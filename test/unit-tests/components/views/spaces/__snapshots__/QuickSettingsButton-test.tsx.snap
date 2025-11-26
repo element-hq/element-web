@@ -12,7 +12,7 @@ exports[`QuickSettingsButton should render the quick settings button in expanded
     tabindex="0"
   >
     <div
-      class="_indicator-icon_147l5_17"
+      class="_indicator-icon_zr2a0_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg

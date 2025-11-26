@@ -393,18 +393,18 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1md5v_10"
+            class="_container_1hel1_10"
           >
             <input
               aria-label="Select all"
               aria-labelledby="_r_4q_"
-              class="_input_1md5v_18"
+              class="_input_1hel1_18"
               data-testid="device-select-all-checkbox"
               id="device-select-all-checkbox"
               type="checkbox"
             />
             <div
-              class="_ui_1md5v_19"
+              class="_ui_1hel1_19"
             >
               <svg
                 aria-hidden="true"

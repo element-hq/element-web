@@ -25,7 +25,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
           class="mx_UserMenu_userAvatar"
         >
           <span
-            class="_avatar_zysgz_8 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_zysgz_55"
+            class="_avatar_1qbcf_8 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_1qbcf_52"
             data-color="5"
             data-testid="avatar-img"
             data-type="round"
@@ -248,7 +248,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         type="button"
       >
         <div
-          class="_indicator-icon_147l5_17"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -277,7 +277,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       title="Quick settings"
     >
       <div
-        class="_indicator-icon_147l5_17"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
