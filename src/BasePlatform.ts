@@ -88,7 +88,7 @@ export default abstract class BasePlatform {
 
     protected onAction(payload: ActionPayload): void {
         switch (payload.action) {
-            case "on_client_not_viable":
+            case Action.ClientNotViable:
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;

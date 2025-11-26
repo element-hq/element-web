@@ -126,6 +126,7 @@ describe("DeviceListener", () => {
             getRooms: jest.fn().mockReturnValue([]),
             isVersionSupported: jest.fn().mockResolvedValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
+            isKeyBackupKeyStored: jest.fn(),
             waitForClientWellKnown: jest.fn(),
             getClientWellKnown: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
@@ -275,13 +276,6 @@ describe("DeviceListener", () => {
     });
 
     describe("recheck", () => {
-        it("does nothing when cross signing feature is not supported", async () => {
-            mockClient!.isVersionSupported.mockResolvedValue(false);
-            await createAndStart();
-
-            expect(mockClient!.isVersionSupported).toHaveBeenCalledWith("v1.1");
-            expect(mockCrypto!.isCrossSigningReady).not.toHaveBeenCalled();
-        });
         it("does nothing when crypto is not enabled", async () => {
             mockClient!.getCrypto.mockReturnValue(undefined);
             await createAndStart();
@@ -453,7 +447,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
                     );
                 });
             });
@@ -1221,6 +1215,136 @@ describe("DeviceListener", () => {
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
                     SetupEncryptionToast.Kind.SET_UP_RECOVERY,
                 );
+            });
+        });
+    });
+
+    describe("key storage out of sync", () => {
+        describe("needs backup reset", () => {
+            it("should not need resetting if backup disabled", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: true,
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(false);
+            });
+
+            it("should not need resetting if backup key is present locally or in 4S, and user has 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue({});
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+            });
+
+            it("should not need resetting if backup key is present locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(false);
+            });
+
+            it("should need resetting if backup key is missing locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue({});
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(true);
+            });
+
+            it("should need resetting if backup key is missing locally and in 4s", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(true);
+            });
+        });
+
+        describe("needs cross-signing reset", () => {
+            it("should not need resetting if cross-signing keys are present locally or in 4S, and user has 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: true,
+                        selfSigningKey: true,
+                        userSigningKey: true,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
+
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: true,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
+            });
+
+            it("should not need resetting if cross-signing keys are present locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: true,
+                        selfSigningKey: true,
+                        userSigningKey: true,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(false);
+            });
+
+            it("should need resetting if cross-signing keys are missing locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: true,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(true);
+            });
+
+            it("should need resetting if cross-signing keys are missing locally and in 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(true);
             });
         });
     });

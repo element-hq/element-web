@@ -24,7 +24,7 @@ test.describe("UserView", () => {
             css: `
                 /* Use monospace font for consistent mask width */
                 .mx_UserInfo_profile_mxid {
-                    font-family: Inconsolata !important;
+                    font-family: "Fira Code" !important;
                 }
             `,
         });

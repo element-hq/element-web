@@ -18,6 +18,7 @@ import EventEmitter from "events";
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
 import {
+    flushPromises,
     getMockClientWithEventEmitter,
     setupAsyncStoreWithClient,
     untilDispatch,
@@ -45,6 +46,7 @@ import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
 import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
 import { type Call } from "../../../src/models/Call.ts";
+import { ModuleApi } from "../../../src/modules/Api";
 
 jest.mock("../../../src/Modal");
 
@@ -144,16 +146,6 @@ describe("RoomViewStore", function () {
     const room2 = new Room(roomId2, mockClient, userId);
     getRooms.mockReturnValue([room, room2]);
 
-    const viewCall = async (): Promise<void> => {
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: roomId,
-            view_call: true,
-            metricsTrigger: undefined,
-        });
-        await untilDispatch(Action.ViewRoom, dis);
-    };
-
     const dispatchPromptAskToJoin = async () => {
         dis.dispatch({ action: Action.PromptAskToJoin });
         await untilDispatch(Action.PromptAskToJoin, dis);
@@ -201,6 +193,12 @@ describe("RoomViewStore", function () {
         // @ts-expect-error
         MockPosthogAnalytics.instance = stores._PosthogAnalytics;
         stores._SpaceStore = new MockSpaceStore();
+        // Add activeSpace property to the mock
+        Object.defineProperty(stores._SpaceStore, "activeSpace", {
+            value: null,
+            writable: true,
+            configurable: true,
+        });
         roomViewStore = new RoomViewStore(dis, stores);
         stores._RoomViewStore = roomViewStore;
     });
@@ -351,6 +349,37 @@ describe("RoomViewStore", function () {
         },
     );
 
+    it("does not change room when replying to event in a room displayed in module", async () => {
+        // Spy on dispatch to check later if ViewRoom was dispatched
+        jest.spyOn(dis, "dispatch");
+
+        // Set up current room
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+        await untilDispatch(Action.ActiveRoomChanged, dis);
+        expect(roomViewStore.getRoomId()).toEqual(roomId);
+
+        ModuleApi.instance.extras.getVisibleRoomBySpaceKey("space1", () => [roomId, roomId2]);
+        // @ts-ignore
+        stores.spaceStore.activeSpace = "space1";
+
+        // Create reply event for roomId2 (which is displayed in module)
+        const replyToEvent = {
+            getRoomId: () => roomId2,
+        };
+
+        // Dispatch reply_to_event - should not change room since roomId2 is in module
+        dis.dispatch({ action: "reply_to_event", event: replyToEvent, context: TimelineRenderingType.Room });
+        await flushPromises();
+
+        // Room should remain the same (roomId), not change to roomId2
+        expect(dis.dispatch).not.toHaveBeenCalledWith({
+            action: Action.ViewRoom,
+            room_id: roomId2,
+            replyingToEvent: replyToEvent,
+            metricsTrigger: undefined,
+        });
+    });
+
     it("removes the roomId on ViewHomePage", async () => {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
@@ -365,8 +394,33 @@ describe("RoomViewStore", function () {
         const call = { presented: false } as Call;
         const getCallSpy = jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
         await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
-        await viewCall();
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
         expect(getCallSpy).toHaveBeenCalledWith(roomId);
+        expect(call.presented).toEqual(true);
+    });
+
+    it("implicitly views an active call", async () => {
+        const call = { presented: false } as Call;
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        jest.spyOn(CallStore.instance, "getActiveCall").mockImplementation((rId) => (rId === roomId ? call : null));
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        // View the room without explicitly setting view_call to true
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
         expect(call.presented).toEqual(true);
     });
 

@@ -69,7 +69,7 @@ class LifecycleStore extends AsyncStore<IState> {
                 dis.dispatch(deferredAction);
                 break;
             }
-            case "on_client_not_viable":
+            case Action.ClientNotViable:
             case Action.OnLoggedOut:
                 this.reset();
                 break;

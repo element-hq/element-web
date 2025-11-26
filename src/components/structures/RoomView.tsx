@@ -175,6 +175,16 @@ interface IRoomProps extends RoomViewProps {
      * If true, hide the composer
      */
     hideComposer?: boolean;
+
+    /*
+     * If true, hide the right panel
+     */
+    hideRightPanel?: boolean;
+
+    /**
+     * If true, hide the pinned messages banner
+     */
+    hidePinnedMessageBanner?: boolean;
 }
 
 export { MainSplitContentType };
@@ -1197,7 +1207,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.EditEvent: {
                 // Quit early if we're trying to edit events in wrong rendering context
                 if (payload.timelineRenderingType !== this.state.timelineRenderingType) return;
-                if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
+
+                const roomId: string | undefined = payload.event?.getRoomId();
+
+                if (payload.event && roomId !== this.state.roomId) {
+                    // if the room is displayed in a module, we don't want to change the room view
+                    if (roomId && this.roomViewStore.isRoomDisplayedInModule(roomId)) return;
+
                     // If the event is in a different room (e.g. because the event to be edited is being displayed
                     // in the results of an all-rooms search), we need to view that room first.
                     defaultDispatcher.dispatch<ViewRoomPayload>({
@@ -2459,7 +2475,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        const pinnedMessageBanner = (
+        const pinnedMessageBanner = !this.props.hidePinnedMessageBanner && (
             <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
         );
 
@@ -2557,7 +2573,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        const showRightPanel = !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
+        const showRightPanel =
+            !this.props.hideRightPanel && !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
 
         const rightPanel = showRightPanel ? (
             <RightPanel

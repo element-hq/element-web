@@ -610,6 +610,7 @@
         "video": "Video",
         "video_room": "Video miestnosť",
         "view_message": "Zobraziť správu",
+        "voice": "Hlas",
         "warning": "Upozornenie"
     },
     "composer": {
@@ -4175,9 +4176,11 @@
         "user_busy_description": "Volaný používateľ má obsadené.",
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Video hovor",
+        "video_call_incoming": "Prichádzajúci videohovor",
         "video_call_started": "Videohovor bol spustený",
         "video_call_using": "Videohovor pomocou:",
         "voice_call": "Hlasový hovor",
+        "voice_call_incoming": "Prichádzajúci hlasový hovor",
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
