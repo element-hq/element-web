@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React from "react";
+import { SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { ALTERNATE_KEY_NAME } from "../../accessibility/KeyboardShortcuts";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -15,7 +16,6 @@ import { IS_MAC, Key } from "../../Keyboard";
 import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
-import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 
 interface IProps {
     isMinimized: boolean;
