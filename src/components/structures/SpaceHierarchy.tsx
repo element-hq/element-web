@@ -40,6 +40,7 @@ import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/types";
+import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -72,8 +73,6 @@ import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import RoomContext from "../../contexts/RoomContext.ts";
-import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
-import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface IProps {
     space: Room;
