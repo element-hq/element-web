@@ -5,16 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useRef, type JSX } from "react";
+import React, { useCallback, useMemo, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { type ScrollIntoViewLocation } from "react-virtuoso";
-import { isEqual } from "lodash";
+import { RoomList as SharedRoomList, type RoomsResult, type FilterKey } from "@element-hq/web-shared-components";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
-import { type ListContext, ListView } from "../../../utils/ListView";
-import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
@@ -25,81 +22,69 @@ interface RoomListProps {
      */
     vm: RoomListViewState;
 }
+
 /**
- * Height of a single room list item
+ * Room adapter that wraps Matrix Room objects with an id property for the shared component
  */
-const ROOM_LIST_ITEM_HEIGHT = 48;
-/**
- * Amount to extend the top and bottom of the viewport by.
- * From manual testing and user feedback 25 items is reported to be enough to avoid blank space when using the mouse wheel,
- * and the trackpad scrolling at a slow to moderate speed where you can still see/read the content.
- * Using the trackpad to sling through a large percentage of the list quickly will still show blank space.
- * We would likely need to simplify the item content to improve this case.
- */
-const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
+interface RoomAdapter {
+    id: string;
+    room: Room;
+}
+
 /**
  * A virtualized list of rooms.
+ * This component adapts element-web's room list to use the shared RoomList component.
  */
 export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): JSX.Element {
-    const lastSpaceId = useRef<string | undefined>(undefined);
-    const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
     const roomCount = roomsResult.rooms.length;
-    const getItemComponent = useCallback(
+
+    /**
+     * Adapt the element-web roomsResult to the shared component's format
+     */
+    const adaptedRoomsResult: RoomsResult<RoomAdapter> = useMemo(
+        () => ({
+            spaceId: roomsResult.spaceId,
+            filterKeys: roomsResult.filterKeys as FilterKey[] | undefined,
+            rooms: roomsResult.rooms.map((room) => ({
+                id: room.roomId,
+                room,
+            })),
+        }),
+        [roomsResult],
+    );
+
+    /**
+     * Render a room item using the RoomListItemView
+     */
+    const renderItem = useCallback(
         (
             index: number,
-            item: Room,
-            context: ListContext<{
-                spaceId: string;
-                filterKeys: FilterKey[] | undefined;
-            }>,
-            onFocus: (item: Room, e: React.FocusEvent) => void,
-        ): JSX.Element => {
-            const itemKey = item.roomId;
-            const isRovingItem = itemKey === context.tabIndexKey;
-            const isFocused = isRovingItem && context.focused;
-            const isSelected = activeIndex === index;
+            item: RoomAdapter,
+            isSelected: boolean,
+            isFocused: boolean,
+            tabIndex: number,
+            roomCount: number,
+            onFocus: (item: RoomAdapter, e: React.FocusEvent) => void,
+        ): React.ReactNode => {
             return (
                 <RoomListItemView
-                    room={item}
-                    key={itemKey}
+                    room={item.room}
+                    key={item.id}
                     isSelected={isSelected}
                     isFocused={isFocused}
-                    tabIndex={isRovingItem ? 0 : -1}
+                    tabIndex={tabIndex}
                     roomIndex={index}
                     roomCount={roomCount}
-                    onFocus={onFocus}
+                    onFocus={(room, e) => onFocus(item, e)}
                 />
             );
         },
-        [activeIndex, roomCount],
+        [],
     );
 
-    const getItemKey = useCallback((item: Room): string => {
-        return item.roomId;
-    }, []);
-
-    const scrollIntoViewOnChange = useCallback(
-        (params: {
-            context: ListContext<{ spaceId: string; filterKeys: FilterKey[] | undefined }>;
-        }): ScrollIntoViewLocation | null | undefined | false | void => {
-            const { spaceId, filterKeys } = params.context.context;
-            const shouldScrollIndexIntoView =
-                lastSpaceId.current !== spaceId || !isEqual(lastFilterKeys.current, filterKeys);
-            lastFilterKeys.current = filterKeys;
-            lastSpaceId.current = spaceId;
-
-            if (shouldScrollIndexIntoView) {
-                return {
-                    align: `start`,
-                    index: activeIndex || 0,
-                    behavior: "auto",
-                };
-            }
-            return false;
-        },
-        [activeIndex],
-    );
-
+    /**
+     * Handle keyboard events for landmark navigation
+     */
     const keyDownCallback = useCallback((ev: React.KeyboardEvent) => {
         const navAction = getKeyBindingsManager().getNavigationAction(ev);
         if (navAction === KeyBindingAction.NextLandmark || navAction === KeyBindingAction.PreviousLandmark) {
@@ -114,23 +99,12 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
     }, []);
 
     return (
-        <ListView
-            context={{ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }}
-            scrollIntoViewOnChange={scrollIntoViewOnChange}
-            initialTopMostItemIndex={activeIndex}
-            data-testid="room-list"
-            role="listbox"
-            aria-label={_t("room_list|list_title")}
-            fixedItemHeight={ROOM_LIST_ITEM_HEIGHT}
-            items={roomsResult.rooms}
-            getItemComponent={getItemComponent}
-            getItemKey={getItemKey}
-            isItemFocusable={() => true}
+        <SharedRoomList
+            roomsResult={adaptedRoomsResult}
+            activeIndex={activeIndex}
+            renderItem={renderItem}
             onKeyDown={keyDownCallback}
-            increaseViewportBy={{
-                bottom: EXTENDED_VIEWPORT_HEIGHT,
-                top: EXTENDED_VIEWPORT_HEIGHT,
-            }}
+            ariaLabel={_t("room_list|list_title")}
         />
     );
 }

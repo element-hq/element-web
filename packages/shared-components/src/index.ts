@@ -13,12 +13,21 @@ export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
+export * from "./notifications/NotificationDecoration";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
+export * from "./room-list/RoomList";
+export * from "./room-list/RoomListItem";
+export * from "./room-list/RoomListPanel";
+export * from "./room-list/RoomListSearch";
+export * from "./room-list/RoomListHeader";
+export * from "./room-list/RoomListView";
+export * from "./room-list/RoomListPrimaryFilters";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./utils/ListView";
 
 // Utils
 export * from "./utils/i18n";

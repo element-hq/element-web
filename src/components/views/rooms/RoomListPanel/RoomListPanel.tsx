@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useCallback } from "react";
-import { Flex } from "@element-hq/web-shared-components";
+import { RoomListPanel as SharedRoomListPanel } from "@element-hq/web-shared-components";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
@@ -59,19 +59,14 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
     );
 
     return (
-        <Flex
-            as="nav"
-            className="mx_RoomListPanel"
-            direction="column"
-            align="stretch"
-            aria-label={_t("room_list|list_title")}
+        <SharedRoomListPanel
+            ariaLabel={_t("room_list|list_title")}
+            searchSlot={displayRoomSearch ? <RoomListSearch activeSpace={activeSpace} /> : undefined}
+            headerSlot={<RoomListHeaderView />}
+            contentSlot={<RoomListView />}
             onFocus={onFocus}
             onBlur={onBlur}
             onKeyDown={onKeyDown}
-        >
-            {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
-            <RoomListHeaderView />
-            <RoomListView />
-        </Flex>
+        />
     );
 };

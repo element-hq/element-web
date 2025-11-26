@@ -1,0 +1,32 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.roomListPrimaryFilters {
+    padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-3x);
+}
+
+.list {
+    /**
+     * The InteractionObserver needs the height to be set to work properly.
+     */
+    height: 100%;
+    flex: 1;
+}
+
+/* Styles for element-web wrapping class */
+.roomListPrimaryFilters :global(.mx_RoomListPrimaryFilters_wrapping) {
+    display: none;
+}
+
+/* IconButton styles for chevron */
+.roomListPrimaryFilters :global(.mx_RoomListPrimaryFilters_IconButton) svg {
+    transition: transform 0.1s linear;
+}
+
+.roomListPrimaryFilters :global(.mx_RoomListPrimaryFilters_IconButton[aria-expanded="true"]) svg {
+    transform: rotate(180deg);
+}

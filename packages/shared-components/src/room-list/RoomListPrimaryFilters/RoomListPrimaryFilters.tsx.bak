@@ -1,0 +1,70 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React, { type JSX, type ReactNode, type RefObject } from "react";
+
+import { Flex } from "../../utils/Flex";
+import styles from "./RoomListPrimaryFilters.module.css";
+
+/**
+ * ViewModel interface for RoomListPrimaryFilters
+ */
+export interface RoomListPrimaryFiltersViewModel {
+    /** Unique ID for accessibility */
+    id: string;
+    /** Whether to display the chevron button */
+    displayChevron: boolean;
+    /** The chevron button component */
+    chevronButton?: ReactNode;
+    /** The filter elements to display */
+    filterElements: ReactNode[];
+    /** Accessibility label for the filter list */
+    filtersAriaLabel: string;
+    /** Ref to attach to the filter list container */
+    filtersRef?: RefObject<HTMLDivElement>;
+}
+
+/**
+ * Props for RoomListPrimaryFilters component
+ */
+export interface RoomListPrimaryFiltersProps {
+    /** The view model containing filter data */
+    viewModel: RoomListPrimaryFiltersViewModel;
+}
+
+/**
+ * The primary filters component for the room list.
+ * Displays a collapsible list of filters.
+ */
+export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({ viewModel }): JSX.Element => {
+    return (
+        <Flex
+            className={styles.roomListPrimaryFilters}
+            data-testid="primary-filters"
+            gap="var(--cpd-space-3x)"
+            direction="row-reverse"
+            justify="space-between"
+        >
+            {viewModel.displayChevron && viewModel.chevronButton}
+            <Flex
+                id={viewModel.id}
+                as="div"
+                role="listbox"
+                aria-label={viewModel.filtersAriaLabel}
+                align="center"
+                gap="var(--cpd-space-2x)"
+                wrap="wrap"
+                className={styles.list}
+                ref={viewModel.filtersRef}
+            >
+                {viewModel.filterElements.map((element, i) => (
+                    <React.Fragment key={i}>{element}</React.Fragment>
+                ))}
+            </Flex>
+        </Flex>
+    );
+};

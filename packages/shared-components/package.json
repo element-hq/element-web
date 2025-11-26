@@ -52,6 +52,7 @@
         "matrix-web-i18n": "^3.4.0",
         "patch-package": "^8.0.1",
         "react-merge-refs": "^3.0.2",
+        "react-virtuoso": "^4.15.0",
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {

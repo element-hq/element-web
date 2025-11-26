@@ -1,0 +1,9 @@
+<testExecutions version="1">
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/room-list/RoomListHeader/RoomListHeader.test.tsx">
+  <testCase name="RoomListHeader renders title" duration="153"/>
+  <testCase name="RoomListHeader renders title with action" duration="7"/>
+  <testCase name="RoomListHeader renders action buttons" duration="6"/>
+  <testCase name="RoomListHeader truncates long titles with title attribute" duration="15"/>
+  <testCase name="RoomListHeader renders data-testid attribute" duration="5"/>
+ </file>
+</testExecutions>
