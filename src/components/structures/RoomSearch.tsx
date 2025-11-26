@@ -15,6 +15,7 @@ import { IS_MAC, Key } from "../../Keyboard";
 import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
+import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 
 interface IProps {
     isMinimized: boolean;
@@ -34,8 +35,6 @@ export default class RoomSearch extends React.PureComponent<IProps> {
             "mx_RoomSearch_spotlightTrigger",
         );
 
-        const icon = <div className="mx_RoomSearch_icon" />;
-
         const shortcutPrompt = (
             <kbd className="mx_RoomSearch_shortcutPrompt">
                 {IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}
@@ -44,7 +43,7 @@ export default class RoomSearch extends React.PureComponent<IProps> {
 
         return (
             <AccessibleButton onClick={this.openSpotlight} className={classes} aria-label={_t("action|search")}>
-                {icon}
+                <SearchIcon className="mx_RoomSearch_icon" />
                 {!this.props.isMinimized && (
                     <div className="mx_RoomSearch_spotlightTriggerText">{_t("action|search")}</div>
                 )}
