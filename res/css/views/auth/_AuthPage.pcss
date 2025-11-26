@@ -29,8 +29,13 @@ Please see LICENSE files in the repository root for full details.
         margin-top: 0;
     }
 
-    /* Apply a blurred shadow around the modal */
     &.mx_AuthPage_modal_withBlur {
+        /* Apply a blurred shadow around the modal */
         box-shadow: 0 2px 4px 0 rgb(0, 0, 0, 0.33);
+
+        .mx_AuthPage_modalContent {
+            /* Make the modal's background semitransparent */
+            background-color: $authpage-modal-content-with-blur-bg-color;
+        }
     }
 }
