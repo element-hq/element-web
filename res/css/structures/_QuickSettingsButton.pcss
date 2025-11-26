@@ -7,39 +7,54 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_QuickSettingsButton {
-    flex: 0 0 auto;
     border-radius: 8px;
-    position: relative;
-    margin: 12px auto;
-    color: $secondary-content;
-    min-width: 32px;
-    min-height: 32px;
-    line-height: 32px;
+    margin: 18px auto 12px;
 
-    &.expanded {
-        margin-left: 20px;
-        padding-left: 44px; /* align with toggle collapse button text */
-        padding-right: 8px;
-    }
-
-    &::before {
-        content: "";
-        position: absolute;
-        width: 32px;
-        height: 32px;
-        left: 0;
-        mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 24px;
-        background: $secondary-content;
+    svg {
+        fill: $secondary-content;
     }
 
     &:not(.expanded):hover {
-        background-color: $quaternary-content;
+        /**
+         * override compound default background color when hovered
+         * should disappear when the space panel will be migrated to compound
+         */
+        background-color: $quaternary-content !important;
+        color: $primary-content;
 
-        &::before {
-            background-color: $primary-content;
+        svg {
+            fill: $primary-content;
+        }
+    }
+
+    &.expanded {
+        /**
+         * override compound default background color when hovered
+         * should disappear when the space panel will be migrated to compound
+         */
+        background-color: transparent !important;
+
+        /* align with settings icon */
+        margin-left: 21px;
+
+        /**
+         * modify internal css of the compound component
+         * dirty but we need to add the label into the indicator icon button
+         **/
+        & > div {
+            display: flex;
+            align-items: center;
+        }
+
+        svg {
+            /* align with settings label */
+            margin-right: 14px;
+            /* required to set the icon width when into a flex container */
+            min-width: 24px;
+        }
+
+        & .mx_QuickSettingsButton_label {
+            color: $secondary-content;
         }
     }
 }
