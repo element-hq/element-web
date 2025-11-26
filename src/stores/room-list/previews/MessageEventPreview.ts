@@ -10,10 +10,11 @@ import { type MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matri
 
 import { type IPreview } from "./IPreview";
 import { type TagID } from "../models";
-import { _t, sanitizeForTranslation } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { getHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
+import { sanitizeForTranslation } from "../../../i18n/i18n";
 
 export class MessageEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {

@@ -11,7 +11,7 @@ import Play from "@vector-im/compound-design-tokens/assets/web/icons/play-solid"
 import Pause from "@vector-im/compound-design-tokens/assets/web/icons/pause-solid";
 
 import styles from "./PlayPauseButton.module.css";
-import { _t } from "../../utils/i18n";
+import { _t } from "__i18nAPI";
 
 export interface PlayPauseButtonProps extends HTMLAttributes<HTMLButtonElement> {
     /**

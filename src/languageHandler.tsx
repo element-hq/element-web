@@ -8,21 +8,20 @@
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
+import { KEY_SEPARATOR, normalizeLanguageKey } from "matrix-web-i18n";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
+
 import {
     _t,
-    normalizeLanguageKey,
-    type TranslationKey,
     type IVariables,
-    KEY_SEPARATOR,
     getLangsJson,
     registerTranslations,
     setLocale,
     getLocale,
     setMissingEntryGenerator as setMissingEntryGeneratorSharedComponents,
-} from "@element-hq/web-shared-components";
-
+    type TranslationKey,
+} from "./i18n/i18n";
 import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
 import { SettingLevel } from "./settings/SettingLevel";
@@ -30,20 +29,7 @@ import { retry } from "./utils/promise";
 import SdkConfig from "./SdkConfig";
 import { ModuleRunner } from "./modules/ModuleRunner";
 
-export {
-    _t,
-    type IVariables,
-    type Tags,
-    type TranslationKey,
-    type TranslatedString,
-    _td,
-    _tDom,
-    lookupString,
-    sanitizeForTranslation,
-    normalizeLanguageKey,
-    getNormalizedLanguageKeys,
-    substitute,
-} from "@element-hq/web-shared-components";
+export { _t, _td, _tDom, type TranslationKey } from "./i18n/i18n";
 
 const i18nFolder = "i18n/";
 

@@ -10,12 +10,13 @@ import React, { type ReactNode } from "react";
 import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, _td, lookupString, type Tags, type TranslatedString, type TranslationKey } from "../languageHandler";
+import { _t, _td, type TranslationKey } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import { type ValidatedServerConfig } from "./ValidatedServerConfig";
 import ExternalLink from "../components/views/elements/ExternalLink";
 import Modal from "../Modal.tsx";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog.tsx";
+import { lookupString, type Tags, type TranslatedString } from "../i18n/i18n.tsx";
 
 export const resourceLimitStrings = {
     "monthly_active_user": _td("error|mau"),

@@ -30,7 +30,7 @@ import {
     VectorState,
     type VectorPushRuleDefinition,
 } from "../../../notifications";
-import { _t, type TranslatedString } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -52,6 +52,7 @@ import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
+import { TranslatedString } from "../../../i18n/i18n";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.

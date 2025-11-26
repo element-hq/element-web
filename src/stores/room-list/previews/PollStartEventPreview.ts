@@ -12,9 +12,10 @@ import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStart
 
 import { type IPreview } from "./IPreview";
 import { type TagID } from "../models";
-import { _t, sanitizeForTranslation } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { sanitizeForTranslation } from "../../../i18n/i18n";
 
 export class PollStartEventPreview implements IPreview {
     public static contextType = MatrixClientContext;

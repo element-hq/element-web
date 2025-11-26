@@ -9,7 +9,7 @@ import React, { type HTMLAttributes, type JSX, memo } from "react";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import styles from "./RichItem.module.css";
-import { humanizeTime } from "../../utils/humanize";
+import { humanizeTime } from "__i18nAPI";
 import { Flex } from "../../utils/Flex";
 
 export interface RichItemProps extends HTMLAttributes<HTMLLIElement> {
