@@ -10,7 +10,6 @@ import { without } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
-import { MenuItemRadio } from "../../../accessibility/context_menu/MenuItemRadio";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
@@ -22,6 +21,7 @@ import {
     type AdditionalOptionsProps,
     GenericDropdownMenu,
     type GenericDropdownMenuItem,
+    GenericDropdownMenuOption,
 } from "../../structures/GenericDropdownMenu";
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -200,9 +200,9 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
         ({ closeMenu }: AdditionalOptionsProps) => (
             <>
                 <span className="mx_GenericDropdownMenu_divider" />
-                <MenuItemRadio
-                    active={false}
-                    className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
+                <GenericDropdownMenuOption
+                    key="add-server"
+                    className="mx_NetworkDropdown_addServer"
                     onClick={async (): Promise<void> => {
                         closeMenu();
                         const { finished } = Modal.createDialog(
@@ -229,13 +229,9 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                             });
                         }
                     }}
-                >
-                    <div className="mx_GenericDropdownMenu_Option--label">
-                        <span className="mx_NetworkDropdown_addServer">
-                            {_t("spotlight|public_rooms|network_dropdown_add_server_option")}
-                        </span>
-                    </div>
-                </MenuItemRadio>
+                    isSelected={false}
+                    label={_t("spotlight|public_rooms|network_dropdown_add_server_option")}
+                />
             </>
         ),
         [allServers, setConfig, setUserDefinedServers, userDefinedServers],
