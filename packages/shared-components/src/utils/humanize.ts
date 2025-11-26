@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { I18nApi } from "@element-hq/element-web-module-api";
 import { _t } from "./i18n";
 
 // These are the constants we use for when to break the text
@@ -21,31 +22,33 @@ const HOURS_1_DAY = 26;
  * @param {number} timeMillis The time in millis to compare against.
  * @returns {string} The humanized time.
  */
-export function humanizeTime(timeMillis: number): string {
+export function humanizeTime(timeMillis: number, i18nApi?: I18nApi): string {
     const now = Date.now();
     let msAgo = now - timeMillis;
     const minutes = Math.abs(Math.ceil(msAgo / 60000));
     const hours = Math.ceil(minutes / 60);
     const days = Math.ceil(hours / 24);
 
+    const tFunc = i18nApi?.translate ?? _t;
+
     if (msAgo >= 0) {
         // Past
-        if (msAgo <= MILLISECONDS_RECENT) return _t("time|few_seconds_ago");
-        if (msAgo <= MILLISECONDS_1_MIN) return _t("time|about_minute_ago");
-        if (minutes <= MINUTES_UNDER_1_HOUR) return _t("time|n_minutes_ago", { num: minutes });
-        if (minutes <= MINUTES_1_HOUR) return _t("time|about_hour_ago");
-        if (hours <= HOURS_UNDER_1_DAY) return _t("time|n_hours_ago", { num: hours });
-        if (hours <= HOURS_1_DAY) return _t("time|about_day_ago");
-        return _t("time|n_days_ago", { num: days });
+        if (msAgo <= MILLISECONDS_RECENT) return tFunc("time|few_seconds_ago");
+        if (msAgo <= MILLISECONDS_1_MIN) return tFunc("time|about_minute_ago");
+        if (minutes <= MINUTES_UNDER_1_HOUR) return tFunc("time|n_minutes_ago", { num: minutes });
+        if (minutes <= MINUTES_1_HOUR) return tFunc("time|about_hour_ago");
+        if (hours <= HOURS_UNDER_1_DAY) return tFunc("time|n_hours_ago", { num: hours });
+        if (hours <= HOURS_1_DAY) return tFunc("time|about_day_ago");
+        return tFunc("time|n_days_ago", { num: days });
     } else {
         // Future
         msAgo = Math.abs(msAgo);
-        if (msAgo <= MILLISECONDS_RECENT) return _t("time|in_few_seconds");
-        if (msAgo <= MILLISECONDS_1_MIN) return _t("time|in_about_minute");
-        if (minutes <= MINUTES_UNDER_1_HOUR) return _t("time|in_n_minutes", { num: minutes });
-        if (minutes <= MINUTES_1_HOUR) return _t("time|in_about_hour");
-        if (hours <= HOURS_UNDER_1_DAY) return _t("time|in_n_hours", { num: hours });
-        if (hours <= HOURS_1_DAY) return _t("time|in_about_day");
-        return _t("time|in_n_days", { num: days });
+        if (msAgo <= MILLISECONDS_RECENT) return tFunc("time|in_few_seconds");
+        if (msAgo <= MILLISECONDS_1_MIN) return tFunc("time|in_about_minute");
+        if (minutes <= MINUTES_UNDER_1_HOUR) return tFunc("time|in_n_minutes", { num: minutes });
+        if (minutes <= MINUTES_1_HOUR) return tFunc("time|in_about_hour");
+        if (hours <= HOURS_UNDER_1_DAY) return tFunc("time|in_n_hours", { num: hours });
+        if (hours <= HOURS_1_DAY) return tFunc("time|in_about_day");
+        return tFunc("time|in_n_days", { num: days });
     }
 }

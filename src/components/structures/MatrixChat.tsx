@@ -28,6 +28,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import sanitizeHtml from "sanitize-html";
+import { I18nContext } from "@element-hq/web-shared-components";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -2218,9 +2219,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         return (
             <ErrorBoundary>
-                <SDKContext.Provider value={this.stores}>
-                    <TooltipProvider>{view}</TooltipProvider>
-                </SDKContext.Provider>
+                <I18nContext.Provider value={ModuleApi.instance.i18n}>
+                    <SDKContext.Provider value={this.stores}>
+                        <TooltipProvider>{view}</TooltipProvider>
+                    </SDKContext.Provider>
+                </I18nContext.Provider>
             </ErrorBoundary>
         );
     }

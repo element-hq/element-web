@@ -12,7 +12,7 @@ import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close"
 
 import { Flex } from "../../utils/Flex";
 import styles from "./Pill.module.css";
-import { _t } from "../../utils/i18n";
+import { useI18n } from "../../utils/i18nContext";
 
 export interface PillProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
     /**
@@ -39,6 +39,7 @@ export interface PillProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick
  */
 export function Pill({ className, children, label, onClick, ...props }: PropsWithChildren<PillProps>): JSX.Element {
     const id = useId();
+    const i18n = useI18n();
 
     return (
         <Flex
@@ -57,7 +58,7 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
                     aria-describedby={id}
                     size="16px"
                     onClick={onClick}
-                    aria-label={_t("action|delete")}
+                    aria-label={i18n.translate("action|delete")}
                     className="mx_Dialog_nonDialogButton"
                 >
                     <CloseIcon color="var(--cpd-color-icon-tertiary)" />

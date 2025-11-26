@@ -14,7 +14,7 @@ import { Flex } from "../../utils/Flex";
 import styles from "./AudioPlayerView.module.css";
 import { PlayPauseButton } from "../PlayPauseButton";
 import { type PlaybackState } from "../playback";
-import { _t } from "../../utils/i18n";
+import { useI18n } from "../../utils/i18nContext";
 import { formatBytes } from "../../utils/FormattingUtils";
 import { Clock } from "../Clock";
 import { SeekBar } from "../SeekBar";
@@ -90,9 +90,11 @@ interface AudioPlayerViewProps {
  * ```
  */
 export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Element {
+    const i18n = useI18n();
+
     const {
         playbackState,
-        mediaName = _t("timeline|m.audio|unnamed_audio"),
+        mediaName = i18n.translate("timeline|m.audio|unnamed_audio"),
         sizeBytes,
         durationSeconds,
         playedSeconds,
@@ -110,7 +112,7 @@ export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Ele
                 className={styles.audioPlayer}
                 tabIndex={0}
                 onKeyDown={vm.onKeyDown}
-                aria-label={_t("timeline|m.audio|audio_player")}
+                aria-label={i18n.translate("timeline|m.audio|audio_player")}
                 role="region"
             >
                 <Flex gap="var(--cpd-space-2x)" align="center">
@@ -137,7 +139,9 @@ export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Ele
                     <Clock className={styles.clock} seconds={playedSeconds} role="timer" />
                 </Flex>
             </MediaBody>
-            {error && <span className={styles.error}>{_t("timeline|m.audio|error_downloading_audio")}</span>}
+            {error && (
+                <span className={styles.error}>{i18n.translate("timeline|m.audio|error_downloading_audio")}</span>
+            )}
         </>
     );
 }
