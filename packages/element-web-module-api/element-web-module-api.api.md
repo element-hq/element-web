@@ -172,6 +172,7 @@ export interface ExtrasApi {
 
 // @public
 export interface I18nApi {
+    humanizeTime(timeMillis: number): string;
     get language(): string;
     register(translations: Partial<Translations>): void;
     translate(key: keyof Translations, variables?: Variables): string;

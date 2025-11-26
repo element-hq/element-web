@@ -49,4 +49,10 @@ export interface I18nApi {
      * @param variables - Optional variables to interpolate into the translation
      */
     translate(key: keyof Translations, variables?: Variables): string;
+
+    /**
+     * Convert a timestamp into a human-readable time string
+     * @param timeMillis - The time in milliseconds since epoch
+     */
+    humanizeTime(timeMillis: number): string;
 }
