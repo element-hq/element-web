@@ -72,6 +72,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import RoomContext from "../../contexts/RoomContext.ts";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface IProps {
     space: Room;
@@ -251,7 +253,12 @@ const Tile: React.FC<ITileProps> = ({
 
     let joinedSection: ReactElement | undefined;
     if (joinedRoom) {
-        joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">{_t("common|joined")}</div>;
+        joinedSection = (
+            <div className="mx_SpaceHierarchy_roomTile_joined">
+                <CheckIcon />
+                {_t("common|joined")}
+            </div>
+        );
     }
 
     let suggestedSection: ReactElement | undefined;
@@ -294,7 +301,9 @@ const Tile: React.FC<ITileProps> = ({
                     ev.stopPropagation();
                     toggleShowChildren();
                 }}
-            />
+            >
+                <ChevronDownIcon />
+            </div>
         );
 
         if (showChildren) {
