@@ -47,7 +47,6 @@ import PageType from "../../PageTypes";
 import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
-import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
@@ -202,7 +201,10 @@ interface IState {
     hideToSRUsers: boolean;
     syncError: Error | null;
     serverConfig?: ValidatedServerConfig;
+
+    /** Has our MatrixClient started? */
     ready: boolean;
+
     threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     pendingInitialSync?: boolean;
@@ -225,7 +227,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
+
+    /** True if we have successfully completed an OIDC or token login.
+     *
+     * XXX it's unclear if this is ever cleared, so what happens if the user logs out and then logs back in?
+     */
     private tokenLogin?: boolean;
+
     // What to focus on next component update, if anything
     private focusNext: FocusNextType;
     private subTitleStatus: string;
@@ -386,6 +394,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await Lifecycle.onSessionLockStolen();
     }
 
+    /**
+     * Perform actions that are specific to a user that has just logged in (compare {@link onLoggedIn}, which, despite
+     * its name, is called when an already-logged-in client is restored at session startup).
+     *
+     * Called when:
+     *
+     *  - We successfully completed an OIDC or token login, via {@link initSession}.
+     *  - The {@link Login} or {@link Register} components notify us that we successfully completed a non-OIDC login or
+     *    registration.
+     *
+     * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onLoggedIn} will
+     * have been suppressed (by either {@link tokenLogin} being set, or the view being set to {@link Views.LOGIN} or
+     * {@link Views.REGISTER}).
+     *
+     * {@link onWillStartClient} and {@link onClientStarted} will already have been called (but not necessarily
+     * completed).
+     *
+     * This method either calls {@link onLiggedIn} directly, or switches to {@link Views.E2E_SETUP} or
+     * {@link Views.COMPLETE_SECURITY}, which will later call {@link onCompleteSecurityE2eSetupFinished}.
+     */
     private async postLoginSetup(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
         const cryptoEnabled = Boolean(cli.getCrypto());
@@ -603,6 +631,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         );
     }
 
+    private isLoggedInViewPageDisplayed(): boolean {
+        return this.loggedInView.current !== null && this.state.page_type !== undefined;
+    }
+
     private setStateForNewView(state: Partial<IState>): void {
         if (state.view === undefined) {
             throw new Error("setStateForNewView with no view!");
@@ -812,13 +844,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
-            case "view_last_screen":
-                // This function does what we want, despite the name. The idea is that it shows
-                // the last room we were looking at or some reasonable default/guess. We don't
-                // have to worry about email invites or similar being re-triggered because the
-                // function will have cleared that state and not execute that path.
-                this.showScreenAfterLogin();
-                break;
             case "hide_left_panel":
                 this.setState(
                     {
@@ -856,13 +881,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.onLoggedIn();
                 }
                 break;
-            case "on_client_not_viable":
+            case Action.ClientNotViable:
                 this.onSoftLogout();
                 break;
             case Action.OnLoggedOut:
                 this.onLoggedOut();
                 break;
-            case "will_start_client":
+            case Action.WillStartClient:
                 this.setState({ ready: false }, () => {
                     // if the client is about to start, we are, by definition, not ready.
                     // Set ready to false now, then it'll be set to true when the sync
@@ -870,7 +895,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.onWillStartClient();
                 });
                 break;
-            case "client_started":
+            case Action.ClientStarted:
                 // No need to make this handler async to wait for the result of this
                 this.onClientStarted().catch((e) => {
                     logger.error("Exception in onClientStarted", e);
@@ -990,8 +1015,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         newState.isMobileRegistration = isMobileRegistration;
 
         this.setStateForNewView(newState);
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
         this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
@@ -1063,8 +1086,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             },
             () => {
-                ThemeController.isLogin = false;
-                this.themeWatcher?.recheck();
                 this.notifyNewScreen("room/" + presentedId, replaceLast);
             },
         );
@@ -1075,7 +1096,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.viewWelcome();
             return;
         }
-        if (!this.state.currentRoomId && !this.state.currentUserId) {
+
+        if (!this.state.currentRoomId && !this.state.currentUserId && !this.isLoggedInViewPageDisplayed()) {
             this.viewHome();
         }
     }
@@ -1088,8 +1110,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.WELCOME,
         });
         this.notifyNewScreen("welcome");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewLogin(otherState?: any): void {
@@ -1098,8 +1118,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ...otherState,
         });
         this.notifyNewScreen("login");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewHome(justRegistered = false): void {
@@ -1111,8 +1129,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         this.setPage(PageType.HomePage);
         this.notifyNewScreen("home");
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
     }
 
     private viewUser(userId: string, subAction: string): void {
@@ -1376,16 +1392,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Called when a new logged in session has started
+     * Called when a new logged in session has started.
+     *
+     * Called:
+     *
+     *  - on {@link Action.OnLoggedIn}, but only when we don't expect a separate call to {@link postLoginSetup}.
+     *  - from {@link postLoginSetup}, when we don't have crypto setup tasks to perform after the login.
+     *
+     * It's never actually called if we have crypto setup tasks to perform after login (which we normally do, unless
+     * crypto is disabled.) XXX: is this a bug or a feature?
      */
     private async onLoggedIn(): Promise<void> {
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
         StorageManager.tryPersistStorage();
 
         await this.onShowPostLoginScreen();
     }
 
+    /**
+     * Show the first screen after the application is successfully loaded in a logged-in state.
+     *
+     * Called:
+     *
+     *  - by {@link onLoggedIn}
+     *  - by {@link onCompleteSecurityE2eSetupFinished}
+     *
+     * In other words, whenever we think we have completed the login and E2E setup tasks.
+     */
     private async onShowPostLoginScreen(): Promise<void> {
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
@@ -1812,7 +1844,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if we weren't already coming at this from an existing screen
             // and we're logged in, then explicitly default to home.
             // if we're not logged in, then the login flow will do the right thing.
-            if (!this.state.currentRoomId && !this.state.currentUserId) {
+            if (!this.state.currentRoomId && !this.state.currentUserId && !this.isLoggedInViewPageDisplayed()) {
                 this.viewHome();
             }
         } else if (screen === "settings") {
@@ -2050,7 +2082,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };
 
-    // complete security / e2e setup has finished
+    /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */
     private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
         const forceVerify = await this.shouldForceVerification();
         if (forceVerify) {
@@ -2101,7 +2133,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
-            view = <E2eSetup onFinished={this.onCompleteSecurityE2eSetupFinished} />;
+            view = <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.LOGGED_IN) {
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,

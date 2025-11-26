@@ -43,7 +43,7 @@
         "lint:types": "tsc --noEmit --jsx react",
         "test:storybook": "test-storybook --url http://localhost:6007/",
         "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook --no-open\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\"",
-        "test:storybook:update": "playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
+        "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
     },
     "dependencies": {
         "@vector-im/compound-design-tokens": "^6.3.0",
@@ -61,7 +61,7 @@
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
         "@storybook/addon-docs": "^10.0.7",
-        "@storybook/icons": "^1.6.0",
+        "@storybook/icons": "^2.0.0",
         "@storybook/react-vite": "^10.0.7",
         "@storybook/test-runner": "^0.24.1",
         "@testing-library/dom": "^10.4.1",

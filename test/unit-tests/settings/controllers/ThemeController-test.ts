@@ -14,11 +14,6 @@ import { DEFAULT_THEME } from "../../../../src/theme";
 describe("ThemeController", () => {
     jest.spyOn(SettingsStore, "getValue").mockReturnValue([]);
 
-    afterEach(() => {
-        // reset
-        ThemeController.isLogin = false;
-    });
-
     it("returns null when calculatedValue is falsy", () => {
         const controller = new ThemeController();
 
@@ -30,16 +25,6 @@ describe("ThemeController", () => {
                 SettingLevel.ACCOUNT,
             ),
         ).toEqual(null);
-    });
-
-    it("returns light when login flag is set", () => {
-        const controller = new ThemeController();
-
-        ThemeController.isLogin = true;
-
-        expect(controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", "dark", SettingLevel.ACCOUNT)).toEqual(
-            "light",
-        );
     });
 
     it("returns default theme when value is not a valid theme", () => {

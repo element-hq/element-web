@@ -13,14 +13,14 @@ import customCSS from "!!raw-loader!./exportCustomCSS.css";
 const cssSelectorTextClassesRegex = /\.[\w-]+/g;
 
 function mutateCssText(css: string): string {
-    // replace used fonts so that we don't have to bundle Inter & Inconsalata
+    // replace used fonts so that we don't have to bundle Inter & Fira Code
     const sansFont = `-apple-system, BlinkMacSystemFont, avenir next,
             avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif`;
     return css
         .replace(/font-family: ?(Inter|'Inter'|"Inter")/g, `font-family: ${sansFont}`)
         .replace(/--cpd-font-family-sans: ?(Inter|'Inter'|"Inter")/g, `--cpd-font-family-sans: ${sansFont}`)
         .replace(
-            /font-family: ?Inconsolata/g,
+            /font-family: ?Fira Code/g,
             "font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace",
         );
 }
