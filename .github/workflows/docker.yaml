@@ -141,7 +141,7 @@ jobs:
                   repository: vectorim/element-web
 
             - name: Repository Dispatch
-              uses: peter-evans/repository-dispatch@5fc4efd1a4797ddb68ffd0714a238564e4cc0e6f # v4
+              uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4
               if: github.event_name != 'pull_request'
               with:
                   repository: element-hq/element-web-pro
