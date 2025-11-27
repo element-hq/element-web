@@ -10,6 +10,10 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
+import { readFile } from "node:fs/promises";
+
+const widgetApi = readFile("node_modules/matrix-widget-api/dist/api.min.js", "utf-8");
+const fakeCallClient = readFile("playwright/sample-files/fake-element-call.html", "utf-8");
 
 function assertCommonCallParameters(
     url: URLSearchParams,
@@ -93,7 +97,8 @@ test.describe("Element Call", () => {
         await page.route("/widget.html", async (route) => {
             await route.fulfill({
                 status: 200,
-                body: "<p> Hello world </p>",
+                // Do enough to
+                body: (await fakeCallClient).replace("widgetCodeHere", await widgetApi),
             });
         });
         await app.settings.setValue(
@@ -417,6 +422,31 @@ test.describe("Element Call", () => {
             expect(hash.get("intent")).toEqual("join_existing");
             expect(hash.get("skipLobby")).toEqual("false");
             expect(hash.get("returnToLobby")).toEqual("true");
+        });
+    });
+
+    test.describe("Switching rooms", () => {
+        let charlie: Bot;
+        test.use({
+            room: async ({ page, app, user, homeserver, bot }, use) => {
+                charlie = new Bot(page, homeserver, { displayName: "Charlie" });
+                await charlie.prepareClient();
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials.userId, charlie.credentials.userId],
+                });
+                await use({ roomId });
+            },
+        });
+        test("should be able to start a video call", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            await expect(frameUrlStr).toBeDefined();
         });
     });
 });
