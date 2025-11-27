@@ -8,12 +8,12 @@
 import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListPanel, type RoomListPanelViewModel } from "./RoomListPanel";
-import { type RoomsResult } from "../RoomList";
-import { type RoomListItemViewModel } from "../RoomListItem";
 import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
+import type { RoomsResult } from "../RoomList";
+import type { RoomListItemViewModel } from "../RoomListItem";
 import { SortOption } from "../RoomListHeader/SortOptionsMenu";
-import { type FilterViewModel } from "../RoomListPrimaryFilters/useVisibleFilters";
+import { RoomListPanel, type RoomListPanelViewModel } from "./RoomListPanel";
+import type { FilterViewModel } from "../RoomListPrimaryFilters/useVisibleFilters";
 
 // Mock avatar component
 const mockAvatar = (roomViewModel: RoomListItemViewModel): React.ReactElement => (
