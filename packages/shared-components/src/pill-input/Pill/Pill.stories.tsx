@@ -34,8 +34,7 @@ const Template: StoryFn<typeof Pill> = (args) => {
 };
 
 export const Default = Template.bind({});
-export const WithoutCloseButton = Template.bind({
-    args: {
-        onClick: undefined,
-    },
-});
+export const WithoutCloseButton = Template.bind({});
+WithoutCloseButton.args = {
+    onClick: undefined,
+};
