@@ -43,7 +43,6 @@ import { ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
-import { showContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";

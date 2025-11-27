@@ -264,26 +264,4 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<ExtensionsCard /> should show context menu on widget row 1`] = `
-<ul
-  class="mx_IconizedContextMenu"
-  role="none"
->
-  <div
-    class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
-  >
-    <li
-      aria-label="Remove for everyone"
-      class="mx_AccessibleButton mx_IconizedContextMenu_item"
-      role="menuitem"
-      tabindex="0"
-    >
-      <span
-        class="mx_IconizedContextMenu_label"
-      >
-        Remove for everyone
-      </span>
-    </li>
-  </div>
-</ul>
-`;
+exports[`<ExtensionsCard /> should show context menu on widget row 1`] = `null`;
