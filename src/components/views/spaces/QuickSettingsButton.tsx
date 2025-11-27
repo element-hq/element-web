@@ -139,31 +139,24 @@ const QuickSettingsButton: React.FC<{
     }
 
     let button = (
-        <>
-            <IconButton
-                aria-label={_t("quick_settings|title")}
-                className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
-                onClick={openMenu}
-                title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
-                ref={handle}
-                aria-expanded={!isPanelCollapsed}
-            >
-                <>
-                    <SettingsSolidIcon />
-                    {/* This is dirty, but we need to add the label to the indicator icon */}
-                    {!isPanelCollapsed && (
-                        <Text
-                            className="mx_QuickSettingsButton_label"
-                            as="span"
-                            size="md"
-                            title={_t("common|settings")}
-                        >
-                            {_t("common|settings")}
-                        </Text>
-                    )}
-                </>
-            </IconButton>
-        </>
+        <IconButton
+            aria-label={_t("quick_settings|title")}
+            className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
+            onClick={openMenu}
+            title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
+            ref={handle}
+            aria-expanded={!isPanelCollapsed}
+        >
+            <>
+                <SettingsSolidIcon />
+                {/* This is dirty, but we need to add the label to the indicator icon */}
+                {!isPanelCollapsed && (
+                    <Text className="mx_QuickSettingsButton_label" as="span" size="md" title={_t("common|settings")}>
+                        {_t("common|settings")}
+                    </Text>
+                )}
+            </>
+        </IconButton>
     );
 
     if (isPanelCollapsed) {
