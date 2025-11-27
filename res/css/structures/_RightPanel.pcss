@@ -24,36 +24,6 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-/** Fixme - factor this out with the main header **/
-
-.mx_RightPanel_threadsButton::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/threads-solid.svg");
-}
-
-.mx_RightPanel_notifsButton::before {
-    mask-image: url("$(res)/img/element-icons/notifications.svg");
-    mask-position: center;
-}
-
-.mx_RightPanel_roomSummaryButton::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/info-solid.svg");
-    mask-position: center;
-}
-
-.mx_RightPanel_pinnedMessagesButton {
-    &::before {
-        mask-image: url("$(res)/img/element-icons/room/pin.svg");
-        mask-position: center;
-    }
-}
-
-.mx_RightPanel_timelineCardButton {
-    &::before {
-        mask-image: url("$(res)/img/element-icons/feedback.svg");
-        mask-position: center;
-    }
-}
-
 .mx_RightPanel .mx_MemberList,
 .mx_RightPanel .mx_MemberInfo {
     order: 2;

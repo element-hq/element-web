@@ -13,26 +13,6 @@ Please see LICENSE files in the repository root for full details.
     overflow-y: auto;
     font-size: var(--cpd-font-size-body-sm);
 
-    .mx_UserInfo_cancel {
-        cursor: pointer;
-        position: absolute;
-        top: 0;
-        border-radius: 4px;
-        background-color: $dark-panel-bg-color;
-        margin: 9px;
-        z-index: 1; /* render on top of the right panel */
-
-        div {
-            height: 16px;
-            width: 16px;
-            padding: 4px;
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-left.svg");
-            mask-repeat: no-repeat;
-            mask-position: center;
-            background-color: $header-panel-text-primary-color;
-        }
-    }
-
     .mx_UserInfo_container {
         padding: var(--cpd-space-2x) 0 var(--cpd-space-4x);
         margin: 0 var(--cpd-space-4x);
