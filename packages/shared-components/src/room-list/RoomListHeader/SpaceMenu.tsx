@@ -13,12 +13,14 @@ import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user
 import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/preferences";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 
 /**
- * ViewModel for SpaceMenu
+ * Snapshot for SpaceMenu
  */
-export interface SpaceMenuViewModel {
+export type SpaceMenuSnapshot = {
     /** The title of the space */
     title: string;
     /** Whether the user can invite in the space */
@@ -33,28 +35,29 @@ export interface SpaceMenuViewModel {
     openSpacePreferences: () => void;
     /** Open the space settings */
     openSpaceSettings: () => void;
-}
+};
 
 /**
  * Props for SpaceMenu component
  */
 export interface SpaceMenuProps {
     /** The view model containing menu data and callbacks */
-    viewModel: SpaceMenuViewModel;
+    vm: ViewModel<SpaceMenuSnapshot>;
 }
 
 /**
  * The space menu for the room list header.
  * Displays a dropdown menu with space-specific actions.
  */
-export const SpaceMenu: React.FC<SpaceMenuProps> = ({ viewModel }): JSX.Element => {
+export const SpaceMenu: React.FC<SpaceMenuProps> = ({ vm }): JSX.Element => {
+    const snapshot = useViewModel(vm);
     const [open, setOpen] = useState(false);
 
     return (
         <Menu
             open={open}
             onOpenChange={setOpen}
-            title={viewModel.title}
+            title={snapshot.title}
             side="right"
             align="start"
             trigger={
@@ -66,28 +69,28 @@ export const SpaceMenu: React.FC<SpaceMenuProps> = ({ viewModel }): JSX.Element 
             <MenuItem
                 Icon={HomeIcon}
                 label={_t("room_list|space_menu|home")}
-                onSelect={viewModel.openSpaceHome}
+                onSelect={snapshot.openSpaceHome}
                 hideChevron={true}
             />
-            {viewModel.canInviteInSpace && (
+            {snapshot.canInviteInSpace && (
                 <MenuItem
                     Icon={UserAddIcon}
                     label={_t("action|invite")}
-                    onSelect={viewModel.inviteInSpace}
+                    onSelect={snapshot.inviteInSpace}
                     hideChevron={true}
                 />
             )}
             <MenuItem
                 Icon={PreferencesIcon}
                 label={_t("common|preferences")}
-                onSelect={viewModel.openSpacePreferences}
+                onSelect={snapshot.openSpacePreferences}
                 hideChevron={true}
             />
-            {viewModel.canAccessSpaceSettings && (
+            {snapshot.canAccessSpaceSettings && (
                 <MenuItem
                     Icon={SettingsIcon}
                     label={_t("room_list|space_menu|space_settings")}
-                    onSelect={viewModel.openSpaceSettings}
+                    onSelect={snapshot.openSpaceSettings}
                     hideChevron={true}
                 />
             )}

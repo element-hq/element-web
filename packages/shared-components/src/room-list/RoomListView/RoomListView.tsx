@@ -7,38 +7,40 @@
 
 import React, { type JSX, type ReactNode } from "react";
 
-import { RoomListPrimaryFilters, type RoomListPrimaryFiltersViewModel } from "../RoomListPrimaryFilters";
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
+import { RoomListPrimaryFilters, type RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyState } from "./RoomListEmptyState";
-import { RoomList, type RoomListViewModel } from "../RoomList";
+import { RoomList, type RoomListSnapshot } from "../RoomList";
 import { type RoomListItemViewModel } from "../RoomListItem";
 
 /**
- * ViewModel interface for RoomListView
+ * Snapshot for RoomListView
  */
-export interface RoomListViewViewModel {
+export type RoomListViewSnapshot = {
     /** Whether the rooms are currently loading */
     isLoadingRooms: boolean;
     /** Whether the room list is empty */
     isRoomListEmpty: boolean;
     /** View model for the primary filters */
-    filtersViewModel: RoomListPrimaryFiltersViewModel;
+    filtersVm: ViewModel<RoomListPrimaryFiltersSnapshot>;
     /** View model for the room list */
-    roomListViewModel: RoomListViewModel;
+    roomListVm: ViewModel<RoomListSnapshot>;
     /** Title for the empty state */
     emptyStateTitle: string;
     /** Optional description for the empty state */
     emptyStateDescription?: string;
     /** Optional action element for the empty state */
     emptyStateAction?: ReactNode;
-}
+};
 
 /**
  * Props for RoomListView component
  */
 export interface RoomListViewProps {
     /** The view model containing list data */
-    viewModel: RoomListViewViewModel;
+    vm: ViewModel<RoomListViewSnapshot>;
     /** Render function for room avatar */
     renderAvatar: (roomViewModel: RoomListItemViewModel) => ReactNode;
 }
@@ -47,26 +49,27 @@ export interface RoomListViewProps {
  * The main room list view component.
  * Manages the display of filters, loading states, empty states, and the room list.
  */
-export const RoomListView: React.FC<RoomListViewProps> = ({ viewModel, renderAvatar }): JSX.Element => {
+export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar }): JSX.Element => {
+    const snapshot = useViewModel(vm);
     let listBody: ReactNode;
 
-    if (viewModel.isLoadingRooms) {
+    if (snapshot.isLoadingRooms) {
         listBody = <RoomListLoadingSkeleton />;
-    } else if (viewModel.isRoomListEmpty) {
+    } else if (snapshot.isRoomListEmpty) {
         listBody = (
             <RoomListEmptyState
-                title={viewModel.emptyStateTitle}
-                description={viewModel.emptyStateDescription}
-                action={viewModel.emptyStateAction}
+                title={snapshot.emptyStateTitle}
+                description={snapshot.emptyStateDescription}
+                action={snapshot.emptyStateAction}
             />
         );
     } else {
-        listBody = <RoomList viewModel={viewModel.roomListViewModel} renderAvatar={renderAvatar} />;
+        listBody = <RoomList vm={snapshot.roomListVm} renderAvatar={renderAvatar} />;
     }
 
     return (
         <>
-            <RoomListPrimaryFilters viewModel={viewModel.filtersViewModel} />
+            <RoomListPrimaryFilters vm={snapshot.filtersVm} />
             {listBody}
         </>
     );

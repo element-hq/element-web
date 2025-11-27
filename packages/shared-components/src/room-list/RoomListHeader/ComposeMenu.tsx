@@ -12,12 +12,14 @@ import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 
 /**
- * ViewModel for ComposeMenu
+ * Snapshot for ComposeMenu
  */
-export interface ComposeMenuViewModel {
+export type ComposeMenuSnapshot = {
     /** Whether the user can create rooms */
     canCreateRoom: boolean;
     /** Whether the user can create video rooms */
@@ -28,21 +30,22 @@ export interface ComposeMenuViewModel {
     createRoom: () => void;
     /** Create a video room */
     createVideoRoom: () => void;
-}
+};
 
 /**
  * Props for ComposeMenu component
  */
 export interface ComposeMenuProps {
     /** The view model containing menu data and callbacks */
-    viewModel: ComposeMenuViewModel;
+    vm: ViewModel<ComposeMenuSnapshot>;
 }
 
 /**
  * The compose menu for the room list header.
  * Displays a dropdown menu with options to create new chats, rooms, and video rooms.
  */
-export const ComposeMenu: React.FC<ComposeMenuProps> = ({ viewModel }): JSX.Element => {
+export const ComposeMenu: React.FC<ComposeMenuProps> = ({ vm }): JSX.Element => {
+    const snapshot = useViewModel(vm);
     const [open, setOpen] = useState(false);
 
     return (
@@ -62,22 +65,22 @@ export const ComposeMenu: React.FC<ComposeMenuProps> = ({ viewModel }): JSX.Elem
             <MenuItem
                 Icon={ChatIcon}
                 label={_t("action|start_chat")}
-                onSelect={viewModel.createChatRoom}
+                onSelect={snapshot.createChatRoom}
                 hideChevron={true}
             />
-            {viewModel.canCreateRoom && (
+            {snapshot.canCreateRoom && (
                 <MenuItem
                     Icon={RoomIcon}
                     label={_t("action|new_room")}
-                    onSelect={viewModel.createRoom}
+                    onSelect={snapshot.createRoom}
                     hideChevron={true}
                 />
             )}
-            {viewModel.canCreateVideoRoom && (
+            {snapshot.canCreateVideoRoom && (
                 <MenuItem
                     Icon={VideoCallIcon}
                     label={_t("action|new_video_room")}
-                    onSelect={viewModel.createVideoRoom}
+                    onSelect={snapshot.createVideoRoom}
                     hideChevron={true}
                 />
             )}

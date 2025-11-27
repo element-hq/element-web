@@ -6,10 +6,10 @@
  */
 
 export { RoomListHeader } from "./RoomListHeader";
-export type { RoomListHeaderProps, RoomListHeaderViewModel } from "./RoomListHeader";
+export type { RoomListHeaderProps, RoomListHeaderSnapshot } from "./RoomListHeader";
 export { SpaceMenu } from "./SpaceMenu";
-export type { SpaceMenuProps, SpaceMenuViewModel } from "./SpaceMenu";
+export type { SpaceMenuProps, SpaceMenuSnapshot } from "./SpaceMenu";
 export { ComposeMenu } from "./ComposeMenu";
-export type { ComposeMenuProps, ComposeMenuViewModel } from "./ComposeMenu";
+export type { ComposeMenuProps, ComposeMenuSnapshot } from "./ComposeMenu";
 export { SortOptionsMenu, SortOption } from "./SortOptionsMenu";
-export type { SortOptionsMenuProps, SortOptionsMenuViewModel } from "./SortOptionsMenu";
+export type { SortOptionsMenuProps, SortOptionsMenuSnapshot } from "./SortOptionsMenu";

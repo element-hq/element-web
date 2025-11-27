@@ -8,35 +8,43 @@
 import { render, screen } from "jest-matrix-react";
 import React from "react";
 
-import { RoomListHeader, type RoomListHeaderViewModel } from "./RoomListHeader";
-import type { SpaceMenuViewModel } from "./SpaceMenu";
-import type { ComposeMenuViewModel } from "./ComposeMenu";
-import type { SortOptionsMenuViewModel } from "./SortOptionsMenu";
+import { RoomListHeader, type RoomListHeaderSnapshot } from "./RoomListHeader";
+import type { SpaceMenuSnapshot } from "./SpaceMenu";
+import type { ComposeMenuSnapshot } from "./ComposeMenu";
+import type { SortOptionsMenuSnapshot } from "./SortOptionsMenu";
 import { SortOption } from "./SortOptionsMenu";
+import { type ViewModel } from "../../viewmodel/ViewModel";
+
+function createMockViewModel<T>(snapshot: T): ViewModel<T> {
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: () => () => {},
+    };
+}
 
 describe("RoomListHeader", () => {
-    const mockSortOptionsViewModel: SortOptionsMenuViewModel = {
+    const mockSortOptionsSnapshot: SortOptionsMenuSnapshot = {
         activeSortOption: SortOption.Activity,
         sort: jest.fn(),
     };
 
     it("renders title", () => {
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: "My Space",
             isSpace: false,
             displayComposeMenu: false,
             onComposeClick: jest.fn(),
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         expect(screen.getByText("My Space")).toBeInTheDocument();
         expect(screen.getByRole("banner")).toBeInTheDocument();
     });
 
     it("renders space menu when isSpace is true", () => {
-        const mockSpaceMenuViewModel: SpaceMenuViewModel = {
+        const mockSpaceMenuSnapshot: SpaceMenuSnapshot = {
             title: "My Space",
             canInviteInSpace: true,
             canAccessSpaceSettings: true,
@@ -46,16 +54,16 @@ describe("RoomListHeader", () => {
             openSpaceSettings: jest.fn(),
         };
 
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: "My Space",
             isSpace: true,
-            spaceMenuViewModel: mockSpaceMenuViewModel,
+            spaceMenuVm: createMockViewModel(mockSpaceMenuSnapshot),
             displayComposeMenu: false,
             onComposeClick: jest.fn(),
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         expect(screen.getByText("My Space")).toBeInTheDocument();
         // Space menu chevron button should be present
@@ -63,7 +71,7 @@ describe("RoomListHeader", () => {
     });
 
     it("renders compose menu when displayComposeMenu is true", () => {
-        const mockComposeMenuViewModel: ComposeMenuViewModel = {
+        const mockComposeMenuSnapshot: ComposeMenuSnapshot = {
             canCreateRoom: true,
             canCreateVideoRoom: true,
             createChatRoom: jest.fn(),
@@ -71,45 +79,45 @@ describe("RoomListHeader", () => {
             createVideoRoom: jest.fn(),
         };
 
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: "My Space",
             isSpace: false,
             displayComposeMenu: true,
-            composeMenuViewModel: mockComposeMenuViewModel,
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            composeMenuVm: createMockViewModel(mockComposeMenuSnapshot),
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         // Compose button should be present
         expect(screen.getByLabelText("New conversation")).toBeInTheDocument();
     });
 
     it("renders compose icon button when displayComposeMenu is false", () => {
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: "My Space",
             isSpace: false,
             displayComposeMenu: false,
             onComposeClick: jest.fn(),
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         // Compose icon button should be present
         expect(screen.getByLabelText("New conversation")).toBeInTheDocument();
     });
 
     it("renders sort options menu", () => {
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: "My Space",
             isSpace: false,
             displayComposeMenu: false,
             onComposeClick: jest.fn(),
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         // Sort options menu trigger should be present
         expect(screen.getByLabelText("Room options")).toBeInTheDocument();
@@ -117,15 +125,15 @@ describe("RoomListHeader", () => {
 
     it("truncates long titles with title attribute", () => {
         const longTitle = "This is a very long space name that should be truncated";
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: longTitle,
             isSpace: false,
             displayComposeMenu: false,
             onComposeClick: jest.fn(),
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         const h1 = screen.getByRole("heading", { level: 1 });
         expect(h1).toHaveAttribute("title", longTitle);
@@ -133,15 +141,15 @@ describe("RoomListHeader", () => {
     });
 
     it("renders data-testid attribute", () => {
-        const viewModel: RoomListHeaderViewModel = {
+        const snapshot: RoomListHeaderSnapshot = {
             title: "My Space",
             isSpace: false,
             displayComposeMenu: false,
             onComposeClick: jest.fn(),
-            sortOptionsMenuViewModel: mockSortOptionsViewModel,
+            sortOptionsMenuVm: createMockViewModel(mockSortOptionsSnapshot),
         };
 
-        render(<RoomListHeader viewModel={viewModel} />);
+        render(<RoomListHeader vm={createMockViewModel(snapshot)} />);
 
         expect(screen.getByTestId("room-list-header")).toBeInTheDocument();
     });

@@ -9,6 +9,8 @@ import React, { type JSX, useId, useState } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
 import { Flex } from "../../utils/Flex";
 import { _t } from "../../utils/i18n";
 import { useCollapseFilters } from "./useCollapseFilters";
@@ -16,31 +18,32 @@ import { useVisibleFilters, type FilterViewModel } from "./useVisibleFilters";
 import styles from "./RoomListPrimaryFilters.module.css";
 
 /**
- * ViewModel interface for RoomListPrimaryFilters - contains only presentation data
+ * Snapshot for RoomListPrimaryFilters
  */
-export interface RoomListPrimaryFiltersViewModel {
+export type RoomListPrimaryFiltersSnapshot = {
     /** Array of filter data */
     filters: FilterViewModel[];
-}
+};
 
 /**
  * Props for RoomListPrimaryFilters component
  */
 export interface RoomListPrimaryFiltersProps {
     /** The view model containing filter data */
-    viewModel: RoomListPrimaryFiltersViewModel;
+    vm: ViewModel<RoomListPrimaryFiltersSnapshot>;
 }
 
 /**
  * The primary filters component for the room list.
  * Displays a collapsible list of filters with expand/collapse functionality.
  */
-export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({ viewModel }): JSX.Element => {
+export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({ vm }): JSX.Element => {
+    const snapshot = useViewModel(vm);
     const id = useId();
     const [isExpanded, setIsExpanded] = useState(false);
 
     const { ref, isWrapping: displayChevron, wrappingIndex } = useCollapseFilters<HTMLUListElement>(isExpanded);
-    const filters = useVisibleFilters(viewModel.filters, wrappingIndex);
+    const filters = useVisibleFilters(snapshot.filters, wrappingIndex);
 
     return (
         <Flex

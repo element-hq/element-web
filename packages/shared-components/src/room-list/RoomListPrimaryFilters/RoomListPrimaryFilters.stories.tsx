@@ -6,8 +6,9 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
+import { RoomListPrimaryFilters, type RoomListPrimaryFiltersSnapshot } from "./RoomListPrimaryFilters";
 import type { FilterViewModel } from "./useVisibleFilters";
+import { type ViewModel } from "../../viewmodel/ViewModel";
 
 const meta: Meta<typeof RoomListPrimaryFilters> = {
     title: "Room List/RoomListPrimaryFilters",
@@ -17,6 +18,13 @@ const meta: Meta<typeof RoomListPrimaryFilters> = {
 
 export default meta;
 type Story = StoryObj<typeof RoomListPrimaryFilters>;
+
+function createMockViewModel(snapshot: RoomListPrimaryFiltersSnapshot): ViewModel<RoomListPrimaryFiltersSnapshot> {
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: () => () => {},
+    };
+}
 
 // Mock filter data - simple presentation data only
 const createFilters = (selectedIndex: number = 0): FilterViewModel[] => {
@@ -31,23 +39,23 @@ const createFilters = (selectedIndex: number = 0): FilterViewModel[] => {
 
 export const Default: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             filters: createFilters(0),
-        },
+        }),
     },
 };
 
 export const PeopleSelected: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             filters: createFilters(1),
-        },
+        }),
     },
 };
 
 export const FewFilters: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             filters: [
                 {
                     name: "All",
@@ -60,6 +68,6 @@ export const FewFilters: Story = {
                     toggle: () => console.log("Unread toggled"),
                 },
             ],
-        },
+        }),
     },
 };

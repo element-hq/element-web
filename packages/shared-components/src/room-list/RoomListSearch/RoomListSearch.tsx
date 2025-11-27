@@ -11,14 +11,16 @@ import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/searc
 import DialPadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dial-pad";
 import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
 
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
 import { Flex } from "../../utils/Flex";
 import { _t } from "../../utils/i18n";
 import styles from "./RoomListSearch.module.css";
 
 /**
- * ViewModel interface for RoomListSearch
+ * Snapshot for RoomListSearch
  */
-export interface RoomListSearchViewModel {
+export type RoomListSearchSnapshot = {
     /** Callback fired when search button is clicked */
     onSearchClick: () => void;
     /** Whether to show the dial pad button */
@@ -29,21 +31,23 @@ export interface RoomListSearchViewModel {
     showExplore: boolean;
     /** Callback fired when explore button is clicked */
     onExploreClick?: () => void;
-}
+};
 
 /**
  * Props for RoomListSearch component
  */
 export interface RoomListSearchProps {
     /** The view model containing search data */
-    viewModel: RoomListSearchViewModel;
+    vm: ViewModel<RoomListSearchSnapshot>;
 }
 
 /**
  * A presentational search bar component for the room list.
  * Displays a search button and optional action buttons (dial pad, explore) in a horizontal layout.
  */
-export const RoomListSearch: React.FC<RoomListSearchProps> = ({ viewModel }): JSX.Element => {
+export const RoomListSearch: React.FC<RoomListSearchProps> = ({ vm }): JSX.Element => {
+    const snapshot = useViewModel(vm);
+
     // Determine keyboard shortcut based on platform
     const isMac = typeof navigator !== "undefined" && /Mac/.test(navigator.platform);
     const searchShortcut = isMac ? "⌘ K" : "Ctrl K";
@@ -55,31 +59,31 @@ export const RoomListSearch: React.FC<RoomListSearchProps> = ({ viewModel }): JS
                 kind="secondary"
                 size="sm"
                 Icon={SearchIcon}
-                onClick={viewModel.onSearchClick}
+                onClick={snapshot.onSearchClick}
             >
                 <Flex as="span" justify="space-between">
                     <span className="mx_RoomListSearch_search_text">{_t("action|search")}</span>
                     <kbd>{searchShortcut}</kbd>
                 </Flex>
             </Button>
-            {viewModel.showDialPad && (
+            {snapshot.showDialPad && (
                 <Button
                     kind="secondary"
                     size="sm"
                     Icon={DialPadIcon}
                     iconOnly={true}
                     aria-label={_t("left_panel|open_dial_pad")}
-                    onClick={viewModel.onDialPadClick}
+                    onClick={snapshot.onDialPadClick}
                 />
             )}
-            {viewModel.showExplore && (
+            {snapshot.showExplore && (
                 <Button
                     kind="secondary"
                     size="sm"
                     Icon={ExploreIcon}
                     iconOnly={true}
                     aria-label={_t("action|explore_rooms")}
-                    onClick={viewModel.onExploreClick}
+                    onClick={snapshot.onExploreClick}
                 />
             )}
         </Flex>

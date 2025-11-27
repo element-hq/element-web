@@ -12,8 +12,14 @@ import type { NotificationDecorationViewModel } from "../../notifications/Notifi
 import type { RoomsResult } from "../RoomList";
 import type { RoomListItemViewModel } from "../RoomListItem";
 import { SortOption } from "../RoomListHeader/SortOptionsMenu";
-import { RoomListPanel, type RoomListPanelViewModel } from "./RoomListPanel";
+import { RoomListPanel, type RoomListPanelSnapshot } from "./RoomListPanel";
 import type { FilterViewModel } from "../RoomListPrimaryFilters/useVisibleFilters";
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import type { RoomListSearchSnapshot } from "../RoomListSearch";
+import type { RoomListHeaderSnapshot, SortOptionsMenuSnapshot } from "../RoomListHeader";
+import type { RoomListViewSnapshot } from "../RoomListView";
+import type { RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
+import type { RoomListSnapshot } from "../RoomList";
 
 // Mock avatar component
 const mockAvatar = (roomViewModel: RoomListItemViewModel): React.ReactElement => (
@@ -111,42 +117,49 @@ const meta: Meta<typeof RoomListPanel> = {
 export default meta;
 type Story = StoryObj<typeof RoomListPanel>;
 
-const baseViewModel: RoomListPanelViewModel = {
+function createMockViewModel<T>(snapshot: T): ViewModel<T> {
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: () => () => {},
+    };
+}
+
+const baseViewModel: ViewModel<RoomListPanelSnapshot> = createMockViewModel({
     ariaLabel: "Room list navigation",
-    searchViewModel: {
+    searchVm: createMockViewModel<RoomListSearchSnapshot>({
         onSearchClick: () => console.log("Open search"),
         showDialPad: false,
         showExplore: true,
         onExploreClick: () => console.log("Explore rooms"),
-    },
-    headerViewModel: {
+    }),
+    headerVm: createMockViewModel<RoomListHeaderSnapshot>({
         title: "Home",
         isSpace: false,
         displayComposeMenu: false,
         onComposeClick: () => console.log("Compose"),
-        sortOptionsMenuViewModel: {
+        sortOptionsMenuVm: createMockViewModel<SortOptionsMenuSnapshot>({
             activeSortOption: SortOption.Activity,
             sort: (option) => console.log(`Sort: ${option}`),
-        },
-    },
-    viewViewModel: {
+        }),
+    }),
+    viewVm: createMockViewModel<RoomListViewSnapshot>({
         isLoadingRooms: false,
         isRoomListEmpty: false,
-        filtersViewModel: {
+        filtersVm: createMockViewModel<RoomListPrimaryFiltersSnapshot>({
             filters: createFilters(),
-        },
-        roomListViewModel: {
+        }),
+        roomListVm: createMockViewModel<RoomListSnapshot>({
             roomsResult: mockRoomsResult,
             activeRoomIndex: 0,
-        },
+        }),
         emptyStateTitle: "No rooms",
         emptyStateDescription: "Join a room to get started",
-    },
-};
+    }),
+});
 
 export const Default: Story = {
     args: {
-        viewModel: baseViewModel,
+        vm: baseViewModel,
         renderAvatar: mockAvatar,
     },
     decorators: [
@@ -160,10 +173,12 @@ export const Default: Story = {
 
 export const WithoutSearch: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
-            searchViewModel: undefined,
-        },
+        vm: createMockViewModel<RoomListPanelSnapshot>({
+            ariaLabel: "Room list navigation",
+            searchVm: undefined,
+            headerVm: baseViewModel.getSnapshot().headerVm,
+            viewVm: baseViewModel.getSnapshot().viewVm,
+        }),
         renderAvatar: mockAvatar,
     },
     decorators: [
@@ -177,13 +192,15 @@ export const WithoutSearch: Story = {
 
 export const Loading: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
-            viewViewModel: {
-                ...baseViewModel.viewViewModel,
+        vm: createMockViewModel<RoomListPanelSnapshot>({
+            ariaLabel: "Room list navigation",
+            searchVm: baseViewModel.getSnapshot().searchVm,
+            headerVm: baseViewModel.getSnapshot().headerVm,
+            viewVm: createMockViewModel<RoomListViewSnapshot>({
+                ...baseViewModel.getSnapshot().viewVm.getSnapshot(),
                 isLoadingRooms: true,
-            },
-        },
+            }),
+        }),
         renderAvatar: mockAvatar,
     },
     decorators: [
@@ -197,15 +214,17 @@ export const Loading: Story = {
 
 export const Empty: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
-            viewViewModel: {
-                ...baseViewModel.viewViewModel,
+        vm: createMockViewModel<RoomListPanelSnapshot>({
+            ariaLabel: "Room list navigation",
+            searchVm: baseViewModel.getSnapshot().searchVm,
+            headerVm: baseViewModel.getSnapshot().headerVm,
+            viewVm: createMockViewModel<RoomListViewSnapshot>({
+                ...baseViewModel.getSnapshot().viewVm.getSnapshot(),
                 isRoomListEmpty: true,
                 emptyStateTitle: "No rooms to display",
                 emptyStateDescription: "Join a room or start a conversation to get started",
-            },
-        },
+            }),
+        }),
         renderAvatar: mockAvatar,
     },
     decorators: [

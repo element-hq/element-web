@@ -9,6 +9,8 @@ import React, { useCallback, useRef, type JSX, type ReactNode } from "react";
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 import { ListView, type ListContext } from "../../utils/ListView";
 import { RoomListItem, type RoomListItemViewModel } from "../RoomListItem";
@@ -31,16 +33,16 @@ export interface RoomsResult {
 }
 
 /**
- * ViewModel interface for RoomList
+ * Snapshot for RoomList
  */
-export interface RoomListViewModel {
+export type RoomListSnapshot = {
     /** The rooms result containing the list of rooms */
     roomsResult: RoomsResult;
     /** Optional active room index */
     activeRoomIndex?: number;
     /** Optional keyboard event handler */
     onKeyDown?: (ev: React.KeyboardEvent) => void;
-}
+};
 
 /**
  * Props for the RoomList component
@@ -49,7 +51,7 @@ export interface RoomListProps {
     /**
      * The view model containing room list data
      */
-    viewModel: RoomListViewModel;
+    vm: ViewModel<RoomListSnapshot>;
 
     /**
      * Render function for room avatar
@@ -76,8 +78,9 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  * This component provides efficient rendering of large room lists using virtualization,
  * and renders RoomListItem components for each room.
  */
-export function RoomList({ viewModel, renderAvatar }: RoomListProps): JSX.Element {
-    const { roomsResult, activeRoomIndex, onKeyDown } = viewModel;
+export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
+    const snapshot = useViewModel(vm);
+    const { roomsResult, activeRoomIndex, onKeyDown } = snapshot;
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
     const roomCount = roomsResult.rooms.length;

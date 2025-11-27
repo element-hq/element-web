@@ -1,9 +1,163 @@
 <testExecutions version="1">
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/room-list/RoomList/RoomList.test.tsx">
+  <testCase name="RoomList renders the room list with correct aria attributes" duration="205"/>
+  <testCase name="RoomList renders with correct aria-label" duration="26"/>
+  <testCase name="RoomList calls renderAvatar for each room" duration="16"/>
+  <testCase name="RoomList handles empty room list" duration="41"/>
+  <testCase name="RoomList passes activeRoomIndex correctly" duration="20"/>
+  <testCase name="RoomList accepts onKeyDown callback" duration="33"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/audio/Clock/Clock.test.tsx">
+  <testCase name="Clock renders the clock" duration="62"/>
+  <testCase name="Clock renders the clock with a lot of seconds" duration="6"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/rich-list/RichList/RichList.test.tsx">
+  <testCase name="RichItem renders the list" duration="111"/>
+  <testCase name="RichItem renders the list with isEmpty=true" duration="6"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/pill-input/Pill/Pill.test.tsx">
+  <testCase name="Pill renders the pill" duration="120"/>
+  <testCase name="Pill renders the pill without close button" duration="7"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/avatar/AvatarWithDetails/AvatarWithDetails.test.tsx">
+  <testCase name="AvatarWithDetails renders a textual event" duration="105"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/event-tiles/TextualEventView/TextualEventView.test.tsx">
+  <testCase name="TextualEventView renders a textual event" duration="90"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/message-body/MediaBody/MediaBody.test.tsx">
+  <testCase name="MediaBody renders the media body" duration="89"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/pill-input/PillInput/PillInput.test.tsx">
+  <testCase name="PillInput renders the pill input" duration="102"/>
+  <testCase name="PillInput renders only the input without children" duration="28"/>
+  <testCase name="PillInput calls onRemoveChildren when backspace is pressed and input is empty" duration="237"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/rich-list/RichItem/RichItem.test.tsx">
+  <testCase name="RichItem renders the item in default state" duration="133"/>
+  <testCase name="RichItem renders the item in selected state" duration="33"/>
+  <testCase name="RichItem renders the item without timestamp" duration="13"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/audio/PlayPauseButton/PlayPauseButton.test.tsx">
+  <testCase name="PlayPauseButton renders the button in default state" duration="307"/>
+  <testCase name="PlayPauseButton renders the button in playing state" duration="67"/>
+  <testCase name="PlayPauseButton calls togglePlay when clicked" duration="189"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/viewmodel/tests/Snapshot.test.ts">
+  <testCase name="Snapshot should accept an initial value" duration="3"/>
+  <testCase name="Snapshot should call emit callback when state changes" duration="1"/>
+  <testCase name="Snapshot should swap out entire snapshot on set call" duration="1"/>
+  <testCase name="Snapshot should merge partial snapshot on merge call" duration="0"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/viewmodel/tests/Disposables.test.ts">
+  <testCase name="Disposable isDisposed is true after dispose() is called" duration="9"/>
+  <testCase name="Disposable dispose() calls the correct disposing function" duration="2"/>
+  <testCase name="Disposable Throws error if acting on already disposed disposables" duration="34"/>
+  <testCase name="Disposable Removes tracked event listeners on dispose" duration="1"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/utils/numbers.test.ts">
+  <testCase name="numbers defaultNumber should use the default when the input is not a number" duration="1"/>
+  <testCase name="numbers defaultNumber should use the number when it is a number" duration="1"/>
+  <testCase name="numbers clamp should clamp high numbers" duration="0"/>
+  <testCase name="numbers clamp should clamp low numbers" duration="0"/>
+  <testCase name="numbers clamp should not clamp numbers in range" duration="0"/>
+  <testCase name="numbers clamp should clamp floats" duration="13"/>
+  <testCase name="numbers sum should sum" duration="0"/>
+  <testCase name="numbers percentageWithin should work within 0-100" duration="0"/>
+  <testCase name="numbers percentageWithin should work within 0-100 when pct &gt; 1" duration="0"/>
+  <testCase name="numbers percentageWithin should work within 0-100 when pct &lt; 0" duration="0"/>
+  <testCase name="numbers percentageWithin should work with ranges other than 0-100" duration="1"/>
+  <testCase name="numbers percentageWithin should work with ranges other than 0-100 when pct &gt; 1" duration="0"/>
+  <testCase name="numbers percentageWithin should work with ranges other than 0-100 when pct &lt; 0" duration="0"/>
+  <testCase name="numbers percentageWithin should work with floats" duration="0"/>
+  <testCase name="numbers percentageOf should work within 0-100" duration="0"/>
+  <testCase name="numbers percentageOf should work within 0-100 when val &gt; 100" duration="0"/>
+  <testCase name="numbers percentageOf should work within 0-100 when val &lt; 0" duration="0"/>
+  <testCase name="numbers percentageOf should work with ranges other than 0-100" duration="1"/>
+  <testCase name="numbers percentageOf should work with ranges other than 0-100 when val &gt; 100" duration="0"/>
+  <testCase name="numbers percentageOf should work with ranges other than 0-100 when val &lt; 0" duration="0"/>
+  <testCase name="numbers percentageOf should work with floats" duration="0"/>
+  <testCase name="numbers percentageOf should return 0 for values that cause a division by zero" duration="1"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/utils/humanize.test.ts">
+  <testCase name="humanizeTime returns &apos;a few seconds ago&apos; for &lt;15s ago" duration="9"/>
+  <testCase name="humanizeTime returns &apos;about a minute ago&apos; for &lt;75s ago" duration="1"/>
+  <testCase name="humanizeTime returns &apos;20 minutes ago&apos; for &lt;45min ago" duration="1"/>
+  <testCase name="humanizeTime returns &apos;about an hour ago&apos; for &lt;75min ago" duration="1"/>
+  <testCase name="humanizeTime returns &apos;5 hours ago&apos; for &lt;23h ago" duration="0"/>
+  <testCase name="humanizeTime returns &apos;about a day ago&apos; for &lt;26h ago" duration="1"/>
+  <testCase name="humanizeTime returns &apos;3 days ago&apos; for &gt;26h ago" duration="1"/>
+  <testCase name="humanizeTime returns &apos;a few seconds from now&apos; for &lt;15s ahead" duration="1"/>
+  <testCase name="humanizeTime returns &apos;about a minute from now&apos; for &lt;75s ahead" duration="2"/>
+  <testCase name="humanizeTime returns &apos;20 minutes from now&apos; for &lt;45min ahead" duration="1"/>
+  <testCase name="humanizeTime returns &apos;about an hour from now&apos; for &lt;75min ahead" duration="1"/>
+  <testCase name="humanizeTime returns &apos;5 hours from now&apos; for &lt;23h ahead" duration="0"/>
+  <testCase name="humanizeTime returns &apos;about a day from now&apos; for &lt;26h ahead" duration="0"/>
+  <testCase name="humanizeTime returns &apos;3 days from now&apos; for &gt;26h ahead" duration="1"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/audio/AudioPlayerView/AudioPlayerView.test.tsx">
+  <testCase name="AudioPlayerView renders the audio player in default state" duration="397"/>
+  <testCase name="AudioPlayerView renders the audio player without media name" duration="58"/>
+  <testCase name="AudioPlayerView renders the audio player without size" duration="93"/>
+  <testCase name="AudioPlayerView renders the audio player in error state" duration="59"/>
+  <testCase name="AudioPlayerView should attach vm methods" duration="244"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/utils/i18n.test.ts">
+  <testCase name="i18n utils should wrap registerTranslations" duration="4"/>
+  <testCase name="i18n utils should wrap setMissingEntryGenerator" duration="0"/>
+  <testCase name="i18n utils should wrap getLocale" duration="1"/>
+  <testCase name="i18n utils should wrap setLocale" duration="1"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/hooks/useListKeyboardNavigation.test.ts">
+  <testCase name="useListKeyDown should handle Enter key to click active element" duration="7"/>
+  <testCase name="useListKeyDown should handle Space key to click active element" duration="7"/>
+  <testCase name="useListKeyDown should handle ArrowDown to focus the 1nth element" duration="7"/>
+  <testCase name="useListKeyDown should handle ArrowUp to focus the 1nth element" duration="4"/>
+  <testCase name="useListKeyDown should handle Home to focus the 0nth element" duration="4"/>
+  <testCase name="useListKeyDown should handle End to focus the 2nth element" duration="2"/>
+  <testCase name="useListKeyDown should not handle ArrowDown when active element is not in list" duration="3"/>
+  <testCase name="useListKeyDown should not handle ArrowUp when active element is not in list" duration="3"/>
+  <testCase name="useListKeyDown should not prevent default for unhandled keys" duration="24"/>
+  <testCase name="useListKeyDown should focus the first item if list itself is focused" duration="4"/>
+  <testCase name="useListKeyDown should focus the selected item if list itself is focused" duration="2"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/audio/SeekBar/SeekBar.test.tsx">
+  <testCase name="Seekbar renders the clock" duration="12"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/room-list/RoomListSearch/RoomListSearch.test.tsx">
+  <testCase name="RoomListSearch renders search button with shortcut" duration="101"/>
+  <testCase name="RoomListSearch calls onSearchClick when search button is clicked" duration="88"/>
+  <testCase name="RoomListSearch renders dial pad button when showDialPad is true" duration="12"/>
+  <testCase name="RoomListSearch calls onDialPadClick when dial pad button is clicked" duration="26"/>
+  <testCase name="RoomListSearch renders explore button when showExplore is true" duration="12"/>
+  <testCase name="RoomListSearch calls onExploreClick when explore button is clicked" duration="21"/>
+  <testCase name="RoomListSearch renders all buttons when showDialPad and showExplore are true" duration="18"/>
+  <testCase name="RoomListSearch does not render dial pad or explore buttons when flags are false" duration="13"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/room-list/RoomListItem/RoomListItem.test.tsx">
+  <testCase name="RoomListItem renders room name and avatar" duration="58"/>
+  <testCase name="RoomListItem renders with message preview" duration="10"/>
+  <testCase name="RoomListItem applies selected styles when selected" duration="118"/>
+  <testCase name="RoomListItem applies bold styles when room has unread" duration="14"/>
+  <testCase name="RoomListItem calls openRoom when clicked" duration="148"/>
+  <testCase name="RoomListItem calls onFocus when focused" duration="12"/>
+  <testCase name="RoomListItem renders notification decoration when hasAnyNotificationOrActivity is true" duration="8"/>
+  <testCase name="RoomListItem sets correct ARIA attributes" duration="9"/>
+ </file>
  <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/room-list/RoomListHeader/RoomListHeader.test.tsx">
-  <testCase name="RoomListHeader renders title" duration="153"/>
-  <testCase name="RoomListHeader renders title with action" duration="7"/>
-  <testCase name="RoomListHeader renders action buttons" duration="6"/>
-  <testCase name="RoomListHeader truncates long titles with title attribute" duration="15"/>
-  <testCase name="RoomListHeader renders data-testid attribute" duration="5"/>
+  <testCase name="RoomListHeader renders title" duration="284"/>
+  <testCase name="RoomListHeader renders space menu when isSpace is true" duration="65"/>
+  <testCase name="RoomListHeader renders compose menu when displayComposeMenu is true" duration="60"/>
+  <testCase name="RoomListHeader renders compose icon button when displayComposeMenu is false" duration="44"/>
+  <testCase name="RoomListHeader renders sort options menu" duration="43"/>
+  <testCase name="RoomListHeader truncates long titles with title attribute" duration="72"/>
+  <testCase name="RoomListHeader renders data-testid attribute" duration="36"/>
+ </file>
+ <file path="/Users/davidlangley/dev/element-web/packages/shared-components/src/room-list/RoomListPanel/RoomListPanel.test.tsx">
+  <testCase name="RoomListPanel renders with search, header, and content" duration="174"/>
+  <testCase name="RoomListPanel renders without search" duration="59"/>
+  <testCase name="RoomListPanel renders loading state" duration="55"/>
+  <testCase name="RoomListPanel renders empty state" duration="52"/>
+  <testCase name="RoomListPanel passes additional HTML attributes" duration="61"/>
  </file>
 </testExecutions>

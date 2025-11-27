@@ -6,7 +6,8 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListSearch } from "./RoomListSearch";
+import { RoomListSearch, type RoomListSearchSnapshot } from "./RoomListSearch";
+import { type ViewModel } from "../../viewmodel/ViewModel";
 
 const meta: Meta<typeof RoomListSearch> = {
     title: "Room List/RoomListSearch",
@@ -17,46 +18,53 @@ const meta: Meta<typeof RoomListSearch> = {
 export default meta;
 type Story = StoryObj<typeof RoomListSearch>;
 
+function createMockViewModel(snapshot: RoomListSearchSnapshot): ViewModel<RoomListSearchSnapshot> {
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: () => () => {},
+    };
+}
+
 export const Default: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             onSearchClick: () => console.log("Open search"),
             showDialPad: false,
             showExplore: false,
-        },
+        }),
     },
 };
 
 export const WithDialPad: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             onSearchClick: () => console.log("Open search"),
             showDialPad: true,
             onDialPadClick: () => console.log("Open dial pad"),
             showExplore: false,
-        },
+        }),
     },
 };
 
 export const WithExplore: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             onSearchClick: () => console.log("Open search"),
             showDialPad: false,
             showExplore: true,
             onExploreClick: () => console.log("Explore rooms"),
-        },
+        }),
     },
 };
 
 export const WithAllActions: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel({
             onSearchClick: () => console.log("Open search"),
             showDialPad: true,
             onDialPadClick: () => console.log("Open dial pad"),
             showExplore: true,
             onExploreClick: () => console.log("Explore rooms"),
-        },
+        }),
     },
 };

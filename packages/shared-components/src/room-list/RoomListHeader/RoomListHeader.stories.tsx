@@ -8,10 +8,11 @@
 import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListHeader } from "./RoomListHeader";
-import { SortOption } from "./SortOptionsMenu";
-import type { SpaceMenuViewModel } from "./SpaceMenu";
-import type { ComposeMenuViewModel } from "./ComposeMenu";
+import { RoomListHeader, type RoomListHeaderSnapshot } from "./RoomListHeader";
+import { SortOption, type SortOptionsMenuSnapshot } from "./SortOptionsMenu";
+import type { SpaceMenuSnapshot } from "./SpaceMenu";
+import type { ComposeMenuSnapshot } from "./ComposeMenu";
+import { type ViewModel } from "../../viewmodel/ViewModel";
 
 const meta: Meta<typeof RoomListHeader> = {
     title: "Room List/RoomListHeader",
@@ -22,29 +23,37 @@ const meta: Meta<typeof RoomListHeader> = {
 export default meta;
 type Story = StoryObj<typeof RoomListHeader>;
 
-const baseSortOptionsViewModel = {
+function createMockViewModel<T>(snapshot: T): ViewModel<T> {
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: () => () => {},
+    };
+}
+
+const baseSortOptionsViewModel = createMockViewModel<SortOptionsMenuSnapshot>({
     activeSortOption: SortOption.Activity,
     sort: (option: SortOption) => console.log("Sort by:", option),
-};
+});
 
 export const Default: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel<RoomListHeaderSnapshot>({
             title: "Home",
             isSpace: false,
             displayComposeMenu: false,
             onComposeClick: () => console.log("Compose clicked"),
-            sortOptionsMenuViewModel: baseSortOptionsViewModel,
-        },
+            sortOptionsMenuVm: baseSortOptionsViewModel,
+        }),
     },
 };
 
 export const WithSpaceMenu: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel<RoomListHeaderSnapshot>({
             title: "My Space",
             isSpace: true,
-            spaceMenuViewModel: {
+            displayComposeMenu: false,
+            spaceMenuVm: createMockViewModel<SpaceMenuSnapshot>({
                 title: "My Space",
                 canInviteInSpace: true,
                 canAccessSpaceSettings: true,
@@ -52,38 +61,38 @@ export const WithSpaceMenu: Story = {
                 inviteInSpace: () => console.log("Invite in space"),
                 openSpacePreferences: () => console.log("Open space preferences"),
                 openSpaceSettings: () => console.log("Open space settings"),
-            } as SpaceMenuViewModel,
-            displayComposeMenu: false,
+            }),
             onComposeClick: () => console.log("Compose clicked"),
-            sortOptionsMenuViewModel: baseSortOptionsViewModel,
-        },
+            sortOptionsMenuVm: baseSortOptionsViewModel,
+        }),
     },
 };
 
 export const WithComposeMenu: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel<RoomListHeaderSnapshot>({
             title: "Home",
             isSpace: false,
             displayComposeMenu: true,
-            composeMenuViewModel: {
+            composeMenuVm: createMockViewModel<ComposeMenuSnapshot>({
                 canCreateRoom: true,
                 canCreateVideoRoom: true,
                 createChatRoom: () => console.log("Create chat room"),
                 createRoom: () => console.log("Create room"),
                 createVideoRoom: () => console.log("Create video room"),
-            } as ComposeMenuViewModel,
-            sortOptionsMenuViewModel: baseSortOptionsViewModel,
-        },
+            }),
+            sortOptionsMenuVm: baseSortOptionsViewModel,
+        }),
     },
 };
 
 export const FullHeader: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel<RoomListHeaderSnapshot>({
             title: "My Space",
             isSpace: true,
-            spaceMenuViewModel: {
+            displayComposeMenu: true,
+            spaceMenuVm: createMockViewModel<SpaceMenuSnapshot>({
                 title: "My Space",
                 canInviteInSpace: true,
                 canAccessSpaceSettings: true,
@@ -91,26 +100,26 @@ export const FullHeader: Story = {
                 inviteInSpace: () => console.log("Invite in space"),
                 openSpacePreferences: () => console.log("Open space preferences"),
                 openSpaceSettings: () => console.log("Open space settings"),
-            } as SpaceMenuViewModel,
-            displayComposeMenu: true,
-            composeMenuViewModel: {
+            }),
+            composeMenuVm: createMockViewModel<ComposeMenuSnapshot>({
                 canCreateRoom: true,
                 canCreateVideoRoom: true,
                 createChatRoom: () => console.log("Create chat room"),
                 createRoom: () => console.log("Create room"),
                 createVideoRoom: () => console.log("Create video room"),
-            } as ComposeMenuViewModel,
-            sortOptionsMenuViewModel: baseSortOptionsViewModel,
-        },
+            }),
+            sortOptionsMenuVm: baseSortOptionsViewModel,
+        }),
     },
 };
 
 export const LongTitle: Story = {
     args: {
-        viewModel: {
+        vm: createMockViewModel<RoomListHeaderSnapshot>({
             title: "This is a very long space name that should be truncated with ellipsis when it overflows",
             isSpace: true,
-            spaceMenuViewModel: {
+            displayComposeMenu: true,
+            spaceMenuVm: createMockViewModel<SpaceMenuSnapshot>({
                 title: "This is a very long space name that should be truncated with ellipsis when it overflows",
                 canInviteInSpace: true,
                 canAccessSpaceSettings: true,
@@ -118,17 +127,16 @@ export const LongTitle: Story = {
                 inviteInSpace: () => console.log("Invite in space"),
                 openSpacePreferences: () => console.log("Open space preferences"),
                 openSpaceSettings: () => console.log("Open space settings"),
-            } as SpaceMenuViewModel,
-            displayComposeMenu: true,
-            composeMenuViewModel: {
+            }),
+            composeMenuVm: createMockViewModel<ComposeMenuSnapshot>({
                 canCreateRoom: true,
                 canCreateVideoRoom: true,
                 createChatRoom: () => console.log("Create chat room"),
                 createRoom: () => console.log("Create room"),
                 createVideoRoom: () => console.log("Create video room"),
-            } as ComposeMenuViewModel,
-            sortOptionsMenuViewModel: baseSortOptionsViewModel,
-        },
+            }),
+            sortOptionsMenuVm: baseSortOptionsViewModel,
+        }),
     },
     decorators: [
         (Story) => (

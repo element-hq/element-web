@@ -7,11 +7,12 @@
 
 import React from "react";
 
-import { RoomList, type RoomListViewModel, type RoomsResult } from "./RoomList";
+import { RoomList, type RoomListSnapshot, type RoomsResult } from "./RoomList";
 import type { RoomListItemViewModel } from "../RoomListItem";
 import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
 import type { RoomListItemMenuViewModel } from "../RoomListItem/RoomListItemMenuViewModel";
 import { type RoomNotifState } from "../../notifications/RoomNotifs";
+import { type ViewModel } from "../../viewmodel/ViewModel";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 // Mock avatar component
@@ -108,11 +109,18 @@ const mockRoomsResult: RoomsResult = {
     rooms: generateMockRooms(50),
 };
 
-const mockViewModel: RoomListViewModel = {
+function createMockViewModel(snapshot: RoomListSnapshot): ViewModel<RoomListSnapshot> {
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: () => () => {},
+    };
+}
+
+const mockViewModel: ViewModel<RoomListSnapshot> = createMockViewModel({
     roomsResult: mockRoomsResult,
     activeRoomIndex: undefined,
     onKeyDown: undefined,
-};
+});
 
 const renderAvatar = (roomViewModel: RoomListItemViewModel): React.ReactElement => {
     return mockAvatar(roomViewModel.name);
@@ -130,7 +138,7 @@ const meta = {
         ),
     ],
     args: {
-        viewModel: mockViewModel,
+        vm: mockViewModel,
         renderAvatar,
     },
 } satisfies Meta<typeof RoomList>;
@@ -142,48 +150,52 @@ export const Default: Story = {};
 
 export const WithSelection: Story = {
     args: {
-        viewModel: {
-            ...mockViewModel,
+        vm: createMockViewModel({
+            roomsResult: mockRoomsResult,
             activeRoomIndex: 5,
-        },
+            onKeyDown: undefined,
+        }),
     },
 };
 
 export const SmallList: Story = {
     args: {
-        viewModel: {
-            ...mockViewModel,
+        vm: createMockViewModel({
             roomsResult: {
                 spaceId: "!space:server",
                 filterKeys: undefined,
                 rooms: generateMockRooms(5),
             },
-        },
+            activeRoomIndex: undefined,
+            onKeyDown: undefined,
+        }),
     },
 };
 
 export const LargeList: Story = {
     args: {
-        viewModel: {
-            ...mockViewModel,
+        vm: createMockViewModel({
             roomsResult: {
                 spaceId: "!space:server",
                 filterKeys: undefined,
                 rooms: generateMockRooms(200),
             },
-        },
+            activeRoomIndex: undefined,
+            onKeyDown: undefined,
+        }),
     },
 };
 
 export const EmptyList: Story = {
     args: {
-        viewModel: {
-            ...mockViewModel,
+        vm: createMockViewModel({
             roomsResult: {
                 spaceId: "!space:server",
                 filterKeys: undefined,
                 rooms: [],
             },
-        },
+            activeRoomIndex: undefined,
+            onKeyDown: undefined,
+        }),
     },
 };

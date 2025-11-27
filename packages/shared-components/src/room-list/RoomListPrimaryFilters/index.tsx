@@ -6,7 +6,7 @@
  */
 
 export { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
-export type { RoomListPrimaryFiltersProps, RoomListPrimaryFiltersViewModel } from "./RoomListPrimaryFilters";
+export type { RoomListPrimaryFiltersProps, RoomListPrimaryFiltersSnapshot } from "./RoomListPrimaryFilters";
 export { useCollapseFilters } from "./useCollapseFilters";
 export { useVisibleFilters } from "./useVisibleFilters";
 export type { FilterViewModel } from "./useVisibleFilters";

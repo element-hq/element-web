@@ -6,4 +6,4 @@
  */
 
 export { RoomListSearch } from "./RoomListSearch";
-export type { RoomListSearchProps, RoomListSearchViewModel } from "./RoomListSearch";
+export type { RoomListSearchProps, RoomListSearchSnapshot } from "./RoomListSearch";

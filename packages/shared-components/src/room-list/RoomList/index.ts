@@ -6,4 +6,4 @@
  */
 
 export { RoomList } from "./RoomList";
-export type { RoomListProps, RoomListViewModel, RoomsResult, FilterKey } from "./RoomList";
+export type { RoomListProps, RoomListSnapshot, RoomsResult, FilterKey } from "./RoomList";
