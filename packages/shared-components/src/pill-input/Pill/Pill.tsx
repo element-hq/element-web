@@ -39,7 +39,7 @@ export interface PillProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick
  */
 export function Pill({ className, children, label, onClick, ...props }: PropsWithChildren<PillProps>): JSX.Element {
     const id = useId();
-    const i18n = useI18n();
+    const { translate: _t } = useI18n();
 
     return (
         <Flex
@@ -58,7 +58,7 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
                     aria-describedby={id}
                     size="16px"
                     onClick={onClick}
-                    aria-label={i18n.translate("action|delete")}
+                    aria-label={_t("action|delete")}
                     className="mx_Dialog_nonDialogButton"
                 >
                     <CloseIcon color="var(--cpd-color-icon-tertiary)" />

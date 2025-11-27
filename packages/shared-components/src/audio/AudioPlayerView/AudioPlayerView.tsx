@@ -90,11 +90,11 @@ interface AudioPlayerViewProps {
  * ```
  */
 export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Element {
-    const i18n = useI18n();
+    const { translate: _t } = useI18n();
 
     const {
         playbackState,
-        mediaName = i18n.translate("timeline|m.audio|unnamed_audio"),
+        mediaName = _t("timeline|m.audio|unnamed_audio"),
         sizeBytes,
         durationSeconds,
         playedSeconds,

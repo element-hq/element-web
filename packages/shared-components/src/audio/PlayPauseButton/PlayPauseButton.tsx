@@ -46,9 +46,9 @@ export function PlayPauseButton({
     togglePlay,
     ...rest
 }: Readonly<PlayPauseButtonProps>): JSX.Element {
-    const i18n = useI18n();
+    const { translate: _t } = useI18n();
 
-    const label = playing ? i18n.translate("action|pause") : i18n.translate("action|play");
+    const label = playing ? _t("action|pause") : _t("action|play");
 
     return (
         <IconButton

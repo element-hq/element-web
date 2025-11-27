@@ -33,7 +33,7 @@ interface ISeekCSS extends CSSProperties {
  * ```
  */
 export function SeekBar({ value = 0, className, ...rest }: Readonly<SeekBarProps>): JSX.Element {
-    const i18n = useI18n();
+    const { translate: _t } = useI18n();
 
     const [newValue, setNewValue] = useState(value);
     // Throttle the value setting to avoid excessive re-renders
@@ -53,7 +53,7 @@ export function SeekBar({ value = 0, className, ...rest }: Readonly<SeekBarProps
             value={newValue}
             step={1}
             style={{ "--fillTo": newValue / 100 } as ISeekCSS}
-            aria-label={i18n.translate("a11y|seek_bar_label")}
+            aria-label={_t("a11y|seek_bar_label")}
             {...rest}
         />
     );
