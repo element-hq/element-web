@@ -11,18 +11,13 @@ IMAGE_NAME="element-web-playwright-common"
 build_image() {
   echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
 
-  # Build image
-  PW_VERSION=$(
-    yarn list \
-      --pattern @playwright/test \
-      --depth=0 \
-      --json \
-      --non-interactive \
-      --no-progress | \
-      jq -r '.data.trees[].name | split("@")[2]' \
-    )
+  # Fetch the playwright version
+  # .data.version is for yarn classic
+  # .children.Version is for yarn berry
+  PW_VERSION=$(yarn info --manifest --json @playwright/test | jq -r '.data.version // .children.Version')
   echo "with Playwright version $PW_VERSION"
 
+  # Build image
   docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
 }
 
