@@ -8,8 +8,9 @@
 import React from "react";
 
 import { RichList } from "./RichList";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryFn } from "@storybook/react-vite";
 import { RichItem } from "../RichItem";
+import { I18nApi, I18nContext } from "../..";
 
 const avatar = <div style={{ width: 32, height: 32, backgroundColor: "#ccc", borderRadius: "50%" }} />;
 
@@ -39,12 +40,18 @@ const meta = {
 } satisfies Meta<typeof RichList>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
-export const Empty: Story = {
-    args: {
-        isEmpty: true,
-        children: "No items available",
-    },
+const Template: StoryFn<typeof RichList> = (args) => {
+    return (
+        <I18nContext.Provider value={new I18nApi()}>
+            <RichList {...args} />
+        </I18nContext.Provider>
+    );
+};
+
+export const Default = Template.bind({});
+export const Empty = Template.bind({});
+Empty.args = {
+    isEmpty: true,
+    children: "No items available",
 };

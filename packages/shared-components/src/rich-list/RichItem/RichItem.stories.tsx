@@ -60,9 +60,11 @@ export const Hover = Template.bind({});
 Hover.parameters = { pseudo: { hover: true } };
 
 const TemplateSeparator: StoryFn<typeof RichItem> = (args) => (
-    <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
-        <RichItem {...args} />
-        <RichItem {...args} />
-    </ul>
+    <I18nContext.Provider value={new I18nApi()}>
+        <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
+            <RichItem {...args} />
+            <RichItem {...args} />
+        </ul>
+    </I18nContext.Provider>
 );
 export const Separator = TemplateSeparator.bind({});
