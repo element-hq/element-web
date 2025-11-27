@@ -112,7 +112,7 @@ export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Ele
                 className={styles.audioPlayer}
                 tabIndex={0}
                 onKeyDown={vm.onKeyDown}
-                aria-label={i18n.translate("timeline|m.audio|audio_player")}
+                aria-label={_t("timeline|m.audio|audio_player")}
                 role="region"
             >
                 <Flex gap="var(--cpd-space-2x)" align="center">
