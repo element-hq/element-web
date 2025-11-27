@@ -51,11 +51,11 @@
 
     }
 
-    document.querySelector("#join-button").onclick = () => {
+    document.querySelector("#join-button").onclick = async () => {
+        await api.setAlwaysOnScreen(true);
+        await api.transport.send("io.element.join", { fake: true });
+        await api.sendStateEvent("org.matrix.msc3401.call.member", stateKey, content);
         stateIndicator.innerHTML = "In call";
-        api.setAlwaysOnScreen(true);
-        api.transport.send("io.element.join", { fake: true });
-        api.sendStateEvent("org.matrix.msc3401.call.member", stateKey, content);
     }
 
     document.querySelector("#close-button").onclick = () => {

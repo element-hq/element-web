@@ -1,6 +1,6 @@
 /*
 Copyright 2025 New Vector Ltd.
-
+Copyright (C) 2025 Element Creations Ltd
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
@@ -12,6 +12,10 @@ import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
 import { readFile } from "node:fs/promises";
 
+// Load a copy of our fake Element Call app, and the latest widget API.
+// The fake call app does *just* enough to convince Element Web that a call is ongoing
+// and functions like PiP work. It does not actually do anything though, to limit the
+// surface we test.
 const widgetApi = readFile("node_modules/matrix-widget-api/dist/api.min.js", "utf-8");
 const fakeCallClient = readFile("playwright/sample-files/fake-element-call.html", "utf-8");
 
@@ -93,8 +97,9 @@ test.describe("Element Call", () => {
     });
 
     test.beforeEach(async ({ page, user, app }) => {
-        // Mock a widget page. It doesn't need to actually be Element Call.
-        await page.route("/widget.html", async (route) => {
+        // Mock a widget page. We use a fake version of Element Call here.
+        // We should match on things after .html as these widgets get a ton of extra params.
+        await page.route(/\/widget.html.+/, async (route) => {
             await route.fulfill({
                 status: 200,
                 // Do enough to
@@ -435,18 +440,26 @@ test.describe("Element Call", () => {
                     name: "TestRoom",
                     invite: [bot.credentials.userId, charlie.credentials.userId],
                 });
+                await app.client.createRoom({
+                    name: "OtherRoom",
+                });
                 await use({ roomId });
             },
         });
-        test("should be able to start a video call", async ({ page, user, room, app }) => {
+        test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
             await app.viewRoomById(room.roomId);
             await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
 
             await page.getByRole("button", { name: "Video call" }).click();
             await page.getByRole("menuitem", { name: "Element Call" }).click();
-
             const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
+            const callFrame = page.frame({ url: frameUrlStr });
+            await callFrame.getByRole("button", { name: "Join Call" }).click();
+            await expect(callFrame.getByText('In call', { exact: true })).toBeVisible();
+            await app.viewRoomByName("OtherRoom");
+
+            // We should have a PiP container here.
+            await expect(page.locator('.mx_AppTile_persistedWrapper')).toBeVisible();
         });
     });
 });
