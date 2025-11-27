@@ -126,7 +126,6 @@ export class WidgetContextMenuViewModel
             showSnapshotButton,
             showMoveButtons,
             canModify,
-            widgetMessaging,
             isMenuOpened: menuDisplayed,
             trigger,
         };
@@ -245,7 +244,7 @@ interface WidgetContextMenuProps {
     onFinished?(): void;
 }
 
-type WidgetContextMenuViewModelProps = WidgetContextMenuProps & {
+export type WidgetContextMenuViewModelProps = WidgetContextMenuProps & {
     cli: MatrixClient;
     room: Room | undefined;
     roomId: string | undefined;

@@ -6,7 +6,6 @@
  */
 
 import React, { ReactNode, type JSX } from "react";
-import { type ClientWidgetApi } from "matrix-widget-api";
 import { Menu, MenuItem } from "@vector-im/compound-web";
 
 import { _t } from "../../utils/i18n.tsx";
@@ -21,7 +20,6 @@ export interface WidgetContextMenuSnapshot {
     showSnapshotButton: boolean;
     showMoveButtons: [boolean, boolean];
     canModify: boolean;
-    widgetMessaging: ClientWidgetApi | undefined;
     isMenuOpened: boolean;
     trigger: ReactNode;
 }
