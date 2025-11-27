@@ -50,6 +50,8 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
+import IncompatibleConfigController from "./controllers/IncompatibleConfigController.ts";
+import CombinationIncompatbleController from "./controllers/CombinationIncompatbleController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -623,8 +625,13 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|element_call_video_rooms"),
-        controller: new ReloadOnChangeController(),
-        default: false,
+        controller: new CombinationIncompatbleController([
+            // Video rooms need to be enabled to enable this.
+            new IncompatibleController("feature_video_rooms", false, false, _t("labs|element_call_video_rooms_missing_video_rooms")),
+            // If the config only allows Element Call, force enable
+            new IncompatibleConfigController((c) => !!c.element_call?.use_exclusively, true, true, _t("labs|element_call_video_rooms_element_call_exclusive")),
+        ]),
+        default: true,
     },
     "feature_group_calls": {
         isFeature: true,
