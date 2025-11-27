@@ -173,8 +173,18 @@ interface IProps {
 }
 
 interface IState {
-    // the master view we are showing.
+    /**
+     * The master view we are showing.
+     *
+     * This represents the state of a state machine: see the documentation on {@link Views} for a transition diagram.
+     *
+     * TODO: this doesn't work well, because updates to React state are not instantaneous, meaning that if several
+     *   events or {@link Action}s happen in quick succession, we may end up following the wrong transition.
+     *   We should probably move the view into a separate object (like a ViewModel) and have the React state subscribe
+     *   to updates.
+     */
     view: Views;
+
     // What the LoggedInView would be showing if visible.
     // A member of the enum for standard pages or a string for those provided by
     // a module.
