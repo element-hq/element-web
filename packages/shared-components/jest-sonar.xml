@@ -1,7 +1,0 @@
-<testExecutions version="1">
- <file path="/home/marc/Workspace/element-web/packages/shared-components/src/right-panel/WidgetContextMenu/WidgetContextMenuView.test.tsx">
-  <testCase name="&lt;WidgetContextMenuView /&gt; renders widget contextmenu with all options" duration="93"/>
-  <testCase name="&lt;WidgetContextMenuView /&gt; renders widget contextmenu without only basic modification" duration="26"/>
-  <testCase name="&lt;WidgetContextMenuView /&gt; should attach vm methods" duration="201"/>
- </file>
-</testExecutions>

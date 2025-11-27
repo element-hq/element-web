@@ -1,11 +1,9 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2023 Mikhail Aheichyk
-Copyright 2023 Nordeck IT + Consulting GmbH.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import React from "react";
 import { screen, render } from "jest-matrix-react";
@@ -20,11 +18,9 @@ import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/over
 const { Default, OnlyBasicModification } = composeStories(stories);
 
 describe("<WidgetContextMenuView />", () => {
-
     afterEach(() => {
-        jest.resetAllMocks();
+        jest.clearAllMocks();
     });
-
 
     it("renders widget contextmenu with all options", () => {
         const { container } = render(<Default />);
@@ -62,7 +58,7 @@ describe("<WidgetContextMenuView />", () => {
         public onRevokeClick = onRevokeClick;
         public onFinished = onFinished;
         public onMoveButton = onMoveButton;
-    };
+    }
 
     const defaultValue: WidgetContextMenuSnapshot = {
         showStreamAudioStreamButton: true,
@@ -97,10 +93,10 @@ describe("<WidgetContextMenuView />", () => {
 
         await userEvent.click(screen.getByRole("menuitem", { name: "Revoke permissions" }));
         expect(onRevokeClick).toHaveBeenCalled();
-        
+
         await userEvent.click(screen.getByRole("menuitem", { name: "Remove for everyone" }));
         expect(onDeleteClick).toHaveBeenCalled();
-        
+
         await userEvent.click(screen.getByRole("menuitem", { name: "Move left" }));
         expect(onMoveButton).toHaveBeenCalledWith(-1);
 

@@ -218,6 +218,7 @@ export class WidgetContextMenuViewModel
             } else if (this._room) {
                 WidgetUtils.editWidget(this._room, this._app);
             }
+            console.log("finished edit", this.props.onFinished);
             this.props.onFinished!();
         };
     }
@@ -279,5 +280,22 @@ export function WidgetContextMenu(props: WidgetContextMenuProps): ReactElement {
         };
     }, [vm]);
 
-    return <WidgetContextMenuView vm={vm} />;
+    const {
+        showStreamAudioStreamButton,
+        showEditButton,
+        showRevokeButton,
+        showDeleteButton,
+        showSnapshotButton,
+        showMoveButtons,
+    } = vm.getSnapshot();
+
+    const hasContextMenuOptions = 
+        showStreamAudioStreamButton ||
+        showEditButton ||
+        showRevokeButton ||
+        showDeleteButton ||
+        showSnapshotButton ||
+        showMoveButtons.some(Boolean);
+
+    return hasContextMenuOptions ? <WidgetContextMenuView vm={vm} /> : <></>;
 }
