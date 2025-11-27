@@ -14,6 +14,9 @@ import { fireEvent } from "@testing-library/dom";
 import * as stories from "./AudioPlayerView.stories.tsx";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
+import { options } from "sanitize-html";
+import { I18nContext } from "../../utils/i18nContext.ts";
+import { I18nApi } from "../../index.ts";
 
 const { Default, NoMediaName, NoSize, HasError } = composeStories(stories);
 
@@ -64,7 +67,9 @@ describe("AudioPlayerView", () => {
             error: false,
         });
 
-        render(<AudioPlayerView vm={vm} />);
+        render(<AudioPlayerView vm={vm} />, {
+            wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
+        });
         await user.click(screen.getByRole("button", { name: "Play" }));
         expect(togglePlay).toHaveBeenCalled();
 
