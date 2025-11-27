@@ -22,7 +22,6 @@ import Heading from "../typography/Heading";
 import { PosthogScreenTracker, type ScreenName } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import { ModuleApi } from "../../../modules/Api";
 
 interface IProps {
     /**
@@ -166,7 +165,9 @@ export default class BaseDialog extends React.Component<IProps> {
         }
 
         return (
-            <I18nContext.Provider value={ModuleApi.instance.i18n}>
+            // XXX: We can't import ModuleAPI here because it causes a dependency cycle - hack and
+            // use the copy on the window object :(
+            <I18nContext.Provider value={window.mxModuleApi.i18n}>
                 <MatrixClientContext.Provider value={this.matrixClient}>
                     {this.props.screenName && <PosthogScreenTracker screenName={this.props.screenName} />}
                     <FocusLock
