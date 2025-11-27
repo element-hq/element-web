@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { TranslationKey } from "../i18nKeys";
+import { type TranslationKey } from "../i18nKeys";
 import { I18nApi } from "./I18nApi";
 
 describe("I18nApi", () => {
