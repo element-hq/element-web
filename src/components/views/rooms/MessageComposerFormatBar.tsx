@@ -6,8 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import classNames from "classnames";
+import {
+    BoldIcon,
+    ItalicIcon,
+    StrikethroughIcon,
+    InlineCodeIcon,
+    QuoteIcon,
+    LinkIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
@@ -54,41 +62,41 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
                 <FormatButton
                     label={_t("composer|format_bold")}
                     onClick={() => this.props.onAction(Formatting.Bold)}
-                    icon="Bold"
+                    icon={<BoldIcon />}
                     shortcut={this.props.shortcuts.bold}
                     visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_italics")}
                     onClick={() => this.props.onAction(Formatting.Italics)}
-                    icon="Italic"
+                    icon={<ItalicIcon />}
                     shortcut={this.props.shortcuts.italics}
                     visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_strikethrough")}
                     onClick={() => this.props.onAction(Formatting.Strikethrough)}
-                    icon="Strikethrough"
+                    icon={<StrikethroughIcon />}
                     visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_code_block")}
                     onClick={() => this.props.onAction(Formatting.Code)}
-                    icon="Code"
+                    icon={<InlineCodeIcon />}
                     shortcut={this.props.shortcuts.code}
                     visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("action|quote")}
                     onClick={() => this.props.onAction(Formatting.Quote)}
-                    icon="Quote"
+                    icon={<QuoteIcon />}
                     shortcut={this.props.shortcuts.quote}
                     visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_insert_link")}
                     onClick={() => this.props.onAction(Formatting.InsertLink)}
-                    icon="InsertLink"
+                    icon={<LinkIcon />}
                     shortcut={this.props.shortcuts.insert_link}
                     visible={this.state.visible}
                 />
@@ -116,7 +124,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
 
 interface IFormatButtonProps {
     label: string;
-    icon: string;
+    icon: JSX.Element;
     shortcut?: string;
     visible?: boolean;
     onClick(): void;
@@ -124,8 +132,6 @@ interface IFormatButtonProps {
 
 class FormatButton extends React.PureComponent<IFormatButtonProps> {
     public render(): React.ReactNode {
-        const className = `mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIcon${this.props.icon}`;
-
         // element="button" and type="button" are necessary for the buttons to work on WebKit,
         // otherwise the text is deselected before onClick can ever be called
         return (
@@ -136,8 +142,10 @@ class FormatButton extends React.PureComponent<IFormatButtonProps> {
                 aria-label={this.props.label}
                 title={this.props.label}
                 caption={this.props.shortcut}
-                className={className}
-            />
+                className="mx_MessageComposerFormatBar_button"
+            >
+                {this.props.icon}
+            </RovingAccessibleButton>
         );
     }
 }
