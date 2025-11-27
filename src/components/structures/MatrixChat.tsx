@@ -1409,7 +1409,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      *
      * In other words, whenever we think we have completed the login and E2E setup tasks.
      */
-    private async onShowPostLoginScreen(): Promise<void> {
+    private onShowPostLoginScreen(): void {
         logger.debug("onShowPostLoginScreen: Transitioning to logged in view.");
 
         this.setStateForNewView({ view: Views.LOGGED_IN });
@@ -1814,7 +1814,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (shouldForceVerification) {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             } else {
-                await this.onShowPostLoginScreen();
+                this.onShowPostLoginScreen();
             }
         }
     }
@@ -2134,9 +2134,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
-        await this.onShowPostLoginScreen().catch((e) => {
-            logger.error("Exception showing post-login screen", e);
-        });
+        this.onShowPostLoginScreen();
     };
 
     private getFragmentAfterLogin(): string {
