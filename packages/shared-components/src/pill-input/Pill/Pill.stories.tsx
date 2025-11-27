@@ -8,7 +8,7 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryFn } from "@storybook/react-vite";
 import { Pill } from "./Pill";
 import { I18nApi, I18nContext } from "../..";
 
