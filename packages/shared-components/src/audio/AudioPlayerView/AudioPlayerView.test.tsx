@@ -14,7 +14,6 @@ import { fireEvent } from "@testing-library/dom";
 import * as stories from "./AudioPlayerView.stories.tsx";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
-import { options } from "sanitize-html";
 import { I18nContext } from "../../utils/i18nContext.ts";
 import { I18nApi } from "../../index.ts";
 
