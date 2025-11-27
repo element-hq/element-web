@@ -30,6 +30,12 @@ export interface RoomViewProps {
      * If true, the widgets will be hidden.
      */
     hideWidgets?: boolean;
+    /**
+     * If true, enable sending read receipts and markers on user activity in the room view. When the user interacts with the room view, read receipts and markers are sent.
+     * If false, the read receipts and markers are only send when the room view is focused. The user has to focus the room view in order to clear any unreads and to move the unread marker to the bottom of the view.
+     * @defaultValue true
+     */
+    enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
 
 /**
