@@ -7,9 +7,11 @@
 
 import React from "react";
 import { fn } from "storybook/test";
+import type { Meta, StoryFn } from "@storybook/react-vite";
 
 import { RichItem } from "./RichItem";
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import { I18nContext } from "../../utils/i18nContext";
+import { I18nApi } from "../..";
 
 const currentTimestamp = new Date("2025-03-09T12:00:00Z").getTime();
 
@@ -35,9 +37,11 @@ export default {
 } as Meta<typeof RichItem>;
 
 const Template: StoryFn<typeof RichItem> = (args) => (
-    <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
-        <RichItem {...args} />
-    </ul>
+    <I18nContext.Provider value={new I18nApi()}>
+        <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
+            <RichItem {...args} />
+        </ul>
+    </I18nContext.Provider>
 );
 
 export const Default = Template.bind({});
