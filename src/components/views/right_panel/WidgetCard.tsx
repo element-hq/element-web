@@ -45,20 +45,20 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     // Don't render anything as we are about to transition
     if (!app || !isRight) return null;
 
-    const contextMenu : JSX.Element = (
+    const contextMenu: JSX.Element = (
         <WidgetContextMenu
             trigger={
                 <ContextMenuButton
                     className="mx_BaseCard_header_title_button--option"
                     ref={handle}
-                    onClick={() => {}}
+                    onClick={openMenu}
                     isExpanded={menuDisplayed}
                     label={_t("common|options")}
                 />
             }
-            onFinished={() => (menuDisplayed ? closeMenu : openMenu)}
+            onFinished={closeMenu}
             app={app}
-            menuDisplayed={true}
+            menuDisplayed={menuDisplayed}
         />
     );
 

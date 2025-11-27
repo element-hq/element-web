@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useMemo, useRef, useState } from "react";
+import React, { type JSX, useEffect, useMemo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
@@ -16,8 +16,7 @@ import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/e
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import { _t } from "../../../languageHandler";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import UIStore from "../../../stores/UIStore";
+import { useContextMenu } from "../../structures/ContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IApp } from "../../../stores/WidgetStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -107,15 +106,15 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             {canModifyWidget && (
                 <WidgetContextMenu
                     app={app}
-                    onFinished={() => menuDisplayed ? closeMenu() : openMenu()}
+                    onFinished={closeMenu}
                     menuDisplayed={menuDisplayed}
                     trigger={
                         <AccessibleButton
                             ref={handle}
                             className="mx_ExtensionsCard_app_options"
-                            onClick={() => {}}
+                            onClick={openMenu}
                             title={_t("common|options")}
-                         />
+                        />
                     }
                 />
             )}
@@ -126,8 +125,6 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                 title={pinTitle}
                 disabled={cannotPin}
             />
-
-            {/* {contextMenu} */}
         </div>
     );
 };
