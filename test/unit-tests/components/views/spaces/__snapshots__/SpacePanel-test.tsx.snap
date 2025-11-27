@@ -269,6 +269,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     <button
       aria-expanded="false"
       aria-label="Quick settings"
+      aria-labelledby="_r_1f_"
       class="_icon-button_1pz9o_8 mx_QuickSettingsButton"
       data-kind="primary"
       role="button"
