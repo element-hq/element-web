@@ -8,14 +8,15 @@ Please see LICENSE files in the repository root for full details.
 import { type I18nApi as II18nApi, type Variables, type Translations } from "@element-hq/element-web-module-api";
 import { humanizeTime, registerTranslations } from "@element-hq/web-shared-components";
 
-import { _t, getCurrentLanguage, type TranslationKey } from "../languageHandler.tsx";
+import { _t, getLocale } from "./i18n";
+import { type TranslationKey } from "../i18nKeys";
 
 export class I18nApi implements II18nApi {
     /**
      * Read the current language of the user in IETF Language Tag format
      */
     public get language(): string {
-        return getCurrentLanguage();
+        return getLocale();
     }
 
     /**

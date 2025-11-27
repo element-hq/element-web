@@ -139,9 +139,7 @@ export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Ele
                     <Clock className={styles.clock} seconds={playedSeconds} role="timer" />
                 </Flex>
             </MediaBody>
-            {error && (
-                <span className={styles.error}>{i18n.translate("timeline|m.audio|error_downloading_audio")}</span>
-            )}
+            {error && <span className={styles.error}>{_t("timeline|m.audio|error_downloading_audio")}</span>}
         </>
     );
 }

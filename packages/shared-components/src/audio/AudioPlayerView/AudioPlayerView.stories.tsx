@@ -11,6 +11,8 @@ import { fn } from "storybook/test";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
 import { useMockedViewModel } from "../../useMockedViewModel";
+import { I18nContext } from "../../utils/i18nContext";
+import { I18nApi } from "../../utils/I18nApi";
 
 type AudioPlayerProps = AudioPlayerViewSnapshot & AudioPlayerViewActions;
 const AudioPlayerViewWrapper = ({ togglePlay, onKeyDown, onSeekbarChange, ...rest }: AudioPlayerProps): JSX.Element => {
@@ -19,7 +21,11 @@ const AudioPlayerViewWrapper = ({ togglePlay, onKeyDown, onSeekbarChange, ...res
         onKeyDown,
         onSeekbarChange,
     });
-    return <AudioPlayerView vm={vm} />;
+    return (
+        <I18nContext.Provider value={new I18nApi()}>
+            <AudioPlayerView vm={vm} />
+        </I18nContext.Provider>
+    );
 };
 
 export default {

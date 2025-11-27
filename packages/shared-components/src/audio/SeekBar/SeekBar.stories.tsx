@@ -10,6 +10,7 @@ import { useArgs } from "storybook/preview-api";
 
 import { SeekBar } from "./SeekBar";
 import type { Meta, StoryFn } from "@storybook/react-vite";
+import { I18nApi, I18nContext } from "../..";
 
 export default {
     title: "Audio/SeekBar",
@@ -27,7 +28,11 @@ export default {
 
 const Template: StoryFn<typeof SeekBar> = (args) => {
     const [, updateArgs] = useArgs();
-    return <SeekBar onChange={(evt) => updateArgs({ value: parseInt(evt.target.value, 10) })} {...args} />;
+    return (
+        <I18nContext.Provider value={new I18nApi()}>
+            <SeekBar onChange={(evt) => updateArgs({ value: parseInt(evt.target.value, 10) })} {...args} />
+        </I18nContext.Provider>
+    );
 };
 
 export const Default = Template.bind({});
