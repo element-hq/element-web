@@ -5,11 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mergeTests } from "@playwright/test";
-
-import { test as axe } from "./axe.js";
-import { test as user } from "./user.js";
-
 export { type Services, type WorkerOptions } from "./services.js";
 
-export const test = mergeTests(axe, user);
+// We avoid using `mergeTests` because it drops useful type information about the fixtures.
+// `axe` is the top of our stack of extensions (it extends `user`, etc), so it's the one we want to use.
+export { test } from "./axe";

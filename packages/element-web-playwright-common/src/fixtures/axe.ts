@@ -6,9 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { test as base } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+import { test as base } from "./user";
+
+// We want to avoid using `mergeTests` because it drops useful type information about the fixtures. Instead, we extend
+// the definition of `test` from `user.ts`, so that there is a linear hierarchy.
 export const test = base.extend<{
     /**
      * AxeBuilder instance for the current page
