@@ -202,7 +202,6 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                 <span className="mx_GenericDropdownMenu_divider" />
                 <GenericDropdownMenuOption
                     key="add-server"
-                    className="mx_NetworkDropdown_addServer"
                     onClick={async (): Promise<void> => {
                         closeMenu();
                         const { finished } = Modal.createDialog(

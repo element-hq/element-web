@@ -19,7 +19,6 @@ export type GenericDropdownMenuOption<T> = {
     label: ReactNode;
     description?: ReactNode;
     adornment?: ReactNode;
-    className?: string;
 };
 
 export type GenericDropdownMenuGroup<T> = GenericDropdownMenuOption<T> & {
@@ -34,7 +33,6 @@ export function GenericDropdownMenuOption<T extends Key>({
     onClick,
     isSelected,
     adornment,
-    className,
 }: GenericDropdownMenuOption<T> & {
     onClick: (ev: ButtonEvent) => void;
     isSelected: boolean;
@@ -42,7 +40,7 @@ export function GenericDropdownMenuOption<T extends Key>({
     return (
         <MenuItemRadio
             active={isSelected}
-            className={classNames("mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item", className)}
+            className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
             onClick={onClick}
         >
             {isSelected && <CheckIcon className="mx_GenericDropdownMenu_Option--checkIcon" />}
