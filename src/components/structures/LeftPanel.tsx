@@ -341,7 +341,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let dialPadButton: JSX.Element | undefined;
 
         // If we have dialer support, show a button to bring up the dial pad to start a new call
-        if (1) {
+        if (this.state.supportsPstnProtocol) {
             dialPadButton = (
                 <AccessibleButton
                     className="mx_LeftPanel_dialPadButton"
