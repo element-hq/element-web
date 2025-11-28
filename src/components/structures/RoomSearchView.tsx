@@ -14,6 +14,7 @@ import {
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
@@ -153,7 +154,9 @@ export const RoomSearchView = ({
             <div
                 className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner"
                 data-testid="messagePanelSearchSpinner"
-            />
+            >
+                <SearchIcon />
+            </div>
         );
     }
 
