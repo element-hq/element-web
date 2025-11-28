@@ -10,8 +10,6 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { RichItem } from "./RichItem";
-import { I18nContext } from "../../utils/i18nContext";
-import { I18nApi } from "../..";
 
 const currentTimestamp = new Date("2025-03-09T12:00:00Z").getTime();
 
