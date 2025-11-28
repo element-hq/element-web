@@ -35,6 +35,7 @@ import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { isMimeTypeAllowed } from "../../../utils/blobs.ts";
 
 enum Placeholder {
     NoImage,
@@ -101,7 +102,16 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             }
 
             const content = this.props.mxEvent.getContent<ImageContent>();
-            const httpUrl = this.state.contentUrl;
+
+            let httpUrl = this.state.contentUrl;
+            if (
+                this.props.mediaEventHelper?.media.isEncrypted &&
+                !isMimeTypeAllowed(this.props.mediaEventHelper.sourceBlob.cachedValue?.type ?? "")
+            ) {
+                // contentUrl will be a blob URI mime-type=application/octet-stream so fall back to the thumbUrl instead
+                httpUrl = this.state.thumbUrl;
+            }
+
             if (!httpUrl) return;
             const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
                 src: httpUrl,
@@ -646,6 +656,15 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent<ImageContent>();
+
+        // Fall back to MFileBody if we are unable to render this image e.g. in the case of a blob svg
+        if (
+            this.props.mediaEventHelper?.media.isEncrypted &&
+            !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
+            !content.info?.thumbnail_info
+        ) {
+            return <MFileBody {...this.props} />;
+        }
 
         if (this.state.error) {
             let errorText = _t("timeline|m.image|error");
