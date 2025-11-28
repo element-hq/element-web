@@ -463,7 +463,7 @@ test.describe("Element Call", () => {
             await callFrame.getByRole("button", { name: "Join Call" }).click();
             await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
 
-            // Wait for the room lsit to update before we switch away.
+            // Wait for Element Web to pickup the RTC session and update the room list entry.
             await expect(await page.getByTestId("notification-decoration")).toBeVisible();
         }
 
