@@ -200,4 +200,17 @@ describe("<EncryptionUserSettingsTab />", () => {
             screen.getByText("Your key storage is out of sync. Click one of the buttons below to fix the problem."),
         );
     });
+
+    it("should display the identity needs reset panel when the user's identity needs resetting", async () => {
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.IDENTITY_NEEDS_RESET);
+
+        const user = userEvent.setup();
+        const { asFragment } = renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Continue with reset" }));
+        expect(asFragment()).toMatchSnapshot();
+
+        await user.click(screen.getByRole("button", { name: "Continue with reset" }));
+        expect(screen.getByRole("heading", { name: "You need to reset your identity" })).toBeVisible();
+    });
 });

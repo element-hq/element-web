@@ -90,6 +90,11 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Props): JSX
                         />
                     );
                     break;
+                case DeviceState.IDENTITY_NEEDS_RESET:
+                    content = (
+                        <IdentityNeedsResetNoticePanel onContinue={() => setState("reset_identity_cant_recover")} />
+                    );
+                    break;
                 default:
                     // FIXME: handle backup status
                     content = (
@@ -202,6 +207,38 @@ function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Elem
             >
                 {_t("settings|encryption|device_not_verified_button")}
             </Button>
+        </SettingsSection>
+    );
+}
+
+interface IdentityNeedsResetNoticePanelProps {
+    /**
+     * Callback to call when the user has finished setting up encryption.
+     */
+    onContinue: () => void;
+}
+
+/**
+ * Panel to tell the user that they need to reset their identity.
+ */
+function IdentityNeedsResetNoticePanel({ onContinue }: IdentityNeedsResetNoticePanelProps): JSX.Element {
+    return (
+        <SettingsSection
+            legacy={false}
+            heading={_t("settings|encryption|identity_needs_reset|title")}
+            subHeading={
+                <SettingsSubheader
+                    state="error"
+                    stateMessage={_t("settings|encryption|identity_needs_reset|description")}
+                />
+            }
+            data-testid="recoveryPanel"
+        >
+            <div>
+                <Button size="sm" kind="primary" onClick={onContinue}>
+                    {_t("encryption|continue_with_reset")}
+                </Button>
+            </div>
         </SettingsSection>
     );
 }
