@@ -15,6 +15,7 @@ import React, { type ReactElement } from "react";
 // eslint-disable-next-line no-restricted-imports
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
+
 import { I18nApi, I18nContext } from "../..";
 
 const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
