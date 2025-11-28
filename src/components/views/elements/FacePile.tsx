@@ -10,6 +10,7 @@ import React, { type FC, type HTMLAttributes, type ReactNode } from "react";
 import { type RoomMember } from "matrix-js-sdk/src/matrix";
 import { AvatarStack, Tooltip } from "@vector-im/compound-web";
 import classNames from "classnames";
+import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MemberAvatar from "../avatars/MemberAvatar";
 import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
@@ -56,7 +57,7 @@ const FacePile: FC<IProps> = ({
     const pileContents = (
         <>
             {faces}
-            {overflow ? <span className="mx_FacePile_more" /> : null}
+            {overflow ? <OverflowHorizontalIcon className="mx_FacePile_more" /> : null}
         </>
     );
 
