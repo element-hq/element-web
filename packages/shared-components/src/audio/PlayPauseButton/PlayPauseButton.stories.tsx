@@ -5,13 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
 import { fn } from "storybook/test";
 
 import { PlayPauseButton } from "./PlayPauseButton";
-import type { Meta, StoryFn } from "@storybook/react-vite";
-import { I18nContext } from "../../utils/i18nContext";
-import { I18nApi } from "../..";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
     title: "Audio/PlayPauseButton",
@@ -23,17 +20,7 @@ const meta = {
 } satisfies Meta<typeof PlayPauseButton>;
 
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-const Template: StoryFn<typeof PlayPauseButton> = (args) => {
-    return (
-        <I18nContext.Provider value={new I18nApi()}>
-            <PlayPauseButton {...args} />
-        </I18nContext.Provider>
-    );
-};
-
-export const Default = Template.bind({});
-export const Playing = Template.bind({});
-Playing.args = {
-    playing: true,
-};
+export const Default: Story = {};
+export const Playing: Story = { args: { playing: true } };

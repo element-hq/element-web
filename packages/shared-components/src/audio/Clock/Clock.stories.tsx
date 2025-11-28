@@ -9,8 +9,6 @@ import React from "react";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { Clock } from "./Clock";
-import { I18nContext } from "../../utils/i18nContext";
-import { I18nApi } from "../../utils/I18nApi";
 
 export default {
     title: "Audio/Clock",
@@ -21,13 +19,7 @@ export default {
     },
 } as Meta<typeof Clock>;
 
-const Template: StoryFn<typeof Clock> = (args) => {
-    return (
-        <I18nContext.Provider value={new I18nApi()}>
-            <Clock {...args} />
-        </I18nContext.Provider>
-    );
-};
+const Template: StoryFn<typeof Clock> = (args) => <Clock {...args} />;
 
 export const Default = Template.bind({});
 

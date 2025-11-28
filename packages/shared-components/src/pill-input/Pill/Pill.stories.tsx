@@ -8,9 +8,8 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Pill } from "./Pill";
-import { I18nApi, I18nContext } from "../..";
 
 const meta = {
     title: "PillInput/Pill",
@@ -24,17 +23,7 @@ const meta = {
 } satisfies Meta<typeof Pill>;
 
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-const Template: StoryFn<typeof Pill> = (args) => {
-    return (
-        <I18nContext.Provider value={new I18nApi()}>
-            <Pill {...args} />
-        </I18nContext.Provider>
-    );
-};
-
-export const Default = Template.bind({});
-export const WithoutCloseButton = Template.bind({});
-WithoutCloseButton.args = {
-    onClick: undefined,
-};
+export const Default: Story = {};
+export const WithoutCloseButton: Story = {};

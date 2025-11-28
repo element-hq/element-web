@@ -37,11 +37,9 @@ export default {
 } as Meta<typeof RichItem>;
 
 const Template: StoryFn<typeof RichItem> = (args) => (
-    <I18nContext.Provider value={new I18nApi()}>
-        <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
-            <RichItem {...args} />
-        </ul>
-    </I18nContext.Provider>
+    <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
+        <RichItem {...args} />
+    </ul>
 );
 
 export const Default = Template.bind({});
@@ -60,11 +58,9 @@ export const Hover = Template.bind({});
 Hover.parameters = { pseudo: { hover: true } };
 
 const TemplateSeparator: StoryFn<typeof RichItem> = (args) => (
-    <I18nContext.Provider value={new I18nApi()}>
-        <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
-            <RichItem {...args} />
-            <RichItem {...args} />
-        </ul>
-    </I18nContext.Provider>
+    <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
+        <RichItem {...args} />
+        <RichItem {...args} />
+    </ul>
 );
 export const Separator = TemplateSeparator.bind({});
