@@ -65,17 +65,23 @@ async function languageLoader(context: StoryContext<ReactRenderer, StrictArgs>):
 
 const withTooltipProvider: Decorator = (Story) => {
     return (
+        <TooltipProvider>
+            <Story />
+        </TooltipProvider>
+    );
+};
+
+const withI18nProvider: Decorator = (Story) => {
+    return (
         <I18nContext.Provider value={new I18nApi()}>
-            <TooltipProvider>
-                <Story />
-            </TooltipProvider>
+            <Story />
         </I18nContext.Provider>
     );
 };
 
 const preview: Preview = {
     tags: ["autodocs"],
-    decorators: [withThemeProvider, withTooltipProvider],
+    decorators: [withThemeProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {
             storySort: {
