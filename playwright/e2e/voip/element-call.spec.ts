@@ -11,6 +11,7 @@ import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
 import { readFile } from "node:fs/promises";
+import { Page } from "playwright-core";
 
 // Load a copy of our fake Element Call app, and the latest widget API.
 // The fake call app does *just* enough to convince Element Web that a call is ongoing
@@ -446,20 +447,135 @@ test.describe("Element Call", () => {
                 await use({ roomId });
             },
         });
+
+        async function openAndJoinCall(page: Page, existing = false) {
+            if (existing) {
+                await page.getByTestId("join-call-button").click();
+            } else {
+                await page.getByRole("button", { name: "Video call" }).click();
+                await page.getByRole("menuitem", { name: "Element Call" }).click();
+            }
+            const iframe = page.locator("iframe");
+            await expect(iframe).toBeVisible();
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            const callFrame = page.frame({ url: frameUrlStr });
+            await callFrame.getByRole("button", { name: "Join Call" }).click();
+            await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+        }
+
         test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
             await app.viewRoomById(room.roomId);
             await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
 
-            await page.getByRole("button", { name: "Video call" }).click();
-            await page.getByRole("menuitem", { name: "Element Call" }).click();
-            const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            const callFrame = page.frame({ url: frameUrlStr });
-            await callFrame.getByRole("button", { name: "Join Call" }).click();
-            await expect(callFrame.getByText('In call', { exact: true })).toBeVisible();
+            await openAndJoinCall(page);
             await app.viewRoomByName("OtherRoom");
 
             // We should have a PiP container here.
-            await expect(page.locator('.mx_AppTile_persistedWrapper')).toBeVisible();
+            await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+        });
+
+        test("should be able to start a call, close it via PiP, and start again in the same room", async ({
+            page,
+            user,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+            await openAndJoinCall(page);
+            await app.viewRoomByName("OtherRoom");
+            const pipContainer = page.locator(".mx_WidgetPip");
+
+            // We should have a PiP container here.
+            await expect(pipContainer).toBeVisible();
+
+            // Leave the call.
+            const overlay = page.locator(".mx_WidgetPip_overlay");
+            await overlay.hover({ timeout: 2000 }); // Show the call footer.
+            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+
+            // PiP container goes.
+            await expect(pipContainer).not.toBeVisible();
+
+            // Wait for call to stop.
+            await expect(await page.getByTestId("notification-decoration")).not.toBeVisible();
+            await app.viewRoomById(room.roomId);
+            await expect(await page.getByTestId("join-call-button")).not.toBeVisible();
+
+            // Join the call again.
+            await openAndJoinCall(page);
+        });
+
+        test("should be able to start a call, close it via PiP, and start again in a different room", async ({
+            page,
+            user,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+            await openAndJoinCall(page);
+            await app.viewRoomByName("OtherRoom");
+            const pipContainer = page.locator(".mx_WidgetPip");
+
+            // We should have a PiP container here.
+            await expect(pipContainer).toBeVisible();
+
+            // Leave the call.
+            const overlay = page.locator(".mx_WidgetPip_overlay");
+            await overlay.hover({ timeout: 2000 }); // Show the call footer.
+            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+
+            // PiP container goes.
+            await expect(pipContainer).not.toBeVisible();
+
+            // Wait for call to stop.
+            await expect(await page.getByTestId("notification-decoration")).not.toBeVisible();
+            await expect(await page.getByTestId("join-call-button")).not.toBeVisible();
+
+            // Join the call again, but from the other room.
+            await openAndJoinCall(page);
+        });
+
+        // For https://github.com/element-hq/element-web/issues/30838
+        test("should be able to join a call, leave via PiP, and rejoin the call", async ({
+            page,
+            user,
+            room,
+            app,
+            bot,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+
+            await sendRTCState(bot, room.roomId);
+            await openAndJoinCall(page, true);
+
+            await app.viewRoomByName("OtherRoom");
+            const pipContainer = page.locator(".mx_WidgetPip");
+
+            // We should have a PiP container here.
+            await expect(pipContainer).toBeVisible();
+
+            // Leave the call.
+            const overlay = page.locator(".mx_WidgetPip_overlay");
+            await overlay.hover({ timeout: 2000 }); // Show the call footer.
+            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+
+            // PiP container goes.
+            await expect(pipContainer).not.toBeVisible();
+
+            // Rejoin the call
+            await app.viewRoomById(room.roomId);
+
+            // When this is fixed, this can be removed:
+            await page.getByTestId("join-call-button").click();
+            await expect(page.getByText("Loading…")).toBeVisible();
+            // and this can be uncommented:
+            // await openAndJoinCall(page, true);
         });
     });
 });
