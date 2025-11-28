@@ -146,16 +146,6 @@ describe("RoomViewStore", function () {
     const room2 = new Room(roomId2, mockClient, userId);
     getRooms.mockReturnValue([room, room2]);
 
-    const viewCall = async (): Promise<void> => {
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: roomId,
-            view_call: true,
-            metricsTrigger: undefined,
-        });
-        await untilDispatch(Action.ViewRoom, dis);
-    };
-
     const dispatchPromptAskToJoin = async () => {
         dis.dispatch({ action: Action.PromptAskToJoin });
         await untilDispatch(Action.PromptAskToJoin, dis);
@@ -404,8 +394,33 @@ describe("RoomViewStore", function () {
         const call = { presented: false } as Call;
         const getCallSpy = jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
         await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
-        await viewCall();
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
         expect(getCallSpy).toHaveBeenCalledWith(roomId);
+        expect(call.presented).toEqual(true);
+    });
+
+    it("implicitly views an active call", async () => {
+        const call = { presented: false } as Call;
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        jest.spyOn(CallStore.instance, "getActiveCall").mockImplementation((rId) => (rId === roomId ? call : null));
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        // View the room without explicitly setting view_call to true
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
         expect(call.presented).toEqual(true);
     });
 

@@ -17,6 +17,7 @@ import React, {
     type Ref,
 } from "react";
 import classnames from "classnames";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -411,7 +412,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                     onKeyDown={this.onKeyDown}
                 >
                     {currentValue}
-                    <span className="mx_Dropdown_arrow" />
+                    <ChevronDownIcon className="mx_Dropdown_arrow" />
                     {menu}
                 </AccessibleButton>
             </div>
