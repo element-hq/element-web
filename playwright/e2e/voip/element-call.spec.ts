@@ -541,37 +541,34 @@ test.describe("Element Call", () => {
         });
 
         // For https://github.com/element-hq/element-web/issues/30838
-        test.fail("should be able to join a call, leave via PiP, and rejoin the call", async ({
-            page,
-            user,
-            room,
-            app,
-            bot,
-        }) => {
-            await app.viewRoomById(room.roomId);
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+        test.fail(
+            "should be able to join a call, leave via PiP, and rejoin the call",
+            async ({ page, user, room, app, bot }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
 
-            await sendRTCState(bot, room.roomId);
-            await openAndJoinCall(page, true);
+                await sendRTCState(bot, room.roomId);
+                await openAndJoinCall(page, true);
 
-            await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.locator(".mx_WidgetPip");
 
-            // We should have a PiP container here.
-            await expect(pipContainer).toBeVisible();
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
 
-            // Leave the call.
-            const overlay = page.locator(".mx_WidgetPip_overlay");
-            await overlay.hover({ timeout: 2000 }); // Show the call footer.
-            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+                // Leave the call.
+                const overlay = page.locator(".mx_WidgetPip_overlay");
+                await overlay.hover({ timeout: 2000 }); // Show the call footer.
+                await overlay.getByRole("button", { name: "Leave", exact: true }).click();
 
-            // PiP container goes.
-            await expect(pipContainer).not.toBeVisible();
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
 
-            // Rejoin the call
-            await app.viewRoomById(room.roomId);
-            await openAndJoinCall(page, true);
-        });
+                // Rejoin the call
+                await app.viewRoomById(room.roomId);
+                await openAndJoinCall(page, true);
+            },
+        );
     });
 });
