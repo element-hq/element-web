@@ -40,11 +40,10 @@ const getTitle = (state: DeviceState): string => {
         case DeviceState.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
         case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+        case DeviceState.IDENTITY_NEEDS_RESET:
             return _t("encryption|key_storage_out_of_sync");
         case DeviceState.TURN_ON_KEY_STORAGE:
             return _t("encryption|turn_on_key_storage");
-        case DeviceState.IDENTITY_NEEDS_RESET:
-            return _t("encryption|identity_needs_reset");
         case DeviceState.OK:
             return "";
     }
@@ -76,7 +75,7 @@ const getSetupCaption = (state: DeviceState): string => {
         case DeviceState.TURN_ON_KEY_STORAGE:
             return _t("action|continue");
         case DeviceState.IDENTITY_NEEDS_RESET:
-            return _t("encryption|reset_identity");
+            return _t("encryption|continue_with_reset");
         case DeviceState.OK:
             return "";
     }
