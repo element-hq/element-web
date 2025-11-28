@@ -51,7 +51,8 @@ export interface I18nApi {
     translate(key: keyof Translations, variables?: Variables): string;
 
     /**
-     * Convert a timestamp into a human-readable time string
+     * Convert a timestamp into a translated, human-readable time,
+     * using the current system time as a reference, eg. "5 minutes ago".
      * @param timeMillis - The time in milliseconds since epoch
      */
     humanizeTime(timeMillis: number): string;
