@@ -19,27 +19,33 @@ const meta = {
     tags: ["autodocs"],
     args: {
         children: <p>Hello! This is a status banner.</p>,
-        onClose: fn(),
     },
 } satisfies Meta<typeof Banner>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+    args: {
+        onClose: fn(),
+    },
+};
 export const Info: Story = {
     args: {
         type: "info",
+        onClose: fn(),
     },
 };
 export const Success: Story = {
     args: {
         type: "success",
+        onClose: fn(),
     },
 };
 export const Critical: Story = {
     args: {
         type: "critical",
+        onClose: fn(),
     },
 };
 export const WithAction: Story = {
@@ -63,5 +69,8 @@ export const WithAction: Story = {
 export const WithAvatarImage: Story = {
     args: {
         avatar: <img alt="Example" src="https://picsum.photos/32/32" />,
+        onClose: fn(),
     },
 };
+
+export const WithoutClose: Story = {};
