@@ -52,13 +52,13 @@
     async function hangup() {
         await api.sendStateEvent("org.matrix.msc3401.call.member", stateKey, {}, roomId);
         await api.setAlwaysOnScreen(false);
-        await api.transport.send("io.element.close", { fake: true });
+        await api.transport.send("io.element.close", {});
         stateIndicator.innerHTML = "Ended";
     }
 
     document.querySelector("#join-button").onclick = async () => {
         await api.setAlwaysOnScreen(true);
-        await api.transport.send("io.element.join", { fake: true });
+        await api.transport.send("io.element.join", {});
         await api.sendStateEvent("org.matrix.msc3401.call.member", stateKey, content, roomId);
         stateIndicator.innerHTML = "In call";
     };
