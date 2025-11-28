@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { mocked } from "jest-mock";
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -18,6 +19,7 @@ import {
 } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
 import Modal from "../../../../../../../src/Modal";
+import DeviceListener, { DeviceState } from "../../../../../../../src/DeviceListener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
@@ -37,22 +39,21 @@ describe("<EncryptionUserSettingsTab />", () => {
                 userSigningKey: true,
             },
         });
+
+        jest.spyOn(DeviceListener.sharedInstance(), "getDeviceState").mockReturnValue(DeviceState.OK);
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     function renderComponent(props: { initialState?: State } = {}) {
         return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
     }
 
-    it("should display a loading state when the encryption state is computed", () => {
-        jest.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockImplementation(() => new Promise(() => {}));
-
-        renderComponent();
-        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
-    });
-
     it("should display a verify button when the encryption is not set up", async () => {
         const user = userEvent.setup();
-        jest.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockResolvedValue(false);
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.VERIFY_THIS_SESSION);
 
         const { asFragment } = renderComponent();
         await waitFor(() =>
@@ -81,17 +82,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the recovery out of sync panel when secrets are not cached", async () => {
-        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
-        // Secrets are not cached
-        jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
-            privateKeysInSecretStorage: true,
-            publicKeysOnDevice: true,
-            privateKeysCachedLocally: {
-                masterKey: false,
-                selfSigningKey: true,
-                userSigningKey: true,
-            },
-        });
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
 
         const user = userEvent.setup();
         const { asFragment } = renderComponent();
@@ -196,18 +187,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     it("should re-check the encryption state and displays the correct panel when the user clicks cancel the reset identity flow", async () => {
         const user = userEvent.setup();
 
-        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
-
-        // Secrets are not cached
-        jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
-            privateKeysInSecretStorage: true,
-            publicKeysOnDevice: true,
-            privateKeysCachedLocally: {
-                masterKey: false,
-                selfSigningKey: true,
-                userSigningKey: true,
-            },
-        });
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
 
         renderComponent({ initialState: "reset_identity_forgot" });
 
