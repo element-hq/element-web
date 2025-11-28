@@ -5,13 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { readFile } from "node:fs/promises";
+import { type Page } from "playwright-core";
+
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
-import { readFile } from "node:fs/promises";
-import { Page } from "playwright-core";
 
 // Load a copy of our fake Element Call app, and the latest widget API.
 // The fake call app does *just* enough to convince Element Web that a call is ongoing
