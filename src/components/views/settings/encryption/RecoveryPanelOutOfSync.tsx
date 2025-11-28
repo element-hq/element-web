@@ -13,6 +13,9 @@ import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";
 import { SettingsSubheader } from "../SettingsSubheader";
 import { accessSecretStorage } from "../../../../SecurityManager";
+import DeviceListener from "../../../../DeviceListener";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
 interface RecoveryPanelOutOfSyncProps {
     /**
@@ -33,6 +36,8 @@ interface RecoveryPanelOutOfSyncProps {
  * the client.
  */
 export function RecoveryPanelOutOfSync({ onForgotRecoveryKey, onFinish }: RecoveryPanelOutOfSyncProps): JSX.Element {
+    const matrixClient = useMatrixClientContext();
+
     return (
         <SettingsSection
             legacy={false}
@@ -55,7 +60,29 @@ export function RecoveryPanelOutOfSync({ onForgotRecoveryKey, onFinish }: Recove
                     kind="primary"
                     Icon={KeyIcon}
                     onClick={async () => {
-                        await accessSecretStorage();
+                        const crypto = matrixClient.getCrypto()!;
+
+                        const deviceListener = DeviceListener.sharedInstance();
+
+                        // we need to call keyStorageOutOfSyncNeedsBackupReset here because
+                        // deviceListener.whilePaused() sets its client to undefined, so
+                        // keyStorageOutOfSyncNeedsBackupReset won't be able to check
+                        // the backup state.
+                        const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false);
+
+                        // pause the device listener because we could be making lots
+                        // of changes, and don't want toasts to pop up and disappear
+                        // while we're doing it
+                        await deviceListener.whilePaused(async () => {
+                            await accessSecretStorage(async () => {
+                                // Reset backup if needed.
+                                if (needsBackupReset) {
+                                    await resetKeyBackupAndWait(crypto);
+                                } else if (await matrixClient.isKeyBackupKeyStored()) {
+                                    await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
+                                }
+                            });
+                        });
                         onFinish();
                     }}
                 >
