@@ -52,6 +52,7 @@ const getTitle = (state: DeviceState): string => {
 const getIcon = (state: DeviceState): IToast<any>["icon"] => {
     switch (state) {
         case DeviceState.SET_UP_RECOVERY:
+        case DeviceState.OK:
             return undefined;
         case DeviceState.VERIFY_THIS_SESSION:
         case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
@@ -59,8 +60,6 @@ const getIcon = (state: DeviceState): IToast<any>["icon"] => {
             return "verification_warning";
         case DeviceState.TURN_ON_KEY_STORAGE:
             return "key_storage";
-        case DeviceState.OK:
-            return "";
     }
 };
 
