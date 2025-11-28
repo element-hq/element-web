@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<HistoryVisibleBanner /> should not render history visibility acknowledgement if it has previously been dismissed 1`] = `<div />`;
+
+exports[`<HistoryVisibleBanner /> should not render history visibility acknowledgement in encrypted rooms with joined history visibility 1`] = `<div />`;
+
+exports[`<HistoryVisibleBanner /> should not render history visibility acknowledgement in unencrypted rooms 1`] = `<div />`;
+
+exports[`<HistoryVisibleBanner /> should render dismissable history visibility acknowledgement in encrypted rooms with non-join history visibility 1`] = `
+<div>
+  <div
+    class="_banner_15kcv_20"
+    data-type="info"
+  >
+    <div
+      class="_icon_15kcv_65"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M11.288 7.288A.97.97 0 0 1 12 7q.424 0 .713.287Q13 7.576 13 8t-.287.713A.97.97 0 0 1 12 9a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 8q0-.424.287-.713m.001 4.001A.97.97 0 0 1 12 11q.424 0 .713.287.287.288.287.713v4q0 .424-.287.712A.97.97 0 0 1 12 17a.97.97 0 0 1-.713-.288A.97.97 0 0 1 11 16v-4q0-.424.287-.713"
+        />
+        <path
+          clip-rule="evenodd"
+          d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+    <span
+      class="_content_15kcv_53"
+    >
+      Messages you send will be shared with new members invited to this room.
+    </span>
+    <div
+      class="_actions_15kcv_85"
+    >
+      <a
+        class="_button_vczzf_8"
+        data-kind="tertiary"
+        data-size="sm"
+        href="https://element.io/en/help#e2ee-history-sharing"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        Learn more
+      </a>
+      <button
+        class="_button_vczzf_8"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        Dismiss
+      </button>
+    </div>
+  </div>
+</div>
+`;

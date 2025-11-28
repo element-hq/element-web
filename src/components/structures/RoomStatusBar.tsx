@@ -16,11 +16,7 @@ import {
     RoomEvent,
     type SyncState,
     type SyncStateData,
-    HistoryVisibility,
-    RoomStateEvent,
-    type RoomState,
 } from "matrix-js-sdk/src/matrix";
-import { RoomStatusBarHistoryVisible } from "@element-hq/web-shared-components";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../languageHandler";
@@ -34,8 +30,6 @@ import InlineSpinner from "../views/elements/InlineSpinner";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import ExternalLink from "../views/elements/ExternalLink";
-import SettingsStore from "../../settings/SettingsStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -90,9 +84,6 @@ interface IState {
     syncStateData: SyncStateData | null;
     unsentMessages: MatrixEvent[];
     isResending: boolean;
-    roomHistoryVisibility: HistoryVisibility;
-    roomHasEncryptionStateEvent: boolean;
-    acknowledgedHistoryVisibility: boolean;
 }
 
 export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
@@ -108,9 +99,6 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
             syncStateData: this.context.getSyncStateData(),
             unsentMessages: getUnsentMessages(this.props.room),
             isResending: false,
-            roomHistoryVisibility: this.props.room.getHistoryVisibility(),
-            roomHasEncryptionStateEvent: this.props.room.hasEncryptionStateEvent(),
-            acknowledgedHistoryVisibility: this.getUpdatedAcknowledgedHistoryVisibility(),
         };
     }
 
@@ -120,7 +108,6 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         const client = this.context;
         client.on(ClientEvent.Sync, this.onSyncStateChange);
         client.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
-        client.on(RoomStateEvent.Update, this.onRoomStateEventUpdate);
 
         this.checkSize();
     }
@@ -136,7 +123,6 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         if (client) {
             client.removeListener(ClientEvent.Sync, this.onSyncStateChange);
             client.removeListener(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
-            client.removeListener(RoomStateEvent.Update, this.onRoomStateEventUpdate);
         }
     }
 
@@ -173,22 +159,6 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         });
     };
 
-    private onRoomStateEventUpdate = (state: RoomState): void => {
-        // prevent useless re-renders if the flag is disabled.
-        if (!SettingsStore.getValue("feature_share_history_on_invite")) {
-            return;
-        }
-
-        if (state.roomId !== this.props.room.roomId) {
-            return;
-        }
-        this.setState({
-            acknowledgedHistoryVisibility: this.getUpdatedAcknowledgedHistoryVisibility(),
-            roomHistoryVisibility: this.props.room.getHistoryVisibility(),
-            roomHasEncryptionStateEvent: this.props.room.hasEncryptionStateEvent(),
-        });
-    };
-
     // Check whether current size is greater than 0, if yes call props.onVisible
     private checkSize(): void {
         if (this.getSize()) {
@@ -204,11 +174,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     private getSize(): number {
         if (this.shouldShowConnectionError()) {
             return STATUS_BAR_EXPANDED;
-        } else if (
-            this.state.unsentMessages.length > 0 ||
-            this.state.isResending ||
-            this.shouldShowHistoryVisibilityContent()
-        ) {
+        } else if (this.state.unsentMessages.length > 0 || this.state.isResending) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
@@ -299,85 +265,6 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         );
     }
 
-    /**
-     * Gets the latest acknowledgement flag from the setting store.
-     *
-     * If the room history visibility was changed to `HistoryVisibility.Joined` since this method
-     * was last called, the flag is cleared in both the component state and settings.
-     *
-     * Additionally, while this feature is in development, this method will always return true unless
-     * the `feature_share_history_on_invite` lab is enabled.
-     */
-    private getUpdatedAcknowledgedHistoryVisibility(): boolean {
-        if (!SettingsStore.getValue("feature_share_history_on_invite")) {
-            return true;
-        }
-
-        let acknowledgedHistoryVisibility = SettingsStore.getValue(
-            "acknowledgedHistoryVisibility",
-            this.props.room.roomId,
-        );
-        if (this.props.room.getHistoryVisibility() === HistoryVisibility.Joined) {
-            acknowledgedHistoryVisibility = false;
-            // Clear the dismissed flag to ensure if a room is changed public -> private -> public,
-            // we show the banner again when it is set back to public.
-            void SettingsStore.setValue(
-                "acknowledgedHistoryVisibility",
-                this.props.room.roomId,
-                SettingLevel.ROOM_ACCOUNT,
-                false,
-            );
-        }
-        return acknowledgedHistoryVisibility;
-    }
-
-    /**
-     * Returns true if the history visibility acknowledgement banner should be shown.
-     *
-     * Shown when:
-     * - The room is encrypted
-     * - The room's history visibility is not set to `HistoryVisibility.Joined`
-     * - The user has not already acknowledged the alert
-     *
-     * Additionally, while this feature is in development, this will always return `false`
-     * unless the `feature_share_history_on_invite` lab is enabled.
-     */
-    private shouldShowHistoryVisibilityContent(): boolean {
-        if (!SettingsStore.getValue("feature_share_history_on_invite")) {
-            return false;
-        }
-
-        return (
-            this.state.roomHasEncryptionStateEvent &&
-            this.state.roomHistoryVisibility !== HistoryVisibility.Joined &&
-            !this.state.acknowledgedHistoryVisibility
-        );
-    }
-
-    /**
-     * Get the content for the history visibility acknowledgement banner.
-     *
-     * When the user closes the banner, the acknowledgement is saved in SettingsStore
-     * for this room, and the banner will not be shown again unless the history visibility changes.
-     */
-    private getHistoryVisibilityContent(): JSX.Element {
-        return (
-            <RoomStatusBarHistoryVisible
-                onClose={async () => {
-                    void SettingsStore.setValue(
-                        "acknowledgedHistoryVisibility",
-                        this.props.room.roomId,
-                        SettingLevel.ROOM_ACCOUNT,
-                        true,
-                    );
-                    this.setState({
-                        acknowledgedHistoryVisibility: true,
-                    });
-                }}
-            />
-        );
-    }
-
     public render(): React.ReactNode {
         if (this.shouldShowConnectionError()) {
             return (
@@ -401,10 +288,6 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
 
         if (this.state.unsentMessages.length > 0 || this.state.isResending) {
             return this.getUnsentMessageContent();
-        }
-
-        if (this.shouldShowHistoryVisibilityContent()) {
-            return this.getHistoryVisibilityContent();
         }
 
         return null;

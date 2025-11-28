@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { render } from "jest-matrix-react";
 import {
     type MatrixClient,
     PendingEventOrdering,
@@ -20,11 +20,8 @@ import {
 import RoomStatusBar, { getUnsentMessages } from "../../../../src/components/structures/RoomStatusBar";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { mkEvent, stubClient, upsertRoomStateEvents } from "../../../test-utils/test-utils";
+import { mkEvent, stubClient } from "../../../test-utils/test-utils";
 import { mkThread } from "../../../test-utils/threads";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { type Settings } from "../../../../src/settings/Settings";
 
 describe("RoomStatusBar", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -149,114 +146,6 @@ describe("RoomStatusBar", () => {
 
                 expect(container).toMatchSnapshot();
             });
-        });
-    });
-
-    describe("Shared History Visibility Acknowledgement", () => {
-        let acknowledgedHistoryVisibility = false;
-
-        beforeAll(async () => {
-            jest.spyOn(SettingsStore, "setValue").mockImplementation(
-                async (settingName: keyof Settings, roomId: string | null = null, level: SettingLevel, value: any) => {
-                    if (settingName == "acknowledgedHistoryVisibility") {
-                        acknowledgedHistoryVisibility = value;
-                    }
-                },
-            );
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName: keyof Settings, roomId: string | null = null, excludeDefault = false) => {
-                    if (settingName == "acknowledgedHistoryVisibility") {
-                        return acknowledgedHistoryVisibility;
-                    }
-                    if (settingName == "feature_share_history_on_invite") {
-                        return true;
-                    }
-                    return SettingsStore.getDefaultValue(settingName);
-                },
-            );
-        });
-
-        beforeEach(async () => {
-            await SettingsStore.setValue("acknowledgedHistoryVisibility", ROOM_ID, SettingLevel.ROOM_ACCOUNT, false);
-        });
-
-        it("should not render history visibility acknowledgement in unencrypted rooms", () => {
-            const { container } = getComponent();
-            expect(container).toMatchSnapshot();
-        });
-
-        it("should not render history visibility acknowledgement in encrypted rooms with joined history visibility", () => {
-            upsertRoomStateEvents(room, [
-                mkEvent({
-                    event: true,
-                    type: "m.room.encryption",
-                    user: "@user1:server",
-                    content: {},
-                }),
-                mkEvent({
-                    event: true,
-                    type: "m.room.history_visibility",
-                    content: {
-                        history_visibility: "joined",
-                    },
-                    user: "@user1:server",
-                }),
-            ]);
-
-            const { container } = getComponent();
-            expect(container).toMatchSnapshot();
-        });
-
-        it("should not render history visibility acknowledgement if it has previously been dismissed", async () => {
-            await SettingsStore.setValue("acknowledgedHistoryVisibility", ROOM_ID, SettingLevel.ROOM_ACCOUNT, true);
-            upsertRoomStateEvents(room, [
-                mkEvent({
-                    event: true,
-                    type: "m.room.encryption",
-                    user: "@user1:server",
-                    content: {},
-                }),
-                mkEvent({
-                    event: true,
-                    type: "m.room.history_visibility",
-                    user: "@user1:server",
-                    content: {
-                        history_visibility: "shared",
-                    },
-                }),
-            ]);
-
-            const { container } = getComponent();
-            expect(container).toMatchSnapshot();
-        });
-
-        it("should render dismissable history visibility acknowledgement in encrypted rooms with non-join history visibility", async () => {
-            upsertRoomStateEvents(room, [
-                mkEvent({
-                    event: true,
-                    type: "m.room.encryption",
-                    user: "@user1:server",
-                    content: {},
-                }),
-                mkEvent({
-                    event: true,
-                    type: "m.room.history_visibility",
-                    user: "@user1:server",
-                    content: {
-                        history_visibility: "shared",
-                    },
-                }),
-            ]);
-
-            const { container } = getComponent();
-            expect(container).toMatchSnapshot();
-
-            // assert dismiss button exists, and press it
-            const dismissButton = screen.getByRole<HTMLButtonElement>("button", { name: "Dismiss" });
-            expect(dismissButton).not.toBeNull();
-            fireEvent.click(dismissButton!);
-
-            await waitFor(() => expect(container).toBeEmptyDOMElement());
         });
     });
 });
