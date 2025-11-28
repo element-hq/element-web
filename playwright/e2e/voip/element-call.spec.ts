@@ -462,6 +462,9 @@ test.describe("Element Call", () => {
             const callFrame = page.frame({ url: frameUrlStr });
             await callFrame.getByRole("button", { name: "Join Call" }).click();
             await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+
+            // Wait for the room lsit to update before we switch away.
+            await expect(await page.getByTestId("notification-decoration")).toBeVisible();
         }
 
         test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
