@@ -50,6 +50,7 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
+import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -368,6 +369,7 @@ export interface Settings {
     "Electron.enableContentProtection": IBaseSetting<boolean>;
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
+    "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
 }
 
@@ -457,6 +459,11 @@ export const SETTINGS: Settings = {
         default: InviteRulesConfigController.default,
         // Contains server names
         shouldExportToRageshake: false,
+    },
+    "blockInvites": {
+        controller: new BlockInvitesConfigController("blockInvites"),
+        supportedLevels: [SettingLevel.ACCOUNT],
+        default: false,
     },
     "feature_report_to_moderators": {
         isFeature: true,
