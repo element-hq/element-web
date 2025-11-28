@@ -42,21 +42,17 @@ Please see LICENSE files in the repository root for full details.
     position: relative;
     display: block;
     height: 38px;
-    border-radius: 19px;
+    border-radius: 50%;
     box-sizing: border-box;
     background: $background;
     border: 1.3px solid var(--cpd-color-icon-tertiary);
     cursor: pointer;
-}
 
-.mx_JumpToBottomButton_scrollDown::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    mask-image: url("@vector-im/compound-design-tokens/icons/chevron-up.svg");
-    mask-repeat: no-repeat;
-    mask-size: 24px;
-    mask-position: center 6px;
-    transform: rotate(180deg);
-    background: var(--cpd-color-icon-tertiary);
+    svg {
+        height: inherit;
+        width: inherit;
+        box-sizing: border-box;
+        padding: 7px 8px 7px 6px;
+        color: var(--cpd-color-icon-tertiary);
+    }
 }
