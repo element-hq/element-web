@@ -30,6 +30,7 @@ import {
     JoinRule,
     type OidcClientConfig,
     type GroupCall,
+    HistoryVisibility,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
@@ -627,6 +628,7 @@ export function mkStubRoom(
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
         currentState: {
             getStateEvents: jest.fn((_type, key) => (key === undefined ? [] : null)),
+            getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Joined),
             getMember: jest.fn(),
             mayClientSendStateEvent: jest.fn().mockReturnValue(true),
             maySendStateEvent: jest.fn().mockReturnValue(true),
