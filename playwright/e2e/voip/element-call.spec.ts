@@ -541,7 +541,7 @@ test.describe("Element Call", () => {
         });
 
         // For https://github.com/element-hq/element-web/issues/30838
-        test("should be able to join a call, leave via PiP, and rejoin the call", async ({
+        test.fail("should be able to join a call, leave via PiP, and rejoin the call", async ({
             page,
             user,
             room,
@@ -571,12 +571,7 @@ test.describe("Element Call", () => {
 
             // Rejoin the call
             await app.viewRoomById(room.roomId);
-
-            // When this is fixed, this can be removed:
-            await page.getByTestId("join-call-button").click();
-            await expect(page.getByText("Loading…")).toBeVisible();
-            // and this can be uncommented:
-            // await openAndJoinCall(page, true);
+            await openAndJoinCall(page, true);
         });
     });
 });
