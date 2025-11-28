@@ -70,6 +70,7 @@ describe("<MImageBody/>", () => {
             info: {
                 w: 40,
                 h: 50,
+                mimetype: "image/png",
             },
             file: {
                 url: "mxc://server/encrypted-image",
