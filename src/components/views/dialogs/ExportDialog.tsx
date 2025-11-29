@@ -43,12 +43,14 @@ interface IProps {
 interface ExportConfig {
     exportFormat: ExportFormat;
     exportType: ExportType;
+    numberOfMessagesToBeginning: number;
     numberOfMessages: number;
     sizeLimit: number;
     includeAttachments: boolean;
     setExportFormat?: Dispatch<SetStateAction<ExportFormat>>;
     setExportType?: Dispatch<SetStateAction<ExportType>>;
     setAttachments?: Dispatch<SetStateAction<boolean>>;
+    setNumberOfMessagesToBeginning?: Dispatch<SetStateAction<number>>;
     setNumberOfMessages?: Dispatch<SetStateAction<number>>;
     setSizeLimit?: Dispatch<SetStateAction<number>>;
 }
@@ -64,6 +66,9 @@ const useExportFormState = (): ExportConfig => {
     const [exportFormat, setExportFormat] = useState(config.format ?? ExportFormat.Html);
     const [exportType, setExportType] = useState(config.range ?? ExportType.Timeline);
     const [includeAttachments, setAttachments] = useState(config.includeAttachments ?? false);
+    const [numberOfMessagesToBeginning, setNumberOfMessagesToBeginning] = useState<number>(
+        config.numberOfMessages ?? 100,
+    );
     const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
     const [sizeLimit, setSizeLimit] = useState<number>(config.sizeMb ?? 8);
 
@@ -71,10 +76,12 @@ const useExportFormState = (): ExportConfig => {
         exportFormat,
         exportType,
         includeAttachments,
+        numberOfMessagesToBeginning,
         numberOfMessages,
         sizeLimit,
         setExportFormat: !config.format ? setExportFormat : undefined,
         setExportType: !config.range ? setExportType : undefined,
+        setNumberOfMessagesToBeginning: !config.numberOfMessages ? setNumberOfMessagesToBeginning : undefined,
         setNumberOfMessages: !config.numberOfMessages ? setNumberOfMessages : undefined,
         setSizeLimit: !config.sizeMb ? setSizeLimit : undefined,
         setAttachments: config.includeAttachments === undefined ? setAttachments : undefined,
@@ -86,10 +93,12 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         exportFormat,
         exportType,
         includeAttachments,
+        numberOfMessagesToBeginning,
         numberOfMessages,
         sizeLimit,
         setExportFormat,
         setExportType,
+        setNumberOfMessagesToBeginning,
         setNumberOfMessages,
         setSizeLimit,
         setAttachments,
@@ -97,6 +106,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     const [isExporting, setExporting] = useState(false);
     const sizeLimitRef = useRef<Field>(null);
+    const messageCountToBeginningRef = useRef<Field>(null);
     const messageCountRef = useRef<Field>(null);
     const [exportProgressText, setExportProgressText] = useState(_t("export_chat|processing"));
     const [displayCancel, setCancelWarning] = useState(false);
@@ -113,6 +123,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     const startExport = async (): Promise<void> => {
         const exportOptions = {
+            numberOfMessagesToBeginning,
             numberOfMessages,
             attachmentsIncluded: includeAttachments,
             maxSize: sizeLimit * 1024 * 1024,
@@ -144,7 +155,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             sizeLimitRef.current?.validate({ focused: true });
             return;
         }
-        if (exportType === ExportType.LastNMessages) {
+        if (exportType === ExportType.MessageNumberRange) {
             const isValidNumberOfMessages = await messageCountRef.current?.validate({ focused: false });
             if (!isValidNumberOfMessages) {
                 messageCountRef.current?.validate({ focused: true });
@@ -252,8 +263,23 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         );
     });
 
+    let messageCountToBeginning: JSX.Element | undefined;
     let messageCount: JSX.Element | undefined;
-    if (exportType === ExportType.LastNMessages && setNumberOfMessages) {
+    if (exportType === ExportType.MessageNumberRange && setNumberOfMessagesToBeginning && setNumberOfMessages) {
+        messageCountToBeginning = (
+            <Field
+                id="message-count-to-beginning"
+                element="input"
+                type="number"
+                value={numberOfMessagesToBeginning.toString()}
+                ref={messageCountToBeginningRef}
+                onValidate={onValidateNumberOfMessages}
+                label={_t("export_chat|message_number_range_beginning")}
+                onChange={(e) => {
+                    setNumberOfMessagesToBeginning(parseInt(e.target.value));
+                }}
+            />
+        );
         messageCount = (
             <Field
                 id="message-count"
@@ -262,12 +288,13 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 value={numberOfMessages.toString()}
                 ref={messageCountRef}
                 onValidate={onValidateNumberOfMessages}
-                label={_t("export_chat|num_messages")}
+                label={_t("export_chat|message_number_range_count")}
                 onChange={(e) => {
                     setNumberOfMessages(parseInt(e.target.value));
                 }}
             />
         );
+        // FIXME: Validate that numberOfMessagesToBeginning > numberOfMessages
     }
 
     const sizePostFix = <span>{_t("export_chat|size_limit_postfix")}</span>;
@@ -354,6 +381,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                             >
                                 {exportTypeOptions}
                             </Field>
+                            {messageCountToBeginning}
                             {messageCount}
                         </>
                     )}

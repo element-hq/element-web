@@ -189,7 +189,7 @@ describe("HTMLExport", () => {
             () =>
                 new HTMLExporter(
                     room,
-                    ExportType.LastNMessages,
+                    ExportType.MessageNumberRange,
                     {
                         attachmentsIncluded: false,
                         maxSize: 1_024 * 1_024,
@@ -208,7 +208,7 @@ describe("HTMLExport", () => {
             numberOfMessages: 40,
         };
         const stubRoom = mkStubRoom("!myroom:example.org", roomName, client);
-        const exporter = new HTMLExporter(stubRoom, ExportType.LastNMessages, stubOptions, () => {});
+        const exporter = new HTMLExporter(stubRoom, ExportType.MessageNumberRange, stubOptions, () => {});
 
         expect(exporter.destinationFileName).toMatchSnapshot();
 
@@ -233,7 +233,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -258,7 +258,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -290,7 +290,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -321,7 +321,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -345,7 +345,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -380,7 +380,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -402,7 +402,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -425,7 +425,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: true,
                 maxSize: 1_024 * 1_024,
@@ -451,7 +451,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: true,
                 maxSize: 1_024 * 1_024,
@@ -484,7 +484,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: true,
                 maxSize: 1_024 * 1_024,
@@ -519,7 +519,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: true,
                 maxSize: 1_024 * 1_024,
@@ -545,7 +545,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -566,7 +566,7 @@ describe("HTMLExport", () => {
     it("should add link to next and previous file", async () => {
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -630,7 +630,7 @@ describe("HTMLExport", () => {
 
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
@@ -688,7 +688,7 @@ describe("HTMLExport", () => {
         mockMessages(EVENT_MESSAGE);
         const exporter = new HTMLExporter(
             room,
-            ExportType.LastNMessages,
+            ExportType.MessageNumberRange,
             {
                 attachmentsIncluded: false,
                 maxSize: 1_024 * 1_024,
