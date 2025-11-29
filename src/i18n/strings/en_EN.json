@@ -2431,7 +2431,7 @@
             "history_visibility_joined": "Members only (since they joined)",
             "history_visibility_legend": "Who can read history?",
             "history_visibility_shared": "Members only (since the point in time of selecting this option)",
-            "history_visibility_warning": "The visibility of existing history will not be changed.",
+            "history_visibility_warning": "The visibility of existing history will not be changed. Note: these settings currently do not work in encrypted rooms.",
             "history_visibility_world_readable": "Anyone",
             "join_rule_description": "Decide who can join %(roomName)s.",
             "join_rule_invite": "Private (invite only)",
