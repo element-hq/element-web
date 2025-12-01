@@ -41,7 +41,7 @@ interface BannerProps {
     /**
      * Called when the user presses the "dismiss" button.
      */
-    onClose: MouseEventHandler<HTMLButtonElement>;
+    onClose?: MouseEventHandler<HTMLButtonElement>;
 }
 
 /**
@@ -82,9 +82,11 @@ export function Banner({
             <span className={styles.content}>{children}</span>
             <div className={styles.actions}>
                 {actions}
-                <Button kind="secondary" size="sm" onClick={onClose}>
-                    {_t("action|dismiss")}
-                </Button>
+                {onClose && (
+                    <Button kind="secondary" size="sm" onClick={onClose}>
+                        {_t("action|dismiss")}
+                    </Button>
+                )}
             </div>
         </div>
     );
