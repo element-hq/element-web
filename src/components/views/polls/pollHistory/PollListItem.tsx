@@ -10,8 +10,8 @@ import React from "react";
 import { type PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import { PollsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";
 import { formatLocalDateShort } from "../../../../DateUtils";
 import { _t } from "../../../../languageHandler";
 
@@ -31,7 +31,7 @@ export const PollListItem: React.FC<Props> = ({ event, onClick }) => {
             <Tooltip label={_t("right_panel|poll|view_poll")} placement="top" isTriggerInteractive={false}>
                 <div className="mx_PollListItem_content">
                     <span>{formattedDate}</span>
-                    <PollIcon className="mx_PollListItem_icon" />
+                    <PollsIcon className="mx_PollListItem_icon" />
                     <span className="mx_PollListItem_question">{pollEvent.question.text}</span>
                 </div>
             </Tooltip>

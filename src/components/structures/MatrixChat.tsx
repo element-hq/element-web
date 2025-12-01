@@ -47,7 +47,6 @@ import PageType from "../../PageTypes";
 import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
-import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
@@ -396,8 +395,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Perform actions that are specific to a user that has just logged in (compare {@link onLoggedIn}, which, despite
-     * its name, is called when an already-logged-in client is restored at session startup).
+     * Perform actions that are specific to a user that has just logged in.
      *
      * Called when:
      *
@@ -405,7 +403,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      *  - The {@link Login} or {@link Register} components notify us that we successfully completed a non-OIDC login or
      *    registration.
      *
-     * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onLoggedIn} will
+     * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onShowPostLoginScreen} will
      * have been suppressed (by either {@link tokenLogin} being set, or the view being set to {@link Views.LOGIN} or
      * {@link Views.REGISTER}).
      *
@@ -419,7 +417,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
         const cryptoEnabled = Boolean(cli.getCrypto());
         if (!cryptoEnabled) {
-            this.onLoggedIn();
+            this.onShowPostLoginScreen();
         }
 
         const promisesList: Promise<any>[] = [this.firstSyncPromise.promise];
@@ -452,7 +450,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             const cryptoExtension = ModuleRunner.instance.extensions.cryptoSetup;
             if (cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
-                this.onLoggedIn();
+                this.onShowPostLoginScreen();
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
@@ -464,7 +462,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             );
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
-            this.onLoggedIn();
+            this.onShowPostLoginScreen();
         }
         this.setState({ pendingInitialSync: false });
     }
@@ -869,18 +867,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
                 break;
             case Action.OnLoggedIn:
-                this.stores.client = MatrixClientPeg.safeGet();
-                if (
-                    // Skip this handling for token login as that always calls onLoggedIn itself
-                    !this.tokenLogin &&
-                    !Lifecycle.isSoftLogout() &&
-                    this.state.view !== Views.LOGIN &&
-                    this.state.view !== Views.REGISTER &&
-                    this.state.view !== Views.COMPLETE_SECURITY &&
-                    this.state.view !== Views.E2E_SETUP
-                ) {
-                    this.onLoggedIn();
-                }
+                this.onLoggedIn();
                 break;
             case Action.ClientNotViable:
                 this.onSoftLogout();
@@ -1016,8 +1003,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         newState.isMobileRegistration = isMobileRegistration;
 
         this.setStateForNewView(newState);
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
         this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
@@ -1089,8 +1074,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             },
             () => {
-                ThemeController.isLogin = false;
-                this.themeWatcher?.recheck();
                 this.notifyNewScreen("room/" + presentedId, replaceLast);
             },
         );
@@ -1115,8 +1098,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.WELCOME,
         });
         this.notifyNewScreen("welcome");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewLogin(otherState?: any): void {
@@ -1125,8 +1106,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ...otherState,
         });
         this.notifyNewScreen("login");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewHome(justRegistered = false): void {
@@ -1138,8 +1117,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         this.setPage(PageType.HomePage);
         this.notifyNewScreen("home");
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
     }
 
     private viewUser(userId: string, subAction: string): void {
@@ -1403,30 +1380,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Called when a new logged in session has started.
+     * Show the first screen after the application is successfully loaded in a logged-in state.
      *
      * Called:
      *
      *  - on {@link Action.OnLoggedIn}, but only when we don't expect a separate call to {@link postLoginSetup}.
      *  - from {@link postLoginSetup}, when we don't have crypto setup tasks to perform after the login.
-     *
-     * It's never actually called if we have crypto setup tasks to perform after login (which we normally do, unless
-     * crypto is disabled.) XXX: is this a bug or a feature?
-     */
-    private async onLoggedIn(): Promise<void> {
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
-        StorageManager.tryPersistStorage();
-
-        await this.onShowPostLoginScreen();
-    }
-
-    /**
-     * Show the first screen after the application is successfully loaded in a logged-in state.
-     *
-     * Called:
-     *
-     *  - by {@link onLoggedIn}
      *  - by {@link onCompleteSecurityE2eSetupFinished}
      *
      * In other words, whenever we think we have completed the login and E2E setup tasks.
@@ -1538,6 +1497,28 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             room_id: localStorage.getItem("mx_last_room_id") ?? undefined,
             metricsTrigger: undefined, // other
         });
+    }
+
+    /**
+     * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
+     */
+    private onLoggedIn(): void {
+        this.stores.client = MatrixClientPeg.safeGet();
+        StorageManager.tryPersistStorage();
+
+        // If we're in the middle of a login/registration, we wait for it to complete before transitioning to the logged
+        // in view the login flow will call `postLoginSetup` when it's done, which will arrange for `onShowPostLoginScreen`
+        // to be called.
+        if (
+            !this.tokenLogin &&
+            !Lifecycle.isSoftLogout() &&
+            this.state.view !== Views.LOGIN &&
+            this.state.view !== Views.REGISTER &&
+            this.state.view !== Views.COMPLETE_SECURITY &&
+            this.state.view !== Views.E2E_SETUP
+        ) {
+            this.onShowPostLoginScreen();
+        }
     }
 
     /**
