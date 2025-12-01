@@ -213,17 +213,20 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * Starts the communication between the widget and the call.
      * The widget associated with the call must be active for this to succeed.
      * Only call this if the call state is: ConnectionState.Disconnected.
+     * @param _params Widget generation parameters are unused in this abstract class.
+     * @returns The ClientWidgetApi for this call.
      */
-    public async start(_params?: WidgetGenerationParameters): Promise<void> {
+    public async start(_params?: WidgetGenerationParameters): Promise<ClientWidgetApi> {
         const messagingStore = WidgetMessagingStore.instance;
-        let messaging = messagingStore.getMessagingForUid(this.widgetUid);
         const startTime = performance.now();
+        let messaging: WidgetMessaging|undefined;
         // The widget might still be initializing, so wait for it in an async
         // event loop. We need the messaging to be both present and started, so
         // we register listeners for both cases. Note that due to React strict
         // mode, the messaging could even be aborted and replaced by an entirely
         // new messaging while we are waiting here!
         while (!messaging?.widgetApi) {
+            let messaging = messagingStore.getMessagingForUid(this.widgetUid);
             await new Promise<void>((resolve, reject) => {
                 const onStart = (): void => resolve();
                 messaging?.on(WidgetMessagingEvent.Start, onStart);
@@ -247,7 +250,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
                 );
             });
         }
-        this.widgetApi = messaging.widgetApi;
+        return this.widgetApi = messaging.widgetApi;
     }
 
     protected setConnected(): void {
@@ -462,12 +465,13 @@ export class JitsiCall extends Call {
         });
     }
 
-    public async start(): Promise<void> {
-        await super.start();
-        this.widgetApi!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.widgetApi!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+    public async start(): Promise<ClientWidgetApi> {
+        const widgetApi = await super.start();
+        widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onUndock);
+        return widgetApi;
     }
 
     protected async performDisconnection(): Promise<void> {
@@ -903,7 +907,7 @@ export class ElementCall extends Call {
         ElementCall.createOrGetCallWidget(room.roomId, room.client);
     }
 
-    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<void> {
+    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<ClientWidgetApi> {
         // Some parameters may only be set once the user has chosen to interact with the call, regenerate the URL
         // at this point in case any of the parameters have changed.
         this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters };
@@ -912,11 +916,12 @@ export class ElementCall extends Call {
             this.roomId,
             this.widgetGenerationParameters,
         ).toString();
-        await super.start();
-        this.widgetApi!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.widgetApi!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.widgetApi!.on(`action:${ElementWidgetActions.Close}`, this.onClose);
-        this.widgetApi!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        const widgetApi = await super.start();
+        widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        widgetApi.on(`action:${ElementWidgetActions.Close}`, this.onClose);
+        widgetApi.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        return widgetApi;
     }
 
     protected async performDisconnection(): Promise<void> {
