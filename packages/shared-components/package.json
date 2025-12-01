@@ -45,6 +45,9 @@
         "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook --no-open\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\"",
         "test:storybook:update": "playwright-screenshots --entrypoint yarn --with-node-modules && playwright-screenshots --entrypoint /work/node_modules/.bin/test-storybook --with-node-modules --url http://host.docker.internal:6007/ --updateSnapshot"
     },
+    "resolutions": {
+        "playwright": "1.57.0"
+    },
     "dependencies": {
         "@vector-im/compound-design-tokens": "^6.3.0",
         "classnames": "^2.5.1",
@@ -57,7 +60,7 @@
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "^2.0.0",
-        "@playwright/test": "^1.50.1",
+        "@playwright/test": "1.57.0",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
         "@storybook/addon-docs": "^10.0.7",
