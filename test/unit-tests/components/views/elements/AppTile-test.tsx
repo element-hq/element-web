@@ -117,9 +117,11 @@ describe("AppTile", () => {
         await RightPanelStore.instance.onReady();
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
         sdkContext = new SdkContextClass();
         jest.spyOn(SettingsStore, "getValue").mockRestore();
+        // @ts-ignore
+        await WidgetMessagingStore.instance.onReady();
     });
 
     it("destroys non-persisted right panel widget on room change", async () => {
