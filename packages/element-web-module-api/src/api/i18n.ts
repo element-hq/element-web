@@ -49,4 +49,11 @@ export interface I18nApi {
      * @param variables - Optional variables to interpolate into the translation
      */
     translate(key: keyof Translations, variables?: Variables): string;
+
+    /**
+     * Convert a timestamp into a translated, human-readable time,
+     * using the current system time as a reference, eg. "5 minutes ago".
+     * @param timeMillis - The time in milliseconds since epoch
+     */
+    humanizeTime(timeMillis: number): string;
 }
