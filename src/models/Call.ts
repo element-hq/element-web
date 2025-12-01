@@ -16,7 +16,7 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
@@ -46,6 +46,7 @@ import DMRoomMap from "../utils/DMRoomMap.ts";
 import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
 
 const TIMEOUT_MS = 16000;
+const logger = rootLogger.getChild("models/Call");
 
 // Waits until an event is emitted satisfying the given predicate
 const waitForEvent = async (
@@ -219,20 +220,19 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     public async start(_params?: WidgetGenerationParameters): Promise<ClientWidgetApi> {
         const messagingStore = WidgetMessagingStore.instance;
         const startTime = performance.now();
-        let messaging: WidgetMessaging|undefined;
+        let messaging: WidgetMessaging | undefined = messagingStore.getMessagingForUid(this.widgetUid);
         // The widget might still be initializing, so wait for it in an async
         // event loop. We need the messaging to be both present and started, so
         // we register listeners for both cases. Note that due to React strict
         // mode, the messaging could even be aborted and replaced by an entirely
         // new messaging while we are waiting here!
-        while (!messaging?.widgetApi) {
-            messaging = messagingStore.getMessagingForUid(this.widgetUid);
+        while (!messaging) {
+            logger.info(`No messaging for ${this.widgetUid}`);
             await new Promise<void>((resolve, reject) => {
-                const onStart = (): void => resolve();
-                messaging?.on(WidgetMessagingEvent.Start, onStart);
-
+                // We don't have `messaging` either so wait for the
                 const onStoreMessaging = (uid: string, m: WidgetMessaging): void => {
                     if (uid === this.widgetUid) {
+                        messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
                         messaging = m;
                         resolve();
                     }
@@ -240,17 +240,30 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
                 messagingStore.on(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
 
                 setTimeout(
-                    () =>
-                        reject(
-                            new Error(
-                                `Messaging for call in ${this.roomId} ${messaging ? "did not start" : "not present"}; timed out`,
-                            ),
-                        ),
+                    () => {
+                        messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+                        reject(new Error(`Messaging for call in ${this.roomId} not present; timed out`));
+                    },
                     startTime + TIMEOUT_MS - performance.now(),
                 );
             });
         }
-        return this.widgetApi = messaging.widgetApi;
+
+        while (!messaging.widgetApi) {
+            const foundMessaging = messaging;
+            logger.info(`No widgetApi for ${this.widgetUid}`);
+            await new Promise<void>((resolve, reject) => {
+                // We have messasing but are waiting for the widgetApi
+                foundMessaging.once(WidgetMessagingEvent.Start, (): void => resolve());
+
+                setTimeout(
+                    () => reject(new Error(`Messaging for call in ${this.roomId} did not start; timed out`)),
+                    startTime + TIMEOUT_MS - performance.now(),
+                );
+            });
+        }
+        logger.debug(`Widget ${this.widgetUid} now ready`);
+        return (this.widgetApi = messaging.widgetApi);
     }
 
     protected setConnected(): void {
@@ -306,7 +319,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
 
     private readonly onStopMessaging = (uid: string): void => {
         if (uid === this.widgetUid && this.connected) {
-            logger.log("The widget died; treating this as a user hangup");
+            logger.debug("The widget died; treating this as a user hangup");
             this.setDisconnected();
             this.close();
         }
@@ -526,7 +539,7 @@ export class JitsiCall extends Call {
             // Re-add this device every so often so our video member event doesn't become stale
             this.resendDevicesTimer = window.setInterval(
                 async (): Promise<void> => {
-                    logger.log(`Resending video member event for ${this.roomId}`);
+                    logger.debug(`Resending video member event for ${this.roomId}`);
                     await this.addOurDevice();
                 },
                 (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4,
