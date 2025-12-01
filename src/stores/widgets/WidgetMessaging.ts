@@ -168,6 +168,8 @@ interface WidgetMessagingOptions {
 
 /**
  * A running instance of a widget, associated with an iframe and a messaging transport.
+ * Instances must be tracked by WidgetMessagingStore, as only one WidgetMessaging instance
+ * should exist for a given widget.
  */
 export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap> {
     private client: MatrixClient;
