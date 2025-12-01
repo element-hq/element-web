@@ -6,7 +6,7 @@
  */
 
 import { _t, Banner } from "@element-hq/web-shared-components";
-import { Button } from "@vector-im/compound-web";
+import { Button, Link } from "@vector-im/compound-web";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
@@ -32,22 +32,18 @@ export const HistoryVisibleBanner: React.FC<HistoryVisibleBannerProps> = ({ room
     }
 
     return (
-        <Banner
-            type="info"
-            actions={
-                <Button
-                    as="a"
-                    href="https://element.io/en/help#e2ee-history-sharing"
-                    target="_blank"
-                    kind="tertiary"
-                    size="sm"
-                >
-                    {_t("action|learn_more")}
-                </Button>
-            }
-            onClose={onClose}
-        >
-            {_t("room|status_bar|history_visible")}
+        <Banner type="info" onClose={onClose}>
+            {_t(
+                "room|status_bar|history_visible",
+                {},
+                {
+                    a: (sub: string) => (
+                        <Link href="https://element.io/en/help#e2ee-history-sharing" target="_blank">
+                            {sub}
+                        </Link>
+                    ),
+                },
+            )}
         </Banner>
     );
 };
