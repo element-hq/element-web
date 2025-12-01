@@ -7,13 +7,9 @@
 
 import { _t, Banner } from "@element-hq/web-shared-components";
 import { Button } from "@vector-im/compound-web";
-import { EventType, HistoryVisibility, type Room } from "matrix-js-sdk/src/matrix";
-import React, { useCallback, useEffect } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import React from "react";
 
-import { SettingLevel } from "../../../../settings/SettingLevel";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { useSettingValue } from "../../../../hooks/useSettings";
-import { useRoomState } from "../../../../hooks/useRoomState";
 import { useHistoryVisibleBannerViewModel } from "../../../viewmodels/rooms/banners/HistoryVisibleBannerViewModel";
 
 interface HistoryVisibleBannerProps {
