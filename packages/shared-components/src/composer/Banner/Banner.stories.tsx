@@ -65,3 +65,9 @@ export const WithAvatarImage: Story = {
         avatar: <img alt="Example" src="https://picsum.photos/32/32" />,
     },
 };
+
+export const WithoutClose: Story = {
+    args: {
+        onClose: undefined,
+    },
+};
