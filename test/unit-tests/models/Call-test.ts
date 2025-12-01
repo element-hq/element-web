@@ -48,7 +48,7 @@ import { Anonymity, PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
-import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
+import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
 
 const { enabledSettings } = enableCalls();
 
@@ -724,12 +724,13 @@ describe("ElementCall", () => {
         });
 
         afterEach(() => cleanUpCallAndWidget(call, widget));
+
         // TODO refactor initial device configuration to use the EW settings.
         // Add tests for passing EW device configuration to the widget.
-        it("waits for messaging when starting", async () => {
+
+        it("waits for messaging when starting (widget API available immediately)", async () => {
             // Temporarily remove the messaging to simulate connecting while the
             // widget is still initializing
-
             WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
 
@@ -738,6 +739,52 @@ describe("ElementCall", () => {
             await startup;
             await connect(call, widgetApi, false);
             expect(call.connectionState).toBe(ConnectionState.Connected);
+        });
+
+        it("waits for messaging when starting (widget API started asynchronously)", async () => {
+            // Temporarily remove the messaging to simulate connecting while the
+            // widget is still initializing
+            WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
+            // Also remove the widget API from said messaging until later
+            let storedWidgetApi: Mocked<ClientWidgetApi> | null = null;
+            Object.defineProperty(messaging, "widgetApi", {
+                get() {
+                    return storedWidgetApi;
+                },
+            });
+            expect(call.connectionState).toBe(ConnectionState.Disconnected);
+
+            const startup = call.start({});
+            WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
+            // Yield the event loop to the Call.start promise, then simulate the
+            // widget API being started asynchronously
+            await Promise.resolve();
+            storedWidgetApi = widgetApi;
+            messaging.emit(WidgetMessagingEvent.Start, storedWidgetApi);
+            await startup;
+            await connect(call, widgetApi, false);
+            expect(call.connectionState).toBe(ConnectionState.Connected);
+        });
+
+        it("waits for messaging when starting (even if messaging is replaced during startup)", async () => {
+            const firstMessaging = messaging;
+            // Entirely remove the widget API from this first messaging
+            Object.defineProperty(firstMessaging, "widgetApi", {
+                get() {
+                    return null;
+                },
+            });
+            expect(call.connectionState).toBe(ConnectionState.Disconnected);
+
+            const startup = call.start({});
+            // Now imagine that the messaging gets abandoned and replaced by an
+            // entirely new messaging object
+            ({ widget, messaging, widgetApi } = setUpWidget(call));
+            WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
+            await startup;
+            await connect(call, widgetApi, false);
+            expect(call.connectionState).toBe(ConnectionState.Connected);
+            expect(firstMessaging.listenerCount(WidgetMessagingEvent.Start)).toBe(0); // No leaks
         });
 
         it("fails to disconnect if the widget returns an error", async () => {
