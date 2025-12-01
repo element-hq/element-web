@@ -36,6 +36,8 @@ Please see LICENSE files in the repository root for full details.
 
         /* align with settings icon */
         margin-left: 21px;
+        margin-right: 8px;
+        width: 100%;
 
         /**
          * modify internal css of the compound component
@@ -50,7 +52,8 @@ Please see LICENSE files in the repository root for full details.
             /* align with settings label */
             margin-right: 14px;
             /* required to set the icon width when into a flex container */
-            min-width: 24px;
+            width: 24px;
+            flex-shrink: 0;
         }
 
         & .mx_QuickSettingsButton_label {
