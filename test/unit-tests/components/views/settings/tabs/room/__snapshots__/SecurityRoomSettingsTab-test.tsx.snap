@@ -15,7 +15,20 @@ exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default h
     <div
       class="mx_SettingsSubsection_text"
     >
-      The visibility of existing history will not be changed.
+      <span>
+        Changes won't affect past messages, only new ones. 
+        <a
+          class="mx_ExternalLink"
+          href="https://element.io/help#encryption20"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          Learn more
+          <i
+            class="mx_ExternalLink_icon"
+          />
+        </a>
+      </span>
     </div>
   </div>
   <div
@@ -25,10 +38,10 @@ exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default h
       class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
     >
       <input
-        id="historyVis-world_readable"
+        id="historyVis-invited"
         name="historyVis"
         type="radio"
-        value="world_readable"
+        value="invited"
       />
       <div>
         <div />
@@ -36,7 +49,7 @@ exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default h
       <div
         class="mx_StyledRadioButton_content"
       >
-        Anyone
+        Members since invited
       </div>
       <div
         class="mx_StyledRadioButton_spacer"
@@ -58,49 +71,7 @@ exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default h
       <div
         class="mx_StyledRadioButton_content"
       >
-        Members only (since the point in time of selecting this option)
-      </div>
-      <div
-        class="mx_StyledRadioButton_spacer"
-      />
-    </label>
-    <label
-      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
-    >
-      <input
-        id="historyVis-invited"
-        name="historyVis"
-        type="radio"
-        value="invited"
-      />
-      <div>
-        <div />
-      </div>
-      <div
-        class="mx_StyledRadioButton_content"
-      >
-        Members only (since they were invited)
-      </div>
-      <div
-        class="mx_StyledRadioButton_spacer"
-      />
-    </label>
-    <label
-      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
-    >
-      <input
-        id="historyVis-joined"
-        name="historyVis"
-        type="radio"
-        value="joined"
-      />
-      <div>
-        <div />
-      </div>
-      <div
-        class="mx_StyledRadioButton_content"
-      >
-        Members only (since they joined)
+        Members (full history)
       </div>
       <div
         class="mx_StyledRadioButton_spacer"
