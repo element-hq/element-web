@@ -377,6 +377,77 @@ describe("<SecurityRoomSettingsTab />", () => {
             expect(screen.getByDisplayValue(HistoryVisibility.Shared)).toBeChecked();
             expect(logger.error).toHaveBeenCalledWith("oups");
         });
+        it("maps 'joined' history visibility to 'invited' for display", () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, undefined, undefined, HistoryVisibility.Joined);
+
+            getComponent(room);
+
+            // Should display as 'invited' even though underlying value is 'joined'
+            expect(screen.getByDisplayValue(HistoryVisibility.Invited)).toBeChecked();
+            // Should not have a 'joined' option visible
+            expect(screen.queryByDisplayValue(HistoryVisibility.Joined)).not.toBeInTheDocument();
+        });
+
+        it("shows 'invited' option for non-public rooms", () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Invite);
+
+            getComponent(room);
+
+            expect(screen.getByDisplayValue(HistoryVisibility.Invited)).toBeInTheDocument();
+        });
+
+        it("shows 'invited' option for encrypted rooms even if public", async () => {
+            const room = new Room(roomId, client, userId);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+            setRoomStateEvents(room, JoinRule.Public);
+
+            getComponent(room);
+
+            await waitFor(() => expect(screen.getByDisplayValue(HistoryVisibility.Invited)).toBeInTheDocument());
+        });
+
+        it("does not show 'invited' option for public unencrypted rooms unless selected", async () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Public, undefined, HistoryVisibility.Shared);
+
+            getComponent(room);
+
+            await waitFor(() =>
+                expect(screen.queryByDisplayValue(HistoryVisibility.Invited)).not.toBeInTheDocument(),
+            );
+        });
+
+        it("shows 'world_readable' option for public unencrypted rooms", async () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room, JoinRule.Public);
+
+            getComponent(room);
+
+            await waitFor(() => expect(screen.getByDisplayValue(HistoryVisibility.WorldReadable)).toBeInTheDocument());
+        });
+
+        it("does not show 'world_readable' option for private encrypted rooms unless selected", async () => {
+            const room = new Room(roomId, client, userId);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+            setRoomStateEvents(room, JoinRule.Invite);
+
+            getComponent(room);
+
+            await waitFor(() =>
+                expect(screen.queryByDisplayValue(HistoryVisibility.WorldReadable)).not.toBeInTheDocument(),
+            );
+        });
+
+        it("always shows 'shared' option", () => {
+            const room = new Room(roomId, client, userId);
+            setRoomStateEvents(room);
+
+            getComponent(room);
+
+            expect(screen.getByDisplayValue(HistoryVisibility.Shared)).toBeInTheDocument();
+        });
     });
 
     describe("encryption", () => {
