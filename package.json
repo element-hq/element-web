@@ -70,7 +70,6 @@
     },
     "resolutions": {
         "**/pretty-format/react-is": "19.2.0",
-        "@playwright/test": "1.56.1",
         "@types/react": "19.2.6",
         "@types/react-dom": "19.2.3",
         "oidc-client-ts": "3.4.1",
@@ -185,7 +184,7 @@
         "@element-hq/element-call-embedded": "0.16.1",
         "@element-hq/element-web-playwright-common": "^2.0.0",
         "@peculiar/webcrypto": "^1.4.3",
-        "@playwright/test": "^1.50.1",
+        "@playwright/test": "1.57.0",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^4.0.0",
         "@storybook/react-vite": "^10.0.7",
