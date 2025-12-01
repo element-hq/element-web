@@ -226,7 +226,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         // mode, the messaging could even be aborted and replaced by an entirely
         // new messaging while we are waiting here!
         while (!messaging?.widgetApi) {
-            let messaging = messagingStore.getMessagingForUid(this.widgetUid);
+            messaging = messagingStore.getMessagingForUid(this.widgetUid);
             await new Promise<void>((resolve, reject) => {
                 const onStart = (): void => resolve();
                 messaging?.on(WidgetMessagingEvent.Start, onStart);
