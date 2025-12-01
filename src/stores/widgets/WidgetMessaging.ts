@@ -202,6 +202,10 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     private set widgetApi(value: ClientWidgetApi | null) {
         this._widgetApi = value;
     }
+
+    /**
+     * The widget API interface to the widget, or null if disconnected.
+     */
     public get widgetApi(): ClientWidgetApi | null {
         return this._widgetApi;
     }
