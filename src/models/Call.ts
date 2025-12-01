@@ -222,46 +222,48 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         const startTime = performance.now();
         let messaging: WidgetMessaging | undefined = messagingStore.getMessagingForUid(this.widgetUid);
         // The widget might still be initializing, so wait for it in an async
-        // event loop. We need the messaging to be both present and started, so
-        // we register listeners for both cases. Note that due to React strict
-        // mode, the messaging could even be aborted and replaced by an entirely
-        // new messaging while we are waiting here!
-        while (!messaging) {
-            logger.info(`No messaging for ${this.widgetUid}`);
-            await new Promise<void>((resolve, reject) => {
-                // We don't have `messaging` either so wait for the
-                const onStoreMessaging = (uid: string, m: WidgetMessaging): void => {
-                    if (uid === this.widgetUid) {
-                        messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
-                        messaging = m;
-                        resolve();
-                    }
-                };
-                messagingStore.on(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+        // event loop. We need the messaging to be both present and started
+        // (have a connected widget API), so register listeners for both cases.
+        while (!messaging?.widgetApi) {
+            if (messaging) logger.debug(`Messaging present but not yet started for ${this.widgetUid}`);
+            else logger.debug(`No messaging yet for ${this.widgetUid}`);
+            const recheck = Promise.withResolvers<void>();
+            const currentMessaging = messaging;
 
-                setTimeout(
-                    () => {
-                        messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
-                        reject(new Error(`Messaging for call in ${this.roomId} not present; timed out`));
-                    },
-                    startTime + TIMEOUT_MS - performance.now(),
-                );
-            });
+            // Maybe the messaging is present but not yet started. In this case,
+            // check again for a widget API as soon as it starts.
+            const onStart = (): void => recheck.resolve();
+            currentMessaging?.on(WidgetMessagingEvent.Start, onStart);
+
+            // Maybe the messaging is not present at all. It's also entirely
+            // possible (as shown in React strict mode) that the messaging could
+            // be abandoned and replaced by an entirely new messaging object
+            // while we were waiting for the original one to start. We need to
+            // react to store updates in either case.
+            const onStoreMessaging = (uid: string, m: WidgetMessaging): void => {
+                if (uid === this.widgetUid) {
+                    messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+                    messaging = m; // Check the new messaging object on the next iteration of the loop
+                    recheck.resolve();
+                }
+            };
+            messagingStore.on(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+
+            // Race both of the above recheck signals against a timeout.
+            const timeout = setTimeout(
+                () => recheck.reject(new Error(`Widget for call in ${this.roomId} not started; timed out`)),
+                TIMEOUT_MS - (performance.now() - startTime),
+            );
+
+            try {
+                await recheck.promise;
+            } finally {
+                currentMessaging?.off(WidgetMessagingEvent.Start, onStart);
+                messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+                clearTimeout(timeout);
+            }
         }
 
-        while (!messaging.widgetApi) {
-            const foundMessaging = messaging;
-            logger.info(`No widgetApi for ${this.widgetUid}`);
-            await new Promise<void>((resolve, reject) => {
-                // We have messasing but are waiting for the widgetApi
-                foundMessaging.once(WidgetMessagingEvent.Start, (): void => resolve());
-
-                setTimeout(
-                    () => reject(new Error(`Messaging for call in ${this.roomId} did not start; timed out`)),
-                    startTime + TIMEOUT_MS - performance.now(),
-                );
-            });
-        }
         logger.debug(`Widget ${this.widgetUid} now ready`);
         return (this.widgetApi = messaging.widgetApi);
     }
