@@ -167,9 +167,17 @@ interface WidgetMessagingOptions {
 }
 
 /**
- * A running instance of a widget, associated with an iframe and a messaging transport.
- * Instances must be tracked by WidgetMessagingStore, as only one WidgetMessaging instance
- * should exist for a given widget.
+ * A running instance of a widget, associated with an iframe and an active communication
+ * channel. Instances must be tracked by WidgetMessagingStore, as only one WidgetMessaging
+ * instance should exist for a given widget.
+ *
+ * This class is responsible for:
+ * - Computing the templated widget URL
+ * - Starting a {@link ClientWidgetApi} communication channel with the widget
+ * - Eagerly pushing events from the Matrix client to the widget
+ *
+ * @see {@link ElementWidgetDriver} for the class used to *pull* data lazily from the
+ *   Matrix client to the widget on the widget's behalf.
  * @see {@link WidgetMessagingStore} for the store that holds these instances.
  */
 export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap> {
