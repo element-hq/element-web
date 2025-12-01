@@ -377,6 +377,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             expect(screen.getByDisplayValue(HistoryVisibility.Shared)).toBeChecked();
             expect(logger.error).toHaveBeenCalledWith("oups");
         });
+
         it("maps 'joined' history visibility to 'invited' for display", () => {
             const room = new Room(roomId, client, userId);
             setRoomStateEvents(room, undefined, undefined, HistoryVisibility.Joined);
@@ -414,9 +415,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             getComponent(room);
 
-            await waitFor(() =>
-                expect(screen.queryByDisplayValue(HistoryVisibility.Invited)).not.toBeInTheDocument(),
-            );
+            await waitFor(() => expect(screen.queryByDisplayValue(HistoryVisibility.Invited)).not.toBeInTheDocument());
         });
 
         it("shows 'world_readable' option for public unencrypted rooms", async () => {
