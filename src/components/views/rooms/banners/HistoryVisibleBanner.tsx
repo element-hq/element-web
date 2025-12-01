@@ -14,6 +14,7 @@ import { SettingLevel } from "../../../../settings/SettingLevel";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { useRoomState } from "../../../../hooks/useRoomState";
+import { useHistoryVisibleBannerViewModel } from "../../../viewmodels/rooms/banners/HistoryVisibleBannerViewModel";
 
 interface HistoryVisibleBannerProps {
     room: Room;
@@ -28,32 +29,9 @@ interface HistoryVisibleBannerProps {
  * ```
  */
 export const HistoryVisibleBanner: React.FC<HistoryVisibleBannerProps> = ({ room }) => {
-    const featureEnabled = useSettingValue("feature_share_history_on_invite");
-    const acknowledged = useSettingValue("acknowledgedHistoryVisibility", room.roomId);
+    const { visible, onClose } = useHistoryVisibleBannerViewModel(room);
 
-    const { isEncrypted, historyVisibility } = useRoomState(room, (state) => ({
-        isEncrypted: state.getStateEvents(EventType.RoomEncryption, "") !== null,
-        historyVisibility: state.getHistoryVisibility(),
-    }));
-
-    // --- Handlers ---
-
-    const onClose = useCallback(() => {
-        void SettingsStore.setValue("acknowledgedHistoryVisibility", room.roomId, SettingLevel.ROOM_ACCOUNT, true);
-    }, [room.roomId]);
-
-    // --- Effects ---
-
-    useEffect(() => {
-        // Condition on acknowledged to avoid entering an infinite update loop, since `SettingsStore.setValue` triggers a sync.
-        if (historyVisibility === HistoryVisibility.Joined && acknowledged) {
-            void SettingsStore.setValue("acknowledgedHistoryVisibility", room.roomId, SettingLevel.ROOM_ACCOUNT, false);
-        }
-    }, [historyVisibility, acknowledged, room.roomId]);
-
-    const shouldShow = featureEnabled && isEncrypted && historyVisibility !== HistoryVisibility.Joined && !acknowledged;
-
-    if (!shouldShow) {
+    if (!visible) {
         return null;
     }
 
