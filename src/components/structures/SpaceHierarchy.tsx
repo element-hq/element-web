@@ -40,6 +40,7 @@ import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/types";
+import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -251,7 +252,12 @@ const Tile: React.FC<ITileProps> = ({
 
     let joinedSection: ReactElement | undefined;
     if (joinedRoom) {
-        joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">{_t("common|joined")}</div>;
+        joinedSection = (
+            <div className="mx_SpaceHierarchy_roomTile_joined">
+                <CheckIcon />
+                {_t("common|joined")}
+            </div>
+        );
     }
 
     let suggestedSection: ReactElement | undefined;
@@ -294,7 +300,9 @@ const Tile: React.FC<ITileProps> = ({
                     ev.stopPropagation();
                     toggleShowChildren();
                 }}
-            />
+            >
+                <ChevronDownIcon />
+            </div>
         );
 
         if (showChildren) {

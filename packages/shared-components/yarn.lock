@@ -1959,6 +1959,11 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
+"@vector-im/compound-design-tokens@^6.3.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.0.tgz#2e51f39f79ebda985a2f6cf80d567b9307aff03a"
+  integrity sha512-93nYQZMgUt6apjCwwnMhMxN8VYQXN3GYOnwovwJjavImwsCGwI/e853BV/DstrWumYh6k5pZsP9e6AF+nz3SIQ==
+
 "@vitest/expect@3.2.4":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/@vitest/expect/-/expect-3.2.4.tgz#8362124cd811a5ee11c5768207b9df53d34f2433"
