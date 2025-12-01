@@ -36,22 +36,23 @@ exports[`<HistoryVisibleBanner /> should render dismissable history visibility a
     <span
       class="_content_15kcv_53"
     >
-      Messages you send will be shared with new members invited to this room.
+      <span>
+        Messages you send will be shared with new members invited to this room. 
+        <a
+          class="_link_1v5rz_8"
+          data-kind="primary"
+          data-size="medium"
+          href="https://element.io/en/help#e2ee-history-sharing"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          Learn more
+        </a>
+      </span>
     </span>
     <div
       class="_actions_15kcv_85"
     >
-      <a
-        class="_button_vczzf_8"
-        data-kind="tertiary"
-        data-size="sm"
-        href="https://element.io/en/help#e2ee-history-sharing"
-        role="link"
-        tabindex="0"
-        target="_blank"
-      >
-        Learn more
-      </a>
       <button
         class="_button_vczzf_8"
         data-kind="secondary"
