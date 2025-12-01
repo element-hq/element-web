@@ -30,10 +30,10 @@ import {
     DeleteIcon,
     RestartIcon,
     ThreadsIcon,
+    EditIcon,
     ReactionAddIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
 import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
 import { _t } from "../../../languageHandler";
