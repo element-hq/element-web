@@ -544,7 +544,7 @@ test.describe("Element Call", () => {
         });
 
         // For https://github.com/element-hq/element-web/issues/30838
-        test.fail(
+        test(
             "should be able to join a call, leave via PiP, and rejoin the call",
             async ({ page, user, room, app, bot }) => {
                 await app.viewRoomById(room.roomId);
