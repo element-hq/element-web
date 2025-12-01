@@ -63,7 +63,7 @@ exports[`<MImageBody/> should open ImageView using thumbnail for encrypted svg 1
       <button
         aria-label="Profile picture"
         aria-live="off"
-        class="_avatar_1qbcf_8 mx_BaseAvatar mx_Dialog_nonDialogButton _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar mx_Dialog_nonDialogButton _avatar-imageless_zysgz_55"
         data-color="2"
         data-testid="avatar-img"
         data-type="round"
