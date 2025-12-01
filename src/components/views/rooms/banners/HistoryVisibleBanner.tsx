@@ -6,7 +6,7 @@
  */
 
 import { _t, Banner } from "@element-hq/web-shared-components";
-import { Button, Link } from "@vector-im/compound-web";
+import { Link } from "@vector-im/compound-web";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
