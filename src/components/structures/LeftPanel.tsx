@@ -344,7 +344,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         if (this.state.supportsPstnProtocol) {
             dialPadButton = (
                 <AccessibleButton
-                    className={classNames("mx_LeftPanel_dialPadButton", {})}
+                    className="mx_LeftPanel_dialPadButton"
                     onClick={this.onDialPad}
                     title={_t("left_panel|open_dial_pad")}
                 />
