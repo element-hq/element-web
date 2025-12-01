@@ -4,7 +4,6 @@
 title = "Element Web & Desktop"
 authors = ["New Vector Ltd.", "The Matrix.org Foundation C.I.C."]
 language = "en"
-multilingual = false
 
 # The directory that documentation files are stored in
 src = "docs"

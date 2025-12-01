@@ -17,7 +17,7 @@ import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
-import ToastStore from "../stores/ToastStore";
+import ToastStore, { type IToast } from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
@@ -46,7 +46,7 @@ const getTitle = (kind: Kind): string => {
     }
 };
 
-const getIcon = (kind: Kind): string | undefined => {
+const getIcon = (kind: Kind): IToast<any>["icon"] => {
     switch (kind) {
         case Kind.SET_UP_RECOVERY:
             return undefined;

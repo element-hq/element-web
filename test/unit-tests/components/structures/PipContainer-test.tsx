@@ -134,6 +134,7 @@ describe("PipContainer", () => {
             {
                 action: Action.ViewRoom,
                 room_id: roomId,
+                view_call: false, // We're testing PiP functionality, so view the timeline
                 metricsTrigger: undefined,
             },
             true,

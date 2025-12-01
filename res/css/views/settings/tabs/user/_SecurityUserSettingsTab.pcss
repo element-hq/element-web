@@ -27,20 +27,11 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_SecurityUserSettingsTab_warning {
     color: $alert;
-    position: relative;
-    padding-left: 40px;
 
-    &::before {
-        mask-repeat: no-repeat;
-        mask-position: 0 center;
-        mask-size: $font-24px;
-        position: absolute;
-        width: $font-24px;
-        height: $font-24px;
-        content: "";
-        top: 0;
-        left: 0;
-        background-color: $alert;
-        mask-image: url("@vector-im/compound-design-tokens/icons/warning.svg");
+    svg {
+        width: 24px;
+        height: 24px;
+        margin-right: var(--cpd-space-4x);
+        color: $alert;
     }
 }
