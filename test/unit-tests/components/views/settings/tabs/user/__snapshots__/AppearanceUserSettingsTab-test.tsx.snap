@@ -264,7 +264,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               role="button"
                               tabindex="0"
                             >
-                              <div />
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  clip-rule="evenodd"
+                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
                             </div>
                             <div
                               aria-expanded="false"
@@ -391,7 +403,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               role="button"
                               tabindex="0"
                             >
-                              <div />
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  clip-rule="evenodd"
+                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
                             </div>
                             <div
                               aria-expanded="false"
@@ -521,7 +545,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               role="button"
                               tabindex="0"
                             >
-                              <div />
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  clip-rule="evenodd"
+                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
                             </div>
                             <div
                               aria-expanded="false"

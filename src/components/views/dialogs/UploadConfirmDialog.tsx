@@ -11,7 +11,6 @@ import React, { type JSX } from "react";
 import { FilesIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { getBlobSafeMimeType } from "../../../utils/blobs";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { fileSize } from "../../../utils/FileUtils";
@@ -23,10 +22,11 @@ interface IProps {
     onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
 }
 
-export default class UploadConfirmDialog extends React.Component<IProps> {
-    private readonly objectUrl: string;
-    private readonly mimeType: string;
+interface IState {
+    objectUrl?: string;
+}
 
+export default class UploadConfirmDialog extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         totalFiles: 1,
         currentIndex: 0,
@@ -35,15 +35,22 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     public constructor(props: IProps) {
         super(props);
 
-        // Create a fresh `Blob` for previewing (even though `File` already is
-        // one) so we can adjust the MIME type if needed.
-        this.mimeType = getBlobSafeMimeType(props.file.type);
-        const blob = new Blob([props.file], { type: this.mimeType });
-        this.objectUrl = URL.createObjectURL(blob);
+        this.state = {};
+    }
+
+    public componentDidMount(): void {
+        if (this.props.file.type.startsWith("image/") || this.props.file.type.startsWith("video/")) {
+            this.setState({
+                // We do not filter the mimetype using getBlobSafeMimeType here as if the user is uploading the file
+                // themselves they should be trusting it enough to open/load it, and it will be rendered into a hidden
+                // canvas for thumbnail generation anyway
+                objectUrl: URL.createObjectURL(this.props.file),
+            });
+        }
     }
 
     public componentWillUnmount(): void {
-        if (this.objectUrl) URL.revokeObjectURL(this.objectUrl);
+        if (this.state.objectUrl) URL.revokeObjectURL(this.state.objectUrl);
     }
 
     private onCancelClick = (): void => {
@@ -70,17 +77,23 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         }
 
         const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
+        const mimeType = this.props.file.type;
+
         let preview: JSX.Element | undefined;
         let placeholder: JSX.Element | undefined;
-        if (this.mimeType.startsWith("image/")) {
+        if (mimeType.startsWith("image/")) {
             preview = (
-                <img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} aria-labelledby={fileId} />
+                <img
+                    className="mx_UploadConfirmDialog_imagePreview"
+                    src={this.state.objectUrl}
+                    aria-labelledby={fileId}
+                />
             );
-        } else if (this.mimeType.startsWith("video/")) {
+        } else if (mimeType.startsWith("video/")) {
             preview = (
                 <video
                     className="mx_UploadConfirmDialog_imagePreview"
-                    src={this.objectUrl}
+                    src={this.state.objectUrl}
                     playsInline
                     controls={false}
                 />
