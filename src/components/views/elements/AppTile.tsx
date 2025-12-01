@@ -173,7 +173,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 this.messaging = new WidgetMessaging(this.widget, props);
                 WidgetMessagingStore.instance.storeMessaging(this.widget, props.room?.roomId, this.messaging);
             } catch (e) {
-                logger.log("Failed to construct widget", e);
+                logger.error("Failed to construct widget", e);
             }
         }
 
