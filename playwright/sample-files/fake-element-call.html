@@ -1,0 +1,87 @@
+<!doctype html>
+<style>
+    body {
+        background: rgb(139, 192, 253);
+    }
+</style>
+
+<!-- element-call.spec.ts will insert the widget API in this block -->
+<script>
+    widgetCodeHere;
+</script>
+
+<div>
+    <p>Fake Element Call</p>
+    <p>State: <span id="state">Loading</span></p>
+    <button id="join-button">Join Call</button>
+    <button id="close-button">Close</button>
+</div>
+
+<!-- Minimal fake implementation of Element Call. Just enough for testing persistent widgets.-->
+<script>
+    const content = {
+        "application": "m.call",
+        "call_id": "",
+        "device_id": "gycSobuY0z",
+        "expires": 14400000,
+        "foci_preferred": [
+            {
+                livekit_alias: "any-alias",
+                livekit_service_url: "https://example.org",
+                type: "livekit",
+            },
+        ],
+        "focus_active": {
+            focus_selection: "oldest_membership",
+            type: "livekit",
+        },
+        "m.call.intent": "video",
+        "scope": "m.room",
+    };
+    const stateIndicator = document.querySelector("#state");
+    const { WidgetApi, WidgetApiToWidgetAction, MatrixCapabilities } = mxwidgets();
+    const widgetId = new URLSearchParams(window.location.search).get("widgetId");
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    const userId = params.get("userId");
+    const deviceId = params.get("deviceId");
+    const roomId = params.get("roomId");
+    const api = new WidgetApi(widgetId, "*");
+
+    const stateKey = `_${userId}_${deviceId}_m.call`;
+
+    async function hangup() {
+        await api.sendStateEvent("org.matrix.msc3401.call.member", stateKey, {}, roomId);
+        await api.setAlwaysOnScreen(false);
+        await api.transport.send("io.element.close", {});
+        stateIndicator.innerHTML = "Ended";
+    }
+
+    document.querySelector("#join-button").onclick = async () => {
+        await api.setAlwaysOnScreen(true);
+        await api.transport.send("io.element.join", {});
+        await api.sendStateEvent("org.matrix.msc3401.call.member", stateKey, content, roomId);
+        stateIndicator.innerHTML = "In call";
+    };
+
+    document.querySelector("#close-button").onclick = () => {
+        hangup();
+    };
+
+    api.requestCapability(MatrixCapabilities.AlwaysOnScreen);
+    api.requestCapability(`org.matrix.msc2762.timeline:${roomId}`);
+    api.requestCapabilityToSendState("org.matrix.msc3401.call.member", stateKey);
+
+    api.on("ready", (ev) => {
+        stateIndicator.innerHTML = "Ready";
+        // Pretend to join a call.
+    });
+    api.on("action:im.vector.hangup", async () => {
+        await hangup();
+    });
+
+    // Start the messaging
+    api.start();
+
+    // If waitForIframeLoad is false, tell the client that we're good to go
+    api.sendContentLoaded();
+</script>
