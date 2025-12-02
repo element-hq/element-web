@@ -26,6 +26,10 @@ import { WatchableProfile } from "./Profile.ts";
 import { NavigationApi } from "./Navigation.ts";
 import { openDialog } from "./Dialog.tsx";
 import { overwriteAccountAuth } from "./Auth.ts";
+import { ElementWebExtrasApi } from "./ExtrasApi.ts";
+import { ElementWebBuiltinsApi } from "./BuiltinsApi.tsx";
+import { ClientApi } from "./ClientApi.ts";
+import { StoresApi } from "./StoresApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -39,7 +43,17 @@ const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) =>
 /**
  * Implementation of the @element-hq/element-web-module-api runtime module API.
  */
-class ModuleApi implements Api {
+export class ModuleApi implements Api {
+    private static _instance: ModuleApi;
+
+    public static get instance(): ModuleApi {
+        if (!ModuleApi._instance) {
+            ModuleApi._instance = new ModuleApi();
+            window.mxModuleApi = ModuleApi._instance;
+        }
+        return ModuleApi._instance;
+    }
+
     /* eslint-disable @typescript-eslint/naming-convention */
     public async _registerLegacyModule(LegacyModule: RuntimeModuleConstructor): Promise<void> {
         ModuleRunner.instance.registerModule((api) => new LegacyModule(api));
@@ -69,7 +83,11 @@ class ModuleApi implements Api {
     public readonly config = new ConfigApi();
     public readonly i18n = new I18nApi();
     public readonly customComponents = new CustomComponentsApi();
+    public readonly extras = new ElementWebExtrasApi();
+    public readonly builtins = new ElementWebBuiltinsApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
+    public readonly client = new ClientApi();
+    public readonly stores = new StoresApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
@@ -77,8 +95,3 @@ class ModuleApi implements Api {
 }
 
 export type ModuleApiType = ModuleApi;
-
-if (!window.mxModuleApi) {
-    window.mxModuleApi = new ModuleApi();
-}
-export default window.mxModuleApi;

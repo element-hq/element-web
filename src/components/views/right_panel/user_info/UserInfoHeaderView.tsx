@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type User, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Heading, Tooltip, Text } from "@vector-im/compound-web";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { useUserfoHeaderViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
 import MemberAvatar from "../../avatars/MemberAvatar";
 import { Container, type Member, type IDevice } from "../UserInfo";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import PresenceLabel from "../../rooms/PresenceLabel";
 import CopyableText from "../../elements/CopyableText";
 import { UserInfoHeaderVerificationView } from "./UserInfoHeaderVerificationView";

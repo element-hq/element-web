@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, type HierarchyRoom } from "matrix-js-sdk/src/matrix";
+import { type HierarchyRoom } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../languageHandler";
 
@@ -42,7 +42,15 @@ export const getMetaSpaceName = (spaceKey: MetaSpace, allRoomsInHome = false): s
     }
 };
 
-export type SpaceKey = MetaSpace | Room["roomId"];
+/**
+ * This can be:
+ *  - a MetaSpace
+ *  - space ID (ie. a room ID)
+ *  - A 'custom' space from a module
+ * Unfortunately we can't type the last set as we don't know what modules will define,
+ * so we can't do better than string here.
+ */
+export type SpaceKey = string;
 
 export interface ISuggestedRoom extends HierarchyRoom {
     viaServers: string[];

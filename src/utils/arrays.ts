@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { percentageOf, percentageWithin } from "../shared-components/utils/numbers";
+import { percentageOf, percentageWithin } from "@element-hq/web-shared-components";
 
 /**
  * Quickly resample an array to have less/more data points. If an input which is larger

@@ -2,7 +2,6 @@
 /dist
 /lib
 /node_modules
-/packages/
 /webapp
 /*.log
 yarn.lock

@@ -1392,7 +1392,6 @@
         "upload_file": "Dosya yükle"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Yalnızca ekran paylaşımına izin ver modu",
         "ask_to_join": "Katılma isteğini etkinleştir",
         "automatic_debug_logs": "Herhangi bir hatada otomatik olarak hata ayıklama günlükleri gönder",
         "automatic_debug_logs_decryption": "Şifre çözme hatalarında otomatik olarak hata ayıklama günlükleri gönder",
@@ -2863,7 +2862,6 @@
             "spaces_explainer": "Alanlar, odaları ve kişileri gruplamanın bir yoludur. İçinde bulunduğunuz alanların yanı sıra, önceden oluşturulmuş bazı alanları da kullanabilirsiniz.",
             "title": "Kenar çubuğu"
         },
-        "start_automatically": "Sisteme giriş yaptıktan sonra otomatik başlat",
         "tac_only_notifications": "Bildirimleri yalnızca mesaj dizisi etkinlik merkezinde göster",
         "use_12_hour_format": "Zaman damgalarını 12 biçiminde göster (örn. 2:30 pm)",
         "use_command_enter_send_message": "Mesaj göndermek için Command + Enter tuşlarını kullanın",

@@ -12,8 +12,8 @@ import { debounce } from "lodash";
 import classNames from "classnames";
 import React, { type ChangeEvent, type FormEvent } from "react";
 import { type SecretStorage } from "matrix-js-sdk/src/matrix";
+import { Flex } from "@element-hq/web-shared-components";
 
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";

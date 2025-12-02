@@ -15,9 +15,9 @@ import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,
@@ -70,10 +70,10 @@ export function RoomListHeaderView(): JSX.Element {
                             <ComposeMenu vm={vm} />
                         ) : (
                             <IconButton
-                                aria-label={_t("action|start_chat")}
                                 onClick={(e) => vm.createChatRoom(e.nativeEvent)}
+                                tooltip={_t("action|new_conversation")}
                             >
-                                <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                                <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
                             </IconButton>
                         )}
                     </div>
@@ -163,8 +163,8 @@ function ComposeMenu({ vm }: ComposeMenuProps): JSX.Element {
             side="right"
             align="start"
             trigger={
-                <IconButton aria-label={_t("action|add")}>
-                    <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                <IconButton tooltip={_t("action|new_conversation")}>
+                    <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
                 </IconButton>
             }
         >

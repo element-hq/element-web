@@ -2,114 +2,94 @@
 
 exports[`<Notifications /> main notification switches renders only enable notifications switch when notifications are disabled 1`] = `
 <div>
-  <form
-    class="_root_19upo_16"
+  <div
+    class="mx_SettingsFlag"
+    data-testid="notif-master-switch"
   >
-    <div
-      class="_inline-field_19upo_32"
+    <span
+      class="mx_SettingsFlag_label"
     >
       <div
-        class="_inline-field-control_19upo_44"
+        id="mx_LabelledToggleSwitch__r_0_"
+      >
+        Enable notifications for this account
+      </div>
+      <span
+        class="mx_Caption"
+        id="mx_LabelledToggleSwitch__r_0__caption"
+      >
+        Turn off to disable notifications on all your devices and sessions
+      </span>
+    </span>
+    <div
+      aria-checked="false"
+      aria-describedby="mx_LabelledToggleSwitch__r_0__caption"
+      aria-disabled="false"
+      aria-labelledby="mx_LabelledToggleSwitch__r_0_"
+      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+      role="switch"
+      tabindex="0"
+    >
+      <div
+        class="mx_ToggleSwitch_ball"
+      />
+    </div>
+  </div>
+  <div>
+    <div
+      class="mx_SettingsFlag"
+    >
+      <label
+        class="mx_SettingsFlag_label"
+        for="mx_SettingsFlag_testid_0"
+      >
+        <span
+          class="mx_SettingsFlag_labelText"
+        >
+          Show all activity in the room list (dots or number of unread messages)
+        </span>
+      </label>
+      <div
+        aria-checked="true"
+        aria-disabled="false"
+        aria-label="Show all activity in the room list (dots or number of unread messages)"
+        class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+        id="mx_SettingsFlag_testid_0"
+        role="switch"
+        tabindex="0"
       >
         <div
-          class="_container_19o42_10"
-        >
-          <input
-            class="_input_19o42_24"
-            id="«r0»"
-            role="switch"
-            type="checkbox"
-          />
-          <div
-            class="_ui_19o42_34"
-          />
-        </div>
-      </div>
-      <div
-        class="_inline-field-body_19upo_38"
-      >
-        <label
-          class="_label_19upo_59"
-          for="«r0»"
-        >
-          Enable notifications for this account
-        </label>
-        <span
-          class="_message_19upo_85 _help-message_19upo_91"
-          id="radix-«r2»"
-        >
-          Turn off to disable notifications on all your devices and sessions
-        </span>
+          class="mx_ToggleSwitch_ball"
+        />
       </div>
     </div>
-    <form
-      class="_root_19upo_16"
+    <div
+      class="mx_SettingsFlag"
     >
+      <label
+        class="mx_SettingsFlag_label"
+        for="mx_SettingsFlag_testid_1"
+      >
+        <span
+          class="mx_SettingsFlag_labelText"
+        >
+          Only show notifications in the thread activity centre
+        </span>
+      </label>
       <div
-        class="_inline-field_19upo_32"
+        aria-checked="true"
+        aria-disabled="false"
+        aria-label="Only show notifications in the thread activity centre"
+        class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+        id="mx_SettingsFlag_testid_1"
+        role="switch"
+        tabindex="0"
       >
         <div
-          class="_inline-field-control_19upo_44"
-        >
-          <div
-            class="_container_19o42_10"
-          >
-            <input
-              checked=""
-              class="_input_19o42_24"
-              id="mx_SettingsFlag_testid_0"
-              role="switch"
-              type="checkbox"
-            />
-            <div
-              class="_ui_19o42_34"
-            />
-          </div>
-        </div>
-        <div
-          class="_inline-field-body_19upo_38"
-        >
-          <label
-            class="_label_19upo_59"
-            for="mx_SettingsFlag_testid_0"
-          >
-            Show all activity in the room list (dots or number of unread messages)
-          </label>
-        </div>
+          class="mx_ToggleSwitch_ball"
+        />
       </div>
-      <div
-        class="_inline-field_19upo_32"
-      >
-        <div
-          class="_inline-field-control_19upo_44"
-        >
-          <div
-            class="_container_19o42_10"
-          >
-            <input
-              checked=""
-              class="_input_19o42_24"
-              id="mx_SettingsFlag_testid_1"
-              role="switch"
-              type="checkbox"
-            />
-            <div
-              class="_ui_19o42_34"
-            />
-          </div>
-        </div>
-        <div
-          class="_inline-field-body_19upo_38"
-        >
-          <label
-            class="_label_19upo_59"
-            for="mx_SettingsFlag_testid_1"
-          >
-            Only show notifications in the thread activity centre
-          </label>
-        </div>
-      </div>
-    </form>
-  </form>
+    </div>
+  </div>
 </div>
 `;

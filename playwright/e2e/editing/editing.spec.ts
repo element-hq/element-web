@@ -138,7 +138,11 @@ test.describe("Editing", () => {
 
             // Take a snapshot of the dialog
             await expect(dialog).toMatchScreenshot("message-edit-history-dialog.png", {
-                mask: [page.locator(".mx_MessageTimestamp")],
+                css: `
+                    .mx_MessageTimestamp {
+                        visibility: hidden;
+                    }
+                `,
             });
 
             {

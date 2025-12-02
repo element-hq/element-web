@@ -26,6 +26,7 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
         }
 
         const replaceMap: Record<string, string> = {
+            "$brand": SdkConfig.get("brand"),
             "$riot:ssoUrl": "#/start_sso",
             "$riot:casUrl": "#/start_cas",
             "$matrixLogo": MATRIX_LOGO_HTML,

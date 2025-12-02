@@ -31,11 +31,9 @@ describe("InitialCryptoSetupDialog", () => {
     });
 
     it("should show a spinner while the setup is in progress", async () => {
-        const onFinished = jest.fn();
-
         storeMock.getStatus.mockReturnValue("in_progress");
 
-        render(<InitialCryptoSetupDialog onFinished={onFinished} />);
+        render(<InitialCryptoSetupDialog onCancelled={jest.fn()} />);
 
         expect(screen.getByTestId("spinner")).toBeInTheDocument();
     });
@@ -43,16 +41,15 @@ describe("InitialCryptoSetupDialog", () => {
     it("should display an error if setup has failed", async () => {
         storeMock.getStatus.mockReturnValue("error");
 
-        render(<InitialCryptoSetupDialog onFinished={jest.fn()} />);
+        render(<InitialCryptoSetupDialog onCancelled={jest.fn()} />);
 
         await expect(await screen.findByRole("button", { name: "Retry" })).toBeInTheDocument();
     });
 
     it("calls retry when retry button pressed", async () => {
-        const onFinished = jest.fn();
         storeMock.getStatus.mockReturnValue("error");
 
-        render(<InitialCryptoSetupDialog onFinished={onFinished} />);
+        render(<InitialCryptoSetupDialog onCancelled={jest.fn()} />);
 
         await userEvent.click(await screen.findByRole("button", { name: "Retry" }));
 

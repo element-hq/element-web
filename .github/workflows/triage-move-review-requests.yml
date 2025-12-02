@@ -9,7 +9,7 @@ jobs:
         name: Move PRs asking for design review to the design board
         runs-on: ubuntu-24.04
         steps:
-            - uses: octokit/graphql-action@8ad880e4d437783ea2ab17010324de1075228110 # v2.3.2
+            - uses: octokit/graphql-action@abaeca7ba4f0325d63b8de7ef943c2418d161b93 # v3.0.0
               id: find_team_members
               with:
                   headers: '{"GraphQL-Features": "projects_next_graphql"}'
@@ -52,7 +52,7 @@ jobs:
                   fi
               env:
                   TEAM: "design"
-            - uses: octokit/graphql-action@8ad880e4d437783ea2ab17010324de1075228110 # v2.3.2
+            - uses: octokit/graphql-action@abaeca7ba4f0325d63b8de7ef943c2418d161b93 # v3.0.0
               id: add_to_project
               if: steps.any_matching_reviewers.outputs.match == 'true'
               with:
@@ -76,7 +76,7 @@ jobs:
         name: Move PRs asking for design review to the design board
         runs-on: ubuntu-24.04
         steps:
-            - uses: octokit/graphql-action@8ad880e4d437783ea2ab17010324de1075228110 # v2.3.2
+            - uses: octokit/graphql-action@abaeca7ba4f0325d63b8de7ef943c2418d161b93 # v3.0.0
               id: find_team_members
               with:
                   headers: '{"GraphQL-Features": "projects_next_graphql"}'
@@ -119,7 +119,7 @@ jobs:
                   fi
               env:
                   TEAM: "product"
-            - uses: octokit/graphql-action@8ad880e4d437783ea2ab17010324de1075228110 # v2.3.2
+            - uses: octokit/graphql-action@abaeca7ba4f0325d63b8de7ef943c2418d161b93 # v3.0.0
               id: add_to_project
               if: steps.any_matching_reviewers.outputs.match == 'true'
               with:

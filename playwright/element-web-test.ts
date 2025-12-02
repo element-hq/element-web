@@ -144,7 +144,7 @@ export const expect = baseExpect.extend<Expectations>({
             }
             /* Use monospace font for timestamp for consistent mask width */
             .mx_MessageTimestamp {
-                font-family: Inconsolata !important;
+                font-family: "Fira Code" !important;
             }
         `;
 

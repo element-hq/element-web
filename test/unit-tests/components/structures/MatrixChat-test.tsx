@@ -547,15 +547,15 @@ describe("<MatrixChat />", () => {
                 getComponent({ realQueryParams });
 
                 defaultDispatcher.dispatch({
-                    action: "will_start_client",
+                    action: Action.WillStartClient,
                 });
                 // client successfully started
                 await waitFor(() =>
-                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
                 );
 
-                // check we get to logged in view
-                await waitForSyncAndLoad(loginClient, true);
+                // set up keys screen is rendered
+                expect(screen.getByText("Setting up keys")).toBeInTheDocument();
             });
 
             it("should persist device language when available", async () => {
@@ -1166,14 +1166,16 @@ describe("<MatrixChat />", () => {
                     // Given force_verification is on (outer describe)
                     // And we just logged in via OIDC (inner describe)
 
+                    mocked(loginClient.getCrypto()!.userHasCrossSigningKeys).mockResolvedValue(true);
+
                     // When we load the page
                     getComponent({ realQueryParams });
 
                     defaultDispatcher.dispatch({
-                        action: "will_start_client",
+                        action: Action.WillStartClient,
                     });
                     await waitFor(() =>
-                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
                     );
 
                     // Then we are not allowed in - we are being asked to verify
@@ -1340,22 +1342,8 @@ describe("<MatrixChat />", () => {
                 expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeInTheDocument();
             });
 
-            it("should go straight to logged in view when user does not have cross signing keys and server does not support cross signing", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(false);
-
-                await getComponentAndLogin(false);
-
-                expect(loginClient.doesServerSupportUnstableFeature).toHaveBeenCalledWith(
-                    "org.matrix.e2e_cross_signing",
-                );
-
-                // logged in
-                await screen.findByLabelText("User menu");
-            });
-
             describe("when server supports cross signing and user does not have cross signing setup", () => {
                 beforeEach(() => {
-                    loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
                     jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
                 });
 
@@ -1400,8 +1388,6 @@ describe("<MatrixChat />", () => {
                 });
 
                 it("should go to setup e2e screen", async () => {
-                    loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
                     await getComponentAndLogin();
 
                     expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
@@ -1424,9 +1410,7 @@ describe("<MatrixChat />", () => {
                 expect(screen.getByText("Confirm your identity")).toBeInTheDocument();
             });
 
-            it("should setup e2e when server supports cross signing", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
+            it("should setup e2e", async () => {
                 await getComponentAndLogin();
 
                 expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
@@ -1584,11 +1568,11 @@ describe("<MatrixChat />", () => {
             it("should continue to post login setup when no session is found in local storage", async () => {
                 getComponent({ realQueryParams });
                 defaultDispatcher.dispatch({
-                    action: "will_start_client",
+                    action: Action.WillStartClient,
                 });
 
-                // logged in but waiting for sync screen
-                await screen.findByText("Logout");
+                // set up keys screen is rendered
+                expect(await screen.findByText("Setting up keys")).toBeInTheDocument();
             });
         });
     });
@@ -1844,7 +1828,7 @@ describe("<MatrixChat />", () => {
 
             getComponent({});
             defaultDispatcher.dispatch({
-                action: "will_start_client",
+                action: Action.WillStartClient,
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
@@ -1867,7 +1851,7 @@ describe("<MatrixChat />", () => {
 
             getComponent({});
             defaultDispatcher.dispatch({
-                action: "will_start_client",
+                action: Action.WillStartClient,
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");

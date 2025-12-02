@@ -9,10 +9,10 @@ import React from "react";
 import { type User, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Text, Button, InlineSpinner, Badge } from "@vector-im/compound-web";
 import { VerifiedIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Flex } from "@element-hq/web-shared-components";
 
 import { useUserInfoVerificationViewModel } from "../../../viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
 import { type IDevice } from "../UserInfo";
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 
 export const UserInfoHeaderVerificationView: React.FC<{

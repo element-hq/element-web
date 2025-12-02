@@ -53,7 +53,10 @@ export class ElementAppPage {
      */
 
     public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
-        await this.page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+        await this.page
+            .getByRole("navigation", { name: "Room list" })
+            .getByRole("button", { name: "New conversation" })
+            .click();
         await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
     }
@@ -67,6 +70,20 @@ export class ElementAppPage {
 
     public async getClipboard(): Promise<string> {
         return await this.page.evaluate(() => navigator.clipboard.readText());
+    }
+
+    /**
+     * Get the room ID from the current URL.
+     *
+     * @returns The room ID.
+     * @throws if the current URL does not contain a room ID.
+     */
+    public async getCurrentRoomIdFromUrl(): Promise<string> {
+        const urlHash = await this.page.evaluate(() => window.location.hash);
+        if (!urlHash.startsWith("#/room/")) {
+            throw new Error("URL hash suggests we are not in a room");
+        }
+        return urlHash.replace("#/room/", "");
     }
 
     /**
@@ -186,6 +203,21 @@ export class ElementAppPage {
     }
 
     /**
+     * Opens the room info panel if it is not already open.
+     *
+     * TODO: fix this so that it works correctly if, say, the member list was open instead of the room info panel.
+     *
+     * @returns locator to the right panel
+     */
+    public async openRoomInfoPanel(): Promise<Locator> {
+        const locator = this.page.getByTestId("right-panel");
+        if (!(await locator.isVisible())) {
+            await this.page.getByRole("button", { name: "Room info" }).first().click();
+        }
+        return locator;
+    }
+
+    /**
      * Opens/closes the memberlist panel
      * @returns locator to the memberlist panel
      */
@@ -195,6 +227,21 @@ export class ElementAppPage {
         const memberlist = this.page.locator(".mx_MemberListView");
         await memberlist.waitFor();
         return memberlist;
+    }
+
+    /**
+     * Open the room info panel, and use it to send an invite to the given user.
+     *
+     * @param userId - The user to invite to the room.
+     */
+    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+        const rightPanel = await this.openRoomInfoPanel();
+        await rightPanel.getByRole("menuitem", { name: "Invite" }).click();
+
+        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
+        await input.fill(userId);
+        await input.press("Enter");
+        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
     }
 
     /**

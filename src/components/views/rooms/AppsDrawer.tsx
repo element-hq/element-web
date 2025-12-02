@@ -11,6 +11,7 @@ import classNames from "classnames";
 import { Resizable, type Size } from "re-resizable";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { type IWidget } from "matrix-widget-api";
+import { clamp, percentageOf, percentageWithin } from "@element-hq/web-shared-components";
 
 import AppTile from "../elements/AppTile";
 import dis from "../../../dispatcher/dispatcher";
@@ -22,7 +23,6 @@ import ResizeHandle from "../elements/ResizeHandle";
 import Resizer, { type IConfig } from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
-import { clamp, percentageOf, percentageWithin } from "../../../shared-components/utils/numbers";
 import UIStore from "../../../stores/UIStore";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";

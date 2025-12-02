@@ -70,6 +70,17 @@ describe("createRoom", () => {
         });
     });
 
+    it("creates a public room with a topic", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PublicChat }, topic: "My topic" });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "public_chat",
+            visibility: "private",
+            topic: "My topic",
+            initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+        });
+    });
+
     it("creates a public room in a space", async () => {
         const roomId = await createRoom(client, { roomType: RoomType.Space });
         const parentSpace = client.getRoom(roomId!)!;

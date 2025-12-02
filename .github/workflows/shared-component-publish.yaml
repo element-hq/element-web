@@ -1,0 +1,40 @@
+name: Publish shared component npm package
+on:
+    workflow_dispatch: {}
+
+concurrency: release
+jobs:
+    publish:
+        name: "Publish"
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+
+        steps:
+            - name: 🧮 Checkout code
+              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+
+            - name: 🔧 Set up node environment
+              uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+              with:
+                  cache: "yarn"
+                  node-version-file: ".node-version"
+                  registry-url: "https://registry.npmjs.org"
+
+            # Ensure npm 11.5.1 or later is installed
+            - name: Update npm
+              run: npm install -g npm@latest
+
+            # Need to setup element web too as it needs the translations
+            - name: 🛠️ Setup EW
+              run: yarn install --pure-lockfile
+
+            - name: 🛠️ Setup
+              # When running `install` it also calls the `prepare` step which generates
+              # a build
+              run: yarn --cwd packages/shared-components install --pure-lockfile
+
+            - name: 🚀 Publish to npm
+              working-directory: packages/shared-components
+              run: npm publish --access public --tag test --provenance

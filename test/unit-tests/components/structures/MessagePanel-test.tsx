@@ -15,7 +15,7 @@ import { render } from "jest-matrix-react";
 
 import MessagePanel, { shouldFormContinuation } from "../../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
+import RoomContext, { type RoomContextType, TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import * as TestUtilsMatrix from "../../../test-utils";
 import {
@@ -29,7 +29,6 @@ import {
     mockClientPushProcessor,
 } from "../../../test-utils";
 import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
@@ -92,9 +91,9 @@ describe("MessagePanel", function () {
         showAvatarChanges: false,
         showDisplaynameChanges: true,
         showHiddenEvents: false,
-    } as unknown as IRoomState;
+    } as unknown as RoomContextType;
 
-    const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) => (
+    const getComponent = (props = {}, roomContext: Partial<RoomContextType> = {}) => (
         <ScopedRoomContextProvider {...defaultRoomContext} {...roomContext}>
             <MessagePanel {...defaultProps} {...props} />
         </ScopedRoomContextProvider>

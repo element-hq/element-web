@@ -91,12 +91,13 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             const isTimelineA = isTimelineCapability(capA);
             const isTimelineB = isTimelineCapability(capB);
 
-            if (!isTimelineA && !isTimelineB) return lexicographicCompare(capA, capB);
-            if (isTimelineA && !isTimelineB) return 1;
-            if (!isTimelineA && isTimelineB) return -1;
-            if (isTimelineA && isTimelineB) return lexicographicCompare(capA, capB);
+            // Sort timeline capabilities to the bottom, non-timeline to the top
+            if (isTimelineA !== isTimelineB) {
+                return isTimelineA ? 1 : -1;
+            }
 
-            return 0;
+            // Both are the same type (both timeline or both non-timeline), sort lexicographically
+            return lexicographicCompare(capA, capB);
         });
         const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);

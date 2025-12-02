@@ -16,6 +16,7 @@ import type { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper
 import MVoiceMessageBody from "../../../../../src/components/views/messages/MVoiceMessageBody";
 import { PlaybackQueue } from "../../../../../src/audio/PlaybackQueue";
 import { createTestClient } from "../../../../test-utils";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 describe("<MVvoiceMessageBody />", () => {
     let event: MatrixEvent;
@@ -25,7 +26,7 @@ describe("<MVvoiceMessageBody />", () => {
 
         const matrixClient = createTestClient();
         const room = new Room("!TESTROOM", matrixClient, "@alice:example.org");
-        const playbackQueue = new PlaybackQueue(room);
+        const playbackQueue = new PlaybackQueue(room, SdkContextClass.instance.roomViewStore);
 
         jest.spyOn(PlaybackQueue, "forRoom").mockReturnValue(playbackQueue);
         jest.spyOn(playbackQueue, "unsortedEnqueue").mockReturnValue(undefined);

@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { findLastIndex } from "lodash";
 
 import { _t } from "../../../languageHandler";
 import { type CategoryKey, type ICategory } from "./Category";
@@ -33,14 +32,8 @@ class Header extends React.PureComponent<IProps> {
     }
 
     private changeCategoryRelative(delta: number): void {
-        let current: number;
-        // As multiple categories may be visible at once, we want to find the one closest to the relative direction
-        if (delta < 0) {
-            current = this.props.categories.findIndex((c) => c.visible);
-        } else {
-            // XXX: Switch to Array::findLastIndex once we enable ES2023
-            current = findLastIndex(this.props.categories, (c) => c.visible);
-        }
+        // Move to the next/previous category using the first visible as the current.
+        const current = this.props.categories.findIndex((c) => c.visible);
         this.changeCategoryAbsolute(current + delta, delta);
     }
 
@@ -104,7 +97,7 @@ class Header extends React.PureComponent<IProps> {
                             onClick={() => this.props.onAnchorClick(category.id)}
                             title={category.name}
                             role="tab"
-                            tabIndex={category.visible ? 0 : -1} // roving
+                            tabIndex={category.firstVisible ? 0 : -1} // roving
                             aria-selected={category.visible}
                             aria-controls={`mx_EmojiPicker_category_${category.id}`}
                         />

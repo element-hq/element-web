@@ -735,7 +735,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         if (this.state.reactionPickerDisplayed) {
             const buttonRect = (this.reactButtonRef.current as HTMLElement)?.getBoundingClientRect();
             reactionPicker = (
-                <ContextMenu {...toRightOf(buttonRect)} onFinished={this.closeMenu} managed={false}>
+                <ContextMenu {...toRightOf(buttonRect)} onFinished={this.closeMenu} managed={false} focusLock>
                     <ReactionPicker mxEvent={mxEvent} onFinished={this.onCloseReactionPicker} reactions={reactions} />
                 </ContextMenu>
             );

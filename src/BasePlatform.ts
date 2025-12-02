@@ -70,6 +70,7 @@ export default abstract class BasePlatform {
     protected notificationCount = 0;
     protected errorDidOccur = false;
     protected _favicon?: Favicon;
+    public readonly initialised = Promise.resolve<void>(undefined);
 
     protected constructor() {
         dis.register(this.onAction.bind(this));
@@ -87,7 +88,7 @@ export default abstract class BasePlatform {
 
     protected onAction(payload: ActionPayload): void {
         switch (payload.action) {
-            case "on_client_not_viable":
+            case Action.ClientNotViable:
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;

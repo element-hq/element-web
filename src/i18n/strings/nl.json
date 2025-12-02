@@ -2170,7 +2170,6 @@
             "metaspaces_subsection": "Spaces om te tonen",
             "title": "Zijbalk"
         },
-        "start_automatically": "Automatisch starten na systeemlogin",
         "use_12_hour_format": "Tijd in 12-uursformaat tonen (bv. 2:30pm)",
         "use_command_enter_send_message": "Gebruik Command (⌘) + Enter om een bericht te sturen",
         "use_command_f_search": "Gebruik Command + F om te zoeken in de tijdlijn",

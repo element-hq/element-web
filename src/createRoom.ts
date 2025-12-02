@@ -49,7 +49,19 @@ import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
 
 export interface IOpts {
     dmUserId?: string;
-    createOpts?: ICreateRoomOpts;
+    /**
+     * The name of the room to be created.
+     */
+    name?: string;
+    /**
+     * The topic for the room.
+     */
+    topic?: string;
+    /**
+     * Additional options to pass to the room creation API.
+     * Note: "name", "topic", and "avatar" should be set via their respective properties in IOpts.
+     */
+    createOpts?: Omit<ICreateRoomOpts, "name" | "topic" | "avatar">;
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
@@ -251,6 +263,14 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
+    if (opts.name) {
+        createOpts.name = opts.name;
+    }
+
+    if (opts.topic) {
+        createOpts.topic = opts.topic;
+    }
+
     if (opts.avatar) {
         let url = opts.avatar;
         if (opts.avatar instanceof File) {
@@ -296,9 +316,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 return Promise.reject(err);
             }
         })
-        .finally(function () {
-            if (modal) modal.close();
-        })
         .then(async (res): Promise<void> => {
             roomId = res.room_id;
 
@@ -319,6 +336,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             });
 
             if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
+        })
+        .finally(function () {
+            if (modal) modal.close();
         })
         .then(() => {
             if (opts.parentSpace) {

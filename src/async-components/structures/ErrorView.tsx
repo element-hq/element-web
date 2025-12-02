@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 import { Text, Heading, Button, Separator } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import { Flex } from "@element-hq/web-shared-components";
 
 import SdkConfig from "../../SdkConfig";
-import { Flex } from "../../shared-components/utils/Flex";
 import { _t } from "../../languageHandler";
-import { Icon as AppleIcon } from "../../../res/themes/element/img/compound/apple.svg";
-import { Icon as MicrosoftIcon } from "../../../res/themes/element/img/compound/microsoft.svg";
-import { Icon as LinuxIcon } from "../../../res/themes/element/img/compound/linux.svg";
+import { Icon as AppleIcon } from "../../../res/img/element-icons/brands/apple.svg";
+import { Icon as MicrosoftIcon } from "../../../res/img/element-icons/brands/microsoft.svg";
+import { Icon as LinuxIcon } from "../../../res/img/element-icons/brands/linux.svg";
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // PostCSS variables will be accessible.

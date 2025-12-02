@@ -21,6 +21,7 @@ import {
     type CryptoApi,
     DeviceVerificationStatus,
     type KeyBackupInfo,
+    type SecretStorageStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
@@ -59,6 +60,18 @@ const deviceId = "my-device-id";
 const mockDispatcher = mocked(dis);
 const flushPromises = async () => await new Promise(process.nextTick);
 
+const readySecretStorageStatus: SecretStorageStatus = {
+    ready: true,
+    defaultKeyId: "00",
+    secretStorageKeyValidityMap: {},
+};
+
+const unreadySecretStorageStatus: SecretStorageStatus = {
+    ready: false,
+    defaultKeyId: null,
+    secretStorageKeyValidityMap: {},
+};
+
 describe("DeviceListener", () => {
     let mockClient: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
@@ -90,7 +103,7 @@ describe("DeviceListener", () => {
             }),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
-            isSecretStorageReady: jest.fn().mockResolvedValue(true),
+            getSecretStorageStatus: jest.fn().mockResolvedValue(readySecretStorageStatus),
             userHasCrossSigningKeys: jest.fn(),
             getActiveSessionBackupVersion: jest.fn(),
             getCrossSigningStatus: jest.fn().mockReturnValue({
@@ -113,6 +126,7 @@ describe("DeviceListener", () => {
             getRooms: jest.fn().mockReturnValue([]),
             isVersionSupported: jest.fn().mockResolvedValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
+            isKeyBackupKeyStored: jest.fn(),
             waitForClientWellKnown: jest.fn(),
             getClientWellKnown: jest.fn(),
             getDeviceId: jest.fn().mockReturnValue(deviceId),
@@ -123,7 +137,6 @@ describe("DeviceListener", () => {
             getCrypto: jest.fn().mockReturnValue(mockCrypto),
             secretStorage: {
                 isStored: jest.fn().mockReturnValue(null),
-                getDefaultKeyId: jest.fn().mockReturnValue("00"),
             },
         });
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
@@ -263,13 +276,6 @@ describe("DeviceListener", () => {
     });
 
     describe("recheck", () => {
-        it("does nothing when cross signing feature is not supported", async () => {
-            mockClient!.isVersionSupported.mockResolvedValue(false);
-            await createAndStart();
-
-            expect(mockClient!.isVersionSupported).toHaveBeenCalledWith("v1.1");
-            expect(mockCrypto!.isCrossSigningReady).not.toHaveBeenCalled();
-        });
         it("does nothing when crypto is not enabled", async () => {
             mockClient!.getCrypto.mockReturnValue(undefined);
             await createAndStart();
@@ -302,13 +308,15 @@ describe("DeviceListener", () => {
 
             beforeEach(() => {
                 mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
-                mockCrypto!.isSecretStorageReady.mockResolvedValue(false);
+                mockCrypto!.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
                 mockClient!.getRooms.mockReturnValue(rooms);
                 jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             });
 
             it("hides setup encryption toast when it is dismissed", async () => {
                 const instance = await createAndStart();
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalled();
+
                 instance.dismissEncryptionSetup();
                 await flushPromises();
                 expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
@@ -352,7 +360,7 @@ describe("DeviceListener", () => {
                 });
 
                 it("hides setup encryption toast when cross signing and secret storage are ready", async () => {
-                    mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
                     mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
 
                     await createAndStart();
@@ -378,7 +386,7 @@ describe("DeviceListener", () => {
                 });
 
                 it("hides the out-of-sync toast after we receive the missing secrets", async () => {
-                    mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
                     mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
 
                     // First show the toast
@@ -418,7 +426,7 @@ describe("DeviceListener", () => {
                     // non falsy response
                     mockCrypto.getKeyBackupInfo.mockResolvedValue({} as unknown as KeyBackupInfo);
                     mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
-                    mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+                    mockCrypto.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
 
                     await createAndStart();
 
@@ -430,12 +438,16 @@ describe("DeviceListener", () => {
                 it("shows an out-of-sync toast when one of the secrets is missing from 4S", async () => {
                     mockCrypto.getKeyBackupInfo.mockResolvedValue({} as unknown as KeyBackupInfo);
                     mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
-                    mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("foo");
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue({
+                        ready: false,
+                        defaultKeyId: "foo",
+                        secretStorageKeyValidityMap: {},
+                    });
 
                     await createAndStart();
 
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC_STORE,
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
                     );
                 });
             });
@@ -839,8 +851,7 @@ describe("DeviceListener", () => {
                 ];
 
                 beforeEach(() => {
-                    mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
-                    mockCrypto.isSecretStorageReady.mockResolvedValue(false);
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
                 });
 
                 it.each(testCases)("Does report session verification state when %s", async (_, status, expected) => {
@@ -910,7 +921,7 @@ describe("DeviceListener", () => {
 
                     it("Should report recovery state as Enabled", async () => {
                         // 4S is enabled
-                        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("00");
+                        mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
 
                         // Session trusted and cross signing secrets in 4S and stored locally
                         mockCrypto!.getCrossSigningStatus.mockResolvedValue({
@@ -940,7 +951,7 @@ describe("DeviceListener", () => {
 
                     it("Should report recovery state as Incomplete if secrets not cached locally", async () => {
                         // 4S is enabled
-                        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("00");
+                        mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
 
                         // Session trusted and cross signing secrets in 4S and stored locally
                         mockCrypto!.getCrossSigningStatus.mockResolvedValue({
@@ -1048,7 +1059,7 @@ describe("DeviceListener", () => {
                     it.each(partialTestCases)(
                         "Should report recovery state as Incomplete when %s",
                         async (_, status) => {
-                            mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("00");
+                            mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
 
                             // Session trusted and cross signing secrets in 4S and stored locally
                             mockCrypto!.getCrossSigningStatus.mockResolvedValue(status);
@@ -1070,10 +1081,12 @@ describe("DeviceListener", () => {
                     );
 
                     it("Should report recovery state as Incomplete when some secrets are not in 4S", async () => {
-                        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("00");
-
                         // Some missing secret in 4S
-                        mockCrypto.isSecretStorageReady.mockResolvedValue(false);
+                        mockCrypto!.getSecretStorageStatus.mockResolvedValue({
+                            ready: false,
+                            defaultKeyId: "00",
+                            secretStorageKeyValidityMap: {},
+                        });
 
                         // Session trusted and secrets known locally.
                         mockCrypto!.getCrossSigningStatus.mockResolvedValue({
@@ -1113,7 +1126,7 @@ describe("DeviceListener", () => {
                     ];
                     it.each(testCases)("Should report recovery state as %s", async (_, isCached) => {
                         // 4S is enabled
-                        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("00");
+                        mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
 
                         // Session trusted and cross signing secrets in 4S and stored locally
                         mockCrypto!.getCrossSigningStatus.mockResolvedValue({
@@ -1159,8 +1172,7 @@ describe("DeviceListener", () => {
                     }),
                 );
                 mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-                mockCrypto!.isSecretStorageReady.mockResolvedValue(false);
-                mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+                mockCrypto!.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
                 mockClient!.getRooms.mockReturnValue(rooms);
                 jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             });
@@ -1174,8 +1186,7 @@ describe("DeviceListener", () => {
             });
 
             it("does not show the 'set up recovery' toast if secret storage is set up", async () => {
-                mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
-                mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("thiskey");
+                mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
                 await createAndStart();
 
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
@@ -1204,6 +1215,136 @@ describe("DeviceListener", () => {
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
                     SetupEncryptionToast.Kind.SET_UP_RECOVERY,
                 );
+            });
+        });
+    });
+
+    describe("key storage out of sync", () => {
+        describe("needs backup reset", () => {
+            it("should not need resetting if backup disabled", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: true,
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(false);
+            });
+
+            it("should not need resetting if backup key is present locally or in 4S, and user has 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue({});
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(false);
+            });
+
+            it("should not need resetting if backup key is present locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(new Uint8Array());
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(false);
+            });
+
+            it("should need resetting if backup key is missing locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue({});
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true)).toBe(true);
+            });
+
+            it("should need resetting if backup key is missing locally and in 4s", async () => {
+                const deviceListener = await createAndStart();
+                mockClient.getAccountDataFromServer.mockResolvedValue({
+                    disabled: false,
+                });
+
+                mockCrypto.getSessionBackupPrivateKey.mockResolvedValue(null);
+                mockClient.isKeyBackupKeyStored.mockResolvedValue(null);
+                expect(await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false)).toBe(true);
+            });
+        });
+
+        describe("needs cross-signing reset", () => {
+            it("should not need resetting if cross-signing keys are present locally or in 4S, and user has 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: true,
+                        selfSigningKey: true,
+                        userSigningKey: true,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
+
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: true,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(false);
+            });
+
+            it("should not need resetting if cross-signing keys are present locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: true,
+                        selfSigningKey: true,
+                        userSigningKey: true,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(false);
+            });
+
+            it("should need resetting if cross-signing keys are missing locally and user forgot 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: true,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true)).toBe(true);
+            });
+
+            it("should need resetting if cross-signing keys are missing locally and in 4S key", async () => {
+                const deviceListener = await createAndStart();
+                mockCrypto.getCrossSigningStatus.mockResolvedValue({
+                    publicKeysOnDevice: true,
+                    privateKeysInSecretStorage: false,
+                    privateKeysCachedLocally: {
+                        masterKey: false,
+                        selfSigningKey: false,
+                        userSigningKey: false,
+                    },
+                });
+                expect(await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(false)).toBe(true);
             });
         });
     });

@@ -5,6 +5,7 @@ export default {
         "src/serviceworker/index.ts",
         "src/workers/*.worker.ts",
         "src/utils/exportUtils/exportJS.js",
+        "src/vector/localstorage-fix.ts",
         "scripts/**",
         "playwright/**",
         "test/**",
@@ -19,6 +20,8 @@ export default {
         "src/hooks/useTimeout.ts",
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
+
+        "packages/**/*",
     ],
     ignoreDependencies: [
         // Required for `action-validator`
@@ -39,6 +42,8 @@ export default {
         "util",
         // Embedded into webapp
         "@element-hq/element-call-embedded",
+        // Transitive dep of jest
+        "jsdom",
 
         // Used by matrix-js-sdk, which means we have to include them as a
         // dependency so that // we can run `tsc` (since we import the typescript
@@ -46,11 +51,13 @@ export default {
         // would with a normal library).
         "@types/content-type",
         "@types/sdp-transform",
+
+        // Used in EW but failed because of "link:"
+        "@element-hq/web-shared-components",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows
         "jq",
-        "wait-on",
     ],
     ignoreExportsUsedInFile: true,
 } satisfies KnipConfig;

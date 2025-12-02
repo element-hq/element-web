@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`UrlPreviewSettings should display the correct preview when the room is encrypted and the url preview is enabled 1`] = `
 <DocumentFragment>

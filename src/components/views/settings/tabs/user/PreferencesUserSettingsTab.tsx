@@ -7,8 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEventHandler, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import React, { type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -30,10 +29,12 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { IS_MAC } from "../../../../../Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
+import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
+import SettingsDropdown from "../../../elements/SettingsDropdown.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -91,9 +92,9 @@ const SpellCheckSection: React.FC = () => {
         })();
     }, []);
 
-    const onSpellCheckEnabledChange = useCallback<ChangeEventHandler<HTMLInputElement>>((evt) => {
-        setSpellCheckEnabled(evt.target.checked);
-        PlatformPeg.get()?.setSpellCheckEnabled(evt.target.checked);
+    const onSpellCheckEnabledChange = useCallback((enabled: boolean) => {
+        setSpellCheckEnabled(enabled);
+        PlatformPeg.get()?.setSpellCheckEnabled(enabled);
     }, []);
 
     const onSpellCheckLanguagesChange = useCallback((languages: string[]): void => {
@@ -105,14 +106,11 @@ const SpellCheckSection: React.FC = () => {
 
     return (
         <>
-            <Form.Root>
-                <SettingsToggleInput
-                    label={_t("settings|general|allow_spellcheck")}
-                    name="spell_check"
-                    checked={Boolean(spellCheckEnabled)}
-                    onChange={onSpellCheckEnabledChange}
-                />
-            </Form.Root>
+            <LabelledToggleSwitch
+                label={_t("settings|general|allow_spellcheck")}
+                value={Boolean(spellCheckEnabled)}
+                onChange={onSpellCheckEnabledChange}
+            />
             {spellCheckEnabled && spellCheckLanguages !== undefined && !IS_MAC && (
                 <SpellCheckSettings languages={spellCheckLanguages} onLanguagesChange={onSpellCheckLanguagesChange} />
             )}
@@ -251,11 +249,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
 
         const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
+        const brand = SdkConfig.get().brand;
 
-        // Always Preprend the default option
         const timezones = this.state.timezones.map((tz) => {
             return <div key={tz}>{tz}</div>;
         });
+        // Always prepend the default option
         timezones.unshift(<div key="">{browserTimezoneLabel}</div>);
 
         return (
@@ -266,7 +265,19 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <LanguageSection />
                         <SpellCheckSection />
                     </SettingsSubsection>
-                    <SettingsSubsection formWrap heading={_t("settings|preferences|room_list_heading")}>
+
+                    {SettingsStore.canSetValue("Electron.autoLaunch", null, SettingLevel.PLATFORM) && (
+                        <SettingsSubsection heading={_t("settings|preferences|startup_window_behaviour_label")}>
+                            <SettingsDropdown
+                                settingKey="Electron.autoLaunch"
+                                label={_t("settings|start_automatically|label", { brand })}
+                                level={SettingLevel.PLATFORM}
+                                hideIfCannotSet
+                            />
+                        </SettingsSubsection>
+                    )}
+
+                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
                         {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
                         {/* The settings is on device level where the other room list settings are on account level  */}
                         {newRoomListEnabled && (
@@ -274,13 +285,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         )}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("common|spaces")}>
+                    <SettingsSubsection heading={_t("common|spaces")}>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
                     </SettingsSubsection>
 
                     <SettingsSubsection
                         heading={_t("settings|preferences|keyboard_heading")}
-                        formWrap
                         description={_t(
                             "settings|preferences|keyboard_view_shortcuts_button",
                             {},
@@ -296,7 +306,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|time_heading")} formWrap>
+                    <SettingsSubsection heading={_t("settings|preferences|time_heading")}>
                         <div className="mx_SettingsSubsection_dropdown">
                             {_t("settings|preferences|user_timezone")}
                             <Dropdown
@@ -319,39 +329,38 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     </SettingsSubsection>
 
                     <SettingsSubsection
-                        formWrap
                         heading={_t("common|presence")}
                         description={_t("settings|preferences|presence_description")}
                     >
                         {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("settings|preferences|composer_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|composer_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("settings|preferences|code_blocks_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|code_blocks_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("settings|preferences|media_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|media_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("common|timeline")}>
+                    <SettingsSubsection heading={_t("common|timeline")}>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("common|moderation_and_safety")} legacy={false}>
+                    <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                         <MediaPreviewAccountSettings />
                         <InviteRulesAccountSetting />
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("settings|preferences|room_directory_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection formWrap heading={_t("common|general")} stretchContent>
+                    <SettingsSubsection heading={_t("common|general")} stretchContent>
                         {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
 
                         <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
@@ -360,7 +369,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             level={SettingLevel.PLATFORM}
                             hideIfCannotSet
                             label={_t("settings|preferences|Electron.enableHardwareAcceleration", {
-                                appName: SdkConfig.get().brand,
+                                appName: brand,
                             })}
                         />
                         <SettingsFlag
@@ -370,7 +379,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             label={_t("settings|preferences|Electron.enableContentProtection")}
                         />
                         <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
-                        <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />
                         <SettingsFlag name="Electron.warnBeforeExit" level={SettingLevel.PLATFORM} hideIfCannotSet />
 
                         <Field

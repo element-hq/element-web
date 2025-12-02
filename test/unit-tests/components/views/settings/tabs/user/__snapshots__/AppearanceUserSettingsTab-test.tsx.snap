@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`AppearanceUserSettingsTab should render 1`] = `
 <DocumentFragment>
@@ -46,7 +46,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1e0uz_18"
                         disabled=""
-                        id="radix-«r0»"
+                        id="radix-_r_0_"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -62,7 +62,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-«r0»"
+                      for="radix-_r_0_"
                     >
                       Light
                     </label>
@@ -80,7 +80,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1e0uz_18"
                         disabled=""
-                        id="radix-«r1»"
+                        id="radix-_r_1_"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -96,7 +96,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-«r1»"
+                      for="radix-_r_1_"
                     >
                       Dark
                     </label>
@@ -114,7 +114,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       <input
                         class="_input_1e0uz_18"
                         disabled=""
-                        id="radix-«r2»"
+                        id="radix-_r_2_"
                         name="themeSelector"
                         title=""
                         type="radio"
@@ -130,7 +130,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
-                      for="radix-«r2»"
+                      for="radix-_r_2_"
                     >
                       High contrast
                     </label>
@@ -145,24 +145,24 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               role="separator"
             />
           </div>
-          <form
-            class="_root_19upo_16"
+          <div
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+            data-testid="layoutPanel"
           >
             <div
-              class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
-              data-testid="layoutPanel"
+              class="mx_SettingsSubsectionHeading"
             >
-              <div
-                class="mx_SettingsSubsectionHeading"
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
-                <h3
-                  class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
-                >
-                  Message layout
-                </h3>
-              </div>
-              <div
-                class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+                Message layout
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+            >
+              <form
+                class="_root_19upo_16 mx_LayoutSwitcher_LayoutSelector"
               >
                 <div
                   class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
@@ -170,7 +170,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Modern"
                     class="_label_19upo_59"
-                    for="radix-«r3»"
+                    for="radix-_r_3_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -181,7 +181,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         <input
                           checked=""
                           class="_input_1e0uz_18"
-                          id="radix-«r3»"
+                          id="radix-_r_3_"
                           name="layout"
                           title=""
                           type="radio"
@@ -264,7 +264,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               role="button"
                               tabindex="0"
                             >
-                              <div />
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  clip-rule="evenodd"
+                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
                             </div>
                             <div
                               aria-expanded="false"
@@ -298,7 +310,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Message bubbles"
                     class="_label_19upo_59"
-                    for="radix-«rc»"
+                    for="radix-_r_c_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -308,7 +320,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1e0uz_18"
-                          id="radix-«rc»"
+                          id="radix-_r_c_"
                           name="layout"
                           title=""
                           type="radio"
@@ -391,7 +403,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               role="button"
                               tabindex="0"
                             >
-                              <div />
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  clip-rule="evenodd"
+                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
                             </div>
                             <div
                               aria-expanded="false"
@@ -425,7 +449,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="IRC (experimental)"
                     class="_label_19upo_59"
-                    for="radix-«rl»"
+                    for="radix-_r_l_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -435,7 +459,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1e0uz_18"
-                          id="radix-«rl»"
+                          id="radix-_r_l_"
                           name="layout"
                           title=""
                           type="radio"
@@ -467,6 +491,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         data-self="true"
                         tabindex="-1"
                       >
+                        <span
+                          class="mx_MessageTimestamp"
+                        />
                         <div
                           class="mx_DisambiguatedProfile"
                         >
@@ -518,7 +545,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               role="button"
                               tabindex="0"
                             >
-                              <div />
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  clip-rule="evenodd"
+                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
                             </div>
                             <div
                               aria-expanded="false"
@@ -546,59 +585,59 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </label>
                 </div>
-                <form
-                  class="_root_19upo_16"
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32"
                 >
                   <div
-                    class="_inline-field_19upo_32"
+                    class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_inline-field-control_19upo_44"
+                      class="_container_19o42_10"
                     >
+                      <input
+                        aria-describedby="radix-_r_v_"
+                        class="_input_19o42_24"
+                        id="radix-_r_u_"
+                        name="compactLayout"
+                        role="switch"
+                        title=""
+                        type="checkbox"
+                      />
                       <div
-                        class="_container_19o42_10"
-                      >
-                        <input
-                          aria-describedby="radix-«rv»"
-                          class="_input_19o42_24"
-                          id="radix-«ru»"
-                          name="compactLayout"
-                          role="switch"
-                          title=""
-                          type="checkbox"
-                        />
-                        <div
-                          class="_ui_19o42_34"
-                        />
-                      </div>
-                    </div>
-                    <div
-                      class="_inline-field-body_19upo_38"
-                    >
-                      <label
-                        class="_label_19upo_59"
-                        for="radix-«ru»"
-                      >
-                        Show compact text and messages
-                      </label>
-                      <span
-                        class="_message_19upo_85 _help-message_19upo_91"
-                        id="radix-«rv»"
-                      >
-                        Modern layout must be selected to use this feature.
-                      </span>
+                        class="_ui_19o42_34"
+                      />
                     </div>
                   </div>
-                </form>
-              </div>
-              <div
-                class="_separator_7ckbw_8"
-                data-kind="primary"
-                data-orientation="horizontal"
-                role="separator"
-              />
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="radix-_r_u_"
+                    >
+                      Show compact text and messages
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="radix-_r_v_"
+                    >
+                      Modern layout must be selected to use this feature.
+                    </span>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+            <div
+              class="_separator_7ckbw_8"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
+          </div>
           <div
             class="mx_SettingsSubsection"
             data-testid="mx_FontScalingPanel"
