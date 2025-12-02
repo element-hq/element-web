@@ -6,38 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
-import { createRef } from "react";
+import React, { createRef } from "react";
 import classNames from "classnames";
 
-import dis from "../../dispatcher/dispatcher";
-import { _t } from "../../languageHandler";
-import LegacyRoomList from "../views/rooms/LegacyRoomList";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
-import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
-import { Action } from "../../dispatcher/actions";
-import RoomSearch from "./RoomSearch";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import { getKeyBindingsManager } from "../../KeyBindingsManager";
+import { type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import UIStore from "../../stores/UIStore";
-import { type IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
-import LegacyRoomListHeader from "../views/rooms/LegacyRoomListHeader";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import IndicatorScrollbar from "./IndicatorScrollbar";
-import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
-import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../settings/UIFeature";
-import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
-import PosthogTrackers from "../../PosthogTrackers";
 import type PageType from "../../PageTypes";
-import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
-import SettingsStore from "../../settings/SettingsStore";
 import { RoomListPanel } from "../views/rooms/RoomListPanel";
+
+const HEADER_HEIGHT = 32; // As defined by CSS
 
 interface IProps {
     isMinimized: boolean;
@@ -58,8 +41,6 @@ interface IState {
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
-    private roomListRef = createRef<LegacyRoomList>();
-    private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
     public constructor(props: IProps) {
@@ -113,15 +94,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     private updateActiveSpace = (activeSpace: SpaceKey): void => {
         this.setState({ activeSpace });
-    };
-
-    private onDialPad = (): void => {
-        dis.fire(Action.OpenDialPad);
-    };
-
-    private onExplore = (ev: ButtonEvent): void => {
-        dis.fire(Action.ViewRoomDirectory);
-        PosthogTrackers.trackInteraction("WebLeftPanelExploreRoomsButton", ev);
     };
 
     private refreshStickyHeaders = (): void => {
@@ -289,145 +261,17 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.handleStickyHeaders(list);
     };
 
-    private onFocus = (ev: React.FocusEvent): void => {
-        this.focusedElement = ev.target;
-    };
-
-    private onBlur = (): void => {
-        this.focusedElement = null;
-    };
-
-    private onKeyDown = (ev: React.KeyboardEvent, state?: IRovingTabIndexState): void => {
-        if (!this.focusedElement) return;
-
-        const action = getKeyBindingsManager().getRoomListAction(ev);
-        switch (action) {
-            case KeyBindingAction.NextRoom:
-                if (!state) {
-                    ev.stopPropagation();
-                    ev.preventDefault();
-                    this.roomListRef.current?.focus();
-                }
-                break;
-        }
-
-        const navAction = getKeyBindingsManager().getNavigationAction(ev);
-        if (navAction === KeyBindingAction.PreviousLandmark || navAction === KeyBindingAction.NextLandmark) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            LandmarkNavigation.findAndFocusNextLandmark(
-                Landmark.ROOM_SEARCH,
-                navAction === KeyBindingAction.PreviousLandmark,
-            );
-        }
-    };
-
-    private renderBreadcrumbs(): React.ReactNode {
-        if (this.state.showBreadcrumbs === BreadcrumbsMode.Legacy && !this.props.isMinimized) {
-            return (
-                <IndicatorScrollbar
-                    role="navigation"
-                    aria-label={_t("a11y|recent_rooms")}
-                    className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
-                    verticalScrollsHorizontally={true}
-                >
-                    <RoomBreadcrumbs />
-                </IndicatorScrollbar>
-            );
-        }
-    }
-
-    private renderSearchDialExplore(): React.ReactNode {
-        let dialPadButton: JSX.Element | undefined;
-
-        // If we have dialer support, show a button to bring up the dial pad to start a new call
-        if (this.state.supportsPstnProtocol) {
-            dialPadButton = (
-                <AccessibleButton
-                    className="mx_LeftPanel_dialPadButton"
-                    onClick={this.onDialPad}
-                    title={_t("left_panel|open_dial_pad")}
-                />
-            );
-        }
-
-        let rightButton: JSX.Element | undefined;
-        if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
-            rightButton = (
-                <AccessibleButton
-                    className="mx_LeftPanel_exploreButton"
-                    onClick={this.onExplore}
-                    title={_t("action|explore_rooms")}
-                />
-            );
-        }
-
-        return (
-            <div
-                className="mx_LeftPanel_filterContainer"
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}
-                onKeyDown={this.onKeyDown}
-                role="search"
-            >
-                <RoomSearch isMinimized={this.props.isMinimized} />
-
-                {dialPadButton}
-                {rightButton}
-            </div>
-        );
-    }
-
     public render(): React.ReactNode {
-        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         const containerClasses = classNames({
             mx_LeftPanel: true,
-            mx_LeftPanel_newRoomList: useNewRoomList,
+            mx_LeftPanel_newRoomList: true,
             mx_LeftPanel_minimized: this.props.isMinimized,
         });
-
-        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
-        if (useNewRoomList) {
-            return (
-                <div className={containerClasses}>
-                    <div className="mx_LeftPanel_roomListContainer">
-                        <RoomListPanel activeSpace={this.state.activeSpace} />
-                    </div>
-                </div>
-            );
-        }
-
-        const roomList = (
-            <LegacyRoomList
-                onKeyDown={this.onKeyDown}
-                resizeNotifier={this.props.resizeNotifier}
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}
-                isMinimized={this.props.isMinimized}
-                activeSpace={this.state.activeSpace}
-                onResize={this.refreshStickyHeaders}
-                onListCollapse={this.refreshStickyHeaders}
-                ref={this.roomListRef}
-            />
-        );
 
         return (
             <div className={containerClasses}>
                 <div className="mx_LeftPanel_roomListContainer">
-                    {shouldShowComponent(UIComponent.FilterContainer) && this.renderSearchDialExplore()}
-                    {this.renderBreadcrumbs()}
-                    {!this.props.isMinimized && <LegacyRoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
-                    <nav className="mx_LeftPanel_roomListWrapper" aria-label={_t("common|rooms")}>
-                        <div
-                            className={roomListClasses}
-                            ref={this.listContainerRef}
-                            // Firefox sometimes makes this element focusable due to
-                            // overflow:scroll;, so force it out of tab order.
-                            tabIndex={-1}
-                        >
-                            {roomList}
-                        </div>
-                    </nav>
+                    <RoomListPanel activeSpace={this.state.activeSpace} />
                 </div>
             </div>
         );

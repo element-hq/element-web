@@ -180,27 +180,6 @@ Please see LICENSE files in the repository root for full details.
         .mx_LegacyRoomListHeader:first-child {
             margin-top: 12px;
         }
-
-        .mx_LeftPanel_roomListWrapper {
-            /* Make the y-scrollbar more responsive */
-            padding-right: 2px;
-            overflow: hidden;
-            margin-top: 10px; /* so we're not up against the search/filter */
-            flex: 1 0 0; /* needed in Safari to properly set flex-basis */
-
-            &.mx_LeftPanel_roomListWrapper_stickyBottom {
-                padding-bottom: 32px;
-            }
-
-            &.mx_LeftPanel_roomListWrapper_stickyTop {
-                padding-top: 32px;
-            }
-        }
-
-        .mx_LeftPanel_actualRoomListContainer {
-            position: relative; /* for sticky headers */
-            height: 100%; /* ensure scrolling still works */
-        }
     }
 
     /* These styles override the defaults for the minimized (66px) layout */

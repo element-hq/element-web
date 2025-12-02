@@ -10,10 +10,6 @@ import { type Page } from "@playwright/test";
 import { test, expect } from "../../../element-web-test";
 
 test.describe("Search section of the room list", () => {
-    test.use({
-        labsFlags: ["feature_new_room_list"],
-    });
-
     /**
      * Get the search section of the room list
      * @param page

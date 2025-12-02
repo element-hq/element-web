@@ -21,8 +21,6 @@ test.describe("Preferences user settings tab", () => {
             const locator = await app.settings.openUserSettings("Preferences");
             await use(locator);
         },
-        // display message preview settings
-        labsFlags: ["feature_new_room_list"],
     });
 
     test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {

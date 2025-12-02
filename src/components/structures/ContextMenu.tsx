@@ -583,6 +583,15 @@ export const alwaysAboveRightOf = (
     return menuOptions;
 };
 
+// Placement method for <ContextMenu /> to position context menu below elementRect
+export const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
+    // align the context menu's icons with the icon which opened the context menu
+    const left = elementRect.left + window.scrollX + elementRect.width;
+    const top = elementRect.bottom + window.scrollY;
+    const chevronFace = ChevronFace.None;
+    return { left, top, chevronFace };
+};
+
 type ContextMenuTuple<T> = [
     boolean,
     RefObject<T | null>,
@@ -622,5 +631,3 @@ export { ContextMenuTooltipButton } from "../../accessibility/context_menu/Conte
 export { MenuItem } from "../../accessibility/context_menu/MenuItem";
 export { MenuItemCheckbox } from "../../accessibility/context_menu/MenuItemCheckbox";
 export { MenuItemRadio } from "../../accessibility/context_menu/MenuItemRadio";
-export { StyledMenuItemCheckbox } from "../../accessibility/context_menu/StyledMenuItemCheckbox";
-export { StyledMenuItemRadio } from "../../accessibility/context_menu/StyledMenuItemRadio";

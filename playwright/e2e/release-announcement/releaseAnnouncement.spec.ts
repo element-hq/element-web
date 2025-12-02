@@ -22,7 +22,6 @@ test.describe("Release announcement", () => {
             await app.viewRoomById(roomId);
             await use({ roomId });
         },
-        labsFlags: ["feature_new_room_list"],
     });
 
     test(

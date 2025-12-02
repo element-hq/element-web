@@ -15,9 +15,6 @@ import { type IFilterCondition } from "./filters/IFilterCondition";
 export enum RoomListStoreEvent {
     // The event/channel which is called when the room lists have been changed.
     ListsUpdate = "lists_update",
-    // The event which is called when the room list is loading.
-    // Called with the (tagId, bool) which is true when the list is loading, else false.
-    ListsLoading = "lists_loading",
 }
 
 export interface RoomListStore extends EventEmitter {

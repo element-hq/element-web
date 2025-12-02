@@ -141,8 +141,6 @@ describe("SpaceStore", () => {
     });
 
     afterEach(async () => {
-        // Disable the new room list feature flag
-        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, false);
         await testUtils.resetAsyncStoreWithClient(store);
     });
 
@@ -1402,10 +1400,7 @@ describe("SpaceStore", () => {
         removeListener();
     });
 
-    it("Favourites and People meta spaces should not be returned when the feature_new_room_list labs flag is enabled", async () => {
-        // Enable the new room list
-        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
-
+    it("Favourites and People meta spaces should not be returned", async () => {
         await run();
         // Favourites and People meta spaces should not be returned
         expect(SpaceStore.instance.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);

@@ -544,9 +544,6 @@ describe("<LoggedInView />", () => {
         });
 
         it("should enforce minimum width for new room list when stored size is zero", async () => {
-            // Enable new room list feature
-            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
-
             // 0 represents the collapsed state for the old room list, which could have been set before the new room list was enabled
             window.localStorage.setItem("mx_lhs_size", "0");
 
@@ -557,9 +554,6 @@ describe("<LoggedInView />", () => {
         });
 
         it("should not set localStorage to 0 when resizing lp-resizer to minimum width for new room list", async () => {
-            // Enable new room list feature and mock SettingsStore
-            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
-
             const minimumWidth = 224; // NEW_ROOM_LIST_MIN_WIDTH
 
             // Render the component

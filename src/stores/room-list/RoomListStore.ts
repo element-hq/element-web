@@ -37,7 +37,6 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
-export const LISTS_LOADING_EVENT = RoomListStoreEvent.ListsLoading; // unused; used by SlidingRoomListStore
 
 export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implements Interface {
     /**

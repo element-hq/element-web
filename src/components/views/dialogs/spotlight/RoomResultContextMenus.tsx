@@ -18,9 +18,9 @@ import { RoomGeneralContextMenu } from "../../context_menus/RoomGeneralContextMe
 import { RoomNotificationContextMenu } from "../../context_menus/RoomNotificationContextMenu";
 import SpaceContextMenu from "../../context_menus/SpaceContextMenu";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
-import { contextMenuBelow } from "../../rooms/RoomTile";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
+import { contextMenuBelow } from "../../../structures/ContextMenu.tsx";
 
 interface Props {
     room: Room;

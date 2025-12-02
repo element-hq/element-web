@@ -10,7 +10,6 @@ import {
     type Room,
     RelationType,
     type MatrixEvent,
-    type Thread,
     M_POLL_START,
     RoomEvent,
     type EmptyObject,
@@ -31,7 +30,6 @@ import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { type IPreview } from "./previews/IPreview";
 import shouldHideEvent from "../../shouldHideEvent";
-import SettingsStore from "../../settings/SettingsStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -178,15 +176,6 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
 
     private async generatePreview(room: Room, tagId?: TagID): Promise<void> {
         const events = [...room.getLiveTimeline().getEvents(), ...room.getPendingEvents()];
-
-        const isNewRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
-        if (!isNewRoomListEnabled) {
-            // add last reply from each thread
-            room.getThreads().forEach((thread: Thread): void => {
-                const lastReply = thread.lastReply();
-                if (lastReply) events.push(lastReply);
-            });
-        }
 
         // sort events from oldest to newest
         events.sort((a: MatrixEvent, b: MatrixEvent) => {

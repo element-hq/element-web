@@ -15,11 +15,6 @@ import { type ElementAppPage } from "../../pages/ElementAppPage";
 test.describe("Room Header", () => {
     test.use({
         displayName: "Sakura",
-        config: {
-            features: {
-                feature_new_room_list: false,
-            },
-        },
     });
 
     test.describe("with feature_notifications enabled", () => {
