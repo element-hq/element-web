@@ -98,7 +98,6 @@ export const RoomListItemView = memo(function RoomListItemView({
             onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(room, e)}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
-            onBlur={() => setHover(false)}
             tabIndex={isFocused ? 0 : -1}
             {...props}
         >
