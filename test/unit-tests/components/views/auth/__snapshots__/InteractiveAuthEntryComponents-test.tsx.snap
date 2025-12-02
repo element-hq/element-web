@@ -42,7 +42,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_o77nw_8"
+        class="_content_1r8kr_8"
         data-size="large"
       >
         <svg
@@ -73,7 +73,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_vczzf_8 mx_Dialog_nonDialogButton _has-icon_vczzf_57"
+        class="_button_187yx_8 mx_Dialog_nonDialogButton _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -97,7 +97,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
         Continue to account
       </button>
       <button
-        class="_button_vczzf_8 mx_Dialog_nonDialogButton"
+        class="_button_187yx_8 mx_Dialog_nonDialogButton"
         data-kind="tertiary"
         data-size="lg"
         role="button"

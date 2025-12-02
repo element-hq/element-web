@@ -40,7 +40,7 @@ exports[`<RecoveyPanelOutOfSync /> should render 1`] = `
       class="mx_RecoveryPanelOutOfSync"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -49,7 +49,7 @@ exports[`<RecoveyPanelOutOfSync /> should render 1`] = `
         Forgot recovery key?
       </button>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="sm"
         role="button"

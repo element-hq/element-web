@@ -133,6 +133,7 @@ export const expect = baseExpect.extend<Expectations>({
             }
             .mx_BaseAvatar {
                 background-color: var(--cpd-color-fuchsia-1200) !important;
+                border-color: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;
             }
             .mx_ReplyChain {

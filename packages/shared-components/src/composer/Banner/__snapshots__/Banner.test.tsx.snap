@@ -37,7 +37,7 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
       class="actions"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -46,7 +46,7 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
         encryption|withdraw_verification_action
       </button>
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -83,7 +83,7 @@ exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
       class="actions"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -129,7 +129,7 @@ exports[`AvatarWithDetails renders a critical banner 1`] = `
       class="actions"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -179,7 +179,7 @@ exports[`AvatarWithDetails renders a default banner 1`] = `
       class="actions"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -230,7 +230,7 @@ exports[`AvatarWithDetails renders a info banner 1`] = `
       class="actions"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -276,7 +276,7 @@ exports[`AvatarWithDetails renders a success banner 1`] = `
       class="actions"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"

@@ -9,7 +9,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_o77nw_8 _destructive_o77nw_34"
+        class="_content_1r8kr_8 _destructive_1r8kr_34"
         data-size="large"
       >
         <svg
@@ -59,7 +59,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -68,7 +68,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
         Go to Settings
       </button>
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="lg"
         role="button"

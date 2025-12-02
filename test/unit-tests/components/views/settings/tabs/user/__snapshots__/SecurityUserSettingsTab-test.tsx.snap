@@ -82,17 +82,17 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               class="_inline-field-control_19upo_44"
             >
               <div
-                class="_container_19o42_10"
+                class="_container_udcm8_10"
               >
                 <input
                   checked=""
-                  class="_input_19o42_24"
+                  class="_input_udcm8_24"
                   id="mx_SetIntegrationManager_Toggle"
                   role="switch"
                   type="checkbox"
                 />
                 <div
-                  class="_ui_19o42_34"
+                  class="_ui_udcm8_34"
                 />
               </div>
             </div>

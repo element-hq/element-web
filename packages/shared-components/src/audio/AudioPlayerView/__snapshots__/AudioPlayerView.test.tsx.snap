@@ -23,7 +23,7 @@ exports[`AudioPlayerView renders the audio player in default state 1`] = `
         tabindex="-1"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -114,7 +114,7 @@ exports[`AudioPlayerView renders the audio player in error state 1`] = `
         tabindex="-1"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -210,7 +210,7 @@ exports[`AudioPlayerView renders the audio player without media name 1`] = `
         tabindex="-1"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -301,7 +301,7 @@ exports[`AudioPlayerView renders the audio player without size 1`] = `
         tabindex="-1"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
