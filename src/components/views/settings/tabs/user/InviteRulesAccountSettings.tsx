@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, type FC, useCallback, useState } from "react";
-import { Root, SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -57,7 +57,7 @@ export const InviteRulesAccountSetting: FC = () => {
     const disabledMessage = msc4155Disabled && msc4380Disabled;
     const invitesBlocked = (!msc4155Disabled && msc4155Rules.allBlocked) || (!msc4380Disabled && msc4380BlockInvites);
     return (
-        <Root
+        <Form.Root
             className="mx_MediaPreviewAccountSetting_Form"
             onSubmit={(evt) => {
                 evt.preventDefault();
@@ -73,6 +73,6 @@ export const InviteRulesAccountSetting: FC = () => {
                 disabled={!!disabledMessage || busy}
                 disabledMessage={disabledMessage}
             />
-        </Root>
+        </Form.Root>
     );
 };

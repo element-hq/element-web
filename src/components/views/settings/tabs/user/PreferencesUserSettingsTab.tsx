@@ -268,13 +268,16 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
                 <SettingsSection>
                     {/* The heading string is still 'general' from where it was moved, but this section should become 'general' */}
-                    <SettingsSubsection heading={_t("settings|general|language_section")}>
+                    <SettingsSubsection heading={_t("settings|general|language_section")} formWrap>
                         <LanguageSection />
                         <SpellCheckSection />
                     </SettingsSubsection>
 
                     {SettingsStore.canSetValue("Electron.autoLaunch", null, SettingLevel.PLATFORM) && (
-                        <SettingsSubsection heading={_t("settings|preferences|startup_window_behaviour_label")}>
+                        <SettingsSubsection
+                            heading={_t("settings|preferences|startup_window_behaviour_label")}
+                            formWrap
+                        >
                             <SettingsDropdown
                                 settingKey="Electron.autoLaunch"
                                 label={_t("settings|start_automatically|label", { brand })}
@@ -284,7 +287,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         </SettingsSubsection>
                     )}
 
-                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|room_list_heading")} formWrap>
                         {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
                         {/* The settings is on device level where the other room list settings are on account level  */}
                         {newRoomListEnabled && (
@@ -292,7 +295,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         )}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|spaces")}>
+                    <SettingsSubsection heading={_t("common|spaces")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
                     </SettingsSubsection>
 
@@ -309,11 +312,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                                 ),
                             },
                         )}
+                        formWrap
                     >
                         {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|time_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|time_heading")} formWrap>
                         <div className="mx_SettingsSubsection_dropdown">
                             {_t("settings|preferences|user_timezone")}
                             <Dropdown
@@ -338,23 +342,24 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     <SettingsSubsection
                         heading={_t("common|presence")}
                         description={_t("settings|preferences|presence_description")}
+                        formWrap
                     >
                         {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|composer_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|composer_heading")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|code_blocks_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|code_blocks_heading")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|media_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|media_heading")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|timeline")}>
+                    <SettingsSubsection heading={_t("common|timeline")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>
 
@@ -363,11 +368,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         <InviteRulesAccountSetting />
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
+                    <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("common|general")} stretchContent>
+                    <SettingsSubsection heading={_t("common|general")} stretchContent formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
 
                         <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
