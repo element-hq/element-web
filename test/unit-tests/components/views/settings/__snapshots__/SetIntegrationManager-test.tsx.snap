@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`SetIntegrationManager should render manage integrations sections 1`] = `
-<form
-  class="_root_19upo_16 mx_SetIntegrationManager"
+<div
+  class="mx_SetIntegrationManager"
   data-testid="mx_SetIntegrationManager"
 >
   <div
@@ -18,7 +18,6 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
       </h3>
       <h4
         class="mx_Heading_h4"
-        id="mx_SetIntegrationManager_ManagerName"
       >
         (scalar.vector.im)
       </h4>
@@ -26,7 +25,6 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
   </div>
   <div
     class="mx_SettingsSubsection_text"
-    id="mx_SetIntegrationManager_BodyText"
   >
     <span>
       Use an integration manager 
@@ -41,36 +39,40 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
   >
     Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
   </div>
-  <div
-    class="_inline-field_19upo_32"
+  <form
+    class="_root_19upo_16"
   >
     <div
-      class="_inline-field-control_19upo_44"
+      class="_inline-field_19upo_32"
     >
       <div
-        class="_container_19o42_10"
+        class="_inline-field-control_19upo_44"
       >
-        <input
-          class="_input_19o42_24"
-          id="«r0»"
-          role="switch"
-          type="checkbox"
-        />
         <div
-          class="_ui_19o42_34"
-        />
+          class="_container_udcm8_10"
+        >
+          <input
+            class="_input_udcm8_24"
+            id="mx_SetIntegrationManager_Toggle"
+            role="switch"
+            type="checkbox"
+          />
+          <div
+            class="_ui_udcm8_34"
+          />
+        </div>
+      </div>
+      <div
+        class="_inline-field-body_19upo_38"
+      >
+        <label
+          class="_label_19upo_59"
+          for="mx_SetIntegrationManager_Toggle"
+        >
+          Enable the integration manager
+        </label>
       </div>
     </div>
-    <div
-      class="_inline-field-body_19upo_38"
-    >
-      <label
-        class="_label_19upo_59"
-        for="«r0»"
-      >
-        Enable the integration manager
-      </label>
-    </div>
-  </div>
-</form>
+  </form>
+</div>
 `;
