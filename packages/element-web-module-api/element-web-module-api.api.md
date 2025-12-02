@@ -59,6 +59,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
 
 // @alpha
 export interface BuiltinsApi {
+    renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
     renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode;
 }
