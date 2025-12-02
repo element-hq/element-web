@@ -17,6 +17,7 @@ import {
     MatrixEventEvent,
     RoomStateEvent,
     type RoomState,
+    type Room,
 } from "matrix-js-sdk/src/matrix";
 import {
     ClientWidgetApi,
@@ -44,17 +45,21 @@ import { type IApp } from "../../../../src/utils/WidgetUtils-types";
 import { ModalWidgetStore } from "../../../../src/stores/ModalWidgetStore";
 import { ElementWidgetActions, type IViewRoomApiRequest } from "../../../../src/stores/widgets/ElementWidgetActions";
 import { ElementWidgetCapabilities } from "../../../../src/stores/widgets/ElementWidgetCapabilities";
+import { WidgetType } from "../../../../src/widgets/WidgetType";
+import { IntegrationManagers } from "../../../../src/integrations/IntegrationManagers";
+import { type IntegrationManagerInstance } from "../../../../src/integrations/IntegrationManagerInstance";
 
 jest.mock("matrix-widget-api", () => ({
     ...jest.requireActual("matrix-widget-api"),
     ClientWidgetApi: (jest.createMockFromModule("matrix-widget-api") as any).ClientWidgetApi,
 }));
 
+const originGetValue = SettingsStore.getValue;
+
 describe("WidgetMessaging", () => {
     let client: MockedObject<MatrixClient>;
     let widget: WidgetMessaging;
     let messaging: MockedObject<ClientWidgetApi>;
-    const originGetValue = SettingsStore.getValue;
 
     beforeEach(() => {
         stubClient();
@@ -612,6 +617,88 @@ describe("WidgetMessaging action handling", () => {
                 data: { content: { url: "bar" }, name: "foo" },
                 widgetId: "test",
             });
+        });
+    });
+});
+
+describe("WidgetMessaging action handling for stickerpicker", () => {
+    let widget: WidgetMessaging;
+    let messaging: MockedObject<ClientWidgetApi>;
+    let actionFns: Record<string, (ev: any) => void>;
+    let room: Room;
+
+    function createTransportEvent<T extends IWidgetApiRequest>(data: T["data"]): CustomEvent<T> {
+        // Not the complete CustomEvent but good nuff.
+        return {
+            preventDefault: () => {},
+            detail: {
+                action: WidgetApiFromWidgetAction.OpenModalWidget,
+                data: data,
+                api: WidgetApiDirection.FromWidget,
+                requestId: "12345",
+                widgetId: "test",
+            },
+        } as unknown as CustomEvent;
+    }
+
+    beforeEach(() => {
+        const client = mocked(stubClient());
+        room = mkRoom(client, "!1:example.org");
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
+        const getRoomId = jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
+            () => Optional<string>
+        >;
+        getRoomId.mockReturnValue(room.roomId);
+        const app: IApp = {
+            id: "test",
+            creatorUserId: "@alice:example.org",
+            type: WidgetType.STICKERPICKER.preferred,
+            url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
+            roomId: room.roomId,
+        };
+        widget = new WidgetMessaging(new ElementWidget(app), {
+            app,
+            room,
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+        });
+        // Start messaging without an iframe, since ClientWidgetApi is mocked
+        widget.start(null as unknown as HTMLIFrameElement);
+        messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
+        Object.defineProperty(messaging, "transport", { value: { reply: jest.fn() } });
+        actionFns = Object.fromEntries(messaging.on.mock.calls as any);
+    });
+
+    afterEach(() => {
+        widget.stop();
+        jest.resetAllMocks();
+    });
+
+    describe("open integrations manager", () => {
+        let openIntegrationManager: jest.SpyInstance<void, Parameters<IntegrationManagerInstance["open"]>>;
+        beforeEach(() => {
+            // Trivial mock of ModalWidgetStore
+            openIntegrationManager = jest.fn();
+            const inst = IntegrationManagers.sharedInstance();
+            jest.spyOn(inst, "getPrimaryManager").mockImplementation(
+                () =>
+                    ({
+                        open: openIntegrationManager,
+                    }) as any,
+            );
+        });
+
+        it("open the integration manager", () => {
+            const ev = createTransportEvent<IWidgetApiRequest>({ integType: "my_integ_type", integId: "my_integ_id" });
+            const dispatch = (defaultDispatcher.dispatch = jest.fn());
+            actionFns[`action:${ElementWidgetActions.OpenIntegrationManager}`](ev);
+            expect(dispatch).toHaveBeenCalledWith({
+                action: "stickerpicker_close",
+            });
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {});
+            expect(openIntegrationManager).toHaveBeenCalledWith(room, `type_my_integ_type`, "my_integ_id");
         });
     });
 });
