@@ -11,6 +11,11 @@ import { type I18nApi } from "@element-hq/element-web-module-api";
 export const I18nContext = createContext<I18nApi | null>(null);
 I18nContext.displayName = "I18nContext";
 
+/**
+ * A hook to get the i18n API from the context. Will throw if no i18n context is found.
+ * @throws If no i18n context is found
+ * @returns The i18n API from the context
+ */
 export function useI18n(): I18nApi {
     const i18n = useContext(I18nContext);
 
