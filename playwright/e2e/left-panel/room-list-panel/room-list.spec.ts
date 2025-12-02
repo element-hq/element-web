@@ -299,9 +299,7 @@ test.describe("Room list", () => {
             const publicRoom = roomListView.getByRole("option", { name: "low priority room" });
 
             // Make room low priority
-            await publicRoom.hover();
-            const roomItemMenu = publicRoom.getByRole("button", { name: "More Options" });
-            await roomItemMenu.click();
+            await publicRoom.click({ button: "right" });
             await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
@@ -309,8 +307,8 @@ test.describe("Room list", () => {
                 "This is a low priority room",
             );
 
-            // focus the user menu to avoid to have hover decoration
-            await page.getByRole("button", { name: "User menu" }).focus();
+            // focus the header to avoid to have hover decoration
+            await page.getByTestId("room-list-header").click();
             await expect(publicRoom).toMatchScreenshot("room-list-item-low-priority.png");
         });
 
@@ -452,12 +450,11 @@ test.describe("Room list", () => {
             await bot.joinRoom(roomId);
 
             const room = roomListView.getByRole("option", { name: "mark as unread" });
-            await room.hover();
-            await room.getByRole("button", { name: "More Options" }).click();
+            await room.click({ button: "right" });
             await page.getByRole("menuitem", { name: "mark as unread" }).click();
 
-            // focus the user menu to avoid to have hover decoration
-            await page.getByRole("button", { name: "User menu" }).focus();
+            // focus the header to avoid to have hover decoration
+            await page.getByTestId("room-list-header").click();
 
             await expect(room).toMatchScreenshot("room-list-item-mark-as-unread.png");
         });
