@@ -10,10 +10,6 @@ import { type Page } from "@playwright/test";
 import { test, expect } from "../../../element-web-test";
 
 test.describe("Room list panel", () => {
-    test.use({
-        labsFlags: ["feature_new_room_list"],
-    });
-
     /**
      * Get the room list view
      * @param page

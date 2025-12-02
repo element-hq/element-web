@@ -9,10 +9,6 @@ import { test, expect } from "../../../element-web-test";
 import type { Page } from "@playwright/test";
 
 test.describe("Header section of the room list", () => {
-    test.use({
-        labsFlags: ["feature_new_room_list"],
-    });
-
     /**
      * Get the header section of the room list
      * @param page

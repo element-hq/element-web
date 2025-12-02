@@ -119,8 +119,6 @@ const SpellCheckSection: React.FC = () => {
 };
 
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
-    private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs"];
-
     private static SPACES_SETTINGS: BooleanSettingKey[] = ["Spaces.allRoomsInHome"];
 
     private static KEYBINDINGS_SETTINGS: BooleanSettingKey[] = ["ctrlFForSearch"];
@@ -248,7 +246,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             timezone: TimezoneHandler.shortBrowserTimezone(),
         });
 
-        const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
         const brand = SdkConfig.get().brand;
 
         const timezones = this.state.timezones.map((tz) => {
@@ -278,11 +275,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     )}
 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")}>
-                        {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
-                        {/* The settings is on device level where the other room list settings are on account level  */}
-                        {newRoomListEnabled && (
-                            <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
-                        )}
+                        <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")}>

@@ -14,7 +14,7 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
-import { ChevronFace, ContextMenuTooltipButton, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
+import { contextMenuBelow, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
@@ -26,14 +26,6 @@ export interface ThreadListContextMenuProps {
     permalinkCreator?: RoomPermalinkCreator;
     onMenuToggle?: (open: boolean) => void;
 }
-
-const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
-    // align the context menu's icons with the icon which opened the context menu
-    const left = elementRect.left + window.scrollX + elementRect.width;
-    const top = elementRect.bottom + window.scrollY;
-    const chevronFace = ChevronFace.None;
-    return { left, top, chevronFace };
-};
 
 const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
     mxEvent,

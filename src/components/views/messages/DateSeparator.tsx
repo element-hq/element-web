@@ -23,8 +23,7 @@ import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import BugReportDialog from "../dialogs/BugReportDialog";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
-import { contextMenuBelow } from "../rooms/RoomTile";
-import { ContextMenuTooltipButton } from "../../structures/ContextMenu";
+import { contextMenuBelow, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,

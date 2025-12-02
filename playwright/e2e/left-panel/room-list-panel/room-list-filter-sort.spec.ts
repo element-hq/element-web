@@ -18,7 +18,6 @@ test.describe("Room list filters and sort", () => {
             displayName: "BotBob",
             autoAcceptInvites: true,
         },
-        labsFlags: ["feature_new_room_list"],
     });
 
     function getPrimaryFilters(page: Page): Locator {

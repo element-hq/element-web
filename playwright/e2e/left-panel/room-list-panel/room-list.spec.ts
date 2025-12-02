@@ -12,7 +12,6 @@ import { expect, test } from "../../../element-web-test";
 test.describe("Room list", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list"],
         botCreateOpts: {
             displayName: "BotBob",
         },
@@ -276,7 +275,7 @@ test.describe("Room list", () => {
     });
 
     test.describe("Avatar decoration", () => {
-        test.use({ labsFlags: ["feature_video_rooms", "feature_new_room_list"] });
+        test.use({ labsFlags: ["feature_video_rooms"] });
 
         test("should be a public room", { tag: "@screenshot" }, async ({ page, app, user }) => {
             // @ts-ignore Visibility enum is not accessible
