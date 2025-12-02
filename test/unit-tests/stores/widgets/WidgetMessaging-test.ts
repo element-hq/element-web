@@ -18,7 +18,16 @@ import {
     RoomStateEvent,
     type RoomState,
 } from "matrix-js-sdk/src/matrix";
-import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
+import {
+    ClientWidgetApi,
+    type IModalWidgetOpenRequest,
+    type IStickerActionRequest,
+    type IStickyActionRequest,
+    type IWidgetApiRequest,
+    MatrixCapabilities,
+    WidgetApiDirection,
+    WidgetApiFromWidgetAction,
+} from "matrix-widget-api";
 import { waitFor } from "jest-matrix-react";
 import { type Optional } from "matrix-events-sdk";
 
@@ -32,6 +41,9 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import { type IApp } from "../../../../src/utils/WidgetUtils-types";
+import { ModalWidgetStore } from "../../../../src/stores/ModalWidgetStore";
+import { ElementWidgetActions, type IViewRoomApiRequest } from "../../../../src/stores/widgets/ElementWidgetActions";
+import { ElementWidgetCapabilities } from "../../../../src/stores/widgets/ElementWidgetCapabilities";
 
 jest.mock("matrix-widget-api", () => ({
     ...jest.requireActual("matrix-widget-api"),
@@ -42,6 +54,7 @@ describe("WidgetMessaging", () => {
     let client: MockedObject<MatrixClient>;
     let widget: WidgetMessaging;
     let messaging: MockedObject<ClientWidgetApi>;
+    const originGetValue = SettingsStore.getValue;
 
     beforeEach(() => {
         stubClient();
@@ -73,13 +86,23 @@ describe("WidgetMessaging", () => {
     });
 
     it("should replace parameters in widget url template", () => {
-        const originGetValue = SettingsStore.getValue;
         const spy = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             if (setting === "theme") return "my-theme-for-testing";
             return originGetValue(setting);
         });
         expect(widget.embedUrl).toBe(
             "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.matrix.org&theme=my-theme-for-testing&widgetId=test&parentUrl=http%3A%2F%2Flocalhost%2F",
+        );
+        spy.mockClear();
+    });
+
+    it("should replace parameters in widget url template for popout", () => {
+        const spy = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === "theme") return "my-theme-for-testing";
+            return originGetValue(setting);
+        });
+        expect(widget.popoutUrl).toBe(
+            "https://example.org/?user-id=%40userId%3Amatrix.org&device-id=ABCDEFGHI&base-url=https%3A%2F%2Fmatrix-client.matrix.org&theme=my-theme-for-testing",
         );
         spy.mockClear();
     });
@@ -406,5 +429,189 @@ describe("WidgetMessaging as an account widget", () => {
         SdkContextClass.instance.roomViewStore.emit(UPDATE_EVENT);
         expect(messaging.setViewedRoomId).toHaveBeenCalledTimes(2);
         expect(messaging.setViewedRoomId).toHaveBeenLastCalledWith("!2:example.org");
+    });
+});
+
+describe("WidgetMessaging action handling", () => {
+    let widget: WidgetMessaging;
+    let messaging: MockedObject<ClientWidgetApi>;
+    let actionFns: Record<string, (ev: any) => void>;
+
+    function createTransportEvent<T extends IWidgetApiRequest>(data: T["data"]): CustomEvent<T> {
+        // Not the complete CustomEvent but good nuff.
+        return {
+            preventDefault: () => {},
+            detail: {
+                action: WidgetApiFromWidgetAction.OpenModalWidget,
+                data: data,
+                api: WidgetApiDirection.FromWidget,
+                requestId: "12345",
+                widgetId: "test",
+            },
+        } as unknown as CustomEvent;
+    }
+
+    beforeEach(() => {
+        const client = stubClient();
+
+        const app: IApp = {
+            id: "test",
+            creatorUserId: "@alice:example.org",
+            type: "example",
+            url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
+            roomId: "!1:example.org",
+        };
+        widget = new WidgetMessaging(new ElementWidget(app), {
+            app,
+            room: mkRoom(client, "!1:example.org"),
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+        });
+        // Start messaging without an iframe, since ClientWidgetApi is mocked
+        widget.start(null as unknown as HTMLIFrameElement);
+        messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
+        Object.defineProperty(messaging, "transport", { value: { reply: jest.fn() } });
+        actionFns = Object.fromEntries(messaging.on.mock.calls as any);
+    });
+
+    afterEach(() => {
+        widget.stop();
+        jest.resetAllMocks();
+    });
+
+    describe("open modal widget", () => {
+        beforeEach(() => {
+            // Trivial mock of ModalWidgetStore
+            let hasModal = false;
+            jest.spyOn(ModalWidgetStore.instance, "openModalWidget").mockImplementation(() => {
+                if (hasModal) {
+                    throw Error("Modal already in view");
+                }
+                hasModal = true;
+            });
+            jest.spyOn(ModalWidgetStore.instance, "canOpenModalWidget").mockImplementation(() => !hasModal);
+            jest.spyOn(ModalWidgetStore.instance, "closeModalWidget").mockImplementation(() => {
+                if (!hasModal) {
+                    throw Error("No modal in view");
+                }
+                hasModal = false;
+            });
+        });
+
+        it("handles an open modal request", () => {
+            const ev = createTransportEvent<IModalWidgetOpenRequest>({ type: "foo", url: "bar" });
+            actionFns[`action:${WidgetApiFromWidgetAction.OpenModalWidget}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {});
+        });
+
+        it("responds with an error if a modal is already open", () => {
+            const ev = createTransportEvent<IModalWidgetOpenRequest>({ type: "foo", url: "bar" });
+            actionFns[`action:${WidgetApiFromWidgetAction.OpenModalWidget}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {});
+            messaging.transport.reply.mockReset();
+            actionFns[`action:${WidgetApiFromWidgetAction.OpenModalWidget}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {
+                error: { message: "Unable to open modal at this time" },
+            });
+        });
+    });
+
+    describe("view room", () => {
+        afterEach(() => {
+            jest.resetAllMocks();
+        });
+        it("errors on invalid room", () => {
+            const ev = createTransportEvent<IViewRoomApiRequest>({ room_id: null } as any);
+            actionFns[`action:${ElementWidgetActions.ViewRoom}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {
+                error: { message: "Room ID not supplied." },
+            });
+        });
+        it("errors on missing permissions", () => {
+            const ev = createTransportEvent<IViewRoomApiRequest>({ room_id: "!foo:example.org" } as any);
+            actionFns[`action:${ElementWidgetActions.ViewRoom}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {
+                error: { message: "This widget does not have permission for this action (denied)." },
+            });
+        });
+        it("handles room change", async () => {
+            const ev = createTransportEvent<IViewRoomApiRequest>({ room_id: "!foo:example.org" } as any);
+            messaging.hasCapability.mockImplementation(
+                (capability) => capability === ElementWidgetCapabilities.CanChangeViewedRoom,
+            );
+            const dispatch = (defaultDispatcher.dispatch = jest.fn());
+            actionFns[`action:${ElementWidgetActions.ViewRoom}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {});
+            expect(dispatch).toHaveBeenCalledWith({
+                action: "view_room",
+                metricsTrigger: "Widget",
+                room_id: "!foo:example.org",
+            });
+        });
+    });
+
+    describe("always on screen", () => {
+        let setWidgetPersistence: jest.SpyInstance<void, Parameters<ActiveWidgetStore["setWidgetPersistence"]>>;
+        beforeEach(() => {
+            setWidgetPersistence = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        });
+
+        it("does nothing if the widget does not have permission", () => {
+            const ev = createTransportEvent<IStickyActionRequest>({ value: true });
+            actionFns[`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`](ev);
+            // Currently there is no error response for this.
+            expect(messaging.transport.reply).not.toHaveBeenCalled();
+        });
+
+        it("handles setting a widget as sticky", () => {
+            messaging.hasCapability.mockImplementation(
+                (capability) => capability === MatrixCapabilities.AlwaysOnScreen,
+            );
+            const ev = createTransportEvent<IStickyActionRequest>({ value: true });
+            actionFns[`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {});
+            expect(setWidgetPersistence).toHaveBeenCalledTimes(1);
+        });
+
+        it("handles setting a widget as unsticky", () => {
+            messaging.hasCapability.mockImplementation(
+                (capability) => capability === MatrixCapabilities.AlwaysOnScreen,
+            );
+            const evOpen = createTransportEvent<IStickyActionRequest>({ value: true });
+            actionFns[`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`](evOpen);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(evOpen.detail, {});
+            expect(setWidgetPersistence).toHaveBeenCalledTimes(1);
+            messaging.transport.reply.mockReset();
+            const evClose = createTransportEvent<IStickyActionRequest>({ value: false });
+            actionFns[`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`](evClose);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(evClose.detail, {});
+            expect(setWidgetPersistence).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe("send sticker", () => {
+        it("does nothing if the widget does not have permission", () => {
+            const ev = createTransportEvent<IStickerActionRequest>({ name: "foo", content: { url: "bar" } });
+            actionFns[`action:${WidgetApiFromWidgetAction.SendSticker}`](ev);
+            // Currently there is no error response for this.
+            expect(messaging.transport.reply).not.toHaveBeenCalled();
+        });
+
+        it("handles setting a widget as sticky", () => {
+            messaging.hasCapability.mockImplementation(
+                (capability) => capability === MatrixCapabilities.StickerSending,
+            );
+            const ev = createTransportEvent<IStickerActionRequest>({ name: "foo", content: { url: "bar" } });
+            const dispatch = (defaultDispatcher.dispatch = jest.fn());
+            actionFns[`action:${WidgetApiFromWidgetAction.SendSticker}`](ev);
+            expect(messaging.transport.reply).toHaveBeenCalledWith(ev.detail, {});
+            expect(dispatch).toHaveBeenCalledWith({
+                action: "m.sticker",
+                data: { content: { url: "bar" }, name: "foo" },
+                widgetId: "test",
+            });
+        });
     });
 });
