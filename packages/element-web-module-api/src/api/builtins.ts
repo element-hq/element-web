@@ -53,4 +53,12 @@ export interface BuiltinsApi {
      * @param props - Additional props to pass to the room view
      */
     renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode;
+
+    /**
+     * Render notification decoration component from element-web.
+     *
+     * @alpha
+     * @param roomId - Id of the room
+     */
+    renderNotificationDecoration(roomId: string): React.ReactNode;
 }
