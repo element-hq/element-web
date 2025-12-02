@@ -16,6 +16,7 @@ import { Container, type Member, type IDevice } from "../UserInfo";
 import PresenceLabel from "../../rooms/PresenceLabel";
 import CopyableText from "../../elements/CopyableText";
 import { UserInfoHeaderVerificationView } from "./UserInfoHeaderVerificationView";
+import ModuleApi from "../../../../modules/Api";
 
 export interface UserInfoHeaderViewProps {
     member: Member;
@@ -46,6 +47,27 @@ export const UserInfoHeaderView: React.FC<UserInfoHeaderViewProps> = ({
                 coloured
             />
         );
+    }
+
+    const moduleRenderer = ModuleApi.customComponents.userInfoRenderer;
+    let usernameSection;
+    if (moduleRenderer && vm.userIdentifier) {
+         usernameSection = moduleRenderer(
+            {
+                userId: vm.userIdentifier,
+            },
+            (props) => <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
+                <CopyableText getTextToCopy={() => props.userId} border={false}>
+                    {props.userId}
+                </CopyableText>
+            </Text>,
+        );
+    } else {
+        usernameSection = <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
+            <CopyableText getTextToCopy={() => vm.userIdentifier} border={false}>
+                {vm.userIdentifier}
+            </CopyableText>
+        </Text>;
     }
 
     return (
@@ -83,11 +105,7 @@ export const UserInfoHeaderView: React.FC<UserInfoHeaderViewProps> = ({
                             </Flex>
                         </Tooltip>
                     )}
-                    <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
-                        <CopyableText getTextToCopy={() => vm.userIdentifier} border={false}>
-                            {vm.userIdentifier}
-                        </CopyableText>
-                    </Text>
+                    {usernameSection}
                 </Flex>
                 {!hideVerificationSection && <UserInfoHeaderVerificationView member={member} devices={devices} />}
             </Container>
