@@ -57,16 +57,9 @@ Please see LICENSE files in the repository root for full details.
     width: 100%;
 }
 
-/* needed to make the alias field only grow as wide as needed */
-/* as opposed to full width */
 .mx_CreateRoomDialog_aliasContainer {
+    /* needed to make the alias field only grow as wide as needed as opposed to full width */
     display: flex;
-    /* put margin on container so it can collapse with siblings */
-    margin: 24px 0 10px;
-
-    .mx_RoomAliasField {
-        margin: 0;
-    }
 }
 
 .mx_CreateRoomDialog {
@@ -100,6 +93,14 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_Dialog_content > .mx_SettingsFlag {
         margin-top: 24px;
+    }
+
+    .mx_Field {
+        margin: 0;
+    }
+
+    form {
+        gap: var(--cpd-space-4x);
     }
 
     p {

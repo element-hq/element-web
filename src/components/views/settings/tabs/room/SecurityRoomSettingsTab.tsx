@@ -504,13 +504,13 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("room_settings|security|title")}>
-                    <Form.Root
-                        onSubmit={(evt) => {
-                            evt.preventDefault();
-                            evt.stopPropagation();
-                        }}
-                    >
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSection heading={_t("room_settings|security|title")}>
                         <SettingsFieldset
                             legend={_t("settings|security|encryption_section")}
                             description={
@@ -539,8 +539,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         </SettingsFieldset>
                         {this.renderJoinRule()}
                         {historySection}
-                    </Form.Root>
-                </SettingsSection>
+                    </SettingsSection>
+                </Form.Root>
             </SettingsTab>
         );
     }

@@ -286,7 +286,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let publicPrivateLabel: JSX.Element | undefined;
+        let publicPrivateLabel: string | undefined;
         if (this.state.joinRule === JoinRule.Restricted) {
             publicPrivateLabel = (
                 <p>
@@ -367,16 +367,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                 microcopy = _t("settings|security|e2ee_default_disabled_warning");
             }
             e2eeSection = (
-                <React.Fragment>
-                    <SettingsToggleInput
-                        name="encryption-toggle"
-                        label={_t("create_room|encryption_label")}
-                        onChange={this.onEncryptedChange}
-                        checked={this.state.isEncrypted}
-                        disabled={!this.state.canChangeEncryption}
-                    />
-                    <p>{microcopy}</p>
-                </React.Fragment>
+                <SettingsToggleInput
+                    name="encryption-toggle"
+                    label={_t("create_room|encryption_label")}
+                    onChange={this.onEncryptedChange}
+                    checked={this.state.isEncrypted}
+                    disabled={!this.state.canChangeEncryption}
+                    helpMessage={microcopy}
+                />
             );
         }
 
@@ -406,8 +404,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                 title={title}
                 screenName="CreateRoom"
             >
-                <Form.Root onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
-                    <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content">
+                    <Form.Root onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
                         <Field
                             ref={this.nameField}
                             label={_t("common|name")}
@@ -423,21 +421,24 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             className="mx_CreateRoomDialog_topic"
                         />
 
-                        <JoinRuleDropdown
-                            label={_t("create_room|room_visibility_label")}
-                            labelInvite={_t("create_room|join_rule_invite")}
-                            labelKnock={
-                                this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
-                            }
-                            labelPublic={this.allowCreatingPublicRooms ? _t("common|public_room") : undefined}
-                            labelRestricted={
-                                this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
-                            }
-                            value={this.state.joinRule}
-                            onChange={this.onJoinRuleChange}
-                        />
+                        <div>
+                            <JoinRuleDropdown
+                                label={_t("create_room|room_visibility_label")}
+                                labelInvite={_t("create_room|join_rule_invite")}
+                                labelKnock={
+                                    this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
+                                }
+                                labelPublic={this.allowCreatingPublicRooms ? _t("common|public_room") : undefined}
+                                labelRestricted={
+                                    this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
+                                }
+                                value={this.state.joinRule}
+                                onChange={this.onJoinRuleChange}
+                            />
 
-                        {publicPrivateLabel}
+                            {publicPrivateLabel}
+                        </div>
+
                         {visibilitySection}
                         {e2eeSection}
                         {aliasField}
@@ -458,8 +459,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                                 z<p>{federateLabel}</p>
                             </details>
                         )}
-                    </div>
-                </Form.Root>
+                    </Form.Root>
+                </div>
                 <DialogButtons
                     primaryButton={
                         isVideoRoom ? _t("create_room|action_create_video_room") : _t("create_room|action_create_room")

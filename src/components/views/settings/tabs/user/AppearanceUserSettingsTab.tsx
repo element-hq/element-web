@@ -103,13 +103,13 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
                 <SettingsSection>
-                    <ThemeChoicePanel />
                     <Form.Root
                         onSubmit={(evt) => {
                             evt.preventDefault();
                             evt.stopPropagation();
                         }}
                     >
+                        <ThemeChoicePanel />
                         <LayoutSwitcher />
                         <FontScalingPanel />
                         {this.renderAdvancedSection()}

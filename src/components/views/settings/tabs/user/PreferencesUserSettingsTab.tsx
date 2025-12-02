@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -106,12 +106,7 @@ const SpellCheckSection: React.FC = () => {
     if (!PlatformPeg.get()?.supportsSpellCheckSettings()) return null;
 
     return (
-        <Form.Root
-            onSubmit={(evt) => {
-                evt.preventDefault();
-                evt.stopPropagation();
-            }}
-        >
+        <>
             <SettingsToggleInput
                 name="allow_spellcheck"
                 label={_t("settings|general|allow_spellcheck")}
@@ -121,7 +116,7 @@ const SpellCheckSection: React.FC = () => {
             {spellCheckEnabled && spellCheckLanguages !== undefined && !IS_MAC && (
                 <SpellCheckSettings languages={spellCheckLanguages} onLanguagesChange={onSpellCheckLanguagesChange} />
             )}
-        </Form.Root>
+        </>
     );
 };
 

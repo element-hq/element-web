@@ -111,281 +111,269 @@ export default function NotificationSettings2(): JSX.Element {
                 </SettingsBanner>
             )}
             <SettingsSection>
-                <Form.Root
-                    onSubmit={(evt) => {
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                    }}
+                <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
+                    <SettingsToggleInput
+                        name="enable_notifications_account"
+                        label={_t("settings|notifications|enable_notifications_account")}
+                        checked={!settings.globalMute}
+                        disabled={disabled}
+                        onChange={(evt) => {
+                            reconcile({
+                                ...model!,
+                                globalMute: !evt.target.checked,
+                            });
+                        }}
+                    />
+                    <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
+                    <SettingsFlag
+                        name="notificationBodyEnabled"
+                        label={_t("settings|notifications|desktop_notification_message_preview")}
+                        level={SettingLevel.DEVICE}
+                    />
+                    <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
+                </div>
+                <SettingsSubsection
+                    heading={
+                        <SettingsSubsectionHeading
+                            heading={_t("settings|notifications|default_setting_section")}
+                            as="h2"
+                        />
+                    }
+                    description={_t("settings|notifications|default_setting_description")}
                 >
-                    <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
-                        <SettingsToggleInput
-                            name="enable_notifications_account"
-                            label={_t("settings|notifications|enable_notifications_account")}
-                            checked={!settings.globalMute}
-                            disabled={disabled}
-                            onChange={(evt) => {
-                                reconcile({
-                                    ...model!,
-                                    globalMute: !evt.target.checked,
-                                });
-                            }}
+                    <StyledRadioGroup
+                        name="defaultNotificationLevel"
+                        value={toDefaultLevels(settings.defaultLevels)}
+                        disabled={disabled}
+                        definitions={NotificationOptions}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                defaultLevels: {
+                                    ...model!.defaultLevels,
+                                    dm:
+                                        value !== NotificationDefaultLevels.MentionsKeywords
+                                            ? RoomNotifState.AllMessages
+                                            : RoomNotifState.MentionsOnly,
+                                    room:
+                                        value === NotificationDefaultLevels.AllMessages
+                                            ? RoomNotifState.AllMessages
+                                            : RoomNotifState.MentionsOnly,
+                                },
+                            });
+                        }}
+                    />
+                </SettingsSubsection>
+                <SettingsSubsection
+                    heading={
+                        <SettingsSubsectionHeading
+                            heading={_t("settings|notifications|play_sound_for_section")}
+                            as="h2"
                         />
-                        <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
-                        <SettingsFlag
-                            name="notificationBodyEnabled"
-                            label={_t("settings|notifications|desktop_notification_message_preview")}
-                            level={SettingLevel.DEVICE}
-                        />
-                        <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
-                    </div>
-                    <SettingsSubsection
-                        heading={
-                            <SettingsSubsectionHeading
-                                heading={_t("settings|notifications|default_setting_section")}
-                                as="h2"
-                            />
-                        }
-                        description={_t("settings|notifications|default_setting_description")}
-                    >
-                        <StyledRadioGroup
-                            name="defaultNotificationLevel"
-                            value={toDefaultLevels(settings.defaultLevels)}
-                            disabled={disabled}
-                            definitions={NotificationOptions}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    defaultLevels: {
-                                        ...model!.defaultLevels,
-                                        dm:
-                                            value !== NotificationDefaultLevels.MentionsKeywords
-                                                ? RoomNotifState.AllMessages
-                                                : RoomNotifState.MentionsOnly,
-                                        room:
-                                            value === NotificationDefaultLevels.AllMessages
-                                                ? RoomNotifState.AllMessages
-                                                : RoomNotifState.MentionsOnly,
-                                    },
-                                });
-                            }}
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection
-                        heading={
-                            <SettingsSubsectionHeading
-                                heading={_t("settings|notifications|play_sound_for_section")}
-                                as="h2"
-                            />
-                        }
-                        description={_t("settings|notifications|play_sound_for_description")}
-                    >
-                        <LabelledCheckbox
-                            label={_t("common|people")}
-                            value={settings.sound.people !== undefined}
-                            disabled={disabled || settings.defaultLevels.dm === RoomNotifState.MentionsOnly}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    sound: {
-                                        ...model!.sound,
-                                        people: value ? "default" : undefined,
-                                    },
-                                });
-                            }}
-                        />
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|mentions_keywords")}
-                            value={settings.sound.mentions !== undefined}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    sound: {
-                                        ...model!.sound,
-                                        mentions: value ? "default" : undefined,
-                                    },
-                                });
-                            }}
-                        />
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|voip")}
-                            value={settings.sound.calls !== undefined}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    sound: {
-                                        ...model!.sound,
-                                        calls: value ? "ring" : undefined,
-                                    },
-                                });
-                            }}
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection
-                        heading={
-                            <SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />
-                        }
-                    >
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|invites")}
-                            value={settings.activity.invite}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    activity: {
-                                        ...model!.activity,
-                                        invite: value,
-                                    },
-                                });
-                            }}
-                        />
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|room_activity")}
-                            value={settings.activity.status_event}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    activity: {
-                                        ...model!.activity,
-                                        status_event: value,
-                                    },
-                                });
-                            }}
-                        />
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|notices")}
-                            value={settings.activity.bot_notices}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    activity: {
-                                        ...model!.activity,
-                                        bot_notices: value,
-                                    },
-                                });
-                            }}
-                        />
-                    </SettingsSubsection>
-                    <SettingsSubsection
-                        heading={
-                            <SettingsSubsectionHeading
-                                heading={_t("settings|notifications|mentions_keywords")}
-                                as="h2"
-                            />
-                        }
-                        description={_t(
-                            "settings|notifications|keywords",
-                            {},
-                            {
-                                badge: (
-                                    <StatelessNotificationBadge
-                                        symbol="1"
-                                        count={1}
-                                        level={NotificationLevel.Notification}
-                                    />
-                                ),
-                            },
-                        )}
-                    >
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|notify_at_room")}
-                            value={settings.mentions.room}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    mentions: {
-                                        ...model!.mentions,
-                                        room: value,
-                                    },
-                                });
-                            }}
-                        />
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|notify_mention", {
-                                mxid: cli.getUserId()!,
-                            })}
-                            id="mx_NotificationSettings2_MentionCheckbox"
-                            value={settings.mentions.user}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    mentions: {
-                                        ...model!.mentions,
-                                        user: value,
-                                    },
-                                });
-                            }}
-                        />
-                        <LabelledCheckbox
-                            label={_t("settings|notifications|notify_keyword")}
-                            byline={_t("settings|notifications|keywords_prompt")}
-                            value={settings.mentions.keywords}
-                            disabled={disabled}
-                            onChange={(value) => {
-                                reconcile({
-                                    ...model!,
-                                    mentions: {
-                                        ...model!.mentions,
-                                        keywords: value,
-                                    },
-                                });
-                            }}
-                        />
-                        <TagComposer
-                            id="mx_NotificationSettings2_Keywords"
-                            tags={model?.keywords ?? []}
-                            disabled={disabled}
-                            onAdd={(keyword) => {
-                                reconcile({
-                                    ...model!,
-                                    keywords: [keyword, ...model!.keywords],
-                                });
-                            }}
-                            onRemove={(keyword) => {
-                                reconcile({
-                                    ...model!,
-                                    keywords: model!.keywords.filter((it) => it !== keyword),
-                                });
-                            }}
-                            label={_t("notifications|keyword")}
-                            placeholder={_t("notifications|keyword_new")}
-                        />
+                    }
+                    description={_t("settings|notifications|play_sound_for_description")}
+                >
+                    <LabelledCheckbox
+                        label={_t("common|people")}
+                        value={settings.sound.people !== undefined}
+                        disabled={disabled || settings.defaultLevels.dm === RoomNotifState.MentionsOnly}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                sound: {
+                                    ...model!.sound,
+                                    people: value ? "default" : undefined,
+                                },
+                            });
+                        }}
+                    />
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|mentions_keywords")}
+                        value={settings.sound.mentions !== undefined}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                sound: {
+                                    ...model!.sound,
+                                    mentions: value ? "default" : undefined,
+                                },
+                            });
+                        }}
+                    />
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|voip")}
+                        value={settings.sound.calls !== undefined}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                sound: {
+                                    ...model!.sound,
+                                    calls: value ? "ring" : undefined,
+                                },
+                            });
+                        }}
+                    />
+                </SettingsSubsection>
+                <SettingsSubsection
+                    heading={<SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />}
+                >
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|invites")}
+                        value={settings.activity.invite}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                activity: {
+                                    ...model!.activity,
+                                    invite: value,
+                                },
+                            });
+                        }}
+                    />
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|room_activity")}
+                        value={settings.activity.status_event}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                activity: {
+                                    ...model!.activity,
+                                    status_event: value,
+                                },
+                            });
+                        }}
+                    />
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|notices")}
+                        value={settings.activity.bot_notices}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                activity: {
+                                    ...model!.activity,
+                                    bot_notices: value,
+                                },
+                            });
+                        }}
+                    />
+                </SettingsSubsection>
+                <SettingsSubsection
+                    heading={
+                        <SettingsSubsectionHeading heading={_t("settings|notifications|mentions_keywords")} as="h2" />
+                    }
+                    description={_t(
+                        "settings|notifications|keywords",
+                        {},
+                        {
+                            badge: (
+                                <StatelessNotificationBadge
+                                    symbol="1"
+                                    count={1}
+                                    level={NotificationLevel.Notification}
+                                />
+                            ),
+                        },
+                    )}
+                >
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|notify_at_room")}
+                        value={settings.mentions.room}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                mentions: {
+                                    ...model!.mentions,
+                                    room: value,
+                                },
+                            });
+                        }}
+                    />
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|notify_mention", {
+                            mxid: cli.getUserId()!,
+                        })}
+                        id="mx_NotificationSettings2_MentionCheckbox"
+                        value={settings.mentions.user}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                mentions: {
+                                    ...model!.mentions,
+                                    user: value,
+                                },
+                            });
+                        }}
+                    />
+                    <LabelledCheckbox
+                        label={_t("settings|notifications|notify_keyword")}
+                        byline={_t("settings|notifications|keywords_prompt")}
+                        value={settings.mentions.keywords}
+                        disabled={disabled}
+                        onChange={(value) => {
+                            reconcile({
+                                ...model!,
+                                mentions: {
+                                    ...model!.mentions,
+                                    keywords: value,
+                                },
+                            });
+                        }}
+                    />
+                    <TagComposer
+                        id="mx_NotificationSettings2_Keywords"
+                        tags={model?.keywords ?? []}
+                        disabled={disabled}
+                        onAdd={(keyword) => {
+                            reconcile({
+                                ...model!,
+                                keywords: [keyword, ...model!.keywords],
+                            });
+                        }}
+                        onRemove={(keyword) => {
+                            reconcile({
+                                ...model!,
+                                keywords: model!.keywords.filter((it) => it !== keyword),
+                            });
+                        }}
+                        label={_t("notifications|keyword")}
+                        placeholder={_t("notifications|keyword_new")}
+                    />
 
-                        <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
-                        <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
-                    </SettingsSubsection>
-                    <NotificationPusherSettings />
-                    <SettingsSubsection heading={_t("settings|notifications|quick_actions_section")}>
-                        {hasUnreadNotifications && (
-                            <AccessibleButton
-                                kind="primary_outline"
-                                disabled={updatingUnread}
-                                onClick={async () => {
-                                    setUpdatingUnread(true);
-                                    await clearAllNotifications(cli);
-                                    setUpdatingUnread(false);
-                                }}
-                            >
-                                {_t("settings|notifications|quick_actions_mark_all_read")}
-                            </AccessibleButton>
-                        )}
+                    <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
+                    <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
+                </SettingsSubsection>
+                <NotificationPusherSettings />
+                <SettingsSubsection heading={_t("settings|notifications|quick_actions_section")}>
+                    {hasUnreadNotifications && (
                         <AccessibleButton
-                            kind="danger_outline"
-                            disabled={model === null}
-                            onClick={() => {
-                                reconcile(DefaultNotificationSettings);
+                            kind="primary_outline"
+                            disabled={updatingUnread}
+                            onClick={async () => {
+                                setUpdatingUnread(true);
+                                await clearAllNotifications(cli);
+                                setUpdatingUnread(false);
                             }}
                         >
-                            {_t("settings|notifications|quick_actions_reset")}
+                            {_t("settings|notifications|quick_actions_mark_all_read")}
                         </AccessibleButton>
-                    </SettingsSubsection>
-                </Form.Root>
+                    )}
+                    <AccessibleButton
+                        kind="danger_outline"
+                        disabled={model === null}
+                        onClick={() => {
+                            reconcile(DefaultNotificationSettings);
+                        }}
+                    >
+                        {_t("settings|notifications|quick_actions_reset")}
+                    </AccessibleButton>
+                </SettingsSubsection>
             </SettingsSection>
         </div>
     );
