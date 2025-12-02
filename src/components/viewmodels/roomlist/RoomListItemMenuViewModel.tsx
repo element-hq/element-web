@@ -13,14 +13,13 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
 import { hasAccessToNotificationMenu, hasAccessToOptionsMenu } from "./utils";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { DefaultTagID } from "../../../stores/room-list/models";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { tagRoom } from "../../../utils/room/tagRoom";
+import { DefaultTagID, tagRoom } from "../../../utils/room/tagRoom";
 import { RoomNotifState } from "../../../RoomNotifs";
 import { useNotificationState } from "../../../hooks/useRoomNotificationState";
 

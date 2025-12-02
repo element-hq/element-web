@@ -40,6 +40,7 @@ import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
 import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
+import { DefaultTagID } from "../../../src/utils/room/tagRoom.ts";
 
 jest.useFakeTimers();
 

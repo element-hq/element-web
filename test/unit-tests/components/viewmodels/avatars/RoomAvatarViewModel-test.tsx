@@ -15,6 +15,7 @@ import {
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import * as PresenceIndicatorModule from "../../../../../src/components/views/avatars/WithPresenceIndicator";
+import { DefaultTagID } from "../../../../../src/utils/room/tagRoom.ts";
 
 jest.mock("../../../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
     getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([]),

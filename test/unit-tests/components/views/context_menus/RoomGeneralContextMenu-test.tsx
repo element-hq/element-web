@@ -27,6 +27,7 @@ import { shouldShowComponent } from "../../../../../src/customisations/helpers/U
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { clearAllModals } from "../../../../test-utils";
+import { DefaultTagID } from "../../../../../src/utils/room/tagRoom.ts";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),

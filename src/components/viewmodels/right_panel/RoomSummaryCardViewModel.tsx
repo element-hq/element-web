@@ -30,7 +30,7 @@ import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
 import { ReportRoomDialog } from "../../views/dialogs/ReportRoomDialog";
 import { Key } from "../../../Keyboard";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
-import { tagRoom } from "../../../utils/room/tagRoom";
+import { DefaultTagID, tagRoom } from "../../../utils/room/tagRoom";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 
 export interface RoomSummaryCardState {
@@ -164,9 +164,7 @@ export function useRoomSummaryCardViewModel(
     // value to check if the user can invite to the room
     const canInviteToState = useEventEmitterState(room, RoomStateEvent.Update, () => canInviteTo(room));
 
-    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
-        RoomListStore.instance.getTagsForRoom(room),
-    );
+    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () => getTagsForRoom(room));
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
 
     const isDirectMessage = useIsDirectMessage(room);

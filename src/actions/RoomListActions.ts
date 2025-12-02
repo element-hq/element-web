@@ -16,6 +16,7 @@ import * as Rooms from "../Rooms";
 import { _t } from "../languageHandler";
 import { type AsyncActionPayload } from "../dispatcher/payloads";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
+import { DefaultTagID, type TagID } from "../utils/room/tagRoom.ts";
 
 export default class RoomListActions {
     /**
@@ -39,27 +40,8 @@ export default class RoomListActions {
         room: Room,
         oldTag: TagID | null,
         newTag: TagID | null,
-        newIndex: number,
     ): AsyncActionPayload {
         let metaData: Parameters<MatrixClient["setRoomTag"]>[2] | undefined;
-
-        // Is the tag ordered manually?
-        const store = RoomListStore.instance;
-        if (newTag && store.getTagSorting(newTag) === SortAlgorithm.Manual) {
-            const newList = [...store.orderedLists[newTag]];
-
-            newList.sort((a, b) => a.tags[newTag].order - b.tags[newTag].order);
-
-            const indexBefore = newIndex - 1;
-            const indexAfter = newIndex;
-
-            const prevOrder = indexBefore <= 0 ? 0 : newList[indexBefore].tags[newTag].order;
-            const nextOrder = indexAfter >= newList.length ? 1 : newList[indexAfter].tags[newTag].order;
-
-            metaData = {
-                order: (prevOrder + nextOrder) / 2.0,
-            };
-        }
 
         return asyncAction(
             "RoomListActions.tagRoom",

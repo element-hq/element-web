@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Filter } from ".";
 import { FilterKey } from ".";
-import { DefaultTagID } from "../../../room-list/models";
+import { DefaultTagID } from "../../../../utils/room/tagRoom.ts";
 
 export class FavouriteFilter implements Filter {
     public matches(room: Room): boolean {

@@ -21,7 +21,6 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
 import { PollStartEventPreview } from "./previews/PollStartEventPreview";
-import { type TagID } from "./models";
 import { LegacyCallInviteEventPreview } from "./previews/LegacyCallInviteEventPreview";
 import { LegacyCallAnswerEventPreview } from "./previews/LegacyCallAnswerEventPreview";
 import { LegacyCallHangupEvent } from "./previews/LegacyCallHangupEvent";
@@ -30,6 +29,7 @@ import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { type IPreview } from "./previews/IPreview";
 import shouldHideEvent from "../../shouldHideEvent";
+import { TagID } from "../../utils/room/tagRoom.ts";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.

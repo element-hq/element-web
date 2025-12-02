@@ -28,7 +28,6 @@ import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
-import { DefaultTagID } from "../room-list/models";
 import { EnhancedMap, mapDiff } from "../../utils/maps";
 import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
@@ -62,6 +61,7 @@ import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeave
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleApi } from "../../modules/Api.ts";
 import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3.ts";
+import { DefaultTagID } from "../../utils/room/tagRoom.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 

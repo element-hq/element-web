@@ -20,8 +20,8 @@ import {
 
 import { MessagePreviewStore } from "../../../../src/stores/room-list/MessagePreviewStore";
 import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "../../../test-utils";
-import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import { mkThread } from "../../../test-utils/threads";
+import { DefaultTagID } from "../../../../src/utils/room/tagRoom.ts";
 
 describe("MessagePreviewStore", () => {
     let client: Mocked<MatrixClient>;

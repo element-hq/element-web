@@ -10,7 +10,7 @@ import { Room } from "matrix-js-sdk/src/matrix";
 
 import RoomListActions from "../../../../src/actions/RoomListActions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { tagRoom } from "../../../../src/utils/room/tagRoom";
+import { DefaultTagID, type TagID, tagRoom } from "../../../../src/utils/room/tagRoom";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 
 describe("tagRoom()", () => {

@@ -28,6 +28,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
+import { DefaultTagID } from "../../../../src/utils/room/tagRoom.ts";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {

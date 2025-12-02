@@ -19,7 +19,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { useUnreadNotifications } from "../../../../../src/hooks/useUnreadNotifications";
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../../../src/utils/notifications";
-import { tagRoom } from "../../../../../src/utils/room/tagRoom";
+import { DefaultTagID, tagRoom } from "../../../../../src/utils/room/tagRoom";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { useNotificationState } from "../../../../../src/hooks/useRoomNotificationState";
 import { RoomNotifState } from "../../../../../src/RoomNotifs";

@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { type IPreview } from "./IPreview";
-import { type TagID } from "../models";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { getHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
+import { type TagID } from "../../../utils/room/tagRoom.ts";
 
 export class MessageEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {

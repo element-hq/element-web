@@ -12,8 +12,8 @@ import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { type RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
-import { DefaultTagID } from "../room-list/models";
 import { RoomNotificationStateStore } from "./RoomNotificationStateStore";
+import { DefaultTagID, getTagsForRoom } from "../../utils/room/tagRoom.ts";
 
 export class SpaceNotificationState extends NotificationState {
     public rooms: Room[] = []; // exposed only for tests
@@ -69,7 +69,7 @@ export class SpaceNotificationState extends NotificationState {
         this._level = NotificationLevel.None;
         for (const [roomId, state] of Object.entries(this.states)) {
             const room = this.rooms.find((r) => r.roomId === roomId);
-            const roomTags = room ? RoomListStore.instance.getTagsForRoom(room) : [];
+            const roomTags = room ? getTagsForRoom(room) : [];
 
             // We ignore unreads in LowPriority rooms, see https://github.com/vector-im/element-web/issues/16836
             if (roomTags.includes(DefaultTagID.LowPriority) && state.level === NotificationLevel.Activity) continue;
