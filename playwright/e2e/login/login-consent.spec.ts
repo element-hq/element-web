@@ -167,7 +167,7 @@ test.describe("Login", () => {
         });
 
         test.describe("verification after login", () => {
-            test("Shows verification prompt after login if signing keys are set up, skippable by default", async ({
+            test("Shows verification prompt after login if signing keys are set up, unskippable by default", async ({
                 page,
                 homeserver,
                 request,
@@ -185,9 +185,10 @@ test.describe("Login", () => {
                 await page.goto("/");
                 await login(page, homeserver, credentials);
 
-                await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
+                const h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                await expect(h2).toBeVisible();
 
-                await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                await expect(h2.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
             });
 
             test.describe("with force_verification off", () => {

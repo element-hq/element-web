@@ -118,6 +118,7 @@ beforeEach(() => {
         on: jest.fn(),
         off: jest.fn(),
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
+        isVersionSupported: jest.fn().mockResolvedValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(false),
         getExtendedProfile: jest.fn().mockRejectedValue(new Error("Not supported")),

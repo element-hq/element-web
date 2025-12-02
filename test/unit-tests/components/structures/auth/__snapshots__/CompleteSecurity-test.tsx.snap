@@ -23,14 +23,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
           >
             <h1
               class="mx_CompleteSecurity_header"
-            >
-              <div
-                aria-label="Skip verification for now"
-                class="mx_AccessibleButton mx_CompleteSecurity_skip"
-                role="button"
-                tabindex="0"
-              />
-            </h1>
+            />
             <div
               class="mx_CompleteSecurity_body"
             >
@@ -191,14 +184,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
           >
             <h1
               class="mx_CompleteSecurity_header"
-            >
-              <div
-                aria-label="Skip verification for now"
-                class="mx_AccessibleButton mx_CompleteSecurity_skip"
-                role="button"
-                tabindex="0"
-              />
-            </h1>
+            />
             <div
               class="mx_CompleteSecurity_body"
             >

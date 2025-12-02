@@ -129,7 +129,7 @@ describe("<MatrixChat />", () => {
         setGuest: jest.fn(),
         setNotifTimelineSet: jest.fn(),
         getAccountData: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
         getDevices: jest.fn().mockResolvedValue({ devices: [] }),
         getProfileInfo: jest.fn().mockResolvedValue({
             displayname: "Ernie",
@@ -1324,6 +1324,7 @@ describe("<MatrixChat />", () => {
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
                     setDeviceIsolationMode: jest.fn(),
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+                    isCrossSigningReady: jest.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
                     resetKeyBackup: jest.fn(),
@@ -1342,7 +1343,7 @@ describe("<MatrixChat />", () => {
                 expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeInTheDocument();
             });
 
-            describe("when server supports cross signing and user does not have cross signing setup", () => {
+            describe("when user does not have cross signing setup", () => {
                 beforeEach(() => {
                     jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
                 });

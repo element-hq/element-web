@@ -47,10 +47,10 @@ describe("CompleteSecurity", () => {
         jest.restoreAllMocks();
     });
 
-    it("Renders with a cancel button by default", () => {
+    it("Renders without a cancel button by default", () => {
         render(<CompleteSecurity onFinished={() => {}} />);
 
-        expect(screen.getByRole("button", { name: "Skip verification for now" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Skip verification for now" })).not.toBeInTheDocument();
     });
 
     it("Renders with a cancel button if forceVerification false", () => {
