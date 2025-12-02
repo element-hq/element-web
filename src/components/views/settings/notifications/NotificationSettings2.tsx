@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 import NewAndImprovedIcon from "../../../../../res/img/element-icons/new-and-improved.svg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
