@@ -62,5 +62,8 @@ describe("ElementWebBuiltinsApi", () => {
         const builtinsApi = new ElementWebBuiltinsApi();
         expect(() => builtinsApi.renderRoomAvatar("!foo:m.org")).toThrow("No RoomAvatar component has been set");
         expect(() => builtinsApi.renderRoomView("!foo:m.org")).toThrow("No RoomView component has been set");
+        expect(() => builtinsApi.renderNotificationDecoration("!foo:m.org")).toThrow(
+            "No NotificationDecoration component has been set",
+        );
     });
 });
