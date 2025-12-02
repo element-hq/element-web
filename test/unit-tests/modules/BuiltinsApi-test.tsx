@@ -44,6 +44,19 @@ describe("ElementWebBuiltinsApi", () => {
         expect(container).toHaveTextContent("50");
     });
 
+    it("returns rendered NotificationDecoration component", () => {
+        stubClient();
+        const builtinsApi = new ElementWebBuiltinsApi();
+        const NotificationDecoration = () => <div>notification decoration</div>;
+        builtinsApi.setComponents({
+            roomView: {},
+            roomAvatar: Avatar,
+            notificationDecoration: NotificationDecoration,
+        } as any);
+        const { container } = render(<> {builtinsApi.renderNotificationDecoration("!foo:m.org")}</>);
+        expect(container).toHaveTextContent("notification decoration");
+    });
+
     it("should throw error if called before components are set", () => {
         stubClient();
         const builtinsApi = new ElementWebBuiltinsApi();
