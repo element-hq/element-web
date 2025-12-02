@@ -7,7 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import React, { type ChangeEvent, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -29,7 +30,6 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { IS_MAC } from "../../../../../Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
@@ -92,7 +92,8 @@ const SpellCheckSection: React.FC = () => {
         })();
     }, []);
 
-    const onSpellCheckEnabledChange = useCallback((enabled: boolean) => {
+    const onSpellCheckEnabledChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const enabled = e.target.checked;
         setSpellCheckEnabled(enabled);
         PlatformPeg.get()?.setSpellCheckEnabled(enabled);
     }, []);
@@ -105,16 +106,22 @@ const SpellCheckSection: React.FC = () => {
     if (!PlatformPeg.get()?.supportsSpellCheckSettings()) return null;
 
     return (
-        <>
-            <LabelledToggleSwitch
+        <Form.Root
+            onSubmit={(evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }}
+        >
+            <SettingsToggleInput
+                name="allow_spellcheck"
                 label={_t("settings|general|allow_spellcheck")}
-                value={Boolean(spellCheckEnabled)}
                 onChange={onSpellCheckEnabledChange}
+                checked={Boolean(spellCheckEnabled)}
             />
             {spellCheckEnabled && spellCheckLanguages !== undefined && !IS_MAC && (
                 <SpellCheckSettings languages={spellCheckLanguages} onLanguagesChange={onSpellCheckLanguagesChange} />
             )}
-        </>
+        </Form.Root>
     );
 };
 

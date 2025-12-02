@@ -5,15 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type FC, useCallback, useState } from "react";
-import { Root } from "@vector-im/compound-web";
+import React, { type ChangeEvent, type FC, useCallback, useState } from "react";
+import { Root, SettingsToggleInput } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 
 /**
  * A settings component which allows the user to enable/disable invite blocking.
@@ -31,10 +30,10 @@ export const InviteRulesAccountSetting: FC = () => {
     const [busy, setBusy] = useState(false);
 
     const onChange = useCallback(
-        async (allowInvites: boolean) => {
+        async (e: ChangeEvent<HTMLInputElement>) => {
             try {
                 setBusy(true);
-                if (allowInvites) {
+                if (e.target.checked) {
                     // When allowing invites, clear the block setting on both bits of account data.
                     await SettingsStore.setValue("blockInvites", null, SettingLevel.ACCOUNT, false);
                     await SettingsStore.setValue("inviteRules", null, SettingLevel.ACCOUNT, { allBlocked: false });
@@ -58,14 +57,21 @@ export const InviteRulesAccountSetting: FC = () => {
     const disabledMessage = msc4155Disabled && msc4380Disabled;
     const invitesBlocked = (!msc4155Disabled && msc4155Rules.allBlocked) || (!msc4380Disabled && msc4380BlockInvites);
     return (
-        <Root className="mx_MediaPreviewAccountSetting_Form">
-            <LabelledToggleSwitch
-                className="mx_MediaPreviewAccountSetting_ToggleSwitch"
+        <Root
+            className="mx_MediaPreviewAccountSetting_Form"
+            onSubmit={(evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }}
+        >
+            <SettingsToggleInput
+                name="invite_controls"
                 label={_t("settings|invite_controls|default_label")}
-                value={!invitesBlocked}
+                checked={!invitesBlocked}
                 onChange={onChange}
-                tooltip={disabledMessage}
+                className="mx_MediaPreviewAccountSetting_ToggleSwitch"
                 disabled={!!disabledMessage || busy}
+                disabledMessage={disabledMessage}
             />
         </Root>
     );
