@@ -1220,15 +1220,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1e0uz_10"
+                        class="_container_1qhtc_10"
                       >
                         <input
-                          class="_input_1e0uz_18"
+                          class="_input_1qhtc_18"
                           id="mx_media_previews_off"
                           type="radio"
                         />
                         <div
-                          class="_ui_1e0uz_19"
+                          class="_ui_1qhtc_19"
                         />
                       </div>
                     </div>
@@ -1250,15 +1250,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1e0uz_10"
+                        class="_container_1qhtc_10"
                       >
                         <input
-                          class="_input_1e0uz_18"
+                          class="_input_1qhtc_18"
                           id="mx_media_previews_private"
                           type="radio"
                         />
                         <div
-                          class="_ui_1e0uz_19"
+                          class="_ui_1qhtc_19"
                         />
                       </div>
                     </div>
@@ -1280,16 +1280,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1e0uz_10"
+                        class="_container_1qhtc_10"
                       >
                         <input
                           checked=""
-                          class="_input_1e0uz_18"
+                          class="_input_1qhtc_18"
                           id="mx_media_previews_on"
                           type="radio"
                         />
                         <div
-                          class="_ui_1e0uz_19"
+                          class="_ui_1qhtc_19"
                         />
                       </div>
                     </div>
@@ -1338,7 +1338,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_7ckbw_8"
+              class="_separator_cqpyv_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"

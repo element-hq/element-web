@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _t } from "./i18n";
+import { type I18nApi } from "@element-hq/element-web-module-api";
+
+import { _t as _tFromModule } from "./i18n";
 
 // These are the constants we use for when to break the text
 const MILLISECONDS_RECENT = 15000;
@@ -21,12 +23,14 @@ const HOURS_1_DAY = 26;
  * @param {number} timeMillis The time in millis to compare against.
  * @returns {string} The humanized time.
  */
-export function humanizeTime(timeMillis: number): string {
+export function humanizeTime(timeMillis: number, i18nApi?: I18nApi): string {
     const now = Date.now();
     let msAgo = now - timeMillis;
     const minutes = Math.abs(Math.ceil(msAgo / 60000));
     const hours = Math.ceil(minutes / 60);
     const days = Math.ceil(hours / 24);
+
+    const _t = i18nApi?.translate ?? _tFromModule;
 
     if (msAgo >= 0) {
         // Past

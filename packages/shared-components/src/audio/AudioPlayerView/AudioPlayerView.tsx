@@ -14,7 +14,7 @@ import { Flex } from "../../utils/Flex";
 import styles from "./AudioPlayerView.module.css";
 import { PlayPauseButton } from "../PlayPauseButton";
 import { type PlaybackState } from "../playback";
-import { _t } from "../../utils/i18n";
+import { useI18n } from "../../utils/i18nContext";
 import { formatBytes } from "../../utils/FormattingUtils";
 import { Clock } from "../Clock";
 import { SeekBar } from "../SeekBar";
@@ -90,6 +90,8 @@ interface AudioPlayerViewProps {
  * ```
  */
 export function AudioPlayerView({ vm }: Readonly<AudioPlayerViewProps>): JSX.Element {
+    const { translate: _t } = useI18n();
+
     const {
         playbackState,
         mediaName = _t("timeline|m.audio|unnamed_audio"),

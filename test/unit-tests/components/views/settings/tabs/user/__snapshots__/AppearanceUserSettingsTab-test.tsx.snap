@@ -41,10 +41,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1e0uz_10"
+                      class="_container_1qhtc_10"
                     >
                       <input
-                        class="_input_1e0uz_18"
+                        class="_input_1qhtc_18"
                         disabled=""
                         id="radix-_r_0_"
                         name="themeSelector"
@@ -53,7 +53,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         value="light"
                       />
                       <div
-                        class="_ui_1e0uz_19"
+                        class="_ui_1qhtc_19"
                       />
                     </div>
                   </div>
@@ -75,10 +75,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1e0uz_10"
+                      class="_container_1qhtc_10"
                     >
                       <input
-                        class="_input_1e0uz_18"
+                        class="_input_1qhtc_18"
                         disabled=""
                         id="radix-_r_1_"
                         name="themeSelector"
@@ -87,7 +87,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         value="dark"
                       />
                       <div
-                        class="_ui_1e0uz_19"
+                        class="_ui_1qhtc_19"
                       />
                     </div>
                   </div>
@@ -109,10 +109,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1e0uz_10"
+                      class="_container_1qhtc_10"
                     >
                       <input
-                        class="_input_1e0uz_18"
+                        class="_input_1qhtc_18"
                         disabled=""
                         id="radix-_r_2_"
                         name="themeSelector"
@@ -121,7 +121,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         value="light-high-contrast"
                       />
                       <div
-                        class="_ui_1e0uz_19"
+                        class="_ui_1qhtc_19"
                       />
                     </div>
                   </div>
@@ -139,7 +139,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_7ckbw_8"
+              class="_separator_cqpyv_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"
@@ -176,11 +176,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
                     >
                       <div
-                        class="_container_1e0uz_10"
+                        class="_container_1qhtc_10"
                       >
                         <input
                           checked=""
-                          class="_input_1e0uz_18"
+                          class="_input_1qhtc_18"
                           id="radix-_r_3_"
                           name="layout"
                           title=""
@@ -188,7 +188,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           value="group"
                         />
                         <div
-                          class="_ui_1e0uz_19"
+                          class="_ui_1qhtc_19"
                         />
                       </div>
                       <span>
@@ -227,7 +227,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -316,10 +316,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
                     >
                       <div
-                        class="_container_1e0uz_10"
+                        class="_container_1qhtc_10"
                       >
                         <input
-                          class="_input_1e0uz_18"
+                          class="_input_1qhtc_18"
                           id="radix-_r_c_"
                           name="layout"
                           title=""
@@ -327,7 +327,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           value="bubble"
                         />
                         <div
-                          class="_ui_1e0uz_19"
+                          class="_ui_1qhtc_19"
                         />
                       </div>
                       <span>
@@ -366,7 +366,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -455,10 +455,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
                     >
                       <div
-                        class="_container_1e0uz_10"
+                        class="_container_1qhtc_10"
                       >
                         <input
-                          class="_input_1e0uz_18"
+                          class="_input_1qhtc_18"
                           id="radix-_r_l_"
                           name="layout"
                           title=""
@@ -466,7 +466,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           value="irc"
                         />
                         <div
-                          class="_ui_1e0uz_19"
+                          class="_ui_1qhtc_19"
                         />
                       </div>
                       <span>
@@ -508,7 +508,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -596,11 +596,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_19o42_10"
+                      class="_container_udcm8_10"
                     >
                       <input
                         aria-describedby="radix-_r_v_"
-                        class="_input_19o42_24"
+                        class="_input_udcm8_24"
                         id="radix-_r_u_"
                         name="compactLayout"
                         role="switch"
@@ -608,7 +608,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         type="checkbox"
                       />
                       <div
-                        class="_ui_19o42_34"
+                        class="_ui_udcm8_34"
                       />
                     </div>
                   </div>
@@ -632,7 +632,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_7ckbw_8"
+              class="_separator_cqpyv_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"
