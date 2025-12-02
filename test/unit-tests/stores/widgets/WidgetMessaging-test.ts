@@ -437,24 +437,24 @@ describe("WidgetMessaging as an account widget", () => {
     });
 });
 
+function createTransportEvent<T extends IWidgetApiRequest>(data: T["data"]): CustomEvent<T> {
+    // Not the complete CustomEvent but good nuff.
+    return {
+        preventDefault: () => {},
+        detail: {
+            action: WidgetApiFromWidgetAction.OpenModalWidget,
+            data: data,
+            api: WidgetApiDirection.FromWidget,
+            requestId: "12345",
+            widgetId: "test",
+        },
+    } as unknown as CustomEvent;
+}
+
 describe("WidgetMessaging action handling", () => {
     let widget: WidgetMessaging;
     let messaging: MockedObject<ClientWidgetApi>;
     let actionFns: Record<string, (ev: any) => void>;
-
-    function createTransportEvent<T extends IWidgetApiRequest>(data: T["data"]): CustomEvent<T> {
-        // Not the complete CustomEvent but good nuff.
-        return {
-            preventDefault: () => {},
-            detail: {
-                action: WidgetApiFromWidgetAction.OpenModalWidget,
-                data: data,
-                api: WidgetApiDirection.FromWidget,
-                requestId: "12345",
-                widgetId: "test",
-            },
-        } as unknown as CustomEvent;
-    }
 
     beforeEach(() => {
         const client = stubClient();
@@ -626,20 +626,6 @@ describe("WidgetMessaging action handling for stickerpicker", () => {
     let messaging: MockedObject<ClientWidgetApi>;
     let actionFns: Record<string, (ev: any) => void>;
     let room: Room;
-
-    function createTransportEvent<T extends IWidgetApiRequest>(data: T["data"]): CustomEvent<T> {
-        // Not the complete CustomEvent but good nuff.
-        return {
-            preventDefault: () => {},
-            detail: {
-                action: WidgetApiFromWidgetAction.OpenModalWidget,
-                data: data,
-                api: WidgetApiDirection.FromWidget,
-                requestId: "12345",
-                widgetId: "test",
-            },
-        } as unknown as CustomEvent;
-    }
 
     beforeEach(() => {
         const client = mocked(stubClient());
