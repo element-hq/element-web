@@ -11,6 +11,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import externalGlobals from "rollup-plugin-external-globals";
+import { importCSSSheet } from "@arcmantle/vite-plugin-import-css-sheet";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -30,6 +31,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        importCSSSheet(),
         react(),
         nodePolyfills({
             include: ["events"],

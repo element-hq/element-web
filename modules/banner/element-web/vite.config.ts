@@ -12,6 +12,7 @@ import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import externalGlobals from "rollup-plugin-external-globals";
 import svgr from "vite-plugin-svgr";
+import { importCSSSheet } from "@arcmantle/vite-plugin-import-css-sheet";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -31,6 +32,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        importCSSSheet(),
         react(),
         svgr(),
         nodePolyfills({

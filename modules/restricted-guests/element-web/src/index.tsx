@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import compound from "@vector-im/compound-web/dist/style.css" with { type: "css" };
+
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
@@ -28,6 +30,8 @@ class RestrictedGuestsModule implements Module {
     public constructor(private api: Api) {}
 
     public async load(): Promise<void> {
+        document.adoptedStyleSheets.push(compound);
+
         this.api.i18n.register(Translations);
 
         try {

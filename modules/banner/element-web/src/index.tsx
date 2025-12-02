@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ThemeProvider } from "styled-components";
+import compound from "@vector-im/compound-web/dist/style.css" with { type: "css" };
 
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import Translations from "./translations.json";
@@ -21,6 +22,8 @@ class BannerModule implements Module {
     public constructor(private api: Api) {}
 
     public async load(): Promise<void> {
+        document.adoptedStyleSheets.push(compound);
+
         this.api.i18n.register(Translations);
 
         try {
