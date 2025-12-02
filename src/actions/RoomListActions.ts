@@ -15,9 +15,6 @@ import Modal from "../Modal";
 import * as Rooms from "../Rooms";
 import { _t } from "../languageHandler";
 import { type AsyncActionPayload } from "../dispatcher/payloads";
-import RoomListStore from "../stores/room-list/RoomListStore";
-import { SortAlgorithm } from "../stores/room-list/algorithms/models";
-import { DefaultTagID, type TagID } from "../stores/room-list/models";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 
 export default class RoomListActions {

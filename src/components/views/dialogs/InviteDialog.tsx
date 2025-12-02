@@ -27,7 +27,6 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import { type IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list/models";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { mediaFromMxc } from "../../../customisations/Media";

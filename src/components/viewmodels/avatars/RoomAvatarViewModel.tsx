@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useDmMember, usePresence, type Presence } from "../../views/avatars/WithPresenceIndicator";
-import { DefaultTagID } from "../../../stores/room-list/models";
 
 export enum AvatarBadgeDecoration {
     LowPriority = "LowPriority",

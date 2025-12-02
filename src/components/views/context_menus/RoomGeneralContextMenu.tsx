@@ -20,7 +20,6 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";

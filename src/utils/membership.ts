@@ -43,28 +43,6 @@ export enum EffectiveMembership {
     Leave = "LEAVE",
 }
 
-export type MembershipSplit = {
-    [state in EffectiveMembership]: Room[];
-};
-
-export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
-    const split: MembershipSplit = {
-        [EffectiveMembership.Invite]: [],
-        [EffectiveMembership.Join]: [],
-        [EffectiveMembership.Leave]: [],
-    };
-
-    for (const room of rooms) {
-        const membership = room.getMyMembership();
-        // Filter out falsey relationship as this will be peeked rooms
-        if (!!membership) {
-            split[getEffectiveMembershipTag(room)].push(room);
-        }
-    }
-
-    return split;
-}
-
 export function getEffectiveMembership(membership: Membership): EffectiveMembership {
     if (membership === KnownMembership.Invite) {
         return EffectiveMembership.Invite;

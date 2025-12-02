@@ -37,8 +37,6 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Action } from "../../../src/dispatcher/actions";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import RoomListStore from "../../../src/stores/room-list/RoomListStore";
-import { DefaultTagID } from "../../../src/stores/room-list/models";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
 import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";

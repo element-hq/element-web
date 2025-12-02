@@ -13,7 +13,6 @@ import { arrayDiff } from "../../utils/arrays";
 import { type RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
 import { DefaultTagID } from "../room-list/models";
-import RoomListStore from "../room-list/RoomListStore";
 import { RoomNotificationStateStore } from "./RoomNotificationStateStore";
 
 export class SpaceNotificationState extends NotificationState {

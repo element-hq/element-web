@@ -16,7 +16,6 @@ import {
     hasAccessToOptionsMenu,
 } from "../../../../../src/components/viewmodels/roomlist/utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import { useUnreadNotifications } from "../../../../../src/hooks/useUnreadNotifications";
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../../../src/utils/notifications";

@@ -70,7 +70,6 @@ import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
-import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 

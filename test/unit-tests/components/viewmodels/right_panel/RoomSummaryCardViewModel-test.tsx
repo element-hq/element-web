@@ -11,8 +11,6 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { useRoomSummaryCardViewModel } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import Modal from "../../../../../src/Modal";

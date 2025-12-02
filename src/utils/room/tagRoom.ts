@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import RoomListStore from "../../stores/room-list/RoomListStore";
 import { DefaultTagID, type TagID } from "../../stores/room-list/models";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";

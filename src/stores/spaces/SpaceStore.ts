@@ -24,12 +24,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
-import { DefaultTagID, type TagID } from "../room-list/models";
+import { DefaultTagID } from "../room-list/models";
 import { EnhancedMap, mapDiff } from "../../utils/maps";
 import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
@@ -62,23 +61,9 @@ import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePa
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleApi } from "../../modules/Api.ts";
+import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
-
-const TAG_ORDER: TagID[] = [
-    DefaultTagID.Invite,
-    DefaultTagID.Favourite,
-    DefaultTagID.DM,
-    DefaultTagID.Untagged,
-    DefaultTagID.Conference,
-    DefaultTagID.LowPriority,
-    DefaultTagID.ServerNotice,
-    DefaultTagID.Suggested,
-    // DefaultTagID.Archived isn't here any more: we don't show it at all.
-    // The section still exists in the code as a place for rooms that we know
-    // about but aren't joined. At some point it could be removed entirely
-    // but we'd have to make sure that rooms you weren't in were hidden.
-];
 
 const metaSpaceOrder: MetaSpace[] = [MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms];
 
@@ -211,16 +196,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         let roomId: string | undefined;
         if (space === MetaSpace.Home && this.allRoomsInHome) {
             const hasMentions = RoomNotificationStateStore.instance.globalState.hasMentions;
-            const lists = RoomListStore.instance.orderedLists;
-            tagLoop: for (let i = 0; i < TAG_ORDER.length; i++) {
-                const t = TAG_ORDER[i];
-                if (!lists[t]) continue;
-                for (const room of lists[t]) {
-                    const state = RoomNotificationStateStore.instance.getRoomState(room);
-                    if (hasMentions ? state.hasMentions : state.isUnread) {
-                        roomId = room.roomId;
-                        break tagLoop;
-                    }
+            const rooms = RoomListStoreV3.instance.getSortedRooms();
+            for (const room of rooms) {
+                const state = RoomNotificationStateStore.instance.getRoomState(room);
+                if (hasMentions ? state.hasMentions : state.isUnread) {
+                    roomId = room.roomId;
+                    break;
                 }
             }
         } else {
