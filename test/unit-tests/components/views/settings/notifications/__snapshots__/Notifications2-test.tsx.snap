@@ -2,17 +2,17 @@
 
 exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
 <div>
-  <div
-    class="mx_NotificationSettings2"
+  <form
+    class="_root_19upo_16"
   >
     <div
-      class="mx_SettingsSection"
+      class="mx_NotificationSettings2"
     >
       <div
-        class="mx_SettingsSection_subSections"
+        class="mx_SettingsSection"
       >
-        <form
-          class="_root_19upo_16"
+        <div
+          class="mx_SettingsSection_subSections"
         >
           <div
             class="mx_SettingsSubsection_content mx_NotificationSettings2_flags"
@@ -1018,26 +1018,26 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 `;
 
 exports[`<Notifications /> matches the snapshot 1`] = `
 <div>
-  <div
-    class="mx_NotificationSettings2"
+  <form
+    class="_root_19upo_16"
   >
     <div
-      class="mx_SettingsSection"
+      class="mx_NotificationSettings2"
     >
       <div
-        class="mx_SettingsSection_subSections"
+        class="mx_SettingsSection"
       >
-        <form
-          class="_root_19upo_16"
+        <div
+          class="mx_SettingsSection_subSections"
         >
           <div
             class="mx_SettingsSubsection_content mx_NotificationSettings2_flags"
@@ -2326,9 +2326,9 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 `;

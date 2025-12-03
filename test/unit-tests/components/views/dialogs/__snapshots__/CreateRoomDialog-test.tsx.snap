@@ -24,11 +24,11 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
         Create a private room
       </h1>
     </div>
-    <form
-      class="_root_19upo_16"
+    <div
+      class="mx_Dialog_content"
     >
-      <div
-        class="mx_Dialog_content"
+      <form
+        class="_root_19upo_16"
       >
         <div
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
@@ -62,46 +62,48 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             Topic (optional)
           </label>
         </div>
-        <div
-          class="mx_Dropdown mx_JoinRuleDropdown"
-        >
+        <div>
           <div
-            aria-describedby="mx_JoinRuleDropdown_value"
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-label="Room visibility"
-            aria-owns="mx_JoinRuleDropdown_input"
-            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-            role="button"
-            tabindex="0"
+            class="mx_Dropdown mx_JoinRuleDropdown"
           >
             <div
-              class="mx_Dropdown_option"
-              id="mx_JoinRuleDropdown_value"
+              aria-describedby="mx_JoinRuleDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Room visibility"
+              aria-owns="mx_JoinRuleDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
             >
               <div
-                class="mx_JoinRuleDropdown_invite"
+                class="mx_Dropdown_option"
+                id="mx_JoinRuleDropdown_value"
               >
-                Private room (invite only)
+                <div
+                  class="mx_JoinRuleDropdown_invite"
+                >
+                  Private room (invite only)
+                </div>
               </div>
+              <svg
+                class="mx_Dropdown_arrow"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
             </div>
-            <svg
-              class="mx_Dropdown_arrow"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
           </div>
+          <p>
+            Only people invited will be able to find and join this room. You can change this at any time from room settings.
+          </p>
         </div>
-        <p>
-          Only people invited will be able to find and join this room. You can change this at any time from room settings.
-        </p>
         <div
           class="_inline-field_19upo_32"
         >
@@ -114,7 +116,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_6m_"
+                id="_r_72_"
                 role="switch"
                 type="checkbox"
               />
@@ -128,15 +130,18 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           >
             <label
               class="_label_19upo_59"
-              for="_r_6m_"
+              for="_r_72_"
             >
               Enable end-to-end encryption
             </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_74_"
+            >
+              You can't disable this later. Bridges & most bots won't work yet.
+            </span>
           </div>
         </div>
-        <p>
-          You can't disable this later. Bridges & most bots won't work yet.
-        </p>
         <details
           class="mx_CreateRoomDialog_details"
         >
@@ -156,7 +161,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               >
                 <input
                   class="_input_udcm8_24"
-                  id="_r_6o_"
+                  id="_r_75_"
                   role="switch"
                   type="checkbox"
                 />
@@ -170,13 +175,13 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             >
               <label
                 class="_label_19upo_59"
-                for="_r_6o_"
+                for="_r_75_"
               >
                 Block anyone not part of server.org from ever joining this room.
               </label>
               <span
                 class="_message_19upo_85 _help-message_19upo_91"
-                id="radix-_r_6q_"
+                id="radix-_r_77_"
               >
                 You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
               </span>
@@ -187,8 +192,8 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
           </p>
         </details>
-      </div>
-    </form>
+      </form>
+    </div>
     <div
       class="mx_Dialog_buttons"
     >
@@ -249,11 +254,11 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
         Create a private room
       </h1>
     </div>
-    <form
-      class="_root_19upo_16"
+    <div
+      class="mx_Dialog_content"
     >
-      <div
-        class="mx_Dialog_content"
+      <form
+        class="_root_19upo_16"
       >
         <div
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
@@ -287,46 +292,48 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
             Topic (optional)
           </label>
         </div>
-        <div
-          class="mx_Dropdown mx_JoinRuleDropdown"
-        >
+        <div>
           <div
-            aria-describedby="mx_JoinRuleDropdown_value"
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-label="Room visibility"
-            aria-owns="mx_JoinRuleDropdown_input"
-            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-            role="button"
-            tabindex="0"
+            class="mx_Dropdown mx_JoinRuleDropdown"
           >
             <div
-              class="mx_Dropdown_option"
-              id="mx_JoinRuleDropdown_value"
+              aria-describedby="mx_JoinRuleDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Room visibility"
+              aria-owns="mx_JoinRuleDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
             >
               <div
-                class="mx_JoinRuleDropdown_invite"
+                class="mx_Dropdown_option"
+                id="mx_JoinRuleDropdown_value"
               >
-                Private room (invite only)
+                <div
+                  class="mx_JoinRuleDropdown_invite"
+                >
+                  Private room (invite only)
+                </div>
               </div>
+              <svg
+                class="mx_Dropdown_arrow"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
             </div>
-            <svg
-              class="mx_Dropdown_arrow"
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-              />
-            </svg>
           </div>
+          <p>
+            Only people invited will be able to find and join this room. You can change this at any time from room settings.
+          </p>
         </div>
-        <p>
-          Only people invited will be able to find and join this room. You can change this at any time from room settings.
-        </p>
         <div
           class="_inline-field_19upo_32"
         >
@@ -339,7 +346,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_77_"
+                id="_r_7k_"
                 role="switch"
                 type="checkbox"
               />
@@ -353,17 +360,20 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           >
             <label
               class="_label_19upo_59"
-              for="_r_77_"
+              for="_r_7k_"
             >
               Enable end-to-end encryption
             </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_7m_"
+            >
+              You can't disable this later. Bridges & most bots won't work yet.
+            </span>
           </div>
         </div>
-        <p>
-          You can't disable this later. Bridges & most bots won't work yet.
-        </p>
-      </div>
-    </form>
+      </form>
+    </div>
     <div
       class="mx_Dialog_buttons"
     >

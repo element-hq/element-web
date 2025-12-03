@@ -286,7 +286,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let publicPrivateLabel: string | undefined;
+        let publicPrivateLabel: JSX.Element | undefined;
         if (this.state.joinRule === JoinRule.Restricted) {
             publicPrivateLabel = (
                 <p>
