@@ -96,7 +96,6 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Props): JSX
                     );
                     break;
                 default:
-                    // FIXME: handle backup status
                     content = (
                         <>
                             <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
