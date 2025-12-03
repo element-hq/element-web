@@ -121,6 +121,81 @@ describe("StopGapWidget", () => {
         expect(messaging.feedToDevice).toHaveBeenCalledWith(receivedToDevice.message, true);
     });
 
+    it("Drop sent in clear to-device messages if room is encrypted.", async () => {
+        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+
+        const clearReceivedToDevice = {
+            message: {
+                type: "org.example.foo",
+                sender: "@alice:example.org",
+                content: {
+                    hello: "spoofed world",
+                },
+            },
+            encryptionInfo: null,
+        };
+
+        client.emit(ClientEvent.ReceivedToDeviceMessage, clearReceivedToDevice);
+        await Promise.resolve(); // flush promises
+        expect(messaging.feedToDevice).not.toHaveBeenCalled();
+
+        const encryptedReceivedToDevice = {
+            message: {
+                type: "org.example.foo",
+                sender: "@alice:example.org",
+                content: {
+                    hello: "Hello world",
+                },
+            },
+            encryptionInfo: {
+                senderVerified: false,
+                sender: "@alice:example.org",
+                senderCurve25519KeyBase64: "",
+                senderDevice: "ABCDEFGHI",
+            },
+        };
+
+        client.emit(ClientEvent.ReceivedToDeviceMessage, encryptedReceivedToDevice);
+        await Promise.resolve(); // flush promises
+        expect(messaging.feedToDevice).toHaveBeenCalledWith(encryptedReceivedToDevice.message, true);
+    });
+
+    it("Default to only encrypted traffic if there is no room.", async () => {
+        // Replace the widget with one that has no room
+        // first stop messaging to clear the previous widget
+        widget.stopMessaging();
+        widget = new StopGapWidget({
+            app: {
+                id: "test",
+                creatorUserId: "@alice:example.org",
+                type: "example",
+                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
+            },
+            // no room provided
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+        });
+        // Start messaging without an iframe, since ClientWidgetApi is mocked
+        widget.startMessaging(null as unknown as HTMLIFrameElement);
+
+        const clearReceivedToDevice = {
+            message: {
+                type: "org.example.foo",
+                sender: "@alice:example.org",
+                content: {
+                    hello: "spoofed world",
+                },
+            },
+            encryptionInfo: null,
+        };
+
+        client.emit(ClientEvent.ReceivedToDeviceMessage, clearReceivedToDevice);
+        await Promise.resolve(); // flush promises
+        expect(messaging.feedToDevice).not.toHaveBeenCalled();
+    });
+
     it("feeds incoming state updates to the widget", () => {
         const event = mkEvent({
             event: true,
