@@ -9600,7 +9600,7 @@ matrix-events-sdk@0.0.1:
     jwt-decode "^4.0.0"
     loglevel "^1.9.2"
     matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.10.0"
+    matrix-widget-api "^1.14.0"
     oidc-client-ts "^3.0.1"
     p-retry "7"
     sdp-transform "^3.0.0"
@@ -9618,7 +9618,7 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.14.0:
+matrix-widget-api@^1.10.0, matrix-widget-api@^1.14.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==
@@ -12018,10 +12018,10 @@ schema-utils@^4.3.0, schema-utils@^4.3.3:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
 
-sdp-transform@^2.14.1:
-  version "2.14.2"
-  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-2.14.2.tgz#d2cee6a1f7abe44e6332ac6cbb94e8600f32d813"
-  integrity sha512-icY6jVao7MfKCieyo1AyxFYm1baiM+fA00qW/KrNNVlkxHAd34riEKuEkUe4bBb3gJwLJZM+xT60Yj1QL8rHiA==
+sdp-transform@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/sdp-transform/-/sdp-transform-3.0.0.tgz#863dd2d781c468d7d6a2f9c70fedcf0538f3e76c"
+  integrity sha512-gfYVRGxjHkGF2NPeUWHw5u6T/KGFtS5/drPms73gaSuMaVHKCY3lpLnGDfswVQO0kddeePoti09AwhYP4zA8dQ==
 
 seedrandom@^3.0.5:
   version "3.0.5"

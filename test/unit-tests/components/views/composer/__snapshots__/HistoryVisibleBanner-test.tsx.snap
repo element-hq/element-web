@@ -54,7 +54,7 @@ exports[`<HistoryVisibleBanner /> should render dismissable history visibility a
       class="_actions_15kcv_85"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_187yx_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
