@@ -6,7 +6,6 @@
  */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
@@ -236,7 +235,7 @@ async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
     return res.json();
 }
 
-let cachedCustomTranslations: Optional<TranslationStringsObject> = null;
+let cachedCustomTranslations: TranslationStringsObject | undefined;
 let cachedCustomTranslationsExpire = 0; // zero to trigger expiration right away
 
 // This awkward class exists so the test runner can get at the function. It is
@@ -285,7 +284,7 @@ export async function registerCustomTranslations({
     if (!lookupUrl) return; // easy - nothing to do
 
     try {
-        let json: Optional<TranslationStringsObject>;
+        let json: TranslationStringsObject | undefined;
         if (testOnlyIgnoreCustomTranslationsCache || Date.now() >= cachedCustomTranslationsExpire) {
             json = CustomTranslationOptions.lookupFn
                 ? CustomTranslationOptions.lookupFn(lookupUrl)

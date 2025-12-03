@@ -255,7 +255,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         dis.dispatch<OpenForwardDialogPayload>({
             action: Action.OpenForwardDialog,
             event: forwardableEvent,
-            permalinkCreator: this.props.permalinkCreator,
+            permalinkCreator: this.props.permalinkCreator ?? null,
         });
         this.closeMenu();
     };
