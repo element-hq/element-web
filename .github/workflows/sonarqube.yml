@@ -9,43 +9,9 @@ concurrency:
     cancel-in-progress: true
 permissions: {}
 jobs:
-    check-skip-label:
-        name: Check for skip label
-        runs-on: ubuntu-latest
-        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group'
-        outputs:
-            should-skip: ${{ steps.check-labels.outputs.skip }}
-        permissions:
-            pull-requests: read
-        steps:
-            - name: Check labels
-              id: check-labels
-              uses: actions/github-script@v7
-              with:
-                  script: |
-                      const prs = context.payload.workflow_run.pull_requests;
-
-                      if (prs.length === 0) {
-                          core.setOutput('skip', 'false');
-                          return;
-                      }
-
-                      // Get full PR details including labels
-                      const { data: pr } = await github.rest.pulls.get({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          pull_number: prs[0].number
-                      });
-
-                      const hasSkipLabel = pr.labels.some(label => label.name === 'Z-Skip-Sonar');
-                      core.setOutput('skip', hasSkipLabel ? 'true' : 'false');
-
-                      console.log(`PR #${pr.number}: ${hasSkipLabel ? 'Skipping' : 'Running'} SonarQube`);
-
     sonarqube:
         name: 🩻 SonarQube
-        needs: check-skip-label
-        if: needs.check-skip-label.outputs.should-skip != 'true'
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group'
         uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
         permissions:
             actions: read
