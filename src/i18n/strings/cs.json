@@ -95,6 +95,7 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
+        "new_conversation": "Nová konverzace",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
@@ -605,6 +606,7 @@
         "video": "Video",
         "video_room": "Video místnost",
         "view_message": "Zobrazit zprávu",
+        "voice": "Hlas",
         "warning": "Upozornění"
     },
     "composer": {
@@ -4103,9 +4105,11 @@
         "user_busy_description": "Volaný uživatel je zaneprázdněn.",
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Videohovor",
+        "video_call_incoming": "Příchozí videohovor",
         "video_call_started": "Videohovor byl zahájen",
         "video_call_using": "Videohovor pomocí:",
         "voice_call": "Hlasový hovor",
+        "voice_call_incoming": "Příchozí hlasový hovor",
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",

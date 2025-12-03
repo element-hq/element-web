@@ -16,16 +16,24 @@ import React, { type ReactElement } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
+import { I18nApi, I18nContext } from "../..";
+
 const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
     return ({ children }: { children: React.ReactNode }) => {
         if (Wrapper) {
             return (
-                <Wrapper>
-                    <TooltipProvider>{children}</TooltipProvider>
-                </Wrapper>
+                <I18nContext.Provider value={new I18nApi()}>
+                    <Wrapper>
+                        <TooltipProvider>{children}</TooltipProvider>
+                    </Wrapper>
+                </I18nContext.Provider>
             );
         } else {
-            return <TooltipProvider>{children}</TooltipProvider>;
+            return (
+                <I18nContext.Provider value={new I18nApi()}>
+                    <TooltipProvider>{children}</TooltipProvider>
+                </I18nContext.Provider>
+            );
         }
     };
 };

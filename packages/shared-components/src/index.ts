@@ -11,6 +11,7 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
+export * from "./composer/Banner";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./pill-input/Pill";
@@ -22,10 +23,12 @@ export * from "./utils/Flex";
 
 // Utils
 export * from "./utils/i18n";
+export * from "./utils/i18nContext";
 export * from "./utils/humanize";
 export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 export * from "./utils/FormattingUtils";
+export * from "./utils/I18nApi";
 
 // MVVM
 export * from "./viewmodel";

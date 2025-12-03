@@ -42,6 +42,8 @@ export default {
         "util",
         // Embedded into webapp
         "@element-hq/element-call-embedded",
+        // Transitive dep of jest
+        "jsdom",
 
         // Used by matrix-js-sdk, which means we have to include them as a
         // dependency so that // we can run `tsc` (since we import the typescript

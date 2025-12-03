@@ -14,6 +14,7 @@ import { LazyValue } from "./LazyValue";
 import { type Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
+import { getBlobSafeMimeType } from "./blobs.ts";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
@@ -82,7 +83,7 @@ export class MediaEventHelper implements IDestroyable {
                 .downloadSource()
                 .then((r) => r.blob())
                 // Set the mime type from the event info on the blob
-                .then((blob) => blob.slice(0, blob.size, content.info?.mimetype ?? blob.type))
+                .then((blob) => blob.slice(0, blob.size, getBlobSafeMimeType(content.info?.mimetype ?? blob.type)))
         );
     };
 
@@ -107,7 +108,9 @@ export class MediaEventHelper implements IDestroyable {
             fetch(thumbnailHttp)
                 .then((r) => r.blob())
                 // Set the mime type from the event info on the blob
-                .then((blob) => blob.slice(0, blob.size, content.info?.thumbnail_info?.mimetype ?? blob.type))
+                .then((blob) =>
+                    blob.slice(0, blob.size, getBlobSafeMimeType(content.info?.thumbnail_info?.mimetype ?? blob.type)),
+                )
         );
     };
 

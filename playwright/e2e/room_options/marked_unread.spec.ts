@@ -47,12 +47,11 @@ test.describe("Mark as Unread", () => {
         await page.goto("/#/room/" + dummyRoomId);
 
         const roomTile = page.getByLabel(TEST_ROOM_NAME);
-        await roomTile.focus();
-        await roomTile.getByRole("button", { name: "More Options" }).click();
+        await roomTile.click({ button: "right" });
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();
 
-        // focus the user menu to avoid to have hover decoration
-        await page.getByRole("button", { name: "User menu" }).focus();
+        // focus another room to make the notification decoration appear (room options are display on hover)
+        await page.getByRole("option", { name: "Open room Room of no consequence" }).click();
 
         await expect(roomTile.getByTestId("notification-decoration")).toBeVisible();
     });
