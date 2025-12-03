@@ -81,7 +81,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@element-hq/element-web-module-api": "1.7.0",
+        "@element-hq/element-web-module-api": "1.8.0",
         "@element-hq/web-shared-components": "link:packages/shared-components",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "^5",
