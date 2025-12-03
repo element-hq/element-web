@@ -185,6 +185,11 @@ interface IRoomProps extends RoomViewProps {
      * If true, hide the pinned messages banner
      */
     hidePinnedMessageBanner?: boolean;
+
+    /**
+     * If true, hide the widgets
+     */
+    hideWidgets?: boolean;
 }
 
 export { MainSplitContentType };
@@ -897,6 +902,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private shouldShowApps(room: Room): boolean {
         if (!BROWSER_SUPPORTS_SANDBOX || !room) return false;
+        if (this.props.hideWidgets) return false;
 
         // Check if user has previously chosen to hide the app drawer for this
         // room. If so, do not show apps
