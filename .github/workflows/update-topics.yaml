@@ -104,8 +104,8 @@ jobs:
                           if (res.ok) {
                               const resJson = res.json();
                               if (resJson.errcode) {
-                              } else {
                                   core.setFailed(`Error updating ${roomId}: ${resJson.error}`);
+                              } else {
                                   console.log(roomId, "topic updated:", topic);
                               }
                           } else {
