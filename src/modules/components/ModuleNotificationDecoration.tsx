@@ -8,7 +8,7 @@ import React, { useMemo } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
-import { useCall } from "../../hooks/useCall";
+import { useCall, useParticipantCount } from "../../hooks/useCall";
 import { NotificationDecoration } from "../../components/views/rooms/NotificationDecoration";
 
 export interface ModuleNotificationDecorationProps {
@@ -25,5 +25,6 @@ export interface ModuleNotificationDecorationProps {
 export const ModuleNotificationDecoration: React.FC<ModuleNotificationDecorationProps> = ({ room }) => {
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     const call = useCall(room.roomId);
-    return <NotificationDecoration notificationState={notificationState} callType={call?.callType} />;
+    const hasParticipantInCall = useParticipantCount(call) > 0;
+    return <NotificationDecoration notificationState={notificationState} hasVideoCall={hasParticipantInCall} />;
 };
