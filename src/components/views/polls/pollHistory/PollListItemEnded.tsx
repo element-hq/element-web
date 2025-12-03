@@ -41,11 +41,12 @@ const getWinningAnswers = (poll: Poll, responseRelations: Relations): EndedPollS
     return {
         totalVoteCount,
         winningAnswers: poll.pollEvent.answers
-            .filter((answer) => votes.get(answer.id) === winCount)
-            .map((answer) => ({
+            .map((answer, index) => ({ answerIndex: index, answer })) // keep track of original answer index
+            .filter(({answer}) => votes.get(answer.id) === winCount)
+            .map(({answer, answerIndex}) => ({
                 answer,
                 voteCount: votes.get(answer.id) || 0,
-                optionNumber: poll.pollEvent.answers.findIndex((a) => a.id === answer.id) + 1,
+                optionNumber: answerIndex + 1,
             })),
     };
 };
