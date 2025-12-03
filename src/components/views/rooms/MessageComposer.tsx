@@ -20,6 +20,7 @@ import { type Optional } from "matrix-events-sdk";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LockOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { HistoryVisibleBannerView } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -55,7 +56,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
-import { HistoryVisibleBanner } from "../composer/HistoryVisibleBanner";
+import { HistoryVisibleBannerViewModel } from "../../../viewmodels/composer/HistoryVisibleBannerViewModel";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -667,7 +668,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
                 <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
-                    <HistoryVisibleBanner room={this.props.room} />
+                    <HistoryVisibleBannerView vm={new HistoryVisibleBannerViewModel({ room: this.props.room })} />
                     <div className="mx_MessageComposer_wrapper">
                         <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                         <ReplyPreview
