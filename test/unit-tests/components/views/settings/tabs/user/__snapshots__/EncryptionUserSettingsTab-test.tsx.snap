@@ -125,7 +125,7 @@ exports[`<EncryptionUserSettingsTab /> should display the identity needs reset p
         </div>
         <div>
           <button
-            class="_button_vczzf_8"
+            class="_button_187yx_8"
             data-kind="primary"
             data-size="sm"
             role="button"
