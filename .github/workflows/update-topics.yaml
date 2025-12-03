@@ -102,9 +102,15 @@ jobs:
                           });
 
                           if (res.ok) {
-                              console.log(roomId, "topic updated:", topic);
+                              const resJson = res.json();
+                              if (resJson.errcode) {
+                              } else {
+                                  core.setFailed(`Error updating ${roomId}: ${resJson.error}`);
+                                  console.log(roomId, "topic updated:", topic);
+                              }
                           } else {
-                              console.log(roomId, await res.text());
+                              const errText = await res.text();
+                              core.setFailed(`Error updating ${roomId}: ${errText}`);
                           }
                       }
 
