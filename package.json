@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.4",
+    "version": "1.12.5",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -70,7 +70,6 @@
     },
     "resolutions": {
         "**/pretty-format/react-is": "19.2.0",
-        "@playwright/test": "1.56.1",
         "@types/react": "19.2.6",
         "@types/react-dom": "19.2.3",
         "oidc-client-ts": "3.4.1",
@@ -82,7 +81,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@element-hq/element-web-module-api": "1.6.0",
+        "@element-hq/element-web-module-api": "1.7.0",
         "@element-hq/web-shared-components": "link:packages/shared-components",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "^5",
@@ -93,8 +92,8 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^10.0.0",
         "@types/png-chunks-extract": "^1.0.2",
-        "@vector-im/compound-design-tokens": "^6.0.0",
-        "@vector-im/compound-web": "^8.1.2",
+        "@vector-im/compound-design-tokens": "6.4.1",
+        "@vector-im/compound-web": "^8.3.1",
         "@vector-im/matrix-wysiwyg": "2.40.0",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
@@ -185,7 +184,7 @@
         "@element-hq/element-call-embedded": "0.16.1",
         "@element-hq/element-web-playwright-common": "^2.0.0",
         "@peculiar/webcrypto": "^1.4.3",
-        "@playwright/test": "^1.50.1",
+        "@playwright/test": "1.57.0",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^4.0.0",
         "@storybook/react-vite": "^10.0.7",

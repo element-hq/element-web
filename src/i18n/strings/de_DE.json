@@ -842,6 +842,7 @@
         "notification_state": "Benachrichtigungsstand ist <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug-Modus für Benachrichtigungen",
         "number_of_users": "Benutzeranzahl",
+        "only_joined_members": "Nur Mitglieder",
         "original_event_source": "Ursprüngliche Rohdaten",
         "room_encrypted": "Chat ist <strong>verschlüsselt ✅</strong>",
         "room_id": "Chat-ID: %(roomId)s",

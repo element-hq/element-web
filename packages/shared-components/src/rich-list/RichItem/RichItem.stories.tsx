@@ -8,8 +8,8 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import { RichItem } from "./RichItem";
 import type { Meta, StoryFn } from "@storybook/react-vite";
+import { RichItem } from "./RichItem";
 
 const currentTimestamp = new Date("2025-03-09T12:00:00Z").getTime();
 

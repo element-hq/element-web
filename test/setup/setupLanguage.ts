@@ -7,10 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "fetch-mock-jest";
+import { ModuleLoader } from "@element-hq/element-web-module-api";
 
 import * as languageHandler from "../../src/languageHandler";
 import en from "../../src/i18n/strings/en_EN.json";
 import de from "../../src/i18n/strings/de_DE.json";
+import { ModuleApi } from "../../src/modules/Api";
 
 const lv = {
     Save: "Saglabāt",
@@ -43,3 +45,7 @@ setupLanguageMock();
 
 languageHandler.setLanguage("en");
 languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+
+// Set up the mdule API (so the i18n API exists)
+const moduleLoader = new ModuleLoader(ModuleApi.instance);
+window.mxModuleLoader = moduleLoader;

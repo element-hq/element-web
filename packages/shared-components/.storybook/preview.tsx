@@ -6,6 +6,7 @@ import React, { useLayoutEffect } from "react";
 import { setLanguage } from "../src/utils/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { StoryContext } from "storybook/internal/csf";
+import { I18nApi, I18nContext } from "../src";
 
 export const globalTypes = {
     theme: {
@@ -70,9 +71,17 @@ const withTooltipProvider: Decorator = (Story) => {
     );
 };
 
+const withI18nProvider: Decorator = (Story) => {
+    return (
+        <I18nContext.Provider value={new I18nApi()}>
+            <Story />
+        </I18nContext.Provider>
+    );
+};
+
 const preview: Preview = {
     tags: ["autodocs"],
-    decorators: [withThemeProvider, withTooltipProvider],
+    decorators: [withThemeProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {
             storySort: {
