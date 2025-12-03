@@ -10,12 +10,13 @@ import {
     type HistoryVisibleBannerViewModel as HistoryVisibleBannerViewModelInterface,
     type HistoryVisibleBannerViewSnapshot,
 } from "@element-hq/web-shared-components";
-import { HistoryVisibility, type Room } from "matrix-js-sdk/src/matrix";
+import { HistoryVisibility, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 
 interface Props {
+    client: MatrixClient;
     room: Room;
     featureEnabled: boolean;
     acknowledged: boolean;
@@ -51,22 +52,38 @@ export class HistoryVisibleBannerViewModel
 
         // Reset the acknowleded flag when the history visibility is set back to joined.
         if (props.historyVisibility === HistoryVisibility.Joined && props.acknowledged) {
-            void SettingsStore.setValue(
-                "acknowledgedHistoryVisibility",
-                props.room.roomId,
-                SettingLevel.ROOM_ACCOUNT,
-                false,
-            );
+            this.revoke();
         }
     }
 
-    public async onClose(): Promise<void> {
-        // Mark banner as acknokwledged.
+    /**
+     * Revoke the banner's acknoledgement status.
+     */
+    private async revoke(): Promise<void> {
+        await SettingsStore.setValue(
+            "acknowledgedHistoryVisibility",
+            this.props.room.roomId,
+            SettingLevel.ROOM_ACCOUNT,
+            false,
+        );
+    }
+
+    /**
+     * Mark the banner as acknowledged.
+     */
+    private async acknowledge(): Promise<void> {
         await SettingsStore.setValue(
             "acknowledgedHistoryVisibility",
             this.props.room.roomId,
             SettingLevel.ROOM_ACCOUNT,
             true,
         );
+    }
+
+    /**
+     * Called when the user dismisses the banner.
+     */
+    public async onClose(): Promise<void> {
+        await this.acknowledge();
     }
 }

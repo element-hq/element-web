@@ -17,7 +17,7 @@ export interface HistoryVisibleBannerProps {
     room: Room;
 }
 
-export function HistoryVisibleBanner({ room }: HistoryVisibleBannerProps): JSX.Element {
+export function HistoryVisibleBanner({ room }: Readonly<HistoryVisibleBannerProps>): JSX.Element {
     const featureEnabled = useSettingValue("feature_share_history_on_invite");
     const acknowledged = useSettingValue("acknowledgedHistoryVisibility", room.roomId);
 

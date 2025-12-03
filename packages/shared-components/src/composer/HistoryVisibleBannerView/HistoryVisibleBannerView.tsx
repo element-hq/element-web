@@ -55,11 +55,7 @@ export function HistoryVisibleBannerView({ vm }: Readonly<HistoryVisibleBannerVi
         "room|status_bar|history_visible",
         {},
         {
-            a: (sub: string) => (
-                <Link href="https://element.io/en/help#e2ee-history-sharing" target="_blank">
-                    {sub}
-                </Link>
-            ),
+            a: substituteATag,
         },
     );
 
@@ -71,5 +67,13 @@ export function HistoryVisibleBannerView({ vm }: Readonly<HistoryVisibleBannerVi
                 </Banner>
             )}
         </>
+    );
+}
+
+function substituteATag(sub: string): JSX.Element {
+    return (
+        <Link href="https://element.io/en/help#e2ee-history-sharing" target="_blank">
+            {sub}
+        </Link>
     );
 }
