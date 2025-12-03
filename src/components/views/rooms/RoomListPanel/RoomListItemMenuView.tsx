@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type ComponentProps, type JSX, type Ref, useState } from "react";
-import { IconButton, Menu, MenuItem, Separator, ToggleMenuItem, Tooltip } from "@vector-im/compound-web";
+import React, { type JSX, useState } from "react";
+import { IconButton, Menu, MenuItem, Separator, ToggleMenuItem } from "@vector-im/compound-web";
 import MarkAsReadIcon from "@vector-im/compound-design-tokens/assets/web/icons/mark-as-read";
 import MarkAsUnreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/mark-as-unread";
 import FavouriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite";
@@ -20,6 +20,7 @@ import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/ic
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { Flex } from "@element-hq/web-shared-components";
+import classNames from "classnames";
 
 import { _t } from "../../../../languageHandler";
 import {
@@ -30,25 +31,26 @@ import { RoomNotifState } from "../../../../RoomNotifs";
 
 interface RoomListItemMenuViewProps {
     /**
+     * Additional class name for the root element.
+     */
+    className?: string;
+
+    /**
      * The room to display the menu for.
      */
     room: Room;
-    /**
-     * Set the menu open state.
-     */
-    setMenuOpen: (isOpen: boolean) => void;
 }
 
 /**
  * A view for the room list item menu.
  */
-export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuViewProps): JSX.Element {
+export function RoomListItemMenuView({ room, className }: RoomListItemMenuViewProps): JSX.Element {
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
-        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
-            {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
-            {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
+        <Flex className={classNames("mx_RoomListItemMenuView", className)} align="center" gap="var(--cpd-space-1x)">
+            {vm.showMoreOptionsMenu && <MoreOptionsMenu vm={vm} />}
+            {vm.showNotificationMenu && <NotificationMenu vm={vm} />}
         </Flex>
     );
 }
@@ -58,30 +60,30 @@ interface MoreOptionsMenuProps {
      * The view model state for the menu.
      */
     vm: RoomListItemMenuViewState;
-    /**
-     * Set the menu open state.
-     * @param isOpen
-     */
-    setMenuOpen: (isOpen: boolean) => void;
 }
 
 /**
  * The more options menu for the room list item.
  */
-function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element {
+function MoreOptionsMenu({ vm }: MoreOptionsMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
 
     return (
         <Menu
             open={open}
-            onOpenChange={(isOpen) => {
-                setOpen(isOpen);
-                setMenuOpen(isOpen);
-            }}
+            onOpenChange={setOpen}
             title={_t("room_list|room|more_options")}
             showTitle={false}
             align="start"
-            trigger={<MoreOptionsButton size="24px" />}
+            trigger={
+                <IconButton
+                    tooltip={_t("room_list|room|more_options")}
+                    aria-label={_t("room_list|room|more_options")}
+                    size="24px"
+                >
+                    <OverflowIcon />
+                </IconButton>
+            }
         >
             <MoreOptionContent vm={vm} />
         </Menu>
@@ -164,55 +166,37 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     );
 }
 
-interface MoreOptionsButtonProps extends ComponentProps<typeof IconButton> {
-    ref?: Ref<HTMLButtonElement>;
-}
-
-/**
- * A button to trigger the more options menu.
- */
-const MoreOptionsButton = function MoreOptionsButton(props: MoreOptionsButtonProps): JSX.Element {
-    return (
-        <Tooltip label={_t("room_list|room|more_options")}>
-            <IconButton aria-label={_t("room_list|room|more_options")} {...props}>
-                <OverflowIcon />
-            </IconButton>
-        </Tooltip>
-    );
-};
-
 interface NotificationMenuProps {
     /**
      * The view model state for the menu.
      */
     vm: RoomListItemMenuViewState;
-    /**
-     * Set the menu open state.
-     * @param isOpen
-     */
-    setMenuOpen: (isOpen: boolean) => void;
 }
 
-function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Element {
+function NotificationMenu({ vm }: NotificationMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
-
     const checkComponent = <CheckIcon width="24px" height="24px" color="var(--cpd-color-icon-primary)" />;
 
     return (
-        <div
-            // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
-            onKeyDown={(e) => e.stopPropagation()}
+        <Menu
+            open={open}
+            onOpenChange={setOpen}
+            title={_t("room_list|notification_options")}
+            showTitle={false}
+            align="start"
+            trigger={
+                <IconButton
+                    size="24px"
+                    tooltip={_t("room_list|notification_options")}
+                    aria-label={_t("room_list|notification_options")}
+                >
+                    {vm.isNotificationMute ? <NotificationOffIcon /> : <NotificationIcon />}
+                </IconButton>
+            }
         >
-            <Menu
-                open={open}
-                onOpenChange={(isOpen) => {
-                    setOpen(isOpen);
-                    setMenuOpen(isOpen);
-                }}
-                title={_t("room_list|notification_options")}
-                showTitle={false}
-                align="start"
-                trigger={<NotificationButton isRoomMuted={vm.isNotificationMute} size="24px" />}
+            <div
+                // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
+                onKeyDown={(e) => e.stopPropagation()}
             >
                 <MenuItem
                     aria-selected={vm.isNotificationAllMessage}
@@ -250,32 +234,7 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
                 >
                     {vm.isNotificationMute && checkComponent}
                 </MenuItem>
-            </Menu>
-        </div>
+            </div>
+        </Menu>
     );
 }
-
-interface NotificationButtonProps extends ComponentProps<typeof IconButton> {
-    /**
-     * Whether the room is muted.
-     */
-    isRoomMuted: boolean;
-    ref?: Ref<HTMLButtonElement>;
-}
-
-/**
- * A button to trigger the notification menu.
- */
-const NotificationButton = function MoreOptionsButton({
-    isRoomMuted,
-    ref,
-    ...props
-}: NotificationButtonProps): JSX.Element {
-    return (
-        <Tooltip label={_t("room_list|notification_options")}>
-            <IconButton aria-label={_t("room_list|notification_options")} {...props} ref={ref}>
-                {isRoomMuted ? <NotificationOffIcon /> : <NotificationIcon />}
-            </IconButton>
-        </Tooltip>
-    );
-};
