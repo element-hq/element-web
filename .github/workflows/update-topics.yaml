@@ -72,7 +72,8 @@ jobs:
                           console.log(roomId, "got event", data);
 
                           if (!regex.test(data.topic)) {
-                              core.setFailed("Topic format is incorrect for room " + roomId)
+                              core.setFailed("Topic format is incorrect for room " + roomId);
+                              return;
                           }
 
                           const topic = data.topic.replace(regex, releaseTopic);
