@@ -7,7 +7,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import dispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -20,7 +19,7 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useEventEmitter, useEventEmitterState, useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useCall, useConnectionState, useParticipantCount } from "../../../hooks/useCall";
-import { CallEvent, type ConnectionState } from "../../../models/Call";
+import { type ConnectionState } from "../../../models/Call";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
@@ -68,10 +67,6 @@ export interface RoomListItemViewState {
      * Whether there are participants in the call.
      */
     hasParticipantInCall: boolean;
-    /**
-     * Whether the call is a voice or video call.
-     */
-    callType: CallType | undefined;
     /**
      * Pre-rendered and translated preview for the latest message in the room, or undefined
      * if no preview should be shown.
@@ -128,10 +123,10 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     // EC video call or video room
     const call = useCall(room.roomId);
     const connectionState = useConnectionState(call);
-    const participantCount = useParticipantCount(call);
+    const hasParticipantInCall = useParticipantCount(call) > 0;
     const callConnectionState = call ? connectionState : null;
 
-    const showNotificationDecoration = hasVisibleNotification || participantCount > 0;
+    const showNotificationDecoration = hasVisibleNotification || hasParticipantInCall;
 
     // Actions
 
@@ -143,9 +138,6 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         });
     }, [room]);
 
-    const [callType, setCallType] = useState<CallType>(CallType.Video);
-    useTypedEventEmitter(call ?? undefined, CallEvent.CallTypeChanged, setCallType);
-
     return {
         name,
         notificationState,
@@ -156,10 +148,9 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         isBold,
         isVideoRoom,
         callConnectionState,
-        hasParticipantInCall: participantCount > 0,
+        hasParticipantInCall,
         messagePreview,
         showNotificationDecoration,
-        callType: call ? callType : undefined,
     };
 }
 

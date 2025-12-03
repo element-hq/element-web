@@ -188,7 +188,6 @@ describe("IncomingCallToast", () => {
                 room_id: room.roomId,
                 skipLobby: true,
                 view_call: true,
-                voiceOnly: false,
             }),
         );
         await waitFor(() =>
@@ -216,7 +215,6 @@ describe("IncomingCallToast", () => {
                 room_id: room.roomId,
                 skipLobby: false,
                 view_call: true,
-                voiceOnly: false,
             }),
         );
         await waitFor(() =>
@@ -241,7 +239,6 @@ describe("IncomingCallToast", () => {
                 room_id: room.roomId,
                 skipLobby: true,
                 view_call: true,
-                voiceOnly: false,
             }),
         );
         await waitFor(() =>

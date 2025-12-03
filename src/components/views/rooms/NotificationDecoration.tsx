@@ -12,8 +12,6 @@ import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/ic
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
-import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { Flex } from "@element-hq/web-shared-components";
 
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
@@ -26,9 +24,9 @@ interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
      */
     notificationState: RoomNotificationState;
     /**
-     * Whether the room has a voice or video call.
+     * Whether the room has a video call.
      */
-    callType?: CallType;
+    hasVideoCall: boolean;
 }
 
 /**
@@ -36,7 +34,7 @@ interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
  */
 export function NotificationDecoration({
     notificationState,
-    callType,
+    hasVideoCall,
     ...props
 }: NotificationDecorationProps): JSX.Element | null {
     // Listen to the notification state and update the component when it changes
@@ -60,7 +58,7 @@ export function NotificationDecoration({
         muted: notificationState.muted,
     }));
 
-    if (!hasAnyNotificationOrActivity && !muted && !callType) return null;
+    if (!hasAnyNotificationOrActivity && !muted && !hasVideoCall) return null;
 
     return (
         <Flex
@@ -71,12 +69,7 @@ export function NotificationDecoration({
             data-testid="notification-decoration"
         >
             {isUnsentMessage && <ErrorIcon width="20px" height="20px" fill="var(--cpd-color-icon-critical-primary)" />}
-            {callType === CallType.Video && (
-                <VideoCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
-            )}
-            {callType === CallType.Voice && (
-                <VoiceCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
-            )}
+            {hasVideoCall && <VideoCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {invited && <EmailIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {isMention && <MentionIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {(isMention || isNotification) && <UnreadCounter count={count || null} />}

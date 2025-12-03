@@ -7,7 +7,6 @@
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { NotificationDecoration } from "../../../../../src/components/views/rooms/NotificationDecoration";
@@ -23,7 +22,7 @@ describe("<NotificationDecoration />", () => {
 
     it("should not render if RoomNotificationState.hasAnyNotificationOrActivity=true", () => {
         jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(false);
-        render(<NotificationDecoration notificationState={roomNotificationState} callType={undefined} />);
+        render(<NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />);
         expect(screen.queryByTestId("notification-decoration")).toBeNull();
     });
 
@@ -31,7 +30,7 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "isUnsentMessage", "get").mockReturnValue(true);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -40,7 +39,7 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "invited", "get").mockReturnValue(true);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -50,7 +49,7 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "isMention", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "count", "get").mockReturnValue(1);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -60,7 +59,7 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "isNotification", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "count", "get").mockReturnValue(1);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -70,7 +69,7 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "isNotification", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "count", "get").mockReturnValue(0);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -79,7 +78,7 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "isActivityNotification", "get").mockReturnValue(true);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -88,21 +87,14 @@ describe("<NotificationDecoration />", () => {
         jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
         jest.spyOn(roomNotificationState, "muted", "get").mockReturnValue(true);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={undefined} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={false} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
-    it("should render the video call decoration", () => {
+    it("should render the video decoration", () => {
         jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(false);
         const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={CallType.Video} />,
-        );
-        expect(asFragment()).toMatchSnapshot();
-    });
-    it("should render the audio call decoration", () => {
-        jest.spyOn(roomNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(false);
-        const { asFragment } = render(
-            <NotificationDecoration notificationState={roomNotificationState} callType={CallType.Voice} />,
+            <NotificationDecoration notificationState={roomNotificationState} hasVideoCall={true} />,
         );
         expect(asFragment()).toMatchSnapshot();
     });
