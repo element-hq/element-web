@@ -92,7 +92,7 @@ function RoomHeaderButtons({
 
     const voiceClick = useCallback(
         (ev: React.MouseEvent) => voiceCallClick(ev, callOptions[0]),
-        [callOptions, videoCallClick],
+        [callOptions, voiceCallClick],
     );
 
     const toggleCallButton = (
