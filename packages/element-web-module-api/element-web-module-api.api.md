@@ -361,6 +361,7 @@ export interface RoomViewProps {
     hideHeader?: boolean;
     hidePinnedMessageBanner?: boolean;
     hideRightPanel?: boolean;
+    hideWidgets?: boolean;
 }
 
 // @alpha @deprecated (undocumented)

@@ -26,6 +26,10 @@ export interface RoomViewProps {
      * If true, the pinned message banner will be hidden.
      */
     hidePinnedMessageBanner?: boolean;
+    /**
+     * If true, the widgets will be hidden.
+     */
+    hideWidgets?: boolean;
 }
 
 /**
