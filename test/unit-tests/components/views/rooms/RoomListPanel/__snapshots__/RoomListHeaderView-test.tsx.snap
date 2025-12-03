@@ -32,7 +32,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -74,7 +74,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -111,7 +111,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -172,7 +172,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -214,7 +214,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -245,7 +245,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           tabindex="0"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -306,7 +306,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -348,7 +348,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -385,7 +385,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -446,7 +446,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -488,7 +488,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -525,7 +525,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -596,7 +596,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -633,7 +633,7 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg

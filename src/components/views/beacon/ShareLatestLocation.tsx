@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useState } from "react";
 import { type ContentHelpers } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import { PopOutIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as ExternalLinkIcon } from "../../../../res/img/external-link.svg";
 import { _t } from "../../../languageHandler";
 import { makeMapSiteLink, parseGeoUri } from "../../../utils/location";
 import CopyableText from "../elements/CopyableText";
@@ -40,7 +40,7 @@ const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
         <>
             <Tooltip label={_t("timeline|context_menu|open_in_osm")}>
                 <a data-testid="open-location-in-osm" href={mapLink} target="_blank" rel="noreferrer noopener">
-                    <ExternalLinkIcon className="mx_ShareLatestLocation_icon" />
+                    <PopOutIcon className="mx_ShareLatestLocation_icon" />
                 </a>
             </Tooltip>
             <CopyableText className="mx_ShareLatestLocation_copy" border={false} getTextToCopy={() => latLonString} />

@@ -14,7 +14,7 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
       tabindex="0"
     >
       <div
-        class="_indicator-icon_zr2a0_17"
+        class="_indicator-icon_147l5_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <div
@@ -53,7 +53,7 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
       tabindex="0"
     >
       <div
-        class="_indicator-icon_zr2a0_17"
+        class="_indicator-icon_147l5_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <div

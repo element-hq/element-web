@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type FC, type RefObject, useCallback, useMemo } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import BackIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-left";
+import { ArrowLeftIcon, EndCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PersistentApp from "../elements/PersistentApp";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -20,7 +20,6 @@ import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayo
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import Toolbar from "../../../accessibility/Toolbar";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
-import { Icon as HangupIcon } from "../../../../res/img/element-icons/call/hangup.svg";
 import { _t } from "../../../languageHandler";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
@@ -112,7 +111,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                             className="mx_WidgetPip_backButton"
                             aria-label={_t("action|back")}
                         >
-                            <BackIcon className="mx_Icon mx_Icon_16" />
+                            <ArrowLeftIcon className="mx_Icon mx_Icon_16" />
                             {roomName}
                         </RovingAccessibleButton>
                     </Toolbar>
@@ -124,7 +123,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                                 aria-label={_t("action|leave")}
                                 placement="top"
                             >
-                                <HangupIcon className="mx_Icon mx_Icon_24" />
+                                <EndCallIcon className="mx_Icon mx_Icon_24" />
                             </RovingAccessibleButton>
                         </Toolbar>
                     )}

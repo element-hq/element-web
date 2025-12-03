@@ -10,17 +10,33 @@ import React, { type ReactElement } from "react";
 // eslint-disable-next-line no-restricted-imports
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { I18nContext } from "@element-hq/web-shared-components";
 
-const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
+/**
+ * Wraps the provided components in:
+ *  * A TooltipProvider
+ *  * An I18nContext.Provider
+ *
+ * ...plus any wrapper provided in the options.
+ * @param Wrapper Additional wrapper to include
+ * @returns The wrapped component
+ */
+const wrapWithStandardContexts = (Wrapper: RenderOptions["wrapper"]) => {
     return ({ children }: { children: React.ReactNode }) => {
         if (Wrapper) {
             return (
                 <Wrapper>
-                    <TooltipProvider>{children}</TooltipProvider>
+                    <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                        <TooltipProvider>{children}</TooltipProvider>
+                    </I18nContext.Provider>
                 </Wrapper>
             );
         } else {
-            return <TooltipProvider>{children}</TooltipProvider>;
+            return (
+                <TooltipProvider>
+                    <I18nContext.Provider value={window.mxModuleApi.i18n}>{children}</I18nContext.Provider>
+                </TooltipProvider>
+            );
         }
     };
 };
@@ -28,7 +44,7 @@ const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {
 const customRender = (ui: ReactElement, options: RenderOptions = {}) => {
     return render(ui, {
         ...options,
-        wrapper: wrapWithTooltipProvider(options?.wrapper) as RenderOptions["wrapper"],
+        wrapper: wrapWithStandardContexts(options?.wrapper) as RenderOptions["wrapper"],
     }) as ReturnType<typeof render>;
 };
 

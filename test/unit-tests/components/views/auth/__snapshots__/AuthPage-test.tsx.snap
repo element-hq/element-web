@@ -16,7 +16,7 @@ exports[`<AuthPage /> should match snapshot 1`] = `
       <main
         aria-live="polite"
         class="mx_AuthPage_modalContent"
-        style="display: flex; z-index: 1; border-radius: 8px; background: rgba(255, 255, 255, 0.59);"
+        style="display: flex; z-index: 1; border-radius: inherit;"
         tabindex="-1"
       />
     </div>
