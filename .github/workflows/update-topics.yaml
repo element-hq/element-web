@@ -82,12 +82,12 @@ jobs:
                               return;
                           }
                           if (data["org.matrix.msc3765.topic"]) {
-                              data["org.matrix.msc3765.topic"].forEach(d => {
+                              data["org.matrix.msc3765.topic"]?.["m.text"].forEach(d => {
                                   d.body = d.body.replace(regex, releaseTopic);
                               });
                           }
                           if (data["m.topic"]) {
-                              data["m.topic"].forEach(d => {
+                              data["m.topic"]?.["m.text"].forEach(d => {
                                   d.body = d.body.replace(regex, releaseTopic);
                               });
                           }
