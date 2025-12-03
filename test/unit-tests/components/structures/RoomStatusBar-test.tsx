@@ -35,7 +35,6 @@ describe("RoomStatusBar", () => {
         stubClient();
         client = MatrixClientPeg.safeGet();
         client.getSyncStateData = jest.fn().mockReturnValue({});
-        client.setRoomAccountData = jest.fn().mockResolvedValue({});
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });

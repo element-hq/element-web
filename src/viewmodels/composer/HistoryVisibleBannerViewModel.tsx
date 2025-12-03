@@ -42,7 +42,7 @@ export class HistoryVisibleBannerViewModel
     public constructor(props: Props) {
         super(props, HistoryVisibleBannerViewModel.computeSnapshot(props.room));
 
-        this.disposables.trackListener(props.room, RoomStateEvent.Update, this.setSnapshot);
+        this.disposables.trackListener(props.room, RoomStateEvent.Update, () => this.setSnapshot());
 
         // `SettingsStore` is not an `EventListener`, so we must manage these manually.
         this.featureWatcher = SettingsStore.watchSetting(
@@ -61,7 +61,7 @@ export class HistoryVisibleBannerViewModel
         const acknowledged = SettingsStore.getValue("acknowledgedHistoryVisibility", this.props.room.roomId);
 
         // Reset the acknowleded flag when the history visibility is set back to joined.
-        if (this.props.room.getHistoryVisibility() === HistoryVisibility.Joined && !acknowledged) {
+        if (this.props.room.getHistoryVisibility() === HistoryVisibility.Joined && acknowledged) {
             SettingsStore.setValue(
                 "acknowledgedHistoryVisibility",
                 this.props.room.roomId,
