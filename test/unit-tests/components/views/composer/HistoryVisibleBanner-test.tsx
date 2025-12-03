@@ -9,13 +9,13 @@ import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
-import { HistoryVisibleBanner } from "../../../../../../src/components/views/rooms/banners/HistoryVisibleBanner";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
-import { type Settings } from "../../../../../../src/settings/Settings";
-import SettingsStore, { type CallbackFn } from "../../../../../../src/settings/SettingsStore";
-import { mkEvent, stubClient, upsertRoomStateEvents } from "../../../../../test-utils";
+import { HistoryVisibleBanner } from "../../../../../src/components/views/composer/HistoryVisibleBanner";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import { type Settings } from "../../../../../src/settings/Settings";
+import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
+import { mkEvent, stubClient, upsertRoomStateEvents } from "../../../../test-utils";
 
 describe("<HistoryVisibleBanner />", () => {
     const watcherCallbacks: CallbackFn[] = [];
