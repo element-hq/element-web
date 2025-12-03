@@ -62,7 +62,12 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
 
         if (this.state.showAdvanced) {
             advanced = (
-                <>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
                     <SettingsFlag name="useCompactLayout" level={SettingLevel.DEVICE} />
 
                     <SettingsFlag
@@ -88,7 +93,7 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
                         disabled={!this.state.useSystemFont}
                         value={this.state.systemFont}
                     />
-                </>
+                </Form.Root>
             );
         }
         return (
@@ -103,18 +108,11 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
                 <SettingsSection>
-                    <Form.Root
-                        onSubmit={(evt) => {
-                            evt.preventDefault();
-                            evt.stopPropagation();
-                        }}
-                    >
-                        <ThemeChoicePanel />
-                        <LayoutSwitcher />
-                        <FontScalingPanel />
-                        {this.renderAdvancedSection()}
-                        <ImageSizePanel />
-                    </Form.Root>
+                    <ThemeChoicePanel />
+                    <LayoutSwitcher />
+                    <FontScalingPanel />
+                    {this.renderAdvancedSection()}
+                    <ImageSizePanel />
                 </SettingsSection>
             </SettingsTab>
         );
