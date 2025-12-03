@@ -1,6 +1,6 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "0.0.0-test.10",
+    "version": "0.0.0-test.11",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
@@ -49,6 +49,7 @@
         "playwright": "1.57.0"
     },
     "dependencies": {
+        "@element-hq/element-web-module-api": "^1.8.0",
         "@vector-im/compound-design-tokens": "^6.3.0",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
@@ -59,7 +60,6 @@
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-module-api": "^1.8.0",
         "@element-hq/element-web-playwright-common": "^2.0.0",
         "@playwright/test": "1.57.0",
         "@storybook/addon-a11y": "^10.0.7",
