@@ -42,8 +42,8 @@ const getWinningAnswers = (poll: Poll, responseRelations: Relations): EndedPollS
         totalVoteCount,
         winningAnswers: poll.pollEvent.answers
             .map((answer, index) => ({ answerIndex: index, answer })) // keep track of original answer index
-            .filter(({answer}) => votes.get(answer.id) === winCount)
-            .map(({answer, answerIndex}) => ({
+            .filter(({ answer }) => votes.get(answer.id) === winCount)
+            .map(({ answer, answerIndex }) => ({
                 answer,
                 voteCount: votes.get(answer.id) || 0,
                 optionNumber: answerIndex + 1,

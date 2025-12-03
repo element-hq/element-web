@@ -205,9 +205,6 @@ describe("<PollListItemEnded />", () => {
 
         // The optionNumber is maintained correctly
         const radioInput = pollOption.querySelector('input[type="radio"]');
-        expect(radioInput).toHaveAttribute(
-            "aria-label",
-            expect.stringContaining("Option 3, Toyota Supra MK4"),
-        );
+        expect(radioInput).toHaveAttribute("aria-label", expect.stringContaining("Option 3, Toyota Supra MK4"));
     });
 });
