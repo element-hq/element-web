@@ -66,8 +66,20 @@ const ALLOWED_BLOB_MIMETYPES = [
     "audio/x-flac",
 ];
 
+/**
+ * Checks whether the given mime type is in the allowed mimetype list
+ * @param mimetype - the mimetype to check
+ */
+export function isMimeTypeAllowed(mimetype: string): boolean {
+    return ALLOWED_BLOB_MIMETYPES.includes(mimetype);
+}
+
+/**
+ * Returns the input mimetype if it is allowed, `application/octet-stream` otherwise
+ * @param mimetype - the mimetype to check
+ */
 export function getBlobSafeMimeType(mimetype: string): string {
-    if (!ALLOWED_BLOB_MIMETYPES.includes(mimetype)) {
+    if (!isMimeTypeAllowed(mimetype)) {
         return "application/octet-stream";
     }
     return mimetype;

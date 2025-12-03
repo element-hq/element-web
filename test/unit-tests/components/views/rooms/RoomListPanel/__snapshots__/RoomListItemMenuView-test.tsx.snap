@@ -22,7 +22,7 @@ exports[`<RoomListItemMenuView /> should render the more options menu 1`] = `
       type="button"
     >
       <div
-        class="_indicator-icon_zr2a0_17"
+        class="_indicator-icon_147l5_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
@@ -55,7 +55,7 @@ exports[`<RoomListItemMenuView /> should render the more options menu 1`] = `
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -101,7 +101,7 @@ exports[`<RoomListItemMenuView /> should render the notification options menu 1`
       type="button"
     >
       <div
-        class="_indicator-icon_zr2a0_17"
+        class="_indicator-icon_147l5_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
@@ -134,7 +134,7 @@ exports[`<RoomListItemMenuView /> should render the notification options menu 1`
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg

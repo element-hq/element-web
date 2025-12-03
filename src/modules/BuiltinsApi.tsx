@@ -10,6 +10,7 @@ import { type RoomViewProps, type BuiltinsApi } from "@element-hq/element-web-mo
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import type { Room } from "matrix-js-sdk/src/matrix";
+import type { ModuleNotificationDecorationProps } from "./components/ModuleNotificationDecoration";
 
 interface RoomViewPropsWithRoomId extends RoomViewProps {
     /**
@@ -26,11 +27,14 @@ interface RoomAvatarProps {
 interface Components {
     roomView: React.ComponentType<RoomViewPropsWithRoomId>;
     roomAvatar: React.ComponentType<RoomAvatarProps>;
+    notificationDecoration: React.ComponentType<ModuleNotificationDecorationProps>;
 }
 
 export class ElementWebBuiltinsApi implements BuiltinsApi {
     private _roomView?: Components["roomView"];
     private _roomAvatar?: Components["roomAvatar"];
+    private _notificationDecoration?: Components["notificationDecoration"];
+
     /**
      * Sets the components used by the API.
      *
@@ -43,13 +47,13 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
     public setComponents(components: Components): void {
         this._roomView = components.roomView;
         this._roomAvatar = components.roomAvatar;
+        this._notificationDecoration = components.notificationDecoration;
     }
 
     public getRoomViewComponent(): React.ComponentType<RoomViewPropsWithRoomId> {
         if (!this._roomView) {
             throw new Error("No RoomView component has been set");
         }
-
         return this._roomView;
     }
 
@@ -57,8 +61,14 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
         if (!this._roomAvatar) {
             throw new Error("No RoomAvatar component has been set");
         }
-
         return this._roomAvatar;
+    }
+
+    public getNotificationDecorationComponent(): React.ComponentType<ModuleNotificationDecorationProps> {
+        if (!this._notificationDecoration) {
+            throw new Error("No NotificationDecoration component has been set");
+        }
+        return this._notificationDecoration;
     }
 
     public renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode {
@@ -73,5 +83,14 @@ export class ElementWebBuiltinsApi implements BuiltinsApi {
         }
         const Component = this.getRoomAvatarComponent();
         return <Component room={room} size={size} />;
+    }
+
+    public renderNotificationDecoration(roomId: string): React.ReactNode {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) {
+            throw new Error(`No room such room: ${roomId}`);
+        }
+        const Component = this.getNotificationDecorationComponent();
+        return <Component room={room} />;
     }
 }

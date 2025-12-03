@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved, within } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
@@ -70,6 +70,7 @@ describe("<MImageBody/>", () => {
             info: {
                 w: 40,
                 h: 50,
+                mimetype: "image/png",
             },
             file: {
                 url: "mxc://server/encrypted-image",
@@ -303,5 +304,77 @@ describe("<MImageBody/>", () => {
         await userEvent.hover(img);
 
         expect(container.querySelector(".mx_MImageBody_banner")).toHaveTextContent("...alt for a test image");
+    });
+
+    it("should render MFileBody for svg with no thumbnail", async () => {
+        const event = new MatrixEvent({
+            room_id: "!room:server",
+            sender: senderUserId,
+            type: EventType.RoomMessage,
+            content: {
+                info: {
+                    w: 40,
+                    h: 50,
+                    mimetype: "image/svg+xml",
+                },
+                file: {
+                    url: "mxc://server/encrypted-svg",
+                },
+            },
+        });
+
+        const { container, asFragment } = render(
+            <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+            withClientContextRenderOptions(cli),
+        );
+
+        expect(container.querySelector(".mx_MFileBody")).toHaveTextContent("Attachment");
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should open ImageView using thumbnail for encrypted svg", async () => {
+        const url = "https://server/_matrix/media/v3/download/server/encrypted-svg";
+        fetchMock.getOnce(url, { status: 200 });
+        const thumbUrl = "https://server/_matrix/media/v3/download/server/svg-thumbnail";
+        fetchMock.getOnce(thumbUrl, { status: 200 });
+
+        const event = new MatrixEvent({
+            room_id: "!room:server",
+            sender: senderUserId,
+            type: EventType.RoomMessage,
+            origin_server_ts: 1234567890,
+            content: {
+                info: {
+                    w: 40,
+                    h: 50,
+                    mimetype: "image/svg+xml",
+                    thumbnail_file: {
+                        url: "mxc://server/svg-thumbnail",
+                    },
+                    thumbnail_info: { mimetype: "image/png" },
+                },
+                file: {
+                    url: "mxc://server/encrypted-svg",
+                },
+            },
+        });
+
+        const mediaEventHelper = new MediaEventHelper(event);
+        mediaEventHelper.thumbnailUrl["prom"] = Promise.resolve(thumbUrl);
+        mediaEventHelper.sourceUrl["prom"] = Promise.resolve(url);
+
+        const { findByRole } = render(
+            <MImageBody {...props} mxEvent={event} mediaEventHelper={mediaEventHelper} />,
+            withClientContextRenderOptions(cli),
+        );
+
+        fireEvent.click(await findByRole("link"));
+
+        const dialog = await screen.findByRole("dialog");
+        await expect(within(dialog).findByRole("img")).resolves.toHaveAttribute(
+            "src",
+            "https://server/_matrix/media/v3/download/server/svg-thumbnail",
+        );
+        expect(dialog).toMatchSnapshot();
     });
 });

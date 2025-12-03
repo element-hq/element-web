@@ -4109,6 +4109,7 @@
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
         "voice_call_incoming": "Incoming voice call",
+        "voice_call_using": "Voice call using:",
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",

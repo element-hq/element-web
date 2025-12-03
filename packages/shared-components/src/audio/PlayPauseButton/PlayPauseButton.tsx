@@ -11,7 +11,7 @@ import Play from "@vector-im/compound-design-tokens/assets/web/icons/play-solid"
 import Pause from "@vector-im/compound-design-tokens/assets/web/icons/pause-solid";
 
 import styles from "./PlayPauseButton.module.css";
-import { _t } from "../../utils/i18n";
+import { useI18n } from "../../utils/i18nContext";
 
 export interface PlayPauseButtonProps extends HTMLAttributes<HTMLButtonElement> {
     /**
@@ -46,6 +46,8 @@ export function PlayPauseButton({
     togglePlay,
     ...rest
 }: Readonly<PlayPauseButtonProps>): JSX.Element {
+    const { translate: _t } = useI18n();
+
     const label = playing ? _t("action|pause") : _t("action|play");
 
     return (

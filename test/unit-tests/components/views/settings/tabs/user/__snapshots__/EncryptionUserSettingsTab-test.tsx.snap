@@ -42,7 +42,7 @@ exports[`<EncryptionUserSettingsTab /> should display a verify button when the e
           </div>
         </div>
         <button
-          class="_button_vczzf_8 _has-icon_vczzf_57"
+          class="_button_187yx_8 _has-icon_187yx_57"
           data-kind="primary"
           data-size="sm"
           role="button"
@@ -187,7 +187,7 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
           class="mx_RecoveryPanelOutOfSync"
         >
           <button
-            class="_button_vczzf_8"
+            class="_button_187yx_8"
             data-kind="secondary"
             data-size="sm"
             role="button"
@@ -196,7 +196,7 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
             Forgot recovery key?
           </button>
           <button
-            class="_button_vczzf_8 _has-icon_vczzf_57"
+            class="_button_187yx_8 _has-icon_187yx_57"
             data-kind="primary"
             data-size="sm"
             role="button"
@@ -244,7 +244,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           tabindex="0"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -292,7 +292,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           class="mx_EncryptionCard_header"
         >
           <div
-            class="_content_o77nw_8 _destructive_o77nw_34"
+            class="_content_1r8kr_8 _destructive_1r8kr_34"
             data-size="large"
           >
             <svg
@@ -318,14 +318,14 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <ul
-            class="_visual-list_15wzx_8"
+            class="_visual-list_1mgc1_8"
           >
             <li
-              class="_visual-list-item_1ma3e_8"
+              class="_visual-list-item_1nc1y_8"
             >
               <svg
                 aria-hidden="true"
-                class="_visual-list-item-icon_1ma3e_17 _visual-list-item-icon-success_1ma3e_22"
+                class="_visual-list-item-icon_1nc1y_17 _visual-list-item-icon-success_1nc1y_22"
                 fill="currentColor"
                 height="24px"
                 viewBox="0 0 24 24"
@@ -339,11 +339,11 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
               Your account details, contacts, preferences, and chat list will be kept
             </li>
             <li
-              class="_visual-list-item_1ma3e_8"
+              class="_visual-list-item_1nc1y_8"
             >
               <svg
                 aria-hidden="true"
-                class="_visual-list-item-icon_1ma3e_17"
+                class="_visual-list-item-icon_1nc1y_17"
                 fill="currentColor"
                 height="24px"
                 viewBox="0 0 24 24"
@@ -362,11 +362,11 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
               You will lose any message history that’s stored only on the server
             </li>
             <li
-              class="_visual-list-item_1ma3e_8"
+              class="_visual-list-item_1nc1y_8"
             >
               <svg
                 aria-hidden="true"
-                class="_visual-list-item-icon_1ma3e_17"
+                class="_visual-list-item-icon_1nc1y_17"
                 fill="currentColor"
                 height="24px"
                 viewBox="0 0 24 24"
@@ -394,7 +394,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
         >
           <button
             aria-disabled="false"
-            class="_button_vczzf_8 _destructive_vczzf_107"
+            class="_button_187yx_8 _destructive_187yx_107"
             data-kind="primary"
             data-size="lg"
             role="button"
@@ -403,7 +403,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
             Continue
           </button>
           <button
-            class="_button_vczzf_8"
+            class="_button_187yx_8"
             data-kind="tertiary"
             data-size="lg"
             role="button"
