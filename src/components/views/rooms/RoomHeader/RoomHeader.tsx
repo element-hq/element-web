@@ -231,7 +231,7 @@ function RoomHeaderButtons({
                                     setVoiceMenuOpen(false);
                                     voiceCallClick(ev, option);
                                 }}
-                                Icon={VideoCallIcon}
+                                Icon={VoiceCallIcon}
                                 onSelect={() => {} /* Dummy handler since we want the click event.*/}
                             />
                         );
@@ -239,8 +239,8 @@ function RoomHeaderButtons({
                 </Menu>
             ) : (
                 <IconButton
-                    disabled={!!videoCallDisabledReason}
-                    aria-label={videoCallDisabledReason ?? _t("voip|voice_call")}
+                    disabled={!!voiceCallDisabledReason}
+                    aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
                     onClick={voiceClick}
                 >
                     {voiceCallIconWithTooltip}
@@ -271,7 +271,7 @@ function RoomHeaderButtons({
     }
 
     if (!showVoiceCallButton) {
-        videoCallButton = undefined;
+        voiceCallButton = undefined;
     }
 
     const roomContext = useScopedRoomContext("mainSplitContentType");

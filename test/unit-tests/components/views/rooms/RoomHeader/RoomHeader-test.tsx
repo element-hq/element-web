@@ -458,7 +458,10 @@ describe("RoomHeader", () => {
             } as unknown as Call);
             jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
             render(<RoomHeader room={room} />, getWrapper());
-            expect(screen.getByRole("button", { name: "Ongoing call" })).toHaveAttribute("aria-disabled", "true");
+            // Voice and video
+            for (const button of screen.getAllByRole("button", { name: "Ongoing call" })) {
+                expect(button).toHaveAttribute("aria-disabled", "true");
+            }
         });
 
         it("clicking on ongoing (unpinned) call re-pins it", async () => {
