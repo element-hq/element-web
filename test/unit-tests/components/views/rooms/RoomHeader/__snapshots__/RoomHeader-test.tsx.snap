@@ -9,7 +9,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     <button
       aria-label="Open room settings"
       aria-live="off"
-      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
       data-color="3"
       data-testid="avatar-img"
       data-type="round"
@@ -52,11 +52,11 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       tabindex="0"
     >
       <div
-        class="_indicator-icon_147l5_17"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
-          aria-labelledby="_r_14o_"
+          aria-labelledby="_r_17e_"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -79,11 +79,11 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       tabindex="0"
     >
       <div
-        class="_indicator-icon_147l5_17"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
-          aria-labelledby="_r_14t_"
+          aria-labelledby="_r_17j_"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -98,7 +98,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Threads"
-      aria-labelledby="_r_152_"
+      aria-labelledby="_r_17o_"
       class="_icon-button_1pz9o_8"
       data-kind="primary"
       role="button"
@@ -106,7 +106,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       tabindex="0"
     >
       <div
-        class="_indicator-icon_147l5_17"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
@@ -125,7 +125,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Room info"
-      aria-labelledby="_r_157_"
+      aria-labelledby="_r_17t_"
       class="_icon-button_1pz9o_8"
       data-kind="primary"
       role="button"
@@ -133,7 +133,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       tabindex="0"
     >
       <div
-        class="_indicator-icon_147l5_17"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
