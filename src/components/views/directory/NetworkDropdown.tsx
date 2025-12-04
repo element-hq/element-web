@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { without } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -190,7 +191,9 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                           className="mx_NetworkDropdown_removeServer"
                           title={_t("spotlight|public_rooms|network_dropdown_remove_server_adornment", { roomServer })}
                           onClick={() => setUserDefinedServers(without(userDefinedServers, roomServer))}
-                      />
+                      >
+                          <CloseIcon />
+                      </AccessibleButton>
                   ),
               }
             : {}),

@@ -11,6 +11,7 @@ import React, { createRef } from "react";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
+import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type { Call } from "../../../models/Call";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -332,7 +333,9 @@ class RoomTile extends React.PureComponent<Props, State> {
                     onClick={this.onGeneralMenuOpenClick}
                     title={_t("room|context_menu|title")}
                     isExpanded={!!this.state.generalMenuPosition}
-                />
+                >
+                    <OverflowHorizontalIcon />
+                </ContextMenuTooltipButton>
                 {this.state.generalMenuPosition && (
                     <RoomGeneralContextMenu
                         {...contextMenuBelow(this.state.generalMenuPosition)}
