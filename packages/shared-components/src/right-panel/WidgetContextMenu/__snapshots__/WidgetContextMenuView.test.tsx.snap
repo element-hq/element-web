@@ -20,7 +20,7 @@ exports[`<WidgetContextMenuView /> renders widget contextmenu with all options 1
     type="button"
   >
     <div
-      class="_indicator-icon_zr2a0_17"
+      class="_indicator-icon_147l5_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg
@@ -59,7 +59,7 @@ exports[`<WidgetContextMenuView /> renders widget contextmenu without only basic
     type="button"
   >
     <div
-      class="_indicator-icon_zr2a0_17"
+      class="_indicator-icon_147l5_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg

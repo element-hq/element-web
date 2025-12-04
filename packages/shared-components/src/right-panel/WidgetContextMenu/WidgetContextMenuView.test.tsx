@@ -8,12 +8,13 @@
 import React from "react";
 import { screen, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { WidgetContextMenuAction, WidgetContextMenuSnapshot, WidgetContextMenuView } from "./WidgetContextMenuView";
-import * as stories from "./WidgetContextMenuView.stories.tsx";
-import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 import { IconButton } from "@vector-im/compound-web";
 import { composeStories } from "@storybook/react-vite";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+
+import { type WidgetContextMenuAction, type WidgetContextMenuSnapshot, WidgetContextMenuView } from "./WidgetContextMenuView";
+import * as stories from "./WidgetContextMenuView.stories.tsx";
+import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 
 const { Default, OnlyBasicModification } = composeStories(stories);
 
@@ -68,7 +69,6 @@ describe("<WidgetContextMenuView />", () => {
         showSnapshotButton: true,
         showMoveButtons: [true, true],
         canModify: true,
-        widgetMessaging: undefined,
         isMenuOpened: true,
         trigger: (
             <IconButton size="24px">
