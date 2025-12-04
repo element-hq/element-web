@@ -2649,7 +2649,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
-                        <main className={timelineClasses}>
+                        <main className={timelineClasses} data-testid="timeline">
                             <FileDropTarget
                                 parent={this.roomView.current}
                                 onFileDrop={this.onFileDrop}

@@ -335,6 +335,54 @@ describe("RoomView", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    describe("enableReadReceiptsAndMarkersOnActivity", () => {
+        it.each([
+            {
+                enabled: false,
+                testName: "should send read receipts and update read marker on focus when disabled",
+                checkCall: (sendReadReceiptsSpy: jest.Mock, updateReadMarkerSpy: jest.Mock) => {
+                    expect(sendReadReceiptsSpy).toHaveBeenCalled();
+                    expect(updateReadMarkerSpy).toHaveBeenCalled();
+                },
+            },
+            {
+                enabled: true,
+                testName: "should not send read receipts and update read marker on focus when enabled",
+                checkCall: (sendReadReceiptsSpy: jest.Mock, updateReadMarkerSpy: jest.Mock) => {
+                    expect(sendReadReceiptsSpy).not.toHaveBeenCalled();
+                    expect(updateReadMarkerSpy).not.toHaveBeenCalled();
+                },
+            },
+        ])("$testName", async ({ enabled, checkCall }) => {
+            // Join the room
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            const ref = createRef<RoomView>();
+            await mountRoomView(ref, {
+                enableReadReceiptsAndMarkersOnActivity: enabled,
+            });
+
+            // Wait for the timeline to be rendered
+            await waitFor(() => expect(screen.getByTestId("timeline")).not.toBeNull());
+
+            // Get the RoomView instance and mock the messagePanel methods
+            const instance = ref.current!;
+            const sendReadReceiptsSpy = jest.fn();
+            const updateReadMarkerSpy = jest.fn();
+            // @ts-ignore - accessing private property for testing
+            instance.messagePanel = {
+                sendReadReceipts: sendReadReceiptsSpy,
+                updateReadMarker: updateReadMarkerSpy,
+            };
+
+            // Find the main RoomView div and trigger focus
+            const timeline = screen.getByTestId("timeline");
+            fireEvent.focus(timeline);
+
+            // Verify that sendReadReceipts and updateReadMarker were called or not based on the enabled state
+            checkCall(sendReadReceiptsSpy, updateReadMarkerSpy);
+        });
+    });
+
     describe("invites", () => {
         beforeEach(() => {
             const member = new RoomMember(room.roomId, cli.getSafeUserId());
