@@ -322,7 +322,13 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 });
             };
             posthogSection = (
-                <>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                    className="mx_SecurityUserSettingsTab_posthogSection"
+                >
                     <SettingsSubsection
                         heading={_t("common|analytics")}
                         description={_t("settings|security|analytics_description")}
@@ -337,7 +343,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <SettingsSubsection heading={_t("settings|sessions|title")}>
                         <SettingsFlag name="deviceClientInformationOptIn" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
-                </>
+                </Form.Root>
             );
         }
 
