@@ -16,10 +16,10 @@ import "@fontsource/inter/600-italic.css";
 import "@fontsource/inter/700.css";
 import "@fontsource/inter/700-italic.css";
 
-import "@fontsource/inconsolata/latin-ext-400.css";
-import "@fontsource/inconsolata/latin-400.css";
-import "@fontsource/inconsolata/latin-ext-700.css";
-import "@fontsource/inconsolata/latin-700.css";
+import "@fontsource/fira-code/latin-ext-400.css";
+import "@fontsource/fira-code/latin-400.css";
+import "@fontsource/fira-code/latin-ext-700.css";
+import "@fontsource/fira-code/latin-700.css";
 
 import { logger } from "matrix-js-sdk/src/logger";
 

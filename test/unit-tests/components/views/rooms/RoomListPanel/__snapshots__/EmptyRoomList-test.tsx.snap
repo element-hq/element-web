@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] = `
 <DocumentFragment>
@@ -76,7 +76,7 @@ exports[`<EmptyRoomList /> should display the empty state for the invite filter 
       You don't have any unread invites
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_187yx_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -101,7 +101,7 @@ exports[`<EmptyRoomList /> should display the empty state for the low priority f
       You don't have any low priority rooms
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_187yx_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -126,7 +126,7 @@ exports[`<EmptyRoomList /> should display the empty state for the mention filter
       You don't have any unread mentions
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_187yx_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -151,7 +151,7 @@ exports[`<EmptyRoomList /> should display the empty state for the unread filter 
       Congrats! You don’t have any unread messages
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_187yx_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -185,7 +185,7 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -232,7 +232,7 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -253,7 +253,7 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
         Start chat
       </button>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="secondary"
         data-size="sm"
         role="button"

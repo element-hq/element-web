@@ -191,12 +191,28 @@ class LoggedInView extends React.Component<IProps, IState> {
             SettingsStore.watchSetting("userTimezone", null, this.onTimezoneUpdate),
         ];
 
-        this.resizer = this.createResizer();
-        this.resizer.attach();
+        this.loadResizer();
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
-        this.loadResizerPreferences();
         this.refreshBackgroundImage();
+    }
+
+    /**
+     * Load or reload the resizer for the left panel
+     */
+    private loadResizer(): void {
+        // If the resizer already exists, detach it first
+        this.resizer?.detach();
+
+        this.resizer = this.createResizer();
+        this.resizer.attach();
+        this.loadResizerPreferences();
+    }
+
+    public componentDidUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>, nextContext: any): void {
+        if (nextProps.page_type !== this.props.page_type) {
+            this.loadResizer();
+        }
     }
 
     private onTimezoneUpdate = async (): Promise<void> => {

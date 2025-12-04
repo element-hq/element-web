@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] = `
 <div
@@ -37,7 +37,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         class="_icon_dyt4i_50"
       >
         <span
-          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
           data-color="3"
           data-testid="avatar-img"
           data-type="round"
@@ -85,7 +85,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         class="_icon_dyt4i_50"
       >
         <span
-          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"
@@ -196,7 +196,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         class="_icon_dyt4i_50"
       >
         <span
-          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
           data-color="5"
           data-testid="avatar-img"
           data-type="round"
@@ -244,7 +244,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         class="_icon_dyt4i_50"
       >
         <span
-          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
           data-color="3"
           data-testid="avatar-img"
           data-type="round"
@@ -292,7 +292,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         class="_icon_dyt4i_50"
       >
         <span
-          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
           data-color="4"
           data-testid="avatar-img"
           data-type="round"

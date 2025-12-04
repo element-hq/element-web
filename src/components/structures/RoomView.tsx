@@ -165,6 +165,26 @@ interface IRoomProps extends RoomViewProps {
      * Omitting this will mean that RoomView renders for the room held in SDKContext.RoomViewStore.
      */
     roomId?: string;
+
+    /*
+     * If true, hide the header
+     */
+    hideHeader?: boolean;
+
+    /*
+     * If true, hide the composer
+     */
+    hideComposer?: boolean;
+
+    /*
+     * If true, hide the right panel
+     */
+    hideRightPanel?: boolean;
+
+    /**
+     * If true, hide the pinned messages banner
+     */
+    hidePinnedMessageBanner?: boolean;
 }
 
 export { MainSplitContentType };
@@ -1187,7 +1207,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.EditEvent: {
                 // Quit early if we're trying to edit events in wrong rendering context
                 if (payload.timelineRenderingType !== this.state.timelineRenderingType) return;
-                if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
+
+                const roomId: string | undefined = payload.event?.getRoomId();
+
+                if (payload.event && roomId !== this.state.roomId) {
+                    // if the room is displayed in a module, we don't want to change the room view
+                    if (roomId && this.roomViewStore.isRoomDisplayedInModule(roomId)) return;
+
                     // If the event is in a different room (e.g. because the event to be edited is being displayed
                     // in the results of an all-rooms search), we need to view that room first.
                     defaultDispatcher.dispatch<ViewRoomPayload>({
@@ -2449,12 +2475,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        const pinnedMessageBanner = (
+        const pinnedMessageBanner = !this.props.hidePinnedMessageBanner && (
             <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
         );
 
         let messageComposer;
         const showComposer =
+            !this.props.hideComposer &&
             !isRoomEncryptionLoading &&
             // joined and not showing search results
             myMembership === KnownMembership.Join &&
@@ -2546,7 +2573,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        const showRightPanel = !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
+        const showRightPanel =
+            !this.props.hideRightPanel && !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
 
         const rightPanel = showRightPanel ? (
             <RightPanel
@@ -2665,10 +2693,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 ref={this.roomViewBody}
                                 data-layout={this.state.layout}
                             >
-                                <RoomHeader
-                                    room={this.state.room}
-                                    additionalButtons={this.state.viewRoomOpts.buttons}
-                                />
+                                {!this.props.hideHeader && (
+                                    <RoomHeader
+                                        room={this.state.room}
+                                        additionalButtons={this.state.viewRoomOpts.buttons}
+                                    />
+                                )}
                                 {mainSplitBody}
                             </div>
                         </MainSplit>

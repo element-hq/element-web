@@ -28,7 +28,7 @@ describe("QuickSettingsButton", () => {
 
     const openQuickSettings = async () => {
         await userEvent.click(getQuickSettingsButton());
-        await screen.findByText("Quick settings");
+        await screen.findByRole("heading", { name: "Quick settings" });
     };
 
     it("should render the quick settings button", () => {

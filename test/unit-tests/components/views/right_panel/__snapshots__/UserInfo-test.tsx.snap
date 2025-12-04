@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
 <div>
@@ -28,7 +28,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -61,7 +61,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             <button
               aria-label="Profile picture"
               aria-live="off"
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -315,7 +315,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -348,7 +348,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             <button
               aria-label="Profile picture"
               aria-live="off"
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"

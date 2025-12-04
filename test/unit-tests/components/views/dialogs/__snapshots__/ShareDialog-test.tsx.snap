@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ShareDialog should not render the QR code if disabled 1`] = `
 <DocumentFragment>
@@ -36,7 +36,7 @@ exports[`ShareDialog should not render the QR code if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -182,7 +182,7 @@ exports[`ShareDialog should not render the socials if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -270,15 +270,15 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
       </div>
       <label>
         <div
-          class="_container_1hel1_10"
+          class="_container_1md5v_10"
         >
           <input
             checked=""
-            class="_input_1hel1_18"
+            class="_input_1md5v_18"
             type="checkbox"
           />
           <div
-            class="_ui_1hel1_19"
+            class="_ui_1md5v_19"
           >
             <svg
               aria-hidden="true"
@@ -297,7 +297,7 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
         Link to selected message
       </label>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -444,14 +444,14 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
       </div>
       <label>
         <div
-          class="_container_1hel1_10"
+          class="_container_1md5v_10"
         >
           <input
-            class="_input_1hel1_18"
+            class="_input_1md5v_18"
             type="checkbox"
           />
           <div
-            class="_ui_1hel1_19"
+            class="_ui_1md5v_19"
           >
             <svg
               aria-hidden="true"
@@ -470,7 +470,7 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
         Link to most recent message
       </label>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -616,7 +616,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
         </span>
       </div>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -762,7 +762,7 @@ exports[`ShareDialog should render a share dialog for an URL 1`] = `
         </span>
       </div>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="primary"
         data-size="lg"
         role="button"

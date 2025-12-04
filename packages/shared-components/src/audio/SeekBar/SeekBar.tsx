@@ -10,7 +10,7 @@ import { throttle } from "lodash";
 import classNames from "classnames";
 
 import style from "./SeekBar.module.css";
-import { _t } from "../../utils/i18n";
+import { useI18n } from "../../utils/i18nContext";
 
 export interface SeekBarProps extends React.InputHTMLAttributes<HTMLInputElement> {
     /**
@@ -33,6 +33,8 @@ interface ISeekCSS extends CSSProperties {
  * ```
  */
 export function SeekBar({ value = 0, className, ...rest }: Readonly<SeekBarProps>): JSX.Element {
+    const { translate: _t } = useI18n();
+
     const [newValue, setNewValue] = useState(value);
     // Throttle the value setting to avoid excessive re-renders
     const setThrottledValue = useMemo(() => throttle(setNewValue, 10), []);

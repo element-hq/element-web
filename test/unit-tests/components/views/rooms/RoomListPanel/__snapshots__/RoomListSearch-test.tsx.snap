@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
 <DocumentFragment>
@@ -8,7 +8,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
+      class="_button_187yx_8 mx_RoomListSearch_search _has-icon_187yx_57"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -42,7 +42,7 @@ exports[`<RoomListSearch /> should display search and explore buttons 1`] = `
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -73,7 +73,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
+      class="_button_187yx_8 mx_RoomListSearch_search _has-icon_187yx_57"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -107,7 +107,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -128,7 +128,7 @@ exports[`<RoomListSearch /> should display the dial button when the PTSN protoco
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_vczzf_8 _has-icon_vczzf_57 _icon-only_vczzf_50"
+      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -159,7 +159,7 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
+      class="_button_187yx_8 mx_RoomListSearch_search _has-icon_187yx_57"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -203,7 +203,7 @@ exports[`<RoomListSearch /> should hide the explore button when the active space
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
+      class="_button_187yx_8 mx_RoomListSearch_search _has-icon_187yx_57"
       data-kind="secondary"
       data-size="sm"
       role="button"

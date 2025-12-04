@@ -14,6 +14,7 @@ import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/Widget
 import { stubClient } from "../../test-utils";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { Action } from "../../../src/dispatcher/actions.ts";
 
 // setup test env values
 const roomId = "!room:server";
@@ -196,12 +197,7 @@ describe("WidgetLayoutStore", () => {
 
     it("should clear the layout if the client is not viable", () => {
         store.recalculateRoom(mockRoom);
-        defaultDispatcher.dispatch(
-            {
-                action: "on_client_not_viable",
-            },
-            true,
-        );
+        defaultDispatcher.dispatch({ action: Action.ClientNotViable }, true);
 
         expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
         expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);

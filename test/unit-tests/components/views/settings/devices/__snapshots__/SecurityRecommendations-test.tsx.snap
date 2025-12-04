@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SecurityRecommendations /> renders both cards when user has both unverified and inactive devices 1`] = `
 <div>

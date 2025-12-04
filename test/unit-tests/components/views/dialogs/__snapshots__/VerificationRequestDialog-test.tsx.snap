@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 1`] = `
 <DocumentFragment>
@@ -369,6 +369,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐶
@@ -383,6 +384,7 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
             class="mx_VerificationShowSas_emojiSas_block"
           >
             <div
+              aria-hidden="true"
               class="mx_VerificationShowSas_emojiSas_emoji"
             >
               🐱

@@ -14,6 +14,7 @@ import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check"
 import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { AvatarWithDetails } from "@element-hq/web-shared-components";
 
 import { _t } from "../languageHandler";
@@ -23,12 +24,8 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import ToastStore from "../stores/ToastStore";
-import {
-    LiveContentSummary,
-    LiveContentSummaryWithCall,
-    LiveContentType,
-} from "../components/views/rooms/LiveContentSummary";
-import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
+import { LiveContentSummary, LiveContentType } from "../components/views/rooms/LiveContentSummary";
+import { useCall, useJoinCallButtonDisabledTooltip, useParticipantCount } from "../hooks/useCall";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
@@ -36,6 +33,7 @@ import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
+import DMRoomMap from "../utils/DMRoomMap";
 
 /**
  * Get the key for the incoming call toast. A combination of the event ID and room ID.
@@ -71,9 +69,15 @@ interface JoinCallButtonWithCallProps {
     onClick: (e: ButtonEvent) => void;
     call: Call | null;
     disabledTooltip: string | undefined;
+    isRinging: boolean;
 }
 
-function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButtonWithCallProps): JSX.Element {
+function JoinCallButtonWithCall({
+    onClick,
+    call,
+    disabledTooltip,
+    isRinging,
+}: JoinCallButtonWithCallProps): JSX.Element {
     let disTooltip = disabledTooltip;
     const disabledBecauseFullTooltip = useJoinCallButtonDisabledTooltip(call);
     disTooltip = disabledTooltip ?? disabledBecauseFullTooltip ?? undefined;
@@ -88,7 +92,7 @@ function JoinCallButtonWithCall({ onClick, call, disabledTooltip }: JoinCallButt
                 Icon={CheckIcon}
                 size="sm"
             >
-                {_t("action|join")}
+                {isRinging ? _t("action|accept") : _t("action|join")}
             </Button>
         </Tooltip>
     );
@@ -152,7 +156,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         // This section can race, so we use a ref to keep track of whether we have started trying to play.
         // This is because `LegacyCallHandler.play` tries to load the sound and then play it asynchonously
         // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing.
-        const isRingToast = notificationContent.notification_type == "ring";
+        const isRingToast = notificationContent.notification_type === "ring";
         if (isRingToast && !soundHasStarted.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
             // Start ringing if not already.
             soundHasStarted.current = true;
@@ -243,10 +247,11 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                 room_id: room?.roomId,
                 view_call: true,
                 skipLobby: ("shiftKey" in e && e.shiftKey) || skipLobbyToggle,
+                voiceOnly: notificationContent["m.call.intent"] === "audio",
                 metricsTrigger: undefined,
             });
         },
-        [room, skipLobbyToggle],
+        [room, skipLobbyToggle, notificationContent],
     );
 
     // Dismiss on closing toast.
@@ -262,34 +267,53 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
     useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
     useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
+    const isVoice = notificationContent["m.call.intent"] === "audio";
+    const otherUserId = DMRoomMap.shared().getUserIdForRoomId(roomId);
+    const participantCount = useParticipantCount(call);
+    const detailsInformation =
+        notificationContent.notification_type === "ring" ? (
+            <span>{otherUserId}</span>
+        ) : (
+            <LiveContentSummary
+                type={isVoice ? LiveContentType.Voice : LiveContentType.Video}
+                text={isVoice ? _t("common|voice") : _t("common|video")}
+                active={false}
+                participantCount={participantCount}
+            />
+        );
 
-    const callLiveContentSummary = call ? (
-        <LiveContentSummaryWithCall call={call} />
-    ) : (
-        <LiveContentSummary
-            type={LiveContentType.Video}
-            text={_t("common|video")}
-            active={false}
-            participantCount={0}
-        />
-    );
     return (
         <TooltipProvider>
             <>
                 <div className="mx_IncomingCallToast_content">
-                    <div className="mx_IncomingCallToast_message">
-                        <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
-                        {_t("voip|video_call_started")}
-                    </div>
+                    {isVoice ? (
+                        <div className="mx_IncomingCallToast_message">
+                            <VoiceCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
+                            {_t("voip|voice_call_incoming")}
+                        </div>
+                    ) : (
+                        <div className="mx_IncomingCallToast_message">
+                            <VideoCallIcon width="20px" height="20px" style={{ position: "relative", top: "4px" }} />{" "}
+                            {notificationContent.notification_type === "ring"
+                                ? _t("voip|video_call_incoming")
+                                : _t("voip|video_call_started")}
+                        </div>
+                    )}
                     <AvatarWithDetails
                         avatar={<RoomAvatar room={room ?? undefined} size="32px" />}
-                        details={callLiveContentSummary}
+                        details={detailsInformation}
                         title={room ? room.name : _t("voip|call_toast_unknown_room")}
+                        className="mx_IncomingCallToast_AvatarWithDetails"
                     />
-                    <div className="mx_IncomingCallToast_toggleWithLabel">
-                        <span>{_t("voip|skip_lobby_toggle_option")}</span>
-                        <ToggleInput onChange={(e) => setSkipLobbyToggle(e.target.checked)} checked={skipLobbyToggle} />
-                    </div>
+                    {!isVoice && (
+                        <div className="mx_IncomingCallToast_toggleWithLabel">
+                            <span>{_t("voip|skip_lobby_toggle_option")}</span>
+                            <ToggleInput
+                                onChange={(e) => setSkipLobbyToggle(e.target.checked)}
+                                checked={skipLobbyToggle}
+                            />
+                        </div>
+                    )}
                     <div className="mx_IncomingCallToast_buttons">
                         <DeclineCallButtonWithNotificationEvent
                             notificationEvent={notificationEvent}
@@ -299,6 +323,7 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                         <JoinCallButtonWithCall
                             onClick={onJoinClick}
                             call={call}
+                            isRinging={notificationContent.notification_type === "ring"}
                             disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                         />
                     </div>

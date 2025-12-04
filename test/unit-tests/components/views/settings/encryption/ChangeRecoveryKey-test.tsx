@@ -16,6 +16,7 @@ import { createTestClient, withClientContextRenderOptions } from "../../../../..
 import { copyPlaintext } from "../../../../../../src/utils/strings";
 import Modal from "../../../../../../src/Modal";
 import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
+import DeviceListener from "../../../../../../src/DeviceListener";
 
 jest.mock("../../../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
@@ -82,6 +83,8 @@ describe("<ChangeRecoveryKey />", () => {
         });
 
         it("should ask the user to enter the recovery key", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+
             const user = userEvent.setup();
 
             const onFinish = jest.fn();
@@ -115,6 +118,56 @@ describe("<ChangeRecoveryKey />", () => {
             await user.click(finishButton);
             expect(setAccountDataSpy).toHaveBeenCalledWith("io.element.recovery", { enabled: true });
             expect(onFinish).toHaveBeenCalledWith();
+        });
+
+        it("should reset key backup if needed", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(true);
+
+            const user = userEvent.setup();
+
+            const onFinish = jest.fn();
+            renderComponent(false, onFinish);
+            // Display the recovery key to save
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
+            await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const finishButton = screen.getByRole("button", { name: "Finish set up" });
+
+            const input = screen.getByTitle("Enter recovery key");
+
+            // If the user enters the correct recovery key, the finish button should be enabled
+            await userEvent.type(input, "encoded private key");
+
+            await user.click(finishButton);
+            expect(matrixClient.getCrypto()!.resetKeyBackup).toHaveBeenCalled();
+        });
+
+        it("should not reset key backup if not needed", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+
+            const user = userEvent.setup();
+
+            const onFinish = jest.fn();
+            renderComponent(false, onFinish);
+            // Display the recovery key to save
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
+            await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const finishButton = screen.getByRole("button", { name: "Finish set up" });
+
+            const input = screen.getByTitle("Enter recovery key");
+
+            // If the user enters the correct recovery key, the finish button should be enabled
+            await userEvent.type(input, "encoded private key");
+
+            await user.click(finishButton);
+            expect(matrixClient.getCrypto()!.resetKeyBackup).not.toHaveBeenCalled();
         });
 
         it("should display errors from bootstrapSecretStorage", async () => {
@@ -156,6 +209,8 @@ describe("<ChangeRecoveryKey />", () => {
         });
 
         it("should disallow repeated attempts to change the recovery key", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+
             const mockFn = mocked(matrixClient.getCrypto()!).bootstrapSecretStorage.mockImplementation(() => {
                 // Pretend to do some work.
                 return new Promise((r) => setTimeout(r, 200));

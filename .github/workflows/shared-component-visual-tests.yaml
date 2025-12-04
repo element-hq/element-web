@@ -21,7 +21,7 @@ jobs:
             issues: read
             pull-requests: read
         steps:
-            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+            - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
@@ -54,12 +54,6 @@ jobs:
               working-directory: packages/shared-components
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: "yarn playwright install --with-deps --only-shell"
-
-            - name: Build storybook dependencies
-              # When the first test is ran, it will fail because the dependencies are not yet built.
-              # This step is to ensure that the dependencies are built before running the tests.
-              run: "yarn --cwd packages/shared-components test:storybook:ci"
-              continue-on-error: true
 
             - name: Run Visual tests
               run: "yarn --cwd packages/shared-components test:storybook:ci"

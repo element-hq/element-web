@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RoomListOptionsMenu /> should match snapshot 1`] = `
 <DocumentFragment>
@@ -18,7 +18,7 @@ exports[`<RoomListOptionsMenu /> should match snapshot 1`] = `
     type="button"
   >
     <div
-      class="_indicator-icon_zr2a0_17"
+      class="_indicator-icon_147l5_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg

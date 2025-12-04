@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SessionManagerTab /> Device verification does not allow device verification on session that do not support encryption 1`] = `
 HTMLCollection [
@@ -393,18 +393,18 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1hel1_10"
+            class="_container_1md5v_10"
           >
             <input
               aria-label="Select all"
               aria-labelledby="_r_4q_"
-              class="_input_1hel1_18"
+              class="_input_1md5v_18"
               data-testid="device-select-all-checkbox"
               id="device-select-all-checkbox"
               type="checkbox"
             />
             <div
-              class="_ui_1hel1_19"
+              class="_ui_1md5v_19"
             >
               <svg
                 aria-hidden="true"
@@ -451,9 +451,18 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
       >
         Show: Unverified
       </div>
-      <span
+      <svg
         class="mx_Dropdown_arrow"
-      />
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+        />
+      </svg>
     </div>
   </div>
 </div>

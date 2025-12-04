@@ -121,7 +121,7 @@ export enum Action {
     UpdateSystemFont = "update_system_font",
 
     /**
-     * Changes room based on payload parameters. Should be used with JoinRoomPayload.
+     * Changes room based on payload parameters. Should be used with ViewRoomPayload.
      */
     ViewRoom = "view_room",
 
@@ -317,14 +317,37 @@ export enum Action {
     ShowRoomTopic = "show_room_topic",
 
     /**
+     * Fired when the client is no longer viable to use: specifically, that we have been "soft-logged out".
+     */
+    ClientNotViable = "client_not_viable",
+
+    /**
      * Fired when the client was logged out. No additional payload information required.
      */
     OnLoggedOut = "on_logged_out",
 
     /**
-     * Fired when the client was logged in. No additional payload information required.
+     * Fired when the client was logged in, or has otherwise been set up with authentication data (e.g., by loading the
+     * access token from local storage). Note that this does not necessarily mean that a login action has happened,
+     * just that authentication creds have been set up.
+     *
+     * No additional payload information required.
      */
     OnLoggedIn = "on_logged_in",
+
+    /**
+     * Fired when the client is about to be started, shortly after {@link OnLoggedIn}.
+     *
+     * No additional payload information required.
+     */
+    WillStartClient = "will_start_client",
+
+    /**
+     * Fired when the client has started, shortly after {@link WillStartClient}.
+     *
+     * No additional payload information required.
+     */
+    ClientStarted = "client_started",
 
     /**
      * Overwrites the existing login with fresh session credentials. Use with a OverwriteLoginPayload.
@@ -380,4 +403,10 @@ export enum Action {
      * Open the create room dialog
      */
     CreateRoom = "view_create_room",
+
+    /**
+     * The `UserActivity` tracker determined that there was some activity from the user (typically a mouse movement
+     * or keyboard event).
+     */
+    UserActivity = "user_activity",
 }

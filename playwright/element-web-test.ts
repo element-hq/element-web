@@ -133,6 +133,7 @@ export const expect = baseExpect.extend<Expectations>({
             }
             .mx_BaseAvatar {
                 background-color: var(--cpd-color-fuchsia-1200) !important;
+                border-color: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;
             }
             .mx_ReplyChain {
@@ -144,7 +145,7 @@ export const expect = baseExpect.extend<Expectations>({
             }
             /* Use monospace font for timestamp for consistent mask width */
             .mx_MessageTimestamp {
-                font-family: Inconsolata !important;
+                font-family: "Fira Code" !important;
             }
         `;
 

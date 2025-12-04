@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`] = `
 <DocumentFragment>
@@ -15,17 +15,17 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1hel1_10"
+            class="_container_1md5v_10"
           >
             <input
               aria-describedby="_r_4_"
               checked=""
-              class="_input_1hel1_18"
+              class="_input_1md5v_18"
               id="checkbox_vY7Q4uEh9K"
               type="checkbox"
             />
             <div
-              class="_ui_1hel1_19"
+              class="_ui_1md5v_19"
             >
               <svg
                 aria-hidden="true"
@@ -83,16 +83,16 @@ exports[`<LabelledCheckbox /> should render with byline of undefined 1`] = `
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1hel1_10"
+            class="_container_1md5v_10"
           >
             <input
               checked=""
-              class="_input_1hel1_18"
+              class="_input_1md5v_18"
               id="checkbox_vY7Q4uEh9K"
               type="checkbox"
             />
             <div
-              class="_ui_1hel1_19"
+              class="_ui_1md5v_19"
             >
               <svg
                 aria-hidden="true"

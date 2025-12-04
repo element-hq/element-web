@@ -13,22 +13,17 @@ Please see LICENSE files in the repository root for full details.
     user-select: none;
     font-size: $font-12px;
     color: $secondary-content;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        float: right;
+    }
 }
 
 .mx_GenericDropdownMenu_button:hover,
 .mx_GenericDropdownMenu_button[aria-expanded="true"] {
     background: $quinary-content;
-}
-
-.mx_GenericDropdownMenu_button::before {
-    content: "";
-    width: 18px;
-    height: 18px;
-    background: currentColor;
-    mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-    mask-size: 100%;
-    mask-repeat: no-repeat;
-    float: right;
 }
 
 .mx_ContextualMenu_wrapper.mx_GenericDropdownMenu_wrapper {
@@ -97,16 +92,12 @@ Please see LICENSE files in the repository root for full details.
                 background-color: $menu-selected-color;
             }
 
-            &[aria-checked="true"]::before {
-                content: "";
+            .mx_GenericDropdownMenu_Option--checkIcon {
                 width: 16px;
                 height: 16px;
                 margin-left: -22px;
                 margin-right: 6px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
-                mask-size: 100%;
-                mask-repeat: no-repeat;
-                background-color: $primary-content;
+                color: $primary-content;
                 display: inline-block;
                 vertical-align: middle;
             }

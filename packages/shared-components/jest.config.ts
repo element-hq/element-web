@@ -30,7 +30,7 @@ const config: Config = {
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
     },
     transformIgnorePatterns: [
-        "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs)).+$",
+        "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs|@storybook|storybook)).+$",
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
@@ -50,7 +50,7 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
 
     // if we're running against the develop branch, also enable the slow test reporter
     if (env["GITHUB_REF"] == "refs/heads/develop") {
-        reporters.push("<rootDir>/test/slowReporter.cjs");
+        reporters.push("<rootDir>/../../test/slowReporter.cjs");
     }
     config.reporters = reporters;
 }

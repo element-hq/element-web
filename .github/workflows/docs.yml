@@ -17,18 +17,18 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Fetch element-desktop
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
                   repository: element-hq/element-desktop
                   path: element-desktop
 
             - name: Fetch element-web
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
                   path: element-web
 
             - name: Fetch matrix-js-sdk
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk
@@ -43,13 +43,13 @@ jobs:
               working-directory: element-web
               run: |
                   yarn install --frozen-lockfile
-                  yarn ts-node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
+                  yarn node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
               uses: peaceiris/actions-mdbook@ee69d230fe19748b7abf22df32acaa93833fad08 # v2
               with:
-                  mdbook-version: "0.4.10"
+                  mdbook-version: "0.5.1"
 
             - name: Install mdbook extensions
               run: cargo install mdbook-combiner mdbook-mermaid

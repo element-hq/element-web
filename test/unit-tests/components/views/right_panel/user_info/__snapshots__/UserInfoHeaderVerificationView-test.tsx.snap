@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<UserInfoHeaderVerificationView /> renders verification unavailable message 1`] = `
 <div>
@@ -24,7 +24,7 @@ exports[`<UserInfoHeaderVerificationView /> renders verified badge when user is 
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <span
-      class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8 mx_UserInfo_verified_badge"
+      class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8 mx_UserInfo_verified_badge"
       data-kind="green"
     >
       <svg
@@ -59,7 +59,7 @@ exports[`<UserInfoHeaderVerificationView /> renders verify button 1`] = `
       class="mx_UserInfo_container_verifyButton"
     >
       <button
-        class="_button_vczzf_8 mx_UserInfo_verify_button"
+        class="_button_187yx_8 mx_UserInfo_verify_button"
         data-kind="tertiary"
         data-size="sm"
         role="button"

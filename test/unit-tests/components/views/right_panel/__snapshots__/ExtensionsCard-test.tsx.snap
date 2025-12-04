@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<ExtensionsCard /> should render empty state 1`] = `
 <DocumentFragment>
@@ -28,7 +28,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -50,7 +50,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
       tabindex="-1"
     >
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -129,7 +129,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -151,7 +151,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
       tabindex="-1"
     >
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_187yx_8 _has-icon_187yx_57"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -172,7 +172,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         Add extensions
       </button>
       <div
-        class="_separator_7ckbw_8"
+        class="_separator_cqpyv_8"
         data-kind="primary"
         data-orientation="horizontal"
         role="separator"
@@ -187,7 +187,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_1qbcf_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -196,7 +196,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
           >
             <img
               alt=""
-              class="_image_1qbcf_41"
+              class="_image_zysgz_43"
               data-type="round"
               height="24px"
               loading="lazy"
@@ -228,7 +228,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_1qbcf_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -237,7 +237,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
           >
             <img
               alt=""
-              class="_image_1qbcf_41"
+              class="_image_zysgz_43"
               data-type="round"
               height="24px"
               loading="lazy"

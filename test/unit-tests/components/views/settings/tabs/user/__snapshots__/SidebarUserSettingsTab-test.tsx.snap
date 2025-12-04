@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 1`] = `
 <div>
@@ -48,18 +48,18 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_1_"
                         checked=""
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         disabled=""
                         id="checkbox_vY7Q4uEh9K"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -116,17 +116,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_5_"
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         id="checkbox_38QgU2Pomx"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -171,16 +171,16 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_9_"
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         id="checkbox_wKpa6hpi3Y"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -225,16 +225,16 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_d_"
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         id="checkbox_EetmBG4yVC"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -338,18 +338,18 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_h_"
                         checked=""
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         disabled=""
                         id="checkbox_vY7Q4uEh9K"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -406,17 +406,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_l_"
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         id="checkbox_38QgU2Pomx"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -461,16 +461,16 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_p_"
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         id="checkbox_wKpa6hpi3Y"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"
@@ -515,16 +515,16 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1hel1_10"
+                      class="_container_1md5v_10"
                     >
                       <input
                         aria-describedby="_r_t_"
-                        class="_input_1hel1_18"
+                        class="_input_1md5v_18"
                         id="checkbox_EetmBG4yVC"
                         type="checkbox"
                       />
                       <div
-                        class="_ui_1hel1_19"
+                        class="_ui_1md5v_19"
                       >
                         <svg
                           aria-hidden="true"

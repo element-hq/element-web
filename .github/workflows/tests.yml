@@ -39,7 +39,7 @@ jobs:
                 runner: [1, 2]
         steps:
             - name: Checkout code
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
@@ -103,7 +103,7 @@ jobs:
               run: exit 1
 
             - name: Skip SonarCloud in merge queue
-              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
+              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true' || contains(github.event.pull_request.labels.*.name, 'Z-Skip-Sonar')
               uses: guibranco/github-status-action-v2@5530c593759f489bba08272e96986ffc571c1ea1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
@@ -118,7 +118,7 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout code
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
