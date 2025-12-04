@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type RefObject, type ReactNode, useRef } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Optional } from "matrix-events-sdk";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -57,7 +56,7 @@ interface IState {
 // (which should be a single element) of other calls.
 // The primary will be the one not on hold, or an arbitrary one
 // if they're all on hold)
-function getPrimarySecondaryCallsForPip(roomId: Optional<string>): [MatrixCall | null, MatrixCall[]] {
+function getPrimarySecondaryCallsForPip(roomId: string | null): [MatrixCall | null, MatrixCall[]] {
     if (!roomId) return [null, []];
 
     const calls = LegacyCallHandler.instance.getAllActiveCallsForPip(roomId);

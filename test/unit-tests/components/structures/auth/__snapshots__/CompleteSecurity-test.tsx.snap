@@ -41,7 +41,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_content_o77nw_8"
+                    class="_content_1r8kr_8"
                     data-size="large"
                   >
                     <svg
@@ -87,7 +87,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_vczzf_8"
+                    class="_button_187yx_8"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -107,7 +107,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                      Use another device
                   </button>
                   <button
-                    class="_button_vczzf_8"
+                    class="_button_187yx_8"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -116,7 +116,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_vczzf_8"
+                    class="_button_187yx_8"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"
@@ -209,7 +209,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_content_o77nw_8"
+                    class="_content_1r8kr_8"
                     data-size="large"
                   >
                     <svg
@@ -255,7 +255,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_vczzf_8"
+                    class="_button_187yx_8"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -264,7 +264,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     Use recovery key
                   </button>
                   <button
-                    class="_button_vczzf_8"
+                    class="_button_187yx_8"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -273,7 +273,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_vczzf_8"
+                    class="_button_187yx_8"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"

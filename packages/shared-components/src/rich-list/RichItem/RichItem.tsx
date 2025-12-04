@@ -9,8 +9,8 @@ import React, { type HTMLAttributes, type JSX, memo } from "react";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import styles from "./RichItem.module.css";
-import { humanizeTime } from "../../utils/humanize";
 import { Flex } from "../../utils/Flex";
+import { useI18n } from "../../utils/i18nContext";
 
 export interface RichItemProps extends HTMLAttributes<HTMLLIElement> {
     /**
@@ -63,6 +63,8 @@ export const RichItem = memo(function RichItem({
     selected,
     ...props
 }: RichItemProps): JSX.Element {
+    const i18n = useI18n();
+
     return (
         <li
             className={styles.richItem}
@@ -77,7 +79,7 @@ export const RichItem = memo(function RichItem({
             <span className={styles.description}>{description}</span>
             {timestamp && (
                 <span role="timer" className={styles.timestamp}>
-                    {humanizeTime(timestamp)}
+                    {i18n.humanizeTime(timestamp)}
                 </span>
             )}
         </li>

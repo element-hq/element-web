@@ -28,6 +28,7 @@ import {
     MinusIcon,
     ExpandIcon,
     CollapseIcon,
+    PopOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "./AccessibleButton";
@@ -46,7 +47,6 @@ import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetConte
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { Icon as PopoutIcon } from "../../../../res/img/external-link.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -835,7 +835,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         title={_t("widget|popout")}
                                         onClick={this.onPopoutWidgetClick}
                                     >
-                                        <PopoutIcon className="mx_Icon mx_Icon_12 mx_Icon--stroke" />
+                                        <PopOutIcon className="mx_Icon mx_Icon_12" />
                                     </AccessibleButton>
                                 )}
                                 {this.state.hasContextMenuOptions && (

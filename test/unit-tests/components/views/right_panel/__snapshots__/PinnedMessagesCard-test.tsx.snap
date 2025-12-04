@@ -28,7 +28,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -110,7 +110,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -141,7 +141,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -180,7 +180,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -211,7 +211,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
           </div>
         </div>
         <div
-          class="_separator_7ckbw_8 mx_PinnedMessagesCard_Separator"
+          class="_separator_cqpyv_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -222,7 +222,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -261,7 +261,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -296,7 +296,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_vczzf_8"
+          class="_button_187yx_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -338,7 +338,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -369,7 +369,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -408,7 +408,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -439,7 +439,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
           </div>
         </div>
         <div
-          class="_separator_7ckbw_8 mx_PinnedMessagesCard_Separator"
+          class="_separator_cqpyv_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -450,7 +450,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -489,7 +489,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg

@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
-import { type Optional } from "matrix-events-sdk";
 import { act, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -413,7 +412,7 @@ describe("AppTile", () => {
         describe("for a maximised (centered) widget", () => {
             beforeEach(() => {
                 jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockImplementation(
-                    (room: Optional<Room>, widget: IWidget, container: Container) => {
+                    (room: Room | null, widget: IWidget, container: Container) => {
                         return room === r1 && widget === app1 && container === Container.Center;
                     },
                 );

@@ -777,6 +777,17 @@ export class ElementCall extends Call {
             params.append("allowIceFallback", "true");
         }
 
+        const echoCancellation = SettingsStore.getValue("webrtc_audio_echoCancellation");
+        if (!echoCancellation) {
+            // the default is true, so only set if false
+            params.append("echoCancellation", "false");
+        }
+        const noiseSuppression = SettingsStore.getValue("webrtc_audio_noiseSuppression");
+        if (!noiseSuppression) {
+            // the default is true, so only set if false
+            params.append("noiseSuppression", "false");
+        }
+
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
             SettingsStore.getValue("systemFont")

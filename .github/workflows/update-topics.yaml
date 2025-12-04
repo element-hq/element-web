@@ -26,13 +26,13 @@ jobs:
               env:
                   HS_URL: ${{ secrets.BETABOT_HS_URL }}
                   LOBBY_ROOM_ID: ${{ secrets.ROOM_ID }}
-                  PUBLIC_ROOM_ID: "!IemiTbwVankHTFiEoh:matrix.org"
-                  ANNOUNCEMENT_ROOM_ID: "!bijaLdadorKgNGtHdA:matrix.org"
+                  PUBLIC_DISCUSSION_ROOM_ID: "!xUW4PpAe1CmThA3r2wI8IrgwwsK006-zqWdJCljpd10"
+                  ANNOUNCEMENT_ROOM_ID: "!ars5ndgI6IIYZXECiJ-u8YljHNzShJn3nHdB-3rYI2M"
                   TOKEN: ${{ secrets.BETABOT_ACCESS_TOKEN }}
                   RELEASE_STATUS: "Release status: ${{ inputs.expected_status }} expected ${{ inputs.expected_date }}"
               with:
                   script: |
-                      const { HS_URL, TOKEN, RELEASE_STATUS, LOBBY_ROOM_ID, PUBLIC_ROOM_ID, ANNOUNCEMENT_ROOM_ID } = process.env;
+                      const { HS_URL, TOKEN, RELEASE_STATUS, LOBBY_ROOM_ID, PUBLIC_DISCUSSION_ROOM_ID, ANNOUNCEMENT_ROOM_ID } = process.env;
 
                       const repo = context.repo;
                       const { data } = await github.rest.repos.getLatestRelease({
@@ -71,18 +71,23 @@ jobs:
                           const data = await res.json();
                           console.log(roomId, "got event", data);
 
+                          if (!regex.test(data.topic)) {
+                              core.setFailed("Topic format is incorrect for room " + roomId);
+                              return;
+                          }
+
                           const topic = data.topic.replace(regex, releaseTopic);
                           if (topic === data.topic) {
                               console.log(roomId, "nothing to do");
                               return;
                           }
                           if (data["org.matrix.msc3765.topic"]) {
-                              data["org.matrix.msc3765.topic"].forEach(d => {
+                              data["org.matrix.msc3765.topic"]?.["m.text"].forEach(d => {
                                   d.body = d.body.replace(regex, releaseTopic);
                               });
                           }
                           if (data["m.topic"]) {
-                              data["m.topic"].forEach(d => {
+                              data["m.topic"]?.["m.text"].forEach(d => {
                                   d.body = d.body.replace(regex, releaseTopic);
                               });
                           }
@@ -97,12 +102,18 @@ jobs:
                           });
 
                           if (res.ok) {
-                              console.log(roomId, "topic updated:", topic);
+                              const resJson = res.json();
+                              if (resJson.errcode) {
+                                  core.setFailed(`Error updating ${roomId}: ${resJson.error}`);
+                              } else {
+                                  console.log(roomId, "topic updated:", topic);
+                              }
                           } else {
-                              console.log(roomId, await res.text());
+                              const errText = await res.text();
+                              core.setFailed(`Error updating ${roomId}: ${errText}`);
                           }
                       }
 
                       await updateReleaseInTopic(LOBBY_ROOM_ID);
-                      await updateReleaseInTopic(PUBLIC_ROOM_ID);
+                      await updateReleaseInTopic(PUBLIC_DISCUSSION_ROOM_ID);
                       await updateReleaseInTopic(ANNOUNCEMENT_ROOM_ID);

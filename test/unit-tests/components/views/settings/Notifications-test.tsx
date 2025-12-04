@@ -37,6 +37,7 @@ import {
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { Form } from "@vector-im/compound-web";
 
 import Notifications from "../../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -248,7 +249,12 @@ const pushRules: IPushRules = {
 const flushPromises = async () => await new Promise((resolve) => window.setTimeout(resolve));
 
 describe("<Notifications />", () => {
-    const getComponent = () => render(<Notifications />);
+    const getComponent = () =>
+        render(
+            <Form.Root>
+                <Notifications />
+            </Form.Root>,
+        );
 
     // get component, wait for async data and force a render
     const getComponentAndWait = async () => {
@@ -347,11 +353,11 @@ describe("<Notifications />", () => {
         it("renders switches correctly", async () => {
             await getComponentAndWait();
 
-            expect(screen.getByTestId("notif-master-switch")).toBeInTheDocument();
-            expect(screen.getByTestId("notif-device-switch")).toBeInTheDocument();
-            expect(screen.getByTestId("notif-setting-notificationsEnabled")).toBeInTheDocument();
-            expect(screen.getByTestId("notif-setting-notificationBodyEnabled")).toBeInTheDocument();
-            expect(screen.getByTestId("notif-setting-audioNotificationsEnabled")).toBeInTheDocument();
+            expect(screen.getByLabelText("Enable notifications for this account")).toBeInTheDocument();
+            expect(screen.getByLabelText("Enable notifications for this device")).toBeInTheDocument();
+            expect(screen.getByLabelText("Enable desktop notifications for this session")).toBeInTheDocument();
+            expect(screen.getByLabelText("Show message in desktop notification")).toBeInTheDocument();
+            expect(screen.getByLabelText("Enable audible notifications for this session")).toBeInTheDocument();
         });
 
         describe("email switches", () => {
@@ -370,7 +376,7 @@ describe("<Notifications />", () => {
 
             it("renders email switches correctly when email 3pids exist", async () => {
                 await getComponentAndWait();
-                expect(screen.getByTestId("notif-email-switch")).toBeInTheDocument();
+                expect(screen.getByLabelText(`Enable email notifications for ${testEmail}`)).toBeInTheDocument();
             });
 
             it("renders email switches correctly when notifications are on for email", async () => {
@@ -379,14 +385,14 @@ describe("<Notifications />", () => {
                 });
                 await getComponentAndWait();
 
-                const emailSwitch = screen.getByTestId("notif-email-switch");
-                expect(emailSwitch.querySelector('[aria-checked="true"]')).toBeInTheDocument();
+                const emailSwitch = screen.getByLabelText(`Enable email notifications for ${testEmail}`);
+                expect(emailSwitch).toBeChecked();
             });
 
             it("enables email notification when toggling on", async () => {
                 await getComponentAndWait();
 
-                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
+                const emailToggle = screen.getByLabelText(`Enable email notifications for ${testEmail}`);
                 fireEvent.click(emailToggle);
 
                 expect(mockClient.setPusher).toHaveBeenCalledWith(
@@ -405,7 +411,7 @@ describe("<Notifications />", () => {
                 mockClient.setPusher.mockRejectedValue({});
                 await getComponentAndWait();
 
-                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
+                const emailToggle = screen.getByLabelText(`Enable email notifications for ${testEmail}`);
                 fireEvent.click(emailToggle);
 
                 // force render
@@ -431,7 +437,7 @@ describe("<Notifications />", () => {
                 mockClient.getPushers.mockResolvedValue({ pushers: [testPusher] });
                 await getComponentAndWait();
 
-                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
+                const emailToggle = screen.getByLabelText(`Enable email notifications for ${testEmail}`);
                 fireEvent.click(emailToggle);
 
                 expect(mockClient.removePusher).toHaveBeenCalledWith(testPusher.pushkey, testPusher.app_id);
@@ -452,22 +458,20 @@ describe("<Notifications />", () => {
 
         it("toggles and sets settings correctly", async () => {
             await getComponentAndWait();
-            let audioNotifsToggle!: HTMLDivElement;
+            let audioNotifsToggle!: HTMLInputElement;
 
             const update = () => {
-                audioNotifsToggle = screen
-                    .getByTestId("notif-setting-audioNotificationsEnabled")
-                    .querySelector('div[role="switch"]')!;
+                audioNotifsToggle = screen.getByLabelText("Enable audible notifications for this session");
             };
             update();
 
-            expect(audioNotifsToggle.getAttribute("aria-checked")).toEqual("true");
+            expect(audioNotifsToggle).toBeChecked();
             expect(SettingsStore.getValue("audioNotificationsEnabled")).toEqual(true);
 
             fireEvent.click(audioNotifsToggle);
             update();
 
-            expect(audioNotifsToggle.getAttribute("aria-checked")).toEqual("false");
+            expect(audioNotifsToggle).not.toBeChecked();
             expect(SettingsStore.getValue("audioNotificationsEnabled")).toEqual(false);
         });
     });

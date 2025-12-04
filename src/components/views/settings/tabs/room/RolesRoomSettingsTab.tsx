@@ -7,16 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import {
-    EventType,
-    type RoomMember,
-    type RoomState,
-    RoomStateEvent,
-    type Room,
-    type IContent,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, type RoomMember, type RoomState, RoomStateEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { throttle, get } from "lodash";
+import { throttle, get, set } from "lodash";
 import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 import { _t, _td, type TranslationKey } from "../../../../../languageHandler";
@@ -137,6 +130,8 @@ interface RolesRoomSettingsTabState {
     isReady: boolean;
 }
 
+const EVENTS_LEVEL_PREFIX = "event_levels_";
+
 export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
@@ -199,24 +194,10 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);
 
-        const eventsLevelPrefix = "event_levels_";
-
-        if (powerLevelKey.startsWith(eventsLevelPrefix)) {
-            // deep copy "events" object, Object.assign itself won't deep copy
-            plContent["events"] = Object.assign({}, plContent["events"] || {});
-            plContent["events"][powerLevelKey.slice(eventsLevelPrefix.length)] = value;
+        if (powerLevelKey.startsWith(EVENTS_LEVEL_PREFIX)) {
+            set(plContent, ["events", powerLevelKey.slice(EVENTS_LEVEL_PREFIX.length)], value);
         } else {
-            const keyPath = powerLevelKey.split(".");
-            let parentObj: IContent = {};
-            let currentObj: IContent = plContent;
-            for (const key of keyPath) {
-                if (!currentObj[key]) {
-                    currentObj[key] = {};
-                }
-                parentObj = currentObj;
-                currentObj = currentObj[key];
-            }
-            parentObj[keyPath[keyPath.length - 1]] = value;
+            set(plContent, powerLevelKey.split("."), value);
         }
 
         try {
@@ -462,7 +443,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                             value={eventsLevels[eventType]}
                             usersDefault={defaultUserLevel}
                             disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
-                            powerLevelKey={"event_levels_" + eventType}
+                            powerLevelKey={EVENTS_LEVEL_PREFIX + eventType}
                             onChange={this.onPowerLevelsChanged}
                         />
                     </div>

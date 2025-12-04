@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Optional } from "matrix-events-sdk";
 import { type Room, type IEventRelation, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -17,7 +16,7 @@ import { createVoiceMessageRecording, type VoiceMessageRecording } from "../audi
 const SEPARATOR = "|";
 
 interface IState {
-    [voiceRecordingId: string]: Optional<VoiceMessageRecording>;
+    [voiceRecordingId: string]: VoiceMessageRecording;
 }
 
 export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
@@ -51,9 +50,9 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     /**
      * Gets the active recording instance, if any.
      * @param {string} voiceRecordingId The room ID (with optionally the thread ID if in one) to get the recording in.
-     * @returns {Optional<VoiceRecording>} The recording, if any.
+     * @returns {VoiceRecording?} The recording, if any.
      */
-    public getActiveRecording(voiceRecordingId: string): Optional<VoiceMessageRecording> {
+    public getActiveRecording(voiceRecordingId: string): VoiceMessageRecording | undefined {
         return this.state[voiceRecordingId];
     }
 
