@@ -29,7 +29,7 @@ describe("<RoomAvatarView />", () => {
     const room = mkStubRoom("roomId", "roomName", matrixClient);
 
     DMRoomMap.makeShared(matrixClient);
-    jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+    jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
 
     let defaultValue: RoomAvatarViewState;
 

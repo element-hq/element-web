@@ -20,7 +20,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
 import { waitFor } from "jest-matrix-react";
-import { type Optional } from "matrix-events-sdk";
 
 import { stubClient, mkRoom, mkEvent } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -362,13 +361,13 @@ describe("StopGapWidget with stickyPromise", () => {
 describe("StopGapWidget as an account widget", () => {
     let widget: StopGapWidget;
     let messaging: MockedObject<ClientWidgetApi>;
-    let getRoomId: MockedFunction<() => Optional<string>>;
+    let getRoomId: MockedFunction<() => string | null>;
 
     beforeEach(() => {
         stubClient();
         // I give up, getting the return type of spyOn right is hopeless
         getRoomId = jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
-            () => Optional<string>
+            () => string | null
         >;
         getRoomId.mockReturnValue("!1:example.org");
 
