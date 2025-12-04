@@ -217,7 +217,6 @@ export class WidgetContextMenuViewModel
             } else if (this._room) {
                 WidgetUtils.editWidget(this._room, this._app);
             }
-            console.log("finished edit", this.props.onFinished);
             this.props.onFinished!();
         };
     }
@@ -241,7 +240,7 @@ interface WidgetContextMenuProps {
     onDeleteClick?(): void;
     // override edit handler
     onEditClick?(): void;
-    onFinished?(): void;
+    onFinished(): void;
 }
 
 export type WidgetContextMenuViewModelProps = WidgetContextMenuProps & {
