@@ -56,6 +56,7 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
         ? (name: keyof IRoomState) => ctx[name]
         : (name: SettingKey) => SettingsStore.getValue(name, ev.getRoomId());
 
+    if (ev.getType() === EventType.RoomServerAcl && !isEnabled("showServerAclChanges")) return true;
     // Hide redacted events
     // Deleted events with a thread are always shown regardless of user preference
     // to make sure that a thread can be accessible even if the root message is deleted

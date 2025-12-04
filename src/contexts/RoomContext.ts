@@ -65,6 +65,7 @@ const RoomContext = createContext<RoomContextType>({
     showJoinLeaves: true,
     showAvatarChanges: true,
     showDisplaynameChanges: true,
+    showServerAclChanges: true,
     matrixClientIsReady: false,
     showUrlPreview: false,
     timelineRenderingType: TimelineRenderingType.Room,
