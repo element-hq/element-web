@@ -357,6 +357,7 @@ export interface RoomListStoreApi {
 
 // @alpha
 export interface RoomViewProps {
+    enableReadReceiptsAndMarkersOnActivity?: boolean;
     hideComposer?: boolean;
     hideHeader?: boolean;
     hidePinnedMessageBanner?: boolean;
