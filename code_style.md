@@ -79,7 +79,7 @@ Unless otherwise specified, the following applies to all code:
 11. If a variable is not receiving a value on declaration, its type must be defined.
 
     ```typescript
-    let errorMessage: Optional<string>;
+    let errorMessage: string;
     ```
 
 12. Objects can use shorthand declarations, including mixing of types.

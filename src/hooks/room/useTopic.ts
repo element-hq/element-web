@@ -15,11 +15,10 @@ import {
     ContentHelpers,
     type MRoomTopicEventContent,
 } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
-export const getTopic = (room?: Room): Optional<ContentHelpers.TopicState> => {
+export const getTopic = (room?: Room): ContentHelpers.TopicState | null => {
     const content = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent<MRoomTopicEventContent>();
     return !!content ? ContentHelpers.parseTopicContent(content) : null;
 };
@@ -29,7 +28,7 @@ export const getTopic = (room?: Room): Optional<ContentHelpers.TopicState> => {
  * @param room
  * @returns the raw text and an html parsion version of the room topic
  */
-export function useTopic(room?: Room): Optional<ContentHelpers.TopicState> {
+export function useTopic(room?: Room): ContentHelpers.TopicState | null {
     const [topic, setTopic] = useState(getTopic(room));
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomTopic) return;

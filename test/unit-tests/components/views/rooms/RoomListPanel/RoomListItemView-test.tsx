@@ -49,7 +49,7 @@ describe("<RoomListItemView />", () => {
         room = mkRoom(matrixClient, "room1");
 
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
 
         const notificationState = new RoomNotificationState(room, false);
         jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
