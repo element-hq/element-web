@@ -1,3 +1,11 @@
+Changes in [1.12.6](https://github.com/element-hq/element-web/releases/tag/v1.12.6) (2025-12-03)
+================================================================================================
+This release fixes a bug where 1:1 calling was incorrectly not available if no Element Call focus was set.
+
+## 🐛 Bug Fixes
+
+* Add option to pick call options for voice calls. ([#31413](https://github.com/element-hq/element-web/pull/31413)).
+
 Changes in [1.12.5](https://github.com/element-hq/element-web/releases/tag/v1.12.5) (2025-12-02)
 ================================================================================================
 ## ✨ Features
