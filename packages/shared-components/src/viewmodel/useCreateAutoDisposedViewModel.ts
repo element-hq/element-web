@@ -53,9 +53,6 @@ export function useCreateAutoDisposedViewModel<B extends BaseViewModel<unknown, 
             // Dispose the view-model when this component unmounts
             toDispose.dispose();
         };
-
-        // eslint-disable-next-line react-compiler/react-compiler
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return viewModel;
