@@ -301,7 +301,7 @@ describe("<LocationShareMenu />", () => {
 
             setShareType(getByText, LocationShareType.Live);
 
-            expect(getByText("OK").hasAttribute("disabled")).toBeTruthy();
+            expect(getByText("OK")).toHaveAttribute("aria-disabled", "true");
         });
 
         it("enables OK button when labs flag is toggled to enabled", () => {
@@ -311,7 +311,7 @@ describe("<LocationShareMenu />", () => {
 
             fireEvent.click(getByLabelText("Enable live location sharing"));
 
-            expect(getByText("OK").hasAttribute("disabled")).toBeFalsy();
+            expect(getByText("OK")).not.toHaveAttribute("aria-disabled", "true");
         });
 
         it("enables live share setting on ok button submit", () => {

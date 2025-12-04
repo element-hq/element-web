@@ -6,7 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ChangeEventHandler, useCallback, useState } from "react";
-import { Root, Field, Label, InlineSpinner, ErrorMessage, HelpMessage } from "@vector-im/compound-web";
+import {
+    Root,
+    Field,
+    Label,
+    InlineSpinner,
+    ErrorMessage,
+    HelpMessage,
+    SettingsToggleInput,
+} from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -14,7 +22,6 @@ import Markdown from "../../../Markdown";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 
 interface IProps {
     roomId: string;
@@ -33,6 +40,10 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
     const client = MatrixClientPeg.safeGet();
 
     const onReasonChange = useCallback<ChangeEventHandler<HTMLTextAreaElement>>((e) => setReason(e.target.value), []);
+    const onLeaveRoomChanged = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setLeaveRoom(e.target.checked),
+        [setLeaveRoom],
+    );
     const onCancel = useCallback(() => onFinished(false), [onFinished]);
     const onSubmit = useCallback(async () => {
         setBusy(true);
@@ -78,10 +89,11 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
                 </Field>
                 {adminMessage}
                 {busy ? <InlineSpinner /> : null}
-                <LabelledToggleSwitch
+                <SettingsToggleInput
+                    name="leave-room"
                     label={_t("room_list|more_options|leave_room")}
-                    value={leaveRoom}
-                    onChange={setLeaveRoom}
+                    checked={leaveRoom}
+                    onChange={onLeaveRoomChanged}
                 />
                 <DialogButtons
                     primaryButton={_t("action|send_report")}

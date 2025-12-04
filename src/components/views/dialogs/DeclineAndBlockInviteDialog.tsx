@@ -6,12 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler, useCallback, useState } from "react";
-import { Field, Label, Root } from "@vector-im/compound-web";
+import { Field, Label, Root, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 
 interface IProps {
     onFinished: (shouldReject: boolean, ignoreUser: boolean, reportRoom: false | string) => void;
@@ -22,6 +21,14 @@ export const DeclineAndBlockInviteDialog: React.FunctionComponent<IProps> = ({ o
     const [shouldReport, setShouldReport] = useState<boolean>(false);
     const [ignoreUser, setIgnoreUser] = useState<boolean>(false);
 
+    const onShouldReportChanged = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setShouldReport(e.target.checked),
+        [setShouldReport],
+    );
+    const onIgnoreUserChanged = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (e) => setIgnoreUser(e.target.checked),
+        [setIgnoreUser],
+    );
     const [reportReason, setReportReason] = useState<string>("");
     const reportReasonChanged = useCallback<ChangeEventHandler<HTMLTextAreaElement>>(
         (e) => setReportReason(e.target.value),
@@ -43,17 +50,19 @@ export const DeclineAndBlockInviteDialog: React.FunctionComponent<IProps> = ({ o
         >
             <Root>
                 <p>{_t("decline_invitation_dialog|confirm", { roomName })}</p>
-                <LabelledToggleSwitch
+                <SettingsToggleInput
+                    name="ignore-user"
                     label={_t("report_content|ignore_user")}
-                    onChange={setIgnoreUser}
-                    caption={_t("decline_invitation_dialog|ignore_user_help")}
-                    value={ignoreUser}
+                    onChange={onIgnoreUserChanged}
+                    helpMessage={_t("decline_invitation_dialog|ignore_user_help")}
+                    checked={ignoreUser}
                 />
-                <LabelledToggleSwitch
+                <SettingsToggleInput
+                    name="report-room"
                     label={_t("action|report_room")}
-                    onChange={setShouldReport}
-                    caption={_t("decline_invitation_dialog|report_room_description")}
-                    value={shouldReport}
+                    onChange={onShouldReportChanged}
+                    helpMessage={_t("decline_invitation_dialog|report_room_description")}
+                    checked={shouldReport}
                 />
                 <Field name="report-reason" aria-disabled={!shouldReport}>
                     <Label htmlFor="mx_DeclineAndBlockInviteDialog_reason">
