@@ -23,7 +23,7 @@ type VmCreator<B extends BaseViewModel<unknown, unknown>> = () => B;
 export function useCreateAutoDisposedViewModel<B extends BaseViewModel<unknown, unknown>>(vmCreator: VmCreator<B>): B {
     /**
      * The view-model instance may be replaced by a different instance in some scenarios.
-     * We want to be sure that whatever react component called this hook gets re-rendered
+     * We want to be sure that whichever react component called this hook gets re-rendered
      * when this happens, hence the state.
      */
     const [viewModel, setViewModel] = useState<B>(vmCreator);
