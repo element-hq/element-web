@@ -9,14 +9,16 @@ import React from "react";
 import { MatrixWidgetType } from "matrix-widget-api";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
-import { WidgetContextMenuViewModel, type WidgetContextMenuViewModelProps } from "../../../src/viewmodels/right-panel/WidgetContextMenuViewModel";
+import {
+    WidgetContextMenuViewModel,
+    type WidgetContextMenuViewModelProps,
+} from "../../../src/viewmodels/right-panel/WidgetContextMenuViewModel";
 import { stubClient } from "../../test-utils";
 import WidgetUtils from "../../../src/utils/WidgetUtils";
 import { type IApp } from "../../../src/utils/WidgetUtils-types";
 
-
 describe("WidgetContextMenuViewModel", () => {
-const widgetId = "w1";
+    const widgetId = "w1";
     const eventId = "e1";
     const roomId = "r1";
     const userId = "@user-id:server";
@@ -46,7 +48,7 @@ const widgetId = "w1";
         onDeleteClick: jest.fn(),
         onFinished: jest.fn(),
     };
-    
+
     beforeEach(() => {
         jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
         client = stubClient();
@@ -63,7 +65,7 @@ const widgetId = "w1";
             showMoveButtons: [false, false],
             canModify: true,
             isMenuOpened: true,
-            trigger: <></>
+            trigger: <></>,
         });
     });
 
@@ -78,7 +80,7 @@ const widgetId = "w1";
         expect(WidgetUtils.editWidget).toHaveBeenCalled();
         expect(vm.onFinished).toHaveBeenCalled();
     });
-    
+
     it("should call custom onEditClick if passed as props and room exist", () => {
         const props = {
             ...defaultProps,
@@ -106,7 +108,5 @@ const widgetId = "w1";
         expect(vm.onFinished).toHaveBeenCalled();
     });
 
-    it("should move container when onmovebutton is called", () => {
-
-    })
+    it("should move container when onmovebutton is called", () => {});
 });

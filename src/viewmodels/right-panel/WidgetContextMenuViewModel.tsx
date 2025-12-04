@@ -135,7 +135,7 @@ export class WidgetContextMenuViewModel
         return () => this.props.onFinished!();
     }
 
-    public get onRevokeClick() : () => void {
+    public get onRevokeClick(): () => void {
         return () => {
             const eventId = isAppWidget(this._app) ? this._app.eventId : undefined;
             logger.info("Revoking permission for widget to load: " + eventId);
@@ -148,8 +148,8 @@ export class WidgetContextMenuViewModel
                 // We don't really need to do anything about this - the user will just hit the button again.
             });
             this.props.onFinished!();
-        }
-    };
+        };
+    }
 
     public get onDeleteClick(): () => void {
         return () => {
@@ -227,7 +227,7 @@ export class WidgetContextMenuViewModel
             if (!this._room) throw new Error("room must be defined");
             WidgetLayoutStore.instance.moveWithinContainer(this._room, Container.Top, this._app, direction);
             this.props.onFinished!();
-        }
+        };
     }
 }
 
@@ -288,7 +288,7 @@ export function WidgetContextMenu(props: WidgetContextMenuProps): ReactElement {
         showMoveButtons,
     } = vm.getSnapshot();
 
-    const hasContextMenuOptions = 
+    const hasContextMenuOptions =
         showStreamAudioStreamButton ||
         showEditButton ||
         showRevokeButton ||
