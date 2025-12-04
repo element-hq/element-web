@@ -1023,7 +1023,6 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="_r_5_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1035,6 +1034,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_5_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1519,7 +1519,6 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="_r_5g_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1531,6 +1530,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_5g_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1953,7 +1953,6 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="_r_2j_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1965,6 +1964,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_2j_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2387,7 +2387,6 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="_r_ag_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2399,6 +2398,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_ag_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2599,7 +2599,6 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="_r_ag_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2611,6 +2610,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_ag_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"

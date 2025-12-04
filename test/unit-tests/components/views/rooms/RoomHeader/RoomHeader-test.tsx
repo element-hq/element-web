@@ -1,4 +1,5 @@
 /*
+Copyright (C) 2025 Element Creations Ltd
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
@@ -458,7 +459,10 @@ describe("RoomHeader", () => {
             } as unknown as Call);
             jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
             render(<RoomHeader room={room} />, getWrapper());
-            expect(screen.getByRole("button", { name: "Ongoing call" })).toHaveAttribute("aria-disabled", "true");
+            // Voice and video
+            for (const button of screen.getAllByRole("button", { name: "Ongoing call" })) {
+                expect(button).toHaveAttribute("aria-disabled", "true");
+            }
         });
 
         it("clicking on ongoing (unpinned) call re-pins it", async () => {
@@ -631,6 +635,41 @@ describe("RoomHeader", () => {
             render(<RoomHeader room={room} />, getWrapper());
 
             expect(getByLabelText(document.body, _t("voip|get_call_link"))).toBeInTheDocument();
+        });
+
+        it("gives the option of element call or legacy calling for video", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 2);
+            jest.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
+                if (key === ElementCallMemberEventType.name) return true;
+                return false;
+            });
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const button = screen.getByRole("button", { name: "Video call" });
+            expect(button).not.toHaveAttribute("aria-disabled", "true");
+            await user.click(button);
+            const elementCallButton = screen.getByRole("menuitem", { name: "Element Call" });
+            const legacyCallButton = screen.getByRole("menuitem", { name: "Legacy Call" });
+            expect(elementCallButton).toBeInTheDocument();
+            expect(legacyCallButton).toBeInTheDocument();
+        });
+        it("gives the option of element call or legacy calling for voice in DM rooms", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 2);
+            jest.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation((key) => {
+                if (key === ElementCallMemberEventType.name) return true;
+                return false;
+            });
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const button = screen.getByRole("button", { name: "Voice call" });
+            expect(button).not.toHaveAttribute("aria-disabled", "true");
+            await user.click(button);
+            const elementCallButton = screen.getByRole("menuitem", { name: "Element Call" });
+            const legacyCallButton = screen.getByRole("menuitem", { name: "Legacy Call" });
+            expect(elementCallButton).toBeInTheDocument();
+            expect(legacyCallButton).toBeInTheDocument();
         });
     });
 
