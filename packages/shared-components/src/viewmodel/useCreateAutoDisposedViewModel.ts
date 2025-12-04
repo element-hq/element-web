@@ -53,6 +53,15 @@ export function useCreateAutoDisposedViewModel<B extends BaseViewModel<unknown, 
             // Dispose the view-model when this component unmounts
             toDispose.dispose();
         };
+
+        /**
+         * We explicitly provide an empty dependency array as we don't expect the viewModel/viewCreator to
+         * change.
+         * Or to put it in another way, the only reason to use this hook is to create/dispose the view-model
+         * and that is something that should only happen at the start/end of the lifecycle of this component.
+         */
+        // eslint-disable-next-line react-compiler/react-compiler
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return viewModel;
