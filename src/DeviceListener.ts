@@ -495,13 +495,13 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
 
             if (!isCurrentDeviceTrusted) {
                 // the current device is not trusted: prompt the user to verify
-                logSpan.info("Current device not verified: showing VERIFY_THIS_SESSION toast");
+                logSpan.info("Current device not verified: setting state to VERIFY_THIS_SESSION");
                 await this.setDeviceState(DeviceState.VERIFY_THIS_SESSION, logSpan);
             } else if (!allCrossSigningSecretsCached) {
                 // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
                 logSpan.info(
-                    "Some secrets not cached: showing KEY_STORAGE_OUT_OF_SYNC toast",
+                    "Some secrets not cached: setting state to KEY_STORAGE_OUT_OF_SYNC",
                     crossSigningStatus.privateKeysCachedLocally,
                     crossSigningStatus.privateKeysInSecretStorage,
                 );
@@ -512,7 +512,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
                     logSpan,
                 );
             } else if (!keyBackupIsOk) {
-                logSpan.info("Key backup upload is unexpectedly turned off: showing TURN_ON_KEY_STORAGE toast");
+                logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
                 await this.setDeviceState(DeviceState.TURN_ON_KEY_STORAGE, logSpan);
             } else if (secretStorageStatus.defaultKeyId === null) {
                 // The user just hasn't set up 4S yet: if they have key
@@ -522,7 +522,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
                     logSpan.info("Recovery disabled: no toast needed");
                     await this.setDeviceState(DeviceState.OK, logSpan);
                 } else if (keyBackupUploadActive) {
-                    logSpan.info("No default 4S key: showing SET_UP_RECOVERY toast");
+                    logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
                     await this.setDeviceState(DeviceState.SET_UP_RECOVERY, logSpan);
                 } else {
                     logSpan.info("No default 4S key but backup disabled: no toast needed");
