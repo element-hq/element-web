@@ -56,8 +56,8 @@ describe("<RoomListItemMenuView />", () => {
         room = mkRoom(matrixClient, "room1");
     });
 
-    function renderMenu(setMenuOpen = jest.fn()) {
-        return render(<RoomListItemMenuView room={room} setMenuOpen={setMenuOpen} />);
+    function renderMenu() {
+        return render(<RoomListItemMenuView room={room} />);
     }
 
     it("should render the more options menu", () => {
@@ -83,18 +83,6 @@ describe("<RoomListItemMenuView />", () => {
         renderMenu();
         expect(screen.queryByRole("button", { name: "Notification options" })).toBeNull();
     });
-
-    it.each([["More Options"], ["Notification options"]])(
-        "should call setMenuOpen when the menu is opened for %s menu",
-        async (label) => {
-            const user = userEvent.setup();
-            const setMenuOpen = jest.fn();
-            renderMenu(setMenuOpen);
-
-            await user.click(screen.getByRole("button", { name: label }));
-            expect(setMenuOpen).toHaveBeenCalledWith(true);
-        },
-    );
 
     it("should display all the buttons and have the actions linked for the more options menu", async () => {
         const user = userEvent.setup();

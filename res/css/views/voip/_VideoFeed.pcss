@@ -49,9 +49,7 @@ Please see LICENSE files in the repository root for full details.
         position: absolute;
         left: 6px;
         bottom: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        z-index: 1;
 
         width: 24px;
         height: 24px;
@@ -59,24 +57,11 @@ Please see LICENSE files in the repository root for full details.
         background-color: rgb(0, 0, 0, 0.5); /* Same on both themes */
         border-radius: 100%;
 
-        &::before {
-            position: absolute;
-            content: "";
-            width: 17px;
-            height: 17px;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
-            background-color: white; /* Same on both themes */
-            border-radius: 7px;
-        }
-
-        &.mx_VideoFeed_mic_muted::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/mic-off-solid.svg");
-        }
-
-        &.mx_VideoFeed_mic_unmuted::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/mic-on-solid.svg");
+        svg {
+            width: 16px;
+            height: 16px;
+            padding: 4px;
+            color: white; /* Same on both themes */
         }
     }
 }

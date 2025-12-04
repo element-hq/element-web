@@ -19,10 +19,6 @@ interface RoomListItemContextMenuViewProps {
      * The room to display the menu for.
      */
     room: Room;
-    /**
-     * Set the menu open state.
-     */
-    setMenuOpen: (isOpen: boolean) => void;
 }
 
 /**
@@ -30,7 +26,6 @@ interface RoomListItemContextMenuViewProps {
  */
 export function RoomListItemContextMenuView({
     room,
-    setMenuOpen,
     children,
 }: PropsWithChildren<RoomListItemContextMenuViewProps>): JSX.Element {
     const vm = useRoomListItemMenuViewModel(room);
@@ -42,7 +37,6 @@ export function RoomListItemContextMenuView({
             // To not mess with the roving tab index of the button
             hasAccessibleAlternative={true}
             trigger={children}
-            onOpenChange={setMenuOpen}
         >
             <MoreOptionContent vm={vm} />
         </ContextMenu>

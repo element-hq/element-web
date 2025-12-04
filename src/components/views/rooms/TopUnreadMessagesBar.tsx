@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { ChevronUpIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -24,12 +25,16 @@ export default class TopUnreadMessagesBar extends React.PureComponent<IProps> {
                     className="mx_TopUnreadMessagesBar_scrollUp"
                     title={_t("room|jump_read_marker")}
                     onClick={this.props.onScrollUpClick}
-                />
+                >
+                    <ChevronUpIcon />
+                </AccessibleButton>
                 <AccessibleButton
                     className="mx_TopUnreadMessagesBar_markAsRead"
                     title={_t("notifications|mark_all_read")}
                     onClick={this.props.onCloseClick}
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
             </div>
         );
     }

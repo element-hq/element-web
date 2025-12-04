@@ -1212,7 +1212,7 @@ export const SETTINGS: Settings = {
         default: SortingAlgorithm.Recency,
     },
     "RoomList.showMessagePreview": {
-        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
         displayName: _td("settings|show_message_previews"),
     },
