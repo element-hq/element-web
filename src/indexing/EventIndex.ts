@@ -58,12 +58,20 @@ interface ICrawler {
     cancel(): void;
 }
 
-/*
+/**
  * Event indexing class that wraps the platform specific event indexing.
  */
 export default class EventIndex extends EventEmitter {
-    private crawlerCheckpoints: ICrawlerCheckpoint[] = [];
     private crawler: ICrawler | null = null;
+
+    /**
+     * A list of checkpoints which are awaiting processing by the crawler, once it has done with `currentCheckpoint`.
+     */
+    private crawlerCheckpoints: ICrawlerCheckpoint[] = [];
+
+    /**
+     * The current checkpoint that the crawler is working on.
+     */
     private currentCheckpoint: ICrawlerCheckpoint | null = null;
 
     public async init(): Promise<void> {
@@ -102,7 +110,7 @@ export default class EventIndex extends EventEmitter {
     }
 
     /**
-     * Get crawler checkpoints for the encrypted rooms and store them in the index.
+     * Add crawler checkpoints for all of the encrypted rooms the user is in.
      */
     public async addInitialCheckpoints(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
@@ -961,7 +969,10 @@ export default class EventIndex extends EventEmitter {
     }
 
     public crawlingRooms(): {
+        /** The rooms that we are currently crawling. */
         crawlingRooms: Set<string>;
+
+        /** All the encrypted rooms known by the MatrixClient. */
         totalRooms: Set<string>;
     } {
         const totalRooms = new Set<string>();

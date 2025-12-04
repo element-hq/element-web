@@ -15,10 +15,23 @@ import {
 
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
+
+/** A record of a place to resume crawling events in a given room. */
 export interface ICrawlerCheckpoint {
+    /** The room to be indexed */
     roomId: string;
+
+    /** The pagination index to resume crawling from. */
     token: string | null;
+
+    /**
+     * If `fullCrawl` is false (or absent) and we find that we have already indexed the events we find, then we stop crawling.
+     *
+     * If `fullCrawl` is true, then we keep going until we reach the end of the room history.
+     */
     fullCrawl?: boolean;
+
+    /** Whether we should crawl in the forward or backward direction. */
     direction: Direction;
 }
 
