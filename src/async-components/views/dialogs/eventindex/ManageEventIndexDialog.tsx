@@ -32,6 +32,9 @@ interface IState {
     /** Number of events currently indexed in the event index. */
     eventCount: number;
 
+    /** Number of rooms currently mentioned in the event index. */
+    eventIndexRoomCount: number;
+
     /** Number of rooms awaiting crawling by the EventIndex. */
     crawlingRoomsCount: number;
 
@@ -55,6 +58,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,
+            eventIndexRoomCount: 0,
             crawlingRoomsCount: 0,
             roomCount: 0,
             currentRoom: null,
@@ -85,6 +89,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         this.setState({
             eventIndexSize: stats?.size ?? 0,
             eventCount: stats?.eventCount ?? 0,
+            eventIndexRoomCount: stats?.roomCount ?? 0,
             crawlingRoomsCount: crawlingRoomsCount,
             roomCount: roomCount,
             currentRoom: currentRoom,
@@ -130,7 +135,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
             crawlerState = _t("settings|security|message_search_indexing", { currentRoom: this.state.currentRoom });
         }
 
-        const doneRooms = Math.max(0, this.state.roomCount - this.state.crawlingRoomsCount);
+        const doneRooms = Math.max(0, this.state.eventIndexRoomCount - this.state.crawlingRoomsCount);
 
         const eventIndexingSettings = (
             <div>
@@ -149,6 +154,10 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                         doneRooms: formatCountLong(doneRooms),
                         totalRooms: formatCountLong(this.state.roomCount),
                     })}{" "}
+                    <br />
+                    {_t("settings|security|message_search_pending_rooms", {
+                        pendingRooms: formatCountLong(this.state.crawlingRoomsCount),
+                    })}
                     <br />
                     <Field
                         label={_t("settings|security|message_search_sleep_time")}
