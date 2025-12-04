@@ -62,7 +62,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         };
     }
 
-    public updateCurrentRoom = async (room: Room): Promise<void> => {
+    public updateCurrentRoom = async (room: Room | null): Promise<void> => {
         const eventIndex = EventIndexPeg.get();
         if (!eventIndex) return;
         let stats: IIndexStats | undefined;
@@ -100,44 +100,14 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     }
 
     public async componentDidMount(): Promise<void> {
-        let eventIndexSize = 0;
-        let crawlingRoomsCount = 0;
-        let roomCount = 0;
-        let eventCount = 0;
-        let currentRoom: string | null = null;
-
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            try {
-                const stats = await eventIndex.getStats();
-                if (stats) {
-                    eventIndexSize = stats.size;
-                    eventCount = stats.eventCount;
-                }
-            } catch {
-                // This call may fail if sporadically, not a huge issue as we
-                // will try later again in the updateCurrentRoom call and
-                // probably succeed.
-            }
-
-            const roomStats = eventIndex.crawlingRooms();
-            crawlingRoomsCount = roomStats.crawlingRooms.size;
-            roomCount = roomStats.totalRooms.size;
-
             const room = eventIndex.currentRoom();
-            if (room) currentRoom = room.name;
+            await this.updateCurrentRoom(room);
         }
-
-        this.setState({
-            eventIndexSize,
-            eventCount,
-            crawlingRoomsCount,
-            roomCount,
-            currentRoom,
-        });
     }
 
     private onDisable = async (): Promise<void> => {
