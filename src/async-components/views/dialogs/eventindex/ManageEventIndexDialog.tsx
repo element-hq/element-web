@@ -26,11 +26,22 @@ interface IProps {
 }
 
 interface IState {
+    /** Size of the event index, in bytes. */
     eventIndexSize: number;
+
+    /** Number of events currently indexed in the event index. */
     eventCount: number;
+
+    /** Number of rooms awaiting crawling by the EventIndex. */
     crawlingRoomsCount: number;
+
+    /** Number of encrypted rooms known by the MatrixClient. */
     roomCount: number;
+
+    /** Room currently being crawled by the EventIndex. */
     currentRoom: string | null;
+
+    /** Time to sleep between crawlwer passes, in milliseconds. */
     crawlerSleepTime: number;
 }
 
