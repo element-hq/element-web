@@ -92,10 +92,10 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     // TODO: Refactor widgetKind into the Widget class
     public constructor(
-        private forWidget: Widget,
-        private forWidgetKind: WidgetKind,
+        private readonly forWidget: Widget,
+        private readonly forWidgetKind: WidgetKind,
         virtual: boolean,
-        private inRoomId?: string,
+        private readonly inRoomId?: string,
     ) {
         super();
 
