@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
-import { act, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import { act, render, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import {
     type ApprovalOpts,
@@ -363,8 +363,6 @@ describe("AppTile", () => {
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             const { asFragment } = renderResult;
 
-            console.log({isInContainer: WidgetLayoutStore.instance.isInContainer(r1, app1, Container.Center)});
-
             expect(asFragment()).toMatchSnapshot(); // Take a snapshot of the pinned widget
         });
 
@@ -379,7 +377,6 @@ describe("AppTile", () => {
         });
 
         it("clicking 'minimise' should send the widget to the right", async () => {
-    
             const renderResult = render(
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} room={r1} />
@@ -448,7 +445,7 @@ describe("AppTile", () => {
 
             afterEach(() => {
                 jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockRestore();
-            })
+            });
 
             it("clicking 'un-maximise' should send the widget to the top", async () => {
                 const renderResult = render(
