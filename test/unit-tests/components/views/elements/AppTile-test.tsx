@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
-import { act, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import { act, render, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import {
     type ApprovalOpts,
@@ -50,6 +50,8 @@ jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
         },
     },
 }));
+
+const realGetValue = SettingsStore.getValue;
 
 describe("AppTile", () => {
     let cli: MatrixClient;
@@ -106,27 +108,40 @@ describe("AppTile", () => {
             if (roomId === "r2") return [app2];
             return [];
         });
+    });
+
+    afterAll(async () => {
+        jest.restoreAllMocks();
+    });
+
+    beforeEach(async () => {
+        // Do not carry across settings from previous tests
+        SettingsStore.reset();
+        sdkContext = new SdkContextClass();
+        // @ts-ignore
+        await WidgetMessagingStore.instance.onReady();
 
         // Wake up various stores we rely on
         WidgetLayoutStore.instance.useUnitTestClient(cli);
         // @ts-ignore
         await WidgetLayoutStore.instance.onReady();
+
         RightPanelStore.instance.useUnitTestClient(cli);
         // @ts-ignore
         await RightPanelStore.instance.onReady();
     });
 
-    beforeEach(async () => {
-        sdkContext = new SdkContextClass();
+    afterEach(async () => {
         jest.spyOn(SettingsStore, "getValue").mockRestore();
         // @ts-ignore
-        await WidgetMessagingStore.instance.onReady();
+        await WidgetLayoutStore.instance.onNotReady();
+        // @ts-ignore
+        await RightPanelStore.instance.onNotReady();
     });
 
     it("destroys non-persisted right panel widget on room change", async () => {
         // Set up right panel state
-        const realGetValue = SettingsStore.getValue;
-        const mockSettings = jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
             if (name !== "RightPanel.phases") return realGetValue(name, roomId);
             if (roomId === "r1") {
                 return {
@@ -189,8 +204,6 @@ describe("AppTile", () => {
 
         expect(renderResult.queryByText("Example 1")).not.toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
-
-        mockSettings.mockRestore();
     });
 
     it("distinguishes widgets with the same ID in different rooms", async () => {
@@ -327,50 +340,57 @@ describe("AppTile", () => {
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
     });
 
-    afterAll(async () => {
-        // @ts-ignore
-        await WidgetLayoutStore.instance.onNotReady();
-        // @ts-ignore
-        await RightPanelStore.instance.onNotReady();
-        jest.restoreAllMocks();
-    });
-
     describe("for a pinned widget", () => {
-        let renderResult: RenderResult;
         let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
-
         beforeEach(async () => {
-            renderResult = render(
+            moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
+        });
+
+        it("should render", async () => {
+            const renderResult = render(
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} room={r1} />
                 </MatrixClientContext.Provider>,
             );
-
-            moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
-        });
-
-        it("should render", () => {
             const { asFragment } = renderResult;
 
             expect(asFragment()).toMatchSnapshot(); // Take a snapshot of the pinned widget
         });
 
-        it("should not display the »Popout widget« button", () => {
+        it("should not display the »Popout widget« button", async () => {
+            const renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <AppTile key={app1.id} app={app1} room={r1} />
+                </MatrixClientContext.Provider>,
+            );
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             expect(renderResult.queryByLabelText("Popout widget")).not.toBeInTheDocument();
         });
 
         it("clicking 'minimise' should send the widget to the right", async () => {
+            const renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <AppTile key={app1.id} app={app1} room={r1} />
+                </MatrixClientContext.Provider>,
+            );
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Minimise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Right);
         });
 
         it("clicking 'maximise' should send the widget to the center", async () => {
+            const renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <AppTile key={app1.id} app={app1} room={r1} />
+                </MatrixClientContext.Provider>,
+            );
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Maximise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Center);
         });
 
-        it("should render permission request", () => {
+        it("should render permission request", async () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
                 if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
                     (opts as ApprovalOpts).approved = false;
@@ -378,21 +398,17 @@ describe("AppTile", () => {
             });
 
             // userId and creatorUserId are different
-            const renderResult = render(
+            const { container, asFragment, queryByRole } = render(
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />
                 </MatrixClientContext.Provider>,
             );
-
-            const { container, asFragment } = renderResult;
-
             expect(container.querySelector(".mx_Spinner")).toBeFalsy();
+            expect(queryByRole("button", { name: "Continue" })).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
-
-            expect(renderResult.queryByRole("button", { name: "Continue" })).toBeInTheDocument();
         });
 
-        it("should not display 'Continue' button on permission load", () => {
+        it("should not display 'Continue' button on permission load", async () => {
             jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
                 if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
                     (opts as ApprovalOpts).approved = true;
@@ -405,6 +421,7 @@ describe("AppTile", () => {
                     <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />
                 </MatrixClientContext.Provider>,
             );
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
 
             expect(renderResult.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument();
         });
@@ -418,7 +435,17 @@ describe("AppTile", () => {
                 );
             });
 
+            afterEach(() => {
+                jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockRestore();
+            });
+
             it("clicking 'un-maximise' should send the widget to the top", async () => {
+                const renderResult = render(
+                    <MatrixClientContext.Provider value={cli}>
+                        <AppTile key={app1.id} app={app1} room={r1} />
+                    </MatrixClientContext.Provider>,
+                );
+                await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
                 await userEvent.click(renderResult.getByLabelText("Un-maximise"));
                 expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Top);
             });
@@ -440,36 +467,28 @@ describe("AppTile", () => {
 
                 const mockWidget = new ElementWidget(app1);
                 WidgetMessagingStore.instance.storeMessaging(mockWidget, r1.roomId, messaging);
+            });
 
-                renderResult = render(
+            it("should display the »Popout widget« button", async () => {
+                const renderResult = render(
                     <MatrixClientContext.Provider value={cli}>
                         <AppTile key={app1.id} app={app1} room={r1} />
                     </MatrixClientContext.Provider>,
                 );
-            });
-
-            it("should display the »Popout widget« button", () => {
+                await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
                 expect(renderResult.getByLabelText("Popout widget")).toBeInTheDocument();
             });
         });
     });
 
     describe("for a persistent app", () => {
-        let renderResult: RenderResult;
-
-        beforeEach(async () => {
-            renderResult = render(
+        it("should render", async () => {
+            const { asFragment, queryByRole } = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <AppTile key={app1.id} app={app1} fullWidth={true} room={r1} miniMode={true} showMenubar={false} />
+                    <AppTile key={app1.id} app={app1} room={r1} fullWidth={true} miniMode={true} showMenubar={false} />
                 </MatrixClientContext.Provider>,
             );
-
-            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
-        });
-
-        it("should render", async () => {
-            const { asFragment } = renderResult;
-
+            await waitForElementToBeRemoved(() => queryByRole("progressbar"));
             expect(asFragment()).toMatchSnapshot();
         });
     });
