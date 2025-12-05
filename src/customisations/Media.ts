@@ -8,7 +8,6 @@
 
 import { type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
-import { type Optional } from "matrix-events-sdk";
 
 import type { MediaCustomisations, Media } from "@element-hq/element-web-module-api";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -58,7 +57,7 @@ class MediaImplementation implements Media {
      * The MXC URI of the thumbnail media, if a thumbnail is recorded. Null/undefined
      * otherwise.
      */
-    public get thumbnailMxc(): Optional<string> {
+    public get thumbnailMxc(): string | undefined {
         return this.prepared.thumbnail?.mxc;
     }
 

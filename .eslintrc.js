@@ -10,6 +10,7 @@ module.exports = {
     extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     parserOptions: {
         project: ["./tsconfig.json"],
+        tsconfigRootDir: __dirname,
     },
     env: {
         browser: true,

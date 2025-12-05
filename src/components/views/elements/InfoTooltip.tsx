@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
+import { ErrorSolidIcon, InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 
@@ -30,14 +31,14 @@ export default class InfoTooltip extends React.PureComponent<TooltipProps> {
     public render(): React.ReactNode {
         const { tooltip, children, className, kind } = this.props;
         const title = _t("info_tooltip_title");
-        const iconClassName =
-            kind !== InfoTooltipKind.Warning ? "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning";
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
         return (
             <Tooltip description={tooltip || title} placement="right">
                 <div className={classNames("mx_InfoTooltip", className)} tabIndex={this.props.tabIndex ?? 0}>
-                    <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
+                    <span className="mx_InfoTooltip_icon" aria-label={title}>
+                        {kind !== InfoTooltipKind.Warning ? <InfoIcon /> : <ErrorSolidIcon />}
+                    </span>
                     {children}
                 </div>
             </Tooltip>

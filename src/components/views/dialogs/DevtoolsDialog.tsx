@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
+import { Form } from "@vector-im/compound-web";
 
 import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -101,13 +102,19 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                         })}
                     </div>
                 ))}
-                <div>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                    className="mx_DevTools_toggleForm"
+                >
                     <h2 className="mx_DevTools_toolHeading">{_t("common|options")}</h2>
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
                     <SettingsField settingKey="Developer.elementCallUrl" level={SettingLevel.DEVICE} />
-                </div>
+                </Form.Root>
             </BaseTool>
         );
     }

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ChangeEvent, type SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Optional } from "matrix-events-sdk";
 import { type LoginFlow, MatrixError, SSOAction, type SSOFlow } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
@@ -217,7 +216,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             });
     }
 
-    private renderPasswordForm(introText: Optional<string>): JSX.Element {
+    private renderPasswordForm(introText?: string): JSX.Element {
         let error: JSX.Element | undefined;
         if (this.state.errorText) {
             error = <span className="mx_Login_error">{this.state.errorText}</span>;
@@ -244,7 +243,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         );
     }
 
-    private renderSsoForm(introText: Optional<string>): JSX.Element {
+    private renderSsoForm(introText?: string): JSX.Element {
         const loginType = this.state.loginView === LoginView.CAS ? "cas" : "sso";
         const flow = this.state.flows.find((flow) => flow.type === "m.login." + loginType) as SSOFlow;
 
@@ -284,14 +283,14 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return (
                 <>
                     <p>{_t("auth|soft_logout_intro_sso")}</p>
-                    {this.renderSsoForm(null)}
+                    {this.renderSsoForm()}
                     <h2 className="mx_AuthBody_centered">
                         {_t("auth|sso_or_username_password", {
                             ssoButtons: "",
                             usernamePassword: "",
                         }).trim()}
                     </h2>
-                    {this.renderPasswordForm(null)}
+                    {this.renderPasswordForm()}
                 </>
             );
         }

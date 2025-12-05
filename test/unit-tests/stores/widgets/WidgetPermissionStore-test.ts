@@ -16,7 +16,7 @@ import { TestSdkContext } from "../../TestSdkContext";
 import { type SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { stubClient } from "../../../test-utils";
-import { StopGapWidgetDriver } from "../../../../src/stores/widgets/StopGapWidgetDriver";
+import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
 import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
 
 jest.mock("../../../../src/settings/SettingsStore");
@@ -93,7 +93,7 @@ describe("WidgetPermissionStore", () => {
         expect(store2).toStrictEqual(store);
     });
     it("auto-approves OIDC requests for element-call", async () => {
-        new StopGapWidgetDriver([], elementCallWidget, WidgetKind.Room, true, roomId);
+        new ElementWidgetDriver(elementCallWidget, WidgetKind.Room, true, roomId);
         expect(widgetPermissionStore.getOIDCState(elementCallWidget, WidgetKind.Room, roomId)).toEqual(
             OIDCState.Allowed,
         );

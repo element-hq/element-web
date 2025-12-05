@@ -49,7 +49,7 @@ describe("<RoomListItemView />", () => {
         room = mkRoom(matrixClient, "room1");
 
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
 
         const notificationState = new RoomNotificationState(room, false);
         jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
@@ -100,41 +100,6 @@ describe("<RoomListItemView />", () => {
 
         await user.click(screen.getByRole("option", { name: `Open room ${room.name}` }));
         expect(defaultValue.openRoom).toHaveBeenCalled();
-    });
-
-    test("should hover decoration if hovered", async () => {
-        mocked(useRoomListItemViewModel).mockReturnValue({ ...defaultValue, showHoverMenu: true });
-
-        const user = userEvent.setup();
-        renderRoomListItem();
-
-        const listItem = screen.getByRole("option", { name: `Open room ${room.name}` });
-        expect(screen.queryByRole("button", { name: "More Options" })).toBeNull();
-
-        await user.hover(listItem);
-        await waitFor(() => expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument());
-    });
-
-    test("should hover decoration if focused", async () => {
-        const { rerender } = renderRoomListItem({
-            isFocused: true,
-        });
-
-        const listItem = screen.getByRole("option", { name: `Open room ${room.name}` });
-        expect(listItem).toHaveClass("_flex_4dswl_9 mx_RoomListItemView mx_RoomListItemView_hover");
-
-        rerender(
-            <RoomListItemView
-                room={room}
-                isSelected={false}
-                isFocused={false}
-                onFocus={jest.fn()}
-                roomIndex={0}
-                roomCount={1}
-            />,
-        );
-
-        await waitFor(() => expect(listItem).not.toHaveClass("flex mx_RoomListItemView mx_RoomListItemView_hover"));
     });
 
     test("should be selected if isSelected=true", async () => {

@@ -30,7 +30,7 @@ describe("useRoomListNavigation", () => {
         ];
 
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
         jest.spyOn(dispatcher, "dispatch");
     });
 

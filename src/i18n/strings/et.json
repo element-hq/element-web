@@ -2489,7 +2489,6 @@
             "error_update_guest_access": "Ei õnnestunud selle kogukonnakekuse külaliste ligipääsureegleid uuendada",
             "error_update_history_visibility": "Ei õnnestunud selle kogukonnakekuse ajaloo loetavust uuendada",
             "guest_access_explainer": "Külalised võivad liituda kogukonnakeskusega ilma kasutajakontota.",
-            "guest_access_explainer_public_space": "Seda saad kasutada näiteks avalike kogukonnakeskuste puhul.",
             "guest_access_label": "Luba ligipääs külalistele",
             "history_visibility_anyone_space": "Kogukonna eelvaade",
             "history_visibility_anyone_space_description": "Luba huvilistel enne liitumist näha kogukonnakeskuse eelvaadet.",

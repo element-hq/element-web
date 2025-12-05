@@ -84,7 +84,7 @@ class Helpers {
     /**
      * Return the system theme toggle
      */
-    getMatchSystemThemeCheckbox() {
+    getMatchSystemThemeSwitch() {
         return this.getThemePanel().getByRole("switch", { name: "Match system theme" });
     }
 
@@ -216,9 +216,9 @@ class Helpers {
     }
 
     /**
-     * Return the compact layout checkbox
+     * Return the compact layout switch
      */
-    getCompactLayoutCheckbox() {
+    getCompactLayoutSwitch() {
         return this.getMessageLayoutPanel().getByRole("switch", { name: "Show compact text and messages" });
     }
 

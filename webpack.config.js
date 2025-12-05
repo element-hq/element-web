@@ -214,8 +214,7 @@ module.exports = (env, argv) => {
                     __dirname,
                     "node_modules/@matrix-org/react-sdk-module-api",
                 ),
-                // and matrix-events-sdk & matrix-widget-api
-                "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
+                // and matrix-widget-api
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
                 "oidc-client-ts": path.resolve(__dirname, "node_modules/oidc-client-ts"),
 

@@ -1799,7 +1799,6 @@
             "error_update_guest_access": "Het bijwerken van de gastentoegang van deze space is niet gelukt",
             "error_update_history_visibility": "Het bijwerken van de geschiedenis leesbaarheid voor deze space is mislukt",
             "guest_access_explainer": "Gasten kunnen deelnemen aan een space zonder een account.",
-            "guest_access_explainer_public_space": "Dit kan nuttig zijn voor publieke spaces.",
             "guest_access_label": "Gastentoegang inschakelen",
             "history_visibility_anyone_space": "Space voorvertoning",
             "history_visibility_anyone_space_description": "Personen toestaan een voorvertoning van jouw space te zien voor deelname.",

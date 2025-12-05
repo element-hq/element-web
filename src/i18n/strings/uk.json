@@ -2440,7 +2440,6 @@
             "error_update_guest_access": "Не вдалося оновити гостьовий доступ до цього простору",
             "error_update_history_visibility": "Не вдалося оновити видимість історії цього простору",
             "guest_access_explainer": "Гості можуть приєднатися до простору без облікового запису.",
-            "guest_access_explainer_public_space": "Це може бути корисним для загальнодоступних просторів.",
             "guest_access_label": "Увімкнути гостьовий доступ",
             "history_visibility_anyone_space": "Попередній перегляд простору",
             "history_visibility_anyone_space_description": "Дозвольте людям переглядати ваш простір, перш ніж вони приєднаються.",

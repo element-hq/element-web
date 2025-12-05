@@ -1786,7 +1786,6 @@
             "error_update_guest_access": "Fallou a actualización do acceso de convidadas ao espazo",
             "error_update_history_visibility": "Fallou a actualización da visibilidade do historial do espazo",
             "guest_access_explainer": "As convidadas poden unirse ao espazo sen ter unha conta.",
-            "guest_access_explainer_public_space": "Esto podería ser útil para espazos públicos.",
             "guest_access_label": "Activar acceso de convidadas",
             "history_visibility_anyone_space": "Vista previa do Espazo",
             "history_visibility_anyone_space_description": "Permitir que sexa visible o espazo antes de unirte a el.",

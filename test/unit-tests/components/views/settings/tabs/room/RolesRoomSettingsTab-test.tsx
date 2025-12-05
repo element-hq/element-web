@@ -247,4 +247,42 @@ describe("RolesRoomSettingsTab", () => {
         deferred.reject("Error");
         await waitFor(() => expect(selector).toHaveValue("100"));
     });
+
+    it("should allow changing events power levels", async () => {
+        mocked(cli.sendStateEvent).mockResolvedValue({ event_id: "$eventId" });
+        mocked(cli.getRoom).mockReturnValue(room);
+        mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+        const { container } = await renderTab();
+
+        const selector = container.querySelector(`[placeholder="Change topic"]`)!;
+        fireEvent.change(selector, { target: { value: "0" } });
+
+        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+            room.roomId,
+            "m.room.power_levels",
+            expect.objectContaining({
+                events: expect.objectContaining({
+                    "m.room.topic": 0,
+                }),
+            }),
+        );
+    });
+
+    it("should allow changing top level power levels", async () => {
+        mocked(cli.sendStateEvent).mockResolvedValue({ event_id: "$eventId" });
+        mocked(cli.getRoom).mockReturnValue(room);
+        mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+        const { container } = await renderTab();
+
+        const selector = container.querySelector(`[placeholder="Remove users"]`)!;
+        fireEvent.change(selector, { target: { value: "0" } });
+
+        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+            room.roomId,
+            "m.room.power_levels",
+            expect.objectContaining({
+                kick: 0,
+            }),
+        );
+    });
 });
