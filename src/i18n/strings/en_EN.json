@@ -1762,6 +1762,7 @@
         "end_message": "The poll has ended. Top answer: %(topAnswer)s",
         "end_message_no_votes": "The poll has ended. No votes were cast.",
         "end_title": "End Poll",
+        "ended_poll_label": "Poll ended",
         "error_ending_description": "Sorry, the poll did not end. Please try again.",
         "error_ending_title": "Failed to end poll",
         "error_voting_description": "Sorry, your vote was not registered. Please try again.",
@@ -1769,10 +1770,20 @@
         "failed_send_poll_description": "Sorry, the poll you tried to create was not posted.",
         "failed_send_poll_title": "Failed to post poll",
         "notes": "Results are only revealed when you end the poll",
+        "option_label": "Option %(number)s, %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "Option %(number)s, %(answer)s, winning option, %(count)s vote",
+            "other": "Option %(number)s, %(answer)s, winning option, %(count)s votes"
+        },
+        "option_label_with_total": {
+            "one": "Option %(number)s, %(answer)s, %(count)s vote",
+            "other": "Option %(number)s, %(answer)s, %(count)s votes"
+        },
         "options_add_button": "Add option",
         "options_heading": "Create options",
         "options_label": "Option %(number)s",
         "options_placeholder": "Write an option",
+        "poll_label": "Poll",
         "topic_heading": "What is your poll question or topic?",
         "topic_label": "Question or topic",
         "topic_placeholder": "Write something…",
@@ -3529,7 +3540,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ended a poll",
             "sender_ended": "%(senderName)s has ended a poll"
         },
         "m.poll.start": "%(senderName)s has started a poll - %(pollQuestion)s",
