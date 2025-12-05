@@ -22,7 +22,7 @@ export interface ICrawlerCheckpoint {
     roomId: string;
 
     /** The pagination index to resume crawling from. */
-    token: string | null;
+    token: string;
 
     /**
      * If `fullCrawl` is false (or absent) and we find that we have already indexed the events we find, then we stop crawling.

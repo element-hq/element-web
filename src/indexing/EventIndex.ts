@@ -133,6 +133,10 @@ export default class EventIndex extends EventEmitter {
                 const timeline = room.getLiveTimeline();
                 const token = timeline.getPaginationToken(Direction.Backward);
 
+                if (!token) {
+                    return;
+                }
+
                 const backCheckpoint: ICrawlerCheckpoint = {
                     roomId: room.roomId,
                     token: token,
@@ -147,15 +151,11 @@ export default class EventIndex extends EventEmitter {
                 };
 
                 try {
-                    if (backCheckpoint.token) {
-                        await indexManager.addCrawlerCheckpoint(backCheckpoint);
-                        this.crawlerCheckpoints.push(backCheckpoint);
-                    }
+                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
+                    this.crawlerCheckpoints.push(backCheckpoint);
 
-                    if (forwardCheckpoint.token) {
-                        await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-                        this.crawlerCheckpoints.push(forwardCheckpoint);
-                    }
+                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+                    this.crawlerCheckpoints.push(forwardCheckpoint);
                 } catch (e) {
                     logger.log(
                         "EventIndex: Error adding initial checkpoints for room",
