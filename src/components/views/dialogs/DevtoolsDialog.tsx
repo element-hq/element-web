@@ -113,8 +113,8 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
-                    <SettingsField settingKey="Developer.elementCallUrl" level={SettingLevel.DEVICE} />
                 </Form.Root>
+                <SettingsField settingKey="Developer.elementCallUrl" level={SettingLevel.DEVICE} />
             </BaseTool>
         );
     }
