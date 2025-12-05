@@ -115,6 +115,8 @@ describe("AppTile", () => {
     });
 
     beforeEach(async () => {
+        // Do not carry across settings from previous tests
+        SettingsStore.reset();
         sdkContext = new SdkContextClass();
         // @ts-ignore
         await WidgetMessagingStore.instance.onReady();
@@ -343,16 +345,8 @@ describe("AppTile", () => {
     describe("for a pinned widget", () => {
         let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
         beforeEach(async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, ...args) => {
-                // console.log('get value', settingName);
-                if (settingName === 'Widgets.layout') {
-                    return {};
-                }
-                if (settingName === 'Widgets.pinned') {
-                    return {};
-                }
-                return realGetValue(settingName, ...args);
-            });
+            // Do not carry across settings from previous tests
+            SettingsStore.reset();
             // Recalculate now that settings has been applied.
             // @ts-ignore
             await WidgetLayoutStore.instance.onReady();
