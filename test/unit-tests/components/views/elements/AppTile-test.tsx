@@ -51,6 +51,8 @@ jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     },
 }));
 
+const realGetValue = SettingsStore.getValue;
+
 describe("AppTile", () => {
     let cli: MatrixClient;
     let sdkContext: SdkContextClass;
@@ -116,17 +118,27 @@ describe("AppTile", () => {
         await RightPanelStore.instance.onReady();
     });
 
+    afterAll(async () => {
+        // @ts-ignore
+        await WidgetLayoutStore.instance.onNotReady();
+        // @ts-ignore
+        await RightPanelStore.instance.onNotReady();
+        jest.restoreAllMocks();
+    });
+
     beforeEach(async () => {
         sdkContext = new SdkContextClass();
-        jest.spyOn(SettingsStore, "getValue").mockRestore();
         // @ts-ignore
         await WidgetMessagingStore.instance.onReady();
     });
 
+    afterEach(() => {
+        jest.spyOn(SettingsStore, "getValue").mockRestore();
+    });
+
     it("destroys non-persisted right panel widget on room change", async () => {
         // Set up right panel state
-        const realGetValue = SettingsStore.getValue;
-        const mockSettings = jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
             if (name !== "RightPanel.phases") return realGetValue(name, roomId);
             if (roomId === "r1") {
                 return {
@@ -189,8 +201,6 @@ describe("AppTile", () => {
 
         expect(renderResult.queryByText("Example 1")).not.toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
-
-        mockSettings.mockRestore();
     });
 
     it("distinguishes widgets with the same ID in different rooms", async () => {
@@ -325,14 +335,6 @@ describe("AppTile", () => {
 
         expect(renderResult.getByText("Example 1")).toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
-    });
-
-    afterAll(async () => {
-        // @ts-ignore
-        await WidgetLayoutStore.instance.onNotReady();
-        // @ts-ignore
-        await RightPanelStore.instance.onNotReady();
-        jest.restoreAllMocks();
     });
 
     describe("for a pinned widget", () => {
