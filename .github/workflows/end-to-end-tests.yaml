@@ -49,6 +49,9 @@ jobs:
             num-runners: ${{ env.NUM_RUNNERS }}
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
+            - name: Install fonts
+              run: sudo apt install fonts-noto-cjk
+
             - name: Checkout code
               uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
               with:
