@@ -29,5 +29,12 @@ test.describe("Devtools", () => {
                 display: none;
             }`,
         });
+
+        // Try entering a value for the Developer.elementCallUrl setting
+        const input = page.getByRole("textbox", { name: "Element Call URL" });
+        await input.fill("https://example.com");
+        await input.press("Enter");
+        // expect EW NOT to reload
+        await page.getByText("Saved").isVisible();
     });
 });
