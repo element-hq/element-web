@@ -447,6 +447,9 @@ export class RoomViewStore extends EventEmitter {
             if (payload.auto_join) {
                 this.dis?.dispatch<JoinRoomPayload>({
                     ...payload,
+                    opts: {
+                        viaServers: payload.via_servers,
+                    },
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
