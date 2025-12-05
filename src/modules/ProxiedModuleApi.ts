@@ -11,7 +11,6 @@ import {
     type TranslationStringsObject,
     type PlainSubstitution,
 } from "@matrix-org/react-sdk-module-api/lib/types/translations";
-import { type Optional } from "matrix-events-sdk";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import * as Matrix from "matrix-js-sdk/src/matrix";
@@ -40,7 +39,7 @@ import type { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload.ts"
  * to be assigned to a single module.
  */
 export class ProxiedModuleApi implements ModuleApi {
-    private cachedTranslations: Optional<TranslationStringsObject>;
+    private cachedTranslations?: TranslationStringsObject;
 
     private overrideLoginResolve?: () => void;
 
@@ -57,7 +56,7 @@ export class ProxiedModuleApi implements ModuleApi {
     /**
      * All custom translations used by the associated module.
      */
-    public get translations(): Optional<TranslationStringsObject> {
+    public get translations(): TranslationStringsObject | undefined {
         return this.cachedTranslations;
     }
 

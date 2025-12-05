@@ -224,8 +224,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         const messaging = WidgetMessagingStore.instance.getMessagingForUid(
             WidgetUtils.calcWidgetUid(this.state.stickerpickerWidget.id),
         );
-        if (messaging && visible !== this.prevSentVisibility) {
-            messaging.updateVisibility(visible).catch((err) => {
+        if (messaging?.widgetApi && visible !== this.prevSentVisibility) {
+            messaging.widgetApi.updateVisibility(visible).catch((err) => {
                 logger.error("Error updating widget visibility: ", err);
             });
             this.prevSentVisibility = visible;

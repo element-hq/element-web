@@ -2495,7 +2495,6 @@
             "error_update_guest_access": "Nepodařilo se aktualizovat přístup hosta do tohoto prostoru",
             "error_update_history_visibility": "Nepodařilo se aktualizovat viditelnost historie tohoto prostoru",
             "guest_access_explainer": "Hosté se mohou připojit k prostoru, aniž by měli účet.",
-            "guest_access_explainer_public_space": "To může být užitečné pro veřejné prostory.",
             "guest_access_label": "Povolit přístup hostům",
             "history_visibility_anyone_space": "Nahlédnout do prostoru",
             "history_visibility_anyone_space_description": "Umožněte lidem prohlédnout si váš prostor ještě předtím, než se připojí.",

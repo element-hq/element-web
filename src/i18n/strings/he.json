@@ -1469,7 +1469,6 @@
             "error_update_guest_access": "עדכון גישת האורח של מרחב העבודה הזה נכשל",
             "error_update_history_visibility": "נכשל עדכון נראות ההיסטוריה של מרחב עבודה זה",
             "guest_access_explainer": "אורחים יכולים להצטרף אל מרחב העבודה ללא חשבון פעיל.",
-            "guest_access_explainer_public_space": "זה יכול להיות שימושי למרחבי עבודה ציבוריים.",
             "guest_access_label": "אפשר גישה לאורחים",
             "history_visibility_anyone_space": "תצוגה מקדימה של מרחב העבודה",
             "history_visibility_anyone_space_description": "אפשרו לאנשים תצוגה מקדימה של מרחב העבודה שלכם לפני שהם מצטרפים.",

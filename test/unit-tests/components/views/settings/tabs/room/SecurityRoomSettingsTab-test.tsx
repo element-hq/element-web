@@ -252,7 +252,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             fireEvent.click(screen.getByText("Show advanced"));
 
-            expect(screen.getByLabelText("Enable guest access").getAttribute("aria-checked")).toBe("false");
+            expect(screen.getByLabelText("Enable guest access")).not.toBeChecked();
         });
 
         it("updates guest access on toggle", () => {
@@ -264,7 +264,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             fireEvent.click(screen.getByLabelText("Enable guest access"));
 
             // toggle set immediately
-            expect(screen.getByLabelText("Enable guest access").getAttribute("aria-checked")).toBe("true");
+            expect(screen.getByLabelText("Enable guest access")).toBeChecked();
 
             expect(client.sendStateEvent).toHaveBeenCalledWith(
                 room.roomId,
@@ -285,14 +285,14 @@ describe("<SecurityRoomSettingsTab />", () => {
             fireEvent.click(screen.getByLabelText("Enable guest access"));
 
             // toggle set immediately
-            expect(screen.getByLabelText("Enable guest access").getAttribute("aria-checked")).toBe("false");
+            expect(screen.getByLabelText("Enable guest access")).not.toBeChecked();
 
             await flushPromises();
             expect(client.sendStateEvent).toHaveBeenCalled();
             expect(logger.error).toHaveBeenCalledWith("oups");
 
             // toggle reset to old value
-            expect(screen.getByLabelText("Enable guest access").getAttribute("aria-checked")).toBe("true");
+            expect(screen.getByLabelText("Enable guest access")).toBeChecked();
         });
     });
 
@@ -388,7 +388,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             await waitFor(() => expect(screen.getByLabelText("Encrypted")).toBeChecked());
             // can't disable encryption once enabled
-            expect(screen.getByLabelText("Encrypted").getAttribute("aria-disabled")).toEqual("true");
+            expect(screen.getByLabelText("Encrypted")).toBeDisabled();
         });
 
         it("asks users to confirm when setting room to encrypted", async () => {
@@ -495,7 +495,7 @@ describe("<SecurityRoomSettingsTab />", () => {
                 getComponent(room);
 
                 await waitFor(() => expect(screen.getByLabelText("Encrypted")).toBeChecked());
-                expect(screen.getByLabelText("Encrypted").getAttribute("aria-disabled")).toEqual("true");
+                expect(screen.getByLabelText("Encrypted")).toBeDisabled();
                 expect(screen.getByText("Once enabled, encryption cannot be disabled.")).toBeInTheDocument();
             });
 
@@ -505,7 +505,7 @@ describe("<SecurityRoomSettingsTab />", () => {
                 getComponent(room);
 
                 await waitFor(() => expect(screen.getByLabelText("Encrypted")).not.toBeChecked());
-                expect(screen.getByLabelText("Encrypted").getAttribute("aria-disabled")).toEqual("true");
+                expect(screen.getByLabelText("Encrypted")).toBeDisabled();
                 expect(screen.queryByText("Once enabled, encryption cannot be disabled.")).not.toBeInTheDocument();
                 expect(screen.getByText("Your server requires encryption to be disabled.")).toBeInTheDocument();
             });

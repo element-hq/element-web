@@ -6,20 +6,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_NotificationSettings2 {
+.mx_SettingsTab .mx_NotificationSettings2 {
     .mx_SettingsSection_subSections {
         color: $primary-content;
         gap: 32px;
         display: flex;
         flex-direction: column;
+
+        > form {
+            gap: 32px;
+            display: flex;
+            flex-direction: column;
+        }
     }
 
     .mx_SettingsSubsection_description {
         margin-bottom: 20px;
 
         .mx_SettingsSubsection_text {
-            font-size: 1.2rem;
-
             .mx_NotificationBadge {
                 vertical-align: baseline;
                 display: inline-flex;
@@ -33,14 +37,6 @@ Please see LICENSE files in the repository root for full details.
         gap: 12px;
         justify-items: stretch;
         justify-content: stretch;
-    }
-
-    .mx_SettingsBanner {
-        margin-bottom: 32px;
-    }
-
-    .mx_NotificationSettings2_flags {
-        gap: 4px;
     }
 
     .mx_StyledRadioButton_content {

@@ -13,28 +13,22 @@ Please see LICENSE files in the repository root for full details.
     .mx_MiniAvatarUploader_indicator {
         position: absolute;
 
-        height: 26px;
-        width: 26px;
+        height: 16px;
+        width: 16px;
+        padding: 5px;
 
         right: -6px;
         bottom: -6px;
 
         background-color: $background;
         border-radius: 50%;
-        z-index: 1;
 
         line-height: 0;
 
         .mx_MiniAvatarUploader_cameraIcon {
-            height: 100%;
-            width: 100%;
-
-            background-color: $secondary-content;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-image: url("@vector-im/compound-design-tokens/icons/take-photo-solid.svg");
-            mask-size: 16px;
-            z-index: 2;
+            height: inherit;
+            width: inherit;
+            color: $secondary-content;
         }
     }
 }
