@@ -445,16 +445,21 @@ export class RoomViewStore extends EventEmitter {
             this.setState(newState);
 
             if (payload.auto_join) {
-                this.dis?.dispatch<JoinRoomPayload>({
+                const joinPayload: JoinRoomPayload = {
                     ...payload,
-                    opts: {
-                        viaServers: payload.via_servers,
-                    },
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
                     canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
-                });
+                };
+                // Explicitly pass viaServers in case state doesn't contain the same due to
+                // some race issues.
+                if (payload.via_servers) {
+                    joinPayload.opts = {
+                        viaServers: payload.via_servers,
+                    };
+                }
+                this.dis?.dispatch<JoinRoomPayload>(joinPayload);
             }
 
             if (room) {
