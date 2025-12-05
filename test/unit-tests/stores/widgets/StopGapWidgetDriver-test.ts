@@ -36,7 +36,7 @@ import {
 
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
+import { StopGapWidgetDriver } from "../../../../src/stores/widgets/StopGapWidgetDriver";
 import { mkEvent, stubClient } from "../../../test-utils";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 import dis from "../../../../src/dispatcher/dispatcher";
@@ -44,11 +44,12 @@ import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
 
-describe("ElementWidgetDriver", () => {
+describe("StopGapWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
 
     const mkDefaultDriver = (): WidgetDriver =>
-        new ElementWidgetDriver(
+        new StopGapWidgetDriver(
+            [],
             new Widget({
                 id: "test",
                 creatorUserId: "@alice:example.org",
@@ -72,7 +73,8 @@ describe("ElementWidgetDriver", () => {
     });
 
     it("auto-approves capabilities of virtual Element Call widgets", async () => {
-        const driver = new ElementWidgetDriver(
+        const driver = new StopGapWidgetDriver(
+            [],
             new Widget({
                 id: "group_call",
                 creatorUserId: "@alice:example.org",

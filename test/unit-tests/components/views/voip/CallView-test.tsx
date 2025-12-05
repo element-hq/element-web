@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 
+import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
     mkRoomMember,
@@ -32,7 +33,6 @@ import { CallView as _CallView } from "../../../../../src/components/views/voip/
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -73,11 +73,8 @@ describe("CallView", () => {
 
         widget = new Widget(call.widget);
         WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
-            on: () => {},
-            off: () => {},
             stop: () => {},
-            embedUrl: "https://example.org",
-        } as unknown as WidgetMessaging);
+        } as unknown as ClientWidgetApi);
     });
 
     afterEach(() => {

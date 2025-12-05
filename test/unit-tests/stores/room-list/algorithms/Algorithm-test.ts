@@ -12,6 +12,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
     setupAsyncStoreWithClient,
@@ -28,7 +29,6 @@ import { Algorithm } from "../../../../../src/stores/room-list/algorithms/Algori
 import { CallStore } from "../../../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { ConnectionState } from "../../../../../src/models/Call";
-import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 describe("Algorithm", () => {
     useMockedCalls();
@@ -89,7 +89,7 @@ describe("Algorithm", () => {
         const widget = new Widget(call.widget);
         WidgetMessagingStore.instance.storeMessaging(widget, roomWithCall.roomId, {
             stop: () => {},
-        } as unknown as WidgetMessaging);
+        } as unknown as ClientWidgetApi);
 
         // End of setup
 

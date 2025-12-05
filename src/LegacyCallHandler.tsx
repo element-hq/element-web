@@ -1055,9 +1055,9 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         const jitsiWidgets = roomInfo.widgets.filter((w) => WidgetType.JITSI.matches(w.type));
         jitsiWidgets.forEach((w) => {
             const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(w));
-            if (!messaging?.widgetApi) return; // more "should never happen" words
+            if (!messaging) return; // more "should never happen" words
 
-            messaging.widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+            messaging.transport.send(ElementWidgetActions.HangupCall, {});
         });
     }
 

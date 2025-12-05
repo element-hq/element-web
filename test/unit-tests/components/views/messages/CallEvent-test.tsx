@@ -16,7 +16,7 @@ import {
     PendingEventOrdering,
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
-import { Widget } from "matrix-widget-api";
+import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 
 import {
     useMockedCalls,
@@ -35,7 +35,6 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { ConnectionState } from "../../../../../src/models/Call";
-import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 const CallEvent = wrapInMatrixClientContext(UnwrappedCallEvent);
 
@@ -87,7 +86,7 @@ describe("CallEvent", () => {
         widget = new Widget(call.widget);
         WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
             stop: () => {},
-        } as unknown as WidgetMessaging);
+        } as unknown as ClientWidgetApi);
     });
 
     afterEach(async () => {

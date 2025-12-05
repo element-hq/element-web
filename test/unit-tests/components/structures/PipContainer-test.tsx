@@ -49,7 +49,6 @@ import WidgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
-import { type WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
 
 jest.mock("../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -150,40 +149,30 @@ describe("PipContainer", () => {
         await act(async () => {
             WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
-                on: () => {},
-                off: () => {},
-                prepare: async () => {},
                 stop: () => {},
-                widgetApi: {
-                    hasCapability: jest.fn(),
-                    feedStateUpdate: jest.fn().mockResolvedValue(undefined),
-                },
-            } as unknown as WidgetMessaging);
+                hasCapability: jest.fn(),
+                feedStateUpdate: jest.fn().mockResolvedValue(undefined),
+            } as unknown as ClientWidgetApi);
 
             await call.start();
             ActiveWidgetStore.instance.setWidgetPersistence(widget.id, room.roomId, true);
         });
 
-        try {
-            await fn(call);
-        } finally {
-            cleanup();
-            act(() => {
-                call.destroy();
-                ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
-                WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
-            });
-        }
+        await fn(call);
+
+        cleanup();
+        act(() => {
+            call.destroy();
+            ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
+            WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
+        });
     };
 
     const withWidget = async (fn: () => Promise<void>): Promise<void> => {
         act(() => ActiveWidgetStore.instance.setWidgetPersistence("1", room.roomId, true));
-        try {
-            await fn();
-        } finally {
-            cleanup();
-            ActiveWidgetStore.instance.destroyPersistentWidget("1", room.roomId);
-        }
+        await fn();
+        cleanup();
+        ActiveWidgetStore.instance.destroyPersistentWidget("1", room.roomId);
     };
 
     const setUpRoomViewStore = () => {
@@ -287,13 +276,9 @@ describe("PipContainer", () => {
                 >()
                 .mockResolvedValue({});
             const mockMessaging = {
-                on: () => {},
-                off: () => {},
+                transport: { send: sendSpy },
                 stop: () => {},
-                widgetApi: {
-                    transport: { send: sendSpy },
-                },
-            } as unknown as WidgetMessaging;
+            } as unknown as ClientWidgetApi;
             WidgetMessagingStore.instance.storeMessaging(new Widget(widget), room.roomId, mockMessaging);
             await user.click(screen.getByRole("button", { name: "Leave" }));
             expect(sendSpy).toHaveBeenCalledWith(ElementWidgetActions.HangupCall, {});

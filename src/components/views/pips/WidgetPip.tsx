@@ -89,7 +89,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                 // Assumed to be a Jitsi widget
                 WidgetMessagingStore.instance
                     .getMessagingForUid(WidgetUtils.getWidgetUid(widget))
-                    ?.widgetApi?.transport.send(ElementWidgetActions.HangupCall, {})
+                    ?.transport.send(ElementWidgetActions.HangupCall, {})
                     .catch((e) => console.error("Failed to leave Jitsi", e));
             }
         },

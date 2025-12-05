@@ -88,11 +88,11 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
             this.modalInstance = null;
 
             const sourceMessaging = WidgetMessagingStore.instance.getMessaging(sourceWidget, widgetRoomId);
-            if (!sourceMessaging?.widgetApi) {
-                logger.error("No source widget API for modal widget");
+            if (!sourceMessaging) {
+                logger.error("No source widget messaging for modal widget");
                 return;
             }
-            sourceMessaging.widgetApi.notifyModalWidgetClose(data);
+            sourceMessaging.notifyModalWidgetClose(data);
         }
     };
 }

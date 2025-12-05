@@ -41,12 +41,12 @@ async function createLiveStream(matrixClient: MatrixClient, roomId: string): Pro
 
 export async function startJitsiAudioLivestream(
     matrixClient: MatrixClient,
-    widgetApi: ClientWidgetApi,
+    widgetMessaging: ClientWidgetApi,
     roomId: string,
 ): Promise<void> {
     const streamId = await createLiveStream(matrixClient, roomId);
 
-    await widgetApi.transport.send(ElementWidgetActions.StartLiveStream, {
+    await widgetMessaging.transport.send(ElementWidgetActions.StartLiveStream, {
         rtmpStreamKey: AUDIOSTREAM_DUMMY_URL + streamId,
     });
 }

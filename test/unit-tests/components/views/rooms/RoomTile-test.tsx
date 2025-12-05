@@ -20,6 +20,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
+import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
     mkRoomMember,
@@ -46,7 +47,6 @@ import { MessagePreviewStore } from "../../../../../src/stores/room-list/Message
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { ConnectionState } from "../../../../../src/models/Call";
-import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -204,7 +204,7 @@ describe("RoomTile", () => {
                 widget = new Widget(call.widget);
                 WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
                     stop: () => {},
-                } as unknown as WidgetMessaging);
+                } as unknown as ClientWidgetApi);
             });
 
             afterEach(() => {
