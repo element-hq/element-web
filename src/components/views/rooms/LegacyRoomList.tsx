@@ -18,7 +18,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads.ts";
 import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload.ts";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload.ts";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter.ts";
-import { _t, _td, type TranslationKey } from "../../../languageHandler.tsx";
+import { _t, _td } from "../../../languageHandler.tsx";
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 import SettingsStore from "../../../settings/SettingsStore.ts";

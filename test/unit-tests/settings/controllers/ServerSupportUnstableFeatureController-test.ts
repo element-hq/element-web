@@ -14,7 +14,6 @@ import { type FeatureSettingKey, LabGroup, SETTINGS } from "../../../../src/sett
 import { stubClient } from "../../../test-utils";
 import { WatchManager } from "../../../../src/settings/WatchManager";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import { type TranslationKey } from "../../../../src/languageHandler";
 
 describe("ServerSupportUnstableFeatureController", () => {
     const watchers = new WatchManager();

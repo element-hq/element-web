@@ -15,7 +15,7 @@ import { Icon as WebIcon } from "../../../../../res/img/element-icons/settings/w
 import { Icon as MobileIcon } from "../../../../../res/img/element-icons/settings/mobile.svg";
 import { Icon as VerifiedIcon } from "../../../../../res/img/e2e/verified.svg";
 import { Icon as UnverifiedIcon } from "../../../../../res/img/e2e/warning.svg";
-import { _t, _td, type TranslationKey } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import { type ExtendedDevice } from "./types";
 import { DeviceType } from "../../../../utils/device/parseUserAgent";
 

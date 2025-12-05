@@ -11,7 +11,7 @@ import MatrixClientBackedController from "./MatrixClientBackedController";
 import { type WatchManager } from "../WatchManager";
 import SettingsStore from "../SettingsStore";
 import { type SettingKey } from "../Settings.tsx";
-import { _t, type TranslationKey } from "../../languageHandler.tsx";
+import { _t } from "../../languageHandler.tsx";
 
 /**
  * Disables a given setting if the server unstable feature it requires is not supported

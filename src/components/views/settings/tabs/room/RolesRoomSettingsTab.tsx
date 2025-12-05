@@ -12,7 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get, set } from "lodash";
 import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
-import { _t, _td, type TranslationKey } from "../../../../../languageHandler";
+import { _t, _td } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";

@@ -25,8 +25,6 @@ import React from "react";
 import { KEY_SEPARATOR } from "matrix-web-i18n";
 import counterpart from "counterpart";
 
-import type { TranslationKey } from "../index";
-
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 

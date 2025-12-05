@@ -14,7 +14,7 @@ import { type SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-ev
 
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { reject } from "./utils";
-import { _t, type TranslationKey, UserFriendlyError } from "../languageHandler";
+import { _t, UserFriendlyError } from "../languageHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { CommandCategories, type RunResult } from "./interface";
 

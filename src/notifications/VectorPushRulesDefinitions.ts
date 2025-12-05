@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type IAnnotatedPushRule, type PushRuleAction, RuleId } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _td, type TranslationKey } from "../languageHandler";
+import { _td } from "../languageHandler";
 import { StandardActions } from "./StandardActions";
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";

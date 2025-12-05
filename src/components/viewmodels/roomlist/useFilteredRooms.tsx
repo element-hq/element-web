@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import RoomListStoreV3, {
     LISTS_LOADED_EVENT,
     LISTS_UPDATE_EVENT,

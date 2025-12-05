@@ -11,7 +11,7 @@ import React, { createContext, type ReactNode, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import { _t, type TranslationKey } from "../../../../languageHandler";
+import { _t } from "../../../../languageHandler";
 import { type XOR } from "../../../../@types/common";
 import { type Tool } from "../DevtoolsDialog";
 

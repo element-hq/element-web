@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 // Import i18n.tsx instead of languageHandler to avoid circular deps
-import { _td, type TranslationKey } from "@element-hq/web-shared-components";
+import { _td } from "@element-hq/web-shared-components";
 
 import { IS_MAC, IS_ELECTRON, Key } from "../Keyboard";
 import { type IBaseSetting } from "../settings/Settings";
