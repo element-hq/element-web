@@ -139,9 +139,6 @@ jobs:
                   cache-dependency-path: yarn.lock
                   node-version: "lts/*"
 
-            - name: Install fonts
-              run: sudo apt install fonts-noto-cjk
-
             - name: Install dependencies
               run: yarn install --frozen-lockfile
 
@@ -164,6 +161,11 @@ jobs:
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
               run: yarn playwright install-deps webkit
+
+            - name: Install fonts
+              run: |
+                  sudo apt install -y fonts-noto-cjk
+                  fc-cache -f -v
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
