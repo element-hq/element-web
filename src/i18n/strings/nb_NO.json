@@ -2460,7 +2460,6 @@
             "error_update_guest_access": "Kunne ikke oppdatere gjestetilgangen til dette området",
             "error_update_history_visibility": "Kunne ikke oppdatere historikkens synlighet for dette området",
             "guest_access_explainer": "Gjester kan bli med i et område uten å ha en konto.",
-            "guest_access_explainer_public_space": "Dette kan være nyttig for offentlige områder.",
             "guest_access_label": "Aktiver gjestetilgang",
             "history_visibility_anyone_space": "Forhåndsvisning av områder",
             "history_visibility_anyone_space_description": "La folk få en forhåndsvisning av området ditt før de blir med.",

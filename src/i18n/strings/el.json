@@ -1909,7 +1909,6 @@
             "error_update_guest_access": "Αποτυχία ενημέρωσης της πρόσβασης επισκέπτη σε αυτόν τον χώρο",
             "error_update_history_visibility": "Αποτυχία ενημέρωσης της ορατότητας του ιστορικού αυτού του χώρου",
             "guest_access_explainer": "Οι επισκέπτες μπορούν να εγγραφούν σε ένα χώρο χωρίς να έχουν λογαριασμό.",
-            "guest_access_explainer_public_space": "Αυτό μπορεί να είναι χρήσιμο για δημόσιους χώρους.",
             "guest_access_label": "Ενεργοποίηση πρόσβασης επισκέπτη",
             "history_visibility_anyone_space": "Προεπισκόπηση Χώρου",
             "history_visibility_anyone_space_description": "Επιτρέψτε στους χρήστες να κάνουν προεπισκόπηση του χώρου σας προτού να εγγραφούν.",

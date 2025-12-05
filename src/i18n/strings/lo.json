@@ -1751,7 +1751,6 @@
             "error_update_guest_access": "ການອັບເດດການເຂົ້າເຖິງຂອງແຂກຂອງພື້ນທີ່ນີ້ບໍ່ສຳເລັດ",
             "error_update_history_visibility": "ການອັບເດດປະຫວັດການເບິ່ງເຫັນຂອງພື້ນທີ່ນີ້ບໍ່ສຳເລັດ",
             "guest_access_explainer": "ແຂກສາມາດເຂົ້າຮ່ວມພື້ນທີ່ໄດ້ໂດຍບໍ່ຕ້ອງມີບັນຊີ.",
-            "guest_access_explainer_public_space": "ນີ້ອາດຈະເປັນປະໂຫຍດສໍາລັບສະຖານທີ່ສາທາລະນະ.",
             "guest_access_label": "ເປີດໃຊ້ການເຂົ້າເຖິງແຂກ/ຜູ້ຖືກເຊີນ",
             "history_visibility_anyone_space": "ເບິ່ງຕົວຢ່າງພື້ນທີ່",
             "history_visibility_anyone_space_description": "ອະນຸຍາດໃຫ້ຄົນເບິ່ງຕົວຢ່າງພື້ນທີ່ຂອງທ່ານກ່ອນທີ່ເຂົາເຈົ້າເຂົ້າຮ່ວມ.",
