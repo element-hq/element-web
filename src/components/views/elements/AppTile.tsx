@@ -39,11 +39,10 @@ import Spinner from "./Spinner";
 import dis from "../../../dispatcher/dispatcher";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
+import { ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWidget";
-import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
@@ -61,6 +60,7 @@ import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { parseUrl } from "../../../utils/UrlUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
+import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
 
 // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
 // because that would allow the iframe to programmatically remove the sandbox attribute, but
@@ -132,7 +132,6 @@ interface IState {
     error: Error | null;
     menuDisplayed: boolean;
     requiresClient: boolean;
-    hasContextMenuOptions: boolean;
 }
 
 export default class AppTile extends React.Component<IProps, IState> {
@@ -269,15 +268,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             isUserProfileReady: OwnProfileStore.instance.isProfileInfoFetched,
             error: null,
             menuDisplayed: false,
-            requiresClient: this.determineInitialRequiresClientState(),
-            hasContextMenuOptions: showContextMenu(
-                this.context,
-                this.props.room,
-                newProps.app,
-                newProps.userWidget,
-                !newProps.userWidget,
-                newProps.onDeleteClick,
-            ),
+            requiresClient: this.determineInitialRequiresClientState()
         };
     }
 
@@ -746,21 +737,6 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
         appTileClasses = classNames(appTileClasses);
 
-        let contextMenu;
-        if (this.state.menuDisplayed) {
-            contextMenu = (
-                <WidgetContextMenu
-                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
-                    app={this.props.app}
-                    onFinished={this.closeContextMenu}
-                    showUnpin={!this.props.userWidget}
-                    userWidget={this.props.userWidget}
-                    onEditClick={this.props.onEditClick}
-                    onDeleteClick={this.props.onDeleteClick}
-                />
-            );
-        }
-
         const layoutButtons: ReactNode[] = [];
         if (this.props.showLayoutButtons) {
             const isMaximised =
@@ -816,24 +792,31 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         <PopOutIcon className="mx_Icon mx_Icon_12" />
                                     </AccessibleButton>
                                 )}
-                                {this.state.hasContextMenuOptions && (
-                                    <ContextMenuButton
-                                        className="mx_AppTileMenuBar_widgets_button"
-                                        label={_t("common|options")}
-                                        isExpanded={this.state.menuDisplayed}
-                                        ref={this.contextMenuButton}
-                                        onClick={this.onContextMenuClick}
-                                    >
-                                        <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
-                                    </ContextMenuButton>
-                                )}
+                                <WidgetContextMenu
+                                    trigger={
+                                        <ContextMenuButton
+                                            className="mx_AppTileMenuBar_widgets_button"
+                                            label={_t("common|options")}
+                                            isExpanded={this.state.menuDisplayed}
+                                            ref={this.contextMenuButton}
+                                            onClick={this.onContextMenuClick}
+                                        >
+                                            <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
+                                        </ContextMenuButton>
+                                    }
+                                    app={this.props.app}
+                                    onFinished={this.closeContextMenu}
+                                    showUnpin={!this.props.userWidget}
+                                    userWidget={this.props.userWidget}
+                                    onEditClick={this.props.onEditClick}
+                                    onDeleteClick={this.props.onDeleteClick}
+                                    menuDisplayed={this.state.menuDisplayed}
+                                />
                             </span>
                         </div>
                     )}
                     {appTileBody}
                 </div>
-
-                {contextMenu}
             </React.Fragment>
         );
     }

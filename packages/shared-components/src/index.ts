@@ -20,6 +20,7 @@ export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./right-panel/WidgetContextMenu";
 
 // Utils
 export * from "./utils/i18n";
