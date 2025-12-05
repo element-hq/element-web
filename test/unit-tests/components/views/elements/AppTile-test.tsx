@@ -137,8 +137,6 @@ describe("AppTile", () => {
         await WidgetLayoutStore.instance.onNotReady();
         // @ts-ignore
         await RightPanelStore.instance.onNotReady();
-        // @ts-ignore
-        await WidgetMessagingStore.instance.onReady();
     });
 
     it("destroys non-persisted right panel widget on room change", async () => {
@@ -345,12 +343,6 @@ describe("AppTile", () => {
     describe("for a pinned widget", () => {
         let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
         beforeEach(async () => {
-            // Do not carry across settings from previous tests
-            SettingsStore.reset();
-            // Recalculate now that settings has been reset.
-            // @ts-ignore
-            await WidgetLayoutStore.instance.onReady();
-
             moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
         });
 
