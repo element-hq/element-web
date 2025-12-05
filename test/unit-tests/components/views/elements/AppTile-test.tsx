@@ -347,7 +347,7 @@ describe("AppTile", () => {
         beforeEach(async () => {
             // Do not carry across settings from previous tests
             SettingsStore.reset();
-            // Recalculate now that settings has been applied.
+            // Recalculate now that settings has been reset.
             // @ts-ignore
             await WidgetLayoutStore.instance.onReady();
 
