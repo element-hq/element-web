@@ -56,7 +56,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             &.mx_Toast_icon_verification::after {
-                mask-image: url("$(res)/img/e2e/normal.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
                 background-color: $primary-content;
             }
 
@@ -64,12 +64,12 @@ Please see LICENSE files in the repository root for full details.
                 /* white infill for the hollow svg mask */
                 &::before {
                     background-color: #ffffff;
-                    mask-image: url("$(res)/img/e2e/normal.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
                     mask-size: 80%;
                 }
 
                 &::after {
-                    mask-image: url("$(res)/img/e2e/warning.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
                     background-color: $e2e-warning-color;
                 }
             }

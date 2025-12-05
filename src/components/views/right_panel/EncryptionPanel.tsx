@@ -10,6 +10,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { VerificationPhase, type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+// ErrorDialog needs path to the image, not the image node
+// eslint-disable-next-line no-restricted-imports
+import ErrorSolidIcon from "@vector-im/compound-design-tokens/icons/error-solid.svg";
 
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
@@ -21,8 +24,6 @@ import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePha
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import WarningDeprecatedSvg from "../../../../res/img/e2e/warning-deprecated.svg";
-import WarningSvg from "../../../../res/img/e2e/warning.svg";
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
@@ -81,7 +82,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         ) {
             isShowingMismatchModal.current = true;
             Modal.createDialog(ErrorDialog, {
-                headerImage: WarningDeprecatedSvg,
+                headerImage: ErrorSolidIcon,
                 title: _t("encryption|messages_not_secure|title"),
                 description: (
                     <div>
@@ -120,7 +121,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             setRequesting(false);
 
             Modal.createDialog(ErrorDialog, {
-                headerImage: WarningSvg,
+                headerImage: ErrorSolidIcon,
                 title: _t("encryption|verification|error_starting_title"),
                 description: _t("encryption|verification|error_starting_description"),
             });

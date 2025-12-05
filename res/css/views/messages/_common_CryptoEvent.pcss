@@ -12,24 +12,24 @@ Please see LICENSE files in the repository root for full details.
     /* white infill for the transparency */
     &.mx_cryptoEvent_icon::before {
         background-color: #ffffff;
-        mask-image: url("$(res)/img/e2e/normal.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 80%;
     }
 
     &.mx_cryptoEvent_icon::after {
-        mask-image: url("$(res)/img/e2e/normal.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
         background-color: $header-panel-text-primary-color;
     }
 
     &.mx_cryptoEvent_icon_verified::after {
-        mask-image: url("$(res)/img/e2e/verified.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/shield.svg");
         background-color: $accent;
     }
 
     &.mx_cryptoEvent_icon_warning::after {
-        mask-image: url("$(res)/img/e2e/warning.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
         background-color: $e2e-warning-color;
     }
 

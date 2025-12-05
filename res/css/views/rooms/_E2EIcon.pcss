@@ -34,7 +34,7 @@ Please see LICENSE files in the repository root for full details.
 
 /* transparent-looking border surrounding the shield for when overlain over avatars */
 .mx_E2EIcon_bordered {
-    mask-image: url("$(res)/img/e2e/normal.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
     background-color: $header-panel-bg-color;
     mask-size: 100%;
 
@@ -50,12 +50,12 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_E2EIcon_warning::after {
-    mask-image: url("$(res)/img/e2e/warning.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
     background-color: $e2e-warning-color;
 }
 
 .mx_E2EIcon_normal::after {
-    mask-image: url("$(res)/img/e2e/normal.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
     background-color: var(--cpd-color-icon-tertiary);
 }
 
@@ -67,6 +67,6 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_E2EIcon_verified::after {
-    mask-image: url("$(res)/img/e2e/verified.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/shield.svg");
     background-color: $e2e-verified-color;
 }
