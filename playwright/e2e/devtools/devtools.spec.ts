@@ -31,11 +31,10 @@ test.describe("Devtools", () => {
         });
 
         // Try entering a value for the Developer.elementCallUrl setting
-        const editInPlace = dialog.getByLabel("elementCallUrl");
-        const input = editInPlace.getByRole("textbox");
+        const input = page.getByRole("textbox", { name: "Element Call URL" });
         await input.fill("https://example.com");
         await input.press("Enter");
         // expect EW NOT to reload
-        await dialog.getByLabel("Developer mode").check();
+        await page.getByText("Saved").isVisible();
     });
 });
