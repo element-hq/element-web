@@ -1895,7 +1895,6 @@
             "error_update_guest_access": "更新此空间的游客访问权限失败",
             "error_update_history_visibility": "更新此空间的历史记录可见性失败",
             "guest_access_explainer": "游客无需账户即可加入空间。",
-            "guest_access_explainer_public_space": "这可能对公开空间有所帮助。",
             "guest_access_label": "启用游客访问权限",
             "history_visibility_anyone_space": "预览空间",
             "history_visibility_anyone_space_description": "允许人们在加入前预览你的空间。",

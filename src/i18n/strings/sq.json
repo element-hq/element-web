@@ -1973,7 +1973,6 @@
             "error_update_guest_access": "S’arrihet të përditësohet hyrja e mysafirëve të kësaj hapësire",
             "error_update_history_visibility": "S’arrihet të përditësohet dukshmëria e historikut të kësaj hapësire",
             "guest_access_explainer": "Mysafirët mund të hyjnë në një hapësirë pa pasur llogari.",
-            "guest_access_explainer_public_space": "Kjo mund të jetë e dobishme për hapësira publike.",
             "guest_access_label": "Lejo hyrje si vizitor",
             "history_visibility_anyone_space": "Parashiheni Hapësirën",
             "history_visibility_anyone_space_description": "Lejojini personat të parashohin hapësirën tuaj para se të hyjnë në të.",

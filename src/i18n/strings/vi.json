@@ -1914,7 +1914,6 @@
             "error_update_guest_access": "Không cập nhật được quyền truy cập của khách vào space này",
             "error_update_history_visibility": "Không cập nhật được chế độ hiển thị lịch sử của space này",
             "guest_access_explainer": "Khách có thể tham gia space mà không cần có tài khoản.",
-            "guest_access_explainer_public_space": "Điều này có thể hữu ích cho space công cộng.",
             "guest_access_label": "Bật quyền truy cập của khách",
             "history_visibility_anyone_space": "Xem trước space",
             "history_visibility_anyone_space_description": "Cho phép mọi người xem trước space của bạn trước khi tham gia.",

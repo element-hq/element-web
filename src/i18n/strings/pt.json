@@ -2322,7 +2322,6 @@
             "error_update_guest_access": "Falha ao atualizar o acesso de convidado deste espaço",
             "error_update_history_visibility": "Falha ao atualizar a visibilidade do histórico deste espaço",
             "guest_access_explainer": "Os convidados podem juntar-se a um espaço sem terem uma conta.",
-            "guest_access_explainer_public_space": "Isto pode ser útil para espaços públicos.",
             "guest_access_label": "Ativar o acesso de convidados",
             "history_visibility_anyone_space": "Espaço de pré-visualização",
             "history_visibility_anyone_space_description": "Permite que as pessoas visualizem o teu espaço antes de aderirem.",
