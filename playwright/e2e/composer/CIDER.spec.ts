@@ -168,5 +168,19 @@ test.describe("Composer", () => {
             await composer.press("Enter");
             await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
         });
+
+        test("renders slash command autocomplete", { tag: "@screenshot" }, async ({ page }) => {
+            const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+
+            // Type "/" to trigger slash command autocomplete
+            await composer.pressSequentially("/");
+
+            // Wait for autocomplete to appear
+            const autocomplete = page.locator("#mx_Autocomplete");
+            await expect(autocomplete).toBeVisible();
+
+            // Take a screenshot of the autocomplete
+            await expect(autocomplete).toMatchScreenshot("slash-command-autocomplete.png");
+        });
     });
 });
