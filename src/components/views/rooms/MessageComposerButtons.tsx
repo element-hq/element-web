@@ -16,8 +16,10 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
 import {
+    AttachmentIcon,
     MicOnSolidIcon,
     OverflowHorizontalIcon,
+    PollsIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -40,10 +42,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { Icon as PlainTextIcon } from "../../../../res/img/element-icons/room/composer/plain_text.svg";
-import { Icon as UploadIcon } from "../../../../res/img/element-icons/room/composer/attach.svg";
 import { Icon as StickersIcon } from "../../../../res/img/element-icons/room/composer/sticker.svg";
-import { Icon as PollIcon } from "../../../../res/img/element-icons/room/composer/poll.svg";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -247,7 +246,7 @@ const UploadButton: React.FC = () => {
 
     return (
         <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={_t("common|attachment")}>
-            <UploadIcon />
+            <AttachmentIcon />
         </CollapsibleButton>
     );
 };
@@ -331,7 +330,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 onClick={this.onCreateClick}
                 title={_t("composer|poll_button")}
             >
-                <PollIcon />
+                <PollsIcon />
             </CollapsibleButton>
         );
     }
@@ -361,7 +360,7 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
 
     return (
         <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={title}>
-            {isRichTextEnabled ? <TextFormattingIcon /> : <PlainTextIcon />}
+            <TextFormattingIcon />
         </CollapsibleButton>
     );
 }

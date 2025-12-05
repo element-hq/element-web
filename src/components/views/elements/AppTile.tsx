@@ -18,7 +18,7 @@ import React, {
     type ReactNode,
 } from "react";
 import classNames from "classnames";
-import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
+import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-widget-api";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -28,6 +28,7 @@ import {
     MinusIcon,
     ExpandIcon,
     CollapseIcon,
+    PopOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "./AccessibleButton";
@@ -41,12 +42,11 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
 import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { Icon as PopoutIcon } from "../../../../res/img/external-link.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -151,11 +151,12 @@ export default class AppTile extends React.Component<IProps, IState> {
         showLayoutButtons: true,
     };
 
+    private readonly widget: ElementWidget;
     private contextMenuButton = createRef<any>();
     private iframeParent: HTMLElement | null = null; // parent div of the iframe
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
-    private sgWidget?: StopGapWidget;
+    private messaging?: WidgetMessaging;
     private dispatcherRef?: string;
     private unmounted = false;
 
@@ -164,11 +165,16 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
-        try {
-            this.sgWidget = new StopGapWidget(this.props);
-        } catch (e) {
-            logger.log("Failed to construct widget", e);
-            this.sgWidget = undefined;
+
+        this.widget = new ElementWidget(props.app);
+        this.messaging = WidgetMessagingStore.instance.getMessaging(this.widget, props.room?.roomId);
+        if (this.messaging === undefined) {
+            try {
+                this.messaging = new WidgetMessaging(this.widget, props);
+                WidgetMessagingStore.instance.storeMessaging(this.widget, props.room?.roomId, this.messaging);
+            } catch (e) {
+                logger.error("Failed to construct widget", e);
+            }
         }
 
         this.state = this.getNewState(props);
@@ -235,11 +241,11 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private determineInitialRequiresClientState(): boolean {
         try {
-            const mockWidget = new ElementWidget(this.props.app);
-            const widgetApi = WidgetMessagingStore.instance.getMessaging(mockWidget, this.props.room?.roomId);
-            if (widgetApi) {
+            const widget = new ElementWidget(this.props.app);
+            const messaging = WidgetMessagingStore.instance.getMessaging(widget, this.props.room?.roomId);
+            if (messaging?.widgetApi) {
                 // Load value from existing API to prevent resetting the requiresClient value on layout changes.
-                return widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient);
+                return messaging.widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient);
             }
         } catch {
             // fallback to true
@@ -291,7 +297,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 isAppWidget(this.props.app) ? this.props.app.roomId : null,
             );
             PersistedElement.destroyElement(this.persistKey);
-            this.sgWidget?.stopMessaging();
+            this.messaging?.stop();
         }
 
         this.setState({ hasPermissionToLoad });
@@ -325,12 +331,12 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         }
 
-        if (this.sgWidget) {
-            this.setupSgListeners();
+        if (this.messaging) {
+            this.setupMessagingListeners();
         }
 
         // Only fetch IM token on mount if we're showing and have permission to load
-        if (this.sgWidget && this.state.hasPermissionToLoad) {
+        if (this.messaging && this.state.hasPermissionToLoad) {
             this.startWidget();
         }
         this.watchUserReady();
@@ -376,73 +382,56 @@ export default class AppTile extends React.Component<IProps, IState> {
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
-    private setupSgListeners(): void {
-        this.sgWidget?.on("ready", this.onWidgetReady);
-        this.sgWidget?.on("error:preparing", this.updateRequiresClient);
-        // emits when the capabilities have been set up or changed
-        this.sgWidget?.on("capabilitiesNotified", this.updateRequiresClient);
+    private setupMessagingListeners(): void {
+        this.messaging?.on(WidgetMessagingEvent.Start, this.onMessagingStart);
+        this.messaging?.on(WidgetMessagingEvent.Stop, this.onMessagingStop);
     }
 
-    private stopSgListeners(): void {
-        if (!this.sgWidget) return;
-        this.sgWidget?.off("ready", this.onWidgetReady);
-        this.sgWidget.off("error:preparing", this.updateRequiresClient);
-        this.sgWidget.off("capabilitiesNotified", this.updateRequiresClient);
+    private stopMessagingListeners(): void {
+        this.messaging?.off(WidgetMessagingEvent.Start, this.onMessagingStart);
+        this.messaging?.off(WidgetMessagingEvent.Stop, this.onMessagingStop);
     }
+
+    private readonly onMessagingStart = (widgetApi: ClientWidgetApi): void => {
+        widgetApi.on("ready", this.onWidgetReady);
+        widgetApi.on("error:preparing", this.updateRequiresClient);
+        // emits when the capabilities have been set up or changed
+        widgetApi.on("capabilitiesNotified", this.updateRequiresClient);
+    };
+
+    private readonly onMessagingStop = (widgetApi: ClientWidgetApi): void => {
+        widgetApi.off("ready", this.onWidgetReady);
+        widgetApi.off("error:preparing", this.updateRequiresClient);
+        widgetApi.off("capabilitiesNotified", this.updateRequiresClient);
+    };
 
     private resetWidget(newProps: IProps): void {
-        this.sgWidget?.stopMessaging();
-        this.stopSgListeners();
+        this.messaging?.stop();
+        this.stopMessagingListeners();
 
         try {
-            this.sgWidget = new StopGapWidget(newProps);
-            this.setupSgListeners();
+            WidgetMessagingStore.instance.stopMessaging(this.widget, this.props.room?.roomId);
+            this.messaging = new WidgetMessaging(this.widget, newProps);
+            WidgetMessagingStore.instance.storeMessaging(this.widget, this.props.room?.roomId, this.messaging);
+            this.setupMessagingListeners();
             this.startWidget();
         } catch (e) {
             logger.error("Failed to construct widget", e);
-            this.sgWidget = undefined;
+            this.messaging = undefined;
         }
     }
 
     private startWidget(): void {
-        this.sgWidget?.prepare().then(() => {
+        this.messaging?.prepare().then(() => {
             if (this.unmounted) return;
             this.setState({ initialising: false });
         });
     }
 
     /**
-     * Creates the widget iframe and opens communication with the widget.
-     */
-    private startMessaging(): void {
-        // We create the iframe ourselves rather than leaving the job to React,
-        // because we need the lifetime of the messaging and the iframe to be
-        // the same; we don't want strict mode, for instance, to cause the
-        // messaging to restart (lose its state) without also killing the widget
-        const iframe = document.createElement("iframe");
-        iframe.title = WidgetUtils.getWidgetName(this.props.app);
-        iframe.allow = iframeFeatures;
-        iframe.src = this.sgWidget!.embedUrl;
-        iframe.allowFullscreen = true;
-        iframe.sandbox = sandboxFlags;
-        this.iframeParent!.appendChild(iframe);
-        // In order to start the widget messaging we need iframe.contentWindow
-        // to exist. Waiting until the next layout gives the browser a chance to
-        // initialize it.
-        requestAnimationFrame(() => {
-            // Handle the race condition (seen in strict mode) where the element
-            // is added and then removed before we enter this callback
-            if (iframe.parentElement === null) return;
-            try {
-                this.sgWidget?.startMessaging(iframe);
-            } catch (e) {
-                logger.error("Failed to start widget", e);
-            }
-        });
-    }
-
-    /**
-     * Callback ref for the parent div of the iframe.
+     * A callback ref receiving the current parent div of the iframe. This is
+     * responsible for creating the iframe and starting or resetting
+     * communication with the widget.
      */
     private iframeParentRef = (element: HTMLElement | null): void => {
         if (this.unmounted) return;
@@ -451,10 +440,43 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.iframeParent?.querySelector("iframe")?.remove();
         this.iframeParent = element;
 
-        if (element && this.sgWidget) {
-            this.startMessaging();
-        } else {
+        if (this.iframeParent === null) {
+            // The component is trying to unmount the iframe. We could reach
+            // this path if the widget definition was updated, for example. The
+            // iframe parent will later be remounted and widget communications
+            // reopened after this.state.initializing resets to false.
             this.resetWidget(this.props);
+        } else if (
+            this.messaging &&
+            // Check whether an iframe already exists (it totally could exist,
+            // seeing as it is a persisted element which might have hopped
+            // between React components)
+            this.iframeParent.querySelector("iframe") === null
+        ) {
+            // We create the iframe ourselves rather than leaving the job to React,
+            // because we need the lifetime of the messaging and the iframe to be
+            // the same; we don't want strict mode, for instance, to cause the
+            // messaging to restart (lose its state) without also killing the widget
+            const iframe = document.createElement("iframe");
+            iframe.title = WidgetUtils.getWidgetName(this.props.app);
+            iframe.allow = iframeFeatures;
+            iframe.src = this.messaging.embedUrl;
+            iframe.allowFullscreen = true;
+            iframe.sandbox = sandboxFlags;
+            this.iframeParent.appendChild(iframe);
+            // In order to start the widget messaging we need iframe.contentWindow
+            // to exist. Waiting until the next layout gives the browser a chance to
+            // initialize it.
+            requestAnimationFrame(() => {
+                // Handle the race condition (seen in strict mode) where the element is
+                // added and then removed from the DOM before we enter this callback
+                if (iframe.parentElement === null) return;
+                try {
+                    this.messaging?.start(iframe);
+                } catch (e) {
+                    logger.error("Failed to start widget", e);
+                }
+            });
         }
     };
 
@@ -484,7 +506,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             isAppWidget(this.props.app) ? this.props.app.roomId : null,
         );
 
-        this.sgWidget?.stopMessaging({ forceDestroy: true });
+        this.messaging?.stop({ forceDestroy: true });
     }
 
     private onWidgetReady = (): void => {
@@ -493,7 +515,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private updateRequiresClient = (): void => {
         this.setState({
-            requiresClient: !!this.sgWidget?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
+            requiresClient: !!this.messaging?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
         });
     };
 
@@ -502,7 +524,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             case "m.sticker":
                 if (
                     payload.widgetId === this.props.app.id &&
-                    this.sgWidget?.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)
+                    this.messaging?.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)
                 ) {
                     dis.dispatch({
                         action: "post_sticker_message",
@@ -602,7 +624,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement("a"), {
             target: "_blank",
-            href: this.sgWidget?.popoutUrl,
+            href: this.messaging?.popoutUrl,
             rel: "noreferrer noopener",
         }).click();
     };
@@ -665,13 +687,13 @@ export default class AppTile extends React.Component<IProps, IState> {
             </div>
         );
 
-        if (this.sgWidget === null) {
+        if (this.messaging === null) {
             appTileBody = (
                 <div className={appTileBodyClass} style={appTileBodyStyles}>
                     <AppWarning errorMsg={_t("widget|error_loading")} />
                 </div>
             );
-        } else if (!this.state.hasPermissionToLoad && this.props.room && this.sgWidget) {
+        } else if (!this.state.hasPermissionToLoad && this.props.room && this.messaging) {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
@@ -679,7 +701,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     <AppPermission
                         roomId={this.props.room.roomId}
                         creatorUserId={this.props.creatorUserId}
-                        url={this.sgWidget.embedUrl}
+                        url={this.messaging.embedUrl}
                         isRoomEncrypted={isEncrypted}
                         onPermissionGranted={this.grantWidgetPermission}
                     />
@@ -698,7 +720,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                         <AppWarning errorMsg={_t("widget|error_mixed_content")} />
                     </div>
                 );
-            } else if (this.sgWidget) {
+            } else if (this.messaging) {
                 appTileBody = (
                     <>
                         <div className={appTileBodyClass} style={appTileBodyStyles} ref={this.iframeParentRef}>
@@ -813,7 +835,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         title={_t("widget|popout")}
                                         onClick={this.onPopoutWidgetClick}
                                     >
-                                        <PopoutIcon className="mx_Icon mx_Icon_12 mx_Icon--stroke" />
+                                        <PopOutIcon className="mx_Icon mx_Icon_12" />
                                     </AccessibleButton>
                                 )}
                                 {this.state.hasContextMenuOptions && (

@@ -180,6 +180,23 @@ interface IRoomProps extends RoomViewProps {
      * If true, hide the right panel
      */
     hideRightPanel?: boolean;
+
+    /**
+     * If true, hide the pinned messages banner
+     */
+    hidePinnedMessageBanner?: boolean;
+
+    /**
+     * If true, hide the widgets
+     */
+    hideWidgets?: boolean;
+
+    /**
+     * If true, enable sending read receipts and markers on user activity in the room view. When the user interacts with the room view, read receipts and markers are sent.
+     * If false, the read receipts and markers are only send when the room view is focused. The user has to focus the room view in order to clear any unreads and to move the unread marker to the bottom of the view.
+     * @default true
+     */
+    enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
 
 export { MainSplitContentType };
@@ -407,6 +424,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     public static contextType = SDKContext;
     declare public context: React.ContextType<typeof SDKContext>;
+
+    public static readonly defaultProps = {
+        enableReadReceiptsAndMarkersOnActivity: true,
+    };
 
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
@@ -892,6 +913,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private shouldShowApps(room: Room): boolean {
         if (!BROWSER_SUPPORTS_SANDBOX || !room) return false;
+        if (this.props.hideWidgets) return false;
 
         // Check if user has previously chosen to hide the app drawer for this
         // room. If so, do not show apps
@@ -1202,7 +1224,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.EditEvent: {
                 // Quit early if we're trying to edit events in wrong rendering context
                 if (payload.timelineRenderingType !== this.state.timelineRenderingType) return;
-                if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
+
+                const roomId: string | undefined = payload.event?.getRoomId();
+
+                if (payload.event && roomId !== this.state.roomId) {
+                    // if the room is displayed in a module, we don't want to change the room view
+                    if (roomId && this.roomViewStore.isRoomDisplayedInModule(roomId)) return;
+
                     // If the event is in a different room (e.g. because the event to be edited is being displayed
                     // in the results of an all-rooms search), we need to view that room first.
                     defaultDispatcher.dispatch<ViewRoomPayload>({
@@ -2165,6 +2193,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
+    /**
+     * Handles the focus event on the RoomView component.
+     *
+     * Sends read receipts and updates the read marker if the
+     * disableReadReceiptsAndMarkersOnActivity prop is set.
+     */
+    private onFocus = (): void => {
+        if (this.props.enableReadReceiptsAndMarkersOnActivity) return;
+
+        this.messagePanel?.sendReadReceipts();
+        this.messagePanel?.updateReadMarker();
+    };
+
     public render(): ReactNode {
         if (!this.context.client) return null;
         const { isRoomEncrypted } = this.state;
@@ -2464,7 +2505,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        const pinnedMessageBanner = (
+        const pinnedMessageBanner = !this.props.hidePinnedMessageBanner && (
             <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
         );
 
@@ -2522,7 +2563,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     timelineSet={this.state.room.getUnfilteredTimelineSet()}
                     showReadReceipts={this.state.showReadReceipts}
                     manageReadReceipts={!this.state.isPeeking}
-                    sendReadReceiptOnLoad={!this.state.wasContextSwitch}
+                    sendReadReceiptOnLoad={
+                        !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
+                    }
                     manageReadMarkers={!this.state.isPeeking}
                     hidden={hideMessagePanel}
                     highlightedEventId={highlightedEventId}
@@ -2539,6 +2582,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     showReactions={true}
                     layout={this.state.layout}
                     editState={this.state.editState}
+                    enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
                 />
             );
         }
@@ -2605,7 +2649,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
-                        <main className={timelineClasses}>
+                        <main className={timelineClasses} data-testid="timeline">
                             <FileDropTarget
                                 parent={this.roomView.current}
                                 onFileDrop={this.onFileDrop}
@@ -2666,7 +2710,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
-                <div className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
+                <div
+                    className={mainClasses}
+                    ref={this.roomView}
+                    onKeyDown={this.onReactKeyDown}
+                    onFocus={this.onFocus}
+                    tabIndex={-1}
+                >
                     {showChatEffects && this.roomView.current && (
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     )}

@@ -2410,7 +2410,6 @@
             "error_update_guest_access": "Այս տարածքի հյուրերի հասանելիությունը թարմացնել չհաջողվեց",
             "error_update_history_visibility": "Չհաջողվեց թարմացնել այս տարածքի պատմության տեսանելիությունը",
             "guest_access_explainer": "Հյուրերը կարող են միանալ տարածքին առանց հաշիվ ունենալու:",
-            "guest_access_explainer_public_space": "Սա կարող է օգտակար լինել հանրային տարածքների համար:",
             "guest_access_label": "Միացնել հյուրերի մուտքը",
             "history_visibility_anyone_space": "Տարածքի նախադիտում",
             "history_visibility_anyone_space_description": "Թույլատրել մարդկանց նախադիտել ձեր տարածքը՝ նախքան նրանք միանալը:",

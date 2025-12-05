@@ -13,6 +13,7 @@ import React from "react";
 import { type CallFeed, CallFeedEvent } from "matrix-js-sdk/src/webrtc/callFeed";
 import { logger } from "matrix-js-sdk/src/logger";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
+import { MicOffSolidIcon, MicOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import LegacyCallHandler from "../../../LegacyCallHandler";
@@ -179,14 +180,14 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             mx_VideoFeed_secondary: secondary,
             mx_VideoFeed_voice: this.state.videoMuted,
         });
-        const micIconClasses = classnames("mx_VideoFeed_mic", {
-            mx_VideoFeed_mic_muted: this.state.audioMuted,
-            mx_VideoFeed_mic_unmuted: !this.state.audioMuted,
-        });
 
         let micIcon;
         if (feed.purpose !== SDPStreamMetadataPurpose.Screenshare && !pipMode) {
-            micIcon = <div className={micIconClasses} />;
+            micIcon = (
+                <div className="mx_VideoFeed_mic">
+                    {this.state.audioMuted ? <MicOffSolidIcon /> : <MicOnSolidIcon />}
+                </div>
+            );
         }
 
         let content;

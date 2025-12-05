@@ -39,19 +39,19 @@ Please see LICENSE files in the repository root for full details.
     .mx_GenericDropdownMenu_divider {
         margin-top: $spacing-4;
         margin-bottom: $spacing-4;
-    }
-}
 
-.mx_NetworkDropdown_addServer {
-    font-weight: normal;
-    font-size: $font-15px;
+        & + .mx_GenericDropdownMenu_Option .mx_GenericDropdownMenu_Option--label {
+            font-size: $font-15px;
+        }
+    }
 }
 
 .mx_NetworkDropdown_removeServer {
     position: relative;
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+    padding: 1px;
     background: $quinary-content;
     border-radius: 8px;
     text-align: center;
@@ -59,19 +59,10 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
     margin-left: auto;
 
-    &::before {
-        background-color: $secondary-content;
-        content: "";
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 14px;
-        width: inherit;
+    svg {
+        color: $secondary-content;
         height: inherit;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+        width: inherit;
     }
 }
 

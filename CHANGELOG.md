@@ -1,3 +1,39 @@
+Changes in [1.12.6](https://github.com/element-hq/element-web/releases/tag/v1.12.6) (2025-12-03)
+================================================================================================
+This release fixes a bug where 1:1 calling was incorrectly not available if no Element Call focus was set.
+
+## 🐛 Bug Fixes
+
+* Add option to pick call options for voice calls. ([#31413](https://github.com/element-hq/element-web/pull/31413)).
+
+Changes in [1.12.5](https://github.com/element-hq/element-web/releases/tag/v1.12.5) (2025-12-02)
+================================================================================================
+## ✨ Features
+
+* Update Emojibase to v17 ([#31307](https://github.com/element-hq/element-web/pull/31307)). Contributed by @t3chguy.
+* Adds tooltip for compose menu ([#31122](https://github.com/element-hq/element-web/pull/31122)). Contributed by @byteplow.
+* Add option to hide pinned message banner in room view ([#31296](https://github.com/element-hq/element-web/pull/31296)). Contributed by @florianduros.
+* update twemoji to not monochromise emoji with BLACK in their name ([#31281](https://github.com/element-hq/element-web/pull/31281)). Contributed by @ara4n.
+* upgrade to twemoji 17.0.2 and fix #14695 ([#31267](https://github.com/element-hq/element-web/pull/31267)). Contributed by @ara4n.
+* Add options to hide right panel in room view ([#31252](https://github.com/element-hq/element-web/pull/31252)). Contributed by @florianduros.
+* Delayed event management: split endpoints, no auth  ([#31183](https://github.com/element-hq/element-web/pull/31183)). Contributed by @AndrewFerr.
+* Support using Element Call for voice calls in DMs ([#30817](https://github.com/element-hq/element-web/pull/30817)). Contributed by @Half-Shot.
+* Improve screen reader accessibility of auth pages ([#31236](https://github.com/element-hq/element-web/pull/31236)). Contributed by @t3chguy.
+* Add posthog tracking for key backup toasts ([#31195](https://github.com/element-hq/element-web/pull/31195)). Contributed by @Half-Shot.
+
+## 🐛 Bug Fixes
+
+* Return to using Fira Code as the default monospace font ([#31302](https://github.com/element-hq/element-web/pull/31302)). Contributed by @ara4n.
+* Fix case of home screen being displayed erroneously  ([#31301](https://github.com/element-hq/element-web/pull/31301)). Contributed by @langleyd.
+* Fix message edition and reply when multiple rooms at displayed the same moment ([#31280](https://github.com/element-hq/element-web/pull/31280)). Contributed by @florianduros.
+* Key storage out of sync: reset key backup when needed ([#31279](https://github.com/element-hq/element-web/pull/31279)). Contributed by @uhoreg.
+* Fix invalid events crashing entire room rather than just their tile ([#31256](https://github.com/element-hq/element-web/pull/31256)). Contributed by @t3chguy.
+* Fix expand button of space panel getting cut off at the edges ([#31259](https://github.com/element-hq/element-web/pull/31259)). Contributed by @MidhunSureshR.
+* Fix pill buttons in dialogs ([#31246](https://github.com/element-hq/element-web/pull/31246)). Contributed by @dbkr.
+* Fix blank sections at the top and bottom of the member list when scrolling ([#31198](https://github.com/element-hq/element-web/pull/31198)). Contributed by @langleyd.
+* Fix emoji category selection with keyboard ([#31162](https://github.com/element-hq/element-web/pull/31162)). Contributed by @langleyd.
+
+
 Changes in [1.12.4](https://github.com/element-hq/element-web/releases/tag/v1.12.4) (2025-11-18)
 ================================================================================================
 ## ✨ Features

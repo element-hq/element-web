@@ -27,7 +27,7 @@ function getSanitizedHtmlBody(content: IContent): string {
         stripReplyFallback: true,
     };
     if (content.format === "org.matrix.custom.html") {
-        return bodyToHtml(content, null, opts);
+        return bodyToHtml(content, undefined, opts);
     } else {
         // convert the string to something that can be safely
         // embedded in an html document, e.g. use html entities where needed
@@ -37,7 +37,7 @@ function getSanitizedHtmlBody(content: IContent): string {
         // as opposed to bodyToHtml, here we also render
         // text messages with dangerouslySetInnerHTML, to unify
         // the code paths and because we need html to show differences
-        return textToHtml(bodyToHtml(content, null, opts));
+        return textToHtml(bodyToHtml(content, undefined, opts));
     }
 }
 

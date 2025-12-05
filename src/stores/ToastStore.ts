@@ -17,7 +17,7 @@ export interface IToast<C extends ComponentClass> {
     // higher priority number will be shown on top of lower priority
     priority: number;
     title?: string;
-    icon?: string;
+    icon?: "verification" | "verification_warning" | "key_storage";
     component: C;
     className?: string;
     bodyClassName?: string;

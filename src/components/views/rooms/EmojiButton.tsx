@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { type JSX, useContext } from "react";
+import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import EmojiPicker from "../emojipicker/EmojiPicker";
 import { CollapsibleButton } from "./CollapsibleButton";
 import { OverflowMenuContext } from "./MessageComposerButtons";
-import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/composer/emoji.svg";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
@@ -55,7 +55,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
                 title={_t("common|emoji")}
                 inputRef={button}
             >
-                <EmojiIcon />
+                <ReactionIcon />
             </CollapsibleButton>
 
             {contextMenu}

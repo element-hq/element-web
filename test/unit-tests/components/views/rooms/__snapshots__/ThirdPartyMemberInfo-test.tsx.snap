@@ -28,7 +28,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -103,7 +103,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg

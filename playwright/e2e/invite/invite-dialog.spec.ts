@@ -73,7 +73,10 @@ test.describe("Invite dialog", function () {
         "should support inviting a user to Direct Messages",
         { tag: "@screenshot" },
         async ({ page, app, user, bot }) => {
-            await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+            await page
+                .getByRole("navigation", { name: "Room list" })
+                .getByRole("button", { name: "New conversation" })
+                .click();
             await page.getByRole("menuitem", { name: "Start chat" }).click();
 
             const other = page.locator(".mx_InviteDialog_other");

@@ -21,7 +21,7 @@ import {
     type IRoomTimelineData,
     type ISendEventResponse,
 } from "matrix-js-sdk/src/matrix";
-import { type ClientWidgetApi, Widget } from "matrix-widget-api";
+import { Widget } from "matrix-widget-api";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import {
@@ -47,6 +47,7 @@ import {
 } from "../../../src/toasts/IncomingCallToast";
 import LegacyCallHandler, { AudioID } from "../../../src/LegacyCallHandler";
 import { CallEvent } from "../../../src/models/Call";
+import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging";
 
 describe("IncomingCallToast", () => {
     useMockedCalls();
@@ -113,7 +114,7 @@ describe("IncomingCallToast", () => {
         widget = new Widget(call.widget);
         WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
             stop: () => {},
-        } as unknown as ClientWidgetApi);
+        } as unknown as WidgetMessaging);
 
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
         jest.spyOn(ToastStore, "sharedInstance").mockReturnValue(toastStore);

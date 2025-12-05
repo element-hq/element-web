@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useState, useContext, type JSX } from "react";
 import { MatrixEvent, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { PollsEndIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as PollIcon } from "../../../../res/img/element-icons/room/composer/poll.svg";
 import MatrixClientContext, { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
 import { textForEvent } from "../../../TextForEvent";
@@ -93,7 +93,7 @@ export const MPollEndBody = ({ mxEvent, ref, ...props }: IBodyProps): JSX.Elemen
         const pollEndFallbackMessage = M_TEXT.findIn<string>(mxEvent.getContent()) || textForEvent(mxEvent, cli);
         return (
             <>
-                <PollIcon className="mx_MPollEndBody_icon" />
+                <PollsEndIcon className="mx_MPollEndBody_icon" />
                 {!isLoadingPollStartEvent && pollEndFallbackMessage}
             </>
         );

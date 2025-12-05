@@ -25,14 +25,14 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_k_"
+        id="radix-_r_q_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -63,18 +63,18 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_s_"
+          aria-labelledby="_r_12_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_q_"
+          id="radix-_r_10_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -100,21 +100,22 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="Add"
+          aria-labelledby="_r_1d_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_15_"
+          id="radix-_r_1b_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -164,14 +165,14 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_18_"
+        id="radix-_r_1k_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -202,18 +203,18 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_1g_"
+          aria-labelledby="_r_1s_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_1e_"
+          id="radix-_r_1q_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -236,7 +237,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
-          aria-label="Start chat"
+          aria-labelledby="_r_25_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           role="button"
@@ -244,10 +245,11 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           tabindex="0"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -304,7 +306,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -346,7 +348,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -372,7 +374,7 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="Add"
+          aria-labelledby="_r_j_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
@@ -383,10 +385,11 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -436,14 +439,14 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_3g_"
+        id="radix-_r_4e_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
         type="button"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -474,18 +477,18 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_3o_"
+          aria-labelledby="_r_4m_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_3m_"
+          id="radix-_r_4k_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -511,21 +514,22 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="Add"
+          aria-labelledby="_r_51_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_41_"
+          id="radix-_r_4v_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"
@@ -581,18 +585,18 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_4a_"
+          aria-labelledby="_r_5e_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_48_"
+          id="radix-_r_5c_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -618,21 +622,22 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-label="Add"
+          aria-labelledby="_r_5p_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_4j_"
+          id="radix-_r_5n_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
+              aria-hidden="true"
               color="var(--cpd-color-icon-secondary)"
               fill="currentColor"
               height="1em"

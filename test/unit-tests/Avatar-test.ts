@@ -68,7 +68,7 @@ describe("avatarUrlForRoom", () => {
     });
 
     it("should return null if the room is not a DM", () => {
-        mocked(dmRoomMap).getUserIdForRoomId.mockReturnValue(null);
+        mocked(dmRoomMap).getUserIdForRoomId.mockReturnValue(undefined);
         expect(avatarUrlForRoom(room, 128, 128)).toBeNull();
         expect(dmRoomMap.getUserIdForRoomId).toHaveBeenCalledWith(roomId);
     });

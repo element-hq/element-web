@@ -16,22 +16,20 @@ import Spinner from "../../elements/Spinner";
 import { InitialCryptoSetupStore, useInitialCryptoSetupStatus } from "../../../../stores/InitialCryptoSetupStore";
 
 interface Props {
-    onFinished: (success?: boolean) => void;
+    /** Callback which is called if the crypto setup failed, and the user clicked the 'cancel' button */
+    onCancelled: () => void;
 }
 
-/*
- * Walks the user through the process of creating a cross-signing keys.
+/**
+ * Walks the user through the process of creating cross-signing keys.
+ *
  * In most cases, only a spinner is shown, but for more
  * complex auth like SSO, the user may need to complete some steps to proceed.
  */
-export const InitialCryptoSetupDialog: React.FC<Props> = ({ onFinished }) => {
+export const InitialCryptoSetupDialog: React.FC<Props> = ({ onCancelled }) => {
     const onRetryClick = useCallback(() => {
         InitialCryptoSetupStore.sharedInstance().retry();
     }, []);
-
-    const onCancelClick = useCallback(() => {
-        onFinished(false);
-    }, [onFinished]);
 
     const status = useInitialCryptoSetupStatus(InitialCryptoSetupStore.sharedInstance());
 
@@ -44,7 +42,7 @@ export const InitialCryptoSetupDialog: React.FC<Props> = ({ onFinished }) => {
                     <DialogButtons
                         primaryButton={_t("action|retry")}
                         onPrimaryButtonClick={onRetryClick}
-                        onCancel={onCancelClick}
+                        onCancel={onCancelled}
                     />
                 </div>
             </div>
@@ -60,7 +58,6 @@ export const InitialCryptoSetupDialog: React.FC<Props> = ({ onFinished }) => {
     return (
         <BaseDialog
             className="mx_CreateCrossSigningDialog"
-            onFinished={onFinished}
             title={_t("encryption|bootstrap_title")}
             hasCancel={false}
             fixedWidth={false}

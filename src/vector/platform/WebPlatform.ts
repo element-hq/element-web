@@ -53,7 +53,7 @@ export default class WebPlatform extends BasePlatform {
         super.onAction(payload);
 
         switch (payload.action) {
-            case "client_started":
+            case Action.ClientStarted:
                 // Defer drawing the toast until the client is started as the lifecycle methods reset the ToastStore right before
                 this.registerServiceWorkerPromise.catch(this.handleServiceWorkerRegistrationError);
                 break;

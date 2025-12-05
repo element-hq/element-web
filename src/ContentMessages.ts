@@ -140,7 +140,7 @@ const IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT = 0.1; // 10%
 // and videos tend to be much larger.
 
 // Image mime types for which to always include a thumbnail for even if it is larger than the input for wider support.
-const ALWAYS_INCLUDE_THUMBNAIL = ["image/avif", "image/webp"];
+const ALWAYS_INCLUDE_THUMBNAIL = ["image/avif", "image/webp", "image/svg+xml"];
 
 /**
  * Read the metadata for an image file and create and upload a thumbnail of the image.

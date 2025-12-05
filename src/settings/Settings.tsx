@@ -50,6 +50,7 @@ import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index
 import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
+import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -368,6 +369,7 @@ export interface Settings {
     "Electron.enableContentProtection": IBaseSetting<boolean>;
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
+    "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
 }
 
@@ -457,6 +459,11 @@ export const SETTINGS: Settings = {
         default: InviteRulesConfigController.default,
         // Contains server names
         shouldExportToRageshake: false,
+    },
+    "blockInvites": {
+        controller: new BlockInvitesConfigController("blockInvites"),
+        supportedLevels: [SettingLevel.ACCOUNT],
+        default: false,
     },
     "feature_report_to_moderators": {
         isFeature: true,
@@ -967,6 +974,10 @@ export const SETTINGS: Settings = {
         default: false,
         displayName: _td("settings|appearance|custom_font"),
         controller: new SystemFontController(),
+        description: () =>
+            _t("settings|appearance|custom_font_description", {
+                brand: SdkConfig.get().brand,
+            }),
     },
     "systemFont": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -1128,10 +1139,12 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new NotificationsEnabledController(),
+        displayName: _td("settings|notifications|enable_desktop_notifications_session"),
     },
     "deviceNotificationsEnabled": {
         supportedLevels: [SettingLevel.DEVICE],
         default: true,
+        displayName: _td("settings|notifications|enable_notifications_device"),
     },
     "notificationSound": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
@@ -1143,10 +1156,12 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         controller: new NotificationBodyEnabledController(),
+        displayName: _td("settings|notifications|show_message_desktop_notification"),
     },
     "audioNotificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
+        displayName: _td("settings|notifications|enable_audible_notifications_session"),
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -1197,7 +1212,7 @@ export const SETTINGS: Settings = {
         default: SortingAlgorithm.Recency,
     },
     "RoomList.showMessagePreview": {
-        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
         displayName: _td("settings|show_message_previews"),
     },

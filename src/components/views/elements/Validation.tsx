@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 import classNames from "classnames";
 import memoizeOne from "memoize-one";
+import { CheckIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 type Data = Pick<IFieldState, "value" | "allowEmpty">;
 
@@ -173,6 +174,7 @@ export default function withValidation<T = void, D = void>({
                         });
                         return (
                             <li key={result.key} className={classes}>
+                                {result.valid ? <CheckIcon /> : <CloseIcon />}
                                 {result.text}
                             </li>
                         );

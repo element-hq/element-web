@@ -93,6 +93,7 @@
         "maximise": "Teljes méret",
         "mention": "Megemlítés",
         "minimise": "Lecsukás",
+        "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
         "new_video_room": "Új videószoba",
         "next": "Következő",
@@ -601,6 +602,7 @@
         "video": "Videó",
         "video_room": "Videószoba",
         "view_message": "Üzenet megjelenítése",
+        "voice": "Hang",
         "warning": "Figyelmeztetés"
     },
     "composer": {
@@ -2468,7 +2470,6 @@
             "error_update_guest_access": "A tér vendéghozzáférésének frissítése sikertelen",
             "error_update_history_visibility": "A tér régi üzeneteinek láthatóságának frissítése sikertelen",
             "guest_access_explainer": "A vendégek fiók nélkül is beléphetnek a térbe.",
-            "guest_access_explainer_public_space": "A nyilvános tereknél ez hasznos lehet.",
             "guest_access_label": "Vendéghozzáférés engedélyezése",
             "history_visibility_anyone_space": "Tér előnézete",
             "history_visibility_anyone_space_description": "A tér előnézetének engedélyezése a belépés előtt.",
@@ -4066,9 +4067,11 @@
         "user_busy_description": "A hívott felhasználó foglalt.",
         "user_is_presenting": "%(sharerName)s tartja a bemutatót",
         "video_call": "Videóhívás",
+        "video_call_incoming": "Bejövő videóhívás",
         "video_call_started": "A videóhívás elindult",
         "video_call_using": "Videóhívás:",
         "voice_call": "Hanghívás",
+        "voice_call_incoming": "Bejövő hanghívás",
         "you_are_presenting": "Ön tartja a bemutatót"
     },
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",

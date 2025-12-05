@@ -70,10 +70,10 @@ export function RoomListHeaderView(): JSX.Element {
                             <ComposeMenu vm={vm} />
                         ) : (
                             <IconButton
-                                aria-label={_t("action|start_chat")}
                                 onClick={(e) => vm.createChatRoom(e.nativeEvent)}
+                                tooltip={_t("action|new_conversation")}
                             >
-                                <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                                <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
                             </IconButton>
                         )}
                     </div>
@@ -163,8 +163,8 @@ function ComposeMenu({ vm }: ComposeMenuProps): JSX.Element {
             side="right"
             align="start"
             trigger={
-                <IconButton aria-label={_t("action|add")}>
-                    <ComposeIcon color="var(--cpd-color-icon-secondary)" />
+                <IconButton tooltip={_t("action|new_conversation")}>
+                    <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
                 </IconButton>
             }
         >

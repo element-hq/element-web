@@ -33,11 +33,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
             >
               <div
-                class="_container_1e0uz_10"
+                class="_container_1qhtc_10"
               >
                 <input
                   checked=""
-                  class="_input_1e0uz_18"
+                  class="_input_1qhtc_18"
                   id="radix-_r_0_"
                   name="layout"
                   title=""
@@ -45,7 +45,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   value="group"
                 />
                 <div
-                  class="_ui_1e0uz_19"
+                  class="_ui_1qhtc_19"
                 />
               </div>
               <span>
@@ -84,7 +84,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -121,7 +121,19 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                       role="button"
                       tabindex="0"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          clip-rule="evenodd"
+                          d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
                     </div>
                     <div
                       aria-expanded="false"
@@ -161,10 +173,10 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
             >
               <div
-                class="_container_1e0uz_10"
+                class="_container_1qhtc_10"
               >
                 <input
-                  class="_input_1e0uz_18"
+                  class="_input_1qhtc_18"
                   id="radix-_r_9_"
                   name="layout"
                   title=""
@@ -172,7 +184,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   value="bubble"
                 />
                 <div
-                  class="_ui_1e0uz_19"
+                  class="_ui_1qhtc_19"
                 />
               </div>
               <span>
@@ -211,7 +223,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -248,7 +260,19 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                       role="button"
                       tabindex="0"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          clip-rule="evenodd"
+                          d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
                     </div>
                     <div
                       aria-expanded="false"
@@ -288,10 +312,10 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
             >
               <div
-                class="_container_1e0uz_10"
+                class="_container_1qhtc_10"
               >
                 <input
-                  class="_input_1e0uz_18"
+                  class="_input_1qhtc_18"
                   id="radix-_r_i_"
                   name="layout"
                   title=""
@@ -299,7 +323,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   value="irc"
                 />
                 <div
-                  class="_ui_1e0uz_19"
+                  class="_ui_1qhtc_19"
                 />
               </div>
               <span>
@@ -341,7 +365,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -378,7 +402,19 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                       role="button"
                       tabindex="0"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          clip-rule="evenodd"
+                          d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
                     </div>
                     <div
                       aria-expanded="false"
@@ -417,11 +453,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
             class="_inline-field-control_19upo_44"
           >
             <div
-              class="_container_19o42_10"
+              class="_container_udcm8_10"
             >
               <input
                 aria-describedby="radix-_r_s_"
-                class="_input_19o42_24"
+                class="_input_udcm8_24"
                 id="radix-_r_r_"
                 name="compactLayout"
                 role="switch"
@@ -429,7 +465,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 type="checkbox"
               />
               <div
-                class="_ui_19o42_34"
+                class="_ui_udcm8_34"
               />
             </div>
           </div>
@@ -453,7 +489,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
       </form>
     </div>
     <div
-      class="_separator_7ckbw_8"
+      class="_separator_cqpyv_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"

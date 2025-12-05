@@ -2054,7 +2054,6 @@
             "error_update_guest_access": "Vieraiden pääsyasetusten muuttaminen epäonnistui",
             "error_update_history_visibility": "Historian näkyvyysasetusten muuttaminen epäonnistui",
             "guest_access_explainer": "Vieraat voivat liittyä avaruuteen ilman tiliä.",
-            "guest_access_explainer_public_space": "Tämä voi olla hyödyllinen julkisille avaruuksille.",
             "guest_access_label": "Ota käyttöön vieraiden pääsy",
             "history_visibility_anyone_space": "Esikatsele avaruutta",
             "history_visibility_anyone_space_description": "Salli ihmisten esikatsella avaruuttasi ennen liittymistä.",

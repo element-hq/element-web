@@ -16,36 +16,17 @@ Please see LICENSE files in the repository root for full details.
         margin-top: 24px;
 
         .mx_SpaceBasicSettings_avatar {
-            position: relative;
             height: 80px;
             width: 80px;
             background-color: $tertiary-content;
             border-radius: 16px;
-        }
-
-        img.mx_SpaceBasicSettings_avatar {
-            width: 80px;
-            height: 80px;
             object-fit: cover;
-            border-radius: 16px;
-        }
 
-        /* only show it when the button is a div and not an img (has avatar) */
-        div.mx_SpaceBasicSettings_avatar {
-            cursor: pointer;
-
-            &::before {
-                content: "";
-                position: absolute;
-                height: 80px;
-                width: 80px;
-                top: 0;
-                left: 0;
-                background-color: #ffffff; /* white icon fill */
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: 20px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/take-photo-solid.svg");
+            svg {
+                width: 20px;
+                height: 20px;
+                padding: 30px;
+                color: #ffffff; /* white icon fill */
             }
         }
 

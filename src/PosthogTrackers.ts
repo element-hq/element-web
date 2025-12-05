@@ -27,6 +27,7 @@ const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
     [Views.FORGOT_PASSWORD]: "ForgotPassword",
     [Views.COMPLETE_SECURITY]: "CompleteSecurity",
     [Views.E2E_SETUP]: "E2ESetup",
+    [Views.PENDING_CLIENT_START]: "Loading",
     [Views.SOFT_LOGOUT]: "SoftLogout",
     [Views.LOCK_STOLEN]: "SessionLockStolen",
 };
