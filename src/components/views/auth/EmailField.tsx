@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps, PureComponent, type Ref } from "react";
 
 import Field, { type IInputProps } from "../elements/Field";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import * as Email from "../../../email";
 

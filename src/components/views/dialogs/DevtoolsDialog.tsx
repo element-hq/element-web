@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useState } from "react";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "./BaseDialog";
 import { TimelineEventEditor } from "./devtools/Event";

@@ -11,7 +11,7 @@ import React, { type JSX, type ComponentProps, type CSSProperties } from "react"
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 
