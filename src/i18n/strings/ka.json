@@ -1586,7 +1586,6 @@
             "error_update_guest_access": "ამ სივრცეში სტუმრის წვდომის განახლება ვერ მოხერხდა",
             "error_update_history_visibility": "ამ სივრცის ისტორიის ხილვადობის განახლება ვერ მოხერხდა",
             "guest_access_explainer": "სტუმრებს შეუძლიათ შეუერთდნენ სივრცეს ანგარიშის გარეშე.",
-            "guest_access_explainer_public_space": "ეს შეიძლება სასარგებლო იყოს საჯარო სივრცეებისთვის.",
             "guest_access_label": "ჩართეთ სტუმრის წვდომა",
             "history_visibility_anyone_space": "გადახედვის სივრცე",
             "history_visibility_anyone_space_description": "ნება მიეცით ხალხს, გადახედონ თქვენს სივრცეს, სანამ შეუერთდებიან.",

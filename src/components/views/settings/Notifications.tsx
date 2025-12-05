@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type ChangeEvent, type ChangeEventHandler, type JSX, type ReactNode } from "react";
 import {
     type IAnnotatedPushRule,
     type IPusher,
@@ -19,6 +19,7 @@ import {
     type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -31,7 +32,6 @@ import {
     type VectorPushRuleDefinition,
 } from "../../../notifications";
 import { _t, type TranslatedString } from "../../../languageHandler";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import { SettingLevel } from "../../../settings/SettingLevel";
@@ -122,9 +122,6 @@ interface IState {
     threepids?: IThreepid[];
 
     deviceNotificationsEnabled: boolean;
-    desktopNotifications: boolean;
-    desktopShowBody: boolean;
-    audioNotifications: boolean;
 
     clearingNotifications: boolean;
 
@@ -194,10 +191,15 @@ const maximumVectorState = (
 
 const NotificationActivitySettings = (): JSX.Element => {
     return (
-        <div>
+        <Form.Root
+            onSubmit={(evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }}
+        >
             <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
             <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
-        </div>
+        </Form.Root>
     );
 };
 
@@ -213,9 +215,6 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         this.state = {
             phase: Phase.Loading,
             deviceNotificationsEnabled: SettingsStore.getValue("deviceNotificationsEnabled") ?? true,
-            desktopNotifications: SettingsStore.getValue("notificationsEnabled"),
-            desktopShowBody: SettingsStore.getValue("notificationBodyEnabled"),
-            audioNotifications: SettingsStore.getValue("audioNotificationsEnabled"),
             clearingNotifications: false,
             ruleIdsWithError: {},
         };
@@ -231,18 +230,9 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
     public componentDidMount(): void {
         this.settingWatchers = [
-            SettingsStore.watchSetting("notificationsEnabled", null, (...[, , , , value]) =>
-                this.setState({ desktopNotifications: value as boolean }),
-            ),
             SettingsStore.watchSetting("deviceNotificationsEnabled", null, (...[, , , , value]) => {
                 this.setState({ deviceNotificationsEnabled: value as boolean });
             }),
-            SettingsStore.watchSetting("notificationBodyEnabled", null, (...[, , , , value]) =>
-                this.setState({ desktopShowBody: value as boolean }),
-            ),
-            SettingsStore.watchSetting("audioNotificationsEnabled", null, (...[, , , , value]) =>
-                this.setState({ audioNotifications: value as boolean }),
-            ),
         ];
 
         // noinspection JSIgnoredPromiseFromCall
@@ -286,7 +276,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         const settingsEvent = cli.getAccountData(getLocalNotificationAccountDataEventType(cli.deviceId));
         if (settingsEvent) {
             const notificationsEnabled = !(settingsEvent.getContent() as LocalNotificationSettings).is_silenced;
-            await this.updateDeviceNotifications(notificationsEnabled);
+            await SettingsStore.setValue("deviceNotificationsEnabled", null, SettingLevel.DEVICE, notificationsEnabled);
         }
     }
 
@@ -410,7 +400,8 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         });
     }
 
-    private onMasterRuleChanged = async (checked: boolean): Promise<void> => {
+    private onMasterRuleChanged: ChangeEventHandler<HTMLInputElement> = async (evt): Promise<void> => {
+        const { checked } = evt.target;
         this.setState({ phase: Phase.Persisting });
 
         const masterRule = this.state.masterPushRule!;
@@ -431,11 +422,8 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         }));
     };
 
-    private updateDeviceNotifications = async (checked: boolean): Promise<void> => {
-        await SettingsStore.setValue("deviceNotificationsEnabled", null, SettingLevel.DEVICE, checked);
-    };
-
-    private onEmailNotificationsChanged = async (email: string, checked: boolean): Promise<void> => {
+    private onEmailNotificationsChanged = async (email: string, evt: ChangeEvent<HTMLInputElement>): Promise<void> => {
+        const { checked } = evt.target;
         this.setState({ phase: Phase.Persisting });
 
         try {
@@ -468,18 +456,6 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             logger.error("Error updating email pusher:", e);
             this.showSaveError();
         }
-    };
-
-    private onDesktopNotificationsChanged = async (checked: boolean): Promise<void> => {
-        await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, checked);
-    };
-
-    private onDesktopShowBodyChanged = async (checked: boolean): Promise<void> => {
-        await SettingsStore.setValue("notificationBodyEnabled", null, SettingLevel.DEVICE, checked);
-    };
-
-    private onAudioNotificationsChanged = async (checked: boolean): Promise<void> => {
-        await SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, checked);
     };
 
     private onRadioChecked = async (rule: IVectorPushRule, checkedState: VectorState): Promise<void> => {
@@ -663,11 +639,11 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
     private renderTopSection(): JSX.Element {
         const masterSwitch = (
-            <LabelledToggleSwitch
-                data-testid="notif-master-switch"
-                value={!this.isInhibited}
+            <SettingsToggleInput
+                checked={!this.isInhibited}
+                name="notif-master-switch"
                 label={_t("settings|notifications|enable_notifications_account")}
-                caption={_t("settings|notifications|enable_notifications_account_detail")}
+                helpMessage={_t("settings|notifications|enable_notifications_account_detail")}
                 onChange={this.onMasterRuleChanged}
                 disabled={this.state.phase === Phase.Persisting}
             />
@@ -681,10 +657,10 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
         const emailSwitches = (this.state.threepids || [])
             .filter((t) => t.medium === ThreepidMedium.Email)
             .map((e) => (
-                <LabelledToggleSwitch
-                    data-testid="notif-email-switch"
+                <SettingsToggleInput
+                    name="notif-email-switch"
                     key={e.address}
-                    value={!!this.state.pushers?.some((p) => p.kind === "email" && p.pushkey === e.address)}
+                    checked={!!this.state.pushers?.some((p) => p.kind === "email" && p.pushkey === e.address)}
                     label={_t("settings|notifications|enable_email_notifications", { email: e.address })}
                     onChange={this.onEmailNotificationsChanged.bind(this, e.address)}
                     disabled={this.state.phase === Phase.Persisting}
@@ -695,37 +671,13 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
             <SettingsSubsection>
                 {masterSwitch}
 
-                <LabelledToggleSwitch
-                    data-testid="notif-device-switch"
-                    value={this.state.deviceNotificationsEnabled}
-                    label={_t("settings|notifications|enable_notifications_device")}
-                    onChange={(checked) => this.updateDeviceNotifications(checked)}
-                    disabled={this.state.phase === Phase.Persisting}
-                />
+                <SettingsFlag name="deviceNotificationsEnabled" level={SettingLevel.DEVICE} />
 
                 {this.state.deviceNotificationsEnabled && (
                     <>
-                        <LabelledToggleSwitch
-                            data-testid="notif-setting-notificationsEnabled"
-                            value={this.state.desktopNotifications}
-                            onChange={this.onDesktopNotificationsChanged}
-                            label={_t("settings|notifications|enable_desktop_notifications_session")}
-                            disabled={this.state.phase === Phase.Persisting}
-                        />
-                        <LabelledToggleSwitch
-                            data-testid="notif-setting-notificationBodyEnabled"
-                            value={this.state.desktopShowBody}
-                            onChange={this.onDesktopShowBodyChanged}
-                            label={_t("settings|notifications|show_message_desktop_notification")}
-                            disabled={this.state.phase === Phase.Persisting}
-                        />
-                        <LabelledToggleSwitch
-                            data-testid="notif-setting-audioNotificationsEnabled"
-                            value={this.state.audioNotifications}
-                            onChange={this.onAudioNotificationsChanged}
-                            label={_t("settings|notifications|enable_audible_notifications_session")}
-                            disabled={this.state.phase === Phase.Persisting}
-                        />
+                        <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
+                        <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
+                        <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
                     </>
                 )}
 

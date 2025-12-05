@@ -14,7 +14,7 @@ import {
     type RoomMember,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
-import { type ClientWidgetApi, Widget } from "matrix-widget-api";
+import { Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
 import { mocked, type Mocked } from "jest-mock";
 
@@ -32,6 +32,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { ConnectionState } from "../../../../../src/models/Call";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
 import RoomContext, { type RoomContextType } from "../../../../../src/contexts/RoomContext";
+import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
@@ -115,7 +116,7 @@ describe("<RoomCallBanner />", () => {
             widget = new Widget(call.widget);
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
                 stop: () => {},
-            } as unknown as ClientWidgetApi);
+            } as unknown as WidgetMessaging);
         });
         afterEach(() => {
             cleanup(); // Unmount before we do any cleanup that might update the component

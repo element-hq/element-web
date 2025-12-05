@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { type Optional } from "matrix-events-sdk";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { pendingVerificationRequestForUser } from "../../verification";
@@ -58,7 +57,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     private global?: IRightPanelForRoom;
     private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
-    private viewedRoomId: Optional<string>;
+    private viewedRoomId: string | null = null;
 
     private constructor() {
         super(defaultDispatcher);
@@ -419,7 +418,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     };
 
-    private handleViewedRoomChange(oldRoomId: Optional<string>, newRoomId: Optional<string>): void {
+    private handleViewedRoomChange(oldRoomId: string | null, newRoomId: string | null): void {
         if (!this.mxClient) return; // not ready, onReady will handle the first room
         this.viewedRoomId = newRoomId;
         // load values from byRoomCache with the viewedRoomId.

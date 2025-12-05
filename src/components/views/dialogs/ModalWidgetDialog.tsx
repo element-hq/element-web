@@ -27,11 +27,11 @@ import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import BaseDialog from "./BaseDialog";
 import { _t, getUserLanguage } from "../../../languageHandler";
 import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
-import { StopGapWidgetDriver } from "../../../stores/widgets/StopGapWidgetDriver";
+import { ElementWidgetDriver } from "../../../stores/widgets/ElementWidgetDriver";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
-import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidget } from "../../../stores/widgets/WidgetMessaging";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../../settings/watchers/ThemeWatcher";
 
@@ -72,7 +72,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     public componentDidMount(): void {
-        const driver = new StopGapWidgetDriver([], this.widget, WidgetKind.Modal, false);
+        const driver = new ElementWidgetDriver(this.widget, WidgetKind.Modal, false);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current!, driver);
         this.setState({ messaging });
     }

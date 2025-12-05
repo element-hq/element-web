@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { Root, InlineField, Label, ToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
@@ -66,33 +66,31 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
         return (
-            <div className="mx_SetIntegrationManager" data-testid="mx_SetIntegrationManager">
+            <Form.Root
+                onSubmit={(evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                }}
+                className="mx_SetIntegrationManager"
+                data-testid="mx_SetIntegrationManager"
+            >
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
                         <Heading size="3">{_t("integration_manager|manage_title")}</Heading>
-                        <Heading size="4">{managerName}</Heading>
+                        <Heading id="mx_SetIntegrationManager_ManagerName" size="4">
+                            {managerName}
+                        </Heading>
                     </div>
                 </div>
-                <SettingsSubsectionText>{bodyText}</SettingsSubsectionText>
+                <SettingsSubsectionText id="mx_SetIntegrationManager_BodyText">{bodyText}</SettingsSubsectionText>
                 <SettingsSubsectionText>{_t("integration_manager|explainer")}</SettingsSubsectionText>
-                <Root>
-                    <InlineField
-                        name="enable_im"
-                        control={
-                            <ToggleInput
-                                role="switch"
-                                id="mx_SetIntegrationManager_Toggle"
-                                checked={this.state.provisioningEnabled}
-                                onChange={this.onProvisioningToggled}
-                            />
-                        }
-                    >
-                        <Label htmlFor="mx_SetIntegrationManager_Toggle">
-                            {_t("integration_manager|toggle_label")}
-                        </Label>
-                    </InlineField>
-                </Root>
-            </div>
+                <SettingsToggleInput
+                    name="enable_im"
+                    label={_t("integration_manager|toggle_label")}
+                    checked={this.state.provisioningEnabled}
+                    onChange={this.onProvisioningToggled}
+                />
+            </Form.Root>
         );
     }
 }

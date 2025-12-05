@@ -1,6 +1,6 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "0.0.0-test.9",
+    "version": "0.0.0-test.11",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
@@ -49,6 +49,7 @@
         "playwright": "1.57.0"
     },
     "dependencies": {
+        "@element-hq/element-web-module-api": "^1.8.0",
         "@vector-im/compound-design-tokens": "^6.3.0",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",

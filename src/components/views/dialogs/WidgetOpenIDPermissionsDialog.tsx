@@ -7,12 +7,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ChangeEventHandler } from "react";
 import { type Widget, type WidgetKind } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { OIDCState } from "../../../stores/widgets/WidgetPermissionStore";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -61,8 +61,8 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         this.props.onFinished(allowed);
     }
 
-    private onRememberSelectionChange = (newVal: boolean): void => {
-        this.setState({ rememberSelection: newVal });
+    private onRememberSelectionChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ rememberSelection: evt.target.checked });
     };
 
     public render(): React.ReactNode {
@@ -85,12 +85,19 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
                     onPrimaryButtonClick={this.onAllow}
                     onCancel={this.onDeny}
                     additive={
-                        <LabelledToggleSwitch
-                            value={this.state.rememberSelection}
-                            toggleInFront={true}
-                            onChange={this.onRememberSelectionChange}
-                            label={_t("widget|open_id_permissions_dialog|remember_selection")}
-                        />
+                        <Form.Root
+                            onSubmit={(evt) => {
+                                evt.preventDefault();
+                                evt.stopPropagation();
+                            }}
+                        >
+                            <SettingsToggleInput
+                                name="remember-selection"
+                                checked={this.state.rememberSelection}
+                                onChange={this.onRememberSelectionChange}
+                                label={_t("widget|open_id_permissions_dialog|remember_selection")}
+                            />
+                        </Form.Root>
                     }
                 />
             </BaseDialog>

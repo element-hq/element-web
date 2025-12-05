@@ -28,6 +28,7 @@ type EndedPollState = {
     winningAnswers: {
         answer: PollAnswerSubevent;
         voteCount: number;
+        optionNumber: number;
     }[];
     totalVoteCount: number;
 };
@@ -40,10 +41,12 @@ const getWinningAnswers = (poll: Poll, responseRelations: Relations): EndedPollS
     return {
         totalVoteCount,
         winningAnswers: poll.pollEvent.answers
-            .filter((answer) => votes.get(answer.id) === winCount)
-            .map((answer) => ({
+            .map((answer, index) => ({ answerIndex: index, answer })) // keep track of original answer index
+            .filter(({ answer }) => votes.get(answer.id) === winCount)
+            .map(({ answer, answerIndex }) => ({
                 answer,
                 voteCount: votes.get(answer.id) || 0,
+                optionNumber: answerIndex + 1,
             })),
     };
 };
@@ -100,13 +103,14 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
                     </div>
                     {!!winningAnswers?.length && (
                         <div className="mx_PollListItemEnded_answers">
-                            {winningAnswers?.map(({ answer, voteCount }) => (
+                            {winningAnswers?.map(({ answer, voteCount, optionNumber }) => (
                                 <PollOption
                                     key={answer.id}
                                     answer={answer}
                                     voteCount={voteCount}
                                     totalVoteCount={totalVoteCount!}
                                     pollId={poll.pollId}
+                                    optionNumber={optionNumber}
                                     displayVoteCount
                                     isChecked
                                     isEnded

@@ -2108,7 +2108,6 @@
             "error_update_guest_access": "Aggiornamento accesso ospiti dello spazio fallito",
             "error_update_history_visibility": "Aggiornamento visibilità cronologia dello spazio fallito",
             "guest_access_explainer": "Gli ospiti possono entrare in uno spazio senza avere un account.",
-            "guest_access_explainer_public_space": "Può tornare utile per gli spazi pubblici.",
             "guest_access_label": "Attiva accesso ospiti",
             "history_visibility_anyone_space": "Anteprima spazio",
             "history_visibility_anyone_space_description": "Permetti a chiunque di vedere l'anteprima dello spazio prima di unirsi.",

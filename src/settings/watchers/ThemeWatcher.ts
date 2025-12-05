@@ -122,7 +122,6 @@ export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvent, T
                 return theme;
             }
         }
-        logger.log("returning theme value");
         return SettingsStore.getValue("theme");
     }
 
