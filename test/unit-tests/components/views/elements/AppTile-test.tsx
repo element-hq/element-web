@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type ClientWidgetApi, type IWidget, MatrixWidgetType } from "matrix-widget-api";
+import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { act, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -34,7 +34,7 @@ import AppTile from "../../../../../src/components/views/elements/AppTile";
 import { Container, WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import { ElementWidgetCapabilities } from "../../../../../src/stores/widgets/ElementWidgetCapabilities";
-import { ElementWidget } from "../../../../../src/stores/widgets/StopGapWidget";
+import { ElementWidget, type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
@@ -116,9 +116,11 @@ describe("AppTile", () => {
         await RightPanelStore.instance.onReady();
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
         sdkContext = new SdkContextClass();
         jest.spyOn(SettingsStore, "getValue").mockRestore();
+        // @ts-ignore
+        await WidgetMessagingStore.instance.onReady();
     });
 
     it("destroys non-persisted right panel widget on room change", async () => {
@@ -424,16 +426,20 @@ describe("AppTile", () => {
 
         describe("with an existing widgetApi with requiresClient = false", () => {
             beforeEach(() => {
-                const api = {
-                    hasCapability: (capability: ElementWidgetCapabilities): boolean => {
-                        return !(capability === ElementWidgetCapabilities.RequiresClient);
-                    },
-                    once: () => {},
+                const messaging = {
+                    on: () => {},
+                    off: () => {},
+                    prepare: async () => {},
                     stop: () => {},
-                } as unknown as ClientWidgetApi;
+                    widgetApi: {
+                        hasCapability: (capability: ElementWidgetCapabilities): boolean => {
+                            return !(capability === ElementWidgetCapabilities.RequiresClient);
+                        },
+                    },
+                } as unknown as WidgetMessaging;
 
                 const mockWidget = new ElementWidget(app1);
-                WidgetMessagingStore.instance.storeMessaging(mockWidget, r1.roomId, api);
+                WidgetMessagingStore.instance.storeMessaging(mockWidget, r1.roomId, messaging);
 
                 renderResult = render(
                     <MatrixClientContext.Provider value={cli}>
