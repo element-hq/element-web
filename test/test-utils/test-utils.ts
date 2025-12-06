@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { mocked, type MockedObject } from "jest-mock";
 import {
+    type EventTimeline,
     MatrixEvent,
     type Room,
     type User,
@@ -16,7 +17,6 @@ import {
     type IEvent,
     type RoomMember,
     type MatrixClient,
-    type EventTimeline,
     type RoomState,
     EventType,
     type IEventRelation,
@@ -30,6 +30,7 @@ import {
     JoinRule,
     type OidcClientConfig,
     type GroupCall,
+    HistoryVisibility,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
@@ -627,6 +628,7 @@ export function mkStubRoom(
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
         currentState: {
             getStateEvents: jest.fn((_type, key) => (key === undefined ? [] : null)),
+            getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Joined),
             getMember: jest.fn(),
             mayClientSendStateEvent: jest.fn().mockReturnValue(true),
             maySendStateEvent: jest.fn().mockReturnValue(true),
