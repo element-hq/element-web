@@ -12,6 +12,10 @@ import { mocked } from "jest-mock";
 
 import { RecoveryPanelOutOfSync } from "../../../../../../src/components/views/settings/encryption/RecoveryPanelOutOfSync";
 import { accessSecretStorage } from "../../../../../../src/SecurityManager";
+import DeviceListener from "../../../../../../src/DeviceListener";
+import { stubClient } from "../../../../../test-utils";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
 jest.mock("../../../../../../src/SecurityManager", () => ({
     accessSecretStorage: jest.fn(),
@@ -19,8 +23,17 @@ jest.mock("../../../../../../src/SecurityManager", () => ({
 
 describe("<RecoveyPanelOutOfSync />", () => {
     function renderComponent(onFinish = jest.fn(), onForgotRecoveryKey = jest.fn()) {
-        return render(<RecoveryPanelOutOfSync onFinish={onFinish} onForgotRecoveryKey={onForgotRecoveryKey} />);
+        stubClient();
+        return render(
+            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                <RecoveryPanelOutOfSync onFinish={onFinish} onForgotRecoveryKey={onForgotRecoveryKey} />
+            </MatrixClientContext.Provider>,
+        );
     }
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
 
     it("should render", () => {
         const { asFragment } = renderComponent();
@@ -38,8 +51,14 @@ describe("<RecoveyPanelOutOfSync />", () => {
     });
 
     it("should access to 4S and call onFinish when 'Enter recovery key' is clicked", async () => {
+        jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+
         const user = userEvent.setup();
-        mocked(accessSecretStorage).mockClear().mockResolvedValue();
+        mocked(accessSecretStorage)
+            .mockClear()
+            .mockImplementation(async (func = async (): Promise<void> => {}) => {
+                return await func();
+            });
 
         const onFinish = jest.fn();
         renderComponent(onFinish);
@@ -47,5 +66,27 @@ describe("<RecoveyPanelOutOfSync />", () => {
         await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
         expect(accessSecretStorage).toHaveBeenCalled();
         expect(onFinish).toHaveBeenCalled();
+
+        expect(MatrixClientPeg.safeGet().getCrypto()!.resetKeyBackup).not.toHaveBeenCalled();
+    });
+
+    it("should reset key backup if needed", async () => {
+        jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(true);
+
+        const user = userEvent.setup();
+        mocked(accessSecretStorage)
+            .mockClear()
+            .mockImplementation(async (func = async (): Promise<void> => {}) => {
+                return await func();
+            });
+
+        const onFinish = jest.fn();
+        renderComponent(onFinish);
+
+        await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
+        expect(accessSecretStorage).toHaveBeenCalled();
+        expect(onFinish).toHaveBeenCalled();
+
+        expect(MatrixClientPeg.safeGet().getCrypto()!.resetKeyBackup).toHaveBeenCalled();
     });
 });
