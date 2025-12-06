@@ -32,10 +32,12 @@ Please see LICENSE files in the repository root for full details.
     height: 24px;
     vertical-align: middle;
     margin-right: 2px; /* distance from left edge of waveform container (container has some margin too) */
-    background-color: $voice-record-icon-color;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-image: url("@vector-im/compound-design-tokens/icons/delete.svg");
+
+    svg {
+        width: inherit;
+        height: inherit;
+        color: $voice-record-icon-color;
+    }
 }
 
 .mx_VoiceRecordComposerTile_uploadingState {
@@ -113,5 +115,11 @@ Please see LICENSE files in the repository root for full details.
     }
     65% {
         opacity: 1;
+    }
+}
+
+@media (forced-colors: active) {
+    .mx_VoiceMessagePrimaryContainer {
+        outline: 1px solid transparent;
     }
 }

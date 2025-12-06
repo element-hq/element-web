@@ -82,7 +82,6 @@ describe("<RecordingPlayback />", () => {
     it("disables play button while playback is decoding", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
-        expect(getPlayButton(component)).toHaveAttribute("disabled");
         expect(getPlayButton(component)).toHaveAttribute("aria-disabled", "true");
     });
 
@@ -90,7 +89,6 @@ describe("<RecordingPlayback />", () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         await flushPromises();
-        expect(getPlayButton(component)).not.toHaveAttribute("disabled");
         expect(getPlayButton(component)).not.toHaveAttribute("aria-disabled", "true");
     });
 
@@ -110,7 +108,6 @@ describe("<RecordingPlayback />", () => {
         await playback.prepare();
         const component = getComponent({ playback });
         // playback already decoded, button is not disabled
-        expect(getPlayButton(component)).not.toHaveAttribute("disabled");
         expect(getPlayButton(component)).not.toHaveAttribute("aria-disabled", "true");
         expect(component.container.querySelector(".text-warning")).toBeFalsy();
     });

@@ -69,11 +69,16 @@ Please see LICENSE files in the repository root for full details.
             }
 
             img,
+            svg,
             .mx_IconizedContextMenu_icon {
                 /* icons */
                 width: 16px;
                 min-width: 16px;
                 max-width: 16px;
+
+                & + .mx_IconizedContextMenu_label {
+                    padding-left: 14px;
+                }
             }
 
             span.mx_IconizedContextMenu_label {
@@ -87,10 +92,6 @@ Please see LICENSE files in the repository root for full details.
                 white-space: nowrap;
             }
 
-            .mx_IconizedContextMenu_icon + .mx_IconizedContextMenu_label {
-                padding-left: 14px;
-            }
-
             .mx_BetaCard_betaPill {
                 margin-left: 16px;
             }
@@ -99,8 +100,6 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_IconizedContextMenu_icon {
         position: relative;
-        width: 16px;
-        height: 16px;
 
         &::before {
             content: "";
@@ -119,6 +118,10 @@ Please see LICENSE files in the repository root for full details.
             color: $alert !important;
         }
 
+        svg {
+            color: var(--cpd-color-icon-critical-primary);
+        }
+
         .mx_IconizedContextMenu_icon::before {
             background-color: var(--cpd-color-icon-critical-primary);
         }
@@ -126,6 +129,10 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_IconizedContextMenu_option_red {
         color: $alert !important;
+
+        svg {
+            color: $alert;
+        }
 
         .mx_IconizedContextMenu_icon::before {
             background-color: $alert;
@@ -136,6 +143,10 @@ Please see LICENSE files in the repository root for full details.
         &.mx_IconizedContextMenu_item,
         .mx_IconizedContextMenu_item {
             color: $accent !important;
+        }
+
+        svg {
+            color: $accent;
         }
 
         .mx_IconizedContextMenu_icon::before {

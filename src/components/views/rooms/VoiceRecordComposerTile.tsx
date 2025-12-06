@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
@@ -274,7 +275,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                     className="mx_VoiceRecordComposerTile_delete"
                     title={_t("action|delete")}
                     onClick={this.onCancel}
-                />
+                >
+                    <DeleteIcon />
+                </AccessibleButton>
             );
         }
 

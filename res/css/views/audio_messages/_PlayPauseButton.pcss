@@ -14,28 +14,16 @@ Please see LICENSE files in the repository root for full details.
     min-height: 32px; /* for when the button is used in a flexbox */
     border-radius: 32px;
     background-color: $system;
+    padding: var(--cpd-space-1-5x);
+    box-sizing: border-box;
 
-    &::before {
-        content: "";
-        position: absolute; /* sizing varies by icon */
-        background-color: $secondary-content;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        top: 6px; /* center */
-        left: 6px; /* center */
+    svg {
+        color: $secondary-content;
         width: 20px;
         height: 20px;
     }
 
-    &.mx_PlayPauseButton_disabled::before {
+    &[disabled] svg {
         opacity: 0.5;
-    }
-
-    &.mx_PlayPauseButton_play::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/play-solid.svg");
-    }
-
-    &.mx_PlayPauseButton_pause::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/pause-solid.svg");
     }
 }
