@@ -9,15 +9,20 @@ import React, { type JSX, type PropsWithChildren } from "react";
 import { ContextMenu } from "@vector-im/compound-web";
 
 import { _t } from "../../utils/i18n";
-import { MoreOptionContent } from "./RoomListItemHoverMenu";
-import { type RoomListItemMenuViewModel } from "./RoomListItemMenuViewModel";
+import {
+    MoreOptionContent,
+    type MoreOptionsMenuState,
+    type MoreOptionsMenuCallbacks,
+} from "./RoomListItemMoreOptionsMenu";
 
 /**
  * Props for RoomListItemContextMenu component
  */
 export interface RoomListItemContextMenuProps {
-    /** The view model containing menu data and callbacks */
-    viewModel: RoomListItemMenuViewModel;
+    /** More options menu state */
+    state: MoreOptionsMenuState;
+    /** More options menu callbacks */
+    callbacks: MoreOptionsMenuCallbacks;
     /** Callback when menu open state changes */
     onMenuOpenChange: (isOpen: boolean) => void;
 }
@@ -27,7 +32,8 @@ export interface RoomListItemContextMenuProps {
  * Wraps the trigger element with a right-click context menu displaying room options.
  */
 export const RoomListItemContextMenu: React.FC<PropsWithChildren<RoomListItemContextMenuProps>> = ({
-    viewModel,
+    state,
+    callbacks,
     onMenuOpenChange,
     children,
 }): JSX.Element => {
@@ -39,7 +45,7 @@ export const RoomListItemContextMenu: React.FC<PropsWithChildren<RoomListItemCon
             trigger={children}
             onOpenChange={onMenuOpenChange}
         >
-            <MoreOptionContent viewModel={viewModel} />
+            <MoreOptionContent state={state} callbacks={callbacks} />
         </ContextMenu>
     );
 };

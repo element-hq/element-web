@@ -8,21 +8,22 @@
 import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
+import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
 import type { RoomsResult } from "../RoomList";
-import type { RoomListItemViewModel } from "../RoomListItem";
+import type { RoomListItem } from "../RoomListItem";
+import type { MoreOptionsMenuState } from "../RoomListItem/RoomListItemMoreOptionsMenu";
+import type { NotificationMenuState } from "../RoomListItem/RoomListItemNotificationMenu";
 import { SortOption } from "../RoomListHeader/SortOptionsMenu";
 import { RoomListPanel, type RoomListPanelSnapshot } from "./RoomListPanel";
 import type { FilterViewModel } from "../RoomListPrimaryFilters/useVisibleFilters";
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import type { RoomListSearchSnapshot } from "../RoomListSearch";
 import type { RoomListHeaderSnapshot, SortOptionsMenuSnapshot } from "../RoomListHeader";
-import type { RoomListViewSnapshot } from "../RoomListView";
+import type { RoomListViewWrapperSnapshot } from "../RoomListView";
 import type { RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
-import type { RoomListSnapshot } from "../RoomList";
 
 // Mock avatar component
-const mockAvatar = (roomViewModel: RoomListItemViewModel): React.ReactElement => (
+const mockAvatar = (roomItem: RoomListItem): React.ReactElement => (
     <div
         style={{
             width: "32px",
@@ -37,17 +38,17 @@ const mockAvatar = (roomViewModel: RoomListItemViewModel): React.ReactElement =>
             fontSize: "12px",
         }}
     >
-        {roomViewModel.name.substring(0, 2).toUpperCase()}
+        {roomItem.name.substring(0, 2).toUpperCase()}
     </div>
 );
 
 // Generate mock rooms
-const generateMockRooms = (count: number): RoomListItemViewModel[] => {
+const generateMockRooms = (count: number): RoomListItem[] => {
     return Array.from({ length: count }, (_, i) => {
         const unreadCount = Math.random() > 0.7 ? Math.floor(Math.random() * 10) : 0;
         const hasNotification = Math.random() > 0.8;
 
-        const notificationViewModel: NotificationDecorationViewModel = {
+        const notificationData: NotificationDecorationData = {
             hasAnyNotificationOrActivity: unreadCount > 0,
             isUnsentMessage: false,
             invited: false,
@@ -58,36 +59,33 @@ const generateMockRooms = (count: number): RoomListItemViewModel[] => {
             muted: false,
         };
 
+        const moreOptionsState: MoreOptionsMenuState = {
+            isFavourite: false,
+            isLowPriority: false,
+            canInvite: true,
+            canCopyRoomLink: true,
+            canMarkAsRead: unreadCount > 0,
+            canMarkAsUnread: unreadCount === 0,
+        };
+
+        const notificationState: NotificationMenuState = {
+            isNotificationAllMessage: true,
+            isNotificationAllMessageLoud: false,
+            isNotificationMentionOnly: false,
+            isNotificationMute: false,
+        };
+
         return {
             id: `!room${i}:server`,
             name: `Room ${i + 1}`,
-            openRoom: () => console.log(`Opening room: Room ${i + 1}`),
             a11yLabel: unreadCount ? `Room ${i + 1}, ${unreadCount} unread messages` : `Room ${i + 1}`,
             isBold: unreadCount > 0,
             messagePreview: undefined,
-            notificationViewModel,
-            menuViewModel: {
-                showMoreOptionsMenu: true,
-                showNotificationMenu: true,
-                canMarkAsRead: unreadCount > 0,
-                canMarkAsUnread: unreadCount === 0,
-                isFavourite: false,
-                isLowPriority: false,
-                canInvite: true,
-                canCopyRoomLink: true,
-                isNotificationAllMessage: true,
-                isNotificationAllMessageLoud: false,
-                isNotificationMentionOnly: false,
-                isNotificationMute: false,
-                markAsRead: () => console.log(`Mark read: Room ${i + 1}`),
-                markAsUnread: () => console.log(`Mark unread: Room ${i + 1}`),
-                toggleFavorite: () => console.log(`Toggle favorite: Room ${i + 1}`),
-                toggleLowPriority: () => console.log(`Toggle low priority: Room ${i + 1}`),
-                invite: () => console.log(`Invite: Room ${i + 1}`),
-                copyRoomLink: () => console.log(`Copy link: Room ${i + 1}`),
-                leaveRoom: () => console.log(`Leave: Room ${i + 1}`),
-                setRoomNotifState: (state) => console.log(`Set notif state: ${state}`),
-            },
+            notification: notificationData,
+            showMoreOptionsMenu: true,
+            showNotificationMenu: true,
+            moreOptionsState,
+            notificationState,
         };
     });
 };
@@ -117,12 +115,36 @@ const meta: Meta<typeof RoomListPanel> = {
 export default meta;
 type Story = StoryObj<typeof RoomListPanel>;
 
+// Create stable unsubscribe function
+const noop = (): void => {};
+
 function createMockViewModel<T>(snapshot: T): ViewModel<T> {
     return {
         getSnapshot: () => snapshot,
-        subscribe: () => () => {},
+        subscribe: () => noop,
     };
 }
+
+// Create stable snapshot for RoomListViewModel
+const mockRoomListSnapshot = {
+    roomsResult: mockRoomsResult,
+    activeRoomIndex: 0,
+};
+
+// Create stable RoomListViewModel
+const mockRoomListViewModel = {
+    getSnapshot: () => mockRoomListSnapshot,
+    subscribe: () => noop,
+    onOpenRoom: (roomId: string) => console.log("Open room:", roomId),
+    onMarkAsRead: (roomId: string) => console.log("Mark as read:", roomId),
+    onMarkAsUnread: (roomId: string) => console.log("Mark as unread:", roomId),
+    onToggleFavorite: (roomId: string) => console.log("Toggle favorite:", roomId),
+    onToggleLowPriority: (roomId: string) => console.log("Toggle low priority:", roomId),
+    onInvite: (roomId: string) => console.log("Invite:", roomId),
+    onCopyRoomLink: (roomId: string) => console.log("Copy room link:", roomId),
+    onLeaveRoom: (roomId: string) => console.log("Leave room:", roomId),
+    onSetRoomNotifState: (roomId: string, state: any) => console.log("Set notification:", roomId, state),
+};
 
 const baseViewModel: ViewModel<RoomListPanelSnapshot> = createMockViewModel({
     ariaLabel: "Room list navigation",
@@ -142,16 +164,13 @@ const baseViewModel: ViewModel<RoomListPanelSnapshot> = createMockViewModel({
             sort: (option) => console.log(`Sort: ${option}`),
         }),
     }),
-    viewVm: createMockViewModel<RoomListViewSnapshot>({
+    viewVm: createMockViewModel<RoomListViewWrapperSnapshot>({
         isLoadingRooms: false,
         isRoomListEmpty: false,
         filtersVm: createMockViewModel<RoomListPrimaryFiltersSnapshot>({
             filters: createFilters(),
         }),
-        roomListVm: createMockViewModel<RoomListSnapshot>({
-            roomsResult: mockRoomsResult,
-            activeRoomIndex: 0,
-        }),
+        roomListVm: mockRoomListViewModel,
         emptyStateTitle: "No rooms",
         emptyStateDescription: "Join a room to get started",
     }),
@@ -196,7 +215,7 @@ export const Loading: Story = {
             ariaLabel: "Room list navigation",
             searchVm: baseViewModel.getSnapshot().searchVm,
             headerVm: baseViewModel.getSnapshot().headerVm,
-            viewVm: createMockViewModel<RoomListViewSnapshot>({
+            viewVm: createMockViewModel<RoomListViewWrapperSnapshot>({
                 ...baseViewModel.getSnapshot().viewVm.getSnapshot(),
                 isLoadingRooms: true,
             }),
@@ -218,7 +237,7 @@ export const Empty: Story = {
             ariaLabel: "Room list navigation",
             searchVm: baseViewModel.getSnapshot().searchVm,
             headerVm: baseViewModel.getSnapshot().headerVm,
-            viewVm: createMockViewModel<RoomListViewSnapshot>({
+            viewVm: createMockViewModel<RoomListViewWrapperSnapshot>({
                 ...baseViewModel.getSnapshot().viewVm.getSnapshot(),
                 isRoomListEmpty: true,
                 emptyStateTitle: "No rooms to display",

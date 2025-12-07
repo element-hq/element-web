@@ -7,9 +7,10 @@
 
 import React from "react";
 
-import { RoomListItem, type RoomListItemViewModel } from "./RoomListItem";
-import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
-import type { RoomListItemMenuViewModel } from "./RoomListItemMenuViewModel";
+import { RoomListItemView, type RoomListItem, type RoomListItemCallbacks } from "./RoomListItem";
+import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
+import type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
+import type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";
 import type { RoomNotifState } from "../../notifications/RoomNotifs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
@@ -32,8 +33,8 @@ const mockAvatar = (
     </div>
 );
 
-// Mock notification view model with notifications
-const mockNotificationViewModel: NotificationDecorationViewModel = {
+// Mock notification data with notifications
+const mockNotificationData: NotificationDecorationData = {
     hasAnyNotificationOrActivity: true,
     isUnsentMessage: false,
     invited: false,
@@ -44,56 +45,72 @@ const mockNotificationViewModel: NotificationDecorationViewModel = {
     muted: false,
 };
 
-// Mock notification view model without notifications
-const mockEmptyNotificationViewModel: NotificationDecorationViewModel = {
+// Mock notification data without notifications
+const mockEmptyNotificationData: NotificationDecorationData = {
     hasAnyNotificationOrActivity: false,
     isUnsentMessage: false,
     invited: false,
     isMention: false,
     isActivityNotification: false,
     isNotification: false,
-    count: 0,
     muted: false,
 };
 
-// Mock menu view model
-const mockMenuViewModel: RoomListItemMenuViewModel = {
-    showMoreOptionsMenu: true,
-    showNotificationMenu: true,
+// Mock more options menu state
+const mockMoreOptionsState: MoreOptionsMenuState = {
     isFavourite: false,
     isLowPriority: false,
     canInvite: true,
     canCopyRoomLink: true,
     canMarkAsRead: true,
     canMarkAsUnread: true,
+};
+
+// Mock notification menu state
+const mockNotificationState: NotificationMenuState = {
     isNotificationAllMessage: true,
     isNotificationAllMessageLoud: false,
     isNotificationMentionOnly: false,
     isNotificationMute: false,
-    markAsRead: () => console.log("Mark as read"),
-    markAsUnread: () => console.log("Mark as unread"),
-    toggleFavorite: () => console.log("Toggle favorite"),
-    toggleLowPriority: () => console.log("Toggle low priority"),
-    invite: () => console.log("Invite"),
-    copyRoomLink: () => console.log("Copy room link"),
-    leaveRoom: () => console.log("Leave room"),
-    setRoomNotifState: (state: RoomNotifState) => console.log("Set notification state:", state),
 };
 
-const baseViewModel: RoomListItemViewModel = {
+// Mock callbacks
+const mockMoreOptionsCallbacks: MoreOptionsMenuCallbacks = {
+    onMarkAsRead: () => console.log("Mark as read"),
+    onMarkAsUnread: () => console.log("Mark as unread"),
+    onToggleFavorite: () => console.log("Toggle favorite"),
+    onToggleLowPriority: () => console.log("Toggle low priority"),
+    onInvite: () => console.log("Invite"),
+    onCopyRoomLink: () => console.log("Copy room link"),
+    onLeaveRoom: () => console.log("Leave room"),
+};
+
+const mockNotificationCallbacks: NotificationMenuCallbacks = {
+    onSetRoomNotifState: (state: RoomNotifState) => console.log("Set notification state:", state),
+};
+
+const baseItem: RoomListItem = {
     id: "!test:example.org",
     name: "Test Room",
-    openRoom: () => console.log("Opening room"),
     a11yLabel: "Test Room, no unread messages",
     isBold: false,
     messagePreview: undefined,
-    notificationViewModel: mockEmptyNotificationViewModel,
-    menuViewModel: mockMenuViewModel,
+    notification: mockEmptyNotificationData,
+    showMoreOptionsMenu: true,
+    showNotificationMenu: true,
+    moreOptionsState: mockMoreOptionsState,
+    notificationState: mockNotificationState,
+};
+
+const baseCallbacks: RoomListItemCallbacks = {
+    onOpenRoom: () => console.log("Opening room"),
+    moreOptionsCallbacks: mockMoreOptionsCallbacks,
+    notificationCallbacks: mockNotificationCallbacks,
 };
 
 const meta = {
     title: "Room List/RoomListItem",
-    component: RoomListItem,
+    component: RoomListItemView,
     tags: ["autodocs"],
     decorators: [
         (Story) => (
@@ -103,7 +120,8 @@ const meta = {
         ),
     ],
     args: {
-        viewModel: baseViewModel,
+        item: baseItem,
+        callbacks: baseCallbacks,
         isSelected: false,
         isFocused: false,
         onFocus: () => {},
@@ -111,7 +129,7 @@ const meta = {
         roomCount: 10,
         avatar: mockAvatar,
     },
-} satisfies Meta<typeof RoomListItem>;
+} satisfies Meta<typeof RoomListItemView>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -120,8 +138,8 @@ export const Default: Story = {};
 
 export const WithMessagePreview: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
+        item: {
+            ...baseItem,
             messagePreview: "Alice: Hey, are you coming to the meeting?",
         },
     },
@@ -129,12 +147,12 @@ export const WithMessagePreview: Story = {
 
 export const WithUnread: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
+        item: {
+            ...baseItem,
             name: "Team Chat",
             isBold: true,
             a11yLabel: "Team Chat, 3 unread messages",
-            notificationViewModel: mockNotificationViewModel,
+            notification: mockNotificationData,
         },
     },
 };
@@ -153,8 +171,8 @@ export const Focused: Story = {
 
 export const LongRoomName: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
+        item: {
+            ...baseItem,
             name: "This is a very long room name that should be truncated with ellipsis when it exceeds the available width",
             messagePreview: "And this is also a very long message preview that should also be truncated",
         },
@@ -163,12 +181,12 @@ export const LongRoomName: Story = {
 
 export const BoldWithPreview: Story = {
     args: {
-        viewModel: {
-            ...baseViewModel,
+        item: {
+            ...baseItem,
             name: "Design Team",
             isBold: true,
             messagePreview: "Bob shared a new design file",
-            notificationViewModel: mockNotificationViewModel,
+            notification: mockNotificationData,
         },
     },
 };
@@ -176,8 +194,9 @@ export const BoldWithPreview: Story = {
 export const AllStates: Story = {
     render: (): React.ReactElement => (
         <div style={{ width: "320px" }}>
-            <RoomListItem
-                viewModel={baseViewModel}
+            <RoomListItemView
+                item={baseItem}
+                callbacks={baseCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={() => {}}
@@ -185,8 +204,9 @@ export const AllStates: Story = {
                 roomCount={5}
                 avatar={mockAvatar}
             />
-            <RoomListItem
-                viewModel={{ ...baseViewModel, isBold: true, notificationViewModel: mockNotificationViewModel }}
+            <RoomListItemView
+                item={{ ...baseItem, isBold: true, notification: mockNotificationData }}
+                callbacks={baseCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={() => {}}
@@ -194,8 +214,9 @@ export const AllStates: Story = {
                 roomCount={5}
                 avatar={mockAvatar}
             />
-            <RoomListItem
-                viewModel={baseViewModel}
+            <RoomListItemView
+                item={baseItem}
+                callbacks={baseCallbacks}
                 isSelected={true}
                 isFocused={false}
                 onFocus={() => {}}
@@ -203,8 +224,9 @@ export const AllStates: Story = {
                 roomCount={5}
                 avatar={mockAvatar}
             />
-            <RoomListItem
-                viewModel={{ ...baseViewModel, messagePreview: "Latest message" }}
+            <RoomListItemView
+                item={{ ...baseItem, messagePreview: "Latest message" }}
+                callbacks={baseCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={() => {}}
@@ -212,8 +234,9 @@ export const AllStates: Story = {
                 roomCount={5}
                 avatar={mockAvatar}
             />
-            <RoomListItem
-                viewModel={baseViewModel}
+            <RoomListItemView
+                item={baseItem}
+                callbacks={baseCallbacks}
                 isSelected={false}
                 isFocused={true}
                 onFocus={() => {}}

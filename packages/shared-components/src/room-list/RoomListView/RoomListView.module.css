@@ -12,7 +12,6 @@
     flex: 1;
 }
 
-/* Skeleton animation - note: mask-image requires SVG from element-web */
 .skeleton::before {
     background-color: var(--cpd-color-bg-subtle-secondary);
     width: 100%;
@@ -21,9 +20,5 @@
     position: absolute;
     mask-repeat: repeat-y;
     mask-size: auto 96px;
-}
-
-/* Element-web provides the actual mask-image */
-:global(.mx_RoomListSkeleton)::before {
-    mask-image: url("$(res)/img/element-icons/roomlist/room-list-item-skeleton.svg");
+    mask-image: url("./assets/skeleton.svg");
 }

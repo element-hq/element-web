@@ -5,84 +5,100 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import React from "react";
 
-import { RoomList, type RoomListSnapshot, type RoomsResult } from "./RoomList";
-import type { RoomListItemViewModel } from "../RoomListItem";
-import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
-import type { RoomListItemMenuViewModel } from "../RoomListItem/RoomListItemMenuViewModel";
-import { type ViewModel } from "../../viewmodel/ViewModel";
+import {
+    RoomList,
+    type RoomListViewModel,
+    type RoomListViewSnapshot,
+    type RoomListViewActions,
+    type RoomsResult,
+} from "./RoomList";
+import type { RoomListItem } from "../RoomListItem";
+import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
+import type { MoreOptionsMenuState } from "../RoomListItem/RoomListItemMoreOptionsMenu";
+import type { NotificationMenuState } from "../RoomListItem/RoomListItemNotificationMenu";
 
-function createMockViewModel(snapshot: RoomListSnapshot): ViewModel<RoomListSnapshot> {
+function createMockViewModel(
+    snapshot: RoomListViewSnapshot,
+    actions: Partial<RoomListViewActions> = {},
+): RoomListViewModel {
     return {
         getSnapshot: () => snapshot,
         subscribe: () => () => {},
+        onOpenRoom: actions.onOpenRoom || jest.fn(),
+        onMarkAsRead: actions.onMarkAsRead || jest.fn(),
+        onMarkAsUnread: actions.onMarkAsUnread || jest.fn(),
+        onToggleFavorite: actions.onToggleFavorite || jest.fn(),
+        onToggleLowPriority: actions.onToggleLowPriority || jest.fn(),
+        onInvite: actions.onInvite || jest.fn(),
+        onCopyRoomLink: actions.onCopyRoomLink || jest.fn(),
+        onLeaveRoom: actions.onLeaveRoom || jest.fn(),
+        onSetRoomNotifState: actions.onSetRoomNotifState || jest.fn(),
     };
 }
 
 describe("RoomList", () => {
-    const mockNotificationViewModel: NotificationDecorationViewModel = {
+    const mockNotificationData: NotificationDecorationData = {
         hasAnyNotificationOrActivity: false,
         isUnsentMessage: false,
         invited: false,
         isMention: false,
         isActivityNotification: false,
         isNotification: false,
-        count: 0,
         muted: false,
     };
 
-    const mockMenuViewModel: RoomListItemMenuViewModel = {
-        showMoreOptionsMenu: true,
-        showNotificationMenu: true,
+    const mockMoreOptionsState: MoreOptionsMenuState = {
         isFavourite: false,
         isLowPriority: false,
         canInvite: true,
         canCopyRoomLink: true,
         canMarkAsRead: true,
         canMarkAsUnread: true,
+    };
+
+    const mockNotificationState: NotificationMenuState = {
         isNotificationAllMessage: true,
         isNotificationAllMessageLoud: false,
         isNotificationMentionOnly: false,
         isNotificationMute: false,
-        markAsRead: jest.fn(),
-        markAsUnread: jest.fn(),
-        toggleFavorite: jest.fn(),
-        toggleLowPriority: jest.fn(),
-        invite: jest.fn(),
-        copyRoomLink: jest.fn(),
-        leaveRoom: jest.fn(),
-        setRoomNotifState: jest.fn(),
     };
 
-    const mockRooms: RoomListItemViewModel[] = [
+    const mockRooms: RoomListItem[] = [
         {
             id: "!room1:server",
             name: "Room 1",
-            openRoom: jest.fn(),
             a11yLabel: "Room 1",
             isBold: false,
-            notificationViewModel: mockNotificationViewModel,
-            menuViewModel: mockMenuViewModel,
+            notification: mockNotificationData,
+            showMoreOptionsMenu: true,
+            showNotificationMenu: true,
+            moreOptionsState: mockMoreOptionsState,
+            notificationState: mockNotificationState,
         },
         {
             id: "!room2:server",
             name: "Room 2",
-            openRoom: jest.fn(),
             a11yLabel: "Room 2",
             isBold: false,
-            notificationViewModel: mockNotificationViewModel,
-            menuViewModel: mockMenuViewModel,
+            notification: mockNotificationData,
+            showMoreOptionsMenu: true,
+            showNotificationMenu: true,
+            moreOptionsState: mockMoreOptionsState,
+            notificationState: mockNotificationState,
         },
         {
             id: "!room3:server",
             name: "Room 3",
-            openRoom: jest.fn(),
             a11yLabel: "Room 3",
             isBold: false,
-            notificationViewModel: mockNotificationViewModel,
-            menuViewModel: mockMenuViewModel,
+            notification: mockNotificationData,
+            showMoreOptionsMenu: true,
+            showNotificationMenu: true,
+            moreOptionsState: mockMoreOptionsState,
+            notificationState: mockNotificationState,
         },
     ];
 
@@ -92,14 +108,13 @@ describe("RoomList", () => {
         rooms: mockRooms,
     };
 
-    const mockRenderAvatar = jest.fn((roomViewModel: RoomListItemViewModel) => (
-        <div data-testid={`avatar-${roomViewModel.id}`}>{roomViewModel.name[0]}</div>
+    const mockRenderAvatar = jest.fn((roomItem: RoomListItem) => (
+        <div data-testid={`avatar-${roomItem.id}`}>{roomItem.name[0]}</div>
     ));
 
     const mockViewModel = createMockViewModel({
         roomsResult: mockRoomsResult,
         activeRoomIndex: undefined,
-        onKeyDown: undefined,
     });
 
     beforeEach(() => {
@@ -146,7 +161,6 @@ describe("RoomList", () => {
         const emptyViewModel = createMockViewModel({
             roomsResult: emptyResult,
             activeRoomIndex: undefined,
-            onKeyDown: undefined,
         });
 
         render(<RoomList vm={emptyViewModel} renderAvatar={mockRenderAvatar} />);
@@ -159,7 +173,6 @@ describe("RoomList", () => {
         const vmWithActive = createMockViewModel({
             roomsResult: mockRoomsResult,
             activeRoomIndex: 1,
-            onKeyDown: undefined,
         });
 
         render(<RoomList vm={vmWithActive} renderAvatar={mockRenderAvatar} />);

@@ -12,13 +12,13 @@ import { useViewModel } from "../../useViewModel";
 import { RoomListPrimaryFilters, type RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyState } from "./RoomListEmptyState";
-import { RoomList, type RoomListSnapshot } from "../RoomList";
-import { type RoomListItemViewModel } from "../RoomListItem";
+import { RoomList, type RoomListViewModel } from "../RoomList";
+import { type RoomListItem } from "../RoomListItem";
 
 /**
  * Snapshot for RoomListView
  */
-export type RoomListViewSnapshot = {
+export type RoomListViewWrapperSnapshot = {
     /** Whether the rooms are currently loading */
     isLoadingRooms: boolean;
     /** Whether the room list is empty */
@@ -26,7 +26,7 @@ export type RoomListViewSnapshot = {
     /** View model for the primary filters */
     filtersVm: ViewModel<RoomListPrimaryFiltersSnapshot>;
     /** View model for the room list */
-    roomListVm: ViewModel<RoomListSnapshot>;
+    roomListVm: RoomListViewModel;
     /** Title for the empty state */
     emptyStateTitle: string;
     /** Optional description for the empty state */
@@ -40,9 +40,9 @@ export type RoomListViewSnapshot = {
  */
 export interface RoomListViewProps {
     /** The view model containing list data */
-    vm: ViewModel<RoomListViewSnapshot>;
+    vm: ViewModel<RoomListViewWrapperSnapshot>;
     /** Render function for room avatar */
-    renderAvatar: (roomViewModel: RoomListItemViewModel) => ReactNode;
+    renderAvatar: (roomItem: RoomListItem) => ReactNode;
 }
 
 /**

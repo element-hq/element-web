@@ -9,54 +9,69 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 
-import { RoomListItem, type RoomListItemViewModel } from "./RoomListItem";
-import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
-import type { RoomListItemMenuViewModel } from "./RoomListItemMenuViewModel";
+import { RoomListItemView, type RoomListItem, type RoomListItemCallbacks } from "./RoomListItem";
+import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
+import type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
+import type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";
 
 describe("RoomListItem", () => {
-    const mockNotificationViewModel: NotificationDecorationViewModel = {
+    const mockNotificationData: NotificationDecorationData = {
         hasAnyNotificationOrActivity: false,
         isUnsentMessage: false,
         invited: false,
         isMention: false,
         isActivityNotification: false,
         isNotification: false,
-        count: 0,
         muted: false,
     };
 
-    const mockMenuViewModel: RoomListItemMenuViewModel = {
-        showMoreOptionsMenu: true,
-        showNotificationMenu: true,
+    const mockMoreOptionsState: MoreOptionsMenuState = {
         isFavourite: false,
         isLowPriority: false,
         canInvite: true,
         canCopyRoomLink: true,
         canMarkAsRead: true,
         canMarkAsUnread: true,
+    };
+
+    const mockNotificationState: NotificationMenuState = {
         isNotificationAllMessage: true,
         isNotificationAllMessageLoud: false,
         isNotificationMentionOnly: false,
         isNotificationMute: false,
-        markAsRead: jest.fn(),
-        markAsUnread: jest.fn(),
-        toggleFavorite: jest.fn(),
-        toggleLowPriority: jest.fn(),
-        invite: jest.fn(),
-        copyRoomLink: jest.fn(),
-        leaveRoom: jest.fn(),
-        setRoomNotifState: jest.fn(),
     };
 
-    const mockViewModel: RoomListItemViewModel = {
+    const mockMoreOptionsCallbacks: MoreOptionsMenuCallbacks = {
+        onMarkAsRead: jest.fn(),
+        onMarkAsUnread: jest.fn(),
+        onToggleFavorite: jest.fn(),
+        onToggleLowPriority: jest.fn(),
+        onInvite: jest.fn(),
+        onCopyRoomLink: jest.fn(),
+        onLeaveRoom: jest.fn(),
+    };
+
+    const mockNotificationCallbacks: NotificationMenuCallbacks = {
+        onSetRoomNotifState: jest.fn(),
+    };
+
+    const mockItem: RoomListItem = {
         id: "!test:example.org",
         name: "Test Room",
-        openRoom: jest.fn(),
         a11yLabel: "Test Room, no unread messages",
         isBold: false,
         messagePreview: undefined,
-        notificationViewModel: mockNotificationViewModel,
-        menuViewModel: mockMenuViewModel,
+        notification: mockNotificationData,
+        showMoreOptionsMenu: true,
+        showNotificationMenu: true,
+        moreOptionsState: mockMoreOptionsState,
+        notificationState: mockNotificationState,
+    };
+
+    const mockCallbacks: RoomListItemCallbacks = {
+        onOpenRoom: jest.fn(),
+        moreOptionsCallbacks: mockMoreOptionsCallbacks,
+        notificationCallbacks: mockNotificationCallbacks,
     };
 
     const mockAvatar = <div data-testid="mock-avatar">Avatar</div>;
@@ -67,8 +82,9 @@ describe("RoomListItem", () => {
 
     it("renders room name and avatar", () => {
         render(
-            <RoomListItem
-                viewModel={mockViewModel}
+            <RoomListItemView
+                item={mockItem}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -83,10 +99,11 @@ describe("RoomListItem", () => {
     });
 
     it("renders with message preview", () => {
-        const vmWithPreview = { ...mockViewModel, messagePreview: "Latest message preview" };
+        const itemWithPreview = { ...mockItem, messagePreview: "Latest message preview" };
         render(
-            <RoomListItem
-                viewModel={vmWithPreview}
+            <RoomListItemView
+                item={itemWithPreview}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -101,8 +118,9 @@ describe("RoomListItem", () => {
 
     it("applies selected styles when selected", () => {
         render(
-            <RoomListItem
-                viewModel={mockViewModel}
+            <RoomListItemView
+                item={mockItem}
+                callbacks={mockCallbacks}
                 isSelected={true}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -117,10 +135,11 @@ describe("RoomListItem", () => {
     });
 
     it("applies bold styles when room has unread", () => {
-        const vmWithUnread = { ...mockViewModel, isBold: true };
+        const itemWithUnread = { ...mockItem, isBold: true };
         render(
-            <RoomListItem
-                viewModel={vmWithUnread}
+            <RoomListItemView
+                item={itemWithUnread}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -138,8 +157,9 @@ describe("RoomListItem", () => {
     it("calls openRoom when clicked", async () => {
         const user = userEvent.setup();
         render(
-            <RoomListItem
-                viewModel={mockViewModel}
+            <RoomListItemView
+                item={mockItem}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -150,14 +170,15 @@ describe("RoomListItem", () => {
         );
 
         await user.click(screen.getByRole("option"));
-        expect(mockViewModel.openRoom).toHaveBeenCalledTimes(1);
+        expect(mockCallbacks.onOpenRoom).toHaveBeenCalledTimes(1);
     });
 
     it("calls onFocus when focused", async () => {
         const onFocus = jest.fn();
         render(
-            <RoomListItem
-                viewModel={mockViewModel}
+            <RoomListItemView
+                item={mockItem}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={onFocus}
@@ -173,21 +194,21 @@ describe("RoomListItem", () => {
     });
 
     it("renders notification decoration when hasAnyNotificationOrActivity is true", () => {
-        const notificationVM: NotificationDecorationViewModel = {
+        const notificationData: NotificationDecorationData = {
             hasAnyNotificationOrActivity: true,
             isUnsentMessage: false,
             invited: false,
             isMention: false,
             isActivityNotification: true,
             isNotification: false,
-            count: 0,
             muted: false,
         };
-        const vmWithNotification = { ...mockViewModel, notificationViewModel: notificationVM };
+        const itemWithNotification = { ...mockItem, notification: notificationData };
 
         render(
-            <RoomListItem
-                viewModel={vmWithNotification}
+            <RoomListItemView
+                item={itemWithNotification}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -202,8 +223,9 @@ describe("RoomListItem", () => {
 
     it("sets correct ARIA attributes", () => {
         render(
-            <RoomListItem
-                viewModel={mockViewModel}
+            <RoomListItemView
+                item={mockItem}
+                callbacks={mockCallbacks}
                 isSelected={false}
                 isFocused={false}
                 onFocus={jest.fn()}
@@ -216,6 +238,6 @@ describe("RoomListItem", () => {
         const button = screen.getByRole("option");
         expect(button).toHaveAttribute("aria-posinset", "6"); // index + 1
         expect(button).toHaveAttribute("aria-setsize", "20");
-        expect(button).toHaveAttribute("aria-label", mockViewModel.a11yLabel);
+        expect(button).toHaveAttribute("aria-label", mockItem.a11yLabel);
     });
 });

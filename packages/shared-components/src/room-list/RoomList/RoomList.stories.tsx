@@ -7,12 +7,13 @@
 
 import React from "react";
 
-import { RoomList, type RoomListSnapshot, type RoomsResult } from "./RoomList";
-import type { RoomListItemViewModel } from "../RoomListItem";
-import type { NotificationDecorationViewModel } from "../../notifications/NotificationDecoration";
-import type { RoomListItemMenuViewModel } from "../RoomListItem/RoomListItemMenuViewModel";
+import { RoomList, type RoomListViewModel, type RoomListViewSnapshot, type RoomsResult } from "./RoomList";
+import type { RoomListItem } from "../RoomListItem";
+import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
+import type { MoreOptionsMenuState } from "../RoomListItem/RoomListItemMoreOptionsMenu";
+import type { NotificationMenuState } from "../RoomListItem/RoomListItemNotificationMenu";
 import { type RoomNotifState } from "../../notifications/RoomNotifs";
-import { type ViewModel } from "../../viewmodel/ViewModel";
+
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 // Mock avatar component
@@ -35,40 +36,32 @@ const mockAvatar = (name: string): React.ReactElement => (
     </div>
 );
 
-// Generate mock rooms with ViewModels
-const generateMockRooms = (count: number): RoomListItemViewModel[] => {
-    const mockNotificationViewModel: NotificationDecorationViewModel = {
+// Generate mock rooms with data
+const generateMockRooms = (count: number): RoomListItem[] => {
+    const mockNotificationData: NotificationDecorationData = {
         hasAnyNotificationOrActivity: false,
         isUnsentMessage: false,
         invited: false,
         isMention: false,
         isActivityNotification: false,
         isNotification: false,
-        count: 0,
         muted: false,
     };
 
-    const mockMenuViewModel: RoomListItemMenuViewModel = {
-        showMoreOptionsMenu: true,
-        showNotificationMenu: true,
+    const mockMoreOptionsState: MoreOptionsMenuState = {
         isFavourite: false,
         isLowPriority: false,
         canInvite: true,
         canCopyRoomLink: true,
         canMarkAsRead: true,
         canMarkAsUnread: true,
+    };
+
+    const mockNotificationState: NotificationMenuState = {
         isNotificationAllMessage: true,
         isNotificationAllMessageLoud: false,
         isNotificationMentionOnly: false,
         isNotificationMute: false,
-        markAsRead: () => console.log("Mark as read"),
-        markAsUnread: () => console.log("Mark as unread"),
-        toggleFavorite: () => console.log("Toggle favorite"),
-        toggleLowPriority: () => console.log("Toggle low priority"),
-        invite: () => console.log("Invite"),
-        copyRoomLink: () => console.log("Copy room link"),
-        leaveRoom: () => console.log("Leave room"),
-        setRoomNotifState: (state: RoomNotifState) => console.log("Set notification state:", state),
     };
 
     return Array.from({ length: count }, (_, i) => {
@@ -77,7 +70,7 @@ const generateMockRooms = (count: number): RoomListItemViewModel[] => {
         const hasNotification = Math.random() > 0.8;
         const isMention = Math.random() > 0.9;
 
-        const notificationViewModel: NotificationDecorationViewModel = hasUnread
+        const notificationData: NotificationDecorationData = hasUnread
             ? {
                   hasAnyNotificationOrActivity: true,
                   isUnsentMessage: false,
@@ -88,17 +81,19 @@ const generateMockRooms = (count: number): RoomListItemViewModel[] => {
                   count: unreadCount,
                   muted: false,
               }
-            : mockNotificationViewModel;
+            : mockNotificationData;
 
         return {
             id: `!room${i}:server`,
             name: `Room ${i + 1}`,
-            openRoom: () => console.log(`Opening room: Room ${i + 1}`),
             a11yLabel: unreadCount > 0 ? `Room ${i + 1}, ${unreadCount} unread messages` : `Room ${i + 1}`,
             isBold: unreadCount > 0,
             messagePreview: undefined,
-            notificationViewModel,
-            menuViewModel: mockMenuViewModel,
+            notification: notificationData,
+            showMoreOptionsMenu: true,
+            showNotificationMenu: true,
+            moreOptionsState: mockMoreOptionsState,
+            notificationState: mockNotificationState,
         };
     });
 };
@@ -109,21 +104,33 @@ const mockRoomsResult: RoomsResult = {
     rooms: generateMockRooms(50),
 };
 
-function createMockViewModel(snapshot: RoomListSnapshot): ViewModel<RoomListSnapshot> {
+// Create stable unsubscribe function
+const noop = (): void => {};
+
+function createMockViewModel(snapshot: RoomListViewSnapshot): RoomListViewModel {
     return {
         getSnapshot: () => snapshot,
-        subscribe: () => () => {},
+        subscribe: () => noop,
+        onOpenRoom: (roomId: string) => console.log("Open room:", roomId),
+        onMarkAsRead: (roomId: string) => console.log("Mark as read:", roomId),
+        onMarkAsUnread: (roomId: string) => console.log("Mark as unread:", roomId),
+        onToggleFavorite: (roomId: string) => console.log("Toggle favorite:", roomId),
+        onToggleLowPriority: (roomId: string) => console.log("Toggle low priority:", roomId),
+        onInvite: (roomId: string) => console.log("Invite to room:", roomId),
+        onCopyRoomLink: (roomId: string) => console.log("Copy room link:", roomId),
+        onLeaveRoom: (roomId: string) => console.log("Leave room:", roomId),
+        onSetRoomNotifState: (roomId: string, state: RoomNotifState) =>
+            console.log("Set notification state:", roomId, state),
     };
 }
 
-const mockViewModel: ViewModel<RoomListSnapshot> = createMockViewModel({
+const mockViewModel: RoomListViewModel = createMockViewModel({
     roomsResult: mockRoomsResult,
     activeRoomIndex: undefined,
-    onKeyDown: undefined,
 });
 
-const renderAvatar = (roomViewModel: RoomListItemViewModel): React.ReactElement => {
-    return mockAvatar(roomViewModel.name);
+const renderAvatar = (roomItem: RoomListItem): React.ReactElement => {
+    return mockAvatar(roomItem.name);
 };
 
 const meta = {
@@ -146,14 +153,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+    args: {},
+};
 
 export const WithSelection: Story = {
     args: {
         vm: createMockViewModel({
             roomsResult: mockRoomsResult,
             activeRoomIndex: 5,
-            onKeyDown: undefined,
         }),
     },
 };
@@ -167,7 +175,6 @@ export const SmallList: Story = {
                 rooms: generateMockRooms(5),
             },
             activeRoomIndex: undefined,
-            onKeyDown: undefined,
         }),
     },
 };
@@ -181,7 +188,6 @@ export const LargeList: Story = {
                 rooms: generateMockRooms(200),
             },
             activeRoomIndex: undefined,
-            onKeyDown: undefined,
         }),
     },
 };
@@ -195,7 +201,6 @@ export const EmptyList: Story = {
                 rooms: [],
             },
             activeRoomIndex: undefined,
-            onKeyDown: undefined,
         }),
     },
 };

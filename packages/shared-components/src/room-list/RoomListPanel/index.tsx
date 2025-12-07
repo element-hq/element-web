@@ -6,4 +6,4 @@
  */
 
 export { RoomListPanel } from "./RoomListPanel";
-export type { RoomListPanelProps } from "./RoomListPanel";
+export type { RoomListPanelProps, RoomListPanelSnapshot } from "./RoomListPanel";

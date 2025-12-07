@@ -5,5 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { RoomListItem } from "./RoomListItem";
-export type { RoomListItemProps, RoomListItemViewModel } from "./RoomListItem";
+export { RoomListItemView } from "./RoomListItem";
+export type { RoomListItem, RoomListItemViewProps, RoomListItemCallbacks } from "./RoomListItem";
+export type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
+export type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";

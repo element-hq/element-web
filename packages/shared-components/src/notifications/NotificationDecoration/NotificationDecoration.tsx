@@ -17,9 +17,9 @@ import { UnreadCounter, Unread } from "@vector-im/compound-web";
 import { Flex } from "../../utils/Flex";
 
 /**
- * ViewModel representing the notification state for a room or item
+ * Data representing the notification state for a room or item
  */
-export interface NotificationDecorationViewModel {
+export interface NotificationDecorationData {
     /** Whether there is any notification or activity to display */
     hasAnyNotificationOrActivity: boolean;
     /** Whether there's an unsent message */
@@ -32,8 +32,8 @@ export interface NotificationDecorationViewModel {
     isActivityNotification: boolean;
     /** Whether there's a notification (not just activity) */
     isNotification: boolean;
-    /** Notification count */
-    count: number;
+    /** Notification count (optional) */
+    count?: number;
     /** Whether notifications are muted */
     muted: boolean;
     /** Optional call type indicator */
@@ -41,37 +41,37 @@ export interface NotificationDecorationViewModel {
 }
 
 export interface NotificationDecorationProps {
-    /** ViewModel containing notification state */
-    viewModel: NotificationDecorationViewModel;
+    /** Data containing notification state */
+    data: NotificationDecorationData;
 }
 
 /**
  * Renders notification badges and indicators for rooms/items
  */
-export const NotificationDecoration: React.FC<NotificationDecorationProps> = ({ viewModel }) => {
+export const NotificationDecoration: React.FC<NotificationDecorationProps> = ({ data }) => {
     // Don't render anything if there's nothing to show
-    if (!viewModel.hasAnyNotificationOrActivity && !viewModel.muted && !viewModel.callType) {
+    if (!data.hasAnyNotificationOrActivity && !data.muted && !data.callType) {
         return null;
     }
 
     return (
         <Flex align="center" justify="center" gap="var(--cpd-space-1x)" data-testid="notification-decoration">
-            {viewModel.isUnsentMessage && (
+            {data.isUnsentMessage && (
                 <ErrorIcon width="20px" height="20px" fill="var(--cpd-color-icon-critical-primary)" />
             )}
-            {viewModel.callType === "video" && (
+            {data.callType === "video" && (
                 <VideoCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
             )}
-            {viewModel.callType === "voice" && (
+            {data.callType === "voice" && (
                 <VoiceCallIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
             )}
-            {viewModel.invited && <EmailIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
-            {viewModel.isMention && (
+            {data.invited && <EmailIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
+            {data.isMention && (
                 <MentionIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
             )}
-            {(viewModel.isMention || viewModel.isNotification) && <UnreadCounter count={viewModel.count || null} />}
-            {viewModel.isActivityNotification && <Unread />}
-            {viewModel.muted && (
+            {(data.isMention || data.isNotification) && <UnreadCounter count={data.count || null} />}
+            {data.isActivityNotification && <Unread />}
+            {data.muted && (
                 <NotificationOffIcon width="20px" height="20px" fill="var(--cpd-color-icon-tertiary)" />
             )}
         </Flex>

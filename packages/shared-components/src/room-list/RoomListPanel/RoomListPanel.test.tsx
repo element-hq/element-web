@@ -11,12 +11,12 @@ import React from "react";
 import { RoomListPanel, type RoomListPanelSnapshot } from "./RoomListPanel";
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { SortOption } from "../RoomListHeader";
-import type { RoomListItemViewModel } from "../RoomListItem";
+import type { RoomListItem } from "../RoomListItem";
 import type { RoomListSearchSnapshot } from "../RoomListSearch";
 import type { RoomListHeaderSnapshot } from "../RoomListHeader";
-import type { RoomListViewSnapshot } from "../RoomListView";
+import type { RoomListViewWrapperSnapshot } from "../RoomListView";
 import type { RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
-import type { RoomListSnapshot } from "../RoomList";
+import type { RoomListViewModel, RoomListViewSnapshot } from "../RoomList";
 import type { SortOptionsMenuSnapshot } from "../RoomListHeader/SortOptionsMenu";
 
 // Mock ResizeObserver which is used by RoomListPrimaryFilters
@@ -34,8 +34,8 @@ describe("RoomListPanel", () => {
         };
     }
 
-    const mockRenderAvatar = jest.fn((roomViewModel: RoomListItemViewModel) => (
-        <div data-testid={`avatar-${roomViewModel.id}`}>{roomViewModel.name[0]}</div>
+    const mockRenderAvatar = jest.fn((roomItem: RoomListItem) => (
+        <div data-testid={`avatar-${roomItem.id}`}>{roomItem.name[0]}</div>
     ));
 
     const searchSnapshot: RoomListSearchSnapshot = {
@@ -61,22 +61,35 @@ describe("RoomListPanel", () => {
         filters: [],
     };
 
-    const roomListSnapshot: RoomListSnapshot = {
+    const roomListSnapshot: RoomListViewSnapshot = {
         roomsResult: {
             spaceId: "!space:server",
             filterKeys: undefined,
             rooms: [],
         },
         activeRoomIndex: undefined,
-        onKeyDown: undefined,
     };
 
-    const viewSnapshot: RoomListViewSnapshot = {
+    const roomListViewModel: RoomListViewModel = {
+        getSnapshot: () => roomListSnapshot,
+        subscribe: () => () => {},
+        onOpenRoom: jest.fn(),
+        onMarkAsRead: jest.fn(),
+        onMarkAsUnread: jest.fn(),
+        onToggleFavorite: jest.fn(),
+        onToggleLowPriority: jest.fn(),
+        onInvite: jest.fn(),
+        onCopyRoomLink: jest.fn(),
+        onLeaveRoom: jest.fn(),
+        onSetRoomNotifState: jest.fn(),
+    };
+
+    const viewSnapshot: RoomListViewWrapperSnapshot = {
         isLoadingRooms: false,
         isRoomListEmpty: false,
         emptyStateTitle: "No rooms",
         filtersVm: createMockViewModel(filtersSnapshot),
-        roomListVm: createMockViewModel(roomListSnapshot),
+        roomListVm: roomListViewModel,
     };
 
     const mockSnapshot: RoomListPanelSnapshot = {
@@ -109,7 +122,7 @@ describe("RoomListPanel", () => {
     });
 
     it("renders loading state", () => {
-        const loadingViewSnapshot: RoomListViewSnapshot = {
+        const loadingViewSnapshot: RoomListViewWrapperSnapshot = {
             ...viewSnapshot,
             isLoadingRooms: true,
             isRoomListEmpty: false,
@@ -129,7 +142,7 @@ describe("RoomListPanel", () => {
     });
 
     it("renders empty state", () => {
-        const emptyViewSnapshot: RoomListViewSnapshot = {
+        const emptyViewSnapshot: RoomListViewWrapperSnapshot = {
             ...viewSnapshot,
             isLoadingRooms: false,
             isRoomListEmpty: true,

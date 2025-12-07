@@ -9,44 +9,64 @@ import React, { type JSX, memo, useCallback, useEffect, useRef, useState, type R
 import classNames from "classnames";
 
 import { Flex } from "../../utils/Flex";
+import { NotificationDecoration, type NotificationDecorationData } from "../../notifications/NotificationDecoration";
 import {
-    NotificationDecoration,
-    type NotificationDecorationViewModel,
-} from "../../notifications/NotificationDecoration";
-import { type RoomListItemMenuViewModel } from "./RoomListItemMenuViewModel";
-import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
+    RoomListItemHoverMenu,
+    type MoreOptionsMenuState,
+    type MoreOptionsMenuCallbacks,
+    type NotificationMenuState,
+    type NotificationMenuCallbacks,
+} from "./RoomListItemHoverMenu";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
 import styles from "./RoomListItem.module.css";
 
 /**
- * ViewModel interface for RoomListItem
- * Element-web will provide implementations that connect to Matrix SDK
+ * Data interface for a room list item.
+ * Contains all the data needed to render a room in the list.
  */
-export interface RoomListItemViewModel {
+export interface RoomListItem {
     /** Unique identifier for the room (used for list keying) */
     id: string;
     /** The name of the room */
     name: string;
-    /** Callback to open the room */
-    openRoom: () => void;
     /** Accessibility label for the room list item */
     a11yLabel: string;
     /** Whether the room name should be bolded (has unread/activity) */
     isBold: boolean;
     /** Optional message preview text */
     messagePreview?: string;
-    /** Notification decoration view model */
-    notificationViewModel: NotificationDecorationViewModel;
-    /** Menu view model (for hover and context menus) */
-    menuViewModel: RoomListItemMenuViewModel;
+    /** Notification decoration data */
+    notification: NotificationDecorationData;
+    /** Whether the more options menu should be shown */
+    showMoreOptionsMenu: boolean;
+    /** Whether the notification menu should be shown */
+    showNotificationMenu: boolean;
+    /** More options menu state */
+    moreOptionsState: MoreOptionsMenuState;
+    /** Notification menu state */
+    notificationState: NotificationMenuState;
 }
 
 /**
- * Props for RoomListItem component
+ * Callbacks for room list item interactions
  */
-export interface RoomListItemProps extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onFocus"> {
-    /** The view model containing room data and actions */
-    viewModel: RoomListItemViewModel;
+export interface RoomListItemCallbacks {
+    /** Callback to open the room */
+    onOpenRoom: () => void;
+    /** More options menu callbacks */
+    moreOptionsCallbacks: MoreOptionsMenuCallbacks;
+    /** Notification menu callbacks */
+    notificationCallbacks: NotificationMenuCallbacks;
+}
+
+/**
+ * Props for RoomListItemView component
+ */
+export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onFocus"> {
+    /** The room data to display */
+    item: RoomListItem;
+    /** The room callbacks */
+    callbacks: RoomListItemCallbacks;
     /** Whether the room is currently selected */
     isSelected: boolean;
     /** Whether the room is currently focused */
@@ -64,10 +84,11 @@ export interface RoomListItemProps extends Omit<React.HTMLAttributes<HTMLButtonE
 /**
  * A presentational room list item component.
  * Displays room name, avatar, message preview, and notifications.
- * Delegates all business logic to the viewModel and render functions.
+ * All business logic is handled through callbacks to parent components.
  */
-export const RoomListItem = memo(function RoomListItem({
-    viewModel,
+export const RoomListItemView = memo(function RoomListItemView({
+    item,
+    callbacks,
     isSelected,
     isFocused,
     onFocus,
@@ -75,7 +96,7 @@ export const RoomListItem = memo(function RoomListItem({
     roomCount,
     avatar,
     ...props
-}: RoomListItemProps): JSX.Element {
+}: RoomListItemViewProps): JSX.Element {
     const ref = useRef<HTMLButtonElement>(null);
     const [isHover, setHover] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -105,7 +126,7 @@ export const RoomListItem = memo(function RoomListItem({
                 [styles.hover]: showHoverDecoration,
                 [styles.menuOpen]: showHoverMenu,
                 [styles.selected]: isSelected,
-                [styles.bold]: viewModel.isBold,
+                [styles.bold]: item.isBold,
             })}
             gap="var(--cpd-space-3x)"
             align="center"
@@ -114,8 +135,8 @@ export const RoomListItem = memo(function RoomListItem({
             aria-posinset={roomIndex + 1}
             aria-setsize={roomCount}
             aria-selected={isSelected}
-            aria-label={viewModel.a11yLabel}
-            onClick={() => viewModel.openRoom()}
+            aria-label={item.a11yLabel}
+            onClick={callbacks.onOpenRoom}
             onFocus={onFocus}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
@@ -127,25 +148,30 @@ export const RoomListItem = memo(function RoomListItem({
             <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
                 {/* We truncate the room name when too long. Title here is to show the full name on hover */}
                 <div className={styles.text}>
-                    <div className={styles.roomName} title={viewModel.name}>
-                        {viewModel.name}
+                    <div className={styles.roomName} title={item.name}>
+                        {item.name}
                     </div>
-                    {viewModel.messagePreview && (
-                        <div className={styles.messagePreview} title={viewModel.messagePreview}>
-                            {viewModel.messagePreview}
+                    {item.messagePreview && (
+                        <div className={styles.messagePreview} title={item.messagePreview}>
+                            {item.messagePreview}
                         </div>
                     )}
                 </div>
                 {showHoverMenu ? (
                     <RoomListItemHoverMenu
-                        viewModel={viewModel.menuViewModel}
+                        showMoreOptionsMenu={item.showMoreOptionsMenu}
+                        showNotificationMenu={item.showNotificationMenu}
+                        moreOptionsState={item.moreOptionsState}
+                        moreOptionsCallbacks={callbacks.moreOptionsCallbacks}
+                        notificationState={item.notificationState}
+                        notificationCallbacks={callbacks.notificationCallbacks}
                         onMenuOpenChange={(isOpen: boolean) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
                     />
                 ) : (
                     <>
                         {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
                         <div aria-hidden={true}>
-                            <NotificationDecoration viewModel={viewModel.notificationViewModel} />
+                            <NotificationDecoration data={item.notification} />
                         </div>
                     </>
                 )}
@@ -154,7 +180,11 @@ export const RoomListItem = memo(function RoomListItem({
     );
 
     return (
-        <RoomListItemContextMenu viewModel={viewModel.menuViewModel} onMenuOpenChange={setIsMenuOpen}>
+        <RoomListItemContextMenu
+            state={item.moreOptionsState}
+            callbacks={callbacks.moreOptionsCallbacks}
+            onMenuOpenChange={setIsMenuOpen}
+        >
             {content}
         </RoomListItemContextMenu>
     );

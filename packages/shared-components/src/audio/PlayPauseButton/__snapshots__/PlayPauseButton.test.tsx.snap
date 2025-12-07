@@ -13,7 +13,7 @@ exports[`PlayPauseButton renders the button in default state 1`] = `
     tabindex="0"
   >
     <div
-      class="_indicator-icon_zr2a0_17"
+      class="_indicator-icon_147l5_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg
@@ -45,7 +45,7 @@ exports[`PlayPauseButton renders the button in playing state 1`] = `
     tabindex="0"
   >
     <div
-      class="_indicator-icon_zr2a0_17"
+      class="_indicator-icon_147l5_17"
       style="--cpd-icon-button-size: 100%;"
     >
       <svg

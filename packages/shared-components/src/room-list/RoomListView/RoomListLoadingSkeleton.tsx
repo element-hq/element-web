@@ -11,7 +11,7 @@ import styles from "./RoomListView.module.css";
 
 /**
  * Loading skeleton component for the room list.
- * Displays a simple loading indicator while rooms are being fetched.
+ * Displays a repeating skeleton pattern while rooms are being fetched.
  */
 export const RoomListLoadingSkeleton: React.FC = (): JSX.Element => {
     return <div className={styles.skeleton} />;

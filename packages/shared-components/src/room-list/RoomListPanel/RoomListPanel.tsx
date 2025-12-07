@@ -12,8 +12,8 @@ import { useViewModel } from "../../useViewModel";
 import { Flex } from "../../utils/Flex";
 import { RoomListSearch, type RoomListSearchSnapshot } from "../RoomListSearch";
 import { RoomListHeader, type RoomListHeaderSnapshot } from "../RoomListHeader";
-import { RoomListView, type RoomListViewSnapshot } from "../RoomListView";
-import { type RoomListItemViewModel } from "../RoomListItem";
+import { RoomListView, type RoomListViewWrapperSnapshot } from "../RoomListView";
+import { type RoomListItem } from "../RoomListItem";
 import styles from "./RoomListPanel.module.css";
 
 /**
@@ -27,7 +27,7 @@ export type RoomListPanelSnapshot = {
     /** Header view model */
     headerVm: ViewModel<RoomListHeaderSnapshot>;
     /** View model for the main content area */
-    viewVm: ViewModel<RoomListViewSnapshot>;
+    viewVm: ViewModel<RoomListViewWrapperSnapshot>;
 };
 
 /**
@@ -37,7 +37,7 @@ export interface RoomListPanelProps extends React.HTMLAttributes<HTMLElement> {
     /** The view model containing all data and callbacks */
     vm: ViewModel<RoomListPanelSnapshot>;
     /** Render function for room avatar */
-    renderAvatar: (roomViewModel: RoomListItemViewModel) => ReactNode;
+    renderAvatar: (roomItem: RoomListItem) => ReactNode;
 }
 
 /**

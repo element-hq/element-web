@@ -13,7 +13,8 @@ import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 import { ListView, type ListContext } from "../../utils/ListView";
-import { RoomListItem, type RoomListItemViewModel } from "../RoomListItem";
+import { RoomListItemView, type RoomListItem } from "../RoomListItem";
+import { type RoomNotifState } from "../../notifications/RoomNotifs";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -28,36 +29,65 @@ export interface RoomsResult {
     spaceId: string;
     /** Active filter keys */
     filterKeys: FilterKey[] | undefined;
-    /** Array of room item view models */
-    rooms: RoomListItemViewModel[];
+    /** Array of room items */
+    rooms: RoomListItem[];
 }
 
 /**
- * Snapshot for RoomList
+ * Snapshot for RoomList view state
  */
-export type RoomListSnapshot = {
+export interface RoomListViewSnapshot {
     /** The rooms result containing the list of rooms */
     roomsResult: RoomsResult;
     /** Optional active room index */
     activeRoomIndex?: number;
     /** Optional keyboard event handler */
     onKeyDown?: (ev: React.KeyboardEvent) => void;
-};
+}
+
+/**
+ * Actions available for RoomList
+ */
+export interface RoomListViewActions {
+    /** Callback to open a room */
+    onOpenRoom: (roomId: string) => void;
+    /** Callback to mark a room as read */
+    onMarkAsRead: (roomId: string) => void;
+    /** Callback to mark a room as unread */
+    onMarkAsUnread: (roomId: string) => void;
+    /** Callback to toggle a room as favourite */
+    onToggleFavorite: (roomId: string) => void;
+    /** Callback to toggle a room as low priority */
+    onToggleLowPriority: (roomId: string) => void;
+    /** Callback to invite users to a room */
+    onInvite: (roomId: string) => void;
+    /** Callback to copy the room link */
+    onCopyRoomLink: (roomId: string) => void;
+    /** Callback to leave a room */
+    onLeaveRoom: (roomId: string) => void;
+    /** Callback to set the room notification state */
+    onSetRoomNotifState: (roomId: string, state: RoomNotifState) => void;
+}
+
+/**
+ * The view model for the room list.
+ */
+export type RoomListViewModel = ViewModel<RoomListViewSnapshot> & RoomListViewActions;
 
 /**
  * Props for the RoomList component
  */
 export interface RoomListProps {
     /**
-     * The view model containing room list data
+     * The view model containing room list data and actions
      */
-    vm: ViewModel<RoomListSnapshot>;
+    vm: RoomListViewModel;
 
     /**
      * Render function for room avatar
-     * @param roomViewModel - The room item view model
+     * @param roomItem - The room item data
      */
-    renderAvatar: (roomViewModel: RoomListItemViewModel) => ReactNode;
+    renderAvatar: (roomItem: RoomListItem) => ReactNode;
 }
 
 /** Height of a single room list item in pixels */
@@ -76,11 +106,27 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
 /**
  * A virtualized list of rooms.
  * This component provides efficient rendering of large room lists using virtualization,
- * and renders RoomListItem components for each room.
+ * and renders RoomListItemView components for each room.
+ *
+ * @example
+ * ```tsx
+ * <RoomList vm={roomListViewModel} renderAvatar={(room) => <Avatar room={room} />} />
+ * ```
  */
 export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
     const snapshot = useViewModel(vm);
     const { roomsResult, activeRoomIndex, onKeyDown } = snapshot;
+    const {
+        onOpenRoom,
+        onMarkAsRead,
+        onMarkAsUnread,
+        onToggleFavorite,
+        onToggleLowPriority,
+        onInvite,
+        onCopyRoomLink,
+        onLeaveRoom,
+        onSetRoomNotifState,
+    } = vm;
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
     const roomCount = roomsResult.rooms.length;
@@ -91,22 +137,39 @@ export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
     const getItemComponent = useCallback(
         (
             index: number,
-            item: RoomListItemViewModel,
+            item: RoomListItem,
             context: ListContext<{
                 spaceId: string;
                 filterKeys: FilterKey[] | undefined;
             }>,
-            onFocus: (item: RoomListItemViewModel, e: React.FocusEvent) => void,
+            onFocus: (item: RoomListItem, e: React.FocusEvent) => void,
         ): JSX.Element => {
             const itemKey = item.id;
             const isRovingItem = itemKey === context.tabIndexKey;
             const isFocused = isRovingItem && context.focused;
             const isSelected = activeRoomIndex === index;
 
+            const callbacks = {
+                onOpenRoom: () => onOpenRoom(item.id),
+                moreOptionsCallbacks: {
+                    onMarkAsRead: () => onMarkAsRead(item.id),
+                    onMarkAsUnread: () => onMarkAsUnread(item.id),
+                    onToggleFavorite: () => onToggleFavorite(item.id),
+                    onToggleLowPriority: () => onToggleLowPriority(item.id),
+                    onInvite: () => onInvite(item.id),
+                    onCopyRoomLink: () => onCopyRoomLink(item.id),
+                    onLeaveRoom: () => onLeaveRoom(item.id),
+                },
+                notificationCallbacks: {
+                    onSetRoomNotifState: (state: RoomNotifState) => onSetRoomNotifState(item.id, state),
+                },
+            };
+
             return (
                 <div key={itemKey}>
-                    <RoomListItem
-                        viewModel={item}
+                    <RoomListItemView
+                        item={item}
+                        callbacks={callbacks}
                         isSelected={isSelected}
                         isFocused={isFocused}
                         onFocus={(e) => onFocus(item, e)}
@@ -117,13 +180,13 @@ export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
                 </div>
             );
         },
-        [activeRoomIndex, roomCount, renderAvatar],
+        [activeRoomIndex, roomCount, renderAvatar, vm],
     );
 
     /**
      * Get the key for a room item
      */
-    const getItemKey = useCallback((item: RoomListItemViewModel): string => {
+    const getItemKey = useCallback((item: RoomListItem): string => {
         return item.id;
     }, []);
 

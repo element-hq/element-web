@@ -6,4 +6,4 @@
  */
 
 export { NotificationDecoration } from "./NotificationDecoration";
-export type { NotificationDecorationProps, NotificationDecorationViewModel } from "./NotificationDecoration";
+export type { NotificationDecorationProps, NotificationDecorationData } from "./NotificationDecoration";

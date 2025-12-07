@@ -14,6 +14,7 @@ export * from "./avatar/AvatarWithDetails";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./notifications/NotificationDecoration";
+export * from "./notifications/RoomNotifs";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./rich-list/RichItem";
