@@ -2964,6 +2964,7 @@
             "message_search_indexing": "Currently indexing: %(currentRoom)s",
             "message_search_indexing_idle": "Not currently indexing messages for any room.",
             "message_search_intro": "%(brand)s is securely caching encrypted messages locally for them to appear in search results:",
+            "message_search_pending_rooms": "Rooms awaiting indexing: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s out of %(totalRooms)s",
             "message_search_section": "Message search",
             "message_search_sleep_time": "How fast should messages be downloaded.",
