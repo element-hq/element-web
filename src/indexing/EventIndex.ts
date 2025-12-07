@@ -26,7 +26,7 @@ import {
     type IMatrixProfile,
     type IResultRoomEvents,
     type SyncStateData,
-    type SyncState,
+    SyncState,
     type TimelineIndex,
     type TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
@@ -46,6 +46,7 @@ import {
     type ISearchArgs,
 } from "./BaseEventIndexManager";
 import { asyncFilter } from "../utils/arrays.ts";
+import { logErrorAndShowErrorDialog } from "../utils/ErrorUtils.tsx";
 
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.
@@ -74,6 +75,12 @@ export default class EventIndex extends EventEmitter {
      */
     private currentCheckpoint: ICrawlerCheckpoint | null = null;
 
+    /**
+     * True if we need to add the initial checkpoints for encrypted rooms, once we've completed a sync.
+     * This is set if the database is empty when the indexer is first initialized.
+     */
+    private needsInitialCheckpoints = false;
+
     private readonly logger;
 
     public constructor() {
@@ -85,6 +92,13 @@ export default class EventIndex extends EventEmitter {
     public async init(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
+
+        // If the index is empty, set a flag so that we add the initial checkpoints once we sync.
+        // We do this check here rather than in `onSync` because, by the time `onSync` is called, there will
+        // have been a few events added to the index.
+        if (await indexManager.isEventIndexEmpty()) {
+            this.needsInitialCheckpoints = true;
+        }
 
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
         this.logger.debug("Loaded checkpoints", JSON.stringify(this.crawlerCheckpoints));
@@ -121,6 +135,8 @@ export default class EventIndex extends EventEmitter {
      * Add crawler checkpoints for all of the encrypted rooms the user is in.
      */
     public async addInitialCheckpoints(): Promise<void> {
+        this.needsInitialCheckpoints = false;
+
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
         const client = MatrixClientPeg.safeGet();
@@ -177,35 +193,31 @@ export default class EventIndex extends EventEmitter {
         this.logger.debug("addInitialCheckpoints: done");
     }
 
-    /*
+    /**
      * The sync event listener.
-     *
-     * The listener has two cases:
-     *     - First sync after start up, check if the index is empty, add
-     *         initial checkpoints, if so. Start the crawler background task.
-     *     - Every other sync, tell the event index to commit all the queued up
-     *         live events
      */
-    private onSync = async (state: SyncState, prevState: SyncState | null, data?: SyncStateData): Promise<void> => {
-        const indexManager = PlatformPeg.get()?.getEventIndexingManager();
-        if (!indexManager) return;
+    private onSync = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
+        if (state != SyncState.Syncing) return;
 
-        if (prevState === "PREPARED" && state === "SYNCING") {
-            // If our indexer is empty we're most likely running Element the
-            // first time with indexing support or running it with an
-            // initial sync. Add checkpoints to crawl our encrypted rooms.
-            const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();
-            if (eventIndexWasEmpty) await this.addInitialCheckpoints();
+        const onSyncInner = async (): Promise<void> => {
+            const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+            if (!indexManager) return;
 
+            // If the index was empty when we first started up, add the initial checkpoints, to back-populate the index.
+            if (this.needsInitialCheckpoints) {
+                await this.addInitialCheckpoints();
+            }
+
+            // Start the crawler if it's not already running.
             this.startCrawler();
-            return;
-        }
 
-        if (prevState === "SYNCING" && state === "SYNCING") {
-            // A sync was done, presumably we queued up some live events,
-            // commit them now.
+            // Commit any queued up live events
             await indexManager.commitLiveEvents();
-        }
+        };
+
+        onSyncInner().catch((e) => {
+            logErrorAndShowErrorDialog("Event indexer threw an unexpected error", e);
+        });
     };
 
     /*
