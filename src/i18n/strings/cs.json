@@ -3532,7 +3532,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ukončil hlasování",
             "sender_ended": "%(senderName)s ukončil(a) hlasování"
         },
         "m.poll.start": "%(senderName)s zahájil(a) hlasování - %(pollQuestion)s",

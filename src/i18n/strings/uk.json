@@ -95,6 +95,7 @@
         "maximise": "Розгорнути",
         "mention": "Згадати",
         "minimise": "Згорнути",
+        "new_conversation": "Нова розмова",
         "new_room": "Нова кімната",
         "new_video_room": "Нова відеокімната",
         "next": "Далі",
@@ -532,7 +533,8 @@
         "mute": "Стишити",
         "n_members": {
             "one": "%(count)s учасник",
-            "other": "%(count)s учасників"
+            "few": "%(count)s учасники",
+            "many": "%(count)s учасників"
         },
         "n_rooms": {
             "one": "%(count)s кімната",
@@ -605,6 +607,7 @@
         "video": "Відео",
         "video_room": "Відеокімната",
         "view_message": "Переглянути повідомлення",
+        "voice": "Голос",
         "warning": "Попередження"
     },
     "composer": {
@@ -719,6 +722,7 @@
         "personal_space_description": "Приватний простір для впорядкування ваших кімнат",
         "private_description": "Лише за запрошенням, найкраще для себе чи для команди",
         "private_heading": "Ваш приватний простір",
+        "private_only_heading": "Ваш простір",
         "private_personal_description": "Переконайтеся, що потрібні люди мають доступ до %(name)s",
         "private_personal_heading": "З ким ви працюєте?",
         "private_space": "Я й учасники моєї команди",
@@ -806,6 +810,15 @@
         },
         "developer_mode": "Режим розробника",
         "developer_tools": "Інструменти розробника",
+        "device_id": "ID пристрою: %(deviceId)s",
+        "device_keys": "Ключі пристрою",
+        "device_verification_status": {
+            "signed_by_owner": "Стан верифікації: <E2EIcon /> Підписано власником",
+            "unknown": "Стан верифікації: невідомо",
+            "unverified": "Стан верифікації: <E2EIcon /> Не підписано власником",
+            "verified": "Стан верифікації: <E2EIcon /> Верифіковано перехресним підписом"
+        },
+        "devices": "Криптографічні пристрої (%(count)s)",
         "edit_setting": "Змінити налаштування",
         "edit_values": "Редагувати значення",
         "empty_string": "<порожній рядок>",
@@ -821,6 +834,7 @@
         "failed_to_save": "Не вдалося зберегти налаштування.",
         "failed_to_send": "Не вдалося надіслати подію!",
         "id": "Ідентифікатор: ",
+        "invalid_device_key_id": "Недійсний ID ключа пристрою",
         "invalid_json": "Не схоже на чинний JSON.",
         "level": "Рівень",
         "low_bandwidth_mode": "Режим низької пропускної спроможності",
@@ -878,10 +892,17 @@
         "toggle_event": "перемкнути подію",
         "toolbox": "Панель інструментів",
         "use_at_own_risk": "Цей інтерфейс НЕ перевіряє типи значень. Користуйтесь на свій ризик.",
+        "user_avatar": "Аватар: %(avatar)s",
+        "user_displayname": "Показуване ім'я: %(displayname)s",
+        "user_id": "ID користувача: %(userId)s",
         "user_read_up_to": "Користувач прочитав до: ",
         "user_read_up_to_ignore_synthetic": "Користувач прочитав до (ignoreSynthetic): ",
         "user_read_up_to_private": "Користувач прочитав до (m.read.private): ",
         "user_read_up_to_private_ignore_synthetic": "Користувач прочитав до (m.read.private;ignoreSynthetic): ",
+        "user_verification_status": {
+            "identity_changed": "Стан верифікації: <E2EIcon /> Не верифіковано, а особу змінено"
+        },
+        "users": "Користувачі",
         "value": "Значення",
         "value_colon": "Значення:",
         "value_in_this_room": "Значення у цій кімнаті",
@@ -995,6 +1016,7 @@
                 "verify_this_device": "Звірити цей пристрій"
             },
             "cancelling": "Скасування…",
+            "cant_confirm": "Не можете підтвердити?",
             "complete_action": "Зрозуміло",
             "complete_description": "Ви успішно звірили цього користувача.",
             "complete_title": "Звірено!",
@@ -1030,9 +1052,11 @@
             "qr_or_sas": "%(qrCode)s з %(emojiCompare)s",
             "qr_prompt": "Скануйте цей унікальний код",
             "qr_reciprocate_same_shield_user": "Майже готово! Ваш %(displayName)s показує той самий щит?",
+            "qr_reciprocate_yes": "Так, я бачу зелений щит",
             "request_toast_accept_user": "Підтвердити користувача",
             "request_toast_decline_counter": "Ігнорувати (%(counter)s)",
             "request_toast_detail": "%(deviceId)s з %(ip)s",
+            "request_toast_start_verification": "Почати верифікацію",
             "sas_caption_self": "Звірте цей пристрій, підтвердивши, що на екрані з'явилося це число.",
             "sas_caption_user": "Звірте справжність цього користувача, підтвердивши, що на екрані з'явилося таке число.",
             "sas_description": "Порівняйте унікальний набір емодзі якщо жоден ваш пристрій не має камери",
@@ -1050,11 +1074,20 @@
             "unverified_sessions_toast_description": "Перевірте, щоб переконатися, що ваш обліковий запис у безпеці",
             "unverified_sessions_toast_reject": "Пізніше",
             "unverified_sessions_toast_title": "У вас є неперевірені сеанси",
+            "use_another_device": "Використати інший пристрій",
+            "use_recovery_key": "Використати ключ відновлення",
+            "verification_dialog_title_choose": "Виберіть спосіб верифікації",
+            "verification_dialog_title_compare_emojis": "Порівняти емодзі",
+            "verification_dialog_title_confirm_green_shield": "Підтвердьте, що на іншому пристрої ви бачите зелений щит",
             "verification_dialog_title_device": "Звірити інший пристрій",
+            "verification_dialog_title_failed": "Не вдалося верифікувати",
+            "verification_dialog_title_start_on_other_device": "Розпочати верифікацію на іншому пристрої",
             "verification_dialog_title_user": "Запит підтвердження",
+            "verification_dialog_title_verified": "Пристрій верифіковано",
             "verification_skip_warning": "До звірки ви матимете доступ не до всіх своїх повідомлень, а в інших ви можете позначатися недовіреними.",
             "verification_success_with_backup": "Ваш новий пристрій звірено. Він має доступ до ваших зашифрованих повідомлень, а інші користувачі бачитимуть його довіреним.",
             "verification_success_without_backup": "Ваш новий пристрій звірено. Інші користувачі бачитимуть його довіреним.",
+            "verify_by_completing_one_of": "Верифікуйте, виконавши одну з цих дій:",
             "verify_emoji": "Звірити за допомогою емодзі",
             "verify_emoji_prompt": "Звірити порівнянням унікальних емодзі.",
             "verify_emoji_prompt_qr": "Якщо ви не можете сканувати зазначений код, звірте порівнянням унікальних емодзі.",
@@ -1108,6 +1141,7 @@
         "tls": "Не вдалося під'єднатися до домашнього сервера — перевірте з'єднання, переконайтесь, що ваш <a>SSL-сертифікат домашнього сервера</a> довірений і що розширення браузера не блокує запити.",
         "unknown": "Невідома помилка",
         "unknown_error_code": "невідомий код помилки",
+        "update_history_visibility": "Не вдалося змінити видимість історії",
         "update_power_level": "Не вдалося змінити рівень повноважень"
     },
     "error_app_open_in_another_tab": "Перейдіть на іншу вкладку, щоб під'єднатися до %(brand)s. Цю вкладку можна закрити.",
@@ -1378,8 +1412,9 @@
         "other": "Запрошення %(user)s і ще %(count)s"
     },
     "items_and_n_others": {
-        "other": "<Items/> та ще %(count)s учасників",
-        "one": "<Items/> і ще хтось"
+        "one": "<Items/> і ще хтось",
+        "few": "<Items/> і ще %(count)s",
+        "many": "<Items/> і ще %(count)s"
     },
     "keyboard": {
         "activate_button": "Натиснути обрану кнопку",
@@ -1716,6 +1751,7 @@
         "end_message": "Опитування завершене. Перемогла відповідь: %(topAnswer)s",
         "end_message_no_votes": "Опитування завершене. Жодного голосу не було.",
         "end_title": "Завершити опитування",
+        "ended_poll_label": "Опитування завершено",
         "error_ending_description": "Не вдалося завершити опитування. Спробуйте ще.",
         "error_ending_title": "Не вдалося завершити опитування",
         "error_voting_description": "Не вдалося зареєструвати ваш голос. Просимо спробувати ще.",
@@ -1723,10 +1759,12 @@
         "failed_send_poll_description": "Не вдалося надіслати опитування, яке ви намагалися створити.",
         "failed_send_poll_title": "Не вдалося надіслати опитування",
         "notes": "Результати показуються лише після завершення опитування",
+        "option_label": "Варіант %(number)s, %(answer)s",
         "options_add_button": "Додати варіант",
         "options_heading": "Створіть варіанти",
         "options_label": "Варіант %(number)s",
         "options_placeholder": "Вписати варіант",
+        "poll_label": "Опитування",
         "topic_heading": "Яке питання чи тема вашого опитування?",
         "topic_label": "Питання чи тема",
         "topic_placeholder": "Напишіть щось…",
@@ -3034,6 +3072,10 @@
             "spaces_explainer": "Простір це спосіб групування кімнат та людей. Окрім просторів, які ви створюєте, ви також можете використовувати вже готові.",
             "title": "Бічна панель"
         },
+        "start_automatically": {
+            "disabled": "Ні",
+            "enabled": "Так"
+        },
         "tac_only_notifications": "Показувати сповіщення лише в центрі діяльності в гілках",
         "use_12_hour_format": "Показувати час у 12-годинному форматі (напр. 2:30 пп)",
         "use_command_enter_send_message": "Натисніть Command + Enter, щоб надіслати повідомлення",
@@ -3463,7 +3505,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Завершує опитування",
             "sender_ended": "%(senderName)s завершує опитування"
         },
         "m.poll.start": "%(senderName)s починає опитування - %(pollQuestion)s",
@@ -3666,12 +3707,14 @@
                 "one": "заблоковані"
             },
             "changed_avatar": {
-                "other": "%(oneUser)sзмінює своє зображення профілю %(count)s рази",
-                "one": "%(oneUser)sзмінюють зображення профілів"
+                "one": "%(oneUser)s змінює зображення профілю",
+                "few": "%(oneUser)s змінює зображення профілю %(count)s рази",
+                "many": "%(oneUser)s змінює зображення профілю %(count)s разів"
             },
             "changed_avatar_multiple": {
-                "other": "%(severalUsers)sзмінює своє зображення профілю %(count)s рази",
-                "one": "%(severalUsers)sзмінюють зображення профілів"
+                "one": "%(severalUsers)s змінює зображення профілю",
+                "few": "%(severalUsers)s змінюють зображення профілів %(count)s рази",
+                "many": "%(severalUsers)s змінюють зображення профілів %(count)s разів"
             },
             "changed_name": {
                 "one": "%(oneUser)sзмінює своє ім'я",
@@ -3707,20 +3750,24 @@
                 "other": "були запрошені %(count)s разів"
             },
             "joined": {
-                "one": "%(oneUser)sприєднується",
-                "other": "%(oneUser)sприєднується %(count)s разів"
+                "one": "%(oneUser)s приєднується",
+                "few": "%(oneUser)s приєднується %(count)s рази",
+                "many": "%(oneUser)s приєднується %(count)s разів"
             },
             "joined_and_left": {
-                "one": "%(oneUser)sприєднується й виходить",
-                "other": "%(oneUser)sприєднується й виходить %(count)s разів"
+                "one": "%(oneUser)s приєднується й виходить",
+                "few": "%(oneUser)s приєднується й виходить %(count)s рази",
+                "many": "%(oneUser)s приєднується й виходить %(count)s разів"
             },
             "joined_and_left_multiple": {
-                "other": "%(severalUsers)sприєдналися й вийшли %(count)s разів",
-                "one": "%(severalUsers)sприєдналися й вийшли"
+                "one": "%(severalUsers)s приєднуються й виходять",
+                "few": "%(severalUsers)s приєднуються й виходять %(count)s рази",
+                "many": "%(severalUsers)s приєднуються й виходять %(count)s разів"
             },
             "joined_multiple": {
-                "one": "%(severalUsers)sприєдналися",
-                "other": "%(severalUsers)sприєдналися %(count)s разів"
+                "one": "%(severalUsers)s приєднуються",
+                "few": "%(severalUsers)s приєднуються %(count)s рази",
+                "many": "%(severalUsers)s приєднуються %(count)s разів"
             },
             "kicked": {
                 "one": "було вилучено",
@@ -3731,8 +3778,9 @@
                 "other": "було вилучено %(count)s разів"
             },
             "left": {
-                "one": "%(oneUser)sвиходить",
-                "other": "%(oneUser)sвийшли %(count)s разів"
+                "one": "%(oneUser)s виходить",
+                "few": "%(oneUser)s виходить %(count)s рази",
+                "many": "%(oneUser)s виходить %(count)s разів"
             },
             "left_multiple": {
                 "one": "%(severalUsers)sвийшли",
@@ -3771,8 +3819,9 @@
                 "other": "%(severalUsers)s відхилили запрошення %(count)s разів"
             },
             "rejoined": {
-                "one": "%(oneUser)sвиходить і повертається",
-                "other": "%(oneUser)sвиходить і повертається %(count)s разів"
+                "one": "%(oneUser)s виходить і повертається",
+                "few": "%(oneUser)s виходить і повертається %(count)s рази",
+                "many": "%(oneUser)s виходить і повертається %(count)s разів"
             },
             "rejoined_multiple": {
                 "one": "%(severalUsers)sвиходять і повертаються",
@@ -3798,8 +3847,9 @@
         "thread_info_basic": "З гілки",
         "typing_indicator": {
             "more_users": {
-                "other": "%(names)s та ще %(count)s учасників пишуть…",
-                "one": "%(names)s та ще один учасник пишуть…"
+                "one": "%(names)s та ще хтось пишуть…",
+                "few": "%(names)s та ще %(count)s пишуть…",
+                "many": "%(names)s та ще %(count)s пишуть…"
             },
             "one_user": "%(displayName)s пише…",
             "two_users": "%(names)s та %(lastPerson)s пишуть…"
@@ -3814,7 +3864,9 @@
         }
     },
     "truncated_list_n_more": {
-        "other": "І ще %(count)s..."
+        "one": "",
+        "few": "І ще %(count)s…",
+        "many": "І ще %(count)s…"
     },
     "unsupported_browser": {
         "description": "Якщо ви продовжите, деякі функції можуть перестати працювати, і існує ризик втрати даних у майбутньому. Оновіть браузер, щоб продовжити користуватись %(brand)s.",
@@ -3962,6 +4014,7 @@
         "connection_lost": "Втрачено зʼєднання з сервером",
         "connection_lost_description": "Неможливо здійснювати виклики без з'єднання з сервером.",
         "consulting": "Консультація з %(transferTarget)s. <a>Переадресація на %(transferee)s</a>",
+        "decline_call": "Відхилити",
         "default_device": "Уставний пристрій",
         "dial": "Виклик",
         "dialpad": "Номеронабирач",
@@ -3996,8 +4049,9 @@
         "msisdn_lookup_failed_description": "Сталася помилка під час пошуку номеру телефону",
         "msisdn_transfer_failed": "Не вдалося переадресувати виклик",
         "n_people_joined": {
-            "one": "%(count)s осіб приєдналися",
-            "other": "%(count)s людей приєдналися"
+            "one": "%(count)s особа приєднується",
+            "few": "%(count)s особи приєднуються",
+            "many": "%(count)s осіб приєднуються"
         },
         "no_audio_input_description": "Мікрофона не знайдено. Перевірте налаштування й повторіть спробу.",
         "no_audio_input_title": "Мікрофона не знайдено",
@@ -4013,6 +4067,7 @@
         "show_sidebar_button": "Показати бічну панель",
         "silence": "Тихий виклик",
         "silenced": "Сповіщення стишено",
+        "skip_lobby_toggle_option": "Приєднатися негайно",
         "start_screenshare": "Почати показ екрана",
         "stop_screenshare": "Вимкнути показ екрана",
         "too_many_calls": "Забагато викликів",
@@ -4033,9 +4088,12 @@
         "user_busy_description": "Користувач, якого ви викликаєте, зайнятий.",
         "user_is_presenting": "%(sharerName)s показує",
         "video_call": "Відеовиклик",
+        "video_call_incoming": "Вхідний відеовиклик",
         "video_call_started": "Відеовиклик розпочато",
         "video_call_using": "Відеодзвінок за допомогою:",
         "voice_call": "Голосовий виклик",
+        "voice_call_incoming": "Вхідний голосовий виклик",
+        "voice_call_using": "Голосовий виклик за допомогою:",
         "you_are_presenting": "Ви показуєте"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",

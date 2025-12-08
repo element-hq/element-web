@@ -3525,7 +3525,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Lõpetas küsitluse",
             "sender_ended": "%(senderName)s lõpetas küsitluse"
         },
         "m.poll.start": "%(senderName)s algatas küsitluse - %(pollQuestion)s",
