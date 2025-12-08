@@ -161,11 +161,29 @@ export class Bot extends Client {
                     getSecretStorageKey,
                 };
 
+                const loginCli = new window.matrixcs.MatrixClient({
+                    baseUrl,
+                    store: new window.matrixcs.MemoryStore(),
+                    scheduler: new window.matrixcs.MatrixScheduler(),
+                    cryptoStore: new window.matrixcs.MemoryCryptoStore(),
+                    cryptoCallbacks,
+                    logger,
+                });
+
+                const loginResponse = await loginCli.loginRequest({
+                    type: "m.login.password",
+                    identifier: {
+                        type: "m.id.user",
+                        user: credentials.userId,
+                    },
+                    password: credentials.password,
+                });
+
                 const cli = new window.matrixcs.MatrixClient({
                     baseUrl,
-                    userId: credentials.userId,
-                    deviceId: credentials.deviceId,
-                    accessToken: credentials.accessToken,
+                    userId: loginResponse.user_id,
+                    deviceId: loginResponse.device_id,
+                    accessToken: loginResponse.access_token,
                     store: new window.matrixcs.MemoryStore(),
                     scheduler: new window.matrixcs.MatrixScheduler(),
                     cryptoStore: new window.matrixcs.MemoryCryptoStore(),
