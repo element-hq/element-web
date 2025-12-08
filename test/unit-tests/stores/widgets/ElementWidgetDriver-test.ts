@@ -131,11 +131,16 @@ describe("ElementWidgetDriver", () => {
             "org.matrix.msc3819.receive.to_device:m.call.replaces",
             "org.matrix.msc4157.send.delayed_event",
             "org.matrix.msc4157.update_delayed_event",
-            // RTC decline events
+            // RTC decline events (send/receive, unstable/stable)
             "org.matrix.msc2762.send.event:org.matrix.msc4310.rtc.decline",
-            "org.matrix.msc2762.receive.event:org.matrix.msc4310.rtc.decline",
             "org.matrix.msc2762.send.event:m.rtc.decline",
+            "org.matrix.msc2762.receive.event:org.matrix.msc4310.rtc.decline",
             "org.matrix.msc2762.receive.event:m.rtc.decline",
+            // RTC member events (send/receive, unstable/stable)
+            "org.matrix.msc2762.receive.event:org.matrix.msc4143.rtc.member",
+            "org.matrix.msc2762.receive.event:m.rtc.member",
+            "org.matrix.msc2762.send.event:m.rtc.member",
+            "org.matrix.msc2762.send.event:org.matrix.msc4143.rtc.member",
         ]);
 
         const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
