@@ -3431,7 +3431,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Avslutade en omröstning",
             "sender_ended": "%(senderName)s har avslutat en omröstning"
         },
         "m.poll.start": "%(senderName)s har startat en omröstning - %(pollQuestion)s",

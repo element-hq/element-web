@@ -2314,7 +2314,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "დაასრულა გამოკითხვა",
             "sender_ended": "%(senderName)s დაასრულა გამოკითხვა"
         },
         "m.poll.start": "%(senderName)sდაიწყო გამოკითხვა - %(pollQuestion)s",

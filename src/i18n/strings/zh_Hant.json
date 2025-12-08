@@ -2884,7 +2884,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "投票已結束",
             "sender_ended": "%(senderName)s 結束了投票"
         },
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",

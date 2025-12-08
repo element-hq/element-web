@@ -3568,7 +3568,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ukončil anketu",
             "sender_ended": "%(senderName)s ukončil anketu"
         },
         "m.poll.start": "%(senderName)s spustil anketu - %(pollQuestion)s",
