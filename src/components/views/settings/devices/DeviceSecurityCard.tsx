@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React from "react";
+import { ShieldIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as VerifiedIcon } from "../../../../../res/img/e2e/verified.svg";
-import { Icon as UnverifiedIcon } from "../../../../../res/img/e2e/warning.svg";
 import { Icon as InactiveIcon } from "../../../../../res/img/element-icons/settings/inactive.svg";
 import { DeviceSecurityVariation } from "./types";
+
 interface Props {
     variation: DeviceSecurityVariation;
     heading: string;
@@ -22,9 +22,9 @@ interface Props {
 
 const VariationIcon: Record<DeviceSecurityVariation, React.FC<React.SVGProps<SVGSVGElement>>> = {
     [DeviceSecurityVariation.Inactive]: InactiveIcon,
-    [DeviceSecurityVariation.Verified]: VerifiedIcon,
-    [DeviceSecurityVariation.Unverified]: UnverifiedIcon,
-    [DeviceSecurityVariation.Unverifiable]: UnverifiedIcon,
+    [DeviceSecurityVariation.Verified]: ShieldIcon,
+    [DeviceSecurityVariation.Unverified]: ErrorSolidIcon,
+    [DeviceSecurityVariation.Unverifiable]: ErrorSolidIcon,
 };
 
 const DeviceSecurityIcon: React.FC<{ variation: DeviceSecurityVariation }> = ({ variation }) => {
