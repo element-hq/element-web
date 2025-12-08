@@ -3517,7 +3517,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Mengakhiri sebuah pemungutan suara",
             "sender_ended": "%(senderName)s telah mengakhiri sebuah poll"
         },
         "m.poll.start": "%(senderName)s telah memulai sebuah pungutan suara — %(pollQuestion)s",

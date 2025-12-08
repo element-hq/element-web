@@ -3514,7 +3514,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Zakończył ankietę",
             "sender_ended": "%(senderName)s zakończył ankietę"
         },
         "m.poll.start": "%(senderName)s utworzył ankietę - %(pollQuestion)s",
