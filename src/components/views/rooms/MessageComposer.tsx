@@ -587,14 +587,20 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 );
             }
 
+            const isTooltipOpen = Boolean(this.state.recordingTimeLeftSeconds);
+            const secondsLeft = this.state.recordingTimeLeftSeconds
+                ? Math.round(this.state.recordingTimeLeftSeconds)
+                : 0;
             controls.push(
-                <VoiceRecordComposerTile
-                    key="controls_voice_record"
-                    ref={this.voiceRecordingButton}
-                    room={this.props.room}
-                    relation={this.props.relation}
-                    replyToEvent={this.props.replyToEvent}
-                />,
+                <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
+                    <VoiceRecordComposerTile
+                        key="controls_voice_record"
+                        ref={this.voiceRecordingButton}
+                        room={this.props.room}
+                        relation={this.props.relation}
+                        replyToEvent={this.props.replyToEvent}
+                    />
+                </Tooltip>,
             );
         } else if (this.context.tombstone) {
             const replacementRoomId = this.context.tombstone.getContent()["replacement_room"];
@@ -636,9 +642,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
             );
         }
 
-        const isTooltipOpen = Boolean(this.state.recordingTimeLeftSeconds);
-        const secondsLeft = this.state.recordingTimeLeftSeconds ? Math.round(this.state.recordingTimeLeftSeconds) : 0;
-
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
 
@@ -663,55 +666,51 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
-                <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
-                    <div className="mx_MessageComposer_wrapper">
-                        <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
-                        <ReplyPreview
-                            replyToEvent={this.props.replyToEvent}
-                            permalinkCreator={this.props.permalinkCreator}
-                        />
-                        <div className="mx_MessageComposer_row">
-                            {leftIcon}
-                            {composer}
-                            <div className="mx_MessageComposer_actions">
-                                {controls}
-                                {canSendMessages && (
-                                    <MessageComposerButtons
-                                        addEmoji={this.addEmoji}
-                                        haveRecording={this.state.haveRecording}
-                                        isMenuOpen={this.state.isMenuOpen}
-                                        isStickerPickerOpen={this.state.isStickerPickerOpen}
-                                        menuPosition={menuPosition}
-                                        relation={this.props.relation}
-                                        onRecordStartEndClick={this.onRecordStartEndClick}
-                                        setStickerPickerOpen={this.setStickerPickerOpen}
-                                        showLocationButton={
-                                            !window.electron && SettingsStore.getValue(UIFeature.LocationSharing)
-                                        }
-                                        showPollsButton={this.state.showPollsButton}
-                                        showStickersButton={this.showStickersButton}
-                                        isRichTextEnabled={this.state.isRichTextEnabled}
-                                        onComposerModeClick={this.onRichTextToggle}
-                                        toggleButtonMenu={this.toggleButtonMenu}
-                                    />
-                                )}
-                                {showSendButton && (
-                                    <SendButton
-                                        key="controls_send"
-                                        onClick={this.sendMessage}
-                                        title={
-                                            this.state.haveRecording
-                                                ? _t("composer|send_button_voice_message")
-                                                : undefined
-                                        }
-                                    />
-                                )}
-                            </div>
+            <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
+                <div className="mx_MessageComposer_wrapper">
+                    <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
+                    <ReplyPreview
+                        replyToEvent={this.props.replyToEvent}
+                        permalinkCreator={this.props.permalinkCreator}
+                    />
+                    <div className="mx_MessageComposer_row">
+                        {leftIcon}
+                        {composer}
+                        <div className="mx_MessageComposer_actions">
+                            {controls}
+                            {canSendMessages && (
+                                <MessageComposerButtons
+                                    addEmoji={this.addEmoji}
+                                    haveRecording={this.state.haveRecording}
+                                    isMenuOpen={this.state.isMenuOpen}
+                                    isStickerPickerOpen={this.state.isStickerPickerOpen}
+                                    menuPosition={menuPosition}
+                                    relation={this.props.relation}
+                                    onRecordStartEndClick={this.onRecordStartEndClick}
+                                    setStickerPickerOpen={this.setStickerPickerOpen}
+                                    showLocationButton={
+                                        !window.electron && SettingsStore.getValue(UIFeature.LocationSharing)
+                                    }
+                                    showPollsButton={this.state.showPollsButton}
+                                    showStickersButton={this.showStickersButton}
+                                    isRichTextEnabled={this.state.isRichTextEnabled}
+                                    onComposerModeClick={this.onRichTextToggle}
+                                    toggleButtonMenu={this.toggleButtonMenu}
+                                />
+                            )}
+                            {showSendButton && (
+                                <SendButton
+                                    key="controls_send"
+                                    onClick={this.sendMessage}
+                                    title={
+                                        this.state.haveRecording ? _t("composer|send_button_voice_message") : undefined
+                                    }
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
-            </Tooltip>
+            </div>
         );
     }
 }
