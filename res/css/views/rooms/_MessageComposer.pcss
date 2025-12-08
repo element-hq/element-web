@@ -38,11 +38,6 @@ Please see LICENSE files in the repository root for full details.
     font-weight: bold;
 }
 
-.mx_MessageComposer_autocomplete_wrapper {
-    position: relative;
-    height: 0;
-}
-
 .mx_MessageComposer_row {
     display: flex;
     flex-direction: row;
@@ -67,20 +62,19 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_MessageComposer_composecontrols {
-    width: 100%;
-}
 .mx_MessageComposer_e2eIconWrapper {
-    height: 16px; /* Match the height of the E2E icon for alignment */
-    width: 16px;
+    height: 12px; /* Match the height of the E2E icon for alignment */
+    width: 12px;
     position: absolute;
     left: 20px;
-    top: 20px;
+    top: 22px;
     margin-right: 0; /* Counteract the E2EIcon class */
     margin-left: 3px; /* Counteract the E2EIcon class */
 
-    .mx_E2EIcon {
+    .mx_MessageComposer_e2eIcon {
         margin: 0;
+        width: inherit;
+        height: inherit;
     }
 }
 
@@ -92,13 +86,6 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.mx_MessageComposer_input_wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    cursor: text;
 }
 
 .mx_MessageComposer_input {
@@ -147,38 +134,6 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_MessageComposer_editor {
-    width: 100%;
-    max-height: 120px;
-    min-height: 19px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    word-break: break-word;
-
-    /* FIXME: rather unpleasant hack to get rid of <p/> margins. */
-    /* really we should be mixing in markdown-body from github-markdown-css instead */
-    > :first-child {
-        margin-top: 0 !important;
-    }
-
-    > :last-child {
-        margin-bottom: 0 !important;
-    }
-}
-
-@keyframes visualbell {
-    from {
-        background-color: $visual-bell-bg-color;
-    }
-    to {
-        background-color: $background;
-    }
-}
-
-.mx_MessageComposer_input_error {
-    animation: 0.2s visualbell;
-}
-
 .mx_MessageComposer_button_highlight {
     @mixin composerButtonHighLight;
 }
@@ -199,10 +154,6 @@ Please see LICENSE files in the repository root for full details.
             background-color: var(--cpd-color-icon-primary);
             z-index: 2;
         }
-    }
-
-    &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
-        background-color: $alert;
     }
 }
 .mx_MessageComposer_wysiwyg {
@@ -238,10 +189,6 @@ Please see LICENSE files in the repository root for full details.
                 background-color: $accent;
                 z-index: 2;
             }
-        }
-
-        &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
-            background-color: $alert;
         }
     }
 }
@@ -322,6 +269,10 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_MessageComposer_wrapper {
         padding: 0 0 0 25px;
+    }
+
+    .mx_MessageComposer_e2eIconWrapper {
+        left: 0;
     }
 
     &:not(.mx_MessageComposer_e2eStatus) {

@@ -367,9 +367,9 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
-                height="12"
+                height="12px"
                 viewBox="0 0 24 24"
-                width="12"
+                width="12px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -1242,9 +1242,9 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
-                  height="12"
+                  height="12px"
                   viewBox="0 0 24 24"
-                  width="12"
+                  width="12px"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1678,9 +1678,9 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
-                  height="12"
+                  height="12px"
                   viewBox="0 0 24 24"
-                  width="12"
+                  width="12px"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2114,9 +2114,9 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
-                  height="12"
+                  height="12px"
                   viewBox="0 0 24 24"
-                  width="12"
+                  width="12px"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2765,6 +2765,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                     aria-labelledby="_r_g4_"
                     class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                     data-testid="e2e-icon"
+                    style="width: 12px; height: 12px;"
                   >
                     <svg
                       class="mx_E2EIcon_verified"
@@ -3279,9 +3280,9 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                       class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                       color="var(--cpd-color-icon-info-primary)"
                       fill="currentColor"
-                      height="12"
+                      height="12px"
                       viewBox="0 0 24 24"
-                      width="12"
+                      width="12px"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
