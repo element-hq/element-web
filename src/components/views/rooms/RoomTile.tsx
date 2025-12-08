@@ -45,7 +45,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { isKnockDenied } from "../../../utils/membership";
 import SettingsStore from "../../../settings/SettingsStore";
-import { notificationIcons } from "../dialogs/spotlight/RoomResultContextMenus.tsx";
+import { getNotificationIcon } from "../dialogs/spotlight/RoomResultContextMenus.tsx";
 
 interface Props {
     room: Room;
@@ -308,7 +308,7 @@ class RoomTile extends React.PureComponent<Props, State> {
                     isExpanded={!!this.state.notificationsMenuPosition}
                     tabIndex={isActive ? 0 : -1}
                 >
-                    {notificationIcons[state!]}
+                    {getNotificationIcon(state!)}
                 </ContextMenuTooltipButton>
                 {this.state.notificationsMenuPosition && (
                     <RoomNotificationContextMenu

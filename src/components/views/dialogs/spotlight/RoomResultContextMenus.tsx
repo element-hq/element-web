@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, Fragment, useState } from "react";
+import React, { type JSX, Fragment, useState, type ReactNode } from "react";
 import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { ContextMenuTooltipButton } from "../../../../accessibility/context_menu/ContextMenuTooltipButton";
@@ -30,12 +30,15 @@ interface Props {
     room: Room;
 }
 
-export const notificationIcons: Record<RoomNotifState, JSX.Element> = {
-    [RoomNotifState.AllMessages]: <NotificationsIcon />,
-    [RoomNotifState.AllMessagesLoud]: <NotificationsDefaultIcon />,
-    [RoomNotifState.MentionsOnly]: <NotificationsDmIcon />,
-    [RoomNotifState.Mute]: <NotificationsOffIcon />,
-};
+export function getNotificationIcon(state: RoomNotifState): ReactNode {
+    const icons: Record<RoomNotifState, JSX.Element> = {
+        [RoomNotifState.AllMessages]: <NotificationsIcon />,
+        [RoomNotifState.AllMessagesLoud]: <NotificationsDefaultIcon />,
+        [RoomNotifState.MentionsOnly]: <NotificationsDmIcon />,
+        [RoomNotifState.Mute]: <NotificationsOffIcon />,
+    };
+    return icons[state];
+}
 
 export function RoomResultContextMenus({ room }: Props): JSX.Element {
     const [notificationState] = useNotificationState(room);
@@ -106,7 +109,7 @@ export function RoomResultContextMenus({ room }: Props): JSX.Element {
                     title={_t("room_list|notification_options")}
                     isExpanded={notificationMenuPosition !== null}
                 >
-                    {notificationIcons[notificationState!]}
+                    {getNotificationIcon(notificationState!)}
                 </ContextMenuTooltipButton>
             )}
             {generalMenu}
