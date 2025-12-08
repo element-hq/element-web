@@ -3524,7 +3524,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Encerrou uma enquete",
             "sender_ended": "%(senderName)s encerrou uma enquete"
         },
         "m.poll.start": "%(senderName)s começou uma enquete - %(pollQuestion)s",

@@ -3285,7 +3285,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Anketi sonlandırdı",
             "sender_ended": "%(senderName)s anketi sonlandırdı"
         },
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",

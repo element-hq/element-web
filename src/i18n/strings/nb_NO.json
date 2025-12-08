@@ -3496,7 +3496,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Avsluttet en avstemning",
             "sender_ended": "%(senderName)s har avsluttet en avstemning"
         },
         "m.poll.start": "%(senderName)s har startet en avstemning - %(pollQuestion)s",

@@ -3433,7 +3433,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ավարտվեց հարցումը",
             "sender_ended": "%(senderName)s-ն ավարտել է հարցումը"
         },
         "m.poll.start": "%(senderName)s-ը սկսել է հարցում՝ %(pollQuestion)s",
