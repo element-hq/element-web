@@ -44,7 +44,7 @@ exports[`ReportRoomDialog displays admin message 1`] = `
         />
         <span
           class="_message_19upo_85 _help-message_19upo_91"
-          id="radix-_r_8_"
+          id="radix-_r_9_"
         >
           Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.
         </span>
@@ -66,28 +66,34 @@ exports[`ReportRoomDialog displays admin message 1`] = `
 
       </p>
       <div
-        class="mx_SettingsFlag"
+        class="_inline-field_19upo_32"
       >
-        <span
-          class="mx_SettingsFlag_label"
+        <div
+          class="_inline-field-control_19upo_44"
         >
           <div
-            id="mx_LabelledToggleSwitch__r_9_"
+            class="_container_udcm8_10"
+          >
+            <input
+              class="_input_udcm8_24"
+              id="_r_a_"
+              role="switch"
+              type="checkbox"
+            />
+            <div
+              class="_ui_udcm8_34"
+            />
+          </div>
+        </div>
+        <div
+          class="_inline-field-body_19upo_38"
+        >
+          <label
+            class="_label_19upo_59"
+            for="_r_a_"
           >
             Leave room
-          </div>
-        </span>
-        <div
-          aria-checked="false"
-          aria-disabled="false"
-          aria-labelledby="mx_LabelledToggleSwitch__r_9_"
-          class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-          role="switch"
-          tabindex="0"
-        >
-          <div
-            class="mx_ToggleSwitch_ball"
-          />
+          </label>
         </div>
       </div>
       <div

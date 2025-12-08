@@ -2048,7 +2048,6 @@
             "error_update_guest_access": "無法更新此聊天空間的訪客存取權限",
             "error_update_history_visibility": "無法更新此聊天空間紀錄的能見度",
             "guest_access_explainer": "訪客無需帳號即可加入聊天空間。",
-            "guest_access_explainer_public_space": "這可能對公開聊天空間很有用。",
             "guest_access_label": "允許訪客存取",
             "history_visibility_anyone_space": "預覽聊天空間",
             "history_visibility_anyone_space_description": "允許人們在加入前預覽您的聊天空間。",
@@ -2885,7 +2884,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "投票已結束",
             "sender_ended": "%(senderName)s 結束了投票"
         },
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",

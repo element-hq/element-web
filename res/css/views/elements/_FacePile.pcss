@@ -13,23 +13,12 @@ Please see LICENSE files in the repository root for full details.
     border-radius: 100%;
     width: 28px;
     height: 28px;
+    box-sizing: border-box;
+    padding: var(--cpd-space-1x);
     background-color: $panels;
+    color: $tertiary-content;
     display: inline-block;
-
-    &::before {
-        content: "";
-        z-index: 1;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: inherit;
-        width: inherit;
-        background: $tertiary-content;
-        mask-position: center;
-        mask-size: 20px;
-        mask-repeat: no-repeat;
-        mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
-    }
+    z-index: 1;
 }
 
 .mx_FacePile_summary {

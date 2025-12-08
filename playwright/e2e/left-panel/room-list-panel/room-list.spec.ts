@@ -428,7 +428,9 @@ test.describe("Room list", () => {
             await app.settings.closeDialog();
 
             await app.settings.openUserSettings("Notifications");
-            await page.getByText("Show all activity in the room list (dots or number of unread messages)").click();
+            await page
+                .getByRole("switch", { name: "Show all activity in the room list (dots or number of unread messages)" })
+                .check();
             await app.settings.closeDialog();
 
             // Switch to the other room to avoid the notification to be cleared

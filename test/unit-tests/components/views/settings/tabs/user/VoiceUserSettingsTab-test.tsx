@@ -113,10 +113,10 @@ describe("<VoiceUserSettingsTab />", () => {
     });
 
     it("renders audio processing settings", () => {
-        const { getByTestId } = render(getComponent());
-        expect(getByTestId("voice-auto-gain")).toBeTruthy();
-        expect(getByTestId("voice-noise-suppression")).toBeTruthy();
-        expect(getByTestId("voice-echo-cancellation")).toBeTruthy();
+        const { getByRole } = render(getComponent());
+        expect(getByRole("switch", { name: "Automatically adjust the microphone volume" })).toBeTruthy();
+        expect(getByRole("switch", { name: "Noise suppression" })).toBeTruthy();
+        expect(getByRole("switch", { name: "Echo cancellation" })).toBeTruthy();
     });
 
     it("sets and displays audio processing settings", () => {

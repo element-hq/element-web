@@ -16,7 +16,6 @@ import {
     EventType,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LockOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -117,7 +116,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private ref = createRef<HTMLDivElement>();
     private instanceId: number;
 
-    private _voiceRecording: Optional<VoiceMessageRecording>;
+    private _voiceRecording?: VoiceMessageRecording;
 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
@@ -204,11 +203,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
         localStorage.removeItem(this.editorStateKey);
     }
 
-    private get voiceRecording(): Optional<VoiceMessageRecording> {
+    private get voiceRecording(): VoiceMessageRecording | undefined {
         return this._voiceRecording;
     }
 
-    private set voiceRecording(rec: Optional<VoiceMessageRecording>) {
+    private set voiceRecording(rec: VoiceMessageRecording | undefined) {
         if (this._voiceRecording) {
             this._voiceRecording.off(RecordingState.Started, this.onRecordingStarted);
             this._voiceRecording.off(RecordingState.EndingSoon, this.onRecordingEndingSoon);
@@ -330,7 +329,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         window.removeEventListener("beforeunload", this.saveWysiwygEditorState);
         this.saveWysiwygEditorState();
         // clean up our listeners by setting our cached recording to falsy (see internal setter)
-        this.voiceRecording = null;
+        this.voiceRecording = undefined;
     }
 
     private onTombstoneClick = (ev: ButtonEvent): void => {

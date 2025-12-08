@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, RelationType, M_POLL_END } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "./settings/SettingsStore";
@@ -50,6 +50,9 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
  *     hitting the settings store
  */
 export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): boolean {
+    // Hide all poll end events
+    if (M_POLL_END.matches(ev.getType())) return true;
+
     // Accessing the settings store directly can be expensive if done frequently,
     // so we should prefer using cached values if a RoomContext is available
     const isEnabled = ctx

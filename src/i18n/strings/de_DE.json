@@ -2486,7 +2486,6 @@
             "error_update_guest_access": "Gastzutritt zum Space konnte nicht geändert werden",
             "error_update_history_visibility": "Verlaufssichtbarkeit des Space konnte nicht geändert werden",
             "guest_access_explainer": "Gäste ohne Konto können den Space betreten.",
-            "guest_access_explainer_public_space": "Sinnvoll für öffentliche Spaces.",
             "guest_access_label": "Gastzutritt",
             "history_visibility_anyone_space": "Space-Vorschau erlauben",
             "history_visibility_anyone_space_description": "Personen können den Space vor dem Betreten erkunden.",
@@ -3523,7 +3522,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Eine Umfrage beendet",
             "sender_ended": "%(senderName)s hat eine Abstimmung beendet"
         },
         "m.poll.start": "%(senderName)s hat eine Umfrage begonnen – %(pollQuestion)s",

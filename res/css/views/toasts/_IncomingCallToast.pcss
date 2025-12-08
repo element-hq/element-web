@@ -62,17 +62,10 @@ Please see LICENSE files in the repository root for full details.
         height: $closeButtonSize;
         width: $closeButtonSize;
 
-        &::before {
-            content: "";
-
-            mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-
+        svg {
             height: inherit;
             width: inherit;
-            background-color: $secondary-content;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
+            color: $secondary-content;
         }
     }
     .mx_IncomingCallToast_toggleWithLabel {

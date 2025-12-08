@@ -2525,7 +2525,6 @@
             "error_update_guest_access": "Nepodarilo sa aktualizovať hosťovský prístup do tohto priestoru",
             "error_update_history_visibility": "Nepodarilo sa aktualizovať viditeľnosť histórie tohto priestoru",
             "guest_access_explainer": "Hostia sa môžu pripojiť k priestoru bez toho, aby mali konto.",
-            "guest_access_explainer_public_space": "To môže byť užitočné pre verejné priestory.",
             "guest_access_label": "Zapnúť prístup pre hostí",
             "history_visibility_anyone_space": "Prehľad priestoru",
             "history_visibility_anyone_space_description": "Umožnite ľuďom prezrieť si váš priestor predtým, ako sa k vám pripoja.",
@@ -3569,7 +3568,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ukončil anketu",
             "sender_ended": "%(senderName)s ukončil anketu"
         },
         "m.poll.start": "%(senderName)s spustil anketu - %(pollQuestion)s",
@@ -4182,6 +4180,7 @@
         "video_call_using": "Videohovor pomocou:",
         "voice_call": "Hlasový hovor",
         "voice_call_incoming": "Prichádzajúci hlasový hovor",
+        "voice_call_using": "Hlasový hovor pomocou:",
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",

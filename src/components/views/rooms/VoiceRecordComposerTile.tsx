@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Optional } from "matrix-events-sdk";
 
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
@@ -216,7 +215,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
     };
 
-    private bindNewRecorder(recorder: Optional<VoiceMessageRecording>): void {
+    private bindNewRecorder(recorder: VoiceMessageRecording | null): void {
         if (this.state.recorder) {
             this.state.recorder.off(UPDATE_EVENT, this.onRecordingUpdate);
         }

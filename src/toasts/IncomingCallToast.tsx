@@ -10,11 +10,9 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from "react
 import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Button, ToggleInput, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
-import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
-import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
-import { VoiceCallIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CheckIcon, VoiceCallIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { AvatarWithDetails } from "@element-hq/web-shared-components";
 
 import { _t } from "../languageHandler";
@@ -127,7 +125,7 @@ function DeclineCallButtonWithNotificationEvent({
                 kind="primary"
                 destructive
                 disabled={declining}
-                Icon={CrossIcon}
+                Icon={CloseIcon}
                 size="sm"
             >
                 {_t("action|decline")}
@@ -332,7 +330,9 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
                     className="mx_IncomingCallToast_closeButton"
                     onClick={onCloseClick}
                     title={_t("action|close")}
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
             </>
         </TooltipProvider>
     );

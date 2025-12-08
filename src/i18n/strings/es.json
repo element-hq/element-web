@@ -1947,7 +1947,6 @@
             "error_update_guest_access": "No se ha podido cambiar el acceso a este espacio",
             "error_update_history_visibility": "No se ha podido cambiar la visibilidad del historial de este espacio",
             "guest_access_explainer": "Dejar que las personas sin cuenta se unan al espacio.",
-            "guest_access_explainer_public_space": "Esto puede ser útil para espacios públicos.",
             "guest_access_label": "Permitir acceso a personas sin cuenta",
             "history_visibility_anyone_space": "Previsualizar espacio",
             "history_visibility_anyone_space_description": "Permitir que se pueda ver una vista previa del espacio antes de unirse a él.",
@@ -2725,7 +2724,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Cerró una encuesta",
             "sender_ended": "%(senderName)s ha terminado una encuesta"
         },
         "m.poll.start": "%(senderName)s ha empezado una encuesta – %(pollQuestion)s",
