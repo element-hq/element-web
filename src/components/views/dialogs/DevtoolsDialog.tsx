@@ -113,8 +113,16 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
-                    <SettingsField settingKey="Developer.elementCallUrl" level={SettingLevel.DEVICE} />
                 </Form.Root>
+                {/* The settings field needs to be outside `Form.Root` because `SettingsField` will have a inner Form,
+                    Otherwise we end up with a nester `Form` and that prohibits `preventDefault` so setting the value
+                    will reload the page.
+                 */}
+                <SettingsField
+                    settingKey="Developer.elementCallUrl"
+                    level={SettingLevel.DEVICE}
+                    aria-label="elementCallUrl"
+                />
             </BaseTool>
         );
     }

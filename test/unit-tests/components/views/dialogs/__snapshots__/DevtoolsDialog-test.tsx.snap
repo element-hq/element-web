@@ -217,6 +217,10 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </label>
           </div>
         </div>
+      </form>
+      <form
+        class="_root_19upo_16"
+      >
         <div
           class="_field_19upo_26"
         >

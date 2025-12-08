@@ -849,17 +849,17 @@ $left-gutter: 64px;
     }
 
     &.mx_EventTile_e2eIcon_warning::after {
-        mask-image: url("$(res)/img/e2e/warning.svg"); /* (!) in a shield */
+        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
         background-color: $e2e-warning-color; /* red */
     }
 
     &.mx_EventTile_e2eIcon_normal::after {
-        mask-image: url("$(res)/img/e2e/normal.svg"); /* regular shield */
+        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
         background-color: var(--cpd-color-icon-tertiary); /* grey */
     }
 
     &.mx_EventTile_e2eIcon_decryption_failure::after {
-        mask-image: url("$(res)/img/e2e/decryption-failure.svg"); /* key in a circle */
+        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
         background-color: var(--cpd-color-icon-tertiary);
     }
 }

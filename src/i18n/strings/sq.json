@@ -2763,7 +2763,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Përfundoi një pyetësor",
             "sender_ended": "%(senderName)s e përfundoi anketimin"
         },
         "m.poll.start": "%(senderName)s nisi një anketim - %(pollQuestion)s",

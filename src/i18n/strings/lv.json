@@ -2888,7 +2888,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Beidzās aptauja",
             "sender_ended": "%(senderName)s pārtrauca aptauju"
         },
         "m.poll.start": "%(senderName)s uzsāka aptauju- %(pollQuestion)s",

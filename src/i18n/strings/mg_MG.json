@@ -2941,7 +2941,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Namarana ny",
             "sender_ended": "%(nom de l'expéditeur)s dia namarana ny fitsapan-kevitra"
         },
         "m.poll.start": "%(senderName)snanomboka ny fitsapan-kevitra -%(pollQuestion)s",

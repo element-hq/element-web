@@ -2724,7 +2724,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Cerró una encuesta",
             "sender_ended": "%(senderName)s ha terminado una encuesta"
         },
         "m.poll.start": "%(senderName)s ha empezado una encuesta – %(pollQuestion)s",

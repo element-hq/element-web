@@ -51,6 +51,7 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import type Timer from "../../../../src/utils/Timer";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
@@ -366,6 +367,56 @@ describe("TimelinePanel", () => {
                 expect(client.setRoomReadMarkers).not.toHaveBeenCalled();
                 expect(client.sendReadReceipt).toHaveBeenCalledWith(threadEv1, ReceiptType.Read);
             });
+        });
+    });
+
+    describe("enableReadReceiptsAndMarkersOnActivity", () => {
+        it.each([
+            {
+                enabled: false,
+                testName: "should not set up activity timers when disabled",
+                checkCall: (readReceiptTimer: Timer | null, readMarkerTimer: Timer | null) => {
+                    expect(readReceiptTimer).toBeNull();
+                    expect(readMarkerTimer).toBeNull();
+                },
+            },
+            {
+                enabled: true,
+                testName: "should set up activity timers when enabled",
+                checkCall: (readReceiptTimer: Timer | null, readMarkerTimer: Timer | null) => {
+                    expect(readReceiptTimer).toBeTruthy();
+                    expect(readMarkerTimer).toBeTruthy();
+                },
+            },
+        ])("$testName", async ({ enabled, checkCall }) => {
+            const room = mkRoom(client, "roomId");
+            const events = mockEvents(room);
+            const [, timelineSet] = mkTimeline(room, events);
+
+            let timelinePanel: TimelinePanel | null = null;
+
+            render(
+                <TimelinePanel
+                    timelineSet={timelineSet}
+                    manageReadMarkers={true}
+                    manageReadReceipts={true}
+                    enableReadReceiptsAndMarkersOnActivity={enabled}
+                    ref={(ref) => {
+                        timelinePanel = ref;
+                    }}
+                />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            await waitFor(() => expect(timelinePanel).toBeTruthy());
+
+            // Check if the activity timers were set up
+            // @ts-ignore - accessing private property for testing
+            const readReceiptTimer = timelinePanel!.readReceiptActivityTimer;
+            // @ts-ignore - accessing private property for testing
+            const readMarkerTimer = timelinePanel!.readMarkerActivityTimer;
+
+            checkCall(readReceiptTimer, readMarkerTimer);
         });
     });
 

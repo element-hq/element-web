@@ -22,6 +22,8 @@ import {
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
 import { type PollStartEvent, type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
+import PollsIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls";
+import PollsEndIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls-end";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -324,14 +326,18 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             <span className="mx_MPollBody_edited"> ({_t("common|edited")})</span>
         ) : null;
 
+        const PollIcon = poll.isEnded ? PollsEndIcon : PollsIcon;
+        const pollLabel = poll.isEnded ? _t("poll|ended_poll_label") : _t("poll|poll_label");
+
         return (
             <fieldset className="mx_MPollBody">
                 <legend data-testid="pollQuestion">
+                    <PollIcon width="20" height="20" aria-label={pollLabel} />
                     {pollEvent.question.text}
                     {editedSpan}
                 </legend>
                 <div className="mx_MPollBody_allOptions">
-                    {pollEvent.answers.map((answer: PollAnswerSubevent) => {
+                    {pollEvent.answers.map((answer: PollAnswerSubevent, index: number) => {
                         let answerVotes = 0;
 
                         if (showResults) {
@@ -346,6 +352,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                 key={answer.id}
                                 pollId={pollId}
                                 answer={answer}
+                                optionNumber={index + 1}
                                 isChecked={checked}
                                 isEnded={poll.isEnded}
                                 voteCount={answerVotes}
