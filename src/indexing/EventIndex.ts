@@ -26,7 +26,7 @@ import {
     type IMatrixProfile,
     type IResultRoomEvents,
     type SyncStateData,
-    type SyncState,
+    SyncState,
     type TimelineIndex,
     type TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
@@ -46,6 +46,7 @@ import {
     type ISearchArgs,
 } from "./BaseEventIndexManager";
 import { asyncFilter } from "../utils/arrays.ts";
+import { logErrorAndShowErrorDialog } from "../utils/ErrorUtils.tsx";
 
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.
@@ -58,20 +59,49 @@ interface ICrawler {
     cancel(): void;
 }
 
-/*
+/**
  * Event indexing class that wraps the platform specific event indexing.
  */
 export default class EventIndex extends EventEmitter {
-    private crawlerCheckpoints: ICrawlerCheckpoint[] = [];
     private crawler: ICrawler | null = null;
+
+    /**
+     * A list of checkpoints which are awaiting processing by the crawler, once it has done with `currentCheckpoint`.
+     */
+    private crawlerCheckpoints: ICrawlerCheckpoint[] = [];
+
+    /**
+     * The current checkpoint that the crawler is working on.
+     */
     private currentCheckpoint: ICrawlerCheckpoint | null = null;
+
+    /**
+     * True if we need to add the initial checkpoints for encrypted rooms, once we've completed a sync.
+     * This is set if the database is empty when the indexer is first initialized.
+     */
+    private needsInitialCheckpoints = false;
+
+    private readonly logger;
+
+    public constructor() {
+        super();
+
+        this.logger = logger.getChild("EventIndex");
+    }
 
     public async init(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
 
+        // If the index is empty, set a flag so that we add the initial checkpoints once we sync.
+        // We do this check here rather than in `onSync` because, by the time `onSync` is called, there will
+        // have been a few events added to the index.
+        if (await indexManager.isEventIndexEmpty()) {
+            this.needsInitialCheckpoints = true;
+        }
+
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
-        logger.log("EventIndex: Loaded checkpoints", this.crawlerCheckpoints);
+        this.logger.debug("Loaded checkpoints", JSON.stringify(this.crawlerCheckpoints));
 
         this.registerListeners();
     }
@@ -102,9 +132,11 @@ export default class EventIndex extends EventEmitter {
     }
 
     /**
-     * Get crawler checkpoints for the encrypted rooms and store them in the index.
+     * Add crawler checkpoints for all of the encrypted rooms the user is in.
      */
     public async addInitialCheckpoints(): Promise<void> {
+        this.needsInitialCheckpoints = false;
+
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
         const client = MatrixClientPeg.safeGet();
@@ -116,7 +148,7 @@ export default class EventIndex extends EventEmitter {
             Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId)),
         );
 
-        logger.log("EventIndex: Adding initial crawler checkpoints");
+        this.logger.debug("addInitialCheckpoints: starting");
 
         // Gather the prev_batch tokens and create checkpoints for
         // our message crawler.
@@ -124,6 +156,12 @@ export default class EventIndex extends EventEmitter {
             encryptedRooms.map(async (room): Promise<void> => {
                 const timeline = room.getLiveTimeline();
                 const token = timeline.getPaginationToken(Direction.Backward);
+
+                if (!token) {
+                    this.logger.debug(`addInitialCheckpoints: No back-pagination token for room ${room.roomId}"`);
+                    return;
+                }
+                this.logger.debug(`addInitialCheckpoints: Adding initial checkpoints for room ${room.roomId}`);
 
                 const backCheckpoint: ICrawlerCheckpoint = {
                     roomId: room.roomId,
@@ -139,57 +177,47 @@ export default class EventIndex extends EventEmitter {
                 };
 
                 try {
-                    if (backCheckpoint.token) {
-                        await indexManager.addCrawlerCheckpoint(backCheckpoint);
-                        this.crawlerCheckpoints.push(backCheckpoint);
-                    }
+                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
+                    this.crawlerCheckpoints.push(backCheckpoint);
 
-                    if (forwardCheckpoint.token) {
-                        await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-                        this.crawlerCheckpoints.push(forwardCheckpoint);
-                    }
+                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+                    this.crawlerCheckpoints.push(forwardCheckpoint);
                 } catch (e) {
-                    logger.log(
-                        "EventIndex: Error adding initial checkpoints for room",
-                        room.roomId,
-                        backCheckpoint,
-                        forwardCheckpoint,
+                    this.logger.warn(
+                        `addInitialCheckpoints: Error adding initial checkpoints for room ${room.roomId}`,
                         e,
                     );
                 }
             }),
         );
+        this.logger.debug("addInitialCheckpoints: done");
     }
 
-    /*
+    /**
      * The sync event listener.
-     *
-     * The listener has two cases:
-     *     - First sync after start up, check if the index is empty, add
-     *         initial checkpoints, if so. Start the crawler background task.
-     *     - Every other sync, tell the event index to commit all the queued up
-     *         live events
      */
-    private onSync = async (state: SyncState, prevState: SyncState | null, data?: SyncStateData): Promise<void> => {
-        const indexManager = PlatformPeg.get()?.getEventIndexingManager();
-        if (!indexManager) return;
+    private onSync = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
+        if (state != SyncState.Syncing) return;
 
-        if (prevState === "PREPARED" && state === "SYNCING") {
-            // If our indexer is empty we're most likely running Element the
-            // first time with indexing support or running it with an
-            // initial sync. Add checkpoints to crawl our encrypted rooms.
-            const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();
-            if (eventIndexWasEmpty) await this.addInitialCheckpoints();
+        const onSyncInner = async (): Promise<void> => {
+            const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+            if (!indexManager) return;
 
+            // If the index was empty when we first started up, add the initial checkpoints, to back-populate the index.
+            if (this.needsInitialCheckpoints) {
+                await this.addInitialCheckpoints();
+            }
+
+            // Start the crawler if it's not already running.
             this.startCrawler();
-            return;
-        }
 
-        if (prevState === "SYNCING" && state === "SYNCING") {
-            // A sync was done, presumably we queued up some live events,
-            // commit them now.
+            // Commit any queued up live events
             await indexManager.commitLiveEvents();
-        }
+        };
+
+        onSyncInner().catch((e) => {
+            logErrorAndShowErrorDialog("Event indexer threw an unexpected error", e);
+        });
     };
 
     /*
@@ -232,7 +260,7 @@ export default class EventIndex extends EventEmitter {
         if (!MatrixClientPeg.safeGet().isRoomEncrypted(state.roomId)) return;
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
-            logger.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
+            this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
     };
@@ -251,7 +279,7 @@ export default class EventIndex extends EventEmitter {
         try {
             await indexManager.deleteEvent(associatedId);
         } catch (e) {
-            logger.log("EventIndex: Error deleting event from index", e);
+            this.logger.warn("Error deleting event from index", e);
         }
     };
 
@@ -265,7 +293,7 @@ export default class EventIndex extends EventEmitter {
         if (!room) return;
         if (!MatrixClientPeg.safeGet().isRoomEncrypted(room.roomId)) return;
 
-        logger.log("EventIndex: Adding a checkpoint because of a limited timeline", room.roomId);
+        this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
     };
@@ -394,12 +422,12 @@ export default class EventIndex extends EventEmitter {
             direction: Direction.Backward,
         };
 
-        logger.log("EventIndex: Adding checkpoint", checkpoint);
+        this.logger.debug("Adding checkpoint", JSON.stringify(checkpoint));
 
         try {
             await indexManager.addCrawlerCheckpoint(checkpoint);
         } catch (e) {
-            logger.log("EventIndex: Error adding new checkpoint for room", room.roomId, checkpoint, e);
+            this.logger.warn(`Error adding new checkpoint for room ${room.roomId}`, e);
         }
 
         this.crawlerCheckpoints.push(checkpoint);
@@ -460,6 +488,7 @@ export default class EventIndex extends EventEmitter {
                 continue;
             }
 
+            this.logger.debug(`Processing checkpoint ${JSON.stringify(checkpoint)}`);
             this.currentCheckpoint = checkpoint;
             this.emitNewCheckpoint();
 
@@ -481,15 +510,15 @@ export default class EventIndex extends EventEmitter {
                 );
             } catch (e) {
                 if (e instanceof HTTPError && e.httpStatus === 403) {
-                    logger.log(
-                        "EventIndex: Removing checkpoint as we don't have ",
+                    this.logger.debug(
+                        "Removing checkpoint as we don't have ",
                         "permissions to fetch messages from this room.",
-                        checkpoint,
+                        JSON.stringify(checkpoint),
                     );
                     try {
                         await indexManager.removeCrawlerCheckpoint(checkpoint);
                     } catch (e) {
-                        logger.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                        this.logger.warn(`Error removing checkpoint ${JSON.stringify(checkpoint)}:`, e);
                         // We don't push the checkpoint here back, it will
                         // hopefully be removed after a restart. But let us
                         // ignore it for now as we don't want to hammer the
@@ -498,7 +527,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
-                logger.log("EventIndex: Error crawling using checkpoint:", checkpoint, ",", e);
+                this.logger.warn(`Error crawling using checkpoint ${JSON.stringify(checkpoint)}:`, e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
             }
@@ -509,13 +538,13 @@ export default class EventIndex extends EventEmitter {
             }
 
             if (res.chunk.length === 0) {
-                logger.log("EventIndex: Done with the checkpoint", checkpoint);
+                this.logger.debug("Done with the checkpoint", JSON.stringify(checkpoint));
                 // We got to the start/end of our timeline, lets just
                 // delete our checkpoint and go back to sleep.
                 try {
                     await indexManager.removeCrawlerCheckpoint(checkpoint);
                 } catch (e) {
-                    logger.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                    this.logger.warn("Error removing checkpoint", JSON.stringify(checkpoint), e);
                 }
                 continue;
             }
@@ -593,7 +622,7 @@ export default class EventIndex extends EventEmitter {
                     if (eventId) {
                         await indexManager.deleteEvent(eventId);
                     } else {
-                        logger.warn("EventIndex: Redaction event doesn't contain a valid associated event id", ev);
+                        this.logger.warn("Redaction event doesn't contain a valid associated event id", ev);
                     }
                 }
 
@@ -602,10 +631,9 @@ export default class EventIndex extends EventEmitter {
                 // We didn't get a valid new checkpoint from the server, nothing
                 // to do here anymore.
                 if (!newCheckpoint) {
-                    logger.log(
-                        "EventIndex: The server didn't return a valid ",
-                        "new checkpoint, not continuing the crawl.",
-                        checkpoint,
+                    this.logger.debug(
+                        "The server didn't return a valid new checkpoint, not continuing the crawl.",
+                        JSON.stringify(checkpoint),
                     );
                     continue;
                 }
@@ -615,31 +643,29 @@ export default class EventIndex extends EventEmitter {
                 // Let us delete the checkpoint in that case, otherwise push
                 // the new checkpoint to be used by the crawler.
                 if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
-                    logger.log(
-                        "EventIndex: Checkpoint had already all events",
+                    this.logger.debug(
+                        "Checkpoint had already all events",
                         "added, stopping the crawl",
-                        checkpoint,
+                        JSON.stringify(checkpoint),
                     );
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
                     if (eventsAlreadyAdded === true) {
-                        logger.log(
-                            "EventIndex: Checkpoint had already all events",
+                        this.logger.debug(
+                            "Checkpoint had already all events",
                             "added, but continuing due to a full crawl",
-                            checkpoint,
+                            JSON.stringify(checkpoint),
                         );
                     }
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
             } catch (e) {
-                logger.log("EventIndex: Error during a crawl", e);
+                this.logger.warn("Error during a crawl", e);
                 // An error occurred, put the checkpoint back so we
                 // can retry.
                 this.crawlerCheckpoints.push(checkpoint);
             }
         }
-
-        this.crawler = null;
     }
 
     /**
@@ -647,7 +673,14 @@ export default class EventIndex extends EventEmitter {
      */
     public startCrawler(): void {
         if (this.crawler !== null) return;
-        this.crawlerFunc();
+        this.logger.debug("Starting crawler");
+        this.crawlerFunc()
+            .finally(() => {
+                this.crawler = null;
+            })
+            .catch((e) => {
+                this.logger.error("Error in crawler function", e);
+            });
     }
 
     /**
@@ -655,6 +688,7 @@ export default class EventIndex extends EventEmitter {
      */
     public stopCrawler(): void {
         if (this.crawler === null) return;
+        this.logger.debug("Stopping crawler");
         this.crawler.cancel();
     }
 
@@ -732,7 +766,7 @@ export default class EventIndex extends EventEmitter {
         try {
             events = await indexManager.loadFileEvents(loadArgs);
         } catch (e) {
-            logger.log("EventIndex: Error getting file events", e);
+            this.logger.debug("Error getting file events", e);
             return [];
         }
 
@@ -842,11 +876,8 @@ export default class EventIndex extends EventEmitter {
             ret = true;
         }
 
-        logger.log(
-            "EventIndex: Populating file panel with",
-            matrixEvents.length,
-            "events and setting the pagination token to",
-            paginationToken,
+        this.logger.debug(
+            `Populating file panel with ${matrixEvents.length} events and setting the pagination token to ${paginationToken}`,
         );
 
         timeline.setPaginationToken(paginationToken, EventTimeline.BACKWARDS);
@@ -961,7 +992,10 @@ export default class EventIndex extends EventEmitter {
     }
 
     public crawlingRooms(): {
+        /** The rooms that we are currently crawling. */
         crawlingRooms: Set<string>;
+
+        /** All the encrypted rooms known by the MatrixClient. */
         totalRooms: Set<string>;
     } {
         const totalRooms = new Set<string>();
