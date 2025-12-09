@@ -54,6 +54,7 @@ import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
 import { LocalRoom } from "../../../../models/LocalRoom.ts";
+import { CallType } from "matrix-js-sdk/src/webrtc/call.ts";
 
 function RoomHeaderButtons({
     room,
@@ -73,7 +74,7 @@ function RoomHeaderButtons({
         toggleCallMaximized: toggleCall,
         isViewingCall,
         isConnectedToCall,
-        hasActiveCallSession,
+        activeCallSession,
         callOptions,
         showVoiceCallButton,
         showVideoCallButton,
@@ -109,7 +110,8 @@ function RoomHeaderButtons({
             <Button
                 size="sm"
                 onClick={videoClick}
-                Icon={VideoCallIcon}
+                // If we know this is a voice session, show the voice call. All other kinds of call are video calls.
+                Icon={activeCallSession?.type === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
                 className="mx_RoomHeader_join_button"
                 disabled={!!videoCallDisabledReason}
                 color="primary"
@@ -303,7 +305,7 @@ function RoomHeaderButtons({
 
             {isViewingCall && <CallGuestLinkButton room={room} />}
 
-            {hasActiveCallSession && !isConnectedToCall && !isViewingCall ? (
+            {activeCallSession && !isConnectedToCall && !isViewingCall ? (
                 joinCallButton
             ) : (
                 <>
