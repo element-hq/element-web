@@ -39,7 +39,7 @@ import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
-import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
+import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
@@ -230,7 +230,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
-    if (opts.joinRule === JoinRule.Knock) {
+    const defaultRoomVersion = (await client.getCapabilities())["m.room_versions"]?.default ?? "1";
+
+    if (opts.joinRule === JoinRule.Knock && !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)) {
         createOpts.room_version = PreferredRoomVersions.KnockRooms;
     }
 
@@ -238,7 +240,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
 
         if (opts.joinRule === JoinRule.Restricted) {
-            createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
+            if (!doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)) {
+                createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
+            }
 
             createOpts.initial_state.push({
                 type: EventType.RoomJoinRules,
