@@ -268,7 +268,7 @@
         "mini-css-extract-plugin": "2.9.2",
         "minimist": "^1.2.6",
         "modernizr": "^3.12.0",
-        "node-fetch": "^2.6.7",
+        "node-fetch": "^3.0.0",
         "patch-package": "^8.0.0",
         "playwright-core": "^1.51.0",
         "postcss": "8.4.46",
