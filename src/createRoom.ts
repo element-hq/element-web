@@ -165,12 +165,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                     ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
                     [JitsiCall.MEMBER_EVENT_TYPE]: 0,
-                    // Make widgets immutable, even to admins
-                    "im.vector.modular.widgets": 200,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a widget
-                    [client.getSafeUserId()]: 200,
                 },
             };
         } else if (opts.roomType === RoomType.UnstableCall) {
@@ -179,12 +173,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                     ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
                     [ElementCallMemberEventType.name]: 0,
-                    // Make calls immutable, even to admins
-                    [ElementCallEventType.name]: 200,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a call
-                    [client.getSafeUserId()]: 200,
                 },
             };
         }
@@ -194,8 +182,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 ...DEFAULT_EVENT_POWER_LEVELS,
                 // It should always (including non video rooms) be possible to join a group call.
                 [ElementCallMemberEventType.name]: 0,
-                // Make sure only admins can enable it (DEPRECATED)
-                [ElementCallEventType.name]: 100,
             },
         };
     }
@@ -358,15 +344,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             if (opts.roomType === RoomType.ElementVideo) {
                 // Set up this video room with a Jitsi call
                 await JitsiCall.create(await room);
-
-                // Reset our power level back to admin so that the widget becomes immutable
-                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             } else if (opts.roomType === RoomType.UnstableCall) {
                 // Set up this video room with an Element call
                 ElementCall.create(await room);
-
-                // Reset our power level back to admin so that the call becomes immutable
-                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             }
         })
         .then(
