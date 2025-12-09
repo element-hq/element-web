@@ -529,7 +529,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         since: string | undefined,
     ): Generator<IRoomEvent, void, void> {
         let resultCount: number = 0;
-        const events = [...room.getLiveTimeline().getEvents()].reverse(); // timelines are most recent last
+        const events = [...room.getLiveTimeline().getEvents()]; // timelines are most recent last
         while (events.length && resultCount < limit) {
             const ev = events.pop()!;
             if (since !== undefined && ev.getId() === since) break;
