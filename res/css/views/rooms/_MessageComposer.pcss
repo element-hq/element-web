@@ -38,11 +38,6 @@ Please see LICENSE files in the repository root for full details.
     font-weight: bold;
 }
 
-.mx_MessageComposer_autocomplete_wrapper {
-    position: relative;
-    height: 0;
-}
-
 .mx_MessageComposer_row {
     display: flex;
     flex-direction: row;
@@ -67,19 +62,20 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_MessageComposer_composecontrols {
-    width: 100%;
-}
 .mx_MessageComposer_e2eIconWrapper {
     height: 12px; /* Match the height of the E2E icon for alignment */
-}
-.mx_MessageComposer_e2eIcon.mx_E2EIcon {
+    width: 12px;
     position: absolute;
     left: 20px;
+    top: 22px;
     margin-right: 0; /* Counteract the E2EIcon class */
     margin-left: 3px; /* Counteract the E2EIcon class */
-    width: 12px;
-    height: 12px;
+
+    .mx_MessageComposer_e2eIcon {
+        margin: 0;
+        width: inherit;
+        height: inherit;
+    }
 }
 
 .mx_MessageComposer_noperm_error {
@@ -90,13 +86,6 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.mx_MessageComposer_input_wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    cursor: text;
 }
 
 .mx_MessageComposer_input {
@@ -145,44 +134,15 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_MessageComposer_editor {
-    width: 100%;
-    max-height: 120px;
-    min-height: 19px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    word-break: break-word;
-
-    /* FIXME: rather unpleasant hack to get rid of <p/> margins. */
-    /* really we should be mixing in markdown-body from github-markdown-css instead */
-    > :first-child {
-        margin-top: 0 !important;
-    }
-
-    > :last-child {
-        margin-bottom: 0 !important;
-    }
-}
-
-@keyframes visualbell {
-    from {
-        background-color: $visual-bell-bg-color;
-    }
-    to {
-        background-color: $background;
-    }
-}
-
-.mx_MessageComposer_input_error {
-    animation: 0.2s visualbell;
-}
-
 .mx_MessageComposer_button_highlight {
     @mixin composerButtonHighLight;
 }
 
 .mx_MessageComposer_button {
     @mixin composerButton 50%, var(--cpd-color-icon-primary), var(--cpd-color-bg-subtle-primary);
+    padding: 3px;
+    height: 20px;
+    width: 20px;
 
     &:last-child {
         margin-right: auto;
@@ -199,8 +159,9 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
-        background-color: $alert;
+    svg {
+        width: inherit;
+        height: inherit;
     }
 }
 .mx_MessageComposer_wysiwyg {
@@ -237,67 +198,34 @@ Please see LICENSE files in the repository root for full details.
                 z-index: 2;
             }
         }
-
-        &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
-            background-color: $alert;
-        }
     }
 }
 
-.mx_MessageComposer_upload::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/attachment.svg");
-}
+.mx_MessageComposer_buttonMenu {
+    width: 24px;
+    height: 24px;
+    padding: 1px;
 
-.mx_MessageComposer_poll::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/polls.svg");
-}
-
-.mx_MessageComposer_voiceMessage::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/mic-on-solid.svg");
-}
-
-.mx_MessageComposer_plain_text::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/text-formatting.svg");
-}
-
-.mx_MessageComposer_rich_text::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/text-formatting.svg");
-}
-
-.mx_MessageComposer_location::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/location-pin-solid.svg");
-}
-
-.mx_MessageComposer_stickers::before {
-    mask-image: url("$(res)/img/element-icons/room/composer/sticker.svg");
-}
-
-.mx_MessageComposer_buttonMenu::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
+    svg {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
-    width: 32px;
-    height: 32px;
+    padding: var(--cpd-space-2x);
     border-radius: 100%;
     background-color: var(--cpd-color-icon-accent-tertiary);
+    height: 16px;
+    width: 16px;
 
-    &::before {
-        position: absolute;
-        height: 16px;
-        width: 16px;
-        top: 8px;
-        left: 9px;
+    svg {
+        height: inherit;
+        width: inherit;
 
-        mask-image: url("@vector-im/compound-design-tokens/icons/send-solid.svg");
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        mask-position: center;
-
-        background-color: var(--cpd-color-icon-on-solid-primary);
-        content: "";
+        color: var(--cpd-color-icon-on-solid-primary);
     }
 }
 
@@ -320,6 +248,10 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_MessageComposer_wrapper {
         padding: 0 0 0 25px;
+    }
+
+    .mx_MessageComposer_e2eIconWrapper {
+        left: 0;
     }
 
     &:not(.mx_MessageComposer_e2eStatus) {
