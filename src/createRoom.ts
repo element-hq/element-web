@@ -43,7 +43,7 @@ import { waitForMember } from "./utils/membership";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
-import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
+import { ElementCallMemberEventType } from "./call-types";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
