@@ -39,9 +39,22 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
         <span>
           Verification status: 
           <div
-            class="mx_E2EIcon mx_E2EIcon_normal mx_E2EIcon_inline"
+            class="mx_E2EIcon mx_E2EIcon_inline"
             data-testid="e2e-icon"
-          />
+          >
+            <svg
+              class="mx_E2EIcon_normal"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+              />
+            </svg>
+          </div>
            Signed by owner
         </span>
       </li>
@@ -130,12 +143,21 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
         <span>
           Verification status: 
           <div
-            class="mx_E2EIcon mx_E2EIcon_warning mx_E2EIcon_inline"
+            class="mx_E2EIcon mx_E2EIcon_inline"
             data-testid="e2e-icon"
           >
-            <div
-              class="mx_E2EIcon_normal"
-            />
+            <svg
+              class="mx_E2EIcon_warning"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+              />
+            </svg>
           </div>
            Not signed by owner
         </span>
@@ -225,12 +247,23 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
         <span>
           Verification status: 
           <div
-            class="mx_E2EIcon mx_E2EIcon_verified mx_E2EIcon_inline"
+            class="mx_E2EIcon mx_E2EIcon_inline"
             data-testid="e2e-icon"
           >
-            <div
-              class="mx_E2EIcon_normal"
-            />
+            <svg
+              class="mx_E2EIcon_verified"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M11.106 2.447a2 2 0 0 1 1.789 0l6 3A2 2 0 0 1 20 7.237V12c0 6.742-5.773 9.246-7.51 9.846-.32.111-.66.111-.98 0C9.774 21.246 4 18.743 4 12V7.236a2 2 0 0 1 1.105-1.789zm4.601 6.846a1 1 0 0 0-1.414 0L11 12.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 0-1.414"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
            Verified by cross-signing
         </span>
@@ -323,12 +356,23 @@ exports[`<Users /> should render a single user 1`] = `
         <span>
           Verification status: 
           <div
-            class="mx_E2EIcon mx_E2EIcon_verified mx_E2EIcon_inline"
+            class="mx_E2EIcon mx_E2EIcon_inline"
             data-testid="e2e-icon"
           >
-            <div
-              class="mx_E2EIcon_normal"
-            />
+            <svg
+              class="mx_E2EIcon_verified"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M11.106 2.447a2 2 0 0 1 1.789 0l6 3A2 2 0 0 1 20 7.237V12c0 6.742-5.773 9.246-7.51 9.846-.32.111-.66.111-.98 0C9.774 21.246 4 18.743 4 12V7.236a2 2 0 0 1 1.105-1.789zm4.601 6.846a1 1 0 0 0-1.414 0L11 12.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 0-1.414"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
            Verified
         </span>
@@ -344,12 +388,23 @@ exports[`<Users /> should render a single user 1`] = `
             class="mx_DevTools_button"
           >
             <div
-              class="mx_E2EIcon mx_E2EIcon_verified mx_E2EIcon_inline"
+              class="mx_E2EIcon mx_E2EIcon_inline"
               data-testid="e2e-icon"
             >
-              <div
-                class="mx_E2EIcon_normal"
-              />
+              <svg
+                class="mx_E2EIcon_verified"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  d="M11.106 2.447a2 2 0 0 1 1.789 0l6 3A2 2 0 0 1 20 7.237V12c0 6.742-5.773 9.246-7.51 9.846-.32.111-.66.111-.98 0C9.774 21.246 4 18.743 4 12V7.236a2 2 0 0 1 1.105-1.789zm4.601 6.846a1 1 0 0 0-1.414 0L11 12.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 0-1.414"
+                  fill-rule="evenodd"
+                />
+              </svg>
             </div>
             VERIFIED
           </button>
@@ -359,9 +414,22 @@ exports[`<Users /> should render a single user 1`] = `
             class="mx_DevTools_button"
           >
             <div
-              class="mx_E2EIcon mx_E2EIcon_normal mx_E2EIcon_inline"
+              class="mx_E2EIcon mx_E2EIcon_inline"
               data-testid="e2e-icon"
-            />
+            >
+              <svg
+                class="mx_E2EIcon_normal"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                />
+              </svg>
+            </div>
             SIGNED
           </button>
         </li>
@@ -370,12 +438,21 @@ exports[`<Users /> should render a single user 1`] = `
             class="mx_DevTools_button"
           >
             <div
-              class="mx_E2EIcon mx_E2EIcon_warning mx_E2EIcon_inline"
+              class="mx_E2EIcon mx_E2EIcon_inline"
               data-testid="e2e-icon"
             >
-              <div
-                class="mx_E2EIcon_normal"
-              />
+              <svg
+                class="mx_E2EIcon_warning"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
             </div>
             UNSIGNED
           </button>
