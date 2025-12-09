@@ -39,7 +39,6 @@ import {
     type StateEvents,
     type TimelineEvents,
     Room,
-    MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
