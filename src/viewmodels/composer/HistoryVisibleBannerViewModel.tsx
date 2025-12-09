@@ -23,7 +23,14 @@ export class HistoryVisibleBannerViewModel
     extends BaseViewModel<HistoryVisibleBannerViewSnapshot, Props>
     implements HistoryVisibleBannerViewModelInterface
 {
+    /**
+     * Watcher ID for the "feature_share_history_on_invite" setting.
+     */
     private readonly featureWatcher: string;
+
+    /**
+     * Watcher ID for the "acknowledgedHistoryVisibility" setting specific to the room.
+     */
     private readonly acknowledgedWatcher: string;
 
     private static readonly computeSnapshot = (room: Room): HistoryVisibleBannerViewSnapshot => {
