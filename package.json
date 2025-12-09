@@ -117,7 +117,7 @@
         "highlight.js": "^11.3.1",
         "html-entities": "^2.0.0",
         "html-react-parser": "^5.2.2",
-        "is-ip": "^3.1.0",
+        "is-ip": "^5.0.0",
         "js-xxhash": "^5.0.0",
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
