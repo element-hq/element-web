@@ -22,8 +22,10 @@ export type ListContext<Context> = {
     context: Context;
 };
 
-export interface IListViewProps<Item, Context>
-    extends Omit<VirtuosoProps<Item, ListContext<Context>>, "data" | "itemContent" | "context"> {
+export interface IListViewProps<Item, Context> extends Omit<
+    VirtuosoProps<Item, ListContext<Context>>,
+    "data" | "itemContent" | "context"
+> {
     /**
      * The array of items to display in the virtualized list.
      * Each item will be passed to getItemComponent for rendering.
