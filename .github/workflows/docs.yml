@@ -17,18 +17,18 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Fetch element-desktop
-              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   repository: element-hq/element-desktop
                   path: element-desktop
 
             - name: Fetch element-web
-              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   path: element-web
 
             - name: Fetch matrix-js-sdk
-              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk

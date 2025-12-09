@@ -41,7 +41,7 @@ jobs:
             REPOS: matrix-js-sdk element-web element-desktop
         steps:
             - name: Checkout Element Desktop
-              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               if: inputs.element-desktop
               with:
                   repository: element-hq/element-desktop
@@ -51,7 +51,7 @@ jobs:
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
             - name: Checkout Element Web
-              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               if: inputs.element-web
               with:
                   repository: element-hq/element-web
@@ -61,7 +61,7 @@ jobs:
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
             - name: Checkout Matrix JS SDK
-              uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               if: inputs.matrix-js-sdk
               with:
                   repository: matrix-org/matrix-js-sdk
