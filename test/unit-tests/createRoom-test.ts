@@ -212,6 +212,80 @@ describe("createRoom", () => {
             }),
         );
     });
+
+    describe("room versions", () => {
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("should use the correct room version for knocking when default does not support it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "1",
+                    available: {
+                        [PreferredRoomVersions.KnockRooms]: RoomVersionStability.Stable,
+                        "1": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { joinRule: JoinRule.Knock });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    room_version: PreferredRoomVersions.KnockRooms,
+                }),
+            );
+        });
+        it("should use the default room version for knocking when default supports it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "12",
+                    available: {
+                        [PreferredRoomVersions.KnockRooms]: RoomVersionStability.Stable,
+                        "12": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { joinRule: JoinRule.Knock });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    room_version: expect.anything(),
+                }),
+            );
+        });
+        it("should use the correct room version for restricted join rules when default does not support it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "1",
+                    available: {
+                        [PreferredRoomVersions.RestrictedRooms]: RoomVersionStability.Stable,
+                        "1": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { parentSpace: mkRoom(client, "!parent"), joinRule: JoinRule.Restricted });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    room_version: PreferredRoomVersions.RestrictedRooms,
+                }),
+            );
+        });
+        it("should use the default room version for restricted join rules when default supports it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "12",
+                    available: {
+                        [PreferredRoomVersions.RestrictedRooms]: RoomVersionStability.Stable,
+                        "12": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { parentSpace: mkRoom(client, "!parent"), joinRule: JoinRule.Restricted });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    room_version: expect.anything(),
+                }),
+            );
+        });
+    });
 });
 
 describe("canEncryptToAllUsers", () => {
