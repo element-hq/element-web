@@ -1190,10 +1190,10 @@
   dependencies:
     keyv "^5.5.3"
 
-"@casualbot/jest-sonar-reporter@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@casualbot/jest-sonar-reporter/-/jest-sonar-reporter-2.4.0.tgz#6d072b06585c1b32075306ffb6a491630bdc4c85"
-  integrity sha512-RTLup4WsQsLDlJYb01IjW2rMGcVq9F732VME2Qs1MxEgYaBcNZoI10ac+DwNOb8Rd3vP/ghrVZMoalMyn6isBg==
+"@casualbot/jest-sonar-reporter@2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@casualbot/jest-sonar-reporter/-/jest-sonar-reporter-2.5.0.tgz#1c5efc189d57422300034b3551287321ac4d093f"
+  integrity sha512-2/kaSndRYHPqxrnWLszHCzKD5kkmoDq9X54x68ghSxLWzLDEwKzTRiJcRsjRHtqOeMJmwf0EgS/nuv/1BDGI8g==
   dependencies:
     mkdirp "1.0.4"
     uuid "8.3.2"
