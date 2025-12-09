@@ -37,6 +37,7 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
+import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 
 export enum PlatformCallType {
     ElementCall,
@@ -44,8 +45,28 @@ export enum PlatformCallType {
     LegacyCall,
 }
 
+/**
+ * Determine if the client is likely to support Element Call.
+ * Element Call requires a livekit "focus", which is configured on the server.
+ * Without a focus, Element Call will not succeed to create a call.
+ * @returns `true` if creating a call is possible.
+ */
+export function useSeverHasElementCallFocus(): boolean {
+    const client = useMatrixClientContext();
+    // See https://github.com/matrix-org/matrix-spec-proposals/blob/d61969a9a3696b6c54d7987b1643b5bc03670927/proposals/4143-matrix-rtc.md#discovery-of-foci-using-well-knownmatrixclient
+    // This well-known option has since been removed from the spec but is still the current mechanism Element Call uses to determine
+    // foci.
+    // A future change here would be to request transports from the server, but this is not implemented by Call or the JS-SDK yet.
+    const foci = client.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
+    return (
+        Array.isArray(foci) &&
+        // Basic test to ensure a config that looks sensible.
+        foci.find((transport) => transport.type === "livekit" && "livekit_service_url" in transport)
+    );
+}
+
 export const getPlatformCallTypeProps = (
-    platformCallType: PlatformCallType,
+    platformCallType?: PlatformCallType,
 ): {
     label: string;
     children?: ReactNode;
@@ -67,6 +88,8 @@ export const getPlatformCallTypeProps = (
                 label: _t("voip|legacy_call"),
                 analyticsName: "WebVoipOptionLegacy",
             };
+        default:
+            throw Error(`Unexpected PlatformCallType ${platformCallType}`);
     }
 };
 
@@ -87,13 +110,13 @@ export const useRoomCall = (
     room: Room | LocalRoom,
 ): {
     voiceCallDisabledReason: string | null;
-    voiceCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
+    voiceCallClick(evt: React.MouseEvent | undefined, selectedType?: PlatformCallType): void;
     videoCallDisabledReason: string | null;
-    videoCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
+    videoCallClick(evt: React.MouseEvent | undefined, selectedType?: PlatformCallType): void;
     toggleCallMaximized: () => void;
     isViewingCall: boolean;
     isConnectedToCall: boolean;
-    hasActiveCallSession: boolean;
+    activeCallSession: {type: CallType}|null;
     callOptions: PlatformCallType[];
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
@@ -106,6 +129,7 @@ export const useRoomCall = (
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
+    const serverIsConfiguredForElementCall = useSeverHasElementCallFocus();
 
     const hasLegacyCall = useEventEmitterState(
         LegacyCallHandler.instance,
@@ -133,10 +157,12 @@ export const useRoomCall = (
     // room
     const memberCount = useRoomMemberCount(room);
 
-    const [mayEditWidgets, mayCreateElementCalls] = useRoomState(room, () => [
+    const [mayEditWidgets, mayCreateElementCallState] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
         room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
     ]);
+
+    const mayCreateElementCalls = mayCreateElementCallState && serverIsConfiguredForElementCall;
 
     // The options provided to the RoomHeader.
     // If there are multiple options, the user will be prompted to choose.
@@ -167,6 +193,7 @@ export const useRoomCall = (
         groupCallsEnabled,
         hasGroupCall,
         mayCreateElementCalls,
+        serverIsConfiguredForElementCall,
         useElementCallExclusively,
         groupCall?.widget.type,
     ]);
@@ -211,6 +238,10 @@ export const useRoomCall = (
         if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
             return State.NoPermission;
         }
+        // Catch-all for just not having any call options available.
+        if (!callOptions.length) {
+            return State.NoPermission;
+        }
         return State.NoCall;
     }, [
         callOptions,
@@ -226,7 +257,7 @@ export const useRoomCall = (
     ]);
 
     const voiceCallClick = useCallback(
-        (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
+        (evt: React.MouseEvent | undefined, callPlatformType?: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
@@ -237,7 +268,7 @@ export const useRoomCall = (
         [promptPinWidget, room, widget],
     );
     const videoCallClick = useCallback(
-        (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
+        (evt: React.MouseEvent | undefined, callPlatformType?: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
@@ -307,7 +338,7 @@ export const useRoomCall = (
         toggleCallMaximized: toggleCallMaximized,
         isViewingCall: isViewingCall,
         isConnectedToCall: isConnectedToCall,
-        hasActiveCallSession: hasActiveCallSession,
+        activeCallSession: groupCall ? { type: groupCall?.callType  } : null,
         callOptions,
         showVoiceCallButton: !hideVoiceCallButton,
         showVideoCallButton: !hideVideoCallButton,
