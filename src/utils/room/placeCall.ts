@@ -26,7 +26,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 export const placeCall = async (
     room: Room,
     callType: CallType,
-    platformCallType: PlatformCallType,
+    platformCallType?: PlatformCallType,
     skipLobby: boolean | undefined,
     voiceOnly: boolean,
 ): Promise<void> => {
