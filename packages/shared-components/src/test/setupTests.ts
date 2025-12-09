@@ -10,6 +10,12 @@ import fetchMock from "fetch-mock-jest";
 import { setLanguage } from "../../src/utils/i18n";
 import en from "../../../../src/i18n/strings/en_EN.json";
 
+// polyfilling TextEncoder as it is not available on JSDOM
+// view https://github.com/facebook/jest/issues/9983
+global.TextEncoder = TextEncoder;
+// @ts-ignore
+global.TextDecoder = TextDecoder;
+
 export function setupLanguageMock(): void {
     fetchMock
         .get("/i18n/languages.json", {
