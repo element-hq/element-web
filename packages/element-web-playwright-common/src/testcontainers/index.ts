@@ -13,4 +13,4 @@ export {
     MatrixAuthenticationServiceContainer,
     StartedMatrixAuthenticationServiceContainer,
 } from "./mas.js";
-export { MailpitClient, MailpitContainer, StartedMailpitContainer } from "./mailpit.js";
+export { type MailpitClient, MailpitContainer, StartedMailpitContainer } from "./mailpit.js";
