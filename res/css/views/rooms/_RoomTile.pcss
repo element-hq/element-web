@@ -105,33 +105,21 @@ Please see LICENSE files in the repository root for full details.
     /* The context menu buttons are hidden by default */
     .mx_RoomTile_menuButton,
     .mx_RoomTile_notificationsButton {
-        width: 20px;
-        min-width: 20px; /* yay flex */
-        height: 20px;
+        width: 16px;
+        height: 16px;
+        padding: var(--cpd-space-0-5x);
+        flex-shrink: 0;
         margin-top: auto;
         margin-bottom: auto;
         position: relative;
         display: none;
 
         svg {
-            width: 16px;
-            height: 16px;
-            padding: var(--cpd-space-0-5x);
+            width: inherit;
+            height: inherit;
+            display: block;
             color: var(--cpd-color-icon-primary);
         }
-    }
-
-    .mx_RoomTile_notificationsButton::before {
-        top: 2px;
-        left: 2px;
-        content: "";
-        width: 16px;
-        height: 16px;
-        position: absolute;
-        mask-position: center;
-        mask-size: contain;
-        mask-repeat: no-repeat;
-        background: var(--cpd-color-icon-primary);
     }
 
     /* If the room has an overriden notification setting then we always show the notifications menu button */
