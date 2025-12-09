@@ -32,6 +32,7 @@ interface IOptionListProps {
 }
 
 interface IOptionProps extends React.ComponentProps<typeof MenuItem> {
+    icon?: ReactNode;
     iconClassName?: string;
     isDestructive?: boolean;
 }
@@ -114,6 +115,7 @@ export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
     label,
     className,
     iconClassName,
+    icon,
     children,
     isDestructive,
     ...props
@@ -129,6 +131,7 @@ export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
             label={label}
         >
             {iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />}
+            {icon}
             <span className="mx_IconizedContextMenu_label">{label}</span>
             {children}
         </MenuItem>
