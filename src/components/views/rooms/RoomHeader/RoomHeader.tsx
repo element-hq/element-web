@@ -21,6 +21,7 @@ import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/publi
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Flex, Box } from "@element-hq/web-shared-components";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
@@ -54,7 +55,6 @@ import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
 import { LocalRoom } from "../../../../models/LocalRoom.ts";
-import { CallType } from "matrix-js-sdk/src/webrtc/call.ts";
 
 function RoomHeaderButtons({
     room,
