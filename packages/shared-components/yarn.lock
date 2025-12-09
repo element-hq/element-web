@@ -353,18 +353,18 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@element-hq/element-web-module-api@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.8.0.tgz#95aa4ec22609cf0f4a7f24274473af0645a16f2a"
-  integrity sha512-lMiDA9ubP3mZZupIMT8T3wS0riX30rYZj3pFpdP4cfZhkWZa3FJFStokAy5OnaHyENC7Px1cqkBGqilOWewY/A==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.9.0.tgz#2e4fcc8809418c8670d4f0576bc4a9a235bc6c50"
+  integrity sha512-Ao/V9w+wysZK4bh61LlKlznF10n2ZbD6KcUI46/zUMttXbmJn3ahvbzhEpwYcD+Cjy3ag5ycxLIIGkKV/fncXg==
 
 "@element-hq/element-web-playwright-common@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-2.0.0.tgz#30cf741a33c69540b4bc434f5349d0fe900bc611"
-  integrity sha512-axrWlPzP/OljYq53cefo9hha0SGDDu4HeM+sgevgbZSFSms8LsdMsMCyRyUcVBiGYb1xdKmM3RUsWOw5//eE+A==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-2.1.0.tgz#86e8a5632f8cc8bb393a1ec1b793a6278cd5b2c7"
+  integrity sha512-Ah9aioownR5OxAX7IDzys7wqyFmojruqgiRr2oUTLbPA5Y6jUSKWdAu5AqGvi+PYr0kG6zQfdsruhe5FXW9YuQ==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
     "@testcontainers/postgresql" "^11.0.0"
-    glob "^11.0.3"
+    glob "^11.1.0"
     lodash-es "^4.17.21"
     mailpit-api "^1.2.0"
     strip-ansi "^7.1.0"
@@ -3978,14 +3978,14 @@ glob@^10.3.10:
     package-json-from-dist "^1.0.0"
     path-scurry "^1.11.1"
 
-glob@^11.0.3:
-  version "11.0.3"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-11.0.3.tgz#9d8087e6d72ddb3c4707b1d2778f80ea3eaefcd6"
-  integrity sha512-2Nim7dha1KVkaiF4q6Dj+ngPPMdfvLJEOpZk/jKiUAkqKebpGAWQXAq9z1xu9HKu5lWfqw/FASuccEjyznjPaA==
+glob@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-11.1.0.tgz#4f826576e4eb99c7dad383793d2f9f08f67e50a6"
+  integrity sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==
   dependencies:
     foreground-child "^3.3.1"
     jackspeak "^4.1.1"
-    minimatch "^10.0.3"
+    minimatch "^10.1.1"
     minipass "^7.1.2"
     package-json-from-dist "^1.0.0"
     path-scurry "^2.0.0"
@@ -5284,7 +5284,7 @@ minimatch@10.0.3:
   dependencies:
     "@isaacs/brace-expansion" "^5.0.0"
 
-minimatch@^10.0.3:
+minimatch@^10.1.1:
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-10.1.1.tgz#e6e61b9b0c1dcab116b5a7d1458e8b6ae9e73a55"
   integrity sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==
@@ -5825,9 +5825,9 @@ prelude-ls@^1.2.1:
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
 prettier@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.6.2.tgz#ccda02a1003ebbb2bfda6f83a074978f608b9393"
-  integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.7.4.tgz#d2f8335d4b1cec47e1c8098645411b0c9dff9c0f"
+  integrity sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==
 
 pretty-format@30.2.0, pretty-format@^30.0.0:
   version "30.2.0"
@@ -7053,9 +7053,9 @@ vite-plugin-node-polyfills@^0.24.0:
     node-stdlib-browser "^1.2.0"
 
 vite@^7.1.9:
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-7.2.4.tgz#a3a09c7e25487612ecc1119c7d412c73da35bd4e"
-  integrity sha512-NL8jTlbo0Tn4dUEXEsUg8KeyG/Lkmc4Fnzb8JXN/Ykm9G4HNImjtABMJgkQoVjOBN/j2WAwDTRytdqJbZsah7w==
+  version "7.2.7"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-7.2.7.tgz#0789a4c3206081699f34a9ecca2dda594a07478e"
+  integrity sha512-ITcnkFeR3+fI8P1wMgItjGrR10170d8auB4EpMLPqmx6uxElH3a/hHGQabSHKdqd4FXWO1nFIp9rRn7JQ34ACQ==
   dependencies:
     esbuild "^0.25.0"
     fdir "^6.5.0"
