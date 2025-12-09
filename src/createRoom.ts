@@ -159,20 +159,19 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         };
 
         // Video rooms require custom power levels
-        if (opts.roomType === RoomType.ElementVideo) {
+        if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
                     ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
-                    [JitsiCall.MEMBER_EVENT_TYPE]: 0,
-                },
-            };
-        } else if (opts.roomType === RoomType.UnstableCall) {
-            createOpts.power_level_content_override = {
-                events: {
-                    ...DEFAULT_EVENT_POWER_LEVELS,
-                    // Allow all users to send call membership updates
-                    [ElementCallMemberEventType.name]: 0,
+                    [opts.roomType === RoomType.ElementVideo
+                        ? JitsiCall.MEMBER_EVENT_TYPE
+                        : ElementCallMemberEventType.name]: 0,
+                    // Ensure all but admins can't change widgets
+                    // A previous version of the code prevented even administrators
+                    // from changing this, but this is not possible now that room creators
+                    // have an immutable power level
+                    ["im.vector.modular.widgets"]: 100,
                 },
             };
         }
@@ -218,7 +217,10 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
 
     const defaultRoomVersion = (await client.getCapabilities())["m.room_versions"]?.default ?? "1";
 
-    if (opts.joinRule === JoinRule.Knock && !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)) {
+    if (
+        opts.joinRule === JoinRule.Knock &&
+        !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)
+    ) {
         createOpts.room_version = PreferredRoomVersions.KnockRooms;
     }
 
