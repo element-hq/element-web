@@ -98,7 +98,7 @@
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-en": "^3.0.2",
-        "await-lock": "^2.1.0",
+        "await-lock": "^3.0.0",
         "bloom-filters": "^3.0.3",
         "blurhash": "^2.0.3",
         "browserslist": "^4.23.2",
