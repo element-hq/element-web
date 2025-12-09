@@ -39,6 +39,7 @@ import {
     type StateEvents,
     type TimelineEvents,
     Room,
+    MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -530,9 +531,7 @@ export class ElementWidgetDriver extends WidgetDriver {
     ): Generator<IRoomEvent, void, void> {
         let resultCount: number = 0;
         const events = [...room.getLiveTimeline().getEvents()]; // timelines are most recent last
-        while (events.length && resultCount < limit) {
-            const ev = events.pop()!;
-            if (since !== undefined && ev.getId() === since) break;
+        for (let ev = events.pop(); ev && resultCount < limit && ev.getId() !== since; ev = events.pop()) {
             if (ev.getType() !== eventType) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
             if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
