@@ -116,7 +116,7 @@ export const useRoomCall = (
     toggleCallMaximized: () => void;
     isViewingCall: boolean;
     isConnectedToCall: boolean;
-    activeCallSession: {type: CallType}|null;
+    hasActiveCallSession: boolean;
     callOptions: PlatformCallType[];
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
@@ -338,7 +338,7 @@ export const useRoomCall = (
         toggleCallMaximized: toggleCallMaximized,
         isViewingCall: isViewingCall,
         isConnectedToCall: isConnectedToCall,
-        activeCallSession: groupCall ? { type: groupCall?.callType  } : null,
+        hasActiveCallSession: hasActiveCallSession,
         callOptions,
         showVoiceCallButton: !hideVoiceCallButton,
         showVideoCallButton: !hideVideoCallButton,
