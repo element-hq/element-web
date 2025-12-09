@@ -3466,7 +3466,7 @@
     "@types/node" "*"
     "@types/ssh2" "*"
 
-"@types/dockerode@^3.3.45":
+"@types/dockerode@^3.3.47":
   version "3.3.47"
   resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-3.3.47.tgz#cf8c6b4efcd0bb28b0e6009e613e7faab1b96e75"
   integrity sha512-ShM1mz7rCjdssXt7Xz0u1/R2BJC7piWa3SJpUBiVjCf2A3XNn4cP6pUVaD8bLanpPVVn4IKzJuw3dOvkJ8IbYw==
@@ -13096,12 +13096,12 @@ test-exclude@^6.0.0:
     minimatch "^3.0.4"
 
 testcontainers@^11.0.0, testcontainers@^11.9.0:
-  version "11.8.1"
-  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-11.8.1.tgz#e15cf440e5b6c10ddf85dd3ab59a7c3cca855981"
-  integrity sha512-XeqoHbgVA8lx9ufrgYIKlYV4eubVCn3CL6Dh7sdHT793/hbDu/S7N786MqBxQZjzDG+YRKFSCNPTEwp8lREY9Q==
+  version "11.10.0"
+  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-11.10.0.tgz#879b445b763aa357a862770334943d75f2a60159"
+  integrity sha512-8hwK2EnrOZfrHPpDC7CPe03q7H8Vv8j3aXdcmFFyNV8dzpBzgZYmqyDtduJ8YQ5kbzj+A+jUXMQ6zI8B5U3z+g==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
-    "@types/dockerode" "^3.3.45"
+    "@types/dockerode" "^3.3.47"
     archiver "^7.0.1"
     async-lock "^1.4.1"
     byline "^5.0.0"
