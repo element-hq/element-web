@@ -70,6 +70,15 @@ export class Bot extends Client {
         this.opts = Object.assign({}, defaultCreateBotOptions, opts);
     }
 
+    /**
+     * Set the credentials used by the bot.
+     *
+     * If `credentials.accessToken` is set to the empty string, then
+     * `buildClient` will log in a new session.  Note that `getCredentials`
+     * will return the credentials passed to this function, rather than
+     * the updated credentials from the new login.  In particular, the
+     * `accessToken` and `deviceId` will not be updated.
+     */
     public setCredentials(credentials: Credentials): void {
         if (this.credentials) throw new Error("Bot has already started");
         this.credentials = credentials;
@@ -161,29 +170,35 @@ export class Bot extends Client {
                     getSecretStorageKey,
                 };
 
-                const loginCli = new window.matrixcs.MatrixClient({
-                    baseUrl,
-                    store: new window.matrixcs.MemoryStore(),
-                    scheduler: new window.matrixcs.MatrixScheduler(),
-                    cryptoStore: new window.matrixcs.MemoryCryptoStore(),
-                    cryptoCallbacks,
-                    logger,
-                });
+                if (!credentials.accessToken) {
+                    const loginCli = new window.matrixcs.MatrixClient({
+                        baseUrl,
+                        store: new window.matrixcs.MemoryStore(),
+                        scheduler: new window.matrixcs.MatrixScheduler(),
+                        cryptoStore: new window.matrixcs.MemoryCryptoStore(),
+                        cryptoCallbacks,
+                        logger,
+                    });
 
-                const loginResponse = await loginCli.loginRequest({
-                    type: "m.login.password",
-                    identifier: {
-                        type: "m.id.user",
-                        user: credentials.userId,
-                    },
-                    password: credentials.password,
-                });
+                    const loginResponse = await loginCli.loginRequest({
+                        type: "m.login.password",
+                        identifier: {
+                            type: "m.id.user",
+                            user: credentials.userId,
+                        },
+                        password: credentials.password,
+                    });
+
+                    credentials.accessToken = loginResponse.access_token;
+                    credentials.userId = loginResponse.user_id;
+                    credentials.deviceId = loginResponse.device_id;
+                }
 
                 const cli = new window.matrixcs.MatrixClient({
                     baseUrl,
-                    userId: loginResponse.user_id,
-                    deviceId: loginResponse.device_id,
-                    accessToken: loginResponse.access_token,
+                    userId: credentials.userId,
+                    deviceId: credentials.deviceId,
+                    accessToken: credentials.accessToken,
                     store: new window.matrixcs.MemoryStore(),
                     scheduler: new window.matrixcs.MatrixScheduler(),
                     cryptoStore: new window.matrixcs.MemoryCryptoStore(),
