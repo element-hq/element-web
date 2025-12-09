@@ -45,6 +45,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { isKnockDenied } from "../../../utils/membership";
 import SettingsStore from "../../../settings/SettingsStore";
+import { getNotificationIcon } from "../dialogs/spotlight/RoomResultContextMenus.tsx";
 
 interface Props {
     room: Room;
@@ -293,12 +294,6 @@ class RoomTile extends React.PureComponent<Props, State> {
         const state = this.roomProps.notificationVolume;
 
         const classes = classNames("mx_RoomTile_notificationsButton", {
-            // Show bell icon for the default case too.
-            mx_RoomNotificationContextMenu_iconBell: state === RoomNotifState.AllMessages,
-            mx_RoomNotificationContextMenu_iconBellDot: state === RoomNotifState.AllMessagesLoud,
-            mx_RoomNotificationContextMenu_iconBellMentions: state === RoomNotifState.MentionsOnly,
-            mx_RoomNotificationContextMenu_iconBellCrossed: state === RoomNotifState.Mute,
-
             // Only show the icon by default if the room is overridden to muted.
             // TODO: [FTUE Notifications] Probably need to detect global mute state
             mx_RoomTile_notificationsButton_show: state === RoomNotifState.Mute,
@@ -312,7 +307,9 @@ class RoomTile extends React.PureComponent<Props, State> {
                     title={_t("room_list|notification_options")}
                     isExpanded={!!this.state.notificationsMenuPosition}
                     tabIndex={isActive ? 0 : -1}
-                />
+                >
+                    {getNotificationIcon(state!)}
+                </ContextMenuTooltipButton>
                 {this.state.notificationsMenuPosition && (
                     <RoomNotificationContextMenu
                         {...contextMenuBelow(this.state.notificationsMenuPosition)}
