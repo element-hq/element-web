@@ -71,7 +71,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                 highlights = this.props.searchHighlights;
             }
 
-            if (haveRendererForEvent(mxEv, cli, this.context?.showHiddenEvents)) {
+            if (haveRendererForEvent(mxEv, cli, this.context?.showHiddenEvents, true /* forSearchResults */)) {
                 // do we need a date separator since the last event?
                 const prevEv = timeline[j - 1];
                 // is this a continuation of the previous message?

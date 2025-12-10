@@ -46,6 +46,7 @@ export function getEventDisplayInfo(
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,
     hideEvent?: boolean,
+    forSearchResults = false,
 ): {
     isInfoMessage: boolean;
     hasRenderer: boolean;
@@ -72,7 +73,7 @@ export function getEventDisplayInfo(
         }
     }
 
-    let factory = pickFactory(mxEvent, matrixClient, showHiddenEvents);
+    let factory = pickFactory(mxEvent, matrixClient, showHiddenEvents, undefined, forSearchResults);
 
     // Info messages are basically information about commands processed on a room
     let isBubbleMessage =
@@ -95,9 +96,9 @@ export function getEventDisplayInfo(
     // source tile when there's no regular tile for an event and also for
     // replace relations (which otherwise would display as a confusing
     // duplicate of the thing they are replacing).
-    if (hideEvent || !haveRendererForEvent(mxEvent, matrixClient, showHiddenEvents)) {
+    if (hideEvent || !haveRendererForEvent(mxEvent, matrixClient, showHiddenEvents, forSearchResults)) {
         // forcefully ask for a factory for a hidden event (hidden event setting is checked internally)
-        factory = pickFactory(mxEvent, matrixClient, showHiddenEvents, true);
+        factory = pickFactory(mxEvent, matrixClient, showHiddenEvents, true, forSearchResults);
         if (factory === JSONEventFactory) {
             isBubbleMessage = false;
             // Reuse info message avatar and sender profile styling

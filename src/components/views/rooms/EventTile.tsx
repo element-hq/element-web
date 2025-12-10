@@ -925,6 +925,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
 
+        const forSearchResults = this.context.timelineRenderingType === TimelineRenderingType.Search;
         const {
             hasRenderer,
             isBubbleMessage,
@@ -937,6 +938,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.props.mxEvent,
             this.context.showHiddenEvents,
             this.shouldHideEvent(),
+            forSearchResults,
         );
         const { isQuoteExpanded } = this.state;
         // This shouldn't happen: the caller should check we support this type
@@ -1201,7 +1203,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let replyChain: JSX.Element | undefined;
         if (
-            haveRendererForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), this.context.showHiddenEvents) &&
+            haveRendererForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), this.context.showHiddenEvents, forSearchResults) &&
             shouldDisplayReply(this.props.mxEvent)
         ) {
             replyChain = (

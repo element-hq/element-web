@@ -17,6 +17,7 @@ import {
     M_LOCATION,
     M_POLL_START,
     type IContent,
+    RelationType,
 } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -38,6 +39,7 @@ import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -78,6 +80,9 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
 ]);
 
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
+    public static contextType = RoomContext;
+    declare public context: React.ContextType<typeof RoomContext>;
+
     private body = createRef<React.Component | IOperableEventTile>();
     private mediaHelper?: MediaEventHelper;
     private bodyTypes = new Map<string, React.ComponentType<IBodyProps>>(baseBodyTypes.entries());
@@ -240,9 +245,44 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         return mimetype?.split("/")[0];
     }
 
+    /**
+     * Get the event to use for rendering.
+     * For search results showing edit events (m.replace), returns a Proxy that
+     * intercepts getContent() to return m.new_content instead.
+     * This avoids modifying the shared MatrixEvent object.
+     */
+    private getEffectiveEvent(): typeof this.props.mxEvent {
+        const mxEvent = this.props.mxEvent;
+        const originalContent = mxEvent.getContent();
+        const isSearchContext = this.context?.timelineRenderingType === TimelineRenderingType.Search;
+        const isEditEvent = mxEvent.isRelation(RelationType.Replace);
+        const newContent = originalContent["m.new_content"] as IContent | undefined;
+
+        // In search context, edit events should display the edited content (m.new_content)
+        if (isSearchContext && isEditEvent && newContent) {
+            // Create a Proxy that intercepts getContent() to return m.new_content
+            return new Proxy(mxEvent, {
+                get(target, prop, receiver) {
+                    if (prop === "getContent") {
+                        return () => newContent;
+                    }
+                    const value = Reflect.get(target, prop, receiver);
+                    // Bind functions to the original target
+                    if (typeof value === "function") {
+                        return value.bind(target);
+                    }
+                    return value;
+                },
+            });
+        }
+
+        return mxEvent;
+    }
+
     public render(): React.ReactNode {
-        const content = this.props.mxEvent.getContent();
-        const type = this.props.mxEvent.getType();
+        const effectiveEvent = this.getEffectiveEvent();
+        const content = effectiveEvent.getContent();
+        const type = effectiveEvent.getType();
         const msgtype = content.msgtype;
         let BodyType: React.ComponentType<IBodyProps> = RedactedBody;
         if (!this.props.mxEvent.isRedacted()) {
@@ -293,9 +333,10 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
             content.filename &&
             content.filename !== content.body;
+        // Pass the effective event (may be a Proxy for search result edit events)
         const bodyProps: IBodyProps = {
             ref: this.body,
-            mxEvent: this.props.mxEvent,
+            mxEvent: effectiveEvent,
             highlights: this.props.highlights,
             highlightLink: this.props.highlightLink,
             showUrlPreview: this.props.showUrlPreview,

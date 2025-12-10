@@ -160,6 +160,7 @@ export function pickFactory(
     cli: MatrixClient,
     showHiddenEvents: boolean,
     asHiddenEv?: boolean,
+    forSearchResults = false,
 ): Factory | undefined {
     const evType = mxEvent.getType(); // cache this to reduce call stack execution hits
 
@@ -237,7 +238,9 @@ export function pickFactory(
         return MessageEventFactory;
     }
 
-    if (mxEvent.isRelation(RelationType.Replace)) {
+    // No tile for replacement events since they update the original tile
+    // But for search results, we want to show the edited content
+    if (mxEvent.isRelation(RelationType.Replace) && !forSearchResults) {
         return noEventFactoryFactory();
     }
 
@@ -258,7 +261,8 @@ export function renderTile(
 ): JSX.Element | null {
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
-    const factory = pickFactory(props.mxEvent, cli, props.showHiddenEvents);
+    const forSearchResults = renderType === TimelineRenderingType.Search;
+    const factory = pickFactory(props.mxEvent, cli, props.showHiddenEvents, undefined, forSearchResults);
     if (!factory) {
         // If we don't have a factory for this event, attempt
         // to find a custom component that can render it.
@@ -415,6 +419,7 @@ export function haveRendererForEvent(
     mxEvent: MatrixEvent,
     matrixClient: MatrixClient,
     showHiddenEvents: boolean,
+    forSearchResults = false,
 ): boolean {
     // Only show "Message deleted" tile for plain message events, encrypted events,
     // and state events as they'll likely still contain enough keys to be relevant.
@@ -429,10 +434,15 @@ export function haveRendererForEvent(
     }
 
     // No tile for replacement events since they update the original tile
-    if (mxEvent.isRelation(RelationType.Replace)) return false;
+    // But for search results, we want to show the edited content
+    if (mxEvent.isRelation(RelationType.Replace) && !forSearchResults) {
+        return false;
+    }
 
-    const handler = pickFactory(mxEvent, matrixClient, showHiddenEvents);
-    if (!handler) return false;
+    const handler = pickFactory(mxEvent, matrixClient, showHiddenEvents, undefined, forSearchResults);
+    if (!handler) {
+        return false;
+    }
     if (handler === TextualEventFactory) {
         return hasText(mxEvent, matrixClient, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
