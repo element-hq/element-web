@@ -17,6 +17,8 @@ import {
     EventType,
     SearchResult,
     type ISearchResults,
+    RelationType,
+    MsgType,
 } from "matrix-js-sdk/src/matrix";
 
 import { RoomSearchView } from "../../../../src/components/structures/RoomSearchView";
@@ -559,9 +561,10 @@ describe("<RoomSearchView/>", () => {
         );
 
         const event3 = await screen.findByText("Room 3");
-        expect(event3.closest(".mx_EventTile_line")!.querySelector("a")).toHaveAttribute(
+            expect(event3.closest(".mx_EventTile_line")!.querySelector("a")).toHaveAttribute(
             "href",
             `https://matrix.to/#/${room3.roomId}/$32`,
         );
     });
+
 });
