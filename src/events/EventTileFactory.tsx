@@ -17,7 +17,7 @@ import {
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { TextualEventView } from "@element-hq/web-shared-components";
+import { TextualEventView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
@@ -77,9 +77,17 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => {
-    const vm = new TextualEventViewModel(props);
+
+/**
+ * Wrap {@link TextualEventView} in a component so that we can call {@link useCreateAutoDisposedViewModel} hook.
+ * Without the wrapping component, this code will throw a bunch of invalid hook call errors.
+ */
+const TextualEventWrapper: React.FC<FactoryProps> = (props) => {
+    const vm = useCreateAutoDisposedViewModel(() => new TextualEventViewModel(props));
     return <TextualEventView vm={vm} />;
+};
+export const TextualEventFactory: Factory = (ref, props) => {
+    return <TextualEventWrapper {...props} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
