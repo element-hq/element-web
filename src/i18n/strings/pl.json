@@ -2478,7 +2478,6 @@
             "error_update_guest_access": "Nie udało się zaktualizować dostępu dla gości do tej przestrzeni",
             "error_update_history_visibility": "Nie udało się zaktualizować widoczności historii dla tej przestrzeni",
             "guest_access_explainer": "Goście mogą dołączyć do przestrzeni bez posiadania konta.",
-            "guest_access_explainer_public_space": "Może to być przydatne dla publicznych przestrzeni.",
             "guest_access_label": "Włącz dostęp dla gości",
             "history_visibility_anyone_space": "Podgląd przestrzeni",
             "history_visibility_anyone_space_description": "Pozwól ludziom na podgląd Twojej przestrzeni zanim dołączą.",
@@ -3515,7 +3514,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Zakończył ankietę",
             "sender_ended": "%(senderName)s zakończył ankietę"
         },
         "m.poll.start": "%(senderName)s utworzył ankietę - %(pollQuestion)s",

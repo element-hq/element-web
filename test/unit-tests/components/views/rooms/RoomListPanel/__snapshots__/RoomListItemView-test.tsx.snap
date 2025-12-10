@@ -99,7 +99,7 @@ exports[`<RoomListItemView /> should display notification decoration 1`] = `
       </div>
       <div
         aria-hidden="true"
-        class="_flex_4dswl_9"
+        class="_flex_4dswl_9 mx_RoomListItemView_notificationDecoration"
         data-testid="notification-decoration"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >

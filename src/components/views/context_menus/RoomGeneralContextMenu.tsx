@@ -9,6 +9,15 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, useContext } from "react";
+import {
+    FavouriteSolidIcon,
+    LinkIcon,
+    SettingsSolidIcon,
+    ArrowDownIcon,
+    MarkAsReadIcon,
+    MarkAsUnreadIcon,
+    LeaveIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import RoomListActions from "../../../actions/RoomListActions";
@@ -34,6 +43,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { Icon as InviteIcon } from "../../../../res/img/element-icons/room/invite.svg";
 
 export interface RoomGeneralContextMenuProps extends IContextMenuProps {
     room: Room;
@@ -153,7 +163,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
             onClick={wrapHandler((ev) => onTagRoom(ev, DefaultTagID.Favourite), onPostFavoriteClick, true)}
             active={isFavorite}
             label={isFavorite ? _t("room|context_menu|unfavourite") : _t("room|context_menu|favourite")}
-            iconClassName="mx_RoomGeneralContextMenu_iconStar"
+            icon={<FavouriteSolidIcon />}
         />
     );
 
@@ -163,7 +173,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
             onClick={wrapHandler((ev) => onTagRoom(ev, DefaultTagID.LowPriority), onPostLowPriorityClick, true)}
             active={isLowPriority}
             label={_t("room|context_menu|low_priority")}
-            iconClassName="mx_RoomGeneralContextMenu_iconArrowDown"
+            icon={<ArrowDownIcon />}
         />
     );
 
@@ -180,7 +190,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                     onPostInviteClick,
                 )}
                 label={_t("action|invite")}
-                iconClassName="mx_RoomGeneralContextMenu_iconInvite"
+                icon={<InviteIcon />}
             />
         );
     }
@@ -198,7 +208,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                     onPostCopyLinkClick,
                 )}
                 label={_t("room|context_menu|copy_link")}
-                iconClassName="mx_RoomGeneralContextMenu_iconCopyLink"
+                icon={<LinkIcon />}
             />
         );
     }
@@ -214,7 +224,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                 onPostSettingsClick,
             )}
             label={_t("common|settings")}
-            iconClassName="mx_RoomGeneralContextMenu_iconSettings"
+            icon={<SettingsSolidIcon />}
         />
     );
 
@@ -222,7 +232,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     if (roomTags.includes(DefaultTagID.Archived)) {
         leaveOption = (
             <IconizedContextMenuOption
-                iconClassName="mx_RoomGeneralContextMenu_iconSignOut"
+                icon={<LeaveIcon />}
                 label={_t("room|context_menu|forget")}
                 className="mx_IconizedContextMenu_option_red"
                 onClick={wrapHandler(
@@ -248,7 +258,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                 )}
                 label={_t("action|leave")}
                 className="mx_IconizedContextMenu_option_red"
-                iconClassName="mx_RoomGeneralContextMenu_iconSignOut"
+                icon={<LeaveIcon />}
             />
         );
     }
@@ -263,7 +273,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                         onFinished?.();
                     }, onPostMarkAsReadClick)}
                     label={_t("room|context_menu|mark_read")}
-                    iconClassName="mx_RoomGeneralContextMenu_iconMarkAsRead"
+                    icon={<MarkAsReadIcon />}
                 />
             );
         } else if (!roomTags.includes(DefaultTagID.Archived)) {
@@ -274,7 +284,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                         onFinished?.();
                     }, onPostMarkAsUnreadClick)}
                     label={_t("room|context_menu|mark_unread")}
-                    iconClassName="mx_RoomGeneralContextMenu_iconMarkAsUnread"
+                    icon={<MarkAsUnreadIcon />}
                 />
             );
         } else {

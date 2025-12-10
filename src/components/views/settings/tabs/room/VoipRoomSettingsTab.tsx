@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { type ChangeEventHandler, useCallback, useMemo, useState } from "react";
 import { JoinRule, EventType, type RoomState, type Room } from "matrix-js-sdk/src/matrix";
 import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { useRoomState } from "../../../../../hooks/useRoomState";
@@ -45,8 +45,9 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
         return content.events?.[ElementCallMemberEventType.name] === 0;
     });
 
-    const onChange = useCallback(
-        (enabled: boolean): void => {
+    const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+        (evt): void => {
+            const enabled = evt.target.checked;
             setElementCallEnabled(enabled);
 
             // Take a copy to avoid mutating the original
@@ -73,16 +74,17 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
 
     return (
-        <LabelledToggleSwitch
-            data-testid="element-call-switch"
+        <SettingsToggleInput
+            name="element-call-switch"
+            data-test-id="element-call-switch"
             label={_t("room_settings|voip|enable_element_call_label", { brand })}
-            caption={_t("room_settings|voip|enable_element_call_caption", {
+            helpMessage={_t("room_settings|voip|enable_element_call_caption", {
                 brand,
             })}
-            value={elementCallEnabled}
+            checked={elementCallEnabled}
             onChange={onChange}
             disabled={!maySend}
-            tooltip={_t("room_settings|voip|enable_element_call_no_permissions_tooltip")}
+            disabledMessage={_t("room_settings|voip|enable_element_call_no_permissions_tooltip")}
         />
     );
 };
@@ -95,9 +97,16 @@ export const VoipRoomSettingsTab: React.FC<Props> = ({ room }) => {
     return (
         <SettingsTab>
             <SettingsSection heading={_t("settings|voip|title")}>
-                <SettingsSubsection heading={_t("room_settings|voip|call_type_section")}>
-                    <ElementCallSwitch room={room} />
-                </SettingsSubsection>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSubsection heading={_t("room_settings|voip|call_type_section")}>
+                        <ElementCallSwitch room={room} />
+                    </SettingsSubsection>
+                </Form.Root>
             </SettingsSection>
         </SettingsTab>
     );

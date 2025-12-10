@@ -15,7 +15,6 @@ import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
@@ -301,7 +300,7 @@ export interface EventRenderOpts {
     linkify?: boolean;
 }
 
-function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): EventAnalysis {
+function analyseEvent(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): EventAnalysis {
     let sanitizeParams = sanitizeHtmlParams;
     if (opts.forComposerQuote) {
         sanitizeParams = composerSanitizeHtmlParams;
@@ -413,11 +412,7 @@ interface BodyToNodeReturn {
     className: string;
 }
 
-export function bodyToNode(
-    content: IContent,
-    highlights: Optional<string[]>,
-    opts: EventRenderOpts = {},
-): BodyToNodeReturn {
+export function bodyToNode(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): BodyToNodeReturn {
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let emojiBody = false;
@@ -478,7 +473,7 @@ export function bodyToNode(
  * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
  * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
  */
-export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): string {
+export function bodyToHtml(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): string {
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let formattedBody = eventInfo.safeBody;

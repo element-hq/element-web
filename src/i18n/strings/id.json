@@ -2481,7 +2481,6 @@
             "error_update_guest_access": "Gagal untuk memperbarui akses tamu untuk space ini",
             "error_update_history_visibility": "Gagal untuk memperbarui visibilitas riwayat untuk space ini",
             "guest_access_explainer": "Tamu dapat bergabung sebuah space tanpa harus mempunyai akun.",
-            "guest_access_explainer_public_space": "Ini mungkin berguna untuk space publik.",
             "guest_access_label": "Aktifkan akses tamu",
             "history_visibility_anyone_space": "Tampilkan Space",
             "history_visibility_anyone_space_description": "Memungkinkan orang-orang untuk memperlihatkan space Anda sebelum mereka bergabung.",
@@ -3518,7 +3517,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Mengakhiri sebuah pemungutan suara",
             "sender_ended": "%(senderName)s telah mengakhiri sebuah poll"
         },
         "m.poll.start": "%(senderName)s telah memulai sebuah pungutan suara — %(pollQuestion)s",

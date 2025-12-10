@@ -1918,7 +1918,6 @@
             "error_update_guest_access": "ゲストのアクセスの更新に失敗しました",
             "error_update_history_visibility": "このスペースの履歴の見え方の更新に失敗しました",
             "guest_access_explainer": "ゲストはアカウントを使用せずに参加できます。",
-            "guest_access_explainer_public_space": "公開のスペースに適しているかもしれません。",
             "guest_access_label": "ゲストによるアクセスを有効にする",
             "history_visibility_anyone_space": "スペースのプレビュー",
             "history_visibility_anyone_space_description": "参加する前にスペースのプレビューを閲覧することを許可。",

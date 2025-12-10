@@ -15,7 +15,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
-import { type Optional } from "matrix-events-sdk";
 import EventEmitter from "events";
 import {
     RoomViewLifecycle,
@@ -446,13 +445,21 @@ export class RoomViewStore extends EventEmitter {
             this.setState(newState);
 
             if (payload.auto_join) {
-                this.dis?.dispatch<JoinRoomPayload>({
+                const joinPayload: JoinRoomPayload = {
                     ...payload,
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
                     canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
-                });
+                };
+                // Explicitly pass viaServers in case state doesn't contain the same due to
+                // some race issues.
+                if (payload.via_servers) {
+                    joinPayload.opts = {
+                        viaServers: payload.via_servers,
+                    };
+                }
+                this.dis?.dispatch<JoinRoomPayload>(joinPayload);
             }
 
             if (room) {
@@ -664,16 +671,16 @@ export class RoomViewStore extends EventEmitter {
     }
 
     // The room ID of the room currently being viewed
-    public getRoomId(): Optional<string> {
+    public getRoomId(): string | null {
         return this.state.roomId;
     }
 
-    public getThreadId(): Optional<string> {
+    public getThreadId(): string | null {
         return this.state.threadId;
     }
 
     // The event to scroll to when the room is first viewed
-    public getInitialEventId(): Optional<string> {
+    public getInitialEventId(): string | null {
         return this.state.initialEventId;
     }
 
@@ -688,7 +695,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     // The room alias of the room (or null if not originally specified in view_room)
-    public getRoomAlias(): Optional<string> {
+    public getRoomAlias(): string | null {
         return this.state.roomAlias;
     }
 
@@ -698,7 +705,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     // Any error that has occurred during loading
-    public getRoomLoadError(): Optional<MatrixError> {
+    public getRoomLoadError(): MatrixError | null {
         return this.state.roomLoadError;
     }
 
@@ -730,7 +737,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     // Any error that has occurred during joining
-    public getJoinError(): Optional<Error> {
+    public getJoinError(): Error | null {
         return this.state.joinError;
     }
 

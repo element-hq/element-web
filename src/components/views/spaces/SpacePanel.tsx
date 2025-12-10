@@ -99,7 +99,6 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
             {!hideHeader && <div className="mx_SpacePanel_contextMenu_header">{_t("common|home")}</div>}
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuCheckbox
-                    iconClassName="mx_SpacePanel_noIcon"
                     label={_t("settings|sidebar|metaspaces_home_all_rooms")}
                     active={allRoomsInHome}
                     onClick={() => {

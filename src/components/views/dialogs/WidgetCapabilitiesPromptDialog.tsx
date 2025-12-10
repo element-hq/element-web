@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ChangeEventHandler } from "react";
 import {
     type Capability,
     isTimelineCapability,
@@ -15,13 +15,13 @@ import {
     type WidgetKind,
 } from "matrix-widget-api";
 import { lexicographicCompare } from "matrix-js-sdk/src/utils";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import { objectShallowClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import DialogButtons from "../elements/DialogButtons";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
 
 interface IProps {
@@ -64,8 +64,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         this.setState({ booleanStates: newStates });
     };
 
-    private onRememberSelectionChange = (newVal: boolean): void => {
-        this.setState({ rememberSelection: newVal });
+    private onRememberSelectionChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ rememberSelection: evt.target.checked });
     };
 
     private onSubmit = async (): Promise<void> => {
@@ -117,7 +117,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                 onFinished={this.props.onFinished}
                 title={_t("widget|capabilities_dialog|title")}
             >
-                <form onSubmit={this.onSubmit}>
+                <Form.Root onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
                         <div className="text-muted">{_t("widget|capabilities_dialog|content_starting_text")}</div>
                         {checkboxRows}
@@ -127,16 +127,16 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                             onPrimaryButtonClick={this.onSubmit}
                             onCancel={this.onReject}
                             additive={
-                                <LabelledToggleSwitch
-                                    value={this.state.rememberSelection}
-                                    toggleInFront={true}
+                                <SettingsToggleInput
+                                    name="remember-selection"
+                                    checked={this.state.rememberSelection}
                                     onChange={this.onRememberSelectionChange}
                                     label={_t("widget|capabilities_dialog|remember_Selection")}
                                 />
                             }
                         />
                     </div>
-                </form>
+                </Form.Root>
             </BaseDialog>
         );
     }

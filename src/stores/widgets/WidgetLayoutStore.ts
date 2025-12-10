@@ -7,7 +7,6 @@
  */
 
 import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, defaultNumber, sum } from "@element-hq/web-shared-components";
@@ -316,7 +315,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
     }
 
-    public getContainerWidgets(room: Optional<Room>, container: Container): IWidget[] {
+    public getContainerWidgets(room: Room | null, container: Container): IWidget[] {
         return (room && this.byRoom.get(room.roomId)?.get(container)?.ordered) || [];
     }
 

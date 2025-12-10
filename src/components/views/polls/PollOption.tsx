@@ -36,50 +36,67 @@ const PollOptionContent: React.FC<PollOptionContentProps> = ({ isWinner, answer,
 interface PollOptionProps extends PollOptionContentProps {
     pollId: string;
     totalVoteCount: number;
+    optionNumber: number;
     isEnded?: boolean;
     isChecked?: boolean;
     onOptionSelected?: (id: string) => void;
     children?: ReactNode;
 }
 
-const EndedPollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteCount">> = ({
-    isChecked,
-    children,
-    answer,
-}) => (
-    <div
-        className={classNames("mx_PollOption_endedOption", {
-            mx_PollOption_endedOptionWinner: isChecked,
-        })}
-        data-value={answer.id}
-    >
-        {children}
-    </div>
-);
-
-const ActivePollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteCount">> = ({
+const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { children: ReactNode }> = ({
     pollId,
     isChecked,
+    isEnded,
+    optionNumber,
+    isWinner,
+    voteCount,
+    displayVoteCount,
     children,
     answer,
     onOptionSelected,
-}) => (
-    <StyledRadioButton
-        className="mx_PollOption_live-option"
-        name={`poll_answer_select-${pollId}`}
-        value={answer.id}
-        checked={isChecked}
-        onChange={() => onOptionSelected?.(answer.id)}
-    >
-        {children}
-    </StyledRadioButton>
-);
+}) => {
+    let ariaLabel: string;
+
+    if (displayVoteCount && isWinner) {
+        ariaLabel = _t("poll|option_label_winning_with_total", {
+            number: optionNumber,
+            answer: answer.text,
+            count: voteCount,
+        });
+    } else if (displayVoteCount) {
+        ariaLabel = _t("poll|option_label_with_total", {
+            number: optionNumber,
+            answer: answer.text,
+            count: voteCount,
+        });
+    } else {
+        ariaLabel = _t("poll|option_label", {
+            number: optionNumber,
+            answer: answer.text,
+        });
+    }
+
+    return (
+        <StyledRadioButton
+            className="mx_PollOption_live-option"
+            name={`poll_answer_select-${pollId}`}
+            value={answer.id}
+            checked={isChecked}
+            disabled={isEnded}
+            aria-label={ariaLabel}
+            onChange={() => onOptionSelected?.(answer.id)}
+        >
+            <div aria-hidden="true">{children}</div>
+        </StyledRadioButton>
+    );
+};
 
 export const PollOption: React.FC<PollOptionProps> = ({
     pollId,
     answer,
     voteCount,
     totalVoteCount,
+    optionNumber,
     displayVoteCount,
     isEnded,
     isChecked,
@@ -92,13 +109,17 @@ export const PollOption: React.FC<PollOptionProps> = ({
     });
     const isWinner = isEnded && isChecked;
     const answerPercent = totalVoteCount === 0 ? 0 : Math.round((100.0 * voteCount) / totalVoteCount);
-    const PollOptionWrapper = isEnded ? EndedPollOption : ActivePollOption;
     return (
         <div data-testid={`pollOption-${answer.id}`} className={cls} onClick={() => onOptionSelected?.(answer.id)}>
-            <PollOptionWrapper
+            <ActivePollOption
                 pollId={pollId}
                 answer={answer}
+                optionNumber={optionNumber}
                 isChecked={isChecked}
+                isEnded={isEnded}
+                isWinner={isWinner}
+                voteCount={voteCount}
+                displayVoteCount={displayVoteCount}
                 onOptionSelected={onOptionSelected}
             >
                 <PollOptionContent
@@ -107,7 +128,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
                     voteCount={voteCount}
                     displayVoteCount={displayVoteCount}
                 />
-            </PollOptionWrapper>
+            </ActivePollOption>
             <div className="mx_PollOption_popularityBackground">
                 <div className="mx_PollOption_popularityAmount" style={{ width: `${answerPercent}%` }} />
             </div>

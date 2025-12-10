@@ -16,7 +16,7 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
@@ -43,8 +43,10 @@ import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
 import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
+import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
 
 const TIMEOUT_MS = 16000;
+const logger = rootLogger.getChild("models/Call");
 
 // Waits until an event is emitted satisfying the given predicate
 const waitForEvent = async (
@@ -122,15 +124,15 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      */
     public abstract readonly STUCK_DEVICE_TIMEOUT_MS: number;
 
-    private _messaging: ClientWidgetApi | null = null;
+    private _widgetApi: ClientWidgetApi | null = null;
     /**
-     * The widget's messaging, or null if disconnected.
+     * The widget API interface to the widget, or null if disconnected.
      */
-    protected get messaging(): ClientWidgetApi | null {
-        return this._messaging;
+    protected get widgetApi(): ClientWidgetApi | null {
+        return this._widgetApi;
     }
-    private set messaging(value: ClientWidgetApi | null) {
-        this._messaging = value;
+    private set widgetApi(value: ClientWidgetApi | null) {
+        this._widgetApi = value;
     }
 
     public get roomId(): string {
@@ -212,28 +214,58 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * Starts the communication between the widget and the call.
      * The widget associated with the call must be active for this to succeed.
      * Only call this if the call state is: ConnectionState.Disconnected.
+     * @param _params Widget generation parameters are unused in this abstract class.
+     * @returns The ClientWidgetApi for this call.
      */
-    public async start(_params?: WidgetGenerationParameters): Promise<void> {
+    public async start(_params?: WidgetGenerationParameters): Promise<ClientWidgetApi> {
         const messagingStore = WidgetMessagingStore.instance;
-        this.messaging = messagingStore.getMessagingForUid(this.widgetUid) ?? null;
-        if (!this.messaging) {
-            // The widget might still be initializing, so wait for it.
+        const startTime = performance.now();
+        let messaging: WidgetMessaging | undefined = messagingStore.getMessagingForUid(this.widgetUid);
+        // The widget might still be initializing, so wait for it in an async
+        // event loop. We need the messaging to be both present and started
+        // (have a connected widget API), so register listeners for both cases.
+        while (!messaging?.widgetApi) {
+            if (messaging) logger.debug(`Messaging present but not yet started for ${this.widgetUid}`);
+            else logger.debug(`No messaging yet for ${this.widgetUid}`);
+            const recheck = Promise.withResolvers<void>();
+            const currentMessaging = messaging;
+
+            // Maybe the messaging is present but not yet started. In this case,
+            // check again for a widget API as soon as it starts.
+            const onStart = (): void => recheck.resolve();
+            currentMessaging?.on(WidgetMessagingEvent.Start, onStart);
+
+            // Maybe the messaging is not present at all. It's also entirely
+            // possible (as shown in React strict mode) that the messaging could
+            // be abandoned and replaced by an entirely new messaging object
+            // while we were waiting for the original one to start. We need to
+            // react to store updates in either case.
+            const onStoreMessaging = (uid: string, m: WidgetMessaging): void => {
+                if (uid === this.widgetUid) {
+                    messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+                    messaging = m; // Check the new messaging object on the next iteration of the loop
+                    recheck.resolve();
+                }
+            };
+            messagingStore.on(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+
+            // Race both of the above recheck signals against a timeout.
+            const timeout = setTimeout(
+                () => recheck.reject(new Error(`Widget for call in ${this.roomId} not started; timed out`)),
+                TIMEOUT_MS - (performance.now() - startTime),
+            );
+
             try {
-                await waitForEvent(
-                    messagingStore,
-                    WidgetMessagingStoreEvent.StoreMessaging,
-                    (uid: string, widgetApi: ClientWidgetApi) => {
-                        if (uid === this.widgetUid) {
-                            this.messaging = widgetApi;
-                            return true;
-                        }
-                        return false;
-                    },
-                );
-            } catch (e) {
-                throw new Error(`Failed to bind call widget in room ${this.roomId}: ${e}`);
+                await recheck.promise;
+            } finally {
+                currentMessaging?.off(WidgetMessagingEvent.Start, onStart);
+                messagingStore.off(WidgetMessagingStoreEvent.StoreMessaging, onStoreMessaging);
+                clearTimeout(timeout);
             }
         }
+
+        logger.debug(`Widget ${this.widgetUid} now ready`);
+        return (this.widgetApi = messaging.widgetApi);
     }
 
     protected setConnected(): void {
@@ -267,7 +299,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * Stops further communication with the widget and tells the UI to close.
      */
     protected close(): void {
-        this.messaging = null;
+        this.widgetApi = null;
         this.emit(CallEvent.Close);
     }
 
@@ -289,7 +321,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
 
     private readonly onStopMessaging = (uid: string): void => {
         if (uid === this.widgetUid && this.connected) {
-            logger.log("The widget died; treating this as a user hangup");
+            logger.debug("The widget died; treating this as a user hangup");
             this.setDisconnected();
             this.close();
         }
@@ -448,25 +480,26 @@ export class JitsiCall extends Call {
         });
     }
 
-    public async start(): Promise<void> {
-        await super.start();
-        this.messaging!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+    public async start(): Promise<ClientWidgetApi> {
+        const widgetApi = await super.start();
+        widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onUndock);
+        return widgetApi;
     }
 
     protected async performDisconnection(): Promise<void> {
         const response = waitForEvent(
-            this.messaging!,
+            this.widgetApi!,
             `action:${ElementWidgetActions.HangupCall}`,
             (ev: CustomEvent<IWidgetApiRequest>) => {
                 ev.preventDefault();
-                this.messaging!.transport.reply(ev.detail, {}); // ack
+                this.widgetApi!.transport.reply(ev.detail, {}); // ack
                 return true;
             },
         );
-        const request = this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
+        const request = this.widgetApi!.transport.send(ElementWidgetActions.HangupCall, {});
         try {
             await Promise.all([request, response]);
         } catch (e) {
@@ -475,8 +508,8 @@ export class JitsiCall extends Call {
     }
 
     public close(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.widgetApi!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        this.widgetApi!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onUndock);
         super.close();
@@ -508,7 +541,7 @@ export class JitsiCall extends Call {
             // Re-add this device every so often so our video member event doesn't become stale
             this.resendDevicesTimer = window.setInterval(
                 async (): Promise<void> => {
-                    logger.log(`Resending video member event for ${this.roomId}`);
+                    logger.debug(`Resending video member event for ${this.roomId}`);
                     await this.addOurDevice();
                 },
                 (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4,
@@ -527,18 +560,18 @@ export class JitsiCall extends Call {
 
     private readonly onDock = async (): Promise<void> => {
         // The widget is no longer a PiP, so let's restore the default layout
-        await this.messaging!.transport.send(ElementWidgetActions.TileLayout, {});
+        await this.widgetApi!.transport.send(ElementWidgetActions.TileLayout, {});
     };
 
     private readonly onUndock = async (): Promise<void> => {
         // The widget has become a PiP, so let's switch Jitsi to spotlight mode
         // to only show the active speaker and economize on space
-        await this.messaging!.transport.send(ElementWidgetActions.SpotlightLayout, {});
+        await this.widgetApi!.transport.send(ElementWidgetActions.SpotlightLayout, {});
     };
 
     private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
         ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setConnected();
     };
 
@@ -548,7 +581,7 @@ export class JitsiCall extends Call {
         if (this.connectionState === ConnectionState.Disconnecting) return;
 
         ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
         if (!isVideoRoom(this.room)) this.close();
     };
@@ -744,6 +777,17 @@ export class ElementCall extends Call {
             params.append("allowIceFallback", "true");
         }
 
+        const echoCancellation = SettingsStore.getValue("webrtc_audio_echoCancellation");
+        if (!echoCancellation) {
+            // the default is true, so only set if false
+            params.append("echoCancellation", "false");
+        }
+        const noiseSuppression = SettingsStore.getValue("webrtc_audio_noiseSuppression");
+        if (!noiseSuppression) {
+            // the default is true, so only set if false
+            params.append("noiseSuppression", "false");
+        }
+
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
             SettingsStore.getValue("systemFont")
@@ -889,7 +933,7 @@ export class ElementCall extends Call {
         ElementCall.createOrGetCallWidget(room.roomId, room.client);
     }
 
-    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<void> {
+    public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<ClientWidgetApi> {
         // Some parameters may only be set once the user has chosen to interact with the call, regenerate the URL
         // at this point in case any of the parameters have changed.
         this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters };
@@ -898,24 +942,25 @@ export class ElementCall extends Call {
             this.roomId,
             this.widgetGenerationParameters,
         ).toString();
-        await super.start();
-        this.messaging!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.messaging!.on(`action:${ElementWidgetActions.Close}`, this.onClose);
-        this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        const widgetApi = await super.start();
+        widgetApi.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        widgetApi.on(`action:${ElementWidgetActions.Close}`, this.onClose);
+        widgetApi.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        return widgetApi;
     }
 
     protected async performDisconnection(): Promise<void> {
         const response = waitForEvent(
-            this.messaging!,
+            this.widgetApi!,
             `action:${ElementWidgetActions.HangupCall}`,
             (ev: CustomEvent<IWidgetApiRequest>) => {
                 ev.preventDefault();
-                this.messaging!.transport.reply(ev.detail, {}); // ack
+                this.widgetApi!.transport.reply(ev.detail, {}); // ack
                 return true;
             },
         );
-        const request = this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
+        const request = this.widgetApi!.transport.send(ElementWidgetActions.HangupCall, {});
         try {
             await Promise.all([request, response]);
         } catch (e) {
@@ -924,10 +969,10 @@ export class ElementCall extends Call {
     }
 
     public close(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
-        this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.messaging!.off(`action:${ElementWidgetActions.Close}`, this.onClose);
-        this.messaging!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
+        this.widgetApi!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        this.widgetApi!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.widgetApi!.off(`action:${ElementWidgetActions.Close}`, this.onClose);
+        this.widgetApi!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         super.close();
     }
 
@@ -975,12 +1020,12 @@ export class ElementCall extends Call {
 
     private readonly onDeviceMute = (ev: CustomEvent<IWidgetApiRequest>): void => {
         ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.widgetApi!.transport.reply(ev.detail, {}); // ack
     };
 
     private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
         ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setConnected();
     };
 
@@ -990,13 +1035,13 @@ export class ElementCall extends Call {
         if (this.connectionState === ConnectionState.Disconnecting) return;
 
         ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
     };
 
     private readonly onClose = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         ev.preventDefault();
-        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.widgetApi!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected(); // Just in case the widget forgot to emit a hangup action (maybe it's in an error state)
         this.close(); // User is done with the call; tell the UI to close it
     };

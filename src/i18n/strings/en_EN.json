@@ -1764,6 +1764,7 @@
         "end_message": "The poll has ended. Top answer: %(topAnswer)s",
         "end_message_no_votes": "The poll has ended. No votes were cast.",
         "end_title": "End Poll",
+        "ended_poll_label": "Poll ended",
         "error_ending_description": "Sorry, the poll did not end. Please try again.",
         "error_ending_title": "Failed to end poll",
         "error_voting_description": "Sorry, your vote was not registered. Please try again.",
@@ -1771,10 +1772,20 @@
         "failed_send_poll_description": "Sorry, the poll you tried to create was not posted.",
         "failed_send_poll_title": "Failed to post poll",
         "notes": "Results are only revealed when you end the poll",
+        "option_label": "Option %(number)s, %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "Option %(number)s, %(answer)s, winning option, %(count)s vote",
+            "other": "Option %(number)s, %(answer)s, winning option, %(count)s votes"
+        },
+        "option_label_with_total": {
+            "one": "Option %(number)s, %(answer)s, %(count)s vote",
+            "other": "Option %(number)s, %(answer)s, %(count)s votes"
+        },
         "options_add_button": "Add option",
         "options_heading": "Create options",
         "options_label": "Option %(number)s",
         "options_placeholder": "Write an option",
+        "poll_label": "Poll",
         "topic_heading": "What is your poll question or topic?",
         "topic_label": "Question or topic",
         "topic_placeholder": "Write something…",
@@ -2114,6 +2125,7 @@
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit": "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
+            "history_visible": "Messages you send will be shared with new members invited to this room. <a>Learn more</a>",
             "homeserver_blocked": "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.",
             "monthly_user_limit_reached": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.",
             "requires_consent_agreement": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
@@ -2335,6 +2347,8 @@
             "no_aliases_space": "This space has no local addresses",
             "other_section": "Other",
             "publish_toggle": "Publish this room to the public in %(domain)s's room directory?",
+            "publish_warn_invite_only": "You cannot publish a room that is invite-only.",
+            "publish_warn_no_canonical_permission": "You must have permission to set the main address to publish this room.",
             "published_aliases_description": "To publish an address, it needs to be set as a local address first.",
             "published_aliases_explainer_room": "Published addresses can be used by anyone on any server to join your room.",
             "published_aliases_explainer_space": "Published addresses can be used by anyone on any server to join your space.",
@@ -2490,11 +2504,12 @@
             "error_failed_save": "Failed to update the visibility of this space",
             "error_update_guest_access": "Failed to update the guest access of this space",
             "error_update_history_visibility": "Failed to update the history visibility of this space",
-            "guest_access_explainer": "Guests can join a space without having an account.",
-            "guest_access_explainer_public_space": "This may be useful for public spaces.",
+            "guest_access_disabled": "You do not have permission to change guest access.",
+            "guest_access_explainer": "Guests can join a space without having an account. This may be useful for public spaces.",
             "guest_access_label": "Enable guest access",
             "history_visibility_anyone_space": "Preview Space",
             "history_visibility_anyone_space_description": "Allow people to preview your space before they join.",
+            "history_visibility_anyone_space_disabled": "You do not have permission to change history visibilty.",
             "history_visibility_anyone_space_recommendation": "Recommended for public spaces.",
             "title": "Visibility"
         },
@@ -2956,6 +2971,7 @@
             "message_search_indexing": "Currently indexing: %(currentRoom)s",
             "message_search_indexing_idle": "Not currently indexing messages for any room.",
             "message_search_intro": "%(brand)s is securely caching encrypted messages locally for them to appear in search results:",
+            "message_search_pending_rooms": "Rooms awaiting indexing: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s out of %(totalRooms)s",
             "message_search_section": "Message search",
             "message_search_sleep_time": "How fast should messages be downloaded.",
@@ -3532,7 +3548,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ended a poll",
             "sender_ended": "%(senderName)s has ended a poll"
         },
         "m.poll.start": "%(senderName)s has started a poll - %(pollQuestion)s",

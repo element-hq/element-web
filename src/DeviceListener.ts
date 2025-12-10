@@ -477,7 +477,10 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         // said we are OK with that.
         const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
 
-        const backupKeyCached = (await crypto.getSessionBackupPrivateKey()) !== null;
+        // If key backup is active and not disabled: do we have the backup key
+        // cached locally?
+        const backupKeyCached =
+            !keyBackupUploadActive || backupDisabled || (await crypto.getSessionBackupPrivateKey()) !== null;
 
         const allSystemsReady =
             isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk && backupKeyCached;

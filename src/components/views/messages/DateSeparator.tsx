@@ -11,6 +11,7 @@ import React, { type JSX } from "react";
 import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { capitalize } from "lodash";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
@@ -312,7 +313,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
                     {this.getLabel()}
                 </h2>
-                <div className="mx_DateSeparator_chevron" />
+                <ChevronDownIcon className="mx_DateSeparator_chevron" />
                 {contextMenu}
             </ContextMenuTooltipButton>
         );

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 
 import ContentMessages from "../../ContentMessages";
 import dis from "../../dispatcher/dispatcher";
@@ -45,7 +44,7 @@ function isUploadPayload(payload: ActionPayload): payload is UploadPayload {
 }
 
 export default class UploadBar extends React.PureComponent<IProps, IState> {
-    private dispatcherRef: Optional<string>;
+    private dispatcherRef?: string;
     private unmounted = false;
 
     public constructor(props: IProps) {
