@@ -187,10 +187,6 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               </span>
             </div>
           </div>
-          z
-          <p>
-            You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
-          </p>
         </details>
       </form>
     </div>
