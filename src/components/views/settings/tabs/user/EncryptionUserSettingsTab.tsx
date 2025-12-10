@@ -60,7 +60,7 @@ interface Props {
 /**
  * The encryption settings tab.
  */
-export function EncryptionUserSettingsTab({ initialState = "main" }: Props): JSX.Element {
+export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
     const deviceState = useTypedEventEmitterState(
@@ -220,7 +220,7 @@ interface IdentityNeedsResetNoticePanelProps {
 /**
  * Panel to tell the user that they need to reset their identity.
  */
-function IdentityNeedsResetNoticePanel({ onContinue }: IdentityNeedsResetNoticePanelProps): JSX.Element {
+function IdentityNeedsResetNoticePanel({ onContinue }: Readonly<IdentityNeedsResetNoticePanelProps>): JSX.Element {
     return (
         <SettingsSection
             legacy={false}
