@@ -229,7 +229,7 @@ export const RoomSearchView = ({
             continue;
         }
 
-        if (!haveRendererForEvent(mxEv, client, roomContext.showHiddenEvents)) {
+        if (!haveRendererForEvent(mxEv, client, roomContext.showHiddenEvents, true /* forSearchResults */)) {
             // XXX: can this ever happen? It will make the result count
             // not match the displayed count.
             continue;

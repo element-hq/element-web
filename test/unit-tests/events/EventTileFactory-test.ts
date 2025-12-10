@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, type MatrixClient, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixEvent, MsgType, Room, RelationType } from "matrix-js-sdk/src/matrix";
 
 import {
     JSONEventFactory,
@@ -15,6 +15,7 @@ import {
     pickFactory,
     renderTile,
     RoomCreateEventFactory,
+    haveRendererForEvent,
 } from "../../../src/events/EventTileFactory";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { createTestClient, mkEvent } from "../../test-utils";
@@ -206,6 +207,35 @@ describe("pickFactory", () => {
         it("should return a MessageEventFactory for a UTD event", () => {
             expect(pickFactory(utdEvent, client, false)).toBe(MessageEventFactory);
         });
+
+        describe("for search results", () => {
+            it("should return MessageEventFactory for edit events (m.replace) in search context", () => {
+                const editEvent = mkEvent({
+                    event: true,
+                    type: EventType.RoomMessage,
+                    user: client.getUserId()!,
+                    room: roomId,
+                    content: {
+                        "body": "* edited message",
+                        "msgtype": MsgType.Text,
+                        "m.new_content": {
+                            body: "edited message",
+                            msgtype: MsgType.Text,
+                        },
+                        "m.relates_to": {
+                            rel_type: RelationType.Replace,
+                            event_id: "$original",
+                        },
+                    },
+                });
+
+                // In normal context, edit events should be rejected
+                expect(pickFactory(editEvent, client, false, undefined, false)).toBeUndefined();
+
+                // In search context, edit events should be allowed
+                expect(pickFactory(editEvent, client, false, undefined, true)).toBe(MessageEventFactory);
+            });
+        });
     });
 });
 
@@ -256,6 +286,68 @@ describe("renderTile", () => {
 
         expect(ModuleApi.instance.customComponents.renderMessage).toHaveBeenCalledWith({
             mxEvent: messageEvent,
+        });
+    });
+});
+
+describe("haveRendererForEvent", () => {
+    let client: MatrixClient;
+    let room: Room;
+
+    beforeAll(() => {
+        client = createTestClient();
+        room = new Room(roomId, client, client.getSafeUserId());
+        mocked(client.getRoom).mockImplementation((getRoomId: string): Room | null => {
+            if (getRoomId === room.roomId) return room;
+            return null;
+        });
+    });
+
+    describe("for edit events (m.replace)", () => {
+        it("should return false for edit events in normal context", () => {
+            const editEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: client.getUserId()!,
+                room: roomId,
+                content: {
+                    "body": "* edited message",
+                    "msgtype": MsgType.Text,
+                    "m.new_content": {
+                        body: "edited message",
+                        msgtype: MsgType.Text,
+                    },
+                    "m.relates_to": {
+                        rel_type: RelationType.Replace,
+                        event_id: "$original",
+                    },
+                },
+            });
+
+            expect(haveRendererForEvent(editEvent, client, false, false)).toBe(false);
+        });
+
+        it("should return true for edit events in search context", () => {
+            const editEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: client.getUserId()!,
+                room: roomId,
+                content: {
+                    "body": "* edited message",
+                    "msgtype": MsgType.Text,
+                    "m.new_content": {
+                        body: "edited message",
+                        msgtype: MsgType.Text,
+                    },
+                    "m.relates_to": {
+                        rel_type: RelationType.Replace,
+                        event_id: "$original",
+                    },
+                },
+            });
+
+            expect(haveRendererForEvent(editEvent, client, false, true)).toBe(true);
         });
     });
 });

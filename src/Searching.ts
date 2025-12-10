@@ -218,6 +218,9 @@ async function localSearchProcess(
     // Restore our encryption info so we can properly re-verify the events.
     restoreEncryptionInfo(processedResult.results);
 
+    // Note: Edit events (m.replace) are handled at render time in MessageEvent component
+    // to avoid modifying shared MatrixEvent objects
+
     return processedResult;
 }
 
