@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { LinkIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import dis from "../../../dispatcher/dispatcher";
@@ -20,6 +21,7 @@ import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOpti
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { Icon as ViewInRoomIcon } from "../../../../res/img/element-icons/view-in-room.svg";
 
 export interface ThreadListContextMenuProps {
     mxEvent: MatrixEvent;
@@ -102,7 +104,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                             <IconizedContextMenuOption
                                 onClick={(e) => viewInRoom(e)}
                                 label={_t("timeline|mab|view_in_room")}
-                                iconClassName="mx_ThreadPanel_viewInRoom"
+                                icon={<ViewInRoomIcon />}
                             />
                         )}
                         {permalinkCreator && (
@@ -110,7 +112,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                                 data-testid="copy-thread-link"
                                 onClick={(e) => copyLinkToThread(e)}
                                 label={_t("timeline|mab|copy_link_thread")}
-                                iconClassName="mx_ThreadPanel_copyLinkToThread"
+                                icon={<LinkIcon />}
                             />
                         )}
                     </IconizedContextMenuOptionList>
