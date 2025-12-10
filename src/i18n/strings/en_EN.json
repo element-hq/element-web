@@ -2661,10 +2661,6 @@
             "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
             "device_not_verified_title": "Device not verified",
             "dialog_title": "<strong>Settings:</strong> Encryption",
-            "identity_needs_reset": {
-                "description": "You have to reset your cryptographic identity in order to ensure access to your message history",
-                "title": "Your key storage is out of sync"
-            },
             "key_storage": {
                 "allow_key_storage": "Allow key storage",
                 "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",

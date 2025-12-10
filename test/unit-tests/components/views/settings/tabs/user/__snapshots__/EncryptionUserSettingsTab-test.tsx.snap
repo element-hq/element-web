@@ -100,7 +100,7 @@ exports[`<EncryptionUserSettingsTab /> should display the identity needs reset p
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
           >
-            Your key storage is out of sync
+            Your key storage is out of sync.
           </h2>
           <div
             class="mx_SettingsSubheader"

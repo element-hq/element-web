@@ -224,12 +224,9 @@ function IdentityNeedsResetNoticePanel({ onContinue }: Readonly<IdentityNeedsRes
     return (
         <SettingsSection
             legacy={false}
-            heading={_t("settings|encryption|identity_needs_reset|title")}
+            heading={_t("encryption|key_storage_out_of_sync")}
             subHeading={
-                <SettingsSubheader
-                    state="error"
-                    stateMessage={_t("settings|encryption|identity_needs_reset|description")}
-                />
+                <SettingsSubheader state="error" stateMessage={_t("encryption|identity_needs_reset_description")} />
             }
             data-testid="recoveryPanel"
         >
