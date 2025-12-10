@@ -26,7 +26,7 @@ test.describe("Encryption tab", () => {
         test.beforeEach(async ({ page, homeserver, credentials }) => {
             // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
             const botCredentials = { ...credentials };
-            botCredentials.accessToken = ""; // use a new login for the bot
+            delete botCredentials.accessToken; // use a new login for the bot
             const res = await createBot(page, homeserver, botCredentials);
             recoveryKey = res.recoveryKey;
             expectedBackupVersion = res.expectedBackupVersion;

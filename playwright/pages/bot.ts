@@ -16,6 +16,10 @@ import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
 import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { bootstrapCrossSigningForClient, Client } from "./client";
 
+export interface CredentialsOptionalAccessToken extends Omit<Credentials, "accessToken"> {
+    accessToken?: string;
+}
+
 export interface CreateBotOpts {
     /**
      * A prefix to use for the userid. If unspecified, "bot_" will be used.
@@ -58,7 +62,7 @@ const defaultCreateBotOptions = {
 type ExtendedMatrixClient = MatrixClient & { __playwright_recovery_key: GeneratedSecretStorageKey };
 
 export class Bot extends Client {
-    public credentials?: Credentials;
+    public credentials?: CredentialsOptionalAccessToken;
     private handlePromise: Promise<JSHandle<ExtendedMatrixClient>>;
 
     constructor(
@@ -73,13 +77,13 @@ export class Bot extends Client {
     /**
      * Set the credentials used by the bot.
      *
-     * If `credentials.accessToken` is set to the empty string, then
-     * `buildClient` will log in a new session.  Note that `getCredentials`
-     * will return the credentials passed to this function, rather than
-     * the updated credentials from the new login.  In particular, the
-     * `accessToken` and `deviceId` will not be updated.
+     * If `credentials.accessToken` is unset, then `buildClient` will log in a
+     * new session.  Note that `getCredentials` will return the credentials
+     * passed to this function, rather than the updated credentials from the new
+     * login.  In particular, the `accessToken` and `deviceId` will not be
+     * updated.
      */
-    public setCredentials(credentials: Credentials): void {
+    public setCredentials(credentials: CredentialsOptionalAccessToken): void {
         if (this.credentials) throw new Error("Bot has already started");
         this.credentials = credentials;
     }
@@ -89,7 +93,7 @@ export class Bot extends Client {
         return client.evaluate((cli) => cli.__playwright_recovery_key);
     }
 
-    private async getCredentials(): Promise<Credentials> {
+    private async getCredentials(): Promise<CredentialsOptionalAccessToken> {
         if (this.credentials) return this.credentials;
         // We want to pad the uniqueId but not the prefix
         const username =
@@ -170,7 +174,7 @@ export class Bot extends Client {
                     getSecretStorageKey,
                 };
 
-                if (!credentials.accessToken) {
+                if (!("accessToken" in credentials)) {
                     const loginCli = new window.matrixcs.MatrixClient({
                         baseUrl,
                         store: new window.matrixcs.MemoryStore(),
