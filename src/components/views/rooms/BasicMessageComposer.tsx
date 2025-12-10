@@ -482,6 +482,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onKeyDown = (event: React.KeyboardEvent): void => {
         if (!this.editorRef.current) return;
+        // Ignore any keypress while doing IME compositions to prevent cursor position issues
+        // This matches the behavior in SendMessageComposer and EditMessageComposer
+        if (this.isComposing(event)) {
+            return;
+        }
         if (this.isSafari && event.which == 229) {
             // Swallow the extra keyDown by Safari
             event.stopPropagation();

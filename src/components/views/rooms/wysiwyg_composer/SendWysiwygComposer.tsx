@@ -68,7 +68,7 @@ export default function SendWysiwygComposer({
             />
         );
     } else if (e2eStatus !== E2EStatus.Normal) {
-        leftIcon = <E2EIcon status={e2eStatus} />;
+        leftIcon = <E2EIcon status={e2eStatus} size={12} />;
     }
     return (
         <ComposerContext.Provider value={defaultContextValue}>

@@ -363,13 +363,13 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_jb_"
+                aria-labelledby="_r_o1_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
-                height="12"
+                height="12px"
                 viewBox="0 0 24 24"
-                width="12"
+                width="12px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -529,22 +529,61 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <div
                 aria-label="Emoji"
-                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                  />
+                  <path
+                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="Attachment"
-                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                class="mx_AccessibleButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="More options"
                 class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
               <input
                 multiple=""
                 style="display: none;"
@@ -832,22 +871,61 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             >
               <div
                 aria-label="Emoji"
-                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                  />
+                  <path
+                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="Attachment"
-                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                class="mx_AccessibleButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="More options"
                 class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
               <input
                 multiple=""
                 style="display: none;"
@@ -939,6 +1017,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -1127,6 +1206,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         >
           <div
             class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
@@ -1166,6 +1246,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -1189,6 +1270,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         >
           <div
             class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
@@ -1234,13 +1316,13 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
               >
                 <svg
                   aria-label="Messages in this room are not end-to-end encrypted"
-                  aria-labelledby="_r_14_"
+                  aria-labelledby="_r_10_"
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
-                  height="12"
+                  height="12px"
                   viewBox="0 0 24 24"
-                  width="12"
+                  width="12px"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1400,22 +1482,61 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -1435,6 +1556,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -1623,6 +1745,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         >
           <div
             class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
@@ -1668,13 +1791,13 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               >
                 <svg
                   aria-label="Messages in this room are not end-to-end encrypted"
-                  aria-labelledby="_r_6e_"
+                  aria-labelledby="_r_6a_"
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
-                  height="12"
+                  height="12px"
                   viewBox="0 0 24 24"
-                  width="12"
+                  width="12px"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1834,22 +1957,61 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -1869,6 +2031,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -2057,6 +2220,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         >
           <div
             class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
@@ -2102,13 +2266,13 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               >
                 <svg
                   aria-label="Messages in this room are not end-to-end encrypted"
-                  aria-labelledby="_r_3h_"
+                  aria-labelledby="_r_3d_"
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
-                  height="12"
+                  height="12px"
                   viewBox="0 0 24 24"
-                  width="12"
+                  width="12px"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2268,22 +2432,61 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -2303,6 +2506,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -2371,7 +2575,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_ab_"
+                aria-labelledby="_r_f5_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2398,7 +2602,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_ag_"
+                aria-labelledby="_r_fa_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2413,7 +2617,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_al_"
+            aria-labelledby="_r_ff_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2440,7 +2644,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_aq_"
+            aria-labelledby="_r_fk_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2470,7 +2674,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_av_"
+              aria-labelledby="_r_fp_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -2491,6 +2695,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         />
         <div
           aria-label="Room status bar"
@@ -2515,6 +2720,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -2583,7 +2789,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_ab_"
+                aria-labelledby="_r_f5_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2610,7 +2816,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_ag_"
+                aria-labelledby="_r_fa_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2625,7 +2831,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_al_"
+            aria-labelledby="_r_ff_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2652,7 +2858,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_aq_"
+            aria-labelledby="_r_fk_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2682,7 +2888,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_av_"
+              aria-labelledby="_r_fp_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -2703,6 +2909,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         >
           <div
             class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
@@ -2750,13 +2957,25 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   tabindex="0"
                 >
                   <div
-                    aria-labelledby="_r_be_"
-                    class="mx_E2EIcon mx_E2EIcon_verified mx_MessageComposer_e2eIcon"
+                    aria-labelledby="_r_g4_"
+                    class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                     data-testid="e2e-icon"
+                    style="width: 12px; height: 12px;"
                   >
-                    <div
-                      class="mx_E2EIcon_normal"
-                    />
+                    <svg
+                      class="mx_E2EIcon_verified"
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M11.106 2.447a2 2 0 0 1 1.789 0l6 3A2 2 0 0 1 20 7.237V12c0 6.742-5.773 9.246-7.51 9.846-.32.111-.66.111-.98 0C9.774 21.246 4 18.743 4 12V7.236a2 2 0 0 1 1.105-1.789zm4.601 6.846a1 1 0 0 0-1.414 0L11 12.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 0-1.414"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </span>
               </div>
@@ -2912,22 +3131,61 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -2977,6 +3235,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView mx_RoomView_immersive"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -3033,7 +3292,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Chat"
-            aria-labelledby="_r_fd_"
+            aria-labelledby="_r_k7_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -3060,7 +3319,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_fi_"
+            aria-labelledby="_r_kc_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -3087,7 +3346,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_fn_"
+            aria-labelledby="_r_kh_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -3117,7 +3376,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_fs_"
+              aria-labelledby="_r_km_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -3191,7 +3450,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 </p>
               </div>
               <button
-                aria-labelledby="_r_g5_"
+                aria-labelledby="_r_kv_"
                 class="_icon-button_1pz9o_8"
                 data-kind="secondary"
                 data-testid="base-card-close-button"
@@ -3251,13 +3510,13 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                   >
                     <svg
                       aria-label="Messages in this room are not end-to-end encrypted"
-                      aria-labelledby="_r_ge_"
+                      aria-labelledby="_r_l4_"
                       class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                       color="var(--cpd-color-icon-info-primary)"
                       fill="currentColor"
-                      height="12"
+                      height="12px"
                       viewBox="0 0 24 24"
-                      width="12"
+                      width="12px"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
@@ -3417,22 +3676,61 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                   >
                     <div
                       aria-label="Emoji"
-                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                        />
+                        <path
+                          d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                        />
+                      </svg>
+                    </div>
                     <div
                       aria-label="Attachment"
-                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                      class="mx_AccessibleButton mx_MessageComposer_button"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                        />
+                      </svg>
+                    </div>
                     <div
                       aria-label="More options"
                       class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                        />
+                      </svg>
+                    </div>
                     <input
                       multiple=""
                       style="display: none;"

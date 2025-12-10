@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ComponentProps, type CSSProperties } from "react";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
+import { ErrorSolidIcon, ShieldIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -32,31 +33,20 @@ interface Props {
     onClick?: () => void;
     hideTooltip?: boolean;
     tooltipPlacement?: ComponentProps<typeof Tooltip>["placement"];
-    bordered?: boolean;
     status: E2EStatus;
     isUser?: boolean;
 }
 
-const E2EIcon: React.FC<Props> = ({
-    isUser,
-    status,
-    className,
-    size,
-    onClick,
-    hideTooltip,
-    tooltipPlacement,
-    bordered,
-}) => {
-    const classes = classNames(
-        {
-            mx_E2EIcon: true,
-            mx_E2EIcon_bordered: bordered,
-            mx_E2EIcon_warning: status === E2EStatus.Warning,
-            mx_E2EIcon_normal: status === E2EStatus.Normal,
-            mx_E2EIcon_verified: status === E2EStatus.Verified,
-        },
-        className,
-    );
+const icons: Record<E2EStatus, JSX.Element> = {
+    [E2EStatus.Warning]: <ErrorSolidIcon className="mx_E2EIcon_warning" />,
+    [E2EStatus.Normal]: <LockSolidIcon className="mx_E2EIcon_normal" />,
+    [E2EStatus.Verified]: <ShieldIcon className="mx_E2EIcon_verified" />,
+};
+
+const E2EIcon: React.FC<Props> = ({ isUser, status, className, size, onClick, hideTooltip, tooltipPlacement }) => {
+    const icon = icons[status];
+
+    const classes = classNames("mx_E2EIcon", className);
 
     let e2eTitle: TranslationKey | undefined;
     if (isUser) {
@@ -74,19 +64,17 @@ const E2EIcon: React.FC<Props> = ({
 
     let content: JSX.Element;
     if (onClick) {
-        content = <AccessibleButton onClick={onClick} className={classes} style={style} data-testid="e2e-icon" />;
+        content = (
+            <AccessibleButton onClick={onClick} className={classes} style={style} data-testid="e2e-icon">
+                {icon}
+            </AccessibleButton>
+        );
     } else {
-        // Verified and warning icon have a transparent cutout, so add a white background.
-        // The normal icon already has the correct shape and size, so reuse that.
-        if (status === E2EStatus.Verified || status === E2EStatus.Warning) {
-            content = (
-                <div className={classes} style={style} data-testid="e2e-icon">
-                    <div className="mx_E2EIcon_normal" />
-                </div>
-            );
-        } else {
-            content = <div className={classes} style={style} data-testid="e2e-icon" />;
-        }
+        content = (
+            <div className={classes} style={style} data-testid="e2e-icon">
+                {icon}
+            </div>
+        );
     }
 
     if (!e2eTitle || hideTooltip) {

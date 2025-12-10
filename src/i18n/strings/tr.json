@@ -2298,7 +2298,6 @@
             "error_update_guest_access": "Bu alanın misafir erişimi güncellenemedi",
             "error_update_history_visibility": "Bu alanın geçmiş görünürlüğü güncellenemedi",
             "guest_access_explainer": "Misafirler bir hesap oluşturmadan bir alana katılabilirler.",
-            "guest_access_explainer_public_space": "Bu, herkese açık alanlar için yararlı olabilir.",
             "guest_access_label": "Misafir erişimini etkinleştir",
             "history_visibility_anyone_space": "Alanı önizle",
             "history_visibility_anyone_space_description": "İnsanların katılmadan önce alanınızı önizlemesine izin verin.",
@@ -3286,7 +3285,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Anketi sonlandırdı",
             "sender_ended": "%(senderName)s anketi sonlandırdı"
         },
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",

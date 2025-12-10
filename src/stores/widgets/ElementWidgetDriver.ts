@@ -65,8 +65,6 @@ import { ModuleRunner } from "../../modules/ModuleRunner";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 
-// TODO: Purge this from the universe
-
 function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
 }
@@ -81,12 +79,19 @@ const normalizeTurnServer = ({ urls, username, credential }: IClientTurnServer):
     password: credential,
 });
 
-export class StopGapWidgetDriver extends WidgetDriver {
+/**
+ * Element Web's implementation of a widget driver (the object that
+ * matrix-widget-api uses to retrieve information from the client and carry out
+ * authorized actions on the widget's behalf). Essentially this is a glorified
+ * set of callbacks.
+ */
+// TODO: Consider alternative designs for matrix-widget-api?
+// Replace with matrix-rust-sdk?
+export class ElementWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
 
     // TODO: Refactor widgetKind into the Widget class
     public constructor(
-        allowedCapabilities: Capability[],
         private forWidget: Widget,
         private forWidgetKind: WidgetKind,
         virtual: boolean,
@@ -97,11 +102,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
         // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
         // button if the widget says it supports screenshots.
-        this.allowedCapabilities = new Set([
-            ...allowedCapabilities,
-            MatrixCapabilities.Screenshots,
-            ElementWidgetCapabilities.RequiresClient,
-        ]);
+        this.allowedCapabilities = new Set([MatrixCapabilities.Screenshots, ElementWidgetCapabilities.RequiresClient]);
 
         // Grant the permissions that are specific to given widget types
         if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {

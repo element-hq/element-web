@@ -1702,7 +1702,6 @@
             "error_update_guest_access": "Mistókst að uppfæra gestaaðgang þessa svæðis",
             "error_update_history_visibility": "Mistókst að uppfæra sýnileika atvikaferils þessa svæðis",
             "guest_access_explainer": "Gestir geta tekið þátt í svæði án þess að vera með notandaaðgang.",
-            "guest_access_explainer_public_space": "Þetta getur hentað fyrir opinber almenningssvæði.",
             "guest_access_label": "Leyfa aðgang gesta",
             "history_visibility_anyone_space": "Forskoða svæði",
             "history_visibility_anyone_space_description": "Bjóddu fólki að forskoða svæðið þitt áður en þau geta tekið þátt.",

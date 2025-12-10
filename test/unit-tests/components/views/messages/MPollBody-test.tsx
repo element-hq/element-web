@@ -505,11 +505,11 @@ describe("MPollBody", () => {
         expect(runFindTopAnswer([])).toEqual("");
     });
 
-    it("shows non-radio buttons if the poll is ended", async () => {
+    it("shows disabled radio buttons if the poll is ended", async () => {
         const events = [newPollEndEvent()];
         const { container } = await newMPollBody([], events);
-        expect(container.querySelector(".mx_StyledRadioButton")).not.toBeInTheDocument();
-        expect(container.querySelector('input[type="radio"]')).not.toBeInTheDocument();
+        expect(container.querySelector(".mx_StyledRadioButton")).toBeInTheDocument();
+        expect(container.querySelector('input[type="radio"][disabled]')).toBeInTheDocument();
     });
 
     it("counts votes as normal if the poll is ended", async () => {
@@ -551,8 +551,8 @@ describe("MPollBody", () => {
         const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
 
-        expect(renderResult.container.querySelectorAll(".mx_StyledRadioButton")).toHaveLength(0);
-        expect(renderResult.container.querySelectorAll('input[type="radio"]')).toHaveLength(0);
+        expect(renderResult.container.querySelectorAll(".mx_StyledRadioButton")).toHaveLength(4);
+        expect(renderResult.container.querySelectorAll('input[type="radio"][disabled]')).toHaveLength(4);
         expect(endedVotesCount(renderResult, "pizza")).toBe("2 votes");
         expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
@@ -646,9 +646,9 @@ describe("MPollBody", () => {
         expect(endedVoteChecked(renderResult, "wings")).toBe(true);
         expect(endedVoteChecked(renderResult, "pizza")).toBe(false);
 
-        // Double-check by looking for the endedOptionWinner class
-        expect(endedVoteDiv(renderResult, "wings").className.includes("mx_PollOption_endedOptionWinner")).toBe(true);
-        expect(endedVoteDiv(renderResult, "pizza").className.includes("mx_PollOption_endedOptionWinner")).toBe(false);
+        // Double-check by looking for the checked class
+        expect(endedVoteDiv(renderResult, "wings").className.includes("mx_PollOption_checked")).toBe(true);
+        expect(endedVoteDiv(renderResult, "pizza").className.includes("mx_PollOption_checked")).toBe(false);
     });
 
     it("highlights multiple winning votes", async () => {
@@ -731,9 +731,7 @@ describe("MPollBody", () => {
         });
         pollEvent.makeReplaced(replacingEvent);
         const { getByTestId, container } = await newMPollBodyFromEvent(pollEvent, []);
-        expect(getByTestId("pollQuestion").innerHTML).toEqual(
-            'new question<span class="mx_MPollBody_edited"> (edited)</span>',
-        );
+        expect(getByTestId("pollQuestion").textContent).toEqual("new question (edited)");
         const inputs = container.querySelectorAll('input[type="radio"]');
         expect(inputs).toHaveLength(3);
         expect(inputs[0].getAttribute("value")).toEqual("n1");
@@ -951,7 +949,7 @@ function endedVoteChecked({ getByTestId }: RenderResult, value: string): boolean
 }
 
 function endedVoteDiv({ getByTestId }: RenderResult, value: string): Element {
-    return getByTestId(`pollOption-${value}`).firstElementChild!;
+    return getByTestId(`pollOption-${value}`);
 }
 
 function endedVotesCount(renderResult: RenderResult, value: string): string {
