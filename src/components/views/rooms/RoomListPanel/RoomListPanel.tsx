@@ -5,24 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { RoomListPanel as SharedRoomListPanel } from "@element-hq/web-shared-components";
 
-import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../../settings/UIFeature";
-import { RoomListSearch } from "./RoomListSearch";
-import { RoomListHeaderView } from "./RoomListHeaderView";
-import { RoomListView } from "./RoomListView";
-import { _t } from "../../../../languageHandler";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 import { type IState as IRovingTabIndexState } from "../../../../accessibility/RovingTabIndex";
+import { RoomListPanelViewModel } from "../../../viewmodels/roomlist/RoomListPanelViewModel";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import RoomAvatar from "../../avatars/RoomAvatar";
+import type { RoomListItem } from "@element-hq/web-shared-components";
 
 type RoomListPanelProps = {
     /**
      * Current active space
-     * See {@link RoomListSearch}
+     * This is kept for backward compatibility but not currently used by the ViewModel
      */
     activeSpace: string;
 };
@@ -31,8 +29,23 @@ type RoomListPanelProps = {
  * The panel of the room list
  */
 export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => {
-    const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
+    const client = useMatrixClientContext();
     const [focusedElement, setFocusedElement] = useState<Element | null>(null);
+
+    // Create ViewModel instance - use ref to survive strict mode double-mounting
+    const vmRef = useRef<RoomListPanelViewModel | null>(null);
+    if (!vmRef.current) {
+        vmRef.current = new RoomListPanelViewModel({ client });
+    }
+    const vm = vmRef.current;
+
+    // Clean up ViewModel on unmount
+    useEffect(() => {
+        return () => {
+            vm.dispose();
+            vmRef.current = null;
+        };
+    }, [vm]);
 
     const onFocus = useCallback((ev: React.FocusEvent): void => {
         setFocusedElement(ev.target as Element);
@@ -58,12 +71,21 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
         [focusedElement],
     );
 
+    // Render avatar for room items
+    const renderAvatar = useCallback(
+        (roomItem: RoomListItem) => {
+            // Get the actual room from the client
+            const room = client.getRoom(roomItem.id);
+            if (!room) return null;
+            return <RoomAvatar room={room} size="32px" />;
+        },
+        [client],
+    );
+
     return (
         <SharedRoomListPanel
-            ariaLabel={_t("room_list|list_title")}
-            searchSlot={displayRoomSearch ? <RoomListSearch activeSpace={activeSpace} /> : undefined}
-            headerSlot={<RoomListHeaderView />}
-            contentSlot={<RoomListView />}
+            vm={vm}
+            renderAvatar={renderAvatar}
             onFocus={onFocus}
             onBlur={onBlur}
             onKeyDown={onKeyDown}
