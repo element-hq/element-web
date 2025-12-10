@@ -23,6 +23,10 @@ import {
     type Room,
     ClientEvent,
     SyncState,
+    RoomEvent,
+    EventType,
+    MsgType,
+    RelationType,
 } from "matrix-js-sdk/src/matrix";
 
 import EventIndex from "../../../src/indexing/EventIndex.ts";
@@ -159,6 +163,75 @@ describe("EventIndex", () => {
             token: "token2",
             direction: Direction.Forward,
         });
+    });
+
+    it("deletes original event when an edit event is received", async () => {
+        const deleteEventCalled = Promise.withResolvers<void>();
+        const mockIndexingManager = {
+            loadCheckpoints: jest.fn().mockResolvedValue([]),
+            isEventIndexEmpty: jest.fn().mockResolvedValue(false),
+            deleteEvent: jest.fn().mockImplementation(async () => {
+                deleteEventCalled.resolve();
+            }),
+            addEventToIndex: jest.fn().mockResolvedValue(undefined),
+        } as any as Mocked<BaseEventIndexManager>;
+        mockPlatformPeg({ getEventIndexingManager: () => mockIndexingManager });
+
+        const roomId = "!room1:id";
+        const room = {
+            roomId,
+            getLiveTimeline: () => ({
+                getPaginationToken: () => "token1",
+            }),
+        } as any as Room;
+        const mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsRooms([room]),
+            getEventMapper: () => (obj: Partial<IEvent>) => new MatrixEvent(obj),
+            isRoomEncrypted: jest.fn().mockReturnValue(true),
+            decryptEventIfNeeded: jest.fn().mockResolvedValue(undefined),
+        });
+
+        const indexer = new EventIndex();
+        await indexer.init();
+
+        // Create an edit event (m.replace)
+        const originalEventId = "$original_event_id";
+        const editEvent = new MatrixEvent({
+            type: EventType.RoomMessage,
+            sender: "@user:example.org",
+            room_id: roomId,
+            event_id: "$edit_event_id",
+            content: {
+                "body": "* edited message",
+                "msgtype": MsgType.Text,
+                "m.new_content": {
+                    body: "edited message",
+                    msgtype: MsgType.Text,
+                },
+                "m.relates_to": {
+                    rel_type: RelationType.Replace,
+                    event_id: originalEventId,
+                },
+            },
+        });
+
+        // Emit a Room.Timeline event with the edit
+        mockClient.emit(RoomEvent.Timeline, editEvent, room, false, false, {
+            liveEvent: true,
+            timeline: room.getLiveTimeline(),
+        });
+
+        // Wait for deleteEvent to be called (with timeout)
+        await Promise.race([
+            deleteEventCalled.promise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 1000)),
+        ]);
+
+        // Verify the original event was deleted
+        expect(mockIndexingManager.deleteEvent).toHaveBeenCalledWith(originalEventId);
+
+        // Verify the edit event was added to the index
+        expect(mockIndexingManager.addEventToIndex).toHaveBeenCalled();
     });
 });
 

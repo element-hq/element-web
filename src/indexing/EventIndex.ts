@@ -29,6 +29,7 @@ import {
     SyncState,
     type TimelineIndex,
     type TimelineWindow,
+    RelationType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -367,8 +368,24 @@ export default class EventIndex extends EventEmitter {
      */
     private async addLiveEventToIndex(ev: MatrixEvent): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
 
-        if (!indexManager || !this.isValidEvent(ev)) return;
+        // Handle message edits: delete the original event and add the edited version.
+        // Note: This only handles live events. Edits in historical messages fetched
+        // by the crawler are not processed, so both original and edited versions
+        // may exist in the index.
+        if (ev.isRelation(RelationType.Replace)) {
+            const originalEventId = ev.getAssociatedId();
+            if (originalEventId) {
+                try {
+                    await indexManager.deleteEvent(originalEventId);
+                } catch (e) {
+                    logger.log("EventIndex: Error deleting original event for edit", e);
+                }
+            }
+        }
+
+        if (!this.isValidEvent(ev)) return;
 
         const e = this.eventToJson(ev);
 
