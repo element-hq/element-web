@@ -5,5 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { RoomListSearch } from "./RoomListSearch";
-export type { RoomListSearchState, RoomListSearchProps, RoomListSearchSnapshot } from "./RoomListSearch";
+export { RoomListSearch, type RoomListSearchProps, type RoomListSearchState } from "./RoomListSearch";

@@ -16,8 +16,8 @@ import {
 import {
     RoomListItemNotificationMenu,
     type NotificationMenuState,
-    type NotificationMenuCallbacks,
 } from "./RoomListItemNotificationMenu";
+import { type RoomNotifState } from "../../notifications/RoomNotifs";
 
 /**
  * Props for RoomListItemHoverMenu component
@@ -33,8 +33,8 @@ export interface RoomListItemHoverMenuProps {
     moreOptionsCallbacks: MoreOptionsMenuCallbacks;
     /** Notification menu state */
     notificationState: NotificationMenuState;
-    /** Notification menu callbacks */
-    notificationCallbacks: NotificationMenuCallbacks;
+    /** Callback to set room notification state */
+    onSetRoomNotifState: (state: RoomNotifState) => void;
     /** Callback when menu open state changes */
     onMenuOpenChange: (isOpen: boolean) => void;
 }
@@ -49,7 +49,7 @@ export const RoomListItemHoverMenu: React.FC<RoomListItemHoverMenuProps> = ({
     moreOptionsState,
     moreOptionsCallbacks,
     notificationState,
-    notificationCallbacks,
+    onSetRoomNotifState,
     onMenuOpenChange,
 }): JSX.Element => {
     return (
@@ -64,7 +64,7 @@ export const RoomListItemHoverMenu: React.FC<RoomListItemHoverMenuProps> = ({
             {showNotificationMenu && (
                 <RoomListItemNotificationMenu
                     state={notificationState}
-                    callbacks={notificationCallbacks}
+                    onSetRoomNotifState={onSetRoomNotifState}
                     onMenuOpenChange={onMenuOpenChange}
                 />
             )}
@@ -74,4 +74,5 @@ export const RoomListItemHoverMenu: React.FC<RoomListItemHoverMenuProps> = ({
 
 // Re-export types for convenience
 export type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
-export type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";
+export type { NotificationMenuState } from "./RoomListItemNotificationMenu";
+export type { RoomNotifState } from "../../notifications/RoomNotifs";

@@ -8,9 +8,7 @@
 export { RoomList } from "./RoomList";
 export type { 
     RoomListProps, 
-    RoomListViewModel,
-    RoomListViewSnapshot,
-    RoomListViewActions,
+    RoomListViewState,
     RoomsResult, 
     FilterKey 
 } from "./RoomList";

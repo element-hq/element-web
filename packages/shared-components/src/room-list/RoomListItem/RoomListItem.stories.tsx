@@ -10,7 +10,7 @@ import React from "react";
 import { RoomListItemView, type RoomListItem, type RoomListItemCallbacks } from "./RoomListItem";
 import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
 import type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
-import type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";
+import type { NotificationMenuState } from "./RoomListItemNotificationMenu";
 import type { RoomNotifState } from "../../notifications/RoomNotifs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
@@ -85,10 +85,6 @@ const mockMoreOptionsCallbacks: MoreOptionsMenuCallbacks = {
     onLeaveRoom: () => console.log("Leave room"),
 };
 
-const mockNotificationCallbacks: NotificationMenuCallbacks = {
-    onSetRoomNotifState: (state: RoomNotifState) => console.log("Set notification state:", state),
-};
-
 const baseItem: RoomListItem = {
     id: "!test:example.org",
     name: "Test Room",
@@ -105,7 +101,7 @@ const baseItem: RoomListItem = {
 const baseCallbacks: RoomListItemCallbacks = {
     onOpenRoom: () => console.log("Opening room"),
     moreOptionsCallbacks: mockMoreOptionsCallbacks,
-    notificationCallbacks: mockNotificationCallbacks,
+    onSetRoomNotifState: (state: RoomNotifState) => console.log("Set notification state:", state),
 };
 
 const meta = {

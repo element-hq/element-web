@@ -6,68 +6,54 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListPrimaryFilters, type RoomListPrimaryFiltersSnapshot } from "./RoomListPrimaryFilters";
-import type { FilterViewModel } from "./useVisibleFilters";
-import { type ViewModel } from "../../viewmodel/ViewModel";
+import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
+import type { Filter } from "./useVisibleFilters";
 
 const meta: Meta<typeof RoomListPrimaryFilters> = {
     title: "Room List/RoomListPrimaryFilters",
     component: RoomListPrimaryFilters,
     tags: ["autodocs"],
+    args: {
+        onToggleFilter: () => {},
+    },
 };
 
 export default meta;
 type Story = StoryObj<typeof RoomListPrimaryFilters>;
 
-function createMockViewModel(snapshot: RoomListPrimaryFiltersSnapshot): ViewModel<RoomListPrimaryFiltersSnapshot> {
-    return {
-        getSnapshot: () => snapshot,
-        subscribe: () => () => {},
-    };
-}
-
 // Mock filter data - simple presentation data only
-const createFilters = (selectedIndex: number = 0): FilterViewModel[] => {
+const createFilters = (selectedIndex: number = 0): Filter[] => {
     const filterNames = ["All", "People", "Rooms", "Favourites", "Unread"];
 
     return filterNames.map((name, index) => ({
         name,
         active: index === selectedIndex,
-        toggle: () => console.log(`Filter toggled: ${name}`),
     }));
 };
 
 export const Default: Story = {
     args: {
-        vm: createMockViewModel({
-            filters: createFilters(0),
-        }),
+        filters: createFilters(0),
     },
 };
 
 export const PeopleSelected: Story = {
     args: {
-        vm: createMockViewModel({
-            filters: createFilters(1),
-        }),
+        filters: createFilters(1),
     },
 };
 
 export const FewFilters: Story = {
     args: {
-        vm: createMockViewModel({
-            filters: [
-                {
-                    name: "All",
-                    active: true,
-                    toggle: () => console.log("All toggled"),
-                },
-                {
-                    name: "Unread",
-                    active: false,
-                    toggle: () => console.log("Unread toggled"),
-                },
-            ],
-        }),
+        filters: [
+            {
+                name: "All",
+                active: true,
+            },
+            {
+                name: "Unread",
+                active: false,
+            },
+        ],
     },
 };

@@ -9,41 +9,35 @@ import React, { type JSX, useId, useState } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
 import { Flex } from "../../utils/Flex";
 import { _t } from "../../utils/i18n";
 import { useCollapseFilters } from "./useCollapseFilters";
-import { useVisibleFilters, type FilterViewModel } from "./useVisibleFilters";
+import { useVisibleFilters, type Filter } from "./useVisibleFilters";
 import styles from "./RoomListPrimaryFilters.module.css";
-
-/**
- * Snapshot for RoomListPrimaryFilters
- */
-export type RoomListPrimaryFiltersSnapshot = {
-    /** Array of filter data */
-    filters: FilterViewModel[];
-};
 
 /**
  * Props for RoomListPrimaryFilters component
  */
 export interface RoomListPrimaryFiltersProps {
-    /** The view model containing filter data */
-    vm: ViewModel<RoomListPrimaryFiltersSnapshot>;
+    /** Array of filters to display */
+    filters: Filter[];
+    /** Callback when a filter is toggled */
+    onToggleFilter: (filter: Filter) => void;
 }
 
 /**
  * The primary filters component for the room list.
  * Displays a collapsible list of filters with expand/collapse functionality.
  */
-export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({ vm }): JSX.Element => {
-    const snapshot = useViewModel(vm);
+export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({
+    filters,
+    onToggleFilter,
+}): JSX.Element | null => {
     const id = useId();
     const [isExpanded, setIsExpanded] = useState(false);
 
     const { ref, isWrapping: displayChevron, wrappingIndex } = useCollapseFilters<HTMLUListElement>(isExpanded);
-    const filters = useVisibleFilters(snapshot.filters, wrappingIndex);
+    const visibleFilters = useVisibleFilters(filters, wrappingIndex);
 
     return (
         <Flex
@@ -77,8 +71,8 @@ export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({ 
                 className={styles.list}
                 ref={ref}
             >
-                {filters.map((filter, i) => (
-                    <ChatFilter key={i} role="option" selected={filter.active} onClick={() => filter.toggle()}>
+                {visibleFilters.map((filter, i) => (
+                    <ChatFilter key={i} role="option" selected={filter.active} onClick={() => onToggleFilter(filter)}>
                         {filter.name}
                     </ChatFilter>
                 ))}

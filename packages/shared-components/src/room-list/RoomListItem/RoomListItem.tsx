@@ -15,9 +15,9 @@ import {
     type MoreOptionsMenuState,
     type MoreOptionsMenuCallbacks,
     type NotificationMenuState,
-    type NotificationMenuCallbacks,
 } from "./RoomListItemHoverMenu";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
+import { type RoomNotifState } from "../../notifications/RoomNotifs";
 import styles from "./RoomListItem.module.css";
 
 /**
@@ -55,8 +55,8 @@ export interface RoomListItemCallbacks {
     onOpenRoom: () => void;
     /** More options menu callbacks */
     moreOptionsCallbacks: MoreOptionsMenuCallbacks;
-    /** Notification menu callbacks */
-    notificationCallbacks: NotificationMenuCallbacks;
+    /** Set the room notification state */
+    onSetRoomNotifState: (state: RoomNotifState) => void;
 }
 
 /**
@@ -164,7 +164,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                         moreOptionsState={item.moreOptionsState}
                         moreOptionsCallbacks={callbacks.moreOptionsCallbacks}
                         notificationState={item.notificationState}
-                        notificationCallbacks={callbacks.notificationCallbacks}
+                        onSetRoomNotifState={callbacks.onSetRoomNotifState}
                         onMenuOpenChange={(isOpen: boolean) => (isOpen ? setIsMenuOpen(true) : closeMenu())}
                     />
                 ) : (

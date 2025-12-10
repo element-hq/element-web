@@ -12,14 +12,12 @@ import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 
 /**
- * Snapshot for ComposeMenu
+ * Props for ComposeMenu component
  */
-export type ComposeMenuSnapshot = {
+export interface ComposeMenuProps {
     /** Whether the user can create rooms */
     canCreateRoom: boolean;
     /** Whether the user can create video rooms */
@@ -30,22 +28,24 @@ export type ComposeMenuSnapshot = {
     createRoom: () => void;
     /** Create a video room */
     createVideoRoom: () => void;
-};
+}
 
 /**
- * Props for ComposeMenu component
+ * @deprecated Use ComposeMenuProps instead
  */
-export interface ComposeMenuProps {
-    /** The view model containing menu data and callbacks */
-    vm: ViewModel<ComposeMenuSnapshot>;
-}
+export type ComposeMenuSnapshot = ComposeMenuProps;
 
 /**
  * The compose menu for the room list header.
  * Displays a dropdown menu with options to create new chats, rooms, and video rooms.
  */
-export const ComposeMenu: React.FC<ComposeMenuProps> = ({ vm }): JSX.Element => {
-    const snapshot = useViewModel(vm);
+export const ComposeMenu: React.FC<ComposeMenuProps> = ({
+    canCreateRoom,
+    canCreateVideoRoom,
+    createChatRoom,
+    createRoom,
+    createVideoRoom,
+}): JSX.Element => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -62,25 +62,15 @@ export const ComposeMenu: React.FC<ComposeMenuProps> = ({ vm }): JSX.Element => 
                 </IconButton>
             }
         >
-            <MenuItem
-                Icon={ChatIcon}
-                label={_t("action|start_chat")}
-                onSelect={snapshot.createChatRoom}
-                hideChevron={true}
-            />
-            {snapshot.canCreateRoom && (
-                <MenuItem
-                    Icon={RoomIcon}
-                    label={_t("action|new_room")}
-                    onSelect={snapshot.createRoom}
-                    hideChevron={true}
-                />
+            <MenuItem Icon={ChatIcon} label={_t("action|start_chat")} onSelect={createChatRoom} hideChevron={true} />
+            {canCreateRoom && (
+                <MenuItem Icon={RoomIcon} label={_t("action|new_room")} onSelect={createRoom} hideChevron={true} />
             )}
-            {snapshot.canCreateVideoRoom && (
+            {canCreateVideoRoom && (
                 <MenuItem
                     Icon={VideoCallIcon}
                     label={_t("action|new_video_room")}
-                    onSelect={snapshot.createVideoRoom}
+                    onSelect={createVideoRoom}
                     hideChevron={true}
                 />
             )}

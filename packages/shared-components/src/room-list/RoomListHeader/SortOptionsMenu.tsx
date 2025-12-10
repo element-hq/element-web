@@ -9,8 +9,6 @@ import React, { useState, useCallback, type JSX } from "react";
 import { IconButton, Menu, MenuTitle, Tooltip, RadioMenuItem } from "@vector-im/compound-web";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 
 /**
@@ -24,20 +22,12 @@ export enum SortOption {
 /**
  * Snapshot for SortOptionsMenu
  */
-export type SortOptionsMenuSnapshot = {
+export type SortOptionsMenuProps = {
     /** The currently active sort option */
     activeSortOption: SortOption;
     /** Change the sort order of the room-list */
     sort: (option: SortOption) => void;
 };
-
-/**
- * Props for SortOptionsMenu component
- */
-export interface SortOptionsMenuProps {
-    /** The view model containing menu data and callbacks */
-    vm: ViewModel<SortOptionsMenuSnapshot>;
-}
 
 const MenuTrigger = (props: React.ComponentProps<typeof IconButton>): JSX.Element => (
     <Tooltip label={_t("room_list|room_options")}>
@@ -51,17 +41,16 @@ const MenuTrigger = (props: React.ComponentProps<typeof IconButton>): JSX.Elemen
  * The sort options menu for the room list header.
  * Displays a dropdown menu with options to sort rooms by activity or alphabetically.
  */
-export const SortOptionsMenu: React.FC<SortOptionsMenuProps> = ({ vm }): JSX.Element => {
-    const snapshot = useViewModel(vm);
+export const SortOptionsMenu: React.FC<SortOptionsMenuProps> = ({ activeSortOption, sort }): JSX.Element => {
     const [open, setOpen] = useState(false);
 
     const onActivitySelected = useCallback(() => {
-        snapshot.sort(SortOption.Activity);
-    }, [snapshot]);
+        sort(SortOption.Activity);
+    }, [sort]);
 
     const onAtoZSelected = useCallback(() => {
-        snapshot.sort(SortOption.AToZ);
-    }, [snapshot]);
+        sort(SortOption.AToZ);
+    }, [sort]);
 
     return (
         <Menu
@@ -75,12 +64,12 @@ export const SortOptionsMenu: React.FC<SortOptionsMenuProps> = ({ vm }): JSX.Ele
             <MenuTitle title={_t("room_list|sort")} />
             <RadioMenuItem
                 label={_t("room_list|sort_type|activity")}
-                checked={snapshot.activeSortOption === SortOption.Activity}
+                checked={activeSortOption === SortOption.Activity}
                 onSelect={onActivitySelected}
             />
             <RadioMenuItem
                 label={_t("room_list|sort_type|atoz")}
-                checked={snapshot.activeSortOption === SortOption.AToZ}
+                checked={activeSortOption === SortOption.AToZ}
                 onSelect={onAtoZSelected}
             />
         </Menu>

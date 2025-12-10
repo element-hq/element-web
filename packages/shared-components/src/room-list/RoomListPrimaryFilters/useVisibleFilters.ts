@@ -7,13 +7,11 @@
 
 import { useEffect, useState } from "react";
 
-export interface FilterViewModel {
+export interface Filter {
     /** Filter name/label */
     name: string;
     /** Whether the filter is currently active */
     active: boolean;
-    /** Callback when filter is clicked */
-    toggle: () => void;
 }
 
 /**
@@ -24,7 +22,7 @@ export interface FilterViewModel {
  * @param filters - the list of filters to sort.
  * @param wrappingIndex - the index of the first filter that is wrapping.
  */
-export function useVisibleFilters(filters: FilterViewModel[], wrappingIndex: number): FilterViewModel[] {
+export function useVisibleFilters(filters: Filter[], wrappingIndex: number): Filter[] {
     // By default, the filters are not sorted
     const [sortedFilters, setSortedFilters] = useState(filters);
 

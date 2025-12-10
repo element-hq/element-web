@@ -8,34 +8,31 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
 
-import {
-    RoomList,
-    type RoomListViewModel,
-    type RoomListViewSnapshot,
-    type RoomListViewActions,
-    type RoomsResult,
-} from "./RoomList";
+import { RoomList } from "./RoomList";
+import type { RoomListViewModel, RoomListSnapshot } from "../RoomListView";
 import type { RoomListItem } from "../RoomListItem";
 import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
 import type { MoreOptionsMenuState } from "../RoomListItem/RoomListItemMoreOptionsMenu";
 import type { NotificationMenuState } from "../RoomListItem/RoomListItemNotificationMenu";
+import { SortOption } from "../RoomListHeader/SortOptionsMenu";
 
-function createMockViewModel(
-    snapshot: RoomListViewSnapshot,
-    actions: Partial<RoomListViewActions> = {},
-): RoomListViewModel {
+function createMockViewModel(snapshot: RoomListSnapshot): RoomListViewModel {
     return {
         getSnapshot: () => snapshot,
         subscribe: () => () => {},
-        onOpenRoom: actions.onOpenRoom || jest.fn(),
-        onMarkAsRead: actions.onMarkAsRead || jest.fn(),
-        onMarkAsUnread: actions.onMarkAsUnread || jest.fn(),
-        onToggleFavorite: actions.onToggleFavorite || jest.fn(),
-        onToggleLowPriority: actions.onToggleLowPriority || jest.fn(),
-        onInvite: actions.onInvite || jest.fn(),
-        onCopyRoomLink: actions.onCopyRoomLink || jest.fn(),
-        onLeaveRoom: actions.onLeaveRoom || jest.fn(),
-        onSetRoomNotifState: actions.onSetRoomNotifState || jest.fn(),
+        onToggleFilter: jest.fn(),
+        onSearchClick: jest.fn(),
+        onDialPadClick: jest.fn(),
+        onExploreClick: jest.fn(),
+        onOpenRoom: jest.fn(),
+        onMarkAsRead: jest.fn(),
+        onMarkAsUnread: jest.fn(),
+        onToggleFavorite: jest.fn(),
+        onToggleLowPriority: jest.fn(),
+        onInvite: jest.fn(),
+        onCopyRoomLink: jest.fn(),
+        onLeaveRoom: jest.fn(),
+        onSetRoomNotifState: jest.fn(),
     };
 }
 
@@ -102,19 +99,29 @@ describe("RoomList", () => {
         },
     ];
 
-    const mockRoomsResult: RoomsResult = {
-        spaceId: "!space:server",
-        filterKeys: undefined,
-        rooms: mockRooms,
-    };
-
     const mockRenderAvatar = jest.fn((roomItem: RoomListItem) => (
         <div data-testid={`avatar-${roomItem.id}`}>{roomItem.name[0]}</div>
     ));
 
     const mockViewModel = createMockViewModel({
-        roomsResult: mockRoomsResult,
-        activeRoomIndex: undefined,
+        roomListState: {
+            rooms: mockRooms,
+            activeRoomIndex: undefined,
+            spaceId: "!space:server",
+            filterKeys: undefined,
+        },
+        headerState: {
+            title: "Rooms",
+            isSpace: false,
+            displayComposeMenu: false,
+            sortOptionsMenuProps: {
+                activeSortOption: SortOption.Activity,
+                sort: jest.fn(),
+            },
+        },
+        isLoadingRooms: false,
+        isRoomListEmpty: false,
+        filters: [],
     });
 
     beforeEach(() => {
@@ -152,15 +159,25 @@ describe("RoomList", () => {
     });
 
     it("handles empty room list", () => {
-        const emptyResult: RoomsResult = {
-            spaceId: "!space:server",
-            filterKeys: undefined,
-            rooms: [],
-        };
-
         const emptyViewModel = createMockViewModel({
-            roomsResult: emptyResult,
-            activeRoomIndex: undefined,
+            roomListState: {
+                rooms: [],
+                activeRoomIndex: undefined,
+                spaceId: "!space:server",
+                filterKeys: undefined,
+            },
+            headerState: {
+                title: "Rooms",
+                isSpace: false,
+                displayComposeMenu: false,
+                sortOptionsMenuProps: {
+                    activeSortOption: "activity" as any,
+                    sort: jest.fn(),
+                },
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
         });
 
         render(<RoomList vm={emptyViewModel} renderAvatar={mockRenderAvatar} />);
@@ -171,8 +188,24 @@ describe("RoomList", () => {
 
     it("passes activeRoomIndex correctly", () => {
         const vmWithActive = createMockViewModel({
-            roomsResult: mockRoomsResult,
-            activeRoomIndex: 1,
+            roomListState: {
+                rooms: mockRooms,
+                activeRoomIndex: 1,
+                spaceId: "!space:server",
+                filterKeys: undefined,
+            },
+            headerState: {
+                title: "Rooms",
+                isSpace: false,
+                displayComposeMenu: false,
+                sortOptionsMenuProps: {
+                    activeSortOption: "activity" as any,
+                    sort: jest.fn(),
+                },
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
         });
 
         render(<RoomList vm={vmWithActive} renderAvatar={mockRenderAvatar} />);
@@ -183,11 +216,25 @@ describe("RoomList", () => {
     });
 
     it("accepts onKeyDown callback", () => {
-        const onKeyDown = jest.fn();
         const vmWithKeyDown = createMockViewModel({
-            roomsResult: mockRoomsResult,
-            activeRoomIndex: undefined,
-            onKeyDown,
+            roomListState: {
+                rooms: mockRooms,
+                activeRoomIndex: undefined,
+                spaceId: "!space:server",
+                filterKeys: undefined,
+            },
+            headerState: {
+                title: "Rooms",
+                isSpace: false,
+                displayComposeMenu: false,
+                sortOptionsMenuProps: {
+                    activeSortOption: "activity" as any,
+                    sort: jest.fn(),
+                },
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
         });
 
         render(<RoomList vm={vmWithKeyDown} renderAvatar={mockRenderAvatar} />);

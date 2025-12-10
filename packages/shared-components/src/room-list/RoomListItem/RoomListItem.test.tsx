@@ -12,7 +12,7 @@ import React from "react";
 import { RoomListItemView, type RoomListItem, type RoomListItemCallbacks } from "./RoomListItem";
 import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
 import type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
-import type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";
+import type { NotificationMenuState } from "./RoomListItemNotificationMenu";
 
 describe("RoomListItem", () => {
     const mockNotificationData: NotificationDecorationData = {
@@ -51,9 +51,7 @@ describe("RoomListItem", () => {
         onLeaveRoom: jest.fn(),
     };
 
-    const mockNotificationCallbacks: NotificationMenuCallbacks = {
-        onSetRoomNotifState: jest.fn(),
-    };
+    const mockOnSetRoomNotifState = jest.fn();
 
     const mockItem: RoomListItem = {
         id: "!test:example.org",
@@ -71,7 +69,7 @@ describe("RoomListItem", () => {
     const mockCallbacks: RoomListItemCallbacks = {
         onOpenRoom: jest.fn(),
         moreOptionsCallbacks: mockMoreOptionsCallbacks,
-        notificationCallbacks: mockNotificationCallbacks,
+        onSetRoomNotifState: mockOnSetRoomNotifState,
     };
 
     const mockAvatar = <div data-testid="mock-avatar">Avatar</div>;

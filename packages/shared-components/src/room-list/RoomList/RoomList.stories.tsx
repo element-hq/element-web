@@ -7,12 +7,14 @@
 
 import React from "react";
 
-import { RoomList, type RoomListViewModel, type RoomListViewSnapshot, type RoomsResult } from "./RoomList";
+import { RoomList, type RoomsResult } from "./RoomList";
+import type { RoomListViewModel, RoomListSnapshot } from "../RoomListView";
 import type { RoomListItem } from "../RoomListItem";
 import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
 import type { MoreOptionsMenuState } from "../RoomListItem/RoomListItemMoreOptionsMenu";
 import type { NotificationMenuState } from "../RoomListItem/RoomListItemNotificationMenu";
 import { type RoomNotifState } from "../../notifications/RoomNotifs";
+import { SortOption } from "../RoomListHeader/SortOptionsMenu";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
@@ -107,10 +109,24 @@ const mockRoomsResult: RoomsResult = {
 // Create stable unsubscribe function
 const noop = (): void => {};
 
-function createMockViewModel(snapshot: RoomListViewSnapshot): RoomListViewModel {
+function createMockViewModel(snapshot: RoomListSnapshot): RoomListViewModel {
     return {
         getSnapshot: () => snapshot,
         subscribe: () => noop,
+        showDialPad: false,
+        showExplore: false,
+        onSearchClick: () => {},
+        onDialPadClick: () => {},
+        onExploreClick: () => {},
+        onComposeClick: () => {},
+        openSpaceHome: () => {},
+        inviteInSpace: () => {},
+        openSpacePreferences: () => {},
+        openSpaceSettings: () => {},
+        createChatRoom: () => {},
+        createRoom: () => {},
+        createVideoRoom: () => {},
+        sort: () => {},
         onOpenRoom: (roomId: string) => console.log("Open room:", roomId),
         onMarkAsRead: (roomId: string) => console.log("Mark as read:", roomId),
         onMarkAsUnread: (roomId: string) => console.log("Mark as unread:", roomId),
@@ -121,12 +137,26 @@ function createMockViewModel(snapshot: RoomListViewSnapshot): RoomListViewModel 
         onLeaveRoom: (roomId: string) => console.log("Leave room:", roomId),
         onSetRoomNotifState: (roomId: string, state: RoomNotifState) =>
             console.log("Set notification state:", roomId, state),
+        onToggleFilter: (filter) => console.log("Toggle filter:", filter),
     };
 }
 
 const mockViewModel: RoomListViewModel = createMockViewModel({
-    roomsResult: mockRoomsResult,
-    activeRoomIndex: undefined,
+    headerState: {
+        title: "Test",
+        isSpace: false,
+        displayComposeMenu: false,
+        activeSortOption: SortOption.Activity,
+    },
+    isLoadingRooms: false,
+    isRoomListEmpty: false,
+    filters: [],
+    roomListState: {
+        rooms: mockRoomsResult.rooms,
+        activeRoomIndex: undefined,
+        spaceId: mockRoomsResult.spaceId,
+        filterKeys: mockRoomsResult.filterKeys,
+    },
 });
 
 const renderAvatar = (roomItem: RoomListItem): React.ReactElement => {
@@ -160,8 +190,21 @@ export const Default: Story = {
 export const WithSelection: Story = {
     args: {
         vm: createMockViewModel({
-            roomsResult: mockRoomsResult,
-            activeRoomIndex: 5,
+            headerState: {
+                title: "Test",
+                isSpace: false,
+                displayComposeMenu: false,
+                activeSortOption: SortOption.AToZ,
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
+            roomListState: {
+                rooms: mockRoomsResult.rooms,
+                activeRoomIndex: 5,
+                spaceId: mockRoomsResult.spaceId,
+                filterKeys: mockRoomsResult.filterKeys,
+            },
         }),
     },
 };
@@ -169,12 +212,21 @@ export const WithSelection: Story = {
 export const SmallList: Story = {
     args: {
         vm: createMockViewModel({
-            roomsResult: {
+            headerState: {
+                title: "Test",
+                isSpace: false,
+                displayComposeMenu: false,
+                activeSortOption: SortOption.Activity,
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
+            roomListState: {
                 spaceId: "!space:server",
                 filterKeys: undefined,
                 rooms: generateMockRooms(5),
+                activeRoomIndex: undefined,
             },
-            activeRoomIndex: undefined,
         }),
     },
 };
@@ -182,12 +234,21 @@ export const SmallList: Story = {
 export const LargeList: Story = {
     args: {
         vm: createMockViewModel({
-            roomsResult: {
+            headerState: {
+                title: "Test",
+                isSpace: false,
+                displayComposeMenu: false,
+                activeSortOption: SortOption.Activity,
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
+            roomListState: {
                 spaceId: "!space:server",
                 filterKeys: undefined,
                 rooms: generateMockRooms(200),
+                activeRoomIndex: undefined,
             },
-            activeRoomIndex: undefined,
         }),
     },
 };
@@ -195,12 +256,21 @@ export const LargeList: Story = {
 export const EmptyList: Story = {
     args: {
         vm: createMockViewModel({
-            roomsResult: {
+            headerState: {
+                title: "Test",
+                isSpace: false,
+                displayComposeMenu: false,
+                activeSortOption: SortOption.Activity,
+            },
+            isLoadingRooms: false,
+            isRoomListEmpty: false,
+            filters: [],
+            roomListState: {
                 spaceId: "!space:server",
                 filterKeys: undefined,
                 rooms: [],
+                activeRoomIndex: undefined,
             },
-            activeRoomIndex: undefined,
         }),
     },
 };

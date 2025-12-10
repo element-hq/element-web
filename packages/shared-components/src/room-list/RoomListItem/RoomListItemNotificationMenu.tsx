@@ -29,21 +29,13 @@ export interface NotificationMenuState {
 }
 
 /**
- * Callbacks for the notification menu
- */
-export interface NotificationMenuCallbacks {
-    /** Set the room notification state */
-    onSetRoomNotifState: (state: RoomNotifState) => void;
-}
-
-/**
  * Props for RoomListItemNotificationMenu component
  */
 export interface RoomListItemNotificationMenuProps {
     /** Notification menu state */
     state: NotificationMenuState;
-    /** Notification menu callbacks */
-    callbacks: NotificationMenuCallbacks;
+    /** Set the room notification state */
+    onSetRoomNotifState: (state: RoomNotifState) => void;
     /** Callback when menu open state changes */
     onMenuOpenChange: (isOpen: boolean) => void;
 }
@@ -54,7 +46,7 @@ export interface RoomListItemNotificationMenuProps {
  */
 export function RoomListItemNotificationMenu({
     state,
-    callbacks,
+    onSetRoomNotifState,
     onMenuOpenChange,
 }: RoomListItemNotificationMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
@@ -84,7 +76,7 @@ export function RoomListItemNotificationMenu({
                     aria-selected={state.isNotificationAllMessage}
                     hideChevron={true}
                     label={_t("notifications|default_settings")}
-                    onSelect={() => callbacks.onSetRoomNotifState(RoomNotifState.AllMessages)}
+                    onSelect={() => onSetRoomNotifState(RoomNotifState.AllMessages)}
                     onClick={(evt) => evt.stopPropagation()}
                 >
                     {state.isNotificationAllMessage && checkComponent}
@@ -93,7 +85,7 @@ export function RoomListItemNotificationMenu({
                     aria-selected={state.isNotificationAllMessageLoud}
                     hideChevron={true}
                     label={_t("notifications|all_messages")}
-                    onSelect={() => callbacks.onSetRoomNotifState(RoomNotifState.AllMessagesLoud)}
+                    onSelect={() => onSetRoomNotifState(RoomNotifState.AllMessagesLoud)}
                     onClick={(evt) => evt.stopPropagation()}
                 >
                     {state.isNotificationAllMessageLoud && checkComponent}
@@ -102,7 +94,7 @@ export function RoomListItemNotificationMenu({
                     aria-selected={state.isNotificationMentionOnly}
                     hideChevron={true}
                     label={_t("notifications|mentions_keywords")}
-                    onSelect={() => callbacks.onSetRoomNotifState(RoomNotifState.MentionsOnly)}
+                    onSelect={() => onSetRoomNotifState(RoomNotifState.MentionsOnly)}
                     onClick={(evt) => evt.stopPropagation()}
                 >
                     {state.isNotificationMentionOnly && checkComponent}
@@ -111,7 +103,7 @@ export function RoomListItemNotificationMenu({
                     aria-selected={state.isNotificationMute}
                     hideChevron={true}
                     label={_t("notifications|mute_room")}
-                    onSelect={() => callbacks.onSetRoomNotifState(RoomNotifState.Mute)}
+                    onSelect={() => onSetRoomNotifState(RoomNotifState.Mute)}
                     onClick={(evt) => evt.stopPropagation()}
                 >
                     {state.isNotificationMute && checkComponent}

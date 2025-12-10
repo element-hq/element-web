@@ -6,21 +6,16 @@
  */
 
 import React from "react";
-
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import type { NotificationDecorationData } from "../../notifications/NotificationDecoration";
-import type { RoomsResult } from "../RoomList";
 import type { RoomListItem } from "../RoomListItem";
 import type { MoreOptionsMenuState } from "../RoomListItem/RoomListItemMoreOptionsMenu";
 import type { NotificationMenuState } from "../RoomListItem/RoomListItemNotificationMenu";
 import { SortOption } from "../RoomListHeader/SortOptionsMenu";
-import { RoomListPanel, type RoomListPanelSnapshot } from "./RoomListPanel";
-import type { FilterViewModel } from "../RoomListPrimaryFilters/useVisibleFilters";
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import type { RoomListSearchSnapshot } from "../RoomListSearch";
-import type { RoomListHeaderSnapshot, SortOptionsMenuSnapshot } from "../RoomListHeader";
-import type { RoomListViewWrapperSnapshot } from "../RoomListView";
-import type { RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
+import { RoomListPanel } from "./RoomListPanel";
+import type { Filter } from "../RoomListPrimaryFilters/useVisibleFilters";
+import type { RoomListSnapshot, RoomListViewModel, RoomListHeaderState } from "../RoomListView";
 
 // Mock avatar component
 const mockAvatar = (roomItem: RoomListItem): React.ReactElement => (
@@ -90,19 +85,12 @@ const generateMockRooms = (count: number): RoomListItem[] => {
     });
 };
 
-const mockRoomsResult: RoomsResult = {
-    spaceId: "!space:server",
-    filterKeys: undefined,
-    rooms: generateMockRooms(20),
-};
-
 // Create mock filters
-const createFilters = (): FilterViewModel[] => {
+const createFilters = (): Filter[] => {
     const filters = ["All", "People", "Rooms", "Favourites", "Unread"];
     return filters.map((name, index) => ({
         name,
         active: index === 0,
-        toggle: () => console.log(`Filter: ${name}`),
     }));
 };
 
@@ -118,67 +106,61 @@ type Story = StoryObj<typeof RoomListPanel>;
 // Create stable unsubscribe function
 const noop = (): void => {};
 
-function createMockViewModel<T>(snapshot: T): ViewModel<T> {
+// Create mock ViewModel with public methods
+function createMockViewModel(snapshot: RoomListSnapshot): RoomListViewModel {
     return {
         getSnapshot: () => snapshot,
         subscribe: () => noop,
+        // Public properties
+        showDialPad: false,
+        showExplore: false,
+        // Public callback methods
+        onToggleFilter: () => {},
+        onSearchClick: () => {},
+        onDialPadClick: () => {},
+        onExploreClick: () => {},
+        onComposeClick: () => {},
+        openSpaceHome: () => {},
+        inviteInSpace: () => {},
+        openSpacePreferences: () => {},
+        openSpaceSettings: () => {},
+        createChatRoom: () => {},
+        createRoom: () => {},
+        createVideoRoom: () => {},
+        sort: () => {},
+        onOpenRoom: () => {},
+        onMarkAsRead: () => {},
+        onMarkAsUnread: () => {},
+        onToggleFavorite: () => {},
+        onToggleLowPriority: () => {},
+        onInvite: () => {},
+        onCopyRoomLink: () => {},
+        onLeaveRoom: () => {},
+        onSetRoomNotifState: () => {},
     };
 }
 
-// Create stable snapshot for RoomListViewModel
-const mockRoomListSnapshot = {
-    roomsResult: mockRoomsResult,
-    activeRoomIndex: 0,
+const baseHeaderState: RoomListHeaderState = {
+    title: "Home",
+    isSpace: false,
+    displayComposeMenu: false,
+    activeSortOption: SortOption.Activity,
 };
 
-// Create stable RoomListViewModel
-const mockRoomListViewModel = {
-    getSnapshot: () => mockRoomListSnapshot,
-    subscribe: () => noop,
-    onOpenRoom: (roomId: string) => console.log("Open room:", roomId),
-    onMarkAsRead: (roomId: string) => console.log("Mark as read:", roomId),
-    onMarkAsUnread: (roomId: string) => console.log("Mark as unread:", roomId),
-    onToggleFavorite: (roomId: string) => console.log("Toggle favorite:", roomId),
-    onToggleLowPriority: (roomId: string) => console.log("Toggle low priority:", roomId),
-    onInvite: (roomId: string) => console.log("Invite:", roomId),
-    onCopyRoomLink: (roomId: string) => console.log("Copy room link:", roomId),
-    onLeaveRoom: (roomId: string) => console.log("Leave room:", roomId),
-    onSetRoomNotifState: (roomId: string, state: any) => console.log("Set notification:", roomId, state),
+const baseSnapshot: RoomListSnapshot = {
+    headerState: baseHeaderState,
+    isLoadingRooms: false,
+    isRoomListEmpty: false,
+    filters: createFilters(),
+    roomListState: {
+        rooms: generateMockRooms(20),
+    },
+    emptyStateDescription: "Join a room to get started",
 };
-
-const baseViewModel: ViewModel<RoomListPanelSnapshot> = createMockViewModel({
-    ariaLabel: "Room list navigation",
-    searchVm: createMockViewModel<RoomListSearchSnapshot>({
-        onSearchClick: () => console.log("Open search"),
-        showDialPad: false,
-        showExplore: true,
-        onExploreClick: () => console.log("Explore rooms"),
-    }),
-    headerVm: createMockViewModel<RoomListHeaderSnapshot>({
-        title: "Home",
-        isSpace: false,
-        displayComposeMenu: false,
-        onComposeClick: () => console.log("Compose"),
-        sortOptionsMenuVm: createMockViewModel<SortOptionsMenuSnapshot>({
-            activeSortOption: SortOption.Activity,
-            sort: (option) => console.log(`Sort: ${option}`),
-        }),
-    }),
-    viewVm: createMockViewModel<RoomListViewWrapperSnapshot>({
-        isLoadingRooms: false,
-        isRoomListEmpty: false,
-        filtersVm: createMockViewModel<RoomListPrimaryFiltersSnapshot>({
-            filters: createFilters(),
-        }),
-        roomListVm: mockRoomListViewModel,
-        emptyStateTitle: "No rooms",
-        emptyStateDescription: "Join a room to get started",
-    }),
-});
 
 export const Default: Story = {
     args: {
-        vm: baseViewModel,
+        vm: createMockViewModel(baseSnapshot),
         renderAvatar: mockAvatar,
     },
     decorators: [
@@ -192,11 +174,8 @@ export const Default: Story = {
 
 export const WithoutSearch: Story = {
     args: {
-        vm: createMockViewModel<RoomListPanelSnapshot>({
-            ariaLabel: "Room list navigation",
-            searchVm: undefined,
-            headerVm: baseViewModel.getSnapshot().headerVm,
-            viewVm: baseViewModel.getSnapshot().viewVm,
+        vm: createMockViewModel({
+            ...baseSnapshot,
         }),
         renderAvatar: mockAvatar,
     },
@@ -211,14 +190,9 @@ export const WithoutSearch: Story = {
 
 export const Loading: Story = {
     args: {
-        vm: createMockViewModel<RoomListPanelSnapshot>({
-            ariaLabel: "Room list navigation",
-            searchVm: baseViewModel.getSnapshot().searchVm,
-            headerVm: baseViewModel.getSnapshot().headerVm,
-            viewVm: createMockViewModel<RoomListViewWrapperSnapshot>({
-                ...baseViewModel.getSnapshot().viewVm.getSnapshot(),
-                isLoadingRooms: true,
-            }),
+        vm: createMockViewModel({
+            ...baseSnapshot,
+            isLoadingRooms: true,
         }),
         renderAvatar: mockAvatar,
     },
@@ -233,16 +207,13 @@ export const Loading: Story = {
 
 export const Empty: Story = {
     args: {
-        vm: createMockViewModel<RoomListPanelSnapshot>({
-            ariaLabel: "Room list navigation",
-            searchVm: baseViewModel.getSnapshot().searchVm,
-            headerVm: baseViewModel.getSnapshot().headerVm,
-            viewVm: createMockViewModel<RoomListViewWrapperSnapshot>({
-                ...baseViewModel.getSnapshot().viewVm.getSnapshot(),
-                isRoomListEmpty: true,
-                emptyStateTitle: "No rooms to display",
-                emptyStateDescription: "Join a room or start a conversation to get started",
-            }),
+        vm: createMockViewModel({
+            ...baseSnapshot,
+            isRoomListEmpty: true,
+            roomListState: {
+                rooms: [],
+            },
+            emptyStateDescription: "Join a room or start a conversation to get started",
         }),
         renderAvatar: mockAvatar,
     },

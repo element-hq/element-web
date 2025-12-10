@@ -9,26 +9,18 @@ import { render, screen } from "jest-matrix-react";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 
-import { RoomListSearch, type RoomListSearchSnapshot } from "./RoomListSearch";
-import { type ViewModel } from "../../viewmodel/ViewModel";
-
-function createMockViewModel(snapshot: RoomListSearchSnapshot): ViewModel<RoomListSearchSnapshot> {
-    return {
-        getSnapshot: () => snapshot,
-        subscribe: () => () => {},
-    };
-}
+import { RoomListSearch, type RoomListSearchProps } from "./RoomListSearch";
 
 describe("RoomListSearch", () => {
     it("renders search button with shortcut", () => {
         const onSearchClick = jest.fn();
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick,
             showDialPad: false,
             showExplore: false,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         expect(screen.getByRole("search")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /search/i })).toBeInTheDocument();
@@ -38,13 +30,13 @@ describe("RoomListSearch", () => {
 
     it("calls onSearchClick when search button is clicked", async () => {
         const onSearchClick = jest.fn();
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick,
             showDialPad: false,
             showExplore: false,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         await userEvent.click(screen.getByRole("button", { name: /search/i }));
         expect(onSearchClick).toHaveBeenCalledTimes(1);
@@ -52,28 +44,28 @@ describe("RoomListSearch", () => {
 
     it("renders dial pad button when showDialPad is true", () => {
         const onDialPadClick = jest.fn();
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick: jest.fn(),
             showDialPad: true,
             onDialPadClick,
             showExplore: false,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         expect(screen.getByRole("button", { name: /dial pad/i })).toBeInTheDocument();
     });
 
     it("calls onDialPadClick when dial pad button is clicked", async () => {
         const onDialPadClick = jest.fn();
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick: jest.fn(),
             showDialPad: true,
             onDialPadClick,
             showExplore: false,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         await userEvent.click(screen.getByRole("button", { name: /dial pad/i }));
         expect(onDialPadClick).toHaveBeenCalledTimes(1);
@@ -81,43 +73,43 @@ describe("RoomListSearch", () => {
 
     it("renders explore button when showExplore is true", () => {
         const onExploreClick = jest.fn();
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick: jest.fn(),
             showDialPad: false,
             showExplore: true,
             onExploreClick,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         expect(screen.getByRole("button", { name: /explore/i })).toBeInTheDocument();
     });
 
     it("calls onExploreClick when explore button is clicked", async () => {
         const onExploreClick = jest.fn();
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick: jest.fn(),
             showDialPad: false,
             showExplore: true,
             onExploreClick,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         await userEvent.click(screen.getByRole("button", { name: /explore/i }));
         expect(onExploreClick).toHaveBeenCalledTimes(1);
     });
 
     it("renders all buttons when showDialPad and showExplore are true", () => {
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick: jest.fn(),
             showDialPad: true,
             onDialPadClick: jest.fn(),
             showExplore: true,
             onExploreClick: jest.fn(),
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         expect(screen.getByRole("button", { name: /search/i })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /dial pad/i })).toBeInTheDocument();
@@ -125,13 +117,13 @@ describe("RoomListSearch", () => {
     });
 
     it("does not render dial pad or explore buttons when flags are false", () => {
-        const vm = createMockViewModel({
+        const props: RoomListSearchProps = {
             onSearchClick: jest.fn(),
             showDialPad: false,
             showExplore: false,
-        });
+        };
 
-        render(<RoomListSearch vm={vm} />);
+        render(<RoomListSearch {...props} />);
 
         expect(screen.getByRole("button", { name: /search/i })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: /dial pad/i })).not.toBeInTheDocument();

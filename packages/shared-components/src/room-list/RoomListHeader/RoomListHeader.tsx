@@ -9,49 +9,66 @@ import React, { type JSX } from "react";
 import { IconButton } from "@vector-im/compound-web";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
 import { Flex } from "../../utils/Flex";
 import { _t } from "../../utils/i18n";
-import { SpaceMenu, type SpaceMenuSnapshot } from "./SpaceMenu";
-import { ComposeMenu, type ComposeMenuSnapshot } from "./ComposeMenu";
-import { SortOptionsMenu, type SortOptionsMenuSnapshot } from "./SortOptionsMenu";
+import { SpaceMenu } from "./SpaceMenu";
+import { ComposeMenu } from "./ComposeMenu";
+import { SortOptionsMenu, SortOption } from "./SortOptionsMenu";
 import styles from "./RoomListHeader.module.css";
+import { RoomListViewModel } from "../RoomListView";
+import { useViewModel } from "../../useViewModel";
 
 /**
- * Snapshot for RoomListHeader
+ * State for space menu - pure data, no callbacks
  */
-export type RoomListHeaderSnapshot = {
-    /** The title to display in the header */
+export type SpaceMenuState = {
+    /** The title of the space */
     title: string;
-    /** Whether to display the space menu (true if there is an active space) */
-    isSpace: boolean;
-    /** Space menu view model (only used if isSpace is true) */
-    spaceMenuVm?: ViewModel<SpaceMenuSnapshot>;
-    /** Whether to display the compose menu */
-    displayComposeMenu: boolean;
-    /** Compose menu view model (only used if displayComposeMenu is true) */
-    composeMenuVm?: ViewModel<ComposeMenuSnapshot>;
-    /** Callback when compose button is clicked (only used if displayComposeMenu is false) */
-    onComposeClick?: () => void;
-    /** Sort options menu view model */
-    sortOptionsMenuVm: ViewModel<SortOptionsMenuSnapshot>;
+    /** Whether the user can invite in the space */
+    canInviteInSpace: boolean;
+    /** Whether the user can access space settings */
+    canAccessSpaceSettings: boolean;
 };
 
 /**
- * Props for RoomListHeader component
+ * State for compose menu - pure data, no callbacks
  */
-export interface RoomListHeaderProps {
-    /** The view model containing header data */
-    vm: ViewModel<RoomListHeaderSnapshot>;
-}
+export type ComposeMenuState = {
+    /** Whether the user can create rooms */
+    canCreateRoom: boolean;
+    /** Whether the user can create video rooms */
+    canCreateVideoRoom: boolean;
+};
 
+/**
+ * State for RoomListHeader - pure data
+ */
+export type RoomListHeaderState = {
+    /** Header title */
+    title: string;
+    /** Whether this is a space */
+    isSpace: boolean;
+    /** Space menu state (if this is a space) */
+    spaceMenuState?: SpaceMenuState;
+    /** Whether to display compose menu */
+    displayComposeMenu: boolean;
+    /** Compose menu state (if displayComposeMenu is true) */
+    composeMenuState?: ComposeMenuState;
+    /** Active sort option */
+    activeSortOption: SortOption;
+};
+
+export interface RoomListHeaderProps {
+    vm: RoomListViewModel;
+}
 /**
  * A presentational header component for the room list.
  * Displays a title with optional space menu, sort options, and compose actions.
  */
 export const RoomListHeader: React.FC<RoomListHeaderProps> = ({ vm }): JSX.Element => {
     const snapshot = useViewModel(vm);
+    const { title, isSpace, spaceMenuState, displayComposeMenu, composeMenuState, activeSortOption } =
+        snapshot.headerState;
 
     return (
         <Flex
@@ -63,15 +80,31 @@ export const RoomListHeader: React.FC<RoomListHeaderProps> = ({ vm }): JSX.Eleme
             data-testid="room-list-header"
         >
             <Flex className={styles.title} align="center" gap="var(--cpd-space-1x)">
-                <h1 title={snapshot.title}>{snapshot.title}</h1>
-                {snapshot.isSpace && snapshot.spaceMenuVm && <SpaceMenu vm={snapshot.spaceMenuVm} />}
+                <h1 title={title}>{title}</h1>
+                {isSpace && spaceMenuState && (
+                    <SpaceMenu
+                        title={spaceMenuState.title}
+                        canInviteInSpace={spaceMenuState.canInviteInSpace}
+                        canAccessSpaceSettings={spaceMenuState.canAccessSpaceSettings}
+                        openSpaceHome={vm.openSpaceHome}
+                        inviteInSpace={vm.inviteInSpace}
+                        openSpacePreferences={vm.openSpacePreferences}
+                        openSpaceSettings={vm.openSpaceSettings}
+                    />
+                )}
             </Flex>
             <Flex align="center" gap="var(--cpd-space-2x)">
-                <SortOptionsMenu vm={snapshot.sortOptionsMenuVm} />
-                {snapshot.displayComposeMenu && snapshot.composeMenuVm ? (
-                    <ComposeMenu vm={snapshot.composeMenuVm} />
+                <SortOptionsMenu activeSortOption={activeSortOption} sort={vm.sort} />
+                {displayComposeMenu && composeMenuState ? (
+                    <ComposeMenu
+                        canCreateRoom={composeMenuState.canCreateRoom}
+                        canCreateVideoRoom={composeMenuState.canCreateVideoRoom}
+                        createChatRoom={vm.createChatRoom}
+                        createRoom={vm.createRoom}
+                        createVideoRoom={vm.createVideoRoom}
+                    />
                 ) : (
-                    <IconButton onClick={snapshot.onComposeClick} tooltip={_t("action|new_conversation")}>
+                    <IconButton onClick={vm.onComposeClick} tooltip={_t("action|new_conversation")}>
                         <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
                     </IconButton>
                 )}

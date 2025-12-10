@@ -11,43 +11,42 @@ import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/searc
 import DialPadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dial-pad";
 import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
 import { Flex } from "../../utils/Flex";
 import { _t } from "../../utils/i18n";
 import styles from "./RoomListSearch.module.css";
 
 /**
- * Snapshot for RoomListSearch
+ * State for RoomListSearch - pure data, no callbacks
  */
-export type RoomListSearchSnapshot = {
-    /** Callback fired when search button is clicked */
-    onSearchClick: () => void;
-    /** Whether to show the dial pad button */
+export interface RoomListSearchState {
     showDialPad: boolean;
-    /** Callback fired when dial pad button is clicked */
-    onDialPadClick?: () => void;
     /** Whether to show the explore rooms button */
     showExplore: boolean;
-    /** Callback fired when explore button is clicked */
-    onExploreClick?: () => void;
-};
+}
 
 /**
- * Props for RoomListSearch component
+ * Props for RoomListSearch component - combines state with callbacks
  */
-export interface RoomListSearchProps {
-    /** The view model containing search data */
-    vm: ViewModel<RoomListSearchSnapshot>;
+export interface RoomListSearchProps extends RoomListSearchState {
+    /** Callback fired when search button is clicked */
+    onSearchClick: () => void;
+    /** Callback fired when dial pad button is clicked */
+    onDialPadClick: () => void;
+    /** Callback fired when explore button is clicked */
+    onExploreClick: () => void;
 }
 
 /**
  * A presentational search bar component for the room list.
  * Displays a search button and optional action buttons (dial pad, explore) in a horizontal layout.
  */
-export const RoomListSearch: React.FC<RoomListSearchProps> = ({ vm }): JSX.Element => {
-    const snapshot = useViewModel(vm);
-
+export const RoomListSearch: React.FC<RoomListSearchProps> = ({
+    onSearchClick,
+    showDialPad,
+    onDialPadClick,
+    showExplore,
+    onExploreClick,
+}): JSX.Element => {
     // Determine keyboard shortcut based on platform
     const isMac = typeof navigator !== "undefined" && /Mac/.test(navigator.platform);
     const searchShortcut = isMac ? "⌘ K" : "Ctrl K";
@@ -59,31 +58,31 @@ export const RoomListSearch: React.FC<RoomListSearchProps> = ({ vm }): JSX.Eleme
                 kind="secondary"
                 size="sm"
                 Icon={SearchIcon}
-                onClick={snapshot.onSearchClick}
+                onClick={onSearchClick}
             >
                 <Flex as="span" justify="space-between">
                     <span className="mx_RoomListSearch_search_text">{_t("action|search")}</span>
                     <kbd>{searchShortcut}</kbd>
                 </Flex>
             </Button>
-            {snapshot.showDialPad && (
+            {showDialPad && (
                 <Button
                     kind="secondary"
                     size="sm"
                     Icon={DialPadIcon}
                     iconOnly={true}
                     aria-label={_t("left_panel|open_dial_pad")}
-                    onClick={snapshot.onDialPadClick}
+                    onClick={onDialPadClick}
                 />
             )}
-            {snapshot.showExplore && (
+            {showExplore && (
                 <Button
                     kind="secondary"
                     size="sm"
                     Icon={ExploreIcon}
                     iconOnly={true}
                     aria-label={_t("action|explore_rooms")}
-                    onClick={snapshot.onExploreClick}
+                    onClick={onExploreClick}
                 />
             )}
         </Flex>

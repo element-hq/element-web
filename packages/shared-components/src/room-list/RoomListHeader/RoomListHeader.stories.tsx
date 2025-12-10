@@ -8,11 +8,10 @@
 import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListHeader, type RoomListHeaderSnapshot } from "./RoomListHeader";
-import { SortOption, type SortOptionsMenuSnapshot } from "./SortOptionsMenu";
-import type { SpaceMenuSnapshot } from "./SpaceMenu";
-import type { ComposeMenuSnapshot } from "./ComposeMenu";
-import { type ViewModel } from "../../viewmodel/ViewModel";
+import { RoomListHeader } from "./RoomListHeader";
+import { SortOption } from "./SortOptionsMenu";
+import type { RoomListViewModel, RoomListSnapshot } from "../RoomListView";
+import type { RoomListHeaderState } from "./RoomListHeader";
 
 const meta: Meta<typeof RoomListHeader> = {
     title: "Room List/RoomListHeader",
@@ -23,119 +22,127 @@ const meta: Meta<typeof RoomListHeader> = {
 export default meta;
 type Story = StoryObj<typeof RoomListHeader>;
 
-function createMockViewModel<T>(snapshot: T): ViewModel<T> {
+const createMockViewModel = (headerState: RoomListHeaderState): RoomListViewModel => {
+    const snapshot: RoomListSnapshot = {
+        headerState,
+        isLoadingRooms: false,
+        isRoomListEmpty: false,
+        filters: [],
+        roomListState: {
+            rooms: [],
+        },
+    };
+
     return {
         getSnapshot: () => snapshot,
-        subscribe: () => () => {},
+        subscribe: (listener: () => void) => {
+            return () => {};
+        },
+        sort: (option: SortOption) => console.log("Sort by:", option),
+        onToggleFilter: () => {},
+        onSearchClick: () => {},
+        onDialPadClick: () => {},
+        onExploreClick: () => {},
+        showDialPad: false,
+        showExplore: false,
+        onComposeClick: () => console.log("Compose clicked"),
+        openSpaceHome: () => console.log("Open space home"),
+        inviteInSpace: () => console.log("Invite in space"),
+        openSpacePreferences: () => console.log("Open space preferences"),
+        openSpaceSettings: () => console.log("Open space settings"),
+        createChatRoom: () => console.log("Create chat room"),
+        createRoom: () => console.log("Create room"),
+        createVideoRoom: () => console.log("Create video room"),
+        onOpenRoom: () => {},
+        onMarkAsRead: () => {},
+        onMarkAsUnread: () => {},
+        onToggleFavorite: () => {},
+        onToggleLowPriority: () => {},
+        onInvite: () => {},
+        onCopyRoomLink: () => {},
+        onLeaveRoom: () => {},
+        onSetRoomNotifState: () => {},
     };
-}
-
-const baseSortOptionsViewModel = createMockViewModel<SortOptionsMenuSnapshot>({
-    activeSortOption: SortOption.Activity,
-    sort: (option: SortOption) => console.log("Sort by:", option),
-});
+};
 
 export const Default: Story = {
     args: {
-        vm: createMockViewModel<RoomListHeaderSnapshot>({
+        vm: createMockViewModel({
             title: "Home",
             isSpace: false,
             displayComposeMenu: false,
-            onComposeClick: () => console.log("Compose clicked"),
-            sortOptionsMenuVm: baseSortOptionsViewModel,
+            activeSortOption: SortOption.Activity,
         }),
     },
 };
 
 export const WithSpaceMenu: Story = {
     args: {
-        vm: createMockViewModel<RoomListHeaderSnapshot>({
+        vm: createMockViewModel({
             title: "My Space",
             isSpace: true,
-            displayComposeMenu: false,
-            spaceMenuVm: createMockViewModel<SpaceMenuSnapshot>({
+            spaceMenuState: {
                 title: "My Space",
                 canInviteInSpace: true,
                 canAccessSpaceSettings: true,
-                openSpaceHome: () => console.log("Open space home"),
-                inviteInSpace: () => console.log("Invite in space"),
-                openSpacePreferences: () => console.log("Open space preferences"),
-                openSpaceSettings: () => console.log("Open space settings"),
-            }),
-            onComposeClick: () => console.log("Compose clicked"),
-            sortOptionsMenuVm: baseSortOptionsViewModel,
+            },
+            displayComposeMenu: false,
+            activeSortOption: SortOption.Activity,
         }),
     },
 };
 
 export const WithComposeMenu: Story = {
     args: {
-        vm: createMockViewModel<RoomListHeaderSnapshot>({
+        vm: createMockViewModel({
             title: "Home",
             isSpace: false,
             displayComposeMenu: true,
-            composeMenuVm: createMockViewModel<ComposeMenuSnapshot>({
+            composeMenuState: {
                 canCreateRoom: true,
                 canCreateVideoRoom: true,
-                createChatRoom: () => console.log("Create chat room"),
-                createRoom: () => console.log("Create room"),
-                createVideoRoom: () => console.log("Create video room"),
-            }),
-            sortOptionsMenuVm: baseSortOptionsViewModel,
+            },
+            activeSortOption: SortOption.Activity,
         }),
     },
 };
 
 export const FullHeader: Story = {
     args: {
-        vm: createMockViewModel<RoomListHeaderSnapshot>({
+        vm: createMockViewModel({
             title: "My Space",
             isSpace: true,
-            displayComposeMenu: true,
-            spaceMenuVm: createMockViewModel<SpaceMenuSnapshot>({
+            spaceMenuState: {
                 title: "My Space",
                 canInviteInSpace: true,
                 canAccessSpaceSettings: true,
-                openSpaceHome: () => console.log("Open space home"),
-                inviteInSpace: () => console.log("Invite in space"),
-                openSpacePreferences: () => console.log("Open space preferences"),
-                openSpaceSettings: () => console.log("Open space settings"),
-            }),
-            composeMenuVm: createMockViewModel<ComposeMenuSnapshot>({
+            },
+            displayComposeMenu: true,
+            composeMenuState: {
                 canCreateRoom: true,
                 canCreateVideoRoom: true,
-                createChatRoom: () => console.log("Create chat room"),
-                createRoom: () => console.log("Create room"),
-                createVideoRoom: () => console.log("Create video room"),
-            }),
-            sortOptionsMenuVm: baseSortOptionsViewModel,
+            },
+            activeSortOption: SortOption.Activity,
         }),
     },
 };
 
 export const LongTitle: Story = {
     args: {
-        vm: createMockViewModel<RoomListHeaderSnapshot>({
+        vm: createMockViewModel({
             title: "This is a very long space name that should be truncated with ellipsis when it overflows",
             isSpace: true,
-            displayComposeMenu: true,
-            spaceMenuVm: createMockViewModel<SpaceMenuSnapshot>({
+            spaceMenuState: {
                 title: "This is a very long space name that should be truncated with ellipsis when it overflows",
                 canInviteInSpace: true,
                 canAccessSpaceSettings: true,
-                openSpaceHome: () => console.log("Open space home"),
-                inviteInSpace: () => console.log("Invite in space"),
-                openSpacePreferences: () => console.log("Open space preferences"),
-                openSpaceSettings: () => console.log("Open space settings"),
-            }),
-            composeMenuVm: createMockViewModel<ComposeMenuSnapshot>({
+            },
+            displayComposeMenu: true,
+            composeMenuState: {
                 canCreateRoom: true,
                 canCreateVideoRoom: true,
-                createChatRoom: () => console.log("Create chat room"),
-                createRoom: () => console.log("Create room"),
-                createVideoRoom: () => console.log("Create video room"),
-            }),
-            sortOptionsMenuVm: baseSortOptionsViewModel,
+            },
+            activeSortOption: SortOption.Activity,
         }),
     },
     decorators: [

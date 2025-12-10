@@ -9,26 +9,31 @@ import React, { type JSX, type ReactNode } from "react";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
-import { RoomListPrimaryFilters, type RoomListPrimaryFiltersSnapshot } from "../RoomListPrimaryFilters";
+import { _t } from "../../utils/i18n";
+import { RoomListPrimaryFilters, type Filter } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyState } from "./RoomListEmptyState";
-import { RoomList, type RoomListViewModel } from "../RoomList";
+import { RoomList, type RoomListViewState } from "../RoomList";
 import { type RoomListItem } from "../RoomListItem";
+import { type RoomNotifState } from "../../notifications/RoomNotifs";
+import { type RoomListHeaderState } from "../RoomListHeader";
+import { SortOption } from "../RoomListHeader/SortOptionsMenu";
 
 /**
- * Snapshot for RoomListView
+ * Snapshot for the complete room list, used across RoomListPanel, RoomListView, and RoomList
+ * Contains all data AND all callbacks needed by the room list components
  */
-export type RoomListViewWrapperSnapshot = {
+export type RoomListSnapshot = {
+    /** Header state for the room list */
+    headerState: RoomListHeaderState;
     /** Whether the rooms are currently loading */
     isLoadingRooms: boolean;
     /** Whether the room list is empty */
     isRoomListEmpty: boolean;
-    /** View model for the primary filters */
-    filtersVm: ViewModel<RoomListPrimaryFiltersSnapshot>;
-    /** View model for the room list */
-    roomListVm: RoomListViewModel;
-    /** Title for the empty state */
-    emptyStateTitle: string;
+    /** Array of filter data (required by RoomListPrimaryFilters) */
+    filters: Filter[];
+    /** Room list state */
+    roomListState: RoomListViewState;
     /** Optional description for the empty state */
     emptyStateDescription?: string;
     /** Optional action element for the empty state */
@@ -36,11 +41,70 @@ export type RoomListViewWrapperSnapshot = {
 };
 
 /**
+ * Actions interface for room list operations
+ */
+export interface RoomListViewActions {
+    /** Whether to show the dial pad button */
+    showDialPad: boolean;
+    /** Whether to show the explore rooms button */
+    showExplore: boolean;
+    /** Called when a filter is toggled */
+    onToggleFilter: (filter: Filter) => void;
+    /** Called when search button is clicked */
+    onSearchClick: () => void;
+    /** Called when dial pad button is clicked */
+    onDialPadClick: () => void;
+    /** Called when explore button is clicked */
+    onExploreClick: () => void;
+    /** Called when compose button is clicked */
+    onComposeClick: () => void;
+    /** Open the space home */
+    openSpaceHome: () => void;
+    /** Display the space invite dialog */
+    inviteInSpace: () => void;
+    /** Open the space preferences */
+    openSpacePreferences: () => void;
+    /** Open the space settings */
+    openSpaceSettings: () => void;
+    /** Create a chat room */
+    createChatRoom: () => void;
+    /** Create a room */
+    createRoom: () => void;
+    /** Create a video room */
+    createVideoRoom: () => void;
+    /** Change the sort order of the room-list */
+    sort: (option: SortOption) => void;
+    /** Called when a room should be opened */
+    onOpenRoom: (roomId: string) => void;
+    /** Called when a room should be marked as read */
+    onMarkAsRead: (roomId: string) => void;
+    /** Called when a room should be marked as unread */
+    onMarkAsUnread: (roomId: string) => void;
+    /** Called when a room's favorite status should be toggled */
+    onToggleFavorite: (roomId: string) => void;
+    /** Called when a room's low priority status should be toggled */
+    onToggleLowPriority: (roomId: string) => void;
+    /** Called when inviting users to a room */
+    onInvite: (roomId: string) => void;
+    /** Called when copying a room link */
+    onCopyRoomLink: (roomId: string) => void;
+    /** Called when leaving a room */
+    onLeaveRoom: (roomId: string) => void;
+    /** Called when setting room notification state */
+    onSetRoomNotifState: (roomId: string, notifState: RoomNotifState) => void;
+}
+
+/**
+ * The view model type for the room list
+ */
+export type RoomListViewModel = ViewModel<RoomListSnapshot> & RoomListViewActions;
+
+/**
  * Props for RoomListView component
  */
 export interface RoomListViewProps {
-    /** The view model containing list data */
-    vm: ViewModel<RoomListViewWrapperSnapshot>;
+    /** The view model containing all data and callbacks */
+    vm: RoomListViewModel;
     /** Render function for room avatar */
     renderAvatar: (roomItem: RoomListItem) => ReactNode;
 }
@@ -58,18 +122,18 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar }):
     } else if (snapshot.isRoomListEmpty) {
         listBody = (
             <RoomListEmptyState
-                title={snapshot.emptyStateTitle}
+                title={_t("room_list|empty_no_rooms")}
                 description={snapshot.emptyStateDescription}
                 action={snapshot.emptyStateAction}
             />
         );
     } else {
-        listBody = <RoomList vm={snapshot.roomListVm} renderAvatar={renderAvatar} />;
+        listBody = <RoomList vm={vm} renderAvatar={renderAvatar} />;
     }
 
     return (
         <>
-            <RoomListPrimaryFilters vm={snapshot.filtersVm} />
+            <RoomListPrimaryFilters filters={snapshot.filters} onToggleFilter={vm.onToggleFilter} />
             {listBody}
         </>
     );

@@ -8,4 +8,4 @@
 export { RoomListItemView } from "./RoomListItem";
 export type { RoomListItem, RoomListItemViewProps, RoomListItemCallbacks } from "./RoomListItem";
 export type { MoreOptionsMenuState, MoreOptionsMenuCallbacks } from "./RoomListItemMoreOptionsMenu";
-export type { NotificationMenuState, NotificationMenuCallbacks } from "./RoomListItemNotificationMenu";
+export type { NotificationMenuState } from "./RoomListItemNotificationMenu";

@@ -5,17 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { RoomListPanel as SharedRoomListPanel } from "@element-hq/web-shared-components";
 
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 import { type IState as IRovingTabIndexState } from "../../../../accessibility/RovingTabIndex";
-import { RoomListPanelViewModel } from "../../../viewmodels/roomlist/RoomListPanelViewModel";
+import { RoomListViewModel } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import type { RoomListItem } from "@element-hq/web-shared-components";
+import { _t } from "../../../../languageHandler";
 
 type RoomListPanelProps = {
     /**
@@ -33,9 +34,9 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
     const [focusedElement, setFocusedElement] = useState<Element | null>(null);
 
     // Create ViewModel instance - use ref to survive strict mode double-mounting
-    const vmRef = useRef<RoomListPanelViewModel | null>(null);
+    const vmRef = useRef<RoomListViewModel | null>(null);
     if (!vmRef.current) {
-        vmRef.current = new RoomListPanelViewModel({ client });
+        vmRef.current = new RoomListViewModel({ client });
     }
     const vm = vmRef.current;
 

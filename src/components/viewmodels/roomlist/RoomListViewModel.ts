@@ -5,97 +5,352 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { BaseViewModel, type RoomListViewModel as RoomListVMType, type RoomListItem, type RoomNotifState } from "@element-hq/web-shared-components";
-import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import {
+    BaseViewModel,
+    type RoomListSnapshot,
+    type RoomListHeaderState,
+    type SpaceMenuState,
+    type ComposeMenuState,
+    type Filter,
+    type RoomListItem,
+    type RoomNotifState,
+    type RoomListViewActions,
+    SortOption,
+    type RoomListViewState,
+} from "@element-hq/web-shared-components";
+import {
+    type MatrixClient,
+    type Room,
+    RoomEvent,
+    JoinRule,
+    RoomType,
+} from "matrix-js-sdk/src/matrix";
 
-import RoomListStoreV3, { RoomListStoreV3Event, type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
-import dispatcher from "../../../dispatcher/dispatcher";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
+import { MetaSpace, getMetaSpaceName, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
 import { Action } from "../../../dispatcher/actions";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import dispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import {
+    shouldShowSpaceSettings,
+    showSpaceInvite,
+    showSpacePreferences,
+    showSpaceSettings,
+    showCreateNewRoom,
+} from "../../../utils/space";
+import SettingsStore from "../../../settings/SettingsStore";
+import RoomListStoreV3, { RoomListStoreV3Event, type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
+import { SortingAlgorithm } from "../../../stores/room-list-v3/skip-list/sorters";
+import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
 import { RoomNotificationStateStore, UPDATE_STATUS_INDICATOR } from "../../../stores/notifications/RoomNotificationStateStore";
-import { DefaultTagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
+import { DefaultTagID } from "../../../stores/room-list/models";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
-import { hasAccessToNotificationMenu, hasAccessToOptionsMenu } from "./utils";
+import { hasAccessToNotificationMenu, hasAccessToOptionsMenu, hasCreateRoomRights, createRoom as createRoomFunc } from "./utils";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
 import { RoomNotifState as ElementRoomNotifState } from "../../../RoomNotifs";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
 interface RoomListViewModelProps {
     client: MatrixClient;
-    activeFilter?: FilterKey;
 }
 
+const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
+    [FilterKey.UnreadFilter, _td("room_list|filters|unread")],
+    [FilterKey.PeopleFilter, _td("room_list|filters|people")],
+    [FilterKey.RoomsFilter, _td("room_list|filters|rooms")],
+    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
+    [FilterKey.MentionsFilter, _td("room_list|filters|mentions")],
+    [FilterKey.InvitesFilter, _td("room_list|filters|invites")],
+    [FilterKey.LowPriorityFilter, _td("room_list|filters|low_priority")],
+]);
+
 /**
- * ViewModel for the RoomList component.
- * Manages the room list data and actions.
+ * Consolidated ViewModel for the entire RoomListPanel component.
+ * Manages search, header, filters, and room list state in a single class.
+ * Implements RoomListViewActions to provide room action callbacks.
  */
-export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps>
-    implements Omit<RoomListVMType, 'getSnapshot' | 'subscribe'> {
-
+export class RoomListViewModel
+    extends BaseViewModel<RoomListSnapshot, RoomListViewModelProps>
+    implements RoomListViewActions
+{
+    // State tracking
+    private activeSpace: Room | null = null;
+    private displayRoomSearch: boolean;
+    private activeFilter: FilterKey | undefined = undefined;
     private roomsResult: RoomsResult;
-    private activeFilter: FilterKey | undefined;
 
-    public constructor(props: RoomListWrapperViewModelProps) {
-        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(
-            props.activeFilter ? [props.activeFilter] : undefined
-        );
+    // Search state properties (not in snapshot)
+    public showDialPad: boolean = false;
+    public showExplore: boolean = false;
 
-        super(props, RoomListViewModel.createSnapshot(roomsResult, props.client));
+    public constructor(props: RoomListViewModelProps) {
+        const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
+        const activeSpace = SpaceStore.instance.activeSpaceRoom;
 
+        // Get initial rooms
+        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
+
+        super(props, {
+            headerState: RoomListViewModel.createHeaderState(
+                SpaceStore.instance.activeSpace,
+                activeSpace,
+                SpaceStore.instance.allRoomsInHome,
+                props.client,
+            ),
+            // Initial view state
+            isLoadingRooms: RoomListStoreV3.instance.isLoadingRooms,
+            isRoomListEmpty: roomsResult.rooms.length === 0,
+            filters: RoomListViewModel.createFilters(undefined),
+            roomListState: RoomListViewModel.createRoomListState(roomsResult, props.client),
+        });
+
+        this.displayRoomSearch = displayRoomSearch;
+        this.activeSpace = activeSpace;
         this.roomsResult = roomsResult;
-        this.activeFilter = props.activeFilter;
 
-        // Listen to room list updates
+        // Initialize search state
+        this.showDialPad = LegacyCallHandler.instance.getSupportsPstnProtocol() ?? false;
+        this.showExplore = SpaceStore.instance.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms);
+
+        // Subscribe to search-related changes if search is enabled
+        if (this.displayRoomSearch) {
+            this.disposables.trackListener(
+                LegacyCallHandler.instance,
+                LegacyCallHandlerEvent.ProtocolSupport,
+                this.onProtocolChanged,
+            );
+        }
+
+        // Subscribe to space changes
+        this.disposables.trackListener(SpaceStore.instance, UPDATE_SELECTED_SPACE as any, this.onSpaceChanged);
+        this.disposables.trackListener(SpaceStore.instance, UPDATE_HOME_BEHAVIOUR as any, this.onHomeBehaviourChanged);
+
+        // Subscribe to room name changes if there's an active space
+        if (this.activeSpace) {
+            this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.onRoomNameChanged);
+        }
+
+        // Subscribe to room list updates
         this.disposables.trackListener(
             RoomListStoreV3.instance,
             RoomListStoreV3Event.ListsUpdate as any,
             this.onListsUpdate,
         );
 
-        // Listen to notification state changes
+        // Subscribe to room list loaded
+        this.disposables.trackListener(
+            RoomListStoreV3.instance,
+            RoomListStoreV3Event.ListsLoaded as any,
+            this.onListsLoaded,
+        );
+
+        // Subscribe to notification state changes
         this.disposables.trackListener(
             RoomNotificationStateStore.instance,
             UPDATE_STATUS_INDICATOR as any,
             this.onNotificationUpdate,
         );
 
-        // Listen to message preview changes
+        // Subscribe to message preview changes
         this.disposables.trackListener(
             MessagePreviewStore.instance,
             UPDATE_EVENT,
             this.onMessagePreviewUpdate,
         );
 
-        // Listen to ViewRoomDelta action for keyboard navigation
-        this.disposables.trackDispatcher(dispatcher, this.onDispatch);
+        // Subscribe to dispatcher for keyboard navigation
+    const dispatcherRef = dispatcher.register(this.onDispatch);
+    this.disposables.track(() => {
+        dispatcher.unregister(dispatcherRef);
+    });
+    }    // ==================== Search Actions ====================
+
+    public onSearchClick = (): void => {
+        defaultDispatcher.fire(Action.OpenSpotlight);
+    };
+
+    public onExploreClick = (): void => {
+        defaultDispatcher.fire(Action.ViewRoomDirectory);
+    };
+
+    public onDialPadClick = (): void => {
+        defaultDispatcher.fire(Action.OpenDialPad);
+    };
+
+    public onComposeClick = (): void => {
+        this.createChatRoom();
+    };
+
+    private onProtocolChanged = (): void => {
+        this.showDialPad = LegacyCallHandler.instance.getSupportsPstnProtocol() ?? false;
+    };
+
+    // ==================== Header State ====================
+
+    private static createHeaderState(
+        spaceKey: string,
+        activeSpace: Room | null,
+        allRoomsInHome: boolean,
+        client: MatrixClient,
+    ): RoomListHeaderState {
+        const spaceName = activeSpace?.name;
+        const title = spaceName ?? getMetaSpaceName(spaceKey as MetaSpace, allRoomsInHome);
+        const isSpace = Boolean(activeSpace);
+        const canCreateRoom = hasCreateRoomRights(client, activeSpace);
+        const displayComposeMenu = canCreateRoom;
+
+        // Create space menu state (data only, no callbacks)
+        const spaceMenuState: SpaceMenuState | undefined = isSpace
+            ? {
+                  title: activeSpace?.name ?? "",
+                  canInviteInSpace: Boolean(
+                      activeSpace?.getJoinRule() === JoinRule.Public ||
+                          activeSpace?.canInvite(client.getSafeUserId()),
+                  ),
+                  canAccessSpaceSettings: Boolean(activeSpace && shouldShowSpaceSettings(activeSpace)),
+              }
+            : undefined;
+
+        // Create compose menu state (data only, no callbacks)
+        const canCreateVideoRoom = SettingsStore.getValue("feature_video_rooms") && canCreateRoom;
+        const composeMenuState: ComposeMenuState | undefined = displayComposeMenu
+            ? {
+                  canCreateRoom,
+                  canCreateVideoRoom,
+              }
+            : undefined;
+
+        // Get active sort option
+        const activeSortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
+        const activeSortOption =
+            activeSortingAlgorithm === SortingAlgorithm.Alphabetic ? SortOption.AToZ : SortOption.Activity;
+
+        return {
+            title,
+            isSpace,
+            spaceMenuState,
+            displayComposeMenu,
+            composeMenuState,
+            activeSortOption,
+        };
     }
 
-    private static createSnapshot(
-        roomsResult: RoomsResult,
-        client: MatrixClient,
-    ): any {
+    // Space menu actions
+    public openSpaceHome = (): void => {
+        if (!this.activeSpace) return;
+        defaultDispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: this.activeSpace.roomId,
+            metricsTrigger: undefined,
+        });
+    };
+
+    public inviteInSpace = (): void => {
+        if (!this.activeSpace) return;
+        showSpaceInvite(this.activeSpace);
+    };
+
+    public openSpacePreferences = (): void => {
+        if (!this.activeSpace) return;
+        showSpacePreferences(this.activeSpace);
+    };
+
+    public openSpaceSettings = (): void => {
+        if (!this.activeSpace) return;
+        showSpaceSettings(this.activeSpace);
+    };
+
+    // Compose menu actions
+    public createChatRoom = (): void => {
+        defaultDispatcher.fire(Action.CreateChat);
+    };
+
+    public createRoom = (): void => {
+        createRoomFunc(this.activeSpace);
+    };
+
+    public createVideoRoom = (): void => {
+        const elementCallVideoRoomsEnabled = SettingsStore.getValue("feature_element_call_video_rooms");
+        const type = elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo;
+
+        if (this.activeSpace) {
+            showCreateNewRoom(this.activeSpace, type);
+        } else {
+            defaultDispatcher.dispatch({
+                action: Action.CreateRoom,
+                type,
+            });
+        }
+    };
+
+    // Sort options actions
+    public sort = (option: SortOption): void => {
+        const sortingAlgorithm =
+            option === SortOption.AToZ ? SortingAlgorithm.Alphabetic : SortingAlgorithm.Recency;
+        RoomListStoreV3.instance.resort(sortingAlgorithm);
+    };
+
+    // ==================== Filters ====================
+
+    private static createFilters(activeFilter: FilterKey | undefined): Filter[] {
+        const filters = [];
+
+        for (const [key, name] of filterKeyToNameMap.entries()) {
+            filters.push({
+                name: _t(name),
+                active: activeFilter === key,
+            });
+        }
+
+        return filters;
+    }
+
+    public onToggleFilter = (filter: Filter): void => {
+        // Find the FilterKey by matching the translated filter name
+        let filterKey: FilterKey | undefined = undefined;
+        for (const [key, name] of filterKeyToNameMap.entries()) {
+            if (_t(name) === filter.name) {
+                filterKey = key;
+                break;
+            }
+        }
+
+        if (filterKey === undefined) return;
+
+        // Toggle the filter - if it's already active, deactivate it
+        const newFilter = this.activeFilter === filterKey ? undefined : filterKey;
+        this.activeFilter = newFilter;
+
+        // Update rooms result with new filter
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomListData();
+    };
+
+    // ==================== Room List State ====================
+
+    private static createRoomListState(roomsResult: RoomsResult, client: MatrixClient): RoomListViewState {
         // Transform rooms into RoomListItems
         const roomListItems: RoomListItem[] = roomsResult.rooms.map((room) => {
             return RoomListViewModel.roomToListItem(room, client);
         });
 
         return {
-            roomsResult: {
-                spaceId: roomsResult.spaceId,
-                filterKeys: roomsResult.filterKeys,
-                rooms: roomListItems,
-            },
+            rooms: roomListItems,
             activeRoomIndex: undefined,
-            onKeyDown: undefined,
+            spaceId: roomsResult.spaceId,
+            filterKeys: roomsResult.filterKeys?.map(k => String(k)),
         };
     }
 
@@ -167,38 +422,135 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         };
     }
 
-    private onListsUpdate = (): void => {
+    // ==================== Event Handlers ====================
+
+    private onSpaceChanged = (): void => {
+        // Remove listener from old space
+        if (this.activeSpace) {
+            this.activeSpace.off(RoomEvent.Name, this.onRoomNameChanged);
+        }
+
+        this.activeSpace = SpaceStore.instance.activeSpaceRoom;
+
+        // Add listener to new space
+        if (this.activeSpace) {
+            this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.onRoomNameChanged);
+        }
+
+        // Update showExplore based on new space
+        const activeSpace = SpaceStore.instance.activeSpace;
+        this.showExplore = activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms);
+
+        // Update header state
+        const headerState = RoomListViewModel.createHeaderState(
+            SpaceStore.instance.activeSpace,
+            this.activeSpace,
+            SpaceStore.instance.allRoomsInHome,
+            this.props.client,
+        );
+        this.snapshot.merge({ headerState });
+
+        // Update rooms list
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomListData();
+    };
 
-        // Transform rooms into RoomListItems
-        const roomListItems: RoomListItem[] = this.roomsResult.rooms.map((room) => {
-            return RoomListViewModel.roomToListItem(room, this.props.client);
-        });
+    private onHomeBehaviourChanged = (): void => {
+        const spaceKey = SpaceStore.instance.activeSpace;
+        const spaceName = this.activeSpace?.name;
+        const title = spaceName ?? getMetaSpaceName(spaceKey as MetaSpace, SpaceStore.instance.allRoomsInHome);
 
+        const currentHeaderState = this.snapshot.current.headerState;
         this.snapshot.merge({
-            roomsResult: {
-                spaceId: this.roomsResult.spaceId,
-                filterKeys: this.roomsResult.filterKeys,
-                rooms: roomListItems,
+            headerState: {
+                ...currentHeaderState,
+                title,
             },
         });
     };
 
-    public setActiveFilter(filter: FilterKey | undefined): void {
-        this.activeFilter = filter;
-        this.onListsUpdate();
-    }
+    private onRoomNameChanged = (): void => {
+        if (this.activeSpace) {
+            const title = this.activeSpace.name;
+            const isSpace = Boolean(this.activeSpace);
+
+            // Update space menu state with new name
+            const spaceMenuState: SpaceMenuState | undefined = isSpace
+                ? {
+                      title,
+                      canInviteInSpace: Boolean(
+                          this.activeSpace?.getJoinRule() === JoinRule.Public ||
+                              this.activeSpace?.canInvite(this.props.client.getSafeUserId()),
+                      ),
+                      canAccessSpaceSettings: Boolean(this.activeSpace && shouldShowSpaceSettings(this.activeSpace)),
+                  }
+                : undefined;
+
+            const currentHeaderState = this.snapshot.current.headerState;
+            this.snapshot.merge({
+                headerState: {
+                    ...currentHeaderState,
+                    title,
+                    spaceMenuState,
+                },
+            });
+        }
+    };
+
+    private onListsUpdate = (): void => {
+        // Update sort options in header
+        const activeSortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
+        const activeSortOption =
+            activeSortingAlgorithm === SortingAlgorithm.Alphabetic ? SortOption.AToZ : SortOption.Activity;
+
+        const currentHeaderState = this.snapshot.current.headerState;
+        this.snapshot.merge({
+            headerState: {
+                ...currentHeaderState,
+                activeSortOption,
+            },
+        });
+
+        // Update rooms list
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomListData();
+    };
+
+    private onListsLoaded = (): void => {
+        // Room lists have finished loading
+        this.snapshot.merge({
+            isLoadingRooms: false,
+        });
+    };
 
     private onNotificationUpdate = (): void => {
         // Notification states changed, update room list items
-        this.onListsUpdate();
+        this.updateRoomListData();
     };
 
     private onMessagePreviewUpdate = (): void => {
         // Message previews changed, update room list items
-        this.onListsUpdate();
+        this.updateRoomListData();
     };
+
+    private updateRoomListData(): void {
+        // Update the snapshot with fresh room list data
+        const filters = RoomListViewModel.createFilters(this.activeFilter);
+        const roomListState = RoomListViewModel.createRoomListState(this.roomsResult, this.props.client);
+        const isRoomListEmpty = this.roomsResult.rooms.length === 0;
+        const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
+
+        this.snapshot.merge({
+            isLoadingRooms,
+            isRoomListEmpty,
+            filters,
+            roomListState,
+        });
+    }
+
+    // ==================== Keyboard Navigation ====================
 
     private onDispatch = (payload: any): void => {
         if (payload.action !== Action.ViewRoomDelta) return;
@@ -207,10 +559,10 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         if (!currentRoomId) return;
 
         const { delta, unread } = payload as ViewRoomDeltaPayload;
-        
+
         // Get the rooms list to navigate through
         const rooms = this.roomsResult.rooms;
-        
+
         // Filter rooms if unread navigation is requested
         const filteredRooms = unread
             ? rooms.filter((room) => {
@@ -237,7 +589,7 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         });
     };
 
-    // Action implementations - using exact logic from RoomListItemMenuViewModel
+    // ==================== Room Action Handlers ====================
 
     public onOpenRoom = (roomId: string): void => {
         dispatcher.dispatch<ViewRoomPayload>({
@@ -252,7 +604,7 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         if (!room) return;
         await clearRoomNotification(room, this.props.client);
         // Trigger immediate update for optimistic UI
-        this.onListsUpdate();
+        this.updateRoomListData();
     };
 
     public onMarkAsUnread = async (roomId: string): Promise<void> => {
@@ -260,7 +612,7 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         if (!room) return;
         await setMarkedUnreadState(room, this.props.client, true);
         // Trigger immediate update for optimistic UI
-        this.onListsUpdate();
+        this.updateRoomListData();
     };
 
     public onToggleFavorite = (roomId: string): void => {
@@ -268,7 +620,7 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         if (!room) return;
         tagRoom(room, DefaultTagID.Favourite);
         // Trigger immediate update for optimistic UI
-        this.onListsUpdate();
+        this.updateRoomListData();
     };
 
     public onToggleLowPriority = (roomId: string): void => {
@@ -276,7 +628,7 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
         if (!room) return;
         tagRoom(room, DefaultTagID.LowPriority);
         // Trigger immediate update for optimistic UI
-        this.onListsUpdate();
+        this.updateRoomListData();
     };
 
     public onInvite = (roomId: string): void => {
@@ -332,6 +684,6 @@ export class RoomListViewModel extends BaseViewModel<any, RoomListViewModelProps
 
         // Trigger immediate update for optimistic UI
         // Use setTimeout to allow the echo chamber to update first
-        setTimeout(() => this.onListsUpdate(), 0);
+        setTimeout(() => this.updateRoomListData(), 0);
     };
 }

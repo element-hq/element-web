@@ -9,12 +9,12 @@ import React, { useCallback, useRef, type JSX, type ReactNode } from "react";
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
 import { ListView, type ListContext } from "../../utils/ListView";
 import { RoomListItemView, type RoomListItem } from "../RoomListItem";
 import { type RoomNotifState } from "../../notifications/RoomNotifs";
+import type { RoomListViewModel } from "../RoomListView";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -34,52 +34,25 @@ export interface RoomsResult {
 }
 
 /**
- * Snapshot for RoomList view state
+ * State for the room list data (nested within RoomListSnapshot)
  */
-export interface RoomListViewSnapshot {
-    /** The rooms result containing the list of rooms */
-    roomsResult: RoomsResult;
-    /** Optional active room index */
+export interface RoomListViewState {
+    /** Array of room items */
+    rooms: RoomListItem[];
+    /** Optional active room index for keyboard navigation */
     activeRoomIndex?: number;
-    /** Optional keyboard event handler */
-    onKeyDown?: (ev: React.KeyboardEvent) => void;
+    /** Space ID for context tracking */
+    spaceId?: string;
+    /** Active filter keys for context tracking */
+    filterKeys?: FilterKey[];
 }
-
-/**
- * Actions available for RoomList
- */
-export interface RoomListViewActions {
-    /** Callback to open a room */
-    onOpenRoom: (roomId: string) => void;
-    /** Callback to mark a room as read */
-    onMarkAsRead: (roomId: string) => void;
-    /** Callback to mark a room as unread */
-    onMarkAsUnread: (roomId: string) => void;
-    /** Callback to toggle a room as favourite */
-    onToggleFavorite: (roomId: string) => void;
-    /** Callback to toggle a room as low priority */
-    onToggleLowPriority: (roomId: string) => void;
-    /** Callback to invite users to a room */
-    onInvite: (roomId: string) => void;
-    /** Callback to copy the room link */
-    onCopyRoomLink: (roomId: string) => void;
-    /** Callback to leave a room */
-    onLeaveRoom: (roomId: string) => void;
-    /** Callback to set the room notification state */
-    onSetRoomNotifState: (roomId: string, state: RoomNotifState) => void;
-}
-
-/**
- * The view model for the room list.
- */
-export type RoomListViewModel = ViewModel<RoomListViewSnapshot> & RoomListViewActions;
 
 /**
  * Props for the RoomList component
  */
 export interface RoomListProps {
     /**
-     * The view model containing room list data and actions
+     * The view model containing all room list data and callbacks
      */
     vm: RoomListViewModel;
 
@@ -115,21 +88,12 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  */
 export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
     const snapshot = useViewModel(vm);
-    const { roomsResult, activeRoomIndex, onKeyDown } = snapshot;
-    const {
-        onOpenRoom,
-        onMarkAsRead,
-        onMarkAsUnread,
-        onToggleFavorite,
-        onToggleLowPriority,
-        onInvite,
-        onCopyRoomLink,
-        onLeaveRoom,
-        onSetRoomNotifState,
-    } = vm;
+    const { roomListState } = snapshot;
+    const rooms = roomListState.rooms;
+    const activeRoomIndex = roomListState.activeRoomIndex;
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
-    const roomCount = roomsResult.rooms.length;
+    const roomCount = rooms.length;
 
     /**
      * Get the item component for a specific index
@@ -150,19 +114,17 @@ export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
             const isSelected = activeRoomIndex === index;
 
             const callbacks = {
-                onOpenRoom: () => onOpenRoom(item.id),
+                onOpenRoom: () => vm.onOpenRoom(item.id),
                 moreOptionsCallbacks: {
-                    onMarkAsRead: () => onMarkAsRead(item.id),
-                    onMarkAsUnread: () => onMarkAsUnread(item.id),
-                    onToggleFavorite: () => onToggleFavorite(item.id),
-                    onToggleLowPriority: () => onToggleLowPriority(item.id),
-                    onInvite: () => onInvite(item.id),
-                    onCopyRoomLink: () => onCopyRoomLink(item.id),
-                    onLeaveRoom: () => onLeaveRoom(item.id),
+                    onMarkAsRead: () => vm.onMarkAsRead(item.id),
+                    onMarkAsUnread: () => vm.onMarkAsUnread(item.id),
+                    onToggleFavorite: () => vm.onToggleFavorite(item.id),
+                    onToggleLowPriority: () => vm.onToggleLowPriority(item.id),
+                    onInvite: () => vm.onInvite(item.id),
+                    onCopyRoomLink: () => vm.onCopyRoomLink(item.id),
+                    onLeaveRoom: () => vm.onLeaveRoom(item.id),
                 },
-                notificationCallbacks: {
-                    onSetRoomNotifState: (state: RoomNotifState) => onSetRoomNotifState(item.id, state),
-                },
+                onSetRoomNotifState: (state: RoomNotifState) => vm.onSetRoomNotifState(item.id, state),
             };
 
             return (
@@ -216,30 +178,19 @@ export function RoomList({ vm, renderAvatar }: RoomListProps): JSX.Element {
         [activeRoomIndex],
     );
 
-    /**
-     * Handle keyboard events
-     */
-    const keyDownCallback = useCallback(
-        (ev: React.KeyboardEvent): void => {
-            onKeyDown?.(ev);
-        },
-        [onKeyDown],
-    );
-
     return (
         <ListView
-            context={{ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }}
+            context={{ spaceId: roomListState.spaceId || "", filterKeys: roomListState.filterKeys }}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             initialTopMostItemIndex={activeRoomIndex}
             data-testid="room-list"
             role="listbox"
             aria-label={_t("room_list|list_title")}
             fixedItemHeight={ROOM_LIST_ITEM_HEIGHT}
-            items={roomsResult.rooms}
+            items={rooms}
             getItemComponent={getItemComponent}
             getItemKey={getItemKey}
             isItemFocusable={() => true}
-            onKeyDown={keyDownCallback}
             increaseViewportBy={{
                 bottom: EXTENDED_VIEWPORT_HEIGHT,
                 top: EXTENDED_VIEWPORT_HEIGHT,
