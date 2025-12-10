@@ -162,11 +162,6 @@ jobs:
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
               run: yarn playwright install-deps webkit
 
-            - name: Install fonts
-              run: |
-                  sudo apt install -y fonts-noto-cjk
-                  fc-cache -f -v
-
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
               run: |
