@@ -831,8 +831,13 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
+    let storedClientid;
+    try {
+        storedClientid = getStoredOidcClientId();
+    } catch {}
+
     let tokenRefresher;
-    if (credentials.refreshToken) {
+    if (credentials.refreshToken && storedClientid) {
         tokenRefresher = await createOidcTokenRefresher(credentials);
     } else {
         logger.debug("No refresh token was supplied: access token will not be refreshed");
