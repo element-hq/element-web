@@ -141,4 +141,13 @@ export class AudioPlayerViewModel
     public onSeekbarChange = async (ev: ChangeEvent<HTMLInputElement>): Promise<void> => {
         await this.props.playback.skipTo((Number(ev.target.value) / 100) * this.props.playback.durationSeconds);
     };
+
+    /**
+     * Updates the properties of the view model and recomputes the snapshot.
+     * @param newProps
+     */
+    public setProps(newProps: Partial<Props>): void {
+        this.props = { ...this.props, ...newProps };
+        this.setSnapshot();
+    }
 }
