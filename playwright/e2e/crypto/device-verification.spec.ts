@@ -189,40 +189,32 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         { tag: "@screenshot" },
         async ({ page, app, credentials, homeserver }) => {
             await logIntoElement(page, credentials);
-            await enterRecoveryKeyAndCheckVerified(page, app, "new passphrase");
+            await enterRecoveryKeyAndCheckVerified(page, app, "new passphrase", true);
         },
     );
 
-    test(
-        "Verify device with Recovery Key during login",
-        { tag: "@screenshot" },
-        async ({ page, app, credentials, homeserver }) => {
-            const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+    test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
 
-            await logIntoElement(page, credentials);
-            await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
-        },
-    );
+        await logIntoElement(page, credentials);
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
 
-    test(
-        "Verify device with Recovery Key from settings",
-        { tag: "@screenshot" },
-        async ({ page, app, credentials }) => {
-            const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
+    test("Verify device with Recovery Key from settings", async ({ page, app, credentials }) => {
+        const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
 
-            await logIntoElement(page, credentials);
+        await logIntoElement(page, credentials);
 
-            /* Dismiss "Verify this device" */
-            const authPage = page.locator(".mx_AuthPage");
-            await authPage.getByRole("button", { name: "Skip verification for now" }).click();
-            await authPage.getByRole("button", { name: "I'll verify later" }).click();
-            await page.waitForSelector(".mx_MatrixChat");
+        /* Dismiss "Verify this device" */
+        const authPage = page.locator(".mx_AuthPage");
+        await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+        await authPage.getByRole("button", { name: "I'll verify later" }).click();
+        await page.waitForSelector(".mx_MatrixChat");
 
-            const settings = await app.settings.openUserSettings("Encryption");
-            await settings.getByRole("button", { name: "Verify this device" }).click();
-            await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
-        },
-    );
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await enterRecoveryKeyAndCheckVerified(page, app, recoveryKey);
+    });
 
     test("After cancelling verify with another device, I can try again #29882", async ({ page, app, credentials }) => {
         // Regression test for https://github.com/element-hq/element-web/issues/29882
@@ -249,7 +241,12 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     });
 
     /** Helper for the three tests above which verify by recovery key */
-    async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
+    async function enterRecoveryKeyAndCheckVerified(
+        page: Page,
+        app: ElementAppPage,
+        recoveryKey: string,
+        screenshot = false,
+    ) {
         await page.getByRole("button", { name: "Use recovery key" }).click();
 
         // Enter the recovery key
@@ -257,9 +254,11 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // We use `pressSequentially` here to make sure that the FocusLock isn't causing us any problems
         // (cf https://github.com/element-hq/element-web/issues/30089)
         await dialog.getByTitle("Recovery key").pressSequentially(recoveryKey);
-        await expect(page.locator(".mx_Dialog").filter({ hasText: "Enter your recovery key" })).toMatchScreenshot(
-            "recovery-key.png",
-        );
+        if (screenshot) {
+            await expect(page.locator(".mx_Dialog").filter({ hasText: "Enter your recovery key" })).toMatchScreenshot(
+                "recovery-key.png",
+            );
+        }
         await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
         await page.getByRole("button", { name: "Done" }).click();
 
