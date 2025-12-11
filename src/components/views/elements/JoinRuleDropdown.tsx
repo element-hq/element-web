@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 import { JoinRule } from "matrix-js-sdk/src/matrix";
+import { GroupIcon, LockSolidIcon, PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import Dropdown from "./Dropdown";
 import { type NonEmptyArray } from "../../../@types/common";
@@ -36,6 +37,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
 }) => {
     const options = [
         <div key={JoinRule.Invite} className="mx_JoinRuleDropdown_invite">
+            <LockSolidIcon />
             {labelInvite}
         </div>,
     ] as NonEmptyArray<ReactElement & { key: string }>;
@@ -44,6 +46,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         options.push(
             (
                 <div key={JoinRule.Public} className="mx_JoinRuleDropdown_public">
+                    <PublicIcon />
                     {labelPublic}
                 </div>
             ) as ReactElement & { key: string },
@@ -65,6 +68,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         options.unshift(
             (
                 <div key={JoinRule.Restricted} className="mx_JoinRuleDropdown_restricted">
+                    <GroupIcon />
                     {labelRestricted}
                 </div>
             ) as ReactElement & { key: string },
