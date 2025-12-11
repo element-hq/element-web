@@ -264,6 +264,7 @@ test.describe("Element Call", () => {
                     preset: "trusted_private_chat" as Preset.TrustedPrivateChat,
                     invite: [bot.credentials.userId],
                 });
+                await bot.awaitRoomMembership(roomId);
                 await app.client.setAccountData("m.direct" as EventType.Direct, {
                     [bot.credentials.userId]: [roomId],
                 });
