@@ -12,7 +12,11 @@ import { IconButton } from "@vector-im/compound-web";
 import { composeStories } from "@storybook/react-vite";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import { type WidgetContextMenuAction, type WidgetContextMenuSnapshot, WidgetContextMenuView } from "./WidgetContextMenuView";
+import {
+    type WidgetContextMenuAction,
+    type WidgetContextMenuSnapshot,
+    WidgetContextMenuView,
+} from "./WidgetContextMenuView";
 import * as stories from "./WidgetContextMenuView.stories.tsx";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 

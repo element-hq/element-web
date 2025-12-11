@@ -274,7 +274,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             isUserProfileReady: OwnProfileStore.instance.isProfileInfoFetched,
             error: null,
             menuDisplayed: false,
-            requiresClient: this.determineInitialRequiresClientState()
+            requiresClient: this.determineInitialRequiresClientState(),
         };
     }
 

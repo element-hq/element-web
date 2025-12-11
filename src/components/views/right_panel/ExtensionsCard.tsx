@@ -65,7 +65,6 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
-
     const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, Container.Top);
 
     let pinTitle: string;

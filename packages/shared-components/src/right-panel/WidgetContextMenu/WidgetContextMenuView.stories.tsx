@@ -7,12 +7,16 @@
 
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
+import { IconButton } from "@vector-im/compound-web";
+import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../useMockedViewModel";
-import { WidgetContextMenuAction, WidgetContextMenuSnapshot, WidgetContextMenuView } from "./WidgetContextMenuView";
-import { IconButton } from "@vector-im/compound-web";
-import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import {
+    type WidgetContextMenuAction,
+    type WidgetContextMenuSnapshot,
+    WidgetContextMenuView,
+} from "./WidgetContextMenuView";
 
 type WidgetContextMenuViewModelProps = WidgetContextMenuSnapshot & WidgetContextMenuAction;
 

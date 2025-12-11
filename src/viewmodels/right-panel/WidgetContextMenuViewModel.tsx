@@ -8,7 +8,7 @@
 import React, { useContext, useMemo, useEffect, type ReactElement, type ReactNode } from "react";
 import { logger } from "@sentry/browser";
 import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type ClientWidgetApi, type IWidget, MatrixCapabilities } from "matrix-widget-api";
+import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import {
     BaseViewModel,
     type WidgetContextMenuSnapshot,
@@ -32,7 +32,7 @@ import { isAppWidget } from "../../stores/WidgetStore";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { ModuleRunner } from "../../modules/ModuleRunner";
-import { ElementWidget } from "../../stores/widgets/StopGapWidget";
+import { ElementWidget, type WidgetMessaging } from "../../stores/widgets/WidgetMessaging";
 import dis from "../../dispatcher/dispatcher";
 
 const checkRevokeButtonState = (
@@ -64,7 +64,7 @@ export class WidgetContextMenuViewModel
     private _roomId: string | undefined;
     private _room: Room | undefined;
     private _cli: MatrixClient;
-    private _widgetMessaging: ClientWidgetApi | undefined;
+    private _widgetMessaging: WidgetMessaging | undefined;
 
     public constructor(props: WidgetContextMenuViewModelProps) {
         const { app, cli, room, roomId, userWidget, showUnpin, menuDisplayed, trigger, onDeleteClick } = props;
@@ -105,7 +105,7 @@ export class WidgetContextMenuViewModel
 
         const showSnapshotButton =
             SettingsStore.getValue("enableWidgetScreenshots") &&
-            !!widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots);
+            !!widgetMessaging?.widgetApi?.hasCapability(MatrixCapabilities.Screenshots);
 
         let showMoveButtons: [boolean, boolean] = [false, false];
         if (showUnpin) {
@@ -175,7 +175,7 @@ export class WidgetContextMenuViewModel
 
     public get onSnapshotClick(): () => void {
         return () => {
-            this._widgetMessaging
+            this._widgetMessaging?.widgetApi
                 ?.takeScreenshot()
                 .then((data) => {
                     dis.dispatch({
@@ -194,9 +194,9 @@ export class WidgetContextMenuViewModel
         return async () => {
             try {
                 if (this._roomId) {
-                    await startJitsiAudioLivestream(this._cli, this._widgetMessaging!, this._roomId!);
+                    await startJitsiAudioLivestream(this._cli, this._widgetMessaging!.widgetApi!, this._roomId!);
                 }
-            } catch (err) {
+            } catch (err: any) {
                 logger.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
                 const message =

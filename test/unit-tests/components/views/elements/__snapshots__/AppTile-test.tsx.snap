@@ -293,7 +293,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           data-state="closed"
-          id="radix-_r_3a_"
+          id="radix-_r_30_"
           role="button"
           tabindex="0"
           type="button"
@@ -349,8 +349,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="_r_3d_"
-                aria-labelledby="_r_3c_"
+                aria-describedby="_r_33_"
+                aria-labelledby="_r_32_"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg
