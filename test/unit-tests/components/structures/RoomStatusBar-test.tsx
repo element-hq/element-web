@@ -17,11 +17,10 @@ import {
     MatrixError,
 } from "matrix-js-sdk/src/matrix";
 
-import RoomStatusBar, { getUnsentMessages } from "../../../../src/components/structures/RoomStatusBar";
+import { RoomStatusBar } from "../../../../src/components/structures/RoomStatusBar";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkEvent, stubClient } from "../../../test-utils/test-utils";
-import { mkThread } from "../../../test-utils/threads";
 
 describe("RoomStatusBar", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -55,96 +54,52 @@ describe("RoomStatusBar", () => {
             ),
         });
 
-    describe("getUnsentMessages", () => {
-        it("returns no unsent messages", () => {
-            expect(getUnsentMessages(room)).toHaveLength(0);
-        });
-
-        it("checks the event status", () => {
-            room.addPendingEvent(event, "123");
-
-            expect(getUnsentMessages(room)).toHaveLength(1);
-            event.status = EventStatus.SENT;
-
-            expect(getUnsentMessages(room)).toHaveLength(0);
-        });
-
-        it("only returns events related to a thread", () => {
-            room.addPendingEvent(event, "123");
-
-            const { rootEvent, events } = mkThread({
-                room,
-                client,
-                authorId: "@alice:example.org",
-                participantUserIds: ["@alice:example.org"],
-                length: 2,
-            });
-            rootEvent.status = EventStatus.NOT_SENT;
-            room.addPendingEvent(rootEvent, rootEvent.getId()!);
-            for (const event of events) {
-                event.status = EventStatus.NOT_SENT;
-                room.addPendingEvent(event, Date.now() + Math.random() + "");
-            }
-
-            const pendingEvents = getUnsentMessages(room, rootEvent.getId());
-
-            expect(pendingEvents[0].threadRootId).toBe(rootEvent.getId());
-            expect(pendingEvents[1].threadRootId).toBe(rootEvent.getId());
-            expect(pendingEvents[2].threadRootId).toBe(rootEvent.getId());
-
-            // Filters out the non thread events
-            expect(pendingEvents.every((ev) => ev.getId() !== event.getId())).toBe(true);
-        });
+    it("should render nothing when room has no error or unsent messages", () => {
+        const { container } = getComponent();
+        expect(container.firstChild).toBe(null);
     });
 
-    describe("<RoomStatusBar />", () => {
-        it("should render nothing when room has no error or unsent messages", () => {
+    describe("unsent messages", () => {
+        it("should render warning when messages are unsent due to consent", () => {
+            const unsentMessage = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: "@user1:server",
+                room: "!room1:server",
+                content: {},
+            });
+            unsentMessage.status = EventStatus.NOT_SENT;
+            unsentMessage.error = new MatrixError({
+                errcode: "M_CONSENT_NOT_GIVEN",
+                data: { consent_uri: "terms.com" },
+            });
+
+            room.addPendingEvent(unsentMessage, "123");
+
             const { container } = getComponent();
-            expect(container.firstChild).toBe(null);
+
+            expect(container).toMatchSnapshot();
         });
 
-        describe("unsent messages", () => {
-            it("should render warning when messages are unsent due to consent", () => {
-                const unsentMessage = mkEvent({
-                    event: true,
-                    type: "m.room.message",
-                    user: "@user1:server",
-                    room: "!room1:server",
-                    content: {},
-                });
-                unsentMessage.status = EventStatus.NOT_SENT;
-                unsentMessage.error = new MatrixError({
-                    errcode: "M_CONSENT_NOT_GIVEN",
-                    data: { consent_uri: "terms.com" },
-                });
-
-                room.addPendingEvent(unsentMessage, "123");
-
-                const { container } = getComponent();
-
-                expect(container).toMatchSnapshot();
+        it("should render warning when messages are unsent due to resource limit", () => {
+            const unsentMessage = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: "@user1:server",
+                room: "!room1:server",
+                content: {},
+            });
+            unsentMessage.status = EventStatus.NOT_SENT;
+            unsentMessage.error = new MatrixError({
+                errcode: "M_RESOURCE_LIMIT_EXCEEDED",
+                data: { limit_type: "monthly_active_user" },
             });
 
-            it("should render warning when messages are unsent due to resource limit", () => {
-                const unsentMessage = mkEvent({
-                    event: true,
-                    type: "m.room.message",
-                    user: "@user1:server",
-                    room: "!room1:server",
-                    content: {},
-                });
-                unsentMessage.status = EventStatus.NOT_SENT;
-                unsentMessage.error = new MatrixError({
-                    errcode: "M_RESOURCE_LIMIT_EXCEEDED",
-                    data: { limit_type: "monthly_active_user" },
-                });
+            room.addPendingEvent(unsentMessage, "123");
 
-                room.addPendingEvent(unsentMessage, "123");
+            const { container } = getComponent();
 
-                const { container } = getComponent();
-
-                expect(container).toMatchSnapshot();
-            });
+            expect(container).toMatchSnapshot();
         });
     });
 });

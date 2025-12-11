@@ -13,15 +13,26 @@ import {
     PushRuleActionName,
     PushRuleKind,
     TweakName,
+    EventStatus,
 } from "matrix-js-sdk/src/matrix";
 
-import type { IPushRule, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { IPushRule, Room, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { NotificationLevel } from "./stores/notifications/NotificationLevel";
-import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
 import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./utils/membership";
 import SettingsStore from "./settings/SettingsStore";
 import { getMarkedUnreadState } from "./utils/notifications";
+
+export function getUnsentMessages(room: Room, threadId?: string): MatrixEvent[] {
+    if (!room) {
+        return [];
+    }
+    return room.getPendingEvents().filter(function (ev) {
+        const isNotSent = ev.status === EventStatus.NOT_SENT;
+        const belongsToTheThread = threadId === ev.threadRootId;
+        return isNotSent && (!threadId || belongsToTheThread);
+    });
+}
 
 export enum RoomNotifState {
     AllMessagesLoud = "all_messages_loud",

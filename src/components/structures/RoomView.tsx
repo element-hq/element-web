@@ -92,7 +92,7 @@ import { type IOpts } from "../../createRoom";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import UploadBar from "./UploadBar";
-import RoomStatusBar from "./RoomStatusBar";
+import { RoomStatusBar } from "./RoomStatusBar";
 import MessageComposer from "../views/rooms/MessageComposer";
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
@@ -1678,14 +1678,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     }
 
-    private onInviteClick = (): void => {
-        // open the room inviter
-        defaultDispatcher.dispatch({
-            action: "view_invite",
-            roomId: this.getRoomId(),
-        });
-    };
-
     private onJoinButtonClicked = (): void => {
         // If the user is a ROU, allow them to transition to a PWLU
         if (this.context.client?.isGuest()) {
@@ -2023,17 +2015,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             pixelOffset: scrollState.pixelOffset,
         };
     }
-
-    private onStatusBarVisible = (): void => {
-        if (this.unmounted || this.state.statusBarVisible) return;
-        this.setState({ statusBarVisible: true });
-    };
-
-    private onStatusBarHidden = (): void => {
-        // This is currently not desired as it is annoying if it keeps expanding and collapsing
-        if (this.unmounted || !this.state.statusBarVisible) return;
-        this.setState({ statusBarVisible: false });
-    };
 
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
@@ -2385,21 +2366,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         let statusBar: JSX.Element | undefined;
-        let isStatusAreaExpanded = true;
+        const isStatusAreaExpanded = true;
 
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
             statusBar = <UploadBar room={this.state.room} />;
         } else if (!this.state.search) {
-            isStatusAreaExpanded = this.state.statusBarVisible;
-            statusBar = (
-                <RoomStatusBar
-                    room={this.state.room}
-                    isPeeking={myMembership !== KnownMembership.Join}
-                    onInviteClick={this.onInviteClick}
-                    onVisible={this.onStatusBarVisible}
-                    onHidden={this.onStatusBarHidden}
-                />
-            );
+            statusBar = <RoomStatusBar room={this.state.room} />;
         }
 
         const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
