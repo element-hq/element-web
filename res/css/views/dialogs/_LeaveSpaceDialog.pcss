@@ -25,28 +25,21 @@ Please see LICENSE files in the repository root for full details.
                 overflow-y: auto;
 
                 .mx_LeaveSpaceDialog_section_warning {
-                    position: relative;
                     border-radius: 8px;
                     margin: 12px 0 0;
-                    padding: 12px 8px 12px 42px;
+                    padding: 12px 8px;
                     background-color: $header-panel-bg-color;
 
                     font-size: $font-12px;
                     line-height: $font-15px;
                     color: $secondary-content;
 
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        left: 10px;
-                        top: calc(50% - 8px); /* vertical centering */
+                    svg {
                         height: 16px;
                         width: 16px;
-                        background-color: $secondary-content;
-                        mask-repeat: no-repeat;
-                        mask-size: contain;
-                        mask-image: url("@vector-im/compound-design-tokens/icons/info-solid.svg");
-                        mask-position: center;
+                        color: $secondary-content;
+                        vertical-align: middle;
+                        margin: 0 var(--cpd-space-1x);
                     }
                 }
 
