@@ -78,7 +78,8 @@ export function isModule(module: unknown): module is ModuleExport {
  * @public
  */
 export interface Api
-    extends LegacyModuleApiExtension,
+    extends
+        LegacyModuleApiExtension,
         LegacyCustomisationsApiExtension,
         DialogApiExtension,
         AccountAuthApiExtension,
