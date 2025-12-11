@@ -193,6 +193,9 @@ export class ElementWidgetDriver extends WidgetDriver {
                 //  MSC4310: Add dev and final event to ease future transition,
                 EventType.RTCDecline,
                 "m.rtc.decline",
+                // MSC4310 The main membership event is sent via a room sticky event.
+                EventType.RTCMembership,
+                "m.rtc.member",
             ];
             for (const eventType of [...sendRoomEvents, ...sendRecvRoomEvents])
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
