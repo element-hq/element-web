@@ -313,9 +313,9 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@element-hq/element-web-module-api@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.8.0.tgz#95aa4ec22609cf0f4a7f24274473af0645a16f2a"
-  integrity sha512-lMiDA9ubP3mZZupIMT8T3wS0riX30rYZj3pFpdP4cfZhkWZa3FJFStokAy5OnaHyENC7Px1cqkBGqilOWewY/A==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.9.0.tgz#2e4fcc8809418c8670d4f0576bc4a9a235bc6c50"
+  integrity sha512-Ao/V9w+wysZK4bh61LlKlznF10n2ZbD6KcUI46/zUMttXbmJn3ahvbzhEpwYcD+Cjy3ag5ycxLIIGkKV/fncXg==
 
 "@element-hq/element-web-playwright-common@^2.0.0":
   version "2.1.0"
@@ -5855,9 +5855,9 @@ prelude-ls@^1.2.1:
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
 prettier@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.6.2.tgz#ccda02a1003ebbb2bfda6f83a074978f608b9393"
-  integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.7.4.tgz#d2f8335d4b1cec47e1c8098645411b0c9dff9c0f"
+  integrity sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==
 
 pretty-format@30.2.0, pretty-format@^30.0.0:
   version "30.2.0"
@@ -7088,9 +7088,9 @@ vite-plugin-node-polyfills@^0.24.0:
     node-stdlib-browser "^1.2.0"
 
 vite@^7.1.9:
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-7.2.4.tgz#a3a09c7e25487612ecc1119c7d412c73da35bd4e"
-  integrity sha512-NL8jTlbo0Tn4dUEXEsUg8KeyG/Lkmc4Fnzb8JXN/Ykm9G4HNImjtABMJgkQoVjOBN/j2WAwDTRytdqJbZsah7w==
+  version "7.2.7"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-7.2.7.tgz#0789a4c3206081699f34a9ecca2dda594a07478e"
+  integrity sha512-ITcnkFeR3+fI8P1wMgItjGrR10170d8auB4EpMLPqmx6uxElH3a/hHGQabSHKdqd4FXWO1nFIp9rRn7JQ34ACQ==
   dependencies:
     esbuild "^0.25.0"
     fdir "^6.5.0"
