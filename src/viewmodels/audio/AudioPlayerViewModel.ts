@@ -147,8 +147,7 @@ export class AudioPlayerViewModel
      * @param newProps
      */
     public setProps(newProps: Partial<Props>): void {
-        const props = { ...this.props, ...newProps };
-        this.props = props;
-        this.snapshot.set(AudioPlayerViewModel.computeSnapshot(props.playback, props.mediaName, this.error));
+        this.props = { ...this.props, ...newProps };
+        this.setSnapshot();
     }
 }
