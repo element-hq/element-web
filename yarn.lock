@@ -4201,7 +4201,12 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@6.4.1", "@vector-im/compound-design-tokens@^6.3.0":
+"@vector-im/compound-design-tokens@6.4.2":
+  version "6.4.2"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.2.tgz#29189d6480c8ccf09ce143cb4618fb13a56a7583"
+  integrity sha512-LHLGZgnatH3mQXn9TF+m/SUinPS2nKvuCT/r2AQ7HAgEIG/S/Ck6e/iV4IFQLSZnd9gU0RlMsLkP2UQ/AKUEBA==
+
+"@vector-im/compound-design-tokens@^6.3.0":
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.1.tgz#b3356300136b974104b4fb818969350c7686f5ae"
   integrity sha512-JhrxnzohxGILrc+IZWoMXcpGHinnJlR2HSCKfypEjPDDF5TOB8HQYTqd5ALAPlob8QZU3N2ghnCF7d0f2LmTxg==
