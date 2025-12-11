@@ -230,7 +230,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             }
             return (
                 <div>
-                    <E2EIcon className="mx_CompleteSecurity_heroIcon" status={E2EStatus.Verified} hideTooltip />;
+                    <E2EIcon className="mx_CompleteSecurity_heroIcon" status={E2EStatus.Verified} hideTooltip />
                     {message}
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton kind="primary" onClick={this.onDoneClick}>
