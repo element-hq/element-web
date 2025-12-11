@@ -26,7 +26,7 @@ export class Tab<T extends string> {
      * Creates a new tab.
      * @param {string} id The tab's ID.
      * @param {string} label The untranslated tab label.
-     * @param {string|JSX.Element} icon An SVG element to use for the tab icon. Can also be a string for legacy icons, in which case it is the class for the tab icon. This should be a simple mask.
+     * @param {string|JSX.Element} icon An SVG element to use for the tab icon.
      * @param {JSX.Element} body The JSX for the tab container.
      * @param {string} screenName The screen name to report to Posthog.
      * @param {string} labelClassName Additional class to add to the tab label.
@@ -34,7 +34,7 @@ export class Tab<T extends string> {
     public constructor(
         public readonly id: T,
         public readonly label: TranslationKey,
-        public readonly icon: string | JSX.Element | null,
+        public readonly icon: JSX.Element | null,
         public readonly body: JSX.Element,
         public readonly screenName?: ScreenName,
         public readonly labelClassName?: string,
