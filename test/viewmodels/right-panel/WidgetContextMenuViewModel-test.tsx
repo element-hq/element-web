@@ -22,6 +22,8 @@ import Modal from "../../../src/Modal";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import * as widgetStore from "../../../src/stores/WidgetStore";
+import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
+import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging";
 
 describe("WidgetContextMenuViewModel", () => {
     const widgetId = "w1";
@@ -59,6 +61,15 @@ describe("WidgetContextMenuViewModel", () => {
         jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
         jest.spyOn(WidgetUtils, "isManagedByManager").mockReturnValue(true);
         jest.spyOn(WidgetUtils, "editWidget").mockReturnValue();
+        const mockMessaging = {
+            on: () => {},
+            off: () => {},
+            stop: () => {},
+            widgetApi: {
+                hasCapability: jest.fn(),
+            },
+        } as unknown as WidgetMessaging;
+        jest.spyOn(WidgetMessagingStore.instance, "getMessagingForUid").mockReturnValue(mockMessaging);
         client = stubClient();
     });
 
