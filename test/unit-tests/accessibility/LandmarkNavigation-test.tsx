@@ -19,7 +19,7 @@ describe("KeyboardLandmarkUtils", () => {
                 <div tabIndex={0} className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
                     SPACE_BUTTON
                 </div>
-                <div tabIndex={0} className="mx_RoomListSearch_search" data-testid="mx_RoomListSearch_search">
+                <div tabIndex={0} id="room-list-search-button" data-testid="mx_RoomListSearch_search">
                     ROOM_SEARCH
                 </div>
                 <div tabIndex={0} className="mx_RoomListItemView" data-testid="mx_RoomListItemView">
@@ -72,7 +72,7 @@ describe("KeyboardLandmarkUtils", () => {
                 <div tabIndex={0} className="mx_SpaceButton_active" data-testid="mx_SpaceButton_active">
                     SPACE_BUTTON
                 </div>
-                <div tabIndex={0} className="mx_RoomListSearch_search" data-testid="mx_RoomListSearch_search">
+                <div tabIndex={0} id="room-list-search-button" data-testid="mx_RoomListSearch_search">
                     ROOM_SEARCH
                 </div>
                 <div tabIndex={0} className="mx_RoomListItemView_selected" data-testid="mx_RoomListItemView_selected">
