@@ -130,53 +130,68 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await page.unrouteAll({ behavior: "ignoreErrors" });
     });
 
-    test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
-        // A mode 0x02 verification: "self-verifying in which the current device does not yet trust the master key"
-        await logIntoElement(page, credentials);
+    test(
+        "Verify device with QR code during login",
+        { tag: "@screenshot" },
+        async ({ page, app, credentials, homeserver }) => {
+            // A mode 0x02 verification: "self-verifying in which the current device does not yet trust the master key"
+            await logIntoElement(page, credentials);
 
-        // Launch the verification request between alice and the bot
-        const verificationRequest = await initiateAliceVerificationRequest(page);
+            // Launch the verification request between alice and the bot
+            const verificationRequest = await initiateAliceVerificationRequest(page);
 
-        const infoDialog = page.locator(".mx_InfoDialog");
-        // feed the QR code into the verification request.
-        const qrData = await readQrCode(infoDialog);
-        const verifier = await verificationRequest.evaluateHandle(
-            (request, qrData) => request.scanQRCode(new Uint8ClampedArray(qrData)),
-            [...qrData],
-        );
+            const infoDialog = page.locator(".mx_InfoDialog");
+            // feed the QR code into the verification request.
+            const qrData = await readQrCode(infoDialog);
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("qr-code.png", {
+                mask: [infoDialog.locator("img")],
+            });
+            const verifier = await verificationRequest.evaluateHandle(
+                (request, qrData) => request.scanQRCode(new Uint8ClampedArray(qrData)),
+                [...qrData],
+            );
 
-        // Confirm that the bot user scanned successfully
-        await expect(infoDialog.getByText("Confirm that you see a green shield on your other device")).toBeVisible();
-        await infoDialog.getByRole("button", { name: "Yes, I see a green shield" }).click();
-        await infoDialog.getByRole("button", { name: "Got it" }).click();
+            // Confirm that the bot user scanned successfully
+            await expect(
+                infoDialog.getByText("Confirm that you see a green shield on your other device"),
+            ).toBeVisible();
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("confirm-green-shield.png");
+            await infoDialog.getByRole("button", { name: "Yes, I see a green shield" }).click();
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("got-it.png");
+            await infoDialog.getByRole("button", { name: "Got it" }).click();
 
-        // wait for the bot to see we have finished
-        await verifier.evaluate((verifier) => verifier.verify());
+            // wait for the bot to see we have finished
+            await verifier.evaluate((verifier) => verifier.verify());
 
-        // the bot uploads the signatures asynchronously, so wait for that to happen
-        await page.waitForTimeout(1000);
+            // the bot uploads the signatures asynchronously, so wait for that to happen
+            await page.waitForTimeout(1000);
 
-        // our device should trust the bot device
-        await app.client.evaluate(async (cli, aliceBotCredentials) => {
-            const deviceStatus = await cli
-                .getCrypto()!
-                .getDeviceVerificationStatus(aliceBotCredentials.userId, aliceBotCredentials.deviceId);
-            if (!deviceStatus.isVerified()) {
-                throw new Error("Bot device was not verified after QR code verification");
-            }
-        }, aliceBotClient.credentials);
+            // our device should trust the bot device
+            await app.client.evaluate(async (cli, aliceBotCredentials) => {
+                const deviceStatus = await cli
+                    .getCrypto()!
+                    .getDeviceVerificationStatus(aliceBotCredentials.userId, aliceBotCredentials.deviceId);
+                if (!deviceStatus.isVerified()) {
+                    throw new Error("Bot device was not verified after QR code verification");
+                }
+            }, aliceBotClient.credentials);
 
-        // Check that our device is now cross-signed
-        await checkDeviceIsCrossSigned(app);
+            // Check that our device is now cross-signed
+            await checkDeviceIsCrossSigned(app);
 
-        // Check that the current device is connected to key backup
-        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
-    });
+            // Check that the current device is connected to key backup
+            await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
+        },
+    );
 
-    test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, credentials);
-        await enterRecoveryKeyAndCheckVerified(page, app, "new passphrase");
-    });
+    test(
+        "Verify device with Security Phrase during login",
+        { tag: "@screenshot" },
+        async ({ page, app, credentials, homeserver }) => {
+            await logIntoElement(page, credentials);
+            await enterRecoveryKeyAndCheckVerified(page, app, "new passphrase", true);
+        },
+    );
 
     test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
         const recoveryKey = (await aliceBotClient.getRecoveryKey()).encodedPrivateKey;
@@ -226,7 +241,12 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     });
 
     /** Helper for the three tests above which verify by recovery key */
-    async function enterRecoveryKeyAndCheckVerified(page: Page, app: ElementAppPage, recoveryKey: string) {
+    async function enterRecoveryKeyAndCheckVerified(
+        page: Page,
+        app: ElementAppPage,
+        recoveryKey: string,
+        screenshot = false,
+    ) {
         await page.getByRole("button", { name: "Use recovery key" }).click();
 
         // Enter the recovery key
@@ -234,8 +254,12 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // We use `pressSequentially` here to make sure that the FocusLock isn't causing us any problems
         // (cf https://github.com/element-hq/element-web/issues/30089)
         await dialog.getByTitle("Recovery key").pressSequentially(recoveryKey);
+        if (screenshot) {
+            await expect(page.locator(".mx_Dialog").filter({ hasText: "Enter your recovery key" })).toMatchScreenshot(
+                "recovery-key.png",
+            );
+        }
         await dialog.getByRole("button", { name: "Continue", disabled: false }).click();
-
         await page.getByRole("button", { name: "Done" }).click();
 
         // Check that our device is now cross-signed
