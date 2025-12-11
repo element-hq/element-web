@@ -456,7 +456,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                                     checked={this.state.noFederate}
                                     helpMessage={federateLabel}
                                 />
-                                z<p>{federateLabel}</p>
                             </details>
                         )}
                     </Form.Root>
