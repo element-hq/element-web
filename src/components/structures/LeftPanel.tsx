@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { createRef } from "react";
 import classNames from "classnames";
+import { ExploreIcon, DialPadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -347,7 +348,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     className="mx_LeftPanel_dialPadButton"
                     onClick={this.onDialPad}
                     title={_t("left_panel|open_dial_pad")}
-                />
+                >
+                    <DialPadIcon />
+                </AccessibleButton>
             );
         }
 
@@ -358,7 +361,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     className="mx_LeftPanel_exploreButton"
                     onClick={this.onExplore}
                     title={_t("action|explore_rooms")}
-                />
+                >
+                    <ExploreIcon />
+                </AccessibleButton>
             );
         }
 
