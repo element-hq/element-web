@@ -17,8 +17,6 @@ import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../to
  * Stores tokens in the same way as login flow in Lifecycle.
  */
 export class TokenRefresher extends OidcTokenRefresher {
-    private readonly deviceId!: string;
-
     public constructor(
         issuer: string,
         clientId: string,
@@ -28,7 +26,6 @@ export class TokenRefresher extends OidcTokenRefresher {
         private readonly userId: string,
     ) {
         super(issuer, clientId, deviceId, redirectUri, idTokenClaims);
-        this.deviceId = deviceId;
     }
 
     public async persistTokens({ accessToken, refreshToken }: AccessTokens): Promise<void> {
