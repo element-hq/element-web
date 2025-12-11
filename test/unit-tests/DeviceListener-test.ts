@@ -367,7 +367,7 @@ describe("DeviceListener", () => {
                     expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
                 });
 
-                it("shows an out-of-sync toast when one of the secrets is missing locally", async () => {
+                it("shows an out-of-sync toast when one of the cross-signing secrets is missing locally", async () => {
                     mockCrypto!.getCrossSigningStatus.mockResolvedValue({
                         publicKeysOnDevice: true,
                         privateKeysInSecretStorage: true,
@@ -383,6 +383,30 @@ describe("DeviceListener", () => {
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
                         SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
                     );
+                });
+
+                it("shows an out-of-sync toast when the backup key is missing locally", async () => {
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+                    mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue("1");
+                    mockCrypto!.getSessionBackupPrivateKey.mockResolvedValue(null);
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
+                    );
+                });
+
+                it("does not show an out-of-sync toast when the backup key is missing locally but backup is purposely disabled", async () => {
+                    mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
+                    mockCrypto!.getSessionBackupPrivateKey.mockResolvedValue(null);
+                    mockClient.getAccountDataFromServer.mockImplementation((eventType) =>
+                        eventType === BACKUP_DISABLED_ACCOUNT_DATA_KEY ? ({ disabled: true } as any) : null,
+                    );
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
                 });
 
                 it("hides the out-of-sync toast after we receive the missing secrets", async () => {

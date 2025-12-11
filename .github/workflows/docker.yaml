@@ -20,7 +20,7 @@ jobs:
         env:
             TEST_TAG: vectorim/element-web:test
         steps:
-            - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
@@ -96,7 +96,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5
+              uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
               if: github.event_name != 'pull_request'
               with:
                   images: |
