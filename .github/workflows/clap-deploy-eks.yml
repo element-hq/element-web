@@ -22,7 +22,7 @@ env:
 jobs:
   build-and-push:
     name: Build and Push Docker Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm  # Native ARM64 runner for Graviton EKS nodes
     permissions:
       id-token: write
       contents: read
@@ -61,12 +61,14 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/arm64
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.meta.outputs.version }}
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.environment }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
           labels: |
             org.opencontainers.image.source=${{ github.repositoryUrl }}
             org.opencontainers.image.created=${{ steps.meta.outputs.date }}
