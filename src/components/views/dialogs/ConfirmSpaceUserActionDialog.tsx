@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ComponentProps, useMemo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
-import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 type BaseProps = ComponentProps<typeof ConfirmUserActionDialog>;
 interface IProps extends Omit<BaseProps, "matrixClient" | "children" | "onFinished"> {
