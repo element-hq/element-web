@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: element-web
-  namespace: clap
+  namespace: ENV_NAMESPACE
   labels:
     app: element-web
     tier: frontend

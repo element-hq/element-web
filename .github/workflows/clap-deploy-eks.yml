@@ -153,6 +153,7 @@ jobs:
 
           # Replace placeholders with actual values
           # Use immutable image tag (commit hash) for reproducibility
+          sed -i "s|ENV_NAMESPACE|${{ env.K8S_NAMESPACE }}|g" k8s/deployment.yaml k8s/service.yaml k8s/ingress.yaml
           sed -i "s|ENV_TAG|${{ needs.build-and-push.outputs.image-tag }}|g" k8s/deployment.yaml
           sed -i "s/ENV/${{ github.event.inputs.environment }}/g" k8s/ingress.yaml
           sed -i "s|DOMAIN_NAME|$DOMAIN_NAME|g" k8s/ingress.yaml

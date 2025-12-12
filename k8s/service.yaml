@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: element-web
-  namespace: clap
+  namespace: ENV_NAMESPACE
   labels:
     app: element-web
 spec:
