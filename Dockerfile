@@ -37,10 +37,10 @@ COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html
 
-# Run as root user to bind to port 80
-USER root
+# Run as non-root user (nginx user from base image)
+USER 101
 
-# HTTP listen port
-ENV ELEMENT_WEB_PORT=80
+# HTTP listen port (8080 for non-root)
+ENV ELEMENT_WEB_PORT=8080
 
 HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB_PORT/config.json

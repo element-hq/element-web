@@ -1,0 +1,222 @@
+name: Clap - Build and Deploy to EKS
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        default: 'dev'
+        options:
+          - dev
+          - staging
+          - production
+
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_REPOSITORY: clap-element-web
+  EKS_CLUSTER_NAME: clap-eks-${{ github.event.inputs.environment }}
+  K8S_NAMESPACE: clap
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.version }}
+      image-uri: ${{ steps.meta.outputs.image-uri }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Extract metadata
+        id: meta
+        run: |
+          VERSION=$(git rev-parse --short HEAD)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+          echo "image-uri=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.meta.outputs.version }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.environment }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.source=${{ github.repositoryUrl }}
+            org.opencontainers.image.created=${{ steps.meta.outputs.date }}
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: Output image details
+        run: |
+          echo "### Docker Image Published 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** ${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** ${{ env.ECR_REPOSITORY }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
+          echo "- \`latest\` (mutable, for convenience)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ steps.meta.outputs.version }}\` (immutable, used for deployment)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ github.event.inputs.environment }}\` (mutable, for easy reference)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployed Image (Immutable):**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.image-uri }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  deploy-to-eks:
+    name: Deploy to EKS - ${{ github.event.inputs.environment }}
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.31.0'
+
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig \
+            --region ${{ env.AWS_REGION }} \
+            --name ${{ env.EKS_CLUSTER_NAME }}
+
+      - name: Verify cluster connection
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Create namespace if not exists
+        run: |
+          kubectl create namespace ${{ env.K8S_NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply Kubernetes manifests
+        env:
+          CERTIFICATE_ARN: ${{ secrets.ACM_CERTIFICATE_ARN }}
+        run: |
+          # Determine domain name based on environment
+          if [ "${{ github.event.inputs.environment }}" == "production" ]; then
+            DOMAIN_NAME="app.clap.ac"
+          else
+            DOMAIN_NAME="app.${{ github.event.inputs.environment }}.clap.ac"
+          fi
+
+          echo "Deploying to domain: $DOMAIN_NAME"
+
+          # Validate required secrets
+          if [ -z "$CERTIFICATE_ARN" ]; then
+            echo "ERROR: ACM_CERTIFICATE_ARN secret is not set"
+            echo "Please configure the ACM_CERTIFICATE_ARN secret for this repository"
+            exit 1
+          fi
+
+          # Replace placeholders with actual values
+          # Use immutable image tag (commit hash) for reproducibility
+          sed -i "s|ENV_TAG|${{ needs.build-and-push.outputs.image-tag }}|g" k8s/deployment.yaml
+          sed -i "s/ENV/${{ github.event.inputs.environment }}/g" k8s/ingress.yaml
+          sed -i "s|DOMAIN_NAME|$DOMAIN_NAME|g" k8s/ingress.yaml
+          sed -i "s|CERTIFICATE_ARN|$CERTIFICATE_ARN|g" k8s/ingress.yaml
+
+          # Apply manifests
+          kubectl apply -f k8s/deployment.yaml -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/service.yaml -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/ingress.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Wait for deployment rollout
+        run: |
+          kubectl rollout status deployment/element-web -n ${{ env.K8S_NAMESPACE }} --timeout=5m
+
+      - name: Get deployment status
+        run: |
+          echo "### Deployment Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          kubectl get deployment element-web -n ${{ env.K8S_NAMESPACE }} >> $GITHUB_STEP_SUMMARY
+          kubectl get pods -l app=element-web -n ${{ env.K8S_NAMESPACE }} >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Get ALB endpoint
+        run: |
+          echo "### Ingress Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Waiting for ALB to be provisioned (this may take 2-3 minutes)..." >> $GITHUB_STEP_SUMMARY
+
+          # Wait for ALB to be ready (max 5 minutes)
+          ALB_URL=""
+          for i in {1..60}; do
+            ALB_URL=$(kubectl get ingress element-web -n ${{ env.K8S_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || echo "")
+            if [ -n "$ALB_URL" ]; then
+              echo "**ALB URL:** $ALB_URL" >> $GITHUB_STEP_SUMMARY
+              echo "**Application URL:** https://app.${{ github.event.inputs.environment }}.clap.ac" >> $GITHUB_STEP_SUMMARY
+              break
+            fi
+            echo "Waiting for ALB... ($i/60)"
+            sleep 5
+          done
+
+          # Fail if ALB was not provisioned
+          if [ -z "$ALB_URL" ]; then
+            echo "## ❌ ALB Provisioning Timeout" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "ALB was not provisioned after 5 minutes. This may indicate:" >> $GITHUB_STEP_SUMMARY
+            echo "- AWS Load Balancer Controller not running" >> $GITHUB_STEP_SUMMARY
+            echo "- IAM permissions issue" >> $GITHUB_STEP_SUMMARY
+            echo "- Subnet tagging issue" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Ingress Status:**" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            kubectl describe ingress element-web -n ${{ env.K8S_NAMESPACE }} >> $GITHUB_STEP_SUMMARY || echo "Failed to get ingress details"
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          kubectl get ingress element-web -n ${{ env.K8S_NAMESPACE }} >> $GITHUB_STEP_SUMMARY
+
+      - name: Deployment summary
+        run: |
+          echo "### Deployment to EKS ${{ github.event.inputs.environment }} Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Cluster:** ${{ env.EKS_CLUSTER_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Namespace:** ${{ env.K8S_NAMESPACE }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** ${{ needs.build-and-push.outputs.image-uri }}" >> $GITHUB_STEP_SUMMARY
