@@ -25,7 +25,7 @@ export class TokenRefresher extends OidcTokenRefresher {
         idTokenClaims: IdTokenClaims,
         private readonly userId: string,
     ) {
-        super(issuer, clientId, deviceId, redirectUri, idTokenClaims);
+        super(issuer, clientId, redirectUri, deviceId, idTokenClaims);
     }
 
     public async persistTokens({ accessToken, refreshToken }: AccessTokens): Promise<void> {
