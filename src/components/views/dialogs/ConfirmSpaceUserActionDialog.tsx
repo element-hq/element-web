@@ -12,6 +12,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
+import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 type BaseProps = ComponentProps<typeof ConfirmUserActionDialog>;
 interface IProps extends Omit<BaseProps, "matrixClient" | "children" | "onFinished"> {
@@ -47,7 +48,12 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
 
     let warning: JSX.Element | undefined;
     if (warningMessage) {
-        warning = <div className="mx_ConfirmSpaceUserActionDialog_warning">{warningMessage}</div>;
+        warning = (
+            <div className="mx_ConfirmSpaceUserActionDialog_warning">
+                <InfoSolidIcon />
+                {warningMessage}
+            </div>
+        );
     }
 
     return (
