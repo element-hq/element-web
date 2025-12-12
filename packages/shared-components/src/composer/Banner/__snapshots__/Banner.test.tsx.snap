@@ -26,20 +26,20 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         encryption|pinned_identity_changed
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
         class="_button_187yx_8"
         data-kind="primary"
-        data-size="lg"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
@@ -72,13 +72,13 @@ exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
         src="https://picsum.photos/32/32"
       />
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -118,13 +118,13 @@ exports[`AvatarWithDetails renders a critical banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -168,13 +168,13 @@ exports[`AvatarWithDetails renders a default banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -219,13 +219,13 @@ exports[`AvatarWithDetails renders a info banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -265,13 +265,13 @@ exports[`AvatarWithDetails renders a success banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >

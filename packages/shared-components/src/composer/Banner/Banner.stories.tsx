@@ -56,7 +56,11 @@ export const WithAction: Story = {
                 )}
             </p>
         ),
-        actions: <Button kind="primary">{_t("encryption|withdraw_verification_action")}</Button>,
+        actions: (
+            <Button kind="primary" size="sm">
+                {_t("encryption|withdraw_verification_action")}
+            </Button>
+        ),
     },
 };
 
@@ -69,5 +73,21 @@ export const WithAvatarImage: Story = {
 export const WithoutClose: Story = {
     args: {
         onClose: undefined,
+    },
+};
+
+export const WithLoadsOfContent: Story = {
+    args: {
+        type: "info",
+        children: (
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis massa facilisis, venenatis risus
+                consectetur, sagittis libero. Aenean et scelerisque justo. Nunc luctus, mi sed facilisis suscipit, magna
+                ante pharetra sem, eu rutrum purus quam quis arcu. Sed eleifend arcu vitae magna sodales, sit amet
+                fermentum urna dictum. Mauris vel velit pulvinar enim mollis tincidunt. Vivamus egestas rhoncus
+                sagittis. Curabitur auctor vehicula massa, et cursus lacus laoreet a. Maecenas et sollicitudin lectus,
+                in ligula.
+            </p>
+        ),
     },
 };
