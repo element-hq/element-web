@@ -7,11 +7,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
+import React from "react";
+import { KeyIcon, ErrorSolidIcon, SettingsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { type ComponentType } from "react";
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 
-import type React from "react";
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
@@ -52,9 +52,9 @@ const getIcon = (kind: Kind): IToast<any>["icon"] => {
             return undefined;
         case Kind.VERIFY_THIS_SESSION:
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
-            return "verification_warning";
+            return <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />;
         case Kind.TURN_ON_KEY_STORAGE:
-            return "key_storage";
+            return <SettingsSolidIcon color="var(--cpd-color-text-primary)" />;
     }
 };
 

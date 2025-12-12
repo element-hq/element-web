@@ -8,7 +8,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
       role="alert"
     >
       <div
-        class="mx_Toast_toast mx_Toast_hasIcon mx_Toast_icon_verification_warning"
+        class="mx_Toast_toast mx_Toast_hasIcon"
       >
         <div
           class="mx_Toast_title"
