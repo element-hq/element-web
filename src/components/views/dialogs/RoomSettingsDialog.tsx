@@ -188,12 +188,10 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 RoomSettingsTab.Notifications,
                 _td("notifications|enable_prompt_toast_title"),
                 <NotificationsIcon />,
-                (
-                    <NotificationSettingsTab
-                        roomId={this.state.room.roomId}
-                        closeSettingsFn={() => this.props.onFinished(true)}
-                    />
-                ),
+                <NotificationSettingsTab
+                    roomId={this.state.room.roomId}
+                    closeSettingsFn={() => this.props.onFinished(true)}
+                />
                 "RoomSettingsNotifications",
             ),
         );
@@ -225,12 +223,10 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                     RoomSettingsTab.Advanced,
                     _td("common|advanced"),
                     <AdvancedIcon />,
-                    (
-                        <AdvancedRoomSettingsTab
-                            room={this.state.room}
-                            closeSettingsFn={() => this.props.onFinished(true)}
-                        />
-                    ),
+                    <AdvancedRoomSettingsTab
+                        room={this.state.room}
+                        closeSettingsFn={() => this.props.onFinished(true)}
+                    />,
                     "RoomSettingsAdvanced",
                 ),
             );
