@@ -17,7 +17,7 @@ env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: clap-element-web
   EKS_CLUSTER_NAME: clap-eks-${{ github.event.inputs.environment }}
-  K8S_NAMESPACE: clap
+  K8S_NAMESPACE: ${{ github.event.inputs.environment }}
 
 jobs:
   build-and-push:
