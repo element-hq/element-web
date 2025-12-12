@@ -187,8 +187,8 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         // if it's a resource limit exceeded error: those are shown in the top bar.
         const errorIsMauError = Boolean(
             this.state.syncStateData &&
-                this.state.syncStateData.error &&
-                this.state.syncStateData.error.name === "M_RESOURCE_LIMIT_EXCEEDED",
+            this.state.syncStateData.error &&
+            this.state.syncStateData.error.name === "M_RESOURCE_LIMIT_EXCEEDED",
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
     }

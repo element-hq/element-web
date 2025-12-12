@@ -75,7 +75,7 @@ const landmarkToDomElementMap: Record<Landmark, () => HTMLElement | null | undef
 
     [Landmark.ROOM_SEARCH]: () =>
         SettingsStore.getValue("feature_new_room_list")
-            ? document.querySelector<HTMLElement>(".mx_RoomListSearch_search")
+            ? document.querySelector<HTMLElement>("#room-list-search-button")
             : document.querySelector<HTMLElement>(".mx_RoomSearch"),
     [Landmark.ROOM_LIST]: () =>
         SettingsStore.getValue("feature_new_room_list")
