@@ -751,10 +751,14 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
  * When we have a authenticated via OIDC-native flow and have a refresh token
  * try to create a token refresher.
  * @param credentials from current session
+ * @param clientId OIDC client ID
  * @throws If credentials.refreshToken or credentials.deviceId is falsy, or if no token issuer is stored
  * @returns Promise that resolves to a TokenRefresher
  */
-async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promise<OidcTokenRefresher> {
+async function createOidcTokenRefresher(
+    credentials: IMatrixClientCreds,
+    clientId: string,
+): Promise<OidcTokenRefresher> {
     if (!credentials.refreshToken) {
         throw new Error("A refresh token must be supplied in order to create an OIDC token refresher.");
     }
@@ -764,7 +768,6 @@ async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promis
         throw new Error("Cannot create an OIDC token refresher as no stored OIDC token issuer was found.");
     }
 
-    const clientId = getStoredOidcClientId();
     const idTokenClaims = getStoredOidcIdTokenClaims();
     const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
     const deviceId = credentials.deviceId;
@@ -838,7 +841,7 @@ async function doSetLoggedIn(
 
     let tokenRefresher;
     if (credentials.refreshToken && storedClientid) {
-        tokenRefresher = await createOidcTokenRefresher(credentials);
+        tokenRefresher = await createOidcTokenRefresher(credentials, storedClientid);
     } else {
         logger.debug("No refresh token was supplied: access token will not be refreshed");
     }
