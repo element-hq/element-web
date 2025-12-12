@@ -438,7 +438,7 @@ num_sqrt = num **
       </div>
     </pre>
     <span
-      class="mx_EventTile_button mx_EventTile_expandButton"
+      class="mx_EventTile_button"
     />
     <div
       aria-label="Copy"

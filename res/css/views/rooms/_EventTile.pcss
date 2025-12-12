@@ -918,29 +918,20 @@ $left-gutter: 64px;
             position: absolute;
             top: $spacing-8;
             right: $spacing-8;
-            width: 19px;
-            height: 19px;
+            width: 16px;
+            height: 16px;
             visibility: hidden;
-            background-color: $message-action-bar-fg-color;
 
             &.mx_EventTile_buttonBottom {
                 top: 33px;
             }
 
-            &.mx_EventTile_collapseButton,
-            &.mx_EventTile_expandButton {
-                mask-size: 75%;
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $message-action-bar-fg-color;
             }
-        }
-
-        .mx_EventTile_copyButton {
-            height: 17px;
-            mask-image: url($copy-button-url);
-            mask-position: center center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            right: 9px;
-            width: 17px;
         }
     }
 }
@@ -960,20 +951,6 @@ $left-gutter: 64px;
 .mx_EventTile_button {
     display: inline-block;
     cursor: pointer;
-}
-
-.mx_EventTile_collapseButton,
-.mx_EventTile_expandButton {
-    mask-position: center;
-    mask-repeat: no-repeat;
-}
-
-.mx_EventTile_collapseButton {
-    mask-image: url("@vector-im/compound-design-tokens/icons/collapse.svg");
-}
-
-.mx_EventTile_expandButton {
-    mask-image: url("@vector-im/compound-design-tokens/icons/expand.svg");
 }
 
 .mx_EventTile_tileError {
