@@ -191,7 +191,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 <NotificationSettingsTab
                     roomId={this.state.room.roomId}
                     closeSettingsFn={() => this.props.onFinished(true)}
-                />
+                />,
                 "RoomSettingsNotifications",
             ),
         );
