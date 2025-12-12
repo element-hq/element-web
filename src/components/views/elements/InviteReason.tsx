@@ -12,6 +12,7 @@ import React from "react";
 import { sanitizedHtmlNode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "./AccessibleButton";
+import VisibilityOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
 
 interface IProps {
     reason: string;
@@ -50,6 +51,7 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
                     {this.props.htmlReason ? sanitizedHtmlNode(this.props.htmlReason) : this.props.reason}
                 </div>
                 <AccessibleButton kind="link_inline" className="mx_InviteReason_view" onClick={this.onViewClick}>
+                    <VisibilityOnIcon />
                     {_t("common|view_message")}
                 </AccessibleButton>
             </div>
