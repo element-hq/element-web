@@ -9,12 +9,10 @@ import React, { type JSX, type ReactNode } from "react";
 import { Text, Heading, Button, Separator } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { Flex } from "@element-hq/web-shared-components";
+import { LinuxIcon, MacIcon, WindowsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import SdkConfig from "../../SdkConfig";
 import { _t } from "../../languageHandler";
-import { Icon as AppleIcon } from "../../../res/img/element-icons/brands/apple.svg";
-import { Icon as MicrosoftIcon } from "../../../res/img/element-icons/brands/microsoft.svg";
-import { Icon as LinuxIcon } from "../../../res/img/element-icons/brands/linux.svg";
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // PostCSS variables will be accessible.
@@ -61,7 +59,12 @@ const MobileAppLinks: React.FC<{
     <Flex gap="var(--cpd-space-6x)" className="mx_ErrorView_flexContainer">
         {appleAppStoreUrl && (
             <a href={appleAppStoreUrl} target="_blank" rel="noreferrer noopener">
-                <img height="64" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
+                <img
+                    height="64"
+                    /* eslint-disable-next-line @typescript-eslint/no-require-imports */
+                    src={require("@vector-im/compound-design-tokens/icons/mac.svg").default}
+                    alt="Apple App Store"
+                />
             </a>
         )}
         {googlePlayUrl && (
@@ -86,17 +89,17 @@ const DesktopAppLinks: React.FC<{
     return (
         <Flex gap="var(--cpd-space-4x)" className="mx_ErrorView_flexContainer">
             {macOsUrl && (
-                <Button as="a" href={macOsUrl} kind="secondary" Icon={AppleIcon}>
+                <Button as="a" href={macOsUrl} kind="secondary" Icon={MacIcon}>
                     {_t("incompatible_browser|macos")}
                 </Button>
             )}
             {win64Url && (
-                <Button as="a" href={win64Url} kind="secondary" Icon={MicrosoftIcon}>
+                <Button as="a" href={win64Url} kind="secondary" Icon={WindowsIcon}>
                     {_t("incompatible_browser|windows_64bit")}
                 </Button>
             )}
             {win64ArmUrl && (
-                <Button as="a" href={win64ArmUrl} kind="secondary" Icon={MicrosoftIcon}>
+                <Button as="a" href={win64ArmUrl} kind="secondary" Icon={WindowsIcon}>
                     {_t("incompatible_browser|windows_arm_64bit")}
                 </Button>
             )}
