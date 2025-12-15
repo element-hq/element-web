@@ -97,7 +97,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             &.mx_SpotlightDialog_filterPublicRooms::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
 
             &.mx_SpotlightDialog_filterPublicSpaces::before {
@@ -340,35 +340,26 @@ Please see LICENSE files in the repository root for full details.
 
                 .mx_SpotlightDialog_option--menu,
                 .mx_SpotlightDialog_option--notifications {
-                    width: 20px;
-                    min-width: 20px;
-                    height: 20px;
+                    width: 16px;
+                    height: 16px;
+                    padding: var(--cpd-space-0-5x);
+                    flex-shrink: 0;
                     margin-top: auto;
                     margin-bottom: auto;
                     position: relative;
                     display: none;
 
-                    &::before {
-                        top: 2px;
-                        left: 2px;
-                        content: "";
-                        width: 16px;
-                        height: 16px;
-                        position: absolute;
-                        mask-position: center;
-                        mask-size: contain;
-                        mask-repeat: no-repeat;
-                        background: $tertiary-content;
+                    svg {
+                        width: inherit;
+                        height: inherit;
+                        display: block;
+                        color: $tertiary-content;
                     }
 
-                    &:hover::before,
-                    &:focus-visible::before {
-                        background-color: $secondary-content;
+                    &:hover svg,
+                    &:focus-visible svg {
+                        color: $secondary-content;
                     }
-                }
-
-                .mx_SpotlightDialog_option--menu::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
                 }
 
                 &:hover,
@@ -414,7 +405,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpotlightDialog_createRoom .mx_AccessibleButton::before {
-            mask-image: url("$(res)/img/element-icons/roomlist/hash.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
         }
 
         .mx_SpotlightDialog_otherSearches {
@@ -447,11 +438,11 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_joinRoomAlias::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
 
             .mx_SpotlightDialog_explorePublicRooms::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
 
             .mx_SpotlightDialog_explorePublicSpaces::before {
@@ -459,7 +450,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_startGroupChat::before {
-                mask-image: url("$(res)/img/element-icons/group-members.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/group.svg");
             }
 
             .mx_SpotlightDialog_searchMessages::before {
@@ -523,7 +514,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             &.mx_SpotlightDialog_metaspaceResult_orphans-space {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
         }
     }

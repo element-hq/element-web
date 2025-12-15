@@ -1,0 +1,646 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ * Copyright 2020-2022 The Matrix.org Foundation C.I.C.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import {
+    type Room,
+    type MatrixEvent,
+    MatrixEventEvent,
+    type MatrixClient,
+    ClientEvent,
+    RoomStateEvent,
+    type ReceivedToDeviceMessage,
+    TypedEventEmitter,
+} from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import {
+    ClientWidgetApi,
+    type IModalWidgetOpenRequest,
+    type IRoomEvent,
+    type IStickerActionRequest,
+    type IStickyActionRequest,
+    type ITemplateParams,
+    type IWidget,
+    type IWidgetApiErrorResponseData,
+    type IWidgetApiRequest,
+    type IWidgetApiRequestEmptyData,
+    type IWidgetData,
+    MatrixCapabilities,
+    runTemplate,
+    Widget,
+    WidgetApiFromWidgetAction,
+    WidgetKind,
+} from "matrix-widget-api";
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { _t, getUserLanguage } from "../../languageHandler";
+import { ElementWidgetDriver } from "./ElementWidgetDriver";
+import { WidgetMessagingStore } from "./WidgetMessagingStore";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { OwnProfileStore } from "../OwnProfileStore";
+import WidgetUtils from "../../utils/WidgetUtils";
+import { IntegrationManagers } from "../../integrations/IntegrationManagers";
+import { WidgetType } from "../../widgets/WidgetType";
+import ActiveWidgetStore from "../ActiveWidgetStore";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
+import { ElementWidgetActions, type IHangupCallApiRequest, type IViewRoomApiRequest } from "./ElementWidgetActions";
+import { ModalWidgetStore } from "../ModalWidgetStore";
+import { isAppWidget } from "../WidgetStore";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
+import { getCustomTheme } from "../../theme";
+import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
+import { ELEMENT_CLIENT_ID } from "../../identifiers";
+import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
+import { arrayFastClone } from "../../utils/arrays";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import Modal from "../../Modal";
+import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { SdkContextClass } from "../../contexts/SDKContext";
+import { UPDATE_EVENT } from "../AsyncStore";
+
+// TODO: Purge this code of its overgrown hacks and compatibility shims.
+
+// TODO: Don't use this. We should avoid overriding/mocking matrix-widget-api
+// behavior and instead strive to use widgets in more transparent ways.
+export class ElementWidget extends Widget {
+    public constructor(private rawDefinition: IWidget) {
+        super(rawDefinition);
+    }
+
+    public get templateUrl(): string {
+        if (WidgetType.JITSI.matches(this.type)) {
+            return WidgetUtils.getLocalJitsiWrapperUrl({
+                forLocalRender: true,
+                auth: super.rawData?.auth as string, // this.rawData can call templateUrl, do this to prevent looping
+            });
+        }
+        return super.templateUrl;
+    }
+
+    public get popoutTemplateUrl(): string {
+        if (WidgetType.JITSI.matches(this.type)) {
+            return WidgetUtils.getLocalJitsiWrapperUrl({
+                forLocalRender: false, // The only important difference between this and templateUrl()
+                auth: super.rawData?.auth as string,
+            });
+        }
+        return this.templateUrl; // use this instead of super to ensure we get appropriate templating
+    }
+
+    public get rawData(): IWidgetData {
+        let conferenceId = super.rawData["conferenceId"];
+        if (conferenceId === undefined) {
+            // we'll need to parse the conference ID out of the URL for v1 Jitsi widgets
+            const parsedUrl = new URL(super.templateUrl); // use super to get the raw widget URL
+            conferenceId = parsedUrl.searchParams.get("confId");
+        }
+        let domain = super.rawData["domain"];
+        if (domain === undefined) {
+            // v1 widgets default to meet.element.io regardless of user settings
+            domain = "meet.element.io";
+        }
+
+        let theme = new ThemeWatcher().getEffectiveTheme();
+        if (theme.startsWith("custom-")) {
+            const customTheme = getCustomTheme(theme.slice(7));
+            // Jitsi only understands light/dark
+            theme = customTheme.is_dark ? "dark" : "light";
+        }
+
+        // only allow light/dark through, defaulting to dark as that was previously the only state
+        // accounts for legacy-light/legacy-dark themes too
+        if (theme.includes("light")) {
+            theme = "light";
+        } else {
+            theme = "dark";
+        }
+
+        return {
+            ...super.rawData,
+            theme,
+            conferenceId,
+            domain,
+        };
+    }
+
+    public getCompleteUrl(params: ITemplateParams, asPopout = false): string {
+        return runTemplate(
+            asPopout ? this.popoutTemplateUrl : this.templateUrl,
+            {
+                ...this.rawDefinition,
+                data: this.rawData,
+            },
+            params,
+        );
+    }
+}
+
+export enum WidgetMessagingEvent {
+    Start = "start",
+    Stop = "stop",
+}
+
+interface WidgetMessagingEventMap {
+    [WidgetMessagingEvent.Start]: (widgetApi: ClientWidgetApi) => void;
+    [WidgetMessagingEvent.Stop]: (widgetApi: ClientWidgetApi) => void;
+}
+
+interface WidgetMessagingOptions {
+    app: IWidget;
+    room?: Room; // without a room it is a user widget
+    userId: string;
+    creatorUserId: string;
+    waitForIframeLoad: boolean;
+    userWidget: boolean;
+    /**
+     * If defined this async method will be called when the widget requests to become sticky.
+     * It will only become sticky once the returned promise resolves.
+     * This is useful because: Widget B is sticky. Making widget A sticky will kill widget B immediately.
+     * This promise allows to do Widget B related cleanup before Widget A becomes sticky. (e.g. hangup a Voip call)
+     */
+    stickyPromise?: () => Promise<void>;
+}
+
+/**
+ * A running instance of a widget, associated with an iframe and an active communication
+ * channel. Instances must be tracked by WidgetMessagingStore, as only one WidgetMessaging
+ * instance should exist for a given widget.
+ *
+ * This class is responsible for:
+ * - Computing the templated widget URL
+ * - Starting a {@link ClientWidgetApi} communication channel with the widget
+ * - Eagerly pushing events from the Matrix client to the widget
+ *
+ * @see {@link ElementWidgetDriver} for the class used to *pull* data lazily from the
+ *   Matrix client to the widget on the widget's behalf.
+ * @see {@link WidgetMessagingStore} for the store that holds these instances.
+ */
+export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap> {
+    private client: MatrixClient;
+    private iframe: HTMLIFrameElement | null = null;
+    private scalarToken?: string;
+    private roomId?: string;
+    // The room that we're currently allowing the widget to interact with. Only
+    // used for account widgets, which may follow the user to different rooms.
+    private viewedRoomId: string | null = null;
+    private kind: WidgetKind;
+    private readonly virtual: boolean;
+    private readonly themeWatcher = new ThemeWatcher();
+    private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
+    // This promise will be called and needs to resolve before the widget will actually become sticky.
+    private stickyPromise?: () => Promise<void>;
+    // Holds events that should be fed to the widget once they finish decrypting
+    private readonly eventsToFeed = new WeakSet<MatrixEvent>();
+
+    public constructor(
+        private readonly widget: ElementWidget,
+        options: WidgetMessagingOptions,
+    ) {
+        super();
+        this.client = MatrixClientPeg.safeGet();
+        this.roomId = options.room?.roomId;
+        this.kind = options.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
+        this.virtual = isAppWidget(options.app) && options.app.eventId === undefined;
+        this.stickyPromise = options.stickyPromise;
+    }
+
+    private _widgetApi: ClientWidgetApi | null = null;
+    private set widgetApi(value: ClientWidgetApi | null) {
+        this._widgetApi = value;
+    }
+
+    /**
+     * The widget API interface to the widget, or null if disconnected.
+     */
+    public get widgetApi(): ClientWidgetApi | null {
+        return this._widgetApi;
+    }
+
+    /**
+     * The URL to use in the iframe
+     */
+    public get embedUrl(): string {
+        return this.runUrlTemplate({ asPopout: false });
+    }
+
+    /**
+     * The URL to use in the popout
+     */
+    public get popoutUrl(): string {
+        return this.runUrlTemplate({ asPopout: true });
+    }
+
+    private runUrlTemplate(opts = { asPopout: false }): string {
+        const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
+        const defaults: ITemplateParams = {
+            widgetRoomId: this.roomId,
+            currentUserId: this.client.getUserId()!,
+            userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
+            userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
+            clientId: ELEMENT_CLIENT_ID,
+            clientTheme: this.themeWatcher.getEffectiveTheme(),
+            clientLanguage: getUserLanguage(),
+            deviceId: this.client.getDeviceId() ?? undefined,
+            baseUrl: this.client.baseUrl,
+        };
+        const templated = this.widget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
+
+        const parsed = new URL(templated);
+
+        // Add in some legacy support sprinkles (for non-popout widgets)
+        // TODO: Replace these with proper widget params
+        // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
+        if (!opts?.asPopout) {
+            parsed.searchParams.set("widgetId", this.widget.id);
+            parsed.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
+
+            // Give the widget a scalar token if we're supposed to (more legacy)
+            // TODO: Stop doing this
+            if (this.scalarToken) {
+                parsed.searchParams.set("scalar_token", this.scalarToken);
+            }
+        }
+
+        // Replace the encoded dollar signs back to dollar signs. They have no special meaning
+        // in HTTP, but URL parsers encode them anyways.
+        return parsed.toString().replace(/%24/g, "$");
+    }
+
+    private onThemeChange = (theme: string): void => {
+        this.widgetApi?.updateTheme({ name: theme });
+    };
+
+    private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
+        ev.preventDefault();
+        if (ModalWidgetStore.instance.canOpenModalWidget()) {
+            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.widget, this.roomId);
+            this.widgetApi?.transport.reply(ev.detail, {}); // ack
+        } else {
+            this.widgetApi?.transport.reply(ev.detail, {
+                error: {
+                    message: "Unable to open modal at this time",
+                },
+            });
+        }
+    };
+
+    // This listener is only active for account widgets, which may follow the
+    // user to different rooms
+    private onRoomViewStoreUpdate = (): void => {
+        const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
+        if (roomId !== this.viewedRoomId) {
+            this.widgetApi!.setViewedRoomId(roomId);
+            this.viewedRoomId = roomId;
+        }
+    };
+
+    /**
+     * This starts the messaging for the widget if it is not in the state `started` yet.
+     * @param iframe the iframe the widget should use
+     */
+    public start(iframe: HTMLIFrameElement): void {
+        if (this.widgetApi !== null) return;
+
+        this.iframe = iframe;
+        const driver = new ElementWidgetDriver(this.widget, this.kind, this.virtual, this.roomId);
+
+        this.widgetApi = new ClientWidgetApi(this.widget, iframe, driver);
+        this.widgetApi.once("ready", () => {
+            this.themeWatcher.start();
+            this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
+            // Theme may have changed while messaging was starting
+            this.onThemeChange(this.themeWatcher.getEffectiveTheme());
+        });
+        this.widgetApi.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
+
+        // When widgets are listening to events, we need to make sure they're only
+        // receiving events for the right room
+        if (this.roomId === undefined) {
+            // Account widgets listen to the currently active room
+            this.widgetApi.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
+            SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        } else {
+            // Room widgets get locked to the room they were added in
+            this.widgetApi.setViewedRoomId(this.roomId);
+        }
+
+        // Always attach a handler for ViewRoom, but permission check it internally
+        this.widgetApi.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {
+            ev.preventDefault(); // stop the widget API from auto-rejecting this
+
+            // Check up front if this is even a valid request
+            const targetRoomId = (ev.detail.data || {}).room_id;
+            if (!targetRoomId) {
+                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                    error: { message: "Room ID not supplied." },
+                });
+            }
+
+            // Check the widget's permission
+            if (!this.widgetApi?.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
+                return this.widgetApi?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                    error: { message: "This widget does not have permission for this action (denied)." },
+                });
+            }
+
+            // at this point we can change rooms, so do that
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: targetRoomId,
+                metricsTrigger: "Widget",
+            });
+
+            // acknowledge so the widget doesn't freak out
+            this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+        });
+
+        // Populate the map of "read up to" events for this widget with the current event in every room.
+        // This is a bit inefficient, but should be okay. We do this for all rooms in case the widget
+        // requests timeline capabilities in other rooms down the road. It's just easier to manage here.
+        for (const room of this.client.getRooms()) {
+            // Timelines are most recent last
+            const events = room.getLiveTimeline()?.getEvents() || [];
+            const roomEvent = events[events.length - 1];
+            if (!roomEvent) continue; // force later code to think the room is fresh
+            this.readUpToMap[room.roomId] = roomEvent.getId()!;
+        }
+
+        // Attach listeners for feeding events - the underlying widget classes handle permissions for us
+        this.client.on(ClientEvent.Event, this.onEvent);
+        this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.on(RoomStateEvent.Events, this.onStateUpdate);
+        this.client.on(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
+
+        this.widgetApi.on(
+            `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
+            async (ev: CustomEvent<IStickyActionRequest>) => {
+                if (this.widgetApi?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                    ev.preventDefault();
+                    if (ev.detail.data.value) {
+                        // If the widget wants to become sticky we wait for the stickyPromise to resolve
+                        if (this.stickyPromise) await this.stickyPromise();
+                    }
+                    // Stop being persistent can be done instantly
+                    ActiveWidgetStore.instance.setWidgetPersistence(
+                        this.widget.id,
+                        this.roomId ?? null,
+                        ev.detail.data.value,
+                    );
+                    // Send the ack after the widget actually has become sticky.
+                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                }
+            },
+        );
+
+        // TODO: Replace this event listener with appropriate driver functionality once the API
+        // establishes a sane way to send events back and forth.
+        this.widgetApi.on(
+            `action:${WidgetApiFromWidgetAction.SendSticker}`,
+            (ev: CustomEvent<IStickerActionRequest>) => {
+                if (this.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)) {
+                    // Acknowledge first
+                    ev.preventDefault();
+                    this.widgetApi.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+
+                    // Send the sticker
+                    defaultDispatcher.dispatch({
+                        action: "m.sticker",
+                        data: ev.detail.data,
+                        widgetId: this.widget.id,
+                    });
+                }
+            },
+        );
+
+        if (WidgetType.STICKERPICKER.matches(this.widget.type)) {
+            this.widgetApi.on(
+                `action:${ElementWidgetActions.OpenIntegrationManager}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    // Acknowledge first
+                    ev.preventDefault();
+                    this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+
+                    // First close the stickerpicker
+                    defaultDispatcher.dispatch({ action: "stickerpicker_close" });
+
+                    // Now open the integration manager
+                    // TODO: Spec this interaction.
+                    const data = ev.detail.data;
+                    const integType = data?.integType as string;
+                    const integId = <string>data?.integId;
+
+                    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+                    const room = roomId ? this.client.getRoom(roomId) : undefined;
+                    if (!room) return;
+
+                    // noinspection JSIgnoredPromiseFromCall
+                    IntegrationManagers.sharedInstance()?.getPrimaryManager()?.open(room, `type_${integType}`, integId);
+                },
+            );
+        }
+
+        if (WidgetType.JITSI.matches(this.widget.type)) {
+            this.widgetApi.on(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IHangupCallApiRequest>) => {
+                ev.preventDefault();
+                if (ev.detail.data?.errorMessage) {
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t("widget|error_hangup_title"),
+                        description: _t("widget|error_hangup_description", {
+                            message: ev.detail.data.errorMessage,
+                        }),
+                    });
+                }
+                this.widgetApi?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+            });
+        }
+
+        this.emit(WidgetMessagingEvent.Start, this.widgetApi);
+    }
+
+    public async prepare(): Promise<void> {
+        // Ensure the variables are ready for us to be rendered before continuing
+        await (WidgetVariableCustomisations?.isReady?.() ?? Promise.resolve());
+
+        if (this.scalarToken) return;
+        try {
+            if (WidgetUtils.isScalarUrl(this.widget.templateUrl)) {
+                const managers = IntegrationManagers.sharedInstance();
+                if (managers.hasManager()) {
+                    // TODO: Pick the right manager for the widget
+                    const defaultManager = managers.getPrimaryManager();
+                    if (defaultManager && WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
+                        const scalar = defaultManager.getScalarClient();
+                        this.scalarToken = await scalar.getScalarToken();
+                    }
+                }
+            }
+        } catch (e) {
+            // All errors are non-fatal
+            logger.error("Error preparing widget communications: ", e);
+        }
+    }
+
+    /**
+     * Stops the widget messaging for if it is started. Skips stopping if it is an active
+     * widget.
+     * @param opts
+     */
+    public stop(opts = { forceDestroy: false }): void {
+        if (this.widgetApi === null || this.iframe === null) return;
+        if (opts.forceDestroy) {
+            // HACK: This is a really dirty way to ensure that Jitsi cleans up
+            // its hold on the webcam. Without this, the widget holds a media
+            // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
+            // In practice we could just do `+= ''` to trick the browser into
+            // thinking the URL changed, however I can foresee this being
+            // optimized out by a browser. Instead, we'll just point the iframe
+            // at a page that is reasonably safe to use in the event the iframe
+            // doesn't wink away.
+            this.iframe!.src = "about:blank";
+        } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.widget.id, this.roomId ?? null)) {
+            logger.log("Skipping destroy - persistent widget");
+            return;
+        }
+
+        this.emit(WidgetMessagingEvent.Stop, this.widgetApi);
+        this.widgetApi?.removeAllListeners(); // Insurance against resource leaks
+        this.widgetApi = null;
+        this.iframe = null;
+        WidgetMessagingStore.instance.stopMessaging(this.widget, this.roomId);
+
+        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+
+        this.client.off(ClientEvent.Event, this.onEvent);
+        this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.off(RoomStateEvent.Events, this.onStateUpdate);
+        this.client.off(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
+    }
+
+    private onEvent = (ev: MatrixEvent): void => {
+        this.client.decryptEventIfNeeded(ev);
+        this.feedEvent(ev);
+    };
+
+    private onEventDecrypted = (ev: MatrixEvent): void => {
+        this.feedEvent(ev);
+    };
+
+    private onStateUpdate = (ev: MatrixEvent): void => {
+        if (this.widgetApi === null) return;
+        const raw = ev.getEffectiveEvent();
+        this.widgetApi.feedStateUpdate(raw as IRoomEvent).catch((e) => {
+            logger.error("Error sending state update to widget: ", e);
+        });
+    };
+
+    private onToDeviceMessage = async (payload: ReceivedToDeviceMessage): Promise<void> => {
+        const { message, encryptionInfo } = payload;
+        // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
+        await this.widgetApi?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
+    };
+
+    /**
+     * Determines whether the event has a relation to an unknown parent.
+     */
+    private relatesToUnknown(ev: MatrixEvent): boolean {
+        // Replies to unknown events don't count
+        if (!ev.relationEventId || ev.replyEventId) return false;
+        const room = this.client.getRoom(ev.getRoomId());
+        return room === null || !room.findEventById(ev.relationEventId);
+    }
+
+    /**
+     * Determines whether the event comes from a room that we've been invited to
+     * (in which case we likely don't have the full timeline).
+     */
+    private isFromInvite(ev: MatrixEvent): boolean {
+        const room = this.client.getRoom(ev.getRoomId());
+        return room?.getMyMembership() === KnownMembership.Invite;
+    }
+
+    /**
+     * Advances the "read up to" marker for a room to a certain event. No-ops if
+     * the event is before the marker.
+     * @returns Whether the "read up to" marker was advanced.
+     */
+    private advanceReadUpToMarker(ev: MatrixEvent): boolean {
+        const evId = ev.getId();
+        if (evId === undefined) return false;
+        const roomId = ev.getRoomId();
+        if (roomId === undefined) return false;
+        const room = this.client.getRoom(roomId);
+        if (room === null) return false;
+
+        const upToEventId = this.readUpToMap[ev.getRoomId()!];
+        if (!upToEventId) {
+            // There's no marker yet; start it at this event
+            this.readUpToMap[roomId] = evId;
+            return true;
+        }
+
+        // Small optimization for exact match (skip the search)
+        if (upToEventId === evId) return false;
+
+        // Timelines are most recent last, so reverse the order and limit ourselves to 100 events
+        // to avoid overusing the CPU.
+        const timeline = room.getLiveTimeline();
+        const events = arrayFastClone(timeline.getEvents()).reverse().slice(0, 100);
+
+        for (const timelineEvent of events) {
+            if (timelineEvent.getId() === upToEventId) {
+                // The event must be somewhere before the "read up to" marker
+                return false;
+            } else if (timelineEvent.getId() === ev.getId()) {
+                // The event is after the marker; advance it
+                this.readUpToMap[roomId] = evId;
+                return true;
+            }
+        }
+
+        // We can't say for sure whether the widget has seen the event; let's
+        // just assume that it has
+        return false;
+    }
+
+    private feedEvent(ev: MatrixEvent): void {
+        if (this.widgetApi === null) return;
+        if (
+            // If we had decided earlier to feed this event to the widget, but
+            // it just wasn't ready, give it another try
+            this.eventsToFeed.delete(ev) ||
+            // Skip marker timeline check for events with relations to unknown parent because these
+            // events are not added to the timeline here and will be ignored otherwise:
+            // https://github.com/matrix-org/matrix-js-sdk/blob/d3dfcd924201d71b434af3d77343b5229b6ed75e/src/models/room.ts#L2207-L2213
+            this.relatesToUnknown(ev) ||
+            // Skip marker timeline check for rooms where membership is
+            // 'invite', otherwise the membership event from the invitation room
+            // will advance the marker and new state events will not be
+            // forwarded to the widget.
+            this.isFromInvite(ev) ||
+            // Check whether this event would be before or after our "read up to" marker. If it's
+            // before, or we can't decide, then we assume the widget will have already seen the event.
+            // If the event is after, or we don't have a marker for the room, then the marker will advance and we'll
+            // send it through.
+            // This approach of "read up to" prevents widgets receiving decryption spam from startup or
+            // receiving ancient events from backfill and such.
+            this.advanceReadUpToMarker(ev)
+        ) {
+            // If the event is still being decrypted, remember that we want to
+            // feed it to the widget (even if not strictly in the order given by
+            // the timeline) and get back to it later
+            if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
+                this.eventsToFeed.add(ev);
+            } else {
+                const raw = ev.getEffectiveEvent();
+                this.widgetApi.feedEvent(raw as IRoomEvent).catch((e) => {
+                    logger.error("Error sending event to widget: ", e);
+                });
+            }
+        }
+    }
+}

@@ -61,11 +61,11 @@ $left-gutter: 64px;
     }
 
     .mx_EventTile_receiptSent::before {
-        mask-image: url("$(res)/img/element-icons/circle-sent.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/check-circle.svg");
     }
 
     .mx_EventTile_receiptSending::before {
-        mask-image: url("$(res)/img/element-icons/circle-sending.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/circle.svg");
     }
 
     .mx_EventTile_content {
@@ -296,13 +296,11 @@ $left-gutter: 64px;
             display: flex;
             align-items: center;
 
-            /* Need to use important to override the js provided height and width values. */
+            /* Need to use important to override the js calculated values. */
             > .mx_BaseAvatar,
             > .mx_BaseAvatar > * {
-                height: $font-14px !important;
-                width: $font-14px !important;
                 font-size: $font-10px !important;
-                line-height: $font-15px !important;
+                line-height: calc($font-15px - 2px) !important;
             }
         }
 
@@ -851,17 +849,17 @@ $left-gutter: 64px;
     }
 
     &.mx_EventTile_e2eIcon_warning::after {
-        mask-image: url("$(res)/img/e2e/warning.svg"); /* (!) in a shield */
+        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
         background-color: $e2e-warning-color; /* red */
     }
 
     &.mx_EventTile_e2eIcon_normal::after {
-        mask-image: url("$(res)/img/e2e/normal.svg"); /* regular shield */
+        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
         background-color: var(--cpd-color-icon-tertiary); /* grey */
     }
 
     &.mx_EventTile_e2eIcon_decryption_failure::after {
-        mask-image: url("$(res)/img/e2e/decryption-failure.svg"); /* key in a circle */
+        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
         background-color: var(--cpd-color-icon-tertiary);
     }
 }
@@ -920,29 +918,20 @@ $left-gutter: 64px;
             position: absolute;
             top: $spacing-8;
             right: $spacing-8;
-            width: 19px;
-            height: 19px;
+            width: 16px;
+            height: 16px;
             visibility: hidden;
-            background-color: $message-action-bar-fg-color;
 
             &.mx_EventTile_buttonBottom {
                 top: 33px;
             }
 
-            &.mx_EventTile_collapseButton,
-            &.mx_EventTile_expandButton {
-                mask-size: 75%;
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $message-action-bar-fg-color;
             }
-        }
-
-        .mx_EventTile_copyButton {
-            height: 17px;
-            mask-image: url($copy-button-url);
-            mask-position: center center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            right: 9px;
-            width: 17px;
         }
     }
 }
@@ -962,20 +951,6 @@ $left-gutter: 64px;
 .mx_EventTile_button {
     display: inline-block;
     cursor: pointer;
-}
-
-.mx_EventTile_collapseButton,
-.mx_EventTile_expandButton {
-    mask-position: center;
-    mask-repeat: no-repeat;
-}
-
-.mx_EventTile_collapseButton {
-    mask-image: url("@vector-im/compound-design-tokens/icons/collapse.svg");
-}
-
-.mx_EventTile_expandButton {
-    mask-image: url("@vector-im/compound-design-tokens/icons/expand.svg");
 }
 
 .mx_EventTile_tileError {
@@ -1166,11 +1141,11 @@ $left-gutter: 64px;
         &.mx_EventTile_info {
             .mx_EventTile_avatar {
                 position: absolute;
-                top: 1.5px; /* Align with hidden event content */
-                margin-top: 0;
+                /* Align with hidden event content */
+                top: 50%;
+                transform: translateY(-50%);
+                margin-top: -2px;
                 margin-bottom: 0;
-                width: 14px; /* avatar img size */
-                height: 14px; /* avatar img size */
             }
 
             &.mx_EventTile_selected .mx_EventTile_line,

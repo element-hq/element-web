@@ -37,7 +37,7 @@ describe("<RoomList />", () => {
 
         // Needed to render a room list cell
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
     });
 
     it("should render a room list", () => {

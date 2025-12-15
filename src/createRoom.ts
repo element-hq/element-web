@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
@@ -39,10 +40,10 @@ import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
-import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
+import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
-import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
+import { ElementCallMemberEventType } from "./call-types";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -159,32 +160,19 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         };
 
         // Video rooms require custom power levels
-        if (opts.roomType === RoomType.ElementVideo) {
+        if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
                     ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
-                    [JitsiCall.MEMBER_EVENT_TYPE]: 0,
-                    // Make widgets immutable, even to admins
-                    "im.vector.modular.widgets": 200,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a widget
-                    [client.getSafeUserId()]: 200,
-                },
-            };
-        } else if (opts.roomType === RoomType.UnstableCall) {
-            createOpts.power_level_content_override = {
-                events: {
-                    ...DEFAULT_EVENT_POWER_LEVELS,
-                    // Allow all users to send call membership updates
-                    [ElementCallMemberEventType.name]: 0,
-                    // Make calls immutable, even to admins
-                    [ElementCallEventType.name]: 200,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a call
-                    [client.getSafeUserId()]: 200,
+                    [opts.roomType === RoomType.ElementVideo
+                        ? JitsiCall.MEMBER_EVENT_TYPE
+                        : ElementCallMemberEventType.name]: 0,
+                    // Ensure all but admins can't change widgets
+                    // A previous version of the code prevented even administrators
+                    // from changing this, but this is not possible now that room creators
+                    // have an immutable power level
+                    ["im.vector.modular.widgets"]: 100,
                 },
             };
         }
@@ -194,8 +182,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 ...DEFAULT_EVENT_POWER_LEVELS,
                 // It should always (including non video rooms) be possible to join a group call.
                 [ElementCallMemberEventType.name]: 0,
-                // Make sure only admins can enable it (DEPRECATED)
-                [ElementCallEventType.name]: 100,
             },
         };
     }
@@ -230,7 +216,12 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
-    if (opts.joinRule === JoinRule.Knock) {
+    const defaultRoomVersion = (await client.getCapabilities())["m.room_versions"]?.default ?? "1";
+
+    if (
+        opts.joinRule === JoinRule.Knock &&
+        !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)
+    ) {
         createOpts.room_version = PreferredRoomVersions.KnockRooms;
     }
 
@@ -238,7 +229,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
 
         if (opts.joinRule === JoinRule.Restricted) {
-            createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
+            if (!doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)) {
+                createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
+            }
 
             createOpts.initial_state.push({
                 type: EventType.RoomJoinRules,
@@ -316,9 +309,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 return Promise.reject(err);
             }
         })
-        .finally(function () {
-            if (modal) modal.close();
-        })
         .then(async (res): Promise<void> => {
             roomId = res.room_id;
 
@@ -340,6 +330,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
 
             if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
         })
+        .finally(function () {
+            if (modal) modal.close();
+        })
         .then(() => {
             if (opts.parentSpace) {
                 return SpaceStore.instance.addRoomToSpace(
@@ -354,15 +347,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             if (opts.roomType === RoomType.ElementVideo) {
                 // Set up this video room with a Jitsi call
                 await JitsiCall.create(await room);
-
-                // Reset our power level back to admin so that the widget becomes immutable
-                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             } else if (opts.roomType === RoomType.UnstableCall) {
                 // Set up this video room with an Element call
                 ElementCall.create(await room);
-
-                // Reset our power level back to admin so that the call becomes immutable
-                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             }
         })
         .then(

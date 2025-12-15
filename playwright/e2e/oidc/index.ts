@@ -42,7 +42,7 @@ export async function registerAccountMas(
     await page.getByRole("button", { name: "Continue" }).click();
     await page.getByRole("textbox", { name: "Display Name" }).fill(username);
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByText("Allow access to your account?")).toBeVisible();
+    await expect(page.getByText("Continue to Element?")).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
 }
 
@@ -56,6 +56,6 @@ export async function logInAccountMas(page: Page, username: string, password: st
     await page.getByRole("textbox", { name: "Password", exact: true }).fill(password);
     await page.getByRole("button", { name: "Continue" }).click();
 
-    await expect(page.getByText("Allow access to your account?")).toBeVisible();
+    await expect(page.getByText("Continue to Element?")).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
 }

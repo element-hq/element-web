@@ -93,6 +93,7 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
+        "new_conversation": "Nova conversa",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
@@ -2487,7 +2488,6 @@
             "error_update_guest_access": "Falha ao atualizar o acesso de convidados a este espaço",
             "error_update_history_visibility": "Falha ao atualizar a visibilidade do histórico deste espaço",
             "guest_access_explainer": "Convidados podem se juntar a um espaço sem ter uma conta.",
-            "guest_access_explainer_public_space": "Isso pode ser útil para espaços públicos.",
             "guest_access_label": "Habilitar acesso a convidados",
             "history_visibility_anyone_space": "Previsualizar o Espaço",
             "history_visibility_anyone_space_description": "Permite que pessoas vejam seu espaço antes de entrarem.",
@@ -3524,7 +3524,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Encerrou uma enquete",
             "sender_ended": "%(senderName)s encerrou uma enquete"
         },
         "m.poll.start": "%(senderName)s começou uma enquete - %(pollQuestion)s",

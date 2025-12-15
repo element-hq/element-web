@@ -61,18 +61,13 @@ Please see LICENSE files in the repository root for full details.
     background-repeat: no-repeat;
     position: relative;
 
-    &::before {
-        background-color: $info-plinth-fg-color;
-        mask: url("@vector-im/compound-design-tokens/icons/search.svg");
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 50px;
-        content: "";
+    svg {
+        color: $info-plinth-fg-color;
+        width: 50px;
+        height: 50px;
         position: absolute;
         top: 286px;
-        left: 0;
-        right: 0;
-        height: 50px;
+        left: calc(50% - 25px);
     }
 }
 
@@ -81,6 +76,8 @@ Please see LICENSE files in the repository root for full details.
     flex-direction: column;
     flex: 1;
     min-width: 0;
+    container-type: size;
+    container-name: roomview;
 
     .mx_RoomView_messagePanel,
     .mx_RoomView_messagePanelSpinner,

@@ -12,11 +12,11 @@
 import React, { type JSX, useContext, useState } from "react";
 import { type Device, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import FilteredList from "./FilteredList";
-import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import CopyableText from "../../elements/CopyableText";
 import E2EIcon from "../../rooms/E2EIcon";
@@ -57,11 +57,21 @@ export const UserList: React.FC<Pick<IDevtoolsProps, "onBack">> = ({ onBack }) =
                     <UserButton key={member.userId} member={member} onClick={() => setMember(member)} />
                 ))}
             </FilteredList>
-            <LabelledToggleSwitch
-                label={_t("devtools|only_joined_members")}
-                onChange={setShowOnlyJoined}
-                value={showOnlyJoined}
-            />
+            <Form.Root
+                onSubmit={(evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                }}
+            >
+                <SettingsToggleInput
+                    name="only_joined_members"
+                    label={_t("devtools|only_joined_members")}
+                    onChange={(e) => {
+                        setShowOnlyJoined(e.target.checked);
+                    }}
+                    checked={showOnlyJoined}
+                />
+            </Form.Root>
         </BaseTool>
     );
 };

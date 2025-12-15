@@ -26,19 +26,20 @@ Please see LICENSE files in the repository root for full details.
 .mx_OverflowTileView:hover {
     padding-right: 30px;
     position: relative; /* to keep the chevron aligned */
+
+    .mx_OverflowTileView_chevron {
+        display: inline;
+    }
 }
 
-.mx_OverflowTileView:hover::before {
-    content: "";
+.mx_OverflowTileView_chevron {
     position: absolute;
-    top: calc(50% - 8px); /* center */
-    right: -8px;
-    mask: url("@vector-im/compound-design-tokens/icons/chevron-right.svg");
-    mask-repeat: no-repeat;
-    mask-position: center;
-    width: 16px;
-    height: 16px;
-    background-color: $header-panel-text-primary-color;
+    top: calc(50% - 12px); /* center */
+    right: 0;
+    width: 24px;
+    height: 24px;
+    color: $header-panel-text-primary-color;
+    display: none;
 }
 
 .mx_OverflowTileView_icon {

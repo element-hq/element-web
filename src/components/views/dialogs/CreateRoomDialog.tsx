@@ -7,8 +7,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ChangeEvent, createRef, type KeyboardEvent, type SyntheticEvent } from "react";
+import React, {
+    type JSX,
+    type ChangeEvent,
+    createRef,
+    type KeyboardEvent,
+    type SyntheticEvent,
+    type ChangeEventHandler,
+} from "react";
 import { type Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
@@ -17,7 +25,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { checkUserIsAllowedToChangeEncryption, type IOpts } from "../../../createRoom";
 import Field from "../elements/Field";
 import RoomAliasField from "../elements/RoomAliasField";
-import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
 import JoinRuleDropdown from "../elements/JoinRuleDropdown";
@@ -25,7 +32,6 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import SettingsStore from "../../../settings/SettingsStore";
-import LabelledCheckbox from "../elements/LabelledCheckbox";
 import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
@@ -226,8 +232,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.setState({ joinRule });
     };
 
-    private onEncryptedChange = (isEncrypted: boolean): void => {
-        this.setState({ isEncrypted });
+    private onEncryptedChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ isEncrypted: evt.target.checked });
     };
 
     private onAliasChange = (alias: string): void => {
@@ -238,8 +244,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.setState({ detailsOpen: (ev.target as HTMLDetailsElement).open });
     };
 
-    private onNoFederateChange = (noFederate: boolean): void => {
-        this.setState({ noFederate });
+    private onNoFederateChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ noFederate: evt.target.checked });
     };
 
     private onNameValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
@@ -248,8 +254,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         return result;
     };
 
-    private onIsPublicKnockRoomChange = (isPublicKnockRoom: boolean): void => {
-        this.setState({ isPublicKnockRoom });
+    private onIsPublicKnockRoomChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        this.setState({ isPublicKnockRoom: evt.target.checked });
     };
 
     private static validateRoomName = withValidation({
@@ -336,11 +342,12 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         let visibilitySection: JSX.Element | undefined;
         if (this.state.joinRule === JoinRule.Knock) {
             visibilitySection = (
-                <LabelledCheckbox
+                <SettingsToggleInput
+                    name="publish-room"
                     className="mx_CreateRoomDialog_labelledCheckbox"
                     label={_t("room_settings|security|publish_room")}
                     onChange={this.onIsPublicKnockRoomChange}
-                    value={this.state.isPublicKnockRoom}
+                    checked={this.state.isPublicKnockRoom}
                 />
             );
         }
@@ -360,16 +367,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                 microcopy = _t("settings|security|e2ee_default_disabled_warning");
             }
             e2eeSection = (
-                <React.Fragment>
-                    <LabelledToggleSwitch
-                        label={_t("create_room|encryption_label")}
-                        onChange={this.onEncryptedChange}
-                        value={this.state.isEncrypted}
-                        className="mx_CreateRoomDialog_e2eSwitch" // for end-to-end tests
-                        disabled={!this.state.canChangeEncryption}
-                    />
-                    <p>{microcopy}</p>
-                </React.Fragment>
+                <SettingsToggleInput
+                    name="encryption-toggle"
+                    label={_t("create_room|encryption_label")}
+                    onChange={this.onEncryptedChange}
+                    checked={this.state.isEncrypted}
+                    disabled={!this.state.canChangeEncryption}
+                    helpMessage={microcopy}
+                />
             );
         }
 
@@ -399,8 +404,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                 title={title}
                 screenName="CreateRoom"
             >
-                <form onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
-                    <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content">
+                    <Form.Root onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
                         <Field
                             ref={this.nameField}
                             label={_t("common|name")}
@@ -416,21 +421,24 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             className="mx_CreateRoomDialog_topic"
                         />
 
-                        <JoinRuleDropdown
-                            label={_t("create_room|room_visibility_label")}
-                            labelInvite={_t("create_room|join_rule_invite")}
-                            labelKnock={
-                                this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
-                            }
-                            labelPublic={this.allowCreatingPublicRooms ? _t("common|public_room") : undefined}
-                            labelRestricted={
-                                this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
-                            }
-                            value={this.state.joinRule}
-                            onChange={this.onJoinRuleChange}
-                        />
+                        <div>
+                            <JoinRuleDropdown
+                                label={_t("create_room|room_visibility_label")}
+                                labelInvite={_t("create_room|join_rule_invite")}
+                                labelKnock={
+                                    this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
+                                }
+                                labelPublic={this.allowCreatingPublicRooms ? _t("common|public_room") : undefined}
+                                labelRestricted={
+                                    this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
+                                }
+                                value={this.state.joinRule}
+                                onChange={this.onJoinRuleChange}
+                            />
 
-                        {publicPrivateLabel}
+                            {publicPrivateLabel}
+                        </div>
+
                         {visibilitySection}
                         {e2eeSection}
                         {aliasField}
@@ -439,18 +447,19 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                                 <summary className="mx_CreateRoomDialog_details_summary">
                                     {this.state.detailsOpen ? _t("action|hide_advanced") : _t("action|show_advanced")}
                                 </summary>
-                                <LabelledToggleSwitch
+                                <SettingsToggleInput
+                                    name="unfederated"
                                     label={_t("create_room|unfederated", {
                                         serverName: MatrixClientPeg.safeGet().getDomain(),
                                     })}
                                     onChange={this.onNoFederateChange}
-                                    value={this.state.noFederate}
+                                    checked={this.state.noFederate}
+                                    helpMessage={federateLabel}
                                 />
-                                <p>{federateLabel}</p>
                             </details>
                         )}
-                    </div>
-                </form>
+                    </Form.Root>
+                </div>
                 <DialogButtons
                     primaryButton={
                         isVideoRoom ? _t("create_room|action_create_video_room") : _t("create_room|action_create_room")

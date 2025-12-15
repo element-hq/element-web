@@ -7,12 +7,44 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_UploadBar {
-    padding-left: 65px; /* line up with the shield area in the composer */
-    padding-top: 5px;
+    /* line up with the shield area in the composer */
+    padding: 5px 21px 0;
     position: relative;
 
+    display: grid;
+    grid-template:
+        "icon     filename cancel" auto
+        "progress progress progress" auto
+        / min-content auto min-content;
+    gap: var(--cpd-space-1-5x);
+
+    & > svg {
+        grid-area: icon;
+        height: 18px;
+        width: 18px;
+        color: $muted-fg-color;
+        align-self: center;
+    }
+
+    .mx_UploadBar_filename {
+        grid-area: filename;
+        color: $muted-fg-color;
+        position: relative;
+        font-size: $font-15px;
+        vertical-align: middle;
+    }
+
+    .mx_UploadBar_cancel {
+        grid-area: cancel;
+        height: 16px;
+        width: 16px;
+        color: $muted-fg-color;
+        align-self: center;
+    }
+
     .mx_ProgressBar {
-        width: calc(100% - 40px); /* cheating at a right margin */
+        grid-area: progress;
+        width: 100%;
     }
 }
 
@@ -20,40 +52,4 @@ Please see LICENSE files in the repository root for full details.
     .mx_UploadBar {
         padding-left: 0;
     }
-}
-
-.mx_UploadBar_filename {
-    color: $muted-fg-color;
-    position: relative;
-    padding-right: 38px; /* 32px for cancel icon, 6px for padding */
-    padding-left: 22px; /* 18px for icon, 4px for padding */
-    font-size: $font-15px;
-    vertical-align: middle;
-
-    &::before {
-        content: "";
-        height: 18px;
-        width: 18px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        mask-repeat: no-repeat;
-        mask-position: center;
-        background-color: $muted-fg-color;
-        mask-image: url("$(res)/img/element-icons/upload.svg");
-    }
-}
-
-.mx_UploadBar_cancel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 16px;
-    width: 16px;
-    margin-right: 16px; /* align over rightmost button in composer */
-    margin-top: 5px;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    background-color: $muted-fg-color;
-    mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
 }

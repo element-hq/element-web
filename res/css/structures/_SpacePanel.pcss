@@ -228,7 +228,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
-            mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
         }
 
         &.mx_SpaceButton_videoRooms .mx_SpaceButton_icon::before {
@@ -426,46 +426,6 @@ Please see LICENSE files in the repository root for full details.
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    .mx_SpacePanel_iconHome::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/home-solid.svg");
-    }
-
-    .mx_SpacePanel_iconInvite::before {
-        mask-image: url("$(res)/img/element-icons/room/invite.svg");
-    }
-
-    .mx_SpacePanel_iconSettings::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
-    }
-
-    .mx_SpacePanel_iconLeave::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/leave.svg");
-    }
-
-    .mx_SpacePanel_iconMembers::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
-    }
-
-    .mx_SpacePanel_iconPlus::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
-    }
-
-    .mx_SpacePanel_iconExplore::before {
-        mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
-    }
-
-    .mx_SpacePanel_iconPreferences::before {
-        mask-image: url("$(res)/img/element-icons/settings/preference.svg");
-    }
-
-    .mx_SpacePanel_noIcon {
-        display: none;
-
-        & + .mx_IconizedContextMenu_label {
-            padding-left: 5px !important; /* override default iconized label style to align with header */
-        }
     }
 
     .mx_SpacePanel_contextMenu_separatorLabel {

@@ -19,9 +19,6 @@ describe("<CreateRoomDialog />", () => {
     const userId = "@alice:server.org";
 
     const getE2eeEnableToggleInputElement = () => screen.getByLabelText("Enable end-to-end encryption");
-    // labelled toggle switch doesn't set the disabled attribute, only aria-disabled
-    const getE2eeEnableToggleIsDisabled = () =>
-        getE2eeEnableToggleInputElement().getAttribute("aria-disabled") === "true";
 
     let mockClient: ReturnType<typeof getMockClientWithEventEmitter>;
     beforeEach(() => {
@@ -121,7 +118,7 @@ describe("<CreateRoomDialog />", () => {
             await flushPromises();
 
             expect(getE2eeEnableToggleInputElement()).not.toBeChecked();
-            expect(getE2eeEnableToggleIsDisabled()).toBeFalsy();
+            expect(getE2eeEnableToggleInputElement()).not.toBeDisabled();
             expect(
                 screen.getByText(
                     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
@@ -141,7 +138,7 @@ describe("<CreateRoomDialog />", () => {
             await flushPromises();
 
             expect(getE2eeEnableToggleInputElement()).not.toBeChecked();
-            expect(getE2eeEnableToggleIsDisabled()).toBeTruthy();
+            expect(getE2eeEnableToggleInputElement()).toBeDisabled();
             expect(
                 screen.getByText(
                     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
@@ -161,7 +158,7 @@ describe("<CreateRoomDialog />", () => {
             await flushPromises();
             // encryption enabled
             expect(getE2eeEnableToggleInputElement()).toBeChecked();
-            expect(getE2eeEnableToggleIsDisabled()).toBeFalsy();
+            expect(getE2eeEnableToggleInputElement()).not.toBeDisabled();
         });
 
         it("should use defaultEncrypted prop when it is false", async () => {
@@ -177,7 +174,7 @@ describe("<CreateRoomDialog />", () => {
             // encryption disabled
             expect(getE2eeEnableToggleInputElement()).not.toBeChecked();
             // not forced to off
-            expect(getE2eeEnableToggleIsDisabled()).toBeFalsy();
+            expect(getE2eeEnableToggleInputElement()).not.toBeDisabled();
         });
 
         it("should override defaultEncrypted when server .well-known forces disabled encryption", async () => {
@@ -192,7 +189,7 @@ describe("<CreateRoomDialog />", () => {
 
             // server forces encryption to disabled, even though defaultEncrypted is false
             expect(getE2eeEnableToggleInputElement()).not.toBeChecked();
-            expect(getE2eeEnableToggleIsDisabled()).toBeTruthy();
+            expect(getE2eeEnableToggleInputElement()).toBeDisabled();
             expect(
                 screen.getByText(
                     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
@@ -207,7 +204,7 @@ describe("<CreateRoomDialog />", () => {
 
             // server forces encryption to enabled, even though defaultEncrypted is true
             expect(getE2eeEnableToggleInputElement()).toBeChecked();
-            expect(getE2eeEnableToggleIsDisabled()).toBeTruthy();
+            expect(getE2eeEnableToggleInputElement()).toBeDisabled();
             expect(screen.getByText("Your server requires encryption to be enabled in private rooms.")).toBeDefined();
         });
 
@@ -217,7 +214,7 @@ describe("<CreateRoomDialog />", () => {
 
             await flushPromises();
             expect(getE2eeEnableToggleInputElement()).toBeChecked();
-            expect(getE2eeEnableToggleIsDisabled()).toBeTruthy();
+            expect(getE2eeEnableToggleInputElement()).toBeDisabled();
 
             expect(screen.getByText("Your server requires encryption to be enabled in private rooms.")).toBeDefined();
         });
@@ -319,7 +316,7 @@ describe("<CreateRoomDialog />", () => {
 
             it("should create a knock room with public visibility", async () => {
                 fireEvent.click(
-                    screen.getByRole("checkbox", { name: "Make this room visible in the public room directory." }),
+                    screen.getByRole("switch", { name: "Make this room visible in the public room directory." }),
                 );
                 fireEvent.click(screen.getByText("Create room"));
                 await flushPromises();

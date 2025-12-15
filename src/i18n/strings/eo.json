@@ -1542,7 +1542,6 @@
             "error_update_guest_access": "Malsukcesis ĝisdatigi aliron de gastoj al ĉi tiu aro",
             "error_update_history_visibility": "Malsukcesis ĝisdatigi videblecon de historio de ĉi tiu aro",
             "guest_access_explainer": "Gastoj povas aliĝi al aro sen konto.",
-            "guest_access_explainer_public_space": "Tio povas esti utila por publikaj aroj.",
             "guest_access_label": "Ŝalti aliron de gastoj",
             "history_visibility_anyone_space": "Antaŭrigardi aron",
             "history_visibility_anyone_space_description": "Povigi personojn antaŭrigardi vian aron antaŭ aliĝo.",

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { type JSX, type FunctionComponent, type Key, type PropsWithChildren, type ReactNode } from "react";
+import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MenuItemRadio } from "../../accessibility/context_menu/MenuItemRadio";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
@@ -42,9 +43,10 @@ export function GenericDropdownMenuOption<T extends Key>({
             className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
             onClick={onClick}
         >
+            {isSelected && <CheckIcon className="mx_GenericDropdownMenu_Option--checkIcon" />}
             <div className="mx_GenericDropdownMenu_Option--label">
                 <span>{label}</span>
-                <span>{description}</span>
+                {description && <span>{description}</span>}
             </div>
             {adornment}
         </MenuItemRadio>
@@ -202,6 +204,7 @@ export function GenericDropdownMenu<T>({
                 }}
             >
                 {selectedLabel(selected)}
+                <ChevronDownIcon />
             </ContextMenuButton>
             {contextMenu}
         </>

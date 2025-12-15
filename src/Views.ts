@@ -20,52 +20,62 @@ Please see LICENSE files in the repository root for full details.
  *                    │    LOADING      │─────────────────────────────►│ CONFIRM_LOCK_   │
  *                    │                 │◄─────────────────────────────│     THEFT       │
  *                    └─────────────────┘ Lock theft confirmed         └─────────────────┘
- *     Session recovered │ │         │
- *        ┌──────────────┘ │         └────────────────┐
- *        │  ┌─────────────┘                          │  No previous session
- *        │  │  Token/OIDC login succeeded            │
- *        │  │                                        ▼
- *        │  │                               ┌─────────────────┐
- *        │  │                               │     WELCOME     │           (from all other states
- *        │  │                               │                 │             except LOCK_STOLEN)
- *        │  │                               └─────────────────┘                   │
- *        │  │                  "Create Account" │       │ "Sign in"               │ Client logged out
- *        │  │          ┌────────────────────────┘       │                         │
- *        │  │          │                                │    ┌────────────────────┘
- *        │  │          │                                │    │
- *        │  │          ▼          "Create an            ▼    ▼        "Forgot
- *        │  │ ┌─────────────────┐  account"      ┌─────────────────┐   password"    ┌─────────────────┐
- *        │  │ │    REGISTER     │◄───────────────│      LOGIN      │───────────────►│ FORGOT_PASSWORD │
- *        │  │ │                 │───────────────►│                 │◄───────────────│                 │
- *        │  │ └─────────────────┘ "Sign in here" └─────────────────┘ Complete /     └─────────────────┘
- *        │  │          │                                   │         "Sign in instead"       ▲
- *        │  │          └────────────────────────────────┐  │                                 │
- *        │  └────────────────────────────────────────┐  │  │                                 │
- *        │                                           ▼  ▼  ▼                                 │
- *        │                                       ┌──────────────────┐                        │
- *        │                                       │ (postLoginSetup) │                        │
- *        │                                       └──────────────────┘                        │
- *        │     ┌────────────────────────────────────┘     │      │                           │
- *        │     │ E2EE not enabled           ┌─────────────┘      └──────┐                    │
- *        │     │                            │ Account has               │ Account lacks      │
- *        │     │                            │ cross-signing             │ cross-signing      │
- *        │     │                            │ keys                      │ keys               │
- *        │     │  Client started and        ▼                           ▼                    │
- *        │     │  force_verification ┌─────────────────┐         ┌─────────────────┐         │
- *        │     │  pending            │  COMPLETE_      │         │   E2E_SETUP     │         │
- *        │     │  ┌─────────────────►│      SECURITY   │         │                 │         │
- *        │     │  │                  └─────────────────┘         └─────────────────┘         │ "Forgotten
- *        │     │  │  ┌───────────────────────┘                           │                   │  your
- *        │     │  │  │   ┌───────────────────────────────────────────────┘                   │  password?"
- *        │     │  │  │   │                                                                   │
- *        │     │  │  │   │                                  (from all other states           │
- *        │     │  │  │   │                                    except LOCK_STOLEN)            │
- *        │     │  │  │   │                                               └──────────────┐    │
- *        ▼     ▼  │  ▼   ▼                                         Soft logout error    ▼    │
- *       ┌─────────────────┐                                                         ┌─────────────────┐
- *       │   LOGGED_IN     │                         Re-authentication succeeded     │  SOFT_LOGOUT    │
- *       │                 │◄────────────────────────────────────────────────────────│                 │
- *       └─────────────────┘                                                         └─────────────────┘
+ *     Session recovered │     │      │                                           Token/OIDC login succeeded
+ *        ┌──────────────┘     │      └──────────────────────────────────────────────────────────────────┐
+ *        │                    └───────────────────────────────────────────┐                             │
+ *        │                                                                │ No previous session         │
+ *        │                                                                ▼                             │
+ *        │          (from all other states                        ┌─────────────────┐                   │
+ *        │            except LOCK_STOLEN)                         │     WELCOME     │                   │
+ *        │                  │                                     │                 │                   │
+ *        │                  │ Client logged out                   └─────────────────┘                   │
+ *        │                  │                                            │   │                          │
+ *        │                  └──────────────────────────┐       "Sign in" │   │ "Create account"         │
+ *        │                                             │    ┌────────────┘   └──────────────┐           │
+ *        │                                             │    │                               │           │
+ *        │                       "Forgot               ▼    ▼       "Create an              ▼           │
+ *        │   ┌─────────────────┐  password"     ┌─────────────────┐   account"     ┌─────────────────┐  │
+ *        │   │ FORGOT_PASSWORD │◄───────────────│      LOGIN      │───────────────►│     REGISTER    │  │
+ *        │   │                 │───────────────►│                 │◄───────────────│                 │  │
+ *        │   └─────────────────┘ Complete /     └─────────────────┘ "Sign in here" └─────────────────┘  │
+ *        │            ▲        "Sign in instead"        │                                   │           │
+ *        │            │                                 └──────────────────────┐  ┌─────────┘           │
+ *        │            │"Forgotten your                                         │  │  ┌──────────────────┘
+ *        │            │ password?"                                             │  │  │
+ *        │            │                                                        │  │  │
+ *        │   ┌─────────────────┐ Soft-logout error                             │  │  │
+ *        │   │  SOFT_LOGOUT    │◄───────────── (from all other states          │  │  │
+ *        │   │                 │                except LOCK_STOLEN)            │  │  │
+ *        │   └─────────────────┘                                               │  │  │
+ *        │         │ Re-authentication succeeded                               ▼  ▼  ▼
+ *        │         │                                                    ┌──────────────────┐
+ *        ▼         ▼                                                    │ (postLoginSetup) │
+ *     ┌─────────────────┐                                               └──────────────────┘
+ *     │ PENDING_CLIENT_ │                                      Account has │     │      │ Account lacks
+ *     │     START       │                                    cross-signing │     │      │ cross-signing
+ *     └─────────────────┘                                           keys   │     │      │ keys
+ *        │          │                                                      │     │      │
+ *        │          └───────────────────────────────┐                      │     │      │
+ *        │            Client started,               │                      │     │      └──────┐
+ *        │            force_verification pending    │                      │     │             │
+ *        │                                          ▼                      │     │             │
+ *        │ Client started,                 ┌─────────────────┐             │     │             │
+ *        │ force_verification              │  COMPLETE_      │◄────────────┘     │             ▼
+ *        │ not needed                      │      SECURITY   │                   │      ┌─────────────────┐
+ *        │                                 └─────────────────┘                   │      │   E2E_SETUP     │
+ *        │                                          │                            │      │                 │
+ *        │    ┌─────────────────────────────────────┘           E2EE not enabled │      └─────────────────┘
+ *        │    │    ┌─────────────────────────────────────────────────────────────┘              │
+ *        │    │    │     ┌──────────────────────────────────────────────────────────────────────┘
+ *        │    │    │     │
+ *        │    │    │     │
+ *        │    │    │     │
+ *        │    │    │     │
+ *        ▼    ▼    ▼     ▼
+ *       ┌─────────────────┐
+ *       │   LOGGED_IN     │
+ *       │                 │
+ *       └─────────────────┘
  *
  *       (from all other states)
  *                │
@@ -101,6 +111,12 @@ enum Views {
 
     // flow to setup SSSS / cross-signing on this account
     E2E_SETUP,
+
+    /**
+     * We have successfully recovered a session from localstorage, but the client
+     * has not yet been started.
+     */
+    PENDING_CLIENT_START,
 
     // we are logged in with an active matrix client. The logged_in state also
     // includes guests users as they too are logged in at the client level.

@@ -17,7 +17,19 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
       class="mx_AccessibleButton mx_SearchBox_closeButton"
       role="button"
       tabindex="-1"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     class="mx_SpaceHierarchy_listHeader"
@@ -74,7 +86,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="5"
               data-testid="avatar-img"
               data-type="round"
@@ -119,18 +131,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_8_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_MwbPDmfGtm"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -172,7 +184,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="6"
               data-testid="avatar-img"
               data-type="round"
@@ -217,18 +229,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_c_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_GQvdMWe954"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -271,7 +283,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="2"
               data-testid="avatar-img"
               data-type="round"
@@ -316,18 +328,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_g_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_DVIAu5CsiH"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -352,7 +364,19 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
         </div>
         <div
           class="mx_SpaceHierarchy_subspace_toggle mx_SpaceHierarchy_subspace_toggle_shown"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
       </div>
       <div
         class="mx_SpaceHierarchy_subspace_children"
@@ -376,7 +400,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="2"
               data-testid="avatar-img"
               data-type="round"
@@ -425,11 +449,11 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                   class="_inline-field-control_19upo_44"
                 >
                   <div
-                    class="_container_1hel1_10"
+                    class="_container_1md5v_10"
                   >
                     <input
                       aria-labelledby="_r_k_"
-                      class="_input_1hel1_18"
+                      class="_input_1md5v_18"
                       disabled=""
                       id="checkbox_RD7nyrA2oh"
                       role="presentation"
@@ -437,7 +461,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                       type="checkbox"
                     />
                     <div
-                      class="_ui_1hel1_19"
+                      class="_ui_1md5v_19"
                     >
                       <svg
                         aria-hidden="true"
@@ -480,7 +504,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="6"
               data-testid="avatar-img"
               data-type="round"
@@ -525,18 +549,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_t_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_jWVJIPauy1"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -582,7 +606,19 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
       class="mx_AccessibleButton mx_SearchBox_closeButton"
       role="button"
       tabindex="-1"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     class="mx_SpaceHierarchy_listHeader"
@@ -639,7 +675,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="5"
               data-testid="avatar-img"
               data-type="round"
@@ -684,18 +720,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_3i_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_EetmBG4yVC"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -737,7 +773,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="6"
               data-testid="avatar-img"
               data-type="round"
@@ -782,18 +818,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_3m_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_eEefiPqpMR"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -836,7 +872,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="2"
               data-testid="avatar-img"
               data-type="round"
@@ -881,18 +917,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1hel1_10"
+                  class="_container_1md5v_10"
                 >
                   <input
                     aria-labelledby="_r_3q_"
-                    class="_input_1hel1_18"
+                    class="_input_1md5v_18"
                     id="checkbox_MwbPDmfGtm"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1hel1_19"
+                    class="_ui_1md5v_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -917,7 +953,19 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
         </div>
         <div
           class="mx_SpaceHierarchy_subspace_toggle mx_SpaceHierarchy_subspace_toggle_shown"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
       </div>
       <div
         class="mx_SpaceHierarchy_subspace_children"

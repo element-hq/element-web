@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 
 import { type Action } from "../actions";
 import { type ActionPayload } from "../payloads";
@@ -17,5 +16,5 @@ export interface OpenForwardDialogPayload extends ActionPayload {
     action: Action.OpenForwardDialog;
 
     event: MatrixEvent;
-    permalinkCreator: Optional<RoomPermalinkCreator>;
+    permalinkCreator: RoomPermalinkCreator | null;
 }

@@ -49,19 +49,14 @@ Please see LICENSE files in the repository root for full details.
         transform: translateX(60px);
         transition: all 0.1s ease-in-out;
 
-        &::before {
-            content: "";
+        svg {
             position: absolute;
             top: 50%;
             right: var(--cpd-space-1x);
             transform: translateY(-50%);
             width: 24px;
             height: 24px;
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-right.svg");
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $secondary-content;
+            color: $secondary-content;
         }
     }
 

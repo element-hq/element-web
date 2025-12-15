@@ -10,8 +10,8 @@ import React, { useEffect, useState } from "react";
 import { type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { type MatrixEvent, type Poll, PollEvent, type Relations } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import { PollsEndIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";
 import { _t } from "../../../../languageHandler";
 import { formatLocalDateShort } from "../../../../DateUtils";
 import { allVotes, collectUserVotes, countVotes } from "../../messages/MPollBody";
@@ -28,6 +28,7 @@ type EndedPollState = {
     winningAnswers: {
         answer: PollAnswerSubevent;
         voteCount: number;
+        optionNumber: number;
     }[];
     totalVoteCount: number;
 };
@@ -40,10 +41,12 @@ const getWinningAnswers = (poll: Poll, responseRelations: Relations): EndedPollS
     return {
         totalVoteCount,
         winningAnswers: poll.pollEvent.answers
-            .filter((answer) => votes.get(answer.id) === winCount)
-            .map((answer) => ({
+            .map((answer, index) => ({ answerIndex: index, answer })) // keep track of original answer index
+            .filter(({ answer }) => votes.get(answer.id) === winCount)
+            .map(({ answer, answerIndex }) => ({
                 answer,
                 voteCount: votes.get(answer.id) || 0,
+                optionNumber: answerIndex + 1,
             })),
     };
 };
@@ -94,19 +97,20 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
             <Tooltip label={_t("right_panel|poll|view_poll")} placement="top" isTriggerInteractive={false}>
                 <div className="mx_PollListItemEnded_content">
                     <div className="mx_PollListItemEnded_title">
-                        <PollIcon className="mx_PollListItemEnded_icon" />
+                        <PollsEndIcon className="mx_PollListItemEnded_icon" />
                         <span className="mx_PollListItemEnded_question">{pollEvent.question.text}</span>
                         <Caption>{formattedDate}</Caption>
                     </div>
                     {!!winningAnswers?.length && (
                         <div className="mx_PollListItemEnded_answers">
-                            {winningAnswers?.map(({ answer, voteCount }) => (
+                            {winningAnswers?.map(({ answer, voteCount, optionNumber }) => (
                                 <PollOption
                                     key={answer.id}
                                     answer={answer}
                                     voteCount={voteCount}
                                     totalVoteCount={totalVoteCount!}
                                     pollId={poll.pollId}
+                                    optionNumber={optionNumber}
                                     displayVoteCount
                                     isChecked
                                     isEnded

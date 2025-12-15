@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useMemo } from "react";
 import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AdminIcon, SettingsSolidIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -22,6 +23,7 @@ import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsT
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import { Action } from "../../../dispatcher/actions";
 import { type NonEmptyArray } from "../../../@types/common";
+import { Icon as AdvancedIcon } from "../../../../res/img/element-icons/room/settings/advanced.svg";
 
 export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",
@@ -48,26 +50,26 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             new Tab(
                 SpaceSettingsTab.General,
                 _td("common|general"),
-                "mx_SpaceSettingsDialog_generalIcon",
+                <SettingsSolidIcon />,
                 <SpaceSettingsGeneralTab matrixClient={cli} space={space} />,
             ),
             new Tab(
                 SpaceSettingsTab.Visibility,
                 _td("room_settings|visibility|title"),
-                "mx_SpaceSettingsDialog_visibilityIcon",
+                <VisibilityOnIcon />,
                 <SpaceSettingsVisibilityTab matrixClient={cli} space={space} closeSettingsFn={onFinished} />,
             ),
             new Tab(
                 SpaceSettingsTab.Roles,
                 _td("room_settings|permissions|title"),
-                "mx_RoomSettingsDialog_rolesIcon",
+                <AdminIcon />,
                 <RolesRoomSettingsTab room={space} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(
                       SpaceSettingsTab.Advanced,
                       _td("common|advanced"),
-                      "mx_RoomSettingsDialog_warningIcon",
+                      <AdvancedIcon />,
                       <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )
                 : null,

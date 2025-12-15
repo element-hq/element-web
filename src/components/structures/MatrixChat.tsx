@@ -28,6 +28,8 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import sanitizeHtml from "sanitize-html";
+import { I18nContext } from "@element-hq/web-shared-components";
+import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -47,7 +49,6 @@ import PageType from "../../PageTypes";
 import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
-import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { calculateRoomVia, makeRoomPermalink } from "../../utils/permalinks/Permalinks";
@@ -174,8 +175,18 @@ interface IProps {
 }
 
 interface IState {
-    // the master view we are showing.
+    /**
+     * The master view we are showing.
+     *
+     * This represents the state of a state machine: see the documentation on {@link Views} for a transition diagram.
+     *
+     * TODO: this doesn't work well, because updates to React state are not instantaneous, meaning that if several
+     *   events or {@link Action}s happen in quick succession, we may end up following the wrong transition.
+     *   We should probably move the view into a separate object (like a ViewModel) and have the React state subscribe
+     *   to updates.
+     */
     view: Views;
+
     // What the LoggedInView would be showing if visible.
     // A member of the enum for standard pages or a string for those provided by
     // a module.
@@ -396,8 +407,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Perform actions that are specific to a user that has just logged in (compare {@link onLoggedIn}, which, despite
-     * its name, is called when an already-logged-in client is restored at session startup).
+     * Perform actions that are specific to a user that has just logged in.
      *
      * Called when:
      *
@@ -405,7 +415,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      *  - The {@link Login} or {@link Register} components notify us that we successfully completed a non-OIDC login or
      *    registration.
      *
-     * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onLoggedIn} will
+     * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onShowPostLoginScreen} will
      * have been suppressed (by either {@link tokenLogin} being set, or the view being set to {@link Views.LOGIN} or
      * {@link Views.REGISTER}).
      *
@@ -419,7 +429,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
         const cryptoEnabled = Boolean(cli.getCrypto());
         if (!cryptoEnabled) {
-            this.onLoggedIn();
+            this.onShowPostLoginScreen();
         }
 
         const promisesList: Promise<any>[] = [this.firstSyncPromise.promise];
@@ -452,7 +462,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             const cryptoExtension = ModuleRunner.instance.extensions.cryptoSetup;
             if (cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
-                this.onLoggedIn();
+                this.onShowPostLoginScreen();
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
@@ -464,7 +474,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             );
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
-            this.onLoggedIn();
+            this.onShowPostLoginScreen();
         }
         this.setState({ pendingInitialSync: false });
     }
@@ -475,6 +485,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             | (Pick<IState, K> | IState | null),
         callback?: () => void,
     ): void {
+        if (state && "view" in state) {
+            logger.debug(`MatrixChat: Queuing change of view from ${Views[this.state.view]} to ${Views[state.view]}`);
+        }
         if (this.shouldTrackPageChange(this.state, { ...this.state, ...state })) {
             this.startPageChangeTimer();
         }
@@ -650,7 +663,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private onAction = (payload: ActionPayload): void => {
         // once the session lock has been stolen, don't try to do anything.
         if (this.state.view === Views.LOCK_STOLEN) {
+            logger.warn(`MatrixChat: ignoring action ${payload.action} as session lock has been stolen`);
             return;
+        }
+
+        // Exclude some rather spammy actions from being logged.
+        if (payload.action != Action.UserActivity) {
+            logger.debug(`MatrixChat: handling action ${payload.action}`);
         }
 
         // Start the onboarding process for certain actions
@@ -869,18 +888,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
                 break;
             case Action.OnLoggedIn:
-                this.stores.client = MatrixClientPeg.safeGet();
-                if (
-                    // Skip this handling for token login as that always calls onLoggedIn itself
-                    !this.tokenLogin &&
-                    !Lifecycle.isSoftLogout() &&
-                    this.state.view !== Views.LOGIN &&
-                    this.state.view !== Views.REGISTER &&
-                    this.state.view !== Views.COMPLETE_SECURITY &&
-                    this.state.view !== Views.E2E_SETUP
-                ) {
-                    this.onLoggedIn();
-                }
+                this.onLoggedIn();
                 break;
             case Action.ClientNotViable:
                 this.onSoftLogout();
@@ -1016,8 +1024,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         newState.isMobileRegistration = isMobileRegistration;
 
         this.setStateForNewView(newState);
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
         this.notifyNewScreen(isMobileRegistration ? "mobile_register" : "register");
     }
 
@@ -1089,8 +1095,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             },
             () => {
-                ThemeController.isLogin = false;
-                this.themeWatcher?.recheck();
                 this.notifyNewScreen("room/" + presentedId, replaceLast);
             },
         );
@@ -1115,8 +1119,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view: Views.WELCOME,
         });
         this.notifyNewScreen("welcome");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewLogin(otherState?: any): void {
@@ -1125,8 +1127,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             ...otherState,
         });
         this.notifyNewScreen("login");
-        ThemeController.isLogin = true;
-        this.themeWatcher?.recheck();
     }
 
     private viewHome(justRegistered = false): void {
@@ -1138,8 +1138,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         this.setPage(PageType.HomePage);
         this.notifyNewScreen("home");
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
     }
 
     private viewUser(userId: string, subAction: string): void {
@@ -1403,39 +1401,24 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     /**
-     * Called when a new logged in session has started.
+     * Show the first screen after the application is successfully loaded in a logged-in state.
      *
      * Called:
      *
      *  - on {@link Action.OnLoggedIn}, but only when we don't expect a separate call to {@link postLoginSetup}.
      *  - from {@link postLoginSetup}, when we don't have crypto setup tasks to perform after the login.
-     *
-     * It's never actually called if we have crypto setup tasks to perform after login (which we normally do, unless
-     * crypto is disabled.) XXX: is this a bug or a feature?
-     */
-    private async onLoggedIn(): Promise<void> {
-        ThemeController.isLogin = false;
-        this.themeWatcher?.recheck();
-        StorageManager.tryPersistStorage();
-
-        await this.onShowPostLoginScreen();
-    }
-
-    /**
-     * Show the first screen after the application is successfully loaded in a logged-in state.
-     *
-     * Called:
-     *
-     *  - by {@link onLoggedIn}
      *  - by {@link onCompleteSecurityE2eSetupFinished}
      *
      * In other words, whenever we think we have completed the login and E2E setup tasks.
      */
-    private async onShowPostLoginScreen(): Promise<void> {
+    private onShowPostLoginScreen(): void {
+        logger.debug("onShowPostLoginScreen: Transitioning to logged in view.");
+
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.
         if (this.screenAfterLogin?.screen) {
+            logger.debug(`onShowPostLoginScreen: showing screen ${this.screenAfterLogin.screen}`);
             this.showScreen(this.screenAfterLogin.screen, this.screenAfterLogin.params);
             this.screenAfterLogin = undefined;
         } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
@@ -1444,6 +1427,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             if (ThreepidInviteStore.instance.pickBestInvite()) {
                 // The user has a 3pid invite pending - show them that
                 const threepidInvite = ThreepidInviteStore.instance.pickBestInvite();
+                logger.debug(`onShowPostLoginScreen: showing room ${threepidInvite.roomId} after registration`);
 
                 // HACK: This is a pretty brutal way of threading the invite back through
                 // our systems, but it's the safest we have for now.
@@ -1452,9 +1436,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 // The user has just logged in after registering,
                 // so show the homepage.
+                logger.debug("onShowPostLoginScreen: Showing home page after registration");
                 dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage, justRegistered: true });
             }
-        } else if (!(await this.shouldForceVerification())) {
+        } else {
+            logger.debug("onShowPostLoginScreen: showScreenAfterLogin");
             this.showScreenAfterLogin();
         }
 
@@ -1518,15 +1504,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // If screenAfterLogin is set, use that, then null it so that a second login will
         // result in view_home_page, _user_settings or _room_directory
         if (this.screenAfterLogin && this.screenAfterLogin.screen) {
+            logger.debug(`showScreenAfterLogin: showing screen ${this.screenAfterLogin.screen}`);
             this.showScreen(this.screenAfterLogin.screen, this.screenAfterLogin.params);
             this.screenAfterLogin = undefined;
         } else if (localStorage && localStorage.getItem("mx_last_room_id")) {
             // Before defaulting to directory, show the last viewed room
+            logger.debug("showScreenAfterLogin: showing last room");
             this.viewLastRoom();
         } else {
             if (MatrixClientPeg.safeGet().isGuest()) {
+                logger.debug("showScreenAfterLogin: showing guest welcome page");
                 dis.dispatch({ action: "view_welcome_page" });
             } else {
+                logger.debug("showScreenAfterLogin: showing home page");
                 dis.dispatch({ action: Action.ViewHomePage });
             }
         }
@@ -1538,6 +1528,37 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             room_id: localStorage.getItem("mx_last_room_id") ?? undefined,
             metricsTrigger: undefined, // other
         });
+    }
+
+    /**
+     * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
+     */
+    private onLoggedIn(): void {
+        this.stores.client = MatrixClientPeg.safeGet();
+        StorageManager.tryPersistStorage();
+
+        // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the
+        // client to start. The exceptions are:
+        //
+        //   - If there is a token login in flight: in that case we wait for the login to complete (which hits
+        //     `postLoginSetup`).
+        //
+        //   - Lifecycle emits an `Action.OnLoggedIn` event during startup even if the localstorage flag indicating a
+        //     previous soft logout is set. In that situation we actually want to wait for the `Action.ClientNotViable`
+        //     event, which will transition us into Views.SOFT_LOGOUT. We therefore have to check for !isSoftLogout().
+        //     There will be a subsequent `Action.OnLoggedIn` event once the reauthentication completes.
+        //
+        //     XXX: fix this properly by having Lifecycle not emit OnLoggedIn when it knows it is about to emit a
+        //     ClientNotViable.
+        //
+        // If we're already in the SOFT_LOGOUT view, that means that reauthentication has succeeded, and we can
+        // transition to the splash screen.
+        if (
+            (this.state.view === Views.LOADING && !Lifecycle.isSoftLogout() && !this.tokenLogin) ||
+            this.state.view === Views.SOFT_LOGOUT
+        ) {
+            this.setStateForNewView({ view: Views.PENDING_CLIENT_START });
+        }
     }
 
     /**
@@ -1751,7 +1772,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: "verifreq_" + request.transactionId,
                     title: _t("encryption|verification_requested_toast_title"),
-                    icon: "verification",
+                    icon: <LockSolidIcon color="var(--cpd-color-text-primary)" />,
                     props: { request },
                     component: VerificationRequestToast,
                     priority: 90,
@@ -1769,15 +1790,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const cli = MatrixClientPeg.safeGet();
 
         const shouldForceVerification = await this.shouldForceVerification();
-        // XXX: Don't replace the screen if it's already one of these: postLoginSetup
-        // changes to these screens in certain circumstances so we shouldn't clobber it.
-        // We should probably have one place where we decide what the next screen is after
-        // login.
-        if (![Views.COMPLETE_SECURITY, Views.E2E_SETUP].includes(this.state.view)) {
-            if (shouldForceVerification) {
-                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-            }
-        }
 
         const crypto = cli.getCrypto();
         if (crypto) {
@@ -1794,13 +1806,31 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({
             ready: true,
         });
+
+        // If the view is PENDING_CLIENT_START, that means we recovered the session from localstorage, or from
+        // soft-logout: we can now transition to the logged-in view.
+        //
+        // If the view is something else, that probably means it's a login or registration view; we handle that in
+        // `postLoginSetup`.
+        if (this.state.view === Views.PENDING_CLIENT_START) {
+            if (shouldForceVerification) {
+                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            } else {
+                this.onShowPostLoginScreen();
+            }
+        }
     }
 
     public showScreen(screen: string, params?: { [key: string]: any }): void {
+        logger.debug(`showScreen ${screen}`);
+
         const cli = MatrixClientPeg.get();
         const isLoggedOutOrGuest = !cli || cli.isGuest();
         if (!isLoggedOutOrGuest && AUTH_SCREENS.includes(screen)) {
             // user is logged in and landing on an auth page which will uproot their session, redirect them home instead
+            logger.info(
+                `showScreen: suppressing change to AuthScreen ${screen} for logged-in user, and going to home screen instead`,
+            );
             dis.dispatch({ action: Action.ViewHomePage });
             return;
         }
@@ -2106,9 +2136,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
-        await this.onShowPostLoginScreen().catch((e) => {
-            logger.error("Exception showing post-login screen", e);
-        });
+        this.onShowPostLoginScreen();
     };
 
     private getFragmentAfterLogin(): string {
@@ -2147,6 +2175,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
             view = <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
+        } else if (this.state.view === Views.PENDING_CLIENT_START) {
+            // we think we are logged in, but are still waiting for the /sync to complete
+            view = (
+                <LoginSplashView
+                    matrixClient={MatrixClientPeg.safeGet()}
+                    onLogoutClick={this.onLogoutClick}
+                    syncError={this.state.syncError}
+                />
+            );
         } else if (this.state.view === Views.LOGGED_IN) {
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
@@ -2237,9 +2274,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         return (
             <ErrorBoundary>
-                <SDKContext.Provider value={this.stores}>
-                    <TooltipProvider>{view}</TooltipProvider>
-                </SDKContext.Provider>
+                <I18nContext.Provider value={ModuleApi.instance.i18n}>
+                    <SDKContext.Provider value={this.stores}>
+                        <TooltipProvider>{view}</TooltipProvider>
+                    </SDKContext.Provider>
+                </I18nContext.Provider>
             </ErrorBoundary>
         );
     }

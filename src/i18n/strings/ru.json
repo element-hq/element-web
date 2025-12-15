@@ -2501,7 +2501,6 @@
             "error_update_guest_access": "Не удалось обновить гостевой доступ к этому пространству",
             "error_update_history_visibility": "Не удалось обновить видимость истории этого пространства",
             "guest_access_explainer": "Гости могут присоединиться к пространству, не имея учётной записи.",
-            "guest_access_explainer_public_space": "Это может быть полезно для публичных пространств.",
             "guest_access_label": "Включить гостевой доступ",
             "history_visibility_anyone_space": "Предварительный просмотр пространства",
             "history_visibility_anyone_space_description": "Дайте людям возможность предварительно ознакомиться с вашим пространством, прежде чем они присоединятся к нему.",
@@ -3547,7 +3546,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Опрос завершен",
             "sender_ended": "%(senderName)s завершил(а) опрос"
         },
         "m.poll.start": "%(senderName)s начал(а) опрос — %(pollQuestion)s",

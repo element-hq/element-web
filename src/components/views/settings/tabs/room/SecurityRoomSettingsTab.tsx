@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react";
 import {
     GuestAccess,
     HistoryVisibility,
@@ -17,11 +17,10 @@ import {
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { InlineSpinner } from "@vector-im/compound-web";
+import { Form, InlineSpinner, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { Icon as WarningIcon } from "../../../../../../res/img/warning.svg";
 import { _t } from "../../../../../languageHandler";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
@@ -184,7 +183,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private onGuestAccessChange = (allowed: boolean): void => {
+    private onGuestAccessChange: ChangeEventHandler<HTMLInputElement> = (evt): void => {
+        const allowed = evt.target.checked;
         const guestAccess = allowed ? GuestAccess.CanJoin : GuestAccess.Forbidden;
         const beforeGuestAccess = this.state.guestAccess;
         if (beforeGuestAccess === guestAccess) return;
@@ -464,13 +464,14 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <div className="mx_SecurityRoomSettingsTab_advancedSection">
-                <LabelledToggleSwitch
-                    value={guestAccess === GuestAccess.CanJoin}
+                <SettingsToggleInput
+                    name="guest-access"
+                    checked={guestAccess === GuestAccess.CanJoin}
                     onChange={this.onGuestAccessChange}
                     disabled={!canSetGuestAccess}
                     label={_t("room_settings|visibility|guest_access_label")}
+                    helpMessage={_t("room_settings|security|guest_access_warning")}
                 />
-                <p>{_t("room_settings|security|guest_access_warning")}</p>
             </div>
         );
     }
@@ -503,35 +504,43 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("room_settings|security|title")}>
-                    <SettingsFieldset
-                        legend={_t("settings|security|encryption_section")}
-                        description={
-                            isEncryptionForceDisabled && !isEncrypted
-                                ? undefined
-                                : _t("room_settings|security|encryption_permanent")
-                        }
-                    >
-                        {isEncryptionLoading ? (
-                            <InlineSpinner />
-                        ) : (
-                            <>
-                                <LabelledToggleSwitch
-                                    value={isEncrypted}
-                                    onChange={this.onEncryptionChange}
-                                    label={_t("common|encrypted")}
-                                    disabled={!canEnableEncryption}
-                                />
-                                {isEncryptionForceDisabled && !isEncrypted && (
-                                    <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
-                                )}
-                                {encryptionSettings}
-                            </>
-                        )}
-                    </SettingsFieldset>
-                    {this.renderJoinRule()}
-                    {historySection}
-                </SettingsSection>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    <SettingsSection heading={_t("room_settings|security|title")}>
+                        <SettingsFieldset
+                            legend={_t("settings|security|encryption_section")}
+                            description={
+                                isEncryptionForceDisabled && !isEncrypted
+                                    ? undefined
+                                    : _t("room_settings|security|encryption_permanent")
+                            }
+                        >
+                            {isEncryptionLoading ? (
+                                <InlineSpinner />
+                            ) : (
+                                <>
+                                    <SettingsToggleInput
+                                        name="enable-encryption"
+                                        checked={isEncrypted}
+                                        onChange={this.onEncryptionChange}
+                                        label={_t("common|encrypted")}
+                                        disabled={!canEnableEncryption}
+                                    />
+                                    {isEncryptionForceDisabled && !isEncrypted && (
+                                        <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
+                                    )}
+                                    {encryptionSettings}
+                                </>
+                            )}
+                        </SettingsFieldset>
+                        {this.renderJoinRule()}
+                        {historySection}
+                    </SettingsSection>
+                </Form.Root>
             </SettingsTab>
         );
     }

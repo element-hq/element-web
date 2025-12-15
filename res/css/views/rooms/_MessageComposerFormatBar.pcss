@@ -38,53 +38,25 @@ Please see LICENSE files in the repository root for full details.
         vertical-align: middle;
         background: none;
         border: none;
+        padding: 0;
+
+        svg {
+            width: inherit;
+            height: inherit;
+            box-sizing: border-box;
+            padding: var(--cpd-space-1x);
+            color: var(--cpd-color-icon-secondary);
+        }
 
         &:hover {
             background: var(--cpd-color-bg-subtle-secondary);
             border-radius: 6px;
             z-index: 1;
+
+            svg {
+                color: var(--cpd-color-icon-primary);
+            }
         }
-    }
-
-    .mx_MessageComposerFormatBar_button::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 20px;
-        background-color: var(--cpd-color-icon-secondary);
-    }
-
-    .mx_MessageComposerFormatBar_button:hover::after {
-        background-color: var(--cpd-color-icon-primary);
-    }
-
-    .mx_MessageComposerFormatBar_buttonIconBold::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/bold.svg");
-    }
-
-    .mx_MessageComposerFormatBar_buttonIconItalic::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/italic.svg");
-    }
-
-    .mx_MessageComposerFormatBar_buttonIconStrikethrough::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/strikethrough.svg");
-    }
-
-    .mx_MessageComposerFormatBar_buttonIconQuote::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/quote.svg");
-    }
-
-    .mx_MessageComposerFormatBar_buttonIconCode::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/inline-code.svg");
-    }
-
-    .mx_MessageComposerFormatBar_buttonIconInsertLink::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/link.svg");
     }
 }
 

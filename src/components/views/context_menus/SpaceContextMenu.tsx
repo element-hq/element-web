@@ -8,6 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useContext } from "react";
 import { type Room, EventType, RoomType } from "matrix-js-sdk/src/matrix";
+import {
+    HomeSolidIcon,
+    PlusIcon,
+    SettingsSolidIcon,
+    LeaveIcon,
+    SearchIcon,
+    PreferencesIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
@@ -32,6 +40,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { Icon as InviteIcon } from "../../../../res/img/element-icons/room/invite.svg";
 
 interface IProps extends IContextMenuProps {
     space?: Room;
@@ -60,7 +69,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             <IconizedContextMenuOption
                 data-testid="invite-option"
                 className="mx_SpacePanel_contextMenu_inviteButton"
-                iconClassName="mx_SpacePanel_iconInvite"
+                icon={<InviteIcon />}
                 label={_t("action|invite")}
                 onClick={onInviteClick}
             />
@@ -81,7 +90,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
         settingsOption = (
             <IconizedContextMenuOption
                 data-testid="settings-option"
-                iconClassName="mx_SpacePanel_iconSettings"
+                icon={<SettingsSolidIcon />}
                 label={_t("common|settings")}
                 onClick={onSettingsClick}
             />
@@ -98,7 +107,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
         leaveOption = (
             <IconizedContextMenuOption
                 data-testid="leave-option"
-                iconClassName="mx_SpacePanel_iconLeave"
+                icon={<LeaveIcon />}
                 className="mx_IconizedContextMenu_option_red"
                 label={_t("space|leave_dialog_action")}
                 onClick={onLeaveClick}
@@ -123,7 +132,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
 
         devtoolsOption = (
             <IconizedContextMenuOption
-                iconClassName="mx_SpacePanel_iconSettings"
+                icon={<SettingsSolidIcon />}
                 label={_t("space|context_menu|devtools_open_timeline")}
                 onClick={onViewTimelineClick}
             />
@@ -170,7 +179,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 {canAddRooms && (
                     <IconizedContextMenuOption
                         data-testid="new-room-option"
-                        iconClassName="mx_SpacePanel_iconPlus"
+                        icon={<PlusIcon />}
                         label={_t("common|room")}
                         onClick={onNewRoomClick}
                     />
@@ -178,7 +187,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 {canAddVideoRooms && (
                     <IconizedContextMenuOption
                         data-testid="new-video-room-option"
-                        iconClassName="mx_SpacePanel_iconPlus"
+                        icon={<PlusIcon />}
                         label={_t("common|video_room")}
                         onClick={onNewVideoRoomClick}
                     >
@@ -188,7 +197,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 {canAddSubSpaces && (
                     <IconizedContextMenuOption
                         data-testid="new-subspace-option"
-                        iconClassName="mx_SpacePanel_iconPlus"
+                        icon={<PlusIcon />}
                         label={_t("common|space")}
                         onClick={onNewSubspaceClick}
                     >
@@ -234,18 +243,18 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             {!hideHeader && <div className="mx_SpacePanel_contextMenu_header">{space.name}</div>}
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuOption
-                    iconClassName="mx_SpacePanel_iconHome"
+                    icon={<HomeSolidIcon />}
                     label={_t("space|context_menu|home")}
                     onClick={onHomeClick}
                 />
                 {inviteOption}
                 <IconizedContextMenuOption
-                    iconClassName="mx_SpacePanel_iconExplore"
+                    icon={<SearchIcon />}
                     label={canAddRooms ? _t("space|context_menu|manage_and_explore") : _t("space|context_menu|explore")}
                     onClick={onExploreRoomsClick}
                 />
                 <IconizedContextMenuOption
-                    iconClassName="mx_SpacePanel_iconPreferences"
+                    icon={<PreferencesIcon />}
                     label={_t("common|preferences")}
                     onClick={onPreferencesClick}
                 />

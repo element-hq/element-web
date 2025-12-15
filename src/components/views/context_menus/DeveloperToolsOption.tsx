@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { LabsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
@@ -32,7 +33,7 @@ export const DeveloperToolsOption: React.FC<Props> = ({ onFinished, roomId }) =>
                 onFinished();
             }}
             label={_t("devtools|title")}
-            iconClassName="mx_IconizedContextMenu_developerTools"
+            icon={<LabsIcon />}
         />
     );
 };

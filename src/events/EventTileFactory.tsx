@@ -17,7 +17,6 @@ import {
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 import { TextualEventView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
@@ -47,22 +46,21 @@ import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventVie
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
-export interface EventTileTypeProps
-    extends Pick<
-        EventTileProps,
-        | "mxEvent"
-        | "highlights"
-        | "highlightLink"
-        | "showUrlPreview"
-        | "forExport"
-        | "getRelationsForEvent"
-        | "editState"
-        | "replacingEventId"
-        | "permalinkCreator"
-        | "callEventGrouper"
-        | "isSeeingThroughMessageHiddenForModeration"
-        | "inhibitInteraction"
-    > {
+export interface EventTileTypeProps extends Pick<
+    EventTileProps,
+    | "mxEvent"
+    | "highlights"
+    | "highlightLink"
+    | "showUrlPreview"
+    | "forExport"
+    | "getRelationsForEvent"
+    | "editState"
+    | "replacingEventId"
+    | "permalinkCreator"
+    | "callEventGrouper"
+    | "isSeeingThroughMessageHiddenForModeration"
+    | "inhibitInteraction"
+> {
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
@@ -154,14 +152,14 @@ const SINGULAR_STATE_EVENTS = new Set([
  * @param cli The matrix client to reference when needed.
  * @param showHiddenEvents Whether hidden events should be shown.
  * @param asHiddenEv When true, treat the event as always hidden.
- * @returns The factory, or falsy if not possible.
+ * @returns The factory, or undefined if not possible.
  */
 export function pickFactory(
     mxEvent: MatrixEvent,
     cli: MatrixClient,
     showHiddenEvents: boolean,
     asHiddenEv?: boolean,
-): Optional<Factory> {
+): Factory | undefined {
     const evType = mxEvent.getType(); // cache this to reduce call stack execution hits
 
     // Note: we avoid calling SettingsStore unless absolutely necessary - this code is on the critical path.
@@ -170,7 +168,7 @@ export function pickFactory(
         return JSONEventFactory;
     }
 
-    const noEventFactoryFactory: () => Optional<Factory> = () => (showHiddenEvents ? JSONEventFactory : undefined); // just don't render things that we shouldn't render
+    const noEventFactoryFactory: () => Factory | undefined = () => (showHiddenEvents ? JSONEventFactory : undefined); // just don't render things that we shouldn't render
 
     // We run all the event type checks first as they might override the factory entirely.
 
@@ -249,15 +247,14 @@ export function pickFactory(
  * Render an event as a tile
  * @param renderType The render type. Used to inform properties given to the eventual component.
  * @param props The properties to provide to the eventual component.
- * @param showHiddenEvents Whether hidden events should be shown.
  * @param cli Optional client instance to use, otherwise the default MatrixClientPeg will be used.
- * @returns The tile as JSX, or falsy if unable to render.
+ * @returns The tile as JSX, or null if unable to render.
  */
 export function renderTile(
     renderType: TimelineRenderingType,
     props: EventTileTypeProps,
     cli?: MatrixClient,
-): Optional<JSX.Element> {
+): JSX.Element | null {
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, props.showHiddenEvents);
@@ -352,7 +349,7 @@ export function renderReplyTile(
     props: EventTileTypeProps,
     showHiddenEvents: boolean,
     cli?: MatrixClient,
-): Optional<JSX.Element> {
+): JSX.Element | null {
     cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
