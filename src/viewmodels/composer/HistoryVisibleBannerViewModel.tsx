@@ -16,7 +16,14 @@ import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 
 interface Props {
+    /**
+     * The room instance associated with this banner view model.
+     */
     room: Room;
+
+    /**
+     * The thread ID, if applicable, or null if not in a thread context.
+     */
     threadId?: string | null;
 }
 
