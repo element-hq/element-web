@@ -1,0 +1,38 @@
+{
+    "a11y": {
+        "seek_bar_label": "Audio seek bar"
+    },
+    "action": {
+        "delete": "Delete",
+        "dismiss": "Dismiss",
+        "pause": "Pause",
+        "play": "Play"
+    },
+    "encryption": {
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
+        "withdraw_verification_action": "Withdraw verification"
+    },
+    "time": {
+        "about_day_ago": "about a day ago",
+        "about_hour_ago": "about an hour ago",
+        "about_minute_ago": "about a minute ago",
+        "few_seconds_ago": "a few seconds ago",
+        "in_about_day": "about a day from now",
+        "in_about_hour": "about an hour from now",
+        "in_about_minute": "about a minute from now",
+        "in_few_seconds": "a few seconds from now",
+        "in_n_days": "%(num)s days from now",
+        "in_n_hours": "%(num)s hours from now",
+        "in_n_minutes": "%(num)s minutes from now",
+        "n_days_ago": "%(num)s days ago",
+        "n_hours_ago": "%(num)s hours ago",
+        "n_minutes_ago": "%(num)s minutes ago"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Audio player",
+            "error_downloading_audio": "Error downloading audio",
+            "unnamed_audio": "Unnamed audio"
+        }
+    }
+}
