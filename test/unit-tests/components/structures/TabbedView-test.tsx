@@ -8,15 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
+import { SettingsSolidIcon, VisibilityOnIcon, LabsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import TabbedView, { Tab, TabLocation } from "../../../../src/components/structures/TabbedView";
 import { type NonEmptyArray } from "../../../../src/@types/common";
 import { _t } from "../../../../src/languageHandler";
 
 describe("<TabbedView />", () => {
-    const generalTab = new Tab("GENERAL", "common|general", "general", <div>general</div>);
-    const labsTab = new Tab("LABS", "common|labs", "labs", <div>labs</div>);
-    const appearanceTab = new Tab("APPEARANCE", "common|appearance", "appearance", <div>appearance</div>);
+    const generalTab = new Tab("GENERAL", "common|general", <SettingsSolidIcon />, <div>general</div>);
+    const labsTab = new Tab("LABS", "common|labs", <LabsIcon />, <div>labs</div>);
+    const appearanceTab = new Tab("APPEARANCE", "common|appearance", <VisibilityOnIcon />, <div>appearance</div>);
     const defaultProps = {
         tabLocation: TabLocation.LEFT,
         tabs: [generalTab, labsTab, appearanceTab] as NonEmptyArray<Tab<any>>,

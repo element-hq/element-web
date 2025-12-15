@@ -114,66 +114,29 @@ Please see LICENSE files in the repository root for full details.
                 margin-top: 12px;
             }
 
-            .mx_LeftPanel_dialPadButton {
-                width: 32px;
-                height: 32px;
+            .mx_LeftPanel_dialPadButton,
+            .mx_LeftPanel_exploreButton {
+                width: 20px;
+                height: 20px;
+                padding: var(--cpd-space-1-5x);
                 border-radius: 8px;
                 background-color: $panel-actions;
-                position: relative;
                 margin-left: 8px;
 
-                &::before {
-                    content: "";
-                    position: absolute;
-                    top: 6px;
-                    left: 6px;
-                    width: 20px;
-                    height: 20px;
-                    mask-image: url("@vector-im/compound-design-tokens/icons/dial-pad.svg");
-                    mask-position: center;
-                    mask-size: contain;
-                    mask-repeat: no-repeat;
-                    background-color: $secondary-content;
-                }
-            }
-
-            .mx_LeftPanel_exploreButton,
-            .mx_LeftPanel_recentsButton {
-                width: 32px;
-                height: 32px;
-                border-radius: 8px;
-                background-color: $panel-actions;
-                position: relative;
-                margin-left: 8px;
-
-                &::before {
-                    content: "";
-                    position: absolute;
-                    top: 8px;
-                    left: 8px;
-                    width: 16px;
-                    height: 16px;
-                    mask-position: center;
-                    mask-size: contain;
-                    mask-repeat: no-repeat;
-                    background-color: $secondary-content;
+                svg {
+                    width: inherit;
+                    height: inherit;
+                    display: block;
+                    color: $secondary-content;
                 }
 
                 &:hover {
                     background-color: $tertiary-content;
 
-                    &::before {
-                        background-color: $background;
+                    svg {
+                        color: $background;
                     }
                 }
-            }
-
-            .mx_LeftPanel_exploreButton::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/explore.svg");
-            }
-
-            .mx_LeftPanel_recentsButton::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/time.svg");
             }
         }
 
@@ -228,8 +191,7 @@ Please see LICENSE files in the repository root for full details.
                     background-color: transparent;
                 }
 
-                .mx_LeftPanel_exploreButton,
-                .mx_LeftPanel_recentsButton {
+                .mx_LeftPanel_exploreButton {
                     margin-left: 0;
                     margin-top: 8px;
                 }

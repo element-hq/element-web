@@ -17,7 +17,7 @@ import {
     type SyncState,
     type SyncStateData,
 } from "matrix-js-sdk/src/matrix";
-import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { RestartIcon, WarningIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
@@ -237,10 +237,12 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
 
         let buttonRow = (
             <>
-                <AccessibleButton onClick={this.onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
+                <AccessibleButton onClick={this.onCancelAllClick}>
+                    <DeleteIcon />
                     {_t("room|status_bar|delete_all")}
                 </AccessibleButton>
                 <AccessibleButton onClick={this.onResendAllClick} className="mx_RoomStatusBar_unsentRetry">
+                    <RestartIcon />
                     {_t("room|status_bar|retry_all")}
                 </AccessibleButton>
             </>
