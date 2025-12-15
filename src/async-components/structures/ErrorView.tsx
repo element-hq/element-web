@@ -59,12 +59,7 @@ const MobileAppLinks: React.FC<{
     <Flex gap="var(--cpd-space-6x)" className="mx_ErrorView_flexContainer">
         {appleAppStoreUrl && (
             <a href={appleAppStoreUrl} target="_blank" rel="noreferrer noopener">
-                <img
-                    height="64"
-                    /* eslint-disable-next-line @typescript-eslint/no-require-imports */
-                    src={require("@vector-im/compound-design-tokens/icons/mac.svg").default}
-                    alt="Apple App Store"
-                />
+                <img height="64" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
             </a>
         )}
         {googlePlayUrl && (
