@@ -25,8 +25,29 @@ export default defineConfig<WorkerOptions>({
     projects: [
         {
             name: "Chrome",
+            grepInvert: /@screenshot/,
             use: {
                 ...chromeProject,
+            },
+        },
+        {
+            name: "Screenshots",
+            grep: /@screenshot/,
+            use: {
+                ...chromeProject,
+                headless: true,
+                launchOptions: {
+                    args: [
+                        "--disable-gpu",
+                        "--disable-font-subpixel-positioning",
+                        "--disable-lcd-text",
+                        "--disable-threaded-animation",
+                        "--disable-threaded-scrolling",
+                        "--disable-in-process-stack-traces",
+                        "--disable-checker-imaging",
+                        "--force-color-profile=srgb",
+                    ],
+                },
             },
         },
         {

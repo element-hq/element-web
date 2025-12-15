@@ -61,7 +61,7 @@
         "test": "jest",
         "test:playwright": "playwright test",
         "test:playwright:open": "yarn test:playwright --ui",
-        "test:playwright:screenshots": "playwright-screenshots --project=Chrome",
+        "test:playwright:screenshots": "playwright-screenshots --project=Screenshots",
         "coverage": "yarn test --coverage",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js",
