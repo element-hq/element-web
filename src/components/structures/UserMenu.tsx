@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef, type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
+    ChatSolidIcon,
     HomeSolidIcon,
     LockSolidIcon,
     QrCodeIcon,
@@ -51,7 +52,6 @@ import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
 import { Icon as DarkLightModeSvg } from "../../../res/img/element-icons/roomlist/dark-light-mode.svg";
 import { Icon as NotificationsIcon } from "../../../res/img/element-icons/notifications.svg";
-import { Icon as FeedbackIcon } from "../../../res/img/element-icons/feedback.svg";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -317,7 +317,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (shouldShowFeedback()) {
             feedbackButton = (
                 <IconizedContextMenuOption
-                    icon={<FeedbackIcon />}
+                    icon={<ChatSolidIcon />}
                     label={_t("common|feedback")}
                     onClick={this.onProvideFeedback}
                 />
