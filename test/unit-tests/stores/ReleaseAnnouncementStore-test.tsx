@@ -117,13 +117,13 @@ describe("ReleaseAnnouncementStore", () => {
 
     it("should listen to release announcement data changes in the store", async () => {
         const secondStore = new ReleaseAnnouncementStore();
-        expect(secondStore.getReleaseAnnouncement()).toBe("newNotificationSounds");
+        expect(secondStore.getReleaseAnnouncement()).toBe("_test_dummy1");
 
         const promise = listenReleaseAnnouncementChanged();
         await secondStore.nextReleaseAnnouncement();
 
-        expect(await promise).toBe("newRoomList_intro");
-        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("newRoomList_intro");
+        expect(await promise).toBe("_test_dummy2");
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBe("_test_dummy2");
     });
 
     it("should return null when there are toasts on screen", async () => {

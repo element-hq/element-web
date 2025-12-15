@@ -20,7 +20,7 @@ import ToastStore from "./ToastStore";
  * We include a `_test_dummy` value to enable tests to function even where there are no running release announcements.
  * This value must be at the end of the list.
  */
-const FEATURES = ["_test_dummy"] as const;
+const FEATURES = ["_test_dummy1", "_test_dummy2"] as const;
 /**
  * All the features that can be shown in the release announcements.
  */
