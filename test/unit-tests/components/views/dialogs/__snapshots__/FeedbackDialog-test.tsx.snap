@@ -30,8 +30,9 @@ exports[`FeedbackDialog should respect feedback config 1`] = `
       id="mx_Dialog_content"
     >
       <div
-        class="mx_FeedbackDialog_section mx_FeedbackDialog_reportBug"
+        class="mx_FeedbackDialog_section"
       >
+        <div />
         <h3>
           Report a bug
         </h3>
