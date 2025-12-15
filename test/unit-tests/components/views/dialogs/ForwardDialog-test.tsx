@@ -78,9 +78,17 @@ describe("ForwardDialog", () => {
     });
     const defaultRooms = ["a", "A", "b"].map((name) => mkStubRoom(name, name, mockClient));
 
-    const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms) => {
+    const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms, stubSource = false) => {
         mockClient.getVisibleRooms.mockReturnValue(rooms);
-        mockClient.getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
+
+        const sourceRoomStub = mkStubRoom(sourceRoom, sourceRoom, mockClient);
+
+        mockClient.getRoom.mockImplementation((roomId) => {
+            if (stubSource && roomId === sourceRoom) {
+                return sourceRoomStub; // Return the source room stub, if enabled
+            }
+            return rooms.find((room) => room.roomId === roomId) || null;
+        });
 
         const wrapper: RenderResult = render(
             <ForwardDialog
@@ -285,14 +293,13 @@ describe("ForwardDialog", () => {
             });
         });
 
-        // TODO: mock room membership
         it("recalculates mention pills", async () => {
             const message = makeMessage(
                 "Hi Alice",
                 { user_ids: [aliceId] },
                 `Hi <a href="https://matrix.to/#/${aliceId}">Alice</a>`,
             );
-            const { container } = mountForwardDialog(message);
+            const { container } = mountForwardDialog(message, defaultRooms, true);
             sendClick(container);
             // Expected content should have mentions empty.
             expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
