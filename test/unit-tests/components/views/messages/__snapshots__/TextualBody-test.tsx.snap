@@ -64,7 +64,22 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+        />
+        <path
+          d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+        />
+      </svg>
+    </div>
   </div>
   
 
@@ -268,7 +283,22 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+        />
+        <path
+          d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+        />
+      </svg>
+    </div>
   </div>
   
 
@@ -438,14 +468,41 @@ num_sqrt = num **
       </div>
     </pre>
     <span
-      class="mx_EventTile_button mx_EventTile_expandButton"
-    />
+      class="mx_EventTile_button"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M21 3.997a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a1 1 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0z"
+        />
+      </svg>
+    </span>
     <div
       aria-label="Copy"
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton mx_EventTile_buttonBottom"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+        />
+        <path
+          d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+        />
+      </svg>
+    </div>
   </div>
   
 

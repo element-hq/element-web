@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
@@ -47,7 +48,7 @@ export const showToast = async (deviceId: string): Promise<void> => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: toastKey(deviceId),
         title: _t("encryption|verification|unverified_session_toast_title"),
-        icon: "verification_warning",
+        icon: <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />,
         props: {
             description: device.display_name,
             detail: <DeviceMetaData device={extendedDevice} />,

@@ -3499,7 +3499,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Lezárta a szavazást",
             "sender_ended": "%(senderName)s lezárta a szavazást"
         },
         "m.poll.start": "%(senderName)s szavazást indított - %(pollQuestion)s",

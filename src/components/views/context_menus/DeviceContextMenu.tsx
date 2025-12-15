@@ -26,14 +26,7 @@ interface IDeviceContextMenuDeviceProps {
 }
 
 const DeviceContextMenuDevice: React.FC<IDeviceContextMenuDeviceProps> = ({ label, selected, onClick }) => {
-    return (
-        <IconizedContextMenuRadio
-            iconClassName="mx_DeviceContextMenu_device_icon"
-            label={label}
-            active={selected}
-            onClick={onClick}
-        />
-    );
+    return <IconizedContextMenuRadio label={label} active={selected} onClick={onClick} />;
 };
 
 interface IDeviceContextMenuSectionProps {

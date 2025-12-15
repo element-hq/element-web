@@ -554,7 +554,7 @@
         "privacy": "Privaatsus",
         "private": "Privaatne",
         "private_room": "Omavaheline jututuba",
-        "private_space": "Privaatne kogukonnakeskus",
+        "private_space": "Privaatne kogukond",
         "profile": "Profiil",
         "public": "Avalik",
         "public_room": "Avalik jututuba",
@@ -718,7 +718,7 @@
         "personal_space": "Vaid mina",
         "personal_space_description": "Privaatne kogukonnakeskus jututubade koondamiseks",
         "private_description": "Liitumine vaid kutse alusel, sobib sulle ja sinu lähematele kaaslastele",
-        "private_heading": "Sinu privaatne kogukonnakeskus",
+        "private_heading": "Sinu privaatne kogukond",
         "private_only_heading": "Sinu kogukond",
         "private_personal_description": "Palun kontrolli, et vajalikel inimestel oleks ligipääs siia - %(name)s",
         "private_personal_heading": "Kellega sa koos töötad?",
@@ -1492,7 +1492,7 @@
         "send_sticker": "Saada kleeps",
         "shift": "Shift",
         "space": "Tühikuklahv",
-        "switch_to_space": "Vaata kogukonnakeskust tema numbri alusel",
+        "switch_to_space": "Vaata kogukonda tema numbri alusel",
         "toggle_hidden_events": "Lülita peidetud sündmuste näitamine sisse/välja",
         "toggle_microphone_mute": "Lülita mikrofoni summutamine sisse/välja",
         "toggle_right_panel": "Lülita parem paan sisse/välja",
@@ -1623,7 +1623,7 @@
     "leave_room_dialog": {
         "last_person_warning": "Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.",
         "leave_room_question": "Kas oled kindel, et soovid lahkuda jututoast „%(roomName)s“?",
-        "leave_space_question": "Kas oled kindel, et soovid lahkuda kogukonnakeskusest „%(spaceName)s“?",
+        "leave_space_question": "Kas oled kindel, et soovid lahkuda kogukonnast „%(spaceName)s“?",
         "room_leave_admin_warning": "Sa oled ainus selle jututoa haldaja. Kui sa siit lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
         "room_leave_mod_warning": "Sa oled ainus moderaator selles jututoas. Kui sa siis lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
         "room_rejoin_warning": "See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.",
@@ -1762,6 +1762,7 @@
         "end_message": "Küsitlus on läbi. Populaarseim vastus: %(topAnswer)s",
         "end_message_no_votes": "Küsitlus on läbi. Ühtegi osalejate ei ole.",
         "end_title": "Lõpeta küsitlus",
+        "ended_poll_label": "Küsitlus on lõppenud",
         "error_ending_description": "Vabandust, aga küsitlus jäi lõpetamata. Palun proovi uuesti.",
         "error_ending_title": "Küsitluse lõpetamine ei õnnestunud",
         "error_voting_description": "Vabandust, aga sinu valik jäi salvestamata. Palun proovi uuesti.",
@@ -1769,10 +1770,20 @@
         "failed_send_poll_description": "Vabandust, aga sinu loodud küsitlus jäi üleslaadimata.",
         "failed_send_poll_title": "Küsitluse üleslaadimine ei õnnestunud",
         "notes": "Tulemused on näha vaid siis, kui küsitlus in lõppenud",
+        "option_label": "%(number)s. valikvastus: %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "%(number)s. valikvastus: %(answer)s (osutus valituks, %(count)s hääl)",
+            "other": "%(number)s. valikvastus: %(answer)s (osutus valituks, %(count)s häält)"
+        },
+        "option_label_with_total": {
+            "one": "%(number)s. valikvastus: %(answer)s (%(count)s hääl)",
+            "other": "%(number)s. valikvastus: %(answer)s (%(count)s häält)"
+        },
         "options_add_button": "Lisa valik",
         "options_heading": "Koosta valikud",
         "options_label": "Valik %(number)s",
         "options_placeholder": "Sisesta valik",
+        "poll_label": "Küsitlus",
         "topic_heading": "Mis on küsitluse teema?",
         "topic_label": "Küsimus või teema",
         "topic_placeholder": "Kirjuta midagi…",
@@ -2112,6 +2123,7 @@
         "status_bar": {
             "delete_all": "Kustuta kõik",
             "exceeded_resource_limit": "Sinu sõnumit ei saadetud, kuna see koduserver on ületanud on ületanud ressursipiirangu. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
+            "history_visible": "Sinu saadetud sõnumeid jagatakse sellesse jututuppa kutsutud uute liikmetega.<a> Lisateave</a>",
             "homeserver_blocked": "Sinu sõnumit ei saadetud, kuna see koduserver blokeeritud serveri haldaja poolt. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
             "monthly_user_limit_reached": "Sinu sõnumit ei saadetud, kuna see koduserver on saavutanud igakuise aktiivsete kasutajate piiri. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
             "requires_consent_agreement": "Sa ei saa saata ühtego sõnumit enne, kui oled läbi lugenud ja nõustunud <consentLink>meie kasutustingimustega</consentLink>.",
@@ -2258,7 +2270,7 @@
             "error_upgrade_description": "Jututoa uuendust ei õnnestunud teha",
             "error_upgrade_title": "Jututoa versiooni uuendamine ei õnnestunud",
             "information_section_room": "Info jututoa kohta",
-            "information_section_space": "Kogukonnakeskuse teave",
+            "information_section_space": "Kogukonna teave",
             "room_id": "Jututoa tehniline tunnus",
             "room_predecessor": "Näita vanemat tüüpi sõnumeid jututoas %(roomName)s.",
             "room_upgrade_button": "Uuenda see jututoa versioon soovitatud versioonini",
@@ -2322,7 +2334,7 @@
             "error_updating_alias_description": "Jututoa lisaaadressi uuendamisel tekkis viga. See kas pole serveris lubatud või tekkis mingi ajutine viga.",
             "error_updating_canonical_alias_description": "Jututoa põhiaadressi uuendamisel tekkis viga. See kas pole serveris lubatud või tekkis mingi ajutine viga.",
             "error_updating_canonical_alias_title": "Viga põhiaadressi uuendamisel",
-            "leave_space": "Lahku kogukonnakeskusest",
+            "leave_space": "Lahku kogukonnast",
             "local_alias_field_label": "Kohalik aadress",
             "local_aliases_explainer_room": "Et muud kasutajad saaks seda jututuba leida sinu koduserveri (%(localDomain)s) kaudu, lisa sellele jututoale aadresse",
             "local_aliases_explainer_space": "Selleks et teised kasutajad saaks seda kogukonda leida oma koduserveri kaudu (%(localDomain)s) seadista talle aadressid",
@@ -2333,6 +2345,8 @@
             "no_aliases_space": "Sellel kogukonnakeskusel puuduvad kohalikud aadressid",
             "other_section": "Muud",
             "publish_toggle": "Kas avaldame selle jututoa %(domain)s jututubade loendis?",
+            "publish_warn_invite_only": "Kuna ligipääs siia jututuppa eeldab kutse olemasolu, siis sa ei saa siin sisu avaldada.",
+            "publish_warn_no_canonical_permission": "Siin jututoas sisu avaldamiseks peab sul olema õigus põhiaadressi muutmiseks.",
             "published_aliases_description": "Aadressi avaldamiseks peab ta esmalt olema määratud kohalikuks aadressiks.",
             "published_aliases_explainer_room": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu jututoaga.",
             "published_aliases_explainer_space": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu kogukonnakeskusega.",
@@ -2446,7 +2460,7 @@
             "join_rule_restricted_description_spaces": "Ligipääsuga kogukonnakeskused",
             "join_rule_restricted_dialog_description": "Vali missugustel kogukonnakeskustel on sellele jututoale ligipääs. Kui kogukonnakeskus on valitud, siis selle liikmed saavad <RoomName/> jututuba leida ja temaga liituda.",
             "join_rule_restricted_dialog_empty_warning": "Sa oled eemaldamas kõiki kogukonnakeskuseid. Edaspidine ligipääs eeldab kutse olemasolu",
-            "join_rule_restricted_dialog_filter_placeholder": "Otsi kogukonnakeskusi",
+            "join_rule_restricted_dialog_filter_placeholder": "Otsi kogukondi",
             "join_rule_restricted_dialog_heading_known": "Muud kogukonnad, mida sa tead",
             "join_rule_restricted_dialog_heading_other": "Sellised muud jututoad ja kogukonnakeskused, mida sa ei pruugi teada",
             "join_rule_restricted_dialog_heading_room": "Sulle teadaolevad kogukonnakeskused, millesse kuulub see jututuba",
@@ -2488,10 +2502,12 @@
             "error_failed_save": "Kogukonnakeskuse nähtavust ei õnnestunud uuendada",
             "error_update_guest_access": "Ei õnnestunud selle kogukonnakekuse külaliste ligipääsureegleid uuendada",
             "error_update_history_visibility": "Ei õnnestunud selle kogukonnakekuse ajaloo loetavust uuendada",
-            "guest_access_explainer": "Külalised võivad liituda kogukonnakeskusega ilma kasutajakontota.",
+            "guest_access_disabled": "Sul pole õigust muuta külaliskasutajate ligipääsuvõimalusi.",
+            "guest_access_explainer": "Külalised võivad liituda kogukonnaga ilma kasutajakontota. Sellest võimalusest on kasu avalike kogukondade puhul",
             "guest_access_label": "Luba ligipääs külalistele",
             "history_visibility_anyone_space": "Kogukonna eelvaade",
             "history_visibility_anyone_space_description": "Luba huvilistel enne liitumist näha kogukonnakeskuse eelvaadet.",
+            "history_visibility_anyone_space_disabled": "Sul pole õigust muuta ajaloo nähtavust.",
             "history_visibility_anyone_space_recommendation": "Soovitame avalike kogukonnakeskuste puhul.",
             "title": "Nähtavus"
         },
@@ -2949,6 +2965,7 @@
             "message_search_indexing": "Parasjagu indekseerin: %(currentRoom)s",
             "message_search_indexing_idle": "Mitte ainsamagi jututoa sõnumeid hetkel ei indekseerita.",
             "message_search_intro": "Otsingus kasutamiseks %(brand)s puhverdab turvaliselt kohalikku arvutisse krüptitud sõnumeid:",
+            "message_search_pending_rooms": "Indekseerimist ootavad jututoad: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s / %(totalRooms)s",
             "message_search_section": "Otsing sõnumite seast",
             "message_search_sleep_time": "Kui kiiresti peaksime sõnumeid alla laadima.",
@@ -3236,22 +3253,22 @@
                 "one": "Lisan jututuba...",
                 "other": "Lisan jututubasid... (%(progress)s/%(count)s)"
             },
-            "space_dropdown_label": "Kogukonnakeskuse valik",
+            "space_dropdown_label": "Kogukonna valik",
             "space_dropdown_title": "Lisa olemasolevaid jututubasid",
             "subspace_moved_note": "Kogukondade lisamine asub nüüd uues kohas."
         },
         "add_existing_subspace": {
             "create_button": "Loo uus kogukonnakeskus",
             "create_prompt": "Kas sa selle asemel soovid lisada uut kogukonnakeskust?",
-            "filter_placeholder": "Otsi kogukonnakeskusi",
-            "space_dropdown_title": "Lisa olemasolev kogukonnakeskus"
+            "filter_placeholder": "Otsi kogukondi",
+            "space_dropdown_title": "Lisa olemasolev kogukond"
         },
         "context_menu": {
             "devtools_open_timeline": "Vaata jututoa ajajoont (arendusvaade)",
             "explore": "Tutvu jututubadega",
-            "home": "Kogukonnakeskuse avaleht",
+            "home": "Kogukonna avaleht",
             "manage_and_explore": "Halda ja uuri jututubasid",
-            "options": "Kogukonnakeskus eelistused"
+            "options": "Kogukonna eelistused"
         },
         "failed_load_rooms": "Jututubade loendi laadimine ei õnnestunud.",
         "failed_remove_rooms": "Mõnede jututubade eemaldamine ei õnnestunud. Proovi hiljem uuesti",
@@ -3525,7 +3542,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Lõpetas küsitluse",
             "sender_ended": "%(senderName)s lõpetas küsitluse"
         },
         "m.poll.start": "%(senderName)s algatas küsitluse - %(pollQuestion)s",
@@ -4102,6 +4118,7 @@
         "video_call_using": "Videokõne, kus on kasutusel:",
         "voice_call": "Häälkõne",
         "voice_call_incoming": "Saaduv häälkõne",
+        "voice_call_using": "Häälkõne, kasutades:",
         "you_are_presenting": "Sina esitad"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",

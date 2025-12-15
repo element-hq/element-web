@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode, type SyntheticEvent, useContext } from "react";
 import classNames from "classnames";
 import { type RoomMember, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { LocationPinSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "../rooms/CollapsibleButton";
@@ -54,13 +55,9 @@ const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relati
 
     return (
         <React.Fragment>
-            <CollapsibleButton
-                className={className}
-                iconClassName="mx_MessageComposer_location"
-                onClick={openMenu}
-                title={_t("common|location")}
-                inputRef={button}
-            />
+            <CollapsibleButton className={className} onClick={openMenu} title={_t("common|location")} inputRef={button}>
+                <LocationPinSolidIcon />
+            </CollapsibleButton>
 
             {contextMenu}
         </React.Fragment>

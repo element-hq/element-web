@@ -41,42 +41,10 @@ Please see LICENSE files in the repository root for full details.
         padding: var(--cpd-space-3x);
 
         &.mx_Toast_hasIcon {
-            &::before,
-            &::after {
-                content: "";
+            svg {
                 width: 22px;
                 height: 22px;
                 grid-column: 1;
-                grid-row: 1;
-                mask-size: 100%;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                background-size: 100%;
-                background-repeat: no-repeat;
-            }
-
-            &.mx_Toast_icon_verification::after {
-                mask-image: url("$(res)/img/e2e/normal.svg");
-                background-color: $primary-content;
-            }
-
-            &.mx_Toast_icon_verification_warning {
-                /* white infill for the hollow svg mask */
-                &::before {
-                    background-color: #ffffff;
-                    mask-image: url("$(res)/img/e2e/normal.svg");
-                    mask-size: 80%;
-                }
-
-                &::after {
-                    mask-image: url("$(res)/img/e2e/warning.svg");
-                    background-color: $e2e-warning-color;
-                }
-            }
-
-            &.mx_Toast_icon_key_storage::after {
-                mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
-                background-color: $primary-content;
             }
 
             .mx_Toast_title,

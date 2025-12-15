@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
@@ -44,7 +45,9 @@ export default class ReplyPreview extends React.Component<IProps> {
                         <AccessibleButton
                             className="mx_ReplyPreview_header_cancel"
                             onClick={() => cancelQuoting(this.context.timelineRenderingType)}
-                        />
+                        >
+                            <CloseIcon />
+                        </AccessibleButton>
                     </div>
                     <ReplyTile mxEvent={this.props.replyToEvent} permalinkCreator={this.props.permalinkCreator} />
                 </div>

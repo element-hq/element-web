@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LockOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -54,6 +54,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { HistoryVisibleBanner } from "../composer/HistoryVisibleBanner";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -72,7 +73,9 @@ function SendButton(props: ISendButtonProps): JSX.Element {
             onClick={props.onClick}
             title={props.title ?? _t("composer|send_button_title")}
             data-testid="sendmessagebtn"
-        />
+        >
+            <SendSolidIcon />
+        </AccessibleButton>
     );
 }
 
@@ -533,8 +536,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         <Tooltip label={_t("composer|room_unencrypted")}>
                             <LockOffIcon
                                 aria-label={_t("composer|room_unencrypted")}
-                                width={12}
-                                height={12}
+                                width="12px"
+                                height="12px"
                                 color="var(--cpd-color-icon-info-primary)"
                                 className="mx_E2EIcon mx_MessageComposer_e2eIcon"
                             />
@@ -544,7 +547,12 @@ export class MessageComposer extends React.Component<IProps, IState> {
             } else if (this.props.e2eStatus !== E2EStatus.Normal) {
                 leftIcon = (
                     <div className="mx_MessageComposer_e2eIconWrapper">
-                        <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" />
+                        <E2EIcon
+                            key="e2eIcon"
+                            status={this.props.e2eStatus}
+                            className="mx_MessageComposer_e2eIcon"
+                            size={12}
+                        />
                     </div>
                 );
             }
@@ -587,14 +595,20 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 );
             }
 
+            const isTooltipOpen = Boolean(this.state.recordingTimeLeftSeconds);
+            const secondsLeft = this.state.recordingTimeLeftSeconds
+                ? Math.round(this.state.recordingTimeLeftSeconds)
+                : 0;
             controls.push(
-                <VoiceRecordComposerTile
-                    key="controls_voice_record"
-                    ref={this.voiceRecordingButton}
-                    room={this.props.room}
-                    relation={this.props.relation}
-                    replyToEvent={this.props.replyToEvent}
-                />,
+                <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
+                    <VoiceRecordComposerTile
+                        key="controls_voice_record"
+                        ref={this.voiceRecordingButton}
+                        room={this.props.room}
+                        relation={this.props.relation}
+                        replyToEvent={this.props.replyToEvent}
+                    />
+                </Tooltip>,
             );
         } else if (this.context.tombstone) {
             const replacementRoomId = this.context.tombstone.getContent()["replacement_room"];
@@ -636,9 +650,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
             );
         }
 
-        const isTooltipOpen = Boolean(this.state.recordingTimeLeftSeconds);
-        const secondsLeft = this.state.recordingTimeLeftSeconds ? Math.round(this.state.recordingTimeLeftSeconds) : 0;
-
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
 
@@ -663,55 +674,52 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
-                <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
-                    <div className="mx_MessageComposer_wrapper">
-                        <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
-                        <ReplyPreview
-                            replyToEvent={this.props.replyToEvent}
-                            permalinkCreator={this.props.permalinkCreator}
-                        />
-                        <div className="mx_MessageComposer_row">
-                            {leftIcon}
-                            {composer}
-                            <div className="mx_MessageComposer_actions">
-                                {controls}
-                                {canSendMessages && (
-                                    <MessageComposerButtons
-                                        addEmoji={this.addEmoji}
-                                        haveRecording={this.state.haveRecording}
-                                        isMenuOpen={this.state.isMenuOpen}
-                                        isStickerPickerOpen={this.state.isStickerPickerOpen}
-                                        menuPosition={menuPosition}
-                                        relation={this.props.relation}
-                                        onRecordStartEndClick={this.onRecordStartEndClick}
-                                        setStickerPickerOpen={this.setStickerPickerOpen}
-                                        showLocationButton={
-                                            !window.electron && SettingsStore.getValue(UIFeature.LocationSharing)
-                                        }
-                                        showPollsButton={this.state.showPollsButton}
-                                        showStickersButton={this.showStickersButton}
-                                        isRichTextEnabled={this.state.isRichTextEnabled}
-                                        onComposerModeClick={this.onRichTextToggle}
-                                        toggleButtonMenu={this.toggleButtonMenu}
-                                    />
-                                )}
-                                {showSendButton && (
-                                    <SendButton
-                                        key="controls_send"
-                                        onClick={this.sendMessage}
-                                        title={
-                                            this.state.haveRecording
-                                                ? _t("composer|send_button_voice_message")
-                                                : undefined
-                                        }
-                                    />
-                                )}
-                            </div>
+            <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
+                <HistoryVisibleBanner room={this.props.room} threadId={threadId} />
+                <div className="mx_MessageComposer_wrapper">
+                    <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
+                    <ReplyPreview
+                        replyToEvent={this.props.replyToEvent}
+                        permalinkCreator={this.props.permalinkCreator}
+                    />
+                    <div className="mx_MessageComposer_row">
+                        {leftIcon}
+                        {composer}
+                        <div className="mx_MessageComposer_actions">
+                            {controls}
+                            {canSendMessages && (
+                                <MessageComposerButtons
+                                    addEmoji={this.addEmoji}
+                                    haveRecording={this.state.haveRecording}
+                                    isMenuOpen={this.state.isMenuOpen}
+                                    isStickerPickerOpen={this.state.isStickerPickerOpen}
+                                    menuPosition={menuPosition}
+                                    relation={this.props.relation}
+                                    onRecordStartEndClick={this.onRecordStartEndClick}
+                                    setStickerPickerOpen={this.setStickerPickerOpen}
+                                    showLocationButton={
+                                        !window.electron && SettingsStore.getValue(UIFeature.LocationSharing)
+                                    }
+                                    showPollsButton={this.state.showPollsButton}
+                                    showStickersButton={this.showStickersButton}
+                                    isRichTextEnabled={this.state.isRichTextEnabled}
+                                    onComposerModeClick={this.onRichTextToggle}
+                                    toggleButtonMenu={this.toggleButtonMenu}
+                                />
+                            )}
+                            {showSendButton && (
+                                <SendButton
+                                    key="controls_send"
+                                    onClick={this.sendMessage}
+                                    title={
+                                        this.state.haveRecording ? _t("composer|send_button_voice_message") : undefined
+                                    }
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
-            </Tooltip>
+            </div>
         );
     }
 }

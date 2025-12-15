@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useEffect, useState } from "react";
+import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
@@ -60,6 +61,7 @@ export default function NewRecoveryMethodDialog({ onFinished }: NewRecoveryMetho
             onFinished={onFinished}
             title={
                 <span className="mx_KeyBackupFailedDialog_title">
+                    <ErrorIcon />
                     {_t("encryption|new_recovery_method_detected|title")}
                 </span>
             }

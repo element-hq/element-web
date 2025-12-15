@@ -371,6 +371,7 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "acknowledgedHistoryVisibility": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1487,5 +1488,9 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         displayName: _td("devtools|settings|elementCallUrl"),
         default: "",
+    },
+    "acknowledgedHistoryVisibility": {
+        supportedLevels: [SettingLevel.ROOM_ACCOUNT],
+        default: false,
     },
 };

@@ -12,7 +12,7 @@
             "one": "1 nieprzeczytana wzmianka."
         },
         "recent_rooms": "Ostatnie pokoje",
-        "room_messsage_not_sent": "Otwórz pokój %(roomName)s z niewysłaną wiadomością.",
+        "room_messsage_not_sent": "Otwórz pokój %(roomName)s z niewysłaną wiadomością.room",
         "room_n_unread_invite": "Otwórz zaproszenie pokoju %(roomName)s.",
         "room_n_unread_messages": {
             "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wiadomością.",
@@ -245,7 +245,7 @@
         },
         "misconfigured_body": "Poproś swojego administratora %(brand)s by sprawdzić <a>Twoją konfigurację</a> względem niewłaściwych lub zduplikowanych elementów.",
         "misconfigured_title": "Twój %(brand)s jest źle skonfigurowany",
-        "mobile_create_account_title": "Jesteś w trakcie tworzenia konta na %(hsName)s",
+        "mobile_create_account_title": "Zamierzasz utworzyć konto na%(hsName)s",
         "msisdn_field_description": "Inni użytkownicy mogą Cię zaprosić do pokoi za pomocą Twoich danych kontaktowych",
         "msisdn_field_label": "Telefon",
         "msisdn_field_number_invalid": "Ten numer telefonu nie wygląda dobrze, sprawdź go ponownie",
@@ -287,9 +287,9 @@
             "error_user_cancelled_title": "Żądanie logowania anulowane",
             "error_user_declined": "Ty lub Twój dostawca konta odrzucił żądanie logowania.",
             "error_user_declined_title": "Logowanie odrzucone",
-            "follow_remaining_instructions": "Postępuj zgodnie z instrukcjami",
-            "open_element_other_device": "Otwórz %(brand)s na swoim drugim urządzeniu",
-            "point_the_camera": "Skanuj przedstawiony kod QR",
+            "follow_remaining_instructions": "Postępuj zgodnie z pozostałymi instrukcjami, aby zweryfikować Twoje inne urządzenie",
+            "open_element_other_device": "Otwórz %(brand)s na innym urządzeniu",
+            "point_the_camera": "Skieruj kamerę na pokazany tutaj kod QR",
             "scan_code_instruction": "Skanuj kod QR za pomocą innego urządzenia",
             "scan_qr_code": "Zaloguj się kodem QR",
             "security_code": "Kod bezpieczeństwa",
@@ -386,7 +386,7 @@
             "email_resent": "Wysłano ponownie!",
             "fallback_button": "Rozpocznij uwierzytelnienie",
             "mas_cross_signing_reset_cta": "Przejdź do swojego konta",
-            "mas_cross_signing_reset_description": "Zresetuj swoją tożsamość poprzez dostawcę swojego konta, wróć i kliknij „Ponów”.",
+            "mas_cross_signing_reset_description": "Zresetuj swoją tożsamość za pośrednictwem dostawcy konta, a następnie wróć i kliknij „Spróbuj ponownie”.",
             "mas_cross_signing_reset_title": "Przejdź do swojego konta, aby zresetować swoją tożsamość",
             "msisdn": "Wysłano wiadomość tekstową do %(msisdn)s",
             "msisdn_token_incorrect": "Niepoprawny token",
@@ -424,12 +424,12 @@
         "error_empty": "Powiedz nam, co poszło nie tak, lub nawet lepiej - utwórz zgłoszenie na platformie GitHub, które opisuje problem.",
         "failed_download_logs": "Nie udało się pobrać dzienników debugowania: ",
         "failed_send_logs_causes": {
-            "disallowed_app": "Twój raport o błędzie został odrzucony. Serwer gniewnego potrząśnięcia nie obsługuje tej aplikacji.",
-            "rejected_generic": "Twój raport o błędzie został odrzucony. Serwer gniewnego potrząśnięcia odrzucił zawartość zgłoszenia ze względu na jej politykę.",
-            "rejected_recovery_key": "Twój raport o błędzie został odrzucony ze względów bezpieczeństwa, ponieważ zawierał on klucz przywracania.",
-            "rejected_version": "Twój raport o błędzie został odrzucony, ponieważ wersja aplikacji jest zbyt stara.",
-            "server_unknown_error": "Serwer gniewnego potrząśnięcia napotkał nieznany błąd i nie mógł obsłużyć raportu.",
-            "unknown_error": "Nie udało się wysłać logów."
+            "disallowed_app": "Twój raport o błędzie został odrzucony. Serwer rageshake nie obsługuje tej aplikacji.",
+            "rejected_generic": "Twój raport o błędzie został odrzucony. Serwer rageshake odrzucił zawartość raportu z powodu polityki.",
+            "rejected_recovery_key": "Twój raport o błędzie został odrzucony ze względów bezpieczeństwa, ponieważ zawierał klucz odzyskiwania.",
+            "rejected_version": "Twój raport o błędzie został odrzucony, ponieważ uruchomiona wersja jest zbyt stara.",
+            "server_unknown_error": "Serwer rageshake napotkał nieznany błąd i nie mógł obsłużyć raportu.",
+            "unknown_error": "Nie udało się wysłać dzienników."
         },
         "github_issue": "Zgłoszenie GitHub",
         "introduction": "Jeśli zgłosiłeś błąd za pomocą serwisu GitHub, dzienniki debugowania mogą pomóc nam w namierzeniu problemu. ",
@@ -651,8 +651,8 @@
         "placeholder_encrypted": "Wyślij wiadomość…",
         "placeholder_reply": "Wyślij niezaszyfrowaną odpowiedź…",
         "placeholder_reply_encrypted": "Wyślij odpowiedź…",
-        "placeholder_thread": "Odpowiedz na niezaszyfrowany wątek…",
-        "placeholder_thread_encrypted": "Odpowiedz na wątek…",
+        "placeholder_thread": "Odpowiedz na niezaszyfrowany wątek...",
+        "placeholder_thread_encrypted": "Odpowiedz na wątku",
         "poll_button": "Ankieta",
         "poll_button_no_perms_description": "Nie masz uprawnień do rozpoczęcia ankiety w tym pokoju",
         "poll_button_no_perms_title": "Wymagane Uprawnienia",
@@ -1333,7 +1333,7 @@
         "error_connecting_heading": "Nie udało się połączyć z menedżerem integracji",
         "explainer": "Menedżerowie integracji otrzymują dane konfiguracyjne, przez co mogą modyfikować widżety, wysyłać zaproszenia i ustawiać uprawnienia w Twoim imieniu.",
         "manage_title": "Zarządzaj integracjami",
-        "toggle_label": "Włącz menedżer integracji",
+        "toggle_label": "Włącz menedżera integracji",
         "use_im": "Użyj menedżera integracji, aby zarządzać botami, widżetami i pakietami naklejek.",
         "use_im_default": "Użyj menedżera integracji <b>%(serverName)s</b>, aby zarządzać botami, widżetami i pakietami naklejek."
     },
@@ -1511,7 +1511,7 @@
         "exclude_insecure_devices_description": "Gdy ten tryb jest włączony, wiadomości szyfrowane nie zostaną udostępnione niezweryfikowanym urządzeniom, a wiadomości odbierane od tych urządzeń wyświetlą błąd. Należy pamiętać, że jeśli włączysz ten tryb, możesz nie być w stanie komunikować się z użytkownikami, którzy nie zweryfikowali swoich urządzeń.",
         "experimental_description": "Chcesz poeksperymentować? Wypróbuj nasze najnowsze pomysły w trakcie rozwoju. Przedstawione funkcje nie zostały w pełni ukończone; mogą być niestabilne; mogą się zmienić lub zostać kompletnie porzucone. <a>Dowiedz się więcej</a>.",
         "experimental_section": "Wczesny podgląd",
-        "extended_profiles_msc_support": "Serwer musi wspierać MSC4133",
+        "extended_profiles_msc_support": "Wymaga, aby Twój serwer obsługiwał MSC4133",
         "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
         "feature_wysiwyg_composer_description": "Użyj bogatego edytora tekstu zamiast edytora Markdown podczas tworzenia wiadomości.",
         "group_calls": "Nowe wrażenia rozmów grupowych",
@@ -1609,8 +1609,8 @@
         "last_person_warning": "Jesteś jedyną osoba tutaj. Jeśli wyjdziesz, nikt nie będzie w stanie dołączyć w przyszłości, włączając Ciebie.",
         "leave_room_question": "Czy na pewno chcesz opuścić pokój '%(roomName)s'?",
         "leave_space_question": "Czy na pewno chcesz opuścić przestrzeń '%(spaceName)s'?",
-        "room_leave_admin_warning": "Jesteś jedynym administratorem w tym pokoju. Jeśli odejdziesz, nikt nie będzie mógł zmienić ustawień pokoju, ani podjąć innych ważnych działań.",
-        "room_leave_mod_warning": "Jesteś jedynym moderatorem w tym pokoju. Jeśli odejdziesz, nikt nie będzie mógł zmienić ustawień pokoju, ani podjąć innych ważnych działań.",
+        "room_leave_admin_warning": "Jesteś jedynym administratorem w tym pokoju. Jeśli odejdziesz, nikt nie będzie mógł zmienić ustawień pokoju ani podjąć innych ważnych działań.",
+        "room_leave_mod_warning": "Jesteś jedynym moderatorem w tym pokoju. Jeśli odejdziesz, nikt nie będzie mógł zmienić ustawień pokoju ani podjąć innych ważnych działań.",
         "room_rejoin_warning": "Ten pokój nie jest publiczny. Nie będziesz w stanie do niego dołączyć bez zaproszenia.",
         "space_rejoin_warning": "Ta przestrzeń nie jest publiczna. Nie będziesz w stanie dołączyć bez zaproszenia."
     },
@@ -2173,10 +2173,10 @@
             "one": "Aktualnie dołączanie do %(count)s pokoju",
             "other": "Aktualnie dołączanie do %(count)s pokoi"
         },
-        "list_title": "Lista pokoi",
+        "list_title": "Lista pokojów",
         "more_options": {
-            "copy_link": "Kopiuj link pokoju",
-            "favourited": "Ulubiony",
+            "copy_link": "Kopiuj link do pokoju",
+            "favourited": "Ulubione",
             "leave_room": "Opuść pokój",
             "low_priority": "Niski priorytet",
             "mark_read": "Oznacz jako przeczytane",
@@ -2184,7 +2184,7 @@
         },
         "notification_options": "Opcje powiadomień",
         "open_space_menu": "Otwórz menu przestrzeni",
-        "primary_filters": "Filtry listy pokoi",
+        "primary_filters": "Filtry listy pomieszczeń",
         "redacting_messages_status": {
             "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
             "other": "Aktualnie usuwanie wiadomości z %(count)s pokoi"
@@ -2211,7 +2211,7 @@
         },
         "room": {
             "more_options": "Więcej opcji",
-            "open_room": "Pokój otwarty %(roomName)s"
+            "open_room": "Otwórz pokój %(roomName)s"
         },
         "room_options": "Opcje pokoju",
         "show_less": "Pokaż mniej",
@@ -2231,8 +2231,8 @@
         },
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
         "space_menu": {
-            "home": "Główna przestrzeni",
-            "space_settings": "Ustawienia przestrzeni"
+            "home": "Główna Space",
+            "space_settings": "Ustawienia Space"
         },
         "space_menu_label": "menu %(spaceName)s",
         "sublist_options": "Ustawienia listy",
@@ -2572,7 +2572,7 @@
             "custom_theme_invalid": "Nieprawidłowy schemat motywu.",
             "dialog_title": "<strong>Ustawienia:</strong> Wygląd",
             "font_size": "Rozmiar czcionki",
-            "font_size_default": "%(fontSize)s (domyślny)",
+            "font_size_default": "%(fontSize)s(domyślna)",
             "high_contrast": "Wysoki kontrast",
             "image_size_default": "Domyślne",
             "image_size_large": "Duży",
@@ -2621,20 +2621,20 @@
             "confirm_key_storage_off": "Czy na pewno pozostawić wyłączony magazyn kluczy?",
             "confirm_key_storage_off_description": "Jeśli wylogujesz się ze wszystkich swoich urządzeń, utracisz historię wiadomości i będziesz musiał ponownie zweryfikować wszystkie istniejące kontakty. <a>Dowiedz się więcej</a>",
             "delete_key_storage": {
-                "breadcrumb_page": "Usuń magazyn kluczy",
+                "breadcrumb_page": "Usuń pamięć klucza",
                 "confirm": "Usuń magazyn kluczy",
-                "description": "Usunięcie magazynu kluczy usunie Twoją tożsamość kryptograficzną, klucze wiadomości z serwera i wyłączy następujące funkcje bezpieczeństwa:",
-                "list_first": "Nowe urządzenia nie będą posiadały Twojej historii wiadomości szyfrowanych",
-                "list_second": "Utracisz dostęp do swoich wiadomości szyfrowanych, jeśli wylogujesz się wszędzie z %(brand)s",
-                "title": "Czy na pewno chcesz wyłączyć magazyn kluczy i go wyłączyć?"
+                "description": "Usunięcie pamięci kluczy spowoduje usunięcie tożsamości kryptograficznej i kluczy wiadomości z serwera i wyłączenie następujących funkcji bezpieczeństwa:",
+                "list_first": "Nie będziesz mieć szyfrowanej historii wiadomości na nowych urządzeniach",
+                "list_second": "Stracisz dostęp do zaszyfrowanych wiadomości, jeśli zostaniesz wylogowany z dowolnego %(brand)s miejsca",
+                "title": "Czy na pewno chcesz wyłączyć przechowywanie kluczy i je usunąć?"
             },
             "device_not_verified_button": "Zweryfikuj to urządzenie",
             "device_not_verified_description": "Aby wyświetlić ustawienia szyfrowania, musisz zweryfikować to urządzenie.",
             "device_not_verified_title": "Urządzenie niezweryfikowane",
             "dialog_title": "<strong>Ustawienia:</strong> Szyfrowanie",
             "key_storage": {
-                "allow_key_storage": "Zezwól na magazynowanie kluczy",
-                "description": "Przechowuj swoją tożsamość kryptograficzną i klucze wiadomości bezpiecznie na serwerze. Umożliwi to na przeglądanie historii wiadomości na wszystkich nowych urządzeniach. <a>Dowiedz się więcej</a>",
+                "allow_key_storage": "Zezwalaj na przechowywanie kluczy",
+                "description": "Bezpiecznie przechowuj swoją tożsamość kryptograficzną i klucze wiadomości na serwerze. Umożliwi to przeglądanie historii wiadomości na dowolnych nowych urządzeniach. <a>Dowiedz się więcej </a>",
                 "title": "Magazyn kluczy"
             },
             "recovery": {
@@ -2733,7 +2733,7 @@
             "identity_server_not_set": "Serwer tożsamości nie jest ustawiony",
             "invalid_phone_number": "Podany numer telefonu nie wydaje się być poprawny.",
             "language_section": "Język",
-            "msisdn_adding_unsupported_by_hs": "Ten serwer domowy nie obsługuje dodawania numerów telefonu do Twojego konta.",
+            "msisdn_adding_unsupported_by_hs": "Ten serwer domowy nie obsługuje dodawania numerów telefonów do Twojego konta.",
             "msisdn_in_use": "Ten numer telefonu jest już zajęty",
             "msisdn_label": "Numer telefonu",
             "msisdn_verification_field_label": "Kod weryfikacyjny",
@@ -3075,7 +3075,7 @@
             "metaspaces_subsection": "Wyświetlanie przestrzeni",
             "metaspaces_video_rooms": "Pokoje wideo i konferencje",
             "metaspaces_video_rooms_description": "Grupuj wszystkie prywatne pokoje wideo i konferencje.",
-            "metaspaces_video_rooms_description_invite_extension": "Na konferencjach możesz zaprosić osoby spoza matrix.",
+            "metaspaces_video_rooms_description_invite_extension": "Na konferencje możesz zapraszać osoby spoza matrixa.",
             "spaces_explainer": "Przestrzenie to sposób grupowania pokoi i osób. Oprócz przestrzeni, w których się znajdujesz, możesz również korzystać z już wstępnie zbudowanych.",
             "title": "Pasek boczny"
         },
@@ -3121,8 +3121,8 @@
         "link_copied": "Skopiowano link",
         "permalink_message": "Link do zaznaczonej wiadomości",
         "permalink_most_recent": "Link do najnowszej wiadomości",
-        "share_call": "Link zaproszenia do konferencji",
-        "share_call_subtitle": "Link dla użytkowników zewnętrznych, aby dołączyć do połączenia bez konta matrix:",
+        "share_call": "Link do zaproszenia do konferencji",
+        "share_call_subtitle": "Link dla użytkowników zewnętrznych umożliwiający dołączenie do rozmowy bez konta matrix:",
         "title_link": "Udostępnij link",
         "title_message": "Udostępnij wiadomość w pokoju",
         "title_room": "Udostępnij pokój",
@@ -3365,8 +3365,8 @@
             "one": "%(count)s odpowiedź",
             "other": "%(count)s odpowiedzi"
         },
-        "empty_description": "Użyj „%(replyInThread)s” po najechaniu kursorem na wiadomość",
-        "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo za nimi podążać.",
+        "empty_description": "Użyj „%(replyInThread)s” podczas najechania kursorem na wiadomość.",
+        "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo je śledzić.",
         "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
@@ -3375,7 +3375,7 @@
         "show_thread_filter": "Pokaż:"
     },
     "threads_activity_centre": {
-        "header": "Aktywność wątków",
+        "header": "Aktywność w wątkach",
         "no_rooms_with_threads_notifs": "Nie masz jeszcze pokoi z powiadomieniami w wątku.",
         "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
     },
@@ -3514,7 +3514,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Zakończył ankietę",
             "sender_ended": "%(senderName)s zakończył ankietę"
         },
         "m.poll.start": "%(senderName)s utworzył ankietę - %(pollQuestion)s",
@@ -3896,11 +3895,11 @@
         "unavailable": "Niedostępny"
     },
     "update_room_access_modal": {
-        "description": "Aby utworzyć link udostępniania, ustaw ten pokój jako <b>publiczny</b> lub włącz opcję umożliwiającą użytkownikom <b>poprosić o dołączenie</b>. Dzięki temu goście będą mogli dołączyć bez zaproszenia.",
-        "dont_change_description": "Jeśli nie chcesz zmieniać uprawnień dostępu tego pokoju, możesz utworzyć link połączenia w nowym pokoju.",
-        "no_change": "Nie chce zmieniać poziomu uprawnień.",
-        "revert_access_description": "(Przywróć poprzednią wartość w ustawieniach pokoju: <b>Bezpieczeństwo i prywatność</b> / <b>Dostęp</b>)",
-        "title": "Zezwól gościom na dołączenie do tego pokoju"
+        "description": "Aby utworzyć łącze udostępniania, u <b> publicznij ten pokój </b> lub włącz opcję po <b> proszenia użytkowników o dołączenie</b>. Pozwala to gościom przyłączyć się bez zaproszenia.",
+        "dont_change_description": "Jeśli nie chcesz zmieniać dostępu do tego pokoju, możesz utworzyć nowy pokój dla łącza połączenia.",
+        "no_change": "Nie chcę zmieniać poziomu dostępu.",
+        "revert_access_description": "(Można to przywrócić do poprzedniej wartości w Ustawieniach pokoju: <b> Bezpieczeństwo i prywatność </b> /Dost <b> ęp</b>)",
+        "title": "Zezwalaj gościom na dołączenie do tego pokoju"
     },
     "upload_failed_generic": "Nie udało się przesłać pliku '%(fileName)s'.",
     "upload_failed_size": "Plik '%(fileName)s' przekracza limit rozmiaru dla tego serwera głównego",
@@ -4039,7 +4038,7 @@
         "input_devices": "Urządzenia wejściowe",
         "jitsi_call": "Konferencja Jitsi",
         "join_button_tooltip_call_full": "Przepraszamy — to połączenie jest już zapełnione",
-        "legacy_call": "Połączenie Legacy",
+        "legacy_call": "Połączenie w starszej technologii.",
         "maximise": "Wypełnij ekran",
         "maximise_call": "Maksymalizuj połączenie",
         "metaspace_video_rooms": {
@@ -4095,7 +4094,7 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Rozmowa wideo",
         "video_call_started": "Rozpoczęto rozmowę wideo",
-        "video_call_using": "Połączenie wideo za pomocą:",
+        "video_call_using": "Połączenie wideo przy użyciu:",
         "voice_call": "Rozmowa głosowa",
         "you_are_presenting": "Prezentujesz"
     },

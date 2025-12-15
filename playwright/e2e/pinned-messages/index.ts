@@ -29,6 +29,7 @@ export const test = base.extend<{
     room1Name: "Room 1",
     room1: async ({ room1Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
 

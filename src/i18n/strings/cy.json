@@ -3485,7 +3485,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Daeth arolwg i ben",
             "sender_ended": "Mae %(senderName)s wedi dod ag arolwg i ben"
         },
         "m.poll.start": "Mae %(senderName)s wedi dechrau arolwg - %(pollQuestion)s",

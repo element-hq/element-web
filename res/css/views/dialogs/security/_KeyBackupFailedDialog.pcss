@@ -10,20 +10,12 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_KeyBackupFailedDialog_title {
-    position: relative;
-    padding-left: 45px;
     padding-bottom: 10px;
 
-    &::before {
-        mask: url("$(res)/img/e2e/lock-warning-filled.svg");
-        mask-repeat: no-repeat;
-        background-color: $primary-content;
-        content: "";
-        position: absolute;
-        top: -6px;
-        right: 0;
-        bottom: 0;
-        left: 0;
+    svg {
+        margin-right: var(--cpd-space-2x);
+        vertical-align: -2px;
+        color: $primary-content;
     }
 }
 

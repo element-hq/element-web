@@ -55,6 +55,14 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
+    describe("Verify this session", () => {
+        it("should render the toast", async () => {
+            act(() => showToast(Kind.VERIFY_THIS_SESSION));
+
+            expect(await screen.findByRole("heading", { name: "Verify this session" })).toBeInTheDocument();
+        });
+    });
+
     describe("Key storage out of sync", () => {
         let client: Mocked<MatrixClient>;
 

@@ -64,4 +64,12 @@ describe("AudioPlayerViewModel", () => {
         vm.onKeyDown(event);
         expect(playback.skipTo).toHaveBeenCalledWith(10 + 5); // 5 seconds forward
     });
+
+    it("should update snapshot when setProps is called with new mediaName", () => {
+        const vm = new AudioPlayerViewModel({ playback, mediaName: "oldName" });
+        expect(vm.getSnapshot().mediaName).toBe("oldName");
+
+        vm.setProps({ mediaName: "newName" });
+        expect(vm.getSnapshot().mediaName).toBe("newName");
+    });
 });

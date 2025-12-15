@@ -9,6 +9,7 @@ import React, { type JSX, useState } from "react";
 import classNames from "classnames";
 import { type DOMNode, Element as ParserElement, domToReact } from "html-react-parser";
 import { textContent, getInnerHTML } from "domutils";
+import { CollapseIcon, CopyIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { CopyTextButton } from "../elements/CopyableText.tsx";
@@ -25,13 +26,9 @@ const ExpandCollapseButton: React.FC<{
     onClick(): void;
 }> = ({ expanded, onClick }) => {
     return (
-        <span
-            className={classNames("mx_EventTile_button", {
-                mx_EventTile_expandButton: !expanded,
-                mx_EventTile_collapseButton: expanded,
-            })}
-            onClick={onClick}
-        />
+        <span className="mx_EventTile_button" onClick={onClick}>
+            {expanded ? <CollapseIcon /> : <ExpandIcon />}
+        </span>
     );
 };
 
@@ -138,7 +135,9 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
                 className={classNames("mx_EventTile_button mx_EventTile_copyButton", {
                     mx_EventTile_buttonBottom: !!expandCollapseButton,
                 })}
-            />
+            >
+                <CopyIcon />
+            </CopyTextButton>
         </div>
     );
 };

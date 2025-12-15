@@ -340,7 +340,14 @@ describe("SendWysiwygComposer", () => {
                 const leftIcon = screen.getByTestId("e2e-icon");
                 // Then
                 expect(leftIcon).toBeInTheDocument();
-                expect(leftIcon).toHaveClass(expectedClass ? `mx_E2EIcon ${expectedClass}` : `mx_E2EIcon`);
+                expect(leftIcon).toHaveClass("mx_E2EIcon");
+                if (expectedClass) {
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(leftIcon.querySelector("svg")).toHaveClass(expectedClass);
+                } else {
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(leftIcon.querySelector("svg")).not.toBeInTheDocument();
+                }
             });
         },
     );

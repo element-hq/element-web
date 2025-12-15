@@ -1,5 +1,6 @@
 {
     "a11y": {
+        "emoji_picker": "Emoji 選擇器",
         "jump_first_invite": "跳到第一個邀請。",
         "n_unread_messages": {
             "other": "%(count)s 則未讀訊息。",
@@ -40,6 +41,8 @@
         "create_a_room": "建立聊天室",
         "create_account": "建立帳號",
         "decline": "拒絕",
+        "decline_and_block": "拒絕並封鎖",
+        "decline_invite": "拒絕邀請",
         "delete": "刪除",
         "deny": "拒絕",
         "disable": "停用",
@@ -59,6 +62,7 @@
         "go": "前往",
         "go_back": "返回",
         "got_it": "了解",
+        "hide": "隱藏",
         "hide_advanced": "隱藏進階設定",
         "hold": "保留",
         "ignore": "忽略",
@@ -362,6 +366,9 @@
         "download_logs": "下載紀錄檔",
         "downloading_logs": "正在下載紀錄檔",
         "error_empty": "請告訴我們發生了什麼錯誤，或更好的是，在 GitHub 上建立描述問題的議題。",
+        "failed_send_logs_causes": {
+            "rejected_recovery_key": "您的錯誤報告因安全考量而遭駁回，因為包含復原金鑰。"
+        },
         "github_issue": "GitHub 議題",
         "introduction": "若您透過 GitHub 遞交錯誤，除錯紀錄檔可以協助我們追蹤問題。 ",
         "log_request": "要協助我們讓這個問題不再發生，請<a>將紀錄檔傳送給我們</a>。",
@@ -676,6 +683,9 @@
         "category_room": "聊天室",
         "caution_colon": "警告：",
         "client_versions": "客戶端版本",
+        "crypto": {
+            "key_storage": "金鑰儲存"
+        },
         "developer_mode": "開發者模式",
         "developer_tools": "開發者工具",
         "edit_setting": "編輯設定",
@@ -786,6 +796,7 @@
                 "wrong_security_key": "錯誤的安全金鑰"
             },
             "restoring": "從備份還原金鑰",
+            "security_key_label": "復原金鑰",
             "security_key_title": "安全金鑰"
         },
         "bootstrap_title": "正在產生金鑰",
@@ -797,11 +808,14 @@
         "cross_signing_user_normal": "您尚未驗證此使用者。",
         "cross_signing_user_verified": "您已驗證此使用者。此使用者已驗證他們所有的工作階段。",
         "cross_signing_user_warning": "此使用者尚未驗證他們的所有工作階段。",
+        "enter_recovery_key": "輸入復原金鑰",
         "event_shield_reason_authenticity_not_guaranteed": "無法在此裝置上保證加密訊息的真實性。",
         "event_shield_reason_mismatched_sender_key": "已由未驗證的工作階段加密",
         "export_unsupported": "您的瀏覽器不支援需要的加密擴充",
+        "forgot_recovery_key": "忘記復原金鑰？",
         "import_invalid_keyfile": "不是有效的 %(brand)s 金鑰檔案",
         "import_invalid_passphrase": "無法檢查認證：密碼錯誤？",
+        "key_storage_out_of_sync_description": "請確認您的復原金鑰，以維持對金鑰儲存空間及訊息歷史的存取權限。",
         "messages_not_secure": {
             "cause_1": "您的家伺服器",
             "cause_2": "您正在驗證的使用者所連線的家伺服器",
@@ -822,10 +836,13 @@
             "title": "已移除復原方法",
             "warning": "如果您沒有移除復原方法，攻擊者可能會試圖存取您的帳號。請立刻在設定中變更您帳號的密碼並設定新的復原方式。"
         },
+        "set_up_recovery": "設定復原",
+        "set_up_recovery_toast_description": "產生一把復原金鑰，以便在您無法存取裝置時恢復您的加密訊息歷史記錄。",
         "set_up_toast_title": "設定安全備份",
         "setup_secure_backup": {
             "explainer": "請在登出前備份您的金鑰，以免遺失。"
         },
+        "turn_on_key_storage_description": "在伺服器安全地儲存您的加密身分及訊息金鑰。如此一來，您便能在任何新裝置上檢視訊息歷史紀錄。",
         "udd": {
             "interactive_verification_button": "透過表情符號互動來驗證",
             "other_ask_verify_text": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
@@ -882,6 +899,7 @@
             "unverified_sessions_toast_description": "請確認您的帳號安全",
             "unverified_sessions_toast_reject": "稍後",
             "unverified_sessions_toast_title": "您有未驗證的工作階段",
+            "use_recovery_key": "使用復原金鑰",
             "verification_dialog_title_device": "驗證其他裝置",
             "verification_dialog_title_user": "驗證請求",
             "verification_skip_warning": "如果不進行驗證，您將無法存取您的所有訊息，且可能會被其他人視為不信任。",
@@ -1290,6 +1308,7 @@
         "mjolnir": "忽略人們的新方式",
         "msc3531_hide_messages_pending_moderation": "讓版主能夠隱藏待審核的訊息。",
         "notification_settings": "新通知設定",
+        "notification_settings_beta_caption": "全新推出更簡便的通知設定調整方式。隨心所欲地自訂您的%(brand)s ，打造專屬體驗。",
         "notification_settings_beta_title": "通知設定",
         "report_to_moderators": "回報給版主",
         "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
@@ -2106,6 +2125,7 @@
             "access_token_detail": "您的存取權杖可提供您帳號完整的存取權限。請勿分享給任何人。",
             "brand_version": "%(brand)s 版本：",
             "clear_cache_reload": "清除快取並重新載入",
+            "dialog_title": "<strong>設定：</strong>說明與關於",
             "help_link": "若需 %(brand)s 的使用說明，請點擊<a>這裡</a>。",
             "homeserver": "家伺服器為 <code>%(homeserverUrl)s</code>",
             "identity_server": "身分伺服器為 <code>%(identityServerUrl)s</code>",
@@ -2114,17 +2134,24 @@
         }
     },
     "settings": {
+        "account": {
+            "dialog_title": "<strong>設定：</strong>帳號"
+        },
         "all_rooms_home": "在首頁顯示所有聊天室",
         "all_rooms_home_description": "您所在的所有聊天室都會出現在首頁。",
         "always_show_message_timestamps": "總是顯示訊息時間戳記",
         "appearance": {
+            "compact_layout": "顯示緊湊的文字及訊息",
+            "compact_layout_description": "訊息布局需使用「現代」才可使用此功能。",
             "custom_font": "使用系統字型",
             "custom_font_description": "設定您系統上安裝的字型名稱，%(brand)s 將會嘗試使用它。",
             "custom_font_name": "系統字型名稱",
             "custom_font_size": "使用自訂大小",
             "custom_theme_error_downloading": "下載佈景主題資訊時發生錯誤。",
             "custom_theme_invalid": "無效的佈景主題架構。",
+            "dialog_title": "<strong>設定：</strong>外觀",
             "font_size": "字型大小",
+            "high_contrast": "高對比",
             "image_size_default": "預設",
             "image_size_large": "大",
             "layout_bubbles": "訊息泡泡",
@@ -2142,6 +2169,36 @@
         "emoji_autocomplete": "啟用在打字時出現表情符號建議",
         "enable_markdown": "啟用 Markdown",
         "enable_markdown_description": "使用 <code>/plain</code> 開頭以不使用 Markdown 傳送訊息。",
+        "encryption": {
+            "advanced": {
+                "breadcrumb_title_forgot": "忘記您的復原金鑰？您需要重置您的身分。"
+            },
+            "dialog_title": "<strong>設定：</strong>加密",
+            "recovery": {
+                "change_recovery_confirm_button": "確認新的復原金鑰",
+                "change_recovery_confirm_description": "在下方輸入新的復原金鑰以完成操作。舊金鑰將不再有效。",
+                "change_recovery_confirm_title": "輸入新的復原金鑰",
+                "change_recovery_key": "變更復原金鑰",
+                "change_recovery_key_description": "請將這組新的復原金鑰記錄在安全的地方，接著點擊「繼續」以確認變更。",
+                "change_recovery_key_title": "變更復原金鑰？",
+                "description": "如果您遺失了所有現有設備，請使用復原金鑰來恢復您的加密身分和訊息歷史記錄。",
+                "enter_key_error": "您輸入的復原密鑰不正確。",
+                "enter_recovery_key": "輸入復原金鑰",
+                "forgot_recovery_key": "忘記復原金鑰？",
+                "key_storage_warning": "您的金鑰儲存不同步，請點擊下方按鈕以解決問題。",
+                "save_key_description": "請勿分享給任何人！",
+                "save_key_title": "復原金鑰",
+                "set_up_recovery": "設定復原",
+                "set_up_recovery_confirm_button": "完成設定",
+                "set_up_recovery_confirm_description": "輸入上個畫面顯示的復原金鑰，以完成復原設定。",
+                "set_up_recovery_confirm_title": "輸入您的復原金鑰以確認",
+                "set_up_recovery_description": "您的金鑰儲存空間受復原金鑰保護。若在設定完成後需要新的復原金鑰，可透過選擇「%(changeRecoveryKeyButton)s」重新建立。",
+                "set_up_recovery_save_key_description": "將此復原金鑰謄寫在安全的地方，例如密碼管理器、加密筆記或實體保險箱。",
+                "set_up_recovery_save_key_title": "將您的復原金鑰保存在安全的地方",
+                "set_up_recovery_secondary_description": "點擊繼續後，我們將產生還原金鑰給您。",
+                "title": "復原"
+            }
+        },
         "general": {
             "account_management_section": "帳號管理",
             "account_section": "帳號",
@@ -2206,6 +2263,8 @@
             "oidc_manage_button": "管理帳號",
             "password_change_section": "設定新帳號密碼…",
             "password_change_success": "您的密碼已成功變更。",
+            "personal_info": "個人資訊",
+            "profile_subtitle": "其他人在 App 上看到的你",
             "remove_email_prompt": "移除 %(email)s？",
             "remove_msisdn_prompt": "移除 %(phone)s？",
             "spell_check_locale_placeholder": "選擇語系"
@@ -2258,12 +2317,17 @@
             "phrase_strong_enough": "很好！此密碼看起來夠強"
         },
         "keyboard": {
+            "dialog_title": "<strong>設定：</strong>鍵盤",
             "title": "鍵盤"
+        },
+        "labs": {
+            "dialog_title": "<strong>設定：</strong>實驗室"
         },
         "notifications": {
             "default_setting_description": "預設情況下，此設定將會套用於您所有的聊天室。",
             "default_setting_section": "我想收到相關的通知（預設設定）",
             "desktop_notification_message_preview": "在桌面通知顯示訊息預覽",
+            "dialog_title": "<strong>設定：</strong>通知",
             "email_description": "接收錯過通知的電子郵件摘要",
             "email_section": "電子郵件摘要",
             "email_select": "選取您要將摘要傳送到的電子郵件地址。請在<button>一般</button>中管理您的電子郵件地址。",
@@ -2322,6 +2386,7 @@
             "code_blocks_heading": "程式碼區塊",
             "compact_modern": "使用更簡潔的「現代」佈局",
             "composer_heading": "編輯器",
+            "dialog_title": "<strong>設定：</strong>偏好設定",
             "enable_hardware_acceleration": "啟用硬體加速",
             "enable_tray_icon": "顯示系統匣圖示並於關閉時最小化",
             "keyboard_heading": "鍵盤快捷鍵",
@@ -2344,6 +2409,7 @@
             "bulk_options_accept_all_invites": "接受所有 %(invitedRooms)s 邀請",
             "bulk_options_reject_all_invites": "拒絕所有 %(invitedRooms)s 邀請",
             "bulk_options_section": "大量選項",
+            "dialog_title": "<strong>設定：</strong>安全與隱私",
             "e2ee_default_disabled_warning": "您的伺服器管理員已停用在私密聊天室與私人訊息中預設的端對端加密。",
             "enable_message_search": "在已加密的聊天室中啟用訊息搜尋",
             "encryption_section": "加密",
@@ -2400,6 +2466,7 @@
             "device_unverified_description_current": "驗證您目前的工作階段以強化安全訊息傳遞。",
             "device_verified_description": "此工作階段已準備好進行安全通訊。",
             "device_verified_description_current": "您目前的工作階段已準備好安全通訊。",
+            "dialog_title": "<strong>設定：</strong>工作階段",
             "error_pusher_state": "無法設定推送程式狀態",
             "filter_all": "全部",
             "filter_inactive": "不活躍",
@@ -2441,6 +2508,7 @@
             "sign_in_with_qr": "使用 QR Code 登入",
             "sign_in_with_qr_button": "顯示 QR Code",
             "sign_in_with_qr_description": "您可以使用此裝置透過 QR Code 登入新裝置。您將需要使用已登出的裝置掃描此裝置上顯示的 QR Code。",
+            "sign_in_with_qr_unsupported": "您的帳號提供者不支援這項功能",
             "sign_out": "登出此工作階段",
             "sign_out_all_other_sessions": "登出所有其他工作階段（%(otherSessionsCount)s）",
             "sign_out_confirm_description": {
@@ -2481,6 +2549,7 @@
         "show_stickers_button": "顯示貼圖案按鈕",
         "show_typing_notifications": "顯示打字通知",
         "sidebar": {
+            "dialog_title": "<strong>設定：</strong>側邊欄",
             "metaspaces_favourites_description": "將所有您最喜愛的聊天室與夥伴集中在同一個地方。",
             "metaspaces_home_all_rooms": "顯示所有聊天室",
             "metaspaces_home_all_rooms_description": "將您所有的聊天室顯示在首頁，即便它們位於同一個聊天空間。",
@@ -2505,6 +2574,7 @@
             "audio_output_empty": "未偵測到音訊輸出",
             "auto_gain_control": "自動增益控制",
             "connection_section": "連線",
+            "dialog_title": "<strong>設定：</strong>語音與視訊",
             "echo_cancellation": "迴聲消除",
             "enable_fallback_ice_server": "允許使用備用通話輔助伺服器（%(server)s）",
             "enable_fallback_ice_server_description": "僅當您的家伺服器不提供時才適用。在通話期間，將會把您的 IP 位址分享給此伺服器。",
@@ -2884,7 +2954,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "投票已結束",
             "sender_ended": "%(senderName)s 結束了投票"
         },
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",

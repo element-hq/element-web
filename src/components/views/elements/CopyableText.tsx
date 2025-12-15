@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useState } from "react";
 import classNames from "classnames";
+import { CopyIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
@@ -21,7 +22,11 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
 }
 
-export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className">> = ({ getTextToCopy, className }) => {
+export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className" | "children">> = ({
+    getTextToCopy,
+    className,
+    children,
+}) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent): Promise<void> => {
@@ -45,7 +50,9 @@ export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className"
             onTooltipOpenChange={(open) => {
                 if (!open) onHideTooltip();
             }}
-        />
+        >
+            {children}
+        </AccessibleButton>
     );
 };
 
@@ -57,7 +64,9 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
     return (
         <div className={combinedClassName} {...props}>
             {children}
-            <CopyTextButton getTextToCopy={getTextToCopy} className="mx_CopyableText_copyButton" />
+            <CopyTextButton getTextToCopy={getTextToCopy} className="mx_CopyableText_copyButton">
+                <CopyIcon />
+            </CopyTextButton>
         </div>
     );
 };
