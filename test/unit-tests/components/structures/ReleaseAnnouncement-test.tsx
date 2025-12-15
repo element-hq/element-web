@@ -22,12 +22,7 @@ describe("ReleaseAnnouncement", () => {
 
     function renderReleaseAnnouncement() {
         return render(
-            <ReleaseAnnouncement
-                feature="newNotificationSounds"
-                header="header"
-                description="description"
-                closeLabel="close"
-            >
+            <ReleaseAnnouncement feature="_test_dummy" header="header" description="description" closeLabel="close">
                 <div>content</div>
             </ReleaseAnnouncement>,
         );
