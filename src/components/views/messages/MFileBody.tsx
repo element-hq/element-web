@@ -10,7 +10,7 @@ import React, { type AllHTMLAttributes, createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import { Button } from "@vector-im/compound-web";
-import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { AttachmentIcon, DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -192,7 +192,9 @@ export default class MFileBody extends React.Component<IProps, IState> {
         if (showGenericPlaceholder) {
             placeholder = (
                 <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
-                    <span className="mx_MFileBody_info_icon" />
+                    <span className="mx_MFileBody_info_icon">
+                        <AttachmentIcon />
+                    </span>
                     <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("common|attachment"), true)}>
                         <span className="mx_MFileBody_info_filename">
                             {presentableTextForFile(this.content, _t("common|attachment"), true, true)}
