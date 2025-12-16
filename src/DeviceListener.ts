@@ -643,10 +643,19 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         return recoveryStatus?.enabled === false;
     }
 
+    /**
+     * Get the state of the device and the user's account.  The device/account
+     * state indicates what action the user must take in order to get a
+     * self-verified device that is using key backup and recovery.
+     */
     public getDeviceState(): DeviceState {
         return this.deviceState;
     }
 
+    /**
+     * Set the state of the device, and perform any actions necessary in
+     * response to the state changing.
+     */
     private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
         this.deviceState = newState;
         this.emit(DeviceListenerEvents.DeviceState, newState);
