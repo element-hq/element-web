@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type Ref, type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ErrorSolidIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { _t } from "../../../languageHandler";
@@ -53,6 +54,7 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
 
         return (
             <EventTileBubble
+                icon={<LockSolidIcon />}
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                 title={_t("common|encryption_enabled")}
                 subtitle={subtitle}
@@ -64,6 +66,7 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
     if (isRoomEncrypted) {
         return (
             <EventTileBubble
+                icon={<LockSolidIcon />}
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                 title={_t("common|encryption_enabled")}
                 subtitle={_t("timeline|m.room.encryption|disable_attempt")}
@@ -74,7 +77,8 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
 
     return (
         <EventTileBubble
-            className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
+            icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
+            className="mx_cryptoEvent"
             title={_t("timeline|m.room.encryption|disabled")}
             subtitle={_t("timeline|m.room.encryption|unsupported")}
             ref={ref}
