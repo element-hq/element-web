@@ -17,7 +17,7 @@ import {
 import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
 import {
     AttachmentIcon,
-    MicOnSolidIcon,
+    MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
     TextFormattingIcon,
@@ -274,7 +274,7 @@ function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | nu
             onClick={props.onRecordStartEndClick}
             title={_t("composer|voice_message_button")}
         >
-            <MicOnSolidIcon />
+            <MicOnIcon />
         </CollapsibleButton>
     );
 }
