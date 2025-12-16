@@ -51,7 +51,10 @@ test.describe("Cryptography", function () {
             await app.viewRoomByName("Test room");
             const lastTile = page.locator(".mx_EventTile").last();
             await expect(lastTile).toContainText("Historical messages are not available on this device");
-            await expect(lastTile.locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+            await expect(lastTile.locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                "This message could not be decrypted",
+            );
+            await expect(lastTile).toMatchScreenshot("history-not-available.png");
 
             // Now, we set up key backup, and then send another message.
             const secretStorageKey = await enableKeyBackup(app);
@@ -78,7 +81,9 @@ test.describe("Cryptography", function () {
             // look at the last two tiles only
             for (const tile of tiles.slice(-2)) {
                 await expect(tile).toContainText("You need to verify this device for access to historical messages");
-                await expect(tile.locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                await expect(tile.locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
             }
 
             // Now verify our device (setting up key backup), and check what happens
@@ -87,11 +92,13 @@ test.describe("Cryptography", function () {
 
             // The first message still cannot be decrypted, because it was never backed up. It's now a regular UTD though.
             await expect(tilesAfterVerify[0]).toContainText("Unable to decrypt message");
-            await expect(tilesAfterVerify[0].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+            await expect(tilesAfterVerify[0].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                "This message could not be decrypted",
+            );
 
             // The second message should now be decrypted, with a grey shield
             await expect(tilesAfterVerify[1]).toContainText("test2 test2");
-            await expect(tilesAfterVerify[1].locator(".mx_EventTile_e2eIcon_normal")).toBeVisible();
+            await expect(tilesAfterVerify[1].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName("TODO");
         });
 
         test.describe("non-joined historical messages", () => {
@@ -186,7 +193,9 @@ test.describe("Cryptography", function () {
                 // The first message from Bob was sent before Alice was in the room, so should
                 // be different from the standard UTD message
                 await expect(tiles[tiles.length - 5]).toContainText("You don't have access to this message");
-                await expect(tiles[tiles.length - 5].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                await expect(tiles[tiles.length - 5].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
 
                 // The second message from Bob should be decryptable
                 await expect(tiles[tiles.length - 2]).toContainText("This should be decryptable");
@@ -196,7 +205,9 @@ test.describe("Cryptography", function () {
                 // in the room and is expected to be decryptable, so this should have the
                 // standard UTD message
                 await expect(tiles[tiles.length - 1]).toContainText("Unable to decrypt message");
-                await expect(tiles[tiles.length - 1].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                await expect(tiles[tiles.length - 1].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
             });
 
             test("should be able to jump to a message sent before our last join event", async ({
