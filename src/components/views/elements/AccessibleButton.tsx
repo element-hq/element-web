@@ -30,7 +30,6 @@ export type AccessibleButtonKind =
     | "primary_outline"
     | "primary_sm"
     | "secondary"
-    | "secondary_content"
     | "content_inline"
     | "danger"
     | "danger_outline"
@@ -39,8 +38,6 @@ export type AccessibleButtonKind =
     | "link"
     | "link_inline"
     | "link_sm"
-    | "confirm_sm"
-    | "cancel_sm"
     | "icon"
     | "icon_primary"
     | "icon_primary_outline";
