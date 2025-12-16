@@ -37,7 +37,7 @@ exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 
         style="width: 128px; height: 128px;"
       >
         <svg
-          class="mx_E2EIcon_verified"
+          color="var(--cpd-color-icon-success-primary)"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -313,7 +313,7 @@ exports[`VerificationRequestDialog Shows a successful message if verification fi
         style="width: 128px; height: 128px;"
       >
         <svg
-          class="mx_E2EIcon_verified"
+          color="var(--cpd-color-icon-success-primary)"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
