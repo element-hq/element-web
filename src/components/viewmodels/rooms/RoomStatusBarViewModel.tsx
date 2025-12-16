@@ -100,16 +100,14 @@ export function useRoomStatusBarViewModel({ room }: IProps): RoomStatusBarVM {
         let consentError: MatrixError | null = null;
         let resourceLimitError: MatrixError | null = null;
         for (const m of unsentMessages) {
-            if (!m.error) {
-                continue;
-            }
-            if (m.error.errcode === "M_CONSENT_NOT_GIVEN") {
-                consentError = m.error;
-                break;
-            }
-            if (m.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
-                resourceLimitError = m.error;
-                break;
+            if (m.error) {
+                if (m.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
+                    resourceLimitError = m.error;
+                }
+                if (m.error.errcode === "M_CONSENT_NOT_GIVEN") {
+                    consentError = m.error;
+                    break; // This is the most important thing to show, so break here if we find one.
+                }
             }
         }
         if (consentError) {
