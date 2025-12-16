@@ -7,11 +7,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { RestartIcon, WarningIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t, _td } from "../../languageHandler";
+import { _t } from "../../languageHandler";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
@@ -23,7 +23,7 @@ interface IProps {
     room: Room;
 }
 
-export function RoomStatusBar(props: IProps) {
+export function RoomStatusBar(props: IProps): JSX.Element|null {
     const vm = useRoomStatusBarViewModel(props);
     if (!vm.visible) {
         return null;
