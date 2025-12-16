@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning when messages are unsent due to consent 1`] = `
+exports[`RoomStatusBar unsent messages should render warning when messages are unsent due to consent 1`] = `
 <div>
   <div
     class="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages"
@@ -80,7 +80,7 @@ exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning w
           Delete all
         </div>
         <div
-          class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+          class="mx_AccessibleButton"
           role="button"
           tabindex="0"
         >
@@ -103,7 +103,7 @@ exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning w
 </div>
 `;
 
-exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning when messages are unsent due to resource limit 1`] = `
+exports[`RoomStatusBar unsent messages should render warning when messages are unsent due to resource limit 1`] = `
 <div>
   <div
     class="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages"
@@ -158,7 +158,7 @@ exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning w
           Delete all
         </div>
         <div
-          class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+          class="mx_AccessibleButton"
           role="button"
           tabindex="0"
         >
