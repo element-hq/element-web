@@ -371,7 +371,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                 if (this.props.previewLoading) {
                     footer = (
                         <div>
-                            <Spinner w={20} h={20} />
+                            <Spinner size={20} />
                             {_t("room|loading_preview")}
                         </div>
                     );
