@@ -64,21 +64,15 @@ Please see LICENSE files in the repository root for full details.
                 width: var(--BaseCard_header-button-size);
                 height: var(--BaseCard_header-button-size);
 
-                &::after {
-                    content: "";
-                    position: absolute;
-                    inset-block-start: 0;
-                    inset-inline-start: 0;
-                    height: 100%;
-                    width: 100%;
-                    mask-repeat: no-repeat;
-                    mask-position: center;
-                    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
-                    background-color: $secondary-content;
+                svg {
+                    width: inherit;
+                    height: inherit;
+                    display: block;
+                    color: $secondary-content;
                 }
 
-                &:hover::after {
-                    background-color: $primary-content;
+                &:hover svg {
+                    color: $primary-content;
                 }
             }
         }
