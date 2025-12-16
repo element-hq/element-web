@@ -9588,10 +9588,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@39.4.0-rc.0:
-  version "39.4.0-rc.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-39.4.0-rc.0.tgz#58a451911cd469a1011fc94e499429f4a77d689d"
-  integrity sha512-Y1v5PUN4dfSUcBJ/Mi4BjZ6EqiBLVXe5RobNYIerIEJyKSfEhFn4ptLWb0Gb/hHIm13TKi+HiQ6evYwQEk8wrQ==
+matrix-js-sdk@39.4.0:
+  version "39.4.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-39.4.0.tgz#1298a8745e5e711501f18b6e65d2c08f05e283b1"
+  integrity sha512-0RZLcwbMxMTU+ORPhpFUnX8nDbKwLtdW20T6VesSxEwjKL5j2TM/mIt4u3h0HJiMh63PpAb2QUcNr0R82YfTOA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^15.3.0"
