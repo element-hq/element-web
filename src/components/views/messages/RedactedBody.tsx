@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useContext, type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -34,6 +35,7 @@ const RedactedBody = ({ mxEvent, ref }: IBodyProps): JSX.Element => {
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>
+            <DeleteIcon />
             {text}
         </span>
     );
