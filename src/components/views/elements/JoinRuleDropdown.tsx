@@ -57,7 +57,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         options.unshift(
             (
                 <div key={JoinRule.Knock} className="mx_JoinRuleDropdown_knock">
-                    <AskToJoinIcon className="mx_Icon mx_Icon_16 mx_JoinRuleDropdown_icon" />
+                    <AskToJoinIcon />
                     {labelKnock}
                 </div>
             ) as ReactElement & { key: string },
