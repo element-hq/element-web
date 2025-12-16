@@ -22,6 +22,15 @@ import React, {
 import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import {
+    FavouriteSolidIcon,
+    HomeSolidIcon,
+    RoomIcon,
+    VideoCallSolidIcon,
+    UserProfileSolidIcon,
+    PlusIcon,
+    ChevronRightIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -114,6 +123,7 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
 interface IMetaSpaceButtonProps extends ComponentProps<typeof SpaceButton> {
     selected: boolean;
     isPanelCollapsed: boolean;
+    icon: JSX.Element;
 }
 
 type MetaSpaceButtonProps = Pick<IMetaSpaceButtonProps, "selected" | "isPanelCollapsed">;
@@ -152,7 +162,6 @@ const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.Home}
-            className="mx_SpaceButton_home"
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Home, allRoomsInHome)}
@@ -160,6 +169,7 @@ const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed
             ContextMenuComponent={HomeButtonContextMenu}
             contextMenuTooltip={_t("common|options")}
             size="32px"
+            icon={<HomeSolidIcon />}
         />
     );
 };
@@ -168,12 +178,12 @@ const FavouritesButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCol
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.Favourites}
-            className="mx_SpaceButton_favourites"
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Favourites)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Favourites)}
             size="32px"
+            icon={<FavouriteSolidIcon />}
         />
     );
 };
@@ -182,12 +192,12 @@ const PeopleButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollaps
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.People}
-            className="mx_SpaceButton_people"
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.People)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.People)}
             size="32px"
+            icon={<UserProfileSolidIcon />}
         />
     );
 };
@@ -196,12 +206,12 @@ const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollap
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.Orphans}
-            className="mx_SpaceButton_orphans"
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Orphans)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Orphans)}
             size="32px"
+            icon={<RoomIcon />}
         />
     );
 };
@@ -210,12 +220,12 @@ const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCol
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.VideoRooms}
-            className="mx_SpaceButton_videoRooms"
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.VideoRooms)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.VideoRooms)}
             size="32px"
+            icon={<VideoCallSolidIcon />}
         />
     );
 };
@@ -262,6 +272,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
                 isNarrow={isPanelCollapsed}
                 innerRef={handle}
                 size="32px"
+                icon={<PlusIcon />}
             />
 
             {contextMenu}
@@ -449,7 +460,9 @@ const SpacePanel: React.FC = () => {
                                             className="mx_SpacePanel_Tooltip_KeyboardShortcut"
                                         />
                                     }
-                                />
+                                >
+                                    <ChevronRightIcon />
+                                </AccessibleButton>
                             </UserMenu>
                             <Droppable droppableId="top-level-spaces">
                                 {(provided, snapshot) => (

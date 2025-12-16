@@ -10,7 +10,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { type EventTimelineSet, type Room, Thread } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
+import { ThreadsIcon, CheckIcon, ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
 import BaseCard from "../views/right_panel/BaseCard";
@@ -57,6 +57,7 @@ export const ThreadPanelHeaderFilterOptionItem: React.FC<
 > = ({ label, description, onClick, isSelected }) => {
     return (
         <MenuItemRadio active={isSelected} className="mx_ThreadPanel_Header_FilterOptionItem" onClick={onClick}>
+            {isSelected ? <CheckIcon /> : null}
             <span>{label}</span>
             <span>{description}</span>
         </MenuItemRadio>
@@ -145,6 +146,7 @@ export const ThreadPanelHeader: React.FC<{
                 }}
             >
                 {`${_t("threads|show_thread_filter")} ${value?.label}`}
+                <ChevronDownIcon />
             </ContextMenuButton>
             {contextMenu}
         </div>
