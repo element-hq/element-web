@@ -243,7 +243,6 @@ export interface IRoomState {
     // 'scroll to bottom' knob, among a couple of other things.
     atEndOfLiveTimeline?: boolean;
     showTopUnreadMessagesBar: boolean;
-    statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
 
@@ -462,7 +461,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showRightPanel: false,
             joining: false,
             showTopUnreadMessagesBar: false,
-            statusBarVisible: false,
             canReact: false,
             canSendMessages: false,
             resizing: false,
@@ -2366,7 +2364,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         let statusBar: JSX.Element | undefined;
-        const isStatusAreaExpanded = true;
 
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
             statusBar = <UploadBar room={this.state.room} />;
@@ -2374,14 +2371,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             statusBar = <RoomStatusBar room={this.state.room} />;
         }
 
-        const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
-            mx_RoomView_statusArea_expanded: isStatusAreaExpanded,
-        });
-
         // if statusBar does not exist then statusBarArea is blank and takes up unnecessary space on the screen
         // show statusBarArea only if statusBar is present
         const statusBarArea = statusBar && (
-            <div role="region" className={statusBarAreaClass} aria-label={_t("a11y|room_status_bar")}>
+            <div role="region" className="mx_RoomView_statusArea" aria-label={_t("a11y|room_status_bar")}>
                 <div className="mx_RoomView_statusAreaBox">
                     <div className="mx_RoomView_statusAreaBox_line" />
                     {statusBar}
