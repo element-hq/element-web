@@ -68,32 +68,31 @@ const logger = baseLogger.getChild("DeviceListener:");
 /**
  * The state of the device and the user's account.
  */
-export enum DeviceState {
+export type DeviceState =
     /**
      * The device is in a good state.
      */
-    OK = "ok",
+    | "ok"
     /**
      * The user needs to set up recovery.
      */
-    SET_UP_RECOVERY = "set_up_recovery",
+    | "set_up_recovery"
     /**
      * The device is not verified.
      */
-    VERIFY_THIS_SESSION = "verify_this_session",
+    | "verify_this_session"
     /**
      * Key storage is out of sync (keys are missing locally, from recovery, or both).
      */
-    KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
+    | "key_storage_out_of_sync"
     /**
      * Key storage is not enabled, and has not been marked as purposely disabled.
      */
-    TURN_ON_KEY_STORAGE = "turn_on_key_storage",
+    | "turn_on_key_storage"
     /**
      * The user's identity needs resetting, due to missing keys.
      */
-    IDENTITY_NEEDS_RESET = "identity_needs_reset",
-}
+    | "identity_needs_reset";
 
 /**
  * The events emitted by {@link DeviceListener}
@@ -128,7 +127,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     private shouldRecordClientInformation = false;
     private enableBulkUnverifiedSessionsReminder = true;
     private deviceClientInformationSettingWatcherRef: string | undefined;
-    private deviceState: DeviceState = DeviceState.OK;
+    private deviceState: DeviceState = "ok";
 
     // Remember the current analytics state to avoid sending the same event multiple times.
     private analyticsVerificationState?: string;
@@ -240,7 +239,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     }
 
     /**
-     * If the device is in a `DeviceState.KEY_STORAGE_OUT_OF_SYNC` state, check if
+     * If the device is in a `key_storage_out_of_sync` state, check if
      * it requires a reset of cross-signing keys.
      *
      * We will reset cross-signing keys if both our local cache and 4S don't
@@ -269,7 +268,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     }
 
     /**
-     * If the device is in a `DeviceState.KEY_STORAGE_OUT_OF_SYNC` state, check if
+     * If the device is in a `"key_storage_out_of_sync"` state, check if
      * it requires a reset of key backup.
      *
      * If the user has their recovery key, we need to reset backup if:
@@ -277,7 +276,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
      * - we don't have the backup key cached locally, *and*
      * - we don't have the backup key stored in 4S.
      * (The user should already have a key backup created at this point, the
-     * device state would be `DeviceState.TURN_ON_KEY_STORAGE`.)
+     * device state would be `turn_on_key_storage`.)
      *
      * If the user has forgotten their recovery key, we need to reset backup if:
      * - the user hasn't disabled backup, and
@@ -475,21 +474,25 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
 
         // We warn if key backup upload is turned off and we have not explicitly
         // said we are OK with that.
-        const keyBackupIsOk = keyBackupUploadActive || backupDisabled;
+        const keyBackupUploadIsOk = keyBackupUploadActive || backupDisabled;
 
-        // If key backup is active and not disabled: do we have the backup key
-        // cached locally?
-        const backupKeyCached =
+        // We warn if key backup is set up, but we don't have the decryption
+        // key, so can't fetch keys from backup.
+        const keyBackupDownloadIsOk =
             !keyBackupUploadActive || backupDisabled || (await crypto.getSessionBackupPrivateKey()) !== null;
 
         const allSystemsReady =
-            isCurrentDeviceTrusted && allCrossSigningSecretsCached && keyBackupIsOk && recoveryIsOk && backupKeyCached;
+            isCurrentDeviceTrusted &&
+            allCrossSigningSecretsCached &&
+            keyBackupUploadIsOk &&
+            recoveryIsOk &&
+            keyBackupDownloadIsOk;
 
         await this.reportCryptoSessionStateToAnalytics(cli);
 
         if (allSystemsReady) {
             logSpan.info("No toast needed");
-            await this.setDeviceState(DeviceState.OK, logSpan);
+            await this.setDeviceState("ok", logSpan);
 
             this.checkKeyBackupStatus();
         } else {
@@ -499,7 +502,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
             if (!isCurrentDeviceTrusted) {
                 // the current device is not trusted: prompt the user to verify
                 logSpan.info("Current device not verified: setting state to VERIFY_THIS_SESSION");
-                await this.setDeviceState(DeviceState.VERIFY_THIS_SESSION, logSpan);
+                await this.setDeviceState("verify_this_session", logSpan);
             } else if (!allCrossSigningSecretsCached) {
                 // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
@@ -509,27 +512,25 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
                     crossSigningStatus.privateKeysInSecretStorage,
                 );
                 await this.setDeviceState(
-                    crossSigningStatus.privateKeysInSecretStorage
-                        ? DeviceState.KEY_STORAGE_OUT_OF_SYNC
-                        : DeviceState.IDENTITY_NEEDS_RESET,
+                    crossSigningStatus.privateKeysInSecretStorage ? "key_storage_out_of_sync" : "identity_needs_reset",
                     logSpan,
                 );
-            } else if (!keyBackupIsOk) {
+            } else if (!keyBackupUploadIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
-                await this.setDeviceState(DeviceState.TURN_ON_KEY_STORAGE, logSpan);
+                await this.setDeviceState("turn_on_key_storage", logSpan);
             } else if (secretStorageStatus.defaultKeyId === null) {
                 // The user just hasn't set up 4S yet: if they have key
                 // backup, prompt them to turn on recovery too. (If not, they
                 // have explicitly opted out, so don't hassle them.)
                 if (recoveryDisabled) {
                     logSpan.info("Recovery disabled: no toast needed");
-                    await this.setDeviceState(DeviceState.OK, logSpan);
+                    await this.setDeviceState("ok", logSpan);
                 } else if (keyBackupUploadActive) {
                     logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
-                    await this.setDeviceState(DeviceState.SET_UP_RECOVERY, logSpan);
+                    await this.setDeviceState("set_up_recovery", logSpan);
                 } else {
                     logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    await this.setDeviceState(DeviceState.OK, logSpan);
+                    await this.setDeviceState("ok", logSpan);
                 }
             } else {
                 // If we get here, then we are verified, have key backup, and
@@ -544,9 +545,9 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
                     secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
-                    backupKeyCached,
+                    keyBackupDownloadIsOk,
                 });
-                await this.setDeviceState(DeviceState.KEY_STORAGE_OUT_OF_SYNC, logSpan);
+                await this.setDeviceState("key_storage_out_of_sync", logSpan);
             }
             if (this.dismissedThisDeviceToast) {
                 this.checkKeyBackupStatus();
@@ -649,7 +650,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
         this.deviceState = newState;
         this.emit(DeviceListenerEvents.DeviceState, newState);
-        if (newState === DeviceState.OK || this.dismissedThisDeviceToast) {
+        if (newState === "ok" || this.dismissedThisDeviceToast) {
             hideSetupEncryptionToast();
         } else if (await this.shouldShowSetupEncryptionToast()) {
             showSetupEncryptionToast(newState);

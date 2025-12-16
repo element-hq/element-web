@@ -14,7 +14,7 @@ import { type Interaction as InteractionEvent } from "@matrix-org/analytics-even
 import type React from "react";
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
-import DeviceListener, { DeviceState } from "../DeviceListener";
+import DeviceListener, { type DeviceState } from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";
@@ -33,50 +33,50 @@ import { PosthogAnalytics } from "../PosthogAnalytics";
 
 const TOAST_KEY = "setupencryption";
 
-const getTitle = (state: DeviceState): string => {
+/**
+ * The device states that we show a toast for (everything except for "ok").
+ */
+type DeviceStateForToast = Exclude<DeviceState, "ok">;
+
+const getTitle = (state: DeviceStateForToast): string => {
     switch (state) {
-        case DeviceState.SET_UP_RECOVERY:
+        case "set_up_recovery":
             return _t("encryption|set_up_recovery");
-        case DeviceState.VERIFY_THIS_SESSION:
+        case "verify_this_session":
             return _t("encryption|verify_toast_title");
-        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
-        case DeviceState.IDENTITY_NEEDS_RESET:
+        case "key_storage_out_of_sync":
+        case "identity_needs_reset":
             return _t("encryption|key_storage_out_of_sync");
-        case DeviceState.TURN_ON_KEY_STORAGE:
+        case "turn_on_key_storage":
             return _t("encryption|turn_on_key_storage");
-        case DeviceState.OK:
-            return "";
     }
 };
 
-const getIcon = (state: DeviceState): IToast<any>["icon"] => {
+const getIcon = (state: DeviceStateForToast): IToast<any>["icon"] => {
     switch (state) {
-        case DeviceState.SET_UP_RECOVERY:
-        case DeviceState.OK:
+        case "set_up_recovery":
             return undefined;
-        case DeviceState.VERIFY_THIS_SESSION:
-        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
-        case DeviceState.IDENTITY_NEEDS_RESET:
+        case "verify_this_session":
+        case "key_storage_out_of_sync":
+        case "identity_needs_reset":
             return "verification_warning";
-        case DeviceState.TURN_ON_KEY_STORAGE:
+        case "turn_on_key_storage":
             return "key_storage";
     }
 };
 
-const getSetupCaption = (state: DeviceState): string => {
+const getSetupCaption = (state: DeviceStateForToast): string => {
     switch (state) {
-        case DeviceState.SET_UP_RECOVERY:
+        case "set_up_recovery":
             return _t("action|continue");
-        case DeviceState.VERIFY_THIS_SESSION:
+        case "verify_this_session":
             return _t("action|verify");
-        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+        case "key_storage_out_of_sync":
             return _t("encryption|enter_recovery_key");
-        case DeviceState.TURN_ON_KEY_STORAGE:
+        case "turn_on_key_storage":
             return _t("action|continue");
-        case DeviceState.IDENTITY_NEEDS_RESET:
+        case "identity_needs_reset":
             return _t("encryption|continue_with_reset");
-        case DeviceState.OK:
-            return "";
     }
 };
 
@@ -84,46 +84,44 @@ const getSetupCaption = (state: DeviceState): string => {
  * Get the icon to show on the primary button.
  * @param state
  */
-const getPrimaryButtonIcon = (state: DeviceState): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
+const getPrimaryButtonIcon = (
+    state: DeviceStateForToast,
+): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
     switch (state) {
-        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+        case "key_storage_out_of_sync":
             return KeyIcon;
         default:
             return;
     }
 };
 
-const getSecondaryButtonLabel = (state: DeviceState): string => {
+const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
     switch (state) {
-        case DeviceState.SET_UP_RECOVERY:
+        case "set_up_recovery":
             return _t("action|dismiss");
-        case DeviceState.VERIFY_THIS_SESSION:
+        case "verify_this_session":
             return _t("encryption|verification|unverified_sessions_toast_reject");
-        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+        case "key_storage_out_of_sync":
             return _t("encryption|forgot_recovery_key");
-        case DeviceState.TURN_ON_KEY_STORAGE:
+        case "turn_on_key_storage":
             return _t("action|dismiss");
-        case DeviceState.IDENTITY_NEEDS_RESET:
-            return "";
-        case DeviceState.OK:
+        case "identity_needs_reset":
             return "";
     }
 };
 
-const getDescription = (state: DeviceState): string => {
+const getDescription = (state: DeviceStateForToast): string => {
     switch (state) {
-        case DeviceState.SET_UP_RECOVERY:
+        case "set_up_recovery":
             return _t("encryption|set_up_recovery_toast_description");
-        case DeviceState.VERIFY_THIS_SESSION:
+        case "verify_this_session":
             return _t("encryption|verify_toast_description");
-        case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+        case "key_storage_out_of_sync":
             return _t("encryption|key_storage_out_of_sync_description");
-        case DeviceState.TURN_ON_KEY_STORAGE:
+        case "turn_on_key_storage":
             return _t("encryption|turn_on_key_storage_description");
-        case DeviceState.IDENTITY_NEEDS_RESET:
+        case "identity_needs_reset":
             return _t("encryption|identity_needs_reset_description");
-        case DeviceState.OK:
-            return "";
     }
 };
 
@@ -132,11 +130,7 @@ const getDescription = (state: DeviceState): string => {
  *
  * @param state The state of the device
  */
-export const showToast = (state: DeviceState): void => {
-    if (state === DeviceState.OK) {
-        return hideToast();
-    }
-
+export const showToast = (state: DeviceStateForToast): void => {
     if (
         ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
             kind: state as any,
@@ -148,15 +142,12 @@ export const showToast = (state: DeviceState): void => {
 
     const onPrimaryClick = async (): Promise<void> => {
         switch (state) {
-            case DeviceState.SET_UP_RECOVERY:
-            case DeviceState.TURN_ON_KEY_STORAGE: {
+            case "set_up_recovery":
+            case "turn_on_key_storage": {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
-                    name:
-                        state === DeviceState.SET_UP_RECOVERY
-                            ? "ToastSetUpRecoveryClick"
-                            : "ToastTurnOnKeyStorageClick",
+                    name: state === "set_up_recovery" ? "ToastSetUpRecoveryClick" : "ToastTurnOnKeyStorageClick",
                 });
                 // Open the user settings dialog to the encryption tab
                 const payload: OpenToTabPayload = {
@@ -166,10 +157,10 @@ export const showToast = (state: DeviceState): void => {
                 defaultDispatcher.dispatch(payload);
                 break;
             }
-            case DeviceState.VERIFY_THIS_SESSION:
+            case "verify_this_session":
                 Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
                 break;
-            case DeviceState.KEY_STORAGE_OUT_OF_SYNC: {
+            case "key_storage_out_of_sync": {
                 const modal = Modal.createDialog(
                     Spinner,
                     undefined,
@@ -210,7 +201,7 @@ export const showToast = (state: DeviceState): void => {
                 }
                 break;
             }
-            case DeviceState.IDENTITY_NEEDS_RESET: {
+            case "identity_needs_reset": {
                 // Open the user settings dialog to reset identity
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
@@ -227,7 +218,7 @@ export const showToast = (state: DeviceState): void => {
 
     const onSecondaryClick = async (): Promise<void> => {
         switch (state) {
-            case DeviceState.SET_UP_RECOVERY: {
+            case "set_up_recovery": {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
@@ -239,7 +230,7 @@ export const showToast = (state: DeviceState): void => {
                 deviceListener.dismissEncryptionSetup();
                 break;
             }
-            case DeviceState.KEY_STORAGE_OUT_OF_SYNC: {
+            case "key_storage_out_of_sync": {
                 // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
                 const deviceListener = DeviceListener.sharedInstance();
                 const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true);
@@ -255,7 +246,7 @@ export const showToast = (state: DeviceState): void => {
                 defaultDispatcher.dispatch(payload);
                 break;
             }
-            case DeviceState.TURN_ON_KEY_STORAGE: {
+            case "turn_on_key_storage": {
                 PosthogAnalytics.instance.trackEvent<InteractionEvent>({
                     eventName: "Interaction",
                     interactionType: "Pointer",
@@ -319,10 +310,10 @@ export const showToast = (state: DeviceState): void => {
             onPrimaryClick,
             secondaryLabel: getSecondaryButtonLabel(state),
             onSecondaryClick,
-            overrideWidth: state === DeviceState.KEY_STORAGE_OUT_OF_SYNC ? "366px" : undefined,
+            overrideWidth: state === "key_storage_out_of_sync" ? "366px" : undefined,
         },
         component: GenericToast,
-        priority: state === DeviceState.VERIFY_THIS_SESSION ? 95 : 40,
+        priority: state === "verify_this_session" ? 95 : 40,
     });
 };
 

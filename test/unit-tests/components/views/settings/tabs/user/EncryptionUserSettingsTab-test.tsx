@@ -19,7 +19,7 @@ import {
 } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
 import Modal from "../../../../../../../src/Modal";
-import DeviceListener, { DeviceState } from "../../../../../../../src/DeviceListener";
+import DeviceListener from "../../../../../../../src/DeviceListener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
@@ -40,7 +40,7 @@ describe("<EncryptionUserSettingsTab />", () => {
             },
         });
 
-        jest.spyOn(DeviceListener.sharedInstance(), "getDeviceState").mockReturnValue(DeviceState.OK);
+        jest.spyOn(DeviceListener.sharedInstance(), "getDeviceState").mockReturnValue("ok");
     });
 
     afterEach(() => {
@@ -53,7 +53,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
     it("should display a verify button when the encryption is not set up", async () => {
         const user = userEvent.setup();
-        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.VERIFY_THIS_SESSION);
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("verify_this_session");
 
         const { asFragment } = renderComponent();
         await waitFor(() =>
@@ -82,7 +82,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the recovery out of sync panel when secrets are not cached", async () => {
-        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
 
         const user = userEvent.setup();
         const { asFragment } = renderComponent();
@@ -187,7 +187,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     it("should re-check the encryption state and displays the correct panel when the user clicks cancel the reset identity flow", async () => {
         const user = userEvent.setup();
 
-        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
 
         renderComponent({ initialState: "reset_identity_forgot" });
 
@@ -202,7 +202,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the identity needs reset panel when the user's identity needs resetting", async () => {
-        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(DeviceState.IDENTITY_NEEDS_RESET);
+        mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("identity_needs_reset");
 
         const user = userEvent.setup();
         const { asFragment } = renderComponent();

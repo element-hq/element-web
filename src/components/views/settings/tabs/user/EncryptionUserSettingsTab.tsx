@@ -24,7 +24,7 @@ import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync"
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
-import DeviceListener, { DeviceListenerEvents, DeviceState } from "../../../../../DeviceListener";
+import DeviceListener, { DeviceListenerEvents, type DeviceState } from "../../../../../DeviceListener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
 /**
@@ -79,10 +79,10 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
         case "main":
             switch (deviceState) {
                 // some device states require action from the user rather than showing the main settings screen
-                case DeviceState.VERIFY_THIS_SESSION:
+                case "verify_this_session":
                     content = <SetUpEncryptionPanel onFinish={() => setState("main")} />;
                     break;
-                case DeviceState.KEY_STORAGE_OUT_OF_SYNC:
+                case "key_storage_out_of_sync":
                     content = (
                         <RecoveryPanelOutOfSync
                             onFinish={() => setState("main")}
@@ -90,7 +90,7 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                         />
                     );
                     break;
-                case DeviceState.IDENTITY_NEEDS_RESET:
+                case "identity_needs_reset":
                     content = (
                         <IdentityNeedsResetNoticePanel onContinue={() => setState("reset_identity_cant_recover")} />
                     );

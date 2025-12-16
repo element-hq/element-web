@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
-import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY, DeviceState } from "../../src/DeviceListener";
+import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/DeviceListener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
@@ -341,7 +341,7 @@ describe("DeviceListener", () => {
                 await createAndStart();
 
                 expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
-                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.VERIFY_THIS_SESSION);
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("verify_this_session");
             });
 
             describe("when current device is verified", () => {
@@ -378,7 +378,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
                 it("shows an identity reset toast when one of the cross-signing secrets is missing locally and in 4S", async () => {
@@ -394,7 +394,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.IDENTITY_NEEDS_RESET);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("identity_needs_reset");
                 });
 
                 it("shows an out-of-sync toast when the backup key is missing locally", async () => {
@@ -404,7 +404,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
                 it("does not show an out-of-sync toast when the backup key is missing locally but backup is purposely disabled", async () => {
@@ -436,7 +436,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
 
                     // Then, when we receive the secret, it should be hidden.
                     mockCrypto!.getCrossSigningStatus.mockResolvedValue({
@@ -462,7 +462,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.SET_UP_RECOVERY);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("set_up_recovery");
                 });
 
                 it("shows an out-of-sync toast when one of the secrets is missing from 4S", async () => {
@@ -476,7 +476,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.KEY_STORAGE_OUT_OF_SYNC);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
             });
         });
@@ -577,7 +577,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is displayed
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.TURN_ON_KEY_STORAGE);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("shows the 'Turn on key storage' toast if we turned on key storage", async () => {
@@ -593,7 +593,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is displayed
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.TURN_ON_KEY_STORAGE);
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("does not show the 'Turn on key storage' toast if we turned off key storage", async () => {
@@ -606,7 +606,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.TURN_ON_KEY_STORAGE);
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
             });
 
@@ -624,7 +624,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.TURN_ON_KEY_STORAGE);
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("does not show the 'Turn on key storage' toast if we turned on key storage", async () => {
@@ -639,7 +639,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.TURN_ON_KEY_STORAGE);
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("does not show the 'Turn on key storage' toast if we turned off key storage", async () => {
@@ -655,7 +655,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.TURN_ON_KEY_STORAGE);
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
             });
         });
@@ -1198,21 +1198,21 @@ describe("DeviceListener", () => {
 
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(DeviceState.SET_UP_RECOVERY);
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("set_up_recovery");
             });
 
             it("does not show the 'set up recovery' toast if secret storage is set up", async () => {
                 mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.SET_UP_RECOVERY);
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
             });
 
             it("does not show the 'set up recovery' toast if user has no encrypted rooms", async () => {
                 jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.SET_UP_RECOVERY);
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
             });
 
             it("does not show the 'set up recovery' toast if the user has chosen to disable key storage", async () => {
@@ -1224,7 +1224,7 @@ describe("DeviceListener", () => {
                 });
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(DeviceState.SET_UP_RECOVERY);
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
             });
         });
     });
