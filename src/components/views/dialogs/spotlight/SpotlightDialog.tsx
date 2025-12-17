@@ -1279,7 +1279,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         aria-label={_t("action|search")}
                         aria-describedby="mx_SpotlightDialog_keyboardPrompt"
                     />
-                    {(publicRoomsLoading || peopleLoading || profileLoading) && <Spinner w={24} h={24} />}
+                    {(publicRoomsLoading || peopleLoading || profileLoading) && <Spinner size={24} />}
                 </div>
 
                 <div

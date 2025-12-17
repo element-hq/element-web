@@ -54,13 +54,24 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         <div
           class="mx_Spinner"
         >
-          <div
+          <svg
             aria-label="Loading…"
-            class="mx_Spinner_icon"
+            class="_icon_11k6c_18"
             data-testid="spinner"
+            fill="currentColor"
+            height="1em"
             role="progressbar"
             style="width: 45px; height: 45px;"
-          />
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
         </div>
         <div
           class="mx_LargeLoader_text"
@@ -3422,13 +3433,24 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                     Loading…
                   </div>
                    
-                  <div
+                  <svg
                     aria-label="Loading…"
-                    class="mx_Spinner_icon"
+                    class="_icon_11k6c_18"
                     data-testid="spinner"
+                    fill="currentColor"
+                    height="1em"
                     role="progressbar"
                     style="width: 32px; height: 32px;"
-                  />
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
                 </div>
               </div>
             </div>
