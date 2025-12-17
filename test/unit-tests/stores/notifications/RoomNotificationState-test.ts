@@ -32,7 +32,6 @@ describe("RoomNotificationState", () => {
     let client: MatrixClient;
 
     beforeEach(() => {
-        console.log("Creating spy");
         client = stubClient();
         room = new Room("!room:example.com", client, "@user:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
