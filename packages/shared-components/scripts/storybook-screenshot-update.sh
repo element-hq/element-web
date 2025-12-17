@@ -30,8 +30,10 @@
 
 set -e
 
-# First install dependencies.
-# Be sure to use --with-node-modules on playwright-screenshots to avoid issues with native modules.
+# First install dependencies. We have to do this within the playwright container rather than the host,
+# because we have which must be built for the right architecture (and some environments use a VM
+# to run docker containers, meaning that things inside a container use a different architecture than
+# those on the host).
 yarn
 
 # Now run the screenshot update
