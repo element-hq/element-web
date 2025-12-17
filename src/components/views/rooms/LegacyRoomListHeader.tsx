@@ -9,7 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { ClientEvent, EventType, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, useContext, useEffect, useState } from "react";
 import { Tooltip } from "@vector-im/compound-web";
-import { PlusIcon, UserAddSolidIcon, SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    PlusIcon,
+    UserAddSolidIcon,
+    SearchIcon,
+    UserAddIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
@@ -52,7 +57,6 @@ import IconizedContextMenu, {
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
-import { Icon as InviteIcon } from "../../../../res/img/element-icons/room/invite.svg";
 import { Icon as HashVideoIcon } from "../../../../res/img/element-icons/roomlist/hash-video.svg";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
@@ -181,7 +185,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             inviteOption = (
                 <IconizedContextMenuOption
                     label={_t("action|invite")}
-                    icon={<InviteIcon />}
+                    icon={<UserAddIcon />}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();

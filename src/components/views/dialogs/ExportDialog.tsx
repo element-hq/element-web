@@ -391,7 +391,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 </div>
                 {isExporting ? (
                     <div data-testid="export-progress" className="mx_ExportDialog_progress">
-                        <Spinner w={24} h={24} />
+                        <Spinner size={24} />
                         <p>{exportProgressText}</p>
                         <DialogButtons
                             primaryButton={_t("action|cancel")}
