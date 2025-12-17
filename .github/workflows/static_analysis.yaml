@@ -41,7 +41,7 @@ jobs:
             - name: Typecheck Shared Components
               run: "yarn --cwd packages/shared-components run lint:types"
 
-    i18n_lint:
+    i18n_lint_ew:
         name: "i18n Check (Element Web)"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         permissions:
@@ -59,7 +59,7 @@ jobs:
                 devtools|settings|elementCallUrl
                 labs|sliding_sync_description
 
-    i18n_lint:
+    i18n_lint_shared_components:
         name: "i18n Check (Shared Components)"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         permissions:
