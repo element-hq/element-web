@@ -22,7 +22,7 @@ interface Props {
     room: Room;
 
     /**
-     * If present, indicates the ID of the thread currently being viewed in the thread
+     * If not null, indicates the ID of the thread currently being viewed in the thread
      * timeline side view, where the banner view is displayed as a child of the message
      * composer.
      */
@@ -111,7 +111,7 @@ export class HistoryVisibleBannerViewModel
 
     /**
      * Recompute and update this VM instance's snapshot. This will update the `acknowledgedHistoryVisibility`
-     * store entry  if necessary.
+     * store entry if necessary.
      */
     private setSnapshot(): void {
         const acknowledged = SettingsStore.getValue("acknowledgedHistoryVisibility", this.props.room.roomId);

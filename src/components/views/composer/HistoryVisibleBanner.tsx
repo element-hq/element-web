@@ -17,7 +17,7 @@ export const HistoryVisibleBanner: React.FC<{
     room: Room;
 
     /**
-     * If provided, specifies the ID of the thread currently being viewed in the thread timeline side view,
+     * If not null, specifies the ID of the thread currently being viewed in the thread timeline side view,
      * where the banner view is displayed as a child of the message composer.
      */
     threadId: string | null;
