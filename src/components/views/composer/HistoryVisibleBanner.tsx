@@ -20,7 +20,7 @@ export const HistoryVisibleBanner: React.FC<{
      * If provided, specifies the ID of the thread currently being viewed in the thread timeline side view,
      * where the banner view is displayed as a child of the message composer.
      */
-    threadId?: string | null;
+    threadId: string | null;
 }> = (props) => {
     const vm = useCreateAutoDisposedViewModel(() => new HistoryVisibleBannerViewModel(props));
     return <HistoryVisibleBannerView vm={vm} />;

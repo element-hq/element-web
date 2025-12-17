@@ -26,7 +26,7 @@ interface Props {
      * timeline side view, where the banner view is displayed as a child of the message
      * composer.
      */
-    threadId?: string | null;
+    threadId: string | null;
 }
 
 /**

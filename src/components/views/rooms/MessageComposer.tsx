@@ -675,7 +675,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
-                <HistoryVisibleBanner room={this.props.room} threadId={threadId} />
+                <HistoryVisibleBanner room={this.props.room} threadId={threadId ?? null} />
                 <div className="mx_MessageComposer_wrapper">
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
