@@ -11,7 +11,6 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import { Button } from "@vector-im/compound-web";
 
 import { Banner } from "./Banner";
-import { _t } from "../../utils/i18n";
 
 const meta = {
     title: "room/Banner",
@@ -46,19 +45,12 @@ export const WithAction: Story = {
     args: {
         children: (
             <p>
-                {_t(
-                    "encryption|pinned_identity_changed",
-                    { displayName: "Alice", userId: "@alice:example.org" },
-                    {
-                        a: (sub) => <a href="https://example.org">{sub}</a>,
-                        b: (sub) => <b>{sub}</b>,
-                    },
-                )}
+                Alice's (<b>@alice:example.com</b>) identity was reset. <a href="https://example.org">Learn more</a>
             </p>
         ),
         actions: (
             <Button kind="primary" size="sm">
-                {_t("encryption|withdraw_verification_action")}
+                Withdraw verification
             </Button>
         ),
     },

@@ -30,7 +30,16 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
       class="content"
     >
       <p>
-        encryption|pinned_identity_changed
+        Alice's (
+        <b>
+          @alice:example.com
+        </b>
+        ) identity was reset. 
+        <a
+          href="https://example.org"
+        >
+          Learn more
+        </a>
       </p>
     </div>
     <div
@@ -43,7 +52,7 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
         role="button"
         tabindex="0"
       >
-        encryption|withdraw_verification_action
+        Withdraw verification
       </button>
       <button
         class="_button_187yx_8"
