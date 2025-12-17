@@ -68,7 +68,7 @@ export const Commands = [
     new Command({
         command: "spoiler",
         args: "<message>",
-        description: _td("test|not_a_valid_translation"),
+        description: _td("slash_command|spoiler"),
         runFn: function (cli, roomId, threadId, message = "") {
             return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
         },
