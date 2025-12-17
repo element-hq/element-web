@@ -191,7 +191,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.user!.presence = "offline";
                 });
 
-                await act(() => reRender());
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_MemberTileView");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
@@ -201,7 +201,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                 const { reRender, root, memberListRoom } = rendered;
                 // We already have admin, moderator, and default users so leave them alone
 
-                await act(() => reRender());
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
@@ -229,7 +229,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.user!.lastActiveAgo = 100;
                 });
 
-                await act(() => reRender());
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
@@ -247,7 +247,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.powerLevel = 100;
                 });
 
-                await act(() => reRender());
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
