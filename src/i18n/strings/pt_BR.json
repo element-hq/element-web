@@ -101,9 +101,7 @@
         "ok": "Ok",
         "open": "Abrir",
         "open_menu": "Abrir menu",
-        "pause": "Pausar",
         "pin": "Alfinete",
-        "play": "Reproduzir",
         "proceed": "Prosseguir",
         "quote": "Citar",
         "react": "Adicionar reação",
@@ -3390,24 +3388,10 @@
         "no_rooms_with_unread_threads": "Você ainda não tem salas com tópicos não lidos."
     },
     "time": {
-        "about_day_ago": "há aproximadamente um dia",
-        "about_hour_ago": "há aproximadamente uma hora",
-        "about_minute_ago": "há aproximadamente um minuto",
         "date_at_time": "%(date)s às %(time)s",
-        "few_seconds_ago": "há alguns segundos",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "dentro de aproximadamente um dia",
-        "in_about_hour": "dentro de aproximadamente uma hora",
-        "in_about_minute": "dentro de aproximadamente um minuto",
-        "in_few_seconds": "dentro de alguns segundos",
-        "in_n_days": "dentro de %(num)s dias",
-        "in_n_hours": "dentro de %(num)s horas",
-        "in_n_minutes": "dentro de %(num)s minutos",
         "left": "%(timeRemaining)s restante(s)",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "há %(num)s dias",
-        "n_hours_ago": "há %(num)s horas",
-        "n_minutes_ago": "há %(num)s minutos",
         "seconds_left": "%(seconds)s restantes",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s h %(minutes)s m %(seconds)s s",
@@ -3462,11 +3446,9 @@
             "unable_to_find": "Não foi possível carregar um trecho específico da conversa desta sala."
         },
         "m.audio": {
-            "audio_player": "Reprodutor de Áudio",
             "error_downloading_audio": "Erro ao baixar o áudio",
             "error_processing_audio": "Erro ao processar a mensagem de áudio",
-            "error_processing_voice_message": "Erro ao processar a mensagem de voz",
-            "unnamed_audio": "Áudio sem nome"
+            "error_processing_voice_message": "Erro ao processar a mensagem de voz"
         },
         "m.beacon_info": {
             "view_live_location": "Ver localização ao vivo"

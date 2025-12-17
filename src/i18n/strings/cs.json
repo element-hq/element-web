@@ -103,9 +103,7 @@
         "ok": "OK",
         "open": "Otevřít",
         "open_menu": "Otevřít nabídku",
-        "pause": "Pozastavit",
         "pin": "Připnout",
-        "play": "Přehrát",
         "proceed": "Pokračovat",
         "quote": "Citovat",
         "react": "Reagovat",
@@ -3398,24 +3396,10 @@
         "no_rooms_with_unread_threads": "Zatím nemáte místnosti s nepřečtenými vlákny."
     },
     "time": {
-        "about_day_ago": "před jedním dnem",
-        "about_hour_ago": "asi před hodinou",
-        "about_minute_ago": "před minutou",
         "date_at_time": "%(date)s v %(time)s",
-        "few_seconds_ago": "před pár vteřinami",
         "hours_minutes_seconds_left": "zbývá %(hours)sh %(minutes)sm %(seconds)ss",
-        "in_about_day": "asi za den",
-        "in_about_hour": "asi za hodinu",
-        "in_about_minute": "asi za minutu",
-        "in_few_seconds": "za pár vteřin",
-        "in_n_days": "za %(num)s dní",
-        "in_n_hours": "za %(num)s hodin",
-        "in_n_minutes": "za %(num)s minut",
         "left": "%(timeRemaining)s zbývá",
         "minutes_seconds_left": "zbývá %(minutes)sm %(seconds)ss",
-        "n_days_ago": "před %(num)s dny",
-        "n_hours_ago": "před %(num)s hodinami",
-        "n_minutes_ago": "před %(num)s minutami",
         "seconds_left": "Zbývá %(seconds)ss",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3470,11 +3454,9 @@
             "unable_to_find": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít."
         },
         "m.audio": {
-            "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
             "error_processing_audio": "Došlo k chybě při zpracovávání hlasové zprávy",
-            "error_processing_voice_message": "Chyba při zpracování hlasové zprávy",
-            "unnamed_audio": "Nepojmenovaný audio soubor"
+            "error_processing_voice_message": "Chyba při zpracování hlasové zprávy"
         },
         "m.beacon_info": {
             "view_live_location": "Zobrazit polohu živě"

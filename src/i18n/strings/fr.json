@@ -101,9 +101,7 @@
         "ok": "OK",
         "open": "Ouvrir",
         "open_menu": "Ouvrir le menu",
-        "pause": "Pause",
         "pin": "Épingler",
-        "play": "Lecture",
         "proceed": "Appliquer",
         "quote": "Citer",
         "react": "Réagir",
@@ -2122,7 +2120,6 @@
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit": "Votre message n’a pas été envoyé car ce serveur d’accueil a dépassé une de ses limites de ressources. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-            "history_visible": "Les messages que vous enverrez seront partagés avec les nouveaux membres invités dans ce salon.<a> En savoir plus</a>",
             "homeserver_blocked": "Votre message n’a pas été envoyé car ce serveur d’accueil a été bloqué par son administrateur. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
             "monthly_user_limit_reached": "Votre message n’a pas été envoyé car le serveur d’accueil a atteint sa limite mensuelle d’utilisateurs. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
             "requires_consent_agreement": "Vous ne pouvez voir aucun message tant que vous ne lisez et n’acceptez pas nos <consentLink>conditions générales</consentLink>.",
@@ -3407,24 +3404,10 @@
         "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus."
     },
     "time": {
-        "about_day_ago": "il y a environ un jour",
-        "about_hour_ago": "il y a environ une heure",
-        "about_minute_ago": "il y a environ une minute",
         "date_at_time": "%(date)s à %(time)s",
-        "few_seconds_ago": "il y a quelques secondes",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "dans un jour environ",
-        "in_about_hour": "dans une heure environ",
-        "in_about_minute": "dans une minute environ",
-        "in_few_seconds": "dans quelques secondes",
-        "in_n_days": "dans %(num)s jours",
-        "in_n_hours": "dans %(num)s heures",
-        "in_n_minutes": "dans %(num)s minutes",
         "left": "%(timeRemaining)s restant",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "il y a %(num)s jours",
-        "n_hours_ago": "il y a %(num)s heures",
-        "n_minutes_ago": "il y a %(num)s minutes",
         "seconds_left": "%(seconds)s secondes restantes",
         "short_days": "%(value)sj",
         "short_days_hours_minutes_seconds": "%(days)sj %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3479,11 +3462,9 @@
             "unable_to_find": "Un instant donné du fil de discussion n’a pu être chargé car il n’a pas pu être trouvé."
         },
         "m.audio": {
-            "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "error_processing_audio": "Erreur lors du traitement du message audio",
-            "error_processing_voice_message": "Erreur lors du traitement du message vocal",
-            "unnamed_audio": "Audio sans nom"
+            "error_processing_voice_message": "Erreur lors du traitement du message vocal"
         },
         "m.beacon_info": {
             "view_live_location": "Voir la position en direct"

@@ -100,9 +100,7 @@
         "ok": "Ok",
         "open": "Öffnen",
         "open_menu": "Menu öffnen",
-        "pause": "Pausieren",
         "pin": "Anheften",
-        "play": "Abspielen",
         "proceed": "Fortfahren",
         "quote": "Zitieren",
         "react": "Reagieren",
@@ -3388,24 +3386,10 @@
         "no_rooms_with_unread_threads": "Es gibt keine Chats mit ungelesenen Threads."
     },
     "time": {
-        "about_day_ago": "vor etwa einem Tag",
-        "about_hour_ago": "vor etwa einer Stunde",
-        "about_minute_ago": "vor etwa einer Minute",
         "date_at_time": "%(date)s um %(time)s",
-        "few_seconds_ago": "vor ein paar Sekunden",
         "hours_minutes_seconds_left": "%(hours)s h %(minutes)s m %(seconds)s s verbleibend",
-        "in_about_day": "in etwa einem Tag",
-        "in_about_hour": "in etwa einer Stunde",
-        "in_about_minute": "in etwa einer Minute",
-        "in_few_seconds": "in ein paar Sekunden",
-        "in_n_days": "in %(num)s Tagen",
-        "in_n_hours": "in %(num)s Stunden",
-        "in_n_minutes": "In etwa %(num)s Minuten",
         "left": "%(timeRemaining)s übrig",
         "minutes_seconds_left": "%(minutes)s m %(seconds)s s verbleibend",
-        "n_days_ago": "vor %(num)s Tagen",
-        "n_hours_ago": "vor %(num)s Stunden",
-        "n_minutes_ago": "vor %(num)s Minuten",
         "seconds_left": "%(seconds)s verbleibend",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)s d %(hours)s h %(minutes)s m %(seconds)s s",
@@ -3460,11 +3444,9 @@
             "unable_to_find": "Der Sprung an eine bestimmte Stelle im Nachrichtenverlauf dieses Chats ist gescheitert. Die Stelle konnte nicht gefunden werden."
         },
         "m.audio": {
-            "audio_player": "Audio-Player",
             "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
             "error_processing_audio": "Fehler beim Verarbeiten der Audionachricht",
-            "error_processing_voice_message": "Fehler beim Verarbeiten der Sprachnachricht",
-            "unnamed_audio": "Unbenannte Audiodatei"
+            "error_processing_voice_message": "Fehler beim Verarbeiten der Sprachnachricht"
         },
         "m.beacon_info": {
             "view_live_location": "Echtzeit-Standort anzeigen"
