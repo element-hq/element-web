@@ -833,7 +833,6 @@ $left-gutter: 64px;
     background-repeat: no-repeat;
     background-size: contain;
 
-    &::before,
     &::after {
         content: "";
         display: block;
@@ -844,17 +843,13 @@ $left-gutter: 64px;
         mask-size: contain;
     }
 
-    &::before {
-        mask-size: 80%;
-    }
-
     &.mx_EventTile_e2eIcon_warning::after {
         mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
         background-color: $e2e-warning-color; /* red */
     }
 
     &.mx_EventTile_e2eIcon_normal::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
+        mask-image: url("@vector-im/compound-design-tokens/icons/info.svg");
         background-color: var(--cpd-color-icon-tertiary); /* grey */
     }
 

@@ -2380,10 +2380,10 @@
     emojibase "^17.0.0"
     emojibase-data "^17.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^15.3.0":
-  version "15.3.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-15.3.0.tgz#141fd041ae382b793369bcee4394b0b577bdea0c"
-  integrity sha512-QyxHvncvkl7nf+tnn92PjQ54gMNV8hMSpiukiDgNrqF6IYwgySTlcSdkPYdw8QjZJ0NR6fnVrNzMec0OohM3wA==
+"@matrix-org/matrix-sdk-crypto-wasm@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-16.0.0.tgz#6cd8cde24a9b374d9d1da3a768becbfc346de37e"
+  integrity sha512-c+0eu/ckG+ik62CaOFvHAulJlspw2CBKcLrWbiEQsXv4J3PC4xaaDI5VHFAl7FDU+U9Ww2DDNTieszCh4Lk0/Q==
 
 "@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.5.0"
@@ -9656,11 +9656,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "39.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/942fdf5bee0f0303f32c2cae87df6108666bb780"
+  version "39.4.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/633a5a8848524c08d9548c37d768459b1a7097fe"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^15.3.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^16.0.0"
     another-json "^0.2.0"
     bs58 "^6.0.0"
     content-type "^1.0.4"

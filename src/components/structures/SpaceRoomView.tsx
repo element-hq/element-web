@@ -10,7 +10,12 @@ import { EventType, RoomType, JoinRule, Preset, type Room, RoomEvent } from "mat
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, useCallback, useContext, useRef, useState } from "react";
-import { PlusIcon, RoomIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    GroupIcon,
+    PlusIcon,
+    RoomIcon,
+    UserProfileSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import createRoom, { type IOpts } from "../../createRoom";
@@ -68,6 +73,7 @@ import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { Icon as HashVideoIcon } from "../../../res/img/element-icons/roomlist/hash-video.svg";
+import SpacePillButton from "./SpacePillButton.tsx";
 
 interface IProps {
     space: Room;
@@ -455,24 +461,22 @@ const SpaceSetupPrivateScope: React.FC<{
                 })}
             </div>
 
-            <AccessibleButton
-                className="mx_SpaceRoomView_privateScope_justMeButton"
+            <SpacePillButton
+                icon={<UserProfileSolidIcon />}
+                title={_t("create_space|personal_space")}
+                description={_t("create_space|personal_space_description")}
                 onClick={() => {
                     onFinished(false);
                 }}
-            >
-                {_t("create_space|personal_space")}
-                <div>{_t("create_space|personal_space_description")}</div>
-            </AccessibleButton>
-            <AccessibleButton
-                className="mx_SpaceRoomView_privateScope_meAndMyTeammatesButton"
+            />
+            <SpacePillButton
+                icon={<GroupIcon />}
+                title={_t("create_space|private_space")}
+                description={_t("create_space|private_space_description")}
                 onClick={() => {
                     onFinished(true);
                 }}
-            >
-                {_t("create_space|private_space")}
-                <div>{_t("create_space|private_space_description")}</div>
-            </AccessibleButton>
+            />
         </div>
     );
 };
