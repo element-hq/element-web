@@ -141,7 +141,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
 
     private updateNotificationState(): void {
         const snapshot = this.snapshot();
-
+        console.log(RoomNotifs.determineUnreadState(this.room, undefined, this.includeThreads));
         const { level, symbol, count, invited } = RoomNotifs.determineUnreadState(
             this.room,
             undefined,

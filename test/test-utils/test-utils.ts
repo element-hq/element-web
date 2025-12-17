@@ -32,6 +32,7 @@ import {
     type GroupCall,
     HistoryVisibility,
     type ICreateRoomOpts,
+    EventStatus,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
@@ -399,6 +400,7 @@ type MakeEventProps = MakeEventPassThruProps & {
     // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
+    status?: EventStatus;
 };
 
 export const mkRoomCreateEvent = (userId: string, roomId: string, content?: IContent): MatrixEvent => {
@@ -478,6 +480,9 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
             getAvatarUrl: () => {},
             getMxcAvatarUrl: () => {},
         } as unknown as RoomMember;
+    }
+    if (opts.status !== undefined) {
+        mxEvent.status = opts.status;
     }
     return mxEvent;
 }

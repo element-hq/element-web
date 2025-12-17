@@ -771,7 +771,7 @@ test.describe("Timeline", () => {
             await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
 
             // Wait until the file is sent
-            await expect(page.locator(".mx_RoomView_statusArea")).not.toBeVisible();
+            await expect(page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
             await expect(page.locator(".mx_EventTile.mx_EventTile_last .mx_EventTile_receiptSent")).toBeVisible();
 
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)

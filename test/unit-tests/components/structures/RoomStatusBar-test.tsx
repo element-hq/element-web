@@ -48,7 +48,7 @@ describe("RoomStatusBar", () => {
     });
 
     const getComponent = () =>
-        render(<RoomStatusBar room={room} />, {
+        render(<RoomStatusBar room={room} onVisible={() => {}} onHidden={() => {}} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
             ),

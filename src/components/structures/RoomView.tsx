@@ -243,6 +243,7 @@ export interface IRoomState {
     // 'scroll to bottom' knob, among a couple of other things.
     atEndOfLiveTimeline?: boolean;
     showTopUnreadMessagesBar: boolean;
+    statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
 
@@ -461,6 +462,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showRightPanel: false,
             joining: false,
             showTopUnreadMessagesBar: false,
+            statusBarVisible: false,
             canReact: false,
             canSendMessages: false,
             resizing: false,
@@ -2014,6 +2016,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         };
     }
 
+    private onStatusBarVisible = (): void => {
+        if (this.unmounted || this.state.statusBarVisible) return;
+        this.setState({ statusBarVisible: true });
+    };
+
+    private onStatusBarHidden = (): void => {
+        // This is currently not desired as it is annoying if it keeps expanding and collapsing
+        if (this.unmounted || !this.state.statusBarVisible) return;
+        this.setState({ statusBarVisible: false });
+    };
+
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
      *
@@ -2364,17 +2377,29 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         let statusBar: JSX.Element | undefined;
+        let isStatusAreaExpanded = true;
 
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
             statusBar = <UploadBar room={this.state.room} />;
         } else if (!this.state.search) {
-            statusBar = <RoomStatusBar room={this.state.room} />;
+            isStatusAreaExpanded = this.state.statusBarVisible;
+            statusBar = (
+                <RoomStatusBar
+                    room={this.state.room}
+                    onVisible={this.onStatusBarVisible}
+                    onHidden={this.onStatusBarHidden}
+                />
+            );
         }
+
+        const statusBarAreaClass = classNames("mx_RoomView_statusArea", {
+            mx_RoomView_statusArea_expanded: isStatusAreaExpanded,
+        });
 
         // if statusBar does not exist then statusBarArea is blank and takes up unnecessary space on the screen
         // show statusBarArea only if statusBar is present
         const statusBarArea = statusBar && (
-            <div role="region" className="mx_RoomView_statusArea" aria-label={_t("a11y|room_status_bar")}>
+            <div role="region" className={statusBarAreaClass} aria-label={_t("a11y|room_status_bar")}>
                 <div className="mx_RoomView_statusAreaBox">
                     <div className="mx_RoomView_statusAreaBox_line" />
                     {statusBar}
