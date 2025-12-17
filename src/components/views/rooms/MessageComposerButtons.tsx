@@ -20,6 +20,7 @@ import {
     MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
+    StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -42,7 +43,6 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { Icon as StickersIcon } from "../../../../res/img/element-icons/room/composer/sticker.svg";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -260,7 +260,7 @@ function showStickersButton(props: IProps): ReactElement | null {
             onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
             title={props.isStickerPickerOpen ? _t("composer|close_sticker_picker") : _t("common|sticker")}
         >
-            <StickersIcon />
+            <StickerIcon />
         </CollapsibleButton>
     ) : null;
 }
