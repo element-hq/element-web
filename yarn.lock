@@ -2401,11 +2401,6 @@
   dependencies:
     "@babel/runtime" "^7.17.9"
 
-"@matrix-org/spec@^1.7.0":
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.16.0.tgz#c88f4ed521e4c0bd3a4c108bcaf13f25173a0fdc"
-  integrity sha512-xUKHkwGXXISMCfTrx6JW6uGEK5O8IeZVOjBm7FX1h/ihpK6l50nlSIMRYdtz4V6q3pvOVBOCft4hPYTJVeTZDA==
-
 "@napi-rs/wasm-runtime@^0.2.11":
   version "0.2.12"
   resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz#3e78a8b96e6c33a6c517e1894efbd5385a7cb6f2"
@@ -4542,6 +4537,11 @@ ajv@^8.0.0, ajv@^8.0.1, ajv@^8.9.0:
     fast-uri "^3.0.1"
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
+
+andybalaam-matrix-spec@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/andybalaam-matrix-spec/-/andybalaam-matrix-spec-0.0.1.tgz#e770977ee574f968731af945d6147fb10a30b3b9"
+  integrity sha512-w5XkYTAkUCOzppgFuhwZPgEU2fBaR7Tajqn+XJeSLmt6of2dpYZeGVNwXB8xgQxz2xlnIIH5aNUTrLao3RiKQA==
 
 another-json@^0.2.0:
   version "0.2.0"
