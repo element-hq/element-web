@@ -87,6 +87,13 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                         <RecoveryPanelOutOfSync
                             onFinish={() => setState("main")}
                             onForgotRecoveryKey={() => setState("reset_identity_forgot")}
+                            onAccessSecretStorageFailed={async () => {
+                                const needsCrossSigningReset =
+                                    await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset(
+                                        true,
+                                    );
+                                setState(needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key");
+                            }}
                         />
                     );
                     break;
