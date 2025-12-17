@@ -5,12 +5,22 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "explore_rooms": "action|explore_rooms",
         "pause": "Pause",
-        "play": "Play"
+        "play": "Play",
+        "search": "action|search"
     },
     "encryption": {
         "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
         "withdraw_verification_action": "Withdraw verification"
+    },
+    "left_panel": {
+        "open_dial_pad": "left_panel|open_dial_pad"
+    },
+    "room": {
+        "status_bar": {
+            "history_visible": "room|status_bar|history_visible"
+        }
     },
     "time": {
         "about_day_ago": "about a day ago",
