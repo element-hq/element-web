@@ -1,12 +1,4 @@
 #!/bin/bash
-
-# Storybook screenshot update script
-# This script should be used as the entrypoint parameter of the playwright-screenshots script.
-# See https://github.com/element-hq/element-modules/tree/main/packages/element-web-playwright-common
-# Example: playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules
-# (playwright-screenshots can be run once every 50sec because it's using ryuk to clean up containers.)
-#
-#!/bin/bash
 #
 # Update storybook screenshots
 #
@@ -16,11 +8,11 @@
 # It expects to find a storybook instance running at :6007 on the host machine. It also requires that
 # `playwright-screenshots` is given the `--with-node-modules` parameter.
 #
-# Example: 
+# Example:
 #
 #        test-storybook --url http://localhost:6007/
 #        playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules
-# 
+#
 #
 # Note: even though this script is small, it is important because the alternative is running
 # `playwright-screenshots` twice in quick succession (once to do `yarn install`, a second to do the
