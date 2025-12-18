@@ -204,9 +204,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     </Button>
                 }
             >
-                <div className={styles.container}>
-                    <Text weight="semibold">{_t("room|status_bar|some_messages_not_sent")}</Text>
-                </div>
+                <Text weight="semibold" className={styles.container}>{_t("room|status_bar|failed_to_create_room_title")}</Text>
             </Banner>
         );
     }
@@ -244,7 +242,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
     return (
         <Banner type="critical" actions={actions}>
             <div className={styles.container}>
-                <Text weight="semibold">{_t("room|status_bar|failed_to_create_room_title")}</Text>
+                <Text weight="semibold">{_t("room|status_bar|some_messages_not_sent")}</Text>
                 <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
             </div>
         </Banner>
