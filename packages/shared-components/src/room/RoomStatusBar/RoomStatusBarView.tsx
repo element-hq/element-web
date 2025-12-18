@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, type JSX } from "react";
+import React, { useCallback, useId, type JSX } from "react";
 
 import styles from "./RoomStatusBarView.module.css";
 import { useViewModel } from "../../useViewModel";
@@ -85,6 +85,7 @@ interface RoomStatusBarViewProps {
 export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
     const { state } = useViewModel(vm);
+    const bannerTitleId = useId();
 
     const deleteAllClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (ev) => {
@@ -117,9 +118,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
 
     if ("connectionLost" in state) {
         return (
-            <Banner type="critical">
+            <Banner type="critical" role="status" aria-labelledby={bannerTitleId}>
                 <div className={styles.container}>
-                    <Text weight="semibold">{_t("room|status_bar|server_connectivity_lost_title")}</Text>
+                    <Text id={bannerTitleId} weight="semibold">{_t("room|status_bar|server_connectivity_lost_title")}</Text>
                     <Text className={styles.description}>
                         {_t("room|status_bar|server_connectivity_lost_description")}
                     </Text>
@@ -132,6 +133,8 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         return (
             <Banner
                 type="critical"
+                role="status"
+                aria-labelledby={bannerTitleId}
                 actions={
                     <Button
                         kind="secondary"
@@ -141,12 +144,12 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         target="_blank"
                         rel="noreferrer noopener"
                     >
-                        View Terms and Conditions
+                        {_t("terms|tac_button")}
                     </Button>
                 }
             >
                 <div className={styles.container}>
-                    <Text weight="semibold">{_t("room|status_bar|requires_consent_agreement_title")}</Text>
+                    <Text id={bannerTitleId} weight="semibold">{_t("room|status_bar|requires_consent_agreement_title")}</Text>
                 </div>
             </Banner>
         );
@@ -162,6 +165,8 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         return (
             <Banner
                 type="critical"
+                role="status"
+                aria-labelledby={bannerTitleId}
                 actions={
                     state.adminContactHref && (
                         <Button
@@ -178,7 +183,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 }
             >
                 <div className={styles.container}>
-                    <Text weight="semibold">{title}</Text>
+                    <Text id={bannerTitleId} weight="semibold">{title}</Text>
                     <Text className={styles.description}>
                         {_t("room|status_bar|exceeded_resource_limit_description")}
                     </Text>
@@ -190,7 +195,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
     if ("isRetryingRoomCreation" in state) {
         return (
             <Banner
+                role="status"
                 type="critical"
+                aria-labelledby={bannerTitleId}
                 actions={
                     <Button
                         size="sm"
@@ -204,7 +211,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     </Button>
                 }
             >
-                <Text weight="semibold" className={styles.container}>{_t("room|status_bar|failed_to_create_room_title")}</Text>
+                <Text id={bannerTitleId} weight="semibold" className={styles.container}>{_t("room|status_bar|failed_to_create_room_title")}</Text>
             </Banner>
         );
     }
@@ -240,9 +247,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
     );
 
     return (
-        <Banner type="critical" actions={actions}>
+        <Banner role="status" type="critical" actions={actions} aria-labelledby={bannerTitleId}>
             <div className={styles.container}>
-                <Text weight="semibold">{_t("room|status_bar|some_messages_not_sent")}</Text>
+                <Text id={bannerTitleId} weight="semibold">{_t("room|status_bar|some_messages_not_sent")}</Text>
                 <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
             </div>
         </Banner>
