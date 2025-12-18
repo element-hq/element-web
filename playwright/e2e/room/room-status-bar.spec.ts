@@ -110,7 +110,7 @@ test.describe("Room Status Bar", () => {
         });
         test("should be able to 'Retry all' messages", async ({ page, user, app, room, axe }) => {
             const banner = page.getByRole("region", { name: "Room status bar" });
-            page.unroute("**/_matrix/client/**/send**");
+            await page.unroute("**/_matrix/client/**/send**");
             await banner.getByRole("button", { name: "Retry all" }).click();
             await expect(banner).not.toBeVisible();
         });
