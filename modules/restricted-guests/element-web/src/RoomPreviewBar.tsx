@@ -26,6 +26,8 @@ interface RoomPreviewBarProps {
 const Container = styled.aside`
     margin: auto;
     font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    font-feature-settings: normal;
 `;
 
 const RoomPreviewBar: FC<RoomPreviewBarProps> = ({ api, config, roomId, roomAlias, promptAskToJoin, children }) => {
