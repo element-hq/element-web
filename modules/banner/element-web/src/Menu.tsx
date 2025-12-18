@@ -28,6 +28,7 @@ const Sidebar = styled(motion.div)`
     background: ${({ theme }): string => theme.menuBackgroundColor};
     border-radius: 0 16px 16px 0;
     font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
 `;
 
 const SidebarHeading = styled.div`
