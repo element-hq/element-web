@@ -5,21 +5,21 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
-        "explore_rooms": "action|explore_rooms",
+        "explore_rooms": "Explore rooms",
         "pause": "Pause",
         "play": "Play",
-        "search": "action|search"
+        "search": "Search"
     },
     "encryption": {
         "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
         "withdraw_verification_action": "Withdraw verification"
     },
     "left_panel": {
-        "open_dial_pad": "left_panel|open_dial_pad"
+        "open_dial_pad": "Open dial pad"
     },
     "room": {
         "status_bar": {
-            "history_visible": "room|status_bar|history_visible"
+            "history_visible": "Messages you send will be shared with new members invited to this room. <a>Learn more</a>"
         }
     },
     "time": {
