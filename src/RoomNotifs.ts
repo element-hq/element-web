@@ -254,7 +254,6 @@ export function determineUnreadState(
         return { symbol: null, count: 0, level: NotificationLevel.None, invited: false };
     }
 
-    console.log("determineUnreadState", getUnsentMessages(room, threadId));
     if (getUnsentMessages(room, threadId).length > 0) {
         return { symbol: "!", count: 1, level: NotificationLevel.Unsent, invited: false };
     }
