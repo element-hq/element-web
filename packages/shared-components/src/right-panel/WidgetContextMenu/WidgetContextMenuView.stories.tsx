@@ -38,7 +38,7 @@ const WidgetContextMenuViewWrapper = ({
         onRevokeClick,
         onFinished,
         onMoveButton,
-    });
+    }); 
     return <WidgetContextMenuView vm={vm} />;
 };
 
@@ -57,7 +57,7 @@ export default {
         widgetMessaging: undefined,
         isMenuOpened: true,
         trigger: (
-            <IconButton size="24px">
+            <IconButton size="24px" aria-label="context menu trigger button">
                 <TriggerIcon />
             </IconButton>
         ),

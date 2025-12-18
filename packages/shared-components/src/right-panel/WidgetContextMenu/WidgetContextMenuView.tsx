@@ -50,6 +50,10 @@ export interface WidgetContextMenuSnapshot {
      * A component that is displayed which trigger the menu to open or close
      */
     trigger: ReactNode;
+    /**
+     * If it's an instance of a user widget
+     */
+    userWidget: boolean;
 }
 
 export interface WidgetContextMenuAction {
@@ -99,6 +103,7 @@ export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm
         showRevokeButton,
         showMoveButtons,
         isMenuOpened,
+        userWidget,
         trigger,
     } = useViewModel(vm);
 
@@ -124,8 +129,7 @@ export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm
         deleteButton = (
             <MenuItem
                 onSelect={vm.onDeleteClick}
-                // TODO label={userWidget ? _t("action|remove") : _t("widget|context_menu|remove")}
-                label={_t("widget|context_menu|remove")}
+                label={userWidget ? _t("action|remove") : _t("widget|context_menu|remove")}
             />
         );
     }

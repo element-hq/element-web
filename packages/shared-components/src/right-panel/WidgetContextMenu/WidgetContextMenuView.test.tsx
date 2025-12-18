@@ -74,8 +74,9 @@ describe("<WidgetContextMenuView />", () => {
         showMoveButtons: [true, true],
         canModify: true,
         isMenuOpened: true,
+        userWidget: false,
         trigger: (
-            <IconButton size="24px">
+            <IconButton size="24px" aria-label="context menu trigger button">
                 <TriggerIcon />
             </IconButton>
         ),

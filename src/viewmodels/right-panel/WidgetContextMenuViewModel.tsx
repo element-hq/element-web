@@ -126,6 +126,7 @@ export class WidgetContextMenuViewModel
             showSnapshotButton,
             showMoveButtons,
             canModify,
+            userWidget: !!userWidget,
             isMenuOpened: menuDisplayed,
             trigger,
         };
