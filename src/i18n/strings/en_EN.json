@@ -2127,16 +2127,18 @@
         },
         "status_bar": {
             "delete_all": "Delete all",
-            "exceeded_resource_limit": "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
+            "exceeded_resource_limit_title": "Your message wasn't sent because this homeserver has exceeded a resource limit.",
             "history_visible": "Messages you send will be shared with new members invited to this room. <a>Learn more</a>",
-            "homeserver_blocked": "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.",
-            "monthly_user_limit_reached": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.",
-            "requires_consent_agreement": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
+            "homeserver_blocked_title": "Your message wasn't sent because this homeserver has been blocked by its administrator.",
+            "monthly_user_limit_reached_title": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit.",
+            "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
+            "requires_consent_agreement_title": "You can't send any messages until you review and agree to our terms and conditions.",
             "retry_all": "Retry all",
             "select_messages_to_retry": "You can select all or individual messages to retry or delete",
             "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
             "server_connectivity_lost_title": "Connectivity to the server has been lost.",
-            "some_messages_not_sent": "Some of your messages have not been sent"
+            "some_messages_not_sent": "Some of your messages have not been sent",
+            "failed_to_create_room_title": "Could not start a chat with this user"
         },
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {

@@ -16,6 +16,7 @@ import React, {
     type ReactNode,
     type RefObject,
     type JSX,
+    useEffect,
 } from "react";
 import classNames from "classnames";
 import {
@@ -45,7 +46,6 @@ import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
-import { RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -111,10 +111,8 @@ import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { createRoomFromLocalRoom } from "../../utils/direct-messages";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import EncryptionEvent from "../views/messages/EncryptionEvent";
-import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
-import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import { LargeLoader } from "./LargeLoader";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
@@ -318,33 +316,11 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         encryptionTile = <EncryptionEvent mxEvent={encryptionEvent} />;
     }
 
-    const onRetryClicked = (): void => {
-        // eslint-disable-next-line react-compiler/react-compiler
-        room.state = LocalRoomState.NEW;
-        defaultDispatcher.dispatch({
-            action: "local_room_event",
-            roomId: room.roomId,
-        });
-    };
-
     let statusBar: ReactElement | null = null;
     let composer: ReactElement | null = null;
 
     if (room.isError) {
-        const buttons = (
-            <AccessibleButton onClick={onRetryClicked}>
-                <RestartIcon />
-                {_t("action|retry")}
-            </AccessibleButton>
-        );
-
-        statusBar = (
-            <RoomStatusBarUnsentMessages
-                title={_t("room|status_bar|some_messages_not_sent")}
-                notificationState={StaticNotificationState.RED_EXCLAMATION}
-                buttons={buttons}
-            />
-        );
+        statusBar = <RoomStatusBarWrappedView room={room} />;
     } else {
         composer = (
             <MessageComposer
@@ -404,6 +380,24 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
 
 function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatusBarViewModel>[0]): ReactElement {
     const vm = useCreateAutoDisposedViewModel(() => new RoomStatusBarViewModel(props));
+    useEffect(() => {
+        if ("onVisible" in props) {
+            // Initial setup
+            if (vm.getSnapshot().state !== null) {
+                props.onVisible();
+            } else {
+                props.onHidden?.();
+            }
+            vm.subscribe(() => {
+                if (vm.getSnapshot().state !== null) {
+                    props.onVisible?.();
+                } else {
+                    props.onHidden?.();
+                }
+            });
+        }
+    }, [vm]);
+
     return <RoomStatusBarView vm={vm} />;
 }
 

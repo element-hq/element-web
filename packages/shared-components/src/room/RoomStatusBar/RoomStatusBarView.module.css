@@ -1,0 +1,12 @@
+.container {
+    color: var(--cpd-color-text-primary);
+    svg {
+        /* Ensure button icons are primary too */
+        color: var(--cpd-color-text-primary) !important;
+    }
+}
+
+.description {
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
+}

@@ -1,0 +1,504 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`RoomStatusBarView renders connection lost 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          Connectivity to the server has been lost.
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+        >
+          Sent messages will be stored until your connection has returned.
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    />
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBarView renders consent link 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          You can't send any messages until you review and agree to our terms and conditions.
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    >
+      <a
+        class="_button_187yx_8"
+        data-kind="secondary"
+        data-size="sm"
+        href="#example"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        View Terms and Conditions
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBarView renders local room error 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          Some of your messages have not been sent
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    >
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 container _has-icon_187yx_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+          />
+        </svg>
+        Retry
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBarView renders resource limit error 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          Your message wasn't sent because this homeserver has been blocked by its administrator.
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+        >
+          Please contact your service administrator to continue using the service.
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    >
+      <a
+        class="_button_187yx_8"
+        data-kind="secondary"
+        data-size="sm"
+        href="#example"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        Contact admin
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBarView renders unsent messages 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          Could not start a chat with this user
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+        >
+          You can select all or individual messages to retry or delete
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    >
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7 21q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 19V6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 5q0-.424.287-.713A.97.97 0 0 1 5 4h4q0-.424.287-.712A.97.97 0 0 1 10 3h4q.424 0 .713.288Q15 3.575 15 4h4q.424 0 .712.287Q20 4.576 20 5t-.288.713A.97.97 0 0 1 19 6v13q0 .824-.587 1.413A1.93 1.93 0 0 1 17 21zM7 6v13h10V6zm2 10q0 .424.287.712Q9.576 17 10 17t.713-.288A.97.97 0 0 0 11 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 10 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 9 9zm4 0q0 .424.287.712.288.288.713.288.424 0 .713-.288A.97.97 0 0 0 15 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 9z"
+          />
+        </svg>
+        Delete all
+      </button>
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 container _has-icon_187yx_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+          />
+        </svg>
+        Retry all
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          Could not start a chat with this user
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+        >
+          You can select all or individual messages to retry or delete
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    >
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7 21q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 19V6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 5q0-.424.287-.713A.97.97 0 0 1 5 4h4q0-.424.287-.712A.97.97 0 0 1 10 3h4q.424 0 .713.288Q15 3.575 15 4h4q.424 0 .712.287Q20 4.576 20 5t-.288.713A.97.97 0 0 1 19 6v13q0 .824-.587 1.413A1.93 1.93 0 0 1 17 21zM7 6v13h10V6zm2 10q0 .424.287.712Q9.576 17 10 17t.713-.288A.97.97 0 0 0 11 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 10 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 9 9zm4 0q0 .424.287.712.288.288.713.288.424 0 .713-.288A.97.97 0 0 0 15 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 9z"
+          />
+        </svg>
+        Delete all
+      </button>
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 container _has-icon_187yx_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+          />
+        </svg>
+        Retry all
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
+<div>
+  <div
+    class="banner"
+    data-type="critical"
+  >
+    <div
+      class="icon"
+    >
+      <svg
+        fill="currentColor"
+        font-size="24"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+    </div>
+    <span
+      class="content"
+    >
+      <div
+        class="container"
+      >
+        <p
+          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        >
+          Could not start a chat with this user
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+        >
+          You can select all or individual messages to retry or delete
+        </p>
+      </div>
+    </span>
+    <div
+      class="actions"
+    >
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7 21q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 19V6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 5q0-.424.287-.713A.97.97 0 0 1 5 4h4q0-.424.287-.712A.97.97 0 0 1 10 3h4q.424 0 .713.288Q15 3.575 15 4h4q.424 0 .712.287Q20 4.576 20 5t-.288.713A.97.97 0 0 1 19 6v13q0 .824-.587 1.413A1.93 1.93 0 0 1 17 21zM7 6v13h10V6zm2 10q0 .424.287.712Q9.576 17 10 17t.713-.288A.97.97 0 0 0 11 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 10 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 9 9zm4 0q0 .424.287.712.288.288.713.288.424 0 .713-.288A.97.97 0 0 0 15 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 9z"
+          />
+        </svg>
+        Delete all
+      </button>
+      <button
+        aria-disabled="false"
+        class="_button_187yx_8 container _has-icon_187yx_57"
+        data-kind="secondary"
+        data-size="sm"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+          />
+        </svg>
+        Retry all
+      </button>
+    </div>
+  </div>
+</div>
+`;
