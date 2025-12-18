@@ -10,9 +10,12 @@ import fetchMock from "fetch-mock-jest";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 
 import * as languageHandler from "../../src/languageHandler";
-import en from "../../src/i18n/strings/en_EN.json";
-import de from "../../src/i18n/strings/de_DE.json";
+import enElementWeb from "../../src/i18n/strings/en_EN.json";
+import deElementWeb from "../../src/i18n/strings/de_DE.json";
+import enSharedComponents from "../../packages/shared-components/src/i18n/strings/en_EN.json";
+import deSharedComponents from "../../packages/shared-components/src/i18n/strings/de_DE.json";
 import { ModuleApi } from "../../src/modules/Api";
+import { merge } from "lodash";
 
 const lv = {
     Save: "Saglabāt",
@@ -31,14 +34,20 @@ const lv = {
 // lv.json - mock version with few translations, used to test fallback translation
 
 export function setupLanguageMock() {
+    // Pull the translations from shared components too as they have
+    // the strings for things like `humanizeTime` which do appear in
+    // snnapshots.
+    const enTranslations = merge(enElementWeb, enSharedComponents);
+    const deTranslations = merge(deElementWeb, deSharedComponents);
+
     fetchMock
         .get("/i18n/languages.json", {
             en: "en_EN.json",
             de: "de_DE.json",
             lv: "lv.json",
         })
-        .get("end:en_EN.json", en)
-        .get("end:de_DE.json", de)
+        .get("end:en_EN.json", enTranslations)
+        .get("end:de_DE.json", deTranslations)
         .get("end:lv.json", lv);
 }
 setupLanguageMock();
