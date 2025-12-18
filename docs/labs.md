@@ -112,3 +112,25 @@ Enables knock feature for rooms. This allows users to ask to join a room.
 ## New room list (`feature_new_room_list`) [In Development]
 
 Enable the new room list that is currently in development.
+
+## Exclude insecure devices when sending/receiving messages (`feature_exclude_insecure_devices`)
+
+Do not send or receive messages to/from devices that are not properly verified. Users with unverified devices will not
+receive your messages at all on those devices, and if they send messages, you will not be able to read them, but you
+will be aware that a message exists.
+
+## Share encrypted history with new members (`feature_share_history_on_invite`) [In Development]
+
+When inviting users to an encrypted room with shared history (i.e. a room with the "Who can read history?" setting set
+to "Members only (since the point in time of selecting this option)"), send the keys for previous messages to the
+invitee so they can read them.
+
+Both the inviter and the invitee must set this labs flag, before the invitation is sent.
+
+## Encrypted state events (MSC4362) (`feature_msc4362_encrypted_state_events`)
+
+Encrypt most of the state events in the room, including the room name and topic.
+
+WARNING: this means that users joining a room who do not have access to its history will not be able to see the name or
+topic of the room, or any other room state information. It also means the room name and topic are not available before
+joining a room.
