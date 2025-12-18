@@ -8,14 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMock from "fetch-mock-jest";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
+import { merge } from "lodash";
 
 import * as languageHandler from "../../src/languageHandler";
 import enElementWeb from "../../src/i18n/strings/en_EN.json";
 import deElementWeb from "../../src/i18n/strings/de_DE.json";
+// Cheat and import relatively here as these aren't exported by the module (should they be?)
+// eslint-disable-next-line no-restricted-imports
 import enSharedComponents from "../../packages/shared-components/src/i18n/strings/en_EN.json";
+// eslint-disable-next-line no-restricted-imports
 import deSharedComponents from "../../packages/shared-components/src/i18n/strings/de_DE.json";
 import { ModuleApi } from "../../src/modules/Api";
-import { merge } from "lodash";
 
 const lv = {
     Save: "Saglabāt",
