@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { type FC, useState, type JSX, type FormEvent } from "react";
 import { type Api, type AccountAuthInfo, type DialogProps } from "@element-hq/element-web-module-api";
 import { Form } from "@vector-im/compound-web";
+import styled from "styled-components";
 
 import { type ModuleConfig } from "./config.ts";
 
@@ -21,6 +22,12 @@ const enum State {
     Busy,
     Error,
 }
+
+const StyledFormRoot = styled(Form.Root)`
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    font-feature-settings: normal;
+`;
 
 const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubmit }) => {
     const [username, setUsername] = useState("");
@@ -61,7 +68,7 @@ const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubm
     const disabled = state !== State.Idle;
 
     return (
-        <Form.Root onSubmit={trySubmit}>
+        <StyledFormRoot onSubmit={trySubmit}>
             <Form.Field name="mxid">
                 <Form.Label>{api.i18n.translate("register_dialog_register_username_label")}</Form.Label>
                 <Form.TextControl
@@ -82,7 +89,7 @@ const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubm
             <Form.Submit disabled={disabled || !username}>
                 {api.i18n.translate("register_dialog_continue_label")}
             </Form.Submit>
-        </Form.Root>
+        </StyledFormRoot>
     );
 };
 
