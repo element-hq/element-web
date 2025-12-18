@@ -37,6 +37,7 @@ export interface RoomStatusBarResourceLimitedState {
 
 export interface RoomStatusBarUnsentMessagesState {
     consentUri: string;
+    isResending: boolean;
 }
 
 export interface RoomStatusBarViewSnapshot {
