@@ -17,9 +17,9 @@ export class Toasts {
      * @param expectedTitle - Expected title of the toast
      * @returns the Locator for the matching toast
      */
-    public async getToast(expectedTitle: string): Promise<Locator> {
+    public async getToast(expectedTitle: string, timeout?: number): Promise<Locator> {
         const toast = this.page.locator(".mx_Toast_toast", { hasText: expectedTitle }).first();
-        await expect(toast).toBeVisible();
+        await expect(toast).toBeVisible({ timeout });
         return toast;
     }
 
