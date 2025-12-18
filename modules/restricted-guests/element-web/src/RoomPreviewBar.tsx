@@ -25,6 +25,7 @@ interface RoomPreviewBarProps {
 
 const Container = styled.aside`
     margin: auto;
+    font: var(--cpd-font-body-md-regular);
 `;
 
 const RoomPreviewBar: FC<RoomPreviewBarProps> = ({ api, config, roomId, roomAlias, promptAskToJoin, children }) => {
