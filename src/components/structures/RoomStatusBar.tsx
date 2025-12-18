@@ -33,12 +33,16 @@ interface IProps {
     onHidden: () => void;
 }
 
-export function RoomStatusBar(props: IProps): JSX.Element | null {
-    const vm = useRoomStatusBarViewModel(props);
+export function RoomStatusBar({ room, onVisible, onHidden }: IProps): JSX.Element | null {
+    const vm = useRoomStatusBarViewModel({ room });
 
     useEffect(() => {
-        vm.visible ? props.onVisible() : props.onHidden();
-    }, [vm.visible]);
+        if (vm.visible) {
+            onVisible();
+        } else {
+            onHidden();
+        }
+    }, [vm.visible, onVisible, onHidden]);
 
     if (!vm.visible) {
         return null;

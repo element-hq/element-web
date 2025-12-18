@@ -32,7 +32,7 @@ import {
     type GroupCall,
     HistoryVisibility,
     type ICreateRoomOpts,
-    EventStatus,
+    type EventStatus,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
