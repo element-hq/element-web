@@ -115,4 +115,54 @@ test.describe("Room Status Bar", () => {
             await expect(banner).not.toBeVisible();
         });
     });
+
+    test.describe("Local rooms", () => {
+        test.use({
+            botCreateOpts: {
+                displayName: "Alice",
+            },
+        });
+        test(
+            "should show an error when creating a local room fails",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                await page
+                    .getByRole("navigation", { name: "Room list" })
+                    .getByRole("button", { name: "New conversation" })
+                    .click();
+                await page.getByRole("menuitem", { name: "Start chat" }).click();
+
+                await page.route("**/_matrix/client/*/createRoom*", async (route, req) => {
+                    await route.fulfill({
+                        status: 400,
+                        contentType: "application/json",
+                        body: JSON.stringify({
+                            error: "Test fail",
+                            errcode: "M_UNKNOWN",
+                        }),
+                    });
+                });
+
+                const other = page.locator(".mx_InviteDialog_other");
+                await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
+                await expect(
+                    other.getByRole("option", { name: "Alice" }).getByText(bot.credentials.userId),
+                ).toBeVisible();
+                await other.getByRole("option", { name: "Alice" }).click();
+                await other.getByRole("button", { name: "Go" }).click();
+                // Send a message to invite the bots
+                const composer = app.getComposerField();
+                await composer.fill("Hello");
+                await composer.press("Enter");
+
+                const banner = page.getByText("!Some of your messages have");
+                await expect(banner).toBeVisible();
+                await expect(banner).toMatchScreenshot("local_room_create_failed.png");
+
+                await page.unroute("**/_matrix/client/*/createRoom*");
+                await banner.getByRole("button", { name: "Retry" }).click();
+                await expect(banner).not.toBeVisible();
+            },
+        );
+    });
 });
