@@ -92,7 +92,6 @@ import { type IOpts } from "../../createRoom";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import UploadBar from "./UploadBar";
-import { RoomStatusBar } from "./RoomStatusBar";
 import MessageComposer from "../views/rooms/MessageComposer";
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
@@ -137,6 +136,8 @@ import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInv
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
+import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
+import { RoomStatusBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -399,6 +400,11 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
             </ErrorBoundary>
         </div>
     );
+}
+
+function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatusBarViewModel>[0]): ReactElement {
+    const vm = useCreateAutoDisposedViewModel(() => new RoomStatusBarViewModel(props));
+    return <RoomStatusBarView vm={vm} />;
 }
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
@@ -2384,7 +2390,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } else if (!this.state.search) {
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = (
-                <RoomStatusBar
+                <RoomStatusBarWrappedView
                     room={this.state.room}
                     onVisible={this.onStatusBarVisible}
                     onHidden={this.onStatusBarHidden}
