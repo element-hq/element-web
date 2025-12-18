@@ -15,11 +15,21 @@ import { HistoryVisibility, RoomStateEvent, type Room } from "matrix-js-sdk/src/
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 
+/**
+ * A collection of {@link HistoryVisibility} levels that trigger the display of the history visible banner.
+ */
+const BANNER_VISIBLE_LEVELS = [HistoryVisibility.Shared, HistoryVisibility.WorldReadable];
+
 interface Props {
     /**
      * The room instance associated with this banner view model.
      */
     room: Room;
+
+    /**
+     * Whether or not the current user is able to send messages in this room.
+     */
+    canSendMessages: boolean;
 
     /**
      * If not null, indicates the ID of the thread currently being viewed in the thread
@@ -66,23 +76,25 @@ export class HistoryVisibleBannerViewModel
 
     /**
      * Computes the latest banner snapshot given the VM's props.
-     * @param room - The room the banner will be shown in.
-     * @param threadId - The thread ID passed in from the parent {@link MessageComposer}.
+     * @param props - See {@link Props}.
      * @returns The latest snapshot. See {@link HistoryVisibleBannerViewSnapshot}.
      */
-    private static readonly computeSnapshot = (
-        room: Room,
-        threadId?: string | null,
-    ): HistoryVisibleBannerViewSnapshot => {
+    private static readonly computeSnapshot = ({
+        room,
+        canSendMessages,
+        threadId,
+    }: Props): HistoryVisibleBannerViewSnapshot => {
         const featureEnabled = SettingsStore.getValue("feature_share_history_on_invite");
         const acknowledged = SettingsStore.getValue("acknowledgedHistoryVisibility", room.roomId);
+        const isHistoryVisible = BANNER_VISIBLE_LEVELS.includes(room.getHistoryVisibility());
 
         return {
             visible:
                 featureEnabled &&
+                canSendMessages &&
                 !threadId &&
                 room.hasEncryptionStateEvent() &&
-                room.getHistoryVisibility() !== HistoryVisibility.Joined &&
+                isHistoryVisible &&
                 !acknowledged,
         };
     };
@@ -92,7 +104,7 @@ export class HistoryVisibleBannerViewModel
      * @param props - Properties for this view model. See {@link Props}.
      */
     public constructor(props: Props) {
-        super(props, HistoryVisibleBannerViewModel.computeSnapshot(props.room, props.threadId));
+        super(props, HistoryVisibleBannerViewModel.computeSnapshot(props));
 
         this.disposables.trackListener(props.room, RoomStateEvent.Update, () => this.setSnapshot());
 
@@ -126,7 +138,7 @@ export class HistoryVisibleBannerViewModel
             );
         }
 
-        this.snapshot.set(HistoryVisibleBannerViewModel.computeSnapshot(this.props.room, this.props.threadId));
+        this.snapshot.set(HistoryVisibleBannerViewModel.computeSnapshot(this.props));
     }
 
     /**

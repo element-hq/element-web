@@ -16,6 +16,9 @@ export const HistoryVisibleBanner: React.FC<{
     /** The room instance associated with this banner view model. */
     room: Room;
 
+    /** Whether the current user can send messages in the room. */
+    canSendMessages: boolean;
+
     /**
      * If not null, specifies the ID of the thread currently being viewed in the thread timeline side view,
      * where the banner view is displayed as a child of the message composer.
