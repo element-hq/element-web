@@ -31,7 +31,7 @@ exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
       class="content"
     >
       <span>
-        Messages you send will be shared with new members invited to this room. 
+        This room has been configured so that new members can read history. 
         <a
           class="_link_1v5rz_8"
           data-kind="primary"
@@ -40,7 +40,7 @@ exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
           rel="noreferrer noopener"
           target="_blank"
         >
-          Learn more
+          Learn More
         </a>
       </span>
     </span>
