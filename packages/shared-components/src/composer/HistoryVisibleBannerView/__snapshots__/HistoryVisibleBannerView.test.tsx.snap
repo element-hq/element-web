@@ -27,7 +27,7 @@ exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <span>
@@ -43,7 +43,7 @@ exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
           Learn More
         </a>
       </span>
-    </span>
+    </div>
     <div
       class="actions"
     >
