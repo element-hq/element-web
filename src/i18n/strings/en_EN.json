@@ -849,6 +849,7 @@
         "number_of_users": "Number of users",
         "only_joined_members": "Only joined users",
         "original_event_source": "Original event source",
+        "restore_from_backup": "Restore from backup",
         "room_encrypted": "Room is <strong>encrypted ✅</strong>",
         "room_id": "Room ID: %(roomId)s",
         "room_not_encrypted": "Room is <strong>not encrypted 🚨</strong>",
