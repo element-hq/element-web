@@ -31,7 +31,6 @@ import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement";
 
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;
@@ -169,16 +168,7 @@ const QuickSettingsButton: React.FC<{
 
     return (
         <>
-            <ReleaseAnnouncement
-                feature="newRoomList_settings"
-                header={_t("room_list|release_announcement|settings|title")}
-                description={_t("room_list|release_announcement|settings|description")}
-                closeLabel={_t("room_list|release_announcement|done")}
-                placement="right"
-            >
-                {button}
-            </ReleaseAnnouncement>
-
+            {button}
             {contextMenu}
         </>
     );
