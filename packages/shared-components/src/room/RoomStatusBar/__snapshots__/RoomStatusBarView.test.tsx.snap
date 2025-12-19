@@ -146,7 +146,6 @@ exports[`RoomStatusBarView renders local room error 1`] = `
       class="actions"
     >
       <button
-        aria-disabled="false"
         class="_button_187yx_8 container _has-icon_187yx_57"
         data-kind="secondary"
         data-size="sm"

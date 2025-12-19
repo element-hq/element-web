@@ -40,7 +40,7 @@ exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
           rel="noreferrer noopener"
           target="_blank"
         >
-          Learn More
+          Learn more
         </a>
       </span>
     </span>
