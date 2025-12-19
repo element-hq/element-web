@@ -15,11 +15,12 @@ export class Toasts {
      * Assert that a toast with the given title exists, and return it
      *
      * @param expectedTitle - Expected title of the toast
+     * @param timeout Time to retry the assertion for in milliseconds. Defaults to `timeout` in `TestConfig.expect`.
      * @returns the Locator for the matching toast
      */
-    public async getToast(expectedTitle: string): Promise<Locator> {
+    public async getToast(expectedTitle: string, timeout?: number): Promise<Locator> {
         const toast = this.page.locator(".mx_Toast_toast", { hasText: expectedTitle }).first();
-        await expect(toast).toBeVisible();
+        await expect(toast).toBeVisible({ timeout });
         return toast;
     }
 

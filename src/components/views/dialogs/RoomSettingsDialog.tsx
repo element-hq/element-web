@@ -13,10 +13,11 @@ import { RoomEvent, type Room, RoomStateEvent, type MatrixEvent, EventType } fro
 import {
     AdminIcon,
     GroupIcon,
-    LockSolidIcon,
+    LockIcon,
     PollsIcon,
-    SettingsSolidIcon,
-    VoiceCallSolidIcon,
+    SettingsIcon,
+    VoiceCallIcon,
+    NotificationsIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
@@ -40,7 +41,6 @@ import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
 import { Icon as AdvancedIcon } from "../../../../res/img/element-icons/room/settings/advanced.svg";
-import { Icon as NotificationsIcon } from "../../../../res/img/element-icons/notifications.svg";
 import { Icon as BridgeIcon } from "../../../../res/img/feather-customised/bridge.svg";
 
 export const enum RoomSettingsTab {
@@ -140,7 +140,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.General,
                 _td("common|general"),
-                <SettingsSolidIcon />,
+                <SettingsIcon />,
                 <GeneralRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsGeneral",
             ),
@@ -160,7 +160,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.Voip,
                     _td("settings|voip|title"),
-                    <VoiceCallSolidIcon />,
+                    <VoiceCallIcon />,
                     <VoipRoomSettingsTab room={this.state.room} />,
                 ),
             );
@@ -169,7 +169,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.Security,
                 _td("room_settings|security|title"),
-                <LockSolidIcon />,
+                <LockIcon />,
                 <SecurityRoomSettingsTab room={this.state.room} closeSettingsFn={() => this.props.onFinished(true)} />,
                 "RoomSettingsSecurityPrivacy",
             ),

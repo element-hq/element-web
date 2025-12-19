@@ -3,12 +3,8 @@
 exports[`<SpacePanel /> should show all activated MetaSpaces in the correct order 1`] = `
 <DocumentFragment>
   <nav
-    aria-controls="_r_2_"
-    aria-describedby="_r_2_"
-    aria-haspopup="dialog"
     aria-label="Spaces"
     class="mx_SpacePanel collapsed newUi"
-    data-floating-ui-inert=""
   >
     <div
       class="mx_UserMenu"
@@ -336,11 +332,11 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby="_r_16_"
+        aria-labelledby="_r_12_"
         class="_icon-button_1pz9o_8 mx_ThreadsActivityCentreButton"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_14_"
+        id="radix-_r_10_"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -368,7 +364,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     <button
       aria-expanded="false"
       aria-label="Quick settings"
-      aria-labelledby="_r_1f_"
+      aria-labelledby="_r_17_"
       class="_icon-button_1pz9o_8 mx_QuickSettingsButton"
       data-kind="primary"
       role="button"
@@ -394,30 +390,5 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       </div>
     </button>
   </nav>
-  <span
-    aria-hidden="true"
-    data-floating-ui-inert=""
-    style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-    tabindex="-1"
-  />
-  <span
-    data-floating-ui-focus-guard=""
-    data-type="outside"
-    role="button"
-    style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-    tabindex="0"
-  />
-  <span
-    aria-owns="_r_1k_"
-    data-floating-ui-inert=""
-    style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-  />
-  <span
-    data-floating-ui-focus-guard=""
-    data-type="outside"
-    role="button"
-    style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
-    tabindex="0"
-  />
 </DocumentFragment>
 `;

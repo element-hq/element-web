@@ -847,6 +847,7 @@
         "number_of_users": "Number of users",
         "only_joined_members": "Only joined users",
         "original_event_source": "Original event source",
+        "restore_from_backup": "Restore from backup",
         "room_encrypted": "Room is <strong>encrypted ✅</strong>",
         "room_id": "Room ID: %(roomId)s",
         "room_not_encrypted": "Room is <strong>not encrypted 🚨</strong>",
@@ -2215,26 +2216,6 @@
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
-        "release_announcement": {
-            "done": "Done",
-            "filter": {
-                "description": "Filter your chats with a single click. Expand to view more filters.",
-                "title": "New quick filters"
-            },
-            "intro": {
-                "description": "The chats list has been updated to be more clear and simple to use.",
-                "title": "Chats has a new look!"
-            },
-            "next": "Next",
-            "settings": {
-                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
-                "title": "Some settings have moved"
-            },
-            "sort": {
-                "description": "Change the ordering of your chats from most recent to A-Z",
-                "title": "Sort your chats"
-            }
-        },
         "room": {
             "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
@@ -2904,10 +2885,6 @@
             "rule_suppress_notices": "Messages sent by bot",
             "rule_tombstone": "When rooms are upgraded",
             "show_message_desktop_notification": "Show message in desktop notification",
-            "sounds_release_announcement": {
-                "description": "Your notification ping and call ringer have been updated—clearer, quicker, and less disruptive",
-                "title": "We’ve refreshed your sounds"
-            },
             "voip": "Audio and Video calls"
         },
         "preferences": {
