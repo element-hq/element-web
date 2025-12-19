@@ -47,7 +47,13 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
                     <button
                         type="button"
                         onClick={() => {
-                            Modal.createDialog(RestoreKeyBackupDialog, undefined, undefined, /* priority = */ true, /* static = */ true);
+                            Modal.createDialog(
+                                RestoreKeyBackupDialog,
+                                undefined,
+                                undefined,
+                                /* priority = */ true,
+                                /* static = */ true,
+                            );
                         }}
                     >
                         {_t("devtools|restore_from_backup")}
