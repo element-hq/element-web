@@ -59,7 +59,7 @@ export function Banner({
     actions,
     onClose,
     ...props
-}: PropsWithChildren<BannerProps&HTMLAttributes<HTMLDivElement>>): ReactElement {
+}: PropsWithChildren<BannerProps & HTMLAttributes<HTMLDivElement>>): ReactElement {
     const classes = classNames(styles.banner, className);
 
     const icon = useMemo((): ReactElement => {
