@@ -54,7 +54,7 @@ describe("HistoryVisibleBannerViewModel", () => {
     });
 
     it("should not show the banner in unencrypted rooms", () => {
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
         expect(vm.getSnapshot().visible).toBe(false);
     });
 
@@ -76,7 +76,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
         expect(vm.getSnapshot().visible).toBe(false);
     });
 
@@ -99,7 +99,30 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
+        expect(vm.getSnapshot().visible).toBe(false);
+        vm.dispose();
+    });
+
+    it("should not show the banner in threads", () => {
+        upsertRoomStateEvents(room, [
+            mkEvent({
+                event: true,
+                type: "m.room.encryption",
+                user: "@user1:server",
+                content: {},
+            }),
+            mkEvent({
+                event: true,
+                type: "m.room.history_visibility",
+                user: "@user1:server",
+                content: {
+                    history_visibility: "shared",
+                },
+            }),
+        ]);
+
+        const vm = new HistoryVisibleBannerViewModel({ room, threadId: "some thread ID" });
         expect(vm.getSnapshot().visible).toBe(false);
         vm.dispose();
     });
@@ -122,7 +145,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
         expect(vm.getSnapshot().visible).toBe(true);
         await vm.onClose();
         expect(vm.getSnapshot().visible).toBe(false);

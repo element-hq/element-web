@@ -17,6 +17,7 @@ import {
     MarkAsReadIcon,
     MarkAsUnreadIcon,
     LeaveIcon,
+    UserAddIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -43,7 +44,6 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { useSettingValue } from "../../../hooks/useSettings";
-import { Icon as InviteIcon } from "../../../../res/img/element-icons/room/invite.svg";
 
 export interface RoomGeneralContextMenuProps extends IContextMenuProps {
     room: Room;
@@ -190,7 +190,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                     onPostInviteClick,
                 )}
                 label={_t("action|invite")}
-                icon={<InviteIcon />}
+                icon={<UserAddIcon />}
             />
         );
     }

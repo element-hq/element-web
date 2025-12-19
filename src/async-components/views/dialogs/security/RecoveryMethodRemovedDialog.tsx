@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
@@ -39,7 +40,10 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
 
     public render(): React.ReactNode {
         const title = (
-            <span className="mx_KeyBackupFailedDialog_title">{_t("encryption|recovery_method_removed|title")}</span>
+            <span className="mx_KeyBackupFailedDialog_title">
+                <ErrorIcon />
+                {_t("encryption|recovery_method_removed|title")}
+            </span>
         );
 
         return (

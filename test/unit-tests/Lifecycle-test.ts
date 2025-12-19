@@ -167,6 +167,8 @@ describe("Lifecycle", () => {
         mx_is_url: identityServerUrl,
         mx_user_id: userId,
         mx_device_id: deviceId,
+        mx_oidc_token_issuer: "test-issuer.dummy",
+        mx_oidc_client_id: "test-client-id",
     };
     const idbStorageSession = {
         account: {
@@ -374,7 +376,7 @@ describe("Lifecycle", () => {
                                 guest: false,
                                 pickleKey: undefined,
                             },
-                            undefined,
+                            expect.any(Function),
                         );
                     });
                 });
@@ -492,7 +494,7 @@ describe("Lifecycle", () => {
                                 guest: false,
                                 pickleKey: pickleKey,
                             },
-                            undefined,
+                            expect.any(Function),
                         );
                     });
                 });
@@ -657,6 +659,11 @@ describe("Lifecycle", () => {
             });
 
             it("should persist a refreshToken when present", async () => {
+                initLocalStorageMock({
+                    mx_oidc_token_issuer: "test-issuer.dummy",
+                    mx_oidc_client_id: "test-client-id",
+                });
+
                 await setLoggedIn({
                     ...credentials,
                     refreshToken,
@@ -838,11 +845,18 @@ describe("Lifecycle", () => {
             });
 
             it("should not try to create a token refresher without a deviceId", async () => {
-                await setLoggedIn({
-                    ...credentials,
-                    refreshToken,
-                    deviceId: undefined,
+                initLocalStorageMock({
+                    mx_oidc_token_issuer: "test-issuer.dummy",
+                    mx_oidc_client_id: "test-client-id",
                 });
+
+                await expect(
+                    setLoggedIn({
+                        ...credentials,
+                        refreshToken,
+                        deviceId: undefined,
+                    }),
+                ).rejects.toThrow("Expected deviceId in user credentials.");
 
                 // didn't try to initialise token refresher
                 expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
@@ -855,10 +869,12 @@ describe("Lifecycle", () => {
                     undefined,
                     idToken,
                 );
-                await setLoggedIn({
-                    ...credentials,
-                    refreshToken,
-                });
+                await expect(
+                    setLoggedIn({
+                        ...credentials,
+                        refreshToken,
+                    }),
+                ).rejects.toThrow("Cannot create an OIDC token refresher as no stored OIDC token issuer was found.");
 
                 // didn't try to initialise token refresher
                 expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);

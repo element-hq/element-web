@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type FC, useContext, useState } from "react";
 import { type Room, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { InfoSolidIcon, VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -152,7 +153,9 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         avatarRow = (
             <>
                 <RoomAvatar room={room} size="50px" viewAvatarOnClick />
-                <div className="mx_RoomPreviewCard_video" />
+                <div className="mx_RoomPreviewCard_video">
+                    <VideoCallSolidIcon />
+                </div>
                 <BetaPill onClick={viewLabs} tooltipTitle={_t("labs|video_rooms_beta")} />
             </>
         );
@@ -174,6 +177,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
             {room.getJoinRule() === "public" && <RoomFacePile room={room} />}
             {cannotJoin ? (
                 <div className="mx_RoomPreviewCard_notice">
+                    <InfoSolidIcon />
                     {_t("room|join_failed_needs_invite", { roomName: room.name })}
                 </div>
             ) : null}

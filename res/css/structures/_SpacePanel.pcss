@@ -44,29 +44,23 @@ Please see LICENSE files in the repository root for full details.
         top: 19px; /* v-align with avatar */
         right: -8px;
 
-        &::before {
-            content: "";
-            position: absolute;
-            width: inherit;
+        svg {
             height: inherit;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $background;
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-            transform: rotate(270deg);
+            width: inherit;
+            display: inline-block;
+            color: $background;
+            /* Slight alignment tweak to center the asset */
+            margin-left: 1px;
         }
 
         &:not(.expanded) {
             opacity: 0;
-
-            &::before {
-                mask-position: center 1px;
-            }
         }
 
-        &.expanded::before {
-            transform: rotate(90deg);
+        &.expanded svg {
+            transform: rotate(180deg);
+            /* Slight alignment tweak to center the asset */
+            margin-left: -1px;
         }
     }
 
@@ -103,7 +97,6 @@ Please see LICENSE files in the repository root for full details.
         & > .mx_SpaceButton > .mx_SpaceButton_toggleCollapse {
             padding: 0 10px;
             margin: 0 -10px;
-            transform: rotate(-90deg);
         }
 
         & > .mx_SpaceTreeLevel {
@@ -166,109 +159,67 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpaceButton_toggleCollapse {
-            width: var(--gutterSize);
-            padding: 10px 0;
-            min-width: var(--gutterSize);
             height: 20px;
-            mask-position: center;
-            mask-size: 20px;
-            mask-repeat: no-repeat;
-            background-color: $tertiary-content;
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
+            width: var(--gutterSize);
+            flex-shrink: 0;
+            padding: 10px 0;
+
+            svg {
+                width: 20px;
+                height: inherit;
+                display: inline-block;
+                color: $tertiary-content;
+                /* Re-align with parent */
+                margin-left: -3px;
+            }
         }
 
         .mx_SpaceButton_icon {
-            width: var(--height-topLevel);
-            min-width: var(--height-topLevel);
-            height: var(--height-topLevel);
+            /* Calculate height excluding padding to allow svg to inherit */
+            width: calc(var(--height-topLevel) - 14px);
+            height: calc(var(--height-topLevel) - 14px);
+            flex-shrink: 0;
             border-radius: 8px;
-            position: relative;
-
-            &::before {
-                position: absolute;
-                content: "";
-                width: var(--height-topLevel);
-                height: var(--height-topLevel);
-                top: 0;
-                left: 0;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                mask-size: 18px;
-            }
-        }
-
-        &.mx_SpaceButton_home,
-        &.mx_SpaceButton_favourites,
-        &.mx_SpaceButton_people,
-        &.mx_SpaceButton_orphans,
-        &.mx_SpaceButton_videoRooms {
-            .mx_SpaceButton_icon {
-                background-color: $panel-actions;
-
-                &::before {
-                    background-color: $secondary-content;
-                }
-            }
-        }
-
-        &.mx_SpaceButton_withIcon .mx_SpaceButton_icon {
+            padding: 7px;
             background-color: $panel-actions;
-        }
 
-        &.mx_SpaceButton_home .mx_SpaceButton_icon::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/home-solid.svg");
-        }
-
-        &.mx_SpaceButton_favourites .mx_SpaceButton_icon::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/favourite-solid.svg");
-        }
-
-        &.mx_SpaceButton_people .mx_SpaceButton_icon::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
-        }
-
-        &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
-        }
-
-        &.mx_SpaceButton_videoRooms .mx_SpaceButton_icon::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $secondary-content;
+            }
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
-            &::before {
-                background-color: $primary-content;
-                mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
+            background-color: unset;
+
+            svg {
+                color: $primary-content;
                 transition: all 0.2s ease-in-out; /* TODO transition */
             }
         }
 
-        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon svg {
             transform: rotate(45deg);
         }
 
         .mx_SpaceButton_menuButton {
-            width: 20px;
-            min-width: 20px; /* yay flex */
-            height: 20px;
+            width: 16px;
+            height: 16px;
+            padding: var(--cpd-space-0-5x);
+            flex-shrink: 0;
             margin-top: auto;
             margin-bottom: auto;
             display: none;
             position: absolute;
             right: 4px;
 
-            &::before {
-                top: 3px;
-                left: 2px;
-                content: "";
-                width: 16px;
-                height: 16px;
-                position: absolute;
-                mask-position: center;
-                mask-size: contain;
-                mask-repeat: no-repeat;
-                mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
-                background: $primary-content;
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $primary-content;
             }
         }
     }
@@ -340,18 +291,6 @@ Please see LICENSE files in the repository root for full details.
         flex: 1;
         padding: 0 0 16px 0;
         scrollbar-gutter: stable;
-
-        & > .mx_SpaceButton {
-            height: var(--height-topLevel);
-
-            &.mx_SpaceButton_active::before {
-                height: var(--height-topLevel);
-            }
-        }
-
-        & > ul {
-            padding-left: 0;
-        }
 
         &.mx_IndicatorScrollbar_topOverflow {
             mask-image: linear-gradient(to bottom, transparent, black 16px);

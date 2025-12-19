@@ -77,9 +77,21 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                       target="_blank"
                     >
                       Learn more
-                      <i
+                      <svg
                         class="mx_ExternalLink_icon"
-                      />
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+                        />
+                        <path
+                          d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+                        />
+                      </svg>
                     </a>
                   </span>
                 </div>
@@ -245,9 +257,21 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                       target="_blank"
                     >
                       Learn more
-                      <i
+                      <svg
                         class="mx_ExternalLink_icon"
-                      />
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+                        />
+                        <path
+                          d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+                        />
+                      </svg>
                     </a>
                   </span>
                 </div>

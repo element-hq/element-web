@@ -14,6 +14,7 @@ import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
 import { ManualDeviceKeyVerificationDialog } from "../ManualDeviceKeyVerificationDialog";
+import RestoreKeyBackupDialog from "../../dialogs/security/RestoreKeyBackupDialog";
 
 interface KeyBackupProps {
     /**
@@ -42,6 +43,20 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
                         }}
                     >
                         {_t("devtools|manual_device_verification")}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            Modal.createDialog(
+                                RestoreKeyBackupDialog,
+                                undefined,
+                                undefined,
+                                /* priority = */ true,
+                                /* static = */ true,
+                            );
+                        }}
+                    >
+                        {_t("devtools|restore_from_backup")}
                     </button>
                 </>
             ) : (

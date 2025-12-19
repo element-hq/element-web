@@ -246,7 +246,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 </p>
             );
         } else if (this.state.loading) {
-            header = <Spinner w={16} h={16} />;
+            header = <Spinner size={16} />;
         }
 
         const { isQuoteExpanded } = this.props;

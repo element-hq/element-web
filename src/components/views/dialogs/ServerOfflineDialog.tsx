@@ -52,7 +52,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
             const entries = c.transactions
                 .filter((t) => t.status === TransactionStatus.Error || t.didPreviouslyFail)
                 .map((t, j) => {
-                    let button = <Spinner w={19} h={19} />;
+                    let button = <Spinner size={19} />;
                     if (t.status === TransactionStatus.Error) {
                         button = (
                             <AccessibleButton kind="link" onClick={() => t.run()}>

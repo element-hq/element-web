@@ -15,6 +15,7 @@ import {
     LeaveIcon,
     SearchIcon,
     PreferencesIcon,
+    UserAddIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
@@ -40,7 +41,6 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { Icon as InviteIcon } from "../../../../res/img/element-icons/room/invite.svg";
 
 interface IProps extends IContextMenuProps {
     space?: Room;
@@ -69,7 +69,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             <IconizedContextMenuOption
                 data-testid="invite-option"
                 className="mx_SpacePanel_contextMenu_inviteButton"
-                icon={<InviteIcon />}
+                icon={<UserAddIcon />}
                 label={_t("action|invite")}
                 onClick={onInviteClick}
             />

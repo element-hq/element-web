@@ -25,7 +25,8 @@ test.describe("Release announcement", () => {
         labsFlags: ["feature_new_room_list"],
     });
 
-    test(
+    // There is no release announcement currently live
+    test.skip(
         "should display the new room list release announcement",
         { tag: "@screenshot" },
         async ({ page, app, room, util }) => {
