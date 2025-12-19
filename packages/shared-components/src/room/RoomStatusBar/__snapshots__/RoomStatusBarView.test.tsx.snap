@@ -3,8 +3,10 @@
 exports[`RoomStatusBarView renders connection lost 1`] = `
 <div>
   <div
+    aria-labelledby="_r_0_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -30,6 +32,7 @@ exports[`RoomStatusBarView renders connection lost 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+          id="_r_0_"
         >
           Connectivity to the server has been lost.
         </p>
@@ -50,8 +53,10 @@ exports[`RoomStatusBarView renders connection lost 1`] = `
 exports[`RoomStatusBarView renders consent link 1`] = `
 <div>
   <div
+    aria-labelledby="_r_2_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -77,6 +82,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+          id="_r_2_"
         >
           You can't send any messages until you review and agree to our terms and conditions.
         </p>
@@ -95,7 +101,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
         tabindex="0"
         target="_blank"
       >
-        View Terms and Conditions
+        Review terms and conditions
       </a>
     </div>
   </div>
@@ -105,8 +111,10 @@ exports[`RoomStatusBarView renders consent link 1`] = `
 exports[`RoomStatusBarView renders local room error 1`] = `
 <div>
   <div
+    aria-labelledby="_r_6_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -127,15 +135,12 @@ exports[`RoomStatusBarView renders local room error 1`] = `
     <span
       class="content"
     >
-      <div
-        class="container"
+      <p
+        class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 container"
+        id="_r_6_"
       >
-        <p
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
-        >
-          Some of your messages have not been sent
-        </p>
-      </div>
+        Could not start a chat with this user
+      </p>
     </span>
     <div
       class="actions"
@@ -170,8 +175,10 @@ exports[`RoomStatusBarView renders local room error 1`] = `
 exports[`RoomStatusBarView renders resource limit error 1`] = `
 <div>
   <div
+    aria-labelledby="_r_1_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -197,6 +204,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+          id="_r_1_"
         >
           Your message wasn't sent because this homeserver has been blocked by its administrator.
         </p>
@@ -230,8 +238,10 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
 exports[`RoomStatusBarView renders unsent messages 1`] = `
 <div>
   <div
+    aria-labelledby="_r_3_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -257,8 +267,9 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+          id="_r_3_"
         >
-          Could not start a chat with this user
+          Some of your messages have not been sent
         </p>
         <p
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
@@ -322,8 +333,10 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
 exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
 <div>
   <div
+    aria-labelledby="_r_4_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -349,8 +362,9 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+          id="_r_4_"
         >
-          Could not start a chat with this user
+          Some of your messages have not been sent
         </p>
         <p
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
@@ -414,8 +428,10 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
 exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
 <div>
   <div
+    aria-labelledby="_r_5_"
     class="banner"
     data-type="critical"
+    role="status"
   >
     <div
       class="icon"
@@ -441,8 +457,9 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+          id="_r_5_"
         >
-          Could not start a chat with this user
+          Some of your messages have not been sent
         </p>
         <p
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"

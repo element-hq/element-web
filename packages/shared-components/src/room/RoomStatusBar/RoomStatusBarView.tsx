@@ -26,10 +26,14 @@ export interface RoomStatusBarViewActions {
     onDeleteAllClick?: () => void;
 
     /**
-     * For local rooms which haven't been created yet, this will retry creating the room.
-     * @returns
+     * Called when the user clicks on the 'Retry' button in the 'failed to start chat' bar.
      */
     onRetryRoomCreationClick?: () => void;
+
+    /**
+     * Called when the user clicks on the 'Review Terms and Conditions' button.
+     */
+    onTermsAndConditionsClicked?: () => void;
 }
 
 export interface RoomStatusBarNoConnection {
@@ -49,7 +53,7 @@ export interface RoomStatusBarUnsentMessagesState {
     isResending: boolean;
 }
 export interface RoomStatusBarLocalRoomError {
-    isRetryingRoomCreation: boolean;
+    shouldRetryRoomCreation: boolean;
 }
 
 export interface RoomStatusBarViewSnapshot {
@@ -111,6 +115,11 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         [vm.onRetryRoomCreationClick],
     );
 
+    const termsAndConditionsClicked = useCallback<React.MouseEventHandler<HTMLAnchorElement>>(() => {
+        // Allow the link to go through.
+        vm.onTermsAndConditionsClicked?.();
+    }, [vm.onTermsAndConditionsClicked]);
+
     if (state === null) {
         // Nothing to show!
         return <></>;
@@ -120,7 +129,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         return (
             <Banner type="critical" role="status" aria-labelledby={bannerTitleId}>
                 <div className={styles.container}>
-                    <Text id={bannerTitleId} weight="semibold">{_t("room|status_bar|server_connectivity_lost_title")}</Text>
+                    <Text id={bannerTitleId} weight="semibold">
+                        {_t("room|status_bar|server_connectivity_lost_title")}
+                    </Text>
                     <Text className={styles.description}>
                         {_t("room|status_bar|server_connectivity_lost_description")}
                     </Text>
@@ -137,6 +148,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 aria-labelledby={bannerTitleId}
                 actions={
                     <Button
+                        onClick={termsAndConditionsClicked}
                         kind="secondary"
                         size="sm"
                         as="a"
@@ -149,7 +161,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 }
             >
                 <div className={styles.container}>
-                    <Text id={bannerTitleId} weight="semibold">{_t("room|status_bar|requires_consent_agreement_title")}</Text>
+                    <Text id={bannerTitleId} weight="semibold">
+                        {_t("room|status_bar|requires_consent_agreement_title")}
+                    </Text>
                 </div>
             </Banner>
         );
@@ -183,7 +197,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 }
             >
                 <div className={styles.container}>
-                    <Text id={bannerTitleId} weight="semibold">{title}</Text>
+                    <Text id={bannerTitleId} weight="semibold">
+                        {title}
+                    </Text>
                     <Text className={styles.description}>
                         {_t("room|status_bar|exceeded_resource_limit_description")}
                     </Text>
@@ -192,7 +208,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         );
     }
 
-    if ("isRetryingRoomCreation" in state) {
+    if ("shouldRetryRoomCreation" in state) {
         return (
             <Banner
                 role="status"
@@ -204,14 +220,16 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         kind="secondary"
                         className={styles.container}
                         Icon={RestartIcon}
-                        disabled={state.isRetryingRoomCreation}
+                        disabled={state.shouldRetryRoomCreation}
                         onClick={retryRoomCreationClick}
                     >
                         {_t("action|retry")}
                     </Button>
                 }
             >
-                <Text id={bannerTitleId} weight="semibold" className={styles.container}>{_t("room|status_bar|failed_to_create_room_title")}</Text>
+                <Text id={bannerTitleId} weight="semibold" className={styles.container}>
+                    {_t("room|status_bar|failed_to_create_room_title")}
+                </Text>
             </Banner>
         );
     }
@@ -249,7 +267,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
     return (
         <Banner role="status" type="critical" actions={actions} aria-labelledby={bannerTitleId}>
             <div className={styles.container}>
-                <Text id={bannerTitleId} weight="semibold">{_t("room|status_bar|some_messages_not_sent")}</Text>
+                <Text id={bannerTitleId} weight="semibold">
+                    {_t("room|status_bar|some_messages_not_sent")}
+                </Text>
                 <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
             </div>
         </Banner>

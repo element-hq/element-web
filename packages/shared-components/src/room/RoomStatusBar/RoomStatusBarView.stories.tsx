@@ -17,12 +17,14 @@ const RoomStatusBarViewWrapper = ({
     onResendAllClick,
     onDeleteAllClick,
     onRetryRoomCreationClick,
+    onTermsAndConditionsClicked,
     ...rest
 }: RoomStatusBarProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         onResendAllClick,
         onDeleteAllClick,
         onRetryRoomCreationClick,
+        onTermsAndConditionsClicked,
     });
     return <RoomStatusBarView vm={vm} />;
 };
@@ -36,6 +38,7 @@ export default {
         onResendAllClick: fn(),
         onDeleteAllClick: fn(),
         onRetryRoomCreationClick: fn(),
+        onTermsAndConditionsClicked: fn(),
     },
 } as Meta<typeof RoomStatusBarViewWrapper>;
 
@@ -100,6 +103,6 @@ WithUnsentMessagesSending.args = {
 export const WithLocalRoomRetry = Template.bind({});
 WithLocalRoomRetry.args = {
     state: {
-        isRetryingRoomCreation: false,
+        shouldRetryRoomCreation: false,
     },
 };
