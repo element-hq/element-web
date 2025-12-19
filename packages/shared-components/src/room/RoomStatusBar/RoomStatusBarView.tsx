@@ -6,13 +6,13 @@
  */
 
 import React, { useCallback, useId, type JSX } from "react";
+import { RestartIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Button, InlineSpinner, Text } from "@vector-im/compound-web";
 
 import styles from "./RoomStatusBarView.module.css";
 import { useViewModel } from "../../useViewModel";
 import { type ViewModel } from "../../viewmodel";
-import { RestartIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useI18n } from "../../utils/i18nContext";
-import { Button, InlineSpinner, Text } from "@vector-im/compound-web";
 import { Banner } from "../../composer/Banner";
 export interface RoomStatusBarViewActions {
     /**
@@ -109,7 +109,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
             ev.preventDefault();
             vm.onDeleteAllClick?.();
         },
-        [vm.onDeleteAllClick],
+        [vm],
     );
 
     const resendClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
@@ -117,7 +117,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
             ev.preventDefault();
             vm.onResendAllClick?.();
         },
-        [vm.onResendAllClick],
+        [vm],
     );
 
     const retryRoomCreationClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
@@ -125,13 +125,13 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
             ev.preventDefault();
             vm.onRetryRoomCreationClick?.();
         },
-        [vm.onRetryRoomCreationClick],
+        [vm],
     );
 
     const termsAndConditionsClicked = useCallback<React.MouseEventHandler<HTMLAnchorElement>>(() => {
         // Allow the link to go through.
         vm.onTermsAndConditionsClicked?.();
-    }, [vm.onTermsAndConditionsClicked]);
+    }, [vm]);
 
     if (snapshot.state === null) {
         // Nothing to show!
@@ -180,12 +180,6 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 </Banner>
             );
         case RoomStatusBarState.ResourceLimited:
-            const title =
-                {
-                    monthly_active_user: _t("room|status_bar|monthly_user_limit_reached_title"),
-                    hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
-                }[snapshot.resourceLimit] || _t("room|status_bar|exceeded_resource_limit_title");
-
             return (
                 <Banner
                     type="critical"
@@ -208,7 +202,10 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 >
                     <div className={styles.container}>
                         <Text id={bannerTitleId} weight="semibold">
-                            {title}
+                            {{
+                                monthly_active_user: _t("room|status_bar|monthly_user_limit_reached_title"),
+                                hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
+                            }[snapshot.resourceLimit] || _t("room|status_bar|exceeded_resource_limit_title")}
                         </Text>
                         <Text className={styles.description}>
                             {_t("room|status_bar|exceeded_resource_limit_description")}
@@ -240,38 +237,43 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 </Banner>
             );
         case RoomStatusBarState.UnsentMessages:
-            const actions = snapshot.isResending ? (
-                <InlineSpinner />
-            ) : (
-                <>
-                    {vm.onDeleteAllClick && (
-                        <Button
-                            size="sm"
-                            kind="destructive"
-                            Icon={DeleteIcon}
-                            disabled={snapshot.isResending}
-                            onClick={deleteAllClick}
-                        >
-                            {_t("room|status_bar|delete_all")}
-                        </Button>
-                    )}
-                    {vm.onResendAllClick && (
-                        <Button
-                            size="sm"
-                            kind="secondary"
-                            Icon={RestartIcon}
-                            disabled={snapshot.isResending}
-                            onClick={resendClick}
-                            className={styles.container}
-                        >
-                            {_t("room|status_bar|retry_all")}
-                        </Button>
-                    )}
-                </>
-            );
-
             return (
-                <Banner role="status" type="critical" actions={actions} aria-labelledby={bannerTitleId}>
+                <Banner
+                    role="status"
+                    type="critical"
+                    actions={
+                        snapshot.isResending ? (
+                            <InlineSpinner />
+                        ) : (
+                            <>
+                                {vm.onDeleteAllClick && (
+                                    <Button
+                                        size="sm"
+                                        kind="destructive"
+                                        Icon={DeleteIcon}
+                                        disabled={snapshot.isResending}
+                                        onClick={deleteAllClick}
+                                    >
+                                        {_t("room|status_bar|delete_all")}
+                                    </Button>
+                                )}
+                                {vm.onResendAllClick && (
+                                    <Button
+                                        size="sm"
+                                        kind="secondary"
+                                        Icon={RestartIcon}
+                                        disabled={snapshot.isResending}
+                                        onClick={resendClick}
+                                        className={styles.container}
+                                    >
+                                        {_t("room|status_bar|retry_all")}
+                                    </Button>
+                                )}
+                            </>
+                        )
+                    }
+                    aria-labelledby={bannerTitleId}
+                >
                     <div className={styles.container}>
                         <Text id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|some_messages_not_sent")}

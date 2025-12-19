@@ -12,7 +12,7 @@ import React, {
     type ReactNode,
     type PropsWithChildren,
     useMemo,
-    HTMLAttributes,
+    type HTMLAttributes,
 } from "react";
 import { Button } from "@vector-im/compound-web";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
@@ -73,7 +73,7 @@ export function Banner({
             default:
                 return <InfoIcon fontSize={24} />;
         }
-    }, [type, props]);
+    }, [type]);
 
     return (
         <div {...props} className={classes} data-type={type}>

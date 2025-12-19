@@ -8,9 +8,9 @@
 import React from "react";
 import { render } from "jest-matrix-react";
 import { composeStories } from "@storybook/react-vite";
+import userEvent from "@testing-library/user-event";
 
 import * as stories from "./RoomStatusBarView.stories.tsx";
-import userEvent from "@testing-library/user-event";
 
 const { WithConnectionLost, WithConsentLink, WithResourceLimit, WithUnsentMessages, WithLocalRoomRetry } =
     composeStories(stories);
