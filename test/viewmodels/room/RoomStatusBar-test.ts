@@ -5,19 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { RoomStatusBarViewModel } from "../../../src/viewmodels/room/RoomStatusBar";
-import { mkEvent, mkRoom, stubClient } from "../../test-utils";
 import {
     SyncState,
     MatrixError,
     ClientEvent,
-    MatrixClient,
-    Room,
+    type MatrixClient,
+    type Room,
     type MatrixEvent,
     EventStatus,
 } from "matrix-js-sdk/src/matrix";
 import { RoomStatusBarState } from "@element-hq/web-shared-components";
 import { type MockedObject } from "jest-mock";
+
+import { mkEvent, mkRoom, stubClient } from "../../test-utils";
+import { RoomStatusBarViewModel } from "../../../src/viewmodels/room/RoomStatusBar";
 import { LocalRoom, LocalRoomState } from "../../../src/models/LocalRoom";
 
 const userId = "@example:example.org";
@@ -66,7 +67,7 @@ describe("RoomStatusBarViewModel", () => {
     });
 
     // Because we expect LoggedInView to pop a toast
-    it("should resolve state to nothing if sync error is M_RESOURCE_LIMIT_EXCEEDED ", () => {
+    it("should resolve state to nothing if sync error is M_RESOURCE_LIMIT_EXCEEDED", () => {
         client.getSyncState.mockReturnValue(SyncState.Error);
         client.getSyncStateData.mockReturnValue({ error: new MatrixError({ errcode: "M_RESOURCE_LIMIT_EXCEEDED" }) });
         client.emit(ClientEvent.Sync, SyncState.Error, null);

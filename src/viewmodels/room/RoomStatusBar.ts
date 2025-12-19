@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Resend from "../../Resend";
 import { Action } from "../../dispatcher/actions";
 import dis from "../../dispatcher/dispatcher";
-import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import { type LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 
 interface PropsWithRoom {
     room: Room | LocalRoom;
