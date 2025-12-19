@@ -677,6 +677,7 @@ export function mkStubRoom(
         getCanonicalAlias: jest.fn(),
         getDMInviter: jest.fn(),
         getEventReadUpTo: jest.fn(() => null),
+        getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Joined),
         getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(1),
         getJoinRule: jest.fn().mockReturnValue("invite"),
         getJoinedMemberCount: jest.fn().mockReturnValue(1),
