@@ -200,8 +200,10 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
       </div>
       <div
+        aria-labelledby="_r_r6_"
         class="_banner_15kcv_20"
         data-type="critical"
+        role="status"
       >
         <div
           class="_icon_15kcv_65"
@@ -222,22 +224,18 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         <span
           class="_content_15kcv_53"
         >
-          <div
-            class="_container_sjla8_1"
+          <p
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_sjla8_1"
+            id="_r_r6_"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
-            >
-              Some of your messages have not been sent
-            </p>
-          </div>
+            Could not start a chat with this user
+          </p>
         </span>
         <div
           class="_actions_15kcv_85"
         >
           <button
-            aria-disabled="false"
-            class="_button_187yx_8 _has-icon_187yx_57"
+            class="_button_187yx_8 _container_sjla8_1 _has-icon_187yx_57"
             data-kind="secondary"
             data-size="sm"
             role="button"
@@ -255,7 +253,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
               />
             </svg>
-            actions
+            Retry
           </button>
         </div>
       </div>
@@ -395,7 +393,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_o1_"
+                aria-labelledby="_r_oa_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -1348,7 +1346,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
               >
                 <svg
                   aria-label="Messages in this room are not end-to-end encrypted"
-                  aria-labelledby="_r_10_"
+                  aria-labelledby="_r_12_"
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
@@ -1657,7 +1655,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_5b_"
+                aria-labelledby="_r_5e_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1684,7 +1682,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_5g_"
+                aria-labelledby="_r_5j_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1699,7 +1697,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_5l_"
+            aria-labelledby="_r_5o_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1726,7 +1724,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_5q_"
+            aria-labelledby="_r_5t_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1756,7 +1754,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_5v_"
+              aria-labelledby="_r_62_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -1823,7 +1821,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               >
                 <svg
                   aria-label="Messages in this room are not end-to-end encrypted"
-                  aria-labelledby="_r_6a_"
+                  aria-labelledby="_r_6e_"
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
@@ -2132,7 +2130,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_2e_"
+                aria-labelledby="_r_2g_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2159,7 +2157,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_2j_"
+                aria-labelledby="_r_2l_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2174,7 +2172,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_2o_"
+            aria-labelledby="_r_2q_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2201,7 +2199,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_2t_"
+            aria-labelledby="_r_2v_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2231,7 +2229,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_32_"
+              aria-labelledby="_r_34_"
               class="mx_AccessibleButton mx_FacePile mx_FacePile_toggled"
               role="button"
               tabindex="0"
@@ -2298,7 +2296,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               >
                 <svg
                   aria-label="Messages in this room are not end-to-end encrypted"
-                  aria-labelledby="_r_3d_"
+                  aria-labelledby="_r_3g_"
                   class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                   color="var(--cpd-color-icon-info-primary)"
                   fill="currentColor"
@@ -2607,7 +2605,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_f5_"
+                aria-labelledby="_r_fc_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2634,7 +2632,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_fa_"
+                aria-labelledby="_r_fh_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2649,7 +2647,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_ff_"
+            aria-labelledby="_r_fm_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2676,7 +2674,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_fk_"
+            aria-labelledby="_r_fr_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2706,7 +2704,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_fp_"
+              aria-labelledby="_r_g0_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -2821,7 +2819,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_f5_"
+                aria-labelledby="_r_fc_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2848,7 +2846,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="_r_fa_"
+                aria-labelledby="_r_fh_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2863,7 +2861,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_ff_"
+            aria-labelledby="_r_fm_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2890,7 +2888,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_fk_"
+            aria-labelledby="_r_fr_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2920,7 +2918,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_fp_"
+              aria-labelledby="_r_g0_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -2989,7 +2987,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   tabindex="0"
                 >
                   <div
-                    aria-labelledby="_r_g4_"
+                    aria-labelledby="_r_gc_"
                     class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                     data-testid="e2e-icon"
                     style="width: 12px; height: 12px;"
@@ -3324,7 +3322,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Chat"
-            aria-labelledby="_r_k7_"
+            aria-labelledby="_r_kg_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -3351,7 +3349,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="_r_kc_"
+            aria-labelledby="_r_kl_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -3378,7 +3376,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="_r_kh_"
+            aria-labelledby="_r_kq_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -3408,7 +3406,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           >
             <div
               aria-label="0 members"
-              aria-labelledby="_r_km_"
+              aria-labelledby="_r_kv_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
@@ -3493,7 +3491,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 </p>
               </div>
               <button
-                aria-labelledby="_r_kv_"
+                aria-labelledby="_r_l8_"
                 class="_icon-button_1pz9o_8"
                 data-kind="secondary"
                 data-testid="base-card-close-button"
@@ -3553,7 +3551,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                   >
                     <svg
                       aria-label="Messages in this room are not end-to-end encrypted"
-                      aria-labelledby="_r_l4_"
+                      aria-labelledby="_r_ld_"
                       class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                       color="var(--cpd-color-icon-info-primary)"
                       fill="currentColor"
