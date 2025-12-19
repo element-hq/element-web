@@ -574,6 +574,7 @@
         "someone": "다른 사람",
         "space": "스페이스",
         "spaces": "스페이스",
+        "state_encryption_enabled": "실험적 상태 암호화 활성화됨",
         "sticker": "스티커",
         "stickerpack": "스티커 팩",
         "success": "성공",
@@ -681,6 +682,8 @@
         "join_rule_restricted_label": "<SpaceName/> 의 모든 사용자는 이 방을 찾아 참여할 수 있습니다.",
         "name_validation_required": "방 이름을 입력해주세요",
         "room_visibility_label": "방 표시 여부",
+        "state_encrypted_warning": "상태 이벤트 암호화 실험 기능을 활성화하여 방 이름, 주제 등의 메타데이터를 서버로부터 숨깁니다. 단, 나중에 방에 참여하는 사용자나 MSC4362를 지원하지 않는 클라이언트 사용자에게는 이 정보가 표시되지 않습니다.",
+        "state_encryption_label": "암호화된 상태 이벤트",
         "title_private_room": "개인 방 만들기",
         "title_public_room": "공개 방 만들기",
         "title_video_room": "영상 방 생성",
@@ -1509,6 +1512,8 @@
         "dynamic_room_predecessors": "동적 채팅방 이전 항목",
         "dynamic_room_predecessors_description": "MSC3946 활성화 (지연 도착 채팅방 아카이브 지원)",
         "element_call_video_rooms": "Element Call 영상 채팅방",
+        "encrypted_state_events": "암호화된 상태 이벤트(MSC4362)",
+        "encrypted_state_events_description": "상태 이벤트 암호화 실험 기능을 활성화하여 방 이름, 주제 등의 메타데이터를 서버로부터 숨깁니다. 단, 나중에 방에 참여하는 사용자나 MSC4362를 지원하지 않는 클라이언트 사용자에게는 이 정보가 표시되지 않습니다.",
         "exclude_insecure_devices": "메세지 송수신 시 보안이 취약한 기기 제외",
         "exclude_insecure_devices_description": "이 모드가 활성화되면 암호화된 메시지는 인증되지 않은 기기와 공유되지 않으며, 인증되지 않은 기기에서 보낸 메시지는 오류로 표시됩니다. 이 모드를 활성화하면 기기를 인증하지 않은 사용자와 통신할 수 없게 될 수 있음을 유의하십시오.",
         "experimental_description": "실험적인 기분이 드시나요? 개발 중인 최신 아이디어를 시험해 보세요. 이 기능들은 아직 완성되지 않았으며, 불안정할 수 있고 변경되거나 아예 중단될 수도 있습니다. <a>자세히 알아보기</a>.",
@@ -3514,6 +3519,7 @@
             "enabled_dm": "여기서 메시지는 종단 간 암호화됩니다. 상대방 프로필에서 %(displayName)s 를 확인하세요 - 프로필 사진을 탭하세요.",
             "enabled_local": "이 채팅의 메시지는 종단 간 암호화됩니다.",
             "parameters_changed": "일부 암호화 매개변수가 변경되었습니다.",
+            "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화됩니다. 참여자의 프로필 사진을 누르면 신원을 검증할 수 있습니다.",
             "unsupported": "이 방에서 사용하는 암호화 방식은 지원되지 않습니다."
         },
         "m.room.guest_access": {
