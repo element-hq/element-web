@@ -28,7 +28,7 @@ import dis from "../../dispatcher/dispatcher";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 
 interface PropsWithRoom {
-    room: Room;
+    room: Room | LocalRoom;
 }
 interface PropsWithVisibility extends PropsWithRoom {
     /**
@@ -52,6 +52,7 @@ export class RoomStatusBarViewModel
         hasClickedTermsAndConditions: boolean,
     ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
+        console.log({ unsentMessages });
         if (unsentMessages.length === 0) {
             return {
                 state: null,
@@ -98,15 +99,12 @@ export class RoomStatusBarViewModel
         isResending: boolean,
         hasClickedTermsAndConditions: boolean,
     ): RoomStatusBarViewSnapshot => {
-        if (room instanceof LocalRoom) {
-            if (room.isError) {
-                return {
-                    state: RoomStatusBarState.LocalRoomFailed,
-                };
-            } else {
-                // Local rooms do not have to worry about these other conditions :)
-                return { state: null };
-            }
+        const isLocalRoomAndIsError = (room as LocalRoom)["isError"];
+        if (isLocalRoomAndIsError !== undefined) {
+            return {
+                // Local rooms do not have to worry about these other conditions
+                state: isLocalRoomAndIsError ? RoomStatusBarState.LocalRoomFailed : null,
+            };
         }
 
         // If we're in the process of resending, don't flicker.

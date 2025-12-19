@@ -303,6 +303,7 @@ export function createTestClient(): MatrixClient {
                 room_id: roomId,
             });
         }),
+        resendEvent: jest.fn().mockResolvedValue({}),
 
         _unstable_sendDelayedEvent: jest.fn(),
         _unstable_sendDelayedStateEvent: jest.fn(),
@@ -703,7 +704,7 @@ export function mkStubRoom(
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getMxcAvatarUrl: () => "mxc://avatar.url/room.png",
         getMyMembership: jest.fn().mockReturnValue(KnownMembership.Join),
-        getPendingEvents: () => [] as MatrixEvent[],
+        getPendingEvents: jest.fn().mockReturnValue([]),
         getReceiptsForEvent: jest.fn().mockReturnValue([]),
         getRecommendedVersion: jest.fn().mockReturnValue(Promise.resolve("")),
         getThreads: jest.fn().mockReturnValue([]),
