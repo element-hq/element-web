@@ -88,13 +88,21 @@ export class HistoryVisibleBannerViewModel
         const acknowledged = SettingsStore.getValue("acknowledgedHistoryVisibility", room.roomId);
         const isHistoryVisible = BANNER_VISIBLE_LEVELS.includes(room.getHistoryVisibility());
 
+        // This implements point 1. of the algorithm described above. In the order below, all
+        // of the following must be true for the banner to display:
+        // - The room history sharing feature must be enabled.
+        // - The room must be encrypted.
+        // - The user must be able to send messages.
+        // - The history must be visible.
+        // - The view should not be part of a thread timeline.
+        // - The usuer must not have acknowledged the banner.
         return {
             visible:
                 featureEnabled &&
-                canSendMessages &&
-                !threadId &&
                 room.hasEncryptionStateEvent() &&
+                canSendMessages &&
                 isHistoryVisible &&
+                !threadId &&
                 !acknowledged,
         };
     };
