@@ -8,7 +8,12 @@ import { type Meta, type StoryFn } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 
 import { useMockedViewModel } from "../../useMockedViewModel";
-import { RoomStatusBarView, type RoomStatusBarViewActions, type RoomStatusBarViewSnapshot } from "./RoomStatusBarView";
+import {
+    RoomStatusBarState,
+    RoomStatusBarView,
+    type RoomStatusBarViewActions,
+    type RoomStatusBarViewSnapshot,
+} from "./RoomStatusBarView";
 import { fn } from "storybook/test";
 
 type RoomStatusBarProps = RoomStatusBarViewSnapshot & RoomStatusBarViewActions;
@@ -49,9 +54,7 @@ const Template: StoryFn<typeof RoomStatusBarViewWrapper> = (args) => <RoomStatus
  */
 export const WithConnectionLost = Template.bind({});
 WithConnectionLost.args = {
-    state: {
-        connectionLost: true,
-    },
+    state: RoomStatusBarState.ConnectionLost,
 };
 
 /**
@@ -60,9 +63,8 @@ WithConnectionLost.args = {
  */
 export const WithConsentLink = Template.bind({});
 WithConsentLink.args = {
-    state: {
-        consentUri: "#example",
-    },
+    state: RoomStatusBarState.NeedsConsent,
+    consentUri: "#example",
 };
 
 /**
@@ -71,10 +73,9 @@ WithConsentLink.args = {
  */
 export const WithResourceLimit = Template.bind({});
 WithResourceLimit.args = {
-    state: {
-        resourceLimit: "hs_disabled",
-        adminContactHref: "#example",
-    },
+    state: RoomStatusBarState.ResourceLimited,
+    resourceLimit: "hs_disabled",
+    adminContactHref: "#example",
 };
 
 /**
@@ -82,9 +83,8 @@ WithResourceLimit.args = {
  */
 export const WithUnsentMessages = Template.bind({});
 WithUnsentMessages.args = {
-    state: {
-        isResending: false,
-    },
+    state: RoomStatusBarState.UnsentMessages,
+    isResending: false,
 };
 
 /**
@@ -93,16 +93,13 @@ WithUnsentMessages.args = {
  */
 export const WithUnsentMessagesSending = Template.bind({});
 WithUnsentMessagesSending.args = {
-    state: {
-        isResending: true,
-    },
+    state: RoomStatusBarState.UnsentMessages,
+    isResending: true,
 };
 /**
  * Rendered when a local room has failed to be created.
  */
 export const WithLocalRoomRetry = Template.bind({});
 WithLocalRoomRetry.args = {
-    state: {
-        shouldRetryRoomCreation: false,
-    },
+    state: RoomStatusBarState.LocalRoomFailed,
 };

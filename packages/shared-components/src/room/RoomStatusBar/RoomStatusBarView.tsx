@@ -36,35 +36,48 @@ export interface RoomStatusBarViewActions {
     onTermsAndConditionsClicked?: () => void;
 }
 
+export enum RoomStatusBarState {
+    ConnectionLost,
+    NeedsConsent,
+    ResourceLimited,
+    UnsentMessages,
+    LocalRoomFailed,
+}
+
+export interface RoomStatusBarNotVisible {
+    state: null;
+}
+
 export interface RoomStatusBarNoConnection {
-    connectionLost: true;
+    state: RoomStatusBarState.ConnectionLost;
 }
 
 export interface RoomStatusBarConsentState {
+    state: RoomStatusBarState.NeedsConsent;
     consentUri: string;
 }
 
 export interface RoomStatusBarResourceLimitedState {
+    state: RoomStatusBarState.ResourceLimited;
     resourceLimit: "monthly_active_user" | "hs_disabled" | string;
     adminContactHref?: string;
 }
 
 export interface RoomStatusBarUnsentMessagesState {
+    state: RoomStatusBarState.UnsentMessages;
     isResending: boolean;
 }
 export interface RoomStatusBarLocalRoomError {
-    shouldRetryRoomCreation: boolean;
+    state: RoomStatusBarState.LocalRoomFailed;
 }
 
-export interface RoomStatusBarViewSnapshot {
-    state:
-        | RoomStatusBarNoConnection
-        | RoomStatusBarConsentState
-        | RoomStatusBarResourceLimitedState
-        | RoomStatusBarUnsentMessagesState
-        | RoomStatusBarLocalRoomError
-        | null;
-}
+export type RoomStatusBarViewSnapshot =
+    | RoomStatusBarNoConnection
+    | RoomStatusBarConsentState
+    | RoomStatusBarResourceLimitedState
+    | RoomStatusBarUnsentMessagesState
+    | RoomStatusBarLocalRoomError
+    | RoomStatusBarNotVisible;
 
 /**
  * The view model for the banner.
@@ -88,7 +101,7 @@ interface RoomStatusBarViewProps {
  */
 export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { state } = useViewModel(vm);
+    const snapshot = useViewModel(vm);
     const bannerTitleId = useId();
 
     const deleteAllClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
@@ -120,158 +133,154 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         vm.onTermsAndConditionsClicked?.();
     }, [vm.onTermsAndConditionsClicked]);
 
-    if (state === null) {
+    if (snapshot.state === null) {
         // Nothing to show!
         return <></>;
     }
 
-    if ("connectionLost" in state) {
-        return (
-            <Banner type="critical" role="status" aria-labelledby={bannerTitleId}>
-                <div className={styles.container}>
-                    <Text id={bannerTitleId} weight="semibold">
-                        {_t("room|status_bar|server_connectivity_lost_title")}
-                    </Text>
-                    <Text className={styles.description}>
-                        {_t("room|status_bar|server_connectivity_lost_description")}
-                    </Text>
-                </div>
-            </Banner>
-        );
-    }
-
-    if ("consentUri" in state) {
-        return (
-            <Banner
-                type="critical"
-                role="status"
-                aria-labelledby={bannerTitleId}
-                actions={
-                    <Button
-                        onClick={termsAndConditionsClicked}
-                        kind="secondary"
-                        size="sm"
-                        as="a"
-                        href={state.consentUri}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                    >
-                        {_t("terms|tac_button")}
-                    </Button>
-                }
-            >
-                <div className={styles.container}>
-                    <Text id={bannerTitleId} weight="semibold">
-                        {_t("room|status_bar|requires_consent_agreement_title")}
-                    </Text>
-                </div>
-            </Banner>
-        );
-    }
-
-    if ("resourceLimit" in state) {
-        const title =
-            {
-                monthly_active_user: _t("room|status_bar|monthly_user_limit_reached_title"),
-                hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
-            }[state.resourceLimit] || _t("room|status_bar|exceeded_resource_limit_title");
-
-        return (
-            <Banner
-                type="critical"
-                role="status"
-                aria-labelledby={bannerTitleId}
-                actions={
-                    state.adminContactHref && (
+    switch (snapshot.state) {
+        case RoomStatusBarState.ConnectionLost:
+            return (
+                <Banner type="critical" role="status" aria-labelledby={bannerTitleId}>
+                    <div className={styles.container}>
+                        <Text id={bannerTitleId} weight="semibold">
+                            {_t("room|status_bar|server_connectivity_lost_title")}
+                        </Text>
+                        <Text className={styles.description}>
+                            {_t("room|status_bar|server_connectivity_lost_description")}
+                        </Text>
+                    </div>
+                </Banner>
+            );
+        case RoomStatusBarState.NeedsConsent:
+            return (
+                <Banner
+                    type="critical"
+                    role="status"
+                    aria-labelledby={bannerTitleId}
+                    actions={
                         <Button
+                            onClick={termsAndConditionsClicked}
                             kind="secondary"
                             size="sm"
                             as="a"
-                            href={state.adminContactHref}
+                            href={snapshot.consentUri}
                             target="_blank"
                             rel="noreferrer noopener"
                         >
-                            Contact admin
+                            {_t("terms|tac_button")}
                         </Button>
-                    )
-                }
-            >
-                <div className={styles.container}>
-                    <Text id={bannerTitleId} weight="semibold">
-                        {title}
-                    </Text>
-                    <Text className={styles.description}>
-                        {_t("room|status_bar|exceeded_resource_limit_description")}
-                    </Text>
-                </div>
-            </Banner>
-        );
-    }
-
-    if ("shouldRetryRoomCreation" in state) {
-        return (
-            <Banner
-                role="status"
-                type="critical"
-                aria-labelledby={bannerTitleId}
-                actions={
-                    <Button
-                        size="sm"
-                        kind="secondary"
-                        className={styles.container}
-                        Icon={RestartIcon}
-                        disabled={state.shouldRetryRoomCreation}
-                        onClick={retryRoomCreationClick}
-                    >
-                        {_t("action|retry")}
-                    </Button>
-                }
-            >
-                <Text id={bannerTitleId} weight="semibold" className={styles.container}>
-                    {_t("room|status_bar|failed_to_create_room_title")}
-                </Text>
-            </Banner>
-        );
-    }
-
-    const actions = state.isResending ? (
-        <InlineSpinner />
-    ) : (
-        <>
-            {vm.onDeleteAllClick && (
-                <Button
-                    size="sm"
-                    kind="destructive"
-                    Icon={DeleteIcon}
-                    disabled={state.isResending}
-                    onClick={deleteAllClick}
+                    }
                 >
-                    {_t("room|status_bar|delete_all")}
-                </Button>
-            )}
-            {vm.onResendAllClick && (
-                <Button
-                    size="sm"
-                    kind="secondary"
-                    Icon={RestartIcon}
-                    disabled={state.isResending}
-                    onClick={resendClick}
-                    className={styles.container}
-                >
-                    {_t("room|status_bar|retry_all")}
-                </Button>
-            )}
-        </>
-    );
+                    <div className={styles.container}>
+                        <Text id={bannerTitleId} weight="semibold">
+                            {_t("room|status_bar|requires_consent_agreement_title")}
+                        </Text>
+                    </div>
+                </Banner>
+            );
+        case RoomStatusBarState.ResourceLimited:
+            const title =
+                {
+                    monthly_active_user: _t("room|status_bar|monthly_user_limit_reached_title"),
+                    hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
+                }[snapshot.resourceLimit] || _t("room|status_bar|exceeded_resource_limit_title");
 
-    return (
-        <Banner role="status" type="critical" actions={actions} aria-labelledby={bannerTitleId}>
-            <div className={styles.container}>
-                <Text id={bannerTitleId} weight="semibold">
-                    {_t("room|status_bar|some_messages_not_sent")}
-                </Text>
-                <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
-            </div>
-        </Banner>
-    );
+            return (
+                <Banner
+                    type="critical"
+                    role="status"
+                    aria-labelledby={bannerTitleId}
+                    actions={
+                        snapshot.adminContactHref && (
+                            <Button
+                                kind="secondary"
+                                size="sm"
+                                as="a"
+                                href={snapshot.adminContactHref}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                            >
+                                Contact admin
+                            </Button>
+                        )
+                    }
+                >
+                    <div className={styles.container}>
+                        <Text id={bannerTitleId} weight="semibold">
+                            {title}
+                        </Text>
+                        <Text className={styles.description}>
+                            {_t("room|status_bar|exceeded_resource_limit_description")}
+                        </Text>
+                    </div>
+                </Banner>
+            );
+        case RoomStatusBarState.LocalRoomFailed:
+            return (
+                <Banner
+                    role="status"
+                    type="critical"
+                    aria-labelledby={bannerTitleId}
+                    actions={
+                        <Button
+                            size="sm"
+                            kind="secondary"
+                            className={styles.container}
+                            Icon={RestartIcon}
+                            onClick={retryRoomCreationClick}
+                        >
+                            {_t("action|retry")}
+                        </Button>
+                    }
+                >
+                    <Text id={bannerTitleId} weight="semibold" className={styles.container}>
+                        {_t("room|status_bar|failed_to_create_room_title")}
+                    </Text>
+                </Banner>
+            );
+        case RoomStatusBarState.UnsentMessages:
+            const actions = snapshot.isResending ? (
+                <InlineSpinner />
+            ) : (
+                <>
+                    {vm.onDeleteAllClick && (
+                        <Button
+                            size="sm"
+                            kind="destructive"
+                            Icon={DeleteIcon}
+                            disabled={snapshot.isResending}
+                            onClick={deleteAllClick}
+                        >
+                            {_t("room|status_bar|delete_all")}
+                        </Button>
+                    )}
+                    {vm.onResendAllClick && (
+                        <Button
+                            size="sm"
+                            kind="secondary"
+                            Icon={RestartIcon}
+                            disabled={snapshot.isResending}
+                            onClick={resendClick}
+                            className={styles.container}
+                        >
+                            {_t("room|status_bar|retry_all")}
+                        </Button>
+                    )}
+                </>
+            );
+
+            return (
+                <Banner role="status" type="critical" actions={actions} aria-labelledby={bannerTitleId}>
+                    <div className={styles.container}>
+                        <Text id={bannerTitleId} weight="semibold">
+                            {_t("room|status_bar|some_messages_not_sent")}
+                        </Text>
+                        <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
+                    </div>
+                </Banner>
+            );
+        default:
+            throw Error(`Unexpected unknown state for RoomStatusBar ${snapshot["state"]}`);
+    }
 }

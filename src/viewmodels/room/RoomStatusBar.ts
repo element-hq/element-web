@@ -7,6 +7,7 @@
 
 import {
     BaseViewModel,
+    RoomStatusBarState,
     type RoomStatusBarViewModel as RoomStatusBarViewModelInterface,
     type RoomStatusBarViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -49,14 +50,17 @@ export class RoomStatusBarViewModel
     private static readonly determineStateForUnreadMessages = (
         room: Room,
         hasClickedTermsAndConditions: boolean,
-    ): RoomStatusBarViewSnapshot["state"] => {
+    ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
         if (unsentMessages.length === 0) {
-            return null;
+            return {
+                state: null,
+            };
         }
         if (hasClickedTermsAndConditions) {
             // The user has just clicked (and we assume accepted) the terms and contitions, so show them the retry buttons
             return {
+                state: RoomStatusBarState.UnsentMessages,
                 isResending: false,
             };
         }
@@ -66,7 +70,7 @@ export class RoomStatusBarViewModel
                 if (m.error.errcode === "M_CONSENT_NOT_GIVEN") {
                     // This is the most important thing to show, so break here if we find one.
                     return {
-                        // This MUST exist.
+                        state: RoomStatusBarState.NeedsConsent,
                         consentUri: m.error.data.consent_uri,
                     };
                 }
@@ -77,11 +81,13 @@ export class RoomStatusBarViewModel
         }
         if (resourceLimitError) {
             return {
+                state: RoomStatusBarState.ResourceLimited,
                 resourceLimit: resourceLimitError.data.limit_type ?? "",
                 adminContactHref: resourceLimitError.data.admin_contact,
             };
         }
         return {
+            state: RoomStatusBarState.UnsentMessages,
             isResending: false,
         };
     };
@@ -95,9 +101,7 @@ export class RoomStatusBarViewModel
         if (room instanceof LocalRoom) {
             if (room.isError) {
                 return {
-                    state: {
-                        shouldRetryRoomCreation: true,
-                    },
+                    state: RoomStatusBarState.LocalRoomFailed,
                 };
             } else {
                 // Local rooms do not have to worry about these other conditions :)
@@ -108,9 +112,8 @@ export class RoomStatusBarViewModel
         // If we're in the process of resending, don't flicker.
         if (isResending) {
             return {
-                state: {
-                    isResending,
-                },
+                state: RoomStatusBarState.UnsentMessages,
+                isResending,
             };
         }
         const syncState = client.getSyncState();
@@ -128,15 +131,13 @@ export class RoomStatusBarViewModel
                 };
             } else {
                 return {
-                    state: {
-                        connectionLost: true,
-                    },
+                    state: RoomStatusBarState.ConnectionLost,
                 };
             }
         }
 
         // Then check messages.
-        return { state: this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions) };
+        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions);
     };
 
     private readonly client: MatrixClient;
