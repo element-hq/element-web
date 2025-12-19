@@ -9,6 +9,12 @@ import { test, expect } from "../../element-web-test";
 test.describe("Room Status Bar", () => {
     test.use({
         displayName: "Jim",
+        page: async ({ page }, use) => {
+            // Increase width as these components look horrible at lower
+            // widths.
+            await page.setViewportSize({ width: 1400, height: 768 });
+            await use(page);
+        },
         room: async ({ app, user }, use) => {
             const roomId = await app.client.createRoom({
                 name: "A room",
