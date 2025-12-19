@@ -4538,10 +4538,10 @@ ajv@^8.0.0, ajv@^8.0.1, ajv@^8.9.0:
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
 
-andybalaam-matrix-spec@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/andybalaam-matrix-spec/-/andybalaam-matrix-spec-0.0.1.tgz#e770977ee574f968731af945d6147fb10a30b3b9"
-  integrity sha512-w5XkYTAkUCOzppgFuhwZPgEU2fBaR7Tajqn+XJeSLmt6of2dpYZeGVNwXB8xgQxz2xlnIIH5aNUTrLao3RiKQA==
+andybalaam-matrix-spec@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/andybalaam-matrix-spec/-/andybalaam-matrix-spec-0.0.2.tgz#7e5cac3226b515ad7d4fbf18f5db925978efc08d"
+  integrity sha512-f5PwWcy2hUp8RtCpbPo0xAymZsJn1NtXBTTkKvmx8edK3zcCQhOHBdLmd6WxOyUYfQGCI2c0MYWOrFUhagMZHw==
 
 another-json@^0.2.0:
   version "0.2.0"
