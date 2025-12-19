@@ -45,10 +45,19 @@ export class RoomStatusBarViewModel
     extends BaseViewModel<RoomStatusBarViewSnapshot, Props>
     implements RoomStatusBarViewModelInterface
 {
-    private static readonly determineStateForUnreadMessages = (room: Room): RoomStatusBarViewSnapshot["state"] => {
+    private static readonly determineStateForUnreadMessages = (
+        room: Room,
+        hasClickedTermsAndConditions: boolean,
+    ): RoomStatusBarViewSnapshot["state"] => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
         if (unsentMessages.length === 0) {
             return null;
+        }
+        if (hasClickedTermsAndConditions) {
+            // The user has just clicked (and we assume accepted) the terms and contitions, so show them the retry buttons
+            return {
+                isResending: false,
+            };
         }
         let resourceLimitError: MatrixError | null = null;
         for (const m of unsentMessages) {
@@ -80,20 +89,13 @@ export class RoomStatusBarViewModel
         room: Room,
         client: MatrixClient,
         isResending: boolean,
-        isRetryingRoomCreation: boolean,
+        hasClickedTermsAndConditions: boolean,
     ): RoomStatusBarViewSnapshot => {
         if (room instanceof LocalRoom) {
-            if (isRetryingRoomCreation) {
-                return {
-                    state: {
-                        isRetryingRoomCreation,
-                    },
-                };
-            }
             if (room.isError) {
                 return {
                     state: {
-                        isRetryingRoomCreation,
+                        shouldRetryRoomCreation: true,
                     },
                 };
             } else {
@@ -113,20 +115,15 @@ export class RoomStatusBarViewModel
         const syncState = client.getSyncState();
 
         // Highest priority.
+        // no conn bar trumps the "some not sent" msg since you can't resend without
+        // a connection!
         if (syncState === SyncState.Error) {
-            // no conn bar trumps the "some not sent" msg since you can't resend without
-            // a connection!
-            // There's one situation in which we don't show this 'no connection' bar, and that's
-            // if it's a resource limit exceeded error: those are shown in the top bar.
             const syncData = client.getSyncStateData();
             if (syncData?.error?.name === "M_RESOURCE_LIMIT_EXCEEDED") {
-                const error = syncData.error as MatrixError;
+                // There's one situation in which we don't show this 'no connection' bar, and that's
+                // if it's a M_RESOURCE_LIMIT_EXCEEDED error: those are shown as a toast by LoggedInView.
                 return {
-                    state: {
-                        // TODO: Correct limit
-                        resourceLimit: error.data.limit_type ?? "",
-                        adminContactHref: error.data.admin_contact,
-                    },
+                    state: null,
                 };
             } else {
                 return {
@@ -138,7 +135,7 @@ export class RoomStatusBarViewModel
         }
 
         // Then check messages.
-        return { state: this.determineStateForUnreadMessages(room) };
+        return { state: this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions) };
     };
 
     private readonly client: MatrixClient;
@@ -160,7 +157,7 @@ export class RoomStatusBarViewModel
     };
 
     private isResending = false;
-    private isRetryingRoomCreation = false;
+    private hasClickedTermsAndConditions = false;
 
     private setSnapshot(): void {
         this.snapshot.set(
@@ -168,9 +165,13 @@ export class RoomStatusBarViewModel
                 this.props.room,
                 this.client,
                 this.isResending,
-                this.isRetryingRoomCreation,
+                this.hasClickedTermsAndConditions,
             ),
         );
+        // Reset `hasClickedTermsAndConditions` once the state has cleared.
+        if (this.hasClickedTermsAndConditions && !this.snapshot.current.state) {
+            this.hasClickedTermsAndConditions = false;
+        }
     }
 
     public dispose(): void {
@@ -178,6 +179,11 @@ export class RoomStatusBarViewModel
         this.props.room.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
         super.dispose();
     }
+
+    public onTermsAndConditionsClicked = (): void => {
+        this.hasClickedTermsAndConditions = true;
+        this.setSnapshot();
+    };
 
     public onDeleteAllClick = (): void => {
         Resend.cancelUnsentEvents(this.props.room);
