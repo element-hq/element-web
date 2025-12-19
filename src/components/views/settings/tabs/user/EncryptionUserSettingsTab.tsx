@@ -235,7 +235,6 @@ function IdentityNeedsResetNoticePanel({ onContinue }: Readonly<IdentityNeedsRes
             subHeading={
                 <SettingsSubheader state="error" stateMessage={_t("encryption|identity_needs_reset_description")} />
             }
-            data-testid="recoveryPanel"
         >
             <div>
                 <Button size="sm" kind="primary" onClick={onContinue}>

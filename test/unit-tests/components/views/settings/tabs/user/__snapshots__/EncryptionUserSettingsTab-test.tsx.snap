@@ -92,7 +92,6 @@ exports[`<EncryptionUserSettingsTab /> should display the identity needs reset p
     >
       <div
         class="mx_SettingsSection mx_SettingsSection_newUi"
-        data-testid="recoveryPanel"
       >
         <div
           class="mx_SettingsSection_header"
