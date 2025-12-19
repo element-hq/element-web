@@ -95,7 +95,7 @@ export class HistoryVisibleBannerViewModel
         // - The user must be able to send messages.
         // - The history must be visible.
         // - The view should not be part of a thread timeline.
-        // - The usuer must not have acknowledged the banner.
+        // - The user must not have acknowledged the banner.
         return {
             visible:
                 featureEnabled &&
