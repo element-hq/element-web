@@ -45,7 +45,7 @@ describe("IncomingSasDialog", () => {
         const emojis = container.getElementsByClassName("mx_VerificationShowSas_emojiSas_block");
         expect(emojis.length).toEqual(7);
         for (const emoji of emojis) {
-            expect(emoji).toHaveTextContent("🦄Unicorn");
+            expect(emoji).toHaveTextContent("Unicorn");
         }
     });
 });
@@ -63,7 +63,7 @@ function makeMockVerifier(): Mocked<Verifier> {
 }
 
 function makeMockSasCallbacks(): ShowSasCallbacks {
-    const unicorn: EmojiMapping = ["🦄", "unicorn"];
+    const unicorn: EmojiMapping = ["🦄", "Unicorn"];
     return {
         sas: {
             emoji: new Array<EmojiMapping>(7).fill(unicorn),
