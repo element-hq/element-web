@@ -8,11 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 import { JoinRule } from "matrix-js-sdk/src/matrix";
-import { GroupIcon, LockSolidIcon, PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    GroupIcon,
+    LockSolidIcon,
+    PublicIcon,
+    AskToJoinIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import Dropdown from "./Dropdown";
 import { type NonEmptyArray } from "../../../@types/common";
-import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 
 interface IProps {
     value: JoinRule;
@@ -57,7 +61,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         options.unshift(
             (
                 <div key={JoinRule.Knock} className="mx_JoinRuleDropdown_knock">
-                    <AskToJoinIcon className="mx_Icon mx_Icon_16 mx_JoinRuleDropdown_icon" />
+                    <AskToJoinIcon />
                     {labelKnock}
                 </div>
             ) as ReactElement & { key: string },

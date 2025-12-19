@@ -6,6 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import React from "react";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import DeviceListener from "../DeviceListener";
@@ -33,7 +36,7 @@ export const showToast = (deviceIds: Set<string>): void => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
         title: _t("encryption|verification|unverified_sessions_toast_title"),
-        icon: "verification_warning",
+        icon: <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />,
         props: {
             description: _t("encryption|verification|unverified_sessions_toast_description"),
             primaryLabel: _t("action|review"),

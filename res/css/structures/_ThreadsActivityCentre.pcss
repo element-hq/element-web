@@ -11,7 +11,8 @@
 }
 
 .mx_ThreadsActivityCentreButton {
-    border-radius: 8px;
+    /* !important override compound */
+    border-radius: 8px !important;
     margin: 18px auto auto auto;
 
     &.expanded {
@@ -50,14 +51,16 @@
         }
 
         & .mx_ThreadsActivityCentreButton_Text {
-            color: $secondary-content;
+            /* !important override compound  */
+            color: $secondary-content !important;
         }
     }
 
     &:not(.expanded) {
         &:hover,
         &:hover .mx_ThreadsActivityCentreButton_Icon {
-            background-color: $quaternary-content;
+            /* !important override compound */
+            background-color: $quaternary-content !important;
             fill: $primary-content;
         }
     }

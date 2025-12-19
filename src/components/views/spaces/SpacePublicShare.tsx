@@ -9,15 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import React, { useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { LinkIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
 import { copyPlaintext } from "../../../utils/strings";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { showRoomInviteDialog } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import SpacePillButton from "../../structures/SpacePillButton.tsx";
 
 interface IProps {
     space: Room;
@@ -29,8 +30,10 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
 
     return (
         <div className="mx_SpacePublicShare">
-            <AccessibleButton
-                className="mx_SpacePublicShare_shareButton"
+            <SpacePillButton
+                icon={<LinkIcon />}
+                title={_t("space|invite_link")}
+                description={copiedText}
                 onClick={async (): Promise<void> => {
                     const permalinkCreator = new RoomPermalinkCreator(space);
                     permalinkCreator.load();
@@ -43,22 +46,18 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
                         setCopiedText(_t("action|click_to_copy"));
                     }
                 }}
-            >
-                {_t("space|invite_link")}
-                <div>{copiedText}</div>
-            </AccessibleButton>
+            />
             {space.canInvite(MatrixClientPeg.safeGet().getSafeUserId()) &&
             shouldShowComponent(UIComponent.InviteUsers) ? (
-                <AccessibleButton
-                    className="mx_SpacePublicShare_inviteButton"
+                <SpacePillButton
+                    icon={<UserAddIcon />}
+                    title={_t("space|invite")}
+                    description={_t("space|invite_description")}
                     onClick={() => {
                         if (onFinished) onFinished();
                         showRoomInviteDialog(space.roomId);
                     }}
-                >
-                    {_t("space|invite")}
-                    <div>{_t("space|invite_description")}</div>
-                </AccessibleButton>
+                />
             ) : null}
         </div>
     );

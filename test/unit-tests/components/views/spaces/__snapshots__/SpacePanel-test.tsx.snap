@@ -37,7 +37,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         class="mx_AccessibleButton mx_SpacePanel_toggleCollapse"
         role="button"
         tabindex="0"
-      />
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+          />
+        </svg>
+      </div>
     </div>
     <ul
       aria-label="Spaces"
@@ -54,7 +66,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       >
         <div
           aria-label="Home"
-          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_home mx_SpaceButton_narrow"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_narrow mx_SpaceButton_withIcon"
           role="button"
           tabindex="0"
         >
@@ -69,7 +81,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               >
                 <div
                   class="mx_SpaceButton_icon"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
             <div
@@ -79,7 +103,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               class="mx_AccessibleButton mx_SpaceButton_menuButton"
               role="button"
               tabindex="0"
-            />
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </li>
@@ -90,7 +126,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       >
         <div
           aria-label="Favourites"
-          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_favourites mx_SpaceButton_narrow"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_narrow mx_SpaceButton_withIcon"
           role="button"
           tabindex="-1"
         >
@@ -105,7 +141,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               >
                 <div
                   class="mx_SpaceButton_icon"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="m12.897 2.817 2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759 2.336-4.733a1 1 0 0 1 1.794 0"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -118,7 +166,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       >
         <div
           aria-label="People"
-          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_people mx_SpaceButton_narrow"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_narrow mx_SpaceButton_withIcon"
           role="button"
           tabindex="-1"
         >
@@ -133,7 +181,22 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               >
                 <div
                   class="mx_SpaceButton_icon"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 15q-1.65 0-2.825-1.175T8 11t1.175-2.825T12 7t2.825 1.175T16 11t-1.175 2.825T12 15"
+                    />
+                    <path
+                      d="M19.528 18.583A9.96 9.96 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.98 9.98 0 0 0 12 22a9.98 9.98 0 0 0 7.528-3.417M8.75 16.388q-1.373.332-2.709.95a8 8 0 1 1 11.918 0 14.7 14.7 0 0 0-2.709-.95A13.8 13.8 0 0 0 12 16q-1.65 0-3.25.387"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -146,7 +209,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       >
         <div
           aria-label="Other rooms"
-          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_orphans mx_SpaceButton_narrow"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_narrow mx_SpaceButton_withIcon"
           role="button"
           tabindex="-1"
         >
@@ -161,7 +224,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               >
                 <div
                   class="mx_SpaceButton_icon"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="m8.566 17-.944 4.094q-.086.406-.372.656t-.687.25q-.543 0-.887-.469a1.18 1.18 0 0 1-.2-1.031l.801-3.5H3.158q-.572 0-.916-.484a1.27 1.27 0 0 1-.2-1.078 1.12 1.12 0 0 1 1.116-.938H6.85l1.145-5h-3.12q-.57 0-.915-.484a1.27 1.27 0 0 1-.2-1.078A1.12 1.12 0 0 1 4.875 7h3.691l.945-4.094q.085-.406.372-.656.286-.25.686-.25.544 0 .887.469.345.468.2 1.031l-.8 3.5h4.578l.944-4.094q.085-.406.372-.656.286-.25.687-.25.543 0 .887.469t.2 1.031L17.723 7h3.119q.573 0 .916.484.343.485.2 1.079a1.12 1.12 0 0 1-1.116.937H17.15l-1.145 5h3.12q.57 0 .915.484.343.485.2 1.079a1.12 1.12 0 0 1-1.116.937h-3.691l-.944 4.094q-.087.406-.373.656t-.686.25q-.544 0-.887-.469a1.18 1.18 0 0 1-.2-1.031l.8-3.5zm.573-2.5h4.578l1.144-5h-4.578z"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -174,7 +249,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       >
         <div
           aria-label="Conferences"
-          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_videoRooms mx_SpaceButton_narrow"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_narrow mx_SpaceButton_withIcon"
           role="button"
           tabindex="-1"
         >
@@ -189,7 +264,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               >
                 <div
                   class="mx_SpaceButton_icon"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -202,7 +289,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       >
         <div
           aria-label="Create a space"
-          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_new mx_SpaceButton_narrow"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_new mx_SpaceButton_narrow mx_SpaceButton_withIcon"
           data-testid="create-space-button"
           role="button"
           tabindex="-1"
@@ -218,7 +305,19 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
               >
                 <div
                   class="mx_SpaceButton_icon"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11 13H6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 5 12q0-.424.287-.713A.97.97 0 0 1 6 11h5V6q0-.424.287-.713A.97.97 0 0 1 12 5q.424 0 .713.287Q13 5.576 13 6v5h5q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 18 13h-5v5q0 .424-.287.712A.97.97 0 0 1 12 19a.97.97 0 0 1-.713-.288A.97.97 0 0 1 11 18z"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>

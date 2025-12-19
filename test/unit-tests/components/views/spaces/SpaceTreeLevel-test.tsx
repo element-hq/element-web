@@ -8,13 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, getByTestId, render } from "jest-matrix-react";
+import { mocked } from "jest-mock";
 
 import { mkRoom, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { SpaceButton } from "../../../../../src/components/views/spaces/SpaceTreeLevel";
+import { SpaceItem, SpaceButton } from "../../../../../src/components/views/spaces/SpaceTreeLevel";
 import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { StaticNotificationState } from "../../../../../src/stores/notifications/StaticNotificationState";
@@ -26,6 +27,8 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
     class MockSpaceStore extends EventEmitter {
         activeSpace: SpaceKey = "!space1";
         setActiveSpace = jest.fn();
+        getChildSpaces = jest.fn();
+        getNotificationState = jest.fn();
     }
 
     return { instance: new MockSpaceStore() };
@@ -125,5 +128,30 @@ describe("SpaceButton", () => {
             expect(container.querySelector(".mx_NotificationBadge_count")).toHaveTextContent("8");
             expect(asFragment()).toMatchSnapshot();
         });
+    });
+});
+
+describe("SpaceItem", () => {
+    const cli = stubClient();
+    const space = mkRoom(cli, "!1:example.org");
+    space.name = "Root Space";
+    const subspace = mkRoom(cli, "!2:example.org");
+    subspace.name = "Subspace";
+
+    it("should render a space with subspaces", () => {
+        mocked(SpaceStore.instance.getChildSpaces).mockImplementation((spaceId) =>
+            spaceId === space.roomId ? [subspace] : [],
+        );
+
+        const { asFragment, queryByText, getByLabelText } = render(<SpaceItem space={space} activeSpaces={[]} />);
+
+        expect(queryByText("Root Space")).toBeVisible();
+        expect(queryByText("Subspace")).toBeNull();
+        expect(asFragment()).toMatchSnapshot();
+
+        fireEvent.click(getByLabelText("Expand"));
+        expect(queryByText("Root Space")).toBeVisible();
+        expect(queryByText("Subspace")).toBeVisible();
+        expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -13,11 +13,12 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_Dialog {
-        width: fit-content;
-        border-radius: 8px;
+        /* !important because it's overriding compound  */
+        width: fit-content !important;
+        border-radius: 8px !important;
+        height: 60% !important;
         overflow-y: initial;
         position: relative;
-        height: 60%;
         padding: 0;
         contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
 
@@ -454,7 +455,7 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_searchMessages::before {
-                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/chat.svg");
             }
 
             .mx_SpotlightDialog_otherSearches_messageSearchText {
