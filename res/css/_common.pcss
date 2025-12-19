@@ -9,8 +9,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
-@import url("@vector-im/compound-web/dist/style.css");
 @import "./_font-sizes.pcss";
 @import "./_animations.pcss";
 @import "./_spacing.pcss";
@@ -85,8 +83,9 @@ html {
 }
 
 body {
-    font: var(--cpd-font-body-md-regular);
-    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    /* !important because compound overrides these font settings for body */
+    font: var(--cpd-font-body-md-regular) !important;
+    letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
     /**
      * We want to apply Inter Dynamic metrics (https://rsms.me/inter/dynmetrics/)
      * We need to tweak the `letter-spacing` property and doing so, disables by
@@ -97,7 +96,7 @@ body {
     font-feature-settings:
         "kern" 1,
         "liga" 1,
-        "calt" 1;
+        "calt" 1 !important;
 
     background-color: $background;
     color: $primary-content;
