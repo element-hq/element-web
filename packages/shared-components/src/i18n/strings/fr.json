@@ -19,7 +19,7 @@
     },
     "room": {
         "status_bar": {
-            "history_visible": "Les messages que vous enverrez seront partagés avec les nouveaux membres invités dans ce salon.<a> En savoir plus</a>"
+            "history_visible": "Ce salon a été configuré afin que les nouveaux membres puissent lire l'historique.<a> En savori plus</a>"
         }
     },
     "time": {

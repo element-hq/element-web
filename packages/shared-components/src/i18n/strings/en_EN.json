@@ -19,7 +19,7 @@
     },
     "room": {
         "status_bar": {
-            "history_visible": "Messages you send will be shared with new members invited to this room. <a>Learn more</a>"
+            "history_visible": "This room has been configured so that new members can read history. <a>Learn More</a>"
         }
     },
     "time": {
