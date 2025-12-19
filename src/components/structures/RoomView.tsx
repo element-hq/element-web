@@ -46,6 +46,7 @@ import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
+import { RoomStatusBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -135,7 +136,6 @@ import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusM
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
-import { RoomStatusBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -396,7 +396,7 @@ function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatus
                 }
             });
         }
-    }, [vm]);
+    }, [vm, props]);
 
     return <RoomStatusBarView vm={vm} />;
 }

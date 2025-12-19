@@ -13,12 +13,13 @@ import {
 import {
     ClientEvent,
     SyncState,
-    MatrixClient,
+    type MatrixClient,
     type Room,
-    MatrixError,
+    type MatrixError,
     RoomEvent,
     EventStatus,
 } from "matrix-js-sdk/src/matrix";
+
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Resend from "../../Resend";
 import { Action } from "../../dispatcher/actions";
@@ -148,11 +149,11 @@ export class RoomStatusBarViewModel
         props.room.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
     }
 
-    private readonly onClientSync = () => {
+    private readonly onClientSync = (): void => {
         this.setSnapshot();
     };
 
-    private readonly onRoomLocalEchoUpdated = () => {
+    private readonly onRoomLocalEchoUpdated = (): void => {
         this.setSnapshot();
     };
 
