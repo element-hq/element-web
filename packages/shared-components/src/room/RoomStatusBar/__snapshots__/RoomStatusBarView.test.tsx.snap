@@ -24,7 +24,7 @@ exports[`RoomStatusBarView renders connection lost 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <div
@@ -42,7 +42,7 @@ exports[`RoomStatusBarView renders connection lost 1`] = `
           Sent messages will be stored until your connection has returned.
         </p>
       </div>
-    </span>
+    </div>
     <div
       class="actions"
     />
@@ -74,7 +74,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <div
@@ -87,7 +87,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
           You can't send any messages until you review and agree to our terms and conditions.
         </p>
       </div>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -132,7 +132,7 @@ exports[`RoomStatusBarView renders local room error 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p
@@ -141,7 +141,7 @@ exports[`RoomStatusBarView renders local room error 1`] = `
       >
         Could not start a chat with this user
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -195,7 +195,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <div
@@ -213,7 +213,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
           Please contact your service administrator to continue using the service.
         </p>
       </div>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -258,7 +258,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <div
@@ -276,7 +276,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
           You can select all or individual messages to retry or delete
         </p>
       </div>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -353,7 +353,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <div
@@ -371,7 +371,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
           You can select all or individual messages to retry or delete
         </p>
       </div>
-    </span>
+    </div>
     <div
       class="actions"
     >
@@ -448,7 +448,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <div
@@ -466,7 +466,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
           You can select all or individual messages to retry or delete
         </p>
       </div>
-    </span>
+    </div>
     <div
       class="actions"
     >
