@@ -150,11 +150,21 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                     onFinished: async (confirmed?: boolean) => {
                         if (confirmed) {
                             // Save the tokenizer mode setting
-                            SettingsStore.setValue("tokenizerMode", null, SettingLevel.DEVICE, this.state.tokenizerMode);
+                            SettingsStore.setValue(
+                                "tokenizerMode",
+                                null,
+                                SettingLevel.DEVICE,
+                                this.state.tokenizerMode,
+                            );
                         } else {
                             // User cancelled - revert tokenizer mode to initial value
                             this.setState({ tokenizerMode: this.state.initialTokenizerMode });
-                            SettingsStore.setValue("tokenizerMode", null, SettingLevel.DEVICE, this.state.initialTokenizerMode);
+                            SettingsStore.setValue(
+                                "tokenizerMode",
+                                null,
+                                SettingLevel.DEVICE,
+                                this.state.initialTokenizerMode,
+                            );
                         }
                         this.props.onFinished();
                     },

@@ -43,11 +43,7 @@ describe("EventIndexPeg", () => {
             const peg = new EventIndexPeg();
             await peg.initEventIndex();
 
-            expect(mockIndexingManager.initEventIndex).toHaveBeenCalledWith(
-                "@user:example.org",
-                "DEVICE123",
-                "ngram",
-            );
+            expect(mockIndexingManager.initEventIndex).toHaveBeenCalledWith("@user:example.org", "DEVICE123", "ngram");
         });
 
         it("passes language tokenizer mode by default", async () => {
