@@ -34,9 +34,12 @@ type FileDetails = {
 };
 
 export default abstract class Exporter {
+    protected totalSize = 0;
     protected files: BlobFile[] = [];
     protected fileNames: Map<string, number> = new Map();
     protected cancelled = false;
+    protected partNumber = 1;
+    protected startDate = new Date();
 
     protected constructor(
         protected room: Room,
@@ -56,7 +59,10 @@ export default abstract class Exporter {
     }
 
     public get destinationFileName(): string {
-        return this.makeFileNameNoExtension(SdkConfig.get().brand) + ".zip";
+        let fileName = this.makeFileNameNoExtension(SdkConfig.get().brand);
+        if (this.exportOptions.splitIntoPartsIfNeeded) fileName += "_part" + this.partNumber;
+        fileName += ".zip";
+        return fileName;
     }
 
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
@@ -81,9 +87,11 @@ export default abstract class Exporter {
         // First try to use the real name of the room, then a translated copy of a generic name,
         // then finally hardcoded default to guarantee we'll have a name.
         const safeRoomName = sanitizeFilename(this.room.name ?? _t("common|unnamed_room")).trim() || "Unnamed Room";
-        const safeDate = formatFullDateNoDayISO(new Date()).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
+        const safeDate = formatFullDateNoDayISO(this.startDate).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
         const safeBrand = sanitizeFilename(brand);
-        return `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
+        let fileName = `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
+        if (this.exportOptions.splitIntoPartsIfNeeded) fileName += "_part" + this.partNumber;
+        return fileName;
     }
 
     protected async downloadZIP(): Promise<string | void> {
@@ -100,6 +108,9 @@ export default abstract class Exporter {
 
         const content = await zip.generateAsync({ type: "blob" });
         saveAs(content, filenameWithoutExt + ".zip");
+        this.partNumber++;
+        this.totalSize = 0;
+        this.files = [];
     }
 
     protected cleanUp(): string {

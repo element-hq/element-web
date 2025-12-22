@@ -16,7 +16,6 @@ import { _t } from "../../languageHandler";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 export default class JSONExporter extends Exporter {
-    protected totalSize = 0;
     protected messages: Record<string, any>[] = [];
 
     public constructor(
@@ -54,10 +53,15 @@ export default class JSONExporter extends Exporter {
         if (this.exportOptions.attachmentsIncluded && this.isAttachment(mxEv)) {
             try {
                 const blob = await this.getMediaBlob(mxEv);
+                if (this.totalSize + blob.size > this.exportOptions.maxSize && 
+                    this.exportOptions.splitIntoPartsIfNeeded) {
+                    await this.downloadZIP();
+                }
                 if (this.totalSize + blob.size < this.exportOptions.maxSize) {
                     this.totalSize += blob.size;
                     const filePath = this.getFilePath(mxEv);
-                    if (this.totalSize == this.exportOptions.maxSize) {
+                    if (this.totalSize == this.exportOptions.maxSize && 
+                        !this.exportOptions.splitIntoPartsIfNeeded) {
                         this.exportOptions.attachmentsIncluded = false;
                     }
                     this.addFile(filePath, blob);
@@ -100,7 +104,7 @@ export default class JSONExporter extends Exporter {
         logger.info("Creating output...");
         const text = await this.createOutput(res);
 
-        if (this.files.length) {
+        if (this.files.length || this.exportOptions.splitIntoPartsIfNeeded) {
             this.addFile("export.json", new Blob([text]));
             await this.downloadZIP();
         } else {

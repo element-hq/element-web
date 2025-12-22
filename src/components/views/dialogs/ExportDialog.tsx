@@ -388,6 +388,20 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                             </StyledCheckbox>
                         </>
                     )}
+
+                    {includeAttachments ? (
+                        <>
+                            <StyledCheckbox
+                                enabled={includeAttachments}
+                                className="mx_ExportDialog_attachments-checkbox"
+                                id="split-into-parts-if-needed"
+                                checked={splitIntoPartsIfNeeded}
+                                onChange={(e) => setSplitIntoPartsIfNeeded((e.target as HTMLInputElement).checked)}
+                            >
+                                {_t("export_chat|split_into_parts_if_needed")}
+                            </StyledCheckbox>
+                        </>
+                    ) : (<></>)}
                 </div>
                 {isExporting ? (
                     <div data-testid="export-progress" className="mx_ExportDialog_progress">

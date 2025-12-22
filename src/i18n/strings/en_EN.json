@@ -1249,6 +1249,7 @@
         "html": "HTML",
         "html_title": "Exported Data",
         "include_attachments": "Include Attachments",
+        "split_into_parts_if_needed": "Split into parts if needed",
         "json": "JSON",
         "media_omitted": "Media omitted",
         "media_omitted_file_size": "Media omitted - file size limit exceeded",

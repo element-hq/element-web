@@ -19,7 +19,6 @@ import SettingsStore from "../../settings/SettingsStore";
 import { formatFullDate } from "../../DateUtils";
 
 export default class PlainTextExporter extends Exporter {
-    protected totalSize: number;
     protected mediaOmitText: string;
 
     public constructor(
@@ -79,6 +78,10 @@ export default class PlainTextExporter extends Exporter {
             if (this.exportOptions.attachmentsIncluded) {
                 try {
                     const blob = await this.getMediaBlob(mxEv);
+                    if (this.totalSize + blob.size > this.exportOptions.maxSize && 
+                        this.exportOptions.splitIntoPartsIfNeeded) {
+                        await this.downloadZIP();
+                    }
                     if (this.totalSize + blob.size > this.exportOptions.maxSize) {
                         mediaText = ` (${this.mediaOmitText})`;
                     } else {
@@ -86,7 +89,8 @@ export default class PlainTextExporter extends Exporter {
                         const filePath = this.getFilePath(mxEv);
                         mediaText = " (" + _t("export_chat|file_attached") + ")";
                         this.addFile(filePath, blob);
-                        if (this.totalSize == this.exportOptions.maxSize) {
+                        if (this.totalSize == this.exportOptions.maxSize && 
+                            !this.exportOptions.splitIntoPartsIfNeeded) {
                             this.exportOptions.attachmentsIncluded = false;
                         }
                     }
@@ -138,7 +142,7 @@ export default class PlainTextExporter extends Exporter {
         this.updateProgress(_t("export_chat|creating_output"));
         const text = await this.createOutput(res);
 
-        if (this.files.length) {
+        if (this.files.length || this.exportOptions.splitIntoPartsIfNeeded) {
             this.addFile("export.txt", new Blob([text]));
             await this.downloadZIP();
         } else {

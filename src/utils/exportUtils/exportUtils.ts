@@ -57,5 +57,6 @@ export interface IExportOptions {
     // startDate?: number;
     numberOfMessages?: number;
     attachmentsIncluded: boolean;
+    splitIntoPartsIfNeeded: boolean;
     maxSize: number;
 }
