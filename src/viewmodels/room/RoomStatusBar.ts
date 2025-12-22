@@ -52,7 +52,6 @@ export class RoomStatusBarViewModel
         hasClickedTermsAndConditions: boolean,
     ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
-        console.log({ unsentMessages });
         if (unsentMessages.length === 0) {
             return {
                 state: null,
