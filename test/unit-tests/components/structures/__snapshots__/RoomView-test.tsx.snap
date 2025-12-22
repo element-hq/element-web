@@ -201,12 +201,12 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </div>
       <div
         aria-labelledby="_r_r6_"
-        class="_banner_15kcv_20"
+        class="_banner_48r66_20"
         data-type="critical"
         role="status"
       >
         <div
-          class="_icon_15kcv_65"
+          class="_icon_48r66_63"
         >
           <svg
             fill="currentColor"
@@ -221,8 +221,8 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
             />
           </svg>
         </div>
-        <span
-          class="_content_15kcv_53"
+        <div
+          class="_content_48r66_51"
         >
           <p
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_sjla8_1"
@@ -230,9 +230,9 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           >
             Could not start a chat with this user
           </p>
-        </span>
+        </div>
         <div
-          class="_actions_15kcv_85"
+          class="_actions_48r66_83"
         >
           <button
             class="_button_187yx_8 _container_sjla8_1 _has-icon_187yx_57"
