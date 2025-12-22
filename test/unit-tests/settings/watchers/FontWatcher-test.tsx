@@ -45,11 +45,11 @@ describe("FontWatcher", function () {
         expect(getFontFamily()).toMatchInlineSnapshot(`""Font Name", Twemoji"`);
     });
 
-    it("should load font on Action.OnLoggedIn", async () => {
+    it.each([Action.OnLoggedIn, Action.ReloadFont])("should load font on %s", async (action) => {
         await setSystemFont("Font Name");
         await new FontWatcher().start();
         document.body.style.removeProperty(FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY); // clear the fontFamily which was  by start which we tested already
-        defaultDispatcher.fire(Action.OnLoggedIn, true);
+        defaultDispatcher.fire(action, true);
         expect(getFontFamily()).toMatchInlineSnapshot(`""Font Name", Twemoji"`);
     });
 
