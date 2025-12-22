@@ -2189,26 +2189,6 @@
             "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
             "other": "Aktualnie usuwanie wiadomości z %(count)s pokoi"
         },
-        "release_announcement": {
-            "done": "Gotowe",
-            "filter": {
-                "description": "Filtruj swoje czaty jednym kliknięciem. Rozwiń, aby zobaczyć więcej filtrów.",
-                "title": "Nowe szybkie filtry"
-            },
-            "intro": {
-                "description": "Lista czatów została zaktualizowana, aby była bardziej przejrzysta i łatwiejsza w użyciu.",
-                "title": "Czaty dostały nowy wygląd!"
-            },
-            "next": "Dalej",
-            "settings": {
-                "description": "Aby wyświetlić lub ukryć podglądy wiadomości, przejdź do Wszystkie ustawienia > Preferencje > Lista pokoi",
-                "title": "Niektóre ustawienia zostały przeniesione"
-            },
-            "sort": {
-                "description": "Zmień kolejność swoich czatów od najnowszych do A-Z",
-                "title": "Sortuj swoje czaty"
-            }
-        },
         "room": {
             "more_options": "Więcej opcji",
             "open_room": "Otwórz pokój %(roomName)s"
@@ -2875,10 +2855,6 @@
             "rule_suppress_notices": "Wiadomości wysłane przez bota",
             "rule_tombstone": "Kiedy pokoje są uaktualniane",
             "show_message_desktop_notification": "Pokaż wiadomość w powiadomieniu na pulpicie",
-            "sounds_release_announcement": {
-                "description": "Twoje powiadomienia dźwiękowe i dzwonek telefonu zostały zaktualizowane — są teraz wyraźniejsze, szybsze i mniej uciążliwe",
-                "title": "Odświeżyliśmy Twoje dzwonki"
-            },
             "voip": "Połączenia audio i wideo"
         },
         "preferences": {
