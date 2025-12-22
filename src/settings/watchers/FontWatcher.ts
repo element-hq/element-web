@@ -176,8 +176,9 @@ export class FontWatcher implements IWatcher {
                     font: "",
                 });
                 break;
+            // Font size can be saved on the account, so grab value when logging in
             case Action.OnLoggedIn:
-                // Font size can be saved on the account, so grab value when logging in
+            case Action.ReloadFont:
                 this.updateFont();
                 break;
         }

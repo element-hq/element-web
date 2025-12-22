@@ -26,6 +26,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "./languageHandler";
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
+import defaultDispatcher from "./dispatcher/dispatcher";
+import { Action } from "./dispatcher/actions";
 
 export const DEFAULT_THEME = "light";
 const HIGH_CONTRAST_THEMES: Record<string, string> = {
@@ -381,6 +383,11 @@ export async function setTheme(theme?: string): Promise<void> {
                 const metaElement = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')!;
                 metaElement.content = bodyStyles.backgroundColor;
             }
+
+            // clearCustomTheme removed all css variables, so we need to
+            // re-set the system font variables after a theme change
+            defaultDispatcher.dispatch({ action: Action.ReloadFont });
+
             resolve();
         };
 
