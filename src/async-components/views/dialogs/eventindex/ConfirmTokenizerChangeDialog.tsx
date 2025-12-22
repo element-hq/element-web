@@ -32,7 +32,7 @@ export default class ConfirmTokenizerChangeDialog extends React.Component<IProps
         };
     }
 
-    private onConfirm = async (): Promise<void> => {
+    private readonly onConfirm = async (): Promise<void> => {
         this.setState({
             deleting: true,
         });

@@ -134,12 +134,12 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private onTokenizerModeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+    private readonly onTokenizerModeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
         this.setState({ tokenizerMode: e.target.value });
         // Don't save to settings yet - wait for Done button
     };
 
-    private onDone = async (): Promise<void> => {
+    private readonly onDone = async (): Promise<void> => {
         // Check if tokenizer mode has changed
         if (this.state.tokenizerMode !== this.state.initialTokenizerMode) {
             // Show confirmation dialog
@@ -158,7 +158,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                             );
                         } else {
                             // User cancelled - revert tokenizer mode to initial value
-                            this.setState({ tokenizerMode: this.state.initialTokenizerMode });
+                            this.setState((prevState) => ({ tokenizerMode: prevState.initialTokenizerMode }));
                             SettingsStore.setValue(
                                 "tokenizerMode",
                                 null,
