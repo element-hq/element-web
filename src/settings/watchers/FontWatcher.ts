@@ -157,23 +157,29 @@ export class FontWatcher implements IWatcher {
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (payload.action === Action.MigrateBaseFontSize) {
-            this.migrateBaseFontSize();
-        } else if (payload.action === Action.UpdateFontSizeDelta) {
-            this.setRootFontSize(payload.delta);
-        } else if (payload.action === Action.UpdateSystemFont) {
-            this.setSystemFont(payload as UpdateSystemFontPayload);
-        } else if (payload.action === Action.OnLoggedOut) {
-            // Clear font overrides when logging out
-            this.setRootFontSize(FontWatcher.DEFAULT_DELTA);
-            this.setSystemFont({
-                useBundledEmojiFont: false,
-                useSystemFont: false,
-                font: "",
-            });
-        } else if (payload.action === Action.OnLoggedIn) {
-            // Font size can be saved on the account, so grab value when logging in
-            this.updateFont();
+        switch (payload.action) {
+            case Action.MigrateBaseFontSize:
+                this.migrateBaseFontSize();
+                break;
+            case Action.UpdateFontSizeDelta:
+                this.setRootFontSize(payload.delta);
+                break;
+            case Action.UpdateSystemFont:
+                this.setSystemFont(payload as UpdateSystemFontPayload);
+                break;
+            case Action.OnLoggedOut:
+                // Clear font overrides when logging out
+                this.setRootFontSize(FontWatcher.DEFAULT_DELTA);
+                this.setSystemFont({
+                    useBundledEmojiFont: false,
+                    useSystemFont: false,
+                    font: "",
+                });
+                break;
+            case Action.OnLoggedIn:
+                // Font size can be saved on the account, so grab value when logging in
+                this.updateFont();
+                break;
         }
     };
 
