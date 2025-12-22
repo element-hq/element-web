@@ -85,7 +85,7 @@ describe("EventIndexPeg", () => {
                 setForceAddInitialCheckpoints: jest.fn(),
                 init: jest.fn().mockResolvedValue(undefined),
             };
-            (EventIndex as jest.Mock).mockImplementation(() => mockIndex);
+            (EventIndex as unknown as jest.Mock).mockImplementation(() => mockIndex);
 
             const mockIndexingManager = {
                 initEventIndex: jest.fn().mockResolvedValue({ wasRecreated: true }),
@@ -118,7 +118,7 @@ describe("EventIndexPeg", () => {
                 setForceAddInitialCheckpoints: jest.fn(),
                 init: jest.fn().mockResolvedValue(undefined),
             };
-            (EventIndex as jest.Mock).mockImplementation(() => mockIndex);
+            (EventIndex as unknown as jest.Mock).mockImplementation(() => mockIndex);
 
             const mockIndexingManager = {
                 initEventIndex: jest.fn().mockResolvedValue(undefined),
@@ -153,7 +153,7 @@ describe("EventIndexPeg", () => {
                 setForceAddInitialCheckpoints: jest.fn(),
                 init: jest.fn().mockResolvedValue(undefined),
             };
-            (EventIndex as jest.Mock).mockImplementation(() => mockIndex);
+            (EventIndex as unknown as jest.Mock).mockImplementation(() => mockIndex);
 
             const mockIndexingManager = {
                 initEventIndex: jest.fn().mockResolvedValue(undefined),
