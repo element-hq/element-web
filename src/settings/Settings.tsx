@@ -229,6 +229,7 @@ export interface Settings {
     "feature_new_room_list": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
+    "feature_msc4362_encrypted_state_events": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -786,6 +787,16 @@ export const SETTINGS: Settings = {
         description: _td("labs|unrealiable_e2e"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_msc4362_encrypted_state_events": {
+        isFeature: true,
+        labsGroup: LabGroup.Encryption,
+        displayName: _td("labs|encrypted_state_events"),
+        description: _td("labs|encrypted_state_events_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        shouldWarn: true,
         default: false,
     },
     "useCompactLayout": {

@@ -54,7 +54,7 @@ describe("HistoryVisibleBannerViewModel", () => {
     });
 
     it("should not show the banner in unencrypted rooms", () => {
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: true, threadId: null });
         expect(vm.getSnapshot().visible).toBe(false);
     });
 
@@ -76,7 +76,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: true, threadId: null });
         expect(vm.getSnapshot().visible).toBe(false);
     });
 
@@ -99,7 +99,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: true, threadId: null });
         expect(vm.getSnapshot().visible).toBe(false);
         vm.dispose();
     });
@@ -122,12 +122,12 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room, threadId: "some thread ID" });
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: true, threadId: "some thread ID" });
         expect(vm.getSnapshot().visible).toBe(false);
         vm.dispose();
     });
 
-    it("should show the banner in encrypted rooms with non-joined history visibility", async () => {
+    it("should not show the banner if the user cannot send messages", () => {
         upsertRoomStateEvents(room, [
             mkEvent({
                 event: true,
@@ -145,7 +145,53 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room });
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: false, threadId: null });
+        expect(vm.getSnapshot().visible).toBe(false);
+        vm.dispose();
+    });
+
+    it("should not show the banner if history visibility is `invited`", () => {
+        upsertRoomStateEvents(room, [
+            mkEvent({
+                event: true,
+                type: "m.room.encryption",
+                user: "@user1:server",
+                content: {},
+            }),
+            mkEvent({
+                event: true,
+                type: "m.room.history_visibility",
+                user: "@user1:server",
+                content: {
+                    history_visibility: "invited",
+                },
+            }),
+        ]);
+
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: true, threadId: null });
+        expect(vm.getSnapshot().visible).toBe(false);
+        vm.dispose();
+    });
+
+    it("should show the banner in encrypted rooms with shared history visibility", async () => {
+        upsertRoomStateEvents(room, [
+            mkEvent({
+                event: true,
+                type: "m.room.encryption",
+                user: "@user1:server",
+                content: {},
+            }),
+            mkEvent({
+                event: true,
+                type: "m.room.history_visibility",
+                user: "@user1:server",
+                content: {
+                    history_visibility: "shared",
+                },
+            }),
+        ]);
+
+        const vm = new HistoryVisibleBannerViewModel({ room, canSendMessages: true, threadId: null });
         expect(vm.getSnapshot().visible).toBe(true);
         await vm.onClose();
         expect(vm.getSnapshot().visible).toBe(false);

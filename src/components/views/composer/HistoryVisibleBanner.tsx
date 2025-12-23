@@ -11,7 +11,20 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { HistoryVisibleBannerViewModel } from "../../../viewmodels/composer/HistoryVisibleBannerViewModel";
 
-export const HistoryVisibleBanner: React.FC<{ room: Room; threadId?: string | null }> = (props) => {
+/** Wrapper around {@link HistoryVisibleBannerViewModel} for the creation of an auto-disposed view model. */
+export const HistoryVisibleBanner: React.FC<{
+    /** The room instance associated with this banner view model. */
+    room: Room;
+
+    /** Whether the current user can send messages in the room. */
+    canSendMessages: boolean;
+
+    /**
+     * If not null, specifies the ID of the thread currently being viewed in the thread timeline side view,
+     * where the banner view is displayed as a child of the message composer.
+     */
+    threadId: string | null;
+}> = (props) => {
     const vm = useCreateAutoDisposedViewModel(() => new HistoryVisibleBannerViewModel(props));
     return <HistoryVisibleBannerView vm={vm} />;
 };

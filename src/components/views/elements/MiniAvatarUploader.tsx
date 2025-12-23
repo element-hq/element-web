@@ -87,11 +87,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
                 {children}
 
                 <div className="mx_MiniAvatarUploader_indicator">
-                    {busy ? (
-                        <Spinner w={20} h={20} />
-                    ) : (
-                        <TakePhotoSolidIcon className="mx_MiniAvatarUploader_cameraIcon" />
-                    )}
+                    {busy ? <Spinner size={20} /> : <TakePhotoSolidIcon className="mx_MiniAvatarUploader_cameraIcon" />}
                 </div>
             </AccessibleButton>
         </React.Fragment>

@@ -150,7 +150,7 @@ const Tile: React.FC<ITileProps> = ({
                 tabIndex={isActive ? 0 : -1}
                 title={_t("space|joining_space")}
             >
-                <Spinner w={24} h={24} />
+                <Spinner size={24} />
             </AccessibleButton>
         );
     } else if (joinedRoom || room.join_rule === JoinRule.Knock) {
