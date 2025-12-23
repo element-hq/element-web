@@ -631,7 +631,7 @@ test.describe("Element Call", () => {
             );
         });
 
-        test.fail("Switching rooms should not leak widgets", async ({ page, user, room, app }) => {
+        test("Switching rooms should not leak widgets", async ({ page, user, room, app }) => {
             await app.viewRoomByName("VideoRoom");
 
             await expect(page.getByRole("heading", { name: "Approve widget permissions" })).toBeVisible();

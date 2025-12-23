@@ -508,6 +508,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         }
 
         this.emit(WidgetMessagingEvent.Stop, this.widgetApi);
+        this.widgetApi?.stop();
+        // XXX is the removeAllListeners necessary here?
         this.widgetApi?.removeAllListeners(); // Insurance against resource leaks
         this.widgetApi = null;
         this.iframe = null;
