@@ -588,6 +588,22 @@ Currently, the following UI feature flags are supported:
 - `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
 - `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
 
+## Modules
+
+`modules`: An optional array of module paths to load at runtime. Each entry is a URL or path to a JavaScript module entry point that will be dynamically imported when Element Web starts.
+
+**Note:** This is separate from the build-time module system configured via `build_config.yaml`. Runtime modules are loaded dynamically from the paths specified in `config.json`, while build-time modules are bundled during compilation.
+
+**Example:**
+
+```json
+{
+    "modules": ["https://example.com/my-module.js", "/path/to/local-module.js"]
+}
+```
+
+Each module URL is loaded using dynamic import (`import()`). The modules are loaded in order after Element Web initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api).
+
 ## Undocumented / developer options
 
 The following are undocumented or intended for developer use only.
@@ -596,4 +612,3 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
-5. `modules`: An optional list of modules to load. This is used for testing and development purposes only.
