@@ -2348,7 +2348,6 @@
             "error_join_rule_change_unknown": "Okänt fel",
             "guest_access_warning": "Personer med stödda klienter kommer kunna gå med i rummet utan ett registrerat konto.",
             "history_visibility_invited": "Endast medlemmar (från när de blev inbjudna)",
-            "history_visibility_joined": "Endast medlemmar (från när de gick med)",
             "history_visibility_legend": "Vilka kan läsa historik?",
             "history_visibility_shared": "Endast medlemmar (från tidpunkten för när denna inställning valdes)",
             "history_visibility_warning": "Ändringar av vem som kan läsa historiken gäller endast för framtida meddelanden i detta rum. Synligheten för befintlig historik kommer att vara oförändrad.",

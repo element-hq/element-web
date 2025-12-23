@@ -1982,7 +1982,6 @@
             "error_join_rule_change_unknown": "Fallo desconocido",
             "guest_access_warning": "Las personas con una aplicación compatible podrán unirse a la sala sin tener que registrar una cuenta.",
             "history_visibility_invited": "Solo participantes (desde que fueron invitados)",
-            "history_visibility_joined": "Solo participantes (desde que se unieron a la sala)",
             "history_visibility_legend": "¿Quién puede leer el historial?",
             "history_visibility_shared": "Solo participantes (desde el momento en que se selecciona esta opción)",
             "history_visibility_warning": "Los cambios que se hagan sobre quién puede leer el historial se aplicarán solo a nuevos mensajes. La visibilidad del historial actual no cambiará.",

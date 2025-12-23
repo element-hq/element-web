@@ -2425,7 +2425,6 @@
             "error_join_rule_change_unknown": "Määratlemata viga",
             "guest_access_warning": "Kõik kes kasutavad sobilikke klientrakendusi, saavad jututoaga liituda ilma kasutajakonto registreerimiseta.",
             "history_visibility_invited": "Ainult liikmetele (alates nende kutsumise ajast)",
-            "history_visibility_joined": "Ainult liikmetele (alates liitumisest)",
             "history_visibility_legend": "Kes võivad lugeda ajalugu?",
             "history_visibility_shared": "Ainult liikmetele (alates selle seadistuse kasutuselevõtmisest)",
             "history_visibility_warning": "Senise ajaloo nähtavus ei muutu.",

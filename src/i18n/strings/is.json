@@ -1652,7 +1652,6 @@
             "error_join_rule_change_title": "Mistókst að uppfæra reglur fyrir þátttöku",
             "error_join_rule_change_unknown": "Óþekkt bilun",
             "history_visibility_invited": "Einungis meðlimir (síðan þeim var boðið)",
-            "history_visibility_joined": "Einungis meðlimir (síðan þeir skráðu sig)",
             "history_visibility_legend": "Hver getur lesið ferilskráningu?",
             "history_visibility_shared": "Einungis meðlimir (síðan þessi kostur var valinn)",
             "history_visibility_world_readable": "Hver sem er",

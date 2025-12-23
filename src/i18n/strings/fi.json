@@ -1999,7 +1999,6 @@
             "error_join_rule_change_unknown": "Tuntematon virhe",
             "guest_access_warning": "Käyttäjät, joilla on tuettu asiakasohjelma, voivat liittyä huoneeseen ilman rekisteröityä käyttäjätiliä.",
             "history_visibility_invited": "Vain jäsenet (kutsumisestaan lähtien)",
-            "history_visibility_joined": "Vain jäsenet (liittymisestään lähtien)",
             "history_visibility_legend": "Ketkä voivat lukea historiaa?",
             "history_visibility_shared": "Vain jäsenet (tämän valinnan tekemisestä lähtien)",
             "history_visibility_warning": "Muutokset historian lukuoikeuksiin pätevät vain tuleviin viesteihin tässä huoneessa. Nykyisen historian näkyvyys ei muutu.",

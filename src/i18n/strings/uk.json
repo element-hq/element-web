@@ -2425,7 +2425,6 @@
             "error_join_rule_change_unknown": "Невідомий збій",
             "guest_access_warning": "Люди з підтримуваними клієнтами зможуть приєднуватись до кімнати без реєстрації.",
             "history_visibility_invited": "Лише учасники (від часу їхнього запрошення)",
-            "history_visibility_joined": "Лише учасники (від часу приєднання)",
             "history_visibility_legend": "Хто може читати історію?",
             "history_visibility_shared": "Лише учасники (від часу вибору цієї опції)",
             "history_visibility_warning": "Видимість наявної історії не зміниться.",

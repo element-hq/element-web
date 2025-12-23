@@ -2421,7 +2421,6 @@
             "error_join_rule_change_unknown": "Erreur inconnue",
             "guest_access_warning": "Les personnes utilisant un client pris en charge pourront rejoindre le salon sans compte.",
             "history_visibility_invited": "Seulement les membres (depuis leur invitation)",
-            "history_visibility_joined": "Seulement les membres (depuis leur arrivée)",
             "history_visibility_legend": "Qui peut lire l’historique ?",
             "history_visibility_shared": "Seulement les membres (depuis la sélection de cette option)",
             "history_visibility_warning": "La visibilité de l’historique existant ne sera pas modifiée.",

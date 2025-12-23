@@ -2390,7 +2390,6 @@
             "error_join_rule_change_unknown": "Ismeretlen hiba",
             "guest_access_warning": "A támogatott klienseket használó emberek még regisztrált fiók nélkül is beléphetnek a szobába.",
             "history_visibility_invited": "Csak tagoknak (a meghívásuk idejétől)",
-            "history_visibility_joined": "Csak tagoknak (amióta csatlakoztak)",
             "history_visibility_legend": "Ki olvashatja a régi üzeneteket?",
             "history_visibility_shared": "Csak tagok számára (a beállítás kiválasztásától)",
             "history_visibility_warning": "A régi üzenetek láthatósága nem fog változni.",

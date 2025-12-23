@@ -1981,7 +1981,6 @@
             "error_join_rule_change_unknown": "Nezināma kļūme",
             "guest_access_warning": "Cilvēki ar atbalstītām lietotnēm varēs pievienoties istabai bez reģistrēta konta.",
             "history_visibility_invited": "Tikai dalībnieki (no to uzaicināšanas brīža)",
-            "history_visibility_joined": "Tikai dalībnieki (kopš pievienošanās)",
             "history_visibility_legend": "Kas var lasīt vēsturi?",
             "history_visibility_shared": "Tikai dalībnieki (no šī parametra iestatīšanas brīža)",
             "history_visibility_warning": "Izmaiņas attiecībā uz to, kas var lasīt vēsturi, attieksies tikai uz nākamajiem ziņām šajā istabā. Esošās vēstures redzamība nemainīsies.",

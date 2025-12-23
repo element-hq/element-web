@@ -1857,7 +1857,6 @@
             "error_join_rule_change_unknown": "Thất bại không xác định",
             "guest_access_warning": "Những người có khách hàng được hỗ trợ sẽ có thể tham gia phòng mà không cần đăng ký tài khoản.",
             "history_visibility_invited": "Chỉ dành cho thành viên (từ thời điểm được mời)",
-            "history_visibility_joined": "Chỉ dành cho thành viên (từ thời điểm tham gia)",
             "history_visibility_legend": "Ai có thể đọc lịch sử phòng chat?",
             "history_visibility_shared": "Chỉ dành cho thành viên (từ thời điểm chọn thiết lập này)",
             "history_visibility_warning": "Thay đổi ai có thể đọc lịch sử phòng chat chỉ được áp dụng đối với các tin nhắn từ thời điểm này.",

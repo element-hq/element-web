@@ -2405,7 +2405,6 @@
             "error_join_rule_change_unknown": "Unbekannter Fehler",
             "guest_access_warning": "Personen mit unterstützter Anwendung werden diesem Chat ohne registriertes Konto beitreten können.",
             "history_visibility_invited": "Mitglieder (ab Einladung)",
-            "history_visibility_joined": "Mitglieder (ab Betreten)",
             "history_visibility_legend": "Wer kann den bisherigen Verlauf lesen?",
             "history_visibility_shared": "Mitglieder",
             "history_visibility_warning": "Die Sichtbarkeit des existierenden Nachrichtenverlaufs bleibt unverändert.",

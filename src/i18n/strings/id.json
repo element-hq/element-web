@@ -2400,7 +2400,6 @@
             "error_join_rule_change_unknown": "Kesalahan yang tidak diketahui",
             "guest_access_warning": "Orang-orang dengan klien yang didukung akan dapat bergabung ruangan ini tanpa harus memiliki sebuah akun yang terdaftar.",
             "history_visibility_invited": "Anggota saja (sejak mereka diundang)",
-            "history_visibility_joined": "Anggota saja (sejak mereka bergabung)",
             "history_visibility_legend": "Siapa yang dapat membaca riwayat?",
             "history_visibility_shared": "Anggota saja (sejak memilih opsi ini)",
             "history_visibility_warning": "Visibilitas riwayat yang ada tidak akan berubah.",

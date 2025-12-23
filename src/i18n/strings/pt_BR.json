@@ -2407,7 +2407,6 @@
             "error_join_rule_change_unknown": "Falha desconhecida",
             "guest_access_warning": "Pessoas com clientes suportados poderão entrar na sala sem ter uma conta registrada.",
             "history_visibility_invited": "Somente membros (desde que tenham sido convidados)",
-            "history_visibility_joined": "Apenas participantes (desde que entraram na sala)",
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
             "history_visibility_shared": "Apenas participantes (a partir do momento em que esta opção for selecionada)",
             "history_visibility_warning": "A visibilidade do histórico existente não será alterada.",
