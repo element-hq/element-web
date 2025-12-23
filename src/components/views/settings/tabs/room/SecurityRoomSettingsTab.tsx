@@ -460,7 +460,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     "room_settings|security|history_visibility_warning",
                     {},
                     {
-                        a: (sub) => <ExternalLink href="https://element.io/en/help#e2ee-history-sharing">{sub}</ExternalLink>,
+                        a: (sub) => (
+                            <ExternalLink href="https://element.io/en/help#e2ee-history-sharing">{sub}</ExternalLink>
+                        ),
                     },
                 )}
             </>
