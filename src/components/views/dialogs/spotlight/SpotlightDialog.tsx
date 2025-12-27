@@ -302,7 +302,15 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const setFilter = useCallback((filter: Filter | null) => {
         setFilterInternal(filter);
         inputRef.current?.focus();
-        scrollContainerRef.current?.scrollTo?.({ top: 0 });
+        const sc = scrollContainerRef.current;
+        if (sc) {
+            // Prefer scrollTo when available (supports smooth options), otherwise fallback to scrollTop.
+            if (typeof (sc as any).scrollTo === "function") {
+                (sc as any).scrollTo({ top: 0 });
+            } else {
+                (sc as HTMLDivElement).scrollTop = 0;
+            }
+        }
     }, []);
     const memberComparator = useMemo(() => {
         const activityScores = buildActivityScores(cli);
@@ -1120,6 +1128,23 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     }
 
     const onDialogKeyDown = (ev: KeyboardEvent | React.KeyboardEvent): void => {
+        const key = (ev as KeyboardEvent).key;
+        // handle PageUp / PageDown to scroll the results container by one page
+        if (key === "PageDown" || key === "PageUp") {
+            ev.stopPropagation();
+            ev.preventDefault();
+            const sc = scrollContainerRef.current;
+            if (sc) {
+                const page = sc.clientHeight - 40; // small overlap to keep context
+                if (typeof (sc as any).scrollBy === "function") {
+                    (sc as any).scrollBy({ top: key === "PageDown" ? page : -page, behavior: "smooth" });
+                } else {
+                    sc.scrollTop = Math.max(0, Math.min(sc.scrollHeight - sc.clientHeight, sc.scrollTop + (key === "PageDown" ? page : -page)));
+                }
+            }
+            return;
+        }
+
         const navigationAction = getKeyBindingsManager().getNavigationAction(ev);
         switch (navigationAction) {
             case KeyBindingAction.FilterRooms:
