@@ -1,6 +1,9 @@
 name: Clap - Build and Deploy to EKS
 
 on:
+  push:
+    branches:
+      - clap/main
   workflow_dispatch:
     inputs:
       environment:
@@ -16,8 +19,9 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: clap-element-web
-  EKS_CLUSTER_NAME: clap-eks-${{ github.event.inputs.environment }}
-  K8S_NAMESPACE: ${{ github.event.inputs.environment }}
+  DEPLOY_ENV: ${{ github.event.inputs.environment || 'dev' }}
+  EKS_CLUSTER_NAME: clap-eks-${{ github.event.inputs.environment || 'dev' }}
+  K8S_NAMESPACE: ${{ github.event.inputs.environment || 'dev' }}
 
 jobs:
   build-and-push:
@@ -65,7 +69,7 @@ jobs:
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.meta.outputs.version }}
-            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.environment }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.DEPLOY_ENV }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
@@ -80,12 +84,12 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Registry:** ${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_STEP_SUMMARY
           echo "**Repository:** ${{ env.ECR_REPOSITORY }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ env.DEPLOY_ENV }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
           echo "- \`latest\` (mutable, for convenience)" >> $GITHUB_STEP_SUMMARY
           echo "- \`${{ steps.meta.outputs.version }}\` (immutable, used for deployment)" >> $GITHUB_STEP_SUMMARY
-          echo "- \`${{ github.event.inputs.environment }}\` (mutable, for easy reference)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.DEPLOY_ENV }}\` (mutable, for easy reference)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Deployed Image (Immutable):**" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
@@ -93,10 +97,10 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
   deploy-to-eks:
-    name: Deploy to EKS - ${{ github.event.inputs.environment }}
+    name: Deploy to EKS - ${{ github.event.inputs.environment || 'dev' }}
     needs: build-and-push
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ github.event.inputs.environment || 'dev' }}
     permissions:
       id-token: write
       contents: read
@@ -136,10 +140,10 @@ jobs:
           CERTIFICATE_ARN: ${{ secrets.ACM_CERTIFICATE_ARN }}
         run: |
           # Determine domain name based on environment
-          if [ "${{ github.event.inputs.environment }}" == "production" ]; then
+          if [ "${{ env.DEPLOY_ENV }}" == "production" ]; then
             DOMAIN_NAME="app.clap.ac"
           else
-            DOMAIN_NAME="app.${{ github.event.inputs.environment }}.clap.ac"
+            DOMAIN_NAME="app.${{ env.DEPLOY_ENV }}.clap.ac"
           fi
 
           echo "Deploying to domain: $DOMAIN_NAME"
@@ -155,7 +159,7 @@ jobs:
           # Use immutable image tag (commit hash) for reproducibility
           sed -i "s|ENV_NAMESPACE|${{ env.K8S_NAMESPACE }}|g" k8s/deployment.yaml k8s/service.yaml k8s/ingress.yaml
           sed -i "s|ENV_TAG|${{ needs.build-and-push.outputs.image-tag }}|g" k8s/deployment.yaml
-          sed -i "s/ENV/${{ github.event.inputs.environment }}/g" k8s/ingress.yaml
+          sed -i "s/ENV/${{ env.DEPLOY_ENV }}/g" k8s/ingress.yaml
           sed -i "s|DOMAIN_NAME|$DOMAIN_NAME|g" k8s/ingress.yaml
           sed -i "s|CERTIFICATE_ARN|$CERTIFICATE_ARN|g" k8s/ingress.yaml
 
@@ -189,7 +193,7 @@ jobs:
             ALB_URL=$(kubectl get ingress element-web -n ${{ env.K8S_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || echo "")
             if [ -n "$ALB_URL" ]; then
               echo "**ALB URL:** $ALB_URL" >> $GITHUB_STEP_SUMMARY
-              echo "**Application URL:** https://app.${{ github.event.inputs.environment }}.clap.ac" >> $GITHUB_STEP_SUMMARY
+              echo "**Application URL:** https://app.${{ env.DEPLOY_ENV }}.clap.ac" >> $GITHUB_STEP_SUMMARY
               break
             fi
             echo "Waiting for ALB... ($i/60)"
@@ -217,9 +221,9 @@ jobs:
 
       - name: Deployment summary
         run: |
-          echo "### Deployment to EKS ${{ github.event.inputs.environment }} Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment to EKS ${{ env.DEPLOY_ENV }} Complete ✅" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Cluster:** ${{ env.EKS_CLUSTER_NAME }}" >> $GITHUB_STEP_SUMMARY
           echo "**Namespace:** ${{ env.K8S_NAMESPACE }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ env.DEPLOY_ENV }}" >> $GITHUB_STEP_SUMMARY
           echo "**Image:** ${{ needs.build-and-push.outputs.image-uri }}" >> $GITHUB_STEP_SUMMARY
