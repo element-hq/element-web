@@ -6,7 +6,8 @@
  */
 
 import React, { type ReactNode, type JSX } from "react";
-import { Menu, MenuItem } from "@vector-im/compound-web";
+import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
+import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { _t } from "../../utils/i18n.tsx";
 import { type ViewModel } from "../../viewmodel/ViewModel.ts";
@@ -94,6 +95,9 @@ interface WidgetContextMenuViewProps {
     vm: WidgetContextMenuViewModel;
 }
 
+/**
+ * A context menu component used to display the correct items that needs to be displayed for a widget item menu
+ */
 export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm }) => {
     const {
         showStreamAudioStreamButton,
@@ -150,6 +154,31 @@ export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm
         moveRightButton = <MenuItem onSelect={() => vm.onMoveButton(1)} label={_t("widget|context_menu|move_right")} />;
     }
 
+    // Only render menu items when the menu is open to prevent focusable elements in aria-hidden container
+    const renderMenuItems = (): React.ReactNode => {
+        if (!isMenuOpened) return null;
+        return (
+            <>
+                {streamAudioStreamButton}
+                {editButton}
+                {revokeButton}
+                {deleteButton}
+                {snapshotButton}
+                {moveLeftButton}
+                {moveRightButton}
+            </>
+        );
+    };
+
+    // Default trigger icon if no valid trigger element was passed
+    const wrappedTrigger = React.isValidElement(trigger) ? (
+        trigger
+    ) : (
+        <IconButton size="24px" aria-label="context menu trigger button" inert={true} tabIndex={-1}>
+            <TriggerIcon />
+        </IconButton>
+    );
+
     return (
         <Menu
             title="Widget context menu"
@@ -157,16 +186,10 @@ export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm
             showTitle={false}
             side="right"
             align="start"
-            trigger={trigger}
+            trigger={wrappedTrigger}
             onOpenChange={vm.onFinished}
         >
-            {streamAudioStreamButton}
-            {editButton}
-            {revokeButton}
-            {deleteButton}
-            {snapshotButton}
-            {moveLeftButton}
-            {moveRightButton}
+            {renderMenuItems()}
         </Menu>
     );
 };
