@@ -454,6 +454,7 @@ describe("Notifier", () => {
 
             const mockRtcSession = {
                 memberships: members,
+                slotDescription: { application: "m.call", id: "" },
             } as unknown as MatrixRTCSession;
 
             mockClient.matrixRTC.getRoomSession.mockReturnValue(mockRtcSession);
