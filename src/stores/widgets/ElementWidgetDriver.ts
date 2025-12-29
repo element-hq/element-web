@@ -33,12 +33,12 @@ import {
     EventType,
     type IContent,
     MatrixError,
-    type MatrixEvent,
     Direction,
     THREAD_RELATION_TYPE,
     type SendDelayedEventResponse,
     type StateEvents,
     type TimelineEvents,
+    type Room,
     type SendDelayedEventRequestOpts,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
@@ -564,6 +564,38 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     /**
+     * Generator function that retrieves events for readRoomTimeline
+     * @param room The room to check the timeline of.
+     * @param eventType The event type to be read.
+     * @param msgtype The msgtype of the events to be read, if applicable/defined.
+     * @param stateKey The state key of the events to be read, if applicable/defined.
+     * @param limit The maximum number of events to retrieve. Will be zero to denote "as many as
+     * possible".
+     * @param since When null, retrieves the number of events specified by the "limit" parameter.
+     * Otherwise, the event ID at which only subsequent events will be returned, as many as specified
+     * in "limit".
+     * @returns A generator that emits events.
+     */
+    private *readRoomTimelineIterator(
+        room: Room,
+        eventType: string,
+        msgtype: string | undefined,
+        stateKey: string | undefined,
+        limit: number,
+        since: string | undefined,
+    ): Generator<IRoomEvent, void, void> {
+        let resultCount: number = 0;
+        const events = [...room.getLiveTimeline().getEvents()]; // timelines are most recent last
+        for (let ev = events.pop(); ev && resultCount < limit && ev.getId() !== since; ev = events.pop()) {
+            if (ev.getType() !== eventType) continue;
+            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
+            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            yield ev.getEffectiveEvent() as IRoomEvent;
+            resultCount++;
+        }
+    }
+
+    /**
      * Reads all events of the given type, and optionally `msgtype` (if applicable/defined),
      * the user has access to. The widget API will have already verified that the widget is
      * capable of receiving the events. Less events than the limit are allowed to be returned,
@@ -588,23 +620,9 @@ export class ElementWidgetDriver extends WidgetDriver {
         since: string | undefined,
     ): Promise<IRoomEvent[]> {
         limit = limit > 0 ? Math.min(limit, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
-
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (room === null) return [];
-        const results: MatrixEvent[] = [];
-        const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
-        for (let i = events.length - 1; i >= 0; i--) {
-            const ev = events[i];
-            if (results.length >= limit) break;
-            if (since !== undefined && ev.getId() === since) break;
-
-            if (ev.getType() !== eventType) continue;
-            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
-            results.push(ev);
-        }
-
-        return results.map((e) => e.getEffectiveEvent() as IRoomEvent);
+        return [...this.readRoomTimelineIterator(room, eventType, msgtype, stateKey, limit, since)];
     }
 
     /**
