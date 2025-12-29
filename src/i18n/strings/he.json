@@ -2426,7 +2426,7 @@
         "you_are_presenting": "אתה מציג"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
-    "welcome_to_element": "ברוכים הבאים ל Element",
+    "welcome_to_clap": "ברוכים הבאים ל Clap",
     "widget": {
         "added_by": "ישומון נוסף על ידי",
         "capabilities_dialog": {

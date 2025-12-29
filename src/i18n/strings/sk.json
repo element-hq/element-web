@@ -4184,7 +4184,7 @@
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Víta vás Element",
+    "welcome_to_clap": "Víta vás Clap",
     "widget": {
         "added_by": "Widget pridaný používateľom",
         "capabilities_dialog": {

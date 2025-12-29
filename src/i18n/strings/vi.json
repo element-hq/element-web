@@ -3222,7 +3222,7 @@
         "you_are_presenting": "Bạn đang trình bày"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
-    "welcome_to_element": "Chào mừng tới Element",
+    "welcome_to_clap": "Chào mừng tới Clap",
     "widget": {
         "added_by": "widget được thêm bởi",
         "capabilities_dialog": {

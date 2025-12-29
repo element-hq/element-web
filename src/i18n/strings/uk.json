@@ -4097,7 +4097,7 @@
         "you_are_presenting": "Ви показуєте"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
-    "welcome_to_element": "Ласкаво просимо до Element",
+    "welcome_to_clap": "Ласкаво просимо до Clap",
     "widget": {
         "added_by": "Вджет додано",
         "capabilities_dialog": {

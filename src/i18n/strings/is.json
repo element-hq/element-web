@@ -2897,7 +2897,7 @@
         "you_are_presenting": "Þú ert að kynna"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element",
+    "welcome_to_clap": "Velkomin í Clap",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

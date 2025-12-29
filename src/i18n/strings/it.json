@@ -3508,7 +3508,7 @@
         "you_are_presenting": "Stai presentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element",
+    "welcome_to_clap": "Benvenuti su Clap",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {

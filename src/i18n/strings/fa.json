@@ -2247,7 +2247,7 @@
         "voice_call": "تماس صوتی"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s: روی %(osName)s",
-    "welcome_to_element": "به Element خوش‌آمدید",
+    "welcome_to_clap": "به Clap خوش‌آمدید",
     "widget": {
         "added_by": "ابزارک اضافه شده توسط",
         "capabilities_dialog": {

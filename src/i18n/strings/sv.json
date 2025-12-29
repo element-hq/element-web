@@ -4006,7 +4006,7 @@
         "you_are_presenting": "Du presenterar"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Välkommen till Element",
+    "welcome_to_clap": "Välkommen till Clap",
     "widget": {
         "added_by": "Widget tillagd av",
         "capabilities_dialog": {

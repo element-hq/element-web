@@ -3286,7 +3286,7 @@
         "you_are_presenting": "Përfaqësoni"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
-    "welcome_to_element": "Mirë se vini te Element",
+    "welcome_to_clap": "Mirë se vini te Clap",
     "widget": {
         "added_by": "Widget i shtuar nga",
         "capabilities_dialog": {

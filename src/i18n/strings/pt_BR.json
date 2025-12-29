@@ -4103,7 +4103,7 @@
         "you_are_presenting": "Você está apresentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
-    "welcome_to_element": "Boas-vindas a Element",
+    "welcome_to_clap": "Boas-vindas a Clap",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {

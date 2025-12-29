@@ -9,7 +9,6 @@ import React, { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { LogIn, UserPlus, Compass } from "lucide-react";
 
-import SdkConfig from "../../../SdkConfig";
 import AuthPage from "./AuthPage";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
@@ -41,10 +40,6 @@ const Welcome: React.FC = () => {
         };
     }, []);
 
-    const brand = SdkConfig.get("brand");
-    const brandingConfig = SdkConfig.getObject("branding");
-    const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
-
     const showRegistration = SettingsStore.getValue(UIFeature.Registration);
 
     const client = matrixClientContext || MatrixClientPeg.get();
@@ -66,11 +61,7 @@ const Welcome: React.FC = () => {
                     })}
                 >
                     <div className="mx_WelcomePage_body flex flex-col items-center justify-center p-6 text-center">
-                        <a href="https://element.io" target="_blank" rel="noopener noreferrer">
-                            <img src={logoUrl} alt={brand} className="h-14 mb-5" />
-                        </a>
-
-                        <h1 className="text-2xl font-semibold mt-5 mb-2">{_t("welcome_to_element")}</h1>
+                        <h1 className="text-2xl font-semibold mt-5 mb-2">{_t("welcome_to_clap")}</h1>
 
                         <div className="flex flex-col gap-3 mt-6 w-full max-w-xs">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

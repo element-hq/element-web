@@ -4096,7 +4096,7 @@
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
+    "welcome_to_clap": "Selamat datang di Clap",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {

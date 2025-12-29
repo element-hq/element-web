@@ -3146,7 +3146,7 @@
         "you_are_presenting": "你正在展示"
     },
     "web_default_device_name": "%(appName)s：%(browserName)s在%(osName)s",
-    "welcome_to_element": "欢迎来到 Element",
+    "welcome_to_clap": "欢迎来到 Clap",
     "widget": {
         "added_by": "挂件添加者",
         "capabilities_dialog": {
