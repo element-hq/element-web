@@ -1,0 +1,21 @@
+/*
+ * Tailwind CSS v4 - Preflight 비활성화 버전
+ * 기존 레거시 스타일(.pcss)과 충돌 방지를 위해 base(Preflight) 제외
+ *
+ * 사용법: 신규 컴포넌트에서 className="flex items-center gap-2" 형태로 사용
+ */
+
+/* 소스 파일 감지 - Hot reload를 위해 필수 */
+@source "../../src/**/*.{js,ts,jsx,tsx}";
+@source "../**/*.html";
+
+@layer theme, base, components, utilities;
+
+/* Theme: Tailwind 테마 변수 (colors, spacing, fonts 등) */
+@import "tailwindcss/theme.css" layer(theme);
+
+/* Preflight(base reset) 의도적 제외 - 레거시 스타일 보호 */
+/* @import "tailwindcss/preflight.css" layer(base); */
+
+/* Utilities: Tailwind 유틸리티 클래스 (flex, p-4, text-blue-500 등) */
+@import "tailwindcss/utilities.css" layer(utilities);

@@ -302,8 +302,35 @@ module.exports = (env, argv) => {
                         plugins: enableMinification ? ["babel-plugin-jsx-remove-data-test-id"] : [],
                     },
                 },
+                // Tailwind CSS 처리 (tailwind.css 파일 전용)
+                // 개발 모드: style-loader로 HMR 지원
+                // 프로덕션: MiniCssExtractPlugin으로 별도 파일 추출
+                {
+                    test: /tailwind\.css$/,
+                    use: [
+                        devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+                        {
+                            loader: "css-loader",
+                            options: {
+                                importLoaders: 1,
+                                sourceMap: true,
+                                esModule: false,
+                            },
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: true,
+                                postcssOptions: {
+                                    plugins: [require("@tailwindcss/postcss")()],
+                                },
+                            },
+                        },
+                    ],
+                },
                 {
                     test: /\.css$/,
+                    exclude: /tailwind\.css$/, // Tailwind는 별도 룰에서 처리
                     use: [
                         MiniCssExtractPlugin.loader,
                         {

@@ -20,6 +20,9 @@ import "./modernizr";
 // Import shared components CSS
 import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
 
+// Tailwind CSS 유틸리티 (신규 컴포넌트용, Preflight 비활성화)
+import "../../res/css/tailwind.css";
+
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
