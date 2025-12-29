@@ -628,7 +628,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 return <Blurhash className="mx_Blurhash" hash={blurhash} width={width} height={height} />;
             }
         }
-        return <Spinner w={32} h={32} />;
+        return <Spinner size={32} />;
     }
 
     // Overridden by MStickerBody

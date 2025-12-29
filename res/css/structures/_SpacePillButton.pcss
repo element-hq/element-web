@@ -1,0 +1,48 @@
+/*
+Copyright 2025 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SpacePillButton {
+    position: relative;
+    padding: 16px 32px 16px 72px;
+    width: 432px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid $input-border-color;
+    font-size: $font-17px;
+    font-weight: var(--cpd-font-weight-semibold);
+    margin: 20px 0;
+
+    > div {
+        margin-top: 4px;
+        font-weight: normal;
+        font-size: $font-15px;
+        color: $secondary-content;
+    }
+
+    svg {
+        position: absolute;
+        content: "";
+        width: 28px;
+        height: 28px;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 22px;
+        color: $tertiary-content;
+    }
+
+    &:hover {
+        border-color: var(--cpd-color-bg-action-primary-rest);
+
+        svg {
+            color: var(--cpd-color-icon-primary);
+        }
+
+        > span {
+            color: $primary-content;
+        }
+    }
+}

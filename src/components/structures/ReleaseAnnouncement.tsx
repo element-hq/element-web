@@ -12,8 +12,10 @@ import { ReleaseAnnouncement as ReleaseAnnouncementCompound } from "@vector-im/c
 import { ReleaseAnnouncementStore, type Feature } from "../../stores/ReleaseAnnouncementStore";
 import { useIsReleaseAnnouncementOpen } from "../../hooks/useIsReleaseAnnouncementOpen";
 
-interface ReleaseAnnouncementProps
-    extends Omit<ComponentProps<typeof ReleaseAnnouncementCompound>, "open" | "onClick"> {
+interface ReleaseAnnouncementProps extends Omit<
+    ComponentProps<typeof ReleaseAnnouncementCompound>,
+    "open" | "onClick"
+> {
     feature: Feature;
 }
 

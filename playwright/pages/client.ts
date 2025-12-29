@@ -28,7 +28,7 @@ import type {
     EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
-import { type Credentials } from "../plugins/homeserver";
+import { type CredentialsOptionalAccessToken } from "./bot";
 
 export class Client {
     public network: Network;
@@ -424,7 +424,7 @@ export class Client {
     /**
      * Bootstraps cross-signing.
      */
-    public async bootstrapCrossSigning(credentials: Credentials): Promise<void> {
+    public async bootstrapCrossSigning(credentials: CredentialsOptionalAccessToken): Promise<void> {
         const client = await this.prepareClient();
         return bootstrapCrossSigningForClient(client, credentials);
     }
@@ -522,7 +522,7 @@ export class Client {
  */
 export function bootstrapCrossSigningForClient(
     client: JSHandle<MatrixClient>,
-    credentials: Credentials,
+    credentials: CredentialsOptionalAccessToken,
     resetKeys: boolean = false,
 ) {
     return client.evaluate(

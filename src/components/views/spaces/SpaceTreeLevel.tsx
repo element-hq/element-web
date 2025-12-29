@@ -20,6 +20,11 @@ import classNames from "classnames";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import {
+    ChevronDownIcon,
+    ChevronRightIcon,
+    OverflowHorizontalIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -169,7 +174,9 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
                         onClick={openMenu}
                         title={contextMenuTooltip}
                         isExpanded={menuDisplayed}
-                    />
+                    >
+                        <OverflowHorizontalIcon />
+                    </ContextMenuTooltipButton>
                 )}
 
                 {contextMenu}
@@ -349,7 +356,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 onClick={this.toggleCollapse}
                 tabIndex={-1}
                 aria-label={collapsed ? _t("action|expand") : _t("action|collapse")}
-            />
+            >
+                {collapsed ? <ChevronRightIcon /> : <ChevronDownIcon />}
+            </AccessibleButton>
         ) : null;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -65,7 +65,12 @@
     margin: 12px;
     height: 100%;
     overflow-y: scroll;
-    max-height: 35vh;
+}
+
+@container roomview (height >= 0px) {
+    .mx_Autocomplete_Completion_container_pill {
+        max-height: 40cqh;
+    }
 }
 
 .mx_Autocomplete_Completion_container_truncate {

@@ -207,7 +207,7 @@ test.describe("RightPanel", () => {
 
             // \d represents the number of the space members
             await page
-                .locator(".mx_RoomInfoLine_private")
+                .locator(".mx_RoomInfoLine")
                 .getByRole("button", { name: /\d member/ })
                 .click();
             await expect(page.locator(".mx_MemberListView")).toBeVisible();

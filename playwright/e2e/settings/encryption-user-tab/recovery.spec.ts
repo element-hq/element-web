@@ -17,7 +17,9 @@ test.describe("Recovery section in Encryption tab", () => {
     let recoveryKey: GeneratedSecretStorageKey;
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
-        const res = await createBot(page, homeserver, credentials);
+        const botCredentials = { ...credentials };
+        delete botCredentials.accessToken; // use a new login for the bot
+        const res = await createBot(page, homeserver, botCredentials);
         recoveryKey = res.recoveryKey;
     });
 

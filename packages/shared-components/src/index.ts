@@ -12,12 +12,14 @@ export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
 export * from "./composer/Banner";
+export * from "./composer/HistoryVisibleBannerView";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
+export * from "./room-list/RoomListSearchView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
 

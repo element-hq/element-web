@@ -34,8 +34,10 @@ type DialogAesthetics = Partial<{
     };
 }>;
 
-export interface InteractiveAuthDialogProps<T = unknown>
-    extends Pick<InteractiveAuthProps<T>, "makeRequest" | "authData"> {
+export interface InteractiveAuthDialogProps<T = unknown> extends Pick<
+    InteractiveAuthProps<T>,
+    "makeRequest" | "authData"
+> {
     // matrix client to use for UI auth requests
     matrixClient: MatrixClient;
 

@@ -373,7 +373,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
     public renderSetPassword(): JSX.Element {
         const submitButtonChild =
-            this.state.phase === Phase.ResettingPassword ? <Spinner w={16} h={16} /> : _t("auth|reset_password_action");
+            this.state.phase === Phase.ResettingPassword ? <Spinner size={16} /> : _t("auth|reset_password_action");
 
         return (
             <>
