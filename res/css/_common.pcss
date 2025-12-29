@@ -9,8 +9,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
-@import url("@vector-im/compound-web/dist/style.css");
 @import "./_font-sizes.pcss";
 @import "./_animations.pcss";
 @import "./_spacing.pcss";
@@ -85,8 +83,9 @@ html {
 }
 
 body {
-    font: var(--cpd-font-body-md-regular);
-    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    /* !important because compound overrides these font settings for body */
+    font: var(--cpd-font-body-md-regular) !important;
+    letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
     /**
      * We want to apply Inter Dynamic metrics (https://rsms.me/inter/dynmetrics/)
      * We need to tweak the `letter-spacing` property and doing so, disables by
@@ -97,7 +96,7 @@ body {
     font-feature-settings:
         "kern" 1,
         "liga" 1,
-        "calt" 1;
+        "calt" 1 !important;
 
     background-color: $background;
     color: $primary-content;
@@ -896,53 +895,23 @@ legend {
 
 @define-mixin composerButtonHighLight {
     background: var(--cpd-color-bg-subtle-primary);
-    &::before {
-        background-color: var(--cpd-color-icon-primary) !important;
-    }
+    color: var(--cpd-color-icon-primary) !important;
 }
 
 @define-mixin composerButton $border-radius, $hover-color, $hover-bg {
-    --size: 26px;
     position: relative;
     cursor: pointer;
-    height: var(--size);
-    line-height: var(--size);
-    width: auto;
-    padding-left: var(--size);
     border-radius: $border-radius;
 
-    &::before {
-        content: "";
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        height: 20px;
-        width: 20px;
-        background-color: $icon-button-color;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        mask-position: center;
-        z-index: 2;
-    }
-
-    &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 0;
-        width: var(--size);
-        height: var(--size);
-        border-radius: $border-radius;
+    svg {
+        color: $icon-button-color;
     }
 
     &:hover {
-        &::after {
-            background: $hover-bg;
-        }
+        background-color: $hover-bg;
 
-        &::before {
-            background-color: $hover-color;
+        svg {
+            color: $hover-color;
         }
     }
 }

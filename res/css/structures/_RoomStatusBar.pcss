@@ -99,34 +99,17 @@ Please see LICENSE files in the repository root for full details.
             position: relative;
             user-select: none;
 
-            &:nth-child(2) {
+            & + .mx_AccessibleButton {
                 border-left: 1px solid $resend-button-divider-color;
             }
 
-            &::before {
-                content: "";
-                position: absolute;
+            svg {
                 left: 10px; /* inset for regular button padding */
-                background-color: $muted-fg-color;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
+
                 width: 18px;
                 height: 18px;
-                top: 50%; /* text sizes are dynamic */
-                transform: translateY(-50%);
-            }
-
-            &.mx_RoomStatusBar_unsentCancelAllBtn::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/delete.svg");
-            }
-
-            &.mx_RoomStatusBar_unsentRetry {
-                padding-left: 34px; /* 28px from above, but +6px to account for the wider icon */
-
-                &::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/restart.svg");
-                }
+                vertical-align: middle;
+                color: $muted-fg-color;
             }
         }
 

@@ -11,3 +11,4 @@ export * from "./Snapshot";
 export * from "./ViewModelSubscriptions";
 export type * from "./ViewModel";
 export * from "./MockViewModel";
+export * from "./useCreateAutoDisposedViewModel";

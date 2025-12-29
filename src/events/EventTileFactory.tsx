@@ -46,22 +46,21 @@ import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventVie
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
-export interface EventTileTypeProps
-    extends Pick<
-        EventTileProps,
-        | "mxEvent"
-        | "highlights"
-        | "highlightLink"
-        | "showUrlPreview"
-        | "forExport"
-        | "getRelationsForEvent"
-        | "editState"
-        | "replacingEventId"
-        | "permalinkCreator"
-        | "callEventGrouper"
-        | "isSeeingThroughMessageHiddenForModeration"
-        | "inhibitInteraction"
-    > {
+export interface EventTileTypeProps extends Pick<
+    EventTileProps,
+    | "mxEvent"
+    | "highlights"
+    | "highlightLink"
+    | "showUrlPreview"
+    | "forExport"
+    | "getRelationsForEvent"
+    | "editState"
+    | "replacingEventId"
+    | "permalinkCreator"
+    | "callEventGrouper"
+    | "isSeeingThroughMessageHiddenForModeration"
+    | "inhibitInteraction"
+> {
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;

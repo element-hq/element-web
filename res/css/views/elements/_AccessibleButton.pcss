@@ -37,6 +37,7 @@ Please see LICENSE files in the repository root for full details.
         font: var(--cpd-font-body-md-semibold);
         border: none; /* override default <button /> styles */
         word-break: keep-all; /* prevent button text in Chinese/Japanese/Korean (CJK) from being collapsed */
+        box-sizing: border-box;
 
         &.mx_AccessibleButton_kind_primary_sm,
         &.mx_AccessibleButton_kind_danger_sm,
@@ -47,11 +48,13 @@ Please see LICENSE files in the repository root for full details.
         &.mx_AccessibleButton_kind_primary_sm {
             color: var(--cpd-color-text-on-solid-primary);
             background-color: var(--cpd-color-bg-action-primary-rest);
+            border: 1px solid var(--cpd-color-bg-action-primary-rest);
         }
 
         &.mx_AccessibleButton_kind_danger_sm {
             color: var(--cpd-color-text-on-solid-primary);
             background-color: var(--cpd-color-bg-critical-primary);
+            border: 1px solid var(--cpd-color-bg-critical-primary);
         }
 
         &.mx_AccessibleButton_kind_link_sm {

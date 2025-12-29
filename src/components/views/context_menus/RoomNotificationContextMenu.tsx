@@ -20,6 +20,10 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { type ButtonEvent } from "../elements/AccessibleButton";
+import { Icon as NotificationsIcon } from "../../../../res/img/element-icons/notifications.svg";
+import { Icon as NotificationsDefaultIcon } from "../../../../res/img/element-icons/roomlist/notifications-default.svg";
+import { Icon as NotificationsDmIcon } from "../../../../res/img/element-icons/roomlist/notifications-dm.svg";
+import { Icon as NotificationsOffIcon } from "../../../../res/img/element-icons/roomlist/notifications-off.svg";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -46,7 +50,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
         <IconizedContextMenuRadio
             label={_t("room|context_menu|notifications_default")}
             active={notificationState === RoomNotifState.AllMessages}
-            iconClassName="mx_RoomNotificationContextMenu_iconBell"
+            icon={<NotificationsIcon />}
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessages))}
         />
     );
@@ -55,7 +59,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
         <IconizedContextMenuRadio
             label={_t("notifications|all_messages")}
             active={notificationState === RoomNotifState.AllMessagesLoud}
-            iconClassName="mx_RoomNotificationContextMenu_iconBellDot"
+            icon={<NotificationsDefaultIcon />}
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessagesLoud))}
         />
     );
@@ -64,7 +68,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
         <IconizedContextMenuRadio
             label={_t("notifications|mentions_keywords")}
             active={notificationState === RoomNotifState.MentionsOnly}
-            iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
+            icon={<NotificationsDmIcon />}
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}
         />
     );
@@ -73,7 +77,7 @@ export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished
         <IconizedContextMenuRadio
             label={_t("room|context_menu|notifications_mute")}
             active={notificationState === RoomNotifState.Mute}
-            iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
+            icon={<NotificationsOffIcon />}
             onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}
         />
     );

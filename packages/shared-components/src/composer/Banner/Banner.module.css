@@ -27,8 +27,6 @@
     padding: var(--cpd-space-4x);
 
     border-top: 1px solid var(--cpd-color-gray-400);
-
-    white-space: nowrap;
 }
 
 .banner[data-type="success"] {
@@ -90,4 +88,6 @@
     flex-direction: row;
     gap: var(--cpd-space-1x);
     align-self: center;
+
+    white-space: nowrap;
 }

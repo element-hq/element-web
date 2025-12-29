@@ -579,6 +579,7 @@
         "someone": "Someone",
         "space": "Space",
         "spaces": "Spaces",
+        "state_encryption_enabled": "Experimental state encryption enabled",
         "sticker": "Sticker",
         "stickerpack": "Stickerpack",
         "success": "Success",
@@ -686,6 +687,8 @@
         "join_rule_restricted_label": "Everyone in <SpaceName/> will be able to find and join this room.",
         "name_validation_required": "Please enter a name for the room",
         "room_visibility_label": "Room visibility",
+        "state_encrypted_warning": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
+        "state_encryption_label": "Encrypt state events",
         "title_private_room": "Create a private room",
         "title_public_room": "Create a public room",
         "title_video_room": "Create a video room",
@@ -846,6 +849,7 @@
         "number_of_users": "Number of users",
         "only_joined_members": "Only joined users",
         "original_event_source": "Original event source",
+        "restore_from_backup": "Restore from backup",
         "room_encrypted": "Room is <strong>encrypted ✅</strong>",
         "room_id": "Room ID: %(roomId)s",
         "room_not_encrypted": "Room is <strong>not encrypted 🚨</strong>",
@@ -955,6 +959,7 @@
         "bootstrap_title": "Setting up keys",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
+        "continue_with_reset": "Continue with reset",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
         "cross_signing_room_verified": "Everyone in this room is verified",
         "cross_signing_room_warning": "Someone is using an unknown session",
@@ -970,6 +975,7 @@
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "forgot_recovery_key": "Forgot recovery key?",
+        "identity_needs_reset_description": "You have to reset your cryptographic identity in order to ensure access to your message history",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
@@ -1522,6 +1528,8 @@
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
+        "encrypted_state_events": "Encrypted state events (MSC4362)",
+        "encrypted_state_events_description": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
         "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
         "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
@@ -2123,6 +2131,7 @@
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit": "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
+            "history_visible": "This room has been configured so that new members can read history. <a>Learn More</a>",
             "homeserver_blocked": "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.",
             "monthly_user_limit_reached": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.",
             "requires_consent_agreement": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
@@ -2211,26 +2220,6 @@
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
-        },
-        "release_announcement": {
-            "done": "Done",
-            "filter": {
-                "description": "Filter your chats with a single click. Expand to view more filters.",
-                "title": "New quick filters"
-            },
-            "intro": {
-                "description": "The chats list has been updated to be more clear and simple to use.",
-                "title": "Chats has a new look!"
-            },
-            "next": "Next",
-            "settings": {
-                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
-                "title": "Some settings have moved"
-            },
-            "sort": {
-                "description": "Change the ordering of your chats from most recent to A-Z",
-                "title": "Sort your chats"
-            }
         },
         "room": {
             "more_options": "More Options",
@@ -2901,10 +2890,6 @@
             "rule_suppress_notices": "Messages sent by bot",
             "rule_tombstone": "When rooms are upgraded",
             "show_message_desktop_notification": "Show message in desktop notification",
-            "sounds_release_announcement": {
-                "description": "Your notification ping and call ringer have been updated—clearer, quicker, and less disruptive",
-                "title": "We’ve refreshed your sounds"
-            },
             "voip": "Audio and Video calls"
         },
         "preferences": {
@@ -3578,6 +3563,7 @@
             "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
             "enabled_local": "Messages in this chat will be end-to-end encrypted.",
             "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
         },
         "m.room.guest_access": {

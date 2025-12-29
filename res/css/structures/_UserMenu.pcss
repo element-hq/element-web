@@ -116,48 +116,7 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    .mx_IconizedContextMenu_icon {
-        width: 16px;
-        height: 16px;
-        display: block;
-
-        &::before {
-            content: "";
-            width: 16px;
-            height: 16px;
-            display: block;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background: $icon-button-color;
-        }
-    }
-
-    .mx_UserMenu_iconHome::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/home-solid.svg");
-    }
-
-    .mx_UserMenu_iconBell::before {
-        mask-image: url("$(res)/img/element-icons/notifications.svg");
-    }
-
-    .mx_UserMenu_iconLock::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
-    }
-
-    .mx_UserMenu_iconSettings::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
-    }
-
-    .mx_UserMenu_iconMessage::before {
-        mask-image: url("$(res)/img/element-icons/feedback.svg");
-    }
-
-    .mx_UserMenu_iconSignOut::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/leave.svg");
-    }
-
-    .mx_UserMenu_iconQr::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/qr-code.svg");
+    .mx_IconizedContextMenu_icon svg {
+        color: $icon-button-color;
     }
 }
