@@ -23,7 +23,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="6"
       data-testid="avatar-img"
       data-type="round"
@@ -48,7 +48,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="6"
       data-testid="avatar-img"
       data-type="round"
@@ -73,7 +73,7 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -111,9 +111,18 @@ exports[`<RoomPreviewBar /> message case Knocked renders the corresponding messa
     Request to join sent
   </h3>
   <p>
-    <div
+    <svg
       class="mx_Icon mx_Icon_16 mx_RoomPreviewBar_icon"
-    />
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 18.156q.478 0 .802-.323.323-.324.323-.802h-2.25q0 .478.323.802.324.323.802.323M8.063 16.47h7.874a.54.54 0 0 0 .394-.169.54.54 0 0 0 0-.788.54.54 0 0 0-.393-.168h-.563V12.7q0-1.237-.675-2.25a3 3 0 0 0-1.856-1.294v-.281a.82.82 0 0 0-.24-.605.82.82 0 0 0-.604-.239.82.82 0 0 0-.844.844v.281A3 3 0 0 0 9.3 10.45a3.97 3.97 0 0 0-.675 2.25v2.644h-.562a.54.54 0 0 0-.394.168.54.54 0 0 0 0 .788.54.54 0 0 0 .394.169M3 19.844V9.719q0-.534.24-1.013.238-.478.66-.787l6.75-5.063q.31-.225.647-.337.338-.113.703-.113.366 0 .703.113.337.112.647.337L20.1 7.92q.422.309.66.787.24.479.24 1.013v10.125q0 .927-.66 1.589-.662.66-1.59.66H5.25q-.928 0-1.59-.66-.66-.66-.66-1.59m2.25 0h13.5V9.719L12 4.656 5.25 9.72z"
+      />
+    </svg>
     Your request to join is pending.
   </p>
 </div>
@@ -252,7 +261,7 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
   </h3>
   <p>
     <span
-      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="6"
       data-testid="avatar-img"
       data-type="round"
@@ -310,7 +319,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
   </h3>
   <p>
     <span
-      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="6"
       data-testid="avatar-img"
       data-type="round"
@@ -348,7 +357,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
   </h3>
   <p>
     <span
-      class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
       data-color="6"
       data-testid="avatar-img"
       data-type="round"

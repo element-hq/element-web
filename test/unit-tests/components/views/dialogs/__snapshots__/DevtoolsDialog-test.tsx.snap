@@ -39,7 +39,22 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         class="mx_AccessibleButton mx_CopyableText_copyButton"
         role="button"
         tabindex="0"
-      />
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+          />
+          <path
+            d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+          />
+        </svg>
+      </div>
     </div>
     <div
       class="mx_DevTools_label_bottom"
@@ -116,119 +131,133 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           End-to-end encryption
         </button>
       </div>
-      <div>
+      <form
+        class="_root_19upo_16 mx_DevTools_toggleForm"
+      >
         <h2
           class="mx_DevTools_toolHeading"
         >
           Options
         </h2>
         <div
-          class="mx_SettingsFlag"
-        >
-          <label
-            class="mx_SettingsFlag_label"
-            for="mx_SettingsFlag_vY7Q4uEh9K38"
-          >
-            <span
-              class="mx_SettingsFlag_labelText"
-            >
-              Developer mode
-            </span>
-          </label>
-          <div
-            aria-checked="false"
-            aria-disabled="false"
-            aria-label="Developer mode"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            id="mx_SettingsFlag_vY7Q4uEh9K38"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
-        </div>
-        <div
-          class="mx_SettingsFlag"
-        >
-          <label
-            class="mx_SettingsFlag_label"
-            for="mx_SettingsFlag_QgU2PomxwKpa"
-          >
-            <span
-              class="mx_SettingsFlag_labelText"
-            >
-              Show hidden events in timeline
-            </span>
-          </label>
-          <div
-            aria-checked="false"
-            aria-disabled="false"
-            aria-label="Show hidden events in timeline"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            id="mx_SettingsFlag_QgU2PomxwKpa"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
-        </div>
-        <div
-          class="mx_SettingsFlag"
-        >
-          <label
-            class="mx_SettingsFlag_label"
-            for="mx_SettingsFlag_6hpi3YEetmBG"
-          >
-            <span
-              class="mx_SettingsFlag_labelText"
-            >
-              Enable widget screenshots on supported widgets
-            </span>
-          </label>
-          <div
-            aria-checked="false"
-            aria-disabled="false"
-            aria-label="Enable widget screenshots on supported widgets"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            id="mx_SettingsFlag_6hpi3YEetmBG"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
-        </div>
-        <form
-          class="_root_19upo_16"
+          class="_inline-field_19upo_32"
         >
           <div
-            class="_field_19upo_26"
+            class="_inline-field-control_19upo_44"
           >
-            <label
-              class="_label_19upo_59"
-              for="radix-_r_4_"
-            >
-              Element Call URL
-            </label>
             <div
-              class="_controls_17lij_8"
+              class="_container_udcm8_10"
             >
               <input
-                class="_control_sqdq4_10"
-                id="radix-_r_4_"
-                name="input"
-                title=""
-                value=""
+                class="_input_udcm8_24"
+                id="mx_SettingsFlag_vY7Q4uEh9K38"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
               />
             </div>
           </div>
-        </form>
-      </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="mx_SettingsFlag_vY7Q4uEh9K38"
+            >
+              Developer mode
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="mx_SettingsFlag_QgU2PomxwKpa"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="mx_SettingsFlag_QgU2PomxwKpa"
+            >
+              Show hidden events in timeline
+            </label>
+          </div>
+        </div>
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="mx_SettingsFlag_6hpi3YEetmBG"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="mx_SettingsFlag_6hpi3YEetmBG"
+            >
+              Enable widget screenshots on supported widgets
+            </label>
+          </div>
+        </div>
+      </form>
+      <form
+        class="_root_19upo_16"
+      >
+        <div
+          class="_field_19upo_26"
+        >
+          <label
+            class="_label_19upo_59"
+            for="radix-_r_a_"
+          >
+            Element Call URL
+          </label>
+          <div
+            class="_controls_17lij_8"
+          >
+            <input
+              class="_control_sqdq4_10"
+              id="radix-_r_a_"
+              name="input"
+              title=""
+              value=""
+            />
+          </div>
+        </div>
+      </form>
     </div>
     <div
       class="mx_Dialog_buttons"

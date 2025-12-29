@@ -11,6 +11,8 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Form } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -305,6 +307,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (!privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
             warning = (
                 <div className="mx_SecurityUserSettingsTab_warning">
+                    <WarningIcon />
                     {_t("settings|security|e2ee_default_disabled_warning")}
                 </div>
             );
@@ -319,7 +322,13 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 });
             };
             posthogSection = (
-                <>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                    className="mx_SecurityUserSettingsTab_posthogSection"
+                >
                     <SettingsSubsection
                         heading={_t("common|analytics")}
                         description={_t("settings|security|analytics_description")}
@@ -334,7 +343,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <SettingsSubsection heading={_t("settings|sessions|title")}>
                         <SettingsFlag name="deviceClientInformationOptIn" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
-                </>
+                </Form.Root>
             );
         }
 

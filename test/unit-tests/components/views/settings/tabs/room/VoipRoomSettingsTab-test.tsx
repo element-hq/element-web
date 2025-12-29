@@ -43,7 +43,7 @@ describe("VoipRoomSettingsTab", () => {
         };
 
         const getElementCallSwitch = (tab: RenderResult): HTMLElement => {
-            return tab.container.querySelector("[data-testid='element-call-switch']")!;
+            return tab.getByLabelText("Enable Element Call as an additional calling option in this room")!;
         };
 
         describe("correct state", () => {
@@ -52,7 +52,7 @@ describe("VoipRoomSettingsTab", () => {
 
                 const tab = renderTab();
 
-                expect(getElementCallSwitch(tab).querySelector("[aria-checked='true']")).toBeTruthy();
+                expect(getElementCallSwitch(tab)).toBeChecked();
             });
 
             it.each([1, 50, 100])("shows disabled when call member power level is 0", (level: number) => {
@@ -60,7 +60,7 @@ describe("VoipRoomSettingsTab", () => {
 
                 const tab = renderTab();
 
-                expect(getElementCallSwitch(tab).querySelector("[aria-checked='false']")).toBeTruthy();
+                expect(getElementCallSwitch(tab)).not.toBeChecked();
             });
         });
 
@@ -75,7 +75,7 @@ describe("VoipRoomSettingsTab", () => {
 
                     const tab = renderTab();
 
-                    fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch")!);
+                    fireEvent.click(getElementCallSwitch(tab));
                     await waitFor(() =>
                         expect(cli.sendStateEvent).toHaveBeenCalledWith(
                             room.roomId,
@@ -95,7 +95,7 @@ describe("VoipRoomSettingsTab", () => {
 
                     const tab = renderTab();
 
-                    fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch")!);
+                    fireEvent.click(getElementCallSwitch(tab));
                     await waitFor(() =>
                         expect(cli.sendStateEvent).toHaveBeenCalledWith(
                             room.roomId,
@@ -116,7 +116,7 @@ describe("VoipRoomSettingsTab", () => {
 
                 const tab = renderTab();
 
-                fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch")!);
+                fireEvent.click(getElementCallSwitch(tab));
                 await waitFor(() =>
                     expect(cli.sendStateEvent).toHaveBeenCalledWith(
                         room.roomId,

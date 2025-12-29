@@ -150,7 +150,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 await toggleGuestAccessSection(component);
                 const guestAccessInput = getGuestAccessToggle(component);
 
-                expect(guestAccessInput?.getAttribute("aria-checked")).toEqual("true");
+                expect(guestAccessInput).toBeChecked();
 
                 fireEvent.click(guestAccessInput!);
                 expect(mockMatrixClient.sendStateEvent).toHaveBeenCalledWith(
@@ -162,7 +162,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 );
 
                 // toggled off
-                expect(guestAccessInput?.getAttribute("aria-checked")).toEqual("false");
+                expect(guestAccessInput).not.toBeChecked();
             });
 
             it("renders error message when update fails", async () => {
@@ -184,7 +184,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
 
                 await toggleGuestAccessSection(component);
 
-                expect(getGuestAccessToggle(component)?.getAttribute("aria-disabled")).toEqual("true");
+                expect(getGuestAccessToggle(component)).toBeDisabled();
             });
         });
 
@@ -194,7 +194,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const component = getComponent({ space });
 
                 // toggle off because space settings is != WorldReadable
-                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-checked")).toEqual("false");
+                expect(getHistoryVisibilityToggle(component)).not.toBeChecked();
             });
 
             it("updates history visibility on toggle", () => {
@@ -202,7 +202,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const component = getComponent({ space });
 
                 // toggle off because space settings is != WorldReadable
-                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-checked")).toEqual("false");
+                expect(getHistoryVisibilityToggle(component)).not.toBeChecked();
 
                 fireEvent.click(getHistoryVisibilityToggle(component)!);
                 expect(mockMatrixClient.sendStateEvent).toHaveBeenCalledWith(
@@ -212,7 +212,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                     "",
                 );
 
-                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-checked")).toEqual("true");
+                expect(getHistoryVisibilityToggle(component)).toBeChecked();
             });
 
             it("renders error message when history update fails", async () => {
@@ -231,7 +231,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const space = makeMockSpace(mockMatrixClient, joinRule, guestRule, historyRule);
                 (space.currentState.maySendStateEvent as jest.Mock).mockReturnValue(false);
                 const component = getComponent({ space });
-                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-disabled")).toEqual("true");
+                expect(getHistoryVisibilityToggle(component)).toBeDisabled();
             });
         });
 

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useContext } from "react";
 import { type Thread, ThreadEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { IndicatorIcon } from "@vector-im/compound-web";
-import ThreadIconSolid from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
+import { ThreadsSolidIcon, ChevronRightIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";
@@ -58,11 +58,13 @@ const ThreadSummary: React.FC<IProps> = ({ mxEvent, thread, ...props }) => {
             aria-label={_t("threads|open_thread")}
         >
             <IndicatorIcon size="24px" indicator={notificationLevelToIndicator(level)}>
-                <ThreadIconSolid />
+                <ThreadsSolidIcon />
             </IndicatorIcon>
             <span className="mx_ThreadSummary_replies_amount">{countSection}</span>
             <ThreadMessagePreview thread={thread} showDisplayname={!roomContext.narrow} />
-            <div className="mx_ThreadSummary_chevron" />
+            <div className="mx_ThreadSummary_chevron">
+                <ChevronRightIcon />
+            </div>
         </AccessibleButton>
     );
 };

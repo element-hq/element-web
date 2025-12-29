@@ -11,7 +11,8 @@
 }
 
 .mx_ThreadsActivityCentreButton {
-    border-radius: 8px;
+    /* !important override compound */
+    border-radius: 8px !important;
     margin: 18px auto auto auto;
 
     &.expanded {
@@ -23,6 +24,8 @@
 
         /* align with settings icon */
         margin-left: 21px;
+        margin-right: 8px;
+        width: 100%;
 
         /**
          * modify internal css of the compound component
@@ -31,24 +34,33 @@
         & > div {
             display: flex;
             align-items: center;
+
+            &::before {
+                inline-size: 8px;
+                block-size: 8px;
+                left: 17px;
+            }
         }
 
         & .mx_ThreadsActivityCentreButton_Icon {
             /* align with settings label */
             margin-right: 14px;
             /* required to set the icon width when into a flex container */
-            min-width: 24px;
+            width: 24px;
+            flex-shrink: 0;
         }
 
         & .mx_ThreadsActivityCentreButton_Text {
-            color: $secondary-content;
+            /* !important override compound  */
+            color: $secondary-content !important;
         }
     }
 
     &:not(.expanded) {
         &:hover,
         &:hover .mx_ThreadsActivityCentreButton_Icon {
-            background-color: $quaternary-content;
+            /* !important override compound */
+            background-color: $quaternary-content !important;
             fill: $primary-content;
         }
     }

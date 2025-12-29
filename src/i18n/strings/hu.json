@@ -93,6 +93,7 @@
         "maximise": "Teljes méret",
         "mention": "Megemlítés",
         "minimise": "Lecsukás",
+        "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
         "new_video_room": "Új videószoba",
         "next": "Következő",
@@ -601,6 +602,7 @@
         "video": "Videó",
         "video_room": "Videószoba",
         "view_message": "Üzenet megjelenítése",
+        "voice": "Hang",
         "warning": "Figyelmeztetés"
     },
     "composer": {
@@ -2182,26 +2184,6 @@
         "redacting_messages_status": {
             "Üzenet törlése %(count)s szobából": "other"
         },
-        "release_announcement": {
-            "done": "Kész",
-            "filter": {
-                "description": "Szűrje a csevegéseit egyetlen kattintással. Bontsa ki a további szűrők megtekintéséhez.",
-                "title": "Új gyorsszűrők"
-            },
-            "intro": {
-                "description": "A csevegési lista frissült, hogy áttekinthetőbb és egyszerűbben használható legyen.",
-                "title": "A csevegések új megjelenést kaptak!"
-            },
-            "next": "Következő",
-            "settings": {
-                "description": "Az üzenetelőnézetek megjelenítéséhez vagy elrejtéséhez ugorjon a Minden beállítás &gt; Beállítások &gt; Szobalista menüponthoz.",
-                "title": "Néhány beállítás áthelyezésre került"
-            },
-            "sort": {
-                "description": "A csevegések sorrendjének módosítása a legutóbbiról A–Z-re",
-                "title": "Csevegések rendezése"
-            }
-        },
         "room": {
             "more_options": "További lehetőségek",
             "open_room": "A(z) %(roomName)s szoba megnyitása"
@@ -2468,7 +2450,6 @@
             "error_update_guest_access": "A tér vendéghozzáférésének frissítése sikertelen",
             "error_update_history_visibility": "A tér régi üzeneteinek láthatóságának frissítése sikertelen",
             "guest_access_explainer": "A vendégek fiók nélkül is beléphetnek a térbe.",
-            "guest_access_explainer_public_space": "A nyilvános tereknél ez hasznos lehet.",
             "guest_access_label": "Vendéghozzáférés engedélyezése",
             "history_visibility_anyone_space": "Tér előnézete",
             "history_visibility_anyone_space_description": "A tér előnézetének engedélyezése a belépés előtt.",
@@ -2866,10 +2847,6 @@
             "rule_suppress_notices": "Botok üzenetei",
             "rule_tombstone": "Amikor a szobák fejlesztésre kerülnek",
             "show_message_desktop_notification": "Üzenet megjelenítése az asztali értesítésekben",
-            "sounds_release_announcement": {
-                "description": "Az értesítési hang és a híváscsengő hangja frissült – tisztább, gyorsabb és kevésbé zavaró lett.",
-                "title": "Frissítettük az értesítési hangokat"
-            },
             "voip": "Hang- és videóhívások"
         },
         "preferences": {
@@ -3498,7 +3475,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Lezárta a szavazást",
             "sender_ended": "%(senderName)s lezárta a szavazást"
         },
         "m.poll.start": "%(senderName)s szavazást indított - %(pollQuestion)s",
@@ -4066,9 +4042,11 @@
         "user_busy_description": "A hívott felhasználó foglalt.",
         "user_is_presenting": "%(sharerName)s tartja a bemutatót",
         "video_call": "Videóhívás",
+        "video_call_incoming": "Bejövő videóhívás",
         "video_call_started": "A videóhívás elindult",
         "video_call_using": "Videóhívás:",
         "voice_call": "Hanghívás",
+        "voice_call_incoming": "Bejövő hanghívás",
         "you_are_presenting": "Ön tartja a bemutatót"
     },
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",

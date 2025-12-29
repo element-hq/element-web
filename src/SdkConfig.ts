@@ -7,7 +7,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Optional } from "matrix-events-sdk";
 import { mergeWith } from "lodash";
 
 import { SnakedObject } from "./utils/SnakedObject";
@@ -90,7 +89,7 @@ function mergeConfig(
 
 type ObjectType<K extends keyof IConfigOptions> = IConfigOptions[K] extends object
     ? SnakedObject<NonNullable<IConfigOptions[K]>>
-    : Optional<SnakedObject<NonNullable<IConfigOptions[K]>>>;
+    : SnakedObject<NonNullable<IConfigOptions[K]>> | null | undefined;
 
 export default class SdkConfig {
     private static instance: DeepReadonly<IConfigOptions>;

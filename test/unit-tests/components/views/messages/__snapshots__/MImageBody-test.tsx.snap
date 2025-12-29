@@ -18,13 +18,24 @@ exports[`<MImageBody/> should generate a thumbnail if one isn't included for ani
           <div
             class="mx_Spinner"
           >
-            <div
+            <svg
               aria-label="Loading…"
-              class="mx_Spinner_icon"
+              class="_icon_11k6c_18"
               data-testid="spinner"
+              fill="currentColor"
+              height="1em"
               role="progressbar"
               style="width: 32px; height: 32px;"
-            />
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
         <div
@@ -47,6 +58,147 @@ exports[`<MImageBody/> should generate a thumbnail if one isn't included for ani
 </div>
 `;
 
+exports[`<MImageBody/> should open ImageView using thumbnail for encrypted svg 1`] = `
+<div
+  aria-label="Image view"
+  class="mx_ImageView"
+  data-focus-lock-disabled="false"
+  role="dialog"
+>
+  <div
+    class="mx_ImageView_panel"
+  >
+    <div
+      class="mx_ImageView_info_wrapper"
+    >
+      <button
+        aria-label="Profile picture"
+        aria-live="off"
+        class="_avatar_zysgz_8 mx_BaseAvatar mx_Dialog_nonDialogButton _avatar-imageless_zysgz_55"
+        data-color="2"
+        data-testid="avatar-img"
+        data-type="round"
+        role="button"
+        style="--cpd-avatar-size: 32px;"
+      >
+        o
+      </button>
+      <div
+        class="mx_ImageView_info"
+      >
+        <div
+          class="mx_ImageView_info_sender"
+        >
+          @other_use:server
+        </div>
+        <a
+          aria-live="off"
+          class="mx_MessageTimestamp"
+          href="https://matrix.to/#/!room:server/undefined"
+        >
+          Thu, Jan 15, 1970, 06:56
+        </a>
+      </div>
+    </div>
+    <div
+      class="mx_ImageView_title"
+    >
+      Image
+    </div>
+    <div
+      class="mx_ImageView_toolbar"
+    >
+      <div
+        aria-label="Zoom out"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomOut"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        aria-label="Zoom in"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomIn"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        aria-label="Rotate Left"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_rotateCCW"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        aria-label="Rotate Right"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_rotateCW"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        aria-label="Download"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_download"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="Options"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_more"
+        role="button"
+        tabindex="0"
+      />
+      <div
+        aria-label="Close"
+        class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_close"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+  </div>
+  <div
+    class="mx_ImageView_image_wrapper"
+  >
+    <img
+      alt="Attachment"
+      class="mx_ImageView_image "
+      draggable="true"
+      src="https://server/_matrix/media/v3/download/server/svg-thumbnail"
+      style="transform: translateX(-512px)
+                        translateY(NaNpx)
+                        scale(0)
+                        rotate(0deg); cursor: zoom-out;"
+    />
+  </div>
+</div>
+`;
+
+exports[`<MImageBody/> should render MFileBody for svg with no thumbnail 1`] = `
+<DocumentFragment>
+  <span
+    class="mx_MFileBody"
+  >
+    <div
+      class="mx_AccessibleButton mx_MediaBody mx_MFileBody_info"
+      role="button"
+      tabindex="0"
+    >
+      <span
+        class="mx_MFileBody_info_icon"
+      />
+      <span
+        aria-labelledby="_r_0_"
+        tabindex="0"
+      >
+        <span
+          class="mx_MFileBody_info_filename"
+        >
+          Attachment
+        </span>
+      </span>
+    </div>
+  </span>
+</DocumentFragment>
+`;
+
 exports[`<MImageBody/> should show a thumbnail while image is being downloaded 1`] = `
 <div>
   <div
@@ -62,13 +214,24 @@ exports[`<MImageBody/> should show a thumbnail while image is being downloaded 1
         <div
           class="mx_Spinner"
         >
-          <div
+          <svg
             aria-label="Loading…"
-            class="mx_Spinner_icon"
+            class="_icon_11k6c_18"
             data-testid="spinner"
+            fill="currentColor"
+            height="1em"
             role="progressbar"
             style="width: 32px; height: 32px;"
-          />
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
         </div>
       </div>
       <div

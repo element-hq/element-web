@@ -131,7 +131,7 @@
         "unignore": "Yoksayma",
         "unpin": "Sabitlemeyi kaldır",
         "unsubscribe": "Abonelikten Çık",
-        "update": "Güncelleştirme",
+        "update": "Güncelleştir",
         "upgrade": "Yükselt",
         "upload": "Yükle",
         "upload_file": "Dosya Yükle",
@@ -884,7 +884,7 @@
                 "wrong_security_key": "Yanlış Güvenlik Anahtarı"
             },
             "restoring": "Anahtarları yedekten geri yükle",
-            "security_key_title": "Güvenlik anahtarı"
+            "security_key_title": "Kurtarma anahtarı"
         },
         "bootstrap_title": "Anahtarları ayarla",
         "confirm_encryption_setup_body": "Şifreleme kurulumunu onaylamak için aşağıdaki düğmeye tıklayın.",
@@ -2298,7 +2298,6 @@
             "error_update_guest_access": "Bu alanın misafir erişimi güncellenemedi",
             "error_update_history_visibility": "Bu alanın geçmiş görünürlüğü güncellenemedi",
             "guest_access_explainer": "Misafirler bir hesap oluşturmadan bir alana katılabilirler.",
-            "guest_access_explainer_public_space": "Bu, herkese açık alanlar için yararlı olabilir.",
             "guest_access_label": "Misafir erişimini etkinleştir",
             "history_visibility_anyone_space": "Alanı önizle",
             "history_visibility_anyone_space_description": "İnsanların katılmadan önce alanınızı önizlemesine izin verin.",
@@ -2503,7 +2502,7 @@
             "deactivate_confirm_content_6": "Eski mesajlarınız, geçmişte gönderdiğiniz e-postalar gibi, onları alan kişiler tarafından görülmeye devam eder. Gönderdiğiniz mesajları gelecekte odalara katılacak kişilerden gizlemek ister misiniz?",
             "deactivate_confirm_continue": "Hesap devre dışı bırakmayı onayla",
             "deactivate_confirm_erase_label": "Mesajlarımı yeni katılımcılardan gizle",
-            "deactivate_section": "Hesabı Devre Dışı Bırakma",
+            "deactivate_section": "Hesabı Devre Dışı Bırak",
             "deactivate_warning": "Hesabınızı devre dışı bırakmak kalıcı bir işlemdir - dikkatli olun!",
             "discovery_email_empty": "Bulunulabilirlik seçenekleri, yukarıya bir e-posta adresi ekleyince ortaya çıkacaktır.",
             "discovery_email_verification_instructions": "Gelen kutunuzdaki linki doğrulayın",
@@ -2674,7 +2673,7 @@
             "autocomplete_delay": "Oto tamamlama gecikmesi (ms)",
             "code_blocks_heading": "Kod blokları",
             "compact_modern": "Daha derli toplu 'Modern' düzeni kullan",
-            "composer_heading": "Yazan",
+            "composer_heading": "Yazma",
             "default_timezone": "Tarayıcı varsayılanı (%(timezone)s)",
             "dialog_title": "<strong>Ayarlar:</strong> Tercihler",
             "enable_hardware_acceleration": "Donanım hızlandırmayı etkinleştir",
@@ -2840,6 +2839,7 @@
         "show_chat_effects": "Sohbet efektlerini göster (ör. konfeti animasyonları)",
         "show_displayname_changes": "Görüntü adı değişikliklerini göster",
         "show_join_leave": "Katılma/ayrılma mesajlarını göster (davetler/çıkarmalar/engellemeler etkilenmez)",
+        "show_message_previews": "Mesaj önizlemelerini göster",
         "show_nsfw_content": "NSFW içeriği göster",
         "show_read_receipts": "Diğer kullanıcılar tarafından gönderilen okundu bilgisini göster",
         "show_redaction_placeholder": "Silinen mesajlar için bir yer tutucu göster",
@@ -3128,7 +3128,7 @@
     },
     "theme": {
         "light_high_contrast": "Yüksek ışık kontrastı",
-        "match_system": "Eşleşme sistemi"
+        "match_system": "Sistemle aynı"
     },
     "thread_view_back_action_label": "Konuya geri dön",
     "threads": {
@@ -3286,7 +3286,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Anketi sonlandırdı",
             "sender_ended": "%(senderName)s anketi sonlandırdı"
         },
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",

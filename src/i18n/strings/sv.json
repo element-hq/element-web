@@ -2408,7 +2408,6 @@
             "error_update_guest_access": "Misslyckades att uppdatera gäståtkomst för det här utrymmet",
             "error_update_history_visibility": "Misslyckades att uppdatera historiksynlighet för det här utrymmet",
             "guest_access_explainer": "Gäster kan gå med i ett utrymme utan att ha ett konto.",
-            "guest_access_explainer_public_space": "Det här kan vara användbart för ett offentligt utrymme.",
             "guest_access_label": "Aktivera gäståtkomst",
             "history_visibility_anyone_space": "Förhandsgranska utrymme",
             "history_visibility_anyone_space_description": "Låt personer förhandsgranska ditt utrymme innan de går med.",
@@ -3432,7 +3431,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Avslutade en omröstning",
             "sender_ended": "%(senderName)s har avslutat en omröstning"
         },
         "m.poll.start": "%(senderName)s har startat en omröstning - %(pollQuestion)s",

@@ -50,11 +50,11 @@ jobs:
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -122,7 +122,7 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
@@ -133,7 +133,7 @@ jobs:
                   name: webapp
                   path: webapp
 
-            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               with:
                   cache: "yarn"
                   cache-dependency-path: yarn.lock
@@ -194,13 +194,13 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               if: inputs.skip != true
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               if: inputs.skip != true
               with:
                   cache: "yarn"

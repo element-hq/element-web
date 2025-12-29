@@ -2044,7 +2044,6 @@
             "error_update_guest_access": "Neizdevās atjaunināt viesa piekļuvi šai telpai",
             "error_update_history_visibility": "Neizdevās atjaunināt šīs telpas vēstures redzamību",
             "guest_access_explainer": "Viesi var pievienoties telpai bez konta.",
-            "guest_access_explainer_public_space": "Tas var būt noderīgi publiskās telpās.",
             "guest_access_label": "Iespējot piekļuvi viesiem",
             "history_visibility_anyone_space": "Priekšskatīt telpu",
             "history_visibility_anyone_space_description": "Ļaujiet cilvēkiem priekšskatīt jūsu telpu pirms pievienošanās.",
@@ -2889,7 +2888,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Beidzās aptauja",
             "sender_ended": "%(senderName)s pārtrauca aptauju"
         },
         "m.poll.start": "%(senderName)s uzsāka aptauju- %(pollQuestion)s",

@@ -78,6 +78,8 @@ import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDe
 import Modal, { type ComponentProps } from "../../../../src/Modal.tsx";
 import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.tsx";
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
+import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
+import { ModuleApi } from "../../../../src/modules/Api";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -331,6 +333,54 @@ describe("RoomView", () => {
         // Check that the pinned message banner is not rendered
         await expect(screen.findByTestId("pinned-message-banner")).rejects.toThrow();
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("enableReadReceiptsAndMarkersOnActivity", () => {
+        it.each([
+            {
+                enabled: false,
+                testName: "should send read receipts and update read marker on focus when disabled",
+                checkCall: (sendReadReceiptsSpy: jest.Mock, updateReadMarkerSpy: jest.Mock) => {
+                    expect(sendReadReceiptsSpy).toHaveBeenCalled();
+                    expect(updateReadMarkerSpy).toHaveBeenCalled();
+                },
+            },
+            {
+                enabled: true,
+                testName: "should not send read receipts and update read marker on focus when enabled",
+                checkCall: (sendReadReceiptsSpy: jest.Mock, updateReadMarkerSpy: jest.Mock) => {
+                    expect(sendReadReceiptsSpy).not.toHaveBeenCalled();
+                    expect(updateReadMarkerSpy).not.toHaveBeenCalled();
+                },
+            },
+        ])("$testName", async ({ enabled, checkCall }) => {
+            // Join the room
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            const ref = createRef<RoomView>();
+            await mountRoomView(ref, {
+                enableReadReceiptsAndMarkersOnActivity: enabled,
+            });
+
+            // Wait for the timeline to be rendered
+            await waitFor(() => expect(screen.getByTestId("timeline")).not.toBeNull());
+
+            // Get the RoomView instance and mock the messagePanel methods
+            const instance = ref.current!;
+            const sendReadReceiptsSpy = jest.fn();
+            const updateReadMarkerSpy = jest.fn();
+            // @ts-ignore - accessing private property for testing
+            instance.messagePanel = {
+                sendReadReceipts: sendReadReceiptsSpy,
+                updateReadMarker: updateReadMarkerSpy,
+            };
+
+            // Find the main RoomView div and trigger focus
+            const timeline = screen.getByTestId("timeline");
+            fireEvent.focus(timeline);
+
+            // Verify that sendReadReceipts and updateReadMarker were called or not based on the enabled state
+            checkCall(sendReadReceiptsSpy, updateReadMarkerSpy);
+        });
     });
 
     describe("invites", () => {
@@ -1005,5 +1055,53 @@ describe("RoomView", () => {
                 itShouldNotRemoveTheLastWidget();
             });
         });
+    });
+
+    it("should not change room when editing event in a room displayed in module", async () => {
+        const room2 = new Room("!room2:example.org", cli, "@alice:example.org");
+        rooms.set(room2.roomId, room2);
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+        room2.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+        await mountRoomView();
+
+        // Mock the spaceStore activeSpace and ModuleApi setup
+        jest.spyOn(stores.spaceStore, "activeSpace", "get").mockReturnValue("space1");
+        // Mock that room2 is displayed in a module
+        ModuleApi.instance.extras.getVisibleRoomBySpaceKey("space1", () => [room2.roomId]);
+
+        // Mock the roomViewStore method
+        jest.spyOn(stores.roomViewStore, "isRoomDisplayedInModule").mockReturnValue(true);
+
+        // Create an event in room2 to edit
+        const eventInRoom2 = new MatrixEvent({
+            type: "m.room.message",
+            event_id: "$edit-event:example.org",
+            room_id: room2.roomId,
+            sender: "@alice:example.org",
+            content: {
+                body: "Original message",
+                msgtype: "m.text",
+            },
+        });
+
+        const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+
+        // Dispatch EditEvent for event in room2 (which is displayed in module)
+        defaultDispatcher.dispatch({
+            action: Action.EditEvent,
+            event: eventInRoom2,
+            timelineRenderingType: TimelineRenderingType.Room,
+        });
+
+        await flushPromises();
+
+        // Should not dispatch ViewRoom action since room2 is displayed in module
+        expect(dispatchSpy).not.toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: Action.ViewRoom,
+                room_id: room2.roomId,
+            }),
+        );
     });
 });

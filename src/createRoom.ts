@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
@@ -20,8 +21,12 @@ import {
     Preset,
     RestrictedAllowType,
     Visibility,
+    Direction,
+    RoomStateEvent,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 
 import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
@@ -39,10 +44,11 @@ import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
-import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
+import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
-import { ElementCallEventType, ElementCallMemberEventType } from "./call-types";
+import { ElementCallMemberEventType } from "./call-types";
+import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -65,6 +71,10 @@ export interface IOpts {
     spinner?: boolean;
     guestAccess?: boolean;
     encryption?: boolean;
+    /**
+     * Encrypt state events as per MSC4362
+     */
+    stateEncryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
     avatar?: File | string; // will upload if given file, else mxcUrl is needed
@@ -112,6 +122,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
     if (opts.encryption === undefined) opts.encryption = false;
+    if (opts.stateEncryption === undefined) opts.stateEncryption = false;
 
     if (client.isGuest()) {
         dis.dispatch({ action: "require_registration" });
@@ -159,32 +170,19 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         };
 
         // Video rooms require custom power levels
-        if (opts.roomType === RoomType.ElementVideo) {
+        if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
                     ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
-                    [JitsiCall.MEMBER_EVENT_TYPE]: 0,
-                    // Make widgets immutable, even to admins
-                    "im.vector.modular.widgets": 200,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a widget
-                    [client.getSafeUserId()]: 200,
-                },
-            };
-        } else if (opts.roomType === RoomType.UnstableCall) {
-            createOpts.power_level_content_override = {
-                events: {
-                    ...DEFAULT_EVENT_POWER_LEVELS,
-                    // Allow all users to send call membership updates
-                    [ElementCallMemberEventType.name]: 0,
-                    // Make calls immutable, even to admins
-                    [ElementCallEventType.name]: 200,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a call
-                    [client.getSafeUserId()]: 200,
+                    [opts.roomType === RoomType.ElementVideo
+                        ? JitsiCall.MEMBER_EVENT_TYPE
+                        : ElementCallMemberEventType.name]: 0,
+                    // Ensure all but admins can't change widgets
+                    // A previous version of the code prevented even administrators
+                    // from changing this, but this is not possible now that room creators
+                    // have an immutable power level
+                    ["im.vector.modular.widgets"]: 100,
                 },
             };
         }
@@ -194,8 +192,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 ...DEFAULT_EVENT_POWER_LEVELS,
                 // It should always (including non video rooms) be possible to join a group call.
                 [ElementCallMemberEventType.name]: 0,
-                // Make sure only admins can enable it (DEPRECATED)
-                [ElementCallEventType.name]: 100,
             },
         };
     }
@@ -221,16 +217,25 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     }
 
     if (opts.encryption) {
+        const content: RoomEncryptionEventContent = {
+            algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
+        };
+        if (opts.stateEncryption) {
+            content["io.element.msc4362.encrypt_state_events"] = true;
+        }
         createOpts.initial_state.push({
             type: "m.room.encryption",
             state_key: "",
-            content: {
-                algorithm: MEGOLM_ENCRYPTION_ALGORITHM,
-            },
+            content,
         });
     }
 
-    if (opts.joinRule === JoinRule.Knock) {
+    const defaultRoomVersion = (await client.getCapabilities())["m.room_versions"]?.default ?? "1";
+
+    if (
+        opts.joinRule === JoinRule.Knock &&
+        !doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)
+    ) {
         createOpts.room_version = PreferredRoomVersions.KnockRooms;
     }
 
@@ -238,7 +243,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
 
         if (opts.joinRule === JoinRule.Restricted) {
-            createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
+            if (!doesRoomVersionSupport(defaultRoomVersion, PreferredRoomVersions.KnockRooms)) {
+                createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
+            }
 
             createOpts.initial_state.push({
                 type: EventType.RoomJoinRules,
@@ -263,24 +270,28 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
-    if (opts.name) {
-        createOpts.name = opts.name;
-    }
-
-    if (opts.topic) {
-        createOpts.topic = opts.topic;
-    }
-
-    if (opts.avatar) {
-        let url = opts.avatar;
-        if (opts.avatar instanceof File) {
-            ({ content_uri: url } = await client.uploadContent(opts.avatar));
+    // If we are not encrypting state, copy name, topic, avatar over to
+    // createOpts so we pass them in when we call Client.createRoom().
+    if (!opts.stateEncryption) {
+        if (opts.name) {
+            createOpts.name = opts.name;
         }
 
-        createOpts.initial_state.push({
-            type: EventType.RoomAvatar,
-            content: { url },
-        });
+        if (opts.topic) {
+            createOpts.topic = opts.topic;
+        }
+
+        if (opts.avatar) {
+            let url = opts.avatar;
+            if (opts.avatar instanceof File) {
+                ({ content_uri: url } = await client.uploadContent(opts.avatar));
+            }
+
+            createOpts.initial_state.push({
+                type: EventType.RoomAvatar,
+                content: { url },
+            });
+        }
     }
 
     if (opts.historyVisibility) {
@@ -316,9 +327,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 return Promise.reject(err);
             }
         })
-        .finally(function () {
-            if (modal) modal.close();
-        })
         .then(async (res): Promise<void> => {
             roomId = res.room_id;
 
@@ -340,6 +348,16 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
 
             if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
         })
+        .then(async () => {
+            // We need to set up initial state manually if state encryption is enabled, since it needs
+            // to be encrypted.
+            if (opts.encryption && opts.stateEncryption) {
+                await enableStateEventEncryption(client, await room, opts);
+            }
+        })
+        .finally(function () {
+            if (modal) modal.close();
+        })
         .then(() => {
             if (opts.parentSpace) {
                 return SpaceStore.instance.addRoomToSpace(
@@ -354,15 +372,9 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
             if (opts.roomType === RoomType.ElementVideo) {
                 // Set up this video room with a Jitsi call
                 await JitsiCall.create(await room);
-
-                // Reset our power level back to admin so that the widget becomes immutable
-                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             } else if (opts.roomType === RoomType.UnstableCall) {
                 // Set up this video room with an Element call
                 ElementCall.create(await room);
-
-                // Reset our power level back to admin so that the call becomes immutable
-                await client.setPowerLevel(roomId, client.getUserId()!, 100);
             }
         })
         .then(
@@ -412,6 +424,73 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 return null;
             },
         );
+}
+
+async function enableStateEventEncryption(client: MatrixClient, room: Room, opts: IOpts): Promise<void> {
+    // Don't send our state events until encryption is enabled. If this times
+    // out after 30 seconds, we throw since we don't want to send the events
+    // unencrypted.
+    await waitForRoomEncryption(room, 30000);
+
+    // Set room name
+    if (opts.name) {
+        await client.setRoomName(room.roomId, opts.name);
+    }
+
+    // Set room topic
+    if (opts.topic) {
+        const htmlTopic = htmlSerializeFromMdIfNeeded(opts.topic, { forceHTML: false });
+        await client.setRoomTopic(room.roomId, opts.topic, htmlTopic);
+    }
+
+    // Set room avatar
+    if (opts.avatar) {
+        let url: string;
+        if (opts.avatar instanceof File) {
+            ({ content_uri: url } = await client.uploadContent(opts.avatar));
+        } else {
+            url = opts.avatar;
+        }
+        await client.sendStateEvent(room.roomId, EventType.RoomAvatar, { url }, "");
+    }
+}
+
+/**
+ * Wait until the supplied room has an `m.room.encryption` event, or time out
+ * after 30 seconds.
+ */
+export async function waitForRoomEncryption(room: Room, waitTimeMs: number): Promise<void> {
+    if (room.hasEncryptionStateEvent()) {
+        return;
+    }
+
+    // Start a 30s timeout and return "timed_out" if we hit it
+    const { promise: timeoutPromise, resolve: timeoutResolve } = Promise.withResolvers();
+    const timeout = setTimeout(timeoutResolve, waitTimeMs, "timed_out");
+
+    // Listen for a RoomEncryption state update and return
+    // "received_encryption_state" if we get it
+    const roomState = room.getLiveTimeline().getState(Direction.Forward)!;
+    const { promise: stateUpdatePromise, resolve: stateUpdateResolve } = Promise.withResolvers();
+    const onRoomStateUpdate = (state: RoomState): void => {
+        if (state.getStateEvents(EventType.RoomEncryption, "")) {
+            stateUpdateResolve("received_encryption_state");
+        }
+    };
+    roomState.on(RoomStateEvent.Update, onRoomStateUpdate);
+
+    // Wait for one of the above to happen
+    const resolution = await Promise.race([timeoutPromise, stateUpdatePromise]);
+
+    // Clear the listener and the timeout
+    roomState.off(RoomStateEvent.Update, onRoomStateUpdate);
+    clearTimeout(timeout);
+
+    // Fail if we hit the timeout
+    if (resolution === "timed_out") {
+        logger.warn("Timed out while waiting for room to enable encryption");
+        throw new Error("Timed out while waiting for room to enable encryption");
+    }
 }
 
 /*

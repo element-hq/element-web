@@ -1323,7 +1323,6 @@
             "error_update_guest_access": "Nepavyko atnaujinti šios erdvės svečių prieigos",
             "error_update_history_visibility": "Nepavyko atnaujinti šios erdvės istorijos matomumo",
             "guest_access_explainer": "Svečiai gali prisijungti prie erdvės neturėdami paskyros.",
-            "guest_access_explainer_public_space": "Tai gali būti naudinga viešosiose erdvėse.",
             "guest_access_label": "Įjungti svečių prieigą",
             "history_visibility_anyone_space": "Peržiūrėti erdvę",
             "history_visibility_anyone_space_description": "Leisti žmonėms peržiūrėti jūsų erdvę prieš prisijungiant.",

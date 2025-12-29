@@ -2092,7 +2092,6 @@
             "error_update_guest_access": "Tsy nahomby ny fanavaozana ny fidirany vahiny amin'ity habaka ity",
             "error_update_history_visibility": "Tsy nahomby ny fanavaozana ny tantaran'ity habaka ity",
             "guest_access_explainer": "Afaka miditra amina toerana iray tsy manana kaonty ny vahiny.",
-            "guest_access_explainer_public_space": "Mety ilaina amin'ny toerana hoany daholobe izany.",
             "guest_access_label": "Alefaso ny fidirana amin'ny vahiny",
             "history_visibility_anyone_space": "Toerana fijerena mialoha",
             "history_visibility_anyone_space_description": "Avelao ny olona hijery ny toerana misy anao alohan'ny hidirany.",
@@ -2942,7 +2941,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Namarana ny",
             "sender_ended": "%(nom de l'expéditeur)s dia namarana ny fitsapan-kevitra"
         },
         "m.poll.start": "%(senderName)snanomboka ny fitsapan-kevitra -%(pollQuestion)s",

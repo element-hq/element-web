@@ -10,24 +10,15 @@ Please see LICENSE files in the repository root for full details.
     width: 16px;
     height: 16px;
     display: inline-block;
+
+    svg {
+        height: inherit;
+        width: inherit;
+        color: $muted-fg-color;
+    }
 }
 
 .mx_InfoTooltip_icon::before {
     display: inline-block;
-    background-color: $muted-fg-color;
-    mask-repeat: no-repeat;
-    mask-size: 16px;
-    width: 16px;
-    height: 16px;
-    mask-position: center;
-    content: "";
     vertical-align: middle;
-}
-
-.mx_InfoTooltip_icon_info::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/info.svg");
-}
-
-.mx_InfoTooltip_icon_warning::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
 }

@@ -3,7 +3,7 @@
 exports[`<SelectableDeviceTile /> renders selected tile 1`] = `
 <input
   checked=""
-  class="_input_1hel1_18"
+  class="_input_1md5v_18"
   data-testid="device-tile-checkbox-my-device"
   id="device-tile-checkbox-my-device"
   type="checkbox"
@@ -25,16 +25,16 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1hel1_10"
+            class="_container_1md5v_10"
           >
             <input
-              class="_input_1hel1_18"
+              class="_input_1md5v_18"
               data-testid="device-tile-checkbox-my-device"
               id="device-tile-checkbox-my-device"
               type="checkbox"
             />
             <div
-              class="_ui_1hel1_19"
+              class="_ui_1md5v_19"
             >
               <svg
                 aria-hidden="true"
@@ -74,11 +74,20 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
                     role="img"
                   />
                 </div>
-                <div
+                <svg
                   aria-label="Unverified"
                   class="mx_DeviceTypeIcon_verificationIcon unverified"
+                  fill="currentColor"
+                  height="1em"
                   role="img"
-                />
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                  />
+                </svg>
               </div>
               <div
                 class="mx_DeviceTile_info"

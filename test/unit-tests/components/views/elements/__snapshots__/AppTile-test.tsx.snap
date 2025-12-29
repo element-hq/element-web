@@ -40,7 +40,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
           tabindex="0"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -103,7 +103,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_1qbcf_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -112,7 +112,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
           >
             <img
               alt=""
-              class="_image_1qbcf_41"
+              class="_image_zysgz_43"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -131,7 +131,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
         class="mx_AppTileMenuBar_widgets"
       >
         <div
-          aria-label="Un-maximise"
+          aria-label="Maximise"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           role="button"
           tabindex="0"
@@ -145,7 +145,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M12 11.034a1 1 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 0 0 0-2h-5.586L22 3.445a1 1 0 0 0-1.414-1.414L14 8.617V3.031a1 1 0 1 0-2 0zm0 1.963a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 11 12H3a1 1 0 1 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 0 0 2 0z"
+              d="M21 3.997a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a1 1 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0z"
             />
           </svg>
         </div>
@@ -216,7 +216,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_1qbcf_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -225,7 +225,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           >
             <img
               alt=""
-              class="_image_1qbcf_41"
+              class="_image_zysgz_43"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -244,7 +244,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
         class="mx_AppTileMenuBar_widgets"
       >
         <div
-          aria-label="Un-maximise"
+          aria-label="Maximise"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           role="button"
           tabindex="0"
@@ -258,7 +258,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M12 11.034a1 1 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 0 0 0-2h-5.586L22 3.445a1 1 0 0 0-1.414-1.414L14 8.617V3.031a1 1 0 1 0-2 0zm0 1.963a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 11 12H3a1 1 0 1 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 0 0 2 0z"
+              d="M21 3.997a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a1 1 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0z"
             />
           </svg>
         </div>
@@ -320,7 +320,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           </div>
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
               data-color="1"
               data-testid="avatar-img"
               data-type="round"
@@ -340,8 +340,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="_r_2n_"
-                aria-labelledby="_r_2m_"
+                aria-describedby="_r_2f_"
+                aria-labelledby="_r_2e_"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg
@@ -408,7 +408,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
               <span>
                 <span
                   aria-label="Avatar"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar mx_WidgetAvatar"
+                  class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
                   data-color="1"
                   data-testid="avatar-img"
                   data-type="round"
@@ -417,7 +417,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 >
                   <img
                     alt=""
-                    class="_image_1qbcf_41"
+                    class="_image_zysgz_43"
                     data-type="round"
                     height="20px"
                     loading="lazy"
@@ -511,13 +511,24 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                   Loading…
                 </div>
                  
-                <div
+                <svg
                   aria-label="Loading…"
-                  class="mx_Spinner_icon"
+                  class="_icon_11k6c_18"
                   data-testid="spinner"
+                  fill="currentColor"
+                  height="1em"
                   role="progressbar"
                   style="width: 32px; height: 32px;"
-                />
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                    fill-rule="evenodd"
+                  />
+                </svg>
               </div>
             </div>
           </div>

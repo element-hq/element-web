@@ -373,7 +373,7 @@ test.describe("Threads", () => {
 
             // Exclude timestamp, read marker, and maplibregl-map from snapshots
             const css =
-                ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker, .maplibregl-map { visibility: hidden !important; }";
+                ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker, .maplibregl-map, .maplibregl-ctrl-attrib { visibility: hidden !important; }";
 
             let locator = page.locator(".mx_RoomView_body");
             // User sends message

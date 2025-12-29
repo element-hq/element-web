@@ -95,6 +95,7 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
+        "new_conversation": "Nová konverzace",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
@@ -605,6 +606,7 @@
         "video": "Video",
         "video_room": "Video místnost",
         "view_message": "Zobrazit zprávu",
+        "voice": "Hlas",
         "warning": "Upozornění"
     },
     "composer": {
@@ -2205,26 +2207,6 @@
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
         },
-        "release_announcement": {
-            "done": "Hotovo",
-            "filter": {
-                "description": "Filtrujte své chaty jediným kliknutím. Rozbalením zobrazíte další filtry.",
-                "title": "Nové rychlé filtry"
-            },
-            "intro": {
-                "description": "Seznam chatů byl aktualizován, aby byl přehlednější a jednodušší na používání.",
-                "title": "Chaty mají nový vzhled!"
-            },
-            "next": "Další",
-            "settings": {
-                "description": "Chcete-li zobrazit nebo skrýt náhledy zpráv, přejděte do Všechna nastavení > Předvolby > Seznam místností",
-                "title": "Některá nastavení byla přesunuta"
-            },
-            "sort": {
-                "description": "Změňte pořadí svých chatů z nejnovějších na A-Z",
-                "title": "Seřaďte si chaty"
-            }
-        },
         "room": {
             "more_options": "Více možností",
             "open_room": "Otevřít místnost %(roomName)s"
@@ -2493,7 +2475,6 @@
             "error_update_guest_access": "Nepodařilo se aktualizovat přístup hosta do tohoto prostoru",
             "error_update_history_visibility": "Nepodařilo se aktualizovat viditelnost historie tohoto prostoru",
             "guest_access_explainer": "Hosté se mohou připojit k prostoru, aniž by měli účet.",
-            "guest_access_explainer_public_space": "To může být užitečné pro veřejné prostory.",
             "guest_access_label": "Povolit přístup hostům",
             "history_visibility_anyone_space": "Nahlédnout do prostoru",
             "history_visibility_anyone_space_description": "Umožněte lidem prohlédnout si váš prostor ještě předtím, než se připojí.",
@@ -2891,10 +2872,6 @@
             "rule_suppress_notices": "Zprávy poslané robotem",
             "rule_tombstone": "Při aktualizaci místnosti",
             "show_message_desktop_notification": "Zobrazit text zprávy v oznámení na ploše",
-            "sounds_release_announcement": {
-                "description": "Zvuky oznámení a vyzvánění hovorů byly aktualizovány – nyní jsou jasnější, rychlejší a méně rušivé",
-                "title": "Aktualizovali jsme vaše zvuky"
-            },
             "voip": "Hlasové a video hovory"
         },
         "preferences": {
@@ -3531,7 +3508,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Ukončil hlasování",
             "sender_ended": "%(senderName)s ukončil(a) hlasování"
         },
         "m.poll.start": "%(senderName)s zahájil(a) hlasování - %(pollQuestion)s",
@@ -4103,9 +4079,11 @@
         "user_busy_description": "Volaný uživatel je zaneprázdněn.",
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Videohovor",
+        "video_call_incoming": "Příchozí videohovor",
         "video_call_started": "Videohovor byl zahájen",
         "video_call_using": "Videohovor pomocí:",
         "voice_call": "Hlasový hovor",
+        "voice_call_incoming": "Příchozí hlasový hovor",
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",

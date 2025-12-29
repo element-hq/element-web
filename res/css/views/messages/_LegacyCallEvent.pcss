@@ -43,24 +43,24 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_LegacyCallEvent_silence::before {
-            mask-image: url("$(res)/img/voip/silence.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/volume-on-solid.svg");
         }
 
         .mx_LegacyCallEvent_unSilence::before {
-            mask-image: url("$(res)/img/voip/un-silence.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/volume-off-solid.svg");
         }
 
         &.mx_LegacyCallEvent_voice {
             .mx_LegacyCallEvent_type_icon::before,
             .mx_LegacyCallEvent_content_button_callBack span::before,
             .mx_LegacyCallEvent_content_button_answer span::before {
-                mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/voice-call-solid.svg");
             }
 
             &.mx_LegacyCallEvent_rejected,
             &.mx_LegacyCallEvent_noAnswer {
                 .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url("$(res)/img/element-icons/call/hangup.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/end-call.svg");
                 }
             }
         }
@@ -69,7 +69,7 @@ Please see LICENSE files in the repository root for full details.
             .mx_LegacyCallEvent_type_icon::before,
             .mx_LegacyCallEvent_content_button_callBack span::before,
             .mx_LegacyCallEvent_content_button_answer span::before {
-                mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
             }
 
             &.mx_LegacyCallEvent_rejected,
@@ -169,7 +169,7 @@ Please see LICENSE files in the repository root for full details.
 
             .mx_LegacyCallEvent_content_button_reject {
                 span::before {
-                    mask-image: url("$(res)/img/element-icons/call/hangup.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/end-call.svg");
                 }
             }
 

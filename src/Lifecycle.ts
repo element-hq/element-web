@@ -600,6 +600,9 @@ async function abortLogin(): Promise<void> {
 
 /** Attempt to restore the session from localStorage or indexeddb.
  *
+ * If the credentials are found, and the session is successfully restored,
+ * emits {@link Action.OnLoggedIn}, {@link Action.WillStartClient} and {@link Action.StartedClient}.
+ *
  * @returns true if a session was found; false if no existing session was found.
  *
  * N.B. Lifecycle.js should not maintain any further localStorage state, we
@@ -748,44 +751,45 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
  * When we have a authenticated via OIDC-native flow and have a refresh token
  * try to create a token refresher.
  * @param credentials from current session
- * @returns Promise that resolves to a TokenRefresher, or undefined
+ * @param clientId OIDC client ID
+ * @throws If credentials.refreshToken or credentials.deviceId is falsy, or if no token issuer is stored
+ * @returns Promise that resolves to a TokenRefresher
  */
-async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promise<OidcTokenRefresher | undefined> {
+async function createOidcTokenRefresher(
+    credentials: IMatrixClientCreds,
+    clientId: string,
+): Promise<OidcTokenRefresher> {
     if (!credentials.refreshToken) {
-        return;
+        throw new Error("A refresh token must be supplied in order to create an OIDC token refresher.");
     }
     // stored token issuer indicates we authenticated via OIDC-native flow
     const tokenIssuer = getStoredOidcTokenIssuer();
     if (!tokenIssuer) {
-        return;
+        throw new Error("Cannot create an OIDC token refresher as no stored OIDC token issuer was found.");
     }
-    try {
-        const clientId = getStoredOidcClientId();
-        const idTokenClaims = getStoredOidcIdTokenClaims();
-        const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
-        const deviceId = credentials.deviceId;
-        if (!deviceId) {
-            throw new Error("Expected deviceId in user credentials.");
-        }
-        const tokenRefresher = new TokenRefresher(
-            tokenIssuer,
-            clientId,
-            redirectUri,
-            deviceId,
-            idTokenClaims!,
-            credentials.userId,
-        );
-        // wait for the OIDC client to initialise
-        await tokenRefresher.oidcClientReady;
-        return tokenRefresher;
-    } catch (error) {
-        logger.error("Failed to initialise OIDC token refresher", error);
+
+    const idTokenClaims = getStoredOidcIdTokenClaims();
+    const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
+    const deviceId = credentials.deviceId;
+    if (!deviceId) {
+        throw new Error("Expected deviceId in user credentials.");
     }
+    const tokenRefresher = new TokenRefresher(
+        tokenIssuer,
+        clientId,
+        redirectUri,
+        deviceId,
+        idTokenClaims!,
+        credentials.userId,
+    );
+    return tokenRefresher;
 }
 
 /**
  * optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
+ *
+ * Emits {@link Action.OnLoggedIn}, {@link Action.WillStartClient} and {@link Action.StartedClient}.
  *
  * @param {IMatrixClientCreds} credentials The credentials to use
  * @param {Boolean} clearStorageEnabled True to clear storage before starting the new client
@@ -830,7 +834,17 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    const tokenRefresher = await createOidcTokenRefresher(credentials);
+    let storedClientid;
+    try {
+        storedClientid = getStoredOidcClientId();
+    } catch {}
+
+    let tokenRefresher;
+    if (credentials.refreshToken && storedClientid) {
+        tokenRefresher = await createOidcTokenRefresher(credentials, storedClientid);
+    } else {
+        logger.debug("No refresh token was supplied: access token will not be refreshed");
+    }
 
     // check the session lock just before creating the new client
     checkSessionLock();
@@ -1018,6 +1032,12 @@ export function isLoggingOut(): boolean {
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
+ *
+ * By the time this method is called, we have successfully logged in if necessary, and the client has been set up with
+ * the access token.
+ *
+ * Emits {@link Acction.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
+ * been started.
  *
  * @param client the matrix client to start
  * @param startSyncing - `true` to actually start syncing the client.

@@ -299,9 +299,7 @@ test.describe("Room list", () => {
             const publicRoom = roomListView.getByRole("option", { name: "low priority room" });
 
             // Make room low priority
-            await publicRoom.hover();
-            const roomItemMenu = publicRoom.getByRole("button", { name: "More Options" });
-            await roomItemMenu.click();
+            await publicRoom.click({ button: "right" });
             await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
@@ -309,13 +307,16 @@ test.describe("Room list", () => {
                 "This is a low priority room",
             );
 
-            // focus the user menu to avoid to have hover decoration
-            await page.getByRole("button", { name: "User menu" }).focus();
+            // focus the header to avoid to have hover decoration
+            await page.getByTestId("room-list-header").click();
             await expect(publicRoom).toMatchScreenshot("room-list-item-low-priority.png");
         });
 
         test("should be a video room", { tag: "@screenshot" }, async ({ page, app, user }) => {
-            await page.getByRole("navigation", { name: "Room list" }).getByRole("button", { name: "Add" }).click();
+            await page
+                .getByRole("navigation", { name: "Room list" })
+                .getByRole("button", { name: "New conversation" })
+                .click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("video room");
             await page.getByRole("button", { name: "Create video room" }).click();
@@ -427,7 +428,9 @@ test.describe("Room list", () => {
             await app.settings.closeDialog();
 
             await app.settings.openUserSettings("Notifications");
-            await page.getByText("Show all activity in the room list (dots or number of unread messages)").click();
+            await page
+                .getByRole("switch", { name: "Show all activity in the room list (dots or number of unread messages)" })
+                .check();
             await app.settings.closeDialog();
 
             // Switch to the other room to avoid the notification to be cleared
@@ -447,12 +450,11 @@ test.describe("Room list", () => {
             await bot.joinRoom(roomId);
 
             const room = roomListView.getByRole("option", { name: "mark as unread" });
-            await room.hover();
-            await room.getByRole("button", { name: "More Options" }).click();
+            await room.click({ button: "right" });
             await page.getByRole("menuitem", { name: "mark as unread" }).click();
 
-            // focus the user menu to avoid to have hover decoration
-            await page.getByRole("button", { name: "User menu" }).focus();
+            // focus the header to avoid to have hover decoration
+            await page.getByTestId("room-list-header").click();
 
             await expect(room).toMatchScreenshot("room-list-item-mark-as-unread.png");
         });

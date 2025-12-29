@@ -93,6 +93,7 @@
         "maximise": "Maksimer",
         "mention": "Nevn",
         "minimise": "Minimer",
+        "new_conversation": "Ny samtale",
         "new_room": "Nytt rom",
         "new_video_room": "Nytt videorom",
         "next": "Neste",
@@ -603,6 +604,7 @@
         "video": "Video",
         "video_room": "Videorom",
         "view_message": "Se melding",
+        "voice": "Tale",
         "warning": "Advarsel"
     },
     "composer": {
@@ -805,6 +807,17 @@
         },
         "developer_mode": "Utviklermodus",
         "developer_tools": "Utviklerverktøy",
+        "device_dehydrated_no": "Dehydrert: Nei",
+        "device_dehydrated_yes": "Dehydrert: Ja",
+        "device_id": "Enhets-ID: %(deviceId)s",
+        "device_keys": "Enhetsnøkler",
+        "device_verification_status": {
+            "signed_by_owner": "Verifiseringsstatus: <E2EIcon /> Signert av eier",
+            "unknown": "Verifiseringsstatus: Ukjent",
+            "unverified": "Verifiseringsstatus: <E2EIcon /> Ikke signert av eieren",
+            "verified": "Verifiseringsstatus: <E2EIcon /> Verifisert ved krysssignering"
+        },
+        "devices": "Kryptografiske enheter (%(count)s)",
         "edit_setting": "Rediger innstilling",
         "edit_values": "Rediger verdier",
         "empty_string": "<empty string>",
@@ -830,7 +843,9 @@
         "notification_state": "Varslingsstatus er <strong>%(notificationState)s</strong>",
         "notifications_debug": "Feilsøking av varsler",
         "number_of_users": "Antall brukere",
+        "only_joined_members": "Kun registrerte brukere",
         "original_event_source": "Opprinnelig hendelseskilde",
+        "restore_from_backup": "Gjenopprett fra sikkerhetskopi",
         "room_encrypted": "Rommet er <strong> kryptert ✅ </strong>",
         "room_id": "Rom-ID: %(roomId)s",
         "room_not_encrypted": "Rommet er <strong>ikke kryptert 🚨</strong>",
@@ -876,10 +891,23 @@
         "toggle_event": "slå av/på hendelse",
         "toolbox": "Verktøykasse",
         "use_at_own_risk": "Dette brukergrensesnittet kontrollerer IKKE verditypene. Bruk på egen risiko.",
+        "user_avatar": "Avatar: %(avatar)s",
+        "user_displayname": "Visningsnavn: %(displayname)s",
+        "user_id": "Bruker-ID: %(userId)s",
+        "user_no_avatar": "Avatar: <i>Ingen</i>",
+        "user_no_displayname": "Visningsnavn: <i>Ingen</i>",
         "user_read_up_to": "Brukeren har lest opp til: ",
         "user_read_up_to_ignore_synthetic": "Bruker leste opp til (ignoreSynthetic): ",
         "user_read_up_to_private": "Bruker leste opp til (m.read.private): ",
         "user_read_up_to_private_ignore_synthetic": "Bruker leste opp til (m.read.private; ignoreSyntetisk): ",
+        "user_room_membership": "Medlemskap: %(membership)s",
+        "user_verification_status": {
+            "identity_changed": "Verifiseringsstatus: <E2EIcon /> Uverifisert, og identiteten er endret",
+            "unverified": "Verifiseringsstatus: <E2EIcon /> Uverifisert",
+            "verified": "Verifiseringsstatus: <E2EIcon /> Verifisert",
+            "was_verified": "Verifiseringsstatus: <E2EIcon /> Har vært verifisert, men identiteten er endret"
+        },
+        "users": "Brukere",
         "value": "Verdi",
         "value_colon": "Verdi:",
         "value_in_this_room": "Verdi i dette rommet",
@@ -1734,6 +1762,7 @@
         "end_message": "Avstemningen er avsluttet. Topp svar: %(topAnswer)s",
         "end_message_no_votes": "Avstemningen er avsluttet. Ingen stemmer ble avgitt.",
         "end_title": "Avslutt avstemning",
+        "ended_poll_label": "Avstemningen er avsluttet",
         "error_ending_description": "Beklager, avstemningen ble ikke avsluttet. Prøv igjen.",
         "error_ending_title": "Kunne ikke avslutte avstemningen",
         "error_voting_description": "Beklager, stemmen din ble ikke registrert. Prøv igjen.",
@@ -1741,10 +1770,20 @@
         "failed_send_poll_description": "Beklager, avstemningen du prøvde å opprette ble ikke lagt ut.",
         "failed_send_poll_title": "Kunne ikke legge ut avstemningen",
         "notes": "Resultatene avsløres først når du avslutter avstemningen",
+        "option_label": "Alternativ %(number)s, %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "Alternativ %(number)s, %(answer)s, vinnende alternativ, %(count)s stemme",
+            "other": "Alternativ %(number)s, %(answer)s, vinnende alternativ, %(count)s stemmer"
+        },
+        "option_label_with_total": {
+            "one": "Alternativ %(number)s, %(answer)s, %(count)s stemme",
+            "other": "Alternativ %(number)s, %(answer)s, %(count)s stemmer"
+        },
         "options_add_button": "Legg til alternativ",
         "options_heading": "Opprett alternativer",
         "options_label": "Alternativ %(number)s",
         "options_placeholder": "Skriv et alternativ",
+        "poll_label": "Avstemning",
         "topic_heading": "Hva er avstemningsspørsmålet eller emnet ditt?",
         "topic_label": "Spørsmål eller emne",
         "topic_placeholder": "Skriv noe...",
@@ -2084,6 +2123,7 @@
         "status_bar": {
             "delete_all": "Slett alle",
             "exceeded_resource_limit": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har overskredet en ressursgrense. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
+            "history_visible": "Dette rommet er konfigurert slik at nye medlemmer kan lese historikken. <a>Lær mer</a>",
             "homeserver_blocked": "Meldingen din ble ikke sendt fordi denne hjemmeserveren er blokkert av administratoren. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
             "monthly_user_limit_reached": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har nådd sin månedlige aktive brukergrense. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
             "requires_consent_agreement": "Du kan ikke sende noen meldinger før du har lest gjennom og godtar <consentLink>våre vilkår og betingelser</consentLink>.",
@@ -2172,26 +2212,6 @@
         "redacting_messages_status": {
             "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
             "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
-        },
-        "release_announcement": {
-            "done": "Ferdig",
-            "filter": {
-                "description": "Filtrer chattene dine med ett enkelt klikk. Utvid for å se flere filtre.",
-                "title": "Nye hurtigfiltre"
-            },
-            "intro": {
-                "description": "Chat-listen er oppdatert for å være mer oversiktlig og enkel å bruke.",
-                "title": "Chatten har fått et nytt utseende!"
-            },
-            "next": "Neste",
-            "settings": {
-                "description": "For å vise eller skjule forhåndsvisning av meldinger, gå til Alle innstillinger > Innstillinger > Romliste",
-                "title": "Noen innstillinger er flyttet"
-            },
-            "sort": {
-                "description": "Endre rekkefølgen på chatene dine fra nyeste til A-Å",
-                "title": "Sorter chatene dine"
-            }
         },
         "room": {
             "more_options": "Flere alternativer",
@@ -2304,6 +2324,8 @@
             "no_aliases_space": "Dette området har ingen lokale adresser",
             "other_section": "Andre",
             "publish_toggle": "Vil du publisere dette rommet til offentligheten i %(domain)s sitt rom-arkiv?",
+            "publish_warn_invite_only": "Du kan ikke publisere et rom som kun er tilgjengelig for inviterte.",
+            "publish_warn_no_canonical_permission": "Du må ha tillatelse til å angi hovedadressen for å publisere dette rommet.",
             "published_aliases_description": "For å publisere en adresse, må den angis som en lokal adresse først.",
             "published_aliases_explainer_room": "Publiserte adresser kan brukes av alle, på hvilken som helst server, for å bli med i rommet ditt.",
             "published_aliases_explainer_space": "Publiserte adresser kan brukes av hvem som helst på hvilken som helst server for å bli med i ditt område.",
@@ -2459,11 +2481,12 @@
             "error_failed_save": "Kan ikke oppdatere synligheten til dette området",
             "error_update_guest_access": "Kunne ikke oppdatere gjestetilgangen til dette området",
             "error_update_history_visibility": "Kunne ikke oppdatere historikkens synlighet for dette området",
-            "guest_access_explainer": "Gjester kan bli med i et område uten å ha en konto.",
-            "guest_access_explainer_public_space": "Dette kan være nyttig for offentlige områder.",
+            "guest_access_disabled": "Du har ikke tillatelse til å endre gjestetilgang.",
+            "guest_access_explainer": "Gjester kan delta i et rom uten å ha en konto. Dette kan være nyttig for offentlige rom.",
             "guest_access_label": "Aktiver gjestetilgang",
             "history_visibility_anyone_space": "Forhåndsvisning av områder",
             "history_visibility_anyone_space_description": "La folk få en forhåndsvisning av området ditt før de blir med.",
+            "history_visibility_anyone_space_disabled": "Du har ikke tillatelse til å endre historikkens synlighet.",
             "history_visibility_anyone_space_recommendation": "Anbefales for offentlige områder.",
             "title": "Synlighet"
         },
@@ -2592,7 +2615,7 @@
                 "do_not_close_warning": "Ikke lukk dette vinduet før tilbakestillingen er fullført",
                 "export_keys": "Eksporter nøkler",
                 "import_keys": "Importer nøkler",
-                "other_people_device_description": "Advarsel: Brukere som ikke eksplisitt har verifisert med deg (f.eks. ved hjelp av emoji) vil ikke motta dine krypterte meldinger. Ubekreftede enheter av bekreftede brukere vil heller ikke motta krypterte meldinger.",
+                "other_people_device_description": "Advarsel: brukere som ikke har bekreftet deg eksplisitt (f.eks. ved hjelp av emoji), vil ikke motta dine krypterte meldinger. Ubekreftede enheter til bekreftede brukere vil heller ikke motta dine krypterte meldinger. Endringene krever at programmet startes på nytt for at de skal tre i kraft.",
                 "other_people_device_label": "I krypterte rom, send kun meldinger til verifiserte brukere",
                 "other_people_device_title": "Andre personers enheter",
                 "reset_identity": "Tilbakestill kryptografisk identitet",
@@ -2858,10 +2881,6 @@
             "rule_suppress_notices": "Meldinger sendt av bot",
             "rule_tombstone": "Når rom blir oppgradert",
             "show_message_desktop_notification": "Vis meldingen i skrivebordsvarselet",
-            "sounds_release_announcement": {
-                "description": "Varslingslyden og ringetonen din er oppdatert – klarere, raskere og mindre forstyrrende.",
-                "title": "Vi har oppdatert lydene dine"
-            },
             "voip": "Lyd- og videosamtaler"
         },
         "preferences": {
@@ -2921,6 +2940,7 @@
             "message_search_indexing": "Indeksering for øyeblikket: %(currentRoom)s",
             "message_search_indexing_idle": "Indekserer for øyeblikket ikke meldinger for noen rom.",
             "message_search_intro": "%(brand)s bufrer krypterte meldinger lokalt på en sikker måte slik at de vises i søkeresultatene:",
+            "message_search_pending_rooms": "Rom som venter på indeksering: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s av %(totalRooms)s",
             "message_search_section": "Meldingssøk",
             "message_search_sleep_time": "Hvor raskt skal meldinger lastes ned.",
@@ -3497,7 +3517,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Avsluttet en avstemning",
             "sender_ended": "%(senderName)s har avsluttet en avstemning"
         },
         "m.poll.start": "%(senderName)s har startet en avstemning - %(pollQuestion)s",
@@ -4066,9 +4085,12 @@
         "user_busy_description": "Brukeren du ringte er opptatt.",
         "user_is_presenting": "%(sharerName)s presenterer",
         "video_call": "Videosamtale",
+        "video_call_incoming": "Innkommende videosamtale",
         "video_call_started": "Videosamtale startet",
         "video_call_using": "Videosamtale ved hjelp av:",
         "voice_call": "Stemmesamtale",
+        "voice_call_incoming": "Innkommende taleanrop",
+        "voice_call_using": "Taleanrop ved hjelp av:",
         "you_are_presenting": "Du presenterer"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",

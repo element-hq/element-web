@@ -29,16 +29,11 @@ Please see LICENSE files in the repository root for full details.
             font-weight: 400;
             opacity: 0.4;
 
-            .mx_ReplyPreview_header_cancel {
-                background-color: $primary-content;
-                mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
+            .mx_ReplyPreview_header_cancel svg {
+                color: $primary-content;
                 width: 20px;
                 height: 20px;
-                min-width: 20px;
-                min-height: 20px;
+                flex-shrink: 0;
             }
         }
     }

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type JSX } from "react";
 
 import type React from "react";
 import { type ComponentClass } from "../@types/common";
@@ -17,7 +18,7 @@ export interface IToast<C extends ComponentClass> {
     // higher priority number will be shown on top of lower priority
     priority: number;
     title?: string;
-    icon?: string;
+    icon?: JSX.Element;
     component: C;
     className?: string;
     bodyClassName?: string;

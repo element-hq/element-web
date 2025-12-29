@@ -32,67 +32,77 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
         Are you sure you want to decline the invitation to join "foo"?
       </p>
       <div
-        class="mx_SettingsFlag"
+        class="_inline-field_19upo_32"
       >
-        <span
-          class="mx_SettingsFlag_label"
+        <div
+          class="_inline-field-control_19upo_44"
         >
           <div
-            id="mx_LabelledToggleSwitch__r_7_"
+            class="_container_udcm8_10"
+          >
+            <input
+              class="_input_udcm8_24"
+              id="_r_b_"
+              role="switch"
+              type="checkbox"
+            />
+            <div
+              class="_ui_udcm8_34"
+            />
+          </div>
+        </div>
+        <div
+          class="_inline-field-body_19upo_38"
+        >
+          <label
+            class="_label_19upo_59"
+            for="_r_b_"
           >
             Ignore user
-          </div>
+          </label>
           <span
-            class="mx_Caption"
-            id="mx_LabelledToggleSwitch__r_7__caption"
+            class="_message_19upo_85 _help-message_19upo_91"
+            id="radix-_r_d_"
           >
             You will not see any messages or room invites from this user.
           </span>
-        </span>
-        <div
-          aria-checked="true"
-          aria-describedby="mx_LabelledToggleSwitch__r_7__caption"
-          aria-disabled="false"
-          aria-labelledby="mx_LabelledToggleSwitch__r_7_"
-          class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-          role="switch"
-          tabindex="0"
-        >
-          <div
-            class="mx_ToggleSwitch_ball"
-          />
         </div>
       </div>
       <div
-        class="mx_SettingsFlag"
+        class="_inline-field_19upo_32"
       >
-        <span
-          class="mx_SettingsFlag_label"
+        <div
+          class="_inline-field-control_19upo_44"
         >
           <div
-            id="mx_LabelledToggleSwitch__r_8_"
+            class="_container_udcm8_10"
+          >
+            <input
+              class="_input_udcm8_24"
+              id="_r_e_"
+              role="switch"
+              type="checkbox"
+            />
+            <div
+              class="_ui_udcm8_34"
+            />
+          </div>
+        </div>
+        <div
+          class="_inline-field-body_19upo_38"
+        >
+          <label
+            class="_label_19upo_59"
+            for="_r_e_"
           >
             Report room
-          </div>
+          </label>
           <span
-            class="mx_Caption"
-            id="mx_LabelledToggleSwitch__r_8__caption"
+            class="_message_19upo_85 _help-message_19upo_91"
+            id="radix-_r_g_"
           >
             Report this room to your account provider.
           </span>
-        </span>
-        <div
-          aria-checked="true"
-          aria-describedby="mx_LabelledToggleSwitch__r_8__caption"
-          aria-disabled="false"
-          aria-labelledby="mx_LabelledToggleSwitch__r_8_"
-          class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-          role="switch"
-          tabindex="0"
-        >
-          <div
-            class="mx_ToggleSwitch_ball"
-          />
         </div>
       </div>
       <div

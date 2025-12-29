@@ -2181,26 +2181,6 @@
         "redacting_messages_status": {
             "Yn tynnu negeseuon mewn %(count)s ystafell": "other"
         },
-        "release_announcement": {
-            "done": "Gorffen",
-            "filter": {
-                "description": "Hidlo eich sgyrsiau gydag un clic. Ehangu i weld mwy o hidlwyr.",
-                "title": "Hidlwyr cyflym newydd"
-            },
-            "intro": {
-                "description": "Mae'r rhestr sgyrsiau wedi'i diweddaru i fod yn gliriach ac yn symlach i'w defnyddio.",
-                "title": "Mae gan Sgyriau olwg newydd!"
-            },
-            "next": "Nesaf",
-            "settings": {
-                "description": "I ddangos neu guddio rhagolygon negeseuon, ewch i Bob gosodiad > Dewisiadau > Rhestr ystafelloedd",
-                "title": "Mae rhai gosodiadau wedi symud"
-            },
-            "sort": {
-                "description": "Newid trefn eich sgyrsiau o'r mwyaf diweddar i A-Z",
-                "title": "Trefnwch eich sgyrsiau"
-            }
-        },
         "room": {
             "more_options": "Rhagor o Ddewisiadau",
             "open_room": "Agor ystafell %(roomName)s"
@@ -2467,7 +2447,6 @@
             "error_update_guest_access": "Wedi methu â diweddaru mynediad gwesteion y gofod hwn",
             "error_update_history_visibility": "Wedi methu â diweddaru gwelededd hanes y gofod hwn",
             "guest_access_explainer": "Gall gwesteion ymuno â gofod heb gyfrif.",
-            "guest_access_explainer_public_space": "Gall hyn fod yn ddefnyddiol ar gyfer gofodau cyhoeddus.",
             "guest_access_label": "Galluogi mynediad gwestai",
             "history_visibility_anyone_space": "Gofod Rhagolwg",
             "history_visibility_anyone_space_description": "Caniatáu i bobl gael rhagolwg o'ch gofod cyn iddynt ymuno.",
@@ -3486,7 +3465,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Daeth arolwg i ben",
             "sender_ended": "Mae %(senderName)s wedi dod ag arolwg i ben"
         },
         "m.poll.start": "Mae %(senderName)s wedi dechrau arolwg - %(pollQuestion)s",

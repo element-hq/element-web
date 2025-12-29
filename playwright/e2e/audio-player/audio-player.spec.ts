@@ -49,7 +49,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     /**
      * Take snapshots of mx_EventTile_last on each layout, outputting log for reference/debugging.
      * @param detail The snapshot name. Used for outputting logs too.
-     * @param monospace This changes the font used to render the UI from a default one to Inconsolata. Set to false by default.
+     * @param monospace This changes the font used to render the UI from a default one to Fira Code. Set to false by default.
      */
     const takeSnapshots = async (page: Page, app: ElementAppPage, detail: string, monospace = false) => {
         // Check that the audio player is rendered and its button becomes visible
@@ -65,7 +65,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             if (monospace) {
                 // Assert that the monospace timer is visible
-                await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", "Inconsolata");
+                await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", '"Fira Code"');
             }
         };
 
@@ -73,7 +73,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Enable system font and monospace setting
             await app.settings.setValue("useBundledEmojiFont", null, SettingLevel.DEVICE, false);
             await app.settings.setValue("useSystemFont", null, SettingLevel.DEVICE, true);
-            await app.settings.setValue("systemFont", null, SettingLevel.DEVICE, "Inconsolata");
+            await app.settings.setValue("systemFont", null, SettingLevel.DEVICE, "Fira Code");
         }
 
         // Check the status of the seek bar

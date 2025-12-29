@@ -10,33 +10,10 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
     display: inline-block;
 
-    &::before {
-        content: "";
-        display: inline-block;
-        height: 1.2em;
-        mask-position: center;
-        mask-repeat: no-repeat;
-        background-color: $tertiary-content;
-        vertical-align: text-bottom;
+    svg {
         margin-right: 6px;
-    }
-
-    &.mx_RoomInfoLine_public::before {
-        width: 12px;
-        mask-size: 12px;
-        mask-image: url("@vector-im/compound-design-tokens/icons/public.svg");
-    }
-
-    &.mx_RoomInfoLine_private::before {
-        width: 10px;
-        mask-size: 10px;
-        mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
-    }
-
-    &.mx_RoomInfoLine_video::before {
-        width: 16px;
-        mask-size: 16px;
-        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+        vertical-align: -2px;
+        color: $tertiary-content;
     }
 
     .mx_RoomInfoLine_members {

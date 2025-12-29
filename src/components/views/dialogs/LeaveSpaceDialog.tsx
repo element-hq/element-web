@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useMemo, useState } from "react";
 import { type Room, JoinRule } from "matrix-js-sdk/src/matrix";
+import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
@@ -88,7 +89,12 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
                     />
                 )}
 
-                {onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">{onlyAdminWarning}</div>}
+                {onlyAdminWarning && (
+                    <div className="mx_LeaveSpaceDialog_section_warning">
+                        <InfoSolidIcon />
+                        {onlyAdminWarning}
+                    </div>
+                )}
             </div>
             <DialogButtons
                 primaryButton={_t("space|leave_dialog_action")}

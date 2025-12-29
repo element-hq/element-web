@@ -315,7 +315,7 @@ describe("RoomListViewModel", () => {
         it("active room index becomes undefined when active room is deleted", () => {
             const { rooms } = mockAndCreateRooms();
             // Let's say that the room at index 5 is active
-            let roomId: string | undefined = rooms[5].roomId;
+            let roomId: string | null = rooms[5].roomId;
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
             const { result: vm } = renderHook(() => useRoomListViewModel());
@@ -323,7 +323,7 @@ describe("RoomListViewModel", () => {
 
             // Let's remove the active room (i.e room at index 5)
             rooms.splice(5, 1);
-            roomId = undefined;
+            roomId = null;
             act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
             expect(vm.current.activeIndex).toBeUndefined();
         });
@@ -332,7 +332,7 @@ describe("RoomListViewModel", () => {
             mockAndCreateRooms();
 
             // Let's say that there's no active room currently
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => undefined);
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => null);
 
             const { result: vm } = renderHook(() => useRoomListViewModel());
             expect(vm.current.activeIndex).toEqual(undefined);

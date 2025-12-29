@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React from "react";
+import { VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { sanitizedHtmlNode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
@@ -50,6 +51,7 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
                     {this.props.htmlReason ? sanitizedHtmlNode(this.props.htmlReason) : this.props.reason}
                 </div>
                 <AccessibleButton kind="link_inline" className="mx_InviteReason_view" onClick={this.onViewClick}>
+                    <VisibilityOnIcon />
                     {_t("common|view_message")}
                 </AccessibleButton>
             </div>
