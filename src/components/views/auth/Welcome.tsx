@@ -73,17 +73,17 @@ const Welcome: React.FC = () => {
                         <h1 className="text-2xl font-semibold mt-5 mb-2">{_t("welcome_to_element")}</h1>
 
                         <div className="flex flex-col gap-3 mt-6 w-full max-w-xs">
-                            <div className="flex flex-col sm:flex-row gap-3">
-                                <Button asChild className="flex-1 gap-2">
-                                    <a href="#/login">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <Button asChild className="gap-2">
+                                    <a href="#/login" className="text-white! no-underline">
                                         <LogIn className="h-4 w-4" />
                                         {_t("action|sign_in")}
                                     </a>
                                 </Button>
 
                                 {showRegistration && (
-                                    <Button asChild variant="secondary" className="flex-1 gap-2">
-                                        <a href="#/register">
+                                    <Button asChild variant="outline" className="gap-2">
+                                        <a href="#/register" className="text-inherit! no-underline">
                                             <UserPlus className="h-4 w-4" />
                                             {_t("action|create_account")}
                                         </a>

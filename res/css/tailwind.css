@@ -23,7 +23,7 @@
 /* shadcn/ui 테마 변수 - Clap 브랜드 컬러 */
 @theme {
     /* Primary - Clap 브랜드 블루 */
-    --color-primary: #0d9488;
+    --color-primary: #26231e;
     --color-primary-foreground: #ffffff;
 
     /* Secondary */
@@ -51,7 +51,7 @@
     --color-input: #e4e4e7;
 
     /* Ring (focus ring) */
-    --color-ring: #0d9488;
+    --color-ring: #26231e;
 
     /* Radius */
     --radius-sm: 0.375rem;
