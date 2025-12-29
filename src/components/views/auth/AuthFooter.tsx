@@ -7,33 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactElement } from "react";
-
-import SdkConfig from "../../../SdkConfig";
-import { _t } from "../../../languageHandler";
+import React, { type ReactElement } from "react";
 
 const AuthFooter = (): ReactElement => {
-    const brandingConfig = SdkConfig.getObject("branding");
-    const links = brandingConfig?.get("auth_footer_links") ?? [
-        { text: "Blog", url: "https://element.io/blog" },
-        { text: "Mastodon", url: "https://mastodon.matrix.org/@Element" },
-        { text: "GitHub", url: "https://github.com/element-hq/element-web" },
-    ];
-
-    const authFooterLinks: JSX.Element[] = [];
-    for (const linkEntry of links) {
-        authFooterLinks.push(
-            <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noreferrer noopener">
-                {linkEntry.text}
-            </a>,
-        );
-    }
-
     return (
         <footer className="mx_AuthFooter" role="contentinfo">
-            {authFooterLinks}
-            <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">
-                {_t("powered_by_matrix")}
+            <a href="https://nextkakao.com" target="_blank" rel="noreferrer noopener">
+                Team
             </a>
         </footer>
     );

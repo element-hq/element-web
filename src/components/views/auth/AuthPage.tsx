@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import classNames from "classnames";
 
-import SdkConfig from "../../../SdkConfig";
 import AuthFooter from "./AuthFooter";
 
 interface IProps {
@@ -24,36 +23,16 @@ interface IProps {
 }
 
 export default class AuthPage extends React.PureComponent<React.PropsWithChildren<IProps>> {
-    private static welcomeBackgroundUrl?: string;
-
-    // cache the url as a static to prevent it changing without refreshing
-    private static getWelcomeBackgroundUrl(): string {
-        if (AuthPage.welcomeBackgroundUrl) return AuthPage.welcomeBackgroundUrl;
-
-        const brandingConfig = SdkConfig.getObject("branding");
-        AuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
-
-        const configuredUrl = brandingConfig?.get("welcome_background_url");
-        if (configuredUrl) {
-            if (Array.isArray(configuredUrl)) {
-                const index = Math.floor(Math.random() * configuredUrl.length);
-                AuthPage.welcomeBackgroundUrl = configuredUrl[index];
-            } else {
-                AuthPage.welcomeBackgroundUrl = configuredUrl;
-            }
-        }
-
-        return AuthPage.welcomeBackgroundUrl;
-    }
-
     public render(): React.ReactElement {
-        const pageStyle = {
-            background: `center/cover fixed url(${AuthPage.getWelcomeBackgroundUrl()})`,
-        };
+        const pageStyle = {};
 
         const modalStyle: React.CSSProperties = {
             position: "relative",
             background: "initial",
+            borderRadius: "16px",
+            overflow: "hidden",
+            border: "1px solid rgb(229, 231, 235)",
+            boxShadow: "rgba(34, 42, 53, 0.05) 0px 4px 8px 0px",
         };
 
         const blurStyle: React.CSSProperties = {
@@ -63,13 +42,12 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
             bottom: 0,
             left: 0,
             filter: "blur(40px)",
-            background: pageStyle.background,
         };
 
         const modalContentStyle: React.CSSProperties = {
             display: "flex",
             zIndex: 1,
-            borderRadius: "inherit",
+            borderRadius: "12px",
         };
 
         let modalBlur;
