@@ -21,8 +21,6 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import dis from "../../../dispatcher/dispatcher";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
-import EmbeddedPage from "../../structures/EmbeddedPage";
-import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
 
 const Welcome: React.FC = () => {
     const matrixClientContext = useContext(MatrixClientContext);
@@ -43,45 +41,12 @@ const Welcome: React.FC = () => {
         };
     }, []);
 
-    const pagesConfig = SdkConfig.getObject("embedded_pages");
-    let customWelcomeUrl: string | undefined;
-    if (pagesConfig) {
-        customWelcomeUrl = pagesConfig.get("welcome_url");
-    }
-
-    // 커스텀 welcome_url이 설정된 경우 기존 EmbeddedPage 사용
-    if (customWelcomeUrl) {
-        const replaceMap: Record<string, string> = {
-            "$brand": SdkConfig.get("brand"),
-            "$riot:ssoUrl": "#/start_sso",
-            "$riot:casUrl": "#/start_cas",
-            "$matrixLogo": MATRIX_LOGO_HTML,
-            "[matrix]": MATRIX_LOGO_HTML,
-        };
-
-        return (
-            <AuthPage>
-                <div
-                    className={classNames("mx_Welcome", {
-                        mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
-                    })}
-                    data-testid="mx_welcome_screen"
-                >
-                    <EmbeddedPage className="mx_WelcomePage" url={customWelcomeUrl} replaceMap={replaceMap} />
-                    <LanguageSelector />
-                </div>
-            </AuthPage>
-        );
-    }
-
-    // 기본 Welcome 페이지 (React 컴포넌트)
     const brand = SdkConfig.get("brand");
     const brandingConfig = SdkConfig.getObject("branding");
     const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
 
     const showRegistration = SettingsStore.getValue(UIFeature.Registration);
 
-    // EmbeddedPage와 동일한 로직: context 먼저 확인, 없으면 MatrixClientPeg 사용
     const client = matrixClientContext || MatrixClientPeg.get();
     const isGuest = client ? client.isGuest() : true;
     const showExploreRooms = !!client;
