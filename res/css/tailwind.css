@@ -14,8 +14,8 @@
 /* Theme: Tailwind 테마 변수 (colors, spacing, fonts 등) */
 @import "tailwindcss/theme.css" layer(theme);
 
-/* Preflight(base reset) 의도적 제외 - 레거시 스타일 보호 */
-/* @import "tailwindcss/preflight.css" layer(base); */
+/* Preflight(base reset) - 브라우저 기본 스타일 리셋 */
+@import "tailwindcss/preflight.css" layer(base);
 
 /* Utilities: Tailwind 유틸리티 클래스 (flex, p-4, text-blue-500 등) */
 @import "tailwindcss/utilities.css" layer(utilities);
