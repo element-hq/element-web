@@ -18,6 +18,7 @@ const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-p
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VersionFilePlugin = require("webpack-version-file-plugin");
 const { RetryChunkLoadPlugin } = require("webpack-retry-chunk-load-plugin");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
@@ -100,6 +101,15 @@ module.exports = (env, argv) => {
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== "production";
     const enableMinification = !devMode && !process.env.CI_PACKAGE;
+    // Fast Refresh는 싱글톤 초기화 순서 문제를 일으킬 수 있어 필요 시 환경변수로 끌 수 있게 함
+    const enableReactFastRefresh = devMode && process.env.DISABLE_REACT_FAST_REFRESH !== "1";
+    const babelPlugins = [];
+    if (enableMinification) {
+        babelPlugins.push("babel-plugin-jsx-remove-data-test-id");
+    }
+    if (enableReactFastRefresh) {
+        babelPlugins.push(require.resolve("react-refresh/babel"));
+    }
 
     let VERSION = process.env.VERSION;
     if (!VERSION) {
@@ -299,7 +309,7 @@ module.exports = (env, argv) => {
                     loader: "babel-loader",
                     options: {
                         cacheDirectory: true,
-                        plugins: enableMinification ? ["babel-plugin-jsx-remove-data-test-id"] : [],
+                        plugins: babelPlugins,
                     },
                 },
                 // Tailwind CSS 처리 (tailwind.css 파일 전용)
@@ -619,6 +629,12 @@ module.exports = (env, argv) => {
         plugins: [
             ...moduleReplacementPlugins,
 
+            // React Fast Refresh for reliable HMR in dev
+            enableReactFastRefresh &&
+                new ReactRefreshWebpackPlugin({
+                    overlay: false,
+                }),
+
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
                 filename: "bundles/[fullhash]/[name].css",
@@ -798,10 +814,15 @@ module.exports = (env, argv) => {
 
             // Enable Hot Module Replacement without page refresh as a fallback in
             // case of build failures
-            hot: "only",
+            hot: enableReactFastRefresh ? "only" : false,
+            // Fast Refresh 비활성화 시에는 전체 페이지 리로드로 변경사항을 반영
+            liveReload: !enableReactFastRefresh,
 
             // Disable host check
             allowedHosts: "all",
+
+            // Automatically open browser
+            open: true,
         },
     };
 };
