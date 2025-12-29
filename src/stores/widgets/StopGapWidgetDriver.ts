@@ -39,7 +39,8 @@ import {
     type SendDelayedEventResponse,
     type StateEvents,
     type TimelineEvents,
-    SendDelayedEventRequestOpts,
+    type SendDelayedEventRequestOpts,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -286,7 +287,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return allAllowed;
     }
 
-    private getSendEventTarget(roomId: string | null = null) {
+    private getSendEventTarget(roomId: string | null = null): { client: MatrixClient; roomId: string } {
         const client = MatrixClientPeg.safeGet();
         roomId = roomId || SdkContextClass.instance.roomViewStore.getRoomId() || null;
         if (!roomId) throw new Error("No room specified and no room in RoomViewStore focus.");
@@ -418,7 +419,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        let delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
+        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
@@ -460,7 +461,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         targetRoomId?: string | null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        let delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
+        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
 
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
