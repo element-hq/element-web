@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
-import { type IRTCNotificationContent, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -486,8 +486,11 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     private performCustomEventHandling(ev: MatrixEvent): void {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(ev.getRoomId());
-        const thisUserHasConnectedDevice =
-            room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
+        const rtcSession = room ? cli.matrixRTC.getRoomSession(room) : null;
+        let thisUserHasConnectedDevice = false;
+        if (rtcSession?.slotDescription?.application == "m.call") {
+            thisUserHasConnectedDevice = rtcSession.memberships.some((m) => m.userId === cli.getUserId());
+        }
 
         if (EventType.RTCNotification === ev.getType() && !thisUserHasConnectedDevice) {
             const content = ev.getContent() as IRTCNotificationContent;
