@@ -38,7 +38,7 @@ import {
     type SendDelayedEventResponse,
     type StateEvents,
     type TimelineEvents,
-    Room,
+    type Room,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
