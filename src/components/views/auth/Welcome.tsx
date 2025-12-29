@@ -5,26 +5,52 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { LogIn, UserPlus, Compass } from "lucide-react";
 
 import SdkConfig from "../../../SdkConfig";
 import AuthPage from "./AuthPage";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import LanguageSelector from "./LanguageSelector";
+import { _t } from "../../../languageHandler";
+import { Button } from "../../ui/Button";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import dis from "../../../dispatcher/dispatcher";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import { Action } from "../../../dispatcher/actions";
 import EmbeddedPage from "../../structures/EmbeddedPage";
 import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
 
-export default class Welcome extends React.PureComponent<EmptyObject> {
-    public render(): React.ReactNode {
-        const pagesConfig = SdkConfig.getObject("embedded_pages");
-        let pageUrl: string | undefined;
-        if (pagesConfig) {
-            pageUrl = pagesConfig.get("welcome_url");
-        }
+const Welcome: React.FC = () => {
+    const matrixClientContext = useContext(MatrixClientContext);
+    const [, setClientReady] = useState(false);
 
+    useEffect(() => {
+        const onAction = (payload: ActionPayload): void => {
+            // HACK: Workaround for the context's MatrixClient not being set up at render time.
+            if (payload.action === Action.ClientStarted) {
+                setClientReady(true);
+            }
+        };
+
+        const dispatcherRef = dis.register(onAction);
+
+        return () => {
+            dis.unregister(dispatcherRef);
+        };
+    }, []);
+
+    const pagesConfig = SdkConfig.getObject("embedded_pages");
+    let customWelcomeUrl: string | undefined;
+    if (pagesConfig) {
+        customWelcomeUrl = pagesConfig.get("welcome_url");
+    }
+
+    // 커스텀 welcome_url이 설정된 경우 기존 EmbeddedPage 사용
+    if (customWelcomeUrl) {
         const replaceMap: Record<string, string> = {
             "$brand": SdkConfig.get("brand"),
             "$riot:ssoUrl": "#/start_sso",
@@ -32,14 +58,6 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
             "$matrixLogo": MATRIX_LOGO_HTML,
             "[matrix]": MATRIX_LOGO_HTML,
         };
-
-        if (!pageUrl) {
-            // Fall back to default and replace $logoUrl in welcome.html
-            const brandingConfig = SdkConfig.getObject("branding");
-            const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
-            replaceMap["$logoUrl"] = logoUrl;
-            pageUrl = "welcome.html";
-        }
 
         return (
             <AuthPage>
@@ -49,10 +67,82 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
                     })}
                     data-testid="mx_welcome_screen"
                 >
-                    <EmbeddedPage className="mx_WelcomePage" url={pageUrl} replaceMap={replaceMap} />
+                    <EmbeddedPage className="mx_WelcomePage" url={customWelcomeUrl} replaceMap={replaceMap} />
                     <LanguageSelector />
                 </div>
             </AuthPage>
         );
     }
-}
+
+    // 기본 Welcome 페이지 (React 컴포넌트)
+    const brand = SdkConfig.get("brand");
+    const brandingConfig = SdkConfig.getObject("branding");
+    const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
+
+    const showRegistration = SettingsStore.getValue(UIFeature.Registration);
+
+    // EmbeddedPage와 동일한 로직: context 먼저 확인, 없으면 MatrixClientPeg 사용
+    const client = matrixClientContext || MatrixClientPeg.get();
+    const isGuest = client ? client.isGuest() : true;
+    const showExploreRooms = !!client;
+
+    return (
+        <AuthPage>
+            <div
+                className={classNames("mx_Welcome", {
+                    mx_WelcomePage_registrationDisabled: !showRegistration,
+                })}
+                data-testid="mx_welcome_screen"
+            >
+                <div
+                    className={classNames("mx_WelcomePage", {
+                        mx_WelcomePage_guest: isGuest,
+                        mx_WelcomePage_loggedIn: !!client,
+                    })}
+                >
+                    <div className="mx_WelcomePage_body flex flex-col items-center justify-center p-6 text-center">
+                        <a href="https://element.io" target="_blank" rel="noopener noreferrer">
+                            <img src={logoUrl} alt={brand} className="h-14 mb-5" />
+                        </a>
+
+                        <h1 className="text-2xl font-semibold mt-5 mb-2">{_t("welcome_to_element")}</h1>
+
+                        <div className="flex flex-col gap-3 mt-6 w-full max-w-xs">
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <Button asChild className="flex-1 gap-2">
+                                    <a href="#/login">
+                                        <LogIn className="h-4 w-4" />
+                                        {_t("action|sign_in")}
+                                    </a>
+                                </Button>
+
+                                {showRegistration && (
+                                    <Button asChild variant="secondary" className="flex-1 gap-2">
+                                        <a href="#/register">
+                                            <UserPlus className="h-4 w-4" />
+                                            {_t("action|create_account")}
+                                        </a>
+                                    </Button>
+                                )}
+                            </div>
+
+                            {showExploreRooms && (
+                                <div className="mx_WelcomePage_guestFunctions mt-4">
+                                    <Button asChild variant="outline" className="w-full gap-2">
+                                        <a href="#/directory">
+                                            <Compass className="h-4 w-4" />
+                                            {_t("action|explore_rooms")}
+                                        </a>
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <LanguageSelector />
+            </div>
+        </AuthPage>
+    );
+};
+
+export default Welcome;
