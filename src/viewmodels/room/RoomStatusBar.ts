@@ -19,6 +19,7 @@ import {
     type MatrixError,
     RoomEvent,
     EventStatus,
+    MatrixSafetyError,
 } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -50,6 +51,7 @@ export class RoomStatusBarViewModel
     private static readonly determineStateForUnreadMessages = (
         room: Room,
         hasClickedTermsAndConditions: boolean,
+        isResending: boolean,
     ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
         if (unsentMessages.length === 0) {
@@ -61,10 +63,11 @@ export class RoomStatusBarViewModel
             // The user has just clicked (and we assume accepted) the terms and contitions, so show them the retry buttons
             return {
                 state: RoomStatusBarState.UnsentMessages,
-                isResending: false,
+                isResending,
             };
         }
         let resourceLimitError: MatrixError | null = null;
+        let safetyError: MatrixSafetyError | null = null;
         for (const m of unsentMessages) {
             if (m.error) {
                 if (m.error.errcode === "M_CONSENT_NOT_GIVEN") {
@@ -77,6 +80,9 @@ export class RoomStatusBarViewModel
                 if (m.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
                     resourceLimitError = m.error;
                 }
+                if (m.error instanceof MatrixSafetyError) {
+                    safetyError = m.error;
+                }
             }
         }
         if (resourceLimitError) {
@@ -84,6 +90,15 @@ export class RoomStatusBarViewModel
                 state: RoomStatusBarState.ResourceLimited,
                 resourceLimit: resourceLimitError.data.limit_type ?? "",
                 adminContactHref: resourceLimitError.data.admin_contact,
+            };
+        }
+        if (safetyError) {
+            return {
+                state: RoomStatusBarState.MessageRejected,
+                harms: [...safetyError.harms],
+                serverError: safetyError.error,
+                isResending,
+                canRetryInSeconds: safetyError.expiry && Math.ceil((safetyError.expiry.getTime() - Date.now()) / 1000),
             };
         }
         return {
@@ -107,12 +122,6 @@ export class RoomStatusBarViewModel
         }
 
         // If we're in the process of resending, don't flicker.
-        if (isResending) {
-            return {
-                state: RoomStatusBarState.UnsentMessages,
-                isResending,
-            };
-        }
         const syncState = client.getSyncState();
 
         // Highest priority.
@@ -134,10 +143,11 @@ export class RoomStatusBarViewModel
         }
 
         // Then check messages.
-        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions);
+        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions, isResending);
     };
 
     private readonly client: MatrixClient;
+    private timeout?: ReturnType<typeof globalThis.setTimeout>;
 
     public constructor(props: Props) {
         const client = MatrixClientPeg.safeGet();
@@ -159,6 +169,10 @@ export class RoomStatusBarViewModel
     private hasClickedTermsAndConditions = false;
 
     private setSnapshot(): void {
+        if (this.timeout) {
+            // If we had a timer going, clear it.
+            clearTimeout(this.timeout);
+        }
         this.snapshot.set(
             RoomStatusBarViewModel.computeSnapshot(
                 this.props.room,
@@ -170,6 +184,12 @@ export class RoomStatusBarViewModel
         // Reset `hasClickedTermsAndConditions` once the state has cleared.
         if (this.hasClickedTermsAndConditions && !this.snapshot.current.state) {
             this.hasClickedTermsAndConditions = false;
+        }
+        if (
+            this.snapshot.current.state === RoomStatusBarState.MessageRejected &&
+            this.snapshot.current.canRetryInSeconds
+        ) {
+            this.timeout = setTimeout(() => this.setSnapshot, this.snapshot.current.canRetryInSeconds * 1000);
         }
     }
 

@@ -2141,7 +2141,15 @@
             "select_messages_to_retry": "You can select all or individual messages to retry or delete",
             "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
             "server_connectivity_lost_title": "Connectivity to the server has been lost.",
-            "some_messages_not_sent": "Some of your messages have not been sent"
+            "some_messages_not_sent": "Some of your messages have not been sent",
+            "message_rejected": {
+                "title": "Message rejected: %(harm)s",
+                "can_retry_in": {
+                    "one": "You may attempt to send new messages in 1 second.",
+                    "other": "You may attempt to send new messages in %(count)s seconds."
+                },
+                "cannot_retry": "You are not allowed to retry this message"
+            }
         },
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {
@@ -4263,6 +4271,30 @@
             "topTen": "This is a top-10 common password",
             "userInputs": "There should not be any personal or page related data.",
             "wordByItself": "A word by itself is easy to guess"
+        }
+    },
+    "safety": {
+        "harms": {
+            "generic": "The message was blocked due to harmful content",
+            "multiple": "This message was blocked due to multiple harms",
+            "spam": "The message is considered spam.",
+            "spam.fraud": "The message contains fraudulent content",
+            "spam.impersonation": "The message is attempting to impersonate someone",
+            "spam.election_interference": "The message contains election interference content",
+            "spam.flooding": "You are sending too many messages",
+            "adult": "The message contains adult content",
+            "harassment": "Message detected as containing harassment.",
+            "harassment.trolling": "The message is contains trolling content.",
+            "harassment.targeted": "The message contains targeted harassment.",
+            "harassment.hate": "The message contains hateful content.",
+            "harassment.doxxing": "The message contains doxxing content.",
+            "violence": "The message contains violent content.",
+            "child_safety": "The message has contains child safety risks.",
+            "danger": "The message contains potentially dangerous content.",
+            "tos": "The message is against the terms of service.",
+            "tos.hacking": "The message is against the terms of service (hacking).",
+            "tos.prohibited": "The message is against the terms of service (prohibited content).",
+            "tos.ban_evasion": "The message is against the terms of service (ban evasion detected)."
         }
     }
 }
