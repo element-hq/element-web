@@ -166,12 +166,25 @@ yarn test:playwright tests/path/to/test.spec.ts --headed
 ### Internationalization
 
 ```bash
-# Extract translation strings
-yarn i18n                         # Generate i18n strings
+# Full i18n workflow (extract strings + sort + lint + generate types)
+yarn i18n                         # Run when adding new _t() calls in code
+
+# Quick type generation only (when manually adding keys to JSON)
+yarn i18n:types                   # Fast (~0.6s) - updates TypeScript types only
 
 # Check translation differences
 yarn i18n:diff                    # Compare with baseline
 ```
+
+**Translation Key Workflow**:
+
+| Scenario | Command | Time |
+|----------|---------|------|
+| Added `_t()` call in code | `yarn i18n` | ~2-3s |
+| Manually added key to JSON | `yarn i18n:types` | ~0.6s |
+| Modified shared-components | `cd packages/shared-components && yarn prepare` | ~30s |
+
+**Important**: Translation keys must exist in `src/i18n/strings/en_EN.json` and TypeScript types must be regenerated for the `_t()` function to recognize new keys.
 
 ## Clap Deployment
 
