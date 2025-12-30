@@ -93,12 +93,18 @@ export class RoomStatusBarViewModel
             };
         }
         if (safetyError) {
+            const canRetry = !!safetyError.expiry;
             return {
                 state: RoomStatusBarState.MessageRejected,
                 harms: [...safetyError.harms],
                 serverError: safetyError.error,
-                isResending,
-                canRetryInSeconds: safetyError.expiry && Math.ceil((safetyError.expiry.getTime() - Date.now()) / 1000),
+                ...(canRetry
+                    ? {
+                          isResending,
+                          canRetryInSeconds:
+                              safetyError.expiry && Math.ceil((safetyError.expiry.getTime() - Date.now()) / 1000),
+                      }
+                    : undefined),
             };
         }
         return {
@@ -187,9 +193,10 @@ export class RoomStatusBarViewModel
         }
         if (
             this.snapshot.current.state === RoomStatusBarState.MessageRejected &&
+            "canRetryInSeconds" in this.snapshot.current &&
             this.snapshot.current.canRetryInSeconds
         ) {
-            this.timeout = setTimeout(() => this.setSnapshot, this.snapshot.current.canRetryInSeconds * 1000);
+            this.timeout = setTimeout(() => this.setSnapshot(), this.snapshot.current.canRetryInSeconds * 1000);
         }
     }
 

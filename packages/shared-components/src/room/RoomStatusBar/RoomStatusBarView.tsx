@@ -18,22 +18,22 @@ export interface RoomStatusBarViewActions {
     /**
      * Called when the user clicks on the 'resend all' button in the 'unsent messages' bar.
      */
-    onResendAllClick?: () => void;
+    onResendAllClick: () => void;
 
     /**
      * Called when the user clicks on the 'cancel all' button in the 'unsent messages' bar.
      */
-    onDeleteAllClick?: () => void;
+    onDeleteAllClick: () => void;
 
     /**
      * Called when the user clicks on the 'Retry' button in the 'failed to start chat' bar.
      */
-    onRetryRoomCreationClick?: () => void;
+    onRetryRoomCreationClick: () => void;
 
     /**
      * Called when the user clicks on the 'Review Terms and Conditions' button.
      */
-    onTermsAndConditionsClicked?: () => void;
+    onTermsAndConditionsClicked: () => void;
 }
 
 export enum RoomStatusBarState {
@@ -72,13 +72,20 @@ export interface RoomStatusBarLocalRoomError {
     state: RoomStatusBarState.LocalRoomFailed;
 }
 
-export interface RoomStatusBarMessageRejected {
+export interface RoomStatusBarMessageRejectedRetryable {
     state: RoomStatusBarState.MessageRejected;
     canRetryInSeconds?: number;
     isResending: boolean;
     harms: string[];
     serverError?: string;
 }
+export interface RoomStatusBarMessageRejectedUnretryable {
+    state: RoomStatusBarState.MessageRejected;
+    harms: string[];
+    serverError?: string;
+}
+
+type RoomStatusBarMessageRejected = RoomStatusBarMessageRejectedRetryable | RoomStatusBarMessageRejectedUnretryable;
 
 export type RoomStatusBarViewSnapshot =
     | RoomStatusBarNoConnection
@@ -197,10 +204,14 @@ function RoomStatusBarViewMessageRejected({
     );
 
     let subtitleText: string;
-    if (onResendAllClick) {
-        subtitleText = _t("room|status_bar|select_messages_to_retry");
-    } else if (!onResendAllClick && snapshot.canRetryInSeconds !== undefined) {
-        subtitleText = _t("room|status_bar|message_rejected|can_retry_in", { count: snapshot.canRetryInSeconds });
+    const canRetry = "isResending" in snapshot;
+    const isResending = "isResending" in snapshot && snapshot.isResending;
+    if (canRetry) {
+        if (snapshot.canRetryInSeconds !== undefined) {
+            subtitleText = _t("room|status_bar|message_rejected|can_retry_in", { count: snapshot.canRetryInSeconds });
+        } else {
+            subtitleText = _t("room|status_bar|select_messages_to_retry");
+        }
     } else {
         subtitleText = _t("room|status_bar|message_rejected|cannot_retry");
     }
@@ -210,30 +221,25 @@ function RoomStatusBarViewMessageRejected({
             role="status"
             type="critical"
             actions={
-                snapshot.isResending ? (
+                isResending ? (
                     <InlineSpinner />
                 ) : (
                     <>
-                        {onDeleteAllClick && (
-                            <Button
-                                size="sm"
-                                kind="destructive"
-                                Icon={DeleteIcon}
-                                disabled={snapshot.isResending}
-                                onClick={deleteAllClick}
-                            >
-                                {_t("room|status_bar|delete_all")}
-                            </Button>
-                        )}
-                        {(onResendAllClick || snapshot.canRetryInSeconds) && (
+                        <Button
+                            size="sm"
+                            kind="destructive"
+                            Icon={DeleteIcon}
+                            disabled={isResending}
+                            onClick={deleteAllClick}
+                        >
+                            {_t("room|status_bar|delete_all")}
+                        </Button>
+                        {canRetry && (
                             <Button
                                 size="sm"
                                 kind="secondary"
                                 Icon={RestartIcon}
-                                disabled={
-                                    snapshot.isResending ||
-                                    !!(snapshot.canRetryInSeconds && snapshot.canRetryInSeconds > 0)
-                                }
+                                disabled={!!(snapshot.canRetryInSeconds && snapshot.canRetryInSeconds > 0)}
                                 onClick={resendClick}
                                 className={styles.container}
                             >
@@ -412,29 +418,18 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                             <InlineSpinner />
                         ) : (
                             <>
-                                {vm.onDeleteAllClick && (
-                                    <Button
-                                        size="sm"
-                                        kind="destructive"
-                                        Icon={DeleteIcon}
-                                        disabled={snapshot.isResending}
-                                        onClick={deleteAllClick}
-                                    >
-                                        {_t("room|status_bar|delete_all")}
-                                    </Button>
-                                )}
-                                {vm.onResendAllClick && (
-                                    <Button
-                                        size="sm"
-                                        kind="secondary"
-                                        Icon={RestartIcon}
-                                        disabled={snapshot.isResending}
-                                        onClick={resendClick}
-                                        className={styles.container}
-                                    >
-                                        {_t("room|status_bar|retry_all")}
-                                    </Button>
-                                )}
+                                <Button size="sm" kind="destructive" Icon={DeleteIcon} onClick={deleteAllClick}>
+                                    {_t("room|status_bar|delete_all")}
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    kind="secondary"
+                                    Icon={RestartIcon}
+                                    onClick={resendClick}
+                                    className={styles.container}
+                                >
+                                    {_t("room|status_bar|retry_all")}
+                                </Button>
                             </>
                         )
                     }

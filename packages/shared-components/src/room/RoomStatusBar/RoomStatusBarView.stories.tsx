@@ -110,7 +110,6 @@ WithLocalRoomRetry.args = {
 export const WithMessageRejected = Template.bind({});
 WithMessageRejected.args = {
     state: RoomStatusBarState.MessageRejected,
-    onResendAllClick: undefined,
     harms: ["org.matrix.msc4387.harassment"],
 };
 
@@ -123,6 +122,7 @@ WithMessageRejectedCanRetryInTime.args = {
     onResendAllClick: undefined,
     canRetryInSeconds: 5,
     harms: [],
+    isResending: false,
 };
 
 /**
@@ -132,6 +132,7 @@ export const WithMessageRejectedCanRetry = Template.bind({});
 WithMessageRejectedCanRetry.args = {
     state: RoomStatusBarState.MessageRejected,
     harms: [],
+    isResending: false,
 };
 
 /**
@@ -151,15 +152,7 @@ export const WithMessageRejectedWithKnownHarm = Template.bind({});
 WithMessageRejectedWithKnownHarm.args = {
     state: RoomStatusBarState.MessageRejected,
     harms: ["org.matrix.msc4387.spam"],
-};
-
-/**
- * Rendered when a message was rejected by the server, and we use the generic message.
- */
-export const WithMessageRejectedWithUnknownHarm = Template.bind({});
-WithMessageRejectedWithUnknownHarm.args = {
-    state: RoomStatusBarState.MessageRejected,
-    harms: ["any.old.harm"],
+    isResending: false,
 };
 
 /**
@@ -170,4 +163,5 @@ WithMessageRejectedWithServerMessage.args = {
     state: RoomStatusBarState.MessageRejected,
     harms: ["any.old.harm"],
     serverError: "OurServer rejects this content",
+    isResending: false,
 };
