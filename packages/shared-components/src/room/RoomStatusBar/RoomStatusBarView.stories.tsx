@@ -103,3 +103,71 @@ export const WithLocalRoomRetry = Template.bind({});
 WithLocalRoomRetry.args = {
     state: RoomStatusBarState.LocalRoomFailed,
 };
+
+/**
+ * Rendered when a message was rejected by the server, and cannot be reattempted.
+ */
+export const WithMessageRejected = Template.bind({});
+WithMessageRejected.args = {
+    state: RoomStatusBarState.MessageRejected,
+    onResendAllClick: undefined,
+    harms: ["org.matrix.msc4387.harassment"],
+};
+
+/**
+ * Rendered when a message was rejected by the server, and can be reattempted later.
+ */
+export const WithMessageRejectedCanRetryInTime = Template.bind({});
+WithMessageRejectedCanRetryInTime.args = {
+    state: RoomStatusBarState.MessageRejected,
+    onResendAllClick: undefined,
+    canRetryInSeconds: 5,
+    harms: [],
+};
+
+/**
+ * Rendered when a message was rejected by the server, and can be reattempted.
+ */
+export const WithMessageRejectedCanRetry = Template.bind({});
+WithMessageRejectedCanRetry.args = {
+    state: RoomStatusBarState.MessageRejected,
+    harms: [],
+};
+
+/**
+ * Rendered when a message was rejected by the server, and is being resent.
+ */
+export const WithMessageRejectedSending = Template.bind({});
+WithMessageRejectedSending.args = {
+    state: RoomStatusBarState.MessageRejected,
+    harms: [],
+    isResending: true,
+};
+
+/**
+ * Rendered when a message was rejected by the server, and we use the generic message.
+ */
+export const WithMessageRejectedWithKnownHarm = Template.bind({});
+WithMessageRejectedWithKnownHarm.args = {
+    state: RoomStatusBarState.MessageRejected,
+    harms: ["org.matrix.msc4387.spam"],
+};
+
+/**
+ * Rendered when a message was rejected by the server, and we use the generic message.
+ */
+export const WithMessageRejectedWithUnknownHarm = Template.bind({});
+WithMessageRejectedWithUnknownHarm.args = {
+    state: RoomStatusBarState.MessageRejected,
+    harms: ["any.old.harm"],
+};
+
+/**
+ * Rendered when a message was rejected by the server with a specific message.
+ */
+export const WithMessageRejectedWithServerMessage = Template.bind({});
+WithMessageRejectedWithServerMessage.args = {
+    state: RoomStatusBarState.MessageRejected,
+    harms: ["any.old.harm"],
+    serverError: "OurServer rejects this content",
+};

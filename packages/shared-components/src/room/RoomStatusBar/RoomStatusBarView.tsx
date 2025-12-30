@@ -42,6 +42,7 @@ export enum RoomStatusBarState {
     ResourceLimited,
     UnsentMessages,
     LocalRoomFailed,
+    MessageRejected,
 }
 
 export interface RoomStatusBarNotVisible {
@@ -71,13 +72,22 @@ export interface RoomStatusBarLocalRoomError {
     state: RoomStatusBarState.LocalRoomFailed;
 }
 
+export interface RoomStatusBarMessageRejected {
+    state: RoomStatusBarState.MessageRejected;
+    canRetryInSeconds?: number;
+    isResending: boolean;
+    harms: string[];
+    serverError?: string;
+}
+
 export type RoomStatusBarViewSnapshot =
     | RoomStatusBarNoConnection
     | RoomStatusBarConsentState
     | RoomStatusBarResourceLimitedState
     | RoomStatusBarUnsentMessagesState
     | RoomStatusBarLocalRoomError
-    | RoomStatusBarNotVisible;
+    | RoomStatusBarNotVisible
+    | RoomStatusBarMessageRejected;
 
 /**
  * The view model for the banner.
@@ -89,6 +99,162 @@ interface RoomStatusBarViewProps {
      * The view model for the banner.
      */
     vm: RoomStatusBarViewModel;
+}
+
+function translateHarmsToText(harms: string[], serverProvidedText?: string): string {
+    const { translate: _t } = useI18n();
+    const translatedStrings = [];
+    for (const harmCategory of harms) {
+        switch (harmCategory) {
+            // case "m.spam" once the MSC passes.
+            case "org.matrix.msc4387.spam":
+                translatedStrings.push(_t("safety|harms|spam"));
+                break;
+            case "org.matrix.msc4387.spam.fraud":
+                translatedStrings.push(_t("safety|harms|spam.fraud"));
+                break;
+            case "org.matrix.msc4387.spam.impersonation":
+                translatedStrings.push(_t("safety|harms|spam.impersonation"));
+                break;
+            case "org.matrix.msc4387.spam.election_interference":
+                translatedStrings.push(_t("safety|harms|spam.election_interference"));
+                break;
+            case "org.matrix.msc4387.spam.flooding":
+                translatedStrings.push(_t("safety|harms|spam.flooding"));
+                break;
+            case "org.matrix.msc4387.adult":
+                translatedStrings.push(_t("safety|harms|spam.adult"));
+                break;
+            case "org.matrix.msc4387.harassment":
+                translatedStrings.push(_t("safety|harms|harassment"));
+                break;
+            case "org.matrix.msc4387.harassment.trolling":
+                translatedStrings.push(_t("safety|harms|harassment.trolling"));
+                break;
+            case "org.matrix.msc4387.harassment.targeted":
+                translatedStrings.push(_t("safety|harms|harassment.targeted"));
+                break;
+            case "org.matrix.msc4387.harassment.hate":
+                translatedStrings.push(_t("safety|harms|harassment.hate"));
+                break;
+            case "org.matrix.msc4387.harassment.doxxing":
+                translatedStrings.push(_t("safety|harms|harassment.doxxing"));
+                break;
+            case "org.matrix.msc4387.violence":
+                translatedStrings.push(_t("safety|harms|violence"));
+                break;
+            case "org.matrix.msc4387.child_safety":
+                translatedStrings.push(_t("safety|harms|child_safety"));
+                break;
+            case "org.matrix.msc4387.danger":
+                translatedStrings.push(_t("safety|harms|danger"));
+                break;
+            case "org.matrix.msc4387.tos":
+                translatedStrings.push(_t("safety|harms|tos"));
+                break;
+            case "org.matrix.msc4387.tos.hacking":
+                translatedStrings.push(_t("safety|harms|tos.hacking"));
+                break;
+            case "org.matrix.msc4387.tos.prohibited":
+                translatedStrings.push(_t("safety|harms|tos.prohibited"));
+                break;
+            case "org.matrix.msc4387.tos.ban_evasion":
+                translatedStrings.push(_t("safety|harms|tos.ban_evasion"));
+                break;
+        }
+    }
+    if (translatedStrings.length > 1) {
+        return _t("safety|harms|multiple");
+    } else if (translatedStrings.length === 0) {
+        return serverProvidedText ?? _t("safety|harms|generic");
+    }
+    return translatedStrings[0];
+}
+
+function RoomStatusBarViewMessageRejected({
+    snapshot,
+    actions: { onDeleteAllClick, onResendAllClick },
+}: {
+    snapshot: RoomStatusBarMessageRejected;
+    actions: RoomStatusBarViewActions;
+}): JSX.Element {
+    const { translate: _t } = useI18n();
+    const bannerTitleId = useId();
+    const deleteAllClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+        (ev) => {
+            ev.preventDefault();
+            onDeleteAllClick?.();
+        },
+        [onDeleteAllClick],
+    );
+
+    const resendClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+        (ev) => {
+            ev.preventDefault();
+            onResendAllClick?.();
+        },
+        [onResendAllClick],
+    );
+
+    let subtitleText: string;
+    if (onResendAllClick) {
+        subtitleText = _t("room|status_bar|select_messages_to_retry");
+    } else if (!onResendAllClick && snapshot.canRetryInSeconds !== undefined) {
+        subtitleText = _t("room|status_bar|message_rejected|can_retry_in", { count: snapshot.canRetryInSeconds });
+    } else {
+        subtitleText = _t("room|status_bar|message_rejected|cannot_retry");
+    }
+
+    return (
+        <Banner
+            role="status"
+            type="critical"
+            actions={
+                snapshot.isResending ? (
+                    <InlineSpinner />
+                ) : (
+                    <>
+                        {onDeleteAllClick && (
+                            <Button
+                                size="sm"
+                                kind="destructive"
+                                Icon={DeleteIcon}
+                                disabled={snapshot.isResending}
+                                onClick={deleteAllClick}
+                            >
+                                {_t("room|status_bar|delete_all")}
+                            </Button>
+                        )}
+                        {(onResendAllClick || snapshot.canRetryInSeconds) && (
+                            <Button
+                                size="sm"
+                                kind="secondary"
+                                Icon={RestartIcon}
+                                disabled={
+                                    snapshot.isResending ||
+                                    !!(snapshot.canRetryInSeconds && snapshot.canRetryInSeconds > 0)
+                                }
+                                onClick={resendClick}
+                                className={styles.container}
+                            >
+                                {_t("room|status_bar|retry_all")}
+                            </Button>
+                        )}
+                    </>
+                )
+            }
+            aria-labelledby={bannerTitleId}
+        >
+            <div className={styles.container}>
+                <Text id={bannerTitleId} weight="semibold">
+                    {_t("room|status_bar|message_rejected|title", {
+                        harm: translateHarmsToText(snapshot.harms, snapshot.serverError),
+                    })}
+                </Text>
+                <Text className={styles.description}>{subtitleText}</Text>
+            </div>
+        </Banner>
+    );
 }
 
 /**
@@ -282,6 +448,8 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     </div>
                 </Banner>
             );
+        case RoomStatusBarState.MessageRejected:
+            return <RoomStatusBarViewMessageRejected snapshot={snapshot} actions={vm} />;
         default:
             throw Error(`Unexpected unknown state for RoomStatusBar ${snapshot["state"]}`);
     }
