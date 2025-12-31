@@ -1,7 +1,8 @@
 /*
- * Tailwind CSS v4 - Preflight 비활성화 버전
- * 기존 레거시 스타일(.pcss)과 충돌 방지를 위해 base(Preflight) 제외
+ * Tailwind CSS v4
+ * 기존 레거시 스타일(.pcss)과 공존하며 신규 컴포넌트 개발에 사용
  *
+ * 사용 가이드: docs/tailwind-css.md 참조
  * 사용법: 신규 컴포넌트에서 className="flex items-center gap-2" 형태로 사용
  */
 

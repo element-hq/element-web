@@ -16,21 +16,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Three-Layer Architecture
 
 1. **Matrix JS SDK** (`matrix-js-sdk` v39.0.0)
-   - Core Matrix protocol implementation
-   - Handles client-server communication, E2E encryption, room state
-   - Lives in `node_modules/matrix-js-sdk` (or linked for local dev)
-   - All Matrix API calls go through this layer
+    - Core Matrix protocol implementation
+    - Handles client-server communication, E2E encryption, room state
+    - Lives in `node_modules/matrix-js-sdk` (or linked for local dev)
+    - All Matrix API calls go through this layer
 
 2. **Element Web** (this repository)
-   - React UI layer built on top of matrix-js-sdk
-   - Business logic, state management, UI components
-   - Located in `src/` directory
+    - React UI layer built on top of matrix-js-sdk
+    - Business logic, state management, UI components
+    - Located in `src/` directory
 
 3. **Clap Customizations**
-   - Branding changes ("Element" → "Clap")
-   - Korean localization (default country: KR)
-   - Configuration in `config.clap.json`
-   - Deployment infrastructure for AWS EKS
+    - Branding changes ("Element" → "Clap")
+    - Korean localization (default country: KR)
+    - Configuration in `config.clap.json`
+    - Deployment infrastructure for AWS EKS
 
 ### Key Directories
 
@@ -48,7 +48,7 @@ src/
 └── vector/            # Element-specific initialization code
 
 res/
-├── css/               # PostCSS stylesheets (NOT SCSS)
+├── css/               # Legacy PostCSS stylesheets (new code uses Tailwind)
 ├── themes/            # Theme definitions (light, dark, etc.)
 └── img/               # Images and icons
 
@@ -68,6 +68,7 @@ k8s/                   # Kubernetes deployment manifests
 ### State Management
 
 **Stores use singleton pattern** (NOT Redux):
+
 ```typescript
 class FooStore {
     public static readonly instance = new FooStore();
@@ -79,13 +80,13 @@ class FooStore {
 - Components access stores via `.instance` property
 - Flux-style unidirectional data flow
 
-### CSS Architecture (PostCSS, not SCSS)
+### CSS Architecture (Tailwind CSS)
 
-- **PostCSS** with plugins (looks like SCSS but isn't)
-- Class naming: `mx_ComponentName` prefix (e.g., `mx_EventTile`)
-- Nested elements: `mx_EventTile_avatar`, `mx_EventTile_body`
-- One CSS file per component: `_ComponentName.pcss`
-- Theme support: CSS custom properties (variables)
+- **Tailwind CSS** for all new styling work
+- Use utility classes directly in components (e.g., `className="flex items-center gap-2"`)
+- Legacy code uses PostCSS with `mx_ComponentName` prefix (do not modify unless necessary)
+- Theme support: Tailwind theme configuration + CSS custom properties
+- Custom styles: Use `@apply` directive in Tailwind or inline utilities
 
 ## Development Commands
 
@@ -178,11 +179,11 @@ yarn i18n:diff                    # Compare with baseline
 
 **Translation Key Workflow**:
 
-| Scenario | Command | Time |
-|----------|---------|------|
-| Added `_t()` call in code | `yarn i18n` | ~2-3s |
-| Manually added key to JSON | `yarn i18n:types` | ~0.6s |
-| Modified shared-components | `cd packages/shared-components && yarn prepare` | ~30s |
+| Scenario                   | Command                                         | Time  |
+| -------------------------- | ----------------------------------------------- | ----- |
+| Added `_t()` call in code  | `yarn i18n`                                     | ~2-3s |
+| Manually added key to JSON | `yarn i18n:types`                               | ~0.6s |
+| Modified shared-components | `cd packages/shared-components && yarn prepare` | ~30s  |
 
 **Important**: Translation keys must exist in `src/i18n/strings/en_EN.json` and TypeScript types must be regenerated for the `_t()` function to recognize new keys.
 
@@ -191,17 +192,18 @@ yarn i18n:diff                    # Compare with baseline
 ### Configuration
 
 Clap-specific settings in `config.clap.json`:
+
 ```json
 {
-  "default_server_config": {
-    "m.homeserver": {
-      "base_url": "https://dev.clap.ac",
-      "server_name": "dev.clap.ac"
-    }
-  },
-  "brand": "Clap",
-  "default_country_code": "KR",
-  "show_labs_settings": true
+    "default_server_config": {
+        "m.homeserver": {
+            "base_url": "https://dev.clap.ac",
+            "server_name": "dev.clap.ac"
+        }
+    },
+    "brand": "Clap",
+    "default_country_code": "KR",
+    "show_labs_settings": true
 }
 ```
 
@@ -218,12 +220,14 @@ docker run -p 8080:80 clap-element-web
 ### Kubernetes Deployment
 
 **GitHub Actions** (Recommended):
+
 - Workflow: `.github/workflows/clap-deploy-eks.yml`
 - Manual trigger via GitHub Actions UI
 - Environments: dev, staging, production
 - Builds ARM64 image for AWS Graviton EKS nodes
 
 **Manual Deployment**:
+
 ```bash
 # Configure kubectl for EKS
 aws eks update-kubeconfig --region ap-northeast-2 --name clap-eks-dev
@@ -245,6 +249,7 @@ kubectl rollout undo deployment/element-web -n clap
 ```
 
 **Deployment Targets**:
+
 - **Dev**: app.dev.clap.ac (auto-deploy on push to `clap-stable`)
 - **Staging**: app.staging.clap.ac (manual approval)
 - **Production**: app.clap.ac (manual approval)
@@ -262,9 +267,9 @@ kubectl rollout undo deployment/element-web -n clap
 - **Types**: Always explicit, avoid `any` (comment explaining why if necessary)
 - **Variables**: `const` for constants, `let` for mutability
 - **Naming**:
-  - lowerCamelCase: functions, variables
-  - UpperCamelCase: classes, interfaces, types, components
-  - No `I` prefix for interfaces
+    - lowerCamelCase: functions, variables
+    - UpperCamelCase: classes, interfaces, types, components
+    - No `I` prefix for interfaces
 
 ### React Components
 
@@ -272,19 +277,28 @@ kubectl rollout undo deployment/element-web -n clap
 - Class components must have `Props` and `State` interfaces (defined above component)
 - One component per file (except small utility components)
 - Component file naming: UpperCamelCase (e.g., `EventTile.tsx`)
-- CSS class naming: `mx_ComponentName` (must match component name)
+- **Styling**: Use Tailwind utility classes (e.g., `className="flex items-center"`)
+    - Legacy code uses `mx_ComponentName` prefix (do not modify unless necessary)
 - No `forceUpdate()` usage
 - Derive from props over establishing state when possible
 
-### CSS (PostCSS)
+### CSS (Tailwind CSS)
+
+**New Code (Tailwind CSS)**:
+
+- See [Tailwind CSS Guide](../docs/tailwind-css.md) for detailed guidelines
+- Use Tailwind utility classes directly in JSX: `className="flex items-center gap-2 p-4"`
+- Compose utilities for responsive design: `className="w-full md:w-1/2 lg:w-1/3"`
+- Use Tailwind theme values: `bg-primary`, `text-gray-700`, spacing scale, etc.
+- **Important**: Use `!` at the END of class names: `text-[#2e2f32]!` (see [Tailwind CSS Guide](../docs/tailwind-css.md#important-modifier-important))
+- Avoid `!important` in general (comment why if necessary)
+
+**Legacy Code (PostCSS)**:
 
 - File naming: `_ComponentName.pcss` (matches component name)
 - Class naming: `mx_ComponentName` prefix strictly enforced
 - Nested elements: `mx_ComponentName_elementName` (lowerCamelCase)
-- Use `$font` variables instead of hardcoded values
-- Maximum nesting: 5 levels
-- Document magic numbers with comments (z-index, pixel adjustments, etc.)
-- Avoid `!important` (comment why if necessary)
+- Only modify if absolutely necessary (prefer Tailwind for new work)
 
 ### Testing
 
@@ -292,19 +306,23 @@ kubectl rollout undo deployment/element-web -n clap
 - **Coverage target**: ≥80% for new code
 - **Test file location**: `/test` directory (mirrors `/src` structure)
 - **E2E tests**: Required for user-facing features before leaving labs
-- **Test naming**: `it("should...")`  convention
+- **Test naming**: `it("should...")` convention
 - **Structure**:
-  ```typescript
-  describe("ComponentName", () => {
-    beforeEach(() => { /* setup */ });
-    afterEach(() => { /* cleanup */ });
-    it("should do something", async () => {
-      // test-specific variables
-      // function calls/state changes
-      // expectations
+    ```typescript
+    describe("ComponentName", () => {
+        beforeEach(() => {
+            /* setup */
+        });
+        afterEach(() => {
+            /* cleanup */
+        });
+        it("should do something", async () => {
+            // test-specific variables
+            // function calls/state changes
+            // expectations
+        });
     });
-  });
-  ```
+    ```
 
 ## Important Development Notes
 
@@ -319,6 +337,7 @@ kubectl rollout undo deployment/element-web -n clap
 ### Bundle Structure
 
 Webpack splits code into:
+
 - **Vendor bundle**: React, matrix-js-sdk, third-party libraries
 - **Theme bundles**: Separate CSS bundles for each theme
 - **Code-split chunks**: Lazy-loaded features (e.g., call UI, settings)
@@ -341,13 +360,13 @@ Webpack splits code into:
 ### Common Gotchas
 
 - **inotify limits on Linux**: May need to increase file watch limits
-  ```bash
-  sudo sysctl fs.inotify.max_user_watches=131072
-  sudo sysctl fs.inotify.max_user_instances=512
-  ```
+    ```bash
+    sudo sysctl fs.inotify.max_user_watches=131072
+    sudo sysctl fs.inotify.max_user_instances=512
+    ```
 - **Mac file limits**: Run `ulimit -Sn 1024` before building
 - **Windows**: `yarn dist` not supported, use `yarn build` instead
-- **PostCSS vs SCSS**: Our `.pcss` files look like SCSS but use PostCSS plugins
+- **Styling approach**: New code uses Tailwind CSS, legacy `.pcss` files are PostCSS (not SCSS)
 - **Component cycles**: Utilities requiring JSX must be separate from non-JSX utilities
 
 ## Pull Request Guidelines
@@ -357,10 +376,10 @@ Webpack splits code into:
 - **Commit messages**: Descriptive, focus on "why" not "what"
 - **Changelogs**: Auto-generated from PR title and `Notes:` in description
 - **Labels**: Required for changelog categorization
-  - `T-Enhancement`: New feature (minor version bump)
-  - `T-Defect`: Bug fix
-  - `T-Task`: No user-facing changes (no changelog entry)
-  - `X-Breaking-Change`: Breaking change (major version bump)
+    - `T-Enhancement`: New feature (minor version bump)
+    - `T-Defect`: Bug fix
+    - `T-Task`: No user-facing changes (no changelog entry)
+    - `X-Breaking-Change`: Breaking change (major version bump)
 - **Before/after screenshots**: Required for UI changes
 - **Testing strategy**: Include step-by-step testing instructions
 
@@ -385,6 +404,7 @@ git merge v1.x.x
 ```
 
 **Key conflict areas**:
+
 - `config.clap.json` vs upstream config changes
 - Branding strings in `src/`
 - Theme customizations in `res/`
@@ -403,20 +423,21 @@ git merge v1.x.x
 
 ### 관련 파일
 
-| 파일 | 역할 |
-|------|------|
-| `src/settings/ClapDeveloperFlags.ts` | 플래그 정의 (중앙 집중식) |
-| `src/hooks/useSettings.ts` | `useDeveloperFlag()` 훅 |
-| `src/utils/ClapDevFlagsConsole.ts` | 콘솔 API (`window.mxDevFlags`) |
-| `src/settings/Settings.tsx` | `clapDeveloperFlags` 설정 |
+| 파일                                 | 역할                           |
+| ------------------------------------ | ------------------------------ |
+| `src/settings/ClapDeveloperFlags.ts` | 플래그 정의 (중앙 집중식)      |
+| `src/hooks/useSettings.ts`           | `useDeveloperFlag()` 훅        |
+| `src/utils/ClapDevFlagsConsole.ts`   | 콘솔 API (`window.mxDevFlags`) |
+| `src/settings/Settings.tsx`          | `clapDeveloperFlags` 설정      |
 
 ### 새 플래그 추가 방법
 
 `src/settings/ClapDeveloperFlags.ts`에 키 추가:
+
 ```typescript
 export const CLAP_DEV_FLAGS = {
     showCustomHomeserver: "다른 홈서버 등록 UI 표시",
-    newFeature: "새 기능 설명",  // 추가
+    newFeature: "새 기능 설명", // 추가
 } as const;
 ```
 
@@ -435,10 +456,10 @@ const MyComponent = () => {
 ### 콘솔에서 토글 (F12)
 
 ```javascript
-mxDevFlags.help()                         // 도움말
-mxDevFlags.enable("showCustomHomeserver") // 켜기
-mxDevFlags.disable("showCustomHomeserver") // 끄기
-mxDevFlags.list()                         // 현재 상태
+mxDevFlags.help(); // 도움말
+mxDevFlags.enable("showCustomHomeserver"); // 켜기
+mxDevFlags.disable("showCustomHomeserver"); // 끄기
+mxDevFlags.list(); // 현재 상태
 ```
 
 ### UI에서 토글
