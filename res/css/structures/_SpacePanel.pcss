@@ -148,11 +148,15 @@ Please see LICENSE files in the repository root for full details.
             padding: 4px;
             width: calc(100% - 32px);
             min-width: 0;
+            overflow: hidden;
+            box-sizing: border-box;
         }
 
         &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
             flex: initial;
-            width: 32px;
+            width: 40px;
+            min-width: 40px;
+            overflow: visible;
         }
 
         .mx_SpaceButton_name {
