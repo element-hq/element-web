@@ -51,6 +51,7 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import { type ClapDevFlagsValue } from "./ClapDeveloperFlags.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -371,6 +372,7 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "clapDeveloperFlags": IBaseSetting<ClapDevFlagsValue>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1487,5 +1489,15 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         displayName: _td("devtools|settings|elementCallUrl"),
         default: "",
+    },
+    /**
+     * Clap Developer Flags - 팀 개발자 전용 기능 플래그
+     * 로컬 스토리지에만 저장되며, 서버에 동기화되지 않습니다.
+     */
+    "clapDeveloperFlags": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: {},
+        // 버그 리포트(rageshake)에 포함하지 않음
+        shouldExportToRageshake: false,
     },
 };

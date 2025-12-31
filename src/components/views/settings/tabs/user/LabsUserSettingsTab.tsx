@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { sortBy } from "lodash";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { Form } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -21,9 +21,36 @@ import { EnhancedMap } from "../../../../../utils/maps";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
+import { CLAP_DEV_FLAGS, type ClapDevFlagKey } from "../../../../../settings/ClapDeveloperFlags";
+import { useDeveloperFlag } from "../../../../../hooks/useSettings";
 
 export const showLabsFlags = (): boolean => {
     return SdkConfig.get("show_labs_settings") || SettingsStore.getValue("developerMode");
+};
+
+/**
+ * Individual toggle for a Clap developer flag
+ */
+const ClapDevFlagToggle: React.FC<{ flagKey: ClapDevFlagKey; description: string }> = ({ flagKey, description }) => {
+    const enabled = useDeveloperFlag(flagKey);
+
+    const handleChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+        const newValue = evt.target.checked;
+        const currentFlags = SettingsStore.getValue("clapDeveloperFlags") ?? {};
+        SettingsStore.setValue("clapDeveloperFlags", null, SettingLevel.DEVICE, {
+            ...currentFlags,
+            [flagKey]: newValue,
+        });
+    };
+
+    return (
+        <SettingsToggleInput
+            name={`clap_dev_${flagKey}`}
+            label={`${flagKey} - ${description}`}
+            checked={enabled}
+            onChange={handleChange}
+        />
+    );
 };
 
 export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
@@ -142,6 +169,23 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
                                 )}
                             </SettingsSubsectionText>
                             {labsSections}
+                        </SettingsSection>
+                    )}
+
+                    {SettingsStore.getValue("developerMode") && (
+                        <SettingsSection heading="Clap Developer Flags">
+                            <SettingsSubsectionText>
+                                팀 개발자 전용 기능 플래그입니다. 로컬 스토리지에 저장되며 서버에 동기화되지 않습니다.
+                            </SettingsSubsectionText>
+                            <SettingsSubsection heading="기능 플래그">
+                                {Object.entries(CLAP_DEV_FLAGS).map(([key, description]) => (
+                                    <ClapDevFlagToggle
+                                        key={key}
+                                        flagKey={key as ClapDevFlagKey}
+                                        description={description}
+                                    />
+                                ))}
+                            </SettingsSubsection>
                         </SettingsSection>
                     )}
                 </Form.Root>

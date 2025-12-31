@@ -47,6 +47,7 @@ import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
 import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
+import { type ClapDevFlagsConsoleAPI } from "../utils/ClapDevFlagsConsole.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -125,6 +126,7 @@ declare global {
         mxOnRecaptchaLoaded?: () => void;
         mxModuleLoader: ModuleLoader;
         mxModuleApi: ModuleApiType;
+        mxDevFlags: ClapDevFlagsConsoleAPI;
 
         // electron-only
         electron?: Electron;

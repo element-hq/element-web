@@ -16,6 +16,7 @@ import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import ServerPickerDialog from "../dialogs/ServerPickerDialog";
 import InfoDialog from "../dialogs/InfoDialog";
+import { useDeveloperFlag } from "../../../hooks/useSettings";
 
 interface IProps {
     title?: string;
@@ -51,6 +52,12 @@ const onHelpClick = (): void => {
 
 const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onServerConfigChange, disabled }) => {
     const disableCustomUrls = SdkConfig.get("disable_custom_urls");
+    const showCustomHomeserver = useDeveloperFlag("showCustomHomeserver");
+
+    // 개발자 플래그가 꺼져 있으면 전체 섹션 숨김
+    if (!showCustomHomeserver) {
+        return null;
+    }
 
     let editBtn;
     if (!disableCustomUrls && onServerConfigChange) {

@@ -16,6 +16,10 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
 import "./modernizr";
+import { initClapDevFlagsConsole } from "../utils/ClapDevFlagsConsole";
+
+// Initialize Clap developer flags console API
+initClapDevFlagsConsole();
 
 // Import shared components CSS
 import "@element-hq/web-shared-components/dist/element-web-shared-components.css";

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import SettingsStore from "../settings/SettingsStore";
 import { type SettingLevel } from "../settings/SettingLevel";
 import { type FeatureSettingKey, type SettingKey, type Settings } from "../settings/Settings.tsx";
+import { type ClapDevFlagKey } from "../settings/ClapDeveloperFlags.ts";
 
 // Hook to fetch the value of a setting and dynamically update when it changes
 export function useSettingValue<S extends SettingKey>(
@@ -99,4 +100,15 @@ export const useFeatureEnabled = (featureName: FeatureSettingKey, roomId: string
     }, [featureName, roomId]);
 
     return enabled;
+};
+
+/**
+ * Hook to fetch whether a Clap developer flag is enabled
+ * Developer flags are stored locally and do not sync to the server
+ * @param flagName - The name of the developer flag from CLAP_DEV_FLAGS
+ * @returns Whether the flag is enabled
+ */
+export const useDeveloperFlag = (flagName: ClapDevFlagKey): boolean => {
+    const flags = useSettingValue("clapDeveloperFlags");
+    return flags?.[flagName] ?? false;
 };

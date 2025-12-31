@@ -396,3 +396,57 @@ git merge v1.x.x
 - **clap-infrastructure**: AWS infrastructure as code (Terraform)
 - **ClapAndroid**: Android native client
 - **element-desktop**: Desktop wrapper (upstream Electron app)
+
+## Clap Developer Flags System
+
+팀 개발자 전용 기능을 플래그로 제어하는 시스템. 로컬 스토리지에 저장되며 서버에 동기화되지 않음.
+
+### 관련 파일
+
+| 파일 | 역할 |
+|------|------|
+| `src/settings/ClapDeveloperFlags.ts` | 플래그 정의 (중앙 집중식) |
+| `src/hooks/useSettings.ts` | `useDeveloperFlag()` 훅 |
+| `src/utils/ClapDevFlagsConsole.ts` | 콘솔 API (`window.mxDevFlags`) |
+| `src/settings/Settings.tsx` | `clapDeveloperFlags` 설정 |
+
+### 새 플래그 추가 방법
+
+`src/settings/ClapDeveloperFlags.ts`에 키 추가:
+```typescript
+export const CLAP_DEV_FLAGS = {
+    showCustomHomeserver: "다른 홈서버 등록 UI 표시",
+    newFeature: "새 기능 설명",  // 추가
+} as const;
+```
+
+### 컴포넌트에서 사용
+
+```typescript
+import { useDeveloperFlag } from "../hooks/useSettings";
+
+const MyComponent = () => {
+    const isEnabled = useDeveloperFlag("showCustomHomeserver");
+    if (!isEnabled) return null;
+    return <SomeUI />;
+};
+```
+
+### 콘솔에서 토글 (F12)
+
+```javascript
+mxDevFlags.help()                         // 도움말
+mxDevFlags.enable("showCustomHomeserver") // 켜기
+mxDevFlags.disable("showCustomHomeserver") // 끄기
+mxDevFlags.list()                         // 현재 상태
+```
+
+### UI에서 토글
+
+1. Settings > Labs 탭
+2. Developer Mode 활성화 필요 (DevTools에서)
+3. "Clap Developer Flags" 섹션에서 토글
+
+### 현재 적용된 플래그
+
+- `showCustomHomeserver`: `/login`, `/register` 페이지의 ServerPicker 컴포넌트 표시/숨김 (`src/components/views/elements/ServerPicker.tsx`)
