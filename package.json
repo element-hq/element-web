@@ -91,6 +91,7 @@
         "@matrix-org/emojibase-bindings": "^1.5.0",
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@matrix-org/spec": "^1.7.0",
+        "@radix-ui/react-select": "^2.2.6",
         "@radix-ui/react-slot": "^1.2.4",
         "@sentry/browser": "^10.0.0",
         "@types/png-chunks-extract": "^1.0.2",

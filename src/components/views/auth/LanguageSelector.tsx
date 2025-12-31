@@ -5,14 +5,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect, useState } from "react";
+import { Globe } from "lucide-react";
 
 import SdkConfig from "../../../SdkConfig";
+import * as languageHandler from "../../../languageHandler";
 import { getCurrentLanguage } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import PlatformPeg from "../../../PlatformPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import LanguageDropdown from "../elements/LanguageDropdown";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/Select";
+import Spinner from "../elements/Spinner";
+
+type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesWithLabels>>;
 
 function onChange(newLang: string): void {
     if (getCurrentLanguage() !== newLang) {
@@ -26,13 +31,56 @@ interface IProps {
 }
 
 export default function LanguageSelector({ disabled }: IProps): JSX.Element {
-    if (SdkConfig.get("disable_login_language_selector")) return <div />;
+    const [languages, setLanguages] = useState<Languages | null>(null);
+    const currentLanguage = getCurrentLanguage();
+
+    useEffect(() => {
+        languageHandler
+            .getAllLanguagesWithLabels()
+            .then((langs) => {
+                langs.sort((a, b) => a.labelInTargetLanguage.localeCompare(b.labelInTargetLanguage));
+                setLanguages(langs);
+            })
+            .catch(() => {
+                setLanguages([
+                    {
+                        value: "en",
+                        label: "English",
+                        labelInTargetLanguage: "English",
+                    },
+                ]);
+            });
+    }, []);
+
+    if (SdkConfig.get("disable_login_language_selector")) {
+        return <div />;
+    }
+
+    if (languages === null) {
+        return (
+            <div className="flex justify-center py-4">
+                <Spinner w={16} h={16} />
+            </div>
+        );
+    }
+
+    const currentLangLabel = languages.find((lang) => lang.value === currentLanguage)?.labelInTargetLanguage;
+
     return (
-        <LanguageDropdown
-            className="mx_AuthBody_language"
-            onOptionChange={onChange}
-            value={getCurrentLanguage()}
-            disabled={disabled}
-        />
+        <div className="flex justify-center py-4">
+            <Select value={currentLanguage} onValueChange={onChange} disabled={disabled}>
+                <SelectTrigger className="h-auto min-w-30 gap-2 border-none bg-transparent px-3 py-2 shadow-none hover:bg-black/5 focus:ring-0 focus:outline-none">
+                    <Globe className="h-4 w-4 opacity-70" />
+                    <SelectValue placeholder={currentLangLabel} />
+                </SelectTrigger>
+                <SelectContent className="z-1000 max-h-75 overflow-y-auto rounded-lg border border-gray-200 bg-white">
+                    {languages.map((lang) => (
+                        <SelectItem key={lang.value} value={lang.value}>
+                            {lang.labelInTargetLanguage}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </div>
     );
 }
