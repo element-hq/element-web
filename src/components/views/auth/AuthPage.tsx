@@ -20,6 +20,7 @@ interface IProps {
      * disabled.  Defaults to `true`.
      */
     addBlur?: boolean;
+    disableLanguageSelector?: boolean;
 }
 
 export default class AuthPage extends React.PureComponent<React.PropsWithChildren<IProps>> {
@@ -75,7 +76,7 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
                         {this.props.children}
                     </main>
                 </div>
-                <AuthFooter />
+                <AuthFooter disableLanguageSelector={this.props.disableLanguageSelector} />
             </div>
         );
     }

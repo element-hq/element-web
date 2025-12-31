@@ -23,7 +23,6 @@ import ConfirmWipeDeviceDialog from "../../views/dialogs/ConfirmWipeDeviceDialog
 import Field from "../../views/elements/Field";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
-import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
 import { SDKContext } from "../../../contexts/SDKContext";
 
@@ -302,10 +301,8 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         return (
             <AuthPage>
-                <AuthHeader />
                 <AuthBody>
                     <h1>{_t("auth|soft_logout_heading")}</h1>
-
                     <h2>{_t("action|sign_in")}</h2>
                     <div>{this.renderSignInSection()}</div>
 

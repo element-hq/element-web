@@ -25,7 +25,7 @@ export function AuthHeaderDisplay({ title, icon, serverPicker, children }: Props
     return (
         <Fragment>
             {current?.icon ?? icon}
-            <h1>{current?.title ?? title}</h1>
+            <h1 className="mb-5">{current?.title ?? title}</h1>
             {children}
             {current?.hideServerPicker !== true && serverPicker}
         </Fragment>

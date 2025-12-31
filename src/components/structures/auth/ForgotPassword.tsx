@@ -19,7 +19,6 @@ import PasswordReset from "../../../PasswordReset";
 import AuthPage from "../../views/auth/AuthPage";
 import PassphraseField from "../../views/auth/PassphraseField";
 import { PASSWORD_MIN_SCORE } from "../../views/auth/RegistrationForm";
-import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
 import PassphraseConfirmField from "../../views/auth/PassphraseConfirmField";
 import StyledCheckbox from "../../views/elements/StyledCheckbox";
@@ -471,7 +470,6 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
         return (
             <AuthPage>
-                <AuthHeader />
                 <AuthBody className="mx_AuthBody_forgot-password">{resetPasswordJsx}</AuthBody>
             </AuthPage>
         );

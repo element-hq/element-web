@@ -37,7 +37,6 @@ import ServerPicker from "../../views/elements/ServerPicker";
 import RegistrationForm from "../../views/auth/RegistrationForm";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import AuthBody from "../../views/auth/AuthBody";
-import AuthHeader from "../../views/auth/AuthHeader";
 import InteractiveAuth, { type InteractiveAuthCallback } from "../InteractiveAuth";
 import Spinner from "../../views/elements/Spinner";
 import { AuthHeaderDisplay } from "./header/AuthHeaderDisplay";
@@ -721,14 +720,16 @@ export default class Registration extends React.Component<IProps, IState> {
             }
             body = (
                 <div>
-                    <h1>{_t("auth|registration_successful")}</h1>
+                    <h1 className="mb-5">{_t("auth|registration_successful")}</h1>
                     {regDoneText}
                 </div>
             );
         } else if (this.props.mobileRegister) {
             body = (
                 <Fragment>
-                    <h1>{_t("auth|mobile_create_account_title", { hsName: this.props.serverConfig.hsName })}</h1>
+                    <h1 className="mb-5">
+                        {_t("auth|mobile_create_account_title", { hsName: this.props.serverConfig.hsName })}
+                    </h1>
                     {errorText}
                     {serverDeadSection}
                     {this.renderRegisterComponent()}
@@ -772,7 +773,6 @@ export default class Registration extends React.Component<IProps, IState> {
         }
         return (
             <AuthPage>
-                <AuthHeader />
                 <AuthHeaderProvider>
                     <AuthBody flex>{body}</AuthBody>
                 </AuthHeaderProvider>

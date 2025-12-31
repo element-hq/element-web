@@ -9,12 +9,32 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 
-const AuthFooter = (): ReactElement => {
+import LanguageSelector from "./LanguageSelector";
+
+interface Props {
+    disableLanguageSelector?: boolean;
+}
+
+const AuthFooter = ({ disableLanguageSelector }: Props): ReactElement => {
     return (
-        <footer className="mx_AuthFooter" role="contentinfo">
-            <a href="https://nextkakao.com" target="_blank" rel="noreferrer noopener">
+        <footer
+            className="relative flex w-full items-center justify-center py-5 text-center"
+            style={{ font: "var(--cpd-font-body-md-regular)" }}
+            role="contentinfo"
+        >
+            <a
+                href="https://nextkakao.com"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mx-[22px] text-[#2e2f32]!"
+            >
                 Team
             </a>
+            <div className="absolute right-10">
+                <div className="py-0">
+                    <LanguageSelector disabled={disableLanguageSelector} />
+                </div>
+            </div>
         </footer>
     );
 };

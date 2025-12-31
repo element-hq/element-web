@@ -26,7 +26,6 @@ import Spinner from "../../views/elements/Spinner";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
 import AuthBody from "../../views/auth/AuthBody";
-import AuthHeader from "../../views/auth/AuthHeader";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
@@ -529,10 +528,9 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
 
         return (
-            <AuthPage>
-                <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
+            <AuthPage disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn}>
                 <AuthBody>
-                    <h1>
+                    <h1 className="mb-5">
                         {_t("action|sign_in")}
                         {loader}
                     </h1>

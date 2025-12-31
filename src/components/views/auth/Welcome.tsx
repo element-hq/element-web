@@ -12,7 +12,6 @@ import { LogIn, UserPlus, Compass } from "lucide-react";
 import AuthPage from "./AuthPage";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import LanguageSelector from "./LanguageSelector";
 import { _t } from "../../../languageHandler";
 import { Button } from "../../ui/Button";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -95,7 +94,6 @@ const Welcome: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <LanguageSelector />
             </div>
         </AuthPage>
     );
