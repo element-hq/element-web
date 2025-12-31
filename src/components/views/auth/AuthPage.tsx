@@ -30,10 +30,10 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         const modalStyle: React.CSSProperties = {
             position: "relative",
             background: "initial",
-            borderRadius: "16px",
+            // borderRadius: "16px",
             overflow: "hidden",
-            border: "1px solid rgb(229, 231, 235)",
-            boxShadow: "rgba(34, 42, 53, 0.05) 0px 4px 8px 0px",
+            // border: "1px solid rgb(229, 231, 235)",
+            // boxShadow: "rgba(34, 42, 53, 0.05) 0px 4px 8px 0px",
         };
 
         const blurStyle: React.CSSProperties = {
