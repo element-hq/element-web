@@ -3865,7 +3865,7 @@
         "call_ended": "통화 종료됨"
     },
     "web_default_device_name": "%(appName)s: %(osName)s의 %(browserName)s",
-    "welcome_to_element": "Element에 오신 것을 환영합니다",
+    "welcome_to_clap": "Clap에 오신 것을 환영합니다",
     "widget": {
         "added_by": "위젯 추가자:",
         "capabilities_dialog": {
