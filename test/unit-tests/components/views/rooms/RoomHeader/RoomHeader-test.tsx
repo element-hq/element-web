@@ -587,7 +587,7 @@ describe("RoomHeader", () => {
             // Mock CallStore to return a call with 3 participants
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Join Video Call");
+            const joinButton = getByLabelText(document.body, "Join video call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
         });
 
@@ -596,7 +596,7 @@ describe("RoomHeader", () => {
             // Mock CallStore to return a call with 3 participants
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice));
             render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Join Voice Call");
+            const joinButton = getByLabelText(document.body, "Join voice call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
         });
 
