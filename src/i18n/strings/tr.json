@@ -2238,7 +2238,6 @@
             "error_join_rule_change_unknown": "Bilinmeyen hata",
             "guest_access_warning": "Desteklenen istemciye sahip kişiler, kayıtlı bir hesaba sahip olmadan odaya katılabilecekler.",
             "history_visibility_invited": "Sadece üyeler (davet edildiklerinden beri)",
-            "history_visibility_joined": "Sadece üyeler (katıldıklarından beri)",
             "history_visibility_legend": "Geçmişi kimler okuyabilir ?",
             "history_visibility_shared": "Sadece üyeler ( bu seçeneği seçtiğinizden itibaren)",
             "history_visibility_warning": "Geçmişi kimin okuyabileceğini değiştirmek yalnızca odadaki yeni iletileri etkiler. Var olan geçmiş değişmeden kalacaktır.",

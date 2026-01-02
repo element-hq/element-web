@@ -2048,7 +2048,6 @@
             "error_join_rule_change_unknown": "Errore sconosciuto",
             "guest_access_warning": "Le persone con client supportati potranno entrare nella stanza senza avere un account registrato.",
             "history_visibility_invited": "Solo i membri (da quando sono stati invitati)",
-            "history_visibility_joined": "Solo i membri (da quando sono entrati)",
             "history_visibility_legend": "Chi può leggere la cronologia?",
             "history_visibility_shared": "Solo i membri (dal momento in cui selezioni questa opzione)",
             "history_visibility_warning": "Le modifiche a chi può leggere la cronologia si applicheranno solo ai messaggi futuri in questa stanza. La visibilità della cronologia esistente rimarrà invariata.",

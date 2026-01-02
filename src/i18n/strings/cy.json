@@ -2387,7 +2387,6 @@
             "error_join_rule_change_unknown": "Methiant anhysbys",
             "guest_access_warning": "Bydd pobl â chleientiaid a gefnogir yn gallu ymuno â'r ystafell heb fod â chyfrif cofrestredig.",
             "history_visibility_invited": "Aelodau yn unig (ers iddynt gael eu gwahodd)",
-            "history_visibility_joined": "Aelodau yn unig (ers iddynt ymuno)",
             "history_visibility_legend": "Pwy all ddarllen hanes?",
             "history_visibility_shared": "Aelodau yn unig (ers yr adeg pan ddewiswyd yr opsiwn hwn)",
             "history_visibility_warning": "Ni fydd gwelededd hanes presennol yn cael ei newid.",

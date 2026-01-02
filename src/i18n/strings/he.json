@@ -1428,7 +1428,6 @@
             "error_join_rule_change_unknown": "כשל לא ידוע",
             "guest_access_warning": "אורחים בעלי תוכנת התחברות מתאימה יוכלו להצטרף לחדר גם אם אין להם חשבון משתמש.",
             "history_visibility_invited": "חברים בלבד (מאז שהוזמנו)",
-            "history_visibility_joined": "חברים בלבד (מאז שהצטרפו)",
             "history_visibility_legend": "למי מותר לקרוא הסטוריה?",
             "history_visibility_shared": "חברים בלבד (מרגע בחירת אפשרות זו)",
             "history_visibility_warning": "שינויים במי שיכול לקרוא היסטוריה יחולו רק על הודעות עתידיות בחדר זה. נראות ההיסטוריה הקיימת לא תשתנה.",

@@ -1918,7 +1918,6 @@
             "error_join_rule_change_unknown": "Dështim i panjohur",
             "guest_access_warning": "Persona me klientë të mbuluar do të jenë në gjendje të hyjnë te dhoma pa pasur ndonjë llogari të regjistruar.",
             "history_visibility_invited": "Vetëm anëtarë (që kur qenë ftuar)",
-            "history_visibility_joined": "Vetëm anëtarë (që kur janë bërë pjesë)",
             "history_visibility_legend": "Kush mund të lexojë historikun?",
             "history_visibility_shared": "Vetëm anëtarët (që nga çasti i përzgjedhjes së kësaj mundësie)",
             "history_visibility_warning": "Ndryshime se cilët mund të lexojnë historikun do të vlejnë vetëm për mesazhe të ardhshëm në këtë dhomë. Dukshmëria e historikut ekzistues nuk do të ndryshohet.",

@@ -1744,7 +1744,6 @@
             "error_join_rule_change_unknown": "Onbekende fout",
             "guest_access_warning": "Personen met geschikte apps zullen aan de kamer kunnen deelnemen zonder een account te hebben.",
             "history_visibility_invited": "Alleen deelnemers (vanaf het moment dat ze uitgenodigd zijn)",
-            "history_visibility_joined": "Alleen deelnemers (vanaf het moment dat ze toegetreden zijn)",
             "history_visibility_legend": "Wie kan de geschiedenis lezen?",
             "history_visibility_shared": "Alleen deelnemers (vanaf het moment dat deze optie wordt geselecteerd)",
             "history_visibility_warning": "Wijzigingen aan de leesregels van de geschiedenis gelden alleen voor toekomstige berichten in deze kamer. De zichtbaarheid van de bestaande geschiedenis blijft ongewijzigd.",

@@ -1867,7 +1867,6 @@
             "error_join_rule_change_unknown": "不明なエラー",
             "guest_access_warning": "サポートしているクライアントから、登録済のアカウントを使用せずルームに参加できるようになります。",
             "history_visibility_invited": "メンバーのみ（招待を送った時点から）",
-            "history_visibility_joined": "メンバーのみ（参加した時点から）",
             "history_visibility_legend": "履歴の閲覧権限",
             "history_visibility_shared": "メンバーのみ（この設定を選択した時点から）",
             "history_visibility_warning": "履歴の閲覧権限に関する変更は、今後、このルームで表示されるメッセージにのみ適用されます。既存の履歴の見え方には影響しません。",

@@ -1276,7 +1276,6 @@
             "error_join_rule_change_unknown": "Nežinomas sutrikimas",
             "guest_access_warning": "Žmonės su palaikomais klientais galės prisijungti prie kambario neturėdami registruotos paskyros.",
             "history_visibility_invited": "Tik nariai (nuo jų pakvietimo)",
-            "history_visibility_joined": "Tik nariai (nuo jų prisijungimo)",
             "history_visibility_legend": "Kas gali skaityti istoriją?",
             "history_visibility_shared": "Tik nariai (nuo šios parinkties pasirinkimo momento)",
             "history_visibility_warning": "Kas gali skaityti istoriją nustatymų pakeitimai bus taikomi tik būsimoms šio kambario žinutėms. Esamos istorijos matomumas nepakis.",

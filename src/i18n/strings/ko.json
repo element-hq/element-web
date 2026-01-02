@@ -2386,7 +2386,6 @@
             "error_join_rule_change_unknown": "알 수 없는 오류",
             "guest_access_warning": "지원되는 클라이언트를 사용하는 사용자는 등록된 계정이 없어도 방에 참여할 수 있습니다.",
             "history_visibility_invited": "구성원만(구성원이 초대받은 시점부터)",
-            "history_visibility_joined": "구성원만(구성원들이 참여한 시점부터)",
             "history_visibility_legend": "누가 기록을 읽을 수 있나요?",
             "history_visibility_shared": "구성원만(이 설정을 선택한 시점부터)",
             "history_visibility_warning": "기존 기록의 공개 설정은 변경되지 않습니다",

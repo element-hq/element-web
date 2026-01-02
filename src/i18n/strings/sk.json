@@ -2457,7 +2457,6 @@
             "error_join_rule_change_unknown": "Neznáme zlyhanie",
             "guest_access_warning": "Ľudia s podporovanými klientmi sa budú môcť pripojiť do miestnosti bez toho, aby mali zaregistrovaný účet.",
             "history_visibility_invited": "Len členovia (odkedy boli pozvaní)",
-            "history_visibility_joined": "Len členovia (odkedy vstúpili)",
             "history_visibility_legend": "Kto môže čítať históriu?",
             "history_visibility_shared": "Len členovia (odkedy je aktívna táto voľba)",
             "history_visibility_warning": "Viditeľnosť existujúcej histórie sa nezmení.",

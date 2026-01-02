@@ -1837,7 +1837,6 @@
             "error_join_rule_change_unknown": "未知失败",
             "guest_access_warning": "拥有受支持客户端的人无需注册账户即可加入房间。",
             "history_visibility_invited": "只有成员（从他们被邀请开始）",
-            "history_visibility_joined": "只有成员（从他们加入开始）",
             "history_visibility_legend": "谁可以阅读历史消息？",
             "history_visibility_shared": "仅成员（从选中此选项时开始）",
             "history_visibility_warning": "历史记录阅读权限的更改只会应用到此房间中将来的消息。既有历史记录的可见性将不会更改。",

@@ -2009,7 +2009,6 @@
             "error_join_rule_change_unknown": "未知錯誤",
             "guest_access_warning": "有受支援的客戶端的夥伴不需要註冊帳號就可以加入聊天室。",
             "history_visibility_invited": "僅限成員（自他們被邀請開始）",
-            "history_visibility_joined": "僅限成員（自他們加入開始）",
             "history_visibility_legend": "誰可以閱讀紀錄？",
             "history_visibility_shared": "僅限成員（自選取此選項開始）",
             "history_visibility_warning": "對可閱讀訊息紀錄的使用者的變更，僅適用於此聊天室的新訊息。現有訊息的顯示狀態將保持不變。",

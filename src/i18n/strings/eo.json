@@ -1490,7 +1490,6 @@
             "error_join_rule_change_unknown": "Nekonata malsukceso",
             "guest_access_warning": "Personoj kun subtenataj klientoj povos aliĝi al la ĉambro sen registrita konto.",
             "history_visibility_invited": "Nur ĉambranoj (ekde la invito)",
-            "history_visibility_joined": "Nur ĉambranoj (ekde la aliĝo)",
             "history_visibility_legend": "Kiu povas legi la historion?",
             "history_visibility_shared": "Nur ĉambranoj (ekde ĉi tiu elekto)",
             "history_visibility_warning": "Ŝanĝoj al legebleco de historio nur efektiviĝos por osaj mesaĝoj de ĉi tiu ĉambro. La videbleco de jama historio ne ŝanĝiĝos.",

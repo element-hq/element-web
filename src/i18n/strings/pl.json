@@ -2397,7 +2397,6 @@
             "error_join_rule_change_unknown": "Nieznany błąd",
             "guest_access_warning": "Osoby ze wspieranymi klientami będą mogli dołączyć do pokoju bez posiadania konta.",
             "history_visibility_invited": "Tylko członkowie (od kiedy zostali zaproszeni)",
-            "history_visibility_joined": "Tylko członkowie (od kiedy dołączyli)",
             "history_visibility_legend": "Kto może czytać historię?",
             "history_visibility_shared": "Tylko członkowie (od momentu włączenia tej opcji)",
             "history_visibility_warning": "Widoczność istniejącej historii nie ulegnie zmianie.",

@@ -2073,7 +2073,6 @@
             "error_join_rule_change_unknown": "Ukendt fejl",
             "guest_access_warning": "Personer med understøttede klienter, vil kunne tilslutte sig rummet uden at have en registreret konto.",
             "history_visibility_invited": "Kun medlemmer (siden de blev inviteret)",
-            "history_visibility_joined": "Kun medlemmer (fra de kom ind)",
             "history_visibility_legend": "Hvem kan læse historikken?",
             "history_visibility_shared": "Kun medlemmer (siden det tidspunkt, hvor denne indstilling blev valgt)",
             "history_visibility_warning": "Synligheden af ​​den eksisterende historik vil ikke blive ændret.",
