@@ -385,7 +385,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_o1_"
+                aria-labelledby="_r_qd_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"

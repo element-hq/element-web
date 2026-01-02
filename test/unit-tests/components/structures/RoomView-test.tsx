@@ -639,8 +639,10 @@ describe("RoomView", () => {
             expect(stores.rightPanelStore.currentCard.phase).not.toEqual(RightPanelPhases.Timeline);
 
             await stores.roomViewStore.viewRoom({
+                action: Action.ViewRoom,
                 room_id: stores.roomViewStore.getRoomId()!,
                 event_id: "$eventId",
+                metricsTrigger: undefined,
             });
 
             expect(stores.rightPanelStore.isOpen).toEqual(true);
