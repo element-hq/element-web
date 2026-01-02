@@ -308,6 +308,8 @@ export function createTestClient(): MatrixClient {
         _unstable_cancelScheduledDelayedEvent: jest.fn(),
         _unstable_restartScheduledDelayedEvent: jest.fn(),
         _unstable_sendScheduledDelayedEvent: jest.fn(),
+        _unstable_sendStickyEvent: jest.fn(),
+        _unstable_sendStickyDelayedEvent: jest.fn(),
 
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
@@ -677,6 +679,7 @@ export function mkStubRoom(
         getCanonicalAlias: jest.fn(),
         getDMInviter: jest.fn(),
         getEventReadUpTo: jest.fn(() => null),
+        getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Joined),
         getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(1),
         getJoinRule: jest.fn().mockReturnValue("invite"),
         getJoinedMemberCount: jest.fn().mockReturnValue(1),

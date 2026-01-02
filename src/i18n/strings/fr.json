@@ -2122,7 +2122,7 @@
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit": "Votre message n’a pas été envoyé car ce serveur d’accueil a dépassé une de ses limites de ressources. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-            "history_visible": "Les messages que vous enverrez seront partagés avec les nouveaux membres invités dans ce salon.<a> En savoir plus</a>",
+            "history_visible": "Ce salon a été configuré afin que les nouveaux membres puissent lire l'historique.<a> En savori plus</a>",
             "homeserver_blocked": "Votre message n’a pas été envoyé car ce serveur d’accueil a été bloqué par son administrateur. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
             "monthly_user_limit_reached": "Votre message n’a pas été envoyé car le serveur d’accueil a atteint sa limite mensuelle d’utilisateurs. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
             "requires_consent_agreement": "Vous ne pouvez voir aucun message tant que vous ne lisez et n’acceptez pas nos <consentLink>conditions générales</consentLink>.",
@@ -2211,26 +2211,6 @@
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
-        },
-        "release_announcement": {
-            "done": "Terminé",
-            "filter": {
-                "description": "Filtrez vos discussions en un clic. Développez pour afficher plus de filtres.",
-                "title": "Nouveaux filtres"
-            },
-            "intro": {
-                "description": "La liste des discussions a été mise à jour pour être plus claire et plus facile à utiliser.",
-                "title": "Les discussions ont une nouvelle apparence !"
-            },
-            "next": "Suivant",
-            "settings": {
-                "description": "Pour afficher ou cacher les aperçus des messages, aller dans Tous les paramètres > Préférences > Liste de salons",
-                "title": "Certains paramètres ont été déplacés"
-            },
-            "sort": {
-                "description": "Modifiez l'ordre de vos discussions par ordre chronologique ou par alphabétique",
-                "title": "Triez vos discussions"
-            }
         },
         "room": {
             "more_options": "Plus d’options",
@@ -2901,10 +2881,6 @@
             "rule_suppress_notices": "Messages envoyés par des robots",
             "rule_tombstone": "Quand les salons sont mis à niveau",
             "show_message_desktop_notification": "Afficher le message dans les notifications de bureau",
-            "sounds_release_announcement": {
-                "description": "Votre ping de notification et votre sonnerie d'appel ont été mis à jour : plus clairs, plus rapides et moins perturbateurs",
-                "title": "Nous avons rafraîchi vos sons"
-            },
             "voip": "Appels audio et vidéo"
         },
         "preferences": {

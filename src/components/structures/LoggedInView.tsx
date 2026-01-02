@@ -359,14 +359,15 @@ class LoggedInView extends React.Component<IProps, IState> {
         const newErrCode = (data?.error as MatrixError)?.errcode;
         if (syncState === oldSyncState && oldErrCode === newErrCode) return;
 
+        const syncErrorData = syncState === SyncState.Error ? data : undefined;
         this.setState({
-            syncErrorData: syncState === SyncState.Error ? data : undefined,
+            syncErrorData,
         });
 
         if (oldSyncState === SyncState.Prepared && syncState === SyncState.Syncing) {
             this.updateServerNoticeEvents();
         } else {
-            this.calculateServerLimitToast(this.state.syncErrorData, this.state.usageLimitEventContent);
+            this.calculateServerLimitToast(syncErrorData, this.state.usageLimitEventContent);
         }
     };
 
@@ -391,7 +392,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         // usageLimitDismissed is true when the user has explicitly hidden the toast
         // and it will be reset to false if a *new* usage alert comes in.
-        if (usageLimitEventContent && this.state.usageLimitDismissed) {
+        if (usageLimitEventContent && !this.state.usageLimitDismissed) {
             showServerLimitToast(
                 usageLimitEventContent.limit_type,
                 this.onUsageLimitDismissed,

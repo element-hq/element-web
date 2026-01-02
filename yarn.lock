@@ -9685,7 +9685,7 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.14.0:
+matrix-widget-api@^1.10.0, matrix-widget-api@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==

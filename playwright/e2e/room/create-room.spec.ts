@@ -35,7 +35,10 @@ test.describe("Create Room", () => {
             axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
             await expect(axe).toHaveNoViolations();
             // Snapshot it
-            await expect(dialog).toMatchScreenshot("create-room.png");
+            // Mask topic to avoid flakiness with top border
+            await expect(dialog).toMatchScreenshot("create-room.png", {
+                mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+            });
 
             // Submit
             await dialog.getByRole("button", { name: "Create room" }).click();
@@ -74,7 +77,10 @@ test.describe("Create Room", () => {
         // Fill room address
         await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-video");
         // Snapshot it
-        await expect(dialog).toMatchScreenshot("create-video-room.png");
+        // Mask topic to avoid flakiness with top border
+        await expect(dialog).toMatchScreenshot("create-video-room.png", {
+            mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+        });
 
         // Submit
         await dialog.getByRole("button", { name: "Create video room" }).click();
@@ -102,7 +108,10 @@ test.describe("Create Room", () => {
             axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
             await expect(axe).toHaveNoViolations();
             // Snapshot it
-            await expect(dialog).toMatchScreenshot("create-room-no-public.png");
+            // Mask topic to avoid flakiness with top border
+            await expect(dialog).toMatchScreenshot("create-room-no-public.png", {
+                mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+            });
 
             // Submit
             await dialog.getByRole("button", { name: "Create room" }).click();
