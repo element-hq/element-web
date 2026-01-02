@@ -582,12 +582,21 @@ describe("RoomHeader", () => {
             expect(videoButton).toHaveAttribute("aria-disabled", "true");
         });
 
-        it("join button is shown if there is an ongoing call", async () => {
+        it("join video call button is shown if there is an ongoing call", async () => {
             mockRoomMembers(room, 3);
             // Mock CallStore to return a call with 3 participants
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Join");
+            const joinButton = getByLabelText(document.body, "Join Video Call");
+            expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
+        });
+
+        it("join voice call button is shown if there is an ongoing call", async () => {
+            mockRoomMembers(room, 3);
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice));
+            render(<RoomHeader room={room} />, getWrapper());
+            const joinButton = getByLabelText(document.body, "Join Voice Call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
         });
 
@@ -859,7 +868,11 @@ describe("RoomHeader", () => {
 /**
  * Creates a mock Call object with stable participants to prevent React dependency errors
  */
-function createMockCall(roomId: string = "!1:example.org", participantCount: number = 0): Call {
+function createMockCall(
+    roomId: string = "!1:example.org",
+    participantCount: number = 0,
+    callType: CallType = CallType.Video,
+): Call {
     const participants = new Map();
 
     // Create mock participants with devices
@@ -878,6 +891,7 @@ function createMockCall(roomId: string = "!1:example.org", participantCount: num
         participants,
         widget: { id: "test-widget" },
         connectionState: "disconnected",
+        callType,
         on: jest.fn(),
         off: jest.fn(),
         emit: jest.fn(),

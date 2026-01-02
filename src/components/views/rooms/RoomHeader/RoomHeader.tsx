@@ -74,7 +74,7 @@ function RoomHeaderButtons({
         toggleCallMaximized: toggleCall,
         isViewingCall,
         isConnectedToCall,
-        activeCallSession,
+        activeCallSessionType,
         callOptions,
         showVoiceCallButton,
         showVideoCallButton,
@@ -106,16 +106,26 @@ function RoomHeaderButtons({
     );
 
     const joinCallButton = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
+        <Tooltip
+            label={
+                videoCallDisabledReason ??
+                (activeCallSessionType === CallType.Voice ? _t("voip|voice_call") : _t("voip|video_call"))
+            }
+        >
             <Button
                 size="sm"
                 onClick={videoClick}
                 // If we know this is a voice session, show the voice call. All other kinds of call are video calls.
-                Icon={activeCallSession?.type === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
+                Icon={activeCallSessionType === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
                 className="mx_RoomHeader_join_button"
                 disabled={!!videoCallDisabledReason}
                 color="primary"
-                aria-label={videoCallDisabledReason ?? _t("action|join")}
+                aria-label={
+                    videoCallDisabledReason ??
+                    (activeCallSessionType === CallType.Voice
+                        ? _t("room|header|join_voice_call")
+                        : _t("room|header|join_video_call"))
+                }
                 data-testId="join-call-button"
             >
                 {_t("action|join")}
@@ -305,7 +315,7 @@ function RoomHeaderButtons({
 
             {isViewingCall && <CallGuestLinkButton room={room} />}
 
-            {activeCallSession && !isConnectedToCall && !isViewingCall ? (
+            {activeCallSessionType && !isConnectedToCall && !isViewingCall ? (
                 joinCallButton
             ) : (
                 <>
