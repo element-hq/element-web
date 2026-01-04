@@ -533,7 +533,6 @@ export default class Registration extends React.Component<IProps, IState> {
                     sessionId={this.props.sessionId}
                     clientSecret={this.props.clientSecret}
                     emailSid={this.props.idSid}
-                    poll={true}
                 />
             );
         } else if (!this.state.matrixClient && !this.state.busy) {
