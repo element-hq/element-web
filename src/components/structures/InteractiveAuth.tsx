@@ -44,8 +44,6 @@ export interface InteractiveAuthProps<T> {
     sessionId?: string;
     clientSecret?: string;
     emailSid?: string;
-    // If true, poll to see if the auth flow has been completed out-of-band
-    poll?: boolean;
     // continueText and continueKind are passed straight through to the AuthEntryComponent.
     continueText?: string;
     continueKind?: ContinueKind;
