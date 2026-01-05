@@ -58,6 +58,12 @@ We are aiming for a set of common strings to be shared then some more localised 
 Edits to existing strings should be performed only via Localazy.
 There you can also require all translations to be redone if the meaning of the string has changed significantly.
 
+## Removing existing strings
+
+You can remove an existing string by removing the key from `en_EN.json`. Do not modify other language json files for this purpose.
+
+Localazy will mark the keys you removed as deprecated. See https://localazy.com/docs/general/editing-source-language#source-key-states for more information about the difference between deprecated keys and deleted keys.
+
 ## Adding variables inside a string.
 
 1. Extend your `_t()` call. Instead of `_t(TKEY)` use `_t(TKEY, {})`
