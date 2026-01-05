@@ -38,8 +38,7 @@ import {
     ElementCall,
     ElementCallIntent,
 } from "../../../src/models/Call";
-import { cleanUpClientRoomAndStores, enableCalls, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
-import WidgetStore from "../../../src/stores/WidgetStore";
+import { cleanUpClientRoomAndStores, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
@@ -49,8 +48,6 @@ import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
-
-const { enabledSettings } = enableCalls();
 
 const setUpWidget = (
     call: Call,
