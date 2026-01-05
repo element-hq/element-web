@@ -647,6 +647,10 @@ test.describe("Element Call", () => {
 
             // For this test we want to display the chat area alongside the widget
             await page.getByRole("button", { name: "Chat" }).click();
+            // Wait for the right panel to show the timeline.
+            await expect(
+                page.locator(".mx_RightPanel .mx_TimelineCard").getByText("Alice created and configured the room."),
+            ).toBeVisible();
 
             await page
                 .locator('iframe[title="Element Call"]')
