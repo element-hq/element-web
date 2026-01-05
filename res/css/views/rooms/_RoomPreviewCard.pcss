@@ -92,7 +92,13 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_FacePile {
-        margin-top: $spacing-20;
+        display: flex;
+        align-items: center;
+        margin-top: $spacing-16;
+
+        :first-child {
+            flex-shrink: 0;
+        }
     }
 
     .mx_RoomPreviewCard_joinButtons {

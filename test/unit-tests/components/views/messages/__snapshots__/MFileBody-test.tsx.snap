@@ -9,7 +9,7 @@ exports[`<MFileBody/> should show a download button in file rendering type 1`] =
       class="mx_MFileBody_download"
     >
       <a
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         rel="noreferrer noopener"

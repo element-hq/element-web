@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { LinkIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LinkIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
@@ -18,7 +18,6 @@ import { showRoomInviteDialog } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
-import { Icon as InviteIcon } from "../../../../res/img/element-icons/room/invite.svg";
 import SpacePillButton from "../../structures/SpacePillButton.tsx";
 
 interface IProps {
@@ -51,7 +50,7 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
             {space.canInvite(MatrixClientPeg.safeGet().getSafeUserId()) &&
             shouldShowComponent(UIComponent.InviteUsers) ? (
                 <SpacePillButton
-                    icon={<InviteIcon />}
+                    icon={<UserAddIcon />}
                     title={_t("space|invite")}
                     description={_t("space|invite_description")}
                     onClick={() => {

@@ -498,7 +498,7 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_footer {
-            margin: var(--cpd-space-1x) var(--cpd-space-16x);
+            margin: var(--cpd-space-1x) var(--EventTile_group_line-spacing-inline-start);
         }
 
         > .mx_DisambiguatedProfile {
@@ -758,6 +758,12 @@ $left-gutter: 64px;
             display: inline-block;
         }
         */
+
+        /* Support arbitrarily large marker numbers */
+        ol {
+            list-style-position: inside;
+            padding-inline-start: 0.5em;
+        }
 
         /* Override nested lists being lower-roman */
         ol ol,

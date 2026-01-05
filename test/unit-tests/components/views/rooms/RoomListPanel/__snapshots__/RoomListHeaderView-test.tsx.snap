@@ -25,7 +25,7 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_q_"
+        id="radix-_r_i_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -55,7 +55,6 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
@@ -63,11 +62,11 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_12_"
+          aria-labelledby="_r_m_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_10_"
+          id="radix-_r_k_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -93,18 +92,17 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
         </button>
       </div>
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-labelledby="_r_1d_"
+          aria-labelledby="_r_t_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_1b_"
+          id="radix-_r_r_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -165,7 +163,7 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_1k_"
+        id="radix-_r_14_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -195,7 +193,6 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
@@ -203,11 +200,11 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_1s_"
+          aria-labelledby="_r_18_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_1q_"
+          id="radix-_r_16_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -233,11 +230,10 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
         </button>
       </div>
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
-          aria-labelledby="_r_25_"
+          aria-labelledby="_r_1d_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           role="button"
@@ -329,7 +325,6 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
@@ -337,11 +332,11 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_8_"
+          aria-labelledby="_r_4_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_6_"
+          id="radix-_r_2_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -367,18 +362,17 @@ exports[`<RoomListHeaderView /> should render 'room options' button 1`] = `
         </button>
       </div>
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-labelledby="_r_j_"
+          aria-labelledby="_r_b_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_h_"
+          id="radix-_r_9_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -439,7 +433,7 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         class="_icon-button_1pz9o_8 mx_SpaceMenu_button"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_4e_"
+        id="radix-_r_36_"
         role="button"
         style="--cpd-icon-button-size: 20px;"
         tabindex="0"
@@ -469,7 +463,6 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
@@ -477,11 +470,11 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_4m_"
+          aria-labelledby="_r_3a_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_4k_"
+          id="radix-_r_38_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -507,18 +500,17 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
         </button>
       </div>
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-labelledby="_r_51_"
+          aria-labelledby="_r_3h_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_4v_"
+          id="radix-_r_3f_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -577,7 +569,6 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
@@ -585,11 +576,11 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Room Options"
-          aria-labelledby="_r_5e_"
+          aria-labelledby="_r_3q_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_5c_"
+          id="radix-_r_3o_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"
@@ -615,18 +606,17 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
         </button>
       </div>
       <div
-        aria-haspopup="dialog"
         class="mx_RoomListHeaderView_ReleaseAnnouncementAnchor"
       >
         <button
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
-          aria-labelledby="_r_5p_"
+          aria-labelledby="_r_41_"
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-_r_5n_"
+          id="radix-_r_3v_"
           role="button"
           style="--cpd-icon-button-size: 32px;"
           tabindex="0"

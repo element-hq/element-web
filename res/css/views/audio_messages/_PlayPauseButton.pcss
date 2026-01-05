@@ -14,11 +14,11 @@ Please see LICENSE files in the repository root for full details.
     min-height: 32px; /* for when the button is used in a flexbox */
     border-radius: 32px;
     background-color: $system;
-    padding: var(--cpd-space-1-5x);
+    /* !important override compound icon button */
+    padding: var(--cpd-space-1-5x) !important;
     box-sizing: border-box;
 
     svg {
-        color: $secondary-content;
         width: 20px;
         height: 20px;
     }

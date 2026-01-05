@@ -78,9 +78,17 @@ describe("ForwardDialog", () => {
     });
     const defaultRooms = ["a", "A", "b"].map((name) => mkStubRoom(name, name, mockClient));
 
-    const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms) => {
+    const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms, stubSource = false) => {
         mockClient.getVisibleRooms.mockReturnValue(rooms);
-        mockClient.getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
+
+        const sourceRoomStub = mkStubRoom(sourceRoom, sourceRoom, mockClient);
+
+        mockClient.getRoom.mockImplementation((roomId) => {
+            if (stubSource && roomId === sourceRoom) {
+                return sourceRoomStub; // Return the source room stub, if enabled
+            }
+            return rooms.find((room) => room.roomId === roomId) || null;
+        });
 
         const wrapper: RenderResult = render(
             <ForwardDialog
@@ -249,34 +257,55 @@ describe("ForwardDialog", () => {
         expect(secondButton.getAttribute("aria-disabled")).toBeFalsy();
     });
 
-    it("strips mentions from forwarded messages", async () => {
-        const messageWithMention = mkEvent({
-            type: "m.room.message",
-            room: sourceRoom,
-            user: "@bob:example.org",
-            content: {
-                "msgtype": "m.text",
-                "body": "Hi @alice:example.org",
-                "m.mentions": {
-                    user_ids: ["@alice:example.org"],
-                },
-            },
-            event: true,
-        });
-
-        const { container } = mountForwardDialog(messageWithMention);
+    describe("Mention recalculation", () => {
         const roomId = "a";
+        const sendClick = (container: HTMLElement): void =>
+            act(() => {
+                const sendButton = container.querySelector(".mx_ForwardList_sendButton");
+                fireEvent.click(sendButton!);
+            });
+        const makeMessage = (body: string, mentions: object, formattedBody?: string) => {
+            return mkEvent({
+                type: "m.room.message",
+                room: sourceRoom,
+                user: "@bob:example.org",
+                content: {
+                    "msgtype": "m.text",
+                    "body": body,
+                    "m.mentions": mentions,
+                    ...(formattedBody && {
+                        format: "org.matrix.custom.html",
+                        formatted_body: formattedBody,
+                    }),
+                },
+                event: true,
+            });
+        };
 
-        // Click the send button.
-        act(() => {
-            const sendButton = container.querySelector(".mx_ForwardList_sendButton");
-            fireEvent.click(sendButton!);
+        it("strips extra mentions", async () => {
+            const message = makeMessage("Hi Alice", { user_ids: [aliceId] });
+            const { container } = mountForwardDialog(message);
+            sendClick(container);
+            // Expected content should have mentions empty.
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
+                ...message.getContent(),
+                "m.mentions": {},
+            });
         });
 
-        // Expected content should have mentions empty.
-        expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, messageWithMention.getType(), {
-            ...messageWithMention.getContent(),
-            "m.mentions": {},
+        it("recalculates mention pills", async () => {
+            const message = makeMessage(
+                "Hi Alice",
+                { user_ids: [aliceId] },
+                `Hi <a href="https://matrix.to/#/${aliceId}">Alice</a>`,
+            );
+            const { container } = mountForwardDialog(message, defaultRooms, true);
+            sendClick(container);
+            // Expected content should have mentions empty.
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, message.getType(), {
+                ...message.getContent(),
+                "m.mentions": { user_ids: [aliceId] },
+            });
         });
     });
 

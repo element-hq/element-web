@@ -36,7 +36,7 @@ exports[`ShareDialog should not render the QR code if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -168,13 +168,24 @@ exports[`ShareDialog should not render the socials if disabled 1`] = `
           <div
             class="mx_Spinner"
           >
-            <div
+            <svg
               aria-label="Loading…"
-              class="mx_Spinner_icon"
+              class="_icon_11k6c_18"
               data-testid="spinner"
+              fill="currentColor"
+              height="1em"
               role="progressbar"
               style="width: 32px; height: 32px;"
-            />
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
         <span>
@@ -182,7 +193,7 @@ exports[`ShareDialog should not render the socials if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -255,13 +266,24 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
           <div
             class="mx_Spinner"
           >
-            <div
+            <svg
               aria-label="Loading…"
-              class="mx_Spinner_icon"
+              class="_icon_11k6c_18"
               data-testid="spinner"
+              fill="currentColor"
+              height="1em"
               role="progressbar"
               style="width: 32px; height: 32px;"
-            />
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
         <span>
@@ -297,7 +319,7 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
         Link to selected message
       </label>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -429,13 +451,24 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
           <div
             class="mx_Spinner"
           >
-            <div
+            <svg
               aria-label="Loading…"
-              class="mx_Spinner_icon"
+              class="_icon_11k6c_18"
               data-testid="spinner"
+              fill="currentColor"
+              height="1em"
               role="progressbar"
               style="width: 32px; height: 32px;"
-            />
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
         <span>
@@ -470,7 +503,7 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
         Link to most recent message
       </label>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -602,13 +635,24 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           <div
             class="mx_Spinner"
           >
-            <div
+            <svg
               aria-label="Loading…"
-              class="mx_Spinner_icon"
+              class="_icon_11k6c_18"
               data-testid="spinner"
+              fill="currentColor"
+              height="1em"
               role="progressbar"
               style="width: 32px; height: 32px;"
-            />
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
         <span>
@@ -616,7 +660,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -748,13 +792,24 @@ exports[`ShareDialog should render a share dialog for an URL 1`] = `
           <div
             class="mx_Spinner"
           >
-            <div
+            <svg
               aria-label="Loading…"
-              class="mx_Spinner_icon"
+              class="_icon_11k6c_18"
               data-testid="spinner"
+              fill="currentColor"
+              height="1em"
               role="progressbar"
               style="width: 32px; height: 32px;"
-            />
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
         <span>
@@ -762,7 +817,7 @@ exports[`ShareDialog should render a share dialog for an URL 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"

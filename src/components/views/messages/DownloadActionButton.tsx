@@ -43,7 +43,7 @@ export default function DownloadActionButton({ mxEvent, mediaEventHelperGet }: I
 
     if (!canDownload) return null;
 
-    const spinner = loading ? <Spinner w={18} h={18} /> : undefined;
+    const spinner = loading ? <Spinner size={18} /> : undefined;
     const classes = classNames({
         mx_MessageActionBar_iconButton: true,
         mx_MessageActionBar_downloadButton: true,
