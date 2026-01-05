@@ -108,6 +108,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 const isCodeEllipsisShown = code ? code.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS : false;
                 const isElipsisShown =
                     el.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS ||
+                    el.clientHeight !== el.scrollHeight ||
                     [...el.children].some((child) => child.clientHeight !== child.scrollHeight) ||
                     isCodeEllipsisShown;
                 if (isElipsisShown) {
