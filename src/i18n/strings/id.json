@@ -2191,26 +2191,6 @@
             "one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
             "other": "Saat ini menghapus pesan-pesan di %(count)s ruangan"
         },
-        "release_announcement": {
-            "done": "Selesai",
-            "filter": {
-                "description": "Saring obrolan Anda dengan satu klik. Klik untuk melihat lebih banyak filter.",
-                "title": "Filter cepat baru"
-            },
-            "intro": {
-                "description": "Daftar obrolan telah diperbarui agar lebih jelas dan mudah digunakan.",
-                "title": "Obrolan memiliki tampilan baru!"
-            },
-            "next": "Berikutnya",
-            "settings": {
-                "description": "Untuk menampilkan atau menyembunyikan pratinjau pesan, buka Semua pengaturan > Preferensi > Daftar ruangan",
-                "title": "Beberapa pengaturan telah dipindahkan"
-            },
-            "sort": {
-                "description": "Ubah urutan obrolan Anda dari yang terbaru ke A-Z",
-                "title": "Urutkan obrolan Anda"
-            }
-        },
         "room": {
             "more_options": "Opsi Lainnya",
             "open_room": "Buka ruangan %(roomName)s"
@@ -2876,10 +2856,6 @@
             "rule_suppress_notices": "Pesan dikirim oleh bot",
             "rule_tombstone": "Ketika ruangan telah ditingkatkan",
             "show_message_desktop_notification": "Tampilkan pesan di notifikasi desktop",
-            "sounds_release_announcement": {
-                "description": "Notifikasi ping dan dering panggilan Anda telah diperbarui—lebih jelas, lebih cepat, dan tidak mengganggu",
-                "title": "Kami telah menyegarkan suara Anda"
-            },
             "voip": "Panggilan Audio dan Video"
         },
         "preferences": {

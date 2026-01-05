@@ -766,6 +766,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             newState.search = undefined;
         }
 
+        if (
+            room &&
+            this.getMainSplitContentType(room) !== MainSplitContentType.Timeline &&
+            newState.initialEventId !== this.state.initialEventId
+        ) {
+            // Ensure the right panel timeline is open to show the linked event
+            this.context.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }, true, room.roomId);
+        }
+
         this.setState(newState as IRoomState);
         // At this point, newState.roomId could be null (e.g. the alias might not
         // have been resolved yet) so anything called here must handle this case.

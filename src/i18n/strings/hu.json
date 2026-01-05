@@ -2078,25 +2078,8 @@
         "notification_options": "Értesítési beállítások",
         "open_space_menu": "Tér menü megnyitása",
         "primary_filters": "Szobalistaszűrők",
-        "release_announcement": {
-            "done": "Kész",
-            "filter": {
-                "description": "Szűrje a csevegéseit egyetlen kattintással. Bontsa ki a további szűrők megtekintéséhez.",
-                "title": "Új gyorsszűrők"
-            },
-            "intro": {
-                "description": "A csevegési lista frissült, hogy áttekinthetőbb és egyszerűbben használható legyen.",
-                "title": "A csevegések új megjelenést kaptak!"
-            },
-            "next": "Következő",
-            "settings": {
-                "description": "Az üzenetelőnézetek megjelenítéséhez vagy elrejtéséhez ugorjon a Minden beállítás &gt; Beállítások &gt; Szobalista menüponthoz.",
-                "title": "Néhány beállítás áthelyezésre került"
-            },
-            "sort": {
-                "description": "A csevegések sorrendjének módosítása a legutóbbiról A–Z-re",
-                "title": "Csevegések rendezése"
-            }
+        "redacting_messages_status": {
+            "Üzenet törlése %(count)s szobából": "other"
         },
         "room": {
             "more_options": "További lehetőségek",
@@ -2743,10 +2726,6 @@
             "rule_suppress_notices": "Botok üzenetei",
             "rule_tombstone": "Amikor a szobák fejlesztésre kerülnek",
             "show_message_desktop_notification": "Üzenet megjelenítése az asztali értesítésekben",
-            "sounds_release_announcement": {
-                "description": "Az értesítési hang és a híváscsengő hangja frissült – tisztább, gyorsabb és kevésbé zavaró lett.",
-                "title": "Frissítettük az értesítési hangokat"
-            },
             "voip": "Hang- és videóhívások"
         },
         "preferences": {

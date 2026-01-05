@@ -2242,26 +2242,6 @@
             "few": "V súčasnosti sa odstraňujú správy v %(count)s miestnostiach",
             "other": "V súčasnosti sa odstraňujú správy v %(count)s miestnostiach"
         },
-        "release_announcement": {
-            "done": "Hotovo",
-            "filter": {
-                "description": "Filtrujte svoje konverzácie jedným kliknutím. Rozbaľte pre zobrazenie ďalších filtrov.",
-                "title": "Nové rýchle filtre"
-            },
-            "intro": {
-                "description": "Zoznam konverzácií bol aktualizovaný, aby bol prehľadnejší a jednoduchšie použiteľný.",
-                "title": "Konverzácie majú nový vzhľad!"
-            },
-            "next": "Ďalej",
-            "settings": {
-                "description": "Ak chcete zobraziť alebo skryť ukážky správ, prejdite do časti Všetky nastavenia > Predvoľby > Zoznam miestností",
-                "title": "Niektoré nastavenia boli presunuté"
-            },
-            "sort": {
-                "description": "Zmeňte poradie svojich konverzácií od najnovších po A-Z",
-                "title": "Zoraďte svoje konverzácie"
-            }
-        },
         "room": {
             "more_options": "Viac možností",
             "open_room": "Otvoriť miestnosť %(roomName)s"
@@ -2935,10 +2915,6 @@
             "rule_suppress_notices": "Správy odosielané robotmi",
             "rule_tombstone": "Keď sú miestnosti aktualizované",
             "show_message_desktop_notification": "Zobraziť text správy v oznámení na pracovnej ploche",
-            "sounds_release_announcement": {
-                "description": "Vaše oznámenia a zvonenie telefónu boli aktualizované – sú jasnejšie, rýchlejšie a menej rušivé.",
-                "title": "Obnovili sme vaše zvuky"
-            },
             "voip": "Zvukové a video hovory"
         },
         "preferences": {

@@ -2209,26 +2209,6 @@
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
         },
-        "release_announcement": {
-            "done": "Terminé",
-            "filter": {
-                "description": "Filtrez vos discussions en un clic. Développez pour afficher plus de filtres.",
-                "title": "Nouveaux filtres"
-            },
-            "intro": {
-                "description": "La liste des discussions a été mise à jour pour être plus claire et plus facile à utiliser.",
-                "title": "Les discussions ont une nouvelle apparence !"
-            },
-            "next": "Suivant",
-            "settings": {
-                "description": "Pour afficher ou cacher les aperçus des messages, aller dans Tous les paramètres > Préférences > Liste de salons",
-                "title": "Certains paramètres ont été déplacés"
-            },
-            "sort": {
-                "description": "Modifiez l'ordre de vos discussions par ordre chronologique ou par alphabétique",
-                "title": "Triez vos discussions"
-            }
-        },
         "room": {
             "more_options": "Plus d’options",
             "open_room": "Ouvrir salon %(roomName)s"
@@ -2898,10 +2878,6 @@
             "rule_suppress_notices": "Messages envoyés par des robots",
             "rule_tombstone": "Quand les salons sont mis à niveau",
             "show_message_desktop_notification": "Afficher le message dans les notifications de bureau",
-            "sounds_release_announcement": {
-                "description": "Votre ping de notification et votre sonnerie d'appel ont été mis à jour : plus clairs, plus rapides et moins perturbateurs",
-                "title": "Nous avons rafraîchi vos sons"
-            },
             "voip": "Appels audio et vidéo"
         },
         "preferences": {

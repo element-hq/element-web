@@ -844,6 +844,7 @@
         "number_of_users": "Kasutajate arv",
         "only_joined_members": "Vaid liitunud kasutajad",
         "original_event_source": "Sündmuse töötlemata lähtekood",
+        "restore_from_backup": "Taasta varukoopiast",
         "room_encrypted": "Jututuba on <strong>krüptitud ✅</strong>",
         "room_id": "Jututoa tunnus: %(roomId)s",
         "room_not_encrypted": "Jututuba on <strong>krüptimata 🚨</strong>",
@@ -953,6 +954,7 @@
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
         "confirm_encryption_setup_body": "Kinnitamaks, et soovid krüptimist seadistada, klõpsi järgnevat nuppu.",
         "confirm_encryption_setup_title": "Krüptimise seadistuse kinnitamine",
+        "continue_with_reset": "Jätka lähtestamisega",
         "cross_signing_room_normal": "See jututuba on läbivalt krüptitud",
         "cross_signing_room_verified": "Kõik kasutajad siin jututoas on verifitseeritud",
         "cross_signing_room_warning": "Keegi kasutab tundmatut sessiooni",
@@ -968,6 +970,7 @@
         "event_shield_reason_unverified_identity": "Krüptitud verifitseerimata kasutaja poolt.",
         "export_unsupported": "Sinu brauser ei toeta vajalikke krüptoteeke",
         "forgot_recovery_key": "Kas unustasid taastevõtme?",
+        "identity_needs_reset_description": "Sõnumite ajaloole juurdepääsu tagamiseks pead oma krüptograafilise võrguidentiteedi lähtestama.",
         "import_invalid_keyfile": "See ei ole sobilik võtmefail %(brand)s'i jaoks",
         "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
         "key_storage_out_of_sync": "Sinu krüptovõtmete hoidla pole sünkroonis.",
@@ -2209,26 +2212,6 @@
             "other": "Kustutame sõnumeid %(count)s jututoas",
             "one": "Kustutame sõnumeid %(count)s jututoas"
         },
-        "release_announcement": {
-            "done": "Valmis",
-            "filter": {
-                "description": "Filtreeri oma vestlusi ühe klõpsuga. Lisafiltrite nägemiseks laienda vaadet.",
-                "title": "Uued kiirfiltrid"
-            },
-            "intro": {
-                "description": "Vestluste loend on uuendatud, et see oleks selgem ja hõlpsamini kasutatav.",
-                "title": "Vestlustel on uus välimus!"
-            },
-            "next": "Edasi",
-            "settings": {
-                "description": "Sõnumite eelvaate näitamiseks või peitmiseks ava „Kõik seadistused“ > „Eelistused“ > „Jututubade loend“",
-                "title": "Mõned seadistused on nüüd uues kohas"
-            },
-            "sort": {
-                "description": "Vestlusi võid järjestada ajalises või tähestikulises järjekorras",
-                "title": "Järjesta oma vestlusi"
-            }
-        },
         "room": {
             "more_options": "Täiendavad seadistused",
             "open_room": "Ava jututuba: %(roomName)s"
@@ -2898,10 +2881,6 @@
             "rule_suppress_notices": "Robotite saadetud sõnumid",
             "rule_tombstone": "Kui jututubasid uuendatakse",
             "show_message_desktop_notification": "Näita sõnumit töölauakeskkonnale omases teavituses",
-            "sounds_release_announcement": {
-                "description": "Sinu teavituste märguanne ja kõnehelin on uuendatud - selgemad, kiiremad ja vähem häirivad",
-                "title": "Oleme sinu helisid värskendanud"
-            },
             "voip": "Kõned ja videokõned"
         },
         "preferences": {

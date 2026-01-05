@@ -19,7 +19,7 @@
     },
     "room": {
         "status_bar": {
-            "history_visible": "Sinu saadetud sõnumeid jagatakse sellesse jututuppa kutsutud uute liikmetega.<a> Lisateave</a>"
+            "history_visible": "See jututuba on seadistatud sel viisil, et uued liikmed saavad lugeda varasemat ajalugu.<a> Lisateave</a>"
         }
     },
     "time": {

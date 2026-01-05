@@ -43,6 +43,7 @@ Please see LICENSE files in the repository root for full details.
         &[data-layout="irc"],
         &[data-layout="group"] {
             --TimelineCard_ReadReceiptGroup-inset-block-start: -6px;
+            --EventTile_group_line-spacing-inline-start: var(--BaseCard_EventTile-spacing-inline);
 
             &.mx_EventTile_info .mx_EventTile_line,
             .mx_EventTile_line {
@@ -77,7 +78,6 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_DisambiguatedProfile,
-            .mx_ReactionsRow,
             .mx_ThreadSummary {
                 margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
             }

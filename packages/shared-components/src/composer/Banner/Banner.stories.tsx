@@ -11,7 +11,6 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import { Button } from "@vector-im/compound-web";
 
 import { Banner } from "./Banner";
-import { _t } from "../../utils/i18n";
 
 const meta = {
     title: "room/Banner",
@@ -46,17 +45,14 @@ export const WithAction: Story = {
     args: {
         children: (
             <p>
-                {_t(
-                    "encryption|pinned_identity_changed",
-                    { displayName: "Alice", userId: "@alice:example.org" },
-                    {
-                        a: (sub) => <a href="https://example.org">{sub}</a>,
-                        b: (sub) => <b>{sub}</b>,
-                    },
-                )}
+                Alice's (<b>@alice:example.com</b>) identity was reset. <a href="https://example.org">Learn more</a>
             </p>
         ),
-        actions: <Button kind="primary">{_t("encryption|withdraw_verification_action")}</Button>,
+        actions: (
+            <Button kind="primary" size="sm">
+                Withdraw verification
+            </Button>
+        ),
     },
 };
 
@@ -69,5 +65,21 @@ export const WithAvatarImage: Story = {
 export const WithoutClose: Story = {
     args: {
         onClose: undefined,
+    },
+};
+
+export const WithLoadsOfContent: Story = {
+    args: {
+        type: "info",
+        children: (
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis massa facilisis, venenatis risus
+                consectetur, sagittis libero. Aenean et scelerisque justo. Nunc luctus, mi sed facilisis suscipit, magna
+                ante pharetra sem, eu rutrum purus quam quis arcu. Sed eleifend arcu vitae magna sodales, sit amet
+                fermentum urna dictum. Mauris vel velit pulvinar enim mollis tincidunt. Vivamus egestas rhoncus
+                sagittis. Curabitur auctor vehicula massa, et cursus lacus laoreet a. Maecenas et sollicitudin lectus,
+                in ligula.
+            </p>
+        ),
     },
 };

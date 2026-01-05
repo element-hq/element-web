@@ -79,7 +79,7 @@ export function Banner({
     return (
         <div {...props} className={classes} data-type={type}>
             <div className={styles.icon}>{avatar ?? icon}</div>
-            <span className={styles.content}>{children}</span>
+            <div className={styles.content}>{children}</div>
             <div className={styles.actions}>
                 {actions}
                 {onClose && (

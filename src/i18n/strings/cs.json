@@ -2205,26 +2205,6 @@
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
         },
-        "release_announcement": {
-            "done": "Hotovo",
-            "filter": {
-                "description": "Filtrujte své chaty jediným kliknutím. Rozbalením zobrazíte další filtry.",
-                "title": "Nové rychlé filtry"
-            },
-            "intro": {
-                "description": "Seznam chatů byl aktualizován, aby byl přehlednější a jednodušší na používání.",
-                "title": "Chaty mají nový vzhled!"
-            },
-            "next": "Další",
-            "settings": {
-                "description": "Chcete-li zobrazit nebo skrýt náhledy zpráv, přejděte do Všechna nastavení > Předvolby > Seznam místností",
-                "title": "Některá nastavení byla přesunuta"
-            },
-            "sort": {
-                "description": "Změňte pořadí svých chatů z nejnovějších na A-Z",
-                "title": "Seřaďte si chaty"
-            }
-        },
         "room": {
             "more_options": "Více možností",
             "open_room": "Otevřít místnost %(roomName)s"
@@ -2890,10 +2870,6 @@
             "rule_suppress_notices": "Zprávy poslané robotem",
             "rule_tombstone": "Při aktualizaci místnosti",
             "show_message_desktop_notification": "Zobrazit text zprávy v oznámení na ploše",
-            "sounds_release_announcement": {
-                "description": "Zvuky oznámení a vyzvánění hovorů byly aktualizovány – nyní jsou jasnější, rychlejší a méně rušivé",
-                "title": "Aktualizovali jsme vaše zvuky"
-            },
             "voip": "Hlasové a video hovory"
         },
         "preferences": {

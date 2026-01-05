@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { LinkIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LinkIcon, OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import dis from "../../../dispatcher/dispatcher";
@@ -90,7 +90,9 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                 isExpanded={menuDisplayed}
                 ref={button}
                 data-testid="threadlist-dropdown-button"
-            />
+            >
+                <OverflowHorizontalIcon />
+            </ContextMenuTooltipButton>
             {menuDisplayed && (
                 <IconizedContextMenu
                     onFinished={closeThreadOptions}

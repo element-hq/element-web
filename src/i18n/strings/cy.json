@@ -2033,25 +2033,8 @@
         "notification_options": "Dewisiadau hysbysu",
         "open_space_menu": "Agor dewislen gofod",
         "primary_filters": "Hidlau rhestr ystafelloedd",
-        "release_announcement": {
-            "done": "Gorffen",
-            "filter": {
-                "description": "Hidlo eich sgyrsiau gydag un clic. Ehangu i weld mwy o hidlwyr.",
-                "title": "Hidlwyr cyflym newydd"
-            },
-            "intro": {
-                "description": "Mae'r rhestr sgyrsiau wedi'i diweddaru i fod yn gliriach ac yn symlach i'w defnyddio.",
-                "title": "Mae gan Sgyriau olwg newydd!"
-            },
-            "next": "Nesaf",
-            "settings": {
-                "description": "I ddangos neu guddio rhagolygon negeseuon, ewch i Bob gosodiad > Dewisiadau > Rhestr ystafelloedd",
-                "title": "Mae rhai gosodiadau wedi symud"
-            },
-            "sort": {
-                "description": "Newid trefn eich sgyrsiau o'r mwyaf diweddar i A-Z",
-                "title": "Trefnwch eich sgyrsiau"
-            }
+        "redacting_messages_status": {
+            "Yn tynnu negeseuon mewn %(count)s ystafell": "other"
         },
         "room": {
             "more_options": "Rhagor o Ddewisiadau",

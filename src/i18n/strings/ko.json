@@ -830,6 +830,7 @@
         "number_of_users": "사용자 수",
         "only_joined_members": "가입한 사용자만",
         "original_event_source": "원본 이벤트 소스",
+        "restore_from_backup": "백업에서 복원",
         "room_encrypted": "방은 <strong>암호화됨 ✅</strong>",
         "room_id": "방 ID: %(roomId)s",
         "room_not_encrypted": "방은 <strong>암호화되지 않음 🚨</strong>",
@@ -937,6 +938,7 @@
         "bootstrap_title": "키 설정",
         "confirm_encryption_setup_body": "아래 버튼을 클릭하여 암호화 설정을 확인하십시오.",
         "confirm_encryption_setup_title": "암호화 설정 확인",
+        "continue_with_reset": "재설정을 계속 진행하세요",
         "cross_signing_room_normal": "이 방은 종단 간 암호화됩니다",
         "cross_signing_room_verified": "이 방에 있는 모든 사람은 인증되었습니다",
         "cross_signing_room_warning": "누군가가 알 수 없는 세션을 사용하고 있습니다.",
@@ -952,6 +954,7 @@
         "event_shield_reason_unverified_identity": "검증되지 않은 사용자에 의해 암호화되었습니다.",
         "export_unsupported": "필요한 암호화 확장 기능을 브라우저가 지원하지 않습니다",
         "forgot_recovery_key": "복구 키를 잊으셨나요?",
+        "identity_needs_reset_description": "메시지 기록에 접근하려면 암호화 신원을 재설정해야 합니다.",
         "import_invalid_keyfile": "올바른 %(brand)s 열쇠 파일이 아닙니다",
         "import_invalid_passphrase": "인증 확인 실패: 비밀번호를 틀리셨나요?",
         "key_storage_out_of_sync": "키 저장소가 동기화되지 않았습니다.",
@@ -2153,26 +2156,6 @@
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
         },
-        "release_announcement": {
-            "done": "완료",
-            "filter": {
-                "description": "한 번의 클릭으로 채팅을 필터링하세요. 더 많은 필터를 보려면 확장하세요.",
-                "title": "새로운 빠른 필터"
-            },
-            "intro": {
-                "description": "채팅 목록이 더 명확하고 사용하기 쉽게 업데이트되었습니다.",
-                "title": "채팅이 새롭게 바뀌었습니다!"
-            },
-            "next": "다음",
-            "settings": {
-                "description": "메시지 미리보기를 표시하거나 숨기려면, 모든 설정 > 환경설정 > 채팅방 목록으로 이동하세요",
-                "title": "일부 설정이 이동되었습니다"
-            },
-            "sort": {
-                "description": "채팅 순서를 최근순에서 A-Z순으로 변경하세요",
-                "title": "대화 정렬"
-            }
-        },
         "room": {
             "more_options": "옵션 더보기",
             "open_room": "채팅방 %(roomName)s 열기"
@@ -2830,10 +2813,6 @@
             "rule_suppress_notices": "봇에게 받은 메시지",
             "rule_tombstone": "방을 업그레이드했을 때",
             "show_message_desktop_notification": "컴퓨터 알림에서 내용 보이기",
-            "sounds_release_announcement": {
-                "description": "알림음과 통화 수신음이 더 선명하고 간결하며, 덜 방해되도록 개선되었습니다.",
-                "title": "알림음이 새롭게 변경되었습니다."
-            },
             "voip": "음성 및 영상 통화"
         },
         "preferences": {
