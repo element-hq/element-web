@@ -14,7 +14,7 @@ import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { useWidgets } from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { useCall, useConnectionState, useParticipantCount } from "../useCall";
@@ -37,32 +37,15 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { SdkContextClass } from "../../contexts/SDKContext";
+
+const logger = rootLogger.getChild("useRoomCall");
 
 export enum PlatformCallType {
     ElementCall,
     JitsiCall,
     LegacyCall,
-}
-
-/**
- * Determine if the client is likely to support Element Call.
- * Element Call requires a livekit "focus", which is configured on the server.
- * Without a focus, Element Call will not succeed to create a call.
- * @returns `true` if creating a call is possible.
- */
-export function useSeverHasElementCallFocus(): boolean {
-    const client = useMatrixClientContext();
-    // See https://github.com/matrix-org/matrix-spec-proposals/blob/d61969a9a3696b6c54d7987b1643b5bc03670927/proposals/4143-matrix-rtc.md#discovery-of-foci-using-well-knownmatrixclient
-    // This well-known option has since been removed from the spec but is still the current mechanism Element Call uses to determine
-    // foci.
-    // A future change here would be to request transports from the server, but this is not implemented by Call or the JS-SDK yet.
-    const foci = client.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
-    return (
-        Array.isArray(foci) &&
-        // Basic test to ensure a config that looks sensible.
-        foci.find((transport) => transport.type === "livekit" && "livekit_service_url" in transport)
-    );
 }
 
 export const getPlatformCallTypeProps = (
@@ -132,12 +115,23 @@ export const useRoomCall = (
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
-    const serverIsConfiguredForElementCall = useSeverHasElementCallFocus();
+
+    const serverIsConfiguredForElementCall = CallStore.instance
+        .getConfiguredRTCTransports()
+        .some((s) => s.type === "livekit" && s.livekit_service_url);
+
+    useEffect(() => {
+        if (useElementCallExclusively && !serverIsConfiguredForElementCall) {
+            logger.warn(
+                "Element Call is configured to be used exclusively, but the server is not configured with a transport",
+            );
+        }
+    }, [useElementCallExclusively, serverIsConfiguredForElementCall]);
 
     const hasLegacyCall = useEventEmitterState(
-        LegacyCallHandler.instance,
+        SdkContextClass.instance.legacyCallHandler,
         LegacyCallHandlerEvent.CallsChanged,
-        () => LegacyCallHandler.instance.getCallForRoom(room.roomId) !== null,
+        () => SdkContextClass.instance.legacyCallHandler.getCallForRoom(room.roomId) !== null,
     );
     // settings
     const widgets = useWidgets(room);
@@ -174,9 +168,15 @@ export const useRoomCall = (
 
     const mayCreateElementCalls = mayCreateElementCallState && serverIsConfiguredForElementCall;
 
+    console.log({ mayCreateElementCalls, mayCreateElementCallState, serverIsConfiguredForElementCall });
+
     // The options provided to the RoomHeader.
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
+        // Show no call options until we have checked the runtime config for Call.
+        if (serverIsConfiguredForElementCall === null) {
+            return [];
+        }
         const options: PlatformCallType[] = [];
         if (groupCallsEnabled) {
             if (hasGroupCall || mayCreateElementCalls) {
