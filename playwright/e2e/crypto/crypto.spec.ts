@@ -31,15 +31,11 @@ const startDMWithBob = async (page: Page, bob: Bot) => {
 
 const testMessages = async (page: Page, bob: Bot, bobRoomId: string) => {
     // check the invite message
-    await expect(
-        page.locator(".mx_EventTile", { hasText: "Hey!" }).locator(".mx_EventTile_e2eIcon_warning"),
-    ).not.toBeVisible();
+    await expect(page.locator(".mx_EventTile", { hasText: "Hey!" }).locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
 
     // Bob sends a response
     await bob.sendMessage(bobRoomId, "Hoo!");
-    await expect(
-        page.locator(".mx_EventTile", { hasText: "Hoo!" }).locator(".mx_EventTile_e2eIcon_warning"),
-    ).not.toBeVisible();
+    await expect(page.locator(".mx_EventTile", { hasText: "Hoo!" }).locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
 };
 
 const bobJoin = async (page: Page, bob: Bot) => {

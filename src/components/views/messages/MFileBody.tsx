@@ -9,8 +9,14 @@ Please see LICENSE files in the repository root for full details.
 import React, { type AllHTMLAttributes, createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { MsgType } from "matrix-js-sdk/src/matrix";
 import { Button } from "@vector-im/compound-web";
-import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    AttachmentIcon,
+    DownloadIcon,
+    VideoCallSolidIcon,
+    VolumeOnSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -190,9 +196,17 @@ export default class MFileBody extends React.Component<IProps, IState> {
 
         let placeholder: React.ReactNode = null;
         if (showGenericPlaceholder) {
+            let icon = <AttachmentIcon />;
+            // MFileBody is not generally used for Audio/Video but can be as part of ReplyTile
+            if (this.content.msgtype === MsgType.Audio) {
+                icon = <VolumeOnSolidIcon />;
+            } else if (this.content.msgtype === MsgType.Video) {
+                icon = <VideoCallSolidIcon />;
+            }
+
             placeholder = (
                 <AccessibleButton className="mx_MediaBody mx_MFileBody_info" onClick={this.onPlaceholderClick}>
-                    <span className="mx_MFileBody_info_icon" />
+                    <span className="mx_MFileBody_info_icon">{icon}</span>
                     <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("common|attachment"), true)}>
                         <span className="mx_MFileBody_info_filename">
                             {presentableTextForFile(this.content, _t("common|attachment"), true, true)}

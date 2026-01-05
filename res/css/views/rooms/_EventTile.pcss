@@ -836,32 +836,11 @@ $left-gutter: 64px;
     width: 14px;
     height: 14px;
     display: block;
-    background-repeat: no-repeat;
-    background-size: contain;
 
-    &::after {
-        content: "";
+    svg {
+        height: inherit;
+        width: inherit;
         display: block;
-        position: absolute;
-        inset: 0;
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: contain;
-    }
-
-    &.mx_EventTile_e2eIcon_warning::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
-        background-color: $e2e-warning-color; /* red */
-    }
-
-    &.mx_EventTile_e2eIcon_normal::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/info.svg");
-        background-color: var(--cpd-color-icon-tertiary); /* grey */
-    }
-
-    &.mx_EventTile_e2eIcon_decryption_failure::after {
-        mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
-        background-color: var(--cpd-color-icon-tertiary);
     }
 }
 

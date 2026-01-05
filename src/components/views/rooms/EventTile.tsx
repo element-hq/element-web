@@ -35,6 +35,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
+import { ErrorSolidIcon, InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -1518,13 +1519,13 @@ function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "ic
 }
 
 enum E2ePadlockIcon {
-    /** grey shield */
+    /** Compound Info icon in grey */
     Normal = "normal",
 
-    /** red shield with (!) */
+    /** Compound ErrorSolid icon in red */
     Warning = "warning",
 
-    /** key in grey circle */
+    /** Compound ErrorSolid icon in grey */
     DecryptionFailure = "decryption_failure",
 }
 
@@ -1534,6 +1535,12 @@ interface IE2ePadlockProps {
 }
 
 class E2ePadlock extends React.Component<IE2ePadlockProps> {
+    private static icons: Record<E2ePadlockIcon, JSX.Element> = {
+        [E2ePadlockIcon.Normal]: <InfoIcon color="var(--cpd-color-icon-tertiary)" />,
+        [E2ePadlockIcon.Warning]: <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />,
+        [E2ePadlockIcon.DecryptionFailure]: <ErrorSolidIcon color="var(--cpd-color-icon-tertiary)" />,
+    };
+
     public constructor(props: IE2ePadlockProps) {
         super(props);
 
@@ -1543,12 +1550,13 @@ class E2ePadlock extends React.Component<IE2ePadlockProps> {
     }
 
     public render(): ReactNode {
-        const classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
         // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
         // https://github.com/element-hq/compound/issues/294
         return (
             <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className={classes} tabIndex={0} aria-label={_t("timeline|e2e_state")} />
+                <div className="mx_EventTile_e2eIcon" tabIndex={0} aria-label={_t("timeline|e2e_state")}>
+                    {E2ePadlock.icons[this.props.icon]}
+                </div>
             </Tooltip>
         );
     }

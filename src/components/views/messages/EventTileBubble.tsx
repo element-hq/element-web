@@ -11,6 +11,7 @@ import classNames from "classnames";
 
 interface IProps {
     className: string;
+    icon: JSX.Element;
     title: string;
     timestamp?: JSX.Element;
     subtitle?: ReactNode;
@@ -18,9 +19,10 @@ interface IProps {
     ref?: Ref<HTMLDivElement>;
 }
 
-const EventTileBubble = ({ className, title, timestamp, subtitle, children, ref }: IProps): JSX.Element => {
+const EventTileBubble = ({ className, icon, title, timestamp, subtitle, children, ref }: IProps): JSX.Element => {
     return (
         <div className={classNames("mx_EventTileBubble", className)} ref={ref}>
+            {icon}
             <div className="mx_EventTileBubble_title">{title}</div>
             {subtitle && <div className="mx_EventTileBubble_subtitle">{subtitle}</div>}
             {children}
