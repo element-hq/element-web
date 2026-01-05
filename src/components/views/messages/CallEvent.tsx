@@ -14,7 +14,6 @@ import { _t } from "../../../languageHandler";
 import {
     useCall,
     useConnectionState,
-    useJoinCallButtonDisabledTooltip,
     useParticipatingMembers,
 } from "../../../hooks/useCall";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -102,7 +101,6 @@ interface ActiveLoadedCallEventProps {
 const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProps): JSX.Element => {
     const connectionState = useConnectionState(call);
     const participatingMembers = useParticipatingMembers(call);
-    const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     const connect = useCallback(
         (ev: ButtonEvent) => {
@@ -146,7 +144,6 @@ const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProp
             participatingMembers={participatingMembers}
             buttonText={buttonText}
             buttonKind={buttonKind}
-            buttonDisabledTooltip={joinCallButtonDisabledTooltip ?? undefined}
             onButtonClick={onButtonClick}
         />
     );
