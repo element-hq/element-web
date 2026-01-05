@@ -75,14 +75,13 @@ function JoinCallButtonWithCall({
     disabledTooltip,
     isRinging,
 }: JoinCallButtonWithCallProps): JSX.Element {
-    let disTooltip = disabledTooltip;
 
     return (
-        <Tooltip description={disTooltip ?? _t("voip|video_call")}>
+        <Tooltip description={disabledTooltip ?? _t("voip|video_call")}>
             <Button
                 className="mx_IncomingCallToast_actionButton"
                 onClick={onClick}
-                disabled={disTooltip != undefined}
+                disabled={disabledTooltip != undefined}
                 kind="primary"
                 Icon={CheckIcon}
                 size="sm"
