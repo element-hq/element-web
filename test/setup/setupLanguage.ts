@@ -39,7 +39,7 @@ const lv = {
 export function setupLanguageMock() {
     // Pull the translations from shared components too as they have
     // the strings for things like `humanizeTime` which do appear in
-    // snnapshots.
+    // snapshots.
     const enTranslations = merge(enElementWeb, enSharedComponents);
     const deTranslations = merge(deElementWeb, deSharedComponents);
 
