@@ -74,9 +74,7 @@ test.describe("Roles & Permissions room settings tab", () => {
 
             await settingsGroupAccess.getByText("Private (invite only)").click();
             // Element should have automatically set the room to "sharing" history visibility
-            await expect(
-                settingsGroupHistory.getByText("Members (full history)"),
-            ).toBeChecked();
+            await expect(settingsGroupHistory.getByText("Members (full history)")).toBeChecked();
         },
     );
 
