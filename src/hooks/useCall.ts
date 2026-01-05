@@ -50,7 +50,6 @@ const useParticipants = (call: Call | null): Map<RoomMember, Set<string>> => {
 export const useParticipantCount = (call: Call | null): number => {
     const participants = useParticipants(call);
 
-
     return useMemo(() => {
         return [...participants.values()].reduce<number>((count, set) => count + set.size, 0);
     }, [participants]);

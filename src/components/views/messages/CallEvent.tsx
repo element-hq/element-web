@@ -11,11 +11,7 @@ import React, { type Ref, useCallback, useContext, useMemo, type JSX } from "rea
 import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { ConnectionState, type ElementCall } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
-import {
-    useCall,
-    useConnectionState,
-    useParticipatingMembers,
-} from "../../../hooks/useCall";
+import { useCall, useConnectionState, useParticipatingMembers } from "../../../hooks/useCall";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";

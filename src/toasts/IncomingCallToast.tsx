@@ -70,12 +70,7 @@ interface JoinCallButtonWithCallProps {
     isRinging: boolean;
 }
 
-function JoinCallButtonWithCall({
-    onClick,
-    disabledTooltip,
-    isRinging,
-}: JoinCallButtonWithCallProps): JSX.Element {
-
+function JoinCallButtonWithCall({ onClick, disabledTooltip, isRinging }: JoinCallButtonWithCallProps): JSX.Element {
     return (
         <Tooltip description={disabledTooltip ?? _t("voip|video_call")}>
             <Button
