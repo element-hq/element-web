@@ -12,7 +12,6 @@ import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import { type Call, ConnectionState, CallEvent } from "../models/Call";
 import { useTypedEventEmitterState, useEventEmitter } from "./useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import { _t } from "../languageHandler";
 
 export const useCall = (roomId: string): Call | null => {
     const [call, setCall] = useState(() => CallStore.instance.getCall(roomId));
