@@ -78,4 +78,4 @@ There you can also require all translations to be redone if the meaning of the s
 - Concatenating strings often also introduces an implicit assumption about word order (e.g. that the subject of the sentence comes first), which is incorrect for many languages.
 - Translation 'smell test': If you have a string that does not begin with a capital letter (is not the start of a sentence) or it ends with e.g. ':' or a preposition (e.g. 'to') you should recheck that you are not trying to translate a partial sentence.
 - If you have multiple strings, that are almost identical, except some part (e.g. a word or two) it is still better to translate the full sentence multiple times. It may seem like inefficient repetition, but unlike programming where you try to minimize repetition, translation is much faster if you have many, full, clear, sentences to work with, rather than fewer, but incomplete sentence fragments.
-- Don't forget curly braces when you assign an expression to JSX attributes in the render method)
+- Don't forget curly braces when you assign an expression to JSX attributes in the render method.
