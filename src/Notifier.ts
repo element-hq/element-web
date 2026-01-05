@@ -489,6 +489,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         const rtcSession = room ? cli.matrixRTC.getRoomSession(room) : null;
         let thisUserHasConnectedDevice = false;
         if (rtcSession?.slotDescription?.application == "m.call") {
+            // Get the current state, the actual IncomingCallToast will update as needed by
+            // listening to the rtcSession directly.
             thisUserHasConnectedDevice = rtcSession.memberships.some((m) => m.userId === cli.getUserId());
         }
 
