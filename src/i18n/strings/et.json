@@ -1530,6 +1530,7 @@
         "experimental_description": "Soovid katsetada? Proovi meie uusimaid arendusmõtteid. Need funktsionaalsused pole üldsegi veel valmis, nad võivad toimida puudulikult, võivad muutuda või sootuks lõpetamata jääda. <a>Lisateavet leiad siit</a>.",
         "experimental_section": "Varased arendusjärgud",
         "extended_profiles_msc_support": "See eeldab, et koduserver toetab MSC4133 spetsifikatsiooni",
+        "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
         "feature_wysiwyg_composer_description": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
         "group_calls": "Uus rühmakõnede lahendus",
         "group_developer": "Arendajad",

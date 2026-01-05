@@ -1419,6 +1419,8 @@
         "experimental_description": "Estás a sentir-te experimental? Experimenta as nossas ideias mais recentes em desenvolvimento. Estas funcionalidades não estão finalizadas; podem ser instáveis, podem ser alteradas ou podem ser completamente abandonadas. <a>Sabe mais em</a>.",
         "experimental_section": "Pré-visualizações antecipadas",
         "extended_profiles_msc_support": "Requer que o teu servidor suporte MSC4133",
+        "feature_disable_call_per_sender_encryption": "Desativar a cifragem por remetente na Element Call",
+        "feature_wysiwyg_composer_description": "Utiliza texto rico em vez de Markdown no compositor de mensagens.",
         "group_calls": "Nova experiência de chamada de grupo",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Encriptação",

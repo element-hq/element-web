@@ -1527,6 +1527,8 @@
         "experimental_description": "Er du litt vågal? Prøv ut de nyeste ideene våre under utvikling. Disse funksjonene er ikke ferdigutviklet; de kan være ustabile, endres eller droppes helt. <a>Finn ut mer</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
         "extended_profiles_msc_support": "Krever at serveren din støtter MSC4133",
+        "feature_disable_call_per_sender_encryption": "Deaktiver kryptering per avsender for Element Call",
+        "feature_wysiwyg_composer_description": "Bruk rik tekst i stedet for Markdown i meldingsskriveren.",
         "group_calls": "Ny opplevelse for gruppesamtaler",
         "group_developer": "Utvikler",
         "group_encryption": "Kryptering",

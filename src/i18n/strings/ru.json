@@ -1531,6 +1531,7 @@
         "experimental_description": "Время экспериментов? Попробуйте наши последние наработки. Эти функции не заверешены; они могут быть нестабильными, постоянно меняющимися, или вовсе отброшенными. <a>Узнайте больше</a>.",
         "experimental_section": "Предпросмотр",
         "extended_profiles_msc_support": "Требуется, чтобы ваш сервер поддерживал MSC4133",
+        "feature_disable_call_per_sender_encryption": "Отключить шифрование для каждого отправителя Element Call",
         "feature_wysiwyg_composer_description": "Используйте форматированный текст вместо Markdown в редакторе сообщений.",
         "group_calls": "Новый опыт группового вызова",
         "group_developer": "Разработка",

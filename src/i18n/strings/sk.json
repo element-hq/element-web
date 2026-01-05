@@ -1543,6 +1543,7 @@
         "experimental_description": "Chcete experimentovať? Vyskúšajte naše najnovšie nápady vo vývojovom štádiu. Tieto funkcie nie sú dokončené; môžu byť nestabilné, môžu sa zmeniť alebo môžu byť úplne zrušené. <a>Zistiť viac</a>.",
         "experimental_section": "Predbežné ukážky",
         "extended_profiles_msc_support": "Vyžaduje, aby váš server podporoval MSC4133",
+        "feature_disable_call_per_sender_encryption": "Zakázať šifrovanie pre jednotlivých odosielateľov pre Element Call",
         "feature_wysiwyg_composer_description": "Použiť rozšírený text namiesto Markdown v správach.",
         "group_calls": "Nový zážitok zo skupinových hovorov",
         "group_developer": "Vývojárske",

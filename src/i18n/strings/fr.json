@@ -1527,6 +1527,7 @@
         "experimental_description": "Envie d’expériences ? Essayez nos dernières idées en développement. Ces fonctionnalités ne sont pas terminées ; elles peuvent changer, être instables, ou être complètement abandonnées. <a>En savoir plus</a>.",
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
+        "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
         "feature_wysiwyg_composer_description": "Utilise le texte formaté au lieu de Markdown dans le compositeur de message.",
         "group_calls": "Nouvelle expérience d’appel de groupe",
         "group_developer": "Développeur",

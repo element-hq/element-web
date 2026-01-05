@@ -1503,6 +1503,7 @@
         "experimental_description": "Teimlo'n arbrofol? Rhowch gynnig ar ein syniadau diweddaraf sy'n cael eu datblygu. Nid yw'r nodweddion hyn yn derfynol; gallant fod yn ansefydlog, gallant newid, neu gallant gael eu gollwng yn gyfan gwbl. <a>Dysgu rhagor</a>.",
         "experimental_section": "Rhagolygon cynnar",
         "extended_profiles_msc_support": "Mae angen i'ch gweinydd gefnogi MSC4133",
+        "feature_disable_call_per_sender_encryption": "Analluogi amgryptio fesul anfonwr ar gyfer Element Call",
         "feature_wysiwyg_composer_description": "Defnyddiwch destun cyfoethog yn lle Markdown yng nghyfansoddwr y neges.",
         "group_calls": "Profiad galwad grŵp newydd",
         "group_developer": "Datblygwr",
