@@ -1762,6 +1762,7 @@
         "end_message": "Le sondage est terminé. Meilleure réponse : %(topAnswer)s",
         "end_message_no_votes": "Le sondage est terminé. Aucun vote n’a été exprimé.",
         "end_title": "Terminer le sondage",
+        "ended_poll_label": "Le sondage est terminé",
         "error_ending_description": "Désolé, le sondage n’a pas pu se terminer. Veuillez réessayer.",
         "error_ending_title": "Impossible de terminer le sondage",
         "error_voting_description": "Désolé, votre vote n’a pas été enregistré. Veuillez réessayer.",
@@ -1769,10 +1770,20 @@
         "failed_send_poll_description": "Désolé, le sondage que vous avez essayé de créer n’a pas été envoyé.",
         "failed_send_poll_title": "Échec lors de la soumission du sondage",
         "notes": "Les résultats ne sont révélés que lorsque vous terminez le sondage",
+        "option_label": "Choix %(number)s ,%(answer)s",
+        "option_label_winning_with_total": {
+            "one": "Choix %(number)s, %(answer)s, choix gagnant, %(count)s vote",
+            "other": "Choix %(number)s, %(answer)s, choix gagnant, %(count)s votes"
+        },
+        "option_label_with_total": {
+            "one": "Choix %(number)s, %(answer)s, %(count)s vote",
+            "other": "Choix %(number)s, %(answer)s, %(count)s votes"
+        },
         "options_add_button": "Ajouter un choix",
         "options_heading": "Créer des choix",
         "options_label": "Choix %(number)s",
         "options_placeholder": "Écrivez un choix",
+        "poll_label": "Sondage",
         "topic_heading": "Quelle est la question ou le sujet de votre sondage ?",
         "topic_label": "Question ou sujet",
         "topic_placeholder": "Écrivez quelque chose…",
@@ -2111,6 +2122,7 @@
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit": "Votre message n’a pas été envoyé car ce serveur d’accueil a dépassé une de ses limites de ressources. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
+            "history_visible": "Ce salon a été configuré afin que les nouveaux membres puissent lire l'historique.<a> En savori plus</a>",
             "homeserver_blocked": "Votre message n’a pas été envoyé car ce serveur d’accueil a été bloqué par son administrateur. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
             "monthly_user_limit_reached": "Votre message n’a pas été envoyé car le serveur d’accueil a atteint sa limite mensuelle d’utilisateurs. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
             "requires_consent_agreement": "Vous ne pouvez voir aucun message tant que vous ne lisez et n’acceptez pas nos <consentLink>conditions générales</consentLink>.",
@@ -2199,26 +2211,6 @@
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
-        },
-        "release_announcement": {
-            "done": "Terminé",
-            "filter": {
-                "description": "Filtrez vos discussions en un clic. Développez pour afficher plus de filtres.",
-                "title": "Nouveaux filtres"
-            },
-            "intro": {
-                "description": "La liste des discussions a été mise à jour pour être plus claire et plus facile à utiliser.",
-                "title": "Les discussions ont une nouvelle apparence !"
-            },
-            "next": "Suivant",
-            "settings": {
-                "description": "Pour afficher ou cacher les aperçus des messages, aller dans Tous les paramètres > Préférences > Liste de salons",
-                "title": "Certains paramètres ont été déplacés"
-            },
-            "sort": {
-                "description": "Modifiez l'ordre de vos discussions par ordre chronologique ou par alphabétique",
-                "title": "Triez vos discussions"
-            }
         },
         "room": {
             "more_options": "Plus d’options",
@@ -2494,6 +2486,7 @@
             "guest_access_label": "Activer l’accès visiteur",
             "history_visibility_anyone_space": "Aperçu de l’espace",
             "history_visibility_anyone_space_description": "Permettre aux personnes d’avoir un aperçu de l’espace avant de le rejoindre.",
+            "history_visibility_anyone_space_disabled": "Vous n'êtes pas autorisé à modifier la visibilité de l'historique.",
             "history_visibility_anyone_space_recommendation": "Recommandé pour les espaces publics.",
             "title": "Visibilité"
         },
@@ -2888,10 +2881,6 @@
             "rule_suppress_notices": "Messages envoyés par des robots",
             "rule_tombstone": "Quand les salons sont mis à niveau",
             "show_message_desktop_notification": "Afficher le message dans les notifications de bureau",
-            "sounds_release_announcement": {
-                "description": "Votre ping de notification et votre sonnerie d'appel ont été mis à jour : plus clairs, plus rapides et moins perturbateurs",
-                "title": "Nous avons rafraîchi vos sons"
-            },
             "voip": "Appels audio et vidéo"
         },
         "preferences": {
@@ -2951,6 +2940,7 @@
             "message_search_indexing": "En train d’indexer : %(currentRoom)s",
             "message_search_indexing_idle": "N’indexe aucun message en ce moment.",
             "message_search_intro": "%(brand)s met en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche :",
+            "message_search_pending_rooms": "Salons en attente d'indexation : %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s sur %(totalRooms)s",
             "message_search_section": "Recherche de message",
             "message_search_sleep_time": "À quelle fréquence les messages doivent être téléchargés.",

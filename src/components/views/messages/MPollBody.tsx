@@ -365,7 +365,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                 </div>
                 <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
                     {totalText}
-                    {isFetchingResponses && <Spinner w={16} h={16} />}
+                    {isFetchingResponses && <Spinner size={16} />}
                 </div>
             </fieldset>
         );

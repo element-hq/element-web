@@ -35,7 +35,7 @@ const getIcon = (brand: IdentityProviderBrand | string): string | null => {
     switch (brand) {
         /* eslint-disable @typescript-eslint/no-require-imports */
         case IdentityProviderBrand.Apple:
-            return require(`../../../../res/img/element-icons/brands/apple.svg`).default;
+            return require("@vector-im/compound-design-tokens/icons/mac.svg").default;
         case IdentityProviderBrand.Facebook:
             return require(`../../../../res/img/element-icons/brands/facebook.svg`).default;
         case IdentityProviderBrand.Github:

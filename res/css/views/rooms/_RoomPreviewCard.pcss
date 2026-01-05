@@ -22,20 +22,13 @@ Please see LICENSE files in the repository root for full details.
         line-height: $font-24px;
         color: $primary-content;
         margin-top: $spacing-24;
-        position: relative;
-        padding-left: calc(20px + $spacing-8);
 
-        &::before {
-            content: "";
-            position: absolute;
-            height: $font-24px;
-            width: 20px;
-            left: 0;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: contain;
-            mask-image: url("@vector-im/compound-design-tokens/icons/info-solid.svg");
-            background-color: $secondary-content;
+        svg {
+            height: 1em;
+            width: 1em;
+            margin-right: $spacing-8;
+            color: $secondary-content;
+            vertical-align: -2px;
         }
     }
 
@@ -63,25 +56,19 @@ Please see LICENSE files in the repository root for full details.
         align-items: center;
 
         .mx_RoomPreviewCard_video {
-            width: 50px;
-            height: 50px;
+            width: 22px;
+            height: 22px;
+            padding: 14px;
             border-radius: calc((50px + 2 * 3px) / 2);
             background-color: $accent;
             border: 3px solid $system;
 
-            position: relative;
             left: calc(-50px / 4 - 3px);
 
-            &::before {
-                content: "";
-                background-color: $button-primary-fg-color;
-                position: absolute;
-                width: 50px;
-                height: 50px;
-                mask-size: 22px;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
+            svg {
+                width: inherit;
+                height: inherit;
+                color: $button-primary-fg-color;
             }
         }
 
@@ -105,7 +92,13 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_FacePile {
-        margin-top: $spacing-20;
+        display: flex;
+        align-items: center;
+        margin-top: $spacing-16;
+
+        :first-child {
+            flex-shrink: 0;
+        }
     }
 
     .mx_RoomPreviewCard_joinButtons {

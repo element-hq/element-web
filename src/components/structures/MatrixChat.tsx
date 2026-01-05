@@ -29,6 +29,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import "what-input";
 import sanitizeHtml from "sanitize-html";
 import { I18nContext } from "@element-hq/web-shared-components";
+import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -1771,7 +1772,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: "verifreq_" + request.transactionId,
                     title: _t("encryption|verification_requested_toast_title"),
-                    icon: "verification",
+                    icon: <LockSolidIcon color="var(--cpd-color-text-primary)" />,
                     props: { request },
                     component: VerificationRequestToast,
                     priority: 90,

@@ -58,6 +58,12 @@ We are aiming for a set of common strings to be shared then some more localised 
 Edits to existing strings should be performed only via Localazy.
 There you can also require all translations to be redone if the meaning of the string has changed significantly.
 
+## Removing existing strings
+
+You can remove an existing string by removing the key from `en_EN.json`. Do not modify other language json files for this purpose.
+
+Localazy will mark the keys you removed as deprecated. See https://localazy.com/docs/general/editing-source-language#source-key-states for more information about the difference between deprecated keys and deleted keys.
+
 ## Adding variables inside a string.
 
 1. Extend your `_t()` call. Instead of `_t(TKEY)` use `_t(TKEY, {})`
@@ -66,7 +72,7 @@ There you can also require all translations to be redone if the meaning of the s
 1. Add the variable inside the string. The syntax for variables is `%(variable)s`. Please note the _s_ at the end. The name of the variable has to match the previous used name.
 
 - You can use the special `count` variable to choose between multiple versions of the same string, in order to get the correct pluralization. E.g. `_t('You have %(count)s new messages', { count: 2 })` would show 'You have 2 new messages', while `_t('You have %(count)s new messages', { count: 1 })` would show 'You have one new message' (assuming a singular version of the string has been added to the translation file. See above). Passing in `count` is much preferred over having an if-statement choose the correct string to use, because some languages have much more complicated plural rules than english (e.g. they might need a completely different form if there are three things rather than two).
-- If you want to translate text that includes e.g. hyperlinks or other HTML you have to also use tag substitution, e.g. `_t('<a>Click here!</a>', {}, { 'a': (sub) => <a>{sub}</a> })`. If you don't do the tag substitution you will end up showing literally '<a>' rather than making a hyperlink.
+- If you want to translate text that includes e.g. hyperlinks or other HTML you have to also use tag substitution, e.g. `_t('<a>Click here!</a>', {}, { 'a': (sub) => <a>{sub}</a> })`. If you don't do the tag substitution you will end up showing literally `<a>` rather than making a hyperlink.
 - You can also use React components with normal variable substitution if you want to insert HTML markup, e.g. `_t('Your email address is %(emailAddress)s', { emailAddress: <i>{userEmailAddress}</i> })`.
 
 ## Things to know/Style Guides
@@ -78,4 +84,4 @@ There you can also require all translations to be redone if the meaning of the s
 - Concatenating strings often also introduces an implicit assumption about word order (e.g. that the subject of the sentence comes first), which is incorrect for many languages.
 - Translation 'smell test': If you have a string that does not begin with a capital letter (is not the start of a sentence) or it ends with e.g. ':' or a preposition (e.g. 'to') you should recheck that you are not trying to translate a partial sentence.
 - If you have multiple strings, that are almost identical, except some part (e.g. a word or two) it is still better to translate the full sentence multiple times. It may seem like inefficient repetition, but unlike programming where you try to minimize repetition, translation is much faster if you have many, full, clear, sentences to work with, rather than fewer, but incomplete sentence fragments.
-- Don't forget curly braces when you assign an expression to JSX attributes in the render method)
+- Don't forget curly braces when you assign an expression to JSX attributes in the render method.

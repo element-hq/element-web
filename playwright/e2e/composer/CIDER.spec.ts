@@ -168,5 +168,19 @@ test.describe("Composer", () => {
             await composer.press("Enter");
             await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
         });
+
+        test("renders emoji autocomplete", { tag: "@screenshot" }, async ({ page }) => {
+            const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+
+            // Type ":+1" to trigger emoji autocomplete
+            await composer.pressSequentially(":+1");
+
+            // Wait for autocomplete to appear
+            const autocomplete = page.locator("#mx_Autocomplete");
+            await expect(autocomplete).toBeVisible();
+
+            // Take a screenshot of the autocomplete
+            await expect(autocomplete).toMatchScreenshot("emoji-autocomplete.png");
+        });
     });
 });

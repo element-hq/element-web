@@ -12,18 +12,20 @@ import { test } from ".";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("messages with missing referents", () => {
-        test.fixme(
-            "A message in an unknown thread is not visible and the room is read",
-            async ({ roomAlpha: room1, roomBeta: room2, util, msg }) => {
-                // Given a thread existed and the room is read
-                await util.goTo(room1);
-                await util.receiveMessages(room2, ["Root1", msg.threadedOff("Root1", "T1a")]);
+        test.fixme("A message in an unknown thread is not visible and the room is read", async ({
+            roomAlpha: room1,
+            roomBeta: room2,
+            util,
+            msg,
+        }) => {
+            // Given a thread existed and the room is read
+            await util.goTo(room1);
+            await util.receiveMessages(room2, ["Root1", msg.threadedOff("Root1", "T1a")]);
 
-                // When I restart, forgetting the thread root
-                // And I receive a message on that thread
-                // Then the message is invisible and the room remains read
-            },
-        );
+            // When I restart, forgetting the thread root
+            // And I receive a message on that thread
+            // Then the message is invisible and the room remains read
+        });
         test.fixme("When a message's thread root appears later the thread appears and the room is unread", () => {});
         test.fixme("An edit of an unknown message is not visible and the room is read", () => {});
         test.fixme("When an edit's message appears later the edited version appears and the room is unread", () => {});

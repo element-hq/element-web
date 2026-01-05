@@ -17,7 +17,7 @@ import {
     RoomVersionStability,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { act } from "jest-matrix-react";
 
 import {
     stubClient,
@@ -30,7 +30,11 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import WidgetStore from "../../src/stores/WidgetStore";
 import WidgetUtils from "../../src/utils/WidgetUtils";
 import { JitsiCall, ElementCall } from "../../src/models/Call";
-import createRoom, { checkUserIsAllowedToChangeEncryption, canEncryptToAllUsers } from "../../src/createRoom";
+import createRoom, {
+    checkUserIsAllowedToChangeEncryption,
+    canEncryptToAllUsers,
+    waitForRoomEncryption,
+} from "../../src/createRoom";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { ElementCallMemberEventType } from "../../src/call-types";
 import DMRoomMap from "../../src/utils/DMRoomMap";
@@ -56,6 +60,149 @@ describe("createRoom", () => {
             visibility: "private",
             initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
         });
+    });
+
+    it("creates a private room with encryption", async () => {
+        await createRoom(client, { createOpts: { preset: Preset.PrivateChat }, encryption: true });
+
+        expect(client.createRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        algorithm: "m.megolm.v1.aes-sha2",
+                    },
+                },
+            ],
+        });
+    });
+
+    it("creates a private room with state event encryption", async () => {
+        // When we create a room with state encryption and details like name,
+        // topic, avatar
+        const oldCreateRoom = await createRoomWithStateEncryption(client, {
+            name: "Super-Secret Super-colliding Super Room",
+            topic: "super **Topic**",
+            avatar: "http://example.com/myavatar.png",
+        });
+
+        // Then it is created with the right m.room.encryption event
+        expect(oldCreateRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc4362.encrypt_state_events": true,
+                    },
+                },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+        });
+
+        // And the room name, topic and avatar are set later
+        expect(client.setRoomName).toHaveBeenCalledWith("!1:example.org", "Super-Secret Super-colliding Super Room");
+
+        expect(client.setRoomTopic).toHaveBeenCalledWith(
+            "!1:example.org",
+            "super **Topic**",
+            "super <strong>Topic</strong>",
+        );
+
+        expect(client.sendStateEvent).toHaveBeenCalledWith(
+            "!1:example.org",
+            "m.room.avatar",
+            { url: "http://example.com/myavatar.png" },
+            "",
+        );
+    });
+
+    it("creates a private room with state event encryption - file avatar", async () => {
+        // When we create a room with state encryption and a file avatar
+        client.uploadContent.mockResolvedValue({ content_uri: "mxc://foo.png" });
+        const oldCreateRoom = await createRoomWithStateEncryption(client, {
+            avatar: new File([], "myfile.png"),
+        });
+
+        // Then it is created with the right m.room.encryption event
+        expect(oldCreateRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc4362.encrypt_state_events": true,
+                    },
+                },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+        });
+
+        // And the avatar is set later
+        expect(client.sendStateEvent).toHaveBeenCalledWith(
+            "!1:example.org",
+            "m.room.avatar",
+            { url: "mxc://foo.png" },
+            "",
+        );
+    });
+
+    it("creates a private room with state event encryption - no details", async () => {
+        // When we create a room with state encryption and no further room
+        // details
+        const oldCreateRoom = await createRoomWithStateEncryption(client, {});
+
+        // Then it is created with the right m.room.encryption event
+        expect(oldCreateRoom).toHaveBeenCalledWith({
+            preset: "private_chat",
+            visibility: "private",
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                {
+                    state_key: "",
+                    type: "m.room.encryption",
+                    content: {
+                        "algorithm": "m.megolm.v1.aes-sha2",
+                        "io.element.msc4362.encrypt_state_events": true,
+                    },
+                },
+                // Room name is NOT included, since it needs to be encrypted.
+            ],
+        });
+
+        // And the room name, topic and avatar were not set since we didn't
+        // supply them
+        expect(client.setRoomName).not.toHaveBeenCalled();
+        expect(client.setRoomTopic).not.toHaveBeenCalled();
+        expect(client.sendStateEvent).not.toHaveBeenCalled();
+    });
+
+    it("cancels room creation if we time out before getting state events", async () => {
+        // We are not testing createRoom here, just waitForRoomEncryption, which is used
+        // inside. This allows us to pass in a shorter waitTime.
+
+        // Create a mock room that provides the needed methods
+        const { room_id: roomId } = await client.createRoom({});
+        const room = client.getRoom(roomId)!;
+        room.getLiveTimeline = jest
+            .fn()
+            .mockReturnValue({ getState: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn() }) });
+
+        // Call waitForRoomEncryption with a small timeout ans expect an error
+        const error = new Error("Timed out while waiting for room to enable encryption");
+        await expect(waitForRoomEncryption(room, 1)).rejects.toThrow(error);
     });
 
     it("creates a private room in a space", async () => {
@@ -144,8 +291,6 @@ describe("createRoom", () => {
 
     it("sets up Element video rooms correctly", async () => {
         const createCallSpy = jest.spyOn(ElementCall, "create");
-        const callMembershipSpy = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom");
-        callMembershipSpy.mockReturnValue([]);
 
         await createRoom(client, { roomType: RoomType.UnstableCall });
 
@@ -398,3 +543,42 @@ describe("checkUserIsAllowedToChangeEncryption()", () => {
         );
     });
 });
+
+interface RoomDetails {
+    name?: string;
+    topic?: string;
+    avatar?: string | File;
+}
+
+/**
+ * Call createRoom passing in stateEncryption: true, and set up the returned
+ * room to return true when hasEncryptionStateEvent is called, to avoid
+ * createRoom stalling forever waiting for an m.room.encryption event to arrive.
+ */
+async function createRoomWithStateEncryption(client: MatrixClient, roomDetails: RoomDetails) {
+    const oldCreateRoom = client.createRoom;
+
+    // @ts-ignore Replacing createRoom
+    client.createRoom = async (options) => {
+        const { room_id: roomId } = await oldCreateRoom(options);
+        const room = client.getRoom(roomId);
+        room!.hasEncryptionStateEvent = () => true;
+        return {
+            room_id: roomId,
+        };
+    };
+
+    // When we create a room asking for state encryption
+    await act(
+        async () =>
+            await createRoom(client, {
+                createOpts: {
+                    preset: Preset.PrivateChat,
+                },
+                encryption: true,
+                stateEncryption: true,
+                ...roomDetails,
+            }),
+    );
+    return oldCreateRoom;
+}

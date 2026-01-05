@@ -30,7 +30,6 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     },
     element_call: {
         use_exclusively: false,
-        participant_limit: 8,
         brand: "Element Call",
     },
 

@@ -33,12 +33,14 @@ import {
     EventType,
     type IContent,
     MatrixError,
-    type MatrixEvent,
     Direction,
     THREAD_RELATION_TYPE,
     type SendDelayedEventResponse,
     type StateEvents,
     type TimelineEvents,
+    type Room,
+    type SendDelayedEventRequestOpts,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -122,6 +124,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4354SendStickyEvent);
 
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomName).raw,
@@ -193,6 +196,9 @@ export class ElementWidgetDriver extends WidgetDriver {
                 //  MSC4310: Add dev and final event to ease future transition,
                 EventType.RTCDecline,
                 "m.rtc.decline",
+                // MSC4310 The main membership event is sent via a room sticky event.
+                EventType.RTCMembership,
+                "m.rtc.member",
             ];
             for (const eventType of [...sendRoomEvents, ...sendRecvRoomEvents])
                 this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
@@ -285,6 +291,13 @@ export class ElementWidgetDriver extends WidgetDriver {
         return allAllowed;
     }
 
+    private getSendEventTarget(roomId: string | null = null): { client: MatrixClient; roomId: string } {
+        const client = MatrixClientPeg.safeGet();
+        roomId = roomId || SdkContextClass.instance.roomViewStore.getRoomId() || null;
+        if (!roomId) throw new Error("No room specified and no room in RoomViewStore focus.");
+        return { client, roomId };
+    }
+
     public async sendEvent<K extends keyof StateEvents>(
         eventType: K,
         content: StateEvents[K],
@@ -303,10 +316,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         stateKey: string | null = null,
         targetRoomId: string | null = null,
     ): Promise<ISendEventDetails> {
-        const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
-
-        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
 
         let r: { event_id: string } | null;
         if (stateKey !== null) {
@@ -346,6 +356,42 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     /**
+     * @experimental Part of MSC4354
+     * @see {@link WidgetDriver#sendStickyEvent}
+     */
+    public async sendStickyEvent(
+        stickyDurationMs: number,
+        eventType: string,
+        content: unknown,
+        targetRoomId?: string | null,
+    ): Promise<ISendEventDetails> {
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
+
+        const r = await client._unstable_sendStickyEvent(
+            roomId,
+            stickyDurationMs,
+            null,
+            eventType as keyof TimelineEvents,
+            content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
+        );
+        return { roomId, eventId: r.event_id };
+    }
+
+    private getSendDelayedEventOpts(delay: number | null, parentDelayId: string | null): SendDelayedEventRequestOpts {
+        if (delay !== null) {
+            return {
+                delay,
+                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
+            };
+        } else if (parentDelayId !== null) {
+            return {
+                parent_delay_id: parentDelayId,
+            };
+        }
+        throw new Error("Must provide at least one of delay or parentDelayId");
+    }
+
+    /**
      * @experimental Part of MSC4140 & MSC4157
      * @see {@link WidgetDriver#sendDelayedEvent}
      */
@@ -376,24 +422,8 @@ export class ElementWidgetDriver extends WidgetDriver {
         stateKey: string | null = null,
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
-        const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
-
-        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
-
-        let delayOpts;
-        if (delay !== null) {
-            delayOpts = {
-                delay,
-                ...(parentDelayId !== null && { parent_delay_id: parentDelayId }),
-            };
-        } else if (parentDelayId !== null) {
-            delayOpts = {
-                parent_delay_id: parentDelayId,
-            };
-        } else {
-            throw new Error("Must provide at least one of delay or parentDelayId");
-        }
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
+        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
@@ -423,12 +453,38 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     /**
+     * @experimental Part of MSC4354
+     * @see {@link WidgetDriver#sendStickyEvent}
+     */
+    public async sendDelayedStickyEvent(
+        delay: number | null,
+        parentDelayId: string | null,
+        stickyDurationMs: number,
+        eventType: string,
+        content: unknown,
+        targetRoomId?: string | null,
+    ): Promise<ISendDelayedEventDetails> {
+        const { client, roomId } = this.getSendEventTarget(targetRoomId);
+        const delayOpts = this.getSendDelayedEventOpts(delay, parentDelayId);
+
+        const r = await client._unstable_sendStickyDelayedEvent(
+            roomId,
+            stickyDurationMs,
+            delayOpts,
+            null,
+            eventType as keyof TimelineEvents,
+            content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
+        );
+        return { roomId, delayId: r.delay_id };
+    }
+
+    /**
      * @experimental Part of MSC4140 & MSC4157
      */
     public async cancelScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
-        if (!client) throw new Error("Not in a room or not attached to a client");
+        if (!client) throw new Error("Not attached to a client");
 
         await client._unstable_cancelScheduledDelayedEvent(delayId);
     }
@@ -439,7 +495,7 @@ export class ElementWidgetDriver extends WidgetDriver {
     public async restartScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
-        if (!client) throw new Error("Not in a room or not attached to a client");
+        if (!client) throw new Error("Not attached to a client");
 
         await client._unstable_restartScheduledDelayedEvent(delayId);
     }
@@ -450,7 +506,7 @@ export class ElementWidgetDriver extends WidgetDriver {
     public async sendScheduledDelayedEvent(delayId: string): Promise<void> {
         const client = MatrixClientPeg.get();
 
-        if (!client) throw new Error("Not in a room or not attached to a client");
+        if (!client) throw new Error("Not attached to a client");
 
         await client._unstable_sendScheduledDelayedEvent(delayId);
     }
@@ -508,6 +564,38 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     /**
+     * Generator function that retrieves events for readRoomTimeline
+     * @param room The room to check the timeline of.
+     * @param eventType The event type to be read.
+     * @param msgtype The msgtype of the events to be read, if applicable/defined.
+     * @param stateKey The state key of the events to be read, if applicable/defined.
+     * @param limit The maximum number of events to retrieve. Will be zero to denote "as many as
+     * possible".
+     * @param since When null, retrieves the number of events specified by the "limit" parameter.
+     * Otherwise, the event ID at which only subsequent events will be returned, as many as specified
+     * in "limit".
+     * @returns A generator that emits events.
+     */
+    private *readRoomTimelineIterator(
+        room: Room,
+        eventType: string,
+        msgtype: string | undefined,
+        stateKey: string | undefined,
+        limit: number,
+        since: string | undefined,
+    ): Generator<IRoomEvent, void, void> {
+        let resultCount: number = 0;
+        const events = [...room.getLiveTimeline().getEvents()]; // timelines are most recent last
+        for (let ev = events.pop(); ev && resultCount < limit && ev.getId() !== since; ev = events.pop()) {
+            if (ev.getType() !== eventType) continue;
+            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
+            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            yield ev.getEffectiveEvent() as IRoomEvent;
+            resultCount++;
+        }
+    }
+
+    /**
      * Reads all events of the given type, and optionally `msgtype` (if applicable/defined),
      * the user has access to. The widget API will have already verified that the widget is
      * capable of receiving the events. Less events than the limit are allowed to be returned,
@@ -532,23 +620,9 @@ export class ElementWidgetDriver extends WidgetDriver {
         since: string | undefined,
     ): Promise<IRoomEvent[]> {
         limit = limit > 0 ? Math.min(limit, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
-
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (room === null) return [];
-        const results: MatrixEvent[] = [];
-        const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
-        for (let i = events.length - 1; i >= 0; i--) {
-            const ev = events[i];
-            if (results.length >= limit) break;
-            if (since !== undefined && ev.getId() === since) break;
-
-            if (ev.getType() !== eventType) continue;
-            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-            if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
-            results.push(ev);
-        }
-
-        return results.map((e) => e.getEffectiveEvent() as IRoomEvent);
+        return [...this.readRoomTimelineIterator(room, eventType, msgtype, stateKey, limit, since)];
     }
 
     /**

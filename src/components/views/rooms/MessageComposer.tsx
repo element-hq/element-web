@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LockOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -54,6 +54,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { HistoryVisibleBanner } from "../composer/HistoryVisibleBanner";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -72,7 +73,9 @@ function SendButton(props: ISendButtonProps): JSX.Element {
             onClick={props.onClick}
             title={props.title ?? _t("composer|send_button_title")}
             data-testid="sendmessagebtn"
-        />
+        >
+            <SendSolidIcon />
+        </AccessibleButton>
     );
 }
 
@@ -672,6 +675,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
+                <HistoryVisibleBanner
+                    room={this.props.room}
+                    canSendMessages={canSendMessages}
+                    threadId={threadId ?? null}
+                />
                 <div className="mx_MessageComposer_wrapper">
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
