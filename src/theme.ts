@@ -26,6 +26,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "./languageHandler";
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
+import { FontWatcher } from "./settings/watchers/FontWatcher";
 
 export const DEFAULT_THEME = "light";
 const HIGH_CONTRAST_THEMES: Record<string, string> = {
@@ -126,10 +127,15 @@ export function getOrderedThemes(): ITheme[] {
 }
 
 function clearCustomTheme(): void {
-    // remove all css variables, we assume these are there because of the custom theme
+    // remove all css variables (except font and emoji variables), we assume these are there because of the custom theme
     const inlineStyleProps = Object.values(document.body.style);
     for (const prop of inlineStyleProps) {
-        if (typeof prop === "string" && prop.startsWith("--")) {
+        if (
+            typeof prop === "string" &&
+            prop.startsWith("--") &&
+            prop !== FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY &&
+            prop !== FontWatcher.EMOJI_FONT_FAMILY_CUSTOM_PROPERTY
+        ) {
             document.body.style.removeProperty(prop);
         }
     }
