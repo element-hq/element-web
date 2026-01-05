@@ -877,10 +877,9 @@ export class ElementCall extends Call {
         return {
             ...currentData,
             ...overwriteData,
-            intent
+            intent,
         };
     }
-
 
     private constructor(
         public session: MatrixRTCSession,
