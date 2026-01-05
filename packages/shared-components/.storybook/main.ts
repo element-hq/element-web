@@ -41,7 +41,7 @@ const config: StorybookConfig = {
                         server.middlewares.use((req, res, next) => {
                             if (req.url === "/i18n/languages.json") {
                                 // Dynamically generate a languages.json file based on what files are available
-                                const langJson = {} as Record<string, string>;
+                                const langJson: Record<string, string> = {};
                                 for (const lang of languages) {
                                     const normalizedLanguage = lang.toLowerCase().replace("_", "-");
                                     const languageParts = normalizedLanguage.split("-");
