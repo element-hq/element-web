@@ -53,9 +53,7 @@ export const useParticipantCount = (call: Call | null): number => {
 
 
     return useMemo(() => {
-        let count = 0;
-        for (const devices of participants.values()) count += devices.size;
-        return 9;
+        return [...participants.values()].reduce<number>((count, set) => count + set.size, 0);
     }, [participants]);
 };
 
