@@ -43,7 +43,7 @@ Follow the Playwright installation instructions:
 - **System dependencies:** <https://playwright.dev/docs/browsers#install-system-dependencies>
 
 ```sh
-npx playwright install --with-deps
+yarn playwright install --with-deps
 ```
 
 ### 2. Container Runtime
@@ -56,7 +56,7 @@ Element Web E2E tests require an instance running on `http://localhost:8080` (co
 
 You can either:
 
-- **Run manually:** `yarn start` in a separate terminal (recommended for development)
+- **Run manually:** `yarn start` in a separate terminal (not working for screenshot tests running in a docker environment).
 - **Auto-start:** Playwright will start the webserver automatically if it's not already running
 
 ## Running the Tests
@@ -123,12 +123,9 @@ yarn test:storybook:update
 
 This uses the same Docker-based screenshot rendering as Element Web to ensure consistency across platforms.
 
-> [!WARNING]
-> If you encounter issues with `yarn test:storybook:update`, you may need to temporarily remove the `prepare` script in `packages/shared-components/package.json`.
-
 ### Projects
 
-By default, Playwright runs tests against all "Projects": Chrome, Firefox, and "Safari" (Webkit).
+By default, Playwright runs tests against all "Projects": Chrome, Firefox, "Safari" (Webkit). They all run against Synapse however Chrome "project" is also running against Dendrite and Picone.
 
 - **Pull Request CI:** Tests run only against Chrome
 - **Merge Queue:** Tests run against all projects
