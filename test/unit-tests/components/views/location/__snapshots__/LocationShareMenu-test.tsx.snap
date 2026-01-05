@@ -54,7 +54,7 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
     </div>
     <button
       aria-disabled="true"
-      class="_button_187yx_8 mx_EnableLiveShare_button"
+      class="_button_13vu4_8 mx_EnableLiveShare_button"
       data-kind="primary"
       data-size="lg"
       role="button"

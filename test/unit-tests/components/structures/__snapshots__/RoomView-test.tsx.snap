@@ -1018,7 +1018,7 @@ exports[`RoomView invites renders an invite room 1`] = `
           Decline
         </div>
         <button
-          class="_button_187yx_8 _destructive_187yx_107"
+          class="_button_13vu4_8 _destructive_13vu4_110"
           data-kind="tertiary"
           data-size="lg"
           role="button"

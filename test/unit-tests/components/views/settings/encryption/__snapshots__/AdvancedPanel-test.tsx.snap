@@ -53,7 +53,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_187yx_8 _has-icon_187yx_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -74,7 +74,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
       Export keys
     </button>
     <button
-      class="_button_187yx_8 _has-icon_187yx_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -96,7 +96,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
     </button>
   </div>
   <button
-    class="_button_187yx_8 _destructive_187yx_107"
+    class="_button_13vu4_8 _destructive_13vu4_110"
     data-kind="tertiary"
     data-size="sm"
     role="button"
@@ -145,7 +145,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_187yx_8 _has-icon_187yx_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -166,7 +166,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
       Export keys
     </button>
     <button
-      class="_button_187yx_8 _has-icon_187yx_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -188,7 +188,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
     </button>
   </div>
   <button
-    class="_button_187yx_8 _destructive_187yx_107"
+    class="_button_13vu4_8 _destructive_13vu4_110"
     data-kind="tertiary"
     data-size="sm"
     role="button"

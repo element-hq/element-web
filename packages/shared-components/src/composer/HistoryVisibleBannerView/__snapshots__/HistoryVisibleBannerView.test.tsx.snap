@@ -48,7 +48,7 @@ exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
