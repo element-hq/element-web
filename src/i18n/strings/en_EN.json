@@ -2029,6 +2029,8 @@
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
         "header": {
+            "join_video_call": "Join video call",
+            "join_voice_call": "Join voice call",
             "n_people_asking_to_join": {
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
