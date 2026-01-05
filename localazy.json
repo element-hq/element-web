@@ -37,8 +37,12 @@
     "download": {
         "files": [
             {
-                "conditions": [["equals: ${file}, element-web.json", "equals: ${file}, shared-components.json"]],
+                "conditions": "equals: ${file}, element-web.json",
                 "output": "src/i18n/strings/${langLsrUnderscore}.json"
+            },
+            {
+                "conditions": "equals: ${file}, shared-components.json",
+                "output": "packages/shared-components/src/i18n/strings/${langLsrUnderscore}.json"
             }
         ],
         "includeSourceLang": "${includeSourceLang|false}",
