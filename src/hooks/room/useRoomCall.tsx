@@ -168,15 +168,9 @@ export const useRoomCall = (
 
     const mayCreateElementCalls = mayCreateElementCallState && serverIsConfiguredForElementCall;
 
-    console.log({ mayCreateElementCalls, mayCreateElementCallState, serverIsConfiguredForElementCall });
-
     // The options provided to the RoomHeader.
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
-        // Show no call options until we have checked the runtime config for Call.
-        if (serverIsConfiguredForElementCall === null) {
-            return [];
-        }
         const options: PlatformCallType[] = [];
         if (groupCallsEnabled) {
             if (hasGroupCall || mayCreateElementCalls) {

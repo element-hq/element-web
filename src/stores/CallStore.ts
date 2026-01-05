@@ -53,7 +53,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
      */
     protected async fetchTransports(): Promise<void> {
         if (!this.matrixClient) return;
-        // Prevent flickering by defaulting this to true.
         // Prefer checking the proper endpoint for transports.
         try {
             const transports = await this.matrixClient._unstable_getRTCTransports();
