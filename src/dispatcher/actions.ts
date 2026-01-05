@@ -121,11 +121,6 @@ export enum Action {
     UpdateSystemFont = "update_system_font",
 
     /**
-     * Reloads the font settings from the SettingsStore.
-     */
-    ReloadFont = "reload_font",
-
-    /**
      * Changes room based on payload parameters. Should be used with ViewRoomPayload.
      */
     ViewRoom = "view_room",
