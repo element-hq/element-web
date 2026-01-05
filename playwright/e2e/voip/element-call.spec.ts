@@ -658,7 +658,12 @@ test.describe("Element Call", () => {
                 .getByRole("button", { name: "Send Room Message" })
                 .click();
 
-            const messageSent = await page.getByText("I sent this once!!").count();
+            const timelineLocator = page.locator(".mx_RightPanel .mx_TimelineCard");
+            // First wait for the message to appear in the timeline then
+            // check the count. This improves test stability as we know the message has been sent.
+            await expect(timelineLocator.getByText("I sent this once!!")).toBeVisible();
+
+            const messageSent = await timelineLocator.getByText("I sent this once!!").count();
 
             expect(messageSent).toBe(1);
         });
