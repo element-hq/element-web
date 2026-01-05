@@ -740,7 +740,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
 
             this.setState(updatedState as IState, () => {
-                this.messagePanel.current?.updateTimelineMinHeight();
                 if (callRMUpdated) {
                     this.props.onReadMarkerUpdated?.();
                 }
@@ -1447,8 +1446,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const onLoaded = (): void => {
             if (this.unmounted) return;
 
-            // clear the timeline min-height when (re)loading the timeline
-            this.messagePanel.current?.onTimelineReset();
             this.reloadEvents();
 
             // If we switched away from the room while there were pending

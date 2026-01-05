@@ -32,6 +32,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_MessageComposer {
+        position: relative;
         width: 100%;
         flex: 0 0 auto;
         margin-right: 2px;
@@ -156,9 +157,6 @@ Please see LICENSE files in the repository root for full details.
     list-style-type: none;
     padding: var(--RoomView_MessageList-padding); /* mx_ProfileResizer depends on this value */
     margin: 0;
-    /* needed as min-height is set to clientHeight in ScrollPanel
-    to prevent shrinking when WhoIsTypingTile is hidden */
-    box-sizing: border-box;
 
     li {
         clear: both;

@@ -42,7 +42,7 @@ import { type ComposerInsertPayload } from "../../../dispatcher/payloads/Compose
 import { Action } from "../../../dispatcher/actions";
 import type EditorModel from "../../../editor/model";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { type SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdatedPayload";
 import MessageComposerButtons from "./MessageComposerButtons";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -55,6 +55,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 import { HistoryVisibleBanner } from "../composer/HistoryVisibleBanner";
+import WhoIsTypingTile from "../../views/rooms/WhoIsTypingTile";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -102,6 +103,7 @@ interface IState {
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
     initialComposerContent: string;
+    showTypingNotifications: boolean;
 }
 
 type WysiwygComposerState = {
@@ -114,8 +116,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
+    private whoIsTyping = createRef<WhoIsTypingTile>();
     private ref = createRef<HTMLDivElement>();
     private instanceId: number;
+    private showTypingNotificationsWatcherRef?: string;
 
     private _voiceRecording?: VoiceMessageRecording;
 
@@ -153,6 +157,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
             initialComposerContent: initialComposerContent,
+            showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
         };
 
         this.instanceId = instanceCount++;
@@ -246,6 +251,12 @@ export class MessageComposer extends React.Component<IProps, IState> {
         SettingsStore.monitorSetting("MessageComposerInput.showPollsButton", null);
         SettingsStore.monitorSetting("feature_wysiwyg_composer", null);
 
+        this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
+            "showTypingNotifications",
+            null,
+            this.onShowTypingNotificationsChange,
+        );
+
         this.dispatcherRef = dis.register(this.onAction);
         this.waitForOwnMember();
         UIStore.instance.trackElementDimensions(`MessageComposer${this.instanceId}`, this.ref.current!);
@@ -327,11 +338,19 @@ export class MessageComposer extends React.Component<IProps, IState> {
         UIStore.instance.stopTrackingElementDimensions(`MessageComposer${this.instanceId}`);
         UIStore.instance.removeListener(`MessageComposer${this.instanceId}`, this.onResize);
 
+        SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
+
         window.removeEventListener("beforeunload", this.saveWysiwygEditorState);
         this.saveWysiwygEditorState();
         // clean up our listeners by setting our cached recording to falsy (see internal setter)
         this.voiceRecording = undefined;
     }
+
+    private onShowTypingNotificationsChange = (): void => {
+        this.setState({
+            showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
+        });
+    };
 
     private onTombstoneClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
@@ -666,6 +685,15 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         const showSendButton = canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording);
 
+        let whoIsTyping;
+        if (
+            this.props.room &&
+            this.state.showTypingNotifications &&
+            this.context.timelineRenderingType === TimelineRenderingType.Room
+        ) {
+            whoIsTyping = <WhoIsTypingTile room={this.props.room} ref={this.whoIsTyping} />;
+        }
+
         const classes = classNames({
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
@@ -680,6 +708,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                     canSendMessages={canSendMessages}
                     threadId={threadId ?? null}
                 />
+                {whoIsTyping}
                 <div className="mx_MessageComposer_wrapper">
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
