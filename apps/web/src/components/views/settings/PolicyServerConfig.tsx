@@ -32,18 +32,22 @@ export const PolicyServerConfig: React.FC<PolicyServerConfigProps> = ({ room }) 
     const currentPolicyServerName = policyServerEvent?.getContent()?.["via"] ?? "";
     const [serverName, setServerName] = useState<string>(currentPolicyServerName);
     const [error, setError] = useState<boolean>(false);
-    const supportUrl = useAsyncMemo(async (): Promise<string | undefined> => {
-        if (!currentPolicyServerName) {
+    const supportUrl = useAsyncMemo(
+        async (): Promise<string | undefined> => {
+            if (!currentPolicyServerName) {
+                return undefined;
+            }
+
+            const res = await (await fetch(`https://${currentPolicyServerName}/.well-known/matrix/support`)).json();
+            if (!!res["support_page"] && typeof res["support_page"] === "string") {
+                return res["support_page"];
+            }
+
             return undefined;
-        }
-
-        const res = await (await fetch(`https://${currentPolicyServerName}/.well-known/matrix/support`)).json();
-        if (!!res["support_page"] && typeof res["support_page"] === "string") {
-            return res["support_page"];
-        }
-
-        return undefined;
-    }, [serverName, currentPolicyServerName], undefined);
+        },
+        [serverName, currentPolicyServerName],
+        undefined,
+    );
 
     const onSubmit = async (event: FormEvent): Promise<void> => {
         event.preventDefault();
@@ -56,14 +60,21 @@ export const PolicyServerConfig: React.FC<PolicyServerConfigProps> = ({ room }) 
 
         try {
             if (serverName.trim().length > 0) {
-                const res = await (await fetch(`https://${serverName.trim()}/.well-known/matrix/org.matrix.msc4284.policy_server`)).json();
+                const res = await (
+                    await fetch(`https://${serverName.trim()}/.well-known/matrix/org.matrix.msc4284.policy_server`)
+                ).json();
                 if (!!res["public_key"] && typeof res["public_key"] === "string") {
-                    await client.sendStateEvent(room.roomId, EventType.RoomPolicy, {
-                        via: serverName,
-                        public_key: res["public_key"],
-                    }, "");
+                    await client.sendStateEvent(
+                        room.roomId,
+                        EventType.RoomPolicy,
+                        {
+                            via: serverName,
+                            public_key: res["public_key"],
+                        },
+                        "",
+                    );
                 } else {
-                    logger.error("Policy server returned non-string public key (or returned an error)")
+                    logger.error("Policy server returned non-string public key (or returned an error)");
                     setError(true);
                 }
             } else {
@@ -76,16 +87,24 @@ export const PolicyServerConfig: React.FC<PolicyServerConfigProps> = ({ room }) 
         }
 
         setIsLoading(false);
-    }
+    };
 
     let supportSection: JSX.Element | undefined;
     if (!!currentPolicyServerName) {
         if (!!supportUrl) {
-            supportSection = <span>{ _t("room_settings|permissions|policy_server_support_page", {},{
-                a: (sub) => <ExternalLink href={supportUrl}>{sub}</ExternalLink>,
-            }) }</span>;
+            supportSection = (
+                <span>
+                    {_t(
+                        "room_settings|permissions|policy_server_support_page",
+                        {},
+                        {
+                            a: (sub) => <ExternalLink href={supportUrl}>{sub}</ExternalLink>,
+                        },
+                    )}
+                </span>
+            );
         } else {
-            supportSection = <span>{ _t("room_settings|permissions|policy_server_generic_support") }</span>;
+            supportSection = <span>{_t("room_settings|permissions|policy_server_generic_support")}</span>;
         }
     }
 
@@ -111,8 +130,10 @@ export const PolicyServerConfig: React.FC<PolicyServerConfigProps> = ({ room }) 
                 >
                     {_t("action|apply")}
                 </AccessibleButton>
-                { error ? <span className="error">{ _t("room_settings|permissions|policy_server_error") }</span> : undefined }
-                { supportSection }
+                {error ? (
+                    <span className="error">{_t("room_settings|permissions|policy_server_error")}</span>
+                ) : undefined}
+                {supportSection}
             </SettingsFieldset>
         </form>
     );
