@@ -31,7 +31,6 @@ function assertCommonCallParameters(
     expect(url.has("widgetId")).toEqual(true);
     expect(url.has("parentUrl")).toEqual(true);
 
-    expect(hash.get("perParticipantE2EE")).toEqual("false");
     expect(hash.get("userId")).toEqual(user.userId);
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);

@@ -1289,8 +1289,6 @@
         "element_call_video_rooms": "Stanze video di Element Call",
         "experimental_description": "Ti senti di sperimentare? Prova le nostre ultime idee in sviluppo. Queste funzioni non sono complete; potrebbero essere instabili, cambiare o essere scartate. <a>Maggiori informazioni</a>.",
         "experimental_section": "Anteprime",
-        "feature_disable_call_per_sender_encryption": "Disattiva la crittografia per mittente in Element Call",
-        "feature_wysiwyg_composer_description": "Usa il rich text invece del Markdown nel compositore di messaggi.",
         "group_calls": "Nuova esperienza per chiamate di gruppo",
         "group_developer": "Sviluppatore",
         "group_encryption": "Crittografia",

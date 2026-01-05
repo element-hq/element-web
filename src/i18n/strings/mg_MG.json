@@ -1274,8 +1274,6 @@
         "element_call_video_rooms": "Efitrano fandraisan'orinan-tsary",
         "experimental_description": "Mahatsiaro andrana? Andramo ny hevitray farany amin'ny fampandrosoana. Tsy vita ireo endri-javatra ireo; mety hikorontana izy ireo, mety hiova, na mety ho latsaka tanteraka.<a> Hamantatra bebe kokoa</a> .",
         "experimental_section": "Fijery mialoha",
-        "feature_disable_call_per_sender_encryption": "Atsaharo ny encryption isaky ny mpandefa hoany Element Call",
-        "feature_wysiwyg_composer_description": "Mampiasà lahatsoratra manankarena fa tsy Markdown ao amin'ny mpamoron-dahatsoratra.",
         "group_calls": "Traikefa antso vondrona vaovao",
         "group_developer": "Fampandrosoana",
         "group_encryption": "Fanafenana",

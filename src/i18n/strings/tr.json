@@ -1417,7 +1417,6 @@
         "experimental_description": "Deneysel mi hissediyorsunuz? Geliştirme aşamasındaki en son fikirlerimizi deneyin. Bu özellikler nihai değildir; kararsız olabilirler, değişebilirler veya tamamen kaldırılabilirler. <a>Daha fazla bilgi için</a>.",
         "experimental_section": "Erken önizlemeler",
         "extended_profiles_msc_support": "Sunucunuzun MSC4133 desteklemesini gerektirir",
-        "feature_disable_call_per_sender_encryption": "Element Call için gönderen başına şifrelemeyi devre dışı bırakın",
         "feature_wysiwyg_composer_description": "Mesaj oluşturucu olarak Markdown yerine zengin metin kullanın.",
         "group_calls": "Yeni grup görüşmesi deneyimi",
         "group_developer": "Geliştirici",

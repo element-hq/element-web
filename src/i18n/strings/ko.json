@@ -1522,8 +1522,6 @@
         "experimental_description": "실험적인 기분이 드시나요? 개발 중인 최신 아이디어를 시험해 보세요. 이 기능들은 아직 완성되지 않았으며, 불안정할 수 있고 변경되거나 아예 중단될 수도 있습니다. <a>자세히 알아보기</a>.",
         "experimental_section": "조기 시연",
         "extended_profiles_msc_support": "서버가 MSC4133을 지원해야 합니다.",
-        "feature_disable_call_per_sender_encryption": "Element 통화에서 발신자별 암호화 비활성화",
-        "feature_wysiwyg_composer_description": "메시지 작성기에서 Markdown 대신 서식 있는 텍스트를 사용하세요",
         "group_calls": "그룹 통화 새 기능",
         "group_developer": "개발자",
         "group_encryption": "암호화",

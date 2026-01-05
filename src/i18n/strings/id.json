@@ -1524,7 +1524,6 @@
         "experimental_description": "Merasa eksperimental? Coba ide terkini kami dalam pengembangan. Fitur ini belum selesai; mereka mungkin tidak stabil, mungkin berubah, atau dihapus sama sekali. <a>Pelajari lebih lanjut</a>.",
         "experimental_section": "Pratinjau awal",
         "extended_profiles_msc_support": "Memerlukan server Anda untuk mendukung MSC4133",
-        "feature_disable_call_per_sender_encryption": "Nonaktifkan enkripsi per pengirim untuk Element Call",
         "feature_wysiwyg_composer_description": "Menggunakan teks kaya daripada Markdown dalam komposer pesan.",
         "group_calls": "Pengalaman panggilan grup baru",
         "group_developer": "Pengembang",

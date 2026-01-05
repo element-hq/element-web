@@ -1519,7 +1519,6 @@
         "experimental_description": "Kísérletező kedvében van? Próbálja ki a legújabb fejlesztési ötleteinket. Ezek nincsenek befejezve; lehet, hogy instabilak, megváltozhatnak vagy el is tűnhetnek. <a>Tudjon meg többet</a>.",
         "experimental_section": "Korai előzetesek",
         "extended_profiles_msc_support": "A kiszolgálónak támogatnia kell az MSC4133-at",
-        "feature_disable_call_per_sender_encryption": "Küldőnkénti titkosítás letiltása Element Callhoz",
         "feature_wysiwyg_composer_description": "Szövegszerkesztő használata a Markdown formázás helyett az üzenet írásakor.",
         "group_calls": "Új konferenciahívási élmény",
         "group_developer": "Fejlesztői",

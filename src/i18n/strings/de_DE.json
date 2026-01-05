@@ -1525,7 +1525,6 @@
         "experimental_description": "Experimentierfreudig? Probiere unsere neuesten, sich in Entwicklung befindlichen Ideen aus. Diese Funktionen sind nicht final; Sie könnten instabil sein, sich verändern oder sogar ganz entfernt werden. <a>Erfahre mehr</a>.",
         "experimental_section": "Frühe Vorschauen",
         "extended_profiles_msc_support": "Erfordert die Unterstützung von MSC4133 durch den Server",
-        "feature_disable_call_per_sender_encryption": "Verschlüsselung per-sender für Element Anruf abschalten",
         "feature_wysiwyg_composer_description": "Verwende Textverarbeitung (Rich-Text) statt Markdown im Eingabefeld.",
         "group_calls": "Neue Gruppenanruf-Erfahrung",
         "group_developer": "Entwickler",
