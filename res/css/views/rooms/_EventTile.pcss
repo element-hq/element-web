@@ -9,11 +9,14 @@ Please see LICENSE files in the repository root for full details.
 
 $left-gutter: 64px;
 
+:root {
+    --EventTile_group_line-spacing-inline-start: $left-gutter;
+}
+
 .mx_EventTile {
     --EventTile_content-margin-inline-end: 34px;
     --EventTile_group_line-spacing-block-start: 1px;
     --EventTile_group_line-spacing-block-end: 3px;
-    --EventTile_group_line-spacing-inline-start: $left-gutter;
     --EventTile_group_line-line-height: $font-22px;
     --EventTile_ThreadSummary-line-height: calc(2 * $font-12px);
 
