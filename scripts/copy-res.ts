@@ -107,7 +107,8 @@ function genLangList(langFileMap: Record<string, string>): void {
  * and regenerating languages.json with the new filename
  */
 function watchLanguage(lang: string, dest: string, langFileMap: Record<string, string>): void {
-    const path = EW_I18N_BASE_PATH + lang + ".json";
+    const ewTranslationsPath = EW_I18N_BASE_PATH + lang + ".json";
+    const scTranslationsPath = SC_I18N_BASE_PATH + lang + ".json";
 
     // XXX: Use a debounce because for some reason if we read the language
     // file immediately after the FS event is received, the file contents
@@ -125,7 +126,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
         }, 500);
     };
 
-    [path].forEach(function (f) {
+    [ewTranslationsPath, scTranslationsPath].forEach(function (f) {
         chokidar
             .watch(f, { ignoreInitial: true })
             .on("ready", () => {
