@@ -351,7 +351,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const composer = thread.locator(".mx_MessageComposer--compact");
         // Assert that the reply preview contains audio ReplyTile the file info button
         await expect(
-            composer.locator(".mx_ReplyPreview .mx_ReplyTile_audio .mx_MFileBody_info[role='button']"),
+            composer.locator(".mx_ReplyPreview .mx_ReplyTile .mx_MFileBody_info[role='button']"),
         ).toBeVisible();
 
         // Select :smile: emoji and send it
@@ -360,6 +360,6 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await composer.getByTestId("basicmessagecomposer").press("Enter");
 
         // Assert that the file name is rendered on the file button
-        await expect(threadTile.locator(".mx_ReplyTile_audio .mx_MFileBody_info[role='button']")).toBeVisible();
+        await expect(threadTile.locator(".mx_ReplyTile .mx_MFileBody_info[role='button']")).toBeVisible();
     });
 });

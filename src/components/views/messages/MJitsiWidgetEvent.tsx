@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import WidgetStore from "../../../stores/WidgetStore";
@@ -41,6 +42,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             // removed
             return (
                 <EventTileBubble
+                    icon={<VideoCallSolidIcon />}
                     className="mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_ended", { senderName })}
                     timestamp={this.props.timestamp}
@@ -50,6 +52,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             // modified
             return (
                 <EventTileBubble
+                    icon={<VideoCallSolidIcon />}
                     className="mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_updated", { senderName })}
                     subtitle={joinCopy}
@@ -60,6 +63,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             // assume added
             return (
                 <EventTileBubble
+                    icon={<VideoCallSolidIcon />}
                     className="mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_started", { senderName })}
                     subtitle={joinCopy}
