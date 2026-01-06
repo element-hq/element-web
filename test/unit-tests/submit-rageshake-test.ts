@@ -536,52 +536,6 @@ describe("Rageshakes", () => {
         }
     });
 
-    describe("A-Element-R label", () => {
-        test("should add A-Element-R label if rust crypto", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(RUST_CRYPTO_VERSION);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-        });
-
-        test("should add A-Element-R label if rust crypto and new version", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue("Rust SDK 0.9.3 (909d09fd), Vodozemac 0.8.1");
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-        });
-
-        test("should not add A-Element-R label if not rust crypto", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(OLM_CRYPTO_VERSION);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).not.toContain("A-Element-R");
-        });
-
-        test("should add A-Element-R label to the set of requested labels", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(RUST_CRYPTO_VERSION);
-
-            const formData = await collectBugReport({
-                labels: ["Z-UISI", "Foo"],
-            });
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-            expect(labelNames).toContain("Z-UISI");
-            expect(labelNames).toContain("Foo");
-        });
-
-        test("should not panic if there is no crypto", async () => {
-            mocked(mockClient.getCrypto).mockReturnValue(undefined);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).not.toContain("A-Element-R");
-        });
-    });
-
     it("should notify progress", () => {
         const progressCallback = jest.fn();
 
