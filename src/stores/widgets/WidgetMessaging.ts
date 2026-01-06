@@ -540,10 +540,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         });
     };
 
-    private onToDeviceMessage = async (payload: ReceivedToDeviceMessage): Promise<void> => {
-        const { message, encryptionInfo } = payload;
-        // TODO: Update the widget API to use a proper IToDeviceMessage instead of a IRoomEvent
-        await this.widgetApi?.feedToDevice(message as IRoomEvent, encryptionInfo != null);
+    private onToDeviceMessage = async ({ message, encryptionInfo }: ReceivedToDeviceMessage): Promise<void> => {
+        await this.widgetApi?.feedToDevice(message, encryptionInfo != null);
     };
 
     /**

@@ -68,7 +68,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
             await doTwoWaySasVerification(page, verifier);
 
             await infoDialog.getByRole("button", { name: "They match" }).click();
-            await expect(page.locator(".mx_E2EIcon_verified")).toMatchScreenshot("device-verified-e2eIcon.png");
+            await expect(page.locator(".mx_E2EIcon")).toMatchScreenshot("device-verified-e2eIcon.png");
             await infoDialog.getByRole("button", { name: "Got it" }).click();
 
             // Check that our device is now cross-signed

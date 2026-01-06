@@ -8,8 +8,15 @@
     background-color: transparent !important;
 }
 
-a:hover,
-a:link,
-a:visited {
-    text-decoration: none;
+/*
+    data-kind is used by the Compound <Link> component and therefore does not override them.
+    This is horrible, but will get less horrible when links in the app are replaced with
+    <Link>.
+*/
+a:not([data-kind]) {
+    &:hover,
+    &:link,
+    &:visited {
+        text-decoration: none;
+    }
 }

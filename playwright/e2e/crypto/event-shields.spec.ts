@@ -77,11 +77,8 @@ test.describe("Cryptography", function () {
                 const last = page.locator(".mx_EventTile_last");
                 await expect(last).toContainText("Unable to decrypt message");
                 const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
-                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_decryption_failure/);
-                await lastE2eIcon.focus();
-                await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                    "This message could not be decrypted",
-                );
+                await expect(lastE2eIcon).toHaveAccessibleName("This message could not be decrypted");
+                await expect(lastE2eIcon).toMatchScreenshot("event-shield-utd.png");
 
                 /* Should show a red padlock for an unencrypted message in an e2e room */
                 await bob.evaluate(
@@ -99,10 +96,8 @@ test.describe("Cryptography", function () {
                 );
 
                 await expect(last).toContainText("test unencrypted");
-                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+                await expect(lastE2eIcon).toHaveAccessibleName("Not encrypted");
                 await expect(lastE2eIcon).toMatchScreenshot("event-shield-warning.png");
-                await lastE2eIcon.focus();
-                await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText("Not encrypted");
 
                 /* Should show no padlock for an unverified user */
                 // bob sends a valid event
@@ -133,11 +128,8 @@ test.describe("Cryptography", function () {
                 /* should show red padlock for a message from an unverified device */
                 await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
                 await expect(lastTile).toContainText("test encrypted from unverified");
-                await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-                await lastTileE2eIcon.focus();
-                await expect(await app.getTooltipForElement(lastTileE2eIcon)).toContainText(
-                    "Encrypted by a device not verified by its owner.",
-                );
+                await expect(lastTileE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
+                await expect(lastE2eIcon).toMatchScreenshot("event-shield-not-verified.png");
 
                 /* Should show a red padlock for a message from an unverified device.
                  * Rust crypto remembers the verification state of the sending device, so it will know that the device was
@@ -153,64 +145,58 @@ test.describe("Cryptography", function () {
                 await app.viewRoomByName("TestRoom");
 
                 await expect(last).toContainText("test encrypted from unverified");
-                await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-                await lastE2eIcon.focus();
-                await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                    "Encrypted by a device not verified by its owner.",
-                );
+                await expect(lastE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
+                await expect(lastE2eIcon).toMatchScreenshot("event-shield-not-verified.png");
             },
         );
 
-        test("Should show a grey padlock for a key restored from backup", async ({
-            page,
-            app,
-            bot: bob,
-            homeserver,
-            user: aliceCredentials,
-        }) => {
-            test.slow();
-            const securityKey = await enableKeyBackup(app);
+        test(
+            "Should show a grey padlock for a key restored from backup",
+            { tag: "@screenshot" },
+            async ({ page, app, bot: bob, homeserver, user: aliceCredentials }) => {
+                test.slow();
+                const securityKey = await enableKeyBackup(app);
 
-            // bob sends a valid event
-            await bob.sendMessage(testRoomId, "test encrypted 1");
+                // bob sends a valid event
+                await bob.sendMessage(testRoomId, "test encrypted 1");
 
-            const lastTile = page.locator(".mx_EventTile_last");
-            const lastTileE2eIcon = lastTile.locator(".mx_EventTile_e2eIcon");
-            await expect(lastTile).toContainText("test encrypted 1");
-            // no e2e icon
-            await expect(lastTileE2eIcon).not.toBeVisible();
+                const lastTile = page.locator(".mx_EventTile_last");
+                const lastTileE2eIcon = lastTile.locator(".mx_EventTile_e2eIcon");
+                await expect(lastTile).toContainText("test encrypted 1");
+                // no e2e icon
+                await expect(lastTileE2eIcon).not.toBeVisible();
 
-            // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
-            // the key to be backed up.
-            await page.waitForTimeout(10000);
+                // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
+                // the key to be backed up.
+                await page.waitForTimeout(10000);
 
-            /* log out, and back in */
-            await logOutOfElement(page);
-            // Reload to work around a Rust crypto bug where it can hold onto the indexeddb even after logout
-            // https://github.com/element-hq/element-web/issues/25779
-            await page.addInitScript(() => {
-                // When we reload, the initScript created by the `user`/`pageWithCredentials` fixtures
-                // will re-inject the original credentials into localStorage, which we don't want.
-                // To work around, we add a second initScript which will clear localStorage again.
-                window.localStorage.clear();
-            });
-            await page.reload();
-            await logIntoElementAndVerify(page, aliceCredentials, securityKey);
+                /* log out, and back in */
+                await logOutOfElement(page);
+                // Reload to work around a Rust crypto bug where it can hold onto the indexeddb even after logout
+                // https://github.com/element-hq/element-web/issues/25779
+                await page.addInitScript(() => {
+                    // When we reload, the initScript created by the `user`/`pageWithCredentials` fixtures
+                    // will re-inject the original credentials into localStorage, which we don't want.
+                    // To work around, we add a second initScript which will clear localStorage again.
+                    window.localStorage.clear();
+                });
+                await page.reload();
+                await logIntoElementAndVerify(page, aliceCredentials, securityKey);
 
-            /* go back to the test room and find Bob's message again */
-            await app.viewRoomById(testRoomId);
-            await expect(lastTile).toContainText("test encrypted 1");
-            // The gray shield would be a mx_EventTile_e2eIcon_normal. The red shield would be a mx_EventTile_e2eIcon_warning.
-            // No shield would have no div mx_EventTile_e2eIcon at all.
-            await expect(lastTileE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_normal/);
-            await lastTileE2eIcon.hover();
-            // The key is coming from backup, so it is not anymore possible to establish if the claimed device
-            // creator of this key is authentic. The tooltip should be "The authenticity of this encrypted message can't be guaranteed on this device."
-            // It is not "Encrypted by an unknown or deleted device." even if the claimed device is actually deleted.
-            await expect(await app.getTooltipForElement(lastTileE2eIcon)).toContainText(
-                "The authenticity of this encrypted message can't be guaranteed on this device.",
-            );
-        });
+                /* go back to the test room and find Bob's message again */
+                await app.viewRoomById(testRoomId);
+                await expect(lastTile).toContainText("test encrypted 1");
+                // The gray shield would be a Compound info icon. The red shield would be a Compound error solid icon.
+                // No shield would have no div mx_EventTile_e2eIcon at all.
+                // The key is coming from backup, so it is not anymore possible to establish if the claimed device
+                // creator of this key is authentic. The tooltip should be "The authenticity of this encrypted message can't be guaranteed on this device."
+                // It is not "Encrypted by an unknown or deleted device." even if the claimed device is actually deleted.
+                await expect(lastTileE2eIcon).toHaveAccessibleName(
+                    "The authenticity of this encrypted message can't be guaranteed on this device.",
+                );
+                await expect(lastTileE2eIcon).toMatchScreenshot("event-shield-authenticity.png");
+            },
+        );
 
         test("should show the correct shield on edited e2e events", async ({ page, app, bot: bob, homeserver }) => {
             // bob has a second, not cross-signed, device
@@ -224,7 +210,7 @@ test.describe("Cryptography", function () {
 
             // the message should appear, decrypted, with no warning
             await expect(
-                page.locator(".mx_EventTile", { hasText: "Hoo!" }).locator(".mx_EventTile_e2eIcon_warning"),
+                page.locator(".mx_EventTile", { hasText: "Hoo!" }).locator(".mx_EventTile_e2eIcon"),
             ).not.toBeVisible();
 
             // bob sends an edit to the first message with his unverified device
@@ -241,7 +227,7 @@ test.describe("Cryptography", function () {
 
             // the edit should have a warning
             await expect(
-                page.locator(".mx_EventTile", { hasText: "Haa!" }).locator(".mx_EventTile_e2eIcon_warning"),
+                page.locator(".mx_EventTile", { hasText: "Haa!" }).locator(".mx_EventTile_e2eIcon"),
             ).toBeVisible();
 
             // a second edit from the verified device should be ok
@@ -257,77 +243,69 @@ test.describe("Cryptography", function () {
             });
 
             await expect(
-                page.locator(".mx_EventTile", { hasText: "Hee!" }).locator(".mx_EventTile_e2eIcon_warning"),
+                page.locator(".mx_EventTile", { hasText: "Hee!" }).locator(".mx_EventTile_e2eIcon"),
             ).not.toBeVisible();
         });
 
-        test("should show correct shields on events sent by devices which have since been deleted", async ({
-            page,
-            app,
-            bot: bob,
-            homeserver,
-        }) => {
-            // Workaround for https://github.com/element-hq/element-web/issues/28640:
-            // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
-            // his user info.
-            await waitForDevices(app, bob.credentials.userId, 1);
+        test(
+            "should show correct shields on events sent by devices which have since been deleted",
+            { tag: "@screenshot" },
+            async ({ page, app, bot: bob, homeserver }) => {
+                // Workaround for https://github.com/element-hq/element-web/issues/28640:
+                // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
+                // his user info.
+                await waitForDevices(app, bob.credentials.userId, 1);
 
-            // Our app is blocked from syncing while Bob sends his messages.
-            await app.client.network.goOffline();
+                // Our app is blocked from syncing while Bob sends his messages.
+                await app.client.network.goOffline();
 
-            // Bob sends a message from his verified device
-            await bob.sendMessage(testRoomId, "test encrypted from verified");
+                // Bob sends a message from his verified device
+                await bob.sendMessage(testRoomId, "test encrypted from verified");
 
-            // And one from a second, not cross-signed, device
-            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
-            await bobSecondDevice.waitForNextSync(); // make sure the client knows the room is encrypted
-            await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
+                // And one from a second, not cross-signed, device
+                const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+                await bobSecondDevice.waitForNextSync(); // make sure the client knows the room is encrypted
+                await bobSecondDevice.sendMessage(testRoomId, "test encrypted from unverified");
 
-            // ... and then logs out both devices.
-            await bob.evaluate((cli) => cli.logout(true));
-            await bobSecondDevice.evaluate((cli) => cli.logout(true));
+                // ... and then logs out both devices.
+                await bob.evaluate((cli) => cli.logout(true));
+                await bobSecondDevice.evaluate((cli) => cli.logout(true));
 
-            // Let our app start syncing again
-            await app.client.network.goOnline();
+                // Let our app start syncing again
+                await app.client.network.goOnline();
 
-            // Wait for the messages to arrive. It can take quite a while for the sync to wake up.
-            const last = page.locator(".mx_EventTile_last");
-            await expect(last).toContainText("test encrypted from unverified", { timeout: 20000 });
-            const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
-            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await lastE2eIcon.focus();
-            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                "Encrypted by a device not verified by its owner.",
-            );
+                // Wait for the messages to arrive. It can take quite a while for the sync to wake up.
+                const last = page.locator(".mx_EventTile_last");
+                await expect(last).toContainText("test encrypted from unverified", { timeout: 20000 });
+                const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
+                await expect(lastE2eIcon).toHaveAccessibleName("Encrypted by a device not verified by its owner.");
+                await expect(lastE2eIcon).toMatchScreenshot("event-shield-not-verified.png");
 
-            const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
-            await assertNoE2EIcon(penultimate, app);
-        });
+                const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
+                await assertNoE2EIcon(penultimate, app);
+            },
+        );
 
-        test("should show correct shields on events sent by users with changed identity", async ({
-            page,
-            app,
-            bot: bob,
-            homeserver,
-        }) => {
-            // Verify Bob
-            await verify(app, bob);
+        test(
+            "should show correct shields on events sent by users with changed identity",
+            { tag: "@screenshot" },
+            async ({ page, app, bot: bob, homeserver }) => {
+                // Verify Bob
+                await verify(app, bob);
 
-            // Bob logs in a new device and resets cross-signing
-            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
-            await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
+                // Bob logs in a new device and resets cross-signing
+                const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+                await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
 
-            /* should show an error for a message from a previously verified device */
-            await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
-            const last = page.locator(".mx_EventTile_last");
-            await expect(last).toContainText("test encrypted from user that was previously verified");
-            const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
-            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
-            await lastE2eIcon.focus();
-            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                "Sender's verified identity was reset",
-            );
-        });
+                /* should show an error for a message from a previously verified device */
+                await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
+                const last = page.locator(".mx_EventTile_last");
+                await expect(last).toContainText("test encrypted from user that was previously verified");
+                const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
+                await expect(lastE2eIcon).toHaveAccessibleName("Sender's verified identity was reset");
+                await expect(lastE2eIcon).toMatchScreenshot("event-shield-identity-reset.png");
+            },
+        );
     });
 });
 
@@ -343,8 +321,6 @@ async function assertNoE2EIcon(messageLocator: Locator, app: ElementAppPage) {
     const e2eIcon = messageLocator.locator(".mx_EventTile_e2eIcon");
     if ((await e2eIcon.count()) > 0) {
         // uh-oh, there is an e2e icon. Let's find out what it's about so that we can throw a helpful error.
-        await e2eIcon.focus();
-        const tooltip = await app.getTooltipForElement(e2eIcon);
-        throw new Error(`Found an unexpected e2eIcon with tooltip '${await tooltip.textContent()}'`);
+        await expect(e2eIcon).toHaveAccessibleName("None");
     }
 }

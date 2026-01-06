@@ -42,7 +42,7 @@ exports[`<EncryptionUserSettingsTab /> should display a verify button when the e
           </div>
         </div>
         <button
-          class="_button_187yx_8 _has-icon_187yx_57"
+          class="_button_13vu4_8 _has-icon_13vu4_60"
           data-kind="primary"
           data-size="sm"
           role="button"
@@ -124,7 +124,7 @@ exports[`<EncryptionUserSettingsTab /> should display the identity needs reset p
         </div>
         <div>
           <button
-            class="_button_187yx_8"
+            class="_button_13vu4_8"
             data-kind="primary"
             data-size="sm"
             role="button"
@@ -186,7 +186,7 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
           class="mx_RecoveryPanelOutOfSync"
         >
           <button
-            class="_button_187yx_8"
+            class="_button_13vu4_8"
             data-kind="secondary"
             data-size="sm"
             role="button"
@@ -195,7 +195,7 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
             Forgot recovery key?
           </button>
           <button
-            class="_button_187yx_8 _has-icon_187yx_57"
+            class="_button_13vu4_8 _has-icon_13vu4_60"
             data-kind="primary"
             data-size="sm"
             role="button"
@@ -393,7 +393,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
         >
           <button
             aria-disabled="false"
-            class="_button_187yx_8 _destructive_187yx_107"
+            class="_button_13vu4_8 _destructive_13vu4_110"
             data-kind="primary"
             data-size="lg"
             role="button"
@@ -402,7 +402,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
             Continue
           </button>
           <button
-            class="_button_187yx_8"
+            class="_button_13vu4_8"
             data-kind="tertiary"
             data-size="lg"
             role="button"

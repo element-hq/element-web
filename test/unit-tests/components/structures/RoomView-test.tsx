@@ -22,32 +22,32 @@ import {
     RoomStateEvent,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
-import { type CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
-    fireEvent,
-    render,
-    screen,
-    type RenderResult,
-    waitForElementToBeRemoved,
-    waitFor,
     act,
     cleanup,
+    fireEvent,
+    render,
+    type RenderResult,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved,
 } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
-    stubClient,
-    mockPlatformPeg,
-    unmockPlatformPeg,
+    createTestClient,
+    emitPromise,
+    filterConsole,
     flushPromises,
     mkEvent,
-    setupAsyncStoreWithClient,
-    filterConsole,
     mkRoomMemberJoinEvent,
     mkThirdPartyInviteEvent,
-    emitPromise,
-    createTestClient,
+    mockPlatformPeg,
+    setupAsyncStoreWithClient,
+    stubClient,
+    unmockPlatformPeg,
     untilDispatch,
 } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -594,12 +594,14 @@ describe("RoomView", () => {
 
         const { container } = await renderRoomView();
         // We no longer show the grey shield for encrypted rooms, so it should not be there.
-        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).not.toBeInTheDocument());
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon")).not.toBeInTheDocument());
 
         const verificationStatus = new UserVerificationStatus(true, true, false);
         jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
         cli.emit(CryptoEvent.UserTrustStatusChanged, cli.getSafeUserId(), verificationStatus);
-        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_verified")).toBeInTheDocument());
+        await waitFor(() =>
+            expect(container.querySelector(".mx_E2EIcon")).toHaveAccessibleName("Everyone in this room is verified"),
+        );
     });
 
     describe("video rooms", () => {
@@ -627,6 +629,26 @@ describe("RoomView", () => {
             jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
             const { asFragment } = await mountRoomView();
             expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("should open timeline card when navigating to permalink", async () => {
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            await mountRoomView();
+
+            stores.rightPanelStore.setCard({ phase: RightPanelPhases.RoomSummary });
+
+            expect(stores.rightPanelStore.isOpen).toEqual(true);
+            expect(stores.rightPanelStore.currentCard.phase).not.toEqual(RightPanelPhases.Timeline);
+
+            await stores.roomViewStore.viewRoom({
+                action: Action.ViewRoom,
+                room_id: stores.roomViewStore.getRoomId()!,
+                event_id: "$eventId",
+                metricsTrigger: undefined,
+            });
+
+            expect(stores.rightPanelStore.isOpen).toEqual(true);
+            expect(stores.rightPanelStore.currentCard.phase).toEqual(RightPanelPhases.Timeline);
         });
     });
 

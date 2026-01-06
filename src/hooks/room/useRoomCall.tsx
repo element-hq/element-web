@@ -93,7 +93,10 @@ export const useRoomCall = (
     toggleCallMaximized: () => void;
     isViewingCall: boolean;
     isConnectedToCall: boolean;
-    hasActiveCallSession: boolean;
+    /**
+     * The type of call in progress, or `null` if no call is ongoing.
+     */
+    activeCallSessionType: CallType | null;
     callOptions: PlatformCallType[];
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
@@ -123,12 +126,19 @@ export const useRoomCall = (
     const groupCall = useCall(room.roomId);
     const isConnectedToCall = useConnectionState(groupCall) === ConnectionState.Connected;
     const hasGroupCall = groupCall !== null;
-    const hasActiveCallSession = useParticipantCount(groupCall) > 0;
     const isViewingCall = useEventEmitterState(
         roomViewStore,
         UPDATE_EVENT,
         () => roomViewStore.isViewingCall() || isVideoRoom(room),
     );
+
+    const participantCount = useParticipantCount(groupCall);
+    const activeCallSessionType = useMemo(() => {
+        if (!groupCall || participantCount === 0) {
+            return null;
+        }
+        return groupCall.callType;
+    }, [participantCount, groupCall]);
 
     // room
     const memberCount = useRoomMemberCount(room);
@@ -307,7 +317,7 @@ export const useRoomCall = (
         toggleCallMaximized: toggleCallMaximized,
         isViewingCall: isViewingCall,
         isConnectedToCall: isConnectedToCall,
-        hasActiveCallSession: hasActiveCallSession,
+        activeCallSessionType: activeCallSessionType,
         callOptions,
         showVoiceCallButton: !hideVoiceCallButton,
         showVideoCallButton: !hideVideoCallButton,

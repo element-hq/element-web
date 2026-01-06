@@ -36,7 +36,7 @@ exports[`ShareDialog should not render the QR code if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -193,7 +193,7 @@ exports[`ShareDialog should not render the socials if disabled 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -319,7 +319,7 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
         Link to selected message
       </label>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -503,7 +503,7 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
         Link to most recent message
       </label>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -660,7 +660,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -817,7 +817,7 @@ exports[`ShareDialog should render a share dialog for an URL 1`] = `
         </span>
       </div>
       <button
-        class="_button_187yx_8 _has-icon_187yx_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
