@@ -351,7 +351,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
-                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup" />
                     {_t("settings|key_backup|setup_secure_backup|generate_security_key_title")}
                 </div>
                 <div>{_t("settings|key_backup|setup_secure_backup|generate_security_key_description")}</div>
@@ -370,7 +369,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
-                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase" />
                     {_t("settings|key_backup|setup_secure_backup|enter_phrase_title")}
                 </div>
                 <div>{_t("settings|key_backup|setup_secure_backup|use_phrase_only_you_know")}</div>
