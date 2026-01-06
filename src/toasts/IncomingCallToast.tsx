@@ -23,7 +23,7 @@ import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import ToastStore from "../stores/ToastStore";
 import { LiveContentSummary, LiveContentType } from "../components/views/rooms/LiveContentSummary";
-import { useCall, useJoinCallButtonDisabledTooltip, useParticipantCount } from "../hooks/useCall";
+import { useCall, useParticipantCount } from "../hooks/useCall";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
@@ -70,22 +70,13 @@ interface JoinCallButtonWithCallProps {
     isRinging: boolean;
 }
 
-function JoinCallButtonWithCall({
-    onClick,
-    call,
-    disabledTooltip,
-    isRinging,
-}: JoinCallButtonWithCallProps): JSX.Element {
-    let disTooltip = disabledTooltip;
-    const disabledBecauseFullTooltip = useJoinCallButtonDisabledTooltip(call);
-    disTooltip = disabledTooltip ?? disabledBecauseFullTooltip ?? undefined;
-
+function JoinCallButtonWithCall({ onClick, disabledTooltip, isRinging }: JoinCallButtonWithCallProps): JSX.Element {
     return (
-        <Tooltip description={disTooltip ?? _t("voip|video_call")}>
+        <Tooltip description={disabledTooltip ?? _t("voip|video_call")}>
             <Button
                 className="mx_IncomingCallToast_actionButton"
                 onClick={onClick}
-                disabled={disTooltip != undefined}
+                disabled={disabledTooltip != undefined}
                 kind="primary"
                 Icon={CheckIcon}
                 size="sm"

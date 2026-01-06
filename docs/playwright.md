@@ -2,216 +2,485 @@
 
 ## Contents
 
-- How to run the tests
-- How the tests work
-- How to write great Playwright tests
-- Visual testing
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Running the Tests](#running-the-tests)
+    - [Element Web E2E Tests](#element-web-e2e-tests)
+    - [Shared Components Tests](#shared-components-tests)
+    - [Projects](#projects)
+- [How the Tests Work](#how-the-tests-work)
+    - [Test Structure](#test-structure)
+    - [Homeserver Setup](#homeserver-setup)
+    - [Fixtures](#fixtures)
+- [Writing Tests](#writing-tests)
+    - [Getting a Homeserver](#getting-a-homeserver)
+    - [Logging In](#logging-in)
+    - [Joining a Room](#joining-a-room)
+    - [Using matrix-js-sdk](#using-matrix-js-sdk)
+    - [Best Practices](#best-practices)
+- [Visual Testing](#visual-testing)
+- [Test Tags](#test-tags)
+- [Supported Container Runtimes](#supported-container-runtimes)
+
+## Overview
+
+Element Web contains two sets of Playwright tests:
+
+1. **Element Web E2E Tests** (`playwright/e2e/`) - Full end-to-end tests of the Element Web application with real homeserver instances
+2. **Shared Components Tests** (`packages/shared-components/`) - Visual regression tests for the shared component library using Storybook
+
+Both test suites run automatically in CI on every pull request and on every merge to develop & master.
+
+## Prerequisites
+
+Before running Playwright tests, ensure you have the following set up:
+
+### 1. Install Playwright Browsers and System Dependencies
+
+Follow the Playwright installation instructions:
+
+- **Browsers:** <https://playwright.dev/docs/browsers#install-browsers>
+- **System dependencies:** <https://playwright.dev/docs/browsers#install-system-dependencies>
+
+```sh
+yarn playwright install --with-deps
+```
+
+### 2. Container Runtime
+
+See [Supported Container Runtimes](#supported-container-runtimes) for details on supported container runtimes (Docker, Podman, Colima).
+
+### 3. Element Web Server (for E2E tests)
+
+Element Web E2E tests require an instance running on `http://localhost:8080` (configured in `playwright.config.ts`).
+
+You can either:
+
+- **Run manually:** `yarn start` in a separate terminal (not working for screenshot tests running in a docker environment).
+- **Auto-start:** Playwright will start the webserver automatically if it's not already running
 
 ## Running the Tests
 
-Our Playwright tests run automatically as part of our CI along with our other tests,
-on every pull request and on every merge to develop & master.
+### Element Web E2E Tests
 
-You may need to follow instructions to set up your development environment for running
-Playwright by following <https://playwright.dev/docs/browsers#install-browsers> and
-<https://playwright.dev/docs/browsers#install-system-dependencies>.
+Our main Playwright tests run against a full Element Web instance with Synapse/Dendrite homeservers.
 
-However the Playwright tests are run, an element-web instance must be running on
-http://localhost:8080 (this is configured in `playwright.config.ts`) - this is what will
-be tested. When running Playwright tests yourself, the standard `yarn start` from the
-element-web project is fine: leave it running it a different terminal as you would
-when developing. Alternatively if you followed the development set up from element-web then
-Playwright will be capable of running the webserver on its own if it isn't already running.
+**Run all E2E tests:**
 
-The tests use [testcontainers](https://node.testcontainers.org/) to launch Homeserver (Synapse or Dendrite)
-instances to test against, so you'll also need to one of the
-[supported container runtimes](#supporter-container-runtimes)
-installed and working in order to run the Playwright tests.
-
-There are a few different ways to run the tests yourself. The simplest is to run:
-
-```shell
+```sh
 yarn run test:playwright
 ```
 
-This will run the Playwright tests once, non-interactively.
+**Run a specific test file:**
 
-You can also run individual tests this way too, as you'd expect:
-
-```shell
-yarn run test:playwright --spec playwright/e2e/register/register.spec.ts
+```sh
+yarn run test:playwright playwright/e2e/register/register.spec.ts
 ```
 
-Playwright also has its own UI that you can use to run and debug the tests.
-To launch it:
+**Run tests interactively with Playwright UI:**
 
-```shell
-yarn run test:playwright:open --headed --debug
+```sh
+yarn run test:playwright:open
 ```
 
-See more command line options at <https://playwright.dev/docs/test-cli>.
+**Run screenshot tests only:**
 
-## Projects
+> [!WARNING]
+> This command run the playwright tests in a docker environment.
 
-By default, Playwright will run all "Projects", this means tests will run against Chrome, Firefox and "Safari" (Webkit).
-We only run tests against Chrome in pull request CI, but all projects in the merge queue.
-Some tests are excluded from running on certain browsers due to incompatibilities in the test harness.
+```sh
+yarn run test:playwright:screenshots
+```
+
+For more information about visual testing, see [Visual Testing](playwright#visual-testing).
+
+**Additional command line options:** <https://playwright.dev/docs/test-cli>
+
+### Shared Components Tests
+
+The shared-components package uses Playwright (via Storybook test runner) to validate component rendering across different states and configurations.
+
+**Run Storybook tests:**
+
+```sh
+cd packages/shared-components
+yarn test:storybook
+```
+
+**Run Storybook tests in CI mode:**
+
+```sh
+cd packages/shared-components
+yarn test:storybook:ci
+```
+
+**Update Storybook screenshots:**
+
+```sh
+cd packages/shared-components
+yarn test:storybook:update
+```
+
+This uses the same Docker-based screenshot rendering as Element Web to ensure consistency across platforms.
+
+### Projects
+
+By default, Playwright runs tests against all "Projects": Chrome, Firefox, "Safari" (Webkit), Dendrite and Picone.
+
+- Chrome, Firefox, Safari run against Synapse
+- Dendrite and Picone run against Chrome
+
+Misc:
+
+- **Pull Request CI:** Tests run only against Chrome
+- **Merge Queue:** Tests run against all projects
+- Some tests are excluded from certain browsers due to incompatibilities (see [Test Tags](#test-tags))
 
 ## How the Tests Work
 
-Everything Playwright-related lives in the `playwright/` subdirectory
-as is typical for Playwright tests. Likewise, tests live in `playwright/e2e`.
+### Test Structure
 
-`playwright/testcontainers` contains the testcontainers which start instances
-of Synapse/Dendrite. These servers are what Element-web runs against in the tests.
+**Element Web tests** are located in the `playwright/` subdirectory:
 
-Synapse can be launched with different configurations in order to test element
-in different configurations. You can specify `synapseConfig` as such:
+- `playwright/e2e/` - E2E test files
+- `playwright/testcontainers/` - Testcontainers for Synapse/Dendrite instances
+- `playwright/snapshots/` - Visual regression test screenshots
+- `playwright/pages/` - Page object models
+- `playwright/plugins/` - Custom Playwright plugins
+
+**Shared components tests** are located in `packages/shared-components/`:
+
+- `packages/shared-components/playwright/snapshots/` - Storybook screenshot baselines
+- `packages/shared-components/.storybook/` - Storybook configuration
+
+The shared components use Storybook's test runner (powered by Playwright) to validate component rendering across different states and configurations.
+
+### Homeserver Setup
+
+Homeservers (Synapse or Dendrite) are launched by Playwright workers and reused for all tests matching the worker configuration.
+
+**Configure Synapse options:**
 
 ```typescript
 test.use({
     synapseConfig: {
-        // The config options to pass to the Synapse instance
+        // Configuration options for the Synapse instance
     },
 });
 ```
 
-The appropriate homeserver will be launched by the Playwright worker and reused for all tests which match the worker configuration.
-Due to homeservers being reused between tests, please use unique names for any rooms put into the room directory as
-they may be visible from other tests, the suggested approach is to use `testInfo.testId` within the name or lodash's uniqueId.
-We remove public rooms from the room directory between tests but deleting users doesn't have a homeserver agnostic solution.
-The logs from testcontainers will be attached to any reports output from Playwright.
+**Important notes:**
+
+- Homeservers are reused between tests for efficiency
+- Please use unique names for any rooms put into the room directory as they may be visible from other tests, the suggested approach is to use `testInfo.testId` within the name or lodash's uniqueId.
+- We remove public rooms from the room directory between tests but deleting users doesn't have a homeserver agnostic solution.
+- Homeserver logs are attached to Playwright test reports
+
+### Fixtures
+
+We heavily leverage [Playwright fixtures](https://playwright.dev/docs/test-fixtures) to provide:
+
+- Homeserver instances (`homeserver`)
+- Logged-in users (`user`)
+- Bot users (`bot`)
+- Application state (`app`)
+
+See [Writing Tests](#writing-tests) for usage examples.
 
 ## Writing Tests
 
-Mostly this is the same advice as for writing any other Playwright test: the Playwright
-docs are well worth a read if you're not already familiar with Playwright testing, eg.
-https://playwright.dev/docs/best-practices. To avoid your tests being flaky it is also
-recommended to use [auto-retrying assertions](https://playwright.dev/docs/test-assertions#auto-retrying-assertions).
+For general Playwright best practices, see:
 
-### Getting a Synapse
+- <https://playwright.dev/docs/best-practices>
+- <https://playwright.dev/docs/test-assertions#auto-retrying-assertions> (recommended for avoiding flaky tests)
 
-We heavily leverage the magic of [Playwright fixtures](https://playwright.dev/docs/test-fixtures).
-To acquire a homeserver within a test just add the `homeserver` fixture to the test:
+### Getting a Homeserver
+
+Use the `homeserver` fixture to acquire a Homeserver instance:
 
 ```typescript
 test("should do something", async ({ homeserver }) => {
-    // homeserver is a Synapse/Dendrite instance
+    // homeserver is a ready-to-use Synapse/Dendrite instance
 });
 ```
 
-This returns an object with information about the Homeserver instance, including what port
-it was started on and the ID that needs to be passed to shut it down again. It also
-returns the registration shared secret (`registrationSecret`) that can be used to
-register users via the REST API. The Homeserver has been ensured ready to go by awaiting
-its internal health-check.
+**The fixture provides:**
 
-Homeserver instances should be reasonably cheap to start (you may see the first one take a
-while as it pulls the Docker image).
-You do not need to explicitly clean up the instance as it will be cleaned up by the fixture.
+- Server port information
+- Instance ID for shutdown
+- Registration shared secret (`registrationSecret`) for registering users via REST API
+
+Homeserver instances are:
+
+- Reasonably cheap to start (first run may be slow while pulling Docker image)
+- Automatically cleaned up by the fixture
 
 ### Logging In
 
-We again heavily leverage the magic of [Playwright fixtures](https://playwright.dev/docs/test-fixtures).
-To acquire a logged-in user within a test just add the `user` fixture to the test:
+Use the `user` fixture to get a logged-in user:
 
 ```typescript
 test("should do something", async ({ user }) => {
-    // user is a logged in user
+    // user is logged in and ready to use
 });
 ```
 
-You can specify a display name for the user via `test.use` `displayName`,
-otherwise a random one will be generated.
-This will register a random userId using the registrationSecret with a random password
-and the given display name. The user fixture will contain details about the credentials for if
-they are needed for User-Interactive Auth or similar but localStorage will already be seeded with them
-and the app loaded (path `/`).
+**Customize the user:**
+
+```typescript
+test.use({
+    displayName: "Alice",
+});
+
+test("should do something", async ({ user }) => {
+    // user is logged in as "Alice"
+});
+```
+
+**What the fixture does:**
+
+- Registers a random userId with the `registrationSecret`
+- Generates a random password (or uses specified display name)
+- Seeds localStorage with credentials
+- Loads the app at path `/`
+- Provides user details for User-Interactive Auth if needed
 
 ### Joining a Room
 
-Many tests will also want to start with the client in a room, ready to send & receive messages. Best
-way to do this may be to get an access token for the user and use this to create a room with the REST
-API before logging the user in.
-You can make use of the bot fixture and the `client` field on the app fixture to do this.
+To start with a user in a room:
 
-### Try to write tests from the users' perspective
+```typescript
+test("should send a message", async ({ user, app, bot }) => {
+    // Use the bot client to create a room
+    const roomId = await bot.createRoom({
+        name: "Test Room",
+        invite: [user.userId],
+    });
 
-Like for instance a user will not look for a button by querying a CSS selector.
-Instead, you should work with roles / labels etc, see https://playwright.dev/docs/locators.
+    // Accept the invite using the app client
+    await app.client.joinRoom(roomId);
+
+    // Now ready to test messaging
+});
+```
+
+**Best practice:** Use the REST API (via `bot` or `app.client`) to set up room state rather than driving the UI.
 
 ### Using matrix-js-sdk
 
-Due to the way we run the Playwright tests in CI, at this time you can only use the matrix-js-sdk module
-exposed on `window.matrixcs`. This has the limitation that it is only accessible with the app loaded.
-This may be revisited in the future.
+Due to CI constraints, use the matrix-js-sdk module exposed on `window.matrixcs`:
 
-## Good Test Hygiene
+```typescript
+const matrixcs = window.matrixcs;
+```
 
-This section mostly summarises general good Playwright testing practice, and should not be news to anyone
-already familiar with Playwright.
+**Limitation:** Only accessible when the app is loaded. This may be revisited in the future.
 
-1. Test a well-isolated unit of functionality. The more specific, the easier it will be to tell what's
-   wrong when they fail.
-1. Don't depend on state from other tests: any given test should be able to run in isolation.
-1. Try to avoid driving the UI for anything other than the UI you're trying to test. e.g. if you're
-   testing that the user can send a reaction to a message, it's best to send a message using a REST
-   API, then react to it using the UI, rather than using the element-web UI to send the message.
-1. Avoid explicit waits. Playwright locators & assertions will implicitly wait for the specified
-   element to appear and all assertions are retried until they either pass or time out, so you should
-   never need to manually wait for an element.
-    - For example, for asserting about editing an already-edited message, you can't wait for the
-      'edited' element to appear as there was already one there, but you can assert that the body
-      of the message is what is should be after the second edit and this assertion will pass once
-      it becomes true. You can then assert that the 'edited' element is still in the DOM.
-    - You can also wait for other things like network requests in the
-      browser to complete (https://playwright.dev/docs/api/class-page#page-wait-for-response).
-      Needing to wait for things can also be because of race conditions in the app itself, which ideally
-      shouldn't be there!
+### Best Practices
 
-This is a small selection - the Playwright best practices guide, linked above, has more good advice, and we
-should generally try to adhere to them.
+For more guidance, see the [Playwright best practices guide](https://playwright.dev/docs/best-practices).
 
-## Screenshot testing
+#### 1. Test from the User's Perspective
 
-When we previously used Cypress we also dabbled with Percy, and whilst powerful it did not
-lend itself well to being executed on all PRs without needing to budget it substantially.
+Work with roles, labels, and accessible elements rather than CSS selectors:
+
+```typescript
+// Good
+await page.getByRole("button", { name: "Send" }).click();
+
+// Avoid
+await page.locator(".mx_MessageComposer_sendButton").click();
+```
+
+See <https://playwright.dev/docs/locators> for more guidance.
+
+#### 2. Test Well-Isolated Functionality
+
+- Focus on specific, well-defined units of functionality
+- Easier to debug when tests fail
+- More maintainable over time
+
+#### 3. Maintain Test Independence
+
+- Each test should run successfully in isolation
+- Don't depend on state from other tests
+- Clean up after your test if needed
+
+#### 4. Minimize UI Driving for Setup
+
+- Use REST APIs to set up test state when possible
+- Only drive the UI for the functionality you're actually testing
+
+**Example:**
+
+```typescript
+// Testing reactions - good approach
+test("should react to a message", async ({ page, app, bot }) => {
+    // Send message via API
+    const eventId = await bot.sendMessage(roomId, "Hello");
+
+    // Test the reaction UI
+    await page.getByText("Hello").hover();
+    await page.getByRole("button", { name: "React" }).click();
+    await page.getByLabel("😀").click();
+
+    // Verify reaction was sent
+    await expect(page.getByLabel("😀 1")).toBeVisible();
+});
+```
+
+#### 5. Avoid Explicit Waits
+
+Playwright locators and assertions automatically wait and retry:
+
+```typescript
+// Good - implicit waiting
+await expect(page.getByText("Message sent")).toBeVisible();
+
+// Avoid - explicit waits
+await page.waitForTimeout(1000);
+```
+
+**For dynamic content:**
+
+```typescript
+// Assert on the final state - Playwright will wait for it
+await expect(page.getByRole("textbox")).toHaveValue("Edited message");
+await expect(page.getByText("edited")).toBeVisible();
+```
+
+**When you do need to wait:**
+
+```typescript
+// Wait for network requests
+await page.waitForResponse("**/messages");
+
+// Wait for specific conditions
+await page.waitForFunction(() => window.matrixcs !== undefined);
+```
+
+## Visual Testing
 
 Playwright has built-in support for [visual comparison testing](https://playwright.dev/docs/test-snapshots).
-Screenshots are saved in `playwright/snapshots` and are rendered in a Linux Docker environment for stability.
 
-One must be careful to exclude any dynamic content from the screenshot, such as timestamps, avatars, etc,
-via the `mask` option. See the [Playwright docs](https://playwright.dev/docs/test-snapshots#masking).
+**Screenshot location:** `playwright/snapshots/`
 
-Some UI elements render differently between test runs, such as BaseAvatar when
-there is no avatar set, choosing a colour from the theme palette based on the
-hash of the user/room's Matrix ID. To avoid this creating flaky tests we inject
-some custom CSS, for this to happen we use the custom assertion `toMatchScreenshot`
-instead of the native `toHaveScreenshot`.
+**Rendering environment:** Linux Docker (for consistency across environments)
 
-If you are running Linux and are unfortunate that the screenshots are not rendering identically,
-you may wish to specify `--ignore-snapshots` and rely on Docker to render them for you.
+### Test Tag for Screenshots
+
+All screenshot tests must use the `@screenshot` tag:
+
+```typescript
+test("should render message list", { tag: "@screenshot" }, async ({ page }) => {
+    await expect(page).toMatchScreenshot("message-list.png");
+});
+```
+
+**Purpose of `@screenshot` tag:**
+
+- Allows running only screenshot tests via `test:playwright:screenshots`
+- Speeds up screenshot test runs and updates
+
+### Taking Screenshots
+
+Use the custom `toMatchScreenshot` assertion (not the native `toHaveScreenshot`):
+
+```typescript
+await expect(page).toMatchScreenshot("my-screenshot.png");
+```
+
+**Why a custom assertion?** We inject custom CSS to stabilize dynamic UI elements (e.g., BaseAvatar color selection based on Matrix ID hash).
+
+### Masking Dynamic Content
+
+Always mask dynamic content that changes between runs:
+
+```typescript
+await expect(page).toMatchScreenshot("chat.png", {
+    mask: [page.locator(".mx_MessageTimestamp"), page.locator(".mx_BaseAvatar")],
+});
+```
+
+Common elements to mask:
+
+- Timestamps
+- Avatars (when dynamic)
+- Animated elements
+- User-generated IDs
+
+See [Playwright masking docs](https://playwright.dev/docs/test-snapshots#masking) for more details.
+
+### Updating Screenshots
+
+This command runs only tests tagged with `@screenshot` in the Docker environment.
+When you need to update screenshot baselines (e.g., after intentional UI changes):
+
+```sh
+yarn run test:playwright:screenshots
+```
+
+**Important:** Always use this command to update screenshots rather than running tests locally with `--update-snapshots`.
+
+**Why?** Screenshots must be rendered in a consistent Linux Docker environment because:
+
+- Font rendering differs between operating systems (macOS, Windows, Linux)
+- Subpixel rendering varies across systems
+- Browser rendering engines have platform-specific differences
+
+Using `test:playwright:screenshots` ensures screenshots are generated in the same Docker environment used in CI, preventing false failures due to rendering differences.
 
 ## Test Tags
 
-We use test tags to categorise tests for running subsets more efficiently.
+Test tags categorize tests for efficient subset execution.
 
-- `@mergequeue`: Tests that are slow or flaky and cover areas of the app we update seldom, should not be run on every PR commit but will be run in the Merge Queue.
-- `@screenshot`: Tests that use `toMatchScreenshot` to speed up a run of `test:playwright:screenshots`. A test with this tag must not also have the `@mergequeue` tag as this would cause false positives in the stale screenshot detection.
-- `@no-$project`: Tests which are unsupported in $Project. These tests will be skipped when running in $Project.
+### Available Tags
 
-Anything testing Matrix media will need to have `@no-firefox` and `@no-webkit` as those rely on the service worker which
-has to be disabled in Playwright on Firefox & Webkit to retain routing functionality.
-Anything testing VoIP/microphone will need to have `@no-webkit` as fake microphone functionality is not available
-there at this time.
+- **`@mergequeue`**: Slow or flaky tests covering rarely-updated app areas
+    - Not run on every PR commit
+    - Run in the Merge Queue
 
-If you wish to run all tests in a PR, you can give it the label `X-Run-All-Tests`.
+- **`@screenshot`**: Tests using `toMatchScreenshot` for visual regression testing
+    - See the [Visual Testing](#visual-testing) section for detailed usage
 
-## Supporter container runtimes
+- **`@no-firefox`**: Tests unsupported in Firefox
+    - Automatically skipped in Firefox project
+    - Common reason: Service worker required (disabled in Playwright Firefox for routing)
 
-We use testcontainers to spin up various instances of Synapse, Matrix Authentication Service, and more.
-It supports Docker out of the box but also has support for Podman, Colima, Rancher, you just need to follow some instructions to achieve it:
-https://node.testcontainers.org/supported-container-runtimes/
+- **`@no-webkit`**: Tests unsupported in Webkit
+    - Automatically skipped in Webkit project
+    - Common reasons: Service worker required, microphone functionality unavailable
 
-If you are running under Colima, you may need to set the environment variable `TMPDIR` to `/tmp/colima` or a path
-within `$HOME` to allow bind mounting temporary directories into the Docker containers.
+### Running All Tests in a PR
+
+Add the `X-Run-All-Tests` label to your pull request to run all tests, including `@mergequeue` tests.
+
+## Supported Container Runtimes
+
+We use [testcontainers](https://node.testcontainers.org/) to manage Synapse, Matrix Authentication Service, and other service instances.
+
+**Supported runtimes:**
+
+- Docker (default, recommended)
+- Podman
+- Colima
+  See setup instructions: <https://node.testcontainers.org/supported-container-runtimes/>
+
+### Platform-Specific Configuration
+
+**Colima users:**
+
+If using Colima, you may need to set the `TMPDIR` environment variable to allow bind mounting temporary directories:
+
+```sh
+export TMPDIR=/tmp/colima
+# or
+export TMPDIR=$HOME/tmp
+```
+
+**macOS users:**
+
+Docker Desktop and Colima are both well-supported on macOS.
+
+> [!CAUTION]
+> Do not set `DOCKER_HOST` when running tests. Element Web uses [element-web-playwright-common](https://github.com/element-hq/element-modules/tree/main/packages/element-web-playwright-common), and setting `DOCKER_HOST` causes issues with testcontainers when running in the container VM.

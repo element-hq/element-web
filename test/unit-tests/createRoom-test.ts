@@ -17,7 +17,6 @@ import {
     RoomVersionStability,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { act } from "jest-matrix-react";
 
 import {
@@ -292,8 +291,6 @@ describe("createRoom", () => {
 
     it("sets up Element video rooms correctly", async () => {
         const createCallSpy = jest.spyOn(ElementCall, "create");
-        const callMembershipSpy = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom");
-        callMembershipSpy.mockReturnValue([]);
 
         await createRoom(client, { roomType: RoomType.UnstableCall });
 

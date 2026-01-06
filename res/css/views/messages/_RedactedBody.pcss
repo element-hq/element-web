@@ -11,20 +11,11 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
     vertical-align: middle;
 
-    padding-left: 20px;
-    position: relative;
-
-    &::before {
+    svg {
+        margin-right: 6px;
         height: 14px;
         width: 14px;
-        background-color: $icon-button-color;
-        mask-image: url("@vector-im/compound-design-tokens/icons/delete.svg");
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: contain;
-        content: "";
-        position: absolute;
-        top: 1px;
-        left: 0;
+        color: $icon-button-color;
+        vertical-align: -2px;
     }
 }
