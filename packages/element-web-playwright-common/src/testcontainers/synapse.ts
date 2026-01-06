@@ -174,7 +174,7 @@ const DEFAULT_CONFIG = {
         msc4143_enabled: false,
     },
     matrix_rtc: {
-        transports: [] as { type: string; [field: string]: string }[],
+        transports: Array<{ type: string; [field: string]: string }>,
     },
     oidc_providers: [],
     serve_server_wellknown: true,
