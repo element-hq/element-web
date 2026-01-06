@@ -443,12 +443,16 @@ describe("Notifier", () => {
                         content: {},
                     }),
                     {
-                        call_id: "123",
-                        application: "m.call",
-                        focus_active: { type: "livekit" },
-                        foci_preferred: [],
-                        device_id: "DEVICE",
+                        kind: "session",
+                        data: {
+                            call_id: "123",
+                            application: "m.call",
+                            focus_active: { type: "livekit", focus_selection: "oldest_membership" },
+                            foci_preferred: [],
+                            device_id: "DEVICE",
+                        },
                     },
+                    "hashed_id_XXXAAAAA",
                 ),
             ];
 
