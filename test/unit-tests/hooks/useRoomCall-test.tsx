@@ -1,11 +1,27 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 import { renderHook, waitFor } from "jest-matrix-react";
-import { PlatformCallType, useRoomCall } from "../../../src/hooks/room/useRoomCall";
-import { getMockClientWithEventEmitter, mkRoom, mockClientMethodsRooms, mockClientMethodsServer, mockClientMethodsUser, MockEventEmitter, setupAsyncStoreWithClient } from "../../test-utils";
-import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomContext";
-import RoomContext, { RoomContextType } from "../../../src/contexts/RoomContext";
 import React from "react";
+
+import { PlatformCallType, useRoomCall } from "../../../src/hooks/room/useRoomCall";
+import {
+    getMockClientWithEventEmitter,
+    mkRoom,
+    mockClientMethodsRooms,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+    MockEventEmitter,
+    setupAsyncStoreWithClient,
+} from "../../test-utils";
+import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomContext";
+import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
-import LegacyCallHandler from "../../../src/LegacyCallHandler";
+import type LegacyCallHandler from "../../../src/LegacyCallHandler";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
@@ -34,7 +50,6 @@ describe("useRoomCall", () => {
         roomViewStore: mockRoomViewStore,
     } as unknown as RoomContextType;
 
-
     beforeEach(() => {
         const callHandler = {
             getCallForRoom: jest.fn().mockReturnValue(null),
@@ -44,7 +59,7 @@ describe("useRoomCall", () => {
             on: jest.fn(),
             off: jest.fn(),
         };
-        jest.spyOn(SdkContextClass.instance, "legacyCallHandler",  "get").mockReturnValue(
+        jest.spyOn(SdkContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
             callHandler as unknown as LegacyCallHandler,
         );
         const origGetValue = SettingsStore.getValue;
@@ -59,53 +74,60 @@ describe("useRoomCall", () => {
     });
 
     function render() {
-        return renderHook(() => useRoomCall(room), { wrapper: ({children}) => 
-            <MatrixClientContextProvider client={client}>
-                <ScopedRoomContextProvider {...roomContext}>
-                {children}
-                </ScopedRoomContextProvider>
-            </MatrixClientContextProvider>});
+        return renderHook(() => useRoomCall(room), {
+            wrapper: ({ children }) => (
+                <MatrixClientContextProvider client={client}>
+                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                </MatrixClientContextProvider>
+            ),
+        });
     }
 
-    describe('Element Call focus detection', () => {
-        it('Blocks Element Call if required foci are not configured', async () => {
+    describe("Element Call focus detection", () => {
+        it("Blocks Element Call if required foci are not configured", async () => {
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
             await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]));
         });
-        it('Blocks Element Call if transport foci are the wrong type', async () => {
-            client._unstable_getRTCTransports.mockResolvedValue([{type: "anything-else"}]);
+        it("Blocks Element Call if transport foci are the wrong type", async () => {
+            client._unstable_getRTCTransports.mockResolvedValue([{ type: "anything-else" }]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
             await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]));
         });
-        it('Blocks Element Call if well-known foci are the wrong type', async () => {
+        it("Blocks Element Call if well-known foci are the wrong type", async () => {
             client.getClientWellKnown.mockReturnValue({
                 "org.matrix.msc4143.rtc_foci": {
-                    type: "anything-else"
-                }
-            })
+                    type: "anything-else",
+                },
+            });
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
             await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]));
         });
-        it('Allows Element Call if foci is provided via getRTCTransports', async () => {
-            client._unstable_getRTCTransports.mockResolvedValue([{type: "livekit", livekit_service_url: "https://example.org"}]);
+        it("Allows Element Call if foci is provided via getRTCTransports", async () => {
+            client._unstable_getRTCTransports.mockResolvedValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
             await setupAsyncStoreWithClient(CallStore.instance, client);
-            
+
             const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]));
+            await waitFor(() =>
+                expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
+            );
         });
-        it('Allows Element Call if foci is provided via .well-known', async () => {
+        it("Allows Element Call if foci is provided via .well-known", async () => {
             client.getClientWellKnown.mockReturnValue({
                 "org.matrix.msc4143.rtc_foci": {
                     type: "livekit",
-                    livekit_service_url: "https://example.org"
-                }
-            })
+                    livekit_service_url: "https://example.org",
+                },
+            });
             await setupAsyncStoreWithClient(CallStore.instance, client);
             const { result } = render();
-            await waitFor(() => expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]));
+            await waitFor(() =>
+                expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
+            );
         });
     });
 });

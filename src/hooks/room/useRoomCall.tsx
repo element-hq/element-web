@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";
@@ -37,7 +38,6 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { SdkContextClass } from "../../contexts/SDKContext";
 
 const logger = rootLogger.getChild("useRoomCall");
@@ -197,7 +197,6 @@ export const useRoomCall = (
         groupCallsEnabled,
         hasGroupCall,
         mayCreateElementCalls,
-        serverIsConfiguredForElementCall,
         useElementCallExclusively,
         groupCall?.widget.type,
     ]);
