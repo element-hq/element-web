@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 import { type AbstractStartedContainer, type GenericContainer } from "testcontainers";
 import { type APIRequestContext, type TestInfo } from "@playwright/test";
 
-import { type StartedMatrixAuthenticationServiceContainer } from "./mas";
-import { type ClientServerApi, type Credentials } from "../utils/api";
-import { type StartedMailpitContainer } from "./mailpit";
+import { type StartedMatrixAuthenticationServiceContainer } from "./mas.js";
+import { type ClientServerApi, type Credentials } from "../utils/api.js";
+import { type StartedMailpitContainer } from "./mailpit.js";
 
 export interface HomeserverInstance {
     readonly baseUrl: string;
