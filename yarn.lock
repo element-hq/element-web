@@ -88,7 +88,7 @@
   dependencies:
     eslint-rule-composer "^0.3.0"
 
-"@babel/generator@^7.27.5", "@babel/generator@^7.28.3", "@babel/generator@^7.28.5":
+"@babel/generator@^7.27.5", "@babel/generator@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.28.5.tgz#712722d5e50f44d07bc7ac9fe84438742dd61298"
   integrity sha512-3EwLFhZ38J4VyIP6WNtt2kUdW9dokXA9Cr4IVIFHuCpZ3H8/YFOl5JjZHisrn1fATPBmKKqXzDFvh9fUwHz6CQ==
@@ -278,19 +278,12 @@
     "@babel/template" "^7.27.2"
     "@babel/types" "^7.28.4"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.24.4", "@babel/parser@^7.27.2", "@babel/parser@^7.28.4", "@babel/parser@^7.28.5":
+"@babel/parser@^7.1.0", "@babel/parser@^7.18.5", "@babel/parser@^7.20.7", "@babel/parser@^7.24.4", "@babel/parser@^7.27.2", "@babel/parser@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.28.5.tgz#0b0225ee90362f030efd644e8034c99468893b08"
   integrity sha512-KKBU1VGYR7ORr3At5HAtUQ+TV3SzRCXmA/8OdDZiLDBIZxVyzXuztPjfLd3BV1PRAQGCMWWSHYhL0F8d5uHBDQ==
   dependencies:
     "@babel/types" "^7.28.5"
-
-"@babel/parser@^7.18.5":
-  version "7.28.4"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.28.4.tgz#da25d4643532890932cc03f7705fe19637e03fa8"
-  integrity sha512-yZbBqeM6TkpP9du/I2pUZnJsRMGGvOuIrhjzC1AwHwW+6he4mni6Bp/m8ijn0iOuZuPI2BfkCoSRunpyjnrQKg==
-  dependencies:
-    "@babel/types" "^7.28.4"
 
 "@babel/parser@^7.23.9":
   version "7.25.8"
@@ -1104,20 +1097,7 @@
     "@babel/parser" "^7.27.2"
     "@babel/types" "^7.27.1"
 
-"@babel/traverse@^7.18.5":
-  version "7.28.4"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.28.4.tgz#8d456101b96ab175d487249f60680221692b958b"
-  integrity sha512-YEzuboP2qvQavAcjgQNVgsvHIDv6ZpwXvcvjmyySP2DIMuByS/6ioU5G9pYrWHM6T2YDfc7xga9iNzYOs12CFQ==
-  dependencies:
-    "@babel/code-frame" "^7.27.1"
-    "@babel/generator" "^7.28.3"
-    "@babel/helper-globals" "^7.28.0"
-    "@babel/parser" "^7.28.4"
-    "@babel/template" "^7.27.2"
-    "@babel/types" "^7.28.4"
-    debug "^4.3.1"
-
-"@babel/traverse@^7.27.1", "@babel/traverse@^7.28.0", "@babel/traverse@^7.28.3", "@babel/traverse@^7.28.4", "@babel/traverse@^7.28.5":
+"@babel/traverse@^7.18.5", "@babel/traverse@^7.27.1", "@babel/traverse@^7.28.0", "@babel/traverse@^7.28.3", "@babel/traverse@^7.28.4", "@babel/traverse@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.28.5.tgz#450cab9135d21a7a2ca9d2d35aa05c20e68c360b"
   integrity sha512-TCCj4t55U90khlYkVV/0TfkJkAkUg3jZFA3Neb7unZT8CPok7iiRfaX0F+WnqWqt7OxhOn0uBKXCw4lbL8W0aQ==
@@ -1577,8 +1557,17 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@link:packages/shared-components":
-  version "0.0.0"
-  uid ""
+  version "0.0.0-test.12"
+  dependencies:
+    "@element-hq/element-web-module-api" "^1.8.0"
+    "@vector-im/compound-design-tokens" "^6.4.3"
+    classnames "^2.5.1"
+    counterpart "^0.18.6"
+    lodash "^4.17.21"
+    matrix-web-i18n "^3.4.0"
+    patch-package "^8.0.1"
+    react-merge-refs "^3.0.2"
+    temporal-polyfill "^0.3.0"
 
 "@emnapi/core@^1.4.3":
   version "1.7.0"
@@ -4187,15 +4176,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@6.4.3":
+"@vector-im/compound-design-tokens@6.4.3", "@vector-im/compound-design-tokens@^6.4.3":
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.3.tgz#f8a98308650e841ffba6ca0820055e2bfe2b8af1"
   integrity sha512-Zyqag2QCAfpRipLHSX/LEXj6OGFgBpilMQvNdr3a0iXeGASfkM3HZGid077kMRp9lvyHiQfPIs1BdllENwDSNQ==
-
-"@vector-im/compound-design-tokens@^6.3.0":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.1.tgz#b3356300136b974104b4fb818969350c7686f5ae"
-  integrity sha512-JhrxnzohxGILrc+IZWoMXcpGHinnJlR2HSCKfypEjPDDF5TOB8HQYTqd5ALAPlob8QZU3N2ghnCF7d0f2LmTxg==
 
 "@vector-im/compound-web@^8.3.4":
   version "8.3.4"
@@ -4214,7 +4198,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.40.0":
   version "2.40.0"
@@ -9675,9 +9658,9 @@ matrix-events-sdk@0.0.1:
     uuid "13"
 
 matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.4.0.tgz#2f088a2ec2cb4598092b7e9dd2f24f65d820df0e"
-  integrity sha512-8Bftf3LkACR6oy0iXYuIsDuvHjoJoOCWA+gDuy/lvyPwEpwViMs3XP5mJsXla+51SZEULZRUUtTreufH6xVA8g==
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.0.tgz#2f27fb6024168ee50cdbea495dbd7cf6c7171314"
+  integrity sha512-d6Unc6H/lvr1g5zY9fQMS0xdVZ/4kN4+YeC3TEHU1bQ+ShJrJhYKiysmuOAzRYoS8/FIailyb4rqYRBH+PlidA==
   dependencies:
     "@babel/parser" "^7.18.5"
     "@babel/traverse" "^7.18.5"
@@ -9685,7 +9668,7 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.10.0, matrix-widget-api@^1.15.0:
+matrix-widget-api@^1.14.0, matrix-widget-api@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==
