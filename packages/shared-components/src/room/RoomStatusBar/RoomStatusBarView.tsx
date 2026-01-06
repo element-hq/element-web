@@ -36,39 +36,39 @@ export interface RoomStatusBarViewActions {
     onTermsAndConditionsClicked?: () => void;
 }
 
-export enum RoomStatusBarState {
-    ConnectionLost,
-    NeedsConsent,
-    ResourceLimited,
-    UnsentMessages,
-    LocalRoomFailed,
-}
+export const RoomStatusBarState = {
+    ConnectionLost: "ConnectionLost",
+    NeedsConsent: "NeedsConsent",
+    ResourceLimited: "ResourceLimited",
+    UnsentMessages: "UnsentMessages",
+    LocalRoomFailed: "LocalRoomFailed",
+} as const;
 
 export interface RoomStatusBarNotVisible {
     state: null;
 }
 
 export interface RoomStatusBarNoConnection {
-    state: RoomStatusBarState.ConnectionLost;
+    state: "ConnectionLost";
 }
 
 export interface RoomStatusBarConsentState {
-    state: RoomStatusBarState.NeedsConsent;
+    state: "NeedsConsent";
     consentUri: string;
 }
 
 export interface RoomStatusBarResourceLimitedState {
-    state: RoomStatusBarState.ResourceLimited;
+    state: "ResourceLimited";
     resourceLimit: "monthly_active_user" | "hs_disabled" | string;
     adminContactHref?: string;
 }
 
 export interface RoomStatusBarUnsentMessagesState {
-    state: RoomStatusBarState.UnsentMessages;
+    state: "UnsentMessages";
     isResending: boolean;
 }
 export interface RoomStatusBarLocalRoomError {
-    state: RoomStatusBarState.LocalRoomFailed;
+    state: "LocalRoomFailed";
 }
 
 export type RoomStatusBarViewSnapshot =
@@ -80,7 +80,7 @@ export type RoomStatusBarViewSnapshot =
     | RoomStatusBarNotVisible;
 
 /**
- * The view model for the banner.
+ * The view model for RoomStatusBarView.
  */
 export type RoomStatusBarViewModel = ViewModel<RoomStatusBarViewSnapshot> & RoomStatusBarViewActions;
 
