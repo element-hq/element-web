@@ -60,13 +60,15 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_BaseCard_header_title_button--option {
-                width: var(--BaseCard_header-button-size);
-                height: var(--BaseCard_header-button-size);
-                padding: var(--cpd-space-0-5x);
+                position: relative;
+                width: calc(var(--BaseCard_header-button-size) - 4px);
+                height: calc(var(--BaseCard_header-button-size) - 4px);
+                padding: 2px;
 
                 svg {
                     width: inherit;
                     height: inherit;
+                    display: block;
                     color: $secondary-content;
                 }
 

@@ -27,7 +27,7 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of a
           style="width: 24px; height: 24px;"
         >
           <svg
-            class="mx_E2EIcon_warning"
+            color="var(--cpd-color-icon-critical-primary)"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -116,7 +116,7 @@ exports[`<UntrustedDeviceDialog /> should display the dialog for the device of t
           style="width: 24px; height: 24px;"
         >
           <svg
-            class="mx_E2EIcon_warning"
+            color="var(--cpd-color-icon-critical-primary)"
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"

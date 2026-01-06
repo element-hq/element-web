@@ -43,7 +43,6 @@
     },
     "element_call": {
         "url": "https://call.element.io",
-        "participant_limit": 8,
         "brand": "Element Call"
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"

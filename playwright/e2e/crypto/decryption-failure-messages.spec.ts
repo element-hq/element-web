@@ -30,69 +30,80 @@ test.describe("Cryptography", function () {
     test.describe("decryption failure messages", () => {
         test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
 
-        test("should handle device-relative historical messages", async ({
-            homeserver,
-            page,
-            app,
-            credentials,
-            user,
-        }) => {
-            test.setTimeout(60000);
+        test(
+            "should handle device-relative historical messages",
+            { tag: "@screenshot" },
+            async ({ homeserver, page, app, credentials, user }) => {
+                test.setTimeout(60000);
 
-            // Start with a logged-in session, without key backup, and send a message.
-            await createRoom(page, "Test room", true);
-            await sendMessageInCurrentRoom(page, "test test");
+                // Start with a logged-in session, without key backup, and send a message.
+                await createRoom(page, "Test room", true);
+                await sendMessageInCurrentRoom(page, "test test");
 
-            // Log out, discarding the key for the sent message.
-            await logOutOfElement(page, true);
+                // Log out, discarding the key for the sent message.
+                await logOutOfElement(page, true);
 
-            // Log in again, and see how the message looks.
-            await logIntoElement(page, credentials);
-            await app.viewRoomByName("Test room");
-            const lastTile = page.locator(".mx_EventTile").last();
-            await expect(lastTile).toContainText("Historical messages are not available on this device");
-            await expect(lastTile.locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                // Log in again, and see how the message looks.
+                await logIntoElement(page, credentials);
+                await app.viewRoomByName("Test room");
+                const lastTile = page.locator(".mx_EventTile").last();
+                await expect(lastTile).toContainText("Historical messages are not available on this device");
+                await expect(lastTile.locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
+                await expect(lastTile).toMatchScreenshot("history-not-available.png", {
+                    mask: [page.locator(".mx_MessageTimestamp")],
+                });
 
-            // Now, we set up key backup, and then send another message.
-            const secretStorageKey = await enableKeyBackup(app);
-            await app.viewRoomByName("Test room");
-            await sendMessageInCurrentRoom(page, "test2 test2");
+                // Now, we set up key backup, and then send another message.
+                const secretStorageKey = await enableKeyBackup(app);
+                await app.viewRoomByName("Test room");
+                await sendMessageInCurrentRoom(page, "test2 test2");
 
-            // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
-            // the key to be backed up.
-            await page.waitForTimeout(10000);
+                // Workaround for https://github.com/element-hq/element-web/issues/27267. It can take up to 10 seconds for
+                // the key to be backed up.
+                await page.waitForTimeout(10000);
 
-            // Finally, log out again, and back in, skipping verification for now, and see what we see.
-            await logOutOfElement(page);
-            await logIntoElement(page, credentials);
-            await page.locator(".mx_AuthPage").getByRole("button", { name: "Skip verification for now" }).click();
-            await page.locator(".mx_AuthPage").getByRole("button", { name: "I'll verify later" }).click();
-            await app.viewRoomByName("Test room");
+                // Finally, log out again, and back in, skipping verification for now, and see what we see.
+                await logOutOfElement(page);
+                await logIntoElement(page, credentials);
+                await page.locator(".mx_AuthPage").getByRole("button", { name: "Skip verification for now" }).click();
+                await page.locator(".mx_AuthPage").getByRole("button", { name: "I'll verify later" }).click();
+                await app.viewRoomByName("Test room");
 
-            // In this case, the call to cryptoApi.isEncryptionEnabledInRoom is taking a long time to resolve
-            await page.waitForTimeout(1000);
+                // In this case, the call to cryptoApi.isEncryptionEnabledInRoom is taking a long time to resolve
+                await page.waitForTimeout(1000);
 
-            // There should be two historical events in the timeline
-            const tiles = await page.locator(".mx_EventTile").all();
-            expect(tiles.length).toBeGreaterThanOrEqual(2);
-            // look at the last two tiles only
-            for (const tile of tiles.slice(-2)) {
-                await expect(tile).toContainText("You need to verify this device for access to historical messages");
-                await expect(tile.locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
-            }
+                // There should be two historical events in the timeline
+                const tiles = await page.locator(".mx_EventTile").all();
+                expect(tiles.length).toBeGreaterThanOrEqual(2);
+                // look at the last two tiles only
+                for (const tile of tiles.slice(-2)) {
+                    await expect(tile).toContainText(
+                        "You need to verify this device for access to historical messages",
+                    );
+                    await expect(tile.locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                        "This message could not be decrypted",
+                    );
+                }
 
-            // Now verify our device (setting up key backup), and check what happens
-            await verifySession(app, secretStorageKey);
-            const tilesAfterVerify = (await page.locator(".mx_EventTile").all()).slice(-2);
+                // Now verify our device (setting up key backup), and check what happens
+                await verifySession(app, secretStorageKey);
+                const tilesAfterVerify = (await page.locator(".mx_EventTile").all()).slice(-2);
 
-            // The first message still cannot be decrypted, because it was never backed up. It's now a regular UTD though.
-            await expect(tilesAfterVerify[0]).toContainText("Unable to decrypt message");
-            await expect(tilesAfterVerify[0].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                // The first message still cannot be decrypted, because it was never backed up. It's now a regular UTD though.
+                await expect(tilesAfterVerify[0]).toContainText("Unable to decrypt message");
+                await expect(tilesAfterVerify[0].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
 
-            // The second message should now be decrypted, with a grey shield
-            await expect(tilesAfterVerify[1]).toContainText("test2 test2");
-            await expect(tilesAfterVerify[1].locator(".mx_EventTile_e2eIcon_normal")).toBeVisible();
-        });
+                // The second message should now be decrypted, with a grey shield
+                await expect(tilesAfterVerify[1]).toContainText("test2 test2");
+                await expect(tilesAfterVerify[1].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "The authenticity of this encrypted message can't be guaranteed on this device.",
+                );
+            },
+        );
 
         test.describe("non-joined historical messages", () => {
             test.skip(isDendrite, "does not yet support membership on events");
@@ -186,7 +197,9 @@ test.describe("Cryptography", function () {
                 // The first message from Bob was sent before Alice was in the room, so should
                 // be different from the standard UTD message
                 await expect(tiles[tiles.length - 5]).toContainText("You don't have access to this message");
-                await expect(tiles[tiles.length - 5].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                await expect(tiles[tiles.length - 5].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
 
                 // The second message from Bob should be decryptable
                 await expect(tiles[tiles.length - 2]).toContainText("This should be decryptable");
@@ -196,7 +209,9 @@ test.describe("Cryptography", function () {
                 // in the room and is expected to be decryptable, so this should have the
                 // standard UTD message
                 await expect(tiles[tiles.length - 1]).toContainText("Unable to decrypt message");
-                await expect(tiles[tiles.length - 1].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
+                await expect(tiles[tiles.length - 1].locator(".mx_EventTile_e2eIcon")).toHaveAccessibleName(
+                    "This message could not be decrypted",
+                );
             });
 
             test("should be able to jump to a message sent before our last join event", async ({

@@ -19,7 +19,7 @@ import {
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
-import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { CallMembership, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
@@ -433,7 +433,7 @@ describe("Notifier", () => {
         });
 
         it("should not show toast when group call is already connected", () => {
-            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
+            const members = [
                 new CallMembership(
                     mkEvent({
                         event: true,
@@ -450,14 +450,17 @@ describe("Notifier", () => {
                         device_id: "DEVICE",
                     },
                 ),
-            ]);
+            ];
 
-            const roomSession = MatrixRTCSession.roomSessionForRoom(mockClient, testRoom);
+            const mockRtcSession = {
+                memberships: members,
+                slotDescription: { application: "m.call", id: "" },
+            } as unknown as MatrixRTCSession;
 
-            mockClient.matrixRTC.getRoomSession.mockReturnValue(roomSession);
+            mockClient.matrixRTC.getRoomSession.mockReturnValue(mockRtcSession);
+
             emitCallNotificationEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
-            spyCallMemberships.mockRestore();
         });
 
         it("should not show toast when calling with a different event type to org.matrix.msc4075.rtc.notification", () => {
