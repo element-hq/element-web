@@ -106,7 +106,13 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             if (el) {
                 const code: HTMLElement | null = el.querySelector("code");
                 const isCodeEllipsisShown = code ? code.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS : false;
-                const isElipsisShown = el.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS || isCodeEllipsisShown;
+                const isElipsisShown =
+                    isCodeEllipsisShown ||
+                    el.offsetHeight >= SHOW_EXPAND_QUOTE_PIXELS ||
+                    // Check whether the body fits into it's scroll container
+                    el.clientHeight !== el.scrollHeight ||
+                    // Do the same for its children as the scroll container may be on them instead
+                    [...el.children].some((child) => child.clientHeight !== child.scrollHeight);
                 if (isElipsisShown) {
                     this.props.setQuoteExpanded(false);
                 }

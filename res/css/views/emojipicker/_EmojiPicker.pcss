@@ -66,9 +66,6 @@ Please see LICENSE files in the repository root for full details.
 .mx_EmojiPicker_anchor_activity::before {
     mask-image: url("$(res)/img/emojipicker/activity.svg");
 }
-.mx_EmojiPicker_anchor_custom::before {
-    mask-image: url("$(res)/img/emojipicker/custom.svg");
-}
 .mx_EmojiPicker_anchor_flags::before {
     mask-image: url("$(res)/img/emojipicker/flags.svg");
 }
@@ -132,7 +129,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_EmojiPicker_search_icon {
-    width: 16px;
+    width: 20px;
     margin: 8px;
 }
 
@@ -141,7 +138,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_EmojiPicker_search_icon::after {
-    mask: url("$(res)/img/emojipicker/search.svg") no-repeat;
+    mask: url("@vector-im/compound-design-tokens/icons/search.svg") no-repeat;
     mask-size: 100%;
     background-color: $primary-content;
     content: "";
@@ -151,7 +148,7 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_EmojiPicker_search_clear::after {
-    mask-image: url("$(res)/img/emojipicker/delete.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
 }
 
 .mx_EmojiPicker_category {
