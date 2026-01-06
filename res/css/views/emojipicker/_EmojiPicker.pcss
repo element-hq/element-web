@@ -87,34 +87,24 @@ Please see LICENSE files in the repository root for full details.
         align-self: center;
         width: 32px;
         height: 32px;
+        cursor: pointer;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 
-.mx_EmojiPicker_search_clear {
-    cursor: pointer;
-}
-
 .mx_EmojiPicker_search_icon {
-    width: 20px;
+    width: 18px;
     margin: 8px;
-}
 
-.mx_EmojiPicker_search_icon:not(.mx_EmojiPicker_search_clear) {
-    pointer-events: none;
-}
-
-.mx_EmojiPicker_search_icon::after {
-    mask: url("@vector-im/compound-design-tokens/icons/search.svg") no-repeat;
-    mask-size: 100%;
-    background-color: $primary-content;
-    content: "";
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-}
-
-.mx_EmojiPicker_search_clear::after {
-    mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
+    svg {
+        width: 100%;
+        height: 100%;
+        color: $primary-content;
+    }
 }
 
 .mx_EmojiPicker_category {
