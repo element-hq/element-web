@@ -7,22 +7,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
-import classNames from "classnames";
 import { capitalize, sum } from "lodash";
 import {
+    type HierarchyRoom,
     type IPublicRoomsChunkRoom,
+    JoinRule,
     type MatrixClient,
+    type Room,
     RoomMember,
     RoomType,
-    type Room,
-    type HierarchyRoom,
-    JoinRule,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import React, {
-    type JSX,
     type ChangeEvent,
+    type JSX,
     useCallback,
     useContext,
     useEffect,
@@ -31,6 +30,16 @@ import React, {
     useState,
 } from "react";
 import sanitizeHtml from "sanitize-html";
+import {
+    ChatIcon,
+    RoomIcon,
+    SpaceIcon,
+    UserProfileIcon,
+    FavouriteIcon,
+    HomeIcon,
+    GroupIcon,
+    CloseIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import {
@@ -62,7 +71,7 @@ import { type RoomNotificationState } from "../../../../stores/notifications/Roo
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
 import { RecentAlgorithm } from "../../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import { SdkContextClass } from "../../../../contexts/SDKContext";
-import { getMetaSpaceName } from "../../../../stores/spaces";
+import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";
 import { DirectoryMember, type Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
 import DMRoomMap from "../../../../utils/DMRoomMap";
@@ -88,6 +97,7 @@ import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
 import { transformSearchTerm } from "../../../../utils/SearchInput";
 import { Filter } from "./Filter";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -128,6 +138,30 @@ function filterToLabel(filter: Filter): string {
             return _t("spotlight_dialog|public_rooms_label");
         case Filter.PublicSpaces:
             return _t("spotlight_dialog|public_spaces_label");
+    }
+}
+
+function filterToIcon(filter: Filter): JSX.Element {
+    switch (filter) {
+        case Filter.People:
+            return <UserProfileIcon />;
+        case Filter.PublicRooms:
+            return <RoomIcon />;
+        case Filter.PublicSpaces:
+            return <SpaceIcon />;
+    }
+}
+
+function metaspaceToIcon(key: MetaSpace): JSX.Element | undefined {
+    switch (key) {
+        case MetaSpace.Home:
+            return <HomeIcon />;
+        case MetaSpace.Favourites:
+            return <FavouriteIcon />;
+        case MetaSpace.People:
+            return <UserProfileIcon />;
+        case MetaSpace.Orphans:
+            return <RoomIcon />;
     }
 }
 
@@ -396,14 +430,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             ...SpaceStore.instance.enabledMetaSpaces.map((spaceKey) => ({
                 section: Section.Spaces,
                 filter: [] as Filter[],
-                avatar: (
-                    <div
-                        className={classNames(
-                            "mx_SpotlightDialog_metaspaceResult",
-                            `mx_SpotlightDialog_metaspaceResult_${spaceKey}`,
-                        )}
-                    />
-                ),
+                avatar: <div className="mx_SpotlightDialog_metaspaceResult">{metaspaceToIcon(spaceKey)}</div>,
                 name: getMetaSpaceName(spaceKey, SpaceStore.instance.allRoomsInHome),
                 onClick() {
                     SpaceStore.instance.setActiveSpace(spaceKey);
@@ -584,34 +611,30 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     {filter !== Filter.PublicSpaces && supportsSpaceFiltering && (
                         <Option
                             id="mx_SpotlightDialog_button_explorePublicSpaces"
-                            className="mx_SpotlightDialog_explorePublicSpaces"
                             onClick={() => setFilter(Filter.PublicSpaces)}
                         >
+                            {filterToIcon(Filter.PublicSpaces)}
                             {filterToLabel(Filter.PublicSpaces)}
                         </Option>
                     )}
                     {filter !== Filter.PublicRooms && (
                         <Option
                             id="mx_SpotlightDialog_button_explorePublicRooms"
-                            className="mx_SpotlightDialog_explorePublicRooms"
                             onClick={() => setFilter(Filter.PublicRooms)}
                         >
+                            {filterToIcon(Filter.PublicRooms)}
                             {filterToLabel(Filter.PublicRooms)}
                         </Option>
                     )}
                     {filter !== Filter.People && (
-                        <Option
-                            id="mx_SpotlightDialog_button_startChat"
-                            className="mx_SpotlightDialog_startChat"
-                            onClick={() => setFilter(Filter.People)}
-                        >
+                        <Option id="mx_SpotlightDialog_button_startChat" onClick={() => setFilter(Filter.People)}>
+                            {filterToIcon(Filter.People)}
                             {filterToLabel(Filter.People)}
                         </Option>
                     )}
                     {filter === null && (
                         <Option
                             id="mx_SpotlightDialog_button_searchMessages"
-                            className="mx_SpotlightDialog_searchMessages"
                             onClick={() => {
                                 defaultDispatcher.dispatch({
                                     action: Action.FocusMessageSearch,
@@ -620,6 +643,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 onFinished();
                             }}
                         >
+                            <ChatIcon />
                             {_t("spotlight_dialog|messages_label")}
                         </Option>
                     )}
@@ -919,7 +943,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     <div>
                         <Option
                             id="mx_SpotlightDialog_button_joinRoomAlias"
-                            className="mx_SpotlightDialog_joinRoomAlias"
                             onClick={(ev) => {
                                 defaultDispatcher.dispatch<ViewRoomPayload>({
                                     action: Action.ViewRoom,
@@ -931,6 +954,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 onFinished();
                             }}
                         >
+                            <RoomIcon />
                             {_t("spotlight_dialog|join_button_text", {
                                 roomAddress: trimmedQuery,
                             })}
@@ -961,6 +985,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         title={inviteLinkCopied ? _t("common|copied") : _t("action|copy")}
                     >
                         <span className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline">
+                            <LinkIcon />
                             {_t("spotlight_dialog|copy_link_text")}
                         </span>
                     </TooltipOption>
@@ -985,6 +1010,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         }
                     >
                         <span className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline">
+                            <RoomIcon />
                             {_t("spotlight_dialog|create_new_room_button")}
                         </span>
                     </Option>
@@ -1003,9 +1029,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     <h4 id="mx_SpotlightDialog_section_groupChat">{_t("spotlight_dialog|group_chat_section_title")}</h4>
                     <Option
                         id="mx_SpotlightDialog_button_startGroupChat"
-                        className="mx_SpotlightDialog_startGroupChat"
                         onClick={() => showStartChatInviteDialog(trimmedQuery)}
                     >
+                        <GroupIcon />
                         {_t("spotlight_dialog|start_group_chat_button")}
                     </Option>
                 </div>
@@ -1244,13 +1270,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             >
                 <div className="mx_SpotlightDialog_searchBox mx_textinput">
                     {filter !== null && (
-                        <div
-                            className={classNames("mx_SpotlightDialog_filter", {
-                                mx_SpotlightDialog_filterPeople: filter === Filter.People,
-                                mx_SpotlightDialog_filterPublicRooms: filter === Filter.PublicRooms,
-                                mx_SpotlightDialog_filterPublicSpaces: filter === Filter.PublicSpaces,
-                            })}
-                        >
+                        <div className="mx_SpotlightDialog_filter">
+                            {filterToIcon(filter)}
                             <span>{filterToLabel(filter)}</span>
                             <AccessibleButton
                                 tabIndex={-1}
@@ -1259,7 +1280,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 })}
                                 className="mx_SpotlightDialog_filter--close"
                                 onClick={() => setFilter(null)}
-                            />
+                            >
+                                <CloseIcon />
+                            </AccessibleButton>
                         </div>
                     )}
                     <input
