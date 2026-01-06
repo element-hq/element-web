@@ -187,7 +187,7 @@ export class RoomStatusBarViewModel
 
     public dispose(): void {
         this.client.off(ClientEvent.Sync, this.onClientSync);
-        this.props.room.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
+        this.props.room.off(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
         super.dispose();
     }
 
