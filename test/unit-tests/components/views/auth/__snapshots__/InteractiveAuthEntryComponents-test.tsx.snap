@@ -73,7 +73,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_187yx_8 mx_Dialog_nonDialogButton _has-icon_187yx_57"
+        class="_button_13vu4_8 mx_Dialog_nonDialogButton _has-icon_13vu4_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -97,7 +97,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
         Continue to account
       </button>
       <button
-        class="_button_187yx_8 mx_Dialog_nonDialogButton"
+        class="_button_13vu4_8 mx_Dialog_nonDialogButton"
         data-kind="tertiary"
         data-size="lg"
         role="button"

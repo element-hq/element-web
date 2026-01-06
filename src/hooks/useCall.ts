@@ -12,8 +12,6 @@ import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import { type Call, ConnectionState, CallEvent } from "../models/Call";
 import { useTypedEventEmitterState, useEventEmitter } from "./useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import SdkConfig, { DEFAULTS } from "../SdkConfig";
-import { _t } from "../languageHandler";
 
 export const useCall = (roomId: string): Call | null => {
     const [call, setCall] = useState(() => CallStore.instance.getCall(roomId));
@@ -41,7 +39,7 @@ export const useConnectionState = (call: Call | null): ConnectionState =>
         useCallback((state) => state ?? call?.connectionState ?? ConnectionState.Disconnected, [call]),
     );
 
-export const useParticipants = (call: Call | null): Map<RoomMember, Set<string>> => {
+const useParticipants = (call: Call | null): Map<RoomMember, Set<string>> => {
     return useTypedEventEmitterState(
         call ?? undefined,
         CallEvent.Participants,
@@ -53,9 +51,7 @@ export const useParticipantCount = (call: Call | null): number => {
     const participants = useParticipants(call);
 
     return useMemo(() => {
-        let count = 0;
-        for (const devices of participants.values()) count += devices.size;
-        return count;
+        return [...participants.values()].reduce<number>((count, set) => count + set.size, 0);
     }, [participants]);
 };
 
@@ -70,16 +66,4 @@ export const useParticipatingMembers = (call: Call): RoomMember[] => {
         }
         return members;
     }, [participants]);
-};
-
-export const useFull = (call: Call | null): boolean => {
-    return (
-        useParticipantCount(call) >=
-        (SdkConfig.get("element_call").participant_limit ?? DEFAULTS.element_call.participant_limit!)
-    );
-};
-
-export const useJoinCallButtonDisabledTooltip = (call: Call | null): string | null => {
-    const isFull = useFull(call);
-    return isFull ? _t("voip|join_button_tooltip_call_full") : null;
 };

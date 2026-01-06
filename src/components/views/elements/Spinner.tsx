@@ -7,24 +7,23 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { InlineSpinner } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 
 interface IProps {
-    w?: number;
-    h?: number;
+    size?: number;
     message?: string;
     onFinished: any; // XXX: Spinner pretends to be a dialog so it must accept an onFinished, but it never calls it
 }
 
 export default class Spinner extends React.PureComponent<IProps> {
     public static defaultProps: Partial<IProps> = {
-        w: 32,
-        h: 32,
+        size: 32,
     };
 
     public render(): React.ReactNode {
-        const { w, h, message } = this.props;
+        const { size, message } = this.props;
         return (
             <div className="mx_Spinner">
                 {message && (
@@ -32,13 +31,7 @@ export default class Spinner extends React.PureComponent<IProps> {
                         <div className="mx_Spinner_Msg">{message}</div>&nbsp;
                     </React.Fragment>
                 )}
-                <div
-                    className="mx_Spinner_icon"
-                    style={{ width: w, height: h }}
-                    aria-label={_t("common|loading")}
-                    role="progressbar"
-                    data-testid="spinner"
-                />
+                <InlineSpinner size={size} aria-label={_t("common|loading")} role="progressbar" data-testid="spinner" />
             </div>
         );
     }

@@ -39,17 +39,11 @@ Please see LICENSE files in the repository root for full details.
         top: 0.15em;
         background-color: $background;
 
-        &::before {
-            content: "";
-            mask-image: url($copy-button-url);
-            mask-position: center center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            background-color: $message-action-bar-fg-color;
+        svg {
             width: 1em;
             height: 1em;
+            color: $message-action-bar-fg-color;
             display: block;
-            background-repeat: no-repeat;
         }
     }
 }

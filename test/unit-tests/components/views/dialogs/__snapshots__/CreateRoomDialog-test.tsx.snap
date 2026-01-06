@@ -83,6 +83,17 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
                 <div
                   class="mx_JoinRuleDropdown_invite"
                 >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                    />
+                  </svg>
                   Private room (invite only)
                 </div>
               </div>
@@ -309,6 +320,17 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
                 <div
                   class="mx_JoinRuleDropdown_invite"
                 >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                    />
+                  </svg>
                   Private room (invite only)
                 </div>
               </div>
@@ -365,6 +387,273 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
               id="radix-_r_7m_"
             >
               You can't disable this later. Bridges & most bots won't work yet.
+            </span>
+          </div>
+        </div>
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="_r_7n_"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="_r_7n_"
+            >
+              Encrypt state events
+            </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_7p_"
+            >
+              Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <span
+        class="mx_Dialog_buttons_row"
+      >
+        <button
+          data-testid="dialog-cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="mx_Dialog_primary"
+          data-testid="dialog-primary-button"
+          type="button"
+        >
+          Create room
+        </button>
+      </span>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`<CreateRoomDialog /> for a private room when the state encryption labs flag is on should turn on state encryption when toggled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_CreateRoomDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Create a private room
+      </h1>
+    </div>
+    <div
+      class="mx_Dialog_content"
+    >
+      <form
+        class="_root_19upo_16"
+      >
+        <div
+          class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
+        >
+          <input
+            id="mx_Field_29"
+            label="Name"
+            placeholder="Name"
+            type="text"
+            value=""
+          />
+          <label
+            for="mx_Field_29"
+          >
+            Name
+          </label>
+        </div>
+        <div
+          class="mx_Field mx_Field_input mx_CreateRoomDialog_topic"
+        >
+          <input
+            id="mx_Field_30"
+            label="Topic (optional)"
+            placeholder="Topic (optional)"
+            type="text"
+            value=""
+          />
+          <label
+            for="mx_Field_30"
+          >
+            Topic (optional)
+          </label>
+        </div>
+        <div>
+          <div
+            class="mx_Dropdown mx_JoinRuleDropdown mx_Dropdown_disabled"
+          >
+            <div
+              aria-describedby="mx_JoinRuleDropdown_value"
+              aria-disabled="true"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Room visibility"
+              aria-owns="mx_JoinRuleDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput mx_AccessibleButton_disabled"
+              disabled=""
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_JoinRuleDropdown_value"
+              >
+                <div
+                  class="mx_JoinRuleDropdown_invite"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                    />
+                  </svg>
+                  Private room (invite only)
+                </div>
+              </div>
+              <svg
+                class="mx_Dropdown_arrow"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
+            </div>
+          </div>
+          <p>
+            Only people invited will be able to find and join this room. You can change this at any time from room settings.
+          </p>
+        </div>
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                checked=""
+                class="_input_udcm8_24"
+                id="_r_86_"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="_r_86_"
+            >
+              Enable end-to-end encryption
+            </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_88_"
+            >
+              You can't disable this later. Bridges & most bots won't work yet.
+            </span>
+          </div>
+        </div>
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="_r_89_"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="_r_89_"
+            >
+              Encrypt state events
+            </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_8b_"
+            >
+              Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
             </span>
           </div>
         </div>

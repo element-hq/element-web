@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -126,6 +127,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
     if (newSelected.size < 1) {
         inviteOnlyWarning = (
             <div className="mx_ManageRestrictedJoinRuleDialog_section_info">
+                <InfoSolidIcon />
                 {_t("room_settings|security|join_rule_restricted_dialog_empty_warning")}
             </div>
         );
@@ -183,7 +185,8 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
                             <h3>{_t("room_settings|security|join_rule_restricted_dialog_heading_other")}</h3>
                             <div className="mx_ManageRestrictedJoinRuleDialog_section_info">
-                                <div>{_t("room_settings|security|join_rule_restricted_dialog_heading_unknown")}</div>
+                                <InfoSolidIcon />
+                                {_t("room_settings|security|join_rule_restricted_dialog_heading_unknown")}
                             </div>
                             {filteredOtherEntries.map((space) => {
                                 return (

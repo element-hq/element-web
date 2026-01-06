@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_ReplyChain_wrapper"
+  >
+    <div />
+    <div>
+      <blockquote
+        class="mx_ReplyChain mx_ReplyChain_color2"
+      >
+        <div
+          class="mx_ReplyTile"
+        >
+          <a
+            href="#"
+          >
+            <div
+              class="mx_ReplyTile_sender"
+            >
+              <span
+                class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                data-color="2"
+                data-testid="avatar-img"
+                data-type="round"
+                role="presentation"
+                style="--cpd-avatar-size: 16px;"
+                title="@userId:matrix.org"
+              >
+                u
+              </span>
+              <div
+                class="mx_DisambiguatedProfile"
+              >
+                <span
+                  class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                  dir="auto"
+                >
+                  @userId:matrix.org
+                </span>
+              </div>
+            </div>
+            <div
+              class="mx_MTextBody mx_EventTile_content"
+            >
+              <div
+                class="mx_EventTile_body translate"
+                dir="auto"
+              >
+                A
+B
+C
+              </div>
+            </div>
+          </a>
+        </div>
+      </blockquote>
+    </div>
+  </div>
+</DocumentFragment>
+`;

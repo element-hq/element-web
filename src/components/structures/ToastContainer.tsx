@@ -53,8 +53,7 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
             const { title, icon, key, component, className, bodyClassName, props } = topToast;
             const bodyClasses = classNames("mx_Toast_body", bodyClassName);
             const toastClasses = classNames("mx_Toast_toast", className, {
-                mx_Toast_hasIcon: icon,
-                [`mx_Toast_icon_${icon}`]: icon,
+                mx_Toast_hasIcon: !!icon,
             });
             const toastProps = Object.assign({}, props, {
                 key,
@@ -81,6 +80,7 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
 
             toast = (
                 <div className={toastClasses}>
+                    {icon}
                     {titleElement}
                     <div className={bodyClasses}>{content}</div>
                 </div>

@@ -17,6 +17,8 @@ import {
     PushRuleKind,
     ProfileKeyTimezone,
     ProfileKeyMSC4175Timezone,
+    SyncState,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -35,6 +37,7 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Action } from "../../../../src/dispatcher/actions";
 import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
+import ToastStore from "../../../../src/stores/ToastStore";
 
 // Create a mock resizer instance that can be shared across tests
 const mockResizerInstance = {
@@ -502,6 +505,29 @@ describe("<LoggedInView />", () => {
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
             expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
             expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
+        });
+    });
+
+    describe("resource limit exceeded errors", () => {
+        it("pops a toast when M_RESOURCE_LIMIT_EXCEEDED is seen down sync", async () => {
+            const addOrReplaceToast = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+            const dismissToast = jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
+            getComponent();
+            mockClient.emit(ClientEvent.Sync, SyncState.Error, null, {
+                error: new MatrixError({
+                    errcode: "M_RESOURCE_LIMIT_EXCEEDED",
+                    limit_type: "hs_disabled",
+                    admin_contact: "admin@example.org",
+                }),
+            });
+            expect(addOrReplaceToast).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    key: "serverlimit",
+                    title: "Warning",
+                }),
+            );
+            mockClient.emit(ClientEvent.Sync, SyncState.Prepared, null, undefined);
+            expect(dismissToast).toHaveBeenCalledWith("serverlimit");
         });
     });
 

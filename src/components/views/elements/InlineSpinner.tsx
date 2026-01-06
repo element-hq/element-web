@@ -6,13 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { InlineSpinner as BaseInlineSpinner } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 
 interface IProps {
-    w?: number;
-    h?: number;
-    children?: React.ReactNode;
+    size?: number;
 }
 
 export default class InlineSpinner extends React.PureComponent<IProps> {
@@ -23,15 +22,14 @@ export default class InlineSpinner extends React.PureComponent<IProps> {
 
     public render(): React.ReactNode {
         return (
-            <div className="mx_InlineSpinner">
-                <div
-                    className="mx_InlineSpinner_icon mx_Spinner_icon"
-                    style={{ width: this.props.w, height: this.props.h }}
+            <span className="mx_InlineSpinner">
+                <BaseInlineSpinner
+                    size={this.props.size}
                     aria-label={_t("common|loading")}
-                >
-                    {this.props.children}
-                </div>
-            </div>
+                    role="progressbar"
+                    data-testid="spinner"
+                />
+            </span>
         );
     }
 }

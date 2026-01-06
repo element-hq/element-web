@@ -2198,26 +2198,6 @@
             "one": "Entferne Nachrichten in %(count)s Chat",
             "other": "Entferne Nachrichten in %(count)s Chats"
         },
-        "release_announcement": {
-            "done": "Fertig",
-            "filter": {
-                "description": "Filter deine Chats mit nur einem Klick. Klappe aus, um mehr Filter zu sehen.",
-                "title": "Neue Schnellfilter"
-            },
-            "intro": {
-                "description": "Die Chatliste wurde aktualisiert, um übersichtlicher und nutzerfreundlicher zu sein.",
-                "title": "Chats hat jetzt ein neues Design!"
-            },
-            "next": "Weiter",
-            "settings": {
-                "description": "Um die Vorschau von Nachrichten anzuzeigen oder auszublenden, geh zu „Alle Einstellungen“ &gt; „Einstellungen“ &gt; „Chatliste“.",
-                "title": "Einige Einstellungen wurden verschoben"
-            },
-            "sort": {
-                "description": "Ändere die Reihenfolge deiner Chats von „Neueste zuerst“ zu „A-Z“.",
-                "title": "Sortiere deine Chats"
-            }
-        },
         "room": {
             "more_options": "Weitere Optionen",
             "open_room": "Öffne Chat %(roomName)s"
@@ -2883,10 +2863,6 @@
             "rule_suppress_notices": "Nachrichten von Bots",
             "rule_tombstone": "Wenn die Chat-Version aktualisiert wird",
             "show_message_desktop_notification": "Nachrichteninhalt in der Desktopbenachrichtigung anzeigen",
-            "sounds_release_announcement": {
-                "description": "Deine Benachrichtigungs- und Anruftöne wurden verbessert – sie sind jetzt klarer, schneller und weniger störend.",
-                "title": "Wir haben deine Sounds aktualisiert"
-            },
             "voip": "Audio- und Videoanrufe"
         },
         "preferences": {

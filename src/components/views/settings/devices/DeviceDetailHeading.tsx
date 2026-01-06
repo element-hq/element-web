@@ -103,7 +103,7 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({ devic
                 >
                     {_t("action|cancel")}
                 </AccessibleButton>
-                {isLoading && <Spinner w={16} h={16} />}
+                {isLoading && <Spinner size={16} />}
             </div>
         </form>
     );

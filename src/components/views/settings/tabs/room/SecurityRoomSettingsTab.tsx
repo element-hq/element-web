@@ -54,6 +54,7 @@ interface IState {
     history: HistoryVisibility;
     hasAliases: boolean;
     encrypted: boolean | null;
+    stateEncrypted: boolean | null;
     showAdvancedSection: boolean;
 }
 
@@ -79,6 +80,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             ),
             hasAliases: false, // async loaded in componentDidMount
             encrypted: null, // async loaded in componentDidMount
+            stateEncrypted: null, // async loaded in componentDidMount
             showAdvancedSection: false,
         };
     }
@@ -89,6 +91,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({
             hasAliases: await this.hasAliases(),
             encrypted: Boolean(await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)),
+            stateEncrypted: Boolean(
+                await this.context.getCrypto()?.isStateEncryptionEnabledInRoom(this.props.room.roomId),
+            ),
         });
     }
 
@@ -414,36 +419,60 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const state = this.props.room.currentState;
         const canChangeHistory = state?.mayClientSendStateEvent(EventType.RoomHistoryVisibility, client);
 
-        const options = [
-            {
-                value: HistoryVisibility.Shared,
-                label: _t("room_settings|security|history_visibility_shared"),
-            },
-            {
+        // Map 'joined' to 'invited' for display purposes
+        const displayHistory = history === HistoryVisibility.Joined ? HistoryVisibility.Invited : history;
+
+        const isPublicRoom = this.props.room.getJoinRule() === JoinRule.Public;
+        const isEncrypted = this.state.encrypted;
+
+        const options: Array<{ value: HistoryVisibility; label: string }> = [];
+
+        // Show "invited" when room's join rule is NOT public OR E2EE is turned on, or if currently selected
+        if (
+            !isPublicRoom ||
+            isEncrypted ||
+            history === HistoryVisibility.Invited ||
+            history === HistoryVisibility.Joined
+        ) {
+            options.push({
                 value: HistoryVisibility.Invited,
                 label: _t("room_settings|security|history_visibility_invited"),
-            },
-            {
-                value: HistoryVisibility.Joined,
-                label: _t("room_settings|security|history_visibility_joined"),
-            },
-        ];
+            });
+        }
 
-        // World readable doesn't make sense for encrypted rooms
-        if (!this.state.encrypted || history === HistoryVisibility.WorldReadable) {
-            options.unshift({
+        // Always show "shared" option
+        options.push({
+            value: HistoryVisibility.Shared,
+            label: _t("room_settings|security|history_visibility_shared"),
+        });
+
+        // Show "world_readable" when (is public AND not encrypted) OR currently selected
+        if ((isPublicRoom && !isEncrypted) || history === HistoryVisibility.WorldReadable) {
+            options.push({
                 value: HistoryVisibility.WorldReadable,
                 label: _t("room_settings|security|history_visibility_world_readable"),
             });
         }
 
-        const description = _t("room_settings|security|history_visibility_warning");
+        const description = (
+            <>
+                {_t(
+                    "room_settings|security|history_visibility_warning",
+                    {},
+                    {
+                        a: (sub) => (
+                            <ExternalLink href="https://element.io/en/help#e2ee-history-sharing">{sub}</ExternalLink>
+                        ),
+                    },
+                )}
+            </>
+        );
 
         return (
             <SettingsFieldset legend={_t("room_settings|security|history_visibility_legend")} description={description}>
                 <StyledRadioGroup
                     name="historyVis"
-                    value={history}
+                    value={displayHistory}
                     onChange={this.onHistoryRadioToggle}
                     disabled={!canChangeHistory}
                     definitions={options}
@@ -480,6 +509,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const client = this.context;
         const room = this.props.room;
         const isEncrypted = this.state.encrypted;
+        const isStateEncrypted = this.state.stateEncrypted;
         const isEncryptionLoading = isEncrypted === null;
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);
         const isEncryptionForceDisabled = shouldForceDisableEncryption(client);
@@ -532,6 +562,14 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                     />
                                     {isEncryptionForceDisabled && !isEncrypted && (
                                         <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
+                                    )}
+                                    {isStateEncrypted && (
+                                        <SettingsToggleInput
+                                            name="enable-state-encryption"
+                                            checked={isStateEncrypted}
+                                            label={_t("common|state_encryption_enabled")}
+                                            disabled={true}
+                                        />
                                     )}
                                     {encryptionSettings}
                                 </>
