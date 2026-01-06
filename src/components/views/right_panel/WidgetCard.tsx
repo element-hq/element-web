@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useContext, useEffect } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
