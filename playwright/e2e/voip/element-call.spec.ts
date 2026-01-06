@@ -82,6 +82,22 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
     });
 }
 
+test.use({
+    synapseConfig: {
+        experimental_features: {
+            msc4143_enabled: true,
+        },
+        matrix_rtc: {
+            transports: [
+                {
+                    type: "livekit",
+                    livekit_service_url: "https://example.org/can-be-anything",
+                },
+            ],
+        },
+    },
+});
+
 test.describe("Element Call", () => {
     test.use({
         config: {
