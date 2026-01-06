@@ -9,4 +9,4 @@ export { type Services, type WorkerOptions } from "./services.js";
 
 // We avoid using `mergeTests` because it drops useful type information about the fixtures.
 // `axe` is the top of our stack of extensions (it extends `user`, etc), so it's the one we want to use.
-export { test } from "./axe";
+export { test } from "./axe.js";

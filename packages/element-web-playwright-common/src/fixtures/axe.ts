@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import AxeBuilder from "@axe-core/playwright";
 
-import { test as base } from "./user";
+import { test as base } from "./user.js";
 
 // We want to avoid using `mergeTests` because it drops useful type information about the fixtures. Instead, we extend
 // the definition of `test` from `user.ts`, so that there is a linear hierarchy.
