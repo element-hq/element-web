@@ -89,8 +89,8 @@ class EmojiPicker extends React.Component<IProps, IState> {
             { id: "activity", name: _t("emoji|category_activities"), emoji: "⚽️" },
             { id: "places", name: _t("emoji|category_travel_places"), emoji: "🚗" },
             { id: "objects", name: _t("emoji|category_objects"), emoji: "💡" },
-            { id: "symbols", name: _t("emoji|category_symbols"), emoji: "➗" },
-            { id: "flags", name: _t("emoji|category_flags"), emoji: "🏴" },
+            { id: "symbols", name: _t("emoji|category_symbols"), emoji: "⁉️" },
+            { id: "flags", name: _t("emoji|category_flags"), emoji: "🏁" },
         ];
 
         this.categories = categoryConfig.map((config) => {
