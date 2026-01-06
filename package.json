@@ -85,7 +85,7 @@
         "@element-hq/web-shared-components": "link:packages/shared-components",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "^5",
-        "@formatjs/intl-segmenter": "^11.5.7",
+        "@formatjs/intl-segmenter": "^12.0.0",
         "@matrix-org/analytics-events": "^0.30.0",
         "@matrix-org/emojibase-bindings": "^1.5.0",
         "@matrix-org/react-sdk-module-api": "^2.4.0",
