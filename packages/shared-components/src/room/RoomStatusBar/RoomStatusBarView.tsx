@@ -18,7 +18,7 @@ export interface RoomStatusBarViewActions {
     /**
      * Called when the user clicks on the 'resend all' button in the 'unsent messages' bar.
      */
-    onResendAllClick?: () => void;
+    onResendAllClick?: () => Promise<void>;
 
     /**
      * Called when the user clicks on the 'cancel all' button in the 'unsent messages' bar.
@@ -99,7 +99,7 @@ interface RoomStatusBarViewProps {
  * <RoomStatusBarView vm={RoomStatusBarViewModel} />
  * ```
  */
-export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX.Element {
+export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
     const snapshot = useViewModel(vm);
     const bannerTitleId = useId();
@@ -115,7 +115,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
     const resendClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (ev) => {
             ev.preventDefault();
-            vm.onResendAllClick?.();
+            void vm.onResendAllClick?.();
         },
         [vm],
     );
@@ -135,7 +135,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
 
     if (snapshot.state === null) {
         // Nothing to show!
-        return <></>;
+        return null;
     }
 
     switch (snapshot.state) {
@@ -283,6 +283,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                 </Banner>
             );
         default:
-            throw Error(`Unexpected unknown state for RoomStatusBar ${snapshot["state"]}`);
+            // We should never get into this state.
+            return null;
     }
 }

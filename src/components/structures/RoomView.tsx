@@ -377,10 +377,14 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
         </div>
     );
 }
-
+/**
+ * Wrap a RoomStatusBarView and ViewModel into one component, for usage with legacy React components.
+ */
 function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatusBarViewModel>[0]): ReactElement {
     const vm = useCreateAutoDisposedViewModel(() => new RoomStatusBarViewModel(props));
     useEffect(() => {
+        // Note: We need to tell the parent component whether the viewmodel expects to render anything
+        // (see onStatusBarVisible). This is ugly, but works.
         if ("onVisible" in props) {
             // Initial setup
             if (vm.getSnapshot().state !== null) {
