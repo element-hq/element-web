@@ -125,7 +125,11 @@ This uses the same Docker-based screenshot rendering as Element Web to ensure co
 
 ### Projects
 
-By default, Playwright runs tests against all "Projects": Chrome, Firefox, "Safari" (Webkit). They all run against Synapse however Chrome "project" is also running against Dendrite and Picone.
+By default, Playwright runs tests against all "Projects": Chrome, Firefox, "Safari" (Webkit), Dendrite and Picone.
+- Chrome, Firefox, Safari run against Synapse
+- Dendrite and Picone run against Chrome
+
+Misc:
 
 - **Pull Request CI:** Tests run only against Chrome
 - **Merge Queue:** Tests run against all projects
