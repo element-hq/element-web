@@ -4187,15 +4187,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@6.4.3":
+"@vector-im/compound-design-tokens@6.4.3", "@vector-im/compound-design-tokens@^6.4.3":
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.3.tgz#f8a98308650e841ffba6ca0820055e2bfe2b8af1"
   integrity sha512-Zyqag2QCAfpRipLHSX/LEXj6OGFgBpilMQvNdr3a0iXeGASfkM3HZGid077kMRp9lvyHiQfPIs1BdllENwDSNQ==
-
-"@vector-im/compound-design-tokens@^6.3.0":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.1.tgz#b3356300136b974104b4fb818969350c7686f5ae"
-  integrity sha512-JhrxnzohxGILrc+IZWoMXcpGHinnJlR2HSCKfypEjPDDF5TOB8HQYTqd5ALAPlob8QZU3N2ghnCF7d0f2LmTxg==
 
 "@vector-im/compound-web@^8.3.4":
   version "8.3.4"
@@ -9655,9 +9650,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "39.4.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/633a5a8848524c08d9548c37d768459b1a7097fe"
+matrix-js-sdk@40.0.0-rc.0:
+  version "40.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-40.0.0-rc.0.tgz#fdbbc62c59c3949691ac5c68baabd52ca8cea59e"
+  integrity sha512-RFeU+arhtKfqoE6iZaaB8XyRRxSeaGnsQxwnqTXIkGOGEBZKrOzS/FQl+yxooaUY5QrhJXxWCK6IR+EjgcWKWA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^16.0.0"
@@ -9685,7 +9681,7 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.10.0, matrix-widget-api@^1.15.0:
+matrix-widget-api@^1.14.0, matrix-widget-api@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==
