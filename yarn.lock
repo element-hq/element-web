@@ -1562,14 +1562,14 @@
   resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.9.0.tgz#2e4fcc8809418c8670d4f0576bc4a9a235bc6c50"
   integrity sha512-Ao/V9w+wysZK4bh61LlKlznF10n2ZbD6KcUI46/zUMttXbmJn3ahvbzhEpwYcD+Cjy3ag5ycxLIIGkKV/fncXg==
 
-"@element-hq/element-web-playwright-common@^2.0.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-2.1.0.tgz#86e8a5632f8cc8bb393a1ec1b793a6278cd5b2c7"
-  integrity sha512-Ah9aioownR5OxAX7IDzys7wqyFmojruqgiRr2oUTLbPA5Y6jUSKWdAu5AqGvi+PYr0kG6zQfdsruhe5FXW9YuQ==
+"@element-hq/element-web-playwright-common@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-2.2.2.tgz#9a9e79e48821e87d2c08028b6fd145d77ce2c904"
+  integrity sha512-DhSTdcHt1rCQP65co/KZbpZlwil7TrM5DiHhT9qt/ElYM7h8sBj6IG+1i2atOJV+H9/5634iWOuW6JpeE1UbOg==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
     "@testcontainers/postgresql" "^11.0.0"
-    glob "^11.1.0"
+    glob "^13.0.0"
     lodash-es "^4.17.21"
     mailpit-api "^1.2.0"
     strip-ansi "^7.1.0"
@@ -4187,15 +4187,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@6.4.3":
+"@vector-im/compound-design-tokens@6.4.3", "@vector-im/compound-design-tokens@^6.4.3":
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.3.tgz#f8a98308650e841ffba6ca0820055e2bfe2b8af1"
   integrity sha512-Zyqag2QCAfpRipLHSX/LEXj6OGFgBpilMQvNdr3a0iXeGASfkM3HZGid077kMRp9lvyHiQfPIs1BdllENwDSNQ==
-
-"@vector-im/compound-design-tokens@^6.3.0":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.1.tgz#b3356300136b974104b4fb818969350c7686f5ae"
-  integrity sha512-JhrxnzohxGILrc+IZWoMXcpGHinnJlR2HSCKfypEjPDDF5TOB8HQYTqd5ALAPlob8QZU3N2ghnCF7d0f2LmTxg==
 
 "@vector-im/compound-web@^8.3.4":
   version "8.3.4"
@@ -7449,7 +7444,7 @@ foreachasync@^3.0.0:
   resolved "https://registry.yarnpkg.com/foreachasync/-/foreachasync-3.0.0.tgz#5502987dc8714be3392097f32e0071c9dee07cf6"
   integrity sha512-J+ler7Ta54FwwNcx6wQRDhTIbNeyDcARMkOcguEqnEdtm0jKvN3Li3PDAb2Du3ubJYEWfYL83XMROXdsXAXycw==
 
-foreground-child@^3.1.0, foreground-child@^3.3.1:
+foreground-child@^3.1.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.3.1.tgz#32e8e9ed1b68a3497befb9ac2b6adf92a638576f"
   integrity sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==
@@ -7686,18 +7681,6 @@ glob@^10.3.10:
     minipass "^7.1.2"
     package-json-from-dist "^1.0.0"
     path-scurry "^1.11.1"
-
-glob@^11.1.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-11.1.0.tgz#4f826576e4eb99c7dad383793d2f9f08f67e50a6"
-  integrity sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==
-  dependencies:
-    foreground-child "^3.3.1"
-    jackspeak "^4.1.1"
-    minimatch "^10.1.1"
-    minipass "^7.1.2"
-    package-json-from-dist "^1.0.0"
-    path-scurry "^2.0.0"
 
 glob@^13.0.0:
   version "13.0.0"
@@ -8665,13 +8648,6 @@ jackspeak@^3.1.2:
     "@isaacs/cliui" "^8.0.2"
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
-
-jackspeak@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/jackspeak/-/jackspeak-4.1.1.tgz#96876030f450502047fc7e8c7fcf8ce8124e43ae"
-  integrity sha512-zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ==
-  dependencies:
-    "@isaacs/cliui" "^8.0.2"
 
 jake@^10.8.5:
   version "10.9.2"
@@ -9685,7 +9661,7 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.10.0, matrix-widget-api@^1.15.0:
+matrix-widget-api@^1.14.0, matrix-widget-api@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==

@@ -60,7 +60,7 @@
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "^2.0.0",
+        "@element-hq/element-web-playwright-common": "^2.2.2",
         "@playwright/test": "1.57.0",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
