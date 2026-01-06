@@ -176,10 +176,9 @@ const DEFAULT_CONFIG = {
          */
         msc4143_enabled: false,
         /**
-         * MSC2697: Device dehydration.
-         * This is ON by default in Synapse.
+         * MSC3814: Device dehydration SSSS.
          */
-        msc2697_enabled: true,
+        msc3814_enabled: false,
     },
     matrix_rtc: undefined as
         | undefined
