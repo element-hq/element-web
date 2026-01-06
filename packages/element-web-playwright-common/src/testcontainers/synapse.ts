@@ -171,6 +171,9 @@ const DEFAULT_CONFIG = {
           },
     allow_guest_access: false,
     experimental_features: {
+        /**
+         * MSC4143 Matrix RTC: Required for `matrix_rtc` configuration.
+         */
         msc4143_enabled: false,
     },
     matrix_rtc: {
