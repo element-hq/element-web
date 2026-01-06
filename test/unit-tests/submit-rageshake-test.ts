@@ -25,8 +25,6 @@ import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Sett
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 
 describe("Rageshakes", () => {
-    const RUST_CRYPTO_VERSION = "Rust SDK 0.7.0 (691ec63), Vodozemac 0.5.0";
-    const OLM_CRYPTO_VERSION = "Olm 3.2.15";
     let mockClient: Mocked<MatrixClient>;
     const mockHttpAPI: MatrixHttpApi<IHttpOpts & { onlyData: true }> = new MatrixHttpApi(
         new TypedEventEmitter<HttpApiEvent, HttpApiEventHandlerMap>(),
