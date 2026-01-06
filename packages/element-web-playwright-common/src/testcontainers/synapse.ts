@@ -175,6 +175,11 @@ const DEFAULT_CONFIG = {
          * MSC4143 Matrix RTC: Required for `matrix_rtc` configuration.
          */
         msc4143_enabled: false,
+        /**
+         * MSC2697: Device dehydration.
+         * This is ON by default in Synapse.
+         */
+        msc2697_enabled: true,
     },
     matrix_rtc: undefined as
         | undefined
