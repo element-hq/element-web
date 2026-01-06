@@ -30,6 +30,7 @@ import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
+import { PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface IProps {
     room: Room;
@@ -204,7 +205,9 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
                 <div
                     tabIndex={this.props.tooltipProps?.tabIndex ?? 0}
                     className={`mx_DecoratedRoomAvatar_icon mx_DecoratedRoomAvatar_icon_${this.state.icon.toLowerCase()}`}
-                />
+                >
+                    {this.state.icon === Icon.Globe ? <PublicIcon /> : null}
+                </div>
             );
         }
 
