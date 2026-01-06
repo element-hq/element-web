@@ -92,7 +92,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
       class="actions"
     >
       <a
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         href="#example"
@@ -146,7 +146,7 @@ exports[`RoomStatusBarView renders local room error 1`] = `
       class="actions"
     >
       <button
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -218,7 +218,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
       class="actions"
     >
       <a
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         href="#example"
@@ -282,7 +282,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        class="_button_13vu4_8 _has-icon_13vu4_60 _destructive_13vu4_110"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -304,7 +304,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
       </button>
       <button
         aria-disabled="false"
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -377,7 +377,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        class="_button_13vu4_8 _has-icon_13vu4_60 _destructive_13vu4_110"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -399,7 +399,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
       </button>
       <button
         aria-disabled="false"
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -472,7 +472,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        class="_button_13vu4_8 _has-icon_13vu4_60 _destructive_13vu4_110"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -494,7 +494,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
       </button>
       <button
         aria-disabled="false"
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
