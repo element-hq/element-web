@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { getParentEventId, shouldDisplayReply, stripHTMLReply, stripPlainReply } from "../../src/utils/Reply";
-import { mkEvent, stubClient } from "../test-utils";
+import { getParentEventId, shouldDisplayReply, stripHTMLReply, stripPlainReply } from "../../../src/utils/Reply";
+import { mkEvent, stubClient } from "../../test-utils";
 
 // don't litter test console with logs
 jest.mock("matrix-js-sdk/src/logger");
@@ -58,6 +58,51 @@ describe("Reply", () => {
             });
 
             expect(getParentEventId(event)).toBe("$event1");
+        });
+
+        it("returns id of relation reply from original event when edited", () => {
+            const originalEventWithRelation = mkEvent({
+                event: true,
+                type: "m.room.message",
+                content: {
+                    "msgtype": "m.text",
+                    "body": "> Reply to this message\n\n foo",
+                    "m.relates_to": {
+                        "m.in_reply_to": {
+                            event_id: "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+                        },
+                    },
+                },
+                user: "some_other_user",
+                room: "room_id",
+            });
+
+            const editEvent = mkEvent({
+                event: true,
+                type: "m.room.message",
+                content: {
+                    "msgtype": "m.text",
+                    "body": "> Reply to this message\n\n * foo bar",
+                    "m.new_content": {
+                        msgtype: "m.text",
+                        body: "foo bar",
+                    },
+                    "m.relates_to": {
+                        rel_type: "m.replace",
+                        event_id: originalEventWithRelation.getId(),
+                    },
+                },
+                user: "some_other_user",
+                room: "room_id",
+            });
+
+            // The edit replaces the original event
+            originalEventWithRelation.makeReplaced(editEvent);
+
+            // The relation should be pulled from the original event
+            expect(getParentEventId(originalEventWithRelation)).toStrictEqual(
+                "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+            );
         });
     });
 
