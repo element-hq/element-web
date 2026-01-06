@@ -132,12 +132,17 @@ describe("RoomStatusBarViewModel", () => {
             state: RoomStatusBarState.UnsentMessages,
             isResending: false,
         });
-        await vm.onResendAllClick();
+        const promise = vm.onResendAllClick();
         expect(vm.getSnapshot()).toEqual({
             state: RoomStatusBarState.UnsentMessages,
             isResending: true,
         });
+        room.getPendingEvents.mockReturnValue([]);
+        await promise;
         expect(client.resendEvent).toHaveBeenCalledTimes(1);
+        expect(vm.getSnapshot()).toEqual({
+            state: null,
+        });
     });
 
     describe("Local rooms", () => {
