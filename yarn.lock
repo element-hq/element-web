@@ -1577,17 +1577,8 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@link:packages/shared-components":
-  version "0.0.0-test.12"
-  dependencies:
-    "@element-hq/element-web-module-api" "^1.8.0"
-    "@vector-im/compound-design-tokens" "^6.3.0"
-    classnames "^2.5.1"
-    counterpart "^0.18.6"
-    lodash "^4.17.21"
-    matrix-web-i18n "^3.4.0"
-    patch-package "^8.0.1"
-    react-merge-refs "^3.0.2"
-    temporal-polyfill "^0.3.0"
+  version "0.0.0"
+  uid ""
 
 "@emnapi/core@^1.4.3":
   version "1.7.0"
@@ -4206,10 +4197,10 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.1.tgz#b3356300136b974104b4fb818969350c7686f5ae"
   integrity sha512-JhrxnzohxGILrc+IZWoMXcpGHinnJlR2HSCKfypEjPDDF5TOB8HQYTqd5ALAPlob8QZU3N2ghnCF7d0f2LmTxg==
 
-"@vector-im/compound-web@^8.3.1":
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.3.1.tgz#09cad1c236e89a6d867a674602f9c74628cde000"
-  integrity sha512-VMAHVbpzUK6OQCX+gIm58ESvL6cYzLmr0vz0YBKJ5WoYJxu4/JrAfQ5+2mGn3fufF5Oqy3qBRzlHveFxv7Ij9A==
+"@vector-im/compound-web@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-8.3.4.tgz#842bfcae9ed11e19656cd4bb90d40fed64dbc2c4"
+  integrity sha512-um+rCfnkEyOEIF8qpsLvvxi/jRQXjhul+mXDCsZHBEfashj08zf5euEQxesleAIuDvNXtIWyxDJpwzxIm21YEg==
   dependencies:
     "@floating-ui/react" "^0.27.0"
     "@radix-ui/react-context-menu" "^2.2.16"
@@ -4223,6 +4214,7 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.40.0":
   version "2.40.0"
@@ -9693,7 +9685,7 @@ matrix-web-i18n@^3.2.1, matrix-web-i18n@^3.4.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.14.0:
+matrix-widget-api@^1.10.0, matrix-widget-api@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
   integrity sha512-Yu9rX9wyF3A1sqviKgiYHz8aGgL3HhJe9OXKi/lccr1eZnNb6y+ELdbshTjs+VLKM4rkTWt6CE3THsw3f/CZhg==

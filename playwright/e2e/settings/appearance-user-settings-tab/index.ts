@@ -150,9 +150,10 @@ class Helpers {
     /**
      * Create and display a room named Test Room
      */
-    async createAndDisplayRoom() {
-        await this.app.client.createRoom({ name: "Test Room" });
+    async createAndDisplayRoom(): Promise<string> {
+        const roomId = await this.app.client.createRoom({ name: "Test Room" });
         await this.app.viewRoomByName("Test Room");
+        return roomId;
     }
 
     /**

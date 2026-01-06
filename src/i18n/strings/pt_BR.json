@@ -2200,26 +2200,6 @@
             "one": "Atualmente removendo mensagens em %(count)s sala",
             "other": "Atualmente removendo mensagens em %(count)s salas"
         },
-        "release_announcement": {
-            "done": "OK",
-            "filter": {
-                "description": "Filtre seus chats com um único clique. Expanda para ver mais filtros.",
-                "title": "Novos filtros rápidos"
-            },
-            "intro": {
-                "description": "A lista de bate-papos foi atualizada pra ficar mais clara e fácil de usar.",
-                "title": "O Chats tem um novo visual!"
-            },
-            "next": "Próximo",
-            "settings": {
-                "description": "Pra mostrar ou esconder as pré-visualizações das mensagens, vai em Todas as configurações > Preferências > Lista de salas",
-                "title": "Algumas configurações foram movidas"
-            },
-            "sort": {
-                "description": "Mude a ordem das suas conversas de mais recente para A-Z.",
-                "title": "Classifique seus bate-papos"
-            }
-        },
         "room": {
             "more_options": "Mais opções",
             "open_room": "Abrir sala %(roomName)s"
@@ -2885,10 +2865,6 @@
             "rule_suppress_notices": "Mensagens enviadas por bots",
             "rule_tombstone": "Quando a versão da sala é atualizada",
             "show_message_desktop_notification": "Mostrar a mensagem na notificação da área de trabalho",
-            "sounds_release_announcement": {
-                "description": "Seu som de notificação e toque de chamada foram atualizados — mais claros, rápidos e menos perturbadores.",
-                "title": "Atualizamos seus sons."
-            },
             "voip": "Chamadas de áudio e vídeo"
         },
         "preferences": {

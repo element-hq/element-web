@@ -21,6 +21,7 @@ import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/publi
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Flex, Box } from "@element-hq/web-shared-components";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
@@ -73,7 +74,7 @@ function RoomHeaderButtons({
         toggleCallMaximized: toggleCall,
         isViewingCall,
         isConnectedToCall,
-        hasActiveCallSession,
+        activeCallSessionType,
         callOptions,
         showVoiceCallButton,
         showVideoCallButton,
@@ -105,15 +106,26 @@ function RoomHeaderButtons({
     );
 
     const joinCallButton = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
+        <Tooltip
+            label={
+                videoCallDisabledReason ??
+                (activeCallSessionType === CallType.Voice ? _t("voip|voice_call") : _t("voip|video_call"))
+            }
+        >
             <Button
                 size="sm"
                 onClick={videoClick}
-                Icon={VideoCallIcon}
+                // If we know this is a voice session, show the voice call. All other kinds of call are video calls.
+                Icon={activeCallSessionType === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
                 className="mx_RoomHeader_join_button"
                 disabled={!!videoCallDisabledReason}
                 color="primary"
-                aria-label={videoCallDisabledReason ?? _t("action|join")}
+                aria-label={
+                    videoCallDisabledReason ??
+                    (activeCallSessionType === CallType.Voice
+                        ? _t("room|header|join_voice_call")
+                        : _t("room|header|join_video_call"))
+                }
                 data-testId="join-call-button"
             >
                 {_t("action|join")}
@@ -303,7 +315,7 @@ function RoomHeaderButtons({
 
             {isViewingCall && <CallGuestLinkButton room={room} />}
 
-            {hasActiveCallSession && !isConnectedToCall && !isViewingCall ? (
+            {activeCallSessionType && !isConnectedToCall && !isViewingCall ? (
                 joinCallButton
             ) : (
                 <>

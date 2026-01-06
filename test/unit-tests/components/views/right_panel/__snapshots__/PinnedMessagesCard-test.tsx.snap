@@ -296,7 +296,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_187yx_8"
+          class="_button_13vu4_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"

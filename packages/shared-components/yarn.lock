@@ -2031,10 +2031,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@^6.3.0":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.2.tgz#29189d6480c8ccf09ce143cb4618fb13a56a7583"
-  integrity sha512-LHLGZgnatH3mQXn9TF+m/SUinPS2nKvuCT/r2AQ7HAgEIG/S/Ck6e/iV4IFQLSZnd9gU0RlMsLkP2UQ/AKUEBA==
+"@vector-im/compound-design-tokens@^6.4.3":
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.4.3.tgz#f8a98308650e841ffba6ca0820055e2bfe2b8af1"
+  integrity sha512-Zyqag2QCAfpRipLHSX/LEXj6OGFgBpilMQvNdr3a0iXeGASfkM3HZGid077kMRp9lvyHiQfPIs1BdllENwDSNQ==
 
 "@vitest/expect@3.2.4":
   version "3.2.4"
@@ -6031,9 +6031,9 @@ pure-rand@^7.0.0:
   integrity sha512-oTUZM/NAZS8p7ANR3SHh30kXB+zK2r2BPcEn/awJIbOvq82WoMN4p62AWWp3Hhw50G0xMsw1mhIBLqHw64EcNQ==
 
 qs@^6.12.3:
-  version "6.14.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.14.0.tgz#c63fa40680d2c5c941412a0e899c89af60c0a930"
-  integrity sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==
+  version "6.14.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.14.1.tgz#a41d85b9d3902f31d27861790506294881871159"
+  integrity sha512-4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==
   dependencies:
     side-channel "^1.1.0"
 

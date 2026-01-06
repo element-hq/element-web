@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixEvent, type Room, type RoomState } from "matrix-js-sdk/src/matrix";
+import { ChatSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -89,6 +90,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
 
         return (
             <EventTileBubble
+                icon={<ChatSolidIcon />}
                 className="mx_CreateEvent"
                 title={_t("timeline|m.room.create|continuation")}
                 timestamp={timestamp}
@@ -128,6 +130,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
 
     return (
         <EventTileBubble
+            icon={<ChatSolidIcon />}
             className="mx_CreateEvent"
             title={_t("timeline|m.room.create|continuation")}
             subtitle={link}
