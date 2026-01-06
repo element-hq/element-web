@@ -170,7 +170,12 @@ const DEFAULT_CONFIG = {
               room_name: string;
           },
     allow_guest_access: false,
-    experimental_features: {},
+    experimental_features: {
+        msc4143_enabled: false,
+    },
+    matrix_rtc: {
+        transports: [] as { type: string; [field: string]: string }[],
+    },
     oidc_providers: [],
     serve_server_wellknown: true,
     presence: {
