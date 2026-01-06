@@ -10,6 +10,7 @@ import React from "react";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
+import { BackspaceSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface IProps {
     // Callback for when the button is pressed
@@ -24,7 +25,9 @@ export default class DialPadBackspaceButton extends React.PureComponent<IProps> 
                     className="mx_DialPadBackspaceButton"
                     onClick={this.props.onBackspacePress}
                     aria-label={_t("keyboard|backspace")}
-                />
+                >
+                    <BackspaceSolidIcon />
+                </AccessibleButton>
             </div>
         );
     }

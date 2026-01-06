@@ -7,26 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_DialPadBackspaceButton {
-    position: relative;
-    height: 28px;
-    width: 28px;
+    height: 20px;
+    width: 20px;
+    padding: var(--cpd-space-1x);
 
-    &::before {
-        /* force this element to appear on the DOM */
-        content: "";
-
-        background-color: #8d97a5;
+    svg {
+        color: #8d97a5;
         width: inherit;
         height: inherit;
-        top: 0px;
-        left: 0px;
-        position: absolute;
         display: inline-block;
-        vertical-align: middle;
-
-        mask-image: url("@vector-im/compound-design-tokens/icons/backspace-solid.svg");
-        mask-position: 8px;
-        mask-size: 20px;
-        mask-repeat: no-repeat;
     }
 }
