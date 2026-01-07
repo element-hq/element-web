@@ -74,7 +74,7 @@
         "@types/react-dom": "19.2.3",
         "oidc-client-ts": "3.4.1",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001759",
+        "caniuse-lite": "1.0.30001762",
         "testcontainers": "^11.0.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
@@ -85,7 +85,7 @@
         "@element-hq/web-shared-components": "link:packages/shared-components",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "^5",
-        "@formatjs/intl-segmenter": "^11.5.7",
+        "@formatjs/intl-segmenter": "^12.0.0",
         "@matrix-org/analytics-events": "^0.30.0",
         "@matrix-org/emojibase-bindings": "^1.5.0",
         "@matrix-org/react-sdk-module-api": "^2.4.0",
