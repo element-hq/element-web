@@ -1,0 +1,43 @@
+{
+    "a11y": {
+        "seek_bar_label": "Panel posunu zvuku"
+    },
+    "action": {
+        "delete": "Smazat",
+        "dismiss": "Zavřít",
+        "explore_rooms": "Procházet místnosti",
+        "pause": "Pozastavit",
+        "play": "Přehrát",
+        "search": "Hledání"
+    },
+    "encryption": {
+        "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
+        "withdraw_verification_action": "Zrušit ověření"
+    },
+    "left_panel": {
+        "open_dial_pad": "Otevřít číselník"
+    },
+    "time": {
+        "about_day_ago": "před jedním dnem",
+        "about_hour_ago": "asi před hodinou",
+        "about_minute_ago": "před minutou",
+        "few_seconds_ago": "před pár vteřinami",
+        "in_about_day": "asi za den",
+        "in_about_hour": "asi za hodinu",
+        "in_about_minute": "asi za minutu",
+        "in_few_seconds": "za pár vteřin",
+        "in_n_days": "za %(num)s dní",
+        "in_n_hours": "za %(num)s hodin",
+        "in_n_minutes": "za %(num)s minut",
+        "n_days_ago": "před %(num)s dny",
+        "n_hours_ago": "před %(num)s hodinami",
+        "n_minutes_ago": "před %(num)s minutami"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Audio přehrávač",
+            "error_downloading_audio": "Chyba při stahování audia",
+            "unnamed_audio": "Nepojmenovaný audio soubor"
+        }
+    }
+}

@@ -14,7 +14,7 @@ import { Icon as UnknownDeviceIcon } from "../../../../../res/img/element-icons/
 import { Icon as DesktopIcon } from "../../../../../res/img/element-icons/settings/desktop.svg";
 import { Icon as WebIcon } from "../../../../../res/img/element-icons/settings/web.svg";
 import { Icon as MobileIcon } from "../../../../../res/img/element-icons/settings/mobile.svg";
-import { _t, _td, type TranslationKey } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import { type ExtendedDevice } from "./types";
 import { DeviceType } from "../../../../utils/device/parseUserAgent";
 

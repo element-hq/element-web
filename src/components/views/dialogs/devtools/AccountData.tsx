@@ -14,7 +14,7 @@ import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, type IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
-import { _td, type TranslationKey } from "../../../../languageHandler";
+import { _td } from "../../../../languageHandler";
 
 export const AccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const cli = useContext(MatrixClientContext);

@@ -84,9 +84,7 @@
         "next": "Fanarahana",
         "no": "Tsya",
         "ok": "Eny",
-        "pause": "Mihato",
         "pin": "Hahantona",
-        "play": "Milalao",
         "proceed": "Izotra",
         "quote": "Notsongaina",
         "react": "Mamaly",
@@ -1613,7 +1611,6 @@
         "files_button": "Rakitra",
         "pinned_messages": {
             "limits": {
-                "one": "",
                 "other": "Azonao atao ihany ny manoratra%(count)s gadget"
             }
         },
@@ -2820,24 +2817,10 @@
         "header": "Hetsika kofehy"
     },
     "time": {
-        "about_day_ago": "Tokony ho iray andro izay",
-        "about_hour_ago": "Manakaiky adin'iray Teo ho eo",
-        "about_minute_ago": "Misy iray minitra Teo izay",
         "date_at_time": "% (Mihaona amin'ny % (fotoana",
-        "few_seconds_ago": "Segondra vitsy lasa",
         "hours_minutes_seconds_left": "% (ora) s h%(minitra) s m%(segondra) s ny tavela",
-        "in_about_day": "Anatiny iray andro eo ho eo",
-        "in_about_hour": "Adiny iray eo ho eo",
-        "in_about_minute": "Afaka iray minitra eo ho eo",
-        "in_few_seconds": "Afaka segondra vitsy",
-        "in_n_days": "%(num) s andro manomboka izao",
-        "in_n_hours": "% (num) sAnatiny ora vitsivitsy",
-        "in_n_minutes": "% (Num) sAfaka minitra vitsy",
         "left": "%(timeRemaining) sAnkavia",
         "minutes_seconds_left": "% (minutes) sm% (segondra) s ny ambiny",
-        "n_days_ago": "%(num)s Andro vitsivitsy izay",
-        "n_hours_ago": "%(num)sOra maromaro",
-        "n_minutes_ago": "%(Num)s Minitra vitsivitsy izay",
         "seconds_left": "% (secondes) s ny ambiny",
         "short_days": "% (Sandales d",
         "short_days_hours_minutes_seconds": "%(andro) s d % (ora) sh% (minitra) s m % (segondra)s s",
@@ -2882,8 +2865,7 @@
         "m.audio": {
             "error_downloading_audio": "Hadisoana tamin'ny fampidinana feo",
             "error_processing_audio": "Hadisoana tamin'ny fanodinana hafatra audio",
-            "error_processing_voice_message": "Hadisoana tamin'ny fanodinana hafatra feo",
-            "unnamed_audio": "Audio tsy voatonona anarana"
+            "error_processing_voice_message": "Hadisoana tamin'ny fanodinana hafatra feo"
         },
         "m.beacon_info": {
             "view_live_location": "Jereo ny toerana mivantana"
@@ -3284,7 +3266,6 @@
         }
     },
     "truncated_list_n_more": {
-        "one": "",
         "other": "SY%(count)s Bebe kokoa..."
     },
     "unsupported_server_description": "Ity mpizara ity dia mampiasa dikan-teny taloha any. Hiverina any amin'ny %(version)s mampiasa%(brand)s tsy misy hadisoana.",

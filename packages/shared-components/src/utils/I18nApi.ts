@@ -9,7 +9,6 @@ import { type I18nApi as II18nApi, type Variables, type Translations } from "@el
 
 import { humanizeTime } from "./humanize";
 import { _t, getLocale, registerTranslations } from "./i18n";
-import { type TranslationKey } from "../i18nKeys";
 
 export class I18nApi implements II18nApi {
     /**
@@ -24,10 +23,11 @@ export class I18nApi implements II18nApi {
      */
     public register(translations: Partial<Translations>): void {
         const langs: Record<string, Record<string, string>> = {};
+
         for (const key in translations) {
-            for (const lang in translations[key]) {
+            for (const lang in translations[key as keyof Translations]) {
                 langs[lang] = langs[lang] || {};
-                langs[lang][key] = translations[key][lang];
+                langs[lang][key] = translations[key as keyof Translations]![lang];
             }
         }
 
