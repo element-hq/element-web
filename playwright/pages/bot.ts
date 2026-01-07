@@ -13,7 +13,7 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { Logger } from "matrix-js-sdk/src/logger";
 import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
-import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import type { CryptoCallbacks, GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { bootstrapCrossSigningForClient, Client } from "./client";
 
 export interface CredentialsOptionalAccessToken extends Omit<Credentials, "accessToken"> {
@@ -141,22 +141,12 @@ export class Bot extends Client {
 
                 const logger = getLogger(`bot ${credentials.userId}`);
 
-                const keys = {};
-
-                const getCrossSigningKey = (type: string) => {
-                    return keys[type];
-                };
-
-                const saveCrossSigningKeys = (k: Record<string, Uint8Array>) => {
-                    Object.assign(keys, k);
-                };
-
                 // Store the cached secret storage key and return it when `getSecretStorageKey` is called
-                let cachedKey: { keyId: string; key: Uint8Array };
+                let cachedKey: { keyId: string; key: Uint8Array<ArrayBuffer> };
                 const cacheSecretStorageKey = (
                     keyId: string,
                     keyInfo: SecretStorageKeyDescription,
-                    key: Uint8Array,
+                    key: Uint8Array<ArrayBuffer>,
                 ) => {
                     cachedKey = {
                         keyId,
@@ -165,11 +155,9 @@ export class Bot extends Client {
                 };
 
                 const getSecretStorageKey = () =>
-                    Promise.resolve<[string, Uint8Array]>([cachedKey.keyId, cachedKey.key]);
+                    Promise.resolve<[string, Uint8Array<ArrayBuffer>]>([cachedKey.keyId, cachedKey.key]);
 
-                const cryptoCallbacks = {
-                    getCrossSigningKey,
-                    saveCrossSigningKeys,
+                const cryptoCallbacks: CryptoCallbacks = {
                     cacheSecretStorageKey,
                     getSecretStorageKey,
                 };
