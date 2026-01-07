@@ -8,6 +8,12 @@ General description of the pattern can be found [here](https://en.wikipedia.org/
 
 If you do MVVM right, your view should be dumb i.e it gets data from the view model and merely displays it.
 
+### Why are we using MVVM?
+
+1. MVVM forces a separation of concern i.e we will no longer have large react components that have a lot of state and rendering code mixed together. This improves code readability and makes it easier to introduce changes.
+2. Introduces the possibility of code reuse. You can reuse an old view model with a new view or vice versa.
+3. Adding to the point above, in future you could import element-web view models to your project and supply your own views thus creating something similar to the [hydrogen sdk](https://github.com/element-hq/hydrogen-web/blob/master/doc/SDK.md).
+
 ### Practical guidelines for MVVM in element-web
 
 A first documentation and implementation of MVVM was done in [MVVM-v1.md](MVVM-v1.md). This v1 version is now deprecated and this document describes the current implementation.
@@ -82,8 +88,3 @@ This is anywhere your data or business logic comes from. If your view model is a
 
 4. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/audio/AudioPlayerViewModel.ts)
 
-### Benefits
-
-1. MVVM forces a separation of concern i.e we will no longer have large react components that have a lot of state and rendering code mixed together. This improves code readability and makes it easier to introduce changes.
-2. Introduces the possibility of code reuse. You can reuse an old view model with a new view or vice versa.
-3. Adding to the point above, in future you could import element-web view models to your project and supply your own views thus creating something similar to the [hydrogen sdk](https://github.com/element-hq/hydrogen-web/blob/master/doc/SDK.md).
