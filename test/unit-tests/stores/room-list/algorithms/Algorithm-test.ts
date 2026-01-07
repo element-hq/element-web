@@ -12,7 +12,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
     setupAsyncStoreWithClient,
@@ -28,6 +27,8 @@ import "../../../../../src/stores/room-list/RoomListStore"; // must be imported 
 import { Algorithm } from "../../../../../src/stores/room-list/algorithms/Algorithm";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
+import { ConnectionState } from "../../../../../src/models/Call";
+import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 describe("Algorithm", () => {
     useMockedCalls();
@@ -83,17 +84,17 @@ describe("Algorithm", () => {
 
         MockedCall.create(roomWithCall, "1");
         const call = CallStore.instance.getCall(roomWithCall.roomId);
-        if (call === null) throw new Error("Failed to create call");
+        if (!(call instanceof MockedCall)) throw new Error("Failed to create call");
 
         const widget = new Widget(call.widget);
         WidgetMessagingStore.instance.storeMessaging(widget, roomWithCall.roomId, {
             stop: () => {},
-        } as unknown as ClientWidgetApi);
+        } as unknown as WidgetMessaging);
 
         // End of setup
 
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);
-        await call.start();
+        call.setConnectionState(ConnectionState.Connected);
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([roomWithCall, room]);
         await call.disconnect();
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);

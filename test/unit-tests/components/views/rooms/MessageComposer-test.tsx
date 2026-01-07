@@ -24,7 +24,6 @@ import {
 import MessageComposer from "../../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
@@ -36,6 +35,7 @@ import { addTextToComposerRTL } from "../../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -155,7 +155,7 @@ describe("MessageComposer", () => {
         });
 
         describe("when receiving a »reply_to_event«", () => {
-            let roomContext: IRoomState;
+            let roomContext: RoomContextType;
             let resizeNotifier: ResizeNotifier;
 
             beforeEach(() => {
@@ -458,7 +458,7 @@ function wrapAndRender(
         canSendMessages,
         tombstone,
         narrow,
-    } as unknown as IRoomState;
+    } as unknown as RoomContextType;
 
     const defaultProps = {
         room,

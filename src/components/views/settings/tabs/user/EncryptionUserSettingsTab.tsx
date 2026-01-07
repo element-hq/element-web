@@ -5,15 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useEffect, useState } from "react";
-import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
+import React, { type JSX, useState } from "react";
+import { Button, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
 import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
-import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
@@ -23,17 +21,15 @@ import { AdvancedPanel } from "../../encryption/AdvancedPanel";
 import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 import { type ResetIdentityBodyVariant } from "../../encryption/ResetIdentityBody";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
-import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
+import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
+import DeviceListener, { DeviceListenerEvents, type DeviceState } from "../../../../../DeviceListener";
+import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
 /**
  * The state in the encryption settings tab.
- *  - "loading": We are checking if the device is verified.
  *  - "main": The main panel with all the sections (Key storage, recovery, advanced).
- *  - "key_storage_disabled": The user has chosen to disable key storage and options are unavailable as a result.
- *  - "set_up_encryption": The panel to show when the user is setting up their encryption.
- *                         This happens when the user doesn't have cross-signing enabled, or their current device is not verified.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
@@ -41,21 +37,17 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in the case where their key is compromised.
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
- *  - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
- *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
+ *  - "reset_identity_cant_recover": The panel to show when the user is resetting their identity, in the case where they can't use recovery.
  *  - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
  */
 export type State =
-    | "loading"
     | "main"
-    | "key_storage_disabled"
-    | "set_up_encryption"
     | "change_recovery_key"
     | "set_recovery_key"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "reset_identity_sync_failed"
-    | "secrets_not_cached"
+    | "reset_identity_cant_recover"
     | "key_storage_delete";
 
 interface Props {
@@ -68,48 +60,69 @@ interface Props {
 /**
  * The encryption settings tab.
  */
-export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): JSX.Element {
+export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
-    const checkEncryptionState = useCheckEncryptionState(state, setState);
+    const deviceState = useTypedEventEmitterState(
+        DeviceListener.sharedInstance(),
+        DeviceListenerEvents.DeviceState,
+        (state?: DeviceState): DeviceState => {
+            return state ?? DeviceListener.sharedInstance().getDeviceState();
+        },
+    );
+
+    const { isEnabled: isBackupEnabled } = useKeyStoragePanelViewModel();
 
     let content: JSX.Element;
 
     switch (state) {
-        case "loading":
-            content = <InlineSpinner aria-label={_t("common|loading")} />;
-            break;
-        case "set_up_encryption":
-            content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
-            break;
-        case "secrets_not_cached":
-            content = (
-                <RecoveryPanelOutOfSync
-                    onFinish={checkEncryptionState}
-                    onForgotRecoveryKey={() => setState("reset_identity_forgot")}
-                />
-            );
-            break;
-        case "key_storage_disabled":
         case "main":
-            content = (
-                <>
-                    <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
-                    <Separator kind="section" />
-                    {/* We only show the "Recovery" panel if key storage is enabled.*/}
-                    {state === "main" && (
+            switch (deviceState) {
+                // some device states require action from the user rather than showing the main settings screen
+                case "verify_this_session":
+                    content = <SetUpEncryptionPanel onFinish={() => setState("main")} />;
+                    break;
+                case "key_storage_out_of_sync":
+                    content = (
+                        <RecoveryPanelOutOfSync
+                            onFinish={() => setState("main")}
+                            onForgotRecoveryKey={() => setState("reset_identity_forgot")}
+                            onAccessSecretStorageFailed={async () => {
+                                const needsCrossSigningReset =
+                                    await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset(
+                                        true,
+                                    );
+                                setState(needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key");
+                            }}
+                        />
+                    );
+                    break;
+                case "identity_needs_reset":
+                    content = (
+                        <IdentityNeedsResetNoticePanel onContinue={() => setState("reset_identity_cant_recover")} />
+                    );
+                    break;
+                default:
+                    content = (
                         <>
-                            <RecoveryPanel
-                                onChangeRecoveryKeyClick={(setupNewKey) =>
-                                    setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
-                                }
-                            />
+                            <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
                             <Separator kind="section" />
+                            {/* We only show the "Recovery" panel if key storage is enabled.*/}
+                            {isBackupEnabled && (
+                                <>
+                                    <RecoveryPanel
+                                        onChangeRecoveryKeyClick={(setupNewKey) =>
+                                            setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
+                                        }
+                                    />
+                                    <Separator kind="section" />
+                                </>
+                            )}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
                         </>
-                    )}
-                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
-                </>
-            );
+                    );
+                    break;
+            }
             break;
         case "change_recovery_key":
         case "set_recovery_key":
@@ -124,16 +137,17 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): 
         case "reset_identity_compromised":
         case "reset_identity_forgot":
         case "reset_identity_sync_failed":
+        case "reset_identity_cant_recover":
             content = (
                 <ResetIdentityPanel
                     variant={findResetVariant(state)}
-                    onCancelClick={checkEncryptionState}
-                    onReset={checkEncryptionState}
+                    onCancelClick={() => setState("main")}
+                    onReset={() => setState("main")}
                 />
             );
             break;
         case "key_storage_delete":
-            content = <DeleteKeyStoragePanel onFinish={checkEncryptionState} />;
+            content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
             break;
     }
 
@@ -154,68 +168,13 @@ function findResetVariant(state: State): ResetIdentityBodyVariant {
             return "compromised";
         case "reset_identity_sync_failed":
             return "sync_failed";
+        case "reset_identity_cant_recover":
+            return "no_verification_method";
 
         default:
         case "reset_identity_forgot":
             return "forgot";
     }
-}
-
-/**
- * Hook to check if the user needs:
- * - to go through the SetupEncryption flow.
- * - to enter their recovery key, if the secrets are not cached locally.
- * ...and also whether megolm key backup is enabled on this device (which we use to set the state of the 'allow key storage' toggle)
- *
- * If cross signing is set up, key backup is enabled and the secrets are cached, the state will be set to "main".
- * If cross signing is not set up, the state will be set to "set_up_encryption".
- * If key backup is not enabled, the state will be set to "key_storage_disabled".
- * If secrets are missing, the state will be set to "secrets_not_cached".
- *
- * The state is set once when the component is first mounted.
- * Also returns a callback function which can be called to re-run the logic.
- *
- * @param setState - callback passed from the EncryptionUserSettingsTab to set the current `State`.
- * @returns a callback function, which will re-run the logic and update the state.
- */
-function useCheckEncryptionState(state: State, setState: (state: State) => void): () => Promise<void> {
-    const matrixClient = useMatrixClientContext();
-
-    const checkEncryptionState = useCallback(async () => {
-        const crypto = matrixClient.getCrypto()!;
-        const isCrossSigningReady = await crypto.isCrossSigningReady();
-
-        // Check if the secrets are cached
-        const cachedSecrets = (await crypto.getCrossSigningStatus()).privateKeysCachedLocally;
-        const secretsOk = cachedSecrets.masterKey && cachedSecrets.selfSigningKey && cachedSecrets.userSigningKey;
-
-        // Also check the key backup status
-        const activeBackupVersion = await crypto.getActiveSessionBackupVersion();
-
-        const keyStorageEnabled = activeBackupVersion !== null;
-
-        if (isCrossSigningReady && keyStorageEnabled && secretsOk) setState("main");
-        else if (!isCrossSigningReady) setState("set_up_encryption");
-        else if (!keyStorageEnabled) setState("key_storage_disabled");
-        else setState("secrets_not_cached");
-    }, [matrixClient, setState]);
-
-    // Initialise the state when the component is mounted
-    useEffect(() => {
-        if (state === "loading") checkEncryptionState();
-    }, [checkEncryptionState, state]);
-
-    useTypedEventEmitter(matrixClient, CryptoEvent.KeyBackupStatus, (): void => {
-        // Recheck the status if the key backup status has changed so we can keep the page up to date.
-        // Note that this could potentially update the UI while the user is trying to do something, although
-        // if their key backup status is changing then they're changing encryption related things
-        // on another device. This code is written with the assumption that it's better for the UI to refresh
-        // and be up to date with whatever changes they've made.
-        checkEncryptionState();
-    });
-
-    // Also return the callback so that the component can re-run the logic.
-    return checkEncryptionState;
 }
 
 interface SetUpEncryptionPanelProps {
@@ -254,6 +213,34 @@ function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Elem
             >
                 {_t("settings|encryption|device_not_verified_button")}
             </Button>
+        </SettingsSection>
+    );
+}
+
+interface IdentityNeedsResetNoticePanelProps {
+    /**
+     * Callback to call when the user has finished setting up encryption.
+     */
+    onContinue: () => void;
+}
+
+/**
+ * Panel to tell the user that they need to reset their identity.
+ */
+function IdentityNeedsResetNoticePanel({ onContinue }: Readonly<IdentityNeedsResetNoticePanelProps>): JSX.Element {
+    return (
+        <SettingsSection
+            legacy={false}
+            heading={_t("encryption|key_storage_out_of_sync")}
+            subHeading={
+                <SettingsSubheader state="error" stateMessage={_t("encryption|identity_needs_reset_description")} />
+            }
+        >
+            <div>
+                <Button size="sm" kind="primary" onClick={onContinue}>
+                    {_t("encryption|continue_with_reset")}
+                </Button>
+            </div>
         </SettingsSection>
     );
 }

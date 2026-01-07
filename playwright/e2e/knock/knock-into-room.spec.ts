@@ -59,7 +59,7 @@ test.describe("Knock Into Room", () => {
 
         // Knocked room should appear in Rooms
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         // bot waits for knock request from Alice
@@ -77,7 +77,7 @@ test.describe("Knock Into Room", () => {
         await bot.inviteUser(room.roomId, user.userId);
 
         await expect(
-            page.getByRole("group", { name: "Invites" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         // Alice have to accept invitation in order to join the room.
@@ -85,7 +85,7 @@ test.describe("Knock Into Room", () => {
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         await expect(page.getByText("Alice joined the room")).toBeVisible();
@@ -136,7 +136,7 @@ test.describe("Knock Into Room", () => {
 
         // Knocked room should appear in Rooms
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         // bot waits for knock request from Alice
@@ -154,7 +154,7 @@ test.describe("Knock Into Room", () => {
         await bot.inviteUser(room.roomId, user.userId);
 
         await expect(
-            page.getByRole("group", { name: "Invites" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         // Alice have to accept invitation in order to join the room.
@@ -162,7 +162,7 @@ test.describe("Knock Into Room", () => {
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         await expect(page.getByText("Alice joined the room")).toBeVisible();
@@ -215,14 +215,14 @@ test.describe("Knock Into Room", () => {
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
 
         // Knocked room should appear in Rooms
-        page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" });
+        page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" });
 
         await roomPreviewBar.getByRole("button", { name: "Cancel request" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("button", { name: "Request access" })).toBeVisible();
 
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).not.toBeVisible();
     });
 
@@ -244,7 +244,7 @@ test.describe("Knock Into Room", () => {
 
         // Knocked room should appear in Rooms
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity" }),
+            page.getByTestId("room-list").getByRole("option", { name: "Open room Cybersecurity" }),
         ).toBeVisible();
 
         // bot waits for knock request from Alice
@@ -263,12 +263,9 @@ test.describe("Knock Into Room", () => {
 
         // Room should stay in Rooms and have red badge when knock is denied
         await expect(
-            page.getByRole("group", { name: "Rooms" }).getByRole("treeitem", { name: "Cybersecurity", exact: true }),
-        ).not.toBeVisible();
-        await expect(
             page
-                .getByRole("group", { name: "Rooms" })
-                .getByRole("treeitem", { name: "Cybersecurity 1 unread mention." }),
+                .getByTestId("room-list")
+                .getByRole("option", { name: "Open room Cybersecurity with 1 unread mention." }),
         ).toBeVisible();
 
         await expect(roomPreviewBar.getByRole("heading", { name: "You have been denied access" })).toBeVisible();

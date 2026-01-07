@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback } from "react";
-import { JoinRule } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { SettingLevel } from "../settings/SettingLevel";
 import { useSettingValue } from "./useSettings";
@@ -19,14 +19,25 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
 
 /**
  * Should the media event be visible in the client, or hidden.
- * @param eventId The eventId of the media event.
- * @returns A boolean describing the hidden status, and a function to set the visiblity.
+ *
+ * This function uses the `mediaPreviewConfig` setting to determine the rules for the room
+ * along with the `showMediaEventIds` setting for specific events.
+ *
+ * A function may be provided to alter the visible state.
+ *
+ * @param The event that contains the media. If not provided, the global rule is used.
+ *
+ * @returns Returns a tuple of:
+ *          A boolean describing the hidden status.
+ *          A function to show or hide the event.
  */
-export function useMediaVisible(eventId?: string, roomId?: string): [boolean, (visible: boolean) => void] {
-    const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
+export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void] {
+    const eventId = mxEvent?.getId();
+    const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", mxEvent?.getRoomId());
     const client = useMatrixClientContext();
     const eventVisibility = useSettingValue("showMediaEventIds");
-    const joinRule = useRoomState(client.getRoom(roomId) ?? undefined, (state) => state.getJoinRule());
+    const room = client.getRoom(mxEvent?.getRoomId()) ?? undefined;
+    const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const setMediaVisible = useCallback(
         (visible: boolean) => {
             SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
@@ -43,6 +54,9 @@ export function useMediaVisible(eventId?: string, roomId?: string): [boolean, (v
     // Always prefer the explicit per-event user preference here.
     if (explicitEventVisiblity !== undefined) {
         return [explicitEventVisiblity, setMediaVisible];
+    } else if (mxEvent?.getSender() === client.getUserId()) {
+        // If this event is ours and we've not set an explicit visibility, default to on.
+        return [true, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.Off) {
         return [false, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.On) {

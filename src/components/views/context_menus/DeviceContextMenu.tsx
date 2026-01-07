@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 import IconizedContextMenu, { IconizedContextMenuOptionList, IconizedContextMenuRadio } from "./IconizedContextMenu";
 import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 
 const SECTION_NAMES: Record<MediaDeviceKindEnum, TranslationKey> = {
     [MediaDeviceKindEnum.AudioInput]: _td("voip|input_devices"),
@@ -26,14 +26,7 @@ interface IDeviceContextMenuDeviceProps {
 }
 
 const DeviceContextMenuDevice: React.FC<IDeviceContextMenuDeviceProps> = ({ label, selected, onClick }) => {
-    return (
-        <IconizedContextMenuRadio
-            iconClassName="mx_DeviceContextMenu_device_icon"
-            label={label}
-            active={selected}
-            onClick={onClick}
-        />
-    );
+    return <IconizedContextMenuRadio label={label} active={selected} onClick={onClick} />;
 };
 
 interface IDeviceContextMenuSectionProps {

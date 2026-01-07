@@ -1,19 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
-  class="_tooltip_6ode6_8"
+  class="_tooltip_1nqnq_8"
   data-floating-ui-focusable=""
-  id="«r6»"
+  id="_r_6_"
   role="tooltip"
-  style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
+  style="position: absolute; left: 0px; top: 0px; transform: translate(5px, -6px);"
   tabindex="-1"
 >
   <svg
     aria-hidden="true"
-    class="_arrow_6ode6_33"
+    class="_arrow_1nqnq_33"
     height="10"
-    style="position: absolute; pointer-events: none; top: 100%;"
+    style="position: absolute; pointer-events: none; top: 100%; left: -1px;"
     viewBox="0 0 10 10"
     width="10"
   >
@@ -22,7 +22,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
       stroke="none"
     />
     <clippath
-      id="«r9»"
+      id="_r_9_"
     >
       <rect
         height="10"
@@ -33,22 +33,63 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
     </clippath>
   </svg>
   <span
-    id="«r4»"
+    id="_r_4_"
   >
     Alice
   </span>
   <span
-    class="_caption_6ode6_28 cpd-theme-dark"
-    id="«r5»"
+    class="_caption_1nqnq_28 cpd-theme-dark"
+    id="_r_5_"
   >
     @alice:example.org
   </span>
 </div>
 `;
 
+exports[`ReadReceiptGroup <ReadReceiptPerson /> should fall back to userId if roomMember unspecified 1`] = `
+<div>
+  <span
+    tabindex="0"
+  >
+    <div
+      class="mx_AccessibleButton mx_ReadReceiptGroup_person"
+      role="menuitem"
+      tabindex="-1"
+    >
+      <span
+        aria-hidden="true"
+        aria-live="off"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        data-color="3"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 24px;"
+      >
+        a
+      </span>
+      <div
+        class="mx_ReadReceiptGroup_name"
+      >
+        <p>
+          @alice:example.org
+        </p>
+        <p
+          class="mx_ReadReceiptGroup_secondary"
+        >
+          ==MOCK FORMATTED DATE==
+        </p>
+      </div>
+    </div>
+  </span>
+</div>
+`;
+
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
 <div>
-  <div>
+  <span
+    tabindex="0"
+  >
     <div
       class="mx_AccessibleButton mx_ReadReceiptGroup_person"
       role="menuitem"
@@ -58,7 +99,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         aria-hidden="true"
         aria-label="Profile picture"
         aria-live="off"
-        class="_avatar_1qbcf_8 mx_BaseAvatar"
+        class="_avatar_zysgz_8 mx_BaseAvatar"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -66,7 +107,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
       >
         <img
           alt=""
-          class="_image_1qbcf_41"
+          class="_image_zysgz_43"
           data-type="round"
           height="24px"
           loading="lazy"
@@ -88,6 +129,6 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         </p>
       </div>
     </div>
-  </div>
+  </span>
 </div>
 `;

@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
     /* These are set in Javascript */
     --avatar-letter: "";
     --avatar-background: unset;
+    --avatar-color: unset;
     --placeholder: "";
 
     position: relative;
@@ -54,6 +55,8 @@ Please see LICENSE files in the repository root for full details.
             span.mx_UserPill,
             span.mx_RoomPill,
             span.mx_SpacePill {
+                display: inline-flex;
+                align-items: center;
                 user-select: all;
                 position: relative;
                 cursor: unset; /* We don't want indicate clickability */

@@ -22,8 +22,13 @@ export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent";
 export interface ICategory {
     id: CategoryKey;
     name: string;
+    // Emoji to show in the header for this category
+    emoji: string;
     enabled: boolean;
+    // Whether the category is currently visible
     visible: boolean;
+    // Whether the category is the first visible category
+    firstVisible: boolean;
     ref: RefObject<HTMLButtonElement | null>;
 }
 
@@ -61,17 +66,17 @@ class Category extends React.PureComponent<IProps> {
         return (
             <div key={rowIndex} role="row">
                 {emojisForRow.map((emoji) => (
-                    <Emoji
-                        key={emoji.hexcode}
-                        emoji={emoji}
-                        selectedEmojis={selectedEmojis}
-                        onClick={onClick}
-                        onMouseEnter={onMouseEnter}
-                        onMouseLeave={onMouseLeave}
-                        disabled={this.props.isEmojiDisabled?.(emoji.unicode)}
-                        id={`mx_EmojiPicker_item_${this.props.id}_${hexEncode(emoji.unicode)}`}
-                        role="gridcell"
-                    />
+                    <div role="gridcell" className="mx_EmojiPicker_item_wrapper" key={emoji.hexcode}>
+                        <Emoji
+                            emoji={emoji}
+                            selectedEmojis={selectedEmojis}
+                            onClick={onClick}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                            disabled={this.props.isEmojiDisabled?.(emoji.unicode)}
+                            id={`mx_EmojiPicker_item_${this.props.id}_${hexEncode(emoji.unicode)}`}
+                        />
+                    </div>
                 ))}
             </div>
         );
@@ -118,6 +123,7 @@ class Category extends React.PureComponent<IProps> {
                     overflowMargin={0}
                     renderItem={this.renderEmojiRow}
                     role="grid"
+                    aria-multiselectable
                 />
             </section>
         );

@@ -1,4 +1,5 @@
 /*
+Copyright 2025 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -6,16 +7,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { act, render, screen } from "jest-matrix-react";
+import { mocked, type Mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import * as SecurityManager from "../../../src/SecurityManager";
 import ToastContainer from "../../../src/components/structures/ToastContainer";
-import { Kind, showToast } from "../../../src/toasts/SetupEncryptionToast";
+import { showToast } from "../../../src/toasts/SetupEncryptionToast";
 import dis from "../../../src/dispatcher/dispatcher";
 import DeviceListener from "../../../src/DeviceListener";
 import Modal from "../../../src/Modal";
 import ConfirmKeyStorageOffDialog from "../../../src/components/views/dialogs/ConfirmKeyStorageOffDialog";
+import SetupEncryptionDialog from "../../../src/components/views/dialogs/security/SetupEncryptionDialog";
+import { stubClient } from "../../test-utils";
 
 jest.mock("../../../src/dispatcher/dispatcher", () => ({
     dispatch: jest.fn(),
@@ -31,7 +37,7 @@ describe("SetupEncryptionToast", () => {
 
     describe("Set up recovery", () => {
         it("should render the toast", async () => {
-            showToast(Kind.SET_UP_RECOVERY);
+            act(() => showToast("set_up_recovery"));
 
             expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
         });
@@ -40,7 +46,7 @@ describe("SetupEncryptionToast", () => {
             jest.spyOn(DeviceListener.sharedInstance(), "recordRecoveryDisabled");
             jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
 
-            showToast(Kind.SET_UP_RECOVERY);
+            act(() => showToast("set_up_recovery"));
 
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Dismiss" }));
@@ -50,15 +56,70 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
-    describe("Key storage out of sync (retrieve secrets)", () => {
+    describe("Key storage out of sync", () => {
+        let client: Mocked<MatrixClient>;
+
+        beforeEach(() => {
+            client = mocked(stubClient());
+            mocked(client.getCrypto).mockReturnValue({
+                getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
+                resetKeyBackup: jest.fn(),
+                checkKeyBackupAndEnable: jest.fn(),
+                loadSessionBackupPrivateKeyFromSecretStorage: jest.fn(),
+            } as unknown as CryptoApi);
+        });
+
         it("should render the toast", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+            act(() => showToast("key_storage_out_of_sync"));
 
             await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
         });
 
-        it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+        it("should reset key backup if needed", async () => {
+            showToast("key_storage_out_of_sync");
+
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
+                async (func = async (): Promise<void> => {}) => {
+                    return await func();
+                },
+            );
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(true);
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            expect(client.getCrypto()!.resetKeyBackup).toHaveBeenCalled();
+        });
+
+        it("should not reset key backup if not needed", async () => {
+            showToast("key_storage_out_of_sync");
+
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
+                async (func = async (): Promise<void> => {}) => {
+                    return await func();
+                },
+            );
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+            // if the backup key is stored in 4S
+            client.isKeyBackupKeyStored.mockResolvedValue({});
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            // we shouldn't have reset the key backup, but should have fetched
+            // the key from 4S
+            expect(client.getCrypto()!.resetKeyBackup).not.toHaveBeenCalled();
+            expect(client.getCrypto()!.loadSessionBackupPrivateKeyFromSecretStorage).toHaveBeenCalled();
+        });
+
+        it("should open settings to the reset flow when 'forgot recovery key' clicked and identity reset needed", async () => {
+            act(() => showToast("key_storage_out_of_sync"));
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                true,
+            );
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Forgot recovery key?"));
@@ -70,33 +131,12 @@ describe("SetupEncryptionToast", () => {
             });
         });
 
-        it("should open settings to the reset flow when recovering fails", async () => {
-            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
-                throw new Error("Something went wrong while recovering!");
-            });
+        it("should open settings to the change recovery key flow when 'forgot recovery key' clicked and identity reset not needed", async () => {
+            act(() => showToast("key_storage_out_of_sync"));
 
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
-
-            const user = userEvent.setup();
-            await user.click(await screen.findByText("Enter recovery key"));
-
-            expect(dis.dispatch).toHaveBeenCalledWith({
-                action: "view_user_settings",
-                initialTabId: "USER_ENCRYPTION_TAB",
-                props: { initialEncryptionState: "reset_identity_sync_failed" },
-            });
-        });
-    });
-
-    describe("Key storage out of sync (store secrets)", () => {
-        it("should render the toast", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
-
-            await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
-        });
-
-        it("should open settings to the reset flow when 'forgot recovery key' clicked", async () => {
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                false,
+            );
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Forgot recovery key?"));
@@ -108,12 +148,37 @@ describe("SetupEncryptionToast", () => {
             });
         });
 
-        it("should open settings to the reset flow when recovering fails", async () => {
+        it("should open settings to the reset flow when recovering fails and identity reset needed", async () => {
             jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
                 throw new Error("Something went wrong while recovering!");
             });
 
-            showToast(Kind.KEY_STORAGE_OUT_OF_SYNC_STORE);
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                true,
+            );
+
+            act(() => showToast("key_storage_out_of_sync"));
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "reset_identity_sync_failed" },
+            });
+        });
+
+        it("should open settings to the change recovery key flow when recovering fails and identity reset not needed", async () => {
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async () => {
+                throw new Error("Something went wrong while recovering!");
+            });
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                false,
+            );
+
+            act(() => showToast("key_storage_out_of_sync"));
 
             const user = userEvent.setup();
             await user.click(await screen.findByText("Enter recovery key"));
@@ -128,7 +193,7 @@ describe("SetupEncryptionToast", () => {
 
     describe("Turn on key storage", () => {
         it("should render the toast", async () => {
-            showToast(Kind.TURN_ON_KEY_STORAGE);
+            act(() => showToast("turn_on_key_storage"));
 
             await expect(screen.findByText("Turn on key storage")).resolves.toBeInTheDocument();
             await expect(screen.findByRole("button", { name: "Dismiss" })).resolves.toBeInTheDocument();
@@ -138,7 +203,7 @@ describe("SetupEncryptionToast", () => {
         it("should open settings to the Encryption tab when 'Continue' clicked", async () => {
             jest.spyOn(DeviceListener.sharedInstance(), "recordKeyBackupDisabled");
 
-            showToast(Kind.TURN_ON_KEY_STORAGE);
+            act(() => showToast("turn_on_key_storage"));
 
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Continue" }));
@@ -160,7 +225,7 @@ describe("SetupEncryptionToast", () => {
             });
 
             // When we show the toast, and click Dismiss
-            showToast(Kind.TURN_ON_KEY_STORAGE);
+            act(() => showToast("turn_on_key_storage"));
 
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Dismiss" }));
@@ -174,6 +239,67 @@ describe("SetupEncryptionToast", () => {
 
             // And the backup was disabled when the dialog's onFinished was called
             expect(DeviceListener.sharedInstance().recordKeyBackupDisabled).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("Verify this session", () => {
+        it("should render the toast", async () => {
+            act(() => showToast("verify_this_session"));
+
+            await expect(screen.findByText("Verify this session")).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Later" })).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Verify" })).resolves.toBeInTheDocument();
+        });
+
+        it("should dismiss the toast when 'Later' button clicked, and remember it", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
+
+            act(() => showToast("verify_this_session"));
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Later" }));
+
+            expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
+        });
+
+        it("should open the verification dialog when 'Verify' clicked", async () => {
+            jest.spyOn(Modal, "createDialog");
+
+            // When we show the toast, and click Verify
+            act(() => showToast("verify_this_session"));
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Verify" }));
+
+            // Then the dialog was opened
+            expect(Modal.createDialog).toHaveBeenCalledWith(SetupEncryptionDialog, {}, undefined, false, true);
+        });
+    });
+
+    describe("Identity needs reset", () => {
+        it("should render the toast", async () => {
+            act(() => showToast("identity_needs_reset"));
+
+            await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
+            await expect(
+                screen.findByText(
+                    "You have to reset your cryptographic identity in order to ensure access to your message history",
+                ),
+            ).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Continue with reset" })).resolves.toBeInTheDocument();
+        });
+
+        it("should open settings to the reset flow when 'Continue with reset' clicked", async () => {
+            act(() => showToast("identity_needs_reset"));
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Continue with reset"));
+
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "reset_identity_cant_recover" },
+            });
         });
     });
 });

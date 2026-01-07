@@ -17,7 +17,7 @@ import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
  */
 export function RoomListView(): JSX.Element {
     const vm = useRoomListViewModel();
-    const isRoomListEmpty = vm.rooms.length === 0;
+    const isRoomListEmpty = vm.roomsResult.rooms.length === 0;
     let listBody;
     if (vm.isLoadingRooms) {
         listBody = <div className="mx_RoomListSkeleton" />;
@@ -28,7 +28,9 @@ export function RoomListView(): JSX.Element {
     }
     return (
         <>
-            <RoomListPrimaryFilters vm={vm} />
+            <div>
+                <RoomListPrimaryFilters vm={vm} />
+            </div>
             {listBody}
         </>
     );

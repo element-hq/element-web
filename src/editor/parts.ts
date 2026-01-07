@@ -297,7 +297,12 @@ export abstract class PillPart extends BasePart implements IPillPart {
     }
 
     // helper method for subclasses
-    protected setAvatarVars(node: HTMLElement, avatarUrl: string, initialLetter: string): void {
+    protected setAvatarVars(
+        node: HTMLElement,
+        avatarUrl: string,
+        initialLetter: string,
+        avatarTextColor?: string,
+    ): void {
         const avatarBackground = `url('${avatarUrl}')`;
         const avatarLetter = `'${initialLetter}'`;
         // check if the value is changing,
@@ -307,6 +312,9 @@ export abstract class PillPart extends BasePart implements IPillPart {
         }
         if (node.style.getPropertyValue("--avatar-letter") !== avatarLetter) {
             node.style.setProperty("--avatar-letter", avatarLetter);
+        }
+        if (avatarTextColor && node.style.getPropertyValue("--avatar-color") !== avatarTextColor) {
+            node.style.setProperty("--avatar-color", avatarTextColor);
         }
     }
 
@@ -421,11 +429,13 @@ class RoomPillPart extends PillPart {
     protected setAvatar(node: HTMLElement): void {
         let initialLetter = "";
         let avatarUrl = Avatar.avatarUrlForRoom(this.room ?? null, 16, 16, "crop");
+        let avatarTextColor: string | undefined;
         if (!avatarUrl) {
             initialLetter = Avatar.getInitialLetter(this.room?.name || this.resourceId) ?? "";
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room?.roomId ?? this.resourceId);
+            avatarTextColor = Avatar.getAvatarTextColor(this.room?.roomId ?? this.resourceId);
         }
-        this.setAvatarVars(node, avatarUrl, initialLetter);
+        this.setAvatarVars(node, avatarUrl, initialLetter, avatarTextColor);
     }
 
     public get type(): IPillPart["type"] {
@@ -479,10 +489,12 @@ class UserPillPart extends PillPart {
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this.member.userId);
         const avatarUrl = Avatar.avatarUrlForMember(this.member, 16, 16, "crop");
         let initialLetter = "";
+        let avatarTextColor: string | undefined;
         if (avatarUrl === defaultAvatarUrl) {
             initialLetter = Avatar.getInitialLetter(name) ?? "";
+            avatarTextColor = Avatar.getAvatarTextColor(this.member.userId);
         }
-        this.setAvatarVars(node, avatarUrl, initialLetter);
+        this.setAvatarVars(node, avatarUrl, initialLetter, avatarTextColor);
     }
 
     protected onClick = (): void => {

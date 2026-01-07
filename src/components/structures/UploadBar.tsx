@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
+import { CloseIcon, ShareIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ContentMessages from "../../ContentMessages";
 import dis from "../../dispatcher/dispatcher";
@@ -45,7 +45,7 @@ function isUploadPayload(payload: ActionPayload): payload is UploadPayload {
 }
 
 export default class UploadBar extends React.PureComponent<IProps, IState> {
-    private dispatcherRef: Optional<string>;
+    private dispatcherRef?: string;
     private unmounted = false;
 
     public constructor(props: IProps) {
@@ -115,10 +115,13 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         const uploadSize = fileSize(this.state.currentTotal!);
         return (
             <div className="mx_UploadBar">
+                <ShareIcon />
                 <div className="mx_UploadBar_filename">
                     {uploadText} ({uploadSize})
                 </div>
-                <AccessibleButton onClick={this.onCancelClick} className="mx_UploadBar_cancel" />
+                <AccessibleButton onClick={this.onCancelClick} className="mx_UploadBar_cancel">
+                    <CloseIcon />
+                </AccessibleButton>
                 <ProgressBar value={this.state.currentLoaded!} max={this.state.currentTotal!} />
             </div>
         );

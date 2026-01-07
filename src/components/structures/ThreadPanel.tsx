@@ -6,12 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Optional } from "matrix-events-sdk";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { type EventTimelineSet, type Room, Thread } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
+import { ThreadsIcon, CheckIcon, ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
 import BaseCard from "../views/right_panel/BaseCard";
@@ -58,6 +57,7 @@ export const ThreadPanelHeaderFilterOptionItem: React.FC<
 > = ({ label, description, onClick, isSelected }) => {
     return (
         <MenuItemRadio active={isSelected} className="mx_ThreadPanel_Header_FilterOptionItem" onClick={onClick}>
+            {isSelected ? <CheckIcon /> : null}
             <span>{label}</span>
             <span>{description}</span>
         </MenuItemRadio>
@@ -146,6 +146,7 @@ export const ThreadPanelHeader: React.FC<{
                 }}
             >
                 {`${_t("threads|show_thread_filter")} ${value?.label}`}
+                <ChevronDownIcon />
             </ContextMenuButton>
             {contextMenu}
         </div>
@@ -163,7 +164,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     const [room, setRoom] = useState<Room | null>(null);
     const [narrow, setNarrow] = useState<boolean>(false);
 
-    const timelineSet: Optional<EventTimelineSet> =
+    const timelineSet: EventTimelineSet | undefined =
         filterOption === ThreadFilterType.My ? room?.threadsTimelineSets[1] : room?.threadsTimelineSets[0];
     const hasThreads = Boolean(room?.threadsTimelineSets?.[0]?.getLiveTimeline()?.getEvents()?.length);
 

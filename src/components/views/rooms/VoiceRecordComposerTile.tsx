@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Optional } from "matrix-events-sdk";
+import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
@@ -29,7 +29,7 @@ import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { attachMentions, attachRelation } from "./SendMessageComposer";
+import { attachMentions, attachRelation } from "../../../utils/messages";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
@@ -216,7 +216,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
     };
 
-    private bindNewRecorder(recorder: Optional<VoiceMessageRecording>): void {
+    private bindNewRecorder(recorder: VoiceMessageRecording | null): void {
         if (this.state.recorder) {
             this.state.recorder.off(UPDATE_EVENT, this.onRecordingUpdate);
         }
@@ -275,7 +275,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                     className="mx_VoiceRecordComposerTile_delete"
                     title={_t("action|delete")}
                     onClick={this.onCancel}
-                />
+                >
+                    <DeleteIcon />
+                </AccessibleButton>
             );
         }
 

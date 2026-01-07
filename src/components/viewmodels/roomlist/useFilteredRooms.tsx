@@ -5,15 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { Room } from "matrix-js-sdk/src/matrix";
 import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
-import RoomListStoreV3, { LISTS_LOADED_EVENT, LISTS_UPDATE_EVENT } from "../../../stores/room-list-v3/RoomListStoreV3";
+import { _t, _td } from "../../../languageHandler";
+import RoomListStoreV3, {
+    LISTS_LOADED_EVENT,
+    LISTS_UPDATE_EVENT,
+    type RoomsResult,
+} from "../../../stores/room-list-v3/RoomListStoreV3";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
 
 /**
  * Provides information about a primary filter.
@@ -35,7 +36,7 @@ export interface PrimaryFilter {
 interface FilteredRooms {
     primaryFilters: PrimaryFilter[];
     isLoadingRooms: boolean;
-    rooms: Room[];
+    roomsResult: RoomsResult;
     /**
      * The currently active primary filter.
      * If no primary filter is active, this will be undefined.
@@ -47,9 +48,9 @@ const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
     [FilterKey.UnreadFilter, _td("room_list|filters|unread")],
     [FilterKey.PeopleFilter, _td("room_list|filters|people")],
     [FilterKey.RoomsFilter, _td("room_list|filters|rooms")],
+    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
     [FilterKey.MentionsFilter, _td("room_list|filters|mentions")],
     [FilterKey.InvitesFilter, _td("room_list|filters|invites")],
-    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
     [FilterKey.LowPriorityFilter, _td("room_list|filters|low_priority")],
 ]);
 
@@ -63,23 +64,26 @@ export function useFilteredRooms(): FilteredRooms {
      */
     const [primaryFilter, setPrimaryFilter] = useState<FilterKey | undefined>();
 
-    const [rooms, setRooms] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
+    const [roomsResult, setRoomsResult] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
     const [isLoadingRooms, setIsLoadingRooms] = useState(() => RoomListStoreV3.instance.isLoadingRooms);
 
     const updateRoomsFromStore = useCallback((filters: FilterKey[] = []): void => {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
-        setRooms(newRooms);
+        setRoomsResult(newRooms);
     }, []);
-
-    // Reset filters when active space changes
-    useEventEmitter(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => setPrimaryFilter(undefined));
 
     const filterUndefined = (array: (FilterKey | undefined)[]): FilterKey[] =>
         array.filter((f) => f !== undefined) as FilterKey[];
 
-    const getAppliedFilters = (): FilterKey[] => {
+    const getAppliedFilters = useCallback((): FilterKey[] => {
         return filterUndefined([primaryFilter]);
-    };
+    }, [primaryFilter]);
+
+    useEffect(() => {
+        // Update the rooms state when the primary filter changes
+        const filters = getAppliedFilters();
+        updateRoomsFromStore(filters);
+    }, [getAppliedFilters, updateRoomsFromStore]);
 
     useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
         const filters = getAppliedFilters();
@@ -122,6 +126,6 @@ export function useFilteredRooms(): FilteredRooms {
         isLoadingRooms,
         primaryFilters,
         activePrimaryFilter,
-        rooms,
+        roomsResult,
     };
 }

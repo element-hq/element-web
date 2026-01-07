@@ -39,6 +39,7 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { Box, Flex } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
@@ -46,10 +47,7 @@ import RoomAvatar from "../avatars/RoomAvatar.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
 import RoomName from "../elements/RoomName.tsx";
-import { Flex } from "../../../shared-components/utils/Flex";
 import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
-import { Box } from "../../../shared-components/utils/Box";
-import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 
@@ -251,25 +249,15 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                 <MenuItem Icon={ThreadsIcon} label={_t("common|threads")} onSelect={vm.onRoomThreadsClick} />
                 {!vm.isVideoRoom && (
                     <>
-                        <ReleaseAnnouncement
-                            feature="pinningMessageList"
-                            header={_t("right_panel|pinned_messages|release_announcement|title")}
-                            description={_t("right_panel|pinned_messages|release_announcement|description")}
-                            closeLabel={_t("right_panel|pinned_messages|release_announcement|close")}
-                            placement="top"
+                        <MenuItem
+                            Icon={PinIcon}
+                            label={_t("right_panel|pinned_messages_button")}
+                            onSelect={vm.onRoomPinsClick}
                         >
-                            <div>
-                                <MenuItem
-                                    Icon={PinIcon}
-                                    label={_t("right_panel|pinned_messages_button")}
-                                    onSelect={vm.onRoomPinsClick}
-                                >
-                                    <Text as="span" size="sm">
-                                        {vm.pinCount}
-                                    </Text>
-                                </MenuItem>
-                            </div>
-                        </ReleaseAnnouncement>
+                            <Text as="span" size="sm">
+                                {vm.pinCount}
+                            </Text>
+                        </MenuItem>
                         <MenuItem
                             Icon={FilesIcon}
                             label={_t("right_panel|files_button")}

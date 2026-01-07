@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<PinnedEventTile /> should render pinned event 1`] = `
 <div>
@@ -8,7 +8,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
   >
     <div>
       <span
-        class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
         data-color="2"
         data-testid="avatar-img"
         data-type="round"
@@ -25,12 +25,13 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
-          aria-labelledby="«r0»"
+          aria-labelledby="_r_1_"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
         </span>
         <button
+          aria-describedby="_r_0_"
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
@@ -38,14 +39,14 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«r5»"
+          id="radix-_r_6_"
           role="button"
           style="--cpd-icon-button-size: 24px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -64,6 +65,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
       </div>
       <div
         class="mx_MTextBody mx_EventTile_content"
+        id="_r_0_"
       >
         <div
           class="mx_EventTile_body translate"
@@ -85,7 +87,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
   >
     <div>
       <span
-        class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
         data-color="2"
         data-testid="avatar-img"
         data-type="round"
@@ -102,12 +104,13 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
         class="mx_PinnedEventTile_top"
       >
         <span
-          aria-labelledby="«r8»"
+          aria-labelledby="_r_a_"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
           @alice:server.org
         </span>
         <button
+          aria-describedby="_r_9_"
           aria-disabled="false"
           aria-expanded="false"
           aria-haspopup="menu"
@@ -115,14 +118,14 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
           class="_icon-button_1pz9o_8"
           data-kind="primary"
           data-state="closed"
-          id="radix-«rd»"
+          id="radix-_r_f_"
           role="button"
           style="--cpd-icon-button-size: 24px;"
           tabindex="0"
           type="button"
         >
           <div
-            class="_indicator-icon_zr2a0_17"
+            class="_indicator-icon_147l5_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -141,6 +144,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
       </div>
       <div
         class="mx_MTextBody mx_EventTile_content"
+        id="_r_9_"
       >
         <div
           class="mx_EventTile_body translate"
@@ -183,22 +187,22 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
 exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 <div
   aria-label="Open menu"
-  aria-labelledby="radix-«r10»"
+  aria-labelledby="radix-_r_14_"
   aria-orientation="vertical"
-  class="_menu_19sse_8"
+  class="_menu_1glhz_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-«r11»"
+  id="radix-_r_15_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <button
-    class="_item_dyt4i_8 _interactive_dyt4i_26"
+    class="_item_lqfwq_8 _interactive_lqfwq_26"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -207,7 +211,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_dyt4i_50"
+      class="_icon_lqfwq_50"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -219,13 +223,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
     >
       View in timeline
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_dyt4i_59"
+      class="_nav-hint_lqfwq_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -238,7 +242,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     </svg>
   </button>
   <button
-    class="_item_dyt4i_8 _interactive_dyt4i_26"
+    class="_item_lqfwq_8 _interactive_lqfwq_26"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -247,7 +251,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_dyt4i_50"
+      class="_icon_lqfwq_50"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -264,13 +268,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
     >
       Unpin
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_dyt4i_59"
+      class="_nav-hint_lqfwq_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -283,7 +287,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     </svg>
   </button>
   <button
-    class="_item_dyt4i_8 _interactive_dyt4i_26"
+    class="_item_lqfwq_8 _interactive_lqfwq_26"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -292,7 +296,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_dyt4i_50"
+      class="_icon_lqfwq_50"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -304,13 +308,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
     >
       Forward
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_dyt4i_59"
+      class="_nav-hint_lqfwq_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -323,13 +327,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
     </svg>
   </button>
   <div
-    class="_separator_7ckbw_8"
+    class="_separator_cqpyv_8"
     data-kind="primary"
     data-orientation="horizontal"
     role="separator"
   />
   <button
-    class="_item_dyt4i_8 _interactive_dyt4i_26"
+    class="_item_lqfwq_8 _interactive_lqfwq_26"
     data-kind="critical"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -338,7 +342,7 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="_icon_dyt4i_50"
+      class="_icon_lqfwq_50"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -350,13 +354,13 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
       />
     </svg>
     <span
-      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
     >
       Delete
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_dyt4i_59"
+      class="_nav-hint_lqfwq_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -374,22 +378,22 @@ exports[`<PinnedEventTile /> should render the menu with all the options 1`] = `
 exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`] = `
 <div
   aria-label="Open menu"
-  aria-labelledby="radix-«rl»"
+  aria-labelledby="radix-_r_o_"
   aria-orientation="vertical"
-  class="_menu_19sse_8"
+  class="_menu_1glhz_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
   data-side="right"
   data-state="open"
   dir="ltr"
-  id="radix-«rm»"
+  id="radix-_r_p_"
   role="menu"
   style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
   tabindex="-1"
 >
   <button
-    class="_item_dyt4i_8 _interactive_dyt4i_26"
+    class="_item_lqfwq_8 _interactive_lqfwq_26"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -398,7 +402,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   >
     <svg
       aria-hidden="true"
-      class="_icon_dyt4i_50"
+      class="_icon_lqfwq_50"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -410,13 +414,13 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
       />
     </svg>
     <span
-      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
     >
       View in timeline
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_dyt4i_59"
+      class="_nav-hint_lqfwq_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"
@@ -429,7 +433,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
     </svg>
   </button>
   <button
-    class="_item_dyt4i_8 _interactive_dyt4i_26"
+    class="_item_lqfwq_8 _interactive_lqfwq_26"
     data-kind="primary"
     data-orientation="vertical"
     data-radix-collection-item=""
@@ -438,7 +442,7 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
   >
     <svg
       aria-hidden="true"
-      class="_icon_dyt4i_50"
+      class="_icon_lqfwq_50"
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"
@@ -450,13 +454,13 @@ exports[`<PinnedEventTile /> should render the menu without unpin and delete 1`]
       />
     </svg>
     <span
-      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+      class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
     >
       Forward
     </span>
     <svg
       aria-hidden="true"
-      class="_nav-hint_dyt4i_59"
+      class="_nav-hint_lqfwq_59"
       fill="currentColor"
       height="24"
       viewBox="8 0 8 24"

@@ -47,7 +47,6 @@ import shouldHideEvent from "../../shouldHideEvent";
 import MessagePanel from "./MessagePanel";
 import { type IScrollState } from "./ScrollPanel";
 import { type ActionPayload } from "../../dispatcher/payloads";
-import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
@@ -123,7 +122,6 @@ interface IProps {
     // whether to always show timestamps for an event
     alwaysShowTimestamps?: boolean;
 
-    resizeNotifier?: ResizeNotifier;
     editState?: EditorStateTransfer;
     permalinkCreator?: RoomPermalinkCreator;
     membersLoaded?: boolean;
@@ -141,6 +139,12 @@ interface IProps {
 
     hideThreadedMessages?: boolean;
     disableGrouping?: boolean;
+
+    /**
+     * Enable updating the read receipts and markers on user activity.
+     * @default true
+     */
+    enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
 
 interface IState {
@@ -230,6 +234,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         sendReadReceiptOnLoad: true,
         hideThreadedMessages: true,
         disableGrouping: false,
+        enableReadReceiptsAndMarkersOnActivity: true,
     };
 
     private lastRRSentEventId: string | null | undefined = undefined;
@@ -304,10 +309,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
 
-        if (this.props.manageReadReceipts) {
+        if (this.props.manageReadReceipts && this.props.enableReadReceiptsAndMarkersOnActivity) {
             this.updateReadReceiptOnUserActivity();
         }
-        if (this.props.manageReadMarkers) {
+        if (this.props.manageReadMarkers && this.props.enableReadReceiptsAndMarkersOnActivity) {
             this.updateReadMarkerOnUserActivity();
         }
         this.initTimeline(this.props);
@@ -1030,7 +1035,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         );
     }
 
-    private sendReadReceipts = async (): Promise<void> => {
+    /**
+     * Sends read receipts and fully read markers as appropriate.
+     */
+    public sendReadReceipts = async (): Promise<void> => {
         if (SettingsStore.getValue("lowBandwidth")) return;
         if (!this.messagePanel.current) return;
         if (!this.props.manageReadReceipts) return;
@@ -1136,9 +1144,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
     }
 
-    // if the read marker is on the screen, we can now assume we've caught up to the end
-    // of the screen, so move the marker down to the bottom of the screen.
-    private updateReadMarker = async (): Promise<void> => {
+    /**
+     * Move the marker to the bottom of the screen.
+     * If the read marker is on the screen, we can now assume we've caught up to the end
+     * of the screen, so move the marker down to the bottom of the screen.
+     */
+    public updateReadMarker = async (): Promise<void> => {
         if (!this.props.manageReadMarkers) return;
         if (this.getReadMarkerPosition() === 1) {
             // the read marker is at an event below the viewport,
@@ -1849,7 +1860,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     this.state.alwaysShowTimestamps
                 }
                 className={this.props.className}
-                resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
                 editState={this.props.editState}
                 showReactions={this.props.showReactions}

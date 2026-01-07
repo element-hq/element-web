@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<RecoveryPanel /> should allow to change the recovery key when everything is good 1`] = `
 <DocumentFragment>
@@ -17,7 +17,7 @@ exports[`<RecoveryPanel /> should allow to change the recovery key when everythi
       Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
     </div>
     <button
-      class="_button_vczzf_8 _has-icon_vczzf_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -58,7 +58,7 @@ exports[`<RecoveryPanel /> should ask to set up a recovery key when there is no 
       Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
     </div>
     <button
-      class="_button_vczzf_8 _has-icon_vczzf_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="primary"
       data-size="sm"
       role="button"

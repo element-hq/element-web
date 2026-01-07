@@ -5,18 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import EventEmitter from "events";
-import { SimpleObservable } from "matrix-widget-api";
 import { type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { waitFor } from "@testing-library/dom";
 
 import { type Playback, PlaybackState } from "../../../src/audio/Playback";
 import { AudioPlayerViewModel } from "../../../src/viewmodels/audio/AudioPlayerViewModel";
+import { MockedPlayback } from "../../unit-tests/audio/MockedPlayback";
 
 describe("AudioPlayerViewModel", () => {
-    let playback: MockedPlayback & Playback;
+    let playback: Playback;
     beforeEach(() => {
-        playback = new MockedPlayback(PlaybackState.Decoding, 50, 10) as unknown as MockedPlayback & Playback;
+        playback = new MockedPlayback(PlaybackState.Decoding, 50, 10) as unknown as Playback;
     });
 
     it("should return the snapshot", () => {
@@ -65,39 +64,12 @@ describe("AudioPlayerViewModel", () => {
         vm.onKeyDown(event);
         expect(playback.skipTo).toHaveBeenCalledWith(10 + 5); // 5 seconds forward
     });
+
+    it("should update snapshot when setProps is called with new mediaName", () => {
+        const vm = new AudioPlayerViewModel({ playback, mediaName: "oldName" });
+        expect(vm.getSnapshot().mediaName).toBe("oldName");
+
+        vm.setProps({ mediaName: "newName" });
+        expect(vm.getSnapshot().mediaName).toBe("newName");
+    });
 });
-
-/**
- * A mocked playback implementation for testing purposes.
- * It simulates a playback with a fixed size and allows state changes.
- */
-class MockedPlayback extends EventEmitter {
-    public sizeBytes = 8000;
-
-    public constructor(
-        public currentState: PlaybackState,
-        public durationSeconds: number,
-        public timeSeconds: number,
-    ) {
-        super();
-    }
-
-    public setState(state: PlaybackState): void {
-        this.currentState = state;
-        this.emit("update", state);
-    }
-
-    public get isPlaying(): boolean {
-        return this.currentState === PlaybackState.Playing;
-    }
-
-    public get clockInfo() {
-        return {
-            liveData: new SimpleObservable(),
-        };
-    }
-
-    public prepare = jest.fn().mockResolvedValue(undefined);
-    public skipTo = jest.fn();
-    public toggle = jest.fn();
-}

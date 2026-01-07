@@ -129,7 +129,7 @@ describe("leaveRoomBehaviour", () => {
 
         it("Passes through the dynamic predecessor setting", async () => {
             await leaveRoomBehaviour(client, room.roomId);
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, false);
+            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, true, false);
         });
     });
 
@@ -143,7 +143,7 @@ describe("leaveRoomBehaviour", () => {
 
         it("Passes through the dynamic predecessor setting", async () => {
             await leaveRoomBehaviour(client, room.roomId);
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, true);
+            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, true, true);
         });
     });
 });

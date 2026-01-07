@@ -29,23 +29,19 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_TopUnreadMessagesBar_scrollUp {
     height: 38px;
+    width: 38px;
     border-radius: 19px;
     box-sizing: border-box;
     background: $background;
     border: 1.3px solid var(--cpd-color-icon-tertiary);
     cursor: pointer;
-}
 
-.mx_TopUnreadMessagesBar_scrollUp::before {
-    content: "";
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    mask-image: url("@vector-im/compound-design-tokens/icons/chevron-up.svg");
-    mask-repeat: no-repeat;
-    mask-size: 24px;
-    mask-position: center;
-    background: var(--cpd-color-icon-tertiary);
+    svg {
+        width: 24px;
+        height: 24px;
+        padding: 6px;
+        color: var(--cpd-color-icon-tertiary);
+    }
 }
 
 .mx_TopUnreadMessagesBar_markAsRead {
@@ -56,16 +52,11 @@ Please see LICENSE files in the repository root for full details.
     border: 1.3px solid var(--cpd-color-icon-tertiary);
     border-radius: 10px;
     margin: 5px auto;
-}
 
-.mx_TopUnreadMessagesBar_markAsRead::before {
-    content: "";
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-    mask-repeat: no-repeat;
-    mask-size: 16px;
-    mask-position: center;
-    background: var(--cpd-color-icon-tertiary);
+    svg {
+        width: 16px;
+        height: 16px;
+        padding: 1px;
+        color: var(--cpd-color-icon-tertiary);
+    }
 }

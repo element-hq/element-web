@@ -15,10 +15,9 @@ import RecordingPlayback, {
     PlaybackLayout,
 } from "../../../../../src/components/views/audio_messages/RecordingPlayback";
 import { Playback } from "../../../../../src/audio/Playback";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { createAudioContext } from "../../../../../src/audio/compat";
 import { flushPromises } from "../../../../test-utils";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/WorkerManager", () => ({
@@ -54,7 +53,10 @@ describe("<RecordingPlayback />", () => {
 
     const mockChannelData = new Float32Array();
 
-    const defaultRoom = { roomId: "!room:server.org", timelineRenderingType: TimelineRenderingType.File } as IRoomState;
+    const defaultRoom = {
+        roomId: "!room:server.org",
+        timelineRenderingType: TimelineRenderingType.File,
+    } as RoomContextType;
     const getComponent = (props: React.ComponentProps<typeof RecordingPlayback>, room = defaultRoom) =>
         render(
             <ScopedRoomContextProvider {...room}>
@@ -80,7 +82,6 @@ describe("<RecordingPlayback />", () => {
     it("disables play button while playback is decoding", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
-        expect(getPlayButton(component)).toHaveAttribute("disabled");
         expect(getPlayButton(component)).toHaveAttribute("aria-disabled", "true");
     });
 
@@ -88,7 +89,6 @@ describe("<RecordingPlayback />", () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         await flushPromises();
-        expect(getPlayButton(component)).not.toHaveAttribute("disabled");
         expect(getPlayButton(component)).not.toHaveAttribute("aria-disabled", "true");
     });
 
@@ -108,7 +108,6 @@ describe("<RecordingPlayback />", () => {
         await playback.prepare();
         const component = getComponent({ playback });
         // playback already decoded, button is not disabled
-        expect(getPlayButton(component)).not.toHaveAttribute("disabled");
         expect(getPlayButton(component)).not.toHaveAttribute("aria-disabled", "true");
         expect(component.container.querySelector(".text-warning")).toBeFalsy();
     });

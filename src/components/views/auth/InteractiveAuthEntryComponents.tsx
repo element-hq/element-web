@@ -460,7 +460,7 @@ export class EmailIdentityAuthEntry extends React.Component<
                                     a: (text: string) => (
                                         <Fragment>
                                             <AccessibleButton kind="link_inline" onClick={null} disabled>
-                                                {text} <Spinner w={14} h={14} />
+                                                {text} <Spinner size={14} />
                                             </AccessibleButton>
                                         </Fragment>
                                     ),
@@ -875,7 +875,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
                 {errorSection}
                 <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
                     {this.props.busy ? (
-                        <Spinner w={24} h={24} />
+                        <Spinner size={24} />
                     ) : (
                         <>
                             {cancelButton}

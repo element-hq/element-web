@@ -8,13 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 import { Text, Heading, Button, Separator } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import { Flex } from "@element-hq/web-shared-components";
+import { LinuxIcon, MacIcon, WindowsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import SdkConfig from "../../SdkConfig";
-import { Flex } from "../../shared-components/utils/Flex";
 import { _t } from "../../languageHandler";
-import { Icon as AppleIcon } from "../../../res/themes/element/img/compound/apple.svg";
-import { Icon as MicrosoftIcon } from "../../../res/themes/element/img/compound/microsoft.svg";
-import { Icon as LinuxIcon } from "../../../res/themes/element/img/compound/linux.svg";
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // PostCSS variables will be accessible.
@@ -86,17 +84,17 @@ const DesktopAppLinks: React.FC<{
     return (
         <Flex gap="var(--cpd-space-4x)" className="mx_ErrorView_flexContainer">
             {macOsUrl && (
-                <Button as="a" href={macOsUrl} kind="secondary" Icon={AppleIcon}>
+                <Button as="a" href={macOsUrl} kind="secondary" Icon={MacIcon}>
                     {_t("incompatible_browser|macos")}
                 </Button>
             )}
             {win64Url && (
-                <Button as="a" href={win64Url} kind="secondary" Icon={MicrosoftIcon}>
+                <Button as="a" href={win64Url} kind="secondary" Icon={WindowsIcon}>
                     {_t("incompatible_browser|windows_64bit")}
                 </Button>
             )}
             {win64ArmUrl && (
-                <Button as="a" href={win64ArmUrl} kind="secondary" Icon={MicrosoftIcon}>
+                <Button as="a" href={win64ArmUrl} kind="secondary" Icon={WindowsIcon}>
                     {_t("incompatible_browser|windows_arm_64bit")}
                 </Button>
             )}

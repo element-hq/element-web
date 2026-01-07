@@ -87,9 +87,7 @@
         "no": "Nē",
         "ok": "Labi",
         "open": "Atvērt",
-        "pause": "Pauzēt",
         "pin": "Piespraust",
-        "play": "Atskaņot",
         "proceed": "Turpināt",
         "quote": "Citēt",
         "react": "Reaģēt",
@@ -568,7 +566,6 @@
         "user": "Lietotājs",
         "user_avatar": "Profila attēls",
         "username": "Lietotājvārds",
-        "verification_cancelled": "Apliecināšana atcelta",
         "verified": "Verificēts",
         "version": "Versija",
         "video": "Video",
@@ -875,7 +872,6 @@
             "title": "Atkopšanas metode noņemta",
             "warning": "Ja nenoņēmi atkopšanas veidu, var būt, ka uzbrucējs mēģina piekļūt Tavam kontam. Nekavējoties jānomaina sava konta parole un jāiestata jauns atkopšanas veids."
         },
-        "reset_all_button": "Aizmirsāt vai pazaudējāt visas atkopšanās iespējas? <a>Atiestatiet visu</a>",
         "set_up_toast_title": "Iestatīt drošu rezerves dublēšanu",
         "setup_secure_backup": {
             "explainer": "Pirms izrakstīšanās iestatiet atslēgu dublēšanu, lai izvairītos no tās pazaudēšanas."
@@ -894,12 +890,8 @@
             "after_new_login": {
                 "device_verified": "Ierīce ir verificēta",
                 "skip_verification": "Pagaidām izlaist verifikāciju",
-                "unable_to_verify": "Neizdevās verificēt šo ierīci",
                 "verify_this_device": "Verificēt šo ierīci"
             },
-            "cancelled": "Tu atcēli apliecināšanu.",
-            "cancelled_self": "Jūs atcēlāt verifikāciju citā savā ierīcē.",
-            "cancelled_user": "%(displayName)s atcēla apliecināšanu.",
             "cancelling": "Atcelšana...",
             "complete_action": "Sapratu",
             "complete_description": "Tu esi veiksmīgi apliecinājis šo lietotāju.",
@@ -914,46 +906,33 @@
             "incoming_sas_dialog_waiting": "Gaida partnera apstiprinājumu…",
             "incoming_sas_user_dialog_text_1": "Apliecināt šo lietotāju, lai atzīmētu to kā uzticamu. Uzticēšanās lietotājiem sniedz papildu mieru, kad tiek izmantotas pilnīgi šifrētas ziņas.",
             "incoming_sas_user_dialog_text_2": "Šī lietotāja apliecināšana atzīmēs viņa sesiju kā uzticamu, kā arī atzīmēs šo sesiju kā viņam uzticamu.",
-            "no_key_or_device": "Izskatās, ka Tev nav drošības atslēgas vai citu ierīču, kurās varētu veikt apliecināšanu. Šajā ierīcē nebūs iespējams piekļūt vecām šifrētajām ziņām. Lai šajā ierīcē apliecinātu savu identitāti, būs nepieciešams atiestatīt savas apliecināšanas atslēgas.",
             "no_support_qr_emoji": "Ierīce, kuru mēģini apliecināt, nenodrošina kvadrātkoda nolasīšanu vai emocijzīmju apliecināšanu, ko nodrošina %(brand)s. Jāmēģina ar citu klientu.",
             "other_party_cancelled": "Otra puse atcēla apliecināšanu.",
             "prompt_encrypted": "Apliecināt visus istabā esošos lietotājus, lai nodrošinātu tās drošību.",
-            "prompt_self": "Apliecināšana jāuzsāk vēlreiz no paziņojuma.",
             "prompt_unencrypted": "Šifrētās apliecināt visus lietotājus, lai nodrošinātu, ka tās ir drošas.",
-            "prompt_user": "Apliecināšana jāuzsāk vēlreiz no viņu profila.",
             "qr_or_sas": "%(qrCode)s vai %(emojiCompare)s",
-            "qr_or_sas_header": "Verificējiet šo ierīci, veicot vienu no šīm darbībām:",
             "qr_prompt": "Noskenējiet šo unikālo kodu",
-            "qr_reciprocate_same_shield_device": "Gandrīz esam galā! Vai cita jūsu ierīce rāda tādu pašu vairogu?",
             "qr_reciprocate_same_shield_user": "Gandrīz galā! Vai %(displayName)s tiek parādīts tas pats vairogs?",
-            "request_toast_accept": "Apliecināt sesiju",
             "request_toast_accept_user": "Apliecināt lietotāju",
             "request_toast_decline_counter": "Neņemt vērā (%(counter)s)",
             "request_toast_detail": "%(deviceId)s no %(ip)s",
-            "reset_proceed_prompt": "Turpināt atiestatīšanu",
             "sas_caption_self": "Apliecināt šo ierīci, apstiprinot, ka ekrānā parādās šis skaitlis.",
             "sas_caption_user": "Apliecināt šo lietotāju, apstiprinot, ka zemāk esošais numurs pārādās lietotāja ekrānā.",
             "sas_description": "Salīdziniet unikālu emocijzīmju kopu, ja nevienai ierīcei nav kameras",
-            "sas_emoji_caption_self": "Apstiprināt, ka zemāk esošās emocijzīmes air attēlotas abās ierīcēs tādā pašā secībā:",
             "sas_emoji_caption_user": "Apliecināt šo lietotāju, apstiprinot, ka zemāk esošās emocijzīmes pārādās lietotāja ekrānā.",
             "sas_match": "Tās sakrīt",
             "sas_no_match": "Tās nesakrīt",
             "sas_prompt": "Jāsalīdzina vienreizējās emocijzīmes",
             "scan_qr": "Apliecināt ar nolasīšanu",
             "scan_qr_explainer": "Jāvaicā %(displayName)s nolasīt šo kodu:",
-            "self_verification_hint": "Lai turpinātu, lūgums apstiprināt apliecinājuma pieprasījumu otrā ierīcē.",
             "start_button": "Uzsākt apliecināšanu",
-            "successful_device": "Ir veiksmīgi apliecināta %(deviceName)s (%(deviceId)s).",
-            "successful_own_device": "Ierīce ir veiksmīgi apliecināta.",
             "successful_user": "Ir veiksmīgi apliecināts %(displayName)s!",
-            "timed_out": "Verifikācijai iestājās noilgums.",
             "unsupported_method": "Neizdevās atrast atbalstītu verifikācijas metodi.",
             "unverified_session_toast_accept": "Jā, tas biju es",
             "unverified_session_toast_title": "Jauna pieteikšanās. Vai tas biji Tu?",
             "unverified_sessions_toast_description": "Pārskatīt, lai nodrošinātu, ka konts ir drosībā.",
             "unverified_sessions_toast_reject": "Vēlāk",
             "unverified_sessions_toast_title": "Tev ir neapliecinātas sesijas",
-            "verification_description": "Verificējiet savu identitāti, lai piekļūtu šifrētām ziņām un pierādītu savu identitāti citiem.",
             "verification_dialog_title_device": "Apliecināt otru ierīci",
             "verification_dialog_title_user": "Apliecināšanas pieprasījums",
             "verification_skip_warning": "Neveicot verifikāciju, jums nebūs piekļuves visām savām ziņām, kā arī ierīce var tikt parādīta citiem kā neuzticama.",
@@ -963,9 +942,6 @@
             "verify_emoji_prompt": "Apliecināt ar vienreizēju emocijzīmu salīdzināšanu.",
             "verify_emoji_prompt_qr": "Ja nevar nolasīt augstāk esošo kodu, var apliecināt ar vienreizēju emocijzīmju salīdzināšanu.",
             "verify_later": "Es verificēšu vēlāk",
-            "verify_using_device": "Verificēt ar citu ierīci",
-            "verify_using_key": "Verificēt ar drošības atslēgu",
-            "verify_using_key_or_phrase": "Verificēt, izmantojot drošības atslēgu vai frāzi",
             "waiting_for_user_accept": "Gaida, kamēr %(displayName)s apstiprinās…",
             "waiting_other_device": "Gaida, kamēr jūs verificēsiet citā savā ierīcē...",
             "waiting_other_device_details": "Gaida, kamēr jūs verificēsiet citā ierīcē - %(deviceName)s (%(deviceId)s)…",
@@ -1249,7 +1225,6 @@
         "upload_file": "Augšupielādēt datni"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Atļaut tikai ekrāna kopīgošanas režīmu",
         "ask_to_join": "Iespējot aicinājumus pievienoties",
         "automatic_debug_logs": "Automātiski nosūtīt atkļūdošanas žurnālus par jebkuru kļūdu",
         "automatic_debug_logs_decryption": "Automātiski nosūtīt atkļūdošanas žurnālus par atšifrēšanas kļūdām",
@@ -1575,8 +1550,6 @@
         "files_button": "Datnes",
         "pinned_messages": {
             "limits": {
-                "zero": "",
-                "one": "",
                 "other": "Varat piespraust ne vairāk kā %(count)s logrīkus"
             }
         },
@@ -1705,8 +1678,6 @@
             "send_message_start_dm": "Nosūtiet savu pirmo ziņu, lai uzaicinātu <displayName/> uz tērzēšanu",
             "start_of_dm_history": "Šis ir sākums tiešās sarakstes vēsturei ar <displayName/>.",
             "start_of_room": "Šis ir <roomName/> istabas pats sākums.",
-            "topic": "Temats: %(topic)s ",
-            "topic_edit": "Temats: %(topic)s (<a>redigēt</a>)",
             "unencrypted_warning": "Pilnīga šifrēšana nav iespējota",
             "user_created": "%(displayName)s izveidoja šo istabu.",
             "you_created": "Tu izveidoji šo istabu."
@@ -2069,7 +2040,6 @@
             "error_update_guest_access": "Neizdevās atjaunināt viesa piekļuvi šai telpai",
             "error_update_history_visibility": "Neizdevās atjaunināt šīs telpas vēstures redzamību",
             "guest_access_explainer": "Viesi var pievienoties telpai bez konta.",
-            "guest_access_explainer_public_space": "Tas var būt noderīgi publiskās telpās.",
             "guest_access_label": "Iespējot piekļuvi viesiem",
             "history_visibility_anyone_space": "Priekšskatīt telpu",
             "history_visibility_anyone_space_description": "Ļaujiet cilvēkiem priekšskatīt jūsu telpu pirms pievienošanās.",
@@ -2511,7 +2481,6 @@
             "spaces_explainer": "Telpas ir veids, kā grupēt istabas un cilvēkus. Papildus telpām, kurās atrodaties, varat izmantot arī dažas sākotnēji veidotās telpas.",
             "title": "Sānjoslas"
         },
-        "start_automatically": "Startēt pie ierīces ielādes",
         "use_12_hour_format": "Rādīt laiku 12 stundu formātā (piemēram 2:30pm)",
         "use_command_enter_send_message": "Lietot Command + Enter ziņas nosūtīšanai",
         "use_command_f_search": "Lietot Command + F meklēšanai laika skalā",
@@ -2791,24 +2760,10 @@
         "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
     },
     "time": {
-        "about_day_ago": "aptuveni dienu iepriekš",
-        "about_hour_ago": "aptuveni stundu iepriekš",
-        "about_minute_ago": "aptuveni minūti iepriekš",
         "date_at_time": "%(date)s pulksten %(time)s",
-        "few_seconds_ago": "pirms dažām sekundēm",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)s m %(seconds)s s atlicis",
-        "in_about_day": "aptuveni dienu kopš šī brīža",
-        "in_about_hour": "aptuveni stundu kopš šī brīža",
-        "in_about_minute": "aptuveni minūti kopš šī brīža",
-        "in_few_seconds": "dažas sekundes kopš šī brīža",
-        "in_n_days": "%(num)s dienas kopš šī brīža",
-        "in_n_hours": "%(num)s stundas kopš šī brīža",
-        "in_n_minutes": "%(num)s minūtes kopš šī brīža",
         "left": "%(timeRemaining)s atlicis",
         "minutes_seconds_left": "%(minutes)sm %(seconds)s s atlicis",
-        "n_days_ago": "%(num)s dienas iepriekš",
-        "n_hours_ago": "%(num)s stundas iepriekš",
-        "n_minutes_ago": "%(num)s minūtes iepriekš",
         "seconds_left": "%(seconds)s sekundes atlikušas",
         "short_days": "%(value)s d.",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -2855,8 +2810,7 @@
         "m.audio": {
             "error_downloading_audio": "Kļūda skaņas lejupielādēšanā",
             "error_processing_audio": "Kļūda audio ziņas apstrādē",
-            "error_processing_voice_message": "Balss ziņas apstrādes kļūda",
-            "unnamed_audio": "Nenosaukts audio"
+            "error_processing_voice_message": "Balss ziņas apstrādes kļūda"
         },
         "m.beacon_info": {
             "view_live_location": "Skatīties reāllaika atrašanās vietu"
@@ -2915,7 +2869,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Beidzās aptauja",
             "sender_ended": "%(senderName)s pārtrauca aptauju"
         },
         "m.poll.start": "%(senderName)s uzsāka aptauju- %(pollQuestion)s",

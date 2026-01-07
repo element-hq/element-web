@@ -21,7 +21,7 @@ import { render } from "jest-matrix-react";
 import { type ReactElement } from "react";
 import { type Mocked, mocked } from "jest-mock";
 
-import { textForEvent } from "../../src/TextForEvent";
+import { hasText, textForEvent } from "../../src/TextForEvent";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { createTestClient, stubClient } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -664,24 +664,24 @@ describe("TextForEvent", () => {
             ["the legacy key", { topic: "My topic" }, { result: '@a changed the topic to "My topic".' }],
             [
                 "the legacy key with an empty m.topic key",
-                { "topic": "My topic", "m.topic": [] },
+                { "topic": "My topic", "m.topic": { "m.text": [] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             [
                 "the m.topic key",
-                { "topic": "Ignore this", "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { "topic": "Ignore this", "m.topic": { "m.text": [{ mimetype: "text/plain", body: "My topic" }] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             [
                 "the m.topic key and the legacy key undefined",
-                { "topic": undefined, "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { "topic": undefined, "m.topic": { "m.text": [{ mimetype: "text/plain", body: "My topic" }] } },
                 { result: '@a changed the topic to "My topic".' },
             ],
             ["the legacy key undefined", { topic: undefined }, { result: "@a removed the topic." }],
             ["the legacy key empty string", { topic: "" }, { result: "@a removed the topic." }],
             [
                 "both the legacy and new keys removed",
-                { "topic": undefined, "m.topic": [] },
+                { "topic": undefined, "m.topic": { "m.text": [] } },
                 { result: "@a removed the topic." },
             ],
         ];
@@ -698,6 +698,22 @@ describe("TextForEvent", () => {
                     mockClient,
                 ),
             ).toEqual(result);
+        });
+    });
+
+    describe("hasText", () => {
+        it("should return true for a known handler given an invalid event", async () => {
+            const cli = stubClient();
+            const ev = new MatrixEvent({
+                type: "m.room.name",
+                content: {
+                    name: { foo: "bar" },
+                },
+                state_key: "",
+                room_id: "!roomId",
+                sender: cli.getUserId()!,
+            });
+            expect(hasText(ev, cli, false)).toBe(true);
         });
     });
 });

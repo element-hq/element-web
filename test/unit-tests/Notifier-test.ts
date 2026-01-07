@@ -19,7 +19,7 @@ import {
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
-import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { CallMembership, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
@@ -371,6 +371,7 @@ describe("Notifier", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+            jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
 
             mockClient.getPushActionsForEvent.mockReturnValue({
                 notify: true,
@@ -384,39 +385,55 @@ describe("Notifier", () => {
             jest.resetAllMocks();
         });
 
-        const emitCallNotifyEvent = (type?: string, roomMention = true) => {
-            const callEvent = mkEvent({
-                type: type ?? EventType.CallNotify,
+        const emitCallNotificationEvent = (
+            params: {
+                type?: string;
+                roomMention?: boolean;
+                lifetime?: number;
+                ts?: number;
+            } = {},
+        ) => {
+            const { type, roomMention, lifetime, ts } = {
+                type: EventType.RTCNotification,
+                roomMention: true,
+                lifetime: 30000,
+                ts: Date.now(),
+                ...params,
+            };
+            const notificationEvent = mkEvent({
+                type: type,
                 user: "@alice:foo",
                 room: roomId,
+                ts,
                 content: {
-                    "application": "m.call",
+                    "notification_type": "ring",
+                    "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
                     "m.mentions": { user_ids: [], room: roomMention },
-                    "notify_type": "ring",
-                    "call_id": "abc123",
+                    lifetime,
+                    "sender_ts": ts,
                 },
                 event: true,
             });
-            emitLiveEvent(callEvent);
-            return callEvent;
+            emitLiveEvent(notificationEvent);
+            return notificationEvent;
         };
 
         it("shows group call toast", () => {
-            const notifyEvent = emitCallNotifyEvent();
+            const notificationEvent = emitCallNotificationEvent();
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    key: getIncomingCallToastKey(notifyEvent.getContent().call_id ?? "", roomId),
+                    key: getIncomingCallToastKey(notificationEvent.getId() ?? "", roomId),
                     priority: 100,
                     component: IncomingCallToast,
                     bodyClassName: "mx_IncomingCallToast",
-                    props: { notifyEvent },
+                    props: { notificationEvent },
                 }),
             );
         });
 
         it("should not show toast when group call is already connected", () => {
-            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
+            const members = [
                 new CallMembership(
                     mkEvent({
                         event: true,
@@ -426,25 +443,38 @@ describe("Notifier", () => {
                         content: {},
                     }),
                     {
-                        call_id: "123",
-                        application: "m.call",
-                        focus_active: { type: "livekit" },
-                        foci_preferred: [],
-                        device_id: "DEVICE",
+                        kind: "session",
+                        data: {
+                            call_id: "123",
+                            application: "m.call",
+                            focus_active: { type: "livekit", focus_selection: "oldest_membership" },
+                            foci_preferred: [],
+                            device_id: "DEVICE",
+                        },
                     },
+                    "hashed_id_XXXAAAAA",
                 ),
-            ]);
+            ];
 
-            const roomSession = MatrixRTCSession.roomSessionForRoom(mockClient, testRoom);
+            const mockRtcSession = {
+                memberships: members,
+                slotDescription: { application: "m.call", id: "" },
+            } as unknown as MatrixRTCSession;
 
-            mockClient.matrixRTC.getRoomSession.mockReturnValue(roomSession);
-            emitCallNotifyEvent();
+            mockClient.matrixRTC.getRoomSession.mockReturnValue(mockRtcSession);
+
+            emitCallNotificationEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
-            spyCallMemberships.mockRestore();
         });
 
-        it("should not show toast when calling with non-group call event", () => {
-            emitCallNotifyEvent("event_type");
+        it("should not show toast when calling with a different event type to org.matrix.msc4075.rtc.notification", () => {
+            emitCallNotificationEvent({ type: "event_type" });
+
+            expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+        });
+
+        it("should not show notification event is expired", () => {
+            emitCallNotificationEvent({ ts: Date.now() - 40000 });
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
         });

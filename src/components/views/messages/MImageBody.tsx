@@ -35,6 +35,7 @@ import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { isMimeTypeAllowed } from "../../../utils/blobs.ts";
 
 enum Placeholder {
     NoImage,
@@ -101,7 +102,16 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             }
 
             const content = this.props.mxEvent.getContent<ImageContent>();
-            const httpUrl = this.state.contentUrl;
+
+            let httpUrl = this.state.contentUrl;
+            if (
+                this.props.mediaEventHelper?.media.isEncrypted &&
+                !isMimeTypeAllowed(this.props.mediaEventHelper.sourceBlob.cachedValue?.type ?? "")
+            ) {
+                // contentUrl will be a blob URI mime-type=application/octet-stream so fall back to the thumbUrl instead
+                httpUrl = this.state.thumbUrl;
+            }
+
             if (!httpUrl) return;
             const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
                 src: httpUrl,
@@ -311,10 +321,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                     // then we need to check if the image is animated by downloading it.
                     if (
                         content.info?.["org.matrix.msc4230.is_animated"] === false ||
-                        !(await blobIsAnimated(
-                            content.info?.mimetype,
-                            await this.props.mediaEventHelper!.sourceBlob.value,
-                        ))
+                        (await blobIsAnimated(await this.props.mediaEventHelper!.sourceBlob.value)) === false
                     ) {
                         isAnimated = false;
                     }
@@ -621,7 +628,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 return <Blurhash className="mx_Blurhash" hash={blurhash} width={width} height={height} />;
             }
         }
-        return <Spinner w={32} h={32} />;
+        return <Spinner size={32} />;
     }
 
     // Overridden by MStickerBody
@@ -649,6 +656,15 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent<ImageContent>();
+
+        // Fall back to MFileBody if we are unable to render this image e.g. in the case of a blob svg
+        if (
+            this.props.mediaEventHelper?.media.isEncrypted &&
+            !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
+            !content.info?.thumbnail_info
+        ) {
+            return <MFileBody {...this.props} />;
+        }
 
         if (this.state.error) {
             let errorText = _t("timeline|m.image|error");
@@ -686,7 +702,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
 // Wrap MImageBody component so we can use a hook here.
 const MImageBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
     return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 

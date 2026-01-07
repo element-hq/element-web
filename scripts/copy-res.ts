@@ -6,11 +6,13 @@ import parseArgs from "minimist";
 import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
-import { util } from "webpack";
-import { Translations } from "matrix-web-i18n";
+import webpack from "webpack";
+import type { Translations } from "matrix-web-i18n";
 
-const I18N_BASE_PATH = "src/i18n/strings/";
-const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH)])]
+const EW_I18N_BASE_PATH = "src/i18n/strings/";
+const SC_I18N_BASE_PATH = "packages/shared-components/src/i18n/strings/";
+
+const INCLUDE_LANGS = [...new Set([...fs.readdirSync(EW_I18N_BASE_PATH)])]
     .filter((fn) => fn.endsWith(".json"))
     .map((f) => f.slice(0, -5));
 
@@ -41,11 +43,17 @@ const logWatch = (path: string) => {
     }
 };
 
-function prepareLangFile(lang: string, dest: string): [filename: string, json: string] {
-    const path = I18N_BASE_PATH + lang + ".json";
+/*
+ * Make a JSON language file for the given language by merging all translations
+ * into a single file (ie. element-web and shared-components).
+ * Returns the filename (including hash) and JSON content.
+ */
+function prepareLangFile(lang: string): [filename: string, json: string] {
+    const ewTranslationsPath = EW_I18N_BASE_PATH + lang + ".json";
+    const scTranslationsPath = SC_I18N_BASE_PATH + lang + ".json";
 
     let translations: Translations = {};
-    [path].forEach(function (f) {
+    [ewTranslationsPath, scTranslationsPath].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
                 translations = _.merge(translations, JSON.parse(fs.readFileSync(f).toString()));
@@ -58,7 +66,7 @@ function prepareLangFile(lang: string, dest: string): [filename: string, json: s
 
     const json = JSON.stringify(translations, null, 4);
     const jsonBuffer = Buffer.from(json);
-    const digest = util.createHash("xxhash64").update(jsonBuffer).digest("hex").slice(0, 7);
+    const digest = webpack.util.createHash("xxhash64").update(jsonBuffer).digest("hex").slice(0, 7);
     const filename = `${lang}.${digest}.json`;
 
     return [filename, json];
@@ -99,7 +107,8 @@ function genLangList(langFileMap: Record<string, string>): void {
  * and regenerating languages.json with the new filename
  */
 function watchLanguage(lang: string, dest: string, langFileMap: Record<string, string>): void {
-    const path = I18N_BASE_PATH + lang + ".json";
+    const ewTranslationsPath = EW_I18N_BASE_PATH + lang + ".json";
+    const scTranslationsPath = SC_I18N_BASE_PATH + lang + ".json";
 
     // XXX: Use a debounce because for some reason if we read the language
     // file immediately after the FS event is received, the file contents
@@ -110,14 +119,14 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
             clearTimeout(makeLangDebouncer);
         }
         makeLangDebouncer = setTimeout(() => {
-            const [filename, json] = prepareLangFile(lang, dest);
+            const [filename, json] = prepareLangFile(lang);
             genLangFile(dest, filename, json);
             langFileMap[lang] = filename;
             genLangList(langFileMap);
         }, 500);
     };
 
-    [path].forEach(function (f) {
+    [ewTranslationsPath, scTranslationsPath].forEach(function (f) {
         chokidar
             .watch(f, { ignoreInitial: true })
             .on("ready", () => {
@@ -132,7 +141,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
 // language resources
 const I18N_DEST = "webapp/i18n/";
 const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce<Record<string, string>>((m, l) => {
-    const [filename, json] = prepareLangFile(l, I18N_DEST);
+    const [filename, json] = prepareLangFile(l);
     if (!watch) {
         genLangFile(I18N_DEST, filename, json);
     }

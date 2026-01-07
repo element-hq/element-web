@@ -13,11 +13,12 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_Dialog {
-        width: fit-content;
-        border-radius: 8px;
+        /* !important because it's overriding compound  */
+        width: fit-content !important;
+        border-radius: 8px !important;
+        height: 60% !important;
         overflow-y: initial;
         position: relative;
-        height: 60%;
         padding: 0;
         contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
 
@@ -93,15 +94,15 @@ Please see LICENSE files in the repository root for full details.
             }
 
             &.mx_SpotlightDialog_filterPeople::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile.svg");
             }
 
             &.mx_SpotlightDialog_filterPublicRooms::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
 
             &.mx_SpotlightDialog_filterPublicSpaces::before {
-                mask-image: url("$(res)/img/element-icons/spaces.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/space.svg");
             }
 
             .mx_SpotlightDialog_filter--close {
@@ -150,6 +151,16 @@ Please see LICENSE files in the repository root for full details.
             height: unset;
             margin-left: $spacing-16;
         }
+
+        &:not(:focus-within) + #mx_SpotlightDialog_content {
+            /* Inhibit the styling if focus is not within the input which handles keyboard accessibility */
+            --mx_SpotlightDialog_option_selectedBgColor: transparent;
+
+            /* Hide the enter prompt as in this state pressing enter would not actuate that option */
+            .mx_SpotlightDialog_enterPrompt {
+                visibility: hidden;
+            }
+        }
     }
 
     #mx_SpotlightDialog_content {
@@ -193,6 +204,17 @@ Please see LICENSE files in the repository root for full details.
             }
         }
 
+        .mx_SpotlightDialog_option {
+            border-radius: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:hover,
+            &[aria-selected="true"] {
+                background-color: var(--mx_SpotlightDialog_option_selectedBgColor, $quinary-content);
+            }
+        }
+
         .mx_SpotlightDialog_recentlyViewed {
             > div {
                 display: flex;
@@ -202,7 +224,6 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_option {
-                border-radius: 8px;
                 padding: $spacing-4;
                 color: $primary-content;
                 font-size: $font-12px;
@@ -213,8 +234,6 @@ Please see LICENSE files in the repository root for full details.
                 min-width: 58px;
                 box-sizing: border-box;
                 text-align: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
 
                 .mx_DecoratedRoomAvatar {
                     margin: 0 9px $spacing-4; /* maintain centering */
@@ -222,11 +241,6 @@ Please see LICENSE files in the repository root for full details.
 
                 & + .mx_SpotlightDialog_option {
                     margin-left: $spacing-16;
-                }
-
-                &:hover,
-                &[aria-selected="true"] {
-                    background-color: $quinary-content;
                 }
             }
         }
@@ -236,8 +250,9 @@ Please see LICENSE files in the repository root for full details.
         .mx_SpotlightDialog_otherSearches,
         .mx_SpotlightDialog_hiddenResults {
             .mx_SpotlightDialog_option {
+                --mx_SpotlightDialog_option_selectedBgColor: $system;
+
                 padding: 6px $spacing-4;
-                border-radius: 8px;
                 font-size: $font-15px;
                 line-height: $font-24px;
                 color: $primary-content;
@@ -245,8 +260,6 @@ Please see LICENSE files in the repository root for full details.
                 display: flex;
                 align-items: center;
                 white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
 
                 .mx_SpotlightDialog_option--endAdornment {
                     display: inline-flex;
@@ -328,41 +341,30 @@ Please see LICENSE files in the repository root for full details.
 
                 .mx_SpotlightDialog_option--menu,
                 .mx_SpotlightDialog_option--notifications {
-                    width: 20px;
-                    min-width: 20px;
-                    height: 20px;
+                    width: 16px;
+                    height: 16px;
+                    padding: var(--cpd-space-0-5x);
+                    flex-shrink: 0;
                     margin-top: auto;
                     margin-bottom: auto;
                     position: relative;
                     display: none;
 
-                    &::before {
-                        top: 2px;
-                        left: 2px;
-                        content: "";
-                        width: 16px;
-                        height: 16px;
-                        position: absolute;
-                        mask-position: center;
-                        mask-size: contain;
-                        mask-repeat: no-repeat;
-                        background: $tertiary-content;
+                    svg {
+                        width: inherit;
+                        height: inherit;
+                        display: block;
+                        color: $tertiary-content;
                     }
 
-                    &:hover::before,
-                    &[aria-selected="true"]::before {
-                        background-color: $secondary-content;
+                    &:hover svg,
+                    &:focus-visible svg {
+                        color: $secondary-content;
                     }
-                }
-
-                .mx_SpotlightDialog_option--menu::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
                 }
 
                 &:hover,
                 &[aria-selected="true"] {
-                    background-color: $system;
-
                     .mx_SpotlightDialog_option--menu,
                     .mx_SpotlightDialog_option--notifications {
                         display: block;
@@ -404,7 +406,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpotlightDialog_createRoom .mx_AccessibleButton::before {
-            mask-image: url("$(res)/img/element-icons/roomlist/hash.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
         }
 
         .mx_SpotlightDialog_otherSearches {
@@ -433,27 +435,27 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_SpotlightDialog_startChat::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile.svg");
             }
 
             .mx_SpotlightDialog_joinRoomAlias::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
 
             .mx_SpotlightDialog_explorePublicRooms::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
 
             .mx_SpotlightDialog_explorePublicSpaces::before {
-                mask-image: url("$(res)/img/element-icons/spaces.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/space.svg");
             }
 
             .mx_SpotlightDialog_startGroupChat::before {
-                mask-image: url("$(res)/img/element-icons/group-members.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/group.svg");
             }
 
             .mx_SpotlightDialog_searchMessages::before {
-                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/chat.svg");
             }
 
             .mx_SpotlightDialog_otherSearches_messageSearchText {
@@ -501,19 +503,19 @@ Please see LICENSE files in the repository root for full details.
             mask-size: contain;
 
             &.mx_SpotlightDialog_metaspaceResult_home-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/home-solid.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/home.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_favourites-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/favourite-solid.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/favourite.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_people-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_orphans-space {
-                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
             }
         }
     }

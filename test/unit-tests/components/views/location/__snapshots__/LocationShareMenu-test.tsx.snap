@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<LocationShareMenu /> with live location disabled goes to labs flag screen after live options is clicked 1`] = `
 <div
@@ -18,41 +18,50 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
   >
     Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.
   </p>
-  <div
-    class="mx_SettingsFlag"
-    data-testid="enable-live-share-toggle"
+  <form
+    class="_root_19upo_16"
   >
-    <span
-      class="mx_SettingsFlag_label"
+    <div
+      class="_inline-field_19upo_32"
     >
       <div
-        id="mx_LabelledToggleSwitch_«r0»"
+        class="_inline-field-control_19upo_44"
       >
-        Enable live location sharing
+        <div
+          class="_container_udcm8_10"
+        >
+          <input
+            class="_input_udcm8_24"
+            id="_r_0_"
+            role="switch"
+            type="checkbox"
+          />
+          <div
+            class="_ui_udcm8_34"
+          />
+        </div>
       </div>
-    </span>
-    <div
-      aria-checked="false"
-      aria-disabled="false"
-      aria-labelledby="mx_LabelledToggleSwitch_«r0»"
-      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-      role="switch"
+      <div
+        class="_inline-field-body_19upo_38"
+      >
+        <label
+          class="_label_19upo_59"
+          for="_r_0_"
+        >
+          Enable live location sharing
+        </label>
+      </div>
+    </div>
+    <button
+      aria-disabled="true"
+      class="_button_13vu4_8 mx_EnableLiveShare_button"
+      data-kind="primary"
+      data-size="lg"
+      role="button"
       tabindex="0"
     >
-      <div
-        class="mx_ToggleSwitch_ball"
-      />
-    </div>
-  </div>
-  <button
-    aria-disabled="true"
-    class="mx_AccessibleButton mx_EnableLiveShare_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
-    data-testid="enable-live-share-submit"
-    disabled=""
-    role="button"
-    tabindex="0"
-  >
-    OK
-  </button>
+      OK
+    </button>
+  </form>
 </div>
 `;

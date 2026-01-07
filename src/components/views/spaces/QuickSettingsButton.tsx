@@ -13,7 +13,9 @@ import {
     UserProfileSolidIcon,
     FavouriteSolidIcon,
     PinSolidIcon,
+    SettingsSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { IconButton, Text, Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
@@ -33,7 +35,7 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;
 }> = ({ isPanelCollapsed = false }) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLButtonElement>();
 
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
         useSettingValue("Spaces.enabledMetaSpaces");
@@ -135,19 +137,38 @@ const QuickSettingsButton: React.FC<{
         );
     }
 
+    let button = (
+        <IconButton
+            aria-label={_t("quick_settings|title")}
+            className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
+            onClick={openMenu}
+            title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
+            ref={handle}
+            aria-expanded={!isPanelCollapsed}
+        >
+            <>
+                <SettingsSolidIcon />
+                {/* This is dirty, but we need to add the label to the indicator icon */}
+                {!isPanelCollapsed && (
+                    <Text className="mx_QuickSettingsButton_label" as="span" size="md" title={_t("common|settings")}>
+                        {_t("common|settings")}
+                    </Text>
+                )}
+            </>
+        </IconButton>
+    );
+
+    if (isPanelCollapsed) {
+        button = (
+            <Tooltip label={_t("quick_settings|title")} placement="right">
+                {button}
+            </Tooltip>
+        );
+    }
+
     return (
         <>
-            <AccessibleButton
-                className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
-                onClick={openMenu}
-                aria-label={_t("quick_settings|title")}
-                title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
-                ref={handle}
-                aria-expanded={!isPanelCollapsed}
-            >
-                {!isPanelCollapsed ? _t("common|settings") : null}
-            </AccessibleButton>
-
+            {button}
             {contextMenu}
         </>
     );

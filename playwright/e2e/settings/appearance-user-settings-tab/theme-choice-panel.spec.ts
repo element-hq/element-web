@@ -25,7 +25,7 @@ test.describe("Appearance user settings tab", () => {
             { tag: "@screenshot" },
             async ({ page, app, util }) => {
                 // Assert that 'Match system theme' is not checked
-                await expect(util.getMatchSystemThemeCheckbox()).not.toBeChecked();
+                await expect(util.getMatchSystemThemeSwitch()).not.toBeChecked();
 
                 // Assert that the light theme is selected
                 await expect(util.getLightTheme()).toBeChecked();
@@ -41,7 +41,7 @@ test.describe("Appearance user settings tab", () => {
             "should disable the themes when the system theme is clicked",
             { tag: "@screenshot" },
             async ({ page, app, util }) => {
-                await util.getMatchSystemThemeCheckbox().click();
+                await util.getMatchSystemThemeSwitch().click();
 
                 // Assert that the themes are disabled
                 await expect(util.getLightTheme()).toBeDisabled();

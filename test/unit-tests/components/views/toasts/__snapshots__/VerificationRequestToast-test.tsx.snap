@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`VerificationRequestToast should render a cross-user verification 1`] = `
 <div>
@@ -13,7 +13,7 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
       class="mx_Toast_buttons"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -22,13 +22,13 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
         Ignore
       </button>
       <button
-        class="_button_vczzf_8"
+        class="_button_13vu4_8"
         data-kind="primary"
         data-size="sm"
         role="button"
         tabindex="0"
       >
-        Verify Session
+        Start Verification
       </button>
     </div>
   </div>
@@ -53,7 +53,7 @@ exports[`VerificationRequestToast should render a self-verification 1`] = `
       class="mx_Toast_buttons"
     >
       <button
-        class="_button_vczzf_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -62,13 +62,13 @@ exports[`VerificationRequestToast should render a self-verification 1`] = `
         Ignore
       </button>
       <button
-        class="_button_vczzf_8"
+        class="_button_13vu4_8"
         data-kind="primary"
         data-size="sm"
         role="button"
         tabindex="0"
       >
-        Verify Session
+        Start Verification
       </button>
     </div>
   </div>

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`FilePanel renders empty state 1`] = `
 <DocumentFragment>
@@ -19,7 +19,7 @@ exports[`FilePanel renders empty state 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«r0»"
+        aria-labelledby="_r_0_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -28,7 +28,7 @@ exports[`FilePanel renders empty state 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -52,7 +52,7 @@ exports[`FilePanel renders empty state 1`] = `
         class="mx_RoomView_empty"
       >
         <div
-          class="flex mx_EmptyState"
+          class="_flex_4dswl_9 mx_EmptyState"
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
         >
           <svg

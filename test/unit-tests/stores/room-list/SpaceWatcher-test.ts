@@ -136,29 +136,8 @@ describe("SpaceWatcher", () => {
         expect(filter).toBeNull();
     });
 
-    it("removes filter for favourites -> all transition", async () => {
-        await setShowAllRooms(true);
-        new SpaceWatcher(mockRoomListStore);
-
-        SpaceStore.instance.setActiveSpace(MetaSpace.Favourites);
-        expect(filter).toBeInstanceOf(SpaceFilterCondition);
-        expect(filter!["space"]).toBe(MetaSpace.Favourites);
-        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
-
-        expect(filter).toBeNull();
-    });
-
-    it("removes filter for people -> all transition", async () => {
-        await setShowAllRooms(true);
-        new SpaceWatcher(mockRoomListStore);
-
-        SpaceStore.instance.setActiveSpace(MetaSpace.People);
-        expect(filter).toBeInstanceOf(SpaceFilterCondition);
-        expect(filter!["space"]).toBe(MetaSpace.People);
-        SpaceStore.instance.setActiveSpace(MetaSpace.Home);
-
-        expect(filter).toBeNull();
-    });
+    // The new room list is now forced on, which removes the favourites and people meta spaces.
+    // So no need to test these transitions any more.
 
     it("removes filter for orphans -> all transition", async () => {
         await setShowAllRooms(true);
@@ -196,19 +175,6 @@ describe("SpaceWatcher", () => {
 
         expect(filter).toBeInstanceOf(SpaceFilterCondition);
         expect(filter!["space"]).toBe(MetaSpace.Orphans);
-    });
-
-    it("updates filter correctly for orphans -> people transition", async () => {
-        await setShowAllRooms(false);
-        SpaceStore.instance.setActiveSpace(MetaSpace.Orphans);
-
-        new SpaceWatcher(mockRoomListStore);
-        expect(filter).toBeInstanceOf(SpaceFilterCondition);
-        expect(filter!["space"]).toBe(MetaSpace.Orphans);
-        SpaceStore.instance.setActiveSpace(MetaSpace.People);
-
-        expect(filter).toBeInstanceOf(SpaceFilterCondition);
-        expect(filter!["space"]).toBe(MetaSpace.People);
     });
 
     it("updates filter correctly for space -> space transition", async () => {

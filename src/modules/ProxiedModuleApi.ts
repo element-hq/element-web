@@ -11,7 +11,6 @@ import {
     type TranslationStringsObject,
     type PlainSubstitution,
 } from "@matrix-org/react-sdk-module-api/lib/types/translations";
-import { type Optional } from "matrix-events-sdk";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import * as Matrix from "matrix-js-sdk/src/matrix";
@@ -20,7 +19,7 @@ import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib
 
 import type React from "react";
 import Modal from "../Modal";
-import { _t, type TranslationKey } from "../languageHandler";
+import { _t } from "../languageHandler";
 import { ModuleUiDialog } from "../components/views/dialogs/ModuleUiDialog";
 import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
@@ -28,20 +27,19 @@ import dispatcher from "../dispatcher/dispatcher";
 import { navigateToPermalink } from "../utils/permalinks/navigator";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { getCachedRoomIDForAlias } from "../RoomAliasCache";
 import { Action } from "../dispatcher/actions";
 import { type OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
-import SettingsStore from "../settings/SettingsStore";
 import WidgetStore, { type IApp } from "../stores/WidgetStore";
 import { type Container, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import type { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload.ts";
 
 /**
  * Glue between the `ModuleApi` interface and the react-sdk. Anticipates one instance
  * to be assigned to a single module.
  */
 export class ProxiedModuleApi implements ModuleApi {
-    private cachedTranslations: Optional<TranslationStringsObject>;
+    private cachedTranslations?: TranslationStringsObject;
 
     private overrideLoginResolve?: () => void;
 
@@ -58,7 +56,7 @@ export class ProxiedModuleApi implements ModuleApi {
     /**
      * All custom translations used by the associated module.
      */
-    public get translations(): Optional<TranslationStringsObject> {
+    public get translations(): TranslationStringsObject | undefined {
         return this.cachedTranslations;
     }
 
@@ -183,28 +181,22 @@ export class ProxiedModuleApi implements ModuleApi {
         navigateToPermalink(uri);
 
         const parts = parsePermalink(uri);
-        if (parts?.roomIdOrAlias && andJoin) {
-            let roomId: string | undefined = parts.roomIdOrAlias;
-            let servers = parts.viaServers;
-            if (roomId.startsWith("#")) {
-                roomId = getCachedRoomIDForAlias(parts.roomIdOrAlias);
-                if (!roomId) {
-                    // alias resolution failed
-                    const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(parts.roomIdOrAlias);
-                    roomId = result.room_id;
-                    if (!servers) servers = result.servers; // use provided servers first, if available
-                }
-            }
-            dispatcher.dispatch({
-                action: Action.ViewRoom,
-                room_id: roomId,
-                via_servers: servers,
-            });
-
-            if (andJoin) {
-                dispatcher.dispatch({
-                    action: Action.JoinRoom,
-                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
+        if (parts?.roomIdOrAlias) {
+            if (parts.roomIdOrAlias.startsWith("#")) {
+                dispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_alias: parts.roomIdOrAlias,
+                    via_servers: parts.viaServers ?? undefined,
+                    auto_join: andJoin ?? false,
+                    metricsTrigger: undefined,
+                });
+            } else {
+                dispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: parts.roomIdOrAlias,
+                    via_servers: parts.viaServers ?? undefined,
+                    auto_join: andJoin ?? false,
+                    metricsTrigger: undefined,
                 });
             }
         }

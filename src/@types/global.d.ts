@@ -68,9 +68,17 @@ type ElectronChannel =
     | "openDesktopCapturerSourcePicker"
     | "userAccessToken"
     | "homeserverUrl"
-    | "serverSupportedVersions";
+    | "serverSupportedVersions"
+    | "showToast";
 
 declare global {
+    // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
+    // so we don't accidentally use the methods on NodeJS.Timeout - they only exist in a subset of environments.
+    // The overload for clear{Interval,Timeout} is resolved as expected.
+    // We use `ReturnType<typeof setTimeout>` in the code to be agnostic of if this definition gets loaded.
+    function setInterval(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
+    function setTimeout(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
+
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixLogger: typeof logger;
@@ -90,7 +98,7 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
-        mxRoomListStoreV3: RoomListStoreV3Class;
+        getRoomListStoreV3: () => RoomListStoreV3Class;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;

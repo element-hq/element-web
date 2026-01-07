@@ -96,7 +96,17 @@ describe("<MatrixChat />", () => {
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsServer(),
         getVersions: jest.fn().mockResolvedValue({ versions: SERVER_SUPPORTED_MATRIX_VERSIONS }),
-        startClient: function () {
+        startClient: async function () {
+            // This `sleep` is a horrible hack, for which I am sorry.
+            //
+            // MatrixChat uses its `view` state as the tracker for the current state of its state machine. However,
+            // React state does not update immediately, with the result that if the client starts too quickly after the
+            // "OnLoggedIn" action, the state machine will be confused and the view will not be correctly updated.
+            //
+            // In practice it takes a little time for the client to start up (it has to read a load of stuff from
+            // indexedDB, so in some ways this is just a more realistic simulation of the real world 😇
+            await sleep(1);
+
             // @ts-ignore
             this.emit(ClientEvent.Sync, SyncState.Prepared, null);
         },
@@ -195,33 +205,6 @@ describe("<MatrixChat />", () => {
         localStorage.setItem("mx_device_id", deviceId);
     }
 
-    /**
-     * Wait for a bunch of stuff to happen
-     * between deciding we are logged in and removing the spinner
-     * including waiting for initial sync
-     */
-    const waitForSyncAndLoad = async (client: MatrixClient, withoutSecuritySetup?: boolean): Promise<void> => {
-        // need to wait for different elements depending on which flow
-        // without security setup we go to a loading page
-        if (withoutSecuritySetup) {
-            // wait for logged in view to load
-            await screen.findByLabelText("User menu");
-
-            // otherwise we stay on login and load from there for longer
-        } else {
-            // we are logged in, but are still waiting for the /sync to complete
-            await screen.findByText("Syncing…");
-            // initial sync
-            await act(() => client.emit(ClientEvent.Sync, SyncState.Prepared, null));
-        }
-
-        // let things settle
-        await flushPromises();
-        // and some more for good measure
-        // this proved to be a little flaky
-        await flushPromises();
-    };
-
     beforeEach(async () => {
         await clearStorage();
         Lifecycle.setSessionLockNotStolen();
@@ -305,6 +288,30 @@ describe("<MatrixChat />", () => {
         await waitFor(() => {
             expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.FocusThreadsPanel);
         });
+    });
+
+    it("should notify resizenotifier when left panel hidden", async () => {
+        getComponent();
+
+        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+
+        defaultDispatcher.dispatch({ action: "hide_left_panel" });
+
+        await waitFor(() =>
+            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+        );
+    });
+
+    it("should notify resizenotifier when left panel shown", async () => {
+        getComponent();
+
+        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+
+        defaultDispatcher.dispatch({ action: "show_left_panel" });
+
+        await waitFor(() =>
+            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+        );
     });
 
     describe("when query params have a OIDC params", () => {
@@ -523,15 +530,15 @@ describe("<MatrixChat />", () => {
                 getComponent({ realQueryParams });
 
                 defaultDispatcher.dispatch({
-                    action: "will_start_client",
+                    action: Action.WillStartClient,
                 });
                 // client successfully started
                 await waitFor(() =>
-                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
                 );
 
-                // check we get to logged in view
-                await waitForSyncAndLoad(loginClient, true);
+                // set up keys screen is rendered
+                expect(screen.getByText("Setting up keys")).toBeInTheDocument();
             });
 
             it("should persist device language when available", async () => {
@@ -1081,10 +1088,10 @@ describe("<MatrixChat />", () => {
                 getComponent();
 
                 // Then we are asked to verify our device
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
 
                 // Sanity: we are not racing with another screen update, so this heading stays visible
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
             });
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
@@ -1100,17 +1107,17 @@ describe("<MatrixChat />", () => {
                 // And MatrixChat is rendered
                 getComponent();
 
-                // When we click "Verify with another device"
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
-                const verify = screen.getByRole("button", { name: "Verify with another device" });
+                // When we click "Use another device"
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                const verify = screen.getByRole("button", { name: "Use another device" });
                 act(() => verify.click());
 
                 // And close the device verification dialog
-                const closeButton = await screen.findByRole("button", { name: "Close dialog" });
+                const closeButton = screen.getByRole("button", { name: "Close dialog" });
                 act(() => closeButton.click());
 
                 // Then we are not allowed in - we are still being asked to verify
-                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
             });
 
             describe("when query params have a loginToken", () => {
@@ -1142,18 +1149,20 @@ describe("<MatrixChat />", () => {
                     // Given force_verification is on (outer describe)
                     // And we just logged in via OIDC (inner describe)
 
+                    mocked(loginClient.getCrypto()!.userHasCrossSigningKeys).mockResolvedValue(true);
+
                     // When we load the page
                     getComponent({ realQueryParams });
 
                     defaultDispatcher.dispatch({
-                        action: "will_start_client",
+                        action: Action.WillStartClient,
                     });
                     await waitFor(() =>
-                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
+                        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ClientStarted }),
                     );
 
                     // Then we are not allowed in - we are being asked to verify
-                    await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                    await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
                 });
             });
 
@@ -1179,7 +1188,7 @@ describe("<MatrixChat />", () => {
                         .fn()
                         .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
                     isCrossSigningReady: jest.fn().mockReturnValue(false),
-                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn() }),
+                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
                 } as any;
             }
         });
@@ -1255,7 +1264,7 @@ describe("<MatrixChat />", () => {
             return renderResult;
         };
 
-        const getComponentAndLogin = async (withoutSecuritySetup?: boolean): Promise<void> => {
+        const getComponentAndLogin = async (): Promise<void> => {
             await getComponentAndWaitForReady();
 
             fireEvent.change(screen.getByLabelText("Username"), { target: { value: userName } });
@@ -1263,8 +1272,6 @@ describe("<MatrixChat />", () => {
 
             // sign in button is an input
             fireEvent.click(screen.getByDisplayValue("Sign in"));
-
-            await waitForSyncAndLoad(loginClient, withoutSecuritySetup);
         };
 
         beforeEach(() => {
@@ -1311,27 +1318,16 @@ describe("<MatrixChat />", () => {
             it("should go straight to logged in view when crypto is not enabled", async () => {
                 loginClient.getCrypto.mockReturnValue(undefined);
 
-                await getComponentAndLogin(true);
+                await getComponentAndLogin();
+
+                // wait for logged in view to load
+                await screen.findByLabelText("User menu");
 
                 expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeInTheDocument();
             });
 
-            it("should go straight to logged in view when user does not have cross signing keys and server does not support cross signing", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(false);
-
-                await getComponentAndLogin(false);
-
-                expect(loginClient.doesServerSupportUnstableFeature).toHaveBeenCalledWith(
-                    "org.matrix.e2e_cross_signing",
-                );
-
-                // logged in
-                await screen.findByLabelText("User menu");
-            });
-
-            describe("when server supports cross signing and user does not have cross signing setup", () => {
+            describe("when user does not have cross signing set up", () => {
                 beforeEach(() => {
-                    loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
                     jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
                 });
 
@@ -1358,57 +1354,48 @@ describe("<MatrixChat />", () => {
 
                     it("should go straight to logged in view when user is not in any encrypted rooms", async () => {
                         loginClient.getRooms.mockReturnValue([unencryptedRoom]);
-                        await getComponentAndLogin(false);
+                        await getComponentAndLogin();
 
-                        await flushPromises();
-
-                        // logged in, did not setup keys
+                        // logged in, did not set up keys
                         await screen.findByLabelText("User menu");
                     });
 
-                    it("should go to setup e2e screen when user is in encrypted rooms", async () => {
+                    it("should go to set up e2e screen when user is in encrypted rooms", async () => {
                         loginClient.getRooms.mockReturnValue([unencryptedRoom, encryptedRoom]);
                         await getComponentAndLogin();
-                        await flushPromises();
                         // set up keys screen is rendered
-                        expect(screen.getByText("Setting up keys")).toBeInTheDocument();
+                        await screen.findByText("Setting up keys");
                     });
                 });
 
-                it("should go to setup e2e screen", async () => {
-                    loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
+                it("should go to set up e2e screen", async () => {
                     await getComponentAndLogin();
 
-                    expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
-
                     // set up keys screen is rendered
-                    await expect(await screen.findByText("Setting up keys")).toBeInTheDocument();
+                    await screen.findByText("Setting up keys");
+
+                    expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
                 });
             });
 
-            it("should show complete security screen when user has cross signing setup", async () => {
+            it("should show complete security screen when user has cross signing set up", async () => {
                 jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(true);
 
                 await getComponentAndLogin();
 
-                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
-
-                await flushPromises();
-
                 // Complete security begin screen is rendered
-                expect(screen.getByText("Unable to verify this device")).toBeInTheDocument();
+                await screen.findByText("Confirm your identity");
+
+                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
             });
 
-            it("should setup e2e when server supports cross signing", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-
+            it("should set up e2e", async () => {
                 await getComponentAndLogin();
 
-                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
-
                 // set up keys screen is rendered
-                expect(screen.getByText("Setting up keys")).toBeInTheDocument();
+                await screen.findByText("Setting up keys");
+
+                expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
             });
         });
     });
@@ -1560,11 +1547,11 @@ describe("<MatrixChat />", () => {
             it("should continue to post login setup when no session is found in local storage", async () => {
                 getComponent({ realQueryParams });
                 defaultDispatcher.dispatch({
-                    action: "will_start_client",
+                    action: Action.WillStartClient,
                 });
 
-                // logged in but waiting for sync screen
-                await screen.findByText("Logout");
+                // set up keys screen is rendered
+                expect(await screen.findByText("Setting up keys")).toBeInTheDocument();
             });
         });
     });
@@ -1632,6 +1619,10 @@ describe("<MatrixChat />", () => {
     });
 
     describe("Multi-tab lockout", () => {
+        beforeEach(() => {
+            mockPlatformPeg();
+        });
+
         afterEach(() => {
             Lifecycle.setSessionLockNotStolen();
         });
@@ -1677,6 +1668,8 @@ describe("<MatrixChat />", () => {
             beforeEach(() => {
                 // make sure we start from a clean DOM for each of these tests
                 document.body.replaceChildren();
+                // use the MockPlatform
+                mockPlatformPeg();
             });
 
             function simulateSessionLockClaim() {
@@ -1693,8 +1686,7 @@ describe("<MatrixChat />", () => {
                 jest.spyOn(MatrixJs, "createClient").mockReturnValue(client);
 
                 const rendered = getComponent({});
-                await waitForSyncAndLoad(client, true);
-                rendered.getByText("Welcome Ernie");
+                await rendered.findByText("Welcome Ernie");
 
                 // we're now at the welcome page. Another session wants the lock...
                 simulateSessionLockClaim();
@@ -1814,7 +1806,7 @@ describe("<MatrixChat />", () => {
 
             getComponent({});
             defaultDispatcher.dispatch({
-                action: "will_start_client",
+                action: Action.WillStartClient,
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
@@ -1837,7 +1829,7 @@ describe("<MatrixChat />", () => {
 
             getComponent({});
             defaultDispatcher.dispatch({
-                action: "will_start_client",
+                action: Action.WillStartClient,
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");

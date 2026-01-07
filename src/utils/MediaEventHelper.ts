@@ -14,6 +14,7 @@ import { LazyValue } from "./LazyValue";
 import { type Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
+import { getBlobSafeMimeType } from "./blobs.ts";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
@@ -72,18 +73,25 @@ export class MediaEventHelper implements IDestroyable {
     };
 
     private fetchSource = (): Promise<Blob> => {
+        const content = this.event.getContent<MediaEventContent>();
         if (this.media.isEncrypted) {
-            const content = this.event.getContent<MediaEventContent>();
             return decryptFile(content.file!, content.info);
         }
-        return this.media.downloadSource().then((r) => r.blob());
+
+        return (
+            this.media
+                .downloadSource()
+                .then((r) => r.blob())
+                // Set the mime type from the event info on the blob
+                .then((blob) => blob.slice(0, blob.size, getBlobSafeMimeType(content.info?.mimetype ?? blob.type)))
+        );
     };
 
     private fetchThumbnail = (): Promise<Blob | null> => {
         if (!this.media.hasThumbnail) return Promise.resolve(null);
 
+        const content = this.event.getContent<ImageContent>();
         if (this.media.isEncrypted) {
-            const content = this.event.getContent<ImageContent>();
             if (content.info?.thumbnail_file) {
                 return decryptFile(content.info.thumbnail_file, content.info.thumbnail_info);
             } else {
@@ -96,7 +104,14 @@ export class MediaEventHelper implements IDestroyable {
         const thumbnailHttp = this.media.thumbnailHttp;
         if (!thumbnailHttp) return Promise.resolve(null);
 
-        return fetch(thumbnailHttp).then((r) => r.blob());
+        return (
+            fetch(thumbnailHttp)
+                .then((r) => r.blob())
+                // Set the mime type from the event info on the blob
+                .then((blob) =>
+                    blob.slice(0, blob.size, getBlobSafeMimeType(content.info?.thumbnail_info?.mimetype ?? blob.type)),
+                )
+        );
     };
 
     public static isEligible(event: MatrixEvent): boolean {
@@ -117,7 +132,7 @@ export class MediaEventHelper implements IDestroyable {
     /**
      * Determine if the media event in question supports being hidden in the timeline.
      * @param event Any matrix event.
-     * @returns `true` if the media can be hidden, otherwise false.
+     * @returns `true` if the media can be hidden, otherwise `false`.
      */
     public static canHide(event: MatrixEvent): boolean {
         if (!event) return false;

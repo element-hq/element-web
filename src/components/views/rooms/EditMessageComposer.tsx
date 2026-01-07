@@ -43,7 +43,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
 import type DocumentOffset from "../../../editor/offset";
-import { attachMentions, attachRelation } from "./SendMessageComposer";
+import { attachMentions, attachRelation } from "../../../utils/messages";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
@@ -312,7 +312,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         if (this.isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId()!;
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
-                const [cmd, args, commandText] = getSlashCommand(this.model);
+                const [cmd, args, commandText] = getSlashCommand(roomId, this.model);
                 if (cmd) {
                     const threadId = editedEvent?.getThread()?.id || null;
                     const [content, commandSuccessful] = await runSlashCommand(

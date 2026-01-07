@@ -1,18 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SpaceSettingsVisibilityTab /> for a public space Access renders guest access section toggle 1`] = `
-<div
-  aria-checked="true"
-  aria-disabled="false"
-  aria-labelledby="mx_LabelledToggleSwitch_«rb»"
-  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+<input
+  checked=""
+  class="_input_udcm8_24"
+  id="_r_h_"
   role="switch"
-  tabindex="0"
->
-  <div
-    class="mx_ToggleSwitch_ball"
-  />
-</div>
+  type="checkbox"
+/>
 `;
 
 exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
@@ -112,42 +107,53 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
               >
                 Anyone can find and join.
               </span>
-              <div
-                class="mx_SettingsTab_toggleWithDescription"
+              <form
+                class="_root_19upo_16"
               >
                 <div
-                  class="mx_SettingsFlag"
+                  class="_inline-field_19upo_32"
                 >
-                  <span
-                    class="mx_SettingsFlag_label"
+                  <div
+                    class="_inline-field-control_19upo_44"
                   >
                     <div
-                      id="mx_LabelledToggleSwitch_«r0»"
+                      class="_container_udcm8_10"
+                    >
+                      <input
+                        checked=""
+                        class="_input_udcm8_24"
+                        id="_r_0_"
+                        role="switch"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_udcm8_34"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="_r_0_"
                     >
                       Preview Space
-                    </div>
-                  </span>
-                  <div
-                    aria-checked="true"
-                    aria-disabled="false"
-                    aria-labelledby="mx_LabelledToggleSwitch_«r0»"
-                    class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-                    role="switch"
-                    tabindex="0"
-                  >
-                    <div
-                      class="mx_ToggleSwitch_ball"
-                    />
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="radix-_r_2_"
+                    >
+                      Allow people to preview your space before they join.
+                    </span>
                   </div>
                 </div>
                 <p>
-                  Allow people to preview your space before they join.
-                  <br />
                   <strong>
                     Recommended for public spaces.
                   </strong>
                 </p>
-              </div>
+              </form>
             </div>
           </fieldset>
         </div>

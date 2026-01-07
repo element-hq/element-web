@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<LoginSplashView /> Renders a spinner 1`] = `
 <DocumentFragment>
@@ -8,13 +8,24 @@ exports[`<LoginSplashView /> Renders a spinner 1`] = `
     <div
       class="mx_Spinner"
     >
-      <div
+      <svg
         aria-label="Loading…"
-        class="mx_Spinner_icon"
+        class="_icon_11k6c_18"
         data-testid="spinner"
+        fill="currentColor"
+        height="1em"
         role="progressbar"
         style="width: 32px; height: 32px;"
-      />
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
     </div>
     <div
       class="mx_LoginSplashView_splashButtons"
@@ -46,13 +57,24 @@ exports[`<LoginSplashView /> Renders an error message 1`] = `
     <div
       class="mx_Spinner"
     >
-      <div
+      <svg
         aria-label="Loading…"
-        class="mx_Spinner_icon"
+        class="_icon_11k6c_18"
         data-testid="spinner"
+        fill="currentColor"
+        height="1em"
         role="progressbar"
         style="width: 32px; height: 32px;"
-      />
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
     </div>
     <div
       class="mx_LoginSplashView_splashButtons"

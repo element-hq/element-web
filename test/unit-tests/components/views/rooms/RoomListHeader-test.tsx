@@ -93,7 +93,10 @@ const checkMenuLabels = (items: NodeListOf<Element>, labelArray: Array<string>) 
 describe("RoomListHeader", () => {
     let client: MatrixClient;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+        // This tests the header from the old room list/left panel, the new one is now enabled by default,
+        // so needs to be explicitly disabled to test the old list here.
+        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, false);
         jest.resetAllMocks();
 
         const dmRoomMap = {

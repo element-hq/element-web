@@ -28,7 +28,7 @@ import type {
     EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
-import { type Credentials } from "../plugins/homeserver";
+import { type CredentialsOptionalAccessToken } from "./bot";
 
 export class Client {
     public network: Network;
@@ -424,7 +424,7 @@ export class Client {
     /**
      * Bootstraps cross-signing.
      */
-    public async bootstrapCrossSigning(credentials: Credentials): Promise<void> {
+    public async bootstrapCrossSigning(credentials: CredentialsOptionalAccessToken): Promise<void> {
         const client = await this.prepareClient();
         return bootstrapCrossSigningForClient(client, credentials);
     }
@@ -470,6 +470,27 @@ export class Client {
     }
 
     /**
+     * Set a power level to one or multiple users.
+     * Will apply changes atop of current power level event.
+     * @param roomId - the room to update power levels in
+     * @param userId - the ID of the user or users to update power levels of
+     * @param powerLevel - the numeric power level to update given users to
+     */
+    public async setPowerLevel(
+        roomId: string,
+        userId: string | string[],
+        powerLevel: number,
+    ): Promise<ISendEventResponse> {
+        const client = await this.prepareClient();
+        return client.evaluate(
+            async (client, { roomId, userId, powerLevel }) => {
+                return client.setPowerLevel(roomId, userId, powerLevel);
+            },
+            { roomId, userId, powerLevel },
+        );
+    }
+
+    /**
      * Leaves the given room.
      * @param roomId ID of the room to leave
      */
@@ -501,7 +522,7 @@ export class Client {
  */
 export function bootstrapCrossSigningForClient(
     client: JSHandle<MatrixClient>,
-    credentials: Credentials,
+    credentials: CredentialsOptionalAccessToken,
     resetKeys: boolean = false,
 ) {
     return client.evaluate(

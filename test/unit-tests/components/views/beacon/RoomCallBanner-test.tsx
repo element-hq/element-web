@@ -14,7 +14,7 @@ import {
     type RoomMember,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
-import { type ClientWidgetApi, Widget } from "matrix-widget-api";
+import { Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
 import { mocked, type Mocked } from "jest-mock";
 
@@ -30,7 +30,9 @@ import { CallStore } from "../../../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { ConnectionState } from "../../../../../src/models/Call";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext";
+import RoomContext, { type RoomContextType } from "../../../../../src/contexts/RoomContext";
+import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
@@ -41,6 +43,15 @@ describe("<RoomCallBanner />", () => {
     const defaultProps = {
         roomId: "!1:example.org",
     };
+
+    const mockRoomViewStore = {
+        isViewingCall: jest.fn().mockReturnValue(false),
+        on: jest.fn(),
+        off: jest.fn(),
+        emit: jest.fn(),
+    };
+
+    let roomContext: RoomContextType;
 
     beforeEach(() => {
         stubClient();
@@ -59,6 +70,16 @@ describe("<RoomCallBanner />", () => {
 
         setupAsyncStoreWithClient(CallStore.instance, client);
         setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
+
+        // Reset the mock RoomViewStore
+        mockRoomViewStore.isViewingCall.mockReturnValue(false);
+
+        // Create a stable room context for this test
+        roomContext = {
+            ...RoomContext,
+            roomId: room.roomId,
+            roomViewStore: mockRoomViewStore,
+        } as unknown as RoomContextType;
     });
 
     afterEach(async () => {
@@ -66,7 +87,11 @@ describe("<RoomCallBanner />", () => {
     });
 
     const renderBanner = async (props = {}): Promise<void> => {
-        render(<RoomCallBanner {...defaultProps} {...props} />);
+        render(
+            <ScopedRoomContextProvider {...roomContext}>
+                <RoomCallBanner {...defaultProps} {...props} />
+            </ScopedRoomContextProvider>,
+        );
         await act(() => Promise.resolve()); // Let effects settle
     };
 
@@ -91,7 +116,7 @@ describe("<RoomCallBanner />", () => {
             widget = new Widget(call.widget);
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
                 stop: () => {},
-            } as unknown as ClientWidgetApi);
+            } as unknown as WidgetMessaging);
         });
         afterEach(() => {
             cleanup(); // Unmount before we do any cleanup that might update the component
@@ -117,8 +142,7 @@ describe("<RoomCallBanner />", () => {
         });
 
         it("doesn't show banner if the call is shown", async () => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall");
-            mocked(SdkContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
+            mockRoomViewStore.isViewingCall.mockReturnValue(true);
             await renderBanner();
             const banner = await screen.queryByText("Video call");
             expect(banner).toBeFalsy();

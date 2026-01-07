@@ -10,10 +10,11 @@ import { Button, PasswordInput } from "@vector-im/compound-web";
 import LockSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
 import { debounce } from "lodash";
 import classNames from "classnames";
-import React, { type ChangeEvent, type FormEvent } from "react";
+import React, { type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { type SecretStorage } from "matrix-js-sdk/src/matrix";
+import { Flex } from "@element-hq/web-shared-components";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Flex } from "../../../../shared-components/utils/Flex";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";
@@ -142,27 +143,29 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private getRecoveryKeyFeedback(): React.ReactNode | null {
-        let validationText: string;
+        let content: ReactNode;
         let classes: string | undefined;
 
         if (this.state.recoveryKeyCorrect) {
             // The recovery key is good. Empty feedback.
-            validationText = "\xA0"; // &nbsp;
+            content = "\xA0"; // &nbsp;
         } else if (this.state.recoveryKeyCorrect === null) {
             // The input element is empty. Tell the user they can also use a passphrase.
-            validationText = _t("encryption|access_secret_storage_dialog|alternatives");
+            content = _t("encryption|access_secret_storage_dialog|alternatives");
         } else {
             // The entered key is not (yet) correct. Tell them so.
-            validationText = _t("encryption|access_secret_storage_dialog|key_validation_text|wrong_security_key");
-            classes = classNames({
-                "mx_AccessSecretStorageDialog_recoveryKeyFeedback": true,
-                "mx_AccessSecretStorageDialog_recoveryKeyFeedback--invalid": true,
-            });
+            content = (
+                <>
+                    <ErrorSolidIcon />
+                    {_t("encryption|access_secret_storage_dialog|key_validation_text|wrong_security_key")}
+                </>
+            );
+            classes = "mx_AccessSecretStorageDialog_recoveryKeyFeedback--invalid";
         }
 
         return (
-            <Flex align="center" className={classes}>
-                {validationText}
+            <Flex align="center" className={classNames("mx_AccessSecretStorageDialog_recoveryKeyFeedback", classes)}>
+                {content}
             </Flex>
         );
     }

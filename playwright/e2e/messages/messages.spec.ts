@@ -59,9 +59,11 @@ async function editMessage(page: Page, message: Locator, newMsg: string): Promis
 }
 
 const screenshotOptions = (page?: Page) => ({
-    mask: page ? [page.locator(".mx_MessageTimestamp")] : undefined,
     // Hide the jump to bottom button in the timeline to avoid flakiness
     css: `
+        .mx_MessageTimestamp {
+            visibility: hidden;
+        }
         .mx_JumpToBottomButton {
             display: none !important;
         }

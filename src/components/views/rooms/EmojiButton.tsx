@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { type JSX, useContext } from "react";
+import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
@@ -34,7 +35,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
         };
 
         contextMenu = (
-            <ContextMenu {...position} onFinished={onFinished} managed={false}>
+            <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
                 <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
             </ContextMenu>
         );
@@ -50,11 +51,12 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
         <>
             <CollapsibleButton
                 className={computedClassName}
-                iconClassName="mx_EmojiButton_icon"
                 onClick={openMenu}
                 title={_t("common|emoji")}
                 inputRef={button}
-            />
+            >
+                <ReactionIcon />
+            </CollapsibleButton>
 
             {contextMenu}
         </>

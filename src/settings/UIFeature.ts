@@ -25,6 +25,8 @@ export const enum UIFeature {
     RoomHistorySettings = "UIFeature.roomHistorySettings",
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
     BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
+    AllowCreatingPublicRooms = "UIFeature.allowCreatingPublicRooms",
+    AllowCreatingPublicSpaces = "UIFeature.allowCreatingPublicSpaces",
 }
 
 export enum UIComponent {

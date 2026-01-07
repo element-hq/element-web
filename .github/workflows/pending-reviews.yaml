@@ -16,7 +16,7 @@ jobs:
             URL: "https://github.com/pulls?q=is%3Apr+is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+review-requested%3A%40me+sort%3Aupdated-desc+"
             RELEASE_BLOCKERS_URL: "https://github.com/pulls?q=is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+sort%3Aupdated-desc+label%3AX-Release-Blocker+"
         steps:
-            - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+            - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
               env:
                   HS_URL: ${{ secrets.BETABOT_HS_URL }}
                   ROOM_ID: ${{ secrets.ROOM_ID }}

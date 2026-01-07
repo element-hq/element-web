@@ -8,6 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType, type Room, RoomType } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
+import {
+    PlusIcon,
+    UserAddSolidIcon,
+    RoomIcon,
+    SearchIcon,
+    ShareIcon,
+    VideoCallSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex.tsx";
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
@@ -18,7 +26,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads.ts";
 import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload.ts";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload.ts";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter.ts";
-import { _t, _td, type TranslationKey } from "../../../languageHandler.tsx";
+import { _t, _td } from "../../../languageHandler.tsx";
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 import SettingsStore from "../../../settings/SettingsStore.ts";
@@ -142,7 +150,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                         {showCreateRooms && (
                             <IconizedContextMenuOption
                                 label={_t("action|start_new_chat")}
-                                iconClassName="mx_LegacyRoomList_iconStartChat"
+                                icon={<UserAddSolidIcon />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -158,7 +166,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                         {showInviteUsers && (
                             <IconizedContextMenuOption
                                 label={_t("action|invite_to_space")}
-                                iconClassName="mx_LegacyRoomList_iconInvite"
+                                icon={<ShareIcon />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -230,7 +238,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
             <IconizedContextMenuOptionList first>
                 <IconizedContextMenuOption
                     label={_t("action|explore_rooms")}
-                    iconClassName="mx_LegacyRoomList_iconExplore"
+                    icon={<SearchIcon />}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -247,7 +255,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     <>
                         <IconizedContextMenuOption
                             label={_t("action|new_room")}
-                            iconClassName="mx_LegacyRoomList_iconNewRoom"
+                            icon={<PlusIcon />}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -261,7 +269,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
                                 label={_t("action|new_video_room")}
-                                iconClassName="mx_LegacyRoomList_iconNewVideoRoom"
+                                icon={<VideoCallSolidIcon />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -279,7 +287,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         )}
                         <IconizedContextMenuOption
                             label={_t("action|add_existing_room")}
-                            iconClassName="mx_LegacyRoomList_iconAddExistingRoom"
+                            icon={<RoomIcon />}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -300,7 +308,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     <>
                         <IconizedContextMenuOption
                             label={_t("action|new_room")}
-                            iconClassName="mx_LegacyRoomList_iconNewRoom"
+                            icon={<PlusIcon />}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -312,7 +320,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
                                 label={_t("action|new_video_room")}
-                                iconClassName="mx_LegacyRoomList_iconNewVideoRoom"
+                                icon={<VideoCallSolidIcon />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -333,7 +341,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                 {showExploreRooms ? (
                     <IconizedContextMenuOption
                         label={_t("action|explore_public_rooms")}
-                        iconClassName="mx_LegacyRoomList_iconExplore"
+                        icon={<SearchIcon />}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();

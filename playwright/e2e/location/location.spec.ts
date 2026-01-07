@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -30,31 +30,59 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
         });
     });
 
-    test("sends and displays pin drop location message successfully", async ({ page, user, app }) => {
-        const roomId = await app.client.createRoom({});
-        await page.goto(`/#/room/${roomId}`);
+    test(
+        "sends and displays pin drop location message successfully",
+        { tag: "@screenshot" },
+        async ({ page, user, app }) => {
+            const roomId = await app.client.createRoom({});
+            await page.goto(`/#/room/${roomId}`);
 
-        const composerOptions = await app.openMessageComposerOptions();
-        await composerOptions.getByRole("menuitem", { name: "Location", exact: true }).click();
+            const composerOptions = await app.openMessageComposerOptions();
+            await composerOptions.getByRole("menuitem", { name: "Location", exact: true }).click();
 
-        await selectLocationShareTypeOption(page, "Pin").click();
+            await selectLocationShareTypeOption(page, "Pin").click();
 
-        await page.locator("#mx_LocationPicker_map").click();
+            await page.locator("#mx_LocationPicker_map").click();
 
-        await submitShareLocation(page);
+            await submitShareLocation(page);
 
-        await page.locator(".mx_RoomView_body .mx_EventTile .mx_MLocationBody").click({
-            position: {
-                x: 225,
-                y: 150,
-            },
-        });
+            await page.getByRole("button", { name: "Map marker" }).click();
 
-        // clicking location tile opens maximised map
-        await expect(page.getByRole("dialog")).toBeVisible();
+            const dialog = page.getByRole("dialog");
 
-        await app.closeDialog();
+            // wait for the dialog to be visible
+            await expect(dialog).toBeVisible();
 
-        await expect(page.locator(".mx_Marker")).toBeVisible();
-    });
+            // screenshot the map within the dialog
+            await expect(dialog.getByRole("region", { name: "Map" })).toMatchScreenshot(
+                "location-pin-drop-message-map.png",
+            );
+
+            await app.closeDialog();
+
+            await expect(page.getByRole("button", { name: "Map marker" })).toBeVisible();
+        },
+    );
+
+    test(
+        "is prompted for and can consent to live location sharing",
+        { tag: "@screenshot" },
+        async ({ page, user, app, axe }) => {
+            await app.viewRoomById(await app.client.createRoom({}));
+
+            const composerOptions = await app.openMessageComposerOptions();
+            await composerOptions.getByRole("menuitem", { name: "Location", exact: true }).click();
+            const menu = page.locator(".mx_LocationShareMenu");
+
+            await menu.getByRole("button", { name: "My live location" }).click();
+            await menu.getByLabel("Enable live location sharing").check();
+
+            axe.disableRules([
+                "color-contrast", // XXX: Inheriting colour contrast issues from room view.
+                "region", // XXX: ContextMenu managed=false does not provide a role.
+            ]);
+            await expect(axe).toHaveNoViolations();
+            await expect(menu).toMatchScreenshot("location-live-share-dialog.png");
+        },
+    );
 });

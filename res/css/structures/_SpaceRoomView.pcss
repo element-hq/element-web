@@ -6,51 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-@define-mixin SpacePillButton {
-    position: relative;
-    padding: 16px 32px 16px 72px;
-    width: 432px;
-    box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid $input-border-color;
-    font-size: $font-17px;
-    font-weight: var(--cpd-font-weight-semibold);
-    margin: 20px 0;
-
-    > div {
-        margin-top: 4px;
-        font-weight: normal;
-        font-size: $font-15px;
-        color: $secondary-content;
-    }
-
-    &::before {
-        position: absolute;
-        content: "";
-        width: 28px;
-        height: 28px;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 22px;
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: 28px;
-        background-color: $tertiary-content;
-    }
-
-    &:hover {
-        border-color: var(--cpd-color-bg-action-primary-rest);
-
-        &::before {
-            background-color: var(--cpd-color-icon-primary);
-        }
-
-        > span {
-            color: $primary-content;
-        }
-    }
-}
-
 .mx_SpaceRoomView {
     --innerWidth: 428px;
 
@@ -207,7 +162,7 @@ Please see LICENSE files in the repository root for full details.
                         width: 16px;
                         background: var(--cpd-color-icon-on-solid-primary);
                         mask-size: 16px;
-                        mask-image: url("$(res)/img/element-icons/room/invite.svg");
+                        mask-image: url("@vector-im/compound-design-tokens/icons/user-add.svg");
                     }
                 }
 
@@ -239,20 +194,6 @@ Please see LICENSE files in the repository root for full details.
         .mx_SearchBox {
             margin: 0 0 20px;
             flex: 0;
-        }
-    }
-
-    .mx_SpaceRoomView_privateScope {
-        > .mx_AccessibleButton {
-            @mixin SpacePillButton;
-        }
-
-        .mx_SpaceRoomView_privateScope_justMeButton::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
-        }
-
-        .mx_SpaceRoomView_privateScope_meAndMyTeammatesButton::before {
-            mask-image: url("$(res)/img/element-icons/group-members.svg");
         }
     }
 
@@ -291,7 +232,7 @@ Please see LICENSE files in the repository root for full details.
                 text-decoration: underline;
 
                 &::before {
-                    mask-image: url("$(res)/img/element-icons/room/invite.svg");
+                    mask-image: url("@vector-im/compound-design-tokens/icons/user-add.svg");
                     background-color: var(--cpd-color-icon-primary);
                 }
             }

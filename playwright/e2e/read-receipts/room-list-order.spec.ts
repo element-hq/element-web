@@ -12,7 +12,7 @@ import { test } from ".";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("Room list order", () => {
-        test("Rooms with unread messages appear at the top of room list if 'unread first' is selected", async ({
+        test("Rooms with unread messages appear at the top of room list with default 'activity' ordering", async ({
             roomAlpha: room1,
             roomBeta: room2,
             util,
@@ -22,15 +22,18 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             await util.goTo(room2);
 
             // Display the unread first room
-            await util.toggleRoomUnreadOrder();
             await util.receiveMessages(room1, ["Msg1"]);
             await page.reload();
 
+            // switch rooms so they can re-order in the list
+            await util.goTo(room1);
+
             // Room 1 has an unread message and should be displayed first
+            // (as the default is to sort by activity)
             await util.assertRoomListOrder([room1, room2]);
         });
 
-        test("Rooms with unread threads appear at the top of room list if 'unread first' is selected", async ({
+        test("Rooms with unread threads appear at the top of room list with default 'activity' order", async ({
             roomAlpha: room1,
             roomBeta: room2,
             util,
@@ -42,7 +45,6 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             await util.assertRead(room1);
 
             // Display the unread first room
-            await util.toggleRoomUnreadOrder();
             await util.receiveMessages(room1, [msg.threadedOff("Msg1", "Resp1")]);
             await util.saveAndReload();
 

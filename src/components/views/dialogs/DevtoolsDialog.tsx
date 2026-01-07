@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
+import { Form } from "@vector-im/compound-web";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "./BaseDialog";
 import { TimelineEventEditor } from "./devtools/Event";
@@ -18,6 +19,7 @@ import SettingExplorer from "./devtools/SettingExplorer";
 import { RoomStateExplorer } from "./devtools/RoomState";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./devtools/BaseTool";
 import WidgetExplorer from "./devtools/WidgetExplorer";
+import { UserList } from "./devtools/Users";
 import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/AccountData";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
@@ -46,6 +48,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|view_servers_in_room"), ServersInRoom],
         [_td("devtools|notifications_debug"), RoomNotifications],
         [_td("devtools|active_widgets"), WidgetExplorer],
+        [_td("devtools|users"), UserList],
     ],
     [Category.Other]: [
         [_td("devtools|explore_account_data"), AccountDataExplorer],
@@ -84,7 +87,9 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
             <BaseTool onBack={onBack}>
                 {Object.entries(Tools).map(([category, tools]) => (
                     <div key={category}>
-                        <h3>{_t(categoryLabels[category as unknown as Category])}</h3>
+                        <h2 className="mx_DevTools_toolHeading">
+                            {_t(categoryLabels[category as unknown as Category])}
+                        </h2>
                         {tools.map(([label, tool]) => {
                             const onClick = (): void => {
                                 setTool([label, tool]);
@@ -97,13 +102,27 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                         })}
                     </div>
                 ))}
-                <div>
-                    <h3>{_t("common|options")}</h3>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                    className="mx_DevTools_toggleForm"
+                >
+                    <h2 className="mx_DevTools_toolHeading">{_t("common|options")}</h2>
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
-                    <SettingsField settingKey="Developer.elementCallUrl" level={SettingLevel.DEVICE} />
-                </div>
+                </Form.Root>
+                {/* The settings field needs to be outside `Form.Root` because `SettingsField` will have a inner Form,
+                    Otherwise we end up with a nester `Form` and that prohibits `preventDefault` so setting the value
+                    will reload the page.
+                 */}
+                <SettingsField
+                    settingKey="Developer.elementCallUrl"
+                    level={SettingLevel.DEVICE}
+                    aria-label="elementCallUrl"
+                />
             </BaseTool>
         );
     }

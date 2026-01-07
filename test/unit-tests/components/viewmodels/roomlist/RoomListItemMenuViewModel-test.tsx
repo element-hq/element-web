@@ -56,7 +56,7 @@ describe("RoomListItemMenuViewModel", () => {
         room = mkStubRoom("roomId", "roomName", matrixClient);
 
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
 
         mocked(useUnreadNotifications).mockReturnValue({ symbol: null, count: 0, level: NotificationLevel.None });
         mocked(useNotificationState).mockReturnValue([RoomNotifState.AllMessages, jest.fn()]);

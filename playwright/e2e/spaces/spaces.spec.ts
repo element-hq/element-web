@@ -11,6 +11,7 @@ import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { UIFeature } from "../../../src/settings/UIFeature";
 
 async function openSpaceCreateMenu(page: Page): Promise<Locator> {
     await page.getByRole("button", { name: "Create a space" }).click();
@@ -95,9 +96,9 @@ test.describe("Spaces", () => {
             await page.getByRole("button", { name: "Go to my first room" }).click();
 
             // Assert rooms exist in the room list
-            await expect(page.getByRole("treeitem", { name: "General" })).toBeVisible();
-            await expect(page.getByRole("treeitem", { name: "Random" })).toBeVisible();
-            await expect(page.getByRole("treeitem", { name: "Jokes" })).toBeVisible();
+            await expect(page.getByRole("option", { name: "General" })).toBeVisible();
+            await expect(page.getByRole("option", { name: "Random" })).toBeVisible();
+            await expect(page.getByRole("option", { name: "Jokes" })).toBeVisible();
         },
     );
 
@@ -126,10 +127,10 @@ test.describe("Spaces", () => {
         await page.getByRole("button", { name: "Skip for now" }).click();
 
         // Assert rooms exist in the room list
-        const roomList = page.getByRole("tree", { name: "Rooms" });
-        await expect(roomList.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
-        await expect(roomList.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
-        await expect(roomList.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
+        const roomList = page.getByRole("listbox", { name: "Room list", exact: true });
+        await expect(roomList.getByRole("option", { name: "General" })).toBeVisible();
+        await expect(roomList.getByRole("option", { name: "Random" })).toBeVisible();
+        await expect(roomList.getByRole("option", { name: "Projects" })).toBeVisible();
 
         // Assert rooms exist in the space explorer
         await expect(
@@ -199,7 +200,7 @@ test.describe("Spaces", () => {
 
             await page.getByRole("button", { name: "Skip for now" }).click();
 
-            await page.getByRole("button", { name: "Add room" }).click();
+            await page.getByRole("main").getByRole("button", { name: "Add" }).click();
             await page.getByRole("menuitem", { name: "Add existing room" }).click();
 
             await page.getByRole("checkbox", { name: "Sample Room" }).click();
@@ -375,5 +376,69 @@ test.describe("Spaces", () => {
         });
         await app.viewSpaceByName("Root Space");
         await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
+    });
+
+    test("should render spaces visibility settings", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {
+        await app.client.createSpace({
+            name: "My Space",
+        });
+        await app.viewSpaceByName("My space");
+        await page.getByLabel("Settings", { exact: true }).click();
+        await app.settings.switchTab("Visibility");
+
+        axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+        await expect(axe).toHaveNoViolations();
+        await expect(page.locator("#mx_tabpanel_SPACE_VISIBILITY_TAB")).toMatchScreenshot(
+            "space-visibility-settings.png",
+        );
+    });
+
+    test.describe("Should hide public spaces option if not allowed", () => {
+        test.use({
+            config: {
+                setting_defaults: {
+                    [UIFeature.AllowCreatingPublicSpaces]: false,
+                },
+            },
+        });
+
+        test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app }) => {
+            const menu = await openSpaceCreateMenu(page);
+            await menu
+                .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
+                .setInputFiles("playwright/sample-files/riot.png");
+            await menu.getByRole("textbox", { name: "Name" }).fill("This is a private space");
+            await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
+            await menu
+                .getByRole("textbox", { name: "Description" })
+                .fill("This is a private space because we can't make public ones");
+            await menu.getByRole("button", { name: "Create" }).click();
+
+            await page.getByRole("button", { name: "Me and my teammates" }).click();
+
+            // Create the default General & Random rooms, as well as a custom "Projects" room
+            await expect(page.getByPlaceholder("General")).toBeVisible();
+            await expect(page.getByPlaceholder("Random")).toBeVisible();
+            await page.getByPlaceholder("Support").fill("Projects");
+            await page.getByRole("button", { name: "Continue" }).click();
+            await page.getByRole("button", { name: "Skip for now" }).click();
+
+            // Assert rooms exist in the room list
+            const roomList = page.getByRole("listbox", { name: "Room list", exact: true });
+            await expect(roomList.getByRole("option", { name: "General" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Random" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Projects" })).toBeVisible();
+
+            // Assert rooms exist in the space explorer
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", { hasText: "General" }),
+            ).toBeVisible();
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", { hasText: "Random" }),
+            ).toBeVisible();
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", { hasText: "Projects" }),
+            ).toBeVisible();
+        });
     });
 });

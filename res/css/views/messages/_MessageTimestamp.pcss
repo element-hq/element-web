@@ -13,13 +13,14 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_MessageTimestamp {
-    color: var(--MessageTimestamp-color);
+    color: var(--MessageTimestamp-color) !important; /* override anchor color */
     font-size: $font-10px;
     font-variant-numeric: tabular-nums;
     display: block; /* enable the width setting below */
     width: var(--MessageTimestamp-width);
     white-space: nowrap;
     user-select: none;
+    text-decoration: none;
 }
 
 .mx_MessageTimestamp_lateIcon {

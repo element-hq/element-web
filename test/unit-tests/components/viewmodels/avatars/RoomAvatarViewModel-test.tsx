@@ -30,7 +30,7 @@ describe("RoomAvatarViewModel", () => {
         room = mkStubRoom("roomId", "roomName", matrixClient);
 
         DMRoomMap.makeShared(matrixClient);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
 
         jest.spyOn(PresenceIndicatorModule, "useDmMember").mockReturnValue(null);
         jest.spyOn(PresenceIndicatorModule, "usePresence").mockReturnValue(null);

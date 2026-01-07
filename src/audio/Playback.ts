@@ -9,17 +9,18 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { clamp } from "@element-hq/web-shared-components";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
-import { clamp } from "../shared-components/utils/numbers";
 import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 import { PlaybackEncoder } from "../PlaybackEncoder";
 
 export enum PlaybackState {
+    Preparing = "preparing", // preparing to decode
     Decoding = "decoding",
     Stopped = "stopped", // no progress on timeline
     Paused = "paused", // some progress on timeline
@@ -146,6 +147,8 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             return;
         }
 
+        this.state = PlaybackState.Preparing;
+
         // The point where we use an audio element is fairly arbitrary, though we don't want
         // it to be too low. As of writing, voice messages want to show a waveform but audio
         // messages do not. Using an audio element means we can't show a waveform preview, so
@@ -199,6 +202,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     private onPlaybackEnd = async (): Promise<void> => {
         await this.context.suspend();
         this.emit(PlaybackState.Stopped);
+        this.clock.flagStop();
     };
 
     public async play(): Promise<void> {
@@ -245,9 +249,8 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.emit(PlaybackState.Paused);
     }
 
-    public async stop(): Promise<void> {
-        await this.onPlaybackEnd();
-        this.clock.flagStop();
+    public stop(): Promise<void> {
+        return this.onPlaybackEnd();
     }
 
     public async toggle(): Promise<void> {

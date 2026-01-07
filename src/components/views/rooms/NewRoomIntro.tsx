@@ -9,10 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useContext } from "react";
 import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -30,6 +31,8 @@ import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { useTopic } from "../../../hooks/room/useTopic";
+import { topicToHtml, Linkify } from "../../../HtmlUtils";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -52,6 +55,7 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
 const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
     const { room, roomId } = useScopedRoomContext("room", "roomId");
+    const topic = useTopic(room);
 
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");
@@ -106,7 +110,6 @@ const NewRoomIntro: React.FC = () => {
         );
     } else {
         const inRoom = room && room.getMyMembership() === KnownMembership.Join;
-        const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
         const canAddTopic = inRoom && room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getSafeUserId());
 
         const onTopicClick = (): void => {
@@ -126,18 +129,23 @@ const NewRoomIntro: React.FC = () => {
         let topicText;
         if (canAddTopic && topic) {
             topicText = _t(
-                "room|intro|topic_edit",
-                { topic },
+                "room|intro|edit_topic",
+                {},
                 {
                     a: (sub) => (
                         <AccessibleButton element="a" kind="link_inline" onClick={onTopicClick}>
                             {sub}
                         </AccessibleButton>
                     ),
+                    topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
                 },
             );
         } else if (topic) {
-            topicText = _t("room|intro|topic", { topic });
+            topicText = _t(
+                "room|intro|display_topic",
+                {},
+                { topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
+            );
         } else if (canAddTopic) {
             topicText = _t(
                 "room|intro|no_topic",
@@ -245,7 +253,7 @@ const NewRoomIntro: React.FC = () => {
                         },
                     )}
                 </p>
-                <p>{topicText}</p>
+                <p data-testid="topic">{topicText}</p>
                 {buttons}
             </React.Fragment>
         );
@@ -284,7 +292,8 @@ const NewRoomIntro: React.FC = () => {
         <li className="mx_NewRoomIntro">
             {!hasExpectedEncryptionSettings(cli, room) && (
                 <EventTileBubble
-                    className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                    icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
+                    className="mx_cryptoEvent"
                     title={_t("room|intro|unencrypted_warning")}
                     subtitle={subtitle}
                 />

@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <span
       class="mx_EmptyRoomList_GenericPlaceholder_title"
     >
-      You don't have favourite chat yet
+      You don't have favourite chats yet
     </span>
     <span
       class="mx_EmptyRoomList_GenericPlaceholder_description"
@@ -24,7 +24,7 @@ exports[`<EmptyRoomList /> should display empty state for filter favourite 1`] =
 exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -45,7 +45,7 @@ exports[`<EmptyRoomList /> should display empty state for filter people 1`] = `
 exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -66,7 +66,7 @@ exports[`<EmptyRoomList /> should display empty state for filter rooms 1`] = `
 exports[`<EmptyRoomList /> should display the empty state for the invite filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -76,7 +76,7 @@ exports[`<EmptyRoomList /> should display the empty state for the invite filter 
       You don't have any unread invites
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_13vu4_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -91,7 +91,7 @@ exports[`<EmptyRoomList /> should display the empty state for the invite filter 
 exports[`<EmptyRoomList /> should display the empty state for the low priority filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -101,7 +101,7 @@ exports[`<EmptyRoomList /> should display the empty state for the low priority f
       You don't have any low priority rooms
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_13vu4_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -116,7 +116,7 @@ exports[`<EmptyRoomList /> should display the empty state for the low priority f
 exports[`<EmptyRoomList /> should display the empty state for the mention filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -126,7 +126,7 @@ exports[`<EmptyRoomList /> should display the empty state for the mention filter
       You don't have any unread mentions
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_13vu4_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -141,7 +141,7 @@ exports[`<EmptyRoomList /> should display the empty state for the mention filter
 exports[`<EmptyRoomList /> should display the empty state for the unread filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -151,7 +151,7 @@ exports[`<EmptyRoomList /> should display the empty state for the unread filter 
       Congrats! You don’t have any unread messages
     </span>
     <button
-      class="_button_vczzf_8"
+      class="_button_13vu4_8"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -166,7 +166,7 @@ exports[`<EmptyRoomList /> should display the empty state for the unread filter 
 exports[`<EmptyRoomList /> should not render the new room button if the user doesn't have the rights to create a room 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -181,11 +181,11 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
       Get started by messaging someone
     </span>
     <div
-      class="flex mx_EmptyRoomList_DefaultPlaceholder"
+      class="_flex_4dswl_9 mx_EmptyRoomList_DefaultPlaceholder"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -213,7 +213,7 @@ exports[`<EmptyRoomList /> should not render the new room button if the user doe
 exports[`<EmptyRoomList /> should render the default placeholder when there is no filter 1`] = `
 <DocumentFragment>
   <div
-    class="flex mx_EmptyRoomList_GenericPlaceholder"
+    class="_flex_4dswl_9 mx_EmptyRoomList_GenericPlaceholder"
     data-testid="empty-room-list"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
@@ -228,11 +228,11 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
       Get started by messaging someone or by creating a room
     </span>
     <div
-      class="flex mx_EmptyRoomList_DefaultPlaceholder"
+      class="_flex_4dswl_9 mx_EmptyRoomList_DefaultPlaceholder"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -253,7 +253,7 @@ exports[`<EmptyRoomList /> should render the default placeholder when there is n
         Start chat
       </button>
       <button
-        class="_button_vczzf_8 _has-icon_vczzf_57"
+        class="_button_13vu4_8 _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"

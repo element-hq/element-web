@@ -1,0 +1,76 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.richItem {
+    /* Remove browser button style */
+    background: transparent;
+    border: none;
+    padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-4x);
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-align: start;
+
+    display: grid;
+    column-gap: var(--cpd-space-3x);
+    grid-template-columns: max-content 1fr max-content;
+    grid-template-areas:
+        "avatar title time"
+        "avatar description time";
+}
+
+.richItem:hover,
+.richItem:focus {
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    border-radius: 12px;
+}
+
+.richItem:not(:last-child) {
+    border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-gray-300);
+}
+
+.avatar {
+    grid-area: avatar;
+    align-self: center;
+}
+
+.title {
+    grid-area: title;
+    font: var(--cpd-font-body-sm-semibold);
+    color: var(--cpd-color-text-primary);
+}
+
+.description {
+    grid-area: description;
+}
+
+.timestamp {
+    grid-area: time;
+    align-self: center;
+}
+
+.title,
+.description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.description,
+.timestamp {
+    font: var(--cpd-font-body-sm-regular);
+    color: var(--cpd-color-text-secondary);
+}
+
+.checkmark {
+    grid-area: avatar;
+    align-self: center;
+    background-color: var(--cpd-color-icon-accent-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+}

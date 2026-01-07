@@ -33,15 +33,14 @@ import { type Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";
 
 import TimelinePanel from "../../../../src/components/structures/TimelinePanel";
-import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import {
+    clientAndSDKContextRenderOptions,
     filterConsole,
     flushPromises,
     mkMembership,
     mkRoom,
     stubClient,
-    withClientContextRenderOptions,
 } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import { createMessageEventContent } from "../../../test-utils/events";
@@ -51,6 +50,8 @@ import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import type Timer from "../../../../src/utils/Timer";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
@@ -159,6 +160,7 @@ const setupPagination = (
 
 describe("TimelinePanel", () => {
     let client: Mocked<MatrixClient>;
+    let sdkContext: SdkContextClass;
     let userId: string;
 
     filterConsole("checkForPreJoinUISI: showing all messages, skipping check");
@@ -166,6 +168,7 @@ describe("TimelinePanel", () => {
     beforeEach(() => {
         client = mocked(stubClient());
         userId = client.getSafeUserId();
+        sdkContext = new SdkContextClass();
     });
 
     describe("read receipts and markers", () => {
@@ -200,7 +203,7 @@ describe("TimelinePanel", () => {
                         timelinePanel = ref;
                     }}
                 />,
-                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+                clientAndSDKContextRenderOptions(client, sdkContext),
             );
             await flushPromises();
             await waitFor(() => expect(timelinePanel).toBeTruthy());
@@ -367,6 +370,56 @@ describe("TimelinePanel", () => {
         });
     });
 
+    describe("enableReadReceiptsAndMarkersOnActivity", () => {
+        it.each([
+            {
+                enabled: false,
+                testName: "should not set up activity timers when disabled",
+                checkCall: (readReceiptTimer: Timer | null, readMarkerTimer: Timer | null) => {
+                    expect(readReceiptTimer).toBeNull();
+                    expect(readMarkerTimer).toBeNull();
+                },
+            },
+            {
+                enabled: true,
+                testName: "should set up activity timers when enabled",
+                checkCall: (readReceiptTimer: Timer | null, readMarkerTimer: Timer | null) => {
+                    expect(readReceiptTimer).toBeTruthy();
+                    expect(readMarkerTimer).toBeTruthy();
+                },
+            },
+        ])("$testName", async ({ enabled, checkCall }) => {
+            const room = mkRoom(client, "roomId");
+            const events = mockEvents(room);
+            const [, timelineSet] = mkTimeline(room, events);
+
+            let timelinePanel: TimelinePanel | null = null;
+
+            render(
+                <TimelinePanel
+                    timelineSet={timelineSet}
+                    manageReadMarkers={true}
+                    manageReadReceipts={true}
+                    enableReadReceiptsAndMarkersOnActivity={enabled}
+                    ref={(ref) => {
+                        timelinePanel = ref;
+                    }}
+                />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            await waitFor(() => expect(timelinePanel).toBeTruthy());
+
+            // Check if the activity timers were set up
+            // @ts-ignore - accessing private property for testing
+            const readReceiptTimer = timelinePanel!.readReceiptActivityTimer;
+            // @ts-ignore - accessing private property for testing
+            const readMarkerTimer = timelinePanel!.readMarkerActivityTimer;
+
+            checkCall(readReceiptTimer, readMarkerTimer);
+        });
+    });
+
     it("should scroll event into view when props.eventId changes", () => {
         const client = MatrixClientPeg.safeGet();
         const room = mkRoom(client, "roomId");
@@ -396,7 +449,7 @@ describe("TimelinePanel", () => {
         await withScrollPanelMountSpy(async (mountSpy) => {
             const { container } = render(
                 <TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />,
-                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+                clientAndSDKContextRenderOptions(client, sdkContext),
             );
 
             await waitFor(() => expectEvents(container, [events[1]]));
@@ -416,7 +469,7 @@ describe("TimelinePanel", () => {
         await withScrollPanelMountSpy(async (mountSpy) => {
             const { container } = render(
                 <TimelinePanel {...getProps(room, events)} />,
-                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+                clientAndSDKContextRenderOptions(client, sdkContext),
             );
 
             await waitFor(() => expectEvents(container, [events[0], events[1]]));
@@ -493,7 +546,7 @@ describe("TimelinePanel", () => {
 
             const paginateSpy = jest.spyOn(TimelineWindow.prototype, "paginate").mockClear();
 
-            render(<TimelinePanel {...props} />);
+            render(<TimelinePanel {...props} />, clientAndSDKContextRenderOptions(client, sdkContext));
 
             const event = new MatrixEvent({ type: RoomEvent.Timeline, origin_server_ts: 0 });
             const data = { timeline: props.timelineSet.getLiveTimeline(), liveEvent: true };
@@ -590,9 +643,8 @@ describe("TimelinePanel", () => {
             const replyToEvent = jest.spyOn(thread, "replyToEvent", "get");
 
             const dom = render(
-                <MatrixClientContext.Provider value={client}>
-                    <TimelinePanel timelineSet={allThreads} manageReadReceipts sendReadReceiptOnLoad />
-                </MatrixClientContext.Provider>,
+                <TimelinePanel timelineSet={allThreads} manageReadReceipts sendReadReceiptOnLoad />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
             );
             await dom.findByText("RootEvent");
             await dom.findByText("ReplyEvent1");
@@ -645,9 +697,8 @@ describe("TimelinePanel", () => {
             };
 
             const dom = render(
-                <MatrixClientContext.Provider value={client}>
-                    <TimelinePanel timelineSet={allThreads} manageReadReceipts sendReadReceiptOnLoad />
-                </MatrixClientContext.Provider>,
+                <TimelinePanel timelineSet={allThreads} manageReadReceipts sendReadReceiptOnLoad />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
             );
             await dom.findByText("RootEvent");
             await dom.findByText("ReplyEvent1");
@@ -718,9 +769,8 @@ describe("TimelinePanel", () => {
         }
 
         const { container } = render(
-            <MatrixClientContext.Provider value={client}>
-                <TimelinePanel timelineSet={timelineSet} manageReadReceipts={true} sendReadReceiptOnLoad={true} />
-            </MatrixClientContext.Provider>,
+            <TimelinePanel timelineSet={timelineSet} manageReadReceipts={true} sendReadReceiptOnLoad={true} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
 
         await waitFor(() => expect(screen.queryByRole("progressbar")).toBeNull());
@@ -740,7 +790,7 @@ describe("TimelinePanel", () => {
         await withScrollPanelMountSpy(async () => {
             const { container } = render(
                 <TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />,
-                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+                clientAndSDKContextRenderOptions(client, sdkContext),
             );
 
             await waitFor(() => expectEvents(container, [events[1]]));

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "jest-matrix-react";
+import { fireEvent, render, screen, findByText } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -137,6 +137,7 @@ describe("InviteDialog", () => {
             supportsThreads: jest.fn().mockReturnValue(false),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
             getClientWellKnown: jest.fn().mockResolvedValue({}),
+            invite: jest.fn(),
         });
         SdkConfig.put({ validated_server_config: {} as ValidatedServerConfig } as IConfigOptions);
         DMRoomMap.makeShared(mockClient);
@@ -397,13 +398,23 @@ describe("InviteDialog", () => {
         input.focus();
         await userEvent.keyboard(`${aliceId}`);
 
-        const btn = await screen.findByText(aliceId, {
-            selector: ".mx_InviteDialog_tile_nameStack_userId .mx_InviteDialog_tile--room_highlight",
-        });
+        const btn = await screen.findByRole("option", { name: aliceId });
         fireEvent.click(btn);
 
-        const tile = await screen.findByText(aliceId, { selector: ".mx_InviteDialog_userTile_name" });
+        const tile = await findByText(screen.getByTestId("invite-dialog-input-wrapper"), aliceId);
         expect(tile).toBeInTheDocument();
+    });
+
+    describe("while the invite is in progress", () => {
+        it("should show a spinner", async () => {
+            mockClient.invite.mockReturnValue(new Promise(() => {}));
+
+            render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+            await enterIntoSearchField(bobId);
+            await userEvent.click(screen.getByRole("button", { name: "Invite" }));
+
+            await screen.findByText("Preparing invitations...");
+        });
     });
 
     describe("when inviting a user with an unknown profile", () => {

@@ -38,6 +38,7 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
+import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 
@@ -126,6 +127,9 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     // This is the last known total number of members in this room.
     const [totalMemberCount, setTotalMemberCount] = useState(0);
+
+    const memberCountWithout3Pid = useRoomMemberCount(room, { includeInvited: true });
+
     /**
      * This is the current number of members in the list.
      * This number will be less than the total number of members
@@ -168,7 +172,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                     }
 
                     setMemberMap(newMemberMap);
-                    setMemberCount(joinedSdk.length + invitedSdk.length + threePidInvited.length);
+                    setMemberCount(memberCountWithout3Pid + threePidInvited.length);
                     if (!searchQuery) {
                         /**
                          * Since searching for members only gives you the relevant
@@ -180,7 +184,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                 500,
                 { leading: true, trailing: true },
             ),
-        [sdkContext.memberListStore, roomId, room],
+        [sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
     );
 
     const isPresenceEnabled = useMemo(

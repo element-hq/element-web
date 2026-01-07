@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`RichItem renders the item in default state 1`] = `
+<div>
+  <ul
+    role="listbox"
+    style="all: unset; list-style: none;"
+  >
+    <li
+      aria-label="Rich Item Title"
+      class="richItem"
+      role="option"
+      tabindex="-1"
+    >
+      <div
+        class="flex avatar"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <div
+          style="width: 32px; height: 32px; background-color: rgb(204, 204, 204); border-radius: 50%;"
+        />
+      </div>
+      <span
+        class="title"
+      >
+        Rich Item Title
+      </span>
+      <span
+        class="description"
+      >
+        This is a description of the rich item.
+      </span>
+      <span
+        class="timestamp"
+        role="timer"
+      >
+        145 days ago
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`RichItem renders the item in selected state 1`] = `
+<div>
+  <ul
+    role="listbox"
+    style="all: unset; list-style: none;"
+  >
+    <li
+      aria-label="Rich Item Title"
+      aria-selected="true"
+      class="richItem"
+      role="option"
+      tabindex="-1"
+    >
+      <div
+        aria-hidden="true"
+        class="flex checkmark"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <svg
+          color="var(--cpd-color-icon-on-solid-primary)"
+          fill="currentColor"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+      <span
+        class="title"
+      >
+        Rich Item Title
+      </span>
+      <span
+        class="description"
+      >
+        This is a description of the rich item.
+      </span>
+      <span
+        class="timestamp"
+        role="timer"
+      >
+        145 days ago
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`RichItem renders the item without timestamp 1`] = `
+<div>
+  <ul
+    role="listbox"
+    style="all: unset; list-style: none;"
+  >
+    <li
+      aria-label="Rich Item Title"
+      class="richItem"
+      role="option"
+      tabindex="-1"
+    >
+      <div
+        class="flex avatar"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+      >
+        <div
+          style="width: 32px; height: 32px; background-color: rgb(204, 204, 204); border-radius: 50%;"
+        />
+      </div>
+      <span
+        class="title"
+      >
+        Rich Item Title
+      </span>
+      <span
+        class="description"
+      >
+        This is a description of the rich item.
+      </span>
+    </li>
+  </ul>
+</div>
+`;

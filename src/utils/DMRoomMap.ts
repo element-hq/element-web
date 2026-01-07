@@ -10,7 +10,6 @@ import { uniq } from "lodash";
 import { type Room, type MatrixEvent, EventType, ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Optional } from "matrix-events-sdk";
 
 import { filterValidMDirect } from "./dm/filterValidMDirect";
 
@@ -170,7 +169,7 @@ export default class DMRoomMap {
         return joinedRooms[0];
     }
 
-    public getUserIdForRoomId(roomId: string): Optional<string> {
+    public getUserIdForRoomId(roomId: string): string | undefined {
         if (this.roomToUser == null) {
             // we lazily populate roomToUser so you can use
             // this class just to call getDMRoomsForUserId

@@ -53,9 +53,8 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import UploadFailureDialog from "./components/views/dialogs/UploadFailureDialog";
 import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import { createThumbnail } from "./utils/image-media";
-import { attachMentions, attachRelation } from "./components/views/rooms/SendMessageComposer";
+import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
-import { SdkContextClass } from "./contexts/SDKContext";
 import { blobIsAnimated } from "./utils/Image.ts";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
@@ -63,7 +62,12 @@ import { blobIsAnimated } from "./utils/Image.ts";
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export class UploadCanceledError extends Error {}
-export class UploadFailedError extends Error {}
+export class UploadFailedError extends Error {
+    public constructor(cause: any) {
+        super();
+        this.cause = cause;
+    }
+}
 
 interface IMediaConfig {
     "m.upload.size"?: number;
@@ -136,7 +140,7 @@ const IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT = 0.1; // 10%
 // and videos tend to be much larger.
 
 // Image mime types for which to always include a thumbnail for even if it is larger than the input for wider support.
-const ALWAYS_INCLUDE_THUMBNAIL = ["image/avif", "image/webp"];
+const ALWAYS_INCLUDE_THUMBNAIL = ["image/avif", "image/webp", "image/svg+xml"];
 
 /**
  * Read the metadata for an image file and create and upload a thumbnail of the image.
@@ -153,14 +157,17 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
     }
 
     // We don't await this immediately so it can happen in the background
-    const isAnimatedPromise = blobIsAnimated(imageFile.type, imageFile);
+    const isAnimatedPromise = blobIsAnimated(imageFile);
 
     const imageElement = await loadImageElement(imageFile);
 
     const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
     const imageInfo = result.info;
 
-    imageInfo["org.matrix.msc4230.is_animated"] = await isAnimatedPromise;
+    const isAnimated = await isAnimatedPromise;
+    if (isAnimated !== undefined) {
+        imageInfo["org.matrix.msc4230.is_animated"] = await isAnimatedPromise;
+    }
 
     // For lesser supported image types, always include the thumbnail even if it is larger
     if (!ALWAYS_INCLUDE_THUMBNAIL.includes(imageFile.type)) {
@@ -367,7 +374,7 @@ export async function uploadFile(
         } catch (e) {
             if (abortController.signal.aborted) throw new UploadCanceledError();
             console.error("Failed to upload file", e);
-            throw new UploadFailedError();
+            throw new UploadFailedError(e);
         }
         if (abortController.signal.aborted) throw new UploadCanceledError();
 
@@ -386,7 +393,7 @@ export async function uploadFile(
         } catch (e) {
             if (abortController.signal.aborted) throw new UploadCanceledError();
             console.error("Failed to upload file", e);
-            throw new UploadFailedError();
+            throw new UploadFailedError(e);
         }
         if (abortController.signal.aborted) throw new UploadCanceledError();
         // If the attachment isn't encrypted then include the URL directly.
@@ -420,10 +427,21 @@ export default class ContentMessages {
         return this.mediaConfig?.["m.upload.size"] ?? null;
     }
 
+    /**
+     * Sends a list of files to a room.
+     * @param files - The files to send.
+     * @param roomId - The ID of the room to send the files to.
+     * @param relation - The relation to the event being replied to.
+     * @param replyToEvent - The event being replied to, if any.
+     * @param matrixClient - The Matrix client to use for sending the files.
+     * @param context - The context in which the files are being sent.
+     * @returns A promise that resolves when the files have been sent.
+     */
     public async sendContentListToRoom(
         files: File[],
         roomId: string,
         relation: IEventRelation | undefined,
+        replyToEvent: MatrixEvent | undefined,
         matrixClient: MatrixClient,
         context = TimelineRenderingType.Room,
     ): Promise<void> {
@@ -432,7 +450,6 @@ export default class ContentMessages {
             return;
         }
 
-        const replyToEvent = SdkContextClass.instance.roomViewStore.getQuotingEvent();
         if (!this.mediaConfig) {
             // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
@@ -638,15 +655,18 @@ export default class ContentMessages {
             dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
             dis.dispatch({ action: "message_sent" });
         } catch (error) {
+            // Unwrap UploadFailedError to get the underlying error
+            const unwrappedError = error instanceof UploadFailedError && error.cause ? error.cause : error;
+
             // 413: File was too big or upset the server in some way:
             // clear the media size limit so we fetch it again next time we try to upload
-            if (error instanceof HTTPError && error.httpStatus === 413) {
+            if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
                 this.mediaConfig = null;
             }
 
             if (!upload.cancelled) {
                 let desc = _t("upload_failed_generic", { fileName: upload.fileName });
-                if (error instanceof HTTPError && error.httpStatus === 413) {
+                if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
                     desc = _t("upload_failed_size", {
                         fileName: upload.fileName,
                     });

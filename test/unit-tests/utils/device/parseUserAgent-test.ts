@@ -125,7 +125,7 @@ describe("parseUserAgent()", () => {
         const testCases: TestCase[] = userAgents.map((userAgent, index) => [userAgent, results[index]]);
 
         describe(`on platform ${platform}`, () => {
-            it.each(testCases)("should parse the user agent correctly -  %s", (userAgent, expectedResult) => {
+            it.each(testCases)("should parse the user agent correctly - %s", (userAgent, expectedResult) => {
                 expect(parseUserAgent(userAgent)).toEqual(expectedResult);
             });
         });

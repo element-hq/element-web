@@ -12,13 +12,20 @@ import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";
 import { SettingsSubheader } from "../SettingsSubheader";
-import { accessSecretStorage } from "../../../../SecurityManager";
+import { AccessCancelledError, accessSecretStorage } from "../../../../SecurityManager";
+import DeviceListener from "../../../../DeviceListener";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
 interface RecoveryPanelOutOfSyncProps {
     /**
      * Callback for when the user has finished entering their recovery key.
      */
     onFinish: () => void;
+    /**
+     * Callback for when accessing secret storage fails.
+     */
+    onAccessSecretStorageFailed: () => void;
     /**
      * Callback for when the user clicks on the "Forgot recovery key?" button.
      */
@@ -32,7 +39,13 @@ interface RecoveryPanelOutOfSyncProps {
  * It prompts the user to enter their recovery key so that the secrets can be loaded from 4S into
  * the client.
  */
-export function RecoveryPanelOutOfSync({ onForgotRecoveryKey, onFinish }: RecoveryPanelOutOfSyncProps): JSX.Element {
+export function RecoveryPanelOutOfSync({
+    onForgotRecoveryKey,
+    onAccessSecretStorageFailed,
+    onFinish,
+}: RecoveryPanelOutOfSyncProps): JSX.Element {
+    const matrixClient = useMatrixClientContext();
+
     return (
         <SettingsSection
             legacy={false}
@@ -55,7 +68,39 @@ export function RecoveryPanelOutOfSync({ onForgotRecoveryKey, onFinish }: Recove
                     kind="primary"
                     Icon={KeyIcon}
                     onClick={async () => {
-                        await accessSecretStorage();
+                        const crypto = matrixClient.getCrypto()!;
+
+                        const deviceListener = DeviceListener.sharedInstance();
+
+                        // we need to call keyStorageOutOfSyncNeedsBackupReset here because
+                        // deviceListener.whilePaused() sets its client to undefined, so
+                        // keyStorageOutOfSyncNeedsBackupReset won't be able to check
+                        // the backup state.
+                        const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false);
+
+                        try {
+                            // pause the device listener because we could be making lots
+                            // of changes, and don't want toasts to pop up and disappear
+                            // while we're doing it
+                            await deviceListener.whilePaused(async () => {
+                                await accessSecretStorage(async () => {
+                                    // Reset backup if needed.
+                                    if (needsBackupReset) {
+                                        await resetKeyBackupAndWait(crypto);
+                                    } else if (await matrixClient.isKeyBackupKeyStored()) {
+                                        await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
+                                    }
+                                });
+                            });
+                        } catch (error) {
+                            if (error instanceof AccessCancelledError) {
+                                // The user cancelled the dialog - just allow it to
+                                // close, and return to this panel
+                            } else {
+                                onAccessSecretStorageFailed();
+                            }
+                            return;
+                        }
                         onFinish();
                     }}
                 >

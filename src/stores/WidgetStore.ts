@@ -189,6 +189,7 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
         const app = WidgetUtils.makeAppConfig(widget.id, widget, widget.creatorUserId, roomId, undefined);
         this.widgetMap.set(WidgetUtils.getWidgetUid(app), app);
         this.roomMap.get(roomId)!.widgets.push(app);
+        this.emit(UPDATE_EVENT, roomId);
         return app;
     }
 
@@ -198,6 +199,7 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
         if (roomApps) {
             roomApps.widgets = roomApps.widgets.filter((app) => !(app.id === widgetId && app.roomId === roomId));
         }
+        this.emit(UPDATE_EVENT, roomId);
     }
 }
 

@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
+import { SettingsToggleInput } from "@vector-im/compound-web";
 
 import NewAndImprovedIcon from "../../../../../res/img/element-icons/new-and-improved.svg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useNotificationSettings } from "../../../../hooks/useNotificationSettings";
-import { useSettingValue } from "../../../../hooks/useSettings";
 import { _t } from "../../../../languageHandler";
 import {
     DefaultNotificationSettings,
@@ -19,13 +19,11 @@ import {
 } from "../../../../models/notificationsettings/NotificationSettings";
 import { RoomNotifState } from "../../../../RoomNotifs";
 import { SettingLevel } from "../../../../settings/SettingLevel";
-import SettingsStore from "../../../../settings/SettingsStore";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { clearAllNotifications } from "../../../../utils/notifications";
 import AccessibleButton from "../../elements/AccessibleButton";
 import ExternalLink from "../../elements/ExternalLink";
 import LabelledCheckbox from "../../elements/LabelledCheckbox";
-import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 import StyledRadioGroup from "../../elements/StyledRadioGroup";
 import TagComposer from "../../elements/TagComposer";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
@@ -34,6 +32,7 @@ import { SettingsSection } from "../shared/SettingsSection";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { NotificationPusherSettings } from "./NotificationPusherSettings";
 import SettingsFlag from "../../elements/SettingsFlag";
+import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
 
 enum NotificationDefaultLevels {
     AllMessages = "all_messages",
@@ -69,10 +68,6 @@ function useHasUnreadNotifications(): boolean {
  */
 export default function NotificationSettings2(): JSX.Element {
     const cli = useMatrixClientContext();
-
-    const desktopNotifications = useSettingValue("notificationsEnabled");
-    const desktopShowBody = useSettingValue("notificationBodyEnabled");
-    const audioNotifications = useSettingValue("audioNotificationsEnabled");
 
     const { model, hasPendingChanges, reconcile } = useNotificationSettings(cli);
 
@@ -117,41 +112,33 @@ export default function NotificationSettings2(): JSX.Element {
             )}
             <SettingsSection>
                 <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
-                    <LabelledToggleSwitch
+                    <SettingsToggleInput
+                        name="enable_notifications_account"
                         label={_t("settings|notifications|enable_notifications_account")}
-                        value={!settings.globalMute}
+                        checked={!settings.globalMute}
                         disabled={disabled}
-                        onChange={(value) => {
+                        onChange={(evt) => {
                             reconcile({
                                 ...model!,
-                                globalMute: !value,
+                                globalMute: !evt.target.checked,
                             });
                         }}
                     />
-                    <LabelledToggleSwitch
-                        label={_t("settings|notifications|enable_desktop_notifications_session")}
-                        value={desktopNotifications}
-                        onChange={(value) =>
-                            SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, value)
-                        }
-                    />
-                    <LabelledToggleSwitch
+                    <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
+                    <SettingsFlag
+                        name="notificationBodyEnabled"
                         label={_t("settings|notifications|desktop_notification_message_preview")}
-                        value={desktopShowBody}
-                        onChange={(value) =>
-                            SettingsStore.setValue("notificationBodyEnabled", null, SettingLevel.DEVICE, value)
-                        }
+                        level={SettingLevel.DEVICE}
                     />
-                    <LabelledToggleSwitch
-                        label={_t("settings|notifications|enable_audible_notifications_session")}
-                        value={audioNotifications}
-                        onChange={(value) =>
-                            SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, value)
-                        }
-                    />
+                    <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
                 </div>
                 <SettingsSubsection
-                    heading={_t("settings|notifications|default_setting_section")}
+                    heading={
+                        <SettingsSubsectionHeading
+                            heading={_t("settings|notifications|default_setting_section")}
+                            as="h2"
+                        />
+                    }
                     description={_t("settings|notifications|default_setting_description")}
                 >
                     <StyledRadioGroup
@@ -178,7 +165,12 @@ export default function NotificationSettings2(): JSX.Element {
                     />
                 </SettingsSubsection>
                 <SettingsSubsection
-                    heading={_t("settings|notifications|play_sound_for_section")}
+                    heading={
+                        <SettingsSubsectionHeading
+                            heading={_t("settings|notifications|play_sound_for_section")}
+                            as="h2"
+                        />
+                    }
                     description={_t("settings|notifications|play_sound_for_description")}
                 >
                     <LabelledCheckbox
@@ -224,7 +216,9 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                 </SettingsSubsection>
-                <SettingsSubsection heading={_t("settings|notifications|other_section")}>
+                <SettingsSubsection
+                    heading={<SettingsSubsectionHeading heading={_t("settings|notifications|other_section")} as="h2" />}
+                >
                     <LabelledCheckbox
                         label={_t("settings|notifications|invites")}
                         value={settings.activity.invite}
@@ -269,7 +263,9 @@ export default function NotificationSettings2(): JSX.Element {
                     />
                 </SettingsSubsection>
                 <SettingsSubsection
-                    heading={_t("settings|notifications|mentions_keywords")}
+                    heading={
+                        <SettingsSubsectionHeading heading={_t("settings|notifications|mentions_keywords")} as="h2" />
+                    }
                     description={_t(
                         "settings|notifications|keywords",
                         {},
@@ -302,6 +298,7 @@ export default function NotificationSettings2(): JSX.Element {
                         label={_t("settings|notifications|notify_mention", {
                             mxid: cli.getUserId()!,
                         })}
+                        id="mx_NotificationSettings2_MentionCheckbox"
                         value={settings.mentions.user}
                         disabled={disabled}
                         onChange={(value) => {

@@ -11,6 +11,7 @@ import classNames from "classnames";
 import { Resizable, type Size } from "re-resizable";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { type IWidget } from "matrix-widget-api";
+import { clamp, percentageOf, percentageWithin } from "@element-hq/web-shared-components";
 
 import AppTile from "../elements/AppTile";
 import dis from "../../../dispatcher/dispatcher";
@@ -22,16 +23,15 @@ import ResizeHandle from "../elements/ResizeHandle";
 import Resizer, { type IConfig } from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
-import { clamp, percentageOf, percentageWithin } from "../../../shared-components/utils/numbers";
 import UIStore from "../../../stores/UIStore";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
 import SdkConfig from "../../../SdkConfig";
+import { SDKContext } from "../../../contexts/SDKContext";
 
 interface IProps {
     userId: string;
     room: Room;
-    resizeNotifier: ResizeNotifier;
     showApps?: boolean; // Should apps be rendered
     maxHeight: number;
     role?: AriaRole;
@@ -57,8 +57,11 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         showApps: true,
     };
 
-    public constructor(props: IProps) {
-        super(props);
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.state = {
             apps: this.getApps(),
@@ -73,7 +76,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         this.unmounted = false;
 
-        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+        this.context.resizeNotifier.on("isResizing", this.onIsResizing);
 
         ScalarMessaging.startListening();
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
@@ -88,7 +91,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         if (this.resizeContainer) {
             this.resizer.detach();
         }
-        this.props.resizeNotifier.off("isResizing", this.onIsResizing);
+        this.context.resizeNotifier.off("isResizing", this.onIsResizing);
     }
 
     private onIsResizing = (resizing: boolean): void => {
@@ -281,7 +284,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                     className="mx_AppsDrawer_resizer"
                     handleWrapperClass="mx_AppsDrawer_resizer_container"
                     handleClass="mx_AppsDrawer_resizer_container_handle"
-                    resizeNotifier={this.props.resizeNotifier}
+                    resizeNotifier={this.context.resizeNotifier}
                 >
                     {appContainers}
                 </PersistentVResizer>

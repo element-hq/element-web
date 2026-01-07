@@ -41,6 +41,7 @@ import RoomListStore from "../../../src/stores/room-list/RoomListStore";
 import { DefaultTagID } from "../../../src/stores/room-list/models";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
+import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
 
 jest.useFakeTimers();
 
@@ -1216,6 +1217,15 @@ describe("SpaceStore", () => {
             store.setActiveSpace(MetaSpace.Home, false);
             viewRoom(room1);
             expect(store.activeSpace).toBe(MetaSpace.Home);
+        });
+
+        it("should check alias cache if switching to a room by alias", async () => {
+            viewRoom(room2);
+            storeRoomAliasInCache("#alias:server", room3, []);
+
+            store.setActiveSpace(space2, false);
+            defaultDispatcher.dispatch({ action: Action.ViewRoom, room_alias: "#alias:server" }, true);
+            expect(store.activeSpace).toBe(space1);
         });
     });
 

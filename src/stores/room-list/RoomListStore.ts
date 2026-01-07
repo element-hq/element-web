@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type Room, type RoomState, EventType, type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, EventType, type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
@@ -308,24 +308,22 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
         const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
         const newMembership = getEffectiveMembershipTag(membershipPayload.room, membershipPayload.membership);
         if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-            // If we're joining an upgraded room, we'll want to make sure we don't proliferate
-            // the dead room in the list.
-            const roomState: RoomState = membershipPayload.room.currentState;
-            const predecessor = roomState.findPredecessor(this.msc3946ProcessDynamicPredecessor);
-            if (predecessor) {
-                const prevRoom = this.matrixClient?.getRoom(predecessor.roomId);
-                if (prevRoom) {
-                    const isSticky = this.algorithm.stickyRoom === prevRoom;
-                    if (isSticky) {
-                        this.algorithm.setStickyRoom(null);
-                    }
-
-                    // Note: we hit the algorithm instead of our handleRoomUpdate() function to
-                    // avoid redundant updates.
-                    this.algorithm.handleRoomUpdate(prevRoom, RoomUpdateCause.RoomRemoved);
-                } else {
-                    logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
+            // If we're joining an upgraded room, we'll want to make sure we don't proliferate the dead room in the list.
+            const room: Room = membershipPayload.room;
+            const roomUpgradeHistory = room.client.getRoomUpgradeHistory(
+                room.roomId,
+                true,
+                this.msc3946ProcessDynamicPredecessor,
+            );
+            const predecessors = roomUpgradeHistory.slice(0, roomUpgradeHistory.indexOf(room));
+            for (const predecessor of predecessors) {
+                const isSticky = this.algorithm.stickyRoom === predecessor;
+                if (isSticky) {
+                    this.algorithm.setStickyRoom(null);
                 }
+                // Note: we hit the algorithm instead of our handleRoomUpdate() function to
+                // avoid redundant updates.
+                this.algorithm.handleRoomUpdate(predecessor, RoomUpdateCause.RoomRemoved);
             }
 
             await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);

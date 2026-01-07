@@ -30,9 +30,8 @@ export class Helpers {
     /**
      * Get the release announcement with the given name.
      * @param name
-     * @private
      */
-    private getReleaseAnnouncement(name: string) {
+    public getReleaseAnnouncement(name: string) {
         return this.page.getByRole("dialog", { name });
     }
 
@@ -54,16 +53,6 @@ export class Helpers {
      */
     assertReleaseAnnouncementIsNotVisible(name: string) {
         return expect(this.getReleaseAnnouncement(name)).not.toBeVisible();
-    }
-
-    /**
-     * Mark the release announcement with the given name as read.
-     * If the release announcement is not visible, this will throw an error.
-     * @param name
-     */
-    async markReleaseAnnouncementAsRead(name: string) {
-        const dialog = this.getReleaseAnnouncement(name);
-        await dialog.getByRole("button", { name: "Ok" }).click();
     }
 }
 

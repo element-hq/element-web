@@ -51,6 +51,7 @@ export async function doTokenRegistration(
     await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
 
     return page.evaluate(() => ({
+        homeserverBaseUrl: window.mxMatrixClientPeg.get().getHomeserverUrl(),
         accessToken: window.mxMatrixClientPeg.get().getAccessToken(),
         userId: window.mxMatrixClientPeg.get().getUserId(),
         deviceId: window.mxMatrixClientPeg.get().getDeviceId(),

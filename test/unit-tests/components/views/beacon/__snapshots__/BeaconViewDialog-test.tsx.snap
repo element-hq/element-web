@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<BeaconViewDialog /> renders a fallback when there are no locations 1`] = `
 <div
@@ -41,7 +41,7 @@ exports[`<BeaconViewDialog /> renders own beacon status when user is live sharin
   class="mx_DialogOwnBeaconStatus"
 >
   <span
-    class="_avatar_1qbcf_8 mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar _avatar-imageless_1qbcf_52"
+    class="_avatar_zysgz_8 mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar _avatar-imageless_zysgz_55"
     data-color="6"
     data-testid="avatar-img"
     data-type="round"

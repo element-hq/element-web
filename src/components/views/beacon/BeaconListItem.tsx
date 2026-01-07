@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type HTMLProps, useContext } from "react";
 import { type Beacon, BeaconEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { humanizeTime } from "@element-hq/web-shared-components";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import { humanizeTime } from "../../../utils/humanize";
 import { preventDefaultWrapper } from "../../../utils/NativeEventUtils";
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";

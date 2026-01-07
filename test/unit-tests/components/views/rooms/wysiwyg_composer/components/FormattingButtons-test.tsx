@@ -194,4 +194,14 @@ describe("FormattingButtons", () => {
         expect(screen.getByLabelText("Indent increase")).toBeInTheDocument();
         expect(screen.getByLabelText("Indent decrease")).toBeInTheDocument();
     });
+
+    it("Every button should when disabled the component is disabled", () => {
+        renderComponent({ disabled: true });
+
+        Object.values(testCases).forEach((testCase) => {
+            const { label } = testCase;
+            expect(screen.getByLabelText(label)).toHaveClass(classes.disabled);
+            expect(screen.getByLabelText(label)).toBeDisabled();
+        });
+    });
 });

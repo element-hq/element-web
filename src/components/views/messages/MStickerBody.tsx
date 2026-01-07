@@ -20,7 +20,7 @@ class MStickerBodyInner extends MImageBodyInner {
     protected onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         if (!this.props.mediaVisible) {
-            this.props.setMediaVisible?.(true);
+            this.props.setMediaVisible(true);
         }
     };
 
@@ -79,7 +79,7 @@ class MStickerBodyInner extends MImageBodyInner {
 }
 
 const MStickerBody: React.FC<IBodyProps> = (props) => {
-    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId(), props.mxEvent.getRoomId());
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
     return <MStickerBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
 };
 

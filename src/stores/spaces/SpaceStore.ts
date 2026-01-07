@@ -27,7 +27,6 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
-import { type FetchRoomFn } from "../notifications/ListNotificationState";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { DefaultTagID } from "../room-list/models";
@@ -49,7 +48,7 @@ import {
     UPDATE_SUGGESTED_ROOMS,
     UPDATE_TOP_LEVEL_SPACES,
 } from ".";
-import { getCachedRoomIDForAlias } from "../../RoomAliasCache";
+import { getCachedRoomIdForAlias } from "../../RoomAliasCache";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import {
     flattenSpaceHierarchyWithCache,
@@ -63,6 +62,7 @@ import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePage
 import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { ModuleApi } from "../../modules/Api.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
@@ -109,10 +109,6 @@ export const getChildOrder = (
     roomId: string,
 ): Array<Many<ListIteratee<unknown>>> => {
     return [validOrder(order) ?? NaN, ts, roomId]; // NaN has lodash sort it at the end in asc
-};
-
-const getRoomFn: FetchRoomFn = (room: Room) => {
-    return RoomNotificationStateStore.instance.getRoomState(room);
 };
 
 type SpaceStoreActions =
@@ -258,7 +254,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         if (!space || !this.matrixClient || space === this.activeSpace) return;
 
         let cliSpace: Room | null = null;
-        if (!isMetaSpace(space)) {
+        if (ModuleApi.instance.extras.spacePanelItems.has(space)) {
+            // it's a "space" provided by a module: that's good enough
+        } else if (!isMetaSpace(space)) {
             cliSpace = this.matrixClient.getRoom(space);
             if (!cliSpace?.isSpaceRoom()) return;
         } else if (!this.enabledMetaSpaces.includes(space)) {
@@ -293,6 +291,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                     context_switch: true,
                     metricsTrigger: "WebSpaceContextSwitch",
                 });
+            } else if (ModuleApi.instance.extras.spacePanelItems.has(space)) {
+                // module will handle this
             } else {
                 defaultDispatcher.dispatch<ViewHomePagePayload>({
                     action: Action.ViewHomePage,
@@ -1214,7 +1214,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY) as MetaSpace;
         const valid =
             lastSpaceId &&
-            (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]);
+            (ModuleApi.instance.extras.spacePanelItems.has(lastSpaceId) ||
+                (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]));
         if (valid) {
             // don't context switch here as it may break permalinks
             this.setActiveSpace(lastSpaceId, false);
@@ -1249,7 +1250,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                 let roomId = payload.room_id;
 
                 if (payload.room_alias && !roomId) {
-                    roomId = getCachedRoomIDForAlias(payload.room_alias);
+                    const result = getCachedRoomIdForAlias(payload.room_alias);
+                    if (result) roomId = result.roomId;
                 }
 
                 if (!roomId) return; // we'll get re-fired with the room ID shortly
@@ -1368,7 +1370,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
             return this.notificationStateMap.get(key)!;
         }
 
-        const state = new SpaceNotificationState(getRoomFn);
+        const state = new SpaceNotificationState();
         this.notificationStateMap.set(key, state);
         return state;
     }

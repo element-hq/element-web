@@ -74,7 +74,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
                 <Button
                     size="sm"
                     kind="secondary"
-                    Icon={ShareIcon}
+                    Icon={DownloadIcon}
                     onClick={() =>
                         Modal.createDialog(
                             lazy(
@@ -89,7 +89,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
                 <Button
                     size="sm"
                     kind="secondary"
-                    Icon={DownloadIcon}
+                    Icon={ShareIcon}
                     onClick={() =>
                         Modal.createDialog(
                             lazy(

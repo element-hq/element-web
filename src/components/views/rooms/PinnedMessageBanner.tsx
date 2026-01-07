@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useEffect, useRef, useState } from "react";
+import React, { type JSX, useContext, useEffect, useId, useRef, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
@@ -25,7 +25,7 @@ import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 import { EventPreview } from "./EventPreview.tsx";
-import type ResizeNotifier from "../../../utils/ResizeNotifier";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -39,20 +39,12 @@ interface PinnedMessageBannerProps {
      * The room where the banner is displayed
      */
     room: Room;
-    /**
-     * The resize notifier to notify the timeline to resize itself when the banner is displayed or hidden.
-     */
-    resizeNotifier: ResizeNotifier;
 }
 
 /**
  * A banner that displays the pinned messages in a room.
  */
-export function PinnedMessageBanner({
-    room,
-    permalinkCreator,
-    resizeNotifier,
-}: PinnedMessageBannerProps): JSX.Element | null {
+export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBannerProps): JSX.Element | null {
     const pinnedEventIds = usePinnedEvents(room);
     const pinnedEvents = useSortedFetchedPinnedEvents(room, pinnedEventIds);
     const eventCount = pinnedEvents.length;
@@ -64,8 +56,12 @@ export function PinnedMessageBanner({
         setCurrentEventIndex(() => eventCount - 1);
     }, [eventCount]);
 
+    const isLastMessage = currentEventIndex === eventCount - 1;
+
     const pinnedEvent = pinnedEvents[currentEventIndex];
-    useNotifyTimeline(pinnedEvent, resizeNotifier);
+    useNotifyTimeline(pinnedEvent);
+
+    const id = useId();
 
     if (!pinnedEvent) return null;
 
@@ -90,18 +86,24 @@ export function PinnedMessageBanner({
 
     return (
         <div
+            role="region"
             className="mx_PinnedMessageBanner"
             data-single-message={isSinglePinnedEvent}
             aria-label={_t("room|pinned_message_banner|description")}
             data-testid="pinned-message-banner"
         >
             <button
-                aria-label={_t("room|pinned_message_banner|go_to_message")}
+                aria-label={
+                    isLastMessage
+                        ? _t("room|pinned_message_banner|go_to_newest_message")
+                        : _t("room|pinned_message_banner|go_to_next_message")
+                }
+                aria-describedby={id}
                 type="button"
                 className="mx_PinnedMessageBanner_main"
                 onClick={onBannerClick}
             >
-                <div className="mx_PinnedMessageBanner_content">
+                <div className="mx_PinnedMessageBanner_content" id={id}>
                     <Indicators count={eventCount} currentIndex={currentEventIndex} />
                     <PinIcon width="20px" height="20px" className="mx_PinnedMessageBanner_PinIcon" />
                     {!isSinglePinnedEvent && (
@@ -142,9 +144,10 @@ export function PinnedMessageBanner({
 /**
  * When the banner is displayed or hidden, we want to notify the timeline to resize itself.
  * @param pinnedEvent
- * @param resizeNotifier
  */
-function useNotifyTimeline(pinnedEvent: MatrixEvent | null, resizeNotifier: ResizeNotifier): void {
+function useNotifyTimeline(pinnedEvent: MatrixEvent | null): void {
+    const resizeNotifier = useContext(SDKContext).resizeNotifier;
+
     const previousEvent = useRef<MatrixEvent | null>(null);
     useEffect(() => {
         // If we switch from a pinned message to no pinned message or the opposite, we want to resize the timeline

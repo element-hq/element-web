@@ -34,25 +34,17 @@ Please see LICENSE files in the repository root for full details.
         background-color: $system;
         border-radius: 20px;
         display: inline-block;
-        width: 32px;
-        height: 32px;
-        position: relative;
+        width: 16px;
+        height: 16px;
+        padding: var(--cpd-space-2x);
         vertical-align: middle;
         margin-right: 12px;
 
-        &::before {
-            content: "";
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: cover;
-            mask-image: url("$(res)/img/element-icons/room/composer/attach.svg");
-            background-color: $secondary-content;
-            width: 15px;
-            height: 15px;
-
-            position: absolute;
-            top: 8px;
-            left: 8px;
+        svg {
+            color: $secondary-content;
+            width: inherit;
+            height: inherit;
+            display: block;
         }
     }
 

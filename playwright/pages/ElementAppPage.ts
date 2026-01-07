@@ -51,9 +51,13 @@ export class ElementAppPage {
     /**
      * Open room creation dialog.
      */
-    public async openCreateRoomDialog(): Promise<Locator> {
-        await this.page.getByRole("button", { name: "Add room", exact: true }).click();
-        await this.page.getByRole("menuitem", { name: "New room", exact: true }).click();
+
+    public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
+        await this.page
+            .getByRole("navigation", { name: "Room list" })
+            .getByRole("button", { name: "New conversation" })
+            .click();
+        await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
     }
 
@@ -69,13 +73,38 @@ export class ElementAppPage {
     }
 
     /**
+     * Get the room ID from the current URL.
+     *
+     * @returns The room ID.
+     * @throws if the current URL does not contain a room ID.
+     */
+    public async getCurrentRoomIdFromUrl(): Promise<string> {
+        const urlHash = await this.page.evaluate(() => window.location.hash);
+        if (!urlHash.startsWith("#/room/")) {
+            throw new Error("URL hash suggests we are not in a room");
+        }
+        return urlHash.replace("#/room/", "");
+    }
+
+    /**
      * Opens the given room by name. The room must be visible in the
+     * room list and the room may contain unread messages.
+     *
+     * @param name The exact room name to find and click on/open.
+     */
+    public async viewRoomByName(name: string): Promise<void> {
+        // We get the room list by test-id which is a listbox and matching title=name
+        return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
+    }
+
+    /**
+     * Opens the given room on the old room list by name. The room must be visible in the
      * room list, but the room list may be folded horizontally, and the
      * room may contain unread messages.
      *
      * @param name The exact room name to find and click on/open.
      */
-    public async viewRoomByName(name: string): Promise<void> {
+    public async viewRoomByNameOnOldRoomList(name: string): Promise<void> {
         // We look for the room inside the room list, which is a tree called Rooms.
         //
         // There are 3 cases:
@@ -174,6 +203,21 @@ export class ElementAppPage {
     }
 
     /**
+     * Opens the room info panel if it is not already open.
+     *
+     * TODO: fix this so that it works correctly if, say, the member list was open instead of the room info panel.
+     *
+     * @returns locator to the right panel
+     */
+    public async openRoomInfoPanel(): Promise<Locator> {
+        const locator = this.page.getByTestId("right-panel");
+        if (!(await locator.isVisible())) {
+            await this.page.getByRole("button", { name: "Room info" }).first().click();
+        }
+        return locator;
+    }
+
+    /**
      * Opens/closes the memberlist panel
      * @returns locator to the memberlist panel
      */
@@ -186,21 +230,18 @@ export class ElementAppPage {
     }
 
     /**
-     * Get a locator for the tooltip associated with an element
-     * @param e The element with the tooltip
-     * @returns Locator to the tooltip
+     * Open the room info panel, and use it to send an invite to the given user.
+     *
+     * @param userId - The user to invite to the room.
      */
-    public async getTooltipForElement(e: Locator): Promise<Locator> {
-        const [labelledById, describedById] = await Promise.all([
-            e.getAttribute("aria-labelledby"),
-            e.getAttribute("aria-describedby"),
-        ]);
-        if (!labelledById && !describedById) {
-            throw new Error(
-                "Element has no aria-labelledby or aria-describedy attributes! The tooltip should have added either one of these.",
-            );
-        }
-        return this.page.locator(`id=${labelledById ?? describedById}`);
+    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+        const rightPanel = await this.openRoomInfoPanel();
+        await rightPanel.getByRole("menuitem", { name: "Invite" }).click();
+
+        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
+        await input.fill(userId);
+        await input.press("Enter");
+        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
     }
 
     /**

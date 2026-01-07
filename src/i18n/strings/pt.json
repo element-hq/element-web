@@ -88,9 +88,7 @@
         "ok": "OK",
         "open": "Abrir",
         "open_menu": "Abrir menu",
-        "pause": "Pausar",
         "pin": "Fixar",
-        "play": "Reproduzir",
         "proceed": "Prosseguir",
         "quote": "Citar",
         "react": "Reagir",
@@ -582,7 +580,6 @@
         "user": "Utilizador",
         "user_avatar": "Foto do perfil",
         "username": "Nome de utilizador",
-        "verification_cancelled": "Verificação cancelada",
         "verified": "Verificado",
         "version": "Versão",
         "video": "Vídeo",
@@ -932,7 +929,6 @@
             "title": "Método de recuperação Removido",
             "warning": "Se não tiveres removido o método de recuperação, um atacante pode estar a tentar aceder à tua conta. Altera a palavra-passe da tua conta e define imediatamente um novo método de recuperação nas Definições."
         },
-        "reset_all_button": "Esqueceste-te ou perdeste todos os métodos de recuperação? <a>Repor tudo</a>",
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
@@ -953,12 +949,8 @@
             "after_new_login": {
                 "device_verified": "Dispositivo verificado",
                 "skip_verification": "Ignora a verificação por enquanto",
-                "unable_to_verify": "Não é possível verificar este dispositivo",
                 "verify_this_device": "Verifica este dispositivo"
             },
-            "cancelled": "Cancelaste a verificação.",
-            "cancelled_self": "Cancelaste a verificação no teu outro dispositivo.",
-            "cancelled_user": "%(displayName)sverificação cancelada.",
             "cancelling": "A cancelar…",
             "complete_action": "Entendi",
             "complete_description": "Verificaste este utilizador com sucesso.",
@@ -973,46 +965,33 @@
             "incoming_sas_dialog_waiting": "Aguarda a confirmação do parceiro...",
             "incoming_sas_user_dialog_text_1": "Verifica este utilizador para o marcar como fiável. A confiança nos utilizadores dá-te uma tranquilidade extra quando utilizas mensagens encriptadas de ponta a ponta.",
             "incoming_sas_user_dialog_text_2": "A verificação deste utilizador marcará a sua sessão como sendo de confiança e também marcará a tua sessão como sendo de confiança para ele.",
-            "no_key_or_device": "Parece que não tens uma chave de recuperação ou qualquer outro dispositivo com o qual possas fazer a verificação.  Este dispositivo não poderá aceder a mensagens encriptadas antigas. Para verificares a tua identidade neste dispositivo, terás de repor as tuas chaves de verificação.",
             "no_support_qr_emoji": "O dispositivo que estás a tentar verificar não suporta a leitura de um código QR nem a verificação de emoji, os dois métodos suportados pela %(brand)s. Tenta com um cliente diferente.",
             "other_party_cancelled": "A outra parte cancelou a verificação.",
             "prompt_encrypted": "Verifica todos os utilizadores de uma sala para garantir a sua segurança.",
-            "prompt_self": "Inicia novamente a verificação a partir da notificação.",
             "prompt_unencrypted": "Em salas encriptadas, verifica todos os utilizadores para garantir a segurança.",
-            "prompt_user": "Recomeça a verificação a partir do perfil.",
             "qr_or_sas": "%(qrCode)s ou %(emojiCompare)s",
-            "qr_or_sas_header": "Verifica este dispositivo completando uma das seguintes opções:",
             "qr_prompt": "Lê este código único",
-            "qr_reciprocate_same_shield_device": "Estás quase lá! O teu outro dispositivo está a mostrar o mesmo escudo?",
             "qr_reciprocate_same_shield_user": "Estás quase lá! O %(displayName)s tem o mesmo escudo?",
-            "request_toast_accept": "Verifica a sessão",
             "request_toast_accept_user": "Verificar utilizador",
             "request_toast_decline_counter": "Ignora (%(counter)s)",
             "request_toast_detail": "%(deviceId)s de %(ip)s",
-            "reset_proceed_prompt": "Procede à reposição",
             "sas_caption_self": "Verifica este dispositivo, confirmando que o número seguinte aparece no ecrã.",
             "sas_caption_user": "Verifica este utilizador, confirmando que o seguinte número aparece no ecrã deles.",
             "sas_description": "Compara um conjunto único de emojis se não tiveres uma câmara em nenhum dos dispositivos",
-            "sas_emoji_caption_self": "Confirma se os emojis abaixo são apresentados em ambos os dispositivos, pela mesma ordem:",
             "sas_emoji_caption_user": "Verifica este utilizador confirmando que o seguinte emoji aparece no seu ecrã.",
             "sas_match": "Correspondem",
             "sas_no_match": "Não correspondem",
             "sas_prompt": "Compara emojis únicos",
             "scan_qr": "Verifica através da leitura de um código",
             "scan_qr_explainer": "Pede a %(displayName)s para ler o teu código:",
-            "self_verification_hint": "Para continuar, aceita o pedido de verificação no teu outro dispositivo.",
             "start_button": "Iniciar Verificação",
-            "successful_device": "Verificaste com sucesso %(deviceName)s (%(deviceId)s)!",
-            "successful_own_device": "Verificaste o teu dispositivo com sucesso!",
             "successful_user": "Verificaste com sucesso %(displayName)s!",
-            "timed_out": "A verificação expirou.",
             "unsupported_method": "Não foi possível encontrar um método de verificação compatível.",
             "unverified_session_toast_accept": "Sim, fui eu",
             "unverified_session_toast_title": "Novo login. Foste tu?",
             "unverified_sessions_toast_description": "Revê para garantir que a tua conta está segura",
             "unverified_sessions_toast_reject": "Mais tarde",
             "unverified_sessions_toast_title": "Tens sessões não verificadas",
-            "verification_description": "Verifica a tua identidade para acederes a mensagens encriptadas e provares a tua identidade a outros.",
             "verification_dialog_title_device": "Verifica o outro dispositivo",
             "verification_dialog_title_user": "Pedido de verificação",
             "verification_skip_warning": "Sem a verificação, não terás acesso a todas as tuas mensagens e poderás parecer pouco fiável aos olhos dos outros.",
@@ -1022,9 +1001,6 @@
             "verify_emoji_prompt": "Verifica comparando o emoji único.",
             "verify_emoji_prompt_qr": "Se não conseguires ler o código acima, verifica-o comparando emojis.",
             "verify_later": "Verificarei mais tarde",
-            "verify_using_device": "Verifica com outro dispositivo",
-            "verify_using_key": "Verifica com a chave de recuperação",
-            "verify_using_key_or_phrase": "Verifica com a chave ou frase de recuperação",
             "waiting_for_user_accept": "À espera de %(displayName)s para aceitar...",
             "waiting_other_device": "À espera que verifiques no teu outro dispositivo...",
             "waiting_other_device_details": "À espera que verifiques no teu outro dispositivo, %(deviceName)s (%(deviceId)s)...",
@@ -1416,7 +1392,6 @@
         "upload_file": "Carrega um ficheiro"
     },
     "labs": {
-        "allow_screen_share_only_mode": "Permitir o modo de partilha de ecrã apenas",
         "ask_to_join": "Permitir pedir para participar",
         "automatic_debug_logs": "Envia automaticamente registos de depuração em qualquer erro",
         "automatic_debug_logs_decryption": "Envia automaticamente registos de depuração em caso de erros de desencriptação",
@@ -1804,15 +1779,9 @@
                 "other": "%(count)s Mensagens fixadas"
             },
             "limits": {
-                "one": "",
                 "other": "Só podes fixar até %(count)s widgets"
             },
             "menu": "Abrir o menu",
-            "release_announcement": {
-                "close": "Ok",
-                "description": "Encontra todas as mensagens fixadas aqui. Passa o cursor sobre qualquer mensagem e seleciona \"Fixar\" para a adicionar.",
-                "title": "Todas as novas mensagens afixadas"
-            },
             "reply_thread": "Responde a uma <link> mensagem do tópico</link>",
             "unpin_all": {
                 "button": "Desafixa todas as mensagens",
@@ -1942,8 +1911,6 @@
             "send_message_start_dm": "Envia a tua primeira mensagem para convidar <displayName/> para conversar",
             "start_of_dm_history": "Este é o início do teu histórico de mensagens directas com <displayName/>.",
             "start_of_room": "Este é o início de <roomName/>.",
-            "topic": "Tópico: %(topic)s",
-            "topic_edit": "Tópico: %(topic)s (<a>edita</a>)",
             "unencrypted_warning": "A encriptação de ponta a ponta não está ativada",
             "user_created": "%(displayName)s criou esta sala.",
             "you_created": "Tu criaste esta sala."
@@ -1999,7 +1966,6 @@
             "button_close_list": "Fechar lista",
             "button_view_all": "Ver tudo",
             "description": "Esta sala tem mensagens afixadas. Clica para as veres.",
-            "go_to_message": "Visualiza a mensagem fixada na linha do tempo.",
             "title": "<bold>%(index)s de %(length)s</bold> Mensagens fixadas"
         },
         "read_topic": "Clica para ler o tópico",
@@ -2353,7 +2319,6 @@
             "error_update_guest_access": "Falha ao atualizar o acesso de convidado deste espaço",
             "error_update_history_visibility": "Falha ao atualizar a visibilidade do histórico deste espaço",
             "guest_access_explainer": "Os convidados podem juntar-se a um espaço sem terem uma conta.",
-            "guest_access_explainer_public_space": "Isto pode ser útil para espaços públicos.",
             "guest_access_label": "Ativar o acesso de convidados",
             "history_visibility_anyone_space": "Espaço de pré-visualização",
             "history_visibility_anyone_space_description": "Permite que as pessoas visualizem o teu espaço antes de aderirem.",
@@ -2923,7 +2888,6 @@
             "spaces_explainer": "Os espaços são formas de agrupar divisões e pessoas. Para além dos espaços em que te encontras, também podes utilizar alguns espaços pré-construídos.",
             "title": "Barra lateral"
         },
-        "start_automatically": "Iniciar automaticamente ao iniciar o sistema",
         "tac_only_notifications": "Mostra apenas as notificações no centro de actividades do tópico",
         "use_12_hour_format": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
         "use_command_enter_send_message": "Utiliza Command + Enter para enviar uma mensagem",
@@ -3215,24 +3179,10 @@
         "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos."
     },
     "time": {
-        "about_day_ago": "há cerca de um dia",
-        "about_hour_ago": "há cerca de uma hora",
-        "about_minute_ago": "há cerca de um minuto",
         "date_at_time": "%(date)s às %(time)s",
-        "few_seconds_ago": "há alguns segundos atrás",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "daqui a um dia",
-        "in_about_hour": "daqui a uma hora",
-        "in_about_minute": "daqui a um minuto",
-        "in_few_seconds": "daqui a alguns segundos",
-        "in_n_days": "daqui a %(num)s dias",
-        "in_n_hours": "daqui a %(num)s horas",
-        "in_n_minutes": "daqui a %(num)s minutos",
         "left": "%(timeRemaining)s ainda",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "%(num)s dias atrás",
-        "n_hours_ago": "%(num)s horas atrás",
-        "n_minutes_ago": "%(num)s minutos atrás",
         "seconds_left": "%(seconds)ss restantes",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3289,8 +3239,7 @@
         "m.audio": {
             "error_downloading_audio": "Erro ao descarregar áudio",
             "error_processing_audio": "Erro no processamento da mensagem de áudio",
-            "error_processing_voice_message": "Erro no processamento da mensagem de voz",
-            "unnamed_audio": "Áudio sem nome"
+            "error_processing_voice_message": "Erro no processamento da mensagem de voz"
         },
         "m.beacon_info": {
             "view_live_location": "Vê a localização ao vivo"
@@ -3348,7 +3297,6 @@
             }
         },
         "m.poll.end": {
-            "ended": "Terminou uma sondagem",
             "sender_ended": "%(senderName)s encerrou uma sondagem"
         },
         "m.poll.start": "%(senderName)s iniciou uma sondagem - %(pollQuestion)s",
@@ -3698,7 +3646,6 @@
         }
     },
     "truncated_list_n_more": {
-        "one": "",
         "other": "E %(count)s mais..."
     },
     "unsupported_browser": {

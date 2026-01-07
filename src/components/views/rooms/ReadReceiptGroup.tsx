@@ -212,38 +212,41 @@ export function ReadReceiptPerson({
     onAfterClick,
 }: ReadReceiptPersonProps): JSX.Element {
     return (
-        <Tooltip description={roomMember?.rawDisplayName ?? userId} caption={userId} placement="top">
-            <div>
-                <MenuItem
-                    className="mx_ReadReceiptGroup_person"
-                    onClick={() => {
-                        dis.dispatch({
-                            action: Action.ViewUser,
-                            // XXX: We should be using a real member object and not assuming what the receiver wants.
-                            // The ViewUser action leads to the RightPanelStore, and RightPanelStoreIPanelState defines the
-                            // member property of IRightPanelCardState as `RoomMember | User`, so we’re fine for now, but we
-                            // should definitely clean this up later
-                            member: roomMember ?? ({ userId } as User),
-                            push: false,
-                        });
-                        onAfterClick?.();
-                    }}
-                >
-                    <MemberAvatar
-                        member={roomMember}
-                        fallbackUserId={userId}
-                        size="24px"
-                        aria-hidden="true"
-                        aria-live="off"
-                        resizeMethod="crop"
-                        hideTitle
-                    />
-                    <div className="mx_ReadReceiptGroup_name">
-                        <p>{roomMember?.name ?? userId}</p>
-                        <p className="mx_ReadReceiptGroup_secondary">{formatDate(new Date(ts), isTwelveHour)}</p>
-                    </div>
-                </MenuItem>
-            </div>
+        <Tooltip
+            description={roomMember?.rawDisplayName ?? userId}
+            caption={userId}
+            placement="top"
+            isTriggerInteractive={false}
+        >
+            <MenuItem
+                className="mx_ReadReceiptGroup_person"
+                onClick={() => {
+                    dis.dispatch({
+                        action: Action.ViewUser,
+                        // XXX: We should be using a real member object and not assuming what the receiver wants.
+                        // The ViewUser action leads to the RightPanelStore, and RightPanelStoreIPanelState defines the
+                        // member property of IRightPanelCardState as `RoomMember | User`, so we’re fine for now, but we
+                        // should definitely clean this up later
+                        member: roomMember ?? ({ userId } as User),
+                        push: false,
+                    });
+                    onAfterClick?.();
+                }}
+            >
+                <MemberAvatar
+                    member={roomMember}
+                    fallbackUserId={userId}
+                    size="24px"
+                    aria-hidden="true"
+                    aria-live="off"
+                    resizeMethod="crop"
+                    hideTitle
+                />
+                <div className="mx_ReadReceiptGroup_name">
+                    <p>{roomMember?.name ?? userId}</p>
+                    <p className="mx_ReadReceiptGroup_secondary">{formatDate(new Date(ts), isTwelveHour)}</p>
+                </div>
+            </MenuItem>
         </Tooltip>
     );
 }

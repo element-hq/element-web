@@ -48,7 +48,7 @@ describe("ListView", () => {
         return render(getListViewComponent(mergedProps), {
             wrapper: ({ children }) => (
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
-                    {children}
+                    <>{children}</>
                 </VirtuosoMockContext.Provider>
             ),
         });
@@ -195,6 +195,53 @@ describe("ListView", () => {
             expect(items[lastIndex]).toHaveAttribute("tabindex", "-1");
         });
 
+        it("should not handle keyboard navigation when modifier keys are pressed", () => {
+            renderListViewWithHeight();
+            const container = screen.getByRole("grid");
+
+            fireEvent.focus(container);
+
+            // Store initial state - first item should be focused
+            const initialItems = container.querySelectorAll(".mx_item");
+            expect(initialItems[0]).toHaveAttribute("tabindex", "0");
+            expect(initialItems[2]).toHaveAttribute("tabindex", "-1");
+
+            // Test ArrowDown with Ctrl modifier - should NOT navigate
+            fireEvent.keyDown(container, { code: "ArrowDown", ctrlKey: true });
+
+            let items = container.querySelectorAll(".mx_item");
+            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
+            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+
+            // Test ArrowDown with Alt modifier - should NOT navigate
+            fireEvent.keyDown(container, { code: "ArrowDown", altKey: true });
+
+            items = container.querySelectorAll(".mx_item");
+            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
+            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+
+            // Test ArrowDown with Shift modifier - should NOT navigate
+            fireEvent.keyDown(container, { code: "ArrowDown", shiftKey: true });
+
+            items = container.querySelectorAll(".mx_item");
+            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
+            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+
+            // Test ArrowDown with Meta/Cmd modifier - should NOT navigate
+            fireEvent.keyDown(container, { code: "ArrowDown", metaKey: true });
+
+            items = container.querySelectorAll(".mx_item");
+            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
+            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+
+            // Test normal ArrowDown without modifiers - SHOULD navigate
+            fireEvent.keyDown(container, { code: "ArrowDown" });
+
+            items = container.querySelectorAll(".mx_item");
+            expect(items[0]).toHaveAttribute("tabindex", "-1"); // Should have moved from first item
+            expect(items[2]).toHaveAttribute("tabindex", "0"); // Should have moved to third item (skipping separator)
+        });
+
         it("should skip non-focusable items when navigating down", async () => {
             // Create items where every other item is not focusable
             const mixedItems = [
@@ -316,7 +363,12 @@ describe("ListView", () => {
             const mockOnClick = jest.fn();
 
             mockGetItemComponent.mockImplementation(
-                (index: number, item: TestItemWithSeparator, context: any, onFocus: (e: React.FocusEvent) => void) => {
+                (
+                    index: number,
+                    item: TestItemWithSeparator,
+                    context: any,
+                    onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+                ) => {
                     const itemKey = typeof item === "string" ? item : item.id;
                     const isFocused = context.tabIndexKey === itemKey;
                     return (
@@ -325,7 +377,7 @@ describe("ListView", () => {
                             data-testid={`row-${index}`}
                             tabIndex={isFocused ? 0 : -1}
                             onClick={() => mockOnClick(item)}
-                            onFocus={onFocus}
+                            onFocus={(e) => onFocus(item, e)}
                         >
                             {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
                         </div>

@@ -6,9 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { EventType } from "matrix-js-sdk/src/matrix";
 
-import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
+import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
 import type { FilterKey } from "./skip-list/filters";
@@ -22,7 +22,7 @@ import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
-import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
@@ -55,6 +55,16 @@ export enum RoomListStoreV3Event {
     // The event which is called when the room list is loaded.
     ListsLoaded = "lists_loaded",
 }
+
+// The result object for returning rooms from the store
+export type RoomsResult = {
+    // The ID of the active space queried
+    spaceId: SpaceKey;
+    // The filter queried
+    filterKeys?: FilterKey[];
+    // The resulting list of rooms
+    rooms: Room[];
+};
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
@@ -107,9 +117,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
      * @param filterKeys Optional array of filters that the rooms must match against.
      */
-    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): Room[] {
-        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys));
-        else return [];
+    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
+        const spaceId = SpaceStore.instance.activeSpace;
+        if (this.roomSkipList?.initialized)
+            return {
+                spaceId: spaceId,
+                filterKeys,
+                rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)),
+            };
+        else return { spaceId: spaceId, filterKeys, rooms: [] };
     }
 
     /**
@@ -219,12 +235,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     this.addRoomAndEmit(payload.room);
                     return;
                 }
-
                 // If the user has left this room, remove it from the skiplist.
                 if (
-                    (payload.oldMembership === KnownMembership.Invite ||
-                        payload.oldMembership === KnownMembership.Join) &&
-                    payload.membership === KnownMembership.Leave
+                    (oldMembership === EffectiveMembership.Invite || oldMembership === EffectiveMembership.Join) &&
+                    newMembership === EffectiveMembership.Leave
                 ) {
                     this.roomSkipList.removeRoom(payload.room);
                     this.emit(LISTS_UPDATE_EVENT);
@@ -234,16 +248,19 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                 // the dead room in the list.
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-                    const roomState: RoomState = payload.room.currentState;
-                    const predecessor = roomState.findPredecessor(this.msc3946ProcessDynamicPredecessor);
-                    if (predecessor) {
-                        const prevRoom = this.matrixClient?.getRoom(predecessor.roomId);
-                        if (prevRoom) this.roomSkipList.removeRoom(prevRoom);
-                        else logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
+                    const room: Room = payload.room;
+                    const roomUpgradeHistory = room.client.getRoomUpgradeHistory(
+                        room.roomId,
+                        true,
+                        this.msc3946ProcessDynamicPredecessor,
+                    );
+                    const predecessors = roomUpgradeHistory.slice(0, roomUpgradeHistory.indexOf(room));
+                    for (const predecessor of predecessors) {
+                        this.roomSkipList.removeRoom(predecessor);
                     }
                 }
 
-                this.addRoomAndEmit(payload.room, true);
+                this.addRoomAndEmit(payload.room, oldMembership === EffectiveMembership.Leave);
                 break;
             }
 
@@ -356,4 +373,4 @@ export default class RoomListStoreV3 {
     }
 }
 
-window.mxRoomListStoreV3 = RoomListStoreV3.instance;
+window.getRoomListStoreV3 = () => RoomListStoreV3.instance;

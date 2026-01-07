@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type Ref, type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ErrorSolidIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { _t } from "../../../languageHandler";
@@ -40,6 +41,9 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
         let subtitle: string;
         const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
         const room = cli?.getRoom(roomId);
+
+        const stateEncrypted = content["io.element.msc4362.encrypt_state_events"] && cli.enableEncryptedStateEvents;
+
         if (prevContent.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
             subtitle = _t("timeline|m.room.encryption|parameters_changed");
         } else if (dmPartner) {
@@ -47,14 +51,17 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
             subtitle = _t("timeline|m.room.encryption|enabled_dm", { displayName });
         } else if (room && isLocalRoom(room)) {
             subtitle = _t("timeline|m.room.encryption|enabled_local");
+        } else if (stateEncrypted) {
+            subtitle = _t("timeline|m.room.encryption|state_enabled");
         } else {
             subtitle = _t("timeline|m.room.encryption|enabled");
         }
 
         return (
             <EventTileBubble
+                icon={<LockSolidIcon />}
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
-                title={_t("common|encryption_enabled")}
+                title={stateEncrypted ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled")}
                 subtitle={subtitle}
                 timestamp={timestamp}
             />
@@ -64,6 +71,7 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
     if (isRoomEncrypted) {
         return (
             <EventTileBubble
+                icon={<LockSolidIcon />}
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                 title={_t("common|encryption_enabled")}
                 subtitle={_t("timeline|m.room.encryption|disable_attempt")}
@@ -74,7 +82,8 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
 
     return (
         <EventTileBubble
-            className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
+            icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
+            className="mx_cryptoEvent"
             title={_t("timeline|m.room.encryption|disabled")}
             subtitle={_t("timeline|m.room.encryption|unsupported")}
             ref={ref}

@@ -143,7 +143,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
         // If the room is upgraded, use that room instead. We'll also splice out
         // any children of the room.
-        const history = this.matrixClient?.getRoomUpgradeHistory(room.roomId, false, msc3946ProcessDynamicPredecessor);
+        const history = this.matrixClient?.getRoomUpgradeHistory(room.roomId, true, msc3946ProcessDynamicPredecessor);
         if (history && history.length > 1) {
             room = history[history.length - 1]; // Last room is most recent in history
 

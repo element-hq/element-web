@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventType, getHttpUriForMxc, type IContent, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { fireEvent, render, screen, type RenderResult } from "jest-matrix-react";
+import { fireEvent, render, screen } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 import { type MockedObject } from "jest-mock";
 
@@ -34,7 +34,8 @@ jest.mock("matrix-encrypt-attachment", () => ({
 }));
 
 describe("MVideoBody", () => {
-    const userId = "@user:server";
+    const ourUserId = "@user:server";
+    const senderUserId = "@other_use:server";
     const deviceId = "DEADB33F";
 
     const thumbUrl = "https://server/_matrix/media/v3/download/server/encrypted-poster";
@@ -42,7 +43,7 @@ describe("MVideoBody", () => {
 
     beforeEach(() => {
         cli = getMockClientWithEventEmitter({
-            ...mockClientMethodsUser(userId),
+            ...mockClientMethodsUser(ourUserId),
             ...mockClientMethodsServer(),
             ...mockClientMethodsDevice(deviceId),
             ...mockClientMethodsCrypto(),
@@ -67,7 +68,7 @@ describe("MVideoBody", () => {
 
     const encryptedMediaEvent = new MatrixEvent({
         room_id: "!room:server",
-        sender: userId,
+        sender: senderUserId,
         type: EventType.RoomMessage,
         event_id: "$foo:bar",
         content: {
@@ -86,10 +87,47 @@ describe("MVideoBody", () => {
         },
     });
 
-    it("does not crash when given a portrait image", () => {
+    it("does not crash when given portrait dimensions", () => {
         // Check for an unreliable crash caused by a fractional-sized
         // image dimension being used for a CanvasImageData.
-        const { asFragment } = makeMVideoBody(720, 1280);
+        const content: IContent = {
+            info: {
+                "w": 720,
+                "h": 1280,
+                "mimetype": "video/mp4",
+                "size": 2495675,
+                "thumbnail_file": {
+                    url: "",
+                    key: { alg: "", key_ops: [], kty: "", k: "", ext: true },
+                    iv: "",
+                    hashes: {},
+                    v: "",
+                },
+                "thumbnail_info": { mimetype: "" },
+                "xyz.amorgan.blurhash": "TrGl6bofof~paxWC?bj[oL%2fPj]",
+            },
+            url: "http://example.com",
+        };
+
+        const event = new MatrixEvent({
+            content,
+        });
+
+        const defaultProps: IBodyProps = {
+            mxEvent: event,
+            highlights: [],
+            highlightLink: "",
+            onMessageAllowed: jest.fn(),
+            permalinkCreator: {} as RoomPermalinkCreator,
+            mediaEventHelper: { media: { isEncrypted: false } } as MediaEventHelper,
+        };
+
+        const { asFragment } = render(
+            <MatrixClientContext.Provider value={cli}>
+                <MVideoBody {...defaultProps} />
+            </MatrixClientContext.Provider>,
+            withClientContextRenderOptions(cli),
+        );
         expect(asFragment()).toMatchSnapshot();
         // If we get here, we did not crash.
     });
@@ -153,50 +191,39 @@ describe("MVideoBody", () => {
 
             expect(fetchMock).toHaveFetched(thumbUrl);
         });
+
+        it("should download video if we were the sender", async () => {
+            fetchMock.getOnce(thumbUrl, { status: 200 });
+            const ourEncryptedMediaEvent = new MatrixEvent({
+                room_id: "!room:server",
+                sender: ourUserId,
+                type: EventType.RoomMessage,
+                event_id: "$foo:bar",
+                content: {
+                    body: "alt for a test video",
+                    info: {
+                        duration: 420,
+                        w: 40,
+                        h: 50,
+                        thumbnail_file: {
+                            url: "mxc://server/encrypted-poster",
+                        },
+                    },
+                    file: {
+                        url: "mxc://server/encrypted-image",
+                    },
+                },
+            });
+            const { asFragment } = render(
+                <MVideoBody
+                    mxEvent={ourEncryptedMediaEvent}
+                    mediaEventHelper={new MediaEventHelper(ourEncryptedMediaEvent)}
+                />,
+                withClientContextRenderOptions(cli),
+            );
+
+            expect(fetchMock).toHaveFetched(thumbUrl);
+            expect(asFragment()).toMatchSnapshot();
+        });
     });
 });
-
-function makeMVideoBody(w: number, h: number): RenderResult {
-    const content: IContent = {
-        info: {
-            "w": w,
-            "h": h,
-            "mimetype": "video/mp4",
-            "size": 2495675,
-            "thumbnail_file": {
-                url: "",
-                key: { alg: "", key_ops: [], kty: "", k: "", ext: true },
-                iv: "",
-                hashes: {},
-                v: "",
-            },
-            "thumbnail_info": { mimetype: "" },
-            "xyz.amorgan.blurhash": "TrGl6bofof~paxWC?bj[oL%2fPj]",
-        },
-        url: "http://example.com",
-    };
-
-    const event = new MatrixEvent({
-        content,
-    });
-
-    const defaultProps: IBodyProps = {
-        mxEvent: event,
-        highlights: [],
-        highlightLink: "",
-        onMessageAllowed: jest.fn(),
-        permalinkCreator: {} as RoomPermalinkCreator,
-        mediaEventHelper: { media: { isEncrypted: false } } as MediaEventHelper,
-    };
-
-    const mockClient = getMockClientWithEventEmitter({
-        mxcUrlToHttp: jest.fn(),
-        getRoom: jest.fn(),
-    });
-
-    return render(
-        <MatrixClientContext.Provider value={mockClient}>
-            <MVideoBody {...defaultProps} />
-        </MatrixClientContext.Provider>,
-    );
-}

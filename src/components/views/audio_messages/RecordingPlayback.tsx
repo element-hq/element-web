@@ -74,7 +74,11 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
         }
 
         return (
-            <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer" onKeyDown={this.onKeyDown}>
+            <div
+                className="mx_MediaBody mx_VoiceMessagePrimaryContainer"
+                onKeyDown={this.onKeyDown}
+                data-testid="recording-playback"
+            >
                 <PlayPauseButton
                     playback={this.props.playback}
                     playbackPhase={this.state.playbackPhase}

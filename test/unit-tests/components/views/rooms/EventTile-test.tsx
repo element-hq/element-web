@@ -30,14 +30,13 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
 import { mkThread } from "../../../../test-utils/threads";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
@@ -52,7 +51,7 @@ describe("EventTile", () => {
 
     /** wrap the EventTile up in context providers, and with basic properties, as it would be by MessagePanel normally. */
     function WrappedEventTile(props: {
-        roomContext: IRoomState;
+        roomContext: RoomContextType;
         eventTilePropertyOverrides?: Partial<EventTileProps>;
     }) {
         return (
@@ -71,7 +70,7 @@ describe("EventTile", () => {
     function getComponent(
         overrides: Partial<EventTileProps> = {},
         renderingType: TimelineRenderingType = TimelineRenderingType.Room,
-        roomContext: Partial<IRoomState> = {},
+        roomContext: Partial<RoomContextType> = {},
     ) {
         const context = getRoomContext(room, {
             timelineRenderingType: renderingType,
@@ -270,8 +269,8 @@ describe("EventTile", () => {
 
             // there should be a warning shield
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
-                "mx_EventTile_e2eIcon_warning",
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                "Encrypted by a device not verified by its owner.",
             );
         });
 
@@ -299,10 +298,13 @@ describe("EventTile", () => {
 
         it.each([
             [EventShieldReason.UNKNOWN, "Unknown error"],
-            [EventShieldReason.UNVERIFIED_IDENTITY, "unverified user"],
-            [EventShieldReason.UNSIGNED_DEVICE, "device not verified by its owner"],
-            [EventShieldReason.UNKNOWN_DEVICE, "unknown or deleted device"],
-            [EventShieldReason.AUTHENTICITY_NOT_GUARANTEED, "can't be guaranteed"],
+            [EventShieldReason.UNVERIFIED_IDENTITY, "Encrypted by an unverified user."],
+            [EventShieldReason.UNSIGNED_DEVICE, "Encrypted by a device not verified by its owner."],
+            [EventShieldReason.UNKNOWN_DEVICE, "Encrypted by an unknown or deleted device."],
+            [
+                EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
+                "The authenticity of this encrypted message can't be guaranteed on this device.",
+            ],
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
             [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity was reset"],
@@ -327,12 +329,7 @@ describe("EventTile", () => {
 
             const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
             expect(e2eIcons).toHaveLength(1);
-            expect(e2eIcons[0].classList).toContain("mx_EventTile_e2eIcon_normal");
-            fireEvent.focus(e2eIcons[0]);
-            expect(e2eIcons[0].getAttribute("aria-labelledby")).toBeTruthy();
-            expect(document.getElementById(e2eIcons[0].getAttribute("aria-labelledby")!)).toHaveTextContent(
-                expectedText,
-            );
+            expect(e2eIcons[0]).toHaveAccessibleName(expectedText);
         });
 
         describe("undecryptable event", () => {
@@ -361,8 +358,8 @@ describe("EventTile", () => {
                 expect(eventTiles).toHaveLength(1);
 
                 expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
-                    "mx_EventTile_e2eIcon_decryption_failure",
+                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                    "This message could not be decrypted",
                 );
             });
 
@@ -437,8 +434,8 @@ describe("EventTile", () => {
 
             // check it was updated
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
-                "mx_EventTile_e2eIcon_warning",
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                "Encrypted by a device not verified by its owner.",
             );
         });
 
@@ -482,9 +479,7 @@ describe("EventTile", () => {
 
             // check it was updated
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
-                "mx_EventTile_e2eIcon_warning",
-            );
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName("Not encrypted");
         });
     });
 

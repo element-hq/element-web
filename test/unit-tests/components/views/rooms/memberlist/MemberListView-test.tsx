@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 import { act } from "react";
 import { waitFor, fireEvent } from "jest-matrix-react";
 import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type JSX } from "react";
 
 import { filterConsole } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";
@@ -19,14 +18,6 @@ jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
-type Children = (args: { height: number; width: number }) => JSX.Element;
-jest.mock("react-virtualized", () => {
-    const ReactVirtualized = jest.requireActual("react-virtualized");
-    return {
-        ...ReactVirtualized,
-        AutoSizer: ({ children }: { children: Children }) => children({ height: 1000, width: 1000 }),
-    };
-});
 jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(1500);
 jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(1500);
 
@@ -200,7 +191,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.user!.presence = "offline";
                 });
 
-                await reRender();
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_MemberTileView");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
@@ -210,7 +201,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                 const { reRender, root, memberListRoom } = rendered;
                 // We already have admin, moderator, and default users so leave them alone
 
-                await reRender();
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
@@ -238,7 +229,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.user!.lastActiveAgo = 100;
                 });
 
-                await reRender();
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
@@ -256,7 +247,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.powerLevel = 100;
                 });
 
-                await reRender();
+                await act(reRender);
 
                 const tiles = root.container.querySelectorAll(".mx_EntityTile");
                 expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
 <DocumentFragment>
@@ -14,7 +14,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       tabindex="0"
     >
       <div
-        class="_indicator-icon_zr2a0_17"
+        class="_indicator-icon_147l5_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
@@ -62,7 +62,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_o77nw_8 _destructive_o77nw_34"
+        class="_content_1r8kr_8 _destructive_1r8kr_34"
         data-size="large"
       >
         <svg
@@ -84,19 +84,19 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       </h2>
     </div>
     <div
-      class="flex mx_EncryptionCard_emphasisedContent"
+      class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
       <ul
-        class="_visual-list_15wzx_8"
+        class="_visual-list_1mgc1_8"
       >
         <li
-          class="_visual-list-item_1ma3e_8"
+          class="_visual-list-item_1nc1y_8"
         >
           <svg
             aria-hidden="true"
-            class="_visual-list-item-icon_1ma3e_17 _visual-list-item-icon-destructive_1ma3e_26"
+            class="_visual-list-item-icon_1nc1y_17 _visual-list-item-icon-destructive_1nc1y_26"
             fill="currentColor"
             height="24px"
             viewBox="0 0 24 24"
@@ -110,11 +110,11 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
           You will not have encrypted message history on new devices
         </li>
         <li
-          class="_visual-list-item_1ma3e_8"
+          class="_visual-list-item_1nc1y_8"
         >
           <svg
             aria-hidden="true"
-            class="_visual-list-item-icon_1ma3e_17 _visual-list-item-icon-destructive_1ma3e_26"
+            class="_visual-list-item-icon_1nc1y_17 _visual-list-item-icon-destructive_1nc1y_26"
             fill="currentColor"
             height="24px"
             viewBox="0 0 24 24"
@@ -134,7 +134,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_vczzf_8 _destructive_vczzf_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -143,7 +143,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
         Delete key storage
       </button>
       <button
-        class="_button_vczzf_8"
+        class="_button_13vu4_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { sleep } from "matrix-js-sdk/src/utils";
+import { waitFor } from "jest-matrix-react";
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -131,8 +132,8 @@ describe("FontWatcher", function () {
         it("should migrate from V1 font size to V3", async () => {
             await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, 13);
             await watcher!.start();
-            // 13px (V1 font size) + 5px (V1 offset) + 1px (root font size increase) - 14px (default browser font size) = 5px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(5);
+            // 13px (V1 font size) + 5px (V1 offset) + 1px (root font size increase) - 16px (default browser font size) = 3px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(3);
             // baseFontSize should be cleared
             expect(SettingsStore.getValue("baseFontSize")).toBe(0);
         });
@@ -140,8 +141,8 @@ describe("FontWatcher", function () {
         it("should migrate from V2 font size to V3 using browser font size", async () => {
             await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
             await watcher!.start();
-            // 18px - 14px (default browser font size) = 2px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(4);
+            // 18px - 16px (default browser font size) = 2px
+            expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
             // baseFontSize should be cleared
             expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
         });
@@ -154,6 +155,34 @@ describe("FontWatcher", function () {
             expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
             // baseFontSize should be cleared
             expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
+        });
+
+        it("should trigger migration when dispatched", async () => {
+            await watcher!.start();
+
+            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
+            defaultDispatcher.fire(Action.MigrateBaseFontSize);
+
+            await waitFor(() => {
+                // 18px - 16px (default browser font size) = 2px
+                expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
+                // baseFontSizeV2 should be cleared
+                expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
+            });
+        });
+    });
+
+    it("should update root font size with positive delta", async () => {
+        await new FontWatcher().start();
+
+        defaultDispatcher.dispatch({
+            action: Action.UpdateFontSizeDelta,
+            delta: 2,
+        });
+
+        await waitFor(() => {
+            const rootFontSize = document.querySelector<HTMLElement>(":root")!.style.fontSize;
+            expect(rootFontSize).toContain("2px");
         });
     });
 });

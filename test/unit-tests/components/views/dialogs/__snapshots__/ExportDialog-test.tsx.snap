@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<ExportDialog /> renders export dialog 1`] = `
 <div
@@ -7,6 +7,7 @@ exports[`<ExportDialog /> renders export dialog 1`] = `
   class="mx_ExportDialog false mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"
@@ -160,15 +161,15 @@ exports[`<ExportDialog /> renders export dialog 1`] = `
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1hel1_10"
+            class="_container_1md5v_10"
           >
             <input
-              class="_input_1hel1_18"
+              class="_input_1md5v_18"
               id="include-attachments"
               type="checkbox"
             />
             <div
-              class="_ui_1hel1_19"
+              class="_ui_1md5v_19"
             >
               <svg
                 aria-hidden="true"

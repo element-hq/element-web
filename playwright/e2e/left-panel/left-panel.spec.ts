@@ -17,7 +17,7 @@ test.describe("LeftPanel", () => {
         // create rooms and check room names are correct
         for (const name of ["Apple", "Pineapple", "Orange"]) {
             await app.client.createRoom({ name });
-            await expect(page.getByRole("treeitem", { name })).toBeVisible();
+            await expect(page.getByRole("option", { name: `Open room ${name}` })).toBeVisible();
         }
     });
 });

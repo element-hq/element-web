@@ -15,7 +15,6 @@ import {
     MatrixEventEvent,
     M_BEACON_INFO,
     M_LOCATION,
-    M_POLL_END,
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
@@ -34,7 +33,6 @@ import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MVideoBody from "./MVideoBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
-import { MPollEndBody } from "./MPollEndBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
@@ -51,6 +49,11 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
     getRelationsForEvent?: GetRelationsForEvent;
 
     isSeeingThroughMessageHiddenForModeration?: boolean;
+
+    /**
+     * Optional ID for the root element.
+     */
+    id?: string;
 }
 
 export interface IOperableEventTile {
@@ -70,8 +73,6 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
     [M_POLL_START.name, MPollBody],
     [M_POLL_START.altName, MPollBody],
-    [M_POLL_END.name, MPollEndBody],
-    [M_POLL_END.altName, MPollEndBody],
     [M_BEACON_INFO.name, MBeaconBody],
     [M_BEACON_INFO.altName, MBeaconBody],
 ]);
@@ -308,6 +309,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             getRelationsForEvent: this.props.getRelationsForEvent,
             isSeeingThroughMessageHiddenForModeration: this.props.isSeeingThroughMessageHiddenForModeration,
             inhibitInteraction: this.props.inhibitInteraction,
+            id: this.props.id,
         };
         if (hasCaption) {
             return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;

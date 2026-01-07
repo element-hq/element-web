@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`RoomView for a local room in state CREATING should match the snapshot 1`] = `
 <div>
@@ -6,29 +6,28 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -45,151 +44,6 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           </div>
         </div>
       </button>
-      <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rg4»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«rg9»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="«rge»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="«rgj»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="«rgo»"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <div
       class="mx_RoomView_body"
@@ -200,13 +54,24 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         <div
           class="mx_Spinner"
         >
-          <div
+          <svg
             aria-label="Loading…"
-            class="mx_Spinner_icon"
+            class="_icon_11k6c_18"
             data-testid="spinner"
+            fill="currentColor"
+            height="1em"
             role="progressbar"
             style="width: 45px; height: 45px;"
-          />
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
         </div>
         <div
           class="mx_LargeLoader_text"
@@ -225,29 +90,28 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -264,151 +128,6 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </div>
         </div>
       </button>
-      <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rh2»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«rh7»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="«rhc»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="«rhh»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="«rhm»"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <main
       aria-label="Room content"
@@ -433,8 +152,20 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                  class="mx_EventTileBubble mx_cryptoEvent"
                 >
+                  <svg
+                    color="var(--cpd-color-icon-critical-primary)"
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                    />
+                  </svg>
                   <div
                     class="mx_EventTileBubble_title"
                   >
@@ -454,7 +185,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                  class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -510,10 +241,21 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
             class="mx_RoomStatusBar_unsentButtonBar"
           >
             <div
-              class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+              class="mx_AccessibleButton"
               role="button"
               tabindex="0"
             >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+                />
+              </svg>
               Retry
             </div>
           </div>
@@ -530,29 +272,28 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -569,151 +310,6 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           </div>
         </div>
       </button>
-      <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rbo»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«rbt»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="«rc2»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="«rc7»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="«rcc»"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <main
       aria-label="Room content"
@@ -738,8 +334,20 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                  class="mx_EventTileBubble mx_cryptoEvent"
                 >
+                  <svg
+                    color="var(--cpd-color-icon-critical-primary)"
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                    />
+                  </svg>
                   <div
                     class="mx_EventTileBubble_title"
                   >
@@ -759,7 +367,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                  class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -800,12 +408,14 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
               class="mx_MessageComposer_e2eIconWrapper"
             >
               <svg
+                aria-label="Messages in this room are not end-to-end encrypted"
+                aria-labelledby="_r_qd_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
-                height="12"
+                height="12px"
                 viewBox="0 0 24 24"
-                width="12"
+                width="12px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -826,46 +436,118 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 >
                   <button
                     aria-label="Bold"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="0"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Italics"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Strikethrough"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Code block"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Quote"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Insert link"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                      />
+                    </svg>
+                  </button>
                 </div>
                 <div
                   aria-autocomplete="list"
@@ -893,22 +575,61 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <div
                 aria-label="Emoji"
-                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                  />
+                  <path
+                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="Attachment"
-                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                class="mx_AccessibleButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="More options"
                 class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
               <input
                 multiple=""
                 style="display: none;"
@@ -929,29 +650,28 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="flex mx_RoomHeader light-panel"
+      class="_flex_4dswl_9 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <button
+      <span
         aria-label="Open room settings"
-        aria-live="off"
-        class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
-        role="button"
+        role="presentation"
         style="--cpd-avatar-size: 40px;"
         tabindex="-1"
       >
         u
-      </button>
+      </span>
       <button
         aria-label="Room info"
         class="mx_RoomHeader_infoWrapper"
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info box-flex"
+          class="mx_RoomHeader_info _box-flex_1odfs_9"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -968,151 +688,6 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           </div>
         </div>
       </button>
-      <button
-        aria-disabled="false"
-        aria-label="Video call"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            aria-labelledby="«rdu»"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-label="Voice call"
-        aria-labelledby="«re3»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Threads"
-        aria-labelledby="«re8»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-label="Room info"
-        aria-labelledby="«red»"
-        class="_icon-button_1pz9o_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
-      >
-        <div
-          class="_indicator-icon_zr2a0_17"
-          style="--cpd-icon-button-size: 100%;"
-        >
-          <svg
-            class=""
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
-            />
-          </svg>
-        </div>
-      </button>
-      <div
-        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
-      >
-        <div
-          aria-label="2 members"
-          aria-labelledby="«rei»"
-          class="mx_AccessibleButton mx_FacePile"
-          role="button"
-          tabindex="0"
-        >
-          <div
-            class="_stacked-avatars_1qbcf_102"
-          >
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="2"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-            <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-              data-color="3"
-              data-testid="avatar-img"
-              data-type="round"
-              role="presentation"
-              style="--cpd-avatar-size: 20px;"
-            >
-              u
-            </span>
-          </div>
-          2
-        </div>
-      </div>
     </header>
     <main
       aria-label="Room content"
@@ -1136,6 +711,17 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               <div
                 class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
               >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                  />
+                </svg>
                 <div
                   class="mx_EventTileBubble_title"
                 >
@@ -1153,7 +739,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+                  class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
                   data-color="3"
                   data-testid="avatar-img"
                   data-type="round"
@@ -1181,7 +767,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       </div>
       <div
         aria-label="Message composer"
-        class="mx_MessageComposer mx_MessageComposer_e2eStatus"
+        class="mx_MessageComposer"
         role="region"
       >
         <div
@@ -1190,23 +776,6 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           <div
             class="mx_MessageComposer_row"
           >
-            <div
-              class="mx_MessageComposer_e2eIconWrapper"
-            >
-              <svg
-                class="mx_E2EIcon mx_MessageComposer_e2eIcon"
-                color="var(--cpd-color-icon-info-primary)"
-                fill="currentColor"
-                height="12"
-                viewBox="0 0 24 24"
-                width="12"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
-                />
-              </svg>
-            </div>
             <div
               class="mx_SendMessageComposer"
             >
@@ -1220,59 +789,131 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 >
                   <button
                     aria-label="Bold"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="0"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Italics"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Strikethrough"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Code block"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Quote"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                      />
+                    </svg>
+                  </button>
                   <button
                     aria-label="Insert link"
-                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                     role="button"
                     tabindex="-1"
                     type="button"
-                  />
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                      />
+                    </svg>
+                  </button>
                 </div>
                 <div
                   aria-autocomplete="list"
                   aria-disabled="false"
                   aria-haspopup="listbox"
-                  aria-label="Send an unencrypted message…"
+                  aria-label="Send a message…"
                   aria-multiline="true"
                   class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
                   contenteditable="true"
                   data-testid="basicmessagecomposer"
                   dir="auto"
                   role="textbox"
-                  style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
+                  style="--placeholder: 'Send\\ a\\ message…';"
                   tabindex="0"
                   translate="no"
                 >
@@ -1287,22 +928,61 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             >
               <div
                 aria-label="Emoji"
-                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                  />
+                  <path
+                    d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="Attachment"
-                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                class="mx_AccessibleButton mx_MessageComposer_button"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                  />
+                </svg>
+              </div>
               <div
                 aria-label="More options"
                 class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
               <input
                 multiple=""
                 style="display: none;"
@@ -1330,12 +1010,12 @@ exports[`RoomView invites renders an invite room 1`] = `
         class="mx_RoomPreviewBar_message"
       >
         <h3>
-          Do you want to join !2:example.org?
+          Do you want to join !roomviewinvitesrendersaninviteroom:example.org?
         </h3>
         <p>
           <span
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="4"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="2"
             data-testid="avatar-img"
             data-type="round"
             role="presentation"
@@ -1373,7 +1053,7 @@ exports[`RoomView invites renders an invite room 1`] = `
           Decline
         </div>
         <button
-          class="_button_vczzf_8 _destructive_vczzf_107"
+          class="_button_13vu4_8 _destructive_13vu4_110"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -1390,10 +1070,11 @@ exports[`RoomView invites renders an invite room 1`] = `
 </DocumentFragment>
 `;
 
-exports[`RoomView should not display the timeline when the room encryption is loading 1`] = `
+exports[`RoomView should hide the composer when hideComposer=true 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -1409,14 +1090,14 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         data-layout="group"
       >
         <header
-          class="flex mx_RoomHeader light-panel"
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="5"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="2"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1431,7 +1112,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info box-flex"
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1443,7 +1124,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !12:example.org
+                  !roomviewshouldhidethecomposerwhenhidecomposertrue:example.org
                 </span>
               </div>
             </div>
@@ -1458,11 +1139,11 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="«r2c»"
+                aria-labelledby="_r_0_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1478,7 +1159,6 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="«r2h»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1486,10 +1166,11 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_5_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1504,7 +1185,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="«r2m»"
+            aria-labelledby="_r_a_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1512,7 +1193,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1531,7 +1212,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="«r2r»"
+            aria-labelledby="_r_f_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1539,7 +1220,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1561,13 +1242,13 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="«r30»"
+              aria-labelledby="_r_k_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -1582,6 +1263,1496 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
+        >
+          <div
+            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            tabindex="-1"
+          >
+            <div
+              class="mx_RoomView_messageListWrapper"
+            >
+              <ol
+                aria-live="polite"
+                class="mx_RoomView_MessageList"
+                style="height: 400px;"
+              />
+            </div>
+          </div>
+        </main>
+        <div
+          aria-label="Room status bar"
+          class="mx_RoomView_statusArea"
+          role="region"
+        >
+          <div
+            class="mx_RoomView_statusAreaBox"
+          >
+            <div
+              class="mx_RoomView_statusAreaBox_line"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomView should hide the header when hideHeader=true 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+    tabindex="-1"
+  >
+    <canvas
+      aria-hidden="true"
+      height="768"
+      style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+      width="0"
+    />
+    <div
+      class="mx_MainSplit"
+    >
+      <div
+        class="mx_RoomView_body mx_MainSplit_timeline"
+        data-layout="group"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_AuxPanel"
+          role="region"
+          tabindex="-1"
+        >
+          <div />
+        </div>
+        <main
+          class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
+        >
+          <div
+            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            tabindex="-1"
+          >
+            <div
+              class="mx_RoomView_messageListWrapper"
+            >
+              <ol
+                aria-live="polite"
+                class="mx_RoomView_MessageList"
+                style="height: 400px;"
+              />
+            </div>
+          </div>
+        </main>
+        <div
+          aria-label="Room status bar"
+          class="mx_RoomView_statusArea"
+          role="region"
+        >
+          <div
+            class="mx_RoomView_statusAreaBox"
+          >
+            <div
+              class="mx_RoomView_statusAreaBox_line"
+            />
+          </div>
+        </div>
+        <div
+          aria-label="Message composer"
+          class="mx_MessageComposer mx_MessageComposer_e2eStatus"
+          role="region"
+        >
+          <div
+            class="mx_MessageComposer_wrapper"
+          >
+            <div
+              class="mx_MessageComposer_row"
+            >
+              <div
+                class="mx_MessageComposer_e2eIconWrapper"
+              >
+                <svg
+                  aria-label="Messages in this room are not end-to-end encrypted"
+                  aria-labelledby="_r_10_"
+                  class="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                  color="var(--cpd-color-icon-info-primary)"
+                  fill="currentColor"
+                  height="12px"
+                  viewBox="0 0 24 24"
+                  width="12px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
+                  />
+                </svg>
+              </div>
+              <div
+                class="mx_SendMessageComposer"
+              >
+                <div
+                  class="mx_BasicMessageComposer"
+                >
+                  <div
+                    aria-label="Formatting"
+                    class="mx_MessageComposerFormatBar"
+                    role="toolbar"
+                  >
+                    <button
+                      aria-label="Bold"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Italics"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Strikethrough"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Code block"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Quote"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Insert link"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    aria-autocomplete="list"
+                    aria-disabled="false"
+                    aria-haspopup="listbox"
+                    aria-label="Send an unencrypted message…"
+                    aria-multiline="true"
+                    class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                    contenteditable="true"
+                    data-testid="basicmessagecomposer"
+                    dir="auto"
+                    role="textbox"
+                    style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
+                    tabindex="0"
+                    translate="no"
+                  >
+                    <div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mx_MessageComposer_actions"
+              >
+                <div
+                  aria-label="Emoji"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
+                <div
+                  aria-label="Attachment"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
+                <div
+                  aria-label="More options"
+                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
+                <input
+                  multiple=""
+                  style="display: none;"
+                  type="file"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomView should hide the pinned message banner when hidePinnedMessageBanner=true 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+    tabindex="-1"
+  >
+    <canvas
+      aria-hidden="true"
+      height="768"
+      style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+      width="0"
+    />
+    <div
+      class="mx_MainSplit"
+    >
+      <div
+        class="mx_RoomView_body mx_MainSplit_timeline"
+        data-layout="group"
+      >
+        <header
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        >
+          <button
+            aria-label="Open room settings"
+            aria-live="off"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="2"
+            data-testid="avatar-img"
+            data-type="round"
+            role="button"
+            style="--cpd-avatar-size: 40px;"
+            tabindex="-1"
+          >
+            !
+          </button>
+          <button
+            aria-label="Room info"
+            class="mx_RoomHeader_infoWrapper"
+            tabindex="0"
+          >
+            <div
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              style="--mx-box-flex: 1;"
+            >
+              <div
+                aria-level="1"
+                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                dir="auto"
+                role="heading"
+              >
+                <span
+                  class="mx_RoomHeader_truncated mx_lineClamp"
+                >
+                  !roomviewshouldhidethepinnedmessagebannerwhenhidepinnedmessagebannertrue:example.org
+                </span>
+              </div>
+            </div>
+          </button>
+          <button
+            aria-disabled="false"
+            aria-label="Video call"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                aria-labelledby="_r_5b_"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-disabled="false"
+            aria-label="Voice call"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                aria-labelledby="_r_5g_"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-label="Threads"
+            aria-labelledby="_r_5l_"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                class=""
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-label="Room info"
+            aria-labelledby="_r_5q_"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                class=""
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+            </div>
+          </button>
+          <div
+            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+          >
+            <div
+              aria-label="0 members"
+              aria-labelledby="_r_5v_"
+              class="mx_AccessibleButton mx_FacePile"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="_stacked-avatars_zysgz_109"
+              />
+              0
+            </div>
+          </div>
+        </header>
+        <div
+          class="mx_AutoHideScrollbar mx_AuxPanel"
+          role="region"
+          tabindex="-1"
+        >
+          <div />
+        </div>
+        <main
+          class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
+        >
+          <div
+            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            tabindex="-1"
+          >
+            <div
+              class="mx_RoomView_messageListWrapper"
+            >
+              <ol
+                aria-live="polite"
+                class="mx_RoomView_MessageList"
+                style="height: 400px;"
+              />
+            </div>
+          </div>
+        </main>
+        <div
+          aria-label="Room status bar"
+          class="mx_RoomView_statusArea"
+          role="region"
+        >
+          <div
+            class="mx_RoomView_statusAreaBox"
+          >
+            <div
+              class="mx_RoomView_statusAreaBox_line"
+            />
+          </div>
+        </div>
+        <div
+          aria-label="Message composer"
+          class="mx_MessageComposer mx_MessageComposer_e2eStatus"
+          role="region"
+        >
+          <div
+            class="mx_MessageComposer_wrapper"
+          >
+            <div
+              class="mx_MessageComposer_row"
+            >
+              <div
+                class="mx_MessageComposer_e2eIconWrapper"
+              >
+                <svg
+                  aria-label="Messages in this room are not end-to-end encrypted"
+                  aria-labelledby="_r_6a_"
+                  class="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                  color="var(--cpd-color-icon-info-primary)"
+                  fill="currentColor"
+                  height="12px"
+                  viewBox="0 0 24 24"
+                  width="12px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
+                  />
+                </svg>
+              </div>
+              <div
+                class="mx_SendMessageComposer"
+              >
+                <div
+                  class="mx_BasicMessageComposer"
+                >
+                  <div
+                    aria-label="Formatting"
+                    class="mx_MessageComposerFormatBar"
+                    role="toolbar"
+                  >
+                    <button
+                      aria-label="Bold"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Italics"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Strikethrough"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Code block"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Quote"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Insert link"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    aria-autocomplete="list"
+                    aria-disabled="false"
+                    aria-haspopup="listbox"
+                    aria-label="Send an unencrypted message…"
+                    aria-multiline="true"
+                    class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                    contenteditable="true"
+                    data-testid="basicmessagecomposer"
+                    dir="auto"
+                    role="textbox"
+                    style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
+                    tabindex="0"
+                    translate="no"
+                  >
+                    <div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mx_MessageComposer_actions"
+              >
+                <div
+                  aria-label="Emoji"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
+                <div
+                  aria-label="Attachment"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
+                <div
+                  aria-label="More options"
+                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
+                <input
+                  multiple=""
+                  style="display: none;"
+                  type="file"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+    tabindex="-1"
+  >
+    <canvas
+      aria-hidden="true"
+      height="768"
+      style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+      width="0"
+    />
+    <div
+      class="mx_MainSplit"
+    >
+      <div
+        class="mx_RoomView_body mx_MainSplit_timeline"
+        data-layout="group"
+      >
+        <header
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        >
+          <button
+            aria-label="Open room settings"
+            aria-live="off"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="2"
+            data-testid="avatar-img"
+            data-type="round"
+            role="button"
+            style="--cpd-avatar-size: 40px;"
+            tabindex="-1"
+          >
+            !
+          </button>
+          <button
+            aria-label="Room info"
+            class="mx_RoomHeader_infoWrapper"
+            tabindex="0"
+          >
+            <div
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              style="--mx-box-flex: 1;"
+            >
+              <div
+                aria-level="1"
+                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                dir="auto"
+                role="heading"
+              >
+                <span
+                  class="mx_RoomHeader_truncated mx_lineClamp"
+                >
+                  !roomviewshouldhidetherightpanelwhenhiderightpaneltrue:example.org
+                </span>
+              </div>
+            </div>
+          </button>
+          <button
+            aria-disabled="false"
+            aria-label="Video call"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                aria-labelledby="_r_2e_"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-disabled="false"
+            aria-label="Voice call"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                aria-labelledby="_r_2j_"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-label="Threads"
+            aria-labelledby="_r_2o_"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                class=""
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-label="Room info"
+            aria-labelledby="_r_2t_"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                class=""
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+            </div>
+          </button>
+          <div
+            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+          >
+            <div
+              aria-label="0 members"
+              aria-labelledby="_r_32_"
+              class="mx_AccessibleButton mx_FacePile mx_FacePile_toggled"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="_stacked-avatars_zysgz_109"
+              />
+              0
+            </div>
+          </div>
+        </header>
+        <div
+          class="mx_AutoHideScrollbar mx_AuxPanel"
+          role="region"
+          tabindex="-1"
+        >
+          <div />
+        </div>
+        <main
+          class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
+        >
+          <div
+            class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+            tabindex="-1"
+          >
+            <div
+              class="mx_RoomView_messageListWrapper"
+            >
+              <ol
+                aria-live="polite"
+                class="mx_RoomView_MessageList"
+                style="height: 400px;"
+              />
+            </div>
+          </div>
+        </main>
+        <div
+          aria-label="Room status bar"
+          class="mx_RoomView_statusArea"
+          role="region"
+        >
+          <div
+            class="mx_RoomView_statusAreaBox"
+          >
+            <div
+              class="mx_RoomView_statusAreaBox_line"
+            />
+          </div>
+        </div>
+        <div
+          aria-label="Message composer"
+          class="mx_MessageComposer mx_MessageComposer_e2eStatus"
+          role="region"
+        >
+          <div
+            class="mx_MessageComposer_wrapper"
+          >
+            <div
+              class="mx_MessageComposer_row"
+            >
+              <div
+                class="mx_MessageComposer_e2eIconWrapper"
+              >
+                <svg
+                  aria-label="Messages in this room are not end-to-end encrypted"
+                  aria-labelledby="_r_3d_"
+                  class="mx_E2EIcon mx_MessageComposer_e2eIcon"
+                  color="var(--cpd-color-icon-info-primary)"
+                  fill="currentColor"
+                  height="12px"
+                  viewBox="0 0 24 24"
+                  width="12px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22q-.825 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412a2 2 0 0 1 .702-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 1 1-1.414 1.414l-.896-.896A1.94 1.94 0 0 1 18 22zm14-4.834V10q0-.825-.587-1.412A1.93 1.93 0 0 0 18 8h-1V6q0-2.075-1.463-3.537Q14.075 1 12 1T8.463 2.463a4.9 4.9 0 0 0-1.22 1.946L9 6.166V6q0-1.25.875-2.125A2.9 2.9 0 0 1 12 3q1.25 0 2.125.875T15 6v2h-4.166z"
+                  />
+                </svg>
+              </div>
+              <div
+                class="mx_SendMessageComposer"
+              >
+                <div
+                  class="mx_BasicMessageComposer"
+                >
+                  <div
+                    aria-label="Formatting"
+                    class="mx_MessageComposerFormatBar"
+                    role="toolbar"
+                  >
+                    <button
+                      aria-label="Bold"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Italics"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Strikethrough"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Code block"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Quote"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Insert link"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
+                      role="button"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    aria-autocomplete="list"
+                    aria-disabled="false"
+                    aria-haspopup="listbox"
+                    aria-label="Send an unencrypted message…"
+                    aria-multiline="true"
+                    class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                    contenteditable="true"
+                    data-testid="basicmessagecomposer"
+                    dir="auto"
+                    role="textbox"
+                    style="--placeholder: 'Send\\ an\\ unencrypted\\ message…';"
+                    tabindex="0"
+                    translate="no"
+                  >
+                    <div>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mx_MessageComposer_actions"
+              >
+                <div
+                  aria-label="Emoji"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
+                <div
+                  aria-label="Attachment"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
+                <div
+                  aria-label="More options"
+                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                  role="button"
+                  tabindex="0"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
+                <input
+                  multiple=""
+                  style="display: none;"
+                  type="file"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomView should not display the timeline when the room encryption is loading 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+    tabindex="-1"
+  >
+    <canvas
+      aria-hidden="true"
+      height="768"
+      style="display: block; z-index: 999999; pointer-events: none; position: fixed; top: 0px; right: 0px;"
+      width="0"
+    />
+    <div
+      class="mx_MainSplit"
+    >
+      <div
+        class="mx_RoomView_body mx_MainSplit_timeline"
+        data-layout="group"
+      >
+        <header
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        >
+          <button
+            aria-label="Open room settings"
+            aria-live="off"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            role="button"
+            style="--cpd-avatar-size: 40px;"
+            tabindex="-1"
+          >
+            !
+          </button>
+          <button
+            aria-label="Room info"
+            class="mx_RoomHeader_infoWrapper"
+            tabindex="0"
+          >
+            <div
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              style="--mx-box-flex: 1;"
+            >
+              <div
+                aria-level="1"
+                class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 mx_RoomHeader_heading"
+                dir="auto"
+                role="heading"
+              >
+                <span
+                  class="mx_RoomHeader_truncated mx_lineClamp"
+                >
+                  !roomviewshouldnotdisplaythetimelinewhentheroomencryptionisloading:example.org
+                </span>
+              </div>
+            </div>
+          </button>
+          <button
+            aria-disabled="false"
+            aria-label="Video call"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                aria-labelledby="_r_f5_"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-disabled="false"
+            aria-label="Voice call"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                aria-labelledby="_r_fa_"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m20.958 16.374.039 3.527q0 .427-.33.756-.33.33-.756.33a16 16 0 0 1-6.57-1.105 16.2 16.2 0 0 1-5.563-3.663 16.1 16.1 0 0 1-3.653-5.573 16.3 16.3 0 0 1-1.115-6.56q0-.427.33-.757T4.095 3l3.528.039a1.07 1.07 0 0 1 1.085.93l.543 3.954q.039.271-.039.504a1.1 1.1 0 0 1-.271.426l-1.64 1.64q.505 1.008 1.154 1.909c.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444q.9.65 1.909 1.153l1.64-1.64q.193-.193.426-.27t.504-.04l3.954.543q.406.059.668.359t.262.727"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-label="Threads"
+            aria-labelledby="_r_ff_"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                class=""
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
+                />
+              </svg>
+            </div>
+          </button>
+          <button
+            aria-label="Room info"
+            aria-labelledby="_r_fk_"
+            class="_icon-button_1pz9o_8"
+            data-kind="primary"
+            role="button"
+            style="--cpd-icon-button-size: 32px;"
+            tabindex="0"
+          >
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                class=""
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+            </div>
+          </button>
+          <div
+            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41"
+          >
+            <div
+              aria-label="0 members"
+              aria-labelledby="_r_fp_"
+              class="mx_AccessibleButton mx_FacePile"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="_stacked-avatars_zysgz_109"
+              />
+              0
+            </div>
+          </div>
+        </header>
+        <div
+          class="mx_AutoHideScrollbar mx_AuxPanel"
+          role="region"
+          tabindex="-1"
+        >
+          <div />
+        </div>
+        <main
+          class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         />
         <div
           aria-label="Room status bar"
@@ -1606,6 +2777,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
 <DocumentFragment>
   <div
     class="mx_RoomView"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -1621,14 +2793,14 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         data-layout="group"
       >
         <header
-          class="flex mx_RoomHeader light-panel"
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="5"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="1"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1643,7 +2815,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info box-flex"
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1655,7 +2827,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !12:example.org
+                  !roomviewshouldnotdisplaythetimelinewhentheroomencryptionisloading:example.org
                 </span>
               </div>
             </div>
@@ -1670,11 +2842,11 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="«r2c»"
+                aria-labelledby="_r_f5_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1690,7 +2862,6 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            aria-labelledby="«r2h»"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1698,10 +2869,11 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                aria-labelledby="_r_fa_"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1716,7 +2888,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="«r2m»"
+            aria-labelledby="_r_ff_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1724,7 +2896,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1743,7 +2915,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="«r2r»"
+            aria-labelledby="_r_fk_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -1751,7 +2923,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -1773,13 +2945,13 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           >
             <div
               aria-label="0 members"
-              aria-labelledby="«r30»"
+              aria-labelledby="_r_fp_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -1794,6 +2966,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         </div>
         <main
           class="mx_RoomView_timeline mx_RoomView_timeline_rr_enabled"
+          data-testid="timeline"
         >
           <div
             class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
@@ -1841,13 +3014,25 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   tabindex="0"
                 >
                   <div
-                    aria-labelledby="«r3e»"
-                    class="mx_E2EIcon mx_E2EIcon_verified mx_MessageComposer_e2eIcon"
+                    aria-labelledby="_r_g4_"
+                    class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                     data-testid="e2e-icon"
+                    style="width: 12px; height: 12px;"
                   >
-                    <div
-                      class="mx_E2EIcon_normal"
-                    />
+                    <svg
+                      color="var(--cpd-color-icon-success-primary)"
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M11.106 2.447a2 2 0 0 1 1.789 0l6 3A2 2 0 0 1 20 7.237V12c0 6.742-5.773 9.246-7.51 9.846-.32.111-.66.111-.98 0C9.774 21.246 4 18.743 4 12V7.236a2 2 0 0 1 1.105-1.789zm4.601 6.846a1 1 0 0 0-1.414 0L11 12.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0 0-1.414"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </span>
               </div>
@@ -1864,46 +3049,118 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   >
                     <button
                       aria-label="Bold"
-                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                       role="button"
                       tabindex="0"
                       type="button"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                        />
+                      </svg>
+                    </button>
                     <button
                       aria-label="Italics"
-                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                       role="button"
                       tabindex="-1"
                       type="button"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                        />
+                      </svg>
+                    </button>
                     <button
                       aria-label="Strikethrough"
-                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                       role="button"
                       tabindex="-1"
                       type="button"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                        />
+                      </svg>
+                    </button>
                     <button
                       aria-label="Code block"
-                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                       role="button"
                       tabindex="-1"
                       type="button"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                        />
+                      </svg>
+                    </button>
                     <button
                       aria-label="Quote"
-                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                       role="button"
                       tabindex="-1"
                       type="button"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                        />
+                      </svg>
+                    </button>
                     <button
                       aria-label="Insert link"
-                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                      class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                       role="button"
                       tabindex="-1"
                       type="button"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                        />
+                      </svg>
+                    </button>
                   </div>
                   <div
                     aria-autocomplete="list"
@@ -1931,22 +3188,61 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               >
                 <div
                   aria-label="Emoji"
-                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                  class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                    />
+                    <path
+                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="Attachment"
-                  class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                  class="mx_AccessibleButton mx_MessageComposer_button"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                    />
+                  </svg>
+                </div>
                 <div
                   aria-label="More options"
                   class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                   role="button"
                   tabindex="0"
-                />
+                >
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                    />
+                  </svg>
+                </div>
                 <input
                   multiple=""
                   style="display: none;"
@@ -1996,6 +3292,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
 <DocumentFragment>
   <div
     class="mx_RoomView mx_RoomView_immersive"
+    tabindex="-1"
   >
     <canvas
       aria-hidden="true"
@@ -2011,14 +3308,14 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
         data-layout="group"
       >
         <header
-          class="flex mx_RoomHeader light-panel"
+          class="_flex_4dswl_9 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
             aria-live="off"
-            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
-            data-color="4"
+            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+            data-color="2"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -2033,7 +3330,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info box-flex"
+              class="mx_RoomHeader_info _box-flex_1odfs_9"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -2045,14 +3342,14 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !17:example.org
+                  !roomviewvideoroomsshouldrenderjoinedvideoroomview:example.org
                 </span>
               </div>
             </div>
           </button>
           <button
             aria-label="Chat"
-            aria-labelledby="«r7c»"
+            aria-labelledby="_r_k7_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2060,7 +3357,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2079,7 +3376,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Threads"
-            aria-labelledby="«r7h»"
+            aria-labelledby="_r_kc_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2087,7 +3384,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2106,7 +3403,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           </button>
           <button
             aria-label="Room info"
-            aria-labelledby="«r7m»"
+            aria-labelledby="_r_kh_"
             class="_icon-button_1pz9o_8"
             data-kind="primary"
             role="button"
@@ -2114,7 +3411,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="_indicator-icon_zr2a0_17"
+              class="_indicator-icon_147l5_17"
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
@@ -2136,13 +3433,13 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           >
             <div
               aria-label="0 members"
-              aria-labelledby="«r7r»"
+              aria-labelledby="_r_km_"
               class="mx_AccessibleButton mx_FacePile"
               role="button"
               tabindex="0"
             >
               <div
-                class="_stacked-avatars_1qbcf_102"
+                class="_stacked-avatars_zysgz_109"
               />
               0
             </div>
@@ -2171,13 +3468,24 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                     Loading…
                   </div>
                    
-                  <div
+                  <svg
                     aria-label="Loading…"
-                    class="mx_Spinner_icon"
+                    class="_icon_11k6c_18"
                     data-testid="spinner"
+                    fill="currentColor"
+                    height="1em"
                     role="progressbar"
                     style="width: 32px; height: 32px;"
-                  />
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -2189,11 +3497,9 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
         style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 320px; box-sizing: border-box; flex-shrink: 0;"
       >
         <aside
-          aria-label="Right panel"
           class="mx_RightPanel"
           data-testid="right-panel"
           id="mx_RightPanel"
-          tabindex="-1"
         >
           <div
             class="mx_BaseCard mx_ThreadPanel mx_TimelineCard"
@@ -2212,7 +3518,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 </p>
               </div>
               <button
-                aria-labelledby="«r84»"
+                aria-labelledby="_r_kv_"
                 class="_icon-button_1pz9o_8"
                 data-kind="secondary"
                 data-testid="base-card-close-button"
@@ -2221,7 +3527,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 tabindex="0"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -2271,12 +3577,14 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                     class="mx_MessageComposer_e2eIconWrapper"
                   >
                     <svg
+                      aria-label="Messages in this room are not end-to-end encrypted"
+                      aria-labelledby="_r_l4_"
                       class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                       color="var(--cpd-color-icon-info-primary)"
                       fill="currentColor"
-                      height="12"
+                      height="12px"
                       viewBox="0 0 24 24"
-                      width="12"
+                      width="12px"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
@@ -2297,46 +3605,118 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                       >
                         <button
                           aria-label="Bold"
-                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                           role="button"
                           tabindex="0"
                           type="button"
-                        />
+                        >
+                          <svg
+                            fill="currentColor"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.8 19q-.824 0-1.413-.587A1.93 1.93 0 0 1 6.8 17V7q0-.824.587-1.412A1.93 1.93 0 0 1 8.8 5h3.525q1.624 0 3 1T16.7 8.775q0 1.275-.575 1.963-.575.687-1.075.987.626.275 1.387 1.025.763.75.763 2.25 0 2.224-1.625 3.113-1.625.887-3.05.887zm1.025-2.8h2.6q1.2 0 1.462-.612.263-.614.263-.888 0-.275-.263-.887-.262-.613-1.537-.613H9.825zm0-5.7h2.325q.825 0 1.2-.425a1.4 1.4 0 0 0 .375-.95q0-.6-.425-.975t-1.1-.375H9.825z"
+                            />
+                          </svg>
+                        </button>
                         <button
                           aria-label="Italics"
-                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                           role="button"
                           tabindex="-1"
                           type="button"
-                        />
+                        >
+                          <svg
+                            fill="currentColor"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6.25 19q-.525 0-.888-.363A1.2 1.2 0 0 1 5 17.75q0-.525.362-.887.363-.363.888-.363H9l3-9H9.25q-.525 0-.887-.362A1.2 1.2 0 0 1 8 6.25q0-.525.363-.888Q8.725 5 9.25 5h7.5q.525 0 .887.362.363.363.363.888t-.363.888a1.2 1.2 0 0 1-.887.362H14.5l-3 9h2.25q.525 0 .887.363.363.362.363.887t-.363.887a1.2 1.2 0 0 1-.887.363z"
+                            />
+                          </svg>
+                        </button>
                         <button
                           aria-label="Strikethrough"
-                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                           role="button"
                           tabindex="-1"
                           type="button"
-                        />
+                        >
+                          <svg
+                            fill="currentColor"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12.15 20q-1.9 0-3.375-1.125T6.65 15.8l2.2-.95q.35 1.2 1.213 1.975.861.775 2.137.775 1.05 0 1.9-.5t.85-1.6q0-.45-.175-.825A2.4 2.4 0 0 0 14.3 14h2.8a4.3 4.3 0 0 1 .25 1.5q0 2.15-1.538 3.325Q14.277 20 12.15 20M3 12a.97.97 0 0 1-.712-.287A.97.97 0 0 1 2 11q0-.424.288-.713A.97.97 0 0 1 3 10h18q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 21 12zm9.05-8.15q1.65 0 2.887.812T16.85 7.15l-2.2.975a3 3 0 0 0-.838-1.3Q13.2 6.25 12.1 6.25q-1.025 0-1.7.462-.675.463-.75 1.288h-2.4q.05-1.725 1.363-2.938Q9.925 3.85 12.05 3.85"
+                            />
+                          </svg>
+                        </button>
                         <button
                           aria-label="Code block"
-                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                           role="button"
                           tabindex="-1"
                           type="button"
-                        />
+                        >
+                          <svg
+                            fill="currentColor"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M14.958 5.62a1 1 0 0 0-1.916-.574l-4 13.333a1 1 0 0 0 1.916.575zM5.974 7.232a1 1 0 0 0-1.409.128l-3.333 4a1 1 0 0 0 0 1.28l3.333 4a1 1 0 1 0 1.537-1.28L3.302 12l2.8-3.36a1 1 0 0 0-.128-1.408m12.053 0a1 1 0 0 1 1.408.128l3.333 4a1 1 0 0 1 0 1.28l-3.333 4a1 1 0 1 1-1.537-1.28l2.8-3.36-2.8-3.36a1 1 0 0 1 .128-1.408"
+                            />
+                          </svg>
+                        </button>
                         <button
                           aria-label="Quote"
-                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                           role="button"
                           tabindex="-1"
                           type="button"
-                        />
+                        >
+                          <svg
+                            fill="currentColor"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M4.719 4.34c.094-.642-.366-1.236-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.237 1.028 1.328.663.092 1.276-.354 1.371-.996zm12.115 10.174c.095-.642-.366-1.237-1.028-1.328-.662-.092-1.276.354-1.37.996l-.809 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.277-.354 1.371-.996zM9.318 3.009c.665.077 1.138.662 1.058 1.306l-.022.175a221 221 0 0 1-.266 2.006c-.161 1.171-.368 2.579-.535 3.386-.13.636-.769 1.049-1.425.921s-1.082-.745-.95-1.381c.148-.72.345-2.052.509-3.237a191 191 0 0 0 .262-1.981l.021-.17c.08-.644.684-1.103 1.348-1.025m13.17 11.505c.094-.642-.366-1.237-1.028-1.328-.663-.092-1.276.354-1.371.996l-.808 5.478c-.094.642.366 1.236 1.028 1.328.663.092 1.276-.354 1.371-.996z"
+                            />
+                          </svg>
+                        </button>
                         <button
                           aria-label="Insert link"
-                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                          class="mx_AccessibleButton mx_MessageComposerFormatBar_button"
                           role="button"
                           tabindex="-1"
                           type="button"
-                        />
+                        >
+                          <svg
+                            fill="currentColor"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12 19.071q-1.467 1.467-3.536 1.467-2.067 0-3.535-1.467t-1.467-3.535q0-2.07 1.467-3.536L7.05 9.879q.3-.3.707-.3t.707.3.301.707-.3.707l-2.122 2.121a2.9 2.9 0 0 0-.884 2.122q0 1.237.884 2.12.884.885 2.121.885t2.122-.884l2.121-2.121q.3-.3.707-.3t.707.3.3.707q0 .405-.3.707zm-1.414-4.243q-.3.3-.707.301a.97.97 0 0 1-.707-.3q-.3-.3-.301-.708 0-.405.3-.707l4.243-4.242q.3-.3.707-.3t.707.3.3.707-.3.707zm6.364-.707q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.301-.707 0-.405.3-.707l2.122-2.121q.884-.885.884-2.121 0-1.238-.884-2.122a2.9 2.9 0 0 0-2.121-.884q-1.237 0-2.122.884l-2.121 2.122q-.3.3-.707.3a.97.97 0 0 1-.707-.3q-.3-.3-.3-.708 0-.405.3-.707L12 4.93q1.467-1.467 3.536-1.467t3.535 1.467 1.467 3.536T19.071 12z"
+                            />
+                          </svg>
+                        </button>
                       </div>
                       <div
                         aria-autocomplete="list"
@@ -2364,22 +3744,61 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                   >
                     <div
                       aria-label="Emoji"
-                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                      class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                        />
+                        <path
+                          d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                        />
+                      </svg>
+                    </div>
                     <div
                       aria-label="Attachment"
-                      class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                      class="mx_AccessibleButton mx_MessageComposer_button"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.5 22q-2.3 0-3.9-1.6T6 16.5V6q0-1.65 1.175-2.825T10 2t2.825 1.175T14 6v9.5q0 1.05-.725 1.775T11.5 18t-1.775-.725T9 15.5V6.75A.73.73 0 0 1 9.75 6a.73.73 0 0 1 .75.75v8.75q0 .424.287.712.288.288.713.288.424 0 .713-.288a.97.97 0 0 0 .287-.712V6q0-1.05-.725-1.775T10 3.5t-1.775.725T7.5 6v10.5q0 1.65 1.175 2.825T11.5 20.5t2.825-1.175T15.5 16.5V6.75a.73.73 0 0 1 .75-.75.73.73 0 0 1 .75.75v9.75q0 2.3-1.6 3.9T11.5 22"
+                        />
+                      </svg>
+                    </div>
                     <div
                       aria-label="More options"
                       class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
                       role="button"
                       tabindex="0"
-                    />
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                        />
+                      </svg>
+                    </div>
                     <input
                       multiple=""
                       style="display: none;"

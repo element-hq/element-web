@@ -20,6 +20,11 @@ import classNames from "classnames";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import {
+    ChevronDownIcon,
+    ChevronRightIcon,
+    OverflowHorizontalIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -52,6 +57,7 @@ type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     className?: string;
     selected?: boolean;
     label: string;
+    icon?: JSX.Element;
     contextMenuTooltip?: string;
     notificationState?: NotificationState;
     isNarrow?: boolean;
@@ -65,6 +71,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
     space,
     spaceKey: _spaceKey,
     className,
+    icon,
     selected,
     label,
     contextMenuTooltip,
@@ -84,7 +91,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
 
     let avatar = (
         <div className="mx_SpaceButton_avatarPlaceholder">
-            <div className="mx_SpaceButton_icon" />
+            <div className="mx_SpaceButton_icon">{icon}</div>
         </div>
     );
     if (space) {
@@ -143,6 +150,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
                 mx_SpaceButton_active: selected,
                 mx_SpaceButton_hasMenuOpen: menuDisplayed,
                 mx_SpaceButton_narrow: isNarrow,
+                mx_SpaceButton_withIcon: Boolean(icon),
             })}
             aria-label={label}
             title={!isNarrow || menuDisplayed ? undefined : label}
@@ -166,7 +174,9 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
                         onClick={openMenu}
                         title={contextMenuTooltip}
                         isExpanded={menuDisplayed}
-                    />
+                    >
+                        <OverflowHorizontalIcon />
+                    </ContextMenuTooltipButton>
                 )}
 
                 {contextMenu}
@@ -346,7 +356,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 onClick={this.toggleCollapse}
                 tabIndex={-1}
                 aria-label={collapsed ? _t("action|expand") : _t("action|collapse")}
-            />
+            >
+                {collapsed ? <ChevronRightIcon /> : <ChevronDownIcon />}
+            </AccessibleButton>
         ) : null;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

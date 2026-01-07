@@ -1,15 +1,38 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`QuickSettingsButton should render the quick settings button in expanded mode 1`] = `
 <DocumentFragment>
-  <div
+  <button
     aria-expanded="true"
     aria-label="Quick settings"
-    class="mx_AccessibleButton mx_QuickSettingsButton expanded"
+    class="_icon-button_1pz9o_8 mx_QuickSettingsButton expanded"
+    data-kind="primary"
     role="button"
+    style="--cpd-icon-button-size: 32px;"
     tabindex="0"
   >
-    Settings
-  </div>
+    <div
+      class="_indicator-icon_147l5_17"
+      style="--cpd-icon-button-size: 100%;"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.731 2C13.432 2 14 2.568 14 3.269c0 .578.396 1.074.935 1.286q.128.052.253.106c.531.23 1.162.16 1.572-.25a1.27 1.27 0 0 1 1.794 0l1.034 1.035a1.27 1.27 0 0 1 0 1.794c-.41.41-.48 1.04-.248 1.572l.105.253c.212.539.708.935 1.286.935.701 0 1.269.568 1.269 1.269v1.462c0 .701-.568 1.269-1.269 1.269-.578 0-1.074.396-1.287.935q-.05.128-.104.253c-.232.531-.161 1.162.248 1.572a1.27 1.27 0 0 1 0 1.794l-1.034 1.034a1.27 1.27 0 0 1-1.794 0c-.41-.41-1.04-.48-1.572-.248a8 8 0 0 1-.253.105c-.539.212-.935.708-.935 1.286 0 .701-.568 1.269-1.269 1.269H11.27c-.702 0-1.27-.568-1.27-1.269 0-.578-.396-1.074-.935-1.287a8 8 0 0 1-.253-.104c-.531-.232-1.162-.161-1.572.248a1.27 1.27 0 0 1-1.794 0l-1.034-1.034a1.27 1.27 0 0 1 0-1.794c.41-.41.48-1.04.249-1.572a8 8 0 0 1-.106-.253C4.343 14.396 3.847 14 3.27 14 2.568 14 2 13.432 2 12.731V11.27c0-.702.568-1.27 1.269-1.27.578 0 1.074-.396 1.286-.935q.052-.128.106-.253c.23-.531.16-1.162-.25-1.572a1.27 1.27 0 0 1 0-1.794l1.035-1.034a1.27 1.27 0 0 1 1.794 0c.41.41 1.04.48 1.572.249a8 8 0 0 1 .253-.106c.539-.212.935-.708.935-1.286C10 2.568 10.568 2 11.269 2zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8"
+        />
+      </svg>
+      <span
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 mx_QuickSettingsButton_label"
+        title="Settings"
+      >
+        Settings
+      </span>
+    </div>
+  </button>
 </DocumentFragment>
 `;

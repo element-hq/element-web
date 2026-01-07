@@ -27,11 +27,12 @@ const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
     [Views.FORGOT_PASSWORD]: "ForgotPassword",
     [Views.COMPLETE_SECURITY]: "CompleteSecurity",
     [Views.E2E_SETUP]: "E2ESetup",
+    [Views.PENDING_CLIENT_START]: "Loading",
     [Views.SOFT_LOGOUT]: "SoftLogout",
     [Views.LOCK_STOLEN]: "SessionLockStolen",
 };
 
-const loggedInPageTypeMap: Record<PageType, ScreenName> = {
+const loggedInPageTypeMap: Record<PageType | string, ScreenName> = {
     [PageType.HomePage]: "Home",
     [PageType.RoomView]: "Room",
     [PageType.UserView]: "User",
@@ -48,10 +49,10 @@ export default class PosthogTrackers {
     }
 
     private view: Views = Views.LOADING;
-    private pageType?: PageType;
+    private pageType?: PageType | string;
     private override?: ScreenName;
 
-    public trackPageChange(view: Views, pageType: PageType | undefined, durationMs: number): void {
+    public trackPageChange(view: Views, pageType: PageType | string | undefined, durationMs: number): void {
         this.view = view;
         this.pageType = pageType;
         if (this.override) return;

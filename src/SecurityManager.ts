@@ -14,7 +14,6 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
-import { isSecureBackupRequired } from "./utils/WellKnownUtils";
 import AccessSecretStorageDialog, {
     type KeyParams,
 } from "./components/views/dialogs/security/AccessSecretStorageDialog";
@@ -232,15 +231,6 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
                 undefined,
                 /* priority = */ false,
                 /* static = */ true,
-                /* options = */ {
-                    onBeforeClose: async (reason): Promise<boolean> => {
-                        // If Secure Backup is required, you cannot leave the modal.
-                        if (reason === "backgroundClick") {
-                            return !isSecureBackupRequired(cli);
-                        }
-                        return true;
-                    },
-                },
             );
             const [confirmed] = await finished;
             if (!confirmed) {

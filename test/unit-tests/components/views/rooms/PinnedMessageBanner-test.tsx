@@ -14,13 +14,13 @@ import userEvent from "@testing-library/user-event";
 import * as pinnedEventHooks from "../../../../../src/hooks/usePinnedEvents";
 import { PinnedMessageBanner } from "../../../../../src/components/views/rooms/PinnedMessageBanner";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { makePollStartEvent, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
+import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions } from "../../../../test-utils";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
 import { Action } from "../../../../../src/dispatcher/actions";
-import ResizeNotifier from "../../../../../src/utils/ResizeNotifier.ts";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
 
 describe("<PinnedMessageBanner />", () => {
     const userId = "@alice:server.org";
@@ -29,12 +29,12 @@ describe("<PinnedMessageBanner />", () => {
     let mockClient: MatrixClient;
     let room: Room;
     let permalinkCreator: RoomPermalinkCreator;
-    let resizeNotifier: ResizeNotifier;
+    let sdkContext: SdkContextClass;
     beforeEach(() => {
         mockClient = stubClient();
         room = new Room(roomId, mockClient, userId);
         permalinkCreator = new RoomPermalinkCreator(room);
-        resizeNotifier = new ResizeNotifier();
+        sdkContext = new SdkContextClass();
         jest.spyOn(dis, "dispatch").mockReturnValue(undefined);
     });
 
@@ -80,8 +80,8 @@ describe("<PinnedMessageBanner />", () => {
      */
     function renderBanner() {
         return render(
-            <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} resizeNotifier={resizeNotifier} />,
-            withClientContextRenderOptions(mockClient),
+            <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />,
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
         );
     }
 
@@ -139,7 +139,12 @@ describe("<PinnedMessageBanner />", () => {
         jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
 
         const { asFragment, rerender } = renderBanner();
-        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the newest pinned message here",
+            }),
+        );
         expect(screen.getByText("First pinned message")).toBeVisible();
 
         jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([
@@ -148,9 +153,7 @@ describe("<PinnedMessageBanner />", () => {
             event3.getId()!,
         ]);
         jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2, event3]);
-        rerender(
-            <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} resizeNotifier={resizeNotifier} />,
-        );
+        rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
         await expect(screen.findByText("Third pinned message")).resolves.toBeVisible();
         expect(asFragment()).toMatchSnapshot();
     });
@@ -162,7 +165,11 @@ describe("<PinnedMessageBanner />", () => {
         renderBanner();
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
 
-        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the newest pinned message here",
+            }),
+        );
         expect(screen.getByText("First pinned message")).toBeVisible();
         expect(screen.getByTestId("banner-counter")).toHaveTextContent("1 of 2 Pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
@@ -173,7 +180,11 @@ describe("<PinnedMessageBanner />", () => {
             metricsTrigger: undefined, // room doesn't change
         });
 
-        await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "View the pinned message in the timeline and the next oldest pinned message here",
+            }),
+        );
         expect(screen.getByText("Second pinned message")).toBeVisible();
         expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
@@ -213,7 +224,7 @@ describe("<PinnedMessageBanner />", () => {
 
     describe("Notify the timeline to resize", () => {
         beforeEach(() => {
-            jest.spyOn(resizeNotifier, "notifyTimelineHeightChanged");
+            jest.spyOn(sdkContext.resizeNotifier, "notifyTimelineHeightChanged");
             jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event1.getId()!, event2.getId()!]);
             jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event1, event2]);
         });
@@ -222,28 +233,30 @@ describe("<PinnedMessageBanner />", () => {
             renderBanner();
             await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
             // The banner is displayed, so we need to resize the timeline
-            expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
+            expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
 
-            await userEvent.click(screen.getByRole("button", { name: "View the pinned message in the timeline." }));
+            await userEvent.click(
+                screen.getByRole("button", {
+                    name: "View the pinned message in the timeline and the newest pinned message here",
+                }),
+            );
             await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
             // The banner is already displayed, so we don't need to resize the timeline
-            expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
+            expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
         });
 
         it("should notify the timeline to resize when we hide the banner", async () => {
             const { rerender } = renderBanner();
             await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
             // The banner is displayed, so we need to resize the timeline
-            expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
+            expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(1);
 
             // The banner has no event to display and is hidden
             jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([]);
             jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([]);
-            rerender(
-                <PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} resizeNotifier={resizeNotifier} />,
-            );
+            rerender(<PinnedMessageBanner permalinkCreator={permalinkCreator} room={room} />);
             // The timeline should be resized
-            expect(resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(2);
+            expect(sdkContext.resizeNotifier.notifyTimelineHeightChanged).toHaveBeenCalledTimes(2);
         });
     });
 

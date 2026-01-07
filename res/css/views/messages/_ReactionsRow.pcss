@@ -9,25 +9,19 @@ Please see LICENSE files in the repository root for full details.
     color: var(--cpd-color-text-primary);
 
     .mx_ReactionsRow_addReactionButton {
-        position: relative;
         display: inline-block;
         visibility: hidden; /* show on hover of the .mx_EventTile */
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
+        padding: var(--cpd-space-1x);
         vertical-align: middle;
         margin-left: 4px;
         margin-right: 4px;
 
-        &::before {
-            content: "";
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            mask-size: 16px;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            background-color: $tertiary-content;
-            mask-image: url("$(res)/img/element-icons/room/message-bar/emoji.svg");
+        svg {
+            height: inherit;
+            width: inherit;
+            color: $tertiary-content;
         }
 
         &.mx_ReactionsRow_addReactionButton_active {
@@ -36,8 +30,8 @@ Please see LICENSE files in the repository root for full details.
 
         &:hover,
         &.mx_ReactionsRow_addReactionButton_active {
-            &::before {
-                background-color: $primary-content;
+            svg {
+                color: $primary-content;
             }
         }
     }

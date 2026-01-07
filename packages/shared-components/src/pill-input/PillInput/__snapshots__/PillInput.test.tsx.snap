@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`PillInput renders only the input without children 1`] = `
+<div>
+  <div
+    class="flex pillInput"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+  >
+    <input
+      aria-label="pill input"
+      autocomplete="off"
+      class="input"
+      placeholder="Type something..."
+    />
+  </div>
+</div>
+`;
+
+exports[`PillInput renders the pill input 1`] = `
+<div>
+  <div
+    class="flex pillInput"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: wrap;"
+    >
+      <div
+        style="min-width: 162px; height: 28px; background-color: rgb(204, 204, 204); border-radius: 99px;"
+      />
+      <div
+        style="min-width: 162px; height: 28px; background-color: rgb(204, 204, 204); border-radius: 99px;"
+      />
+    </div>
+    <input
+      aria-label="pill input"
+      autocomplete="off"
+      class="input largerInput"
+      placeholder="Type something..."
+    />
+  </div>
+</div>
+`;

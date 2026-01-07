@@ -939,7 +939,13 @@ for (const evType of ElementCallEventType.names) {
  */
 export function hasText(ev: MatrixEvent, client: MatrixClient, showHiddenEvents?: boolean): boolean {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return Boolean(handler?.(ev, client, false, showHiddenEvents));
+    try {
+        return Boolean(handler?.(ev, client, false, showHiddenEvents));
+    } catch (e) {
+        console.error(`Error encountered when trying to render event type=${ev.getType()} id=${ev.getId()}`, e);
+        // Returning true if we have a handler so we can show an error tile rather than no tile at all
+        return !!handler;
+    }
 }
 
 /**

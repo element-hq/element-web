@@ -11,6 +11,7 @@ import React, { type JSX } from "react";
 import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { capitalize } from "lodash";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
@@ -31,8 +32,8 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import JumpToDatePicker from "./JumpToDatePicker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { SdkContextClass } from "../../../contexts/SDKContext";
 import TimelineSeparator from "./TimelineSeparator";
+import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
     roomId: string;
@@ -51,6 +52,8 @@ interface IState {
  * Has additional jump to date functionality when labs flag is enabled
  */
 export default class DateSeparator extends React.Component<IProps, IState> {
+    public static contextType = RoomContext;
+    declare public context: React.ContextType<typeof RoomContext>;
     private settingWatcherRef?: string;
 
     public constructor(props: IProps) {
@@ -143,7 +146,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // Only try to navigate to the room if the user is still viewing the same
             // room. We don't want to jump someone back to a room after a slow request
             // if they've already navigated away to another room.
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.context.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 dispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
@@ -169,7 +172,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // don't want to worry someone about an error in a room they no longer care
             // about after a slow request if they've already navigated away to another
             // room.
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.context.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
                 let submitDebugLogsContent: JSX.Element = <></>;
@@ -310,7 +313,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
                     {this.getLabel()}
                 </h2>
-                <div className="mx_DateSeparator_chevron" />
+                <ChevronDownIcon className="mx_DateSeparator_chevron" />
                 {contextMenu}
             </ContextMenuTooltipButton>
         );
@@ -320,7 +323,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         const label = this.getLabel();
 
         let dateHeaderContent: JSX.Element;
-        if (this.state.jumpToDateEnabled) {
+        if (this.state.jumpToDateEnabled && !this.props.forExport) {
             dateHeaderContent = this.renderJumpToDateMenu();
         } else {
             dateHeaderContent = (

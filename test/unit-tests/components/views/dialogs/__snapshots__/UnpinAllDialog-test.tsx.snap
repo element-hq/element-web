@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<UnpinAllDialog /> should render 1`] = `
 <DocumentFragment>
@@ -12,6 +12,7 @@ exports[`<UnpinAllDialog /> should render 1`] = `
     class="mx_UnpinAllDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_Dialog_header"
@@ -32,7 +33,7 @@ exports[`<UnpinAllDialog /> should render 1`] = `
       class="mx_UnpinAllDialog_buttons"
     >
       <button
-        class="_button_vczzf_8 _destructive_vczzf_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -41,7 +42,7 @@ exports[`<UnpinAllDialog /> should render 1`] = `
         Continue
       </button>
       <button
-        class="_button_vczzf_8"
+        class="_button_13vu4_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"

@@ -109,22 +109,14 @@ Please see LICENSE files in the repository root for full details.
         border-radius: 4px;
         background-color: $background;
 
-        &::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 16px;
-            width: 16px;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            background-color: $tertiary-content;
-            mask-size: 16px;
+        svg {
+            width: inherit;
+            height: inherit;
+            color: $tertiary-content;
             transform: rotate(270deg);
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
         }
 
-        &.mx_SpaceHierarchy_subspace_toggle_shown::before {
+        &.mx_SpaceHierarchy_subspace_toggle_shown svg {
             transform: rotate(0deg);
         }
     }
@@ -177,18 +169,6 @@ Please see LICENSE files in the repository root for full details.
                             color: $tertiary-content;
                             font-size: $font-12px;
                             line-height: $font-15px;
-
-                            .mx_InfoTooltip_icon {
-                                margin-right: 4px;
-                                position: relative;
-                                vertical-align: text-top;
-
-                                &::before {
-                                    position: absolute;
-                                    top: 0;
-                                    left: 0;
-                                }
-                            }
                         }
 
                         .mx_InfoTooltip {
@@ -196,22 +176,14 @@ Please see LICENSE files in the repository root for full details.
                         }
 
                         .mx_SpaceHierarchy_roomTile_joined {
-                            display: inline;
-                            position: relative;
-                            padding-left: 16px;
+                            display: inline-flex;
+                            align-items: center;
+                            vertical-align: middle;
 
-                            &::before {
-                                content: "";
+                            svg {
                                 width: 20px;
                                 height: 20px;
-                                top: -2px;
-                                left: -4px;
-                                position: absolute;
-                                mask-position: center;
-                                mask-size: contain;
-                                mask-repeat: no-repeat;
-                                background-color: $accent;
-                                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
+                                color: $accent;
                             }
                         }
                     }

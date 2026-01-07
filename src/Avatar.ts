@@ -13,14 +13,18 @@ import DMRoomMap from "./utils/DMRoomMap";
 import { mediaFromMxc } from "./customisations/Media";
 import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
 import { getFirstGrapheme } from "./utils/strings";
+import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
 /**
  * Hardcoded from the Compound colors.
  * Shade for background as defined in the compound web implementation
  * https://github.com/vector-im/compound-web/blob/main/src/components/Avatar
  */
-const AVATAR_BG_COLORS = ["#e9f2ff", "#faeefb", "#e3f7ed", "#ffecf0", "#ffefe4", "#e3f5f8", "#f1efff", "#e0f8d9"];
-const AVATAR_TEXT_COLORS = ["#043894", "#671481", "#004933", "#7e0642", "#850000", "#004077", "#4c05b5", "#004b00"];
+const AVATAR_BG_LIGHT_COLORS = ["#e0f8d9", "#e3f5f8", "#faeefb", "#f1efff", "#ffecf0", "#ffefe4"];
+const AVATAR_TEXT_LIGHT_COLORS = ["#005f00", "#00548c", "#822198", "#5d26cd", "#9f0850", "#9b2200"];
+
+const AVATAR_BG_DARK_COLORS = ["#002600", "#001b4e", "#37004e", "#22006a", "#450018", "#470000"];
+const AVATAR_TEXT_DARK_COLORS = ["#56c02c", "#21bacd", "#d991de", "#ad9cfe", "#fe84a2", "#f6913d"];
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(
@@ -43,6 +47,13 @@ export function avatarUrlForMember(
 }
 
 /**
+ * Determines if the current theme is dark
+ */
+function isDarkTheme(): boolean {
+    return new ThemeWatcher().getEffectiveTheme() === "dark";
+}
+
+/**
  * Determines the HEX color to use in the avatar pills
  * @param id the user or room ID
  * @returns the text color to use on the avatar
@@ -51,7 +62,8 @@ export function getAvatarTextColor(id: string): string {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const index = useIdColorHash(id);
 
-    return AVATAR_TEXT_COLORS[index - 1];
+    // Use light colors by default
+    return isDarkTheme() ? AVATAR_TEXT_DARK_COLORS[index - 1] : AVATAR_TEXT_LIGHT_COLORS[index - 1];
 }
 
 export function avatarUrlForUser(
@@ -103,7 +115,10 @@ export function defaultAvatarUrlForString(s: string): string {
     // overwritten color value in custom themes
     const cssVariable = `--avatar-background-colors_${colorIndex}`;
     const cssValue = getComputedStyle(document.body).getPropertyValue(cssVariable);
-    const color = cssValue || AVATAR_BG_COLORS[colorIndex - 1];
+    // Light colors are the default
+    const color =
+        cssValue || isDarkTheme() ? AVATAR_BG_DARK_COLORS[colorIndex - 1] : AVATAR_BG_LIGHT_COLORS[colorIndex - 1];
+
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
         // validate color as this can come from account_data

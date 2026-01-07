@@ -244,7 +244,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (isTyping && this.props.model.parts[0].type === "command") {
             const { cmd } = parseCommandString(this.props.model.parts[0].text);
             const command = CommandMap.get(cmd!);
-            if (!command?.isEnabled(MatrixClientPeg.get()) || command.category !== CommandCategories.messages) {
+            if (
+                !command?.isEnabled(MatrixClientPeg.get(), this.props.room.roomId) ||
+                command.category !== CommandCategories.messages
+            ) {
                 isTyping = false;
             }
         }
@@ -479,6 +482,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onKeyDown = (event: React.KeyboardEvent): void => {
         if (!this.editorRef.current) return;
+        // Ignore any keypress while doing IME compositions to prevent cursor position issues
+        // This matches the behavior in SendMessageComposer and EditMessageComposer
+        if (this.isComposing(event)) {
+            return;
+        }
         if (this.isSafari && event.which == 229) {
             // Swallow the extra keyDown by Safari
             event.stopPropagation();

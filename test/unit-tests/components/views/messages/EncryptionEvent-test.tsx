@@ -72,6 +72,20 @@ describe("EncryptionEvent", () => {
             );
         });
 
+        it("should show the expected texts for experimental state event encryption", async () => {
+            client.enableEncryptedStateEvents = true;
+            event.event.content!["io.element.msc4362.encrypt_state_events"] = true;
+            renderEncryptionEvent(client, event);
+            await waitFor(() =>
+                checkTexts(
+                    "Experimental state encryption enabled",
+                    "Messages and state events in this room are end-to-end encrypted. " +
+                        "When people join, you can verify them in their profile, " +
+                        "just tap on their profile picture.",
+                ),
+            );
+        });
+
         describe("with same previous algorithm", () => {
             beforeEach(() => {
                 jest.spyOn(event, "getPrevContent").mockReturnValue({
@@ -112,16 +126,19 @@ describe("EncryptionEvent", () => {
     });
 
     describe("for an encrypted local room", () => {
+        let localRoom: LocalRoom;
+
         beforeEach(() => {
             event.event.content!.algorithm = algorithm;
-            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-            const localRoom = new LocalRoom(roomId, client, client.getUserId()!);
+            // jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+            localRoom = new LocalRoom(roomId, client, client.getUserId()!);
+            jest.spyOn(localRoom, "isEncryptionEnabled").mockReturnValue(true);
             mocked(client.getRoom).mockReturnValue(localRoom);
             renderEncryptionEvent(client, event);
         });
 
         it("should show the expected texts", async () => {
-            expect(client.getCrypto()!.isEncryptionEnabledInRoom).toHaveBeenCalledWith(roomId);
+            expect(localRoom.isEncryptionEnabled).toHaveBeenCalled();
             await checkTexts("Encryption enabled", "Messages in this chat will be end-to-end encrypted.");
         });
     });

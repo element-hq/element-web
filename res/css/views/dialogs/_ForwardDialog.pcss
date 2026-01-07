@@ -40,8 +40,7 @@ Please see LICENSE files in the repository root for full details.
         /* that our preview is unencrypted, which doesn't actually matter */
         /* We also hide download links to not encourage users to try interacting */
         .mx_EventTile_msgOption,
-        .mx_EventTile_e2eIcon_unencrypted,
-        .mx_EventTile_e2eIcon_warning,
+        .mx_EventTile_e2eIcon,
         .mx_MFileBody_download {
             display: none;
         }
@@ -61,6 +60,11 @@ Please see LICENSE files in the repository root for full details.
             /* To match the space around the title */
             margin: 0 0 15px 0;
             flex-grow: 0;
+
+            &:not(:focus-within) + .mx_ForwardList_content {
+                /* Inhibit the styling if focus is not within the input which handles keyboard accessibility */
+                --mx_ForwardList_entry_selectedBgColor: transparent;
+            }
         }
 
         .mx_ForwardList_content {
@@ -90,7 +94,7 @@ Please see LICENSE files in the repository root for full details.
 
                 &:hover,
                 &.mx_ForwardList_entry_active {
-                    background-color: $spacePanel-bg-color;
+                    background-color: var(--mx_ForwardList_entry_selectedBgColor, $spacePanel-bg-color);
                 }
 
                 .mx_ForwardList_roomButton {
@@ -142,7 +146,7 @@ Please see LICENSE files in the repository root for full details.
 
                     &.mx_ForwardList_sending .mx_ForwardList_sendIcon {
                         background-color: $accent;
-                        mask-image: url("$(res)/img/element-icons/circle-sending.svg");
+                        mask-image: url("@vector-im/compound-design-tokens/icons/circle.svg");
                         mask-position: center;
                         mask-repeat: no-repeat;
                         mask-size: 14px;
@@ -152,7 +156,7 @@ Please see LICENSE files in the repository root for full details.
 
                     &.mx_ForwardList_sent .mx_ForwardList_sendIcon {
                         background-color: $accent;
-                        mask-image: url("$(res)/img/element-icons/circle-sent.svg");
+                        mask-image: url("@vector-im/compound-design-tokens/icons/check-circle.svg");
                         mask-position: center;
                         mask-repeat: no-repeat;
                         mask-size: 14px;

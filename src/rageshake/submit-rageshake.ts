@@ -232,10 +232,6 @@ async function collectRecoveryInfo(client: MatrixClient, cryptoApi: CryptoApi, b
  * Collects labels to add to the report.
  */
 export function collectLabels(client: MatrixClient | null, opts: IOpts, body: FormData): void {
-    if (client?.getCrypto()?.getVersion()?.startsWith(`Rust SDK`)) {
-        body.append("label", "A-Element-R");
-    }
-
     if (opts.labels) {
         for (const label of opts.labels) {
             body.append("label", label);

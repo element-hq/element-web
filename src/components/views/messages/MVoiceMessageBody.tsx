@@ -14,8 +14,24 @@ import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import MAudioBody from "./MAudioBody";
 import MFileBody from "./MFileBody";
 import MediaProcessingError from "./shared/MediaProcessingError";
+import { isVoiceMessage } from "../../../utils/EventUtils";
+import { PlaybackQueue } from "../../../audio/PlaybackQueue";
+import { type Playback } from "../../../audio/Playback";
+import RoomContext from "../../../contexts/RoomContext";
 
 export default class MVoiceMessageBody extends MAudioBody {
+    public static contextType = RoomContext;
+    declare public context: React.ContextType<typeof RoomContext>;
+
+    protected onMount(playback: Playback): void {
+        if (isVoiceMessage(this.props.mxEvent)) {
+            PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!, this.context.roomViewStore).unsortedEnqueue(
+                this.props.mxEvent,
+                playback,
+            );
+        }
+    }
+
     // A voice message is an audio file but rendered in a special way.
     public render(): React.ReactNode {
         if (this.state.error) {

@@ -8,12 +8,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Optional } from "matrix-events-sdk";
-
 import { _t, getUserLanguage } from "./languageHandler";
 import { getUserTimezone } from "./TimezoneHandler";
 
-export { formatSeconds } from "./shared-components/utils/DateUtils";
+export { formatSeconds } from "@element-hq/web-shared-components";
 
 export const MINUTE_MS = 60000;
 export const HOUR_MS = MINUTE_MS * 60;
@@ -219,7 +217,7 @@ function withinCurrentYear(prevDate: Date, nextDate: Date): boolean {
     return prevDate.getFullYear() === nextDate.getFullYear();
 }
 
-export function wantsDateSeparator(prevEventDate: Optional<Date>, nextEventDate: Optional<Date>): boolean {
+export function wantsDateSeparator(prevEventDate: Date | undefined, nextEventDate: Date | undefined): boolean {
     if (!nextEventDate || !prevEventDate) {
         return false;
     }

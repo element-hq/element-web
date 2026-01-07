@@ -164,7 +164,7 @@ test.describe("RightPanel", () => {
                     css: `
                         /* Use monospace font for consistent mask width */
                         .mx_UserInfo_profile_mxid {
-                            font-family: Inconsolata !important;
+                            font-family: "Fira Code" !important;
                         }
                     `,
                 });
@@ -207,7 +207,7 @@ test.describe("RightPanel", () => {
 
             // \d represents the number of the space members
             await page
-                .locator(".mx_RoomInfoLine_private")
+                .locator(".mx_RoomInfoLine")
                 .getByRole("button", { name: /\d member/ })
                 .click();
             await expect(page.locator(".mx_MemberListView")).toBeVisible();

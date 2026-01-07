@@ -12,6 +12,7 @@ import React, { type JSX, type CSSProperties, type RefObject, type SyntheticEven
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
+import { TooltipProvider } from "@vector-im/compound-web";
 
 import { type Writeable } from "../../@types/common";
 import UIStore from "../../stores/UIStore";
@@ -404,7 +405,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         );
 
         if (focusLock) {
-            body = <FocusLock>{body}</FocusLock>;
+            body = <FocusLock returnFocus>{body}</FocusLock>;
         }
 
         // filter props that are invalid for DOM elements
@@ -425,15 +426,17 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
                         onContextMenu={this.onContextMenuPreventBubbling}
                     >
                         {background}
-                        <div
-                            className={menuClasses}
-                            style={menuStyle}
-                            ref={this.collectContextMenuRect}
-                            role={managed ? "menu" : undefined}
-                            {...divProps}
-                        >
-                            {body}
-                        </div>
+                        <TooltipProvider>
+                            <div
+                                className={menuClasses}
+                                style={menuStyle}
+                                ref={this.collectContextMenuRect}
+                                role={managed ? "menu" : undefined}
+                                {...divProps}
+                            >
+                                {body}
+                            </div>
+                        </TooltipProvider>
                     </div>
                 )}
             </RovingTabIndexProvider>

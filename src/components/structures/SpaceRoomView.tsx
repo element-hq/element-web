@@ -10,6 +10,13 @@ import { EventType, RoomType, JoinRule, Preset, type Room, RoomEvent } from "mat
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, useCallback, useContext, useRef, useState } from "react";
+import {
+    GroupIcon,
+    PlusIcon,
+    RoomIcon,
+    UserProfileSolidIcon,
+    VideoCallSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import createRoom, { type IOpts } from "../../createRoom";
@@ -66,6 +73,7 @@ import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import SpacePillButton from "./SpacePillButton.tsx";
 
 interface IProps {
     space: Room;
@@ -117,7 +125,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                         <>
                             <IconizedContextMenuOption
                                 label={_t("action|new_room")}
-                                iconClassName="mx_LegacyRoomList_iconNewRoom"
+                                icon={<PlusIcon />}
                                 onClick={async (e): Promise<void> => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -132,7 +140,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                             {videoRoomsEnabled && (
                                 <IconizedContextMenuOption
                                     label={_t("action|new_video_room")}
-                                    iconClassName="mx_LegacyRoomList_iconNewVideoRoom"
+                                    icon={<VideoCallSolidIcon />}
                                     onClick={async (e): Promise<void> => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -157,7 +165,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     )}
                     <IconizedContextMenuOption
                         label={_t("action|add_existing_room")}
-                        iconClassName="mx_LegacyRoomList_iconAddExistingRoom"
+                        icon={<RoomIcon />}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -168,7 +176,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     {canCreateSpace && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}
-                            iconClassName="mx_LegacyRoomList_iconPlus"
+                            icon={<PlusIcon />}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -329,8 +337,8 @@ const SpaceSetupFirstRooms: React.FC<{
                     return createRoom(space.client, {
                         createOpts: {
                             preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
-                            name,
                         },
+                        name,
                         spinner: false,
                         encryption: false,
                         andView: false,
@@ -423,7 +431,7 @@ const SpaceSetupPublicShare: React.FC<ISpaceSetupPublicShareProps> = ({
         <div className="mx_SpaceRoomView_publicShare">
             <h1>
                 {_t("create_space|share_heading", {
-                    name: justCreatedOpts?.createOpts?.name || space.name,
+                    name: justCreatedOpts?.name || space.name,
                 })}
             </h1>
             <div className="mx_SpaceRoomView_description">{_t("create_space|share_description")}</div>
@@ -449,28 +457,26 @@ const SpaceSetupPrivateScope: React.FC<{
             <h1>{_t("create_space|private_personal_heading")}</h1>
             <div className="mx_SpaceRoomView_description">
                 {_t("create_space|private_personal_description", {
-                    name: justCreatedOpts?.createOpts?.name || space.name,
+                    name: justCreatedOpts?.name || space.name,
                 })}
             </div>
 
-            <AccessibleButton
-                className="mx_SpaceRoomView_privateScope_justMeButton"
+            <SpacePillButton
+                icon={<UserProfileSolidIcon />}
+                title={_t("create_space|personal_space")}
+                description={_t("create_space|personal_space_description")}
                 onClick={() => {
                     onFinished(false);
                 }}
-            >
-                {_t("create_space|personal_space")}
-                <div>{_t("create_space|personal_space_description")}</div>
-            </AccessibleButton>
-            <AccessibleButton
-                className="mx_SpaceRoomView_privateScope_meAndMyTeammatesButton"
+            />
+            <SpacePillButton
+                icon={<GroupIcon />}
+                title={_t("create_space|private_space")}
+                description={_t("create_space|private_space_description")}
                 onClick={() => {
                     onFinished(true);
                 }}
-            >
-                {_t("create_space|private_space")}
-                <div>{_t("create_space|private_space_description")}</div>
-            </AccessibleButton>
+            />
         </div>
     );
 };
@@ -686,7 +692,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     <SpaceSetupFirstRooms
                         space={this.props.space}
                         title={_t("create_space|setup_rooms_community_heading", {
-                            spaceName: this.props.justCreatedOpts?.createOpts?.name || this.props.space.name,
+                            spaceName: this.props.justCreatedOpts?.name || this.props.space.name,
                         })}
                         description={
                             <>
@@ -763,7 +769,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         return (
             <main className="mx_SpaceRoomView">
                 <ErrorBoundary>
-                    <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier} analyticsRoomType="space">
+                    <MainSplit panel={rightPanel} analyticsRoomType="space">
                         {this.renderBody()}
                     </MainSplit>
                 </ErrorBoundary>

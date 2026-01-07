@@ -50,9 +50,12 @@ test.describe("Media preview settings", () => {
                 }
             `,
         });
-        await expect(
-            page.getByRole("tree", { name: "Rooms" }).getByRole("treeitem", { name: "Test room" }),
-        ).toMatchScreenshot("invite-room-tree-no-avatar.png");
+
+        const testRoomTile = page
+            .getByRole("listbox", { name: "Room list" })
+            .getByRole("option", { name: "Test room" });
+        await expect(testRoomTile).toBeVisible();
+        await expect(testRoomTile).toMatchScreenshot("invite-room-tree-no-avatar.png");
 
         // And then go back to being visible
         settings = await app.settings.openUserSettings("Preferences");
@@ -70,9 +73,7 @@ test.describe("Media preview settings", () => {
                 }
             `,
         });
-        await expect(
-            page.getByRole("tree", { name: "Rooms" }).getByRole("treeitem", { name: "Test room" }),
-        ).toMatchScreenshot("invite-room-tree-with-avatar.png");
+        await expect(testRoomTile).toMatchScreenshot("invite-room-tree-with-avatar.png");
     });
 
     test("should be able to hide media in rooms globally", async ({ page, app, room, user }) => {

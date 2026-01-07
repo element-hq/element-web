@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Direction, EventType, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../../../src/models/LocalRoom";
 import { createTestClient } from "../../test-utils";
@@ -78,5 +78,27 @@ describe("LocalRoom", () => {
                 expect(room.isError).toBe(stateTestDatum.isError);
             });
         });
+    });
+
+    it("should return false for isEncryptionEnabled with no state", () => {
+        expect(room.isEncryptionEnabled()).toBe(false);
+    });
+
+    it("should return true for isEncryptionEnabled with an encryption state event", () => {
+        const encryptionEvent = new MatrixEvent({
+            type: EventType.RoomEncryption,
+            state_key: "",
+            content: {
+                algorithm: "m.megolm.v1.aes-sha2",
+            },
+            sender: "@test:localhost",
+            room_id: room.roomId,
+            event_id: "$test:localhost",
+        });
+
+        const roomState = room.getLiveTimeline().getState(Direction.Forward);
+        roomState?.setStateEvents([encryptionEvent]);
+
+        expect(room.isEncryptionEnabled()).toBe(true);
     });
 });

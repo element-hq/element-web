@@ -20,9 +20,10 @@ Please see LICENSE files in the repository root for full details.
         /**
          * The gap between subsections is 32px and inside the subsection is 24px.
          * The separator separates the subsections, so it should have the same gap as the subsections.
-         * We add 12px and the separator spacing to the top margin to make the separator visually centered between the subsections.
+         * We add 12px and the separator spacing (8px) to the top margin to make the separator visually centered between the subsections.
+         * !important because it's overriding compound margin.
          */
-        margin-top: calc(var(--cpd-space-3x) + var(--cpd-separator-spacing));
+        margin-top: var(--cpd-space-5x) !important;
     }
 }
 
@@ -39,7 +40,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_SettingsSubsection_content {
     width: 100%;
     display: grid;
-    gap: $spacing-8;
+    gap: var(--cpd-space-4x);
     /* setting minwidth 0 makes columns definitely sized fixing horizontal overflow */
     grid-template-columns: minmax(0, 1fr);
     justify-items: flex-start;

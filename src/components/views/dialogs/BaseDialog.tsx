@@ -12,6 +12,7 @@ import React, { type JSX } from "react";
 import FocusLock from "react-focus-lock";
 import classNames from "classnames";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { I18nContext } from "@element-hq/web-shared-components";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -145,6 +146,9 @@ export default class BaseDialog extends React.Component<IProps> {
         const lockProps: Record<string, any> = {
             "onKeyDown": this.onKeyDown,
             "role": "dialog",
+            // Allow the dialog to be keyboard focusable
+            // So the escape key handling works in more cases (say you select the header)
+            "tabIndex": -1,
             // This should point to a node describing the dialog.
             // If we were about to completely follow this recommendation we'd need to
             // make all the components relying on BaseDialog to be aware of it.
@@ -161,38 +165,42 @@ export default class BaseDialog extends React.Component<IProps> {
         }
 
         return (
-            <MatrixClientContext.Provider value={this.matrixClient}>
-                {this.props.screenName && <PosthogScreenTracker screenName={this.props.screenName} />}
-                <FocusLock
-                    returnFocus={true}
-                    lockProps={lockProps}
-                    className={classNames(this.props.className, {
-                        mx_Dialog_fixedWidth: this.props.fixedWidth,
-                    })}
-                >
-                    {this.props.top}
-                    <div
-                        className={classNames("mx_Dialog_header", {
-                            mx_Dialog_headerWithButton: !!this.props.headerButton,
+            // XXX: We can't import ModuleAPI here because it causes a dependency cycle - hack and
+            // use the copy on the window object :(
+            <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                <MatrixClientContext.Provider value={this.matrixClient}>
+                    {this.props.screenName && <PosthogScreenTracker screenName={this.props.screenName} />}
+                    <FocusLock
+                        returnFocus={true}
+                        lockProps={lockProps}
+                        className={classNames(this.props.className, {
+                            mx_Dialog_fixedWidth: this.props.fixedWidth,
                         })}
                     >
-                        {!!(this.props.title || headerImage) && (
-                            <Heading
-                                size="3"
-                                as="h1"
-                                className={classNames("mx_Dialog_title", this.props.titleClass)}
-                                id="mx_BaseDialog_title"
-                            >
-                                {headerImage}
-                                {this.props.title}
-                            </Heading>
-                        )}
-                        {this.props.headerButton}
-                    </div>
-                    {this.props.children}
-                    {cancelButton}
-                </FocusLock>
-            </MatrixClientContext.Provider>
+                        {this.props.top}
+                        <div
+                            className={classNames("mx_Dialog_header", {
+                                mx_Dialog_headerWithButton: !!this.props.headerButton,
+                            })}
+                        >
+                            {!!(this.props.title || headerImage) && (
+                                <Heading
+                                    size="3"
+                                    as="h1"
+                                    className={classNames("mx_Dialog_title", this.props.titleClass)}
+                                    id="mx_BaseDialog_title"
+                                >
+                                    {headerImage}
+                                    {this.props.title}
+                                </Heading>
+                            )}
+                            {this.props.headerButton}
+                        </div>
+                        {this.props.children}
+                        {cancelButton}
+                    </FocusLock>
+                </MatrixClientContext.Provider>
+            </I18nContext.Provider>
         );
     }
 }

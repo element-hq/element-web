@@ -9,9 +9,9 @@ jobs:
     update:
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
-            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -23,7 +23,7 @@ jobs:
               run: "yarn update:jitsi"
 
             - name: Create Pull Request
-              uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
+              uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725 # v8
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   branch: actions/jitsi-update

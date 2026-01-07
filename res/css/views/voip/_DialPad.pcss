@@ -44,16 +44,11 @@ Please see LICENSE files in the repository root for full details.
     grid-column: 2;
     background-color: $accent;
 
-    &::before {
-        content: "";
+    svg {
         display: inline-block;
-        height: 40px;
-        width: 40px;
-        vertical-align: middle;
-        mask-repeat: no-repeat;
-        mask-size: 20px;
-        mask-position: center;
-        background-color: #fff; /* on all themes */
-        mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
+        height: 20px;
+        width: 20px;
+        padding: 10px;
+        color: #fff; /* on all themes */
     }
 }

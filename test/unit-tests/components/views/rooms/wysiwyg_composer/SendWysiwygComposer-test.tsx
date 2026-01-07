@@ -330,17 +330,24 @@ describe("SendWysiwygComposer", () => {
         "Left icon when %s",
         ({ isRichTextEnabled }) => {
             it.each([
-                [E2EStatus.Verified, "mx_E2EIcon_verified"],
-                [E2EStatus.Warning, "mx_E2EIcon_warning"],
+                [E2EStatus.Verified, "Everyone in this room is verified"],
+                [E2EStatus.Warning, "Someone is using an unknown session"],
                 [undefined, undefined],
-            ])("Should render left icon when e2eStatus is %s", async (e2eStatus, expectedClass) => {
+            ])("Should render left icon when e2eStatus is %s", async (e2eStatus, expectedLabel) => {
                 // When
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled, undefined, e2eStatus);
                 await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
                 const leftIcon = screen.getByTestId("e2e-icon");
                 // Then
                 expect(leftIcon).toBeInTheDocument();
-                expect(leftIcon).toHaveClass(expectedClass ? `mx_E2EIcon ${expectedClass}` : `mx_E2EIcon`);
+                expect(leftIcon).toHaveClass("mx_E2EIcon");
+                if (expectedLabel) {
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(leftIcon).toHaveAccessibleName(expectedLabel);
+                } else {
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(leftIcon.querySelector("svg")).not.toBeInTheDocument();
+                }
             });
         },
     );

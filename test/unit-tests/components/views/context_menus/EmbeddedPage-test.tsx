@@ -19,10 +19,10 @@ jest.mock("../../../../../src/languageHandler", () => ({
 }));
 
 describe("<EmbeddedPage />", () => {
-    it("should translate _t strings", async () => {
+    it.each([`"`, `'`, `&#x27;`, `&#x34;`])("should translate _t strings", async (character) => {
         mocked(_t).mockReturnValue("Przeglądaj pokoje");
         fetchMock.get("https://home.page", {
-            body: '<h1>_t("Explore rooms")</h1>',
+            body: `<h1>_t(${character}Explore rooms${character})</h1>`,
         });
 
         const { asFragment } = render(<EmbeddedPage url="https://home.page" />);

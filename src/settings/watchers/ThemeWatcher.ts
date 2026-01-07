@@ -13,7 +13,6 @@ import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import ThemeController from "../controllers/ThemeController";
 import { findHighContrastTheme } from "../../theme";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
@@ -88,15 +87,6 @@ export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvent, T
     public getEffectiveTheme(): string {
         // Dev note: Much of this logic is replicated in the AppearanceUserSettingsTab
 
-        // XXX: checking the isLight flag here makes checking it in the ThemeController
-        // itself completely redundant since we just override the result here and we're
-        // now effectively just using the ThemeController as a place to store the static
-        // variable. The system theme setting probably ought to have an equivalent
-        // controller that honours the same flag, although probably better would be to
-        // have the theme logic in one place rather than split between however many
-        // different places.
-        if (ThemeController.isLogin) return "light";
-
         // If the user has specifically enabled the system matching option (excluding default),
         // then use that over anything else. We pick the lowest possible level for the setting
         // to ensure the ordering otherwise works.
@@ -132,7 +122,6 @@ export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvent, T
                 return theme;
             }
         }
-        logger.log("returning theme value");
         return SettingsStore.getValue("theme");
     }
 

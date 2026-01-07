@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import Icon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import { ChevronRightIcon, OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -24,9 +24,10 @@ export const OverflowTileView: React.FC<Props> = ({ remaining, onClick }) => {
     return (
         <AccessibleButton onClick={onClick} className="mx_OverflowTileView">
             <div className="mx_OverflowTileView_icon">
-                <Icon height="36px" width="36px" />
+                <OverflowHorizontalIcon height="36px" width="36px" />
             </div>
             <div className="mx_OverflowTileView_text">{_t("common|and_n_others", { count: remaining })}</div>
+            <ChevronRightIcon className="mx_OverflowTileView_chevron" />
         </AccessibleButton>
     );
 };

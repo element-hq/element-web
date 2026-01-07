@@ -151,6 +151,25 @@ describe("WysiwygComposer", () => {
             // Then it sends a message
             await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
         });
+
+        it("Should disable formatting buttons when a slash command is entered", async () => {
+            // When
+            fireEvent.input(screen.getByRole("textbox"), {
+                data: "/rainbow",
+                inputType: "insertText",
+            });
+
+            // Then - wait for all buttons to be rendered and have the disabled class
+            await waitFor(() => {
+                const container = screen.getByTestId("WysiwygComposer");
+                const formattingButtons = container.querySelectorAll(".mx_FormattingButtons_Button");
+                expect(formattingButtons.length).toBeGreaterThan(0);
+
+                formattingButtons.forEach((btn) => {
+                    expect(btn).toHaveClass("mx_FormattingButtons_disabled");
+                });
+            });
+        });
     });
 
     describe("Mentions and commands", () => {
@@ -214,6 +233,11 @@ describe("WysiwygComposer", () => {
                 completion: "community-completion",
                 range: { start: 1, end: 1 },
                 component: <div>community</div>,
+            },
+            {
+                completion: "😄",
+                range: { start: 1, end: 1 },
+                component: <div>😄</div>,
             },
         ];
 
@@ -415,6 +439,16 @@ describe("WysiwygComposer", () => {
 
             // check that it we still have the initial text
             expect(screen.getByText(initialInput)).toBeInTheDocument();
+        });
+
+        it("selecting an emoji suggestion inserts the emoji", async () => {
+            await insertMentionInput();
+
+            // select the room suggestion
+            await userEvent.click(screen.getByText("😄"));
+
+            // check that it has inserted the plain text
+            expect(screen.getByText("😄")).toBeInTheDocument();
         });
     });
 

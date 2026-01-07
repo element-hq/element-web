@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
 "[36m<body>[39m
@@ -34,9 +34,17 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [33mrole[39m=[32m"menuitem"[39m
               [33mtabindex[39m=[32m"0"[39m
             [36m>[39m
-              [36m<span[39m
-                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconHome"[39m
-              [36m/>[39m
+              [36m<svg[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mheight[39m=[32m"1em"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"1em"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0"[39m
+                [36m/>[39m
+              [36m</svg>[39m
               [36m<span[39m
                 [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
               [36m>[39m
@@ -49,9 +57,17 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [33mrole[39m=[32m"menuitem"[39m
               [33mtabindex[39m=[32m"-1"[39m
             [36m>[39m
-              [36m<span[39m
-                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconExplore"[39m
-              [36m/>[39m
+              [36m<svg[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mheight[39m=[32m"1em"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"1em"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"[39m
+                [36m/>[39m
+              [36m</svg>[39m
               [36m<span[39m
                 [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
               [36m>[39m
@@ -64,9 +80,19 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [33mrole[39m=[32m"menuitem"[39m
               [33mtabindex[39m=[32m"-1"[39m
             [36m>[39m
-              [36m<span[39m
-                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconPreferences"[39m
-              [36m/>[39m
+              [36m<svg[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mheight[39m=[32m"1em"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"1em"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33mclip-rule[39m=[32m"evenodd"[39m
+                  [33md[39m=[32m"M6.5 2h11a4.5 4.5 0 1 1 0 9h-11a4.5 4.5 0 0 1 0-9m0 2h7.258A4.5 4.5 0 0 0 13 6.5c0 .925.28 1.785.758 2.5H6.5a2.5 2.5 0 0 1 0-5M15 6.5a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0m-13 11A4.5 4.5 0 0 1 6.5 13h11a4.5 4.5 0 1 1 0 9h-11q-.233 0-.46-.023A4.5 4.5 0 0 1 2 17.5m8.242-2.5H17.5a2.5 2.5 0 0 1 0 5h-7.258A4.5 4.5 0 0 0 11 17.5c0-.925-.28-1.785-.758-2.5M6.5 15a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5"[39m
+                  [33mfill-rule[39m=[32m"evenodd"[39m
+                [36m/>[39m
+              [36m</svg>[39m
               [36m<span[39m
                 [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
               [36m>[39m
@@ -80,9 +106,20 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [33mrole[39m=[32m"menuitem"[39m
               [33mtabindex[39m=[32m"-1"[39m
             [36m>[39m
-              [36m<span[39m
-                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconLeave"[39m
-              [36m/>[39m
+              [36m<svg[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mheight[39m=[32m"1em"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"1em"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M14 13q.424 0 .713-.287A.97.97 0 0 0 15 12a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 12q0 .424.287.713.288.287.713.287"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M10.385 21.788A1 1 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a1 1 0 0 1-.857-.182M18 5.781l-6-1.5v15.438l6-1.5zM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2z"[39m
+                [36m/>[39m
+              [36m</svg>[39m
               [36m<span[39m
                 [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
               [36m>[39m

@@ -64,8 +64,7 @@ export async function decryptFile(file?: EncryptedFile, info?: MediaEventInfo): 
         // they introduce XSS attacks if the Blob URI is viewed directly in the
         // browser (e.g. by copying the URI into a new tab or window.)
         // See warning at top of file.
-        let mimetype = info?.mimetype ? info.mimetype.split(";")[0].trim() : "";
-        mimetype = getBlobSafeMimeType(mimetype);
+        const mimetype = getBlobSafeMimeType(info?.mimetype?.split(";")[0].trim() ?? "");
 
         return new Blob([dataArray], { type: mimetype });
     } catch (e) {

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useContext, useEffect } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
@@ -64,7 +65,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     const header = (
         <div className="mx_BaseCard_header_title">
-            <Heading size="4" className="mx_BaseCard_header_title_heading">
+            <Heading size="4" className="mx_BaseCard_header_title_heading" as="h1">
                 {WidgetUtils.getWidgetName(app)}
             </Heading>
             <ContextMenuButton
@@ -73,7 +74,9 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
                 onClick={openMenu}
                 isExpanded={menuDisplayed}
                 label={_t("common|options")}
-            />
+            >
+                <OverflowHorizontalIcon />
+            </ContextMenuButton>
             {contextMenu}
         </div>
     );

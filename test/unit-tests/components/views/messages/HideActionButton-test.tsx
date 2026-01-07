@@ -48,6 +48,7 @@ describe("HideActionButton", () => {
     beforeEach(() => {
         cli = getMockClientWithEventEmitter({
             getRoom: jest.fn(),
+            getUserId: jest.fn(),
         });
     });
     afterEach(() => {

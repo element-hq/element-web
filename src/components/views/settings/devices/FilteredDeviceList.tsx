@@ -195,7 +195,7 @@ const DeviceListItem: React.FC<{
 }) => {
     const tileContent = (
         <>
-            {isSigningOut && <Spinner w={16} h={16} />}
+            {isSigningOut && <Spinner size={16} />}
             <DeviceExpandDetailsButton isExpanded={isExpanded} onClick={onDeviceExpandToggle} />
         </>
     );
@@ -325,7 +325,7 @@ export const FilteredDeviceList = ({
                             onClick={() => onSignOutDevices(selectedDeviceIds)}
                             className="mx_FilteredDeviceList_headerButton"
                         >
-                            {isSigningOut && <Spinner w={16} h={16} />}
+                            {isSigningOut && <Spinner size={16} />}
                             {_t("action|sign_out")}
                         </AccessibleButton>
                         <AccessibleButton

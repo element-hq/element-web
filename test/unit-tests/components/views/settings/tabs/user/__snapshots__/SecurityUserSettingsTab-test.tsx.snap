@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<SecurityUserSettingsTab /> renders ignored users 1`] = `
 <ul
@@ -34,8 +34,8 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
     <div
       class="mx_SettingsTab_sections"
     >
-      <div
-        class="mx_SetIntegrationManager"
+      <form
+        class="_root_19upo_16 mx_SetIntegrationManager"
         data-testid="mx_SetIntegrationManager"
       >
         <div
@@ -51,6 +51,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
             </h3>
             <h4
               class="mx_Heading_h4"
+              id="mx_SetIntegrationManager_ManagerName"
             >
               (scalar.vector.im)
             </h4>
@@ -58,6 +59,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         </div>
         <div
           class="mx_SettingsSubsection_text"
+          id="mx_SetIntegrationManager_BodyText"
         >
           <span>
             Use an integration manager 
@@ -72,43 +74,39 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         >
           Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
         </div>
-        <form
-          class="_root_19upo_16"
+        <div
+          class="_inline-field_19upo_32"
         >
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field-control_19upo_44"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_container_udcm8_10"
             >
+              <input
+                checked=""
+                class="_input_udcm8_24"
+                id="_r_0_"
+                role="switch"
+                type="checkbox"
+              />
               <div
-                class="_container_19o42_10"
-              >
-                <input
-                  checked=""
-                  class="_input_19o42_24"
-                  id="mx_SetIntegrationManager_Toggle"
-                  role="switch"
-                  type="checkbox"
-                />
-                <div
-                  class="_ui_19o42_34"
-                />
-              </div>
-            </div>
-            <div
-              class="_inline-field-body_19upo_38"
-            >
-              <label
-                class="_label_19upo_59"
-                for="mx_SetIntegrationManager_Toggle"
-              >
-                Enable the integration manager
-              </label>
+                class="_ui_udcm8_34"
+              />
             </div>
           </div>
-        </form>
-      </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="_r_0_"
+            >
+              Enable the integration manager
+            </label>
+          </div>
+        </div>
+      </form>
       <div
         class="mx_SettingsSection"
       >
@@ -142,14 +140,26 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   Element can't securely cache encrypted messages locally while running in a web browser. Use 
                   <a
                     class="mx_ExternalLink"
-                    href="https://element.io/get-started"
+                    href="https://element.io/download"
                     rel="noreferrer noopener"
                     target="_blank"
                   >
                     Element Desktop
-                    <i
+                    <svg
                       class="mx_ExternalLink_icon"
-                    />
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+                      />
+                      <path
+                        d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+                      />
+                    </svg>
                   </a>
                    for encrypted messages to appear in search results.
                 </span>
@@ -213,7 +223,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-«r1»"
+                        for="radix-_r_2_"
                       >
                         Enter a new identity server
                       </label>
@@ -222,7 +232,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                       >
                         <input
                           class="_control_sqdq4_10"
-                          id="radix-«r1»"
+                          id="radix-_r_2_"
                           name="input"
                           placeholder=""
                           title=""

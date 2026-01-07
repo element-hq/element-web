@@ -25,7 +25,9 @@ test.describe("Encryption tab", () => {
 
         test.beforeEach(async ({ page, homeserver, credentials }) => {
             // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
-            const res = await createBot(page, homeserver, credentials);
+            const botCredentials = { ...credentials };
+            delete botCredentials.accessToken; // use a new login for the bot
+            const res = await createBot(page, homeserver, botCredentials);
             recoveryKey = res.recoveryKey;
             expectedBackupVersion = res.expectedBackupVersion;
         });
@@ -117,7 +119,7 @@ test.describe("Encryption tab", () => {
             await verifySession(app, recoveryKey.encodedPrivateKey);
             await util.openEncryptionTab();
 
-            await page.getByRole("checkbox", { name: "Allow key storage" }).click();
+            await page.getByRole("switch", { name: "Allow key storage" }).click();
 
             await expect(
                 page.getByRole("heading", { name: "Are you sure you want to turn off key storage and delete it?" }),
@@ -136,7 +138,7 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("button", { name: "Delete key storage" }).click();
 
-            await expect(page.getByRole("checkbox", { name: "Allow key storage" })).not.toBeChecked();
+            await expect(page.getByRole("switch", { name: "Allow key storage" })).not.toBeChecked();
 
             for (const prom of deleteRequestPromises) {
                 const request = await prom;
@@ -160,15 +162,15 @@ test.describe("Encryption tab", () => {
 
             // We will reset our identity
             await settings.getByRole("button", { name: "Verify this device" }).click();
-            await page.getByRole("button", { name: "Proceed with reset" }).click();
+            await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // First try cancelling and restarting
             await page.getByRole("button", { name: "Cancel" }).click();
-            await page.getByRole("button", { name: "Proceed with reset" }).click();
+            await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Then click outside the dialog and restart
             await page.locator("li").filter({ hasText: "Encryption" }).click({ force: true });
-            await page.getByRole("button", { name: "Proceed with reset" }).click();
+            await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Finally we actually continue
             await page.getByRole("button", { name: "Continue" }).click();

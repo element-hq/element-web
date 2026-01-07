@@ -10,7 +10,7 @@ import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IWidget } from "matrix-widget-api";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AppTile from "../elements/AppTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -224,8 +224,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         const messaging = WidgetMessagingStore.instance.getMessagingForUid(
             WidgetUtils.calcWidgetUid(this.state.stickerpickerWidget.id),
         );
-        if (messaging && visible !== this.prevSentVisibility) {
-            messaging.updateVisibility(visible).catch((err) => {
+        if (messaging?.widgetApi && visible !== this.prevSentVisibility) {
+            messaging.widgetApi.updateVisibility(visible).catch((err) => {
                 logger.error("Error updating widget visibility: ", err);
             });
             this.prevSentVisibility = visible;

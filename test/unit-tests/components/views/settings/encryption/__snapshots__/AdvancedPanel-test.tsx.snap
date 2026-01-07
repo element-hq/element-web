@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when loading the device keys 1`] = `
 <div
@@ -53,28 +53,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_vczzf_8 _has-icon_vczzf_57"
-      data-kind="secondary"
-      data-size="sm"
-      role="button"
-      tabindex="0"
-    >
-      <svg
-        aria-hidden="true"
-        fill="currentColor"
-        height="20"
-        viewBox="0 0 24 24"
-        width="20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
-        />
-      </svg>
-      Export keys
-    </button>
-    <button
-      class="_button_vczzf_8 _has-icon_vczzf_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -92,11 +71,32 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
           d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
         />
       </svg>
+      Export keys
+    </button>
+    <button
+      class="_button_13vu4_8 _has-icon_13vu4_60"
+      data-kind="secondary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
       Import keys
     </button>
   </div>
   <button
-    class="_button_vczzf_8 _destructive_vczzf_107"
+    class="_button_13vu4_8 _destructive_13vu4_110"
     data-kind="tertiary"
     data-size="sm"
     role="button"
@@ -145,28 +145,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_vczzf_8 _has-icon_vczzf_57"
-      data-kind="secondary"
-      data-size="sm"
-      role="button"
-      tabindex="0"
-    >
-      <svg
-        aria-hidden="true"
-        fill="currentColor"
-        height="20"
-        viewBox="0 0 24 24"
-        width="20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
-        />
-      </svg>
-      Export keys
-    </button>
-    <button
-      class="_button_vczzf_8 _has-icon_vczzf_57"
+      class="_button_13vu4_8 _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -184,11 +163,32 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
           d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
         />
       </svg>
+      Export keys
+    </button>
+    <button
+      class="_button_13vu4_8 _has-icon_13vu4_60"
+      data-kind="secondary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 24 24"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 16a.97.97 0 0 1-.713-.287A.97.97 0 0 1 11 15V7.85L9.125 9.725q-.3.3-.7.3T7.7 9.7a.93.93 0 0 1-.288-.713A.98.98 0 0 1 7.7 8.3l3.6-3.6q.15-.15.325-.213.175-.062.375-.062t.375.062a.9.9 0 0 1 .325.213l3.6 3.6q.3.3.287.712a.98.98 0 0 1-.287.688q-.3.3-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15q0 .424-.287.713A.97.97 0 0 1 12 16m-6 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+        />
+      </svg>
       Import keys
     </button>
   </div>
   <button
-    class="_button_vczzf_8 _destructive_vczzf_107"
+    class="_button_13vu4_8 _destructive_13vu4_110"
     data-kind="tertiary"
     data-size="sm"
     role="button"
@@ -216,19 +216,20 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
       class="_inline-field-control_19upo_44"
     >
       <div
-        class="_container_19o42_10"
+        class="_container_udcm8_10"
       >
         <input
-          aria-describedby="radix-«r7»"
+          aria-describedby="radix-_r_7_"
           checked=""
-          class="_input_19o42_24"
-          id="radix-«r6»"
+          class="_input_udcm8_24"
+          id="radix-_r_6_"
           name="neverSendEncrypted"
+          role="switch"
           title=""
           type="checkbox"
         />
         <div
-          class="_ui_19o42_34"
+          class="_ui_udcm8_34"
         />
       </div>
     </div>
@@ -237,15 +238,15 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
     >
       <label
         class="_label_19upo_59"
-        for="radix-«r6»"
+        for="radix-_r_6_"
       >
         In encrypted rooms, only send messages to verified users
       </label>
       <span
         class="_message_19upo_85 _help-message_19upo_91"
-        id="radix-«r7»"
+        id="radix-_r_7_"
       >
-        Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.
+        Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.
       </span>
     </div>
   </div>

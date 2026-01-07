@@ -13,7 +13,7 @@ import SdkConfig from "../SdkConfig";
 import Modal from "../Modal";
 import { IntegrationManagerInstance, Kind } from "./IntegrationManagerInstance";
 import IntegrationsImpossibleDialog from "../components/views/dialogs/IntegrationsImpossibleDialog";
-import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
+import { IntegrationsDisabledDialog } from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 

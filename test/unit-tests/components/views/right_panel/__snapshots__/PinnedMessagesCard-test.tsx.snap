@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<PinnedMessagesCard /> should show the empty state when there are no pins 1`] = `
 <DocumentFragment>
@@ -19,7 +19,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         </p>
       </div>
       <button
-        aria-labelledby="«re»"
+        aria-labelledby="_r_f_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -28,7 +28,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -50,7 +50,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
       tabindex="-1"
     >
       <div
-        class="flex mx_EmptyState"
+        class="_flex_4dswl_9 mx_EmptyState"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <svg
@@ -101,7 +101,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«rk»"
+        aria-labelledby="_r_l_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -110,7 +110,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -141,7 +141,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -159,12 +159,13 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«rq»"
+                aria-labelledby="_r_s_"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="_r_r_"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -172,14 +173,14 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«rv»"
+                id="radix-_r_11_"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -198,6 +199,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="_r_r_"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -209,7 +211,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
           </div>
         </div>
         <div
-          class="_separator_7ckbw_8 mx_PinnedMessagesCard_Separator"
+          class="_separator_cqpyv_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -220,7 +222,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -238,12 +240,13 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«r11»"
+                aria-labelledby="_r_14_"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="_r_13_"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -251,14 +254,14 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«r16»"
+                id="radix-_r_19_"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -277,6 +280,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="_r_13_"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -292,7 +296,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_vczzf_8"
+          class="_button_13vu4_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -325,7 +329,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="«rt2»"
+        aria-labelledby="_r_10f_"
         class="_icon-button_1pz9o_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -334,7 +338,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         tabindex="0"
       >
         <div
-          class="_indicator-icon_zr2a0_17"
+          class="_indicator-icon_147l5_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -365,7 +369,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -383,12 +387,13 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«rt8»"
+                aria-labelledby="_r_10m_"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="_r_10l_"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -396,14 +401,14 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«rtd»"
+                id="radix-_r_10r_"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -422,6 +427,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="_r_10l_"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -433,7 +439,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
           </div>
         </div>
         <div
-          class="_separator_7ckbw_8 mx_PinnedMessagesCard_Separator"
+          class="_separator_cqpyv_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -444,7 +450,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
+              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -462,12 +468,13 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="«rtf»"
+                aria-labelledby="_r_10u_"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
+                aria-describedby="_r_10t_"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -475,14 +482,14 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="_icon-button_1pz9o_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-«rtk»"
+                id="radix-_r_113_"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
                 type="button"
               >
                 <div
-                  class="_indicator-icon_zr2a0_17"
+                  class="_indicator-icon_147l5_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -501,6 +508,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content"
+              id="_r_10t_"
             >
               <div
                 class="mx_EventTile_body translate"

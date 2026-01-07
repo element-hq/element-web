@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens after a session is restored 1`] = `
 <div>
@@ -95,13 +95,24 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
     <div
       class="mx_Spinner"
     >
-      <div
+      <svg
         aria-label="Loading…"
-        class="mx_Spinner_icon"
+        class="_icon_11k6c_18"
         data-testid="spinner"
+        fill="currentColor"
+        height="1em"
         role="progressbar"
         style="width: 32px; height: 32px;"
-      />
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
     </div>
   </div>
 </div>
@@ -113,16 +124,18 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
     class="mx_AuthPage"
   >
     <div
-      class="mx_AuthPage_modal"
+      class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
       style="position: relative;"
     >
       <div
         class="mx_AuthPage_modalBlur"
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
-        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
+        style="display: flex; z-index: 1; border-radius: inherit;"
+        tabindex="-1"
       >
         <div
           class="mx_Welcome"
@@ -160,13 +173,22 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
                   English
                 </div>
               </div>
-              <span
+              <svg
                 class="mx_Dropdown_arrow"
-              />
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
     <footer
       class="mx_AuthFooter"
@@ -213,13 +235,24 @@ exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
     <div
       class="mx_Spinner"
     >
-      <div
+      <svg
         aria-label="Loading…"
-        class="mx_Spinner_icon"
+        class="_icon_11k6c_18"
         data-testid="spinner"
+        fill="currentColor"
+        height="1em"
         role="progressbar"
         style="width: 32px; height: 32px;"
-      />
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
     </div>
   </div>
 </div>
@@ -231,16 +264,18 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
     class="mx_AuthPage"
   >
     <div
-      class="mx_AuthPage_modal"
+      class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
       style="position: relative;"
     >
       <div
         class="mx_AuthPage_modalBlur"
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
       />
-      <div
+      <main
+        aria-live="polite"
         class="mx_AuthPage_modalContent"
-        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
+        style="display: flex; z-index: 1; border-radius: inherit;"
+        tabindex="-1"
       >
         <div
           class="mx_AuthHeader"
@@ -274,13 +309,22 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
                   English
                 </div>
               </div>
-              <span
+              <svg
                 class="mx_Dropdown_arrow"
-              />
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
             </div>
           </div>
         </div>
-        <main
+        <div
           class="mx_AuthBody"
         >
           <h1>
@@ -341,8 +385,8 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
               Clear all data
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
     <footer
       class="mx_AuthFooter"
@@ -388,6 +432,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
   class="mx_QuestionDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"
@@ -444,6 +489,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
   class="mx_QuestionDialog mx_Dialog_fixedWidth"
   data-focus-lock-disabled="false"
   role="dialog"
+  tabindex="-1"
 >
   <div
     class="mx_Dialog_header"

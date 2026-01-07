@@ -15,6 +15,14 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
+import {
+    AttachmentIcon,
+    MicOnIcon,
+    OverflowHorizontalIcon,
+    PollsIcon,
+    StickerIcon,
+    TextFormattingIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -125,7 +133,9 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     className={moreOptionsClasses}
                     onClick={props.toggleButtonMenu}
                     title={_t("quick_settings|sidebar_settings")}
-                />
+                >
+                    <OverflowHorizontalIcon />
+                </AccessibleButton>
             )}
             {props.isMenuOpen && (
                 <IconizedContextMenu
@@ -170,7 +180,7 @@ interface IUploadButtonProps {
 // We put the file input outside the UploadButton component so that it doesn't get killed when the context menu closes.
 const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, relation, children }) => {
     const cli = useContext(MatrixClientContext);
-    const roomContext = useScopedRoomContext("timelineRenderingType");
+    const roomContext = useScopedRoomContext("timelineRenderingType", "replyToEvent");
     const uploadInput = useRef<HTMLInputElement>(null);
 
     const onUploadClick = (): void => {
@@ -195,6 +205,7 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
             Array.from(ev.target.files!),
             roomId,
             relation,
+            roomContext.replyToEvent,
             cli,
             roomContext.timelineRenderingType,
         );
@@ -234,12 +245,9 @@ const UploadButton: React.FC = () => {
     };
 
     return (
-        <CollapsibleButton
-            className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_upload"
-            onClick={onClick}
-            title={_t("common|attachment")}
-        />
+        <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={_t("common|attachment")}>
+            <AttachmentIcon />
+        </CollapsibleButton>
     );
 };
 
@@ -249,10 +257,11 @@ function showStickersButton(props: IProps): ReactElement | null {
             id="stickersButton"
             key="controls_stickers"
             className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_stickers"
             onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
             title={props.isStickerPickerOpen ? _t("composer|close_sticker_picker") : _t("common|sticker")}
-        />
+        >
+            <StickerIcon />
+        </CollapsibleButton>
     ) : null;
 }
 
@@ -262,10 +271,11 @@ function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | nu
         <CollapsibleButton
             key="voice_message_send"
             className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_voiceMessage"
             onClick={props.onRecordStartEndClick}
             title={_t("composer|voice_message_button")}
-        />
+        >
+            <MicOnIcon />
+        </CollapsibleButton>
     );
 }
 
@@ -317,10 +327,11 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
         return (
             <CollapsibleButton
                 className="mx_MessageComposer_button"
-                iconClassName="mx_MessageComposer_poll"
                 onClick={this.onCreateClick}
                 title={_t("composer|poll_button")}
-            />
+            >
+                <PollsIcon />
+            </CollapsibleButton>
         );
     }
 }
@@ -348,15 +359,9 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
     const title = isRichTextEnabled ? _t("composer|mode_plain") : _t("composer|mode_rich_text");
 
     return (
-        <CollapsibleButton
-            className="mx_MessageComposer_button"
-            iconClassName={classNames({
-                mx_MessageComposer_plain_text: !isRichTextEnabled,
-                mx_MessageComposer_rich_text: isRichTextEnabled,
-            })}
-            onClick={onClick}
-            title={title}
-        />
+        <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={title}>
+            <TextFormattingIcon />
+        </CollapsibleButton>
     );
 }
 

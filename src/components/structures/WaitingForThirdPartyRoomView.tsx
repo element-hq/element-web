@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type RefObject } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
@@ -41,8 +42,9 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                 <RoomHeader room={context.room!} />
                 <main className="mx_RoomView_body" ref={roomView}>
                     <div className="mx_RoomView_timeline">
-                        <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={resizeNotifier}>
+                        <ScrollPanel className="mx_RoomView_messagePanel">
                             <EventTileBubble
+                                icon={<LockSolidIcon />}
                                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                                 title={_t("room|waiting_for_join_title", { brand })}
                                 subtitle={_t("room|waiting_for_join_subtitle", { brand })}

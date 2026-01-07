@@ -1,3 +1,10 @@
+/*
+Copyright 2025 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 /* eslint-disable quote-props */
 
 const dotenv = require("dotenv");
@@ -207,13 +214,15 @@ module.exports = (env, argv) => {
                     __dirname,
                     "node_modules/@matrix-org/react-sdk-module-api",
                 ),
-                // and matrix-events-sdk & matrix-widget-api
-                "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
+                // and matrix-widget-api
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
                 "oidc-client-ts": path.resolve(__dirname, "node_modules/oidc-client-ts"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
+
+                // Make shared-components imports resolve to EW counterpart
+                "counterpart": path.resolve(__dirname, "node_modules/counterpart"),
             },
             fallback: {
                 // Mock out the NodeFS module: The opus decoder imports this wrongly.
@@ -264,6 +273,10 @@ module.exports = (env, argv) => {
                     include: (f) => {
                         // our own source needs babel-ing
                         if (f.startsWith(path.resolve(__dirname, "src"))) return true;
+
+                        // We import the typescript source directly from shared-components
+                        // to avoid having to build as we dev, so include them too.
+                        if (f.startsWith(path.resolve(__dirname, "packages", "shared-components"))) return true;
 
                         // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute

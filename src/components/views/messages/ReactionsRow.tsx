@@ -11,6 +11,7 @@ import classNames from "classnames";
 import { type MatrixEvent, MatrixEventEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { isContentActionable } from "../../../utils/EventUtils";
@@ -34,7 +35,7 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
     if (menuDisplayed && button.current) {
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
-            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false} focusLock>
                 <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
             </ContextMenu>
         );
@@ -54,7 +55,9 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
                 }}
                 isExpanded={menuDisplayed}
                 ref={button}
-            />
+            >
+                <ReactionAddIcon />
+            </ContextMenuTooltipButton>
 
             {contextMenu}
         </React.Fragment>

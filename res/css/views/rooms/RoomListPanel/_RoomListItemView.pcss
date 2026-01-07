@@ -15,56 +15,81 @@
  * |-------------------------------------------------------|
  */
 .mx_RoomListItemView {
-    all: unset;
+    /* Remove button default style */
+    background: unset;
+    border: none;
+    padding: 0;
+    text-align: unset;
+
     cursor: pointer;
+    height: 48px;
+    width: 100%;
 
-    .mx_RoomListItemView_container {
-        padding-left: var(--cpd-space-3x);
-        font: var(--cpd-font-body-md-regular);
-        height: 100%;
+    padding-left: var(--cpd-space-3x);
+    font: var(--cpd-font-body-md-regular);
 
-        .mx_RoomListItemView_content {
-            height: 100%;
-            flex: 1;
-            /* The border is only under the room name and the future hover menu  */
-            border-bottom: var(--cpd-border-width-0-5) solid var(--cpd-color-bg-subtle-secondary);
-            box-sizing: border-box;
-            min-width: 0;
-            padding-right: var(--cpd-space-5x);
+    /*  Hide the menu by default  */
+    .mx_RoomListItemView_menu {
+        display: none;
+    }
 
-            .mx_RoomListItemView_text {
-                min-width: 0;
+    &:hover,
+    &:focus-visible,
+    /* When the context menu is opened  */
+    &[data-state="open"],
+    /*  When the options and notifications menu are opened */
+    &:has(.mx_RoomListItemMenuView > button[data-state="open"]) {
+        background-color: var(--cpd-color-bg-action-secondary-hovered);
+
+        .mx_RoomListItemView_menu {
+            display: flex;
+        }
+
+        &.mx_RoomListItemView_has_menu {
+            /**
+             * The figma uses 16px padding (--cpd-space-4x) but due to https://github.com/element-hq/compound-web/issues/331
+             * the icon size of the menu is 18px instead of 20px with a different internal padding
+             * We need to use 18px to align the icon with the others icons
+             * 18px is not available in compound spacing
+             */
+            .mx_RoomListItemView_content {
+                padding-right: 18px;
             }
 
-            .mx_RoomListItemView_roomName {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .mx_RoomListItemView_messagePreview {
-                font: var(--cpd-font-body-sm-regular);
-                color: var(--cpd-color-text-secondary);
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+            /*  When the menu is visible, hide the notification decoration to avoid clutter */
+            .mx_RoomListItemView_notificationDecoration {
+                display: none;
             }
         }
     }
-}
 
-.mx_RoomListItemView_hover {
-    background-color: var(--cpd-color-bg-action-secondary-hovered);
-}
+    .mx_RoomListItemView_content {
+        height: 100%;
+        flex: 1;
+        /* The border is only under the room name and the future hover menu  */
+        border-bottom: var(--cpd-border-width-0-5) solid var(--cpd-color-bg-subtle-secondary);
+        box-sizing: border-box;
+        min-width: 0;
+        padding-right: var(--cpd-space-5x);
 
-.mx_RoomListItemView_menu_open .mx_RoomListItemView_container .mx_RoomListItemView_content {
-    /**
-     * The figma uses 16px padding (--cpd-space-4x) but due to https://github.com/element-hq/compound-web/issues/331
-     * the icon size of the menu is 18px instead of 20px with a different internal padding
-     * We need to use 18px to align the icon with the others icons
-     * 18px is not available in compound spacing
-     */
-    padding-right: 18px;
+        .mx_RoomListItemView_text {
+            min-width: 0;
+        }
+
+        .mx_RoomListItemView_roomName {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mx_RoomListItemView_messagePreview {
+            font: var(--cpd-font-body-sm-regular);
+            color: var(--cpd-color-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
 }
 
 .mx_RoomListItemView_selected {

@@ -50,25 +50,20 @@ jobs:
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
 
             - name: Fetch layered build
-              id: layered_build
               env:
                   # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-              run: |
-                  scripts/layered.sh
-                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
-                  VECTOR_SHA=$(git rev-parse --short=12 HEAD)
-                  echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+              run: scripts/layered.sh
 
             - name: Copy config
               run: cp element.io/develop/config.json config.json
@@ -76,12 +71,10 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
-                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
-              run: |
-                  yarn build
+              run: VERSION=$(scripts/get-version-from-git.sh) yarn build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: webapp
                   path: webapp
@@ -89,7 +82,7 @@ jobs:
 
             - name: Calculate runner variables
               id: runner-vars
-              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+              uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
               with:
                   script: |
                       const numRunners = parseInt(process.env.NUM_RUNNERS, 10);
@@ -129,18 +122,18 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
               with:
                   name: webapp
                   path: webapp
 
-            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               with:
                   cache: "yarn"
                   cache-dependency-path: yarn.lock
@@ -154,7 +147,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
+              uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -179,7 +172,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
                   path: blob-report
@@ -201,13 +194,13 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               if: inputs.skip != true
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
               if: inputs.skip != true
               with:
                   cache: "yarn"
@@ -219,7 +212,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
               with:
                   pattern: all-blob-reports-*
                   path: all-blob-reports
@@ -235,7 +228,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: html-report
                   path: playwright-report

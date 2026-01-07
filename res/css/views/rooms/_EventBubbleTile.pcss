@@ -50,7 +50,7 @@ Please see LICENSE files in the repository root for full details.
         margin-right: 0;
     }
 
-    .mx_EventTile_avatar {
+    &:not(.mx_EventTile_info) .mx_EventTile_avatar {
         line-height: 0;
         border: 4px solid $background;
         border-radius: 50%;
@@ -153,7 +153,7 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_MediaBody {
         /* leave space for the timestamp */
-        padding-right: 48px;
+        padding-right: 48px !important;
     }
 
     .mx_MImageBody {
@@ -354,11 +354,6 @@ Please see LICENSE files in the repository root for full details.
 
             /* Keep height equal to text for shield alignment, additional 2px because of 1px padding on text */
             height: calc($font-18px + 2px);
-        }
-
-        .mx_MPollEndBody {
-            /* Prevent the poll end body from exceeding the tile width */
-            width: 100%;
         }
     }
 
@@ -588,6 +583,7 @@ Please see LICENSE files in the repository root for full details.
         position: static;
         order: -1;
         margin-inline-end: var(--EventTile_bubble_gap-inline); /* Same spacing between E2E icon and a hidden event */
+        display: inline-flex;
     }
 
     .mx_EventTile_e2eIcon {

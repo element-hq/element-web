@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "../dialogs/BaseDialog";
@@ -63,7 +64,7 @@ const SpacePreferencesDialog: React.FC<IProps> = ({ space, onFinished }) => {
         new Tab(
             SpacePreferenceTab.Appearance,
             _td("common|appearance"),
-            "mx_SpacePreferencesDialog_appearanceIcon",
+            <VisibilityOnIcon />,
             <SpacePreferencesAppearanceTab space={space} />,
         ),
     ];

@@ -24,6 +24,8 @@ import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
+import ResizeNotifier from "../utils/ResizeNotifier";
+import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
 
 // This context is available to components under MatrixChat,
 // the context must not be used by components outside a SdkContextClass tree.
@@ -64,6 +66,8 @@ export class SdkContextClass {
     protected _TypingStore?: TypingStore;
     protected _UserProfilesStore?: UserProfilesStore;
     protected _OidcClientStore?: OidcClientStore;
+    protected _ResizeNotifier?: ResizeNotifier;
+    protected _MultiRoomViewStore?: MultiRoomViewStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -169,6 +173,23 @@ export class SdkContextClass {
         }
 
         return this._OidcClientStore;
+    }
+
+    // This is getting increasingly tenuous to have here but we still have class components so it's
+    // awkward to consume multiple contexts in them. This should be replaced with ResizeObservers
+    // anyway really.
+    public get resizeNotifier(): ResizeNotifier {
+        if (!this._ResizeNotifier) {
+            this._ResizeNotifier = new ResizeNotifier();
+        }
+        return this._ResizeNotifier;
+    }
+
+    public get multiRoomViewStore(): MultiRoomViewStore {
+        if (!this._MultiRoomViewStore) {
+            this._MultiRoomViewStore = new MultiRoomViewStore(defaultDispatcher, this);
+        }
+        return this._MultiRoomViewStore;
     }
 
     public onLoggedOut(): void {
