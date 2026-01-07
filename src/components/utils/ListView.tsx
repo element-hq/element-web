@@ -77,6 +77,13 @@ export interface IListViewProps<Item, Context> extends Omit<
 }
 
 /**
+ * Utility type for the prop scrollIntoViewOnChange allowing it to be memoised by a caller without repeating types
+ */
+export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
+    VirtuosoProps<Item, ListContext<Context>>["scrollIntoViewOnChange"]
+>;
+
+/**
  * A generic virtualized list component built on top of react-virtuoso.
  * Provides keyboard navigation and virtualized rendering for performance with large lists.
  *
