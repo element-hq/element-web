@@ -84,7 +84,7 @@ class Header extends React.PureComponent<IProps> {
                 onKeyDown={this.onKeyDown}
             >
                 {this.props.categories.map((category) => {
-                    const classes = classNames(`mx_EmojiPicker_anchor mx_EmojiPicker_anchor_${category.id}`, {
+                    const classes = classNames("mx_EmojiPicker_anchor", {
                         mx_EmojiPicker_anchor_visible: category.visible,
                     });
                     // Properties of this button are also modified by EmojiPicker's updateVisibility in DOM.
@@ -100,7 +100,9 @@ class Header extends React.PureComponent<IProps> {
                             tabIndex={category.firstVisible ? 0 : -1} // roving
                             aria-selected={category.visible}
                             aria-controls={`mx_EmojiPicker_category_${category.id}`}
-                        />
+                        >
+                            {category.emoji}
+                        </button>
                     );
                 })}
             </nav>
