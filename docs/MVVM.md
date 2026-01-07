@@ -25,12 +25,12 @@ This is anywhere your data or business logic comes from. If your view model is a
 #### View
 
 1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/packages/shared-components). Develop it in storybook!
-2. Views are simple react components (eg: `FooView`).
-3. Views use [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) internally where the view model is the external store.
+2. Views are simple react components (eg: `FooView`) with very little state and logic.
+3. Views must call `useViewModel` hook with the corresponding view model passed in as argument. This allows the view to re-render when something has changed in the view model. This entire mechanism is powered by [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore).
 4. Views should define the interface of the view model they expect:
 
     ```tsx
-    // Snapshot is the return type of your view model
+    // Snapshot is the data that your view-model provides which is rendered by the view.
     interface FooViewSnapshot {
         value: string;
     }
@@ -40,16 +40,16 @@ This is anywhere your data or business logic comes from. If your view model is a
         doSomething: () => void;
     }
 
-    // ViewModel is a type defining the methods needed for `useSyncExternalStore`
+    // ViewModel is an object (usually a class) that implements both the interfaces listed above.
     // https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
     type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
 
     interface FooViewProps {
+        // Ideally the view only depends on the view model i.e you don't expect any other props here.
         vm: FooViewModel;
     }
 
     function FooView({ vm }: FooViewProps) {
-        // useViewModel is a helper function that uses useSyncExternalStore under the hood
         const { value } = useViewModel(vm);
         return (
             <button type="button" onClick={() => vm.doSomething()}>
