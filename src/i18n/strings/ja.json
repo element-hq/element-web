@@ -78,9 +78,7 @@
         "next": "次へ",
         "no": "いいえ",
         "open": "開く",
-        "pause": "一時停止",
         "pin": "ピン",
-        "play": "再生",
         "quote": "引用",
         "react": "リアクション",
         "refresh": "再読み込み",
@@ -2582,24 +2580,10 @@
         "show_thread_filter": "表示："
     },
     "time": {
-        "about_day_ago": "約1日前",
-        "about_hour_ago": "約1時間前",
-        "about_minute_ago": "約1分前",
         "date_at_time": "%(date)s %(time)s",
-        "few_seconds_ago": "数秒前",
         "hours_minutes_seconds_left": "残り%(hours)s時間%(minutes)s分%(seconds)s秒",
-        "in_about_day": "今から約1日前",
-        "in_about_hour": "今から約1時間前",
-        "in_about_minute": "今から約1分前",
-        "in_few_seconds": "今から数秒前",
-        "in_n_days": "今から%(num)s日前",
-        "in_n_hours": "今から%(num)s時間前",
-        "in_n_minutes": "今から%(num)s分前",
         "left": "残り%(timeRemaining)s",
         "minutes_seconds_left": "残り%(minutes)s分%(seconds)s秒",
-        "n_days_ago": "%(num)s日前",
-        "n_hours_ago": "%(num)s時間前",
-        "n_minutes_ago": "%(num)s分前",
         "seconds_left": "残り%(seconds)s秒",
         "short_days": "%(value)s日",
         "short_days_hours_minutes_seconds": "%(days)s日%(hours)s時%(minutes)s分%(seconds)s秒",
@@ -2643,8 +2627,7 @@
         "m.audio": {
             "error_downloading_audio": "音声をダウンロードする際にエラーが発生しました",
             "error_processing_audio": "音声メッセージを処理する際にエラーが発生しました",
-            "error_processing_voice_message": "音声メッセージを処理する際にエラーが発生しました",
-            "unnamed_audio": "名前のない音声"
+            "error_processing_voice_message": "音声メッセージを処理する際にエラーが発生しました"
         },
         "m.beacon_info": {
             "view_live_location": "位置情報（ライブ）を表示"

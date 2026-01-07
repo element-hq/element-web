@@ -1,0 +1,35 @@
+{
+    "action": {
+        "delete": "Eliminar",
+        "dismiss": "Rexeitar",
+        "explore_rooms": "Explorar salas",
+        "pause": "Deter",
+        "play": "Reproducir",
+        "search": "Busca"
+    },
+    "left_panel": {
+        "open_dial_pad": "Abrir marcador"
+    },
+    "time": {
+        "about_day_ago": "onte",
+        "about_hour_ago": "fai unha hora",
+        "about_minute_ago": "fai un minuto",
+        "few_seconds_ago": "fai uns segundos",
+        "in_about_day": "foi onte",
+        "in_about_hour": "fará unha hora",
+        "in_about_minute": "haberá un minuto",
+        "in_few_seconds": "hai só uns segundos",
+        "in_n_days": "fará %(num)s días",
+        "in_n_hours": "fará %(num)s horas",
+        "in_n_minutes": "fará %(num)s minutos",
+        "n_days_ago": "fai %(num)s días",
+        "n_hours_ago": "fai %(num)s horas",
+        "n_minutes_ago": "fai %(num)s minutos"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Erro ao descargar o audio",
+            "unnamed_audio": "Audio sen nome"
+        }
+    }
+}

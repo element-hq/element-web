@@ -89,9 +89,7 @@
         "ok": "OK",
         "open": "Avaa",
         "open_menu": "Avaa valikko",
-        "pause": "Keskeytä",
         "pin": "Kiinnitä",
-        "play": "Toista",
         "proceed": "Jatka",
         "quote": "Lainaa",
         "react": "Reagoi",
@@ -2816,24 +2814,10 @@
         "show_thread_filter": "Näytä:"
     },
     "time": {
-        "about_day_ago": "noin päivä sitten",
-        "about_hour_ago": "noin tunti sitten",
-        "about_minute_ago": "noin minuutti sitten",
         "date_at_time": "%(date)s klo %(time)s",
-        "few_seconds_ago": "muutama sekunti sitten",
         "hours_minutes_seconds_left": "%(hours)s h %(minutes)s m %(seconds)s s jäljellä",
-        "in_about_day": "noin päivä sitten",
-        "in_about_hour": "noin tunti sitten",
-        "in_about_minute": "noin minuutti sitten",
-        "in_few_seconds": "muutama sekunti sitten",
-        "in_n_days": "%(num)s päivää sitten",
-        "in_n_hours": "%(num)s tuntia sitten",
-        "in_n_minutes": "%(num)s minuuttia sitten",
         "left": "%(timeRemaining)s jäljellä",
         "minutes_seconds_left": "%(minutes)s min %(seconds)s s jäljellä",
-        "n_days_ago": "%(num)s päivää sitten",
-        "n_hours_ago": "%(num)s tuntia sitten",
-        "n_minutes_ago": "%(num)s minuuttia sitten",
         "seconds_left": "%(seconds)s s jäljellä",
         "short_days": "%(value)s vrk",
         "short_days_hours_minutes_seconds": "%(days)s pv %(hours)s t %(minutes)s min %(seconds)s s",
@@ -2882,8 +2866,7 @@
         "m.audio": {
             "error_downloading_audio": "Virhe ääntä ladattaessa",
             "error_processing_audio": "Virhe ääniviestiä käsiteltäessä",
-            "error_processing_voice_message": "Virhe ääniviestin käsittelyssä",
-            "unnamed_audio": "Nimetön ääni"
+            "error_processing_voice_message": "Virhe ääniviestin käsittelyssä"
         },
         "m.call": {
             "video_call_ended": "Videopuhelu päättyi",
