@@ -2230,7 +2230,7 @@
         "sort_unread_first": "Show rooms with unread messages first",
         "space_menu": {
             "home": "Space home",
-            "space_settings": "Space Settings"
+            "space_settings": "Space settings"
         },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
