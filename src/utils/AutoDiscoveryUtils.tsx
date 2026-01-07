@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, _td, type TranslationKey, UserFriendlyError } from "../languageHandler";
+import { _t, _td, UserFriendlyError } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import { type ValidatedServerConfig } from "./ValidatedServerConfig";
 

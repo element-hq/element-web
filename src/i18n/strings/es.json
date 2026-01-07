@@ -92,9 +92,7 @@
         "ok": "Vale",
         "open": "Abrir",
         "open_menu": "Abrir menú",
-        "pause": "Pausar",
         "pin": "Fijar",
-        "play": "Reproducir",
         "proceed": "Continuar",
         "quote": "Citar",
         "react": "Reaccionar",
@@ -2700,24 +2698,10 @@
         "show_thread_filter": "Mostrar:"
     },
     "time": {
-        "about_day_ago": "hace aprox. un día",
-        "about_hour_ago": "hace aprox. una hora",
-        "about_minute_ago": "hace aproximadamente un minuto",
         "date_at_time": "%(date)s a la(s) %(time)s",
-        "few_seconds_ago": "hace unos segundos",
         "hours_minutes_seconds_left": "queda(n) %(hours)sh %(minutes)sm %(seconds)ss",
-        "in_about_day": "dentro de un día",
-        "in_about_hour": "dentro de una hora",
-        "in_about_minute": "dentro de un minuto",
-        "in_few_seconds": "dentro de unos segundos",
-        "in_n_days": "dentro de %(num)s días",
-        "in_n_hours": "dentro de %(num)s horas",
-        "in_n_minutes": "dentro de %(num)s minutos",
         "left": "Queda %(timeRemaining)s",
         "minutes_seconds_left": "queda(n) %(minutes)sm %(seconds)ss",
-        "n_days_ago": "hace %(num)s días",
-        "n_hours_ago": "hace %(num)s horas",
-        "n_minutes_ago": "hace %(num)s minutos",
         "seconds_left": "%(seconds)ss restantes",
         "short_days": "%(value)s d",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -2758,11 +2742,9 @@
             "unable_to_find": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no se ha podido encontrarlo."
         },
         "m.audio": {
-            "audio_player": "Reproductor de audio",
             "error_downloading_audio": "Error al descargar el audio",
             "error_processing_audio": "Error al procesar el mensaje de audio",
-            "error_processing_voice_message": "Ha ocurrido un error al procesar el mensaje de voz",
-            "unnamed_audio": "Audio sin título"
+            "error_processing_voice_message": "Ha ocurrido un error al procesar el mensaje de voz"
         },
         "m.beacon_info": {
             "view_live_location": "Ver ubicación en tiempo real"

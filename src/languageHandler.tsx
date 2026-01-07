@@ -12,7 +12,6 @@ import _ from "lodash";
 import {
     _t,
     normalizeLanguageKey,
-    type TranslationKey,
     type IVariables,
     KEY_SEPARATOR,
     getLangsJson,
@@ -33,7 +32,6 @@ export {
     _t,
     type IVariables,
     type Tags,
-    type TranslationKey,
     type TranslatedString,
     _td,
     _tDom,
