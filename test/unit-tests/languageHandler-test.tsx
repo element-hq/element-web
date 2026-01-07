@@ -23,7 +23,6 @@ import {
     substitute,
     type TranslatedString,
     UserFriendlyError,
-    type TranslationKey,
     type IVariables,
     type Tags,
     getLanguagesFromBrowser,

@@ -1782,21 +1782,7 @@
         "open_thread": "Atidaryti temą"
     },
     "time": {
-        "about_day_ago": "maždaug prieš dieną",
-        "about_hour_ago": "maždaug prieš valandą",
-        "about_minute_ago": "maždaug prieš minutę",
         "date_at_time": "%(date)s %(time)s",
-        "few_seconds_ago": "prieš kelias sekundes",
-        "in_about_day": "apie dieną nuo dabar",
-        "in_about_hour": "apie valandą nuo dabar",
-        "in_about_minute": "apie minutę nuo dabar",
-        "in_few_seconds": "keletą sekundžių nuo dabar",
-        "in_n_days": "%(num)s dienas(-ų) nuo dabar",
-        "in_n_hours": "%(num)s valandas(-ų) nuo dabar",
-        "in_n_minutes": "%(num)s minutes(-ų) nuo dabar",
-        "n_days_ago": "prieš %(num)s dienas(-ų)",
-        "n_hours_ago": "prieš %(num)s valandas(-ų)",
-        "n_minutes_ago": "prieš %(num)s minutes(-ų)",
         "seconds_left": "%(seconds)ss liko",
         "short_hours": "%(value)sval"
     },

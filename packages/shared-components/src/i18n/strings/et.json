@@ -1,0 +1,48 @@
+{
+    "a11y": {
+        "seek_bar_label": "Heli kerimisriba"
+    },
+    "action": {
+        "delete": "Kustuta",
+        "dismiss": "Loobu",
+        "explore_rooms": "Tutvu jututubadega",
+        "pause": "Peata",
+        "play": "Esita",
+        "search": "Otsing"
+    },
+    "encryption": {
+        "pinned_identity_changed": "Kasutaja %(displayName)s (<b>%(userId)s</b>) võrguidentiteet on lähtestatud. <a>Lisateave</a>",
+        "withdraw_verification_action": "Eemalda verifitseerimine"
+    },
+    "left_panel": {
+        "open_dial_pad": "Ava numbriklahvistik"
+    },
+    "room": {
+        "status_bar": {
+            "history_visible": "See jututuba on seadistatud sel viisil, et uued liikmed saavad lugeda varasemat ajalugu.<a> Lisateave</a>"
+        }
+    },
+    "time": {
+        "about_day_ago": "umbes päev tagasi",
+        "about_hour_ago": "umbes tund aega tagasi",
+        "about_minute_ago": "umbes minut tagasi",
+        "few_seconds_ago": "mõni sekund tagasi",
+        "in_about_day": "umbes päeva pärast",
+        "in_about_hour": "umbes tunni pärast",
+        "in_about_minute": "umbes minuti pärast",
+        "in_few_seconds": "mõne sekundi pärast",
+        "in_n_days": "%(num)s päeva pärast",
+        "in_n_hours": "%(num)s tunni pärast",
+        "in_n_minutes": "%(num)s minuti pärast",
+        "n_days_ago": "%(num)s päeva tagasi",
+        "n_hours_ago": "%(num)s tundi tagasi",
+        "n_minutes_ago": "%(num)s minutit tagasi"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Meediaesitaja",
+            "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
+            "unnamed_audio": "Nimetu helifail"
+        }
+    }
+}

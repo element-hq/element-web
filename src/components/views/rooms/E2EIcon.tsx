@@ -12,7 +12,7 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 import { ErrorSolidIcon, ShieldIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 
