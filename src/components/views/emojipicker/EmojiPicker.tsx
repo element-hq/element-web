@@ -81,19 +81,16 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
         const hasRecentlyUsed = this.recentlyUsed.length > 0;
 
-        const categoryConfig: Array<{
-            id: CategoryKey;
-            name: string;
-        }> = [
-            { id: "recent", name: _t("emoji|category_frequently_used") },
-            { id: "people", name: _t("emoji|category_smileys_people") },
-            { id: "nature", name: _t("emoji|category_animals_nature") },
-            { id: "foods", name: _t("emoji|category_food_drink") },
-            { id: "activity", name: _t("emoji|category_activities") },
-            { id: "places", name: _t("emoji|category_travel_places") },
-            { id: "objects", name: _t("emoji|category_objects") },
-            { id: "symbols", name: _t("emoji|category_symbols") },
-            { id: "flags", name: _t("emoji|category_flags") },
+        const categoryConfig: Pick<ICategory, "id" | "name" | "emoji">[] = [
+            { id: "recent", name: _t("emoji|category_frequently_used"), emoji: "🕒" },
+            { id: "people", name: _t("emoji|category_smileys_people"), emoji: "😀" },
+            { id: "nature", name: _t("emoji|category_animals_nature"), emoji: "🐕" },
+            { id: "foods", name: _t("emoji|category_food_drink"), emoji: "🍎" },
+            { id: "activity", name: _t("emoji|category_activities"), emoji: "⚽️" },
+            { id: "places", name: _t("emoji|category_travel_places"), emoji: "🚗" },
+            { id: "objects", name: _t("emoji|category_objects"), emoji: "💡" },
+            { id: "symbols", name: _t("emoji|category_symbols"), emoji: "⁉️" },
+            { id: "flags", name: _t("emoji|category_flags"), emoji: "🏁" },
         ];
 
         this.categories = categoryConfig.map((config) => {
@@ -109,8 +106,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 firstVisible = !hasRecentlyUsed;
             }
             return {
-                id: config.id,
-                name: config.name,
+                ...config,
                 enabled: isEnabled,
                 visible: isVisible,
                 firstVisible: firstVisible,
