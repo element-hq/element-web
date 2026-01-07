@@ -658,6 +658,9 @@ export function mkStubRoom(
         getEvents: (): MatrixEvent[] => [],
         getState: (): RoomState | undefined => state,
     } as unknown as EventTimeline;
+
+    const eventEmitter = new EventEmitter();
+
     return {
         canInvite: jest.fn().mockReturnValue(false),
         client,
@@ -728,9 +731,11 @@ export function mkStubRoom(
         myUserId: client?.getUserId(),
         name,
         normalizedName: normalize(name || ""),
-        off: jest.fn(),
-        on: jest.fn(),
-        removeListener: jest.fn(),
+        on: eventEmitter.on.bind(eventEmitter),
+        once: eventEmitter.once.bind(eventEmitter),
+        off: eventEmitter.off.bind(eventEmitter),
+        removeListener: eventEmitter.removeListener.bind(eventEmitter),
+        emit: eventEmitter.emit.bind(eventEmitter),
         roomId,
         setBlacklistUnverifiedDevices: jest.fn(),
         setUnreadNotificationCount: jest.fn(),
