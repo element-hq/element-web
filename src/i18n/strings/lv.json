@@ -87,9 +87,7 @@
         "no": "Nē",
         "ok": "Labi",
         "open": "Atvērt",
-        "pause": "Pauzēt",
         "pin": "Piespraust",
-        "play": "Atskaņot",
         "proceed": "Turpināt",
         "quote": "Citēt",
         "react": "Reaģēt",
@@ -1552,8 +1550,6 @@
         "files_button": "Datnes",
         "pinned_messages": {
             "limits": {
-                "zero": "",
-                "one": "",
                 "other": "Varat piespraust ne vairāk kā %(count)s logrīkus"
             }
         },
@@ -2764,24 +2760,10 @@
         "no_rooms_with_unread_threads": "Jums vēl nav istabu ar nelasītiem pavedieniem."
     },
     "time": {
-        "about_day_ago": "aptuveni dienu iepriekš",
-        "about_hour_ago": "aptuveni stundu iepriekš",
-        "about_minute_ago": "aptuveni minūti iepriekš",
         "date_at_time": "%(date)s pulksten %(time)s",
-        "few_seconds_ago": "pirms dažām sekundēm",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)s m %(seconds)s s atlicis",
-        "in_about_day": "aptuveni dienu kopš šī brīža",
-        "in_about_hour": "aptuveni stundu kopš šī brīža",
-        "in_about_minute": "aptuveni minūti kopš šī brīža",
-        "in_few_seconds": "dažas sekundes kopš šī brīža",
-        "in_n_days": "%(num)s dienas kopš šī brīža",
-        "in_n_hours": "%(num)s stundas kopš šī brīža",
-        "in_n_minutes": "%(num)s minūtes kopš šī brīža",
         "left": "%(timeRemaining)s atlicis",
         "minutes_seconds_left": "%(minutes)sm %(seconds)s s atlicis",
-        "n_days_ago": "%(num)s dienas iepriekš",
-        "n_hours_ago": "%(num)s stundas iepriekš",
-        "n_minutes_ago": "%(num)s minūtes iepriekš",
         "seconds_left": "%(seconds)s sekundes atlikušas",
         "short_days": "%(value)s d.",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -2828,8 +2810,7 @@
         "m.audio": {
             "error_downloading_audio": "Kļūda skaņas lejupielādēšanā",
             "error_processing_audio": "Kļūda audio ziņas apstrādē",
-            "error_processing_voice_message": "Balss ziņas apstrādes kļūda",
-            "unnamed_audio": "Nenosaukts audio"
+            "error_processing_voice_message": "Balss ziņas apstrādes kļūda"
         },
         "m.beacon_info": {
             "view_live_location": "Skatīties reāllaika atrašanās vietu"

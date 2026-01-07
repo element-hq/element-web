@@ -1,0 +1,48 @@
+{
+    "a11y": {
+        "seek_bar_label": "Barre de recherche audio"
+    },
+    "action": {
+        "delete": "Supprimer",
+        "dismiss": "Ignorer",
+        "explore_rooms": "Parcourir les salons",
+        "pause": "Pause",
+        "play": "Lecture",
+        "search": "Rechercher"
+    },
+    "encryption": {
+        "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
+        "withdraw_verification_action": "Révoquer la vérification"
+    },
+    "left_panel": {
+        "open_dial_pad": "Ouvrir le pavé de numérotation"
+    },
+    "room": {
+        "status_bar": {
+            "history_visible": "Ce salon a été configuré afin que les nouveaux membres puissent lire l'historique.<a> En savori plus</a>"
+        }
+    },
+    "time": {
+        "about_day_ago": "il y a environ un jour",
+        "about_hour_ago": "il y a environ une heure",
+        "about_minute_ago": "il y a environ une minute",
+        "few_seconds_ago": "il y a quelques secondes",
+        "in_about_day": "dans un jour environ",
+        "in_about_hour": "dans une heure environ",
+        "in_about_minute": "dans une minute environ",
+        "in_few_seconds": "dans quelques secondes",
+        "in_n_days": "dans %(num)s jours",
+        "in_n_hours": "dans %(num)s heures",
+        "in_n_minutes": "dans %(num)s minutes",
+        "n_days_ago": "il y a %(num)s jours",
+        "n_hours_ago": "il y a %(num)s heures",
+        "n_minutes_ago": "il y a %(num)s minutes"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Lecteur audio",
+            "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
+            "unnamed_audio": "Audio sans nom"
+        }
+    }
+}

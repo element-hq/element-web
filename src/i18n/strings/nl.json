@@ -86,9 +86,7 @@
         "no": "Nee",
         "ok": "Oké",
         "open": "Openen",
-        "pause": "Pauze",
         "pin": "Vastmaken",
-        "play": "Afspelen",
         "proceed": "Doorgaan",
         "quote": "Citeren",
         "react": "Reageren",
@@ -2420,24 +2418,10 @@
         "show_thread_filter": "Toon:"
     },
     "time": {
-        "about_day_ago": "ongeveer een dag geleden",
-        "about_hour_ago": "ongeveer een uur geleden",
-        "about_minute_ago": "ongeveer een minuut geleden",
         "date_at_time": "%(date)s om %(time)s",
-        "few_seconds_ago": "enige tellen geleden",
         "hours_minutes_seconds_left": "%(hours)su, %(minutes)sm %(seconds)ss over",
-        "in_about_day": "over een dag of zo",
-        "in_about_hour": "over ongeveer een uur",
-        "in_about_minute": "over ongeveer een minuut",
-        "in_few_seconds": "over een paar tellen",
-        "in_n_days": "over %(num)s dagen",
-        "in_n_hours": "over %(num)s uur",
-        "in_n_minutes": "over %(num)s minuten",
         "left": "%(timeRemaining)s over",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss over",
-        "n_days_ago": "%(num)s dagen geleden",
-        "n_hours_ago": "%(num)s uur geleden",
-        "n_minutes_ago": "%(num)s minuten geleden",
         "seconds_left": "%(seconds)s's over",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)su %(minutes)sm %(seconds)ss",
@@ -2477,8 +2461,7 @@
         "m.audio": {
             "error_downloading_audio": "Fout bij downloaden van audio",
             "error_processing_audio": "Fout bij verwerking audiobericht",
-            "error_processing_voice_message": "Fout bij verwerking spraakbericht",
-            "unnamed_audio": "Naamloze audio"
+            "error_processing_voice_message": "Fout bij verwerking spraakbericht"
         },
         "m.beacon_info": {
             "view_live_location": "Bekijk live locatie"

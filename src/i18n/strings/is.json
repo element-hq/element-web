@@ -79,9 +79,7 @@
         "no": "Nei",
         "ok": "Í lagi",
         "open": "Opna",
-        "pause": "Bið",
         "pin": "Pinni",
-        "play": "Spila",
         "quote": "Tilvitnun",
         "react": "Bregðast við",
         "refresh": "Endurlesa",
@@ -2301,24 +2299,10 @@
         "show_thread_filter": "Sýna:"
     },
     "time": {
-        "about_day_ago": "fyrir um degi síðan",
-        "about_hour_ago": "fyrir um klukkustund síðan",
-        "about_minute_ago": "fyrir um það bil mínútu síðan",
         "date_at_time": "%(date)s kl. %(time)s",
-        "few_seconds_ago": "fyrir örfáum sekúndum síðan",
         "hours_minutes_seconds_left": "%(hours)sk %(minutes)sm %(seconds)ss eftir",
-        "in_about_day": "eftir um það bil einn dag",
-        "in_about_hour": "eftir um það bil klukkustund",
-        "in_about_minute": "eftir um það bil mínútu",
-        "in_few_seconds": "eftir nokkrar sekúndur",
-        "in_n_days": "eftir %(num)s daga",
-        "in_n_hours": "eftir %(num)s klukkustundir",
-        "in_n_minutes": "eftir %(num)s mínútur",
         "left": "%(timeRemaining)s eftir",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss eftir",
-        "n_days_ago": "fyrir %(num)s dögum síðan",
-        "n_hours_ago": "fyrir %(num)s klukkustundum síðan",
-        "n_minutes_ago": "fyrir %(num)s mínútum síðan",
         "seconds_left": "%(seconds)ssek eftir",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sk %(minutes)sm %(seconds)ss",
         "short_hours": "%(value)sklst",
@@ -2357,8 +2341,7 @@
         "m.audio": {
             "error_downloading_audio": "Villa við að sækja hljóð",
             "error_processing_audio": "Villa við meðhöndlun hljóðskilaboða",
-            "error_processing_voice_message": "Villa við meðhöndlun talskilaboða",
-            "unnamed_audio": "Nafnlaust hljóð"
+            "error_processing_voice_message": "Villa við meðhöndlun talskilaboða"
         },
         "m.beacon_info": {
             "view_live_location": "Skoða staðsetningu í rauntíma"

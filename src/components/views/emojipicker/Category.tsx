@@ -22,6 +22,8 @@ export type CategoryKey = keyof typeof DATA_BY_CATEGORY | "recent";
 export interface ICategory {
     id: CategoryKey;
     name: string;
+    // Emoji to show in the header for this category
+    emoji: string;
     enabled: boolean;
     // Whether the category is currently visible
     visible: boolean;

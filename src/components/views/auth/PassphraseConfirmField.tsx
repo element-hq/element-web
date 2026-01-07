@@ -10,7 +10,7 @@ import React, { type ComponentProps, PureComponent, type Ref } from "react";
 
 import Field, { type IInputProps } from "../elements/Field";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     id?: string;

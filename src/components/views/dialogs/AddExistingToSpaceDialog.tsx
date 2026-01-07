@@ -14,7 +14,7 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";

@@ -67,9 +67,7 @@
         "next": "შემდეგი",
         "no": "არა",
         "ok": "OK",
-        "pause": "პაუზა",
         "pin": "$",
-        "play": "დაკვრა",
         "proceed": "განაგრძეთ",
         "quote": "ციტირება",
         "react": "რეაგირება",
@@ -2194,24 +2192,10 @@
     },
     "thread_view_back_action_label": "თემაში დაბრუნება",
     "time": {
-        "about_day_ago": "დაახლოებით ერთი დღის წინ",
-        "about_hour_ago": "დაახლოებით ერთი საათის წინ",
-        "about_minute_ago": "დაახლოებით ერთი წუთის წინ",
         "date_at_time": "%(date)s ზე %(time)s",
-        "few_seconds_ago": "რამდენიმე წამის წინ",
         "hours_minutes_seconds_left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",
-        "in_about_day": "დაახლოებით ერთი დღის შემდეგ",
-        "in_about_hour": "დაახლოებით ერთი საათის შემდეგ",
-        "in_about_minute": "დაახლოებით ერთი წუთის შემდეგ",
-        "in_few_seconds": "რამდენიმე წამის შემდეგ",
-        "in_n_days": "%(num)sდღეებიდან",
-        "in_n_hours": "%(num)sსაათის შემდეგ",
-        "in_n_minutes": "%(num)sწუთის შემდეგ",
         "left": "%(timeRemaining)sდატოვა",
         "minutes_seconds_left": "%(minutes)sწთ %(seconds)sწმ დარჩა",
-        "n_days_ago": "%(num)sდღის წინ",
-        "n_hours_ago": "%(num)sსაათის წინ",
-        "n_minutes_ago": "%(num)sწუთის წინ",
         "seconds_left": "%(seconds)sწმ დარჩა",
         "short_days": "%(value)sდ",
         "short_days_hours_minutes_seconds": "%(days)sდ%(hours)s თ%(minutes)s მ%(seconds)s ს",
@@ -2255,8 +2239,7 @@
         "m.audio": {
             "error_downloading_audio": "შეცდომა აუდიოს ჩამოტვირთვისას",
             "error_processing_audio": "შეცდომა აუდიო შეტყობინების დამუშავებისას",
-            "error_processing_voice_message": "შეცდომა ხმოვანი შეტყობინების დამუშავებისას",
-            "unnamed_audio": "უსახელო აუდიო"
+            "error_processing_voice_message": "შეცდომა ხმოვანი შეტყობინების დამუშავებისას"
         },
         "m.beacon_info": {
             "view_live_location": ""

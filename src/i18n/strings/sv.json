@@ -100,9 +100,7 @@
         "ok": "OK",
         "open": "Öppna",
         "open_menu": "Öppna menyn",
-        "pause": "Pausa",
         "pin": "Häftstift",
-        "play": "Spela",
         "proceed": "Fortsätt",
         "quote": "Citera",
         "react": "Reagera",
@@ -3297,24 +3295,10 @@
         "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än."
     },
     "time": {
-        "about_day_ago": "cirka en dag sedan",
-        "about_hour_ago": "cirka en timme sedan",
-        "about_minute_ago": "cirka en minut sedan",
         "date_at_time": "%(date)s vid %(time)s",
-        "few_seconds_ago": "några sekunder sedan",
         "hours_minutes_seconds_left": "%(hours)st %(minutes)sm %(seconds)ss kvar",
-        "in_about_day": "om cirka en dag",
-        "in_about_hour": "om cirka en timme",
-        "in_about_minute": "om cirka en minut",
-        "in_few_seconds": "om några sekunder",
-        "in_n_days": "om %(num)s dagar",
-        "in_n_hours": "om %(num)s timmar",
-        "in_n_minutes": "om %(num)s minuter",
         "left": "%(timeRemaining)s kvar",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss kvar",
-        "n_days_ago": "%(num)s dagar sedan",
-        "n_hours_ago": "%(num)s timmar sedan",
-        "n_minutes_ago": "%(num)s minuter sedan",
         "seconds_left": "%(seconds)ss kvar",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
@@ -3369,11 +3353,9 @@
             "unable_to_find": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den."
         },
         "m.audio": {
-            "audio_player": "Ljudspelare",
             "error_downloading_audio": "Fel vid nedladdning av ljud",
             "error_processing_audio": "Fel vid hantering av ljudmeddelande",
-            "error_processing_voice_message": "Fel vid hantering av röstmeddelande",
-            "unnamed_audio": "Namnlöst ljud"
+            "error_processing_voice_message": "Fel vid hantering av röstmeddelande"
         },
         "m.beacon_info": {
             "view_live_location": "Se realtidsposition"

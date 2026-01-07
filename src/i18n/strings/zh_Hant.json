@@ -85,9 +85,7 @@
         "no": "否",
         "ok": "確定",
         "open": "開啟",
-        "pause": "暫停",
         "pin": "圖釘",
-        "play": "播放",
         "proceed": "繼續",
         "quote": "引用",
         "react": "反應",
@@ -2835,24 +2833,10 @@
         "show_thread_filter": "顯示："
     },
     "time": {
-        "about_day_ago": "大約一天前",
-        "about_hour_ago": "大約一小時前",
-        "about_minute_ago": "大約一分鐘前",
         "date_at_time": "%(date)s 於 %(time)s",
-        "few_seconds_ago": "數秒前",
         "hours_minutes_seconds_left": "剩餘 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
-        "in_about_day": "從現在開始大約一天",
-        "in_about_hour": "從現在開始大約一小時",
-        "in_about_minute": "從現在開始大約一分鐘",
-        "in_few_seconds": "從現在開始數秒鐘",
-        "in_n_days": "從現在開始 %(num)s 天",
-        "in_n_hours": "從現在開始 %(num)s 小時",
-        "in_n_minutes": "從現在開始 %(num)s 分鐘",
         "left": "剩下 %(timeRemaining)s",
         "minutes_seconds_left": "剩餘 %(minutes)s 分鐘 %(seconds)s 秒",
-        "n_days_ago": "%(num)s 天前",
-        "n_hours_ago": "%(num)s 小時前",
-        "n_minutes_ago": "%(num)s 分鐘前",
         "seconds_left": "剩 %(seconds)s 秒",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)s 天 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
@@ -2895,8 +2879,7 @@
         "m.audio": {
             "error_downloading_audio": "下載音訊時發生錯誤",
             "error_processing_audio": "處理音訊訊息時出現問題",
-            "error_processing_voice_message": "處理語音訊息時發生錯誤",
-            "unnamed_audio": "未命名的音訊"
+            "error_processing_voice_message": "處理語音訊息時發生錯誤"
         },
         "m.beacon_info": {
             "view_live_location": "檢視即時位置"
