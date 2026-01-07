@@ -10,10 +10,6 @@
         "play": "Play",
         "search": "Search"
     },
-    "encryption": {
-        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
-        "withdraw_verification_action": "Withdraw verification"
-    },
     "left_panel": {
         "open_dial_pad": "Open dial pad"
     },
