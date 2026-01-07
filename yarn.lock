@@ -2595,10 +2595,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.28.tgz#d45e01c4a56f143ee69c54dd6b12eade9e270a73"
   integrity sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==
 
-"@posthog/core@1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.7.1.tgz#ec45a3b13acbe4fbf453625c83bcd38da21beeb7"
-  integrity sha512-kjK0eFMIpKo9GXIbts8VtAknsoZ18oZorANdtuTj1CbgS28t4ZVq//HAWhnxEuXRTrtkd+SUJ6Ux3j2Af8NCuA==
+"@posthog/core@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.9.0.tgz#b0f3b2018e166dd47e8d5a38fbcf32c93ff384f7"
+  integrity sha512-j7KSWxJTUtNyKynLt/p0hfip/3I46dWU2dk+pt7dKRoz2l5CYueHuHK4EO7Wlgno5yo1HO4sc4s30MXMTICHJw==
   dependencies:
     cross-spawn "^7.0.6"
 
@@ -11180,12 +11180,12 @@ postcss@^8.4.40, postcss@^8.5.6:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-posthog-js@1.302.2:
-  version "1.302.2"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.302.2.tgz#149ab7d511106541d7056bf239094c425fb4ef0a"
-  integrity sha512-4voih22zQe7yHA7DynlQ3B7kgzJOaKIjzV7K3jJ2Qf+UDXd1ZgO7xYmLWYVtuKEvD1OXHbKk/fPhUTZeHEWpBw==
+posthog-js@1.313.0:
+  version "1.313.0"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.313.0.tgz#163c3a21bdde22cc6595b79604b83622731ce3b5"
+  integrity sha512-CL8RkC7m9BTZrix86w0fdnSCVqC/gxrfs6c4Wfkz/CldFD7f2912S2KqnWFmwRVDGIwm9IR82YhublQ88gdDKw==
   dependencies:
-    "@posthog/core" "1.7.1"
+    "@posthog/core" "1.9.0"
     core-js "^3.38.1"
     fflate "^0.4.8"
     preact "^10.19.3"
@@ -11508,10 +11508,10 @@ react-focus-lock@^2.5.1:
     use-callback-ref "^1.3.3"
     use-sidecar "^1.1.3"
 
-react-is@19.2.1, react-is@^17.0.1, react-is@^18.3.1:
-  version "19.2.1"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.2.1.tgz#712fa6ee30c8398dc34260017325dad92b9224c5"
-  integrity sha512-L7BnWgRbMwzMAubQcS7sXdPdNLmKlucPlopgAzx7FtYbksWZgEWiuYM5x9T6UqS2Ne0rsgQTq5kY2SGqpzUkYA==
+react-is@19.2.3, react-is@^17.0.1, react-is@^18.3.1:
+  version "19.2.3"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.2.3.tgz#eec2feb69c7fb31f77d0b5c08c10ae1c88886b29"
+  integrity sha512-qJNJfu81ByyabuG7hPFEbXqNcWSU3+eVus+KJs+0ncpGfMyYdvSmxiJxbWR65lYi1I+/0HBcliO029gc4F+PnA==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

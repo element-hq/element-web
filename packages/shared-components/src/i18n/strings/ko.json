@@ -1,0 +1,43 @@
+{
+    "a11y": {
+        "seek_bar_label": "오디오 탐색 바"
+    },
+    "action": {
+        "delete": "삭제",
+        "dismiss": "버리기",
+        "explore_rooms": "방 검색",
+        "pause": "일시중지",
+        "play": "재생",
+        "search": "찾기"
+    },
+    "encryption": {
+        "pinned_identity_changed": "%(displayName)s (<b>%(userId)s</b>)의 신원이 재설정되었습니다. <a>자세히 알아보기</a>",
+        "withdraw_verification_action": "인증 취소"
+    },
+    "left_panel": {
+        "open_dial_pad": "다이얼 패드 열기"
+    },
+    "time": {
+        "about_day_ago": "약 1일 전",
+        "about_hour_ago": "약 1 시간 전",
+        "about_minute_ago": "약 1분 전",
+        "few_seconds_ago": "몇 초 전",
+        "in_about_day": "하루 정도 후",
+        "in_about_hour": "지금부터 한 시간 정도 후에",
+        "in_about_minute": "지금부터 약 1분 후",
+        "in_few_seconds": "몇 초 후",
+        "in_n_days": "지금부터 %(num)s 일 후에",
+        "in_n_hours": "지금부터 %(num)s 시간 후",
+        "in_n_minutes": "지금부터 %(num)s분 후",
+        "n_days_ago": "%(num)s일 전",
+        "n_hours_ago": "%(num)s 시간 전",
+        "n_minutes_ago": "%(num)s분 전"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "오디오 플레이어",
+            "error_downloading_audio": "오디오 다운로드 중 오류 발생",
+            "unnamed_audio": "이름 없는 오디오"
+        }
+    }
+}

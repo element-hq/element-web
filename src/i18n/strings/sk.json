@@ -105,9 +105,7 @@
         "ok": "OK",
         "open": "Otvoriť",
         "open_menu": "Otvoriť ponuku",
-        "pause": "Pozastaviť",
         "pin": "Špendlík",
-        "play": "Prehrať",
         "proceed": "Pokračovať",
         "quote": "Citovať",
         "react": "Reagovať",
@@ -1933,8 +1931,6 @@
                 "other": "%(count)s pripnutých správ"
             },
             "limits": {
-                "one": "Môžete pripnúť iba %(count)s widget",
-                "few": "Môžete pripnúť iba %(count)s widgety",
                 "other": "Môžete pripnúť iba %(count)s widgetov"
             },
             "menu": "Otvoriť ponuku",
@@ -2153,7 +2149,6 @@
         "status_bar": {
             "delete_all": "Vymazať všetko",
             "exceeded_resource_limit": "Vaša správa nebola odoslaná, pretože bol prekročený limit prostriedkov tohoto domovského servera. Prosím, <a>kontaktujte správcu služieb</a> aby ste službu mohli naďalej používať.",
-            "history_visible": "Správy, ktoré odošlete, budú zdieľané s novými členmi pozvanými do tejto miestnosti. <a>Zistiť viac</a>",
             "homeserver_blocked": "Vaša správa nebola odoslaná, pretože tento domovský server bol zablokovaný jeho správcom. Prosím, <a>kontaktujte správcu služieb</a>, aby ste službu mohli naďalej používať.",
             "monthly_user_limit_reached": "Vaša správa nebola odoslaná, pretože bol dosiahnutý mesačný limit počtu aktívnych používateľov tohoto domovského servera. Prosím, <a>kontaktujte správcu služieb</a> aby ste službu mohli naďalej používať.",
             "requires_consent_agreement": "Nemôžete posielať žiadne správy, kým si neprečítate a neodsúhlasíte <consentLink>naše zmluvné podmienky</consentLink>.",
@@ -3428,24 +3423,10 @@
         "no_rooms_with_unread_threads": "Zatiaľ nemáte miestnosti s neprečítanými vláknami."
     },
     "time": {
-        "about_day_ago": "asi pred jedným dňom",
-        "about_hour_ago": "približne pred hodinou",
-        "about_minute_ago": "približne pred minútou",
         "date_at_time": "%(date)s o %(time)s",
-        "few_seconds_ago": "pred pár sekundami",
         "hours_minutes_seconds_left": "ostáva %(hours)sh %(minutes)sm %(seconds)ss",
-        "in_about_day": "približne o deň",
-        "in_about_hour": "približne o hodinu",
-        "in_about_minute": "približne o minútu",
-        "in_few_seconds": "o pár sekúnd",
-        "in_n_days": "o %(num)s dní",
-        "in_n_hours": "o %(num)s hodín",
-        "in_n_minutes": "o %(num)s minút",
         "left": "zostáva %(timeRemaining)s",
         "minutes_seconds_left": "ostáva %(minutes)sm %(seconds)ss",
-        "n_days_ago": "pred %(num)s dňami",
-        "n_hours_ago": "pred %(num)s hodinami",
-        "n_minutes_ago": "pred %(num)s minútami",
         "seconds_left": "%(seconds)ss ostáva",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3500,11 +3481,9 @@
             "unable_to_find": "Pokus o načítanie konkrétneho bodu na časovej osi tejto miestnosti, ale nepodarilo sa ho nájsť."
         },
         "m.audio": {
-            "audio_player": "Prehrávač zvuku",
             "error_downloading_audio": "Chyba pri sťahovaní zvuku",
             "error_processing_audio": "Chyba pri spracovaní hlasovej správy",
-            "error_processing_voice_message": "Chyba pri spracovaní hlasovej správy",
-            "unnamed_audio": "Nepomenovaný zvukový záznam"
+            "error_processing_voice_message": "Chyba pri spracovaní hlasovej správy"
         },
         "m.beacon_info": {
             "view_live_location": "Zobraziť polohu v reálnom čase"

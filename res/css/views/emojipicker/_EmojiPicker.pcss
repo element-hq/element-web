@@ -31,64 +31,30 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_EmojiPicker_anchor {
     border: none;
-    padding: 8px 8px 6px;
+    padding: var(--cpd-space-1x) 0;
+    font-size: $font-20px;
+    line-height: 1;
     border-bottom: 2px solid transparent;
     background-color: transparent;
     border-radius: 4px 4px 0 0;
 
     width: 36px;
-    height: 38px;
+    height: 36px;
+
+    color: $primary-content;
+    display: inline-block;
 
     &:not(:disabled) {
         cursor: pointer;
+    }
+    &:disabled {
+        filter: opacity(0.3);
     }
 
     &:not(:disabled):hover {
         background-color: $focus-bg-color;
         border-bottom: 2px solid $accent;
     }
-}
-
-.mx_EmojiPicker_anchor::before {
-    background-color: $primary-content;
-    content: "";
-    display: inline-block;
-    mask-size: 100%;
-    mask-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-}
-
-.mx_EmojiPicker_anchor:disabled::before {
-    background-color: $focus-bg-color;
-}
-
-.mx_EmojiPicker_anchor_activity::before {
-    mask-image: url("$(res)/img/emojipicker/activity.svg");
-}
-.mx_EmojiPicker_anchor_flags::before {
-    mask-image: url("$(res)/img/emojipicker/flags.svg");
-}
-.mx_EmojiPicker_anchor_foods::before {
-    mask-image: url("$(res)/img/emojipicker/foods.svg");
-}
-.mx_EmojiPicker_anchor_nature::before {
-    mask-image: url("$(res)/img/emojipicker/nature.svg");
-}
-.mx_EmojiPicker_anchor_objects::before {
-    mask-image: url("$(res)/img/emojipicker/objects.svg");
-}
-.mx_EmojiPicker_anchor_people::before {
-    mask-image: url("$(res)/img/emojipicker/people.svg");
-}
-.mx_EmojiPicker_anchor_places::before {
-    mask-image: url("$(res)/img/emojipicker/places.svg");
-}
-.mx_EmojiPicker_anchor_recent::before {
-    mask-image: url("$(res)/img/emojipicker/recent.svg");
-}
-.mx_EmojiPicker_anchor_symbols::before {
-    mask-image: url("$(res)/img/emojipicker/symbols.svg");
 }
 
 .mx_EmojiPicker_anchor_visible {

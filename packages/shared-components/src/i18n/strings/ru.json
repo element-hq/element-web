@@ -1,0 +1,43 @@
+{
+    "a11y": {
+        "seek_bar_label": "Панель поиска аудио"
+    },
+    "action": {
+        "delete": "Удалить",
+        "dismiss": "Закрыть",
+        "explore_rooms": "Обзор комнат",
+        "pause": "Пауза",
+        "play": "Воспроизведение",
+        "search": "Поиск"
+    },
+    "encryption": {
+        "pinned_identity_changed": "Идентичность %(displayName)s (<b>%(userId)s</b>), похоже, изменилась. <a>Узнать больше</a>",
+        "withdraw_verification_action": "Подтверждение верификации"
+    },
+    "left_panel": {
+        "open_dial_pad": "Открыть панель набора номера"
+    },
+    "time": {
+        "about_day_ago": "около суток назад",
+        "about_hour_ago": "около часа назад",
+        "about_minute_ago": "около минуты назад",
+        "few_seconds_ago": "несколько секунд назад",
+        "in_about_day": "примерно через день",
+        "in_about_hour": "примерно через час",
+        "in_about_minute": "примерно через минуту",
+        "in_few_seconds": "несколько секунд назад",
+        "in_n_days": "%(num)s дней спустя",
+        "in_n_hours": "%(num)s часов спустя",
+        "in_n_minutes": "%(num)s минут спустя",
+        "n_days_ago": "%(num)s дней назад",
+        "n_hours_ago": "%(num)s часов назад",
+        "n_minutes_ago": "%(num)s минут назад"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Аудиоплеер",
+            "error_downloading_audio": "Ошибка загрузки аудио",
+            "unnamed_audio": "Безымянное аудио"
+        }
+    }
+}
