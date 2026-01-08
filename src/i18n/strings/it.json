@@ -86,9 +86,7 @@
         "no": "No",
         "ok": "OK",
         "open": "Apri",
-        "pause": "Pausa",
         "pin": "Spillo",
-        "play": "Riproduci",
         "proceed": "Procedi",
         "quote": "Cita",
         "react": "Reagisci",
@@ -2837,24 +2835,10 @@
         "header": "Attività delle conversazioni"
     },
     "time": {
-        "about_day_ago": "circa un giorno fa",
-        "about_hour_ago": "circa un'ora fa",
-        "about_minute_ago": "circa un minuto fa",
         "date_at_time": "%(date)s alle %(time)s",
-        "few_seconds_ago": "pochi secondi fa",
         "hours_minutes_seconds_left": "%(hours)so %(minutes)sm %(seconds)ss rimasti",
-        "in_about_day": "circa un giorno da adesso",
-        "in_about_hour": "circa un'ora da adesso",
-        "in_about_minute": "circa un minuto da adesso",
-        "in_few_seconds": "pochi secondi da adesso",
-        "in_n_days": "%(num)s giorni da adesso",
-        "in_n_hours": "%(num)s ore da adesso",
-        "in_n_minutes": "%(num)s minuti da adesso",
         "left": "%(timeRemaining)s rimasti",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss rimasti",
-        "n_days_ago": "%(num)s giorni fa",
-        "n_hours_ago": "%(num)s ore fa",
-        "n_minutes_ago": "%(num)s minuti fa",
         "seconds_left": "%(seconds)ss rimanenti",
         "short_days": "%(value)sg",
         "short_days_hours_minutes_seconds": "%(days)sg %(hours)so %(minutes)sm %(seconds)ss",
@@ -2899,8 +2883,7 @@
         "m.audio": {
             "error_downloading_audio": "Errore di scaricamento dell'audio",
             "error_processing_audio": "Errore elaborazione messaggio audio",
-            "error_processing_voice_message": "Errore di elaborazione del vocale",
-            "unnamed_audio": "Audio senza nome"
+            "error_processing_voice_message": "Errore di elaborazione del vocale"
         },
         "m.beacon_info": {
             "view_live_location": "Vedi posizione in tempo reale"

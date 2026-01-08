@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "./AccessibleButton";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
@@ -86,11 +87,9 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
         <div className="mx_ServerPicker">
             <h2>{title || _t("common|homeserver")}</h2>
             {!disableCustomUrls ? (
-                <AccessibleButton
-                    className="mx_ServerPicker_help"
-                    onClick={onHelpClick}
-                    aria-label={_t("common|help")}
-                />
+                <AccessibleButton className="mx_ServerPicker_help" onClick={onHelpClick} aria-label={_t("common|help")}>
+                    <InfoIcon />
+                </AccessibleButton>
             ) : null}
             <span className="mx_ServerPicker_server" title={typeof serverName === "string" ? serverName : undefined}>
                 {serverName}

@@ -81,9 +81,7 @@
         "no": "不",
         "ok": "确定",
         "open": "打开",
-        "pause": "暂停",
         "pin": "别针",
-        "play": "播放",
         "proceed": "继续",
         "quote": "引述",
         "react": "回应",
@@ -2522,24 +2520,10 @@
         "show_thread_filter": "显示："
     },
     "time": {
-        "about_day_ago": "约一天前",
-        "about_hour_ago": "约一小时前",
-        "about_minute_ago": "约一分钟前",
         "date_at_time": "%(date)s 的 %(time)s",
-        "few_seconds_ago": "数秒前",
         "hours_minutes_seconds_left": "剩余%(hours)s小时%(minutes)s分钟%(seconds)s秒",
-        "in_about_day": "从现在开始约一天",
-        "in_about_hour": "从现在开始约一小时",
-        "in_about_minute": "从现在开始约一分钟",
-        "in_few_seconds": "从现在开始数秒",
-        "in_n_days": "从现在开始%(num)s天",
-        "in_n_hours": "从现在开始%(num)s小时",
-        "in_n_minutes": "从现在开始%(num)s分钟",
         "left": "剩余%(timeRemaining)s",
         "minutes_seconds_left": "剩余%(minutes)s分钟%(seconds)s秒",
-        "n_days_ago": "%(num)s天前",
-        "n_hours_ago": "%(num)s小时前",
-        "n_minutes_ago": "%(num)s分钟前",
         "seconds_left": "剩余 %(seconds)s 秒",
         "short_days": "%(value)s 天",
         "short_days_hours_minutes_seconds": "%(days)s天%(hours)s小时%(minutes)s分钟%(seconds)s秒",
@@ -2581,8 +2565,7 @@
         "m.audio": {
             "error_downloading_audio": "下载音频时出错",
             "error_processing_audio": "处理音频消息时出错",
-            "error_processing_voice_message": "处理语音消息时发生错误",
-            "unnamed_audio": "未命名的音频"
+            "error_processing_voice_message": "处理语音消息时发生错误"
         },
         "m.beacon_info": {
             "view_live_location": "查看实时位置"

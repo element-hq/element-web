@@ -70,29 +70,13 @@ Please see LICENSE files in the repository root for full details.
             color: #fff; /* on all themes */
             background-color: $accent;
 
-            &::before {
+            svg {
                 top: 20px;
                 left: 60px; /* (160px-40px)/2 */
                 width: 40px;
                 height: 40px;
-
-                content: "";
                 position: absolute;
-                background-color: #fff; /* on all themes */
-                mask-repeat: no-repeat;
-                mask-size: contain;
-            }
-
-            &.mx_HomePage_button_sendDm::before {
-                mask-image: url("$(res)/img/element-icons/feedback.svg");
-            }
-
-            &.mx_HomePage_button_explore::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/explore.svg");
-            }
-
-            &.mx_HomePage_button_createGroup::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/group.svg");
+                color: #fff; /* on all themes */
             }
         }
     }
