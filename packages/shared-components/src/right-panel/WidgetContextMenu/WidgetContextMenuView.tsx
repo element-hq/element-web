@@ -9,9 +9,9 @@ import React, { type ReactNode, type JSX } from "react";
 import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import { _t } from "../../utils/i18n.tsx";
 import { type ViewModel } from "../../viewmodel/ViewModel.ts";
 import { useViewModel } from "../../useViewModel.ts";
+import { useI18n } from "../../utils/i18nContext.ts";
 
 export interface WidgetContextMenuSnapshot {
     /**
@@ -99,6 +99,7 @@ interface WidgetContextMenuViewProps {
  * A context menu component used to display the correct items that needs to be displayed for a widget item menu
  */
 export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm }) => {
+    const { translate: _t } = useI18n();
     const {
         showStreamAudioStreamButton,
         showEditButton,

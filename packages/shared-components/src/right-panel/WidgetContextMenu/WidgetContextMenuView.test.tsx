@@ -19,6 +19,8 @@ import {
 } from "./WidgetContextMenuView";
 import * as stories from "./WidgetContextMenuView.stories.tsx";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
+import { I18nApi } from "../../utils/I18nApi.ts";
+import { I18nContext } from "../../utils/i18nContext.ts";
 
 const { Default, OnlyBasicModification } = composeStories(stories);
 
@@ -85,7 +87,9 @@ describe("<WidgetContextMenuView />", () => {
     it("should attach vm methods", async () => {
         const vm = new WidgetContextMenuViewModel(defaultValue);
 
-        render(<WidgetContextMenuView vm={vm} />);
+        render(<WidgetContextMenuView vm={vm} />, {
+            wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
+        });
 
         await userEvent.click(screen.getByRole("menuitem", { name: "Start audio stream" }));
         expect(onStreamAudioClick).toHaveBeenCalled();

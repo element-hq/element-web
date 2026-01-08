@@ -5,9 +5,11 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "pause": "Pause",
         "play": "Play",
+        "remove": "Remove",
         "search": "Search"
     },
     "left_panel": {
@@ -39,6 +41,16 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Move left",
+            "move_right": "Move right",
+            "remove": "Remove for everyone",
+            "revoke": "Revoke permissions",
+            "screenshot": "Take a picture",
+            "start_audio_stream": "Start audio stream"
         }
     }
 }
