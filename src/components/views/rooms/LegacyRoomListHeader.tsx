@@ -14,6 +14,7 @@ import {
     UserAddSolidIcon,
     SearchIcon,
     UserAddIcon,
+    VideoCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -57,7 +58,6 @@ import IconizedContextMenu, {
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
-import { Icon as HashVideoIcon } from "../../../../res/img/element-icons/roomlist/hash-video.svg";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
@@ -213,7 +213,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
-                            icon={<HashVideoIcon />}
+                            icon={<VideoCallSolidIcon />}
                             label={_t("action|new_video_room")}
                             onClick={(e) => {
                                 e.preventDefault();
@@ -319,7 +319,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
                             label={_t("action|new_video_room")}
-                            icon={<HashVideoIcon />}
+                            icon={<VideoCallSolidIcon />}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();

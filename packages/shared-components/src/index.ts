@@ -36,7 +36,3 @@ export * from "./utils/I18nApi";
 export * from "./viewmodel";
 export * from "./useMockedViewModel";
 export * from "./useViewModel";
-
-// i18n (we must export this directly in order to not confuse the type bundler, it seems,
-// otherwise it will leave it as a relative import rather than bundling it)
-export type * from "./i18nKeys.d.ts";

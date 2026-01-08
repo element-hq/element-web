@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingsStore from "../../src/settings/SettingsStore";
+import { FontWatcher } from "../../src/settings/watchers/FontWatcher";
 import { enumerateThemes, getOrderedThemes, setTheme } from "../../src/theme";
 
 describe("theme", () => {
@@ -221,6 +222,47 @@ describe("theme", () => {
                 { id: "custom-Apple Green", name: "Apple Green" },
                 { id: "custom-Zebra Striped", name: "Zebra Striped" },
             ]);
+        });
+    });
+
+    describe("clearCustomTheme", () => {
+        beforeEach(() => {
+            // Reset document state
+            document.body.style.cssText = "";
+            document.head.querySelectorAll("style[title^='custom-theme-']").forEach((el) => el.remove());
+        });
+
+        it("should not remove font family custom properties", async () => {
+            // Mock theme elements
+            const lightTheme = {
+                dataset: { mxTheme: "light" },
+                disabled: true,
+                href: "fake URL",
+                onload: (): void => void 0,
+            } as unknown as HTMLStyleElement;
+
+            const removePropertySpy = jest.fn();
+            const styleObject = {
+                0: FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY,
+                1: FontWatcher.EMOJI_FONT_FAMILY_CUSTOM_PROPERTY,
+                2: "--custom-color",
+                length: 3,
+                removeProperty: removePropertySpy,
+            };
+            jest.spyOn(document.body, "style", "get").mockReturnValue(styleObject as any);
+            jest.spyOn(document, "querySelectorAll").mockReturnValue([lightTheme] as any);
+
+            // Trigger clearCustomTheme via setTheme
+            await new Promise((resolve) => {
+                setTheme("light").then(resolve);
+                lightTheme.onload!({} as Event);
+            });
+
+            // Check that font properties were NOT removed
+            expect(removePropertySpy).not.toHaveBeenCalledWith(FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY);
+            expect(removePropertySpy).not.toHaveBeenCalledWith(FontWatcher.EMOJI_FONT_FAMILY_CUSTOM_PROPERTY);
+            // But custom color should be removed
+            expect(removePropertySpy).toHaveBeenCalledWith("--custom-color");
         });
     });
 });

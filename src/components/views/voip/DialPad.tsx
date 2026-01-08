@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import { VoiceCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -59,7 +60,9 @@ class DialPadButton extends React.PureComponent<DigitButtonProps | DialButtonPro
                         className="mx_DialPad_button mx_DialPad_dialButton"
                         onClick={this.onClick}
                         aria-label={_t("voip|dial")}
-                    />
+                    >
+                        <VoiceCallSolidIcon />
+                    </AccessibleButton>
                 );
         }
     }

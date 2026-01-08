@@ -34,8 +34,11 @@
         "package.json"
     ],
     "scripts": {
+        "i18n": "matrix-gen-i18n src && yarn i18n:sort && yarn i18n:lint",
+        "i18n:sort": "jq --sort-keys '.' src/i18n/strings/en_EN.json > src/i18n/strings/en_EN.json.tmp && mv src/i18n/strings/en_EN.json.tmp src/i18n/strings/en_EN.json",
+        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "test": "jest",
-        "prepare": "patch-package && yarn --cwd ../.. build:res && node scripts/gatherTranslationKeys.ts && vite build",
+        "prepare": "patch-package && vite build",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
         "lint": "yarn lint:types && yarn lint:js",
@@ -54,13 +57,13 @@
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
         "lodash": "^4.17.21",
-        "matrix-web-i18n": "^3.4.0",
+        "matrix-web-i18n": "3.5.2",
         "patch-package": "^8.0.1",
         "react-merge-refs": "^3.0.2",
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "^2.2.2",
+        "@element-hq/element-web-playwright-common": "2.2.3",
         "@playwright/test": "1.57.0",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",

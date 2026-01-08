@@ -9,10 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useContext } from "react";
 import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -291,7 +292,8 @@ const NewRoomIntro: React.FC = () => {
         <li className="mx_NewRoomIntro">
             {!hasExpectedEncryptionSettings(cli, room) && (
                 <EventTileBubble
-                    className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                    icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
+                    className="mx_cryptoEvent"
                     title={_t("room|intro|unencrypted_warning")}
                     subtitle={subtitle}
                 />

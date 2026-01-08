@@ -15,7 +15,7 @@ import { Action } from "../../../../dispatcher/actions";
 import { asyncSome } from "../../../../utils/arrays";
 import { getUserDeviceIds } from "../../../../utils/crypto/deviceInfo";
 import { type RoomMember } from "../../../../models/rooms/RoomMember";
-import { _t, _td, type TranslationKey } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import { E2EStatus } from "../../../../utils/ShieldUtils";
 
 interface MemberTileViewModelProps {

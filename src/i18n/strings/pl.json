@@ -102,9 +102,7 @@
         "ok": "OK",
         "open": "Otwórz",
         "open_menu": "Otwórz menu",
-        "pause": "Wstrzymaj",
         "pin": "Przypnij",
-        "play": "Odtwórz",
         "proceed": "Kontynuuj",
         "quote": "Cytuj",
         "react": "Dodaj reakcję",
@@ -3356,24 +3354,10 @@
         "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
     },
     "time": {
-        "about_day_ago": "około dzień temu",
-        "about_hour_ago": "około godziny temu",
-        "about_minute_ago": "około minuty temu",
         "date_at_time": "%(date)s o %(time)s",
-        "few_seconds_ago": "kilka sekund temu",
         "hours_minutes_seconds_left": "pozostało %(hours)s godz. %(minutes)s min. %(seconds)ss",
-        "in_about_day": "około dnia od teraz",
-        "in_about_hour": "około godziny od teraz",
-        "in_about_minute": "około minuty od teraz",
-        "in_few_seconds": "za kilka sekund",
-        "in_n_days": "za %(num)s dni",
-        "in_n_hours": "za %(num)s godzin",
-        "in_n_minutes": "za %(num)s minut",
         "left": "%(timeRemaining)s pozostało",
         "minutes_seconds_left": "pozostało %(minutes)s min. %(seconds)ss",
-        "n_days_ago": "%(num)s dni temu",
-        "n_hours_ago": "%(num)s godzin temu",
-        "n_minutes_ago": "%(num)s minut temu",
         "seconds_left": "pozostało %(seconds)ss",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s godz. %(minutes)s min. %(seconds)ss",
@@ -3428,11 +3412,9 @@
             "unable_to_find": "Próbowano załadować konkretny punkt na osi czasu w tym pokoju, ale nie można go znaleźć."
         },
         "m.audio": {
-            "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
             "error_processing_audio": "Wystąpił błąd procesowania wiadomości audio",
-            "error_processing_voice_message": "Wystąpił błąd procesowania wiadomości głosowej",
-            "unnamed_audio": "Audio bez nazwy"
+            "error_processing_voice_message": "Wystąpił błąd procesowania wiadomości głosowej"
         },
         "m.beacon_info": {
             "view_live_location": "Pokaż lokalizację na żywo"

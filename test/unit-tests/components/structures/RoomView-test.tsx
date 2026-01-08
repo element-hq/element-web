@@ -594,12 +594,14 @@ describe("RoomView", () => {
 
         const { container } = await renderRoomView();
         // We no longer show the grey shield for encrypted rooms, so it should not be there.
-        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).not.toBeInTheDocument());
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon")).not.toBeInTheDocument());
 
         const verificationStatus = new UserVerificationStatus(true, true, false);
         jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
         cli.emit(CryptoEvent.UserTrustStatusChanged, cli.getSafeUserId(), verificationStatus);
-        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_verified")).toBeInTheDocument());
+        await waitFor(() =>
+            expect(container.querySelector(".mx_E2EIcon")).toHaveAccessibleName("Everyone in this room is verified"),
+        );
     });
 
     describe("video rooms", () => {

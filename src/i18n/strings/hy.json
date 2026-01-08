@@ -100,9 +100,7 @@
         "ok": "Լավ",
         "open": "Բաց(ել)",
         "open_menu": "Բացել ընտրացանկը",
-        "pause": "Դադար",
         "pin": "Քորոց",
-        "play": "Միացնել",
         "proceed": "Շարունակել",
         "quote": "Մեջբերում",
         "react": "Արձագանքել",
@@ -1850,7 +1848,6 @@
                 "other": "%(count)s ամրացված հաղորդագրություններ"
             },
             "limits": {
-                "one": "",
                 "other": "Դուք կարող եք ամրացնել միայն մինչև%(count)s վիջեթներ"
             },
             "menu": "Բացել մենյուն",
@@ -3299,24 +3296,10 @@
         "no_rooms_with_unread_threads": "Դուք դեռ չունեք սենյակներ, որտեղ կան չկարդացած թեմաներ։"
     },
     "time": {
-        "about_day_ago": "մոտ մեկ օր առաջ",
-        "about_hour_ago": "մոտ մեկ ժամ առաջ",
-        "about_minute_ago": "մոտ մեկ րոպե առաջ",
         "date_at_time": "%(date)s ժամը %(time)s",
-        "few_seconds_ago": "մի քանի վայրկյան առաջ",
         "hours_minutes_seconds_left": "Մնաց %(hours)sժ %(minutes)sր %(seconds)sվ",
-        "in_about_day": "մոտ մեկ օր անց",
-        "in_about_hour": "մոտ մեկ ժամ անց",
-        "in_about_minute": "մոտ մեկ րոպե անց",
-        "in_few_seconds": "մի քանի վայրկյան անց",
-        "in_n_days": "%(num)s օր անց",
-        "in_n_hours": "%(num)s ժամ անց",
-        "in_n_minutes": "%(num)s րոպեներ անց",
         "left": "%(timeRemaining)s մնաց",
         "minutes_seconds_left": "Մնաց %(minutes)sր %(seconds)sվ",
-        "n_days_ago": "%(num)s օր առաջ",
-        "n_hours_ago": "%(num)s ժամ առաջ",
-        "n_minutes_ago": "%(num)s րոպե առաջ",
         "seconds_left": "Մնաց %(seconds)sվ",
         "short_days": "%(value)sօր",
         "short_days_hours_minutes_seconds": "%(days)sօր %(hours)sժ %(minutes)sր %(seconds)sվ",
@@ -3371,11 +3354,9 @@
             "unable_to_find": "Փորձեցինք բեռնել այս սենյակի ժամանակագրության որոշակի կետ, բայց չկարողացանք գտնել այն։"
         },
         "m.audio": {
-            "audio_player": "Աուդիո նվագարկիչ",
             "error_downloading_audio": "Աուդիո ներբեռնման սխալ",
             "error_processing_audio": "Ձայնային հաղորդագրության մշակման սխալ",
-            "error_processing_voice_message": "Ձայնային հաղորդագրության մշակման սխալ",
-            "unnamed_audio": "Անանուն աուդիո"
+            "error_processing_voice_message": "Ձայնային հաղորդագրության մշակման սխալ"
         },
         "m.beacon_info": {
             "view_live_location": "Դիտել կենդանի գտնվելու վայրը"
@@ -3783,7 +3764,6 @@
         }
     },
     "truncated_list_n_more": {
-        "one": "",
         "other": "Եվ ևս %(հաշվարկ)s..."
     },
     "unsupported_browser": {
