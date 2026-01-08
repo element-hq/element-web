@@ -58,14 +58,14 @@ export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string):
         throw friendlyError("Invalid file: too short", _t("encryption|import_invalid_keyfile", { brand }));
     }
 
-    const salt = body.subarray(1, 1 + 16).slice();
-    const iv = body.subarray(17, 17 + 16).slice();
+    const salt = body.subarray(1, 1 + 16);
+    const iv = body.subarray(17, 17 + 16);
     const iterations = (body[33] << 24) | (body[34] << 16) | (body[35] << 8) | body[36];
-    const ciphertext = body.subarray(37, 37 + ciphertextLength).slice();
-    const hmac = body.subarray(-32).slice();
+    const ciphertext = body.subarray(37, 37 + ciphertextLength);
+    const hmac = body.subarray(-32);
 
     const [aesKey, hmacKey] = await deriveKeys(salt, iterations, password);
-    const toVerify = body.subarray(0, -32).slice();
+    const toVerify = body.subarray(0, -32);
 
     let isValid;
     try {
@@ -253,7 +253,7 @@ const TRAILER_LINE = "-----END MEGOLM SESSION DATA-----";
  * @param {ArrayBuffer} data  input file
  * @return {Uint8Array} unbase64ed content
  */
-function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array {
+function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array<ArrayBuffer> {
     // parse the file as a great big String. This should be safe, because there
     // should be no non-ASCII characters, and it means that we can do string
     // comparisons to find the header and footer, and feed it into window.atob.
@@ -344,7 +344,7 @@ function encodeBase64(uint8Array: Uint8Array): string {
  * @param {string} base64 The base64 to decode.
  * @return {Uint8Array} The decoded data.
  */
-function decodeBase64(base64: string): Uint8Array {
+function decodeBase64(base64: string): Uint8Array<ArrayBuffer> {
     // window.atob returns a unicode string with codepoints in the range 0-255.
     const latin1String = window.atob(base64);
     // Encode the string as a Uint8Array
