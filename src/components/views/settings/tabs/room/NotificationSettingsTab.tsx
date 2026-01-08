@@ -170,7 +170,6 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                             definitions={[
                                 {
                                     value: RoomNotifState.AllMessages,
-                                    className: "mx_NotificationSettingsTab_defaultEntry",
                                     label: (
                                         <>
                                             {_t("notifications|default")}
@@ -195,7 +194,6 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                 },
                                 {
                                     value: RoomNotifState.AllMessagesLoud,
-                                    className: "mx_NotificationSettingsTab_allMessagesEntry",
                                     label: (
                                         <>
                                             {_t("notifications|all_messages")}
@@ -207,7 +205,6 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                 },
                                 {
                                     value: RoomNotifState.MentionsOnly,
-                                    className: "mx_NotificationSettingsTab_mentionsKeywordsEntry",
                                     label: (
                                         <>
                                             {_t("notifications|mentions_and_keywords")}
@@ -232,7 +229,6 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                 },
                                 {
                                     value: RoomNotifState.Mute,
-                                    className: "mx_NotificationSettingsTab_noneEntry",
                                     label: (
                                         <>
                                             {_t("common|off")}
