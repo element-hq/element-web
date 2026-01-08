@@ -15,6 +15,8 @@ import {
     SearchIcon,
     UserAddIcon,
     VideoCallSolidIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -400,10 +402,16 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                 <ContextMenuButton
                     {...commonProps}
                     label={_t("room_list|space_menu_label", { spaceName: spaceName ?? activeSpace.name })}
-                />
+                >
+                    {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </ContextMenuButton>
             );
         } else {
-            contextMenuButton = <ContextMenuTooltipButton {...commonProps} title={_t("room_list|home_menu_label")} />;
+            contextMenuButton = (
+                <ContextMenuTooltipButton {...commonProps} title={_t("room_list|home_menu_label")}>
+                    {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </ContextMenuTooltipButton>
+            );
         }
     }
 
@@ -422,7 +430,9 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     isExpanded={plusMenuDisplayed}
                     className="mx_LegacyRoomListHeader_plusButton"
                     title={_t("action|add")}
-                />
+                >
+                    <PlusIcon />
+                </ContextMenuTooltipButton>
             )}
 
             {contextMenu}
