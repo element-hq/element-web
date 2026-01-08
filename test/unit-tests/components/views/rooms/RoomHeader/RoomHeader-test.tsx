@@ -17,7 +17,7 @@ import {
     Room,
     RoomStateEvent,
     RoomMember,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -93,7 +93,7 @@ describe("RoomHeader", () => {
     function getWrapper(): RenderOptions {
         return {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                <MatrixClientContext.Provider value={client}>
                     <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>
             ),
