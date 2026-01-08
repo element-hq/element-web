@@ -8,6 +8,7 @@
         "explore_rooms": "Explore rooms",
         "pause": "Pause",
         "play": "Play",
+        "retry": "action|retry",
         "search": "Search"
     },
     "left_panel": {
@@ -15,8 +16,23 @@
     },
     "room": {
         "status_bar": {
-            "history_visible": "This room has been configured so that new members can read history. <a>Learn More</a>"
+            "delete_all": "Delete all",
+            "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
+            "exceeded_resource_limit_title": "Your message wasn't sent because this homeserver has exceeded a resource limit.",
+            "failed_to_create_room_title": "Could not start a chat with this user",
+            "history_visible": "This room has been configured so that new members can read history. <a>Learn More</a>",
+            "homeserver_blocked_title": "Your message wasn't sent because this homeserver has been blocked by its administrator.",
+            "monthly_user_limit_reached_title": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit.",
+            "requires_consent_agreement_title": "You can't send any messages until you review and agree to our terms and conditions.",
+            "retry_all": "Retry all",
+            "select_messages_to_retry": "You can select all or individual messages to retry or delete",
+            "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
+            "server_connectivity_lost_title": "Connectivity to the server has been lost.",
+            "some_messages_not_sent": "Some of your messages have not been sent"
         }
+    },
+    "terms": {
+        "tac_button": "terms|tac_button"
     },
     "time": {
         "about_day_ago": "about a day ago",
