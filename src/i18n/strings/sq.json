@@ -78,9 +78,7 @@
         "next": "Pasuesja",
         "no": "Jo",
         "open": "Hape",
-        "pause": "Ndalesë",
         "pin": "Fiksoje",
-        "play": "Luaje",
         "quote": "Citim",
         "react": "Reagoni",
         "refresh": "Rifreskoje",
@@ -2651,24 +2649,10 @@
         "show_thread_filter": "Shfaq:"
     },
     "time": {
-        "about_day_ago": "rreth një ditë më parë",
-        "about_hour_ago": "rreth një orë më parë",
-        "about_minute_ago": "rreth një minutë më parë",
         "date_at_time": "%(date)s më %(time)s",
-        "few_seconds_ago": "pak sekonda më parë",
         "hours_minutes_seconds_left": "Edhe %(hours)sh %(minutes)sm %(seconds)ss",
-        "in_about_day": "rreth një ditë nga tani",
-        "in_about_hour": "rreth një orë nga tani",
-        "in_about_minute": "rreth një minutë nga tani",
-        "in_few_seconds": "pak sekonda nga tani",
-        "in_n_days": "%(num)s ditë nga tani",
-        "in_n_hours": "%(num)s orë nga tani",
-        "in_n_minutes": "%(num)s minuta nga tani",
         "left": "Edhe %(timeRemaining)s",
         "minutes_seconds_left": "Edhe %(minutes)sm %(seconds)ss",
-        "n_days_ago": "%(num)s ditë më parë",
-        "n_hours_ago": "%(num)s orë më parë",
-        "n_minutes_ago": "%(num)s minuta më parë",
         "seconds_left": "Edhe %(seconds)ss"
     },
     "timeline": {
@@ -2704,8 +2688,7 @@
         "m.audio": {
             "error_downloading_audio": "Gabim në shkarkim audioje",
             "error_processing_audio": "Gabim në përpunim mesazhi audio",
-            "error_processing_voice_message": "Gabim në përpunimin e mesazhit zanor",
-            "unnamed_audio": "Audio pa emër"
+            "error_processing_voice_message": "Gabim në përpunimin e mesazhit zanor"
         },
         "m.beacon_info": {
             "view_live_location": "Shihni vendndodhje aty për aty"

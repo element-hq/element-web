@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import classNames from "classnames";
 
-import { _t, type TranslationKey } from "../../languageHandler";
+import { _t } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { PosthogScreenTracker, type ScreenName } from "../../PosthogTrackers";
 import { type NonEmptyArray } from "../../@types/common";

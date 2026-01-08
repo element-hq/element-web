@@ -101,9 +101,7 @@
         "ok": "OK",
         "open": "Åpne",
         "open_menu": "Åpne meny",
-        "pause": "Pause",
         "pin": "Fest",
-        "play": "Spill av",
         "proceed": "Fortsett",
         "quote": "Sitat",
         "react": "Reager",
@@ -1911,7 +1909,6 @@
                 "other": "%(count)s festede meldinger"
             },
             "limits": {
-                "one": "",
                 "other": "Du kan bare feste opptil %(count)s widgets"
             },
             "menu": "Åpne meny",
@@ -2219,9 +2216,6 @@
         },
         "room_options": "Rominnstillinger",
         "show_less": "Vis mindre",
-        "show_n_more": {
-            "Vis %(count)s til": "Vis %(count)s mer"
-        },
         "show_previews": "Vis forhåndsvisninger av meldinger",
         "sort": "Sorter",
         "sort_by": "Sorter etter",
@@ -3383,24 +3377,10 @@
         "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
     },
     "time": {
-        "about_day_ago": "cirka 1 dag siden",
-        "about_hour_ago": "cirka 1 time siden",
-        "about_minute_ago": "cirka 1 minutt siden",
         "date_at_time": "%(date)s klokken %(time)s",
-        "few_seconds_ago": "noen sekunder siden",
         "hours_minutes_seconds_left": "%(hours)st%(minutes)s m%(seconds)s s igjen",
-        "in_about_day": "rundt en dag fra nå",
-        "in_about_hour": "rundt en time fra nå",
-        "in_about_minute": "rundt et minutt fra nå",
-        "in_few_seconds": "om noen sekunder fra nå",
-        "in_n_days": "%(num)s dager fra nå",
-        "in_n_hours": "%(num)s timer fra nå",
-        "in_n_minutes": "%(num)s minutter fra nå",
         "left": "%(timeRemaining)s igjen",
         "minutes_seconds_left": "%(minutes)sm%(seconds)s s igjen",
-        "n_days_ago": "%(num)s dager siden",
-        "n_hours_ago": "%(num)s timer siden",
-        "n_minutes_ago": "%(num)s minutter siden",
         "seconds_left": "%(seconds)ser igjen",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s t %(minutes)s m %(seconds)s er",
@@ -3455,11 +3435,9 @@
             "unable_to_find": "Prøvde å laste inn et bestemt punkt i dette rommets tidslinje, men klarte ikke å finne det."
         },
         "m.audio": {
-            "audio_player": "Lydavspiller",
             "error_downloading_audio": "Feil ved nedlasting av lyd",
             "error_processing_audio": "Feil ved prosessering av lydmelding",
-            "error_processing_voice_message": "Feil ved prosessering av talemelding",
-            "unnamed_audio": "Ikke navngitt lyd"
+            "error_processing_voice_message": "Feil ved prosessering av talemelding"
         },
         "m.beacon_info": {
             "view_live_location": "Se lokasjon i sanntid"
@@ -3730,9 +3708,6 @@
                 "one": "%(oneUser)s endret navn",
                 "other": "%(oneUser)s endret navn %(count)s ganger"
             },
-            "changed_name_multiple": {
-                "%(severalUsers)s endret navnene sine": "one"
-            },
             "format": "%(nameList)s%(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)ssendte en skjult melding",
@@ -3746,9 +3721,6 @@
                 "one": "%(oneUser)sfikk invitasjonen trukket tilbake",
                 "other": "%(oneUser)sfikk invitasjonen trukket tilbake %(count)s ganger"
             },
-            "invite_withdrawn_multiple": {
-                "%(severalUsers)sfikk sine invitasjoner trukket tilbake": "one"
-            },
             "invited": {
                 "one": "ble invitert",
                 "other": "ble invitert %(count)s ganger"
@@ -3760,9 +3732,6 @@
             "joined": {
                 "one": "%(oneUser)sble med",
                 "other": "%(oneUser)sble med %(count)s ganger"
-            },
-            "joined_and_left": {
-                "%(oneUser)sble med og forlot igjen": "one"
             },
             "joined_and_left_multiple": {
                 "one": "%(severalUsers)sble med og forlot",
@@ -3863,9 +3832,6 @@
             }
         }
     },
-    "truncated_list_n_more": {
-        "Og %(count)s til...": "other"
-    },
     "unsupported_browser": {
         "description": "Hvis du fortsetter, kan noen funksjoner slutte å fungere, og det er en risiko for at du kan miste data i fremtiden. Oppdater nettleseren din for å fortsette å bruke%(brand)s.",
         "title": "%(brand)s støtter ikke denne nettleseren"
@@ -3906,11 +3872,7 @@
         "not_image": "Filen du har valgt, er ikke en gyldig bildefil.",
         "title": "Last opp filer",
         "title_progress": "Last opp filer (%(current)s av %(total)s)",
-        "upload_all_button": "Last opp alle",
-        "upload_n_others_button": {
-            "Last opp %(count)s andre filer": "Last opp %(count)s andre filer",
-            "Last opp %(count)s annen fil": "Last opp %(count)s en annen fil"
-        }
+        "upload_all_button": "Last opp alle"
     },
     "user_info": {
         "admin_tools_section": "Adminverktøy",
@@ -3948,10 +3910,6 @@
         "kick_space_warning": "De vil fortsatt kunne få tilgang til det du ikke er administrator av.",
         "promote_warning": "Du vil ikke kunne angre denne endringen ettersom du promoterer brukeren til å ha samme tilgangsnivå som deg selv.",
         "redact": {
-            "confirm_button": {
-                "Slett %(count)s meldinger": "Fjern 1 melding",
-                "Slett 1 melding": "Fjern %(count)s meldinger"
-            },
             "confirm_description_1": {
                 "one": "Du er i ferd med å fjerne %(count)s melding fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?",
                 "other": "Du er i ferd med å fjerne %(count)s meldinger fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?"

@@ -19,7 +19,7 @@ import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib
 
 import type React from "react";
 import Modal from "../Modal";
-import { _t, type TranslationKey } from "../languageHandler";
+import { _t } from "../languageHandler";
 import { ModuleUiDialog } from "../components/views/dialogs/ModuleUiDialog";
 import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
