@@ -88,12 +88,12 @@ test.use({
             msc4143_enabled: false,
         },
         matrix_rtc: {
-            transports:[
+            transports: [
                 {
                     type: "livekit",
                     livekit_service_url: "https://example.org/can-be-anything",
                 },
-            ]
+            ],
         },
     },
 });
