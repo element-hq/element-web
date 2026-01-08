@@ -93,7 +93,46 @@
 }
 
 .mx_RoomListItemView_selected {
-    background-color: var(--cpd-color-bg-action-secondary-pressed);
+    position: relative;
+    background-color: transparent;
+    border-left: none; 
+    border-radius: 0 8px 8px 0;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+    padding-left: var(--cpd-space-3x);
+    
+    /* The curved left indicator */
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: #007a61;
+        border-radius: 0 8px 8px 0;
+        z-index: 0;
+    }
+    
+    /* Background that starts after the gap */
+    &::after {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e1e6ec;
+        border-radius: 8px; /* Curve all corners */
+        z-index: 0;
+    }
+    
+    /* Ensure content appears above backgrounds */
+    > * {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 .mx_RoomListItemView_bold .mx_RoomListItemView_roomName {
