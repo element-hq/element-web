@@ -260,7 +260,7 @@ export const useRoomCall = (
     ]);
 
     const voiceCallClick = useCallback(
-        (evt: React.MouseEvent | undefined, callPlatformType?: PlatformCallType): void => {
+        (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
@@ -271,7 +271,7 @@ export const useRoomCall = (
         [promptPinWidget, room, widget],
     );
     const videoCallClick = useCallback(
-        (evt: React.MouseEvent | undefined, callPlatformType?: PlatformCallType): void => {
+        (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
                 WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);

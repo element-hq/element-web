@@ -26,9 +26,9 @@ import PosthogTrackers from "../../PosthogTrackers";
 export const placeCall = async (
     room: Room,
     callType: CallType,
-    platformCallType: PlatformCallType | undefined,
+    platformCallType: PlatformCallType,
     skipLobby: boolean | undefined,
-    voiceOnly: boolean | undefined,
+    voiceOnly: boolean,
 ): Promise<void> => {
     const { analyticsName } = getPlatformCallTypeProps(platformCallType);
     PosthogTrackers.trackInteraction(analyticsName);

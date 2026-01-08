@@ -85,7 +85,7 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
 test.use({
     synapseConfig: {
         experimental_features: {
-            msc4143_enabled: false,
+            msc4143_enabled: true,
         },
         matrix_rtc: {
             transports: [

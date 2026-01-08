@@ -48,8 +48,8 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
 
     /**
      * Fetch transports used by MatrixRTC services, such as Element Call.
-     * This ensures we only fetch transport information once during the lifetime
-     * of a session.
+     * This function is called once during Store startup which means we don't refetch
+     * transports every time we need to check for Element Call support.
      */
     protected async fetchTransports(): Promise<void> {
         if (!this.matrixClient) return;
