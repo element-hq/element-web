@@ -32,6 +32,8 @@ Please see LICENSE files in the repository root for full details.
 .mx_EmojiPicker_anchor {
     border: none;
     padding: var(--cpd-space-1x) 0;
+    /* We have to explicitly inherit the font as button browser styles are implicitly ignorant */
+    font: inherit;
     font-size: $font-20px;
     line-height: 1;
     border-bottom: 2px solid transparent;
