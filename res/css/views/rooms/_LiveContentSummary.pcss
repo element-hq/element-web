@@ -10,41 +10,28 @@ Please see LICENSE files in the repository root for full details.
     color: $secondary-content;
 
     .mx_LiveContentSummary_text {
-        &::before {
+        svg {
             display: inline-block;
             vertical-align: text-bottom;
-            content: "";
-            background-color: $secondary-content;
-            mask-size: 16px;
+            color: $secondary-content;
             width: 16px;
             height: 16px;
             margin-right: 4px;
         }
 
-        &.mx_LiveContentSummary_text_video::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
-        }
-
-        &.mx_LiveContentSummary_text_voice::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/voice-call-solid.svg");
-        }
-
         &.mx_LiveContentSummary_text_active {
             color: $accent;
 
-            &::before {
-                background-color: $accent;
+            svg {
+                color: $accent;
             }
         }
     }
 
-    .mx_LiveContentSummary_participants::before {
+    .mx_LiveContentSummary_participants svg {
         display: inline-block;
         vertical-align: text-bottom;
-        content: "";
-        background-color: $secondary-content;
-        mask-image: url("@vector-im/compound-design-tokens/icons/group.svg");
-        mask-size: 16px;
+        color: $secondary-content;
         width: 16px;
         height: 16px;
         margin-right: 2px;

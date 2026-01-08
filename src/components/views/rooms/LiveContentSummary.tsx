@@ -10,6 +10,7 @@ import React, { type FC } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
+import { GroupIcon, VideoCallSolidIcon, VoiceCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 export enum LiveContentType {
     Video,
@@ -30,11 +31,10 @@ export const LiveContentSummary: FC<Props> = ({ type, text, active, participantC
     <span className="mx_LiveContentSummary">
         <span
             className={classNames("mx_LiveContentSummary_text", {
-                mx_LiveContentSummary_text_video: type === LiveContentType.Video,
-                mx_LiveContentSummary_text_voice: type === LiveContentType.Voice,
                 mx_LiveContentSummary_text_active: active,
             })}
         >
+            {type === LiveContentType.Video ? <VideoCallSolidIcon /> : <VoiceCallSolidIcon />}
             {text}
         </span>
         {participantCount > 0 && (
@@ -44,6 +44,7 @@ export const LiveContentSummary: FC<Props> = ({ type, text, active, participantC
                     className="mx_LiveContentSummary_participants"
                     aria-label={_t("voip|n_people_joined", { count: participantCount })}
                 >
+                    <GroupIcon />
                     {participantCount}
                 </span>
             </>
