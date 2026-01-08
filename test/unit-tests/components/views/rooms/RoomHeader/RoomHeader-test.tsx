@@ -17,6 +17,7 @@ import {
     Room,
     RoomStateEvent,
     RoomMember,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -37,7 +38,7 @@ import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycl
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
-import { filterConsole, stubClient } from "../../../../../test-utils";
+import { filterConsole, setupAsyncStoreWithClient, stubClient } from "../../../../../test-utils";
 import RoomHeader from "../../../../../../src/components/views/rooms/RoomHeader/RoomHeader";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -85,6 +86,8 @@ describe("RoomHeader", () => {
         emit: jest.fn(),
     };
 
+    let client: MatrixClient;
+
     let roomContext: RoomContextType;
 
     function getWrapper(): RenderOptions {
@@ -98,8 +101,8 @@ describe("RoomHeader", () => {
     }
 
     beforeEach(async () => {
-        stubClient();
-        room = new Room(ROOM_ID, MatrixClientPeg.get()!, "@alice:example.org", {
+        client = stubClient();
+        room = new Room(ROOM_ID, client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
         DMRoomMap.setShared({
@@ -405,12 +408,18 @@ describe("RoomHeader", () => {
     });
 
     describe("group call enabled", () => {
-        beforeEach(() => {
+        beforeEach(async () => {
             SdkConfig.put({
                 features: {
                     feature_group_calls: true,
                 },
             });
+            // Enable Element Call
+            client._unstable_getRTCTransports = jest
+                .fn()
+                .mockResolvedValue([{ type: "livekit", livekit_service_url: "https://example.org" }]);
+            // And ensure the CallStore has the transports configured.
+            await setupAsyncStoreWithClient(CallStore.instance, client);
         });
 
         afterEach(() => {
