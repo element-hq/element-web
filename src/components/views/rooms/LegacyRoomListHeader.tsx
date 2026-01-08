@@ -133,7 +133,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
     const pendingActions = usePendingActions();
 
-    const canShowMainMenu = activeSpace || spaceKey === MetaSpace.Home;
+    const canShowMainMenu = !!activeSpace || spaceKey === MetaSpace.Home;
 
     useEffect(() => {
         if (mainMenuDisplayed && !canShowMainMenu) {
@@ -394,7 +394,11 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             onClick: openMainMenu,
             isExpanded: mainMenuDisplayed,
             className: "mx_LegacyRoomListHeader_contextMenuButton",
-            children: title,
+            children: (
+                <>
+                    {title} {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </>
+            ),
         };
 
         if (!!activeSpace) {
@@ -402,16 +406,10 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                 <ContextMenuButton
                     {...commonProps}
                     label={_t("room_list|space_menu_label", { spaceName: spaceName ?? activeSpace.name })}
-                >
-                    {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                </ContextMenuButton>
+                />
             );
         } else {
-            contextMenuButton = (
-                <ContextMenuTooltipButton {...commonProps} title={_t("room_list|home_menu_label")}>
-                    {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                </ContextMenuTooltipButton>
-            );
+            contextMenuButton = <ContextMenuTooltipButton {...commonProps} title={_t("room_list|home_menu_label")} />;
         }
     }
 
