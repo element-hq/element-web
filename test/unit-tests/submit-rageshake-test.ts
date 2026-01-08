@@ -25,8 +25,6 @@ import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Sett
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 
 describe("Rageshakes", () => {
-    const RUST_CRYPTO_VERSION = "Rust SDK 0.7.0 (691ec63), Vodozemac 0.5.0";
-    const OLM_CRYPTO_VERSION = "Olm 3.2.15";
     let mockClient: Mocked<MatrixClient>;
     const mockHttpAPI: MatrixHttpApi<IHttpOpts & { onlyData: true }> = new MatrixHttpApi(
         new TypedEventEmitter<HttpApiEvent, HttpApiEventHandlerMap>(),
@@ -534,52 +532,6 @@ describe("Rageshakes", () => {
         } finally {
             global.mx_rage_logger = prevLogger;
         }
-    });
-
-    describe("A-Element-R label", () => {
-        test("should add A-Element-R label if rust crypto", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(RUST_CRYPTO_VERSION);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-        });
-
-        test("should add A-Element-R label if rust crypto and new version", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue("Rust SDK 0.9.3 (909d09fd), Vodozemac 0.8.1");
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-        });
-
-        test("should not add A-Element-R label if not rust crypto", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(OLM_CRYPTO_VERSION);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).not.toContain("A-Element-R");
-        });
-
-        test("should add A-Element-R label to the set of requested labels", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(RUST_CRYPTO_VERSION);
-
-            const formData = await collectBugReport({
-                labels: ["Z-UISI", "Foo"],
-            });
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-            expect(labelNames).toContain("Z-UISI");
-            expect(labelNames).toContain("Foo");
-        });
-
-        test("should not panic if there is no crypto", async () => {
-            mocked(mockClient.getCrypto).mockReturnValue(undefined);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).not.toContain("A-Element-R");
-        });
     });
 
     it("should notify progress", () => {

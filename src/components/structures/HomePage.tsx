@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { useContext, useState } from "react";
+import { ChatSolidIcon, ExploreIcon, GroupIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getHomePageUrl } from "../../utils/pages";
@@ -117,12 +118,15 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 {introSection}
                 <div className="mx_HomePage_default_buttons">
                     <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
+                        <ChatSolidIcon />
                         {_tDom("onboarding|send_dm")}
                     </AccessibleButton>
                     <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
+                        <ExploreIcon />
                         {_tDom("onboarding|explore_rooms")}
                     </AccessibleButton>
                     <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
+                        <GroupIcon />
                         {_tDom("onboarding|create_room")}
                     </AccessibleButton>
                 </div>

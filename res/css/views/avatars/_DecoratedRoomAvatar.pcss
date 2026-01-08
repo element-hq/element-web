@@ -38,12 +38,10 @@ Please see LICENSE files in the repository root for full details.
         border-radius: 8px;
     }
 
-    .mx_DecoratedRoomAvatar_icon_globe::before {
-        mask-position: center;
-        mask-size: contain;
-        mask-repeat: no-repeat;
-        background: $secondary-content;
-        mask-image: url("@vector-im/compound-design-tokens/icons/public.svg");
+    .mx_DecoratedRoomAvatar_icon_globe svg {
+        width: inherit;
+        height: inherit;
+        color: $secondary-content;
     }
 
     .mx_DecoratedRoomAvatar_icon_offline::before {

@@ -83,9 +83,7 @@
         "no": "Không",
         "ok": "Ok",
         "open": "Mở",
-        "pause": "Tạm dừng",
         "pin": "Ghim",
-        "play": "Chạy",
         "proceed": "Tiếp tục",
         "quote": "Trích",
         "react": "Phản ứng",
@@ -2597,23 +2595,9 @@
         "show_thread_filter": "Hiển thị:"
     },
     "time": {
-        "about_day_ago": "khoảng một ngày trước",
-        "about_hour_ago": "khoảng một giờ trước",
-        "about_minute_ago": "khoảng một phút trước",
         "date_at_time": "%(date)s lúc %(time)s",
-        "few_seconds_ago": "vài giây trước",
         "hours_minutes_seconds_left": "Còn lại %(hours)s giờ %(minutes)s phút %(seconds)s giây",
-        "in_about_day": "khoảng một ngày kể từ bây giờ",
-        "in_about_hour": "khoảng một giờ kể từ bây giờ",
-        "in_about_minute": "khoảng một phút kể từ bây giờ",
-        "in_few_seconds": "một vài giây kể từ bây giờ",
-        "in_n_days": "%(num)s ngày kể từ bây giờ",
-        "in_n_hours": "%(num)s giờ kể từ bây giờ",
-        "in_n_minutes": "%(num)s phút kể từ bây giờ",
         "minutes_seconds_left": "Còn lại %(minutes)s phút %(seconds)s giây",
-        "n_days_ago": "%(num)s ngày trước",
-        "n_hours_ago": "%(num)s giờ trước",
-        "n_minutes_ago": "%(num)s phút trước",
         "seconds_left": "Còn %(seconds)s giây",
         "short_days": "%(value)sngày",
         "short_days_hours_minutes_seconds": "%(days)s ngày %(hours)s giờ %(minutes)s phút %(seconds)s giây",
@@ -2656,8 +2640,7 @@
         "m.audio": {
             "error_downloading_audio": "Lỗi khi tải xuống âm thanh",
             "error_processing_audio": "Lỗi khi xử lý tin nhắn âm thanh",
-            "error_processing_voice_message": "Lỗi khi xử lý tin nhắn thoại",
-            "unnamed_audio": "Âm thanh không tên"
+            "error_processing_voice_message": "Lỗi khi xử lý tin nhắn thoại"
         },
         "m.call": {
             "video_call_ended": "Cuộc gọi truyền hình đã kết thúc",

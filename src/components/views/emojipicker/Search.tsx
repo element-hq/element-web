@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import { CloseIcon, SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -52,12 +53,18 @@ class Search extends React.PureComponent<IProps> {
             rightButton = (
                 <button
                     onClick={() => this.props.onChange("")}
-                    className="mx_EmojiPicker_search_icon mx_EmojiPicker_search_clear"
+                    className="mx_EmojiPicker_search_clear"
                     title={_t("emoji_picker|cancel_search_label")}
-                />
+                >
+                    <CloseIcon />
+                </button>
             );
         } else {
-            rightButton = <span className="mx_EmojiPicker_search_icon" />;
+            rightButton = (
+                <span className="mx_EmojiPicker_search_icon">
+                    <SearchIcon />
+                </span>
+            );
         }
 
         return (

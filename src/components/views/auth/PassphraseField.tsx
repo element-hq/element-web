@@ -12,7 +12,7 @@ import classNames from "classnames";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import SdkConfig from "../../../SdkConfig";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import Field, { type IInputProps } from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 

@@ -88,9 +88,7 @@
         "ok": "OK",
         "open": "Abrir",
         "open_menu": "Abrir menu",
-        "pause": "Pausar",
         "pin": "Fixar",
-        "play": "Reproduzir",
         "proceed": "Prosseguir",
         "quote": "Citar",
         "react": "Reagir",
@@ -1781,7 +1779,6 @@
                 "other": "%(count)s Mensagens fixadas"
             },
             "limits": {
-                "one": "",
                 "other": "Só podes fixar até %(count)s widgets"
             },
             "menu": "Abrir o menu",
@@ -3182,24 +3179,10 @@
         "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos."
     },
     "time": {
-        "about_day_ago": "há cerca de um dia",
-        "about_hour_ago": "há cerca de uma hora",
-        "about_minute_ago": "há cerca de um minuto",
         "date_at_time": "%(date)s às %(time)s",
-        "few_seconds_ago": "há alguns segundos atrás",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "daqui a um dia",
-        "in_about_hour": "daqui a uma hora",
-        "in_about_minute": "daqui a um minuto",
-        "in_few_seconds": "daqui a alguns segundos",
-        "in_n_days": "daqui a %(num)s dias",
-        "in_n_hours": "daqui a %(num)s horas",
-        "in_n_minutes": "daqui a %(num)s minutos",
         "left": "%(timeRemaining)s ainda",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "%(num)s dias atrás",
-        "n_hours_ago": "%(num)s horas atrás",
-        "n_minutes_ago": "%(num)s minutos atrás",
         "seconds_left": "%(seconds)ss restantes",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3256,8 +3239,7 @@
         "m.audio": {
             "error_downloading_audio": "Erro ao descarregar áudio",
             "error_processing_audio": "Erro no processamento da mensagem de áudio",
-            "error_processing_voice_message": "Erro no processamento da mensagem de voz",
-            "unnamed_audio": "Áudio sem nome"
+            "error_processing_voice_message": "Erro no processamento da mensagem de voz"
         },
         "m.beacon_info": {
             "view_live_location": "Vê a localização ao vivo"
@@ -3664,7 +3646,6 @@
         }
     },
     "truncated_list_n_more": {
-        "one": "",
         "other": "E %(count)s mais..."
     },
     "unsupported_browser": {
