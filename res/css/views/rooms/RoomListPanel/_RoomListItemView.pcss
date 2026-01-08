@@ -113,7 +113,7 @@
     width: calc(100% - 16px);
     padding-left: var(--cpd-space-3x);
     
-    /* The curved left indicator */
+    /* The curved left indicator - Uses Compound accent color (green) */
     &::before {
         content: "";
         position: absolute;
@@ -121,12 +121,12 @@
         top: 0;
         bottom: 0;
         width: 4px;
-        background-color: #007a61;
+        background-color: var(--cpd-color-text-action-accent);
         border-radius: 0 8px 8px 0;
         z-index: 0;
     }
     
-    /* Background that starts after the gap */
+    /* Background that starts after the gap - Uses Compound subtle secondary color */
     &::after {
         content: "";
         position: absolute;
@@ -134,7 +134,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        background-color: #e1e6ec;
+        background-color: var(--cpd-color-bg-subtle-secondary);
         border-radius: 8px;
         z-index: 0;
     }
