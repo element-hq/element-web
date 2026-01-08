@@ -155,8 +155,8 @@ export class RoomStatusBarViewModel
         const client = MatrixClientPeg.safeGet();
         super(props, RoomStatusBarViewModel.computeSnapshot(props.room, client, false, false));
         this.client = client;
-        client.on(ClientEvent.Sync, this.onClientSync);
-        props.room.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
+        this.disposables.trackListener(client, ClientEvent.Sync, this.onClientSync);
+        this.disposables.trackListener(props.room, RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
     }
 
     private readonly onClientSync = (): void => {
@@ -183,12 +183,6 @@ export class RoomStatusBarViewModel
         if (this.hasClickedTermsAndConditions && !this.snapshot.current.state) {
             this.hasClickedTermsAndConditions = false;
         }
-    }
-
-    public dispose(): void {
-        this.client.off(ClientEvent.Sync, this.onClientSync);
-        this.props.room.off(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
-        super.dispose();
     }
 
     public onTermsAndConditionsClicked = (): void => {
