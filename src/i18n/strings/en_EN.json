@@ -93,14 +93,12 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_conversation": "New conversation",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
         "no": "No",
         "ok": "OK",
         "open": "Open",
-        "open_menu": "Open menu",
         "pin": "Pin",
         "proceed": "Proceed",
         "quote": "Quote",
@@ -2202,7 +2200,6 @@
             "mark_unread": "Mark as unread"
         },
         "notification_options": "Notification options",
-        "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
@@ -2212,26 +2209,16 @@
             "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
-        "room_options": "Room Options",
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
         },
         "show_previews": "Show previews of messages",
-        "sort": "Sort",
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Activity",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Show rooms with unread messages first",
-        "space_menu": {
-            "home": "Space home",
-            "space_settings": "Space settings"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
         "suggested_rooms_heading": "Suggested Rooms"
