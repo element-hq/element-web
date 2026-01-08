@@ -27,22 +27,32 @@
 
     padding-left: var(--cpd-space-3x);
     font: var(--cpd-font-body-md-regular);
+    transition: all 0.2s ease;
 
     /*  Hide the menu by default  */
     .mx_RoomListItemView_menu {
         display: none;
     }
 
-    &:hover,
-    &:focus-visible,
+    &:hover:not(.mx_RoomListItemView_selected),
+    &:focus-visible:not(.mx_RoomListItemView_selected),
     /* When the context menu is opened  */
-    &[data-state="open"],
+    &[data-state="open"]:not(.mx_RoomListItemView_selected),
     /*  When the options and notifications menu are opened */
-    &:has(.mx_RoomListItemMenuView > button[data-state="open"]) {
+    &:has(.mx_RoomListItemMenuView > button[data-state="open"]):not(.mx_RoomListItemView_selected) {
         background-color: var(--cpd-color-bg-action-secondary-hovered);
 
         .mx_RoomListItemView_menu {
             display: flex;
+        }
+        
+        /* Shift avatar and content to the left on hover */
+        > :first-child {
+            transform: translateX(-8px);
+        }
+        
+        .mx_RoomListItemView_content {
+            transform: translateX(-8px);
         }
 
         &.mx_RoomListItemView_has_menu {
@@ -71,6 +81,7 @@
         box-sizing: border-box;
         min-width: 0;
         padding-right: var(--cpd-space-5x);
+        transition: transform 0.2s ease;
 
         .mx_RoomListItemView_text {
             min-width: 0;
@@ -124,7 +135,7 @@
         right: 0;
         bottom: 0;
         background-color: #e1e6ec;
-        border-radius: 8px; /* Curve all corners */
+        border-radius: 8px;
         z-index: 0;
     }
     
