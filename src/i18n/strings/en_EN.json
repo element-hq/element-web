@@ -980,6 +980,7 @@
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
         "key_storage_out_of_sync_description": "Confirm your recovery key to maintain access to your key storage and message history.",
+        "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",

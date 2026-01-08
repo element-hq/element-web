@@ -83,6 +83,7 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
+import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 
 export type GetRelationsForEvent = (
@@ -732,6 +733,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     return null;
                 default:
                     return <E2ePadlockDecryptionFailure />;
+            }
+        }
+
+        if (this.state.shieldReason === EventShieldReason.AUTHENTICITY_NOT_GUARANTEED) {
+            // This may happen if the message was forwarded to us by another user, in which case we can show a better message
+            const forwarder = this.props.mxEvent.getKeyForwardingUser();
+            if (forwarder) {
+                return <E2eMessageSharedIcon keyForwardingUserId={forwarder} roomId={ev.getRoomId()!} />;
             }
         }
 
