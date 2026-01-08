@@ -294,7 +294,7 @@
         "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^11.0.0",
-        "typescript": "5.8.3",
+        "typescript": "5.9.3",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",

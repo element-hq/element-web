@@ -64,7 +64,8 @@ global.URL.revokeObjectURL = jest.fn();
 
 // polyfilling TextEncoder as it is not available on JSDOM
 // view https://github.com/facebook/jest/issues/9983
-global.TextEncoder = TextEncoder;
+// XXX: Node's implementation has marginally different types, so we fudge it
+(globalThis as any).TextEncoder = TextEncoder;
 // @ts-ignore
 global.TextDecoder = TextDecoder;
 

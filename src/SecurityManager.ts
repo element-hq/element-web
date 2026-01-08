@@ -25,7 +25,7 @@ import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDia
 // during the same single operation. Use `accessSecretStorage` below to scope a
 // single secret storage operation, as it will clear the cached keys once the
 // operation ends.
-let secretStorageKeys: Record<string, Uint8Array> = {};
+let secretStorageKeys: Record<string, Uint8Array<ArrayBuffer>> = {};
 let secretStorageKeyInfo: Record<string, SecretStorage.SecretStorageKeyDescription> = {};
 let secretStorageBeingAccessed = false;
 
@@ -50,8 +50,8 @@ export class AccessCancelledError extends Error {
 
 function makeInputToKey(
     keyInfo: SecretStorage.SecretStorageKeyDescription,
-): (keyParams: KeyParams) => Promise<Uint8Array> {
-    return async ({ passphrase, recoveryKey }): Promise<Uint8Array> => {
+): (keyParams: KeyParams) => Promise<Uint8Array<ArrayBuffer>> {
+    return async ({ passphrase, recoveryKey }): Promise<Uint8Array<ArrayBuffer>> => {
         if (passphrase) {
             return deriveRecoveryKeyFromPassphrase(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
         } else if (recoveryKey) {
@@ -68,7 +68,7 @@ async function getSecretStorageKey(
         keys: Record<string, SecretStorage.SecretStorageKeyDescription>;
     },
     secretName: string,
-): Promise<[string, Uint8Array]> {
+): Promise<[string, Uint8Array<ArrayBuffer>]> {
     const cli = MatrixClientPeg.safeGet();
     const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
 
@@ -138,7 +138,7 @@ async function getSecretStorageKey(
 function cacheSecretStorageKey(
     keyId: string,
     keyInfo: SecretStorage.SecretStorageKeyDescription,
-    key: Uint8Array,
+    key: Uint8Array<ArrayBuffer>,
 ): void {
     if (secretStorageBeingAccessed) {
         logger.debug(`Caching 4S key ${keyId}`);
