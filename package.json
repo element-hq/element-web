@@ -30,7 +30,7 @@
     ],
     "scripts": {
         "i18n": "matrix-gen-i18n src res && yarn i18n:sort && yarn i18n:lint",
-        "i18n:sort": "jq --sort-keys '.' src/i18n/strings/en_EN.json > src/i18n/strings/en_EN.json.tmp && mv src/i18n/strings/en_EN.json.tmp src/i18n/strings/en_EN.json",
+        "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
         "make-component": "node scripts/make-react-component.js",
@@ -181,7 +181,7 @@
         "@babel/runtime": "^7.12.5",
         "@casualbot/jest-sonar-reporter": "2.5.0",
         "@element-hq/element-call-embedded": "0.16.3",
-        "@element-hq/element-web-playwright-common": "^2.0.0",
+        "@element-hq/element-web-playwright-common": "2.2.3",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "1.57.0",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",

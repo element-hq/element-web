@@ -27,7 +27,7 @@ import {
     type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LockSolidIcon, PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LockSolidIcon, PublicIcon, ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
@@ -300,7 +300,9 @@ const SpaceCreateMenu: React.FC<{
                         className="mx_SpaceCreateMenu_back"
                         onClick={() => setVisibility(null)}
                         title={_t("action|go_back")}
-                    />
+                    >
+                        <ChevronLeftIcon />
+                    </AccessibleButton>
                 )}
 
                 <h2>

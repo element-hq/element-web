@@ -14,6 +14,8 @@ import {
     GroupIcon,
     PlusIcon,
     RoomIcon,
+    SettingsSolidIcon,
+    UserAddIcon,
     UserProfileSolidIcon,
     VideoCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -231,6 +233,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                     showSpaceInvite(space);
                 }}
             >
+                <UserAddIcon />
                 {_t("action|invite")}
             </AccessibleButton>
         );
@@ -254,7 +257,9 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                 }}
                 title={_t("common|settings")}
                 placement="bottom"
-            />
+            >
+                <SettingsSolidIcon />
+            </AccessibleButton>
         );
     }
 
@@ -578,10 +583,8 @@ const SpaceSetupPrivateInvite: React.FC<{
             </form>
 
             <div className="mx_SpaceRoomView_inviteTeammates_buttons">
-                <AccessibleButton
-                    className="mx_SpaceRoomView_inviteTeammates_inviteDialogButton"
-                    onClick={() => showRoomInviteDialog(space.roomId)}
-                >
+                <AccessibleButton onClick={() => showRoomInviteDialog(space.roomId)}>
+                    <UserAddIcon />
                     {_t("create_space|invite_teammates_by_username")}
                 </AccessibleButton>
             </div>

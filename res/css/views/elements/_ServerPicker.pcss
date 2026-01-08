@@ -23,28 +23,19 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_ServerPicker_help {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border-radius: 10px;
         grid-column: 2;
         grid-row: 1;
         margin-left: auto;
-        text-align: center;
-        font-size: 16px;
-        position: relative;
+        margin-top: -2px;
+        margin-right: -2px;
 
-        &::before {
-            content: "";
-            width: 24px;
-            height: 24px;
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            mask-image: url("@vector-im/compound-design-tokens/icons/info.svg");
-            background: $icon-button-color;
+        svg {
+            width: inherit;
+            height: inherit;
+            color: $icon-button-color;
         }
     }
 

@@ -13,6 +13,7 @@ import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import AccessibleButton from "../elements/AccessibleButton";
 import { pickBestPolicyLanguage, type ServicePolicyPair } from "../../../Terms";
+import ExternalLink from "../elements/ExternalLink.tsx";
 
 interface IProps {
     policiesAndServicePairs: ServicePolicyPair[];
@@ -84,12 +85,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
                 {},
                 {
                     policyLink: () => {
-                        return (
-                            <a href={policy.url} rel="noreferrer noopener" target="_blank">
-                                {policy.name}
-                                <span className="mx_InlineTermsAgreement_link" />
-                            </a>
-                        );
+                        return <ExternalLink href={policy.url}>{policy.name}</ExternalLink>;
                     },
                 },
             );
