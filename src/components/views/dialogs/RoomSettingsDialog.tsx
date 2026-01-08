@@ -18,6 +18,8 @@ import {
     SettingsIcon,
     VoiceCallIcon,
     NotificationsIcon,
+    AdvancedSettingsIcon,
+    TreeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
@@ -40,8 +42,6 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
-import { Icon as AdvancedIcon } from "../../../../res/img/element-icons/room/settings/advanced.svg";
-import { Icon as BridgeIcon } from "../../../../res/img/feather-customised/bridge.svg";
 
 export const enum RoomSettingsTab {
     General = "ROOM_GENERAL_TAB",
@@ -201,7 +201,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.Bridges,
                     _td("room_settings|bridges|title"),
-                    <BridgeIcon />,
+                    <TreeIcon />,
                     <BridgeSettingsTab room={this.state.room} />,
                     "RoomSettingsBridges",
                 ),
@@ -222,7 +222,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.Advanced,
                     _td("common|advanced"),
-                    <AdvancedIcon />,
+                    <AdvancedSettingsIcon />,
                     <AdvancedRoomSettingsTab
                         room={this.state.room}
                         closeSettingsFn={() => this.props.onFinished(true)}
