@@ -73,31 +73,20 @@ Please see LICENSE files in the repository root for full details.
                 }
             }
 
-            &::before {
-                content: "";
+            svg {
                 position: absolute;
                 height: 16px;
                 width: 16px;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: 16px;
-                background-color: $icon-button-color;
+                color: $icon-button-color;
             }
         }
 
         .mx_ExtensionsCard_app_pinToggle {
             right: 8px;
-
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/pin-solid.svg");
-            }
         }
 
         .mx_ExtensionsCard_app_options {
             right: 32px; /* 24 + 8 */
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
-            }
         }
 
         &.mx_ExtensionsCard_Button_pinned {
