@@ -104,7 +104,7 @@ jobs:
                   running-workflow-name: "Build & Deploy develop.element.io"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
+                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload).)*$
 
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.
