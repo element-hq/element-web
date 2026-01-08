@@ -21,6 +21,7 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
 import { SessionDuration } from "../voip/CallDuration";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface RoomCallBannerProps {
     roomId: Room["roomId"];
@@ -66,7 +67,10 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
     return (
         <div className="mx_RoomCallBanner" onClick={onClick}>
             <div className="mx_RoomCallBanner_text">
-                <span className="mx_RoomCallBanner_label">{_t("voip|video_call")}</span>
+                <span className="mx_RoomCallBanner_label">
+                    <VideoCallSolidIcon />
+                    {_t("voip|video_call")}
+                </span>
                 <SessionDuration session={call.session} />
             </div>
 
