@@ -21,6 +21,7 @@ import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary
 import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { CallDuration, SessionDuration } from "../voip/CallDuration";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 const MAX_FACES = 8;
 
@@ -166,7 +167,10 @@ export const CallEvent = ({ mxEvent, ref }: CallEventProps): JSX.Element => {
             <div className="mx_CallEvent_wrapper" ref={ref}>
                 <div className="mx_CallEvent mx_CallEvent_inactive">
                     <div className="mx_CallEvent_columns">
-                        <span className="mx_CallEvent_title">{_t("timeline|m.call|video_call_ended")}</span>
+                        <span className="mx_CallEvent_title">
+                            <VideoCallSolidIcon />
+                            {_t("timeline|m.call|video_call_ended")}
+                        </span>
                         <CallDuration delta={latestEvent.getTs() - mxEvent.getTs()} />
                     </div>
                 </div>
