@@ -33,7 +33,6 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
-import { OverflowHorizontalIcon, PinSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface Props {
     room: Room;

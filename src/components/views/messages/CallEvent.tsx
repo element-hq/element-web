@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type Ref, useCallback, useContext, useMemo, type JSX } from "react";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { ConnectionState, type ElementCall } from "../../../models/Call";
@@ -21,7 +22,6 @@ import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary
 import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { CallDuration, SessionDuration } from "../voip/CallDuration";
-import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 const MAX_FACES = 8;
 

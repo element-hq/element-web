@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type FC } from "react";
 import classNames from "classnames";
+import { GroupIcon, VideoCallSolidIcon, VoiceCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { GroupIcon, VideoCallSolidIcon, VoiceCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 export enum LiveContentType {
     Video,

@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useCallback } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -21,7 +22,6 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
 import { SessionDuration } from "../voip/CallDuration";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
-import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface RoomCallBannerProps {
     roomId: Room["roomId"];
