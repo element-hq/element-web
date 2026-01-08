@@ -58,7 +58,13 @@ Please see LICENSE files in the repository root for full details.
             width: 24px;
             padding: var(--cpd-space-3x) var(--cpd-space-1x);
             box-sizing: border-box;
-            min-width: 24px; /* prevent flexbox crushing */
+            flex-shrink: 0;
+
+            svg {
+                width: 16px;
+                height: 16px;
+                color: $icon-button-color;
+            }
 
             &:hover {
                 &::after {
@@ -71,13 +77,6 @@ Please see LICENSE files in the repository root for full details.
                     border-radius: 12px;
                     background-color: rgb(141, 151, 165, 0.1);
                 }
-            }
-
-            svg {
-                position: absolute;
-                height: 16px;
-                width: 16px;
-                color: $icon-button-color;
             }
         }
 
@@ -94,8 +93,8 @@ Please see LICENSE files in the repository root for full details.
                 opacity: 0.2;
             }
 
-            .mx_ExtensionsCard_app_pinToggle::before {
-                background-color: $accent;
+            .mx_ExtensionsCard_app_pinToggle svg {
+                color: $accent;
             }
         }
 

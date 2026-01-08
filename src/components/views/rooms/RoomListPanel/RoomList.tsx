@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useRef, type JSX } from "react";
+import React, { useCallback, useRef, type JSX, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { isEqual } from "lodash";
 
@@ -112,10 +112,14 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
             return;
         }
     }, []);
+    const context = useMemo<Context>(
+        () => ({ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }),
+        [roomsResult.spaceId, roomsResult.filterKeys],
+    );
 
     return (
         <ListView
-            context={{ spaceId: roomsResult.spaceId, filterKeys: roomsResult.filterKeys }}
+            context={context}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             initialTopMostItemIndex={activeIndex}
             data-testid="room-list"
