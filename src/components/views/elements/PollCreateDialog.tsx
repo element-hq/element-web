@@ -18,6 +18,7 @@ import {
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ScrollableBaseModal, { type IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -233,7 +234,9 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                             onClick={() => this.onOptionRemove(i)}
                             className="mx_PollCreateDialog_removeOption"
                             disabled={this.state.busy}
-                        />
+                        >
+                            <CloseIcon />
+                        </AccessibleButton>
                     </div>
                 ))}
                 <AccessibleButton

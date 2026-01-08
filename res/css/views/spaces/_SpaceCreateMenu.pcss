@@ -35,26 +35,15 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpaceCreateMenu_back {
-            width: 28px;
-            height: 28px;
-            position: relative;
+            width: 24px;
+            height: 24px;
+            padding: var(--cpd-space-0-5x);
             background-color: $panel-actions;
             border-radius: 14px;
             margin-bottom: 12px;
 
-            &::before {
-                content: "";
-                position: absolute;
-                height: 28px;
-                width: 28px;
-                top: 0;
-                left: 0;
-                background-color: $tertiary-content;
-                transform: rotate(90deg);
-                mask-repeat: no-repeat;
-                mask-position: 2px 3px;
-                mask-size: 24px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
+            svg {
+                color: $tertiary-content;
             }
         }
 

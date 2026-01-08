@@ -10,8 +10,12 @@ import React, { type JSX, useEffect, useMemo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
-import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
-import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/extensions";
+import {
+    PlusIcon,
+    ExtensionsIcon,
+    OverflowHorizontalIcon,
+    PinSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
@@ -124,7 +128,9 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                     isExpanded={menuDisplayed}
                     onClick={openMenu}
                     title={_t("common|options")}
-                />
+                >
+                    <OverflowHorizontalIcon />
+                </ContextMenuTooltipButton>
             )}
 
             <AccessibleButton
@@ -132,7 +138,9 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                 onClick={togglePin}
                 title={pinTitle}
                 disabled={cannotPin}
-            />
+            >
+                <PinSolidIcon />
+            </AccessibleButton>
 
             {contextMenu}
         </div>
