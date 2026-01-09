@@ -129,5 +129,25 @@ describe("useRoomCall", () => {
                 expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
             );
         });
+        it("Ensure handler reacts to transport changes", async () => {
+            // Clear all transports
+            client._unstable_getRTCTransports.mockResolvedValue([]);
+            client.getClientWellKnown.mockReturnValue({});
+
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            const { result } = render();
+
+            // Ensure Element Call is not a call option.
+            expect(result.current.callOptions).toEqual([PlatformCallType.LegacyCall]);
+
+            // Now enable a transport and ensure that useRoomCall picks it up reactively.
+            client._unstable_getRTCTransports.mockResolvedValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            await waitFor(() =>
+                expect(result.current.callOptions).toEqual([PlatformCallType.ElementCall, PlatformCallType.LegacyCall]),
+            );
+        });
     });
 });

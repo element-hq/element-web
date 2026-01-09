@@ -23,6 +23,8 @@ export enum CallStoreEvent {
     Call = "call",
     // Signals a change in the active calls
     ConnectedCalls = "connected_calls",
+    // Signals a change in the configured RTC transports.
+    TransportsUpdated = "transports_updated",
 }
 
 export class CallStore extends AsyncStoreWithClient<EmptyObject> {
@@ -53,6 +55,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
      */
     protected async fetchTransports(): Promise<void> {
         if (!this.matrixClient) return;
+        this.configuredMatrixRTCTransports.clear();
         // Prefer checking the proper endpoint for transports.
         try {
             const transports = await this.matrixClient._unstable_getRTCTransports();
@@ -70,6 +73,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         if (Array.isArray(foci)) {
             foci.forEach((foci) => this.configuredMatrixRTCTransports.add(foci));
         }
+        this.emit(CallStoreEvent.TransportsUpdated);
     }
 
     protected async onReady(): Promise<any> {
