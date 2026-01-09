@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
-import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { parseCallNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -495,7 +495,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
 
         if (EventType.RTCNotification === ev.getType() && !thisUserHasConnectedDevice) {
-            const content = ev.getContent() as IRTCNotificationContent;
+            const content = parseCallNotificationContent(ev.getContent());
             const roomId = ev.getRoomId();
             const eventId = ev.getId();
 
