@@ -116,9 +116,12 @@ export const useRoomCall = (
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
 
-    const serverIsConfiguredForElementCall = CallStore.instance
-        .getConfiguredRTCTransports()
-        .some((s) => s.type === "livekit" && s.livekit_service_url);
+    const serverIsConfiguredForElementCall = useEventEmitterState(
+        CallStore.instance,
+        CallStoreEvent.TransportsUpdated,
+        () =>
+            CallStore.instance.getConfiguredRTCTransports().some((s) => s.type === "livekit" && s.livekit_service_url),
+    );
 
     useEffect(() => {
         if (useElementCallExclusively && !serverIsConfiguredForElementCall) {
