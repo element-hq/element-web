@@ -49,7 +49,7 @@ export enum PlatformCallType {
 }
 
 export const getPlatformCallTypeProps = (
-    platformCallType?: PlatformCallType,
+    platformCallType: PlatformCallType,
 ): {
     label: string;
     children?: ReactNode;
@@ -93,9 +93,9 @@ export const useRoomCall = (
     room: Room | LocalRoom,
 ): {
     voiceCallDisabledReason: string | null;
-    voiceCallClick(evt: React.MouseEvent | undefined, selectedType?: PlatformCallType): void;
+    voiceCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
     videoCallDisabledReason: string | null;
-    videoCallClick(evt: React.MouseEvent | undefined, selectedType?: PlatformCallType): void;
+    videoCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
     toggleCallMaximized: () => void;
     isViewingCall: boolean;
     isConnectedToCall: boolean;
