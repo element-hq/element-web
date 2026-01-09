@@ -17,10 +17,9 @@ import {
     MatrixEvent,
     SyncState,
     type AccountDataEvents,
-    GroupCallState,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
-import { CallMembership, SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
