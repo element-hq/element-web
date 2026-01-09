@@ -180,7 +180,11 @@ export async function encryptMegolmKeyFile(
  * @param {String} password  password
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
-async function deriveKeys(salt: Uint8Array, iterations: number, password: string): Promise<[CryptoKey, CryptoKey]> {
+async function deriveKeys(
+    salt: Uint8Array<ArrayBuffer>,
+    iterations: number,
+    password: string,
+): Promise<[CryptoKey, CryptoKey]> {
     const start = new Date();
 
     let key;
@@ -249,7 +253,7 @@ const TRAILER_LINE = "-----END MEGOLM SESSION DATA-----";
  * @param {ArrayBuffer} data  input file
  * @return {Uint8Array} unbase64ed content
  */
-function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array {
+function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array<ArrayBuffer> {
     // parse the file as a great big String. This should be safe, because there
     // should be no non-ASCII characters, and it means that we can do string
     // comparisons to find the header and footer, and feed it into window.atob.
@@ -340,7 +344,7 @@ function encodeBase64(uint8Array: Uint8Array): string {
  * @param {string} base64 The base64 to decode.
  * @return {Uint8Array} The decoded data.
  */
-function decodeBase64(base64: string): Uint8Array {
+function decodeBase64(base64: string): Uint8Array<ArrayBuffer> {
     // window.atob returns a unicode string with codepoints in the range 0-255.
     const latin1String = window.atob(base64);
     // Encode the string as a Uint8Array

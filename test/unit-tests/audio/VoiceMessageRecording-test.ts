@@ -118,7 +118,7 @@ describe("VoiceMessageRecording", () => {
         const encryptedFile = {} as unknown as EncryptedFile;
 
         beforeEach(() => {
-            voiceRecording.onDataAvailable!(testBuf);
+            voiceRecording.onDataAvailable!(testBuf.buffer);
         });
 
         it("contentLength should return the buffer length", () => {
