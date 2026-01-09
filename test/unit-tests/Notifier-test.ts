@@ -17,9 +17,10 @@ import {
     MatrixEvent,
     SyncState,
     type AccountDataEvents,
+    GroupCallState,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
-import { CallMembership, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { CallMembership, SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
@@ -56,6 +57,8 @@ jest.mock("../../src/audio/compat", () => ({
     ...jest.requireActual("../../src/audio/compat"),
     createAudioContext: jest.fn(),
 }));
+
+const settingsStoreGetValue = SettingsStore.getValue;
 
 describe("Notifier", () => {
     const roomId = "!room1:server";
@@ -369,20 +372,36 @@ describe("Notifier", () => {
 
     describe("group call notifications", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+                if (key === "notificationsEnabled") {
+                    return true;
+                }
+                return settingsStoreGetValue(key, ...params);
+            });
             jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
             jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
+            ToastStore.sharedInstance().reset();
 
             mockClient.getPushActionsForEvent.mockReturnValue({
                 notify: true,
                 tweaks: {},
+            });
+            jest.spyOn(testRoom, "findEventById").mockImplementation((eventId) => {
+                if (eventId === "$memberEventId") {
+                    mkEvent({
+                        user: "@alice:foo",
+                        type: "org.matrix.msc4143.rtc.member",
+                        content: { call_id: "foobarcall" } satisfies Partial<SessionMembershipData>,
+                    });
+                }
+                return undefined;
             });
             Notifier.start();
             Notifier.onSyncStateChange(SyncState.Syncing, null);
         });
 
         afterEach(() => {
-            jest.resetAllMocks();
+            jest.restoreAllMocks();
         });
 
         const emitCallNotificationEvent = (
@@ -407,7 +426,7 @@ describe("Notifier", () => {
                 ts,
                 content: {
                     "notification_type": "ring",
-                    "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
+                    "m.relates_to": { rel_type: "m.reference", event_id: "$memberEventId" },
                     "m.mentions": { user_ids: [], room: roomMention },
                     lifetime,
                     "sender_ts": ts,
@@ -423,13 +442,20 @@ describe("Notifier", () => {
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    key: getIncomingCallToastKey(notificationEvent.getId() ?? "", roomId),
+                    key: getIncomingCallToastKey("", roomId),
                     priority: 100,
                     component: IncomingCallToast,
                     bodyClassName: "mx_IncomingCallToast",
                     props: { notificationEvent },
                 }),
             );
+        });
+
+        it("shows group call toast once for multiple notifications to the same call", () => {
+            // Call the same function twice.
+            emitCallNotificationEvent();
+            emitCallNotificationEvent();
+            expect(ToastStore.sharedInstance().addOrReplaceToast).toHaveBeenCalledTimes(1);
         });
 
         it("should not show toast when group call is already connected", () => {
