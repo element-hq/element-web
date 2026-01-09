@@ -9,12 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";
 import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { useWidgets } from "../../utils/WidgetUtils";
 import { WidgetType } from "../../widgets/WidgetType";
 import { useCall, useConnectionState, useParticipantCount } from "../useCall";
@@ -37,6 +38,9 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
+import { SdkContextClass } from "../../contexts/SDKContext";
+
+const logger = rootLogger.getChild("useRoomCall");
 
 export enum PlatformCallType {
     ElementCall,
@@ -67,6 +71,8 @@ export const getPlatformCallTypeProps = (
                 label: _t("voip|legacy_call"),
                 analyticsName: "WebVoipOptionLegacy",
             };
+        default:
+            throw Error(`Unexpected PlatformCallType ${platformCallType}`);
     }
 };
 
@@ -110,10 +116,25 @@ export const useRoomCall = (
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
 
+    const serverIsConfiguredForElementCall = useEventEmitterState(
+        CallStore.instance,
+        CallStoreEvent.TransportsUpdated,
+        () =>
+            CallStore.instance.getConfiguredRTCTransports().some((s) => s.type === "livekit" && s.livekit_service_url),
+    );
+
+    useEffect(() => {
+        if (useElementCallExclusively && !serverIsConfiguredForElementCall) {
+            logger.warn(
+                "Element Call is configured to be used exclusively, but the server is not configured with a transport",
+            );
+        }
+    }, [useElementCallExclusively, serverIsConfiguredForElementCall]);
+
     const hasLegacyCall = useEventEmitterState(
-        LegacyCallHandler.instance,
+        SdkContextClass.instance.legacyCallHandler,
         LegacyCallHandlerEvent.CallsChanged,
-        () => LegacyCallHandler.instance.getCallForRoom(room.roomId) !== null,
+        () => SdkContextClass.instance.legacyCallHandler.getCallForRoom(room.roomId) !== null,
     );
     // settings
     const widgets = useWidgets(room);
@@ -143,10 +164,12 @@ export const useRoomCall = (
     // room
     const memberCount = useRoomMemberCount(room);
 
-    const [mayEditWidgets, mayCreateElementCalls] = useRoomState(room, () => [
+    const [mayEditWidgets, mayCreateElementCallState] = useRoomState(room, () => [
         room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
         room.currentState.mayClientSendStateEvent(ElementCallMemberEventType.name, room.client),
     ]);
+
+    const mayCreateElementCalls = mayCreateElementCallState && serverIsConfiguredForElementCall;
 
     // The options provided to the RoomHeader.
     // If there are multiple options, the user will be prompted to choose.
@@ -219,6 +242,10 @@ export const useRoomCall = (
         }
 
         if (!callOptions.includes(PlatformCallType.LegacyCall) && !mayCreateElementCalls && !mayEditWidgets) {
+            return State.NoPermission;
+        }
+        // Catch-all for just not having any call options available.
+        if (!callOptions.length) {
             return State.NoPermission;
         }
         return State.NoCall;
