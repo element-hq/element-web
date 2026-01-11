@@ -339,6 +339,42 @@ describe("Notifier", () => {
                 reply,
             );
         });
+
+        it.each([
+            ["This was a triumph", "This was a triumph", "This was a triumph"],
+            ["This was a triumph", "<span data-mx-spoiler>This was a triumph</span>", "██████████████████"],
+            ["This was a triumph", '<span data-mx-spoiler="triumph">This was a triumph</span>', "██████████████████"],
+            ["foo bar baz", "foo <span data-mx-spoiler>bar</span> baz", "foo ███ baz"],
+            ["foo foo foo", "foo <span data-mx-spoiler>foo</span> foo", "foo ███ foo"],
+            ["a b c d e", "a <span data-mx-spoiler>b</span> c <span data-mx-spoiler>d</span> e", "a ███ c ████ e"],
+            ["foo  foo", "foo <span data-mx-spoiler></span> foo", "foo  foo"],
+            ["foo bar baz", "foo <span data-mx-spoiler>b<em>a</em>r</span> baz", "foo ███ baz"],
+            ["foobar", "<span data-mx-spoiler>foo</span><span data-mx-spoiler>bar</span>", "██████"],
+            ["foo bar baz", "<strong>foo <span data-mx-spoiler>bar</span> baz</strong>", "foo ███ baz"],
+            ["foo <bar> baz", "foo <span data-mx-spoiler>&lt;bar&gt;</span> baz", "foo █████ baz"],
+            ["foo\nbar\nbaz", "foo<span data-mx-spoiler><br>bar<br></span>baz", "foo███baz"],
+        ])("should hide spoilers in notification", (body, formattedBody, expected) => {
+            const spoilerEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: mockClient.getSafeUserId(),
+                room: testRoom.roomId,
+                content: {
+                    msgtype: MsgType.Text,
+                    body: body,
+                    format: "org.matrix.custom.html",
+                    formatted_body: formattedBody,
+                },
+            });
+            Notifier.displayPopupNotification(spoilerEvent, testRoom);
+            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                "@bob:example.org (!room1:server)",
+                expected,
+                expect.any(String),
+                testRoom,
+                spoilerEvent,
+            );
+        });
     });
 
     describe("getSoundForRoom", () => {
