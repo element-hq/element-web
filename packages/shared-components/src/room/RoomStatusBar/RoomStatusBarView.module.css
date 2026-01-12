@@ -7,6 +7,5 @@
 }
 
 .description {
-    font-size: var(--cpd-font-size-body-sm);
     color: var(--cpd-color-text-secondary);
 }

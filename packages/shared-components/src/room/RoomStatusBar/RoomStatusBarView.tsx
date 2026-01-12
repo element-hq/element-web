@@ -37,10 +37,29 @@ export interface RoomStatusBarViewActions {
 }
 
 export const RoomStatusBarState = {
+    /**
+     * Connectivity to the homeserver has been lost. The user can not take any actions
+     * until the connection is restored.
+     */
     ConnectionLost: "ConnectionLost",
+    /**
+     * The homeserver has indiciated the user needs to consent to the Terms and Conditions
+     * before they can send a message.
+     */
     NeedsConsent: "NeedsConsent",
+    /**
+     * The homeserver has indiciated that messages can not be sent due to a resource limit
+     * being reached. The user may use the given admin contact details.
+     */
     ResourceLimited: "ResourceLimited",
+    /**
+     * There are messages stored locally that previously failed to send that the user
+     * may now retry or delete.
+     */
     UnsentMessages: "UnsentMessages",
+    /**
+     * There was an error creating a room. The user may retry creation.
+     */
     LocalRoomFailed: "LocalRoomFailed",
 } as const;
 
@@ -278,7 +297,9 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         <Text id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|some_messages_not_sent")}
                         </Text>
-                        <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
+                        <Text className={styles.description} size="sm">
+                            {_t("room|status_bar|select_messages_to_retry")}
+                        </Text>
                     </div>
                 </Banner>
             );
