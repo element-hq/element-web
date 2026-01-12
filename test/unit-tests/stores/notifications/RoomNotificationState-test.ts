@@ -25,7 +25,6 @@ import { NotificationStateEvents } from "../../../../src/stores/notifications/No
 import { NotificationLevel } from "../../../../src/stores/notifications/NotificationLevel";
 import { createMessageEventContent } from "../../../test-utils/events";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import * as RoomStatusBarModule from "../../../../src/components/structures/RoomStatusBar";
 import * as UnreadModule from "../../../../src/Unread";
 
 describe("RoomNotificationState", () => {
@@ -210,7 +209,7 @@ describe("RoomNotificationState", () => {
 
     describe("computed attributes", () => {
         beforeEach(() => {
-            jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([]);
+            jest.spyOn(room, "getPendingEvents").mockReturnValue([]);
             jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
         });
 
@@ -221,7 +220,9 @@ describe("RoomNotificationState", () => {
         });
 
         it("should has isUnsetMessage at true", () => {
-            jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([{} as MatrixEvent]);
+            jest.spyOn(room, "getPendingEvents").mockReturnValue([
+                mkEvent({ status: EventStatus.NOT_SENT, user: "@foobar:example.org", type: "any.event", content: {} }),
+            ]);
             const roomNotifState = new RoomNotificationState(room, false);
             expect(roomNotifState.isUnsentMessage).toBe(true);
         });
@@ -239,7 +240,9 @@ describe("RoomNotificationState", () => {
             room.updateMyMembership(KnownMembership.Knock);
             expect(roomNotifState.isMention).toBe(false);
 
-            jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([{} as MatrixEvent]);
+            jest.spyOn(room, "getPendingEvents").mockReturnValue([
+                mkEvent({ status: EventStatus.NOT_SENT, user: "@foobar:example.org", type: "any.event", content: {} }),
+            ]);
             room.updateMyMembership(KnownMembership.Join);
             expect(roomNotifState.isMention).toBe(false);
         });
