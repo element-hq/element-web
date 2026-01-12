@@ -237,7 +237,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_content_48r66_51"
         >
           <p
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_sjla8_1"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_mqidv_1"
             id="_r_ti_"
           >
             Could not start a chat with this user
@@ -247,7 +247,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_actions_48r66_83"
         >
           <button
-            class="_button_13vu4_8 _container_sjla8_1 _has-icon_13vu4_60"
+            class="_button_13vu4_8 _container_mqidv_1 _has-icon_13vu4_60"
             data-kind="secondary"
             data-size="sm"
             role="button"
