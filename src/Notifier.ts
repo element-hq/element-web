@@ -83,7 +83,7 @@ const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
 
 /**
  * Extracts plain text from a message body, replacing any spoilered content
- * with block characters (█) to prevent spoilers in desktop notifications.
+ * with '[Spoiler]' to prevent spoilers in desktop notifications.
  */
 function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
     const content = ev.getContent();
@@ -102,7 +102,7 @@ function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
 
         if (node.hasAttribute("data-mx-spoiler")) {
             const e = document.createElement("span");
-            e.appendChild(document.createTextNode("█".repeat(node.textContent.length)));
+            e.appendChild(document.createTextNode("[Spoiler]"));
             return e;
         }
 
