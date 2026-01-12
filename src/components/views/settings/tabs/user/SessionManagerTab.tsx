@@ -303,7 +303,8 @@ const SessionManagerTab: React.FC<{
                     onSignOutCurrentDevice={onSignOutCurrentDevice}
                     signOutAllOtherSessions={signOutAllOtherSessions}
                     otherSessionsCount={otherSessionsCount}
-                    delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                    accountManagementEndpoint={accountManagementEndpoint}
+                    accountManagementActionsSupported={accountManagementActionsSupported}
                 />
                 {shouldShowOtherSessions && (
                     <SettingsSubsection
@@ -337,7 +338,7 @@ const SessionManagerTab: React.FC<{
                             setPushNotifications={setPushNotifications}
                             ref={filteredDeviceListRef}
                             supportsMSC3881={supportsMSC3881}
-                            delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                            accountManagementEndpoint={accountManagementEndpoint}
                         />
                     </SettingsSubsection>
                 )}
