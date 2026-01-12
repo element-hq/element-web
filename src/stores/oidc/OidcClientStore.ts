@@ -33,6 +33,7 @@ export class OidcClientStore {
     private initialisingOidcClientPromise: Promise<void> | undefined;
     private authenticatedIssuer?: string; // set only in OIDC-native mode
     private _accountManagementEndpoint?: string;
+    private _accountManagementActionsSupported?: string[];
     /**
      * Promise which resolves once this store is read to use, which may mean there is no OIDC client if we're in legacy mode,
      * or we just have the account management endpoint if running in OIDC-aware mode.
@@ -51,7 +52,7 @@ export class OidcClientStore {
             // We are not in OIDC Native mode, as we have no locally stored issuer. Check if the server delegates auth to OIDC.
             try {
                 const authMetadata = await this.matrixClient.getAuthMetadata();
-                this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer);
+                this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer, authMetadata.account_management_actions_supported);
             } catch (e) {
                 console.log("Auth issuer not found", e);
             }
@@ -65,7 +66,7 @@ export class OidcClientStore {
         return !!this.authenticatedIssuer;
     }
 
-    private setAccountManagementEndpoint(endpoint: string | undefined, issuer: string): void {
+    private setAccountManagementEndpoint(endpoint: string | undefined, issuer: string, supportedActions?: string[]): void {
         // if no account endpoint is configured default to the issuer
         const url = new URL(endpoint ?? issuer);
         const idToken = getStoredOidcIdToken();
@@ -73,10 +74,15 @@ export class OidcClientStore {
             url.searchParams.set("id_token_hint", idToken);
         }
         this._accountManagementEndpoint = url.toString();
+        this._accountManagementActionsSupported = supportedActions;
     }
 
     public get accountManagementEndpoint(): string | undefined {
         return this._accountManagementEndpoint;
+    }
+
+    public get accountManagementActionsSupported(): string[] | undefined {
+        return this._accountManagementActionsSupported;
     }
 
     /**
@@ -151,7 +157,7 @@ export class OidcClientStore {
         try {
             const clientId = getStoredOidcClientId();
             const authMetadata = await discoverAndValidateOIDCIssuerWellKnown(this.authenticatedIssuer);
-            this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer);
+            this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer, authMetadata.account_management_actions_supported);
             this.oidcClient = new OidcClient({
                 authority: authMetadata.issuer,
                 signingKeys: authMetadata.signingKeys ?? undefined,

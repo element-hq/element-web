@@ -60,7 +60,8 @@ const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> 
 const useSignOut = (
     matrixClient: MatrixClient,
     onSignoutResolvedCallback: () => Promise<void>,
-    delegatedAuthAccountUrl?: string,
+    accountManagementEndpoint?: string,
+    accountManagementActionsSupported?: string[],
 ): {
     onSignOutCurrentDevice: () => void;
     onSignOutOtherDevices: (deviceIds: ExtendedDevice["device_id"][]) => Promise<void>;
@@ -92,9 +93,9 @@ const useSignOut = (
         try {
             setSigningOutDeviceIds((signingOutDeviceIds) => [...signingOutDeviceIds, ...deviceIds]);
 
-            if (delegatedAuthAccountUrl) {
+            if (accountManagementEndpoint) {
                 const [deviceId] = deviceIds;
-                const url = getManageDeviceUrl(delegatedAuthAccountUrl, deviceId);
+                const url = getManageDeviceUrl(accountManagementEndpoint, accountManagementActionsSupported, deviceId);
                 window.open(url, "_blank");
             } else {
                 const deferredSuccess = Promise.withResolvers<boolean>();
@@ -151,11 +152,15 @@ const SessionManagerTab: React.FC<{
      * delegated auth provider.
      * See https://github.com/matrix-org/matrix-spec-proposals/pull/3824
      */
-    const delegatedAuthAccountUrl = useAsyncMemo(async () => {
+    const accountManagementEndpoint = useAsyncMemo(async () => {
         await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
         return sdkContext.oidcClientStore.accountManagementEndpoint;
     }, [sdkContext.oidcClientStore]);
-    const disableMultipleSignout = !!delegatedAuthAccountUrl;
+    const accountManagementActionsSupported = useAsyncMemo(async () => {
+        await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
+        return sdkContext.oidcClientStore.accountManagementActionsSupported;
+    }, [sdkContext.oidcClientStore]);
+    const disableMultipleSignout = !!accountManagementEndpoint;
 
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
@@ -232,7 +237,8 @@ const SessionManagerTab: React.FC<{
     const { onSignOutCurrentDevice, onSignOutOtherDevices, signingOutDeviceIds } = useSignOut(
         matrixClient,
         onSignoutResolvedCallback,
-        delegatedAuthAccountUrl,
+        accountManagementEndpoint,
+        accountManagementActionsSupported,
     );
 
     useEffect(

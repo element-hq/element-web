@@ -244,10 +244,12 @@ describe("OidcClientStore", () => {
             mockClient.getAuthMetadata.mockResolvedValue({
                 ...authConfig,
                 account_management_uri: account,
+                account_management_actions_supported: ["action1", "action2"],
             });
             const store = new OidcClientStore(mockClient);
             await store.readyPromise;
             expect(store.accountManagementEndpoint).toBe(account);
+            expect(store.accountManagementActionsSupported).toEqual(["action1", "action2"]);
         });
     });
 });
