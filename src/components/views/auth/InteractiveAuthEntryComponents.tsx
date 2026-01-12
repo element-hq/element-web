@@ -951,7 +951,7 @@ export class FallbackAuthEntry<T extends object> extends React.Component<IAuthEn
 }
 
 export enum CustomAuthType {
-    // Workaround for MAS requiring non-UIA authentication for resetting cross-signing.
+    // This is the unstable value from MSC4312
     MasCrossSigningReset = "org.matrix.cross_signing_reset",
 }
 
@@ -960,7 +960,8 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
         url?: string;
     };
 }> {
-    public static LOGIN_TYPE = CustomAuthType.MasCrossSigningReset;
+    public static LOGIN_TYPE = AuthType.OAuth;
+    public static UNSTABLE_LOGIN_TYPE = CustomAuthType.MasCrossSigningReset;
 
     private onGoToAccountClick = (): void => {
         if (!this.props.stageParams?.url) return;
@@ -1017,6 +1018,7 @@ export interface IStageComponent extends React.ComponentClass<React.PropsWithRef
 
 export default function getEntryComponentForLoginType(loginType: AuthType | CustomAuthType): IStageComponent {
     switch (loginType) {
+        case AuthType.OAuth:
         case CustomAuthType.MasCrossSigningReset:
             return MasUnlockCrossSigningAuthEntry;
         case AuthType.Password:
