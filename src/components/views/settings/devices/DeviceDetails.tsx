@@ -182,7 +182,11 @@ const DeviceDetails: React.FC<Props> = ({
                         element="a"
                         onClick={null}
                         kind="link_inline"
-                        href={getManageDeviceUrl(accountManagementEndpoint, accountManagementActionsSupported, device.device_id)}
+                        href={getManageDeviceUrl(
+                            accountManagementEndpoint,
+                            accountManagementActionsSupported,
+                            device.device_id,
+                        )}
                         target="_blank"
                         data-testid="device-detail-sign-out-cta"
                     >

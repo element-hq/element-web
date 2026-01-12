@@ -26,7 +26,11 @@ const getUrl = (authUrl: string, action: Action | string): URL => {
  * Create a delegated auth account management URL with logout params as per MSC4191
  * https://github.com/matrix-org/matrix-spec-proposals/blob/quenting/account-deeplink/proposals/4191-account-deeplink.md#possible-actions
  */
-export const getManageDeviceUrl = (accountManagementEndpoint: string, accountManagementActionsSupported: string[] | undefined, deviceId: string): string => {
+export const getManageDeviceUrl = (
+    accountManagementEndpoint: string,
+    accountManagementActionsSupported: string[] | undefined,
+    deviceId: string,
+): string => {
     accountManagementActionsSupported ??= [];
     let action: string | undefined;
 
@@ -42,8 +46,8 @@ export const getManageDeviceUrl = (accountManagementEndpoint: string, accountMan
         action = "session_view";
     }
     if (!action) {
-        // fallback to stable action even if not advertised
-        action = Action.DeviceView;
+        // fallback to unstable action for backwards compatibility
+        action = "org.matrix.session_view";
     }
     const url = getUrl(accountManagementEndpoint, action);
     url.searchParams.set("device_id", deviceId);

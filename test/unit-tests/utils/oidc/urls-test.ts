@@ -13,53 +13,29 @@ describe("OIDC urls", () => {
 
     describe("getManageDeviceUrl()", () => {
         it("prefers stable action", async () => {
-            expect(getManageDeviceUrl(
-                accountManagementEndpoint,
-                [
-                    "org.matrix.session_view",
-                    "session_view",
-                    "org.matrix.device_view",
-                ],
-                deviceId,
-            )).toEqual(
-                "https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234",
-            );
+            expect(
+                getManageDeviceUrl(
+                    accountManagementEndpoint,
+                    ["org.matrix.session_view", "session_view", "org.matrix.device_view"],
+                    deviceId,
+                ),
+            ).toEqual("https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234");
         });
-        it("defaults to stable action", async () => {
-            expect(getManageDeviceUrl(
-                accountManagementEndpoint,
-                [],
-                deviceId,
-            )).toEqual(
-                "https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234",
+        it("defaults to unstable action", async () => {
+            expect(getManageDeviceUrl(accountManagementEndpoint, [], deviceId)).toEqual(
+                "https://auth.com/manage?action=org.matrix.session_view&device_id=DEVICEID1234",
             );
-            expect(getManageDeviceUrl(
-                accountManagementEndpoint,
-                undefined,
-                deviceId,
-            )).toEqual(
-                "https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234",
+            expect(getManageDeviceUrl(accountManagementEndpoint, undefined, deviceId)).toEqual(
+                "https://auth.com/manage?action=org.matrix.session_view&device_id=DEVICEID1234",
             );
         });
         it("uses unstable org.matrix.session_view", async () => {
-            expect(getManageDeviceUrl(
-                accountManagementEndpoint,
-                [
-                    "org.matrix.session_view",
-                ],
-                deviceId,
-            )).toEqual(
+            expect(getManageDeviceUrl(accountManagementEndpoint, ["org.matrix.session_view"], deviceId)).toEqual(
                 "https://auth.com/manage?action=org.matrix.session_view&device_id=DEVICEID1234",
             );
         });
         it("uses unstable session_view", async () => {
-            expect(getManageDeviceUrl(
-                accountManagementEndpoint,
-                [
-                    "session_view",
-                ],
-                deviceId,
-            )).toEqual(
+            expect(getManageDeviceUrl(accountManagementEndpoint, ["session_view"], deviceId)).toEqual(
                 "https://auth.com/manage?action=session_view&device_id=DEVICEID1234",
             );
         });

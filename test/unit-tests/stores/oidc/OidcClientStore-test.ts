@@ -26,6 +26,7 @@ describe("OidcClientStore", () => {
     const clientId = "test-client-id";
     const authConfig = makeDelegatedAuthConfig();
     const account = authConfig.issuer + "account";
+    const accountManagementActionsSupported = ["action1", "action2"];
 
     const mockClient = getMockClientWithEventEmitter({
         getAuthMetadata: jest.fn(),
@@ -41,6 +42,7 @@ describe("OidcClientStore", () => {
             .mockResolvedValue({
                 ...authConfig,
                 account_management_uri: account,
+                account_management_actions_supported: accountManagementActionsSupported,
                 authorization_endpoint: "authorization-endpoint",
                 token_endpoint: "token-endpoint",
             });
@@ -128,6 +130,15 @@ describe("OidcClientStore", () => {
             await store.getOidcClient();
 
             expect(store.accountManagementEndpoint).toEqual(account);
+        });
+
+        it("should set account management actions supported when configured", async () => {
+            const store = new OidcClientStore(mockClient);
+
+            // @ts-ignore private property
+            await store.getOidcClient();
+
+            expect(store.accountManagementActionsSupported).toEqual(accountManagementActionsSupported);
         });
 
         it("should set account management endpoint to issuer when not configured", async () => {
@@ -244,12 +255,12 @@ describe("OidcClientStore", () => {
             mockClient.getAuthMetadata.mockResolvedValue({
                 ...authConfig,
                 account_management_uri: account,
-                account_management_actions_supported: ["action1", "action2"],
+                account_management_actions_supported: accountManagementActionsSupported,
             });
             const store = new OidcClientStore(mockClient);
             await store.readyPromise;
             expect(store.accountManagementEndpoint).toBe(account);
-            expect(store.accountManagementActionsSupported).toEqual(["action1", "action2"]);
+            expect(store.accountManagementActionsSupported).toEqual(accountManagementActionsSupported);
         });
     });
 });

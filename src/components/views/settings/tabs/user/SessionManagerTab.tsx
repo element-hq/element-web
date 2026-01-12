@@ -154,7 +154,10 @@ const SessionManagerTab: React.FC<{
      */
     const accountManagement = useAsyncMemo(async () => {
         await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
-        return { endpoint:sdkContext.oidcClientStore.accountManagementEndpoint, actionsSupported: sdkContext.oidcClientStore.accountManagementActionsSupported };
+        return {
+            endpoint: sdkContext.oidcClientStore.accountManagementEndpoint,
+            actionsSupported: sdkContext.oidcClientStore.accountManagementActionsSupported,
+        };
     }, [sdkContext.oidcClientStore]);
     const disableMultipleSignout = !!accountManagement?.endpoint;
     const userId = matrixClient?.getUserId();
