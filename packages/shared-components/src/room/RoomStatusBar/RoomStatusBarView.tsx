@@ -165,7 +165,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         <Text id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|server_connectivity_lost_title")}
                         </Text>
-                        <Text className={styles.description}>
+                        <Text className={styles.description} size="sm">
                             {_t("room|status_bar|server_connectivity_lost_description")}
                         </Text>
                     </div>
@@ -226,7 +226,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                 hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
                             }[snapshot.resourceLimit] || _t("room|status_bar|exceeded_resource_limit_title")}
                         </Text>
-                        <Text className={styles.description}>
+                        <Text className={styles.description} size="sm">
                             {_t("room|status_bar|exceeded_resource_limit_description")}
                         </Text>
                     </div>
