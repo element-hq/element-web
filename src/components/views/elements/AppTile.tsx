@@ -30,6 +30,7 @@ import {
     CollapseIcon,
     PopOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { I18nContext } from "@element-hq/web-shared-components";
 
 import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
@@ -814,26 +815,28 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         <PopOutIcon className="mx_Icon mx_Icon_12" />
                                     </AccessibleButton>
                                 )}
-                                <WidgetContextMenu
-                                    trigger={
-                                        <ContextMenuButton
-                                            className="mx_AppTileMenuBar_widgets_button"
-                                            label={_t("common|options")}
-                                            isExpanded={this.state.menuDisplayed}
-                                            ref={this.contextMenuButton}
-                                            onClick={this.onContextMenuClick}
-                                        >
-                                            <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
-                                        </ContextMenuButton>
-                                    }
-                                    app={this.props.app}
-                                    onFinished={this.closeContextMenu}
-                                    showUnpin={!this.props.userWidget}
-                                    userWidget={this.props.userWidget}
-                                    onEditClick={this.props.onEditClick}
-                                    onDeleteClick={this.props.onDeleteClick}
-                                    menuDisplayed={this.state.menuDisplayed}
-                                />
+                                <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                                    <WidgetContextMenu
+                                        trigger={
+                                            <ContextMenuButton
+                                                className="mx_AppTileMenuBar_widgets_button"
+                                                label={_t("common|options")}
+                                                isExpanded={this.state.menuDisplayed}
+                                                ref={this.contextMenuButton}
+                                                onClick={this.onContextMenuClick}
+                                            >
+                                                <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
+                                            </ContextMenuButton>
+                                        }
+                                        app={this.props.app}
+                                        onFinished={this.closeContextMenu}
+                                        showUnpin={!this.props.userWidget}
+                                        userWidget={this.props.userWidget}
+                                        onEditClick={this.props.onEditClick}
+                                        onDeleteClick={this.props.onDeleteClick}
+                                        menuDisplayed={this.state.menuDisplayed}
+                                    />
+                                </I18nContext.Provider>
                             </span>
                         </div>
                     )}

@@ -282,7 +282,7 @@ describe("WidgetContextMenuViewModel", () => {
         );
     });
 
-    it("should trhow an error when first supported level is not set", () => {
+    it("should throw an error when first supported level is not set", () => {
         jest.spyOn(SettingsStore, "firstSupportedLevel").mockReturnValue(null);
         const props = {
             ...defaultProps,

@@ -100,6 +100,7 @@ interface WidgetContextMenuViewProps {
  */
 export const WidgetContextMenuView: React.FC<WidgetContextMenuViewProps> = ({ vm }) => {
     const { translate: _t } = useI18n();
+
     const {
         showStreamAudioStreamButton,
         showEditButton,
