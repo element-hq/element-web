@@ -2,7 +2,7 @@
 
 ## Checklist
 
-- [ ] I have read through [review guidelines](../blob/develop/docs/review.md) and [CONTRIBUTING.md](../blob/develop/CONTRIBUTING.md).
+- [ ] I have read through [review guidelines](https://github.com/element-hq/element-web/blob/develop/docs/review.md) and [CONTRIBUTING.md](https://github.com/element-hq/element-web/blob/develop/CONTRIBUTING.md).
 - [ ] Tests written for new code (and old code if feasible).
 - [ ] New or updated `public`/`exported` symbols have accurate [TSDoc](https://tsdoc.org/) documentation.
 - [ ] Linter and other CI checks pass.
