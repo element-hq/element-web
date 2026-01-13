@@ -62,6 +62,7 @@ export class RoomStatusBarViewModel
     private static readonly determineStateForUnreadMessages = (
         room: Room,
         hasClickedTermsAndConditions: boolean,
+        isResending: boolean,
     ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
         if (unsentMessages.length === 0) {
@@ -74,7 +75,7 @@ export class RoomStatusBarViewModel
             // If the user has not accepted the terms, we will just prompt the same error again anyway.
             return {
                 state: RoomStatusBarState.UnsentMessages,
-                isResending: false,
+                isResending,
             };
         }
 
@@ -121,7 +122,7 @@ export class RoomStatusBarViewModel
         // Otherwise, we know there are unsent messages but the error is not special.
         return {
             state: RoomStatusBarState.UnsentMessages,
-            isResending: false,
+            isResending,
         };
     };
 
@@ -139,12 +140,9 @@ export class RoomStatusBarViewModel
             };
         }
 
-        // If we're in the process of resending, always show a resending state so we don't flicker.
+        // If we're in the process of resending, *always* show a resending state so we don't flicker.
         if (isResending) {
-            return {
-                state: RoomStatusBarState.UnsentMessages,
-                isResending,
-            };
+            return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions, true);
         }
 
         const syncState = client.getSyncState();
@@ -166,7 +164,7 @@ export class RoomStatusBarViewModel
         }
 
         // Connection is good, so check room messages for any failures.
-        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions);
+        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions, false);
     };
 
     private readonly client: MatrixClient;
