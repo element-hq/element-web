@@ -31,9 +31,8 @@ describe("E2eMessageSharedIcon", () => {
         });
 
         const result = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <E2eMessageSharedIcon keyForwardingUserId="@bob:example.com" roomId="!roomId" />
-            </MatrixClientContext.Provider>,
+            <E2eMessageSharedIcon keyForwardingUserId="@bob:example.com" roomId="!roomId" />,
+            withClientContextRenderOptions(mockClient),     
         );
 
         expect(result.container).toMatchSnapshot();

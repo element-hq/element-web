@@ -26,7 +26,7 @@ export function E2eMessageSharedIcon(props: {
     roomId: string;
 }): JSX.Element {
     const { roomId, keyForwardingUserId } = props;
-    const client = useContext(MatrixClientContext);
+    const client = useMatrixClientContext();
 
     const roomState = client.getRoom(roomId)?.getLiveTimeline()?.getState(EventTimeline.FORWARDS);
     const forwardingMember = roomState?.getMember(keyForwardingUserId);
