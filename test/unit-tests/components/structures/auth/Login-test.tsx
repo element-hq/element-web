@@ -18,7 +18,6 @@ import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
 import Login from "../../../../../src/components/structures/auth/Login";
 import type BasePlatform from "../../../../../src/BasePlatform";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
 import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
 
@@ -376,21 +375,6 @@ describe("Login", function () {
             jest.spyOn(logger, "error").mockRestore();
         });
 
-        it("should not attempt registration when oidc native flow setting is disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-            getComponent(hsUrl, isUrl, delegatedAuth);
-
-            await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-
-            // didn't try to register
-            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registration_endpoint);
-            // continued with normal setup
-            expect(mockClient.loginFlows).toHaveBeenCalled();
-            // normal password login rendered
-            expect(screen.getByLabelText("Username")).toBeInTheDocument();
-        });
-
         it("should attempt to register oidc client", async () => {
             // dont mock, spy so we can check config values were correctly passed
             jest.spyOn(registerClientUtils, "getOidcClientId");
@@ -431,39 +415,6 @@ describe("Login", function () {
             // did not continue with matrix login
             expect(mockClient.loginFlows).not.toHaveBeenCalled();
             expect(screen.getByText("Continue")).toBeInTheDocument();
-        });
-
-        /**
-         * Oidc-aware flows still work while the oidc-native feature flag is disabled
-         */
-        it("should show oidc-aware flow for oidc-enabled homeserver when oidc native flow setting is disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-            mockClient.loginFlows.mockResolvedValue({
-                flows: [
-                    {
-                        type: "m.login.sso",
-                        [DELEGATED_OIDC_COMPATIBILITY.name]: true,
-                    },
-                    {
-                        type: "m.login.password",
-                    },
-                ],
-            });
-
-            const { container } = getComponent(hsUrl, isUrl, delegatedAuth);
-
-            await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-
-            // didn't try to register
-            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registration_endpoint);
-            // continued with normal setup
-            expect(mockClient.loginFlows).toHaveBeenCalled();
-            // oidc-aware 'continue' button displayed
-            const ssoButtons = container.querySelectorAll(".mx_SSOButton");
-            expect(ssoButtons.length).toBe(1);
-            expect(ssoButtons[0].textContent).toBe("Continue");
-            // no password form visible
-            expect(container.querySelector("form")).toBeFalsy();
         });
     });
 });
