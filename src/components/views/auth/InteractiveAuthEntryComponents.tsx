@@ -960,8 +960,8 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
         url?: string;
     };
 }> {
-    public static LOGIN_TYPE = AuthType.OAuth;
-    public static UNSTABLE_LOGIN_TYPE = CustomAuthType.MasCrossSigningReset;
+    public static readonly LOGIN_TYPE = AuthType.OAuth;
+    public static readonly UNSTABLE_LOGIN_TYPE = CustomAuthType.MasCrossSigningReset;
 
     private onGoToAccountClick = (): void => {
         if (!this.props.stageParams?.url) return;
