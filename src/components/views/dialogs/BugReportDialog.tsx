@@ -43,8 +43,9 @@ interface IState {
     progress: string | null;
     downloadBusy: boolean;
     downloadProgress: string | null;
-    isLocalOnly: boolean;
 }
+
+const isLocalOnly = SdkConfig.get().bug_report_endpoint_url === "local";
 
 export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
     private unmounted: boolean;
@@ -61,8 +62,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             text: props.initialText || "",
             progress: null,
             downloadBusy: false,
-            downloadProgress: null,
-            isLocalOnly: SdkConfig.get().bug_report_endpoint_url === "local",
+            downloadProgress: null
         };
 
         this.unmounted = false;
@@ -144,7 +144,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
         this.setState({ busy: true, progress: null, err: null });
         this.sendProgressCallback(_t("bug_reporting|preparing_logs"));
 
-        if (this.state.isLocalOnly) {
+        if (isLocalOnly) {
             // Shouldn't reach here, but throw in case we do.
             this.setState({
                 err: _t("bug_reporting|failed_send_logs_causes|unknown_error"),
@@ -269,7 +269,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                     {warning}
                     <Text>{_t("bug_reporting|description")}</Text>
                     <Text>
-                        {this.state.isLocalOnly ? (
+                        {isLocalOnly ? (
                             <strong>
                                 {_t(
                                     "bug_reporting|before_submitting",
@@ -307,12 +307,12 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                         value={this.state.issueUrl}
                         placeholder="https://github.com/vector-im/element-web/issues/..."
                         ref={this.issueRef}
-                        disabled={this.state.isLocalOnly}
+                        disabled={isLocalOnly}
                     />
                     <Field
                         className="mx_BugReportDialog_field_input"
                         element="textarea"
-                        disabled={this.state.isLocalOnly}
+                        disabled={isLocalOnly}
                         label={_t("bug_reporting|textarea_label")}
                         rows={5}
                         onChange={this.onTextChange}
@@ -327,7 +327,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                     onPrimaryButtonClick={this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}
-                    disabled={this.state.busy || this.state.isLocalOnly}
+                    disabled={this.state.busy || isLocalOnly}
                 />
             </BaseDialog>
         );
