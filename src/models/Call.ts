@@ -769,7 +769,7 @@ export class ElementCall extends Call {
         }
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
-        if (rageshakeSubmitUrl) {
+        if (rageshakeSubmitUrl && rageshakeSubmitUrl !== "local") {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 

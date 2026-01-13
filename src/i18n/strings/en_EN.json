@@ -417,6 +417,7 @@
         "create_new_issue": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
         "description": "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
         "download_logs": "Download logs",
+        "local_only_description": "Your configuration only allows you to download logs locally.",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
         "failed_download_logs": "Failed to download debug logs: ",

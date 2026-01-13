@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import * as rageshake from "../rageshake/rageshake";
 import SdkConfig from "../SdkConfig";
-import sendBugReport from "../rageshake/submit-rageshake";
+import sendBugReport, { loadBugReport } from "../rageshake/submit-rageshake";
 
 export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves
@@ -54,7 +54,7 @@ export function initRageshakeStore(): Promise<void> {
     return rageshake.tryInitStorage();
 }
 
-window.mxSendRageshake = function (text: string, withLogs?: boolean): void {
+window.mxSendRageshake = async function (text: string, withLogs?: boolean): Promise<void> {
     const url = SdkConfig.get().bug_report_endpoint_url;
     if (!url) {
         logger.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
@@ -64,6 +64,17 @@ window.mxSendRageshake = function (text: string, withLogs?: boolean): void {
     if (withLogs === undefined) withLogs = true;
     if (!text || !text.trim()) {
         logger.error("Cannot send a rageshake without a message - please tell us what went wrong");
+        return;
+    }
+    if (url === "local") {
+        const tape = await loadBugReport({
+            userText: text,
+            sendLogs: withLogs,
+            progressCallback: logger.log.bind(console),
+        });
+        const blob = new Blob([new Uint8Array(tape.out)], { type: "application/gzip" });
+        const object = URL.createObjectURL(blob);
+        console.log(`Your logs are available at ${object}`);
         return;
     }
     sendBugReport(url, {

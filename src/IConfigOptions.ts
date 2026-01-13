@@ -98,7 +98,10 @@ export interface IConfigOptions {
     show_labs_settings: boolean;
     features?: Record<string, boolean>; // <FeatureName, EnabledBool>
 
-    bug_report_endpoint_url?: string; // omission disables bug reporting
+    /**
+     * Bug report endpoint URL. "local" means the logs should not be uploaded.
+     */
+    bug_report_endpoint_url?: "local" | string; // omission disables bug reporting
     uisi_autorageshake_app?: string; // defaults to "element-auto-uisi"
     sentry?: {
         dsn: string;

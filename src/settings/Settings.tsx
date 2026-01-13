@@ -51,6 +51,7 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import { shouldShowFeedback } from "../utils/Feedback.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -406,7 +407,7 @@ export const SETTINGS: Settings = {
                 </>
             ),
             faq: () =>
-                SdkConfig.get().bug_report_endpoint_url && (
+                shouldShowFeedback() && (
                     <>
                         <h4>{_t("labs|video_rooms_faq1_question")}</h4>
                         <p>{_t("labs|video_rooms_faq1_answer")}</p>

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { Link } from "@vector-im/compound-web";
+import { Link, Text } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
@@ -43,6 +43,7 @@ interface IState {
     progress: string | null;
     downloadBusy: boolean;
     downloadProgress: string | null;
+    isLocalOnly: boolean;
 }
 
 export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
@@ -61,6 +62,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             progress: null,
             downloadBusy: false,
             downloadProgress: null,
+            isLocalOnly: SdkConfig.get().bug_report_endpoint_url === "local",
         };
 
         this.unmounted = false;
@@ -141,6 +143,14 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
 
         this.setState({ busy: true, progress: null, err: null });
         this.sendProgressCallback(_t("bug_reporting|preparing_logs"));
+
+        if (this.state.isLocalOnly) {
+            // Shouldn't reach here, but throw in case we do.
+            this.setState({
+                err: _t("bug_reporting|failed_send_logs_causes|unknown_error"),
+            });
+            return;
+        }
 
         sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
             userText,
@@ -257,26 +267,30 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             >
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     {warning}
-                    <p>{_t("bug_reporting|description")}</p>
-                    <p>
-                        <strong>
-                            {_t(
-                                "bug_reporting|before_submitting",
-                                {},
-                                {
-                                    a: (sub) => (
-                                        <a
-                                            target="_blank"
-                                            href={SdkConfig.get().feedback.new_issue_url}
-                                            rel="noreferrer noopener"
-                                        >
-                                            {sub}
-                                        </a>
-                                    ),
-                                },
-                            )}
-                        </strong>
-                    </p>
+                    <Text>{_t("bug_reporting|description")}</Text>
+                    <Text>
+                        {this.state.isLocalOnly ? (
+                            <strong>
+                                {_t(
+                                    "bug_reporting|before_submitting",
+                                    {},
+                                    {
+                                        a: (sub) => (
+                                            <a
+                                                target="_blank"
+                                                href={SdkConfig.get().feedback.new_issue_url}
+                                                rel="noreferrer noopener"
+                                            >
+                                                {sub}
+                                            </a>
+                                        ),
+                                    },
+                                )}
+                            </strong>
+                        ) : (
+                            _t("bug_reporting|local_only_description")
+                        )}
+                    </Text>
 
                     <div className="mx_BugReportDialog_download">
                         <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
@@ -293,10 +307,12 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                         value={this.state.issueUrl}
                         placeholder="https://github.com/vector-im/element-web/issues/..."
                         ref={this.issueRef}
+                        disabled={this.state.isLocalOnly}
                     />
                     <Field
                         className="mx_BugReportDialog_field_input"
                         element="textarea"
+                        disabled={this.state.isLocalOnly}
                         label={_t("bug_reporting|textarea_label")}
                         rows={5}
                         onChange={this.onTextChange}
@@ -311,7 +327,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                     onPrimaryButtonClick={this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}
-                    disabled={this.state.busy}
+                    disabled={this.state.busy || this.state.isLocalOnly}
                 />
             </BaseDialog>
         );
