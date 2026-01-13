@@ -75,7 +75,7 @@
             "spam.election_interference": "The message contains election interference content",
             "spam.flooding": "You are sending too many messages",
             "adult": "The message contains adult content",
-            "harassment": "Message detected as containing harassment.",
+            "harassment": "The message contains harassment.",
             "harassment.trolling": "The message is contains trolling content.",
             "harassment.targeted": "The message contains targeted harassment.",
             "harassment.hate": "The message contains hateful content.",
