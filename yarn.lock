@@ -278,7 +278,7 @@
     "@babel/template" "^7.27.2"
     "@babel/types" "^7.28.4"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.18.5", "@babel/parser@^7.20.7", "@babel/parser@^7.24.4", "@babel/parser@^7.27.2", "@babel/parser@^7.28.5":
+"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.24.4", "@babel/parser@^7.27.2", "@babel/parser@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.28.5.tgz#0b0225ee90362f030efd644e8034c99468893b08"
   integrity sha512-KKBU1VGYR7ORr3At5HAtUQ+TV3SzRCXmA/8OdDZiLDBIZxVyzXuztPjfLd3BV1PRAQGCMWWSHYhL0F8d5uHBDQ==
@@ -1097,7 +1097,7 @@
     "@babel/parser" "^7.27.2"
     "@babel/types" "^7.27.1"
 
-"@babel/traverse@^7.18.5", "@babel/traverse@^7.27.1", "@babel/traverse@^7.28.0", "@babel/traverse@^7.28.3", "@babel/traverse@^7.28.4", "@babel/traverse@^7.28.5":
+"@babel/traverse@^7.27.1", "@babel/traverse@^7.28.0", "@babel/traverse@^7.28.3", "@babel/traverse@^7.28.4", "@babel/traverse@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.28.5.tgz#450cab9135d21a7a2ca9d2d35aa05c20e68c360b"
   integrity sha512-TCCj4t55U90khlYkVV/0TfkJkAkUg3jZFA3Neb7unZT8CPok7iiRfaX0F+WnqWqt7OxhOn0uBKXCw4lbL8W0aQ==
@@ -4165,11 +4165,6 @@
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.6.0.tgz#deac29620caa4c3c6e6669e1392acf40c5ca8eed"
   integrity sha512-IqHldApA5nG3US8bsbH/W2cHx2a7lOF7sOE1HQRAUxLP1B3yfIo8sgw1u6g2kvj8DM4sFIZoKcQ3Lvwym+AsYw==
-
-"@vector-im/compound-design-tokens@^6.4.3":
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.5.0.tgz#2ceb3cd5a8680f579bd7c303c94c7e93fde2c507"
-  integrity sha512-93PD61x8lkU4Hh1DUBV8EHaP1WOZtAJV+/EPbWQCN3wWU1tiruHi3ChhT5xfxeJaipPb6xzLdyt1EyRH0N7Vzg==
 
 "@vector-im/compound-design-tokens@^6.4.3":
   version "6.5.0"
@@ -9645,28 +9640,6 @@ matrix-web-i18n@3.5.2:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-web-i18n@^3.4.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.0.tgz#2f27fb6024168ee50cdbea495dbd7cf6c7171314"
-  integrity sha512-d6Unc6H/lvr1g5zY9fQMS0xdVZ/4kN4+YeC3TEHU1bQ+ShJrJhYKiysmuOAzRYoS8/FIailyb4rqYRBH+PlidA==
-  dependencies:
-    "@babel/parser" "^7.18.5"
-    "@babel/traverse" "^7.18.5"
-    lodash "^4.17.21"
-    minimist "^1.2.8"
-    walk "^2.3.15"
-
-matrix-web-i18n@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.0.tgz#2f27fb6024168ee50cdbea495dbd7cf6c7171314"
-  integrity sha512-d6Unc6H/lvr1g5zY9fQMS0xdVZ/4kN4+YeC3TEHU1bQ+ShJrJhYKiysmuOAzRYoS8/FIailyb4rqYRBH+PlidA==
-  dependencies:
-    "@babel/parser" "^7.18.5"
-    "@babel/traverse" "^7.18.5"
-    lodash "^4.17.21"
-    minimist "^1.2.8"
-    walk "^2.3.15"
-
 matrix-widget-api@^1.14.0, matrix-widget-api@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.15.0.tgz#a508f72a5993a95382bdf890bd9e54525295b321"
@@ -13335,10 +13308,10 @@ typed-array-length@^1.0.7:
     possible-typed-array-names "^1.0.0"
     reflect.getprototypeof "^1.0.6"
 
-typescript@5.8.3:
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
-  integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==
+typescript@5.9.3:
+  version "5.9.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
+  integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
 ua-parser-js@1.0.40:
   version "1.0.40"

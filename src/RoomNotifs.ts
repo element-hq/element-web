@@ -13,15 +13,37 @@ import {
     PushRuleActionName,
     PushRuleKind,
     TweakName,
+    EventStatus,
 } from "matrix-js-sdk/src/matrix";
 
-import type { IPushRule, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { IPushRule, Room, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { NotificationLevel } from "./stores/notifications/NotificationLevel";
-import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
 import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./utils/membership";
 import SettingsStore from "./settings/SettingsStore";
 import { getMarkedUnreadState } from "./utils/notifications";
+
+/**
+ * Gets all pending events in a room that have a status of `EventStatus.NOT_SENT`
+ * and belong to the current thread, if specified.
+ * @param room The room to check.
+ * @param threadId The thread to check. If not specified, no thread filtering is performed.
+ * @returns An array of unsent matrix events.
+ */
+export function getUnsentMessages(room: Room, threadId?: string): MatrixEvent[] {
+    if (!room) {
+        return [];
+    }
+    return room.getPendingEvents().filter(function (ev) {
+        if (ev.status !== EventStatus.NOT_SENT) {
+            return false;
+        }
+        if (threadId && threadId !== ev.threadRootId) {
+            return false;
+        }
+        return true;
+    });
+}
 
 export enum RoomNotifState {
     AllMessagesLoud = "all_messages_loud",

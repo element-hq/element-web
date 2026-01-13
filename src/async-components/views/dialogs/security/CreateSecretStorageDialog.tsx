@@ -112,7 +112,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
     }
 
-    private initExtension(keyFromCustomisations: Uint8Array): void {
+    private initExtension(keyFromCustomisations: Uint8Array<ArrayBuffer>): void {
         logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
         this.recoveryKey = {
             privateKey: keyFromCustomisations,
