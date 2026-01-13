@@ -6,7 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
-import { MatrixSafetyErrorCode } from "matrix-js-sdk/src/matrix";
+
+const MatrixSafetyErrorCode = "ORG.MATRIX.MSC4387_SAFETY";
 
 test.describe("Safety error rendering", () => {
     test.use({
@@ -26,7 +27,7 @@ test.describe("Safety error rendering", () => {
         async ({ page, app, room, user }) => {
             await page.route("**/_matrix/client/v3/**/send/**", async (route) => {
                 await route.fulfill({
-                    json: { errcode: MatrixSafetyErrorCode.name, error: "Server provided error" },
+                    json: { errcode: MatrixSafetyErrorCode, error: "Server provided error" },
                     status: 400,
                 });
             });
@@ -46,7 +47,7 @@ test.describe("Safety error rendering", () => {
             await page.route("**/_matrix/client/v3/**/send/**", async (route) => {
                 await route.fulfill({
                     json: {
-                        errcode: MatrixSafetyErrorCode.name,
+                        errcode: MatrixSafetyErrorCode,
                         error: "Server provided error",
                         harms: ["org.example.unknown-harm"],
                     },
@@ -69,7 +70,7 @@ test.describe("Safety error rendering", () => {
             await page.route("**/_matrix/client/v3/**/send/**", async (route) => {
                 await route.fulfill({
                     json: {
-                        errcode: MatrixSafetyErrorCode.name,
+                        errcode: MatrixSafetyErrorCode,
                         error: "Ignored error",
                         harms: ["org.matrix.msc4387.spam"],
                     },
@@ -91,7 +92,7 @@ test.describe("Safety error rendering", () => {
             await page.route("**/_matrix/client/v3/**/send/**", async (route) => {
                 await route.fulfill({
                     json: {
-                        errcode: MatrixSafetyErrorCode.name,
+                        errcode: MatrixSafetyErrorCode,
                         error: "Ignored error",
                         harms: ["org.matrix.msc4387.spam"],
                         expiry: Date.now() + 1000,
