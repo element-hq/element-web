@@ -278,7 +278,7 @@ function RoomStatusBarViewMessageRejected({
                         harm: translateHarmsToText(snapshot.harms, snapshot.serverError),
                     })}
                 </Text>
-                <Text className={styles.description}>{subtitleText}</Text>
+                <Text className={styles.description} size="sm">{subtitleText}</Text>
             </div>
         </Banner>
     );
