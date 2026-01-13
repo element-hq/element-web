@@ -29,7 +29,7 @@ import { useDispatcher } from "../hooks/useDispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
-import { useEventEmitter } from "../hooks/useEventEmitter";
+import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import DMRoomMap from "../utils/DMRoomMap";
 
@@ -163,6 +163,12 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
         ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(notificationId, roomId));
         LegacyCallHandler.instance.pause(AudioID.Ring);
     }, [notificationEvent, roomId]);
+    // Dismiss if the notification event or call event is redacted
+    useTypedEventEmitter(room, MatrixEventEvent.BeforeRedaction, (ev: MatrixEvent) => {
+        if ([ev.getId(), ev.getRelation()?.event_id].includes(ev.getId())) {
+            dismissToast();
+        }
+    });
 
     // Dismiss if session got ended remotely.
     const onCall = useCallback(
