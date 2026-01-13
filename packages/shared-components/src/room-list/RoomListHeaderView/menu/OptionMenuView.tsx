@@ -12,6 +12,7 @@ import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
 import { useViewModel } from "../../../useViewModel";
 import { useI18n } from "../../../utils/i18nContext";
+import styles from "./OptionMenuView.module.css";
 
 interface OptionMenuViewProps {
     /**
@@ -47,7 +48,7 @@ export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
                 </IconButton>
             }
         >
-            <MenuTitle title={_t("room_list|sort")} />
+            <MenuTitle title={_t("room_list|sort")} className={styles.title} />
             <RadioMenuItem
                 label={_t("room_list|sort_type|activity")}
                 checked={activeSortOption === "recent"}
