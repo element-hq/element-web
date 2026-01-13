@@ -27,6 +27,7 @@ import {
     EventShieldReason,
 } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
+import { getByTestId } from "@testing-library/dom";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -347,11 +348,9 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await flushPromises();
 
-            const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
-            expect(e2eIcons).toHaveLength(1);
-            expect(e2eIcons[0]).toHaveAccessibleName(
+            const e2eIcon = await waitFor(() => getByTestId(container, "e2e-padlock"));
+            expect(e2eIcon).toHaveAccessibleName(
                 "@bob:example.org (@bob:example.org) shared this message since you were not in the room when it was sent.",
             );
         });

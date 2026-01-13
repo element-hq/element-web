@@ -5,12 +5,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext } from "react";
+import React, { type JSX } from "react";
 import { EventTimeline } from "matrix-js-sdk/src/matrix";
 
-import MatrixClientContext from "../../../../contexts/MatrixClientContext.tsx";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { _t } from "../../../../languageHandler.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock.tsx";
+
+/** The React properties of an {@link E2eMessageSharedIcon}. */
+interface E2eMessageSharedIconParams {
+    /** The ID of the user who shared the keys. */
+    keyForwardingUserId: string;
+
+    /** The ID of the room that contains the event whose keys were shared. Used to find the displayname of the user who shared the keys. */
+    roomId: string;
+}
 
 /**
  * A small icon with tooltip, used as part of an {@link EventTile}, which indicates that the key to this event
@@ -18,13 +27,7 @@ import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock.tsx";
  *
  * An alternative to the {@link E2ePadlock} component, which is used for UTD events and other error cases.
  */
-export function E2eMessageSharedIcon(props: {
-    /** The ID of the user who shared the keys. */
-    keyForwardingUserId: string;
-
-    /** The ID of the room that contains the event whose keys were shared. Used to find the displayname of the user who shared the keys. */
-    roomId: string;
-}): JSX.Element {
+export function E2eMessageSharedIcon(props: E2eMessageSharedIconParams): JSX.Element {
     const { roomId, keyForwardingUserId } = props;
     const client = useMatrixClientContext();
 

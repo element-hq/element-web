@@ -6,6 +6,7 @@ exports[`E2ePadlock renders a 'DecryptionFailure' icon 1`] = `
     aria-label="State of the end-to-end encryption"
     aria-labelledby="_r_c_"
     class="mx_EventTile_e2eIcon"
+    data-testid="e2e-padlock"
     tabindex="0"
   >
     <svg
@@ -30,6 +31,7 @@ exports[`E2ePadlock renders a 'Normal' icon 1`] = `
     aria-label="State of the end-to-end encryption"
     aria-labelledby="_r_0_"
     class="mx_EventTile_e2eIcon"
+    data-testid="e2e-padlock"
     tabindex="0"
   >
     <svg
@@ -59,6 +61,7 @@ exports[`E2ePadlock renders a 'Warning' icon 1`] = `
     aria-label="State of the end-to-end encryption"
     aria-labelledby="_r_6_"
     class="mx_EventTile_e2eIcon"
+    data-testid="e2e-padlock"
     tabindex="0"
   >
     <svg

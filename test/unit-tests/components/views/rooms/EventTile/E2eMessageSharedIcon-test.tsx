@@ -11,8 +11,7 @@ import { mocked } from "jest-mock";
 import { type RoomMember, type RoomState } from "matrix-js-sdk/src/matrix";
 
 import { E2eMessageSharedIcon } from "../../../../../../src/components/views/rooms/EventTile/E2eMessageSharedIcon.tsx";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext.tsx";
-import { createTestClient, mkStubRoom } from "../../../../../test-utils";
+import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../../test-utils";
 
 describe("E2eMessageSharedIcon", () => {
     it("renders correctly for a known user", () => {
@@ -32,7 +31,7 @@ describe("E2eMessageSharedIcon", () => {
 
         const result = render(
             <E2eMessageSharedIcon keyForwardingUserId="@bob:example.com" roomId="!roomId" />,
-            withClientContextRenderOptions(mockClient),     
+            withClientContextRenderOptions(mockClient),
         );
 
         expect(result.container).toMatchSnapshot();
@@ -44,9 +43,8 @@ describe("E2eMessageSharedIcon", () => {
     it("renders correctly for an unknown user", () => {
         const mockClient = createTestClient();
         const result = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <E2eMessageSharedIcon keyForwardingUserId="@bob:example.com" roomId="!roomId" />
-            </MatrixClientContext.Provider>,
+            <E2eMessageSharedIcon keyForwardingUserId="@bob:example.com" roomId="!roomId" />,
+            withClientContextRenderOptions(mockClient),
         );
 
         expect(result.container).toMatchSnapshot();

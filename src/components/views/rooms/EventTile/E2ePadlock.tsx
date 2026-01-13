@@ -45,13 +45,20 @@ const icons = {
 /**
  * A small icon with tooltip, used in the left margin of an {@link EventTile}, which indicates a problem
  * with an encrypted event.
+ *
+ * The icon is rendered with `data-testid="e2e-padlock"`.
  */
 export function E2ePadlock(props: IE2ePadlockProps): ReactNode {
     // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
     // https://github.com/element-hq/compound/issues/294
     return (
         <Tooltip label={props.title} isTriggerInteractive={true}>
-            <div className="mx_EventTile_e2eIcon" tabIndex={0} aria-label={_t("timeline|e2e_state")}>
+            <div
+                data-testid="e2e-padlock"
+                className="mx_EventTile_e2eIcon"
+                tabIndex={0}
+                aria-label={_t("timeline|e2e_state")}
+            >
                 {icons[props.icon]}
             </div>
         </Tooltip>
