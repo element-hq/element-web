@@ -414,9 +414,10 @@ describe("Notifier", () => {
                 roomMention?: boolean;
                 lifetime?: number;
                 ts?: number;
+                content?: Partial<IContent>;
             } = {},
         ) => {
-            const { type, roomMention, lifetime, ts } = {
+            const { type, roomMention, lifetime, ts, content } = {
                 type: EventType.RTCNotification,
                 roomMention: true,
                 lifetime: 30000,
@@ -434,6 +435,7 @@ describe("Notifier", () => {
                     "m.mentions": { user_ids: [], room: roomMention },
                     lifetime,
                     "sender_ts": ts,
+                    ...content,
                 },
                 event: true,
             });
@@ -486,6 +488,29 @@ describe("Notifier", () => {
                         props: { notificationEvent },
                     }),
                 );
+            });
+        });
+
+        it.each<IContent>([
+            { "m.relates_to": undefined },
+            { "m.relates_to": { rel_type: "m.reference" } },
+            { "m.relates_to": { event_id: "$memberEventId", rel_type: "something.else" } },
+        ])("ignores invalid relations for call notification", (content) => {
+            emitCallNotificationEvent({ content });
+            waitFor(() => {
+                expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+            });
+        });
+
+        it("ignores a call if the membership is missing", () => {
+            jest.spyOn(testRoom, "findEventById").mockReturnValue(undefined);
+            jest.spyOn(mockClient, "fetchRoomEvent").mockImplementation(async () => {
+                throw new Error("Test mockClient.fetchRoomEvent expected not to find event");
+            });
+
+            emitCallNotificationEvent();
+            waitFor(() => {
+                expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
             });
         });
 
