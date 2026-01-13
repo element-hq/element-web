@@ -44,8 +44,10 @@
         }
     },
     "room_list": {
+        "appearance": "Appearance",
         "open_space_menu": "Open space menu",
         "room_options": "Room Options",
+        "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
             "activity": "Activity",

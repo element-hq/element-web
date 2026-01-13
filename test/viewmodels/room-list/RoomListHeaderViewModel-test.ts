@@ -148,6 +148,16 @@ describe("RoomListHeaderViewModel", () => {
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             expect(vm.getSnapshot().canAccessSpaceSettings).toBe(false);
         });
+
+        it("should show message preview when RoomList.showMessagePreview is enabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "RoomList.showMessagePreview") return true;
+                return false;
+            });
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
+        });
     });
 
     describe("event listeners", () => {
@@ -267,6 +277,21 @@ describe("RoomListHeaderViewModel", () => {
             vm.sort(option);
 
             expect(resortSpy).toHaveBeenCalledWith(expectedAlgorithm);
+        });
+
+        it("should toggle message preview from enabled to disabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "RoomList.showMessagePreview") return true;
+                return false;
+            });
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockImplementation(jest.fn());
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
+
+            vm.toggleMessagePreview();
+
+            expect(setValueSpy).toHaveBeenCalledWith("RoomList.showMessagePreview", null, expect.anything(), false);
         });
     });
 });

@@ -28,6 +28,7 @@ const RoomListHeaderViewWrapper = ({
     inviteInSpace,
     openSpacePreferences,
     sort,
+    toggleMessagePreview,
     ...rest
 }: RoomListHeaderProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -39,6 +40,7 @@ const RoomListHeaderViewWrapper = ({
         inviteInSpace,
         sort,
         openSpacePreferences,
+        toggleMessagePreview,
     });
     return <RoomListHeaderView vm={vm} />;
 };
@@ -57,6 +59,7 @@ export default {
         inviteInSpace: fn(),
         sort: fn(),
         openSpacePreferences: fn(),
+        toggleMessagePreview: fn(),
     },
     parameters: {
         design: {
