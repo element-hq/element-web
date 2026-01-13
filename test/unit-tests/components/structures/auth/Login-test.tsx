@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
@@ -54,8 +54,6 @@ describe("Login", function () {
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
         });
-        fetchMock.resetBehavior();
-        fetchMock.resetHistory();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             unstable_features: {},
             versions: ["v1.1"],
@@ -66,7 +64,6 @@ describe("Login", function () {
     });
 
     afterEach(function () {
-        fetchMock.restore();
         SdkConfig.reset(); // we touch the config, so clean up
         unmockPlatformPeg();
     });
@@ -326,7 +323,7 @@ describe("Login", function () {
     });
 
     it("should display an error when homeserver fails liveliness check", async () => {
-        fetchMock.resetBehavior();
+        fetchMock.removeRoutes();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             status: 0,
         });
@@ -338,7 +335,7 @@ describe("Login", function () {
     });
 
     it("should reset liveliness error when server config changes", async () => {
-        fetchMock.resetBehavior();
+        fetchMock.removeRoutes();
         // matrix.org is not alive
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             status: 400,
@@ -384,7 +381,7 @@ describe("Login", function () {
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // tried to register
-            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registration_endpoint, expect.any(Object));
+            expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             // called with values from config
             expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(delegatedAuth, oidcStaticClientsConfig);
         });
@@ -396,7 +393,7 @@ describe("Login", function () {
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // tried to register
-            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registration_endpoint, expect.any(Object));
+            expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             expect(logger.error).toHaveBeenCalledWith(new Error(OidcError.DynamicRegistrationFailed));
 
             // continued with normal setup

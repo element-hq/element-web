@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import EventEmitter from "events";
 import { waitFor } from "jest-matrix-react";
 
@@ -45,8 +45,7 @@ describe("SlidingSyncManager", () => {
         mocked(client.getRoom).mockReturnValue(null);
         (manager as any).configure(client, "invalid");
         manager.slidingSync = slidingSync;
-        fetchMockJest.reset();
-        fetchMockJest.get("https://proxy/client/server.json", {});
+        fetchMock.get("https://proxy/client/server.json", {});
     });
 
     describe("setRoomVisible", () => {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import SetIdServer from "../../../../../src/components/views/settings/SetIdServer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";

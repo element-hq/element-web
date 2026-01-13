@@ -26,6 +26,70 @@ exports[`<EmbeddedPage /> should show error if unable to load 1`] = `
 </DocumentFragment>
 `;
 
+exports[`<EmbeddedPage /> should translate _t strings ["] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> should translate _t strings [&#27;] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> should translate _t strings [&#34;] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EmbeddedPage /> should translate _t strings ['] 1`] = `
+<DocumentFragment>
+  <div
+    class="undefined_guest"
+  >
+    <div
+      class="undefined_body"
+    >
+      <h1>
+        Przeglądaj pokoje
+      </h1>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<EmbeddedPage /> should translate _t strings 1`] = `
 <DocumentFragment>
   <div

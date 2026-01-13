@@ -6,23 +6,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { UpdateCheckStatus } from "../../../../src/BasePlatform";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import WebPlatform from "../../../../src/vector/platform/WebPlatform";
-import { setupLanguageMock } from "../../../setup/setupLanguage";
 import ToastStore from "../../../../src/stores/ToastStore.ts";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher.ts";
 import { emitPromise } from "../../../test-utils";
 import { Action } from "../../../../src/dispatcher/actions.ts";
 
-fetchMock.config.overwriteRoutes = true;
-
 describe("WebPlatform", () => {
     beforeEach(() => {
-        jest.clearAllMocks();
-        setupLanguageMock();
+        jest.spyOn(global, "navigator", "get").mockReturnValue({
+            ...navigator,
+            // @ts-expect-error - mocking readonly object
+            serviceWorker: {
+                register: jest.fn().mockResolvedValue({
+                    update: jest.fn(),
+                }),
+                addEventListener: jest.fn(),
+            },
+        });
     });
 
     it("returns human readable name", () => {
@@ -32,22 +37,17 @@ describe("WebPlatform", () => {
 
     describe("service worker", () => {
         it("registers successfully", () => {
-            // @ts-expect-error - mocking readonly object
-            navigator.serviceWorker = {
-                register: jest.fn().mockResolvedValue({
-                    update: jest.fn(),
-                }),
-                addEventListener: jest.fn(),
-            };
             new WebPlatform();
             expect(navigator.serviceWorker.register).toHaveBeenCalled();
         });
 
         it("handles errors", async () => {
-            // @ts-expect-error - mocking readonly object
-            navigator.serviceWorker = {
-                register: undefined,
-            };
+            jest.spyOn(global, "navigator", "get").mockReturnValue({
+                serviceWorker: {
+                    // @ts-expect-error - mocking readonly object
+                    register: undefined,
+                },
+            });
             new WebPlatform();
 
             defaultDispatcher.dispatch({ action: Action.ClientStarted });
@@ -85,7 +85,7 @@ describe("WebPlatform", () => {
                 "develop.element.io: Chrome on macOS",
             ],
         ])("%s & %s = %s", (url, userAgent, result) => {
-            Object.defineProperty(window, "navigator", { value: { userAgent }, writable: true });
+            jest.spyOn(global, "navigator", "get").mockReturnValue({ userAgent } as Navigator);
             Object.defineProperty(window, "location", { value: { href: url }, writable: true });
             const platform = new WebPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
@@ -174,7 +174,7 @@ describe("WebPlatform", () => {
             it("should return not available and call showNoUpdate when current version matches most recent version", async () => {
                 // @ts-ignore
                 WebPlatform.VERSION = prodVersion;
-                fetchMock.getOnce("/version", prodVersion);
+                fetchMock.getOnce("end:/version", prodVersion);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -189,7 +189,7 @@ describe("WebPlatform", () => {
             it("should strip v prefix from versions before comparing", async () => {
                 // @ts-ignore
                 WebPlatform.VERSION = prodVersion;
-                fetchMock.getOnce("/version", `v${prodVersion}`);
+                fetchMock.getOnce("end:/version", `v${prodVersion}`);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -207,7 +207,7 @@ describe("WebPlatform", () => {
                 async () => {
                     // @ts-ignore
                     WebPlatform.VERSION = "0.0.0"; // old version
-                    fetchMock.getOnce("/version", prodVersion);
+                    fetchMock.getOnce("end:/version", prodVersion);
                     const platform = new WebPlatform();
 
                     const showUpdate = jest.fn();
@@ -224,7 +224,7 @@ describe("WebPlatform", () => {
                 // @ts-ignore
                 WebPlatform.VERSION = "0.0.0"; // old version
                 jest.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(true);
-                fetchMock.getOnce("/version", prodVersion);
+                fetchMock.getOnce("end:/version", prodVersion);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -237,7 +237,7 @@ describe("WebPlatform", () => {
             });
 
             it("should return error when version check fails", async () => {
-                fetchMock.getOnce("/version", { throws: "oups" });
+                fetchMock.getOnce("end:/version", { throws: "oups" });
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();

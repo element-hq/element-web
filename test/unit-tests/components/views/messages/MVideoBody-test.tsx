@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { EventType, getHttpUriForMxc, type IContent, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen } from "jest-matrix-react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { type MockedObject } from "jest-mock";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -170,7 +170,7 @@ describe("MVideoBody", () => {
 
             expect(screen.getByText("Show video")).toBeInTheDocument();
 
-            expect(fetchMock).not.toHaveFetched(thumbUrl);
+            expect(fetchMock).toHaveFetchedTimes(0, thumbUrl);
         });
 
         it("should render video poster after user consent", async () => {

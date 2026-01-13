@@ -10,7 +10,7 @@ import { render } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { type IClientWellKnown, type IServerVersions, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import React from "react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import LoginWithQRSection from "../../../../../../src/components/views/settings/devices/LoginWithQRSection";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";

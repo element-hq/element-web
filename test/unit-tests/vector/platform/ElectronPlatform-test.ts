@@ -19,7 +19,6 @@ import { BreadcrumbsStore } from "../../../../src/stores/BreadcrumbsStore";
 import Modal from "../../../../src/Modal";
 import DesktopCapturerSourcePicker from "../../../../src/components/views/elements/DesktopCapturerSourcePicker";
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
-import { setupLanguageMock } from "../../../setup/setupLanguage";
 import { stubClient } from "../../../test-utils";
 import ToastStore from "../../../../src/stores/ToastStore.ts";
 
@@ -57,7 +56,6 @@ describe("ElectronPlatform", () => {
         window.electron = mockElectron;
         jest.clearAllMocks();
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
-        setupLanguageMock();
     });
 
     const getElectronEventHandlerCall = (
@@ -456,7 +454,7 @@ describe("ElectronPlatform", () => {
             await waitFor(() => {
                 const ipcMessage = mockElectron.send.mock.lastCall;
                 expect(ipcMessage?.[1]).toEqual(1);
-                expect(ipcMessage?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessage?.[2].constructor.name).toEqual("ArrayBuffer");
             });
         });
 
@@ -473,10 +471,10 @@ describe("ElectronPlatform", () => {
                 );
 
                 expect(ipcMessageA?.[1]).toEqual(1);
-                expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageA?.[2].constructor.name).toEqual("ArrayBuffer");
 
                 expect(ipcMessageB?.[1]).toEqual(2);
-                expect(ipcMessageB?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageB?.[2].constructor.name).toEqual("ArrayBuffer");
             });
         });
         it("should remove badge when notification count zeros", async () => {
@@ -491,7 +489,7 @@ describe("ElectronPlatform", () => {
                 );
 
                 expect(ipcMessageA?.[1]).toEqual(1);
-                expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageA?.[2].constructor.name).toEqual("ArrayBuffer");
 
                 expect(ipcMessageB?.[1]).toEqual(0);
                 expect(ipcMessageB?.[2]).toBeNull();
@@ -506,7 +504,7 @@ describe("ElectronPlatform", () => {
                 const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "setBadgeCount");
 
                 expect(ipcMessage?.[1]).toEqual(0);
-                expect(ipcMessage?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessage?.[2].constructor.name).toEqual("ArrayBuffer");
                 expect(ipcMessage?.[3]).toEqual(true);
             });
         });
@@ -522,7 +520,7 @@ describe("ElectronPlatform", () => {
                 );
 
                 expect(ipcMessageA?.[1]).toEqual(0);
-                expect(ipcMessageA?.[2] instanceof ArrayBuffer).toEqual(true);
+                expect(ipcMessageA?.[2].constructor.name).toEqual("ArrayBuffer");
                 expect(ipcMessageA?.[3]).toEqual(true);
 
                 expect(ipcMessageB?.[1]).toEqual(0);
