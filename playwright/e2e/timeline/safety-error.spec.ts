@@ -5,12 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-// import * as fs from "node:fs";
-
 import { test, expect } from "../../element-web-test";
 import { MatrixSafetyErrorCode } from "matrix-js-sdk/src/matrix";
-
-// const MEDIA_FILE = fs.readFileSync("playwright/sample-files/riot.png");
 
 test.describe("Safety error rendering", () => {
     test.use({
