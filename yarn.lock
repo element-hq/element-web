@@ -278,7 +278,7 @@
     "@babel/template" "^7.27.2"
     "@babel/types" "^7.28.4"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.18.5", "@babel/parser@^7.20.7", "@babel/parser@^7.24.4", "@babel/parser@^7.27.2", "@babel/parser@^7.28.5":
+"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.24.4", "@babel/parser@^7.27.2", "@babel/parser@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.28.5.tgz#0b0225ee90362f030efd644e8034c99468893b08"
   integrity sha512-KKBU1VGYR7ORr3At5HAtUQ+TV3SzRCXmA/8OdDZiLDBIZxVyzXuztPjfLd3BV1PRAQGCMWWSHYhL0F8d5uHBDQ==
@@ -1097,7 +1097,7 @@
     "@babel/parser" "^7.27.2"
     "@babel/types" "^7.27.1"
 
-"@babel/traverse@^7.18.5", "@babel/traverse@^7.27.1", "@babel/traverse@^7.28.0", "@babel/traverse@^7.28.3", "@babel/traverse@^7.28.4", "@babel/traverse@^7.28.5":
+"@babel/traverse@^7.27.1", "@babel/traverse@^7.28.0", "@babel/traverse@^7.28.3", "@babel/traverse@^7.28.4", "@babel/traverse@^7.28.5":
   version "7.28.5"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.28.5.tgz#450cab9135d21a7a2ca9d2d35aa05c20e68c360b"
   integrity sha512-TCCj4t55U90khlYkVV/0TfkJkAkUg3jZFA3Neb7unZT8CPok7iiRfaX0F+WnqWqt7OxhOn0uBKXCw4lbL8W0aQ==
@@ -2361,10 +2361,10 @@
     emojibase "^17.0.0"
     emojibase-data "^17.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^16.0.0":
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-16.0.0.tgz#6cd8cde24a9b374d9d1da3a768becbfc346de37e"
-  integrity sha512-c+0eu/ckG+ik62CaOFvHAulJlspw2CBKcLrWbiEQsXv4J3PC4xaaDI5VHFAl7FDU+U9Ww2DDNTieszCh4Lk0/Q==
+"@matrix-org/matrix-sdk-crypto-wasm@^17.0.0":
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-17.0.0.tgz#d7edc8f4408eafb276049f6e333174d97322de2b"
+  integrity sha512-ti7F2vtUAkepYBT1Ac9M1fBMoPgqTPbsLSvIeKT5AOnoQ5bfjCqYOMPWiRWOZbgtZIt00I80B6uD4J6hAvaH7Q==
 
 "@matrix-org/react-sdk-module-api@^2.4.0":
   version "2.5.0"
@@ -4195,7 +4195,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.40.0.tgz#53c9ca5ea907d91e4515da64f20a82e5586b882c"
   integrity sha512-8LRFLs5PEKYs4lOL7aJ4lL/hGCrvEvOYkCR3JggXYXDVMtX4LmfdlKYucSAe98pCmqAAbLRvlRcR1bTOYvM8ug==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@vitest/expect@3.2.4":
   version "3.2.4"
@@ -9610,13 +9610,12 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@40.0.0:
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "40.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-40.0.0.tgz#1dbf62f0e364970f5e61c2da4374d3c23b7f3ca5"
-  integrity sha512-KQzMJQ7ZzQlgCIYgUOOVT0+dhlyKZS6bq0Gdf1WCt/tIGc4m56aD2h+EqZKv9aNZ3AtPbPUMDMEpHDva0ggYQg==
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3d0ebdf6f1256a0611283b13083f0d52261c9307"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^16.0.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^17.0.0"
     another-json "^0.2.0"
     bs58 "^6.0.0"
     content-type "^1.0.4"
@@ -9637,28 +9636,6 @@ matrix-web-i18n@3.5.2:
   dependencies:
     "@babel/parser" "^7.28.5"
     "@babel/traverse" "^7.28.5"
-    lodash "^4.17.21"
-    minimist "^1.2.8"
-    walk "^2.3.15"
-
-matrix-web-i18n@^3.4.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.0.tgz#2f27fb6024168ee50cdbea495dbd7cf6c7171314"
-  integrity sha512-d6Unc6H/lvr1g5zY9fQMS0xdVZ/4kN4+YeC3TEHU1bQ+ShJrJhYKiysmuOAzRYoS8/FIailyb4rqYRBH+PlidA==
-  dependencies:
-    "@babel/parser" "^7.18.5"
-    "@babel/traverse" "^7.18.5"
-    lodash "^4.17.21"
-    minimist "^1.2.8"
-    walk "^2.3.15"
-
-matrix-web-i18n@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.0.tgz#2f27fb6024168ee50cdbea495dbd7cf6c7171314"
-  integrity sha512-d6Unc6H/lvr1g5zY9fQMS0xdVZ/4kN4+YeC3TEHU1bQ+ShJrJhYKiysmuOAzRYoS8/FIailyb4rqYRBH+PlidA==
-  dependencies:
-    "@babel/parser" "^7.18.5"
-    "@babel/traverse" "^7.18.5"
     lodash "^4.17.21"
     minimist "^1.2.8"
     walk "^2.3.15"
