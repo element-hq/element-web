@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    type MatrixEvent,
+    MatrixEvent,
     MatrixEventEvent,
     type Room,
     RoomEvent,
@@ -456,7 +456,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         const actions = MatrixClientPeg.safeGet().getPushActionsForEvent(ev);
 
         if (actions?.notify) {
-            this.performCustomEventHandling(ev);
+            // We don't need to await this.
+            void this.performCustomEventHandling(ev);
 
             const store = SdkContextClass.instance.roomViewStore;
             const isViewingRoom = store.getRoomId() === room.roomId;
@@ -485,7 +486,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
      * This function may either create a toast or ignore the event based
      * on current app state.
      */
-    private performCustomEventHandling(ev: MatrixEvent): void {
+    private async performCustomEventHandling(ev: MatrixEvent): Promise<void> {
         const toaster = ToastStore.sharedInstance();
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(ev.getRoomId());
@@ -494,14 +495,16 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             const rtcSession = room && cli.matrixRTC.getRoomSession(room);
             if (rtcSession?.slotDescription?.application == "m.call") {
                 // If we're already joined to the session, don't notify.
-                if (rtcSession.memberships.some((m) => m.userId === cli.getUserId())) {
+                if (rtcSession.memberships.some((membership) => membership.userId === cli.getUserId())) {
                     return;
                 }
             }
             // XXX: Should use parseCallNotificationContent once the types are exported.
             const content = ev.getContent() as IRTCNotificationContent;
             const roomId = ev.getRoomId();
-            const getReferencedMembershipEventId = content["m.relates_to"]?.event_id;
+            const referencedMembershipEventId = ev.getRelation()?.event_id;
+
+            console.log({ referencedMembershipEventId });
 
             // Check maximum age of a call notification event that will trigger a ringing notification
             if (Date.now() - getNotificationEventSendTs(ev) > content.lifetime) {
@@ -512,7 +515,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
                 logger.warn("Could not get roomId for RTCNotification event");
                 return;
             }
-            if (!getReferencedMembershipEventId) {
+            if (!referencedMembershipEventId) {
                 logger.warn("Could not get referenced membership for notification");
                 return;
             }
@@ -521,16 +524,29 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
                 return;
             }
 
-            const callMembership = room?.findEventById(getReferencedMembershipEventId);
+            let callMembership = room?.findEventById(referencedMembershipEventId);
             if (!callMembership) {
-                logger.warn(
-                    `Could not find call membership (${getReferencedMembershipEventId} ${roomId}) for notification event.`,
-                );
+                // Attempt to fetch from the homeserver, if we do not have the event locally.
+                // This is a rare case as obviously the referenced event for a m.call notification must
+                // be sent first.
+                try {
+                    callMembership = new MatrixEvent(await cli.fetchRoomEvent(roomId, referencedMembershipEventId));
+                } catch (ex) {
+                    logger.warn(`Call membership for notification could not be found`, ex);
+                }
             }
+            if (!callMembership) {
+                // We will not show a call notification if there is no valid call membership.
+                logger.warn(
+                    `Could not find call membership (${referencedMembershipEventId} ${roomId}) for notification event.`,
+                );
+                return;
+            }
+
             // If we cannot determine the key, we'll accept it but assume it's empty string.
             // This means if you have malformed notifications or call memberships your notifications
             // will overwrite, but the solution to that is to use well-formed events.
-            const callId = callMembership?.getContent<SessionMembershipData>().call_id ?? "";
+            const callId = callMembership.getContent<SessionMembershipData>().call_id ?? "";
             const key = getIncomingCallToastKey(callId, roomId);
 
             if (toaster.hasToast(key)) {
