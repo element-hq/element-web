@@ -20,7 +20,7 @@ import {
     RoomEvent,
     EventStatus,
     MatrixSafetyError,
-} from "matrix-js-sdk/src/matrix"
+} from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Resend from "../../Resend";
