@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback, useEffect, useRef, useState } from "react";
-import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixEvent,
+    type RoomMember,
+    RoomEvent,
+    EventType,
+    MatrixEventEvent,
+} from "matrix-js-sdk/src/matrix";
 import { Button, ToggleInput, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -34,13 +41,12 @@ import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import DMRoomMap from "../utils/DMRoomMap";
 
 /**
- * Get the key for the incoming call toast. A combination of the event ID and room ID.
- * @param notificationEventId The ID of the notification event.
+ * Get the key for the incoming call toast. A combination of the call ID and room ID.
+ * @param callId The ID of the call.
  * @param roomId The ID of the room.
  * @returns The key for the incoming call toast.
  */
-export const getIncomingCallToastKey = (notificationEventId: string, roomId: string): string =>
-    `call_${notificationEventId}_${roomId}`;
+export const getIncomingCallToastKey = (callId: string, roomId: string): string => `call_${callId}_${roomId}`;
 
 /**
  * Get the ts when the notification event was sent.
@@ -127,9 +133,10 @@ function DeclineCallButtonWithNotificationEvent({
 
 interface Props {
     notificationEvent: MatrixEvent;
+    toastKey: string;
 }
 
-export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
+export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.Element {
     const roomId = notificationEvent.getRoomId()!;
     // Use a partial type so ts still helps us to not miss any type checks.
     const notificationContent = notificationEvent.getContent() as Partial<IRTCNotificationContent>;
@@ -155,14 +162,10 @@ export function IncomingCallToast({ notificationEvent }: Props): JSX.Element {
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
-        const notificationId = notificationEvent.getId();
-        if (!notificationId) {
-            logger.warn("Could not get eventId for RTCNotification event");
-            return;
-        }
-        ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(notificationId, roomId));
+        ToastStore.sharedInstance().dismissToast(toastKey);
         LegacyCallHandler.instance.pause(AudioID.Ring);
-    }, [notificationEvent, roomId]);
+    }, [toastKey]);
+
     // Dismiss if the notification event or call event is redacted
     useTypedEventEmitter(room, MatrixEventEvent.BeforeRedaction, (ev: MatrixEvent) => {
         if ([ev.getId(), ev.getRelation()?.event_id].includes(ev.getId())) {
