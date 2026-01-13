@@ -13,6 +13,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 // Load a copy of our fake Element Call app, and the latest widget API.
 // The fake call app does *just* enough to convince Element Web that a call is ongoing
@@ -80,6 +81,22 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
         "sender_ts": 1758611895996,
     });
 }
+
+test.use({
+    synapseConfig: {
+        experimental_features: {
+            msc4143_enabled: true,
+        },
+        matrix_rtc: {
+            transports: [
+                {
+                    type: "livekit",
+                    livekit_service_url: "https://example.org/can-be-anything",
+                },
+            ],
+        },
+    },
+});
 
 test.describe("Element Call", () => {
     test.use({
@@ -576,6 +593,95 @@ test.describe("Element Call", () => {
             // Rejoin the call
             await app.viewRoomById(room.roomId);
             await openAndJoinCall(page, true);
+        });
+    });
+
+    test.describe("Widget leak bug reproduction", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+        test.skip(isDendrite, "No need to test on other HS, this is a client bug reproduction");
+        test.use({
+            config: {
+                features: {
+                    feature_video_rooms: true,
+                    feature_element_call_video_rooms: true,
+                },
+            },
+        });
+
+        const fakeCallClientSend = readFile("playwright/sample-files/fake-element-call-with-send.html", "utf-8");
+
+        let charlie: Bot;
+        test.use({
+            room: async ({ page, app, user, homeserver, bot }, use) => {
+                charlie = new Bot(page, homeserver, { displayName: "Charlie" });
+                await charlie.prepareClient();
+                const roomId = await app.client.createRoom({
+                    name: "VideoRoom",
+                    invite: [bot.credentials.userId, charlie.credentials.userId],
+                    creation_content: {
+                        type: "org.matrix.msc3417.call",
+                    },
+                });
+                await app.client.createRoom({
+                    name: "OtherRoom",
+                });
+                await use({ roomId });
+            },
+        });
+
+        test.beforeEach(async ({ page, user, app }) => {
+            // use a specific widget to reproduce the bug.
+            // Mock a widget page. We use a fake version of Element Call here.
+            // We should match on things after .html as these widgets get a ton of extra params.
+            await page.route(/\/widget-with-send.html.+/, async (route) => {
+                await route.fulfill({
+                    status: 200,
+                    // Do enough to
+                    body: (await fakeCallClientSend).replace("widgetCodeHere", await widgetApi),
+                });
+            });
+            await app.settings.setValue(
+                "Developer.elementCallUrl",
+                null,
+                SettingLevel.DEVICE,
+                new URL("/widget-with-send.html#", page.url()).toString(),
+            );
+        });
+
+        test("Switching rooms should not leak widgets", async ({ page, user, room, app }) => {
+            await app.viewRoomByName("VideoRoom");
+
+            await expect(page.getByRole("heading", { name: "Approve widget permissions" })).toBeVisible();
+            // approve
+            await page.getByTestId("dialog-primary-button").click();
+
+            // Switch back and forth a few times to trigger the bug.
+
+            await app.viewRoomByName("OtherRoom");
+            await app.viewRoomByName("VideoRoom");
+            await app.viewRoomByName("OtherRoom");
+            await app.viewRoomByName("VideoRoom");
+
+            // For this test we want to display the chat area alongside the widget
+            await page.getByRole("button", { name: "Chat" }).click();
+            // Wait for the right panel to show the timeline.
+            await expect(
+                page.locator(".mx_RightPanel .mx_TimelineCard").getByText("Alice created and configured the room."),
+            ).toBeVisible();
+
+            await page
+                .locator('iframe[title="Element Call"]')
+                .contentFrame()
+                .getByRole("button", { name: "Send Room Message" })
+                .click();
+
+            const timelineLocator = page.locator(".mx_RightPanel .mx_TimelineCard");
+            // First wait for the message to appear in the timeline then
+            // check the count. This improves test stability as we know the message has been sent.
+            await expect(timelineLocator.getByText("I sent this once!!")).toBeVisible();
+
+            const messageSent = await timelineLocator.getByText("I sent this once!!").count();
+
+            expect(messageSent).toBe(1);
         });
     });
 });

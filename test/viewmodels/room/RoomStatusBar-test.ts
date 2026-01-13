@@ -125,19 +125,24 @@ describe("RoomStatusBarViewModel", () => {
         });
     });
 
-    it("should resolve state to isResending=true once onResendAllClick is called", () => {
+    it("should resolve state to isResending=true once onResendAllClick is called", async () => {
         room.getPendingEvents.mockReturnValue([mkEventWithError(new MatrixError({ errcode: "M_UNKNOWN" }))]);
         roomEmitFn();
         expect(vm.getSnapshot()).toEqual({
             state: RoomStatusBarState.UnsentMessages,
             isResending: false,
         });
-        vm.onResendAllClick();
+        const promise = vm.onResendAllClick();
         expect(vm.getSnapshot()).toEqual({
             state: RoomStatusBarState.UnsentMessages,
             isResending: true,
         });
+        room.getPendingEvents.mockReturnValue([]);
+        await promise;
         expect(client.resendEvent).toHaveBeenCalledTimes(1);
+        expect(vm.getSnapshot()).toEqual({
+            state: null,
+        });
     });
 
     describe("Local rooms", () => {

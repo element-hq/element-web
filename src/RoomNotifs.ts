@@ -23,14 +23,25 @@ import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./ut
 import SettingsStore from "./settings/SettingsStore";
 import { getMarkedUnreadState } from "./utils/notifications";
 
+/**
+ * Gets all pending events in a room that have a status of `EventStatus.NOT_SENT`
+ * and belong to the current thread, if specified.
+ * @param room The room to check.
+ * @param threadId The thread to check. If not specified, no thread filtering is performed.
+ * @returns An array of unsent matrix events.
+ */
 export function getUnsentMessages(room: Room, threadId?: string): MatrixEvent[] {
     if (!room) {
         return [];
     }
     return room.getPendingEvents().filter(function (ev) {
-        const isNotSent = ev.status === EventStatus.NOT_SENT;
-        const belongsToTheThread = threadId === ev.threadRootId;
-        return isNotSent && (!threadId || belongsToTheThread);
+        if (ev.status !== EventStatus.NOT_SENT) {
+            return false;
+        }
+        if (threadId && threadId !== ev.threadRootId) {
+            return false;
+        }
+        return true;
     });
 }
 

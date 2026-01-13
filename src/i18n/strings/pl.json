@@ -102,9 +102,7 @@
         "ok": "OK",
         "open": "Otwórz",
         "open_menu": "Otwórz menu",
-        "pause": "Wstrzymaj",
         "pin": "Przypnij",
-        "play": "Odtwórz",
         "proceed": "Kontynuuj",
         "quote": "Cytuj",
         "react": "Dodaj reakcję",
@@ -2189,26 +2187,6 @@
             "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
             "other": "Aktualnie usuwanie wiadomości z %(count)s pokoi"
         },
-        "release_announcement": {
-            "done": "Gotowe",
-            "filter": {
-                "description": "Filtruj swoje czaty jednym kliknięciem. Rozwiń, aby zobaczyć więcej filtrów.",
-                "title": "Nowe szybkie filtry"
-            },
-            "intro": {
-                "description": "Lista czatów została zaktualizowana, aby była bardziej przejrzysta i łatwiejsza w użyciu.",
-                "title": "Czaty dostały nowy wygląd!"
-            },
-            "next": "Dalej",
-            "settings": {
-                "description": "Aby wyświetlić lub ukryć podglądy wiadomości, przejdź do Wszystkie ustawienia > Preferencje > Lista pokoi",
-                "title": "Niektóre ustawienia zostały przeniesione"
-            },
-            "sort": {
-                "description": "Zmień kolejność swoich czatów od najnowszych do A-Z",
-                "title": "Sortuj swoje czaty"
-            }
-        },
         "room": {
             "more_options": "Więcej opcji",
             "open_room": "Otwórz pokój %(roomName)s"
@@ -2875,10 +2853,6 @@
             "rule_suppress_notices": "Wiadomości wysłane przez bota",
             "rule_tombstone": "Kiedy pokoje są uaktualniane",
             "show_message_desktop_notification": "Pokaż wiadomość w powiadomieniu na pulpicie",
-            "sounds_release_announcement": {
-                "description": "Twoje powiadomienia dźwiękowe i dzwonek telefonu zostały zaktualizowane — są teraz wyraźniejsze, szybsze i mniej uciążliwe",
-                "title": "Odświeżyliśmy Twoje dzwonki"
-            },
             "voip": "Połączenia audio i wideo"
         },
         "preferences": {
@@ -3380,24 +3354,10 @@
         "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
     },
     "time": {
-        "about_day_ago": "około dzień temu",
-        "about_hour_ago": "około godziny temu",
-        "about_minute_ago": "około minuty temu",
         "date_at_time": "%(date)s o %(time)s",
-        "few_seconds_ago": "kilka sekund temu",
         "hours_minutes_seconds_left": "pozostało %(hours)s godz. %(minutes)s min. %(seconds)ss",
-        "in_about_day": "około dnia od teraz",
-        "in_about_hour": "około godziny od teraz",
-        "in_about_minute": "około minuty od teraz",
-        "in_few_seconds": "za kilka sekund",
-        "in_n_days": "za %(num)s dni",
-        "in_n_hours": "za %(num)s godzin",
-        "in_n_minutes": "za %(num)s minut",
         "left": "%(timeRemaining)s pozostało",
         "minutes_seconds_left": "pozostało %(minutes)s min. %(seconds)ss",
-        "n_days_ago": "%(num)s dni temu",
-        "n_hours_ago": "%(num)s godzin temu",
-        "n_minutes_ago": "%(num)s minut temu",
         "seconds_left": "pozostało %(seconds)ss",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s godz. %(minutes)s min. %(seconds)ss",
@@ -3452,11 +3412,9 @@
             "unable_to_find": "Próbowano załadować konkretny punkt na osi czasu w tym pokoju, ale nie można go znaleźć."
         },
         "m.audio": {
-            "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
             "error_processing_audio": "Wystąpił błąd procesowania wiadomości audio",
-            "error_processing_voice_message": "Wystąpił błąd procesowania wiadomości głosowej",
-            "unnamed_audio": "Audio bez nazwy"
+            "error_processing_voice_message": "Wystąpił błąd procesowania wiadomości głosowej"
         },
         "m.beacon_info": {
             "view_live_location": "Pokaż lokalizację na żywo"

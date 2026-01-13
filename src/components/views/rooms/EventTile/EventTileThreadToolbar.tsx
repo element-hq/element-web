@@ -7,12 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
+import { LinkIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { RovingAccessibleButton } from "../../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
-import { Icon as ViewInRoomIcon } from "../../../../../res/img/element-icons/view-in-room.svg";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 
 export function EventTileThreadToolbar({
@@ -30,7 +29,7 @@ export function EventTileThreadToolbar({
                 title={_t("timeline|mab|view_in_room")}
                 key="view_in_room"
             >
-                <ViewInRoomIcon />
+                <VisibilityOnIcon />
             </RovingAccessibleButton>
             <RovingAccessibleButton
                 className="mx_MessageActionBar_iconButton"

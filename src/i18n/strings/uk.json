@@ -103,9 +103,7 @@
         "ok": "Гаразд",
         "open": "Відкрити",
         "open_menu": "Відкрити меню",
-        "pause": "Призупинити",
         "pin": "Кнопка",
-        "play": "Відтворити",
         "proceed": "Продовжити",
         "quote": "Цитувати",
         "react": "Відреагувати",
@@ -2216,26 +2214,6 @@
             "one": "Триває видалення повідомлень в %(count)s кімнаті",
             "other": "Триває видалення повідомлень у %(count)s кімнатах"
         },
-        "release_announcement": {
-            "done": "Готово",
-            "filter": {
-                "description": "Фільтруйте свої бесіди одним натиском. Розгорніть, щоб переглянути більше фільтрів.",
-                "title": "Нові швидкі фільтри"
-            },
-            "intro": {
-                "description": "Список бесід оновлено, щоб користування ним стало зрозумілішим та простішим.",
-                "title": "Бесіди мають новий вигляд!"
-            },
-            "next": "Далі",
-            "settings": {
-                "description": "Щоб переглянути або сховати попередній перегляд повідомлень, перейдіть до Усі налаштування > Параметри > Список кімнат",
-                "title": "Деякі налаштування переміщено"
-            },
-            "sort": {
-                "description": "Змініть порядок бесід від найновіших до А-Я",
-                "title": "Впорядковуйте свої бесіди"
-            }
-        },
         "room": {
             "more_options": "Інші опції",
             "open_room": "Відкрити кімнату %(roomName)s"
@@ -2905,10 +2883,6 @@
             "rule_suppress_notices": "Повідомлення, надіслані ботом",
             "rule_tombstone": "Коли кімнати поліпшено",
             "show_message_desktop_notification": "Показувати повідомлення у стільничних сповіщеннях",
-            "sounds_release_announcement": {
-                "description": "Ваші сигнали сповіщень та викликів оновлено — вони стали чіткішими, швидшими та не такими докучливими.",
-                "title": "Ми оновили ваші звуки"
-            },
             "voip": "Голосові та відеовиклики"
         },
         "preferences": {
@@ -3411,24 +3385,10 @@
         "no_rooms_with_unread_threads": "У вас ще немає кімнат з непрочитаними гілками."
     },
     "time": {
-        "about_day_ago": "близько доби тому",
-        "about_hour_ago": "близько години тому",
-        "about_minute_ago": "близько хвилини тому",
         "date_at_time": "%(date)s о %(time)s",
-        "few_seconds_ago": "Декілька секунд тому",
         "hours_minutes_seconds_left": "Залишилося %(hours)sгод %(minutes)sхв %(seconds)sс",
-        "in_about_day": "приблизно через день",
-        "in_about_hour": "приблизно через годину",
-        "in_about_minute": "приблизно через хвилинку",
-        "in_few_seconds": "декілька секунд тому",
-        "in_n_days": "%(num)s днів по тому",
-        "in_n_hours": "%(num)s годин по тому",
-        "in_n_minutes": "%(num)s хвилин по тому",
         "left": "Іще %(timeRemaining)s",
         "minutes_seconds_left": "Залишилося %(minutes)sхв %(seconds)sс",
-        "n_days_ago": "%(num)s днів тому",
-        "n_hours_ago": "%(num)s годин тому",
-        "n_minutes_ago": "%(num)s хвилин тому",
         "seconds_left": "Ще %(seconds)s с",
         "short_days": "%(value)sд",
         "short_days_hours_minutes_seconds": "%(days)sд %(hours)sгод %(minutes)sхв %(seconds)sс",
@@ -3483,11 +3443,9 @@
             "unable_to_find": "Не вдалося знайти вказаної позиції в стрічці цієї кімнати."
         },
         "m.audio": {
-            "audio_player": "Звуковий програвач",
             "error_downloading_audio": "Помилка завантаження аудіо",
             "error_processing_audio": "Помилка обробки аудіоповідомлення",
-            "error_processing_voice_message": "Помилка обробки голосового повідомлення",
-            "unnamed_audio": "Аудіо без назви"
+            "error_processing_voice_message": "Помилка обробки голосового повідомлення"
         },
         "m.beacon_info": {
             "view_live_location": "Показувати місцеперебування наживо"
@@ -3902,11 +3860,6 @@
                 "other": "Показати %(count)s інших попередніх переглядів"
             }
         }
-    },
-    "truncated_list_n_more": {
-        "one": "",
-        "few": "І ще %(count)s…",
-        "many": "І ще %(count)s…"
     },
     "unsupported_browser": {
         "description": "Якщо ви продовжите, деякі функції можуть перестати працювати, і існує ризик втрати даних у майбутньому. Оновіть браузер, щоб продовжити користуватись %(brand)s.",

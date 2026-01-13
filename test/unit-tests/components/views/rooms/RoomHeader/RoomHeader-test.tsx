@@ -17,6 +17,7 @@ import {
     Room,
     RoomStateEvent,
     RoomMember,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -37,7 +38,7 @@ import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycl
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
-import { filterConsole, stubClient } from "../../../../../test-utils";
+import { filterConsole, setupAsyncStoreWithClient, stubClient } from "../../../../../test-utils";
 import RoomHeader from "../../../../../../src/components/views/rooms/RoomHeader/RoomHeader";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -85,12 +86,14 @@ describe("RoomHeader", () => {
         emit: jest.fn(),
     };
 
+    let client: MatrixClient;
+
     let roomContext: RoomContextType;
 
     function getWrapper(): RenderOptions {
         return {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                <MatrixClientContext.Provider value={client}>
                     <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>
             ),
@@ -98,8 +101,8 @@ describe("RoomHeader", () => {
     }
 
     beforeEach(async () => {
-        stubClient();
-        room = new Room(ROOM_ID, MatrixClientPeg.get()!, "@alice:example.org", {
+        client = stubClient();
+        room = new Room(ROOM_ID, client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
         DMRoomMap.setShared({
@@ -405,12 +408,18 @@ describe("RoomHeader", () => {
     });
 
     describe("group call enabled", () => {
-        beforeEach(() => {
+        beforeEach(async () => {
             SdkConfig.put({
                 features: {
                     feature_group_calls: true,
                 },
             });
+            // Enable Element Call
+            client._unstable_getRTCTransports = jest
+                .fn()
+                .mockResolvedValue([{ type: "livekit", livekit_service_url: "https://example.org" }]);
+            // And ensure the CallStore has the transports configured.
+            await setupAsyncStoreWithClient(CallStore.instance, client);
         });
 
         afterEach(() => {
@@ -582,12 +591,21 @@ describe("RoomHeader", () => {
             expect(videoButton).toHaveAttribute("aria-disabled", "true");
         });
 
-        it("join button is shown if there is an ongoing call", async () => {
+        it("join video call button is shown if there is an ongoing call", async () => {
             mockRoomMembers(room, 3);
             // Mock CallStore to return a call with 3 participants
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3));
             render(<RoomHeader room={room} />, getWrapper());
-            const joinButton = getByLabelText(document.body, "Join");
+            const joinButton = getByLabelText(document.body, "Join video call");
+            expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
+        });
+
+        it("join voice call button is shown if there is an ongoing call", async () => {
+            mockRoomMembers(room, 3);
+            // Mock CallStore to return a call with 3 participants
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice));
+            render(<RoomHeader room={room} />, getWrapper());
+            const joinButton = getByLabelText(document.body, "Join voice call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
         });
 
@@ -859,7 +877,11 @@ describe("RoomHeader", () => {
 /**
  * Creates a mock Call object with stable participants to prevent React dependency errors
  */
-function createMockCall(roomId: string = "!1:example.org", participantCount: number = 0): Call {
+function createMockCall(
+    roomId: string = "!1:example.org",
+    participantCount: number = 0,
+    callType: CallType = CallType.Video,
+): Call {
     const participants = new Map();
 
     // Create mock participants with devices
@@ -878,6 +900,7 @@ function createMockCall(roomId: string = "!1:example.org", participantCount: num
         participants,
         widget: { id: "test-widget" },
         connectionState: "disconnected",
+        callType,
         on: jest.fn(),
         off: jest.fn(),
         emit: jest.fn(),

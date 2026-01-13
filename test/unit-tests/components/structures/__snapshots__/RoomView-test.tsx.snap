@@ -152,8 +152,20 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                  class="mx_EventTileBubble mx_cryptoEvent"
                 >
+                  <svg
+                    color="var(--cpd-color-icon-critical-primary)"
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                    />
+                  </svg>
                   <div
                     class="mx_EventTileBubble_title"
                   >
@@ -200,7 +212,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
       </div>
       <div
-        aria-labelledby="_r_r6_"
+        aria-labelledby="_r_ti_"
         class="_banner_48r66_20"
         data-type="critical"
         role="status"
@@ -225,8 +237,8 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_content_48r66_51"
         >
           <p
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_sjla8_1"
-            id="_r_r6_"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_mqidv_1"
+            id="_r_ti_"
           >
             Could not start a chat with this user
           </p>
@@ -235,7 +247,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_actions_48r66_83"
         >
           <button
-            class="_button_187yx_8 _container_sjla8_1 _has-icon_187yx_57"
+            class="_button_13vu4_8 _container_mqidv_1 _has-icon_13vu4_60"
             data-kind="secondary"
             data-size="sm"
             role="button"
@@ -330,8 +342,20 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                  class="mx_EventTileBubble mx_cryptoEvent"
                 >
+                  <svg
+                    color="var(--cpd-color-icon-critical-primary)"
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                    />
+                  </svg>
                   <div
                     class="mx_EventTileBubble_title"
                   >
@@ -393,7 +417,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_oa_"
+                aria-labelledby="_r_qm_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -695,6 +719,17 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               <div
                 class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
               >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                  />
+                </svg>
                 <div
                   class="mx_EventTileBubble_title"
                 >
@@ -1026,7 +1061,7 @@ exports[`RoomView invites renders an invite room 1`] = `
           Decline
         </div>
         <button
-          class="_button_187yx_8 _destructive_187yx_107"
+          class="_button_13vu4_8 _destructive_13vu4_110"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -2993,7 +3028,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                     style="width: 12px; height: 12px;"
                   >
                     <svg
-                      class="mx_E2EIcon_verified"
+                      color="var(--cpd-color-icon-success-primary)"
                       fill="currentColor"
                       height="1em"
                       viewBox="0 0 24 24"

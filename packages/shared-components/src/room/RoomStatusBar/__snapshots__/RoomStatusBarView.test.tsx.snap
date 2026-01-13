@@ -37,7 +37,7 @@ exports[`RoomStatusBarView renders connection lost 1`] = `
           Connectivity to the server has been lost.
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 description"
         >
           Sent messages will be stored until your connection has returned.
         </p>
@@ -92,7 +92,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
       class="actions"
     >
       <a
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         href="#example"
@@ -146,7 +146,7 @@ exports[`RoomStatusBarView renders local room error 1`] = `
       class="actions"
     >
       <button
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -208,7 +208,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
           Your message wasn't sent because this homeserver has been blocked by its administrator.
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 description"
         >
           Please contact your service administrator to continue using the service.
         </p>
@@ -218,7 +218,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
       class="actions"
     >
       <a
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         href="#example"
@@ -271,7 +271,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
           Some of your messages have not been sent
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 description"
         >
           You can select all or individual messages to retry or delete
         </p>
@@ -282,7 +282,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        class="_button_13vu4_8 _has-icon_13vu4_60 _destructive_13vu4_110"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -304,7 +304,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
       </button>
       <button
         aria-disabled="false"
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -366,7 +366,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
           Some of your messages have not been sent
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 description"
         >
           You can select all or individual messages to retry or delete
         </p>
@@ -377,7 +377,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        class="_button_13vu4_8 _has-icon_13vu4_60 _destructive_13vu4_110"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -399,7 +399,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
       </button>
       <button
         aria-disabled="false"
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -461,7 +461,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
           Some of your messages have not been sent
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 description"
         >
           You can select all or individual messages to retry or delete
         </p>
@@ -472,7 +472,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _has-icon_187yx_57 _destructive_187yx_107"
+        class="_button_13vu4_8 _has-icon_13vu4_60 _destructive_13vu4_110"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -494,7 +494,7 @@ exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
       </button>
       <button
         aria-disabled="false"
-        class="_button_187yx_8 container _has-icon_187yx_57"
+        class="_button_13vu4_8 container _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"

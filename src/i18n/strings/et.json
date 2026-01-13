@@ -101,9 +101,7 @@
         "ok": "Sobib",
         "open": "Ava",
         "open_menu": "Ava menüü",
-        "pause": "Peata",
         "pin": "Tõsta esile",
-        "play": "Esita",
         "proceed": "Jätka",
         "quote": "Tsiteeri",
         "react": "Reageeri",
@@ -846,6 +844,7 @@
         "number_of_users": "Kasutajate arv",
         "only_joined_members": "Vaid liitunud kasutajad",
         "original_event_source": "Sündmuse töötlemata lähtekood",
+        "restore_from_backup": "Taasta varukoopiast",
         "room_encrypted": "Jututuba on <strong>krüptitud ✅</strong>",
         "room_id": "Jututoa tunnus: %(roomId)s",
         "room_not_encrypted": "Jututuba on <strong>krüptimata 🚨</strong>",
@@ -955,6 +954,7 @@
         "bootstrap_title": "Võtame krüptovõtmed kasutusele",
         "confirm_encryption_setup_body": "Kinnitamaks, et soovid krüptimist seadistada, klõpsi järgnevat nuppu.",
         "confirm_encryption_setup_title": "Krüptimise seadistuse kinnitamine",
+        "continue_with_reset": "Jätka lähtestamisega",
         "cross_signing_room_normal": "See jututuba on läbivalt krüptitud",
         "cross_signing_room_verified": "Kõik kasutajad siin jututoas on verifitseeritud",
         "cross_signing_room_warning": "Keegi kasutab tundmatut sessiooni",
@@ -970,6 +970,7 @@
         "event_shield_reason_unverified_identity": "Krüptitud verifitseerimata kasutaja poolt.",
         "export_unsupported": "Sinu brauser ei toeta vajalikke krüptoteeke",
         "forgot_recovery_key": "Kas unustasid taastevõtme?",
+        "identity_needs_reset_description": "Sõnumite ajaloole juurdepääsu tagamiseks pead oma krüptograafilise võrguidentiteedi lähtestama.",
         "import_invalid_keyfile": "See ei ole sobilik võtmefail %(brand)s'i jaoks",
         "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
         "key_storage_out_of_sync": "Sinu krüptovõtmete hoidla pole sünkroonis.",
@@ -1911,7 +1912,6 @@
                 "other": "%(count)s esiletõstetud sõnumit"
             },
             "limits": {
-                "one": "",
                 "other": "Sa saad esile tõsta kuni %(count)s vidinat"
             },
             "menu": "Ava menüü",
@@ -2123,7 +2123,6 @@
         "status_bar": {
             "delete_all": "Kustuta kõik",
             "exceeded_resource_limit": "Sinu sõnumit ei saadetud, kuna see koduserver on ületanud on ületanud ressursipiirangu. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
-            "history_visible": "Sinu saadetud sõnumeid jagatakse sellesse jututuppa kutsutud uute liikmetega.<a> Lisateave</a>",
             "homeserver_blocked": "Sinu sõnumit ei saadetud, kuna see koduserver blokeeritud serveri haldaja poolt. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
             "monthly_user_limit_reached": "Sinu sõnumit ei saadetud, kuna see koduserver on saavutanud igakuise aktiivsete kasutajate piiri. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
             "requires_consent_agreement": "Sa ei saa saata ühtego sõnumit enne, kui oled läbi lugenud ja nõustunud <consentLink>meie kasutustingimustega</consentLink>.",
@@ -2212,26 +2211,6 @@
         "redacting_messages_status": {
             "other": "Kustutame sõnumeid %(count)s jututoas",
             "one": "Kustutame sõnumeid %(count)s jututoas"
-        },
-        "release_announcement": {
-            "done": "Valmis",
-            "filter": {
-                "description": "Filtreeri oma vestlusi ühe klõpsuga. Lisafiltrite nägemiseks laienda vaadet.",
-                "title": "Uued kiirfiltrid"
-            },
-            "intro": {
-                "description": "Vestluste loend on uuendatud, et see oleks selgem ja hõlpsamini kasutatav.",
-                "title": "Vestlustel on uus välimus!"
-            },
-            "next": "Edasi",
-            "settings": {
-                "description": "Sõnumite eelvaate näitamiseks või peitmiseks ava „Kõik seadistused“ > „Eelistused“ > „Jututubade loend“",
-                "title": "Mõned seadistused on nüüd uues kohas"
-            },
-            "sort": {
-                "description": "Vestlusi võid järjestada ajalises või tähestikulises järjekorras",
-                "title": "Järjesta oma vestlusi"
-            }
         },
         "room": {
             "more_options": "Täiendavad seadistused",
@@ -2902,10 +2881,6 @@
             "rule_suppress_notices": "Robotite saadetud sõnumid",
             "rule_tombstone": "Kui jututubasid uuendatakse",
             "show_message_desktop_notification": "Näita sõnumit töölauakeskkonnale omases teavituses",
-            "sounds_release_announcement": {
-                "description": "Sinu teavituste märguanne ja kõnehelin on uuendatud - selgemad, kiiremad ja vähem häirivad",
-                "title": "Oleme sinu helisid värskendanud"
-            },
             "voip": "Kõned ja videokõned"
         },
         "preferences": {
@@ -3408,24 +3383,10 @@
         "no_rooms_with_unread_threads": "Pole veel ühtegi lugemata jutulõngaga jututuba."
     },
     "time": {
-        "about_day_ago": "umbes päev tagasi",
-        "about_hour_ago": "umbes tund aega tagasi",
-        "about_minute_ago": "umbes minut tagasi",
         "date_at_time": "%(date)s %(time)s",
-        "few_seconds_ago": "mõni sekund tagasi",
         "hours_minutes_seconds_left": "jäänud on %(hours)st %(minutes)sm %(seconds)ss",
-        "in_about_day": "umbes päeva pärast",
-        "in_about_hour": "umbes tunni pärast",
-        "in_about_minute": "umbes minuti pärast",
-        "in_few_seconds": "mõne sekundi pärast",
-        "in_n_days": "%(num)s päeva pärast",
-        "in_n_hours": "%(num)s tunni pärast",
-        "in_n_minutes": "%(num)s minuti pärast",
         "left": "jäänud %(timeRemaining)s",
         "minutes_seconds_left": "jäänud on %(minutes)sm %(seconds)ss",
-        "n_days_ago": "%(num)s päeva tagasi",
-        "n_hours_ago": "%(num)s tundi tagasi",
-        "n_minutes_ago": "%(num)s minutit tagasi",
         "seconds_left": "jäänud %(seconds)s sekundit",
         "short_days": "%(value)s p",
         "short_days_hours_minutes_seconds": "%(days)s pv %(hours)s t %(minutes)s m %(seconds)s s",
@@ -3480,11 +3441,9 @@
             "unable_to_find": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida."
         },
         "m.audio": {
-            "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "error_processing_audio": "Viga häälsõnumi töötlemisel",
-            "error_processing_voice_message": "Viga häälsõnumi töötlemisel",
-            "unnamed_audio": "Nimetu helifail"
+            "error_processing_voice_message": "Viga häälsõnumi töötlemisel"
         },
         "m.beacon_info": {
             "view_live_location": "Vaata asukohta reaalajas"

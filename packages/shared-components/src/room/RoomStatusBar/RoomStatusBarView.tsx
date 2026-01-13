@@ -18,69 +18,90 @@ export interface RoomStatusBarViewActions {
     /**
      * Called when the user clicks on the 'resend all' button in the 'unsent messages' bar.
      */
-    onResendAllClick: () => void;
+    onResendAllClick?: () => Promise<void>;
 
     /**
      * Called when the user clicks on the 'cancel all' button in the 'unsent messages' bar.
      */
-    onDeleteAllClick: () => void;
+    onDeleteAllClick?: () => void;
 
     /**
      * Called when the user clicks on the 'Retry' button in the 'failed to start chat' bar.
      */
-    onRetryRoomCreationClick: () => void;
+    onRetryRoomCreationClick?: () => void;
 
     /**
      * Called when the user clicks on the 'Review Terms and Conditions' button.
      */
-    onTermsAndConditionsClicked: () => void;
+    onTermsAndConditionsClicked?: () => void;
 }
 
-export enum RoomStatusBarState {
-    ConnectionLost,
-    NeedsConsent,
-    ResourceLimited,
-    UnsentMessages,
-    LocalRoomFailed,
-    MessageRejected,
-}
+export const RoomStatusBarState = {
+    /**
+     * Connectivity to the homeserver has been lost. The user can not take any actions
+     * until the connection is restored.
+     */
+    ConnectionLost: "ConnectionLost",
+    /**
+     * The homeserver has indiciated the user needs to consent to the Terms and Conditions
+     * before they can send a message.
+     */
+    NeedsConsent: "NeedsConsent",
+    /**
+     * The homeserver has indiciated that messages can not be sent due to a resource limit
+     * being reached. The user may use the given admin contact details.
+     */
+    ResourceLimited: "ResourceLimited",
+    /**
+     * There are messages stored locally that previously failed to send that the user
+     * may now retry or delete.
+     */
+    UnsentMessages: "UnsentMessages",
+    /**
+     * There was an error creating a room. The user may retry creation.
+     */
+    LocalRoomFailed: "LocalRoomFailed",
+    /**
+     * A message was rejected by the homeserver due to a safety concern.
+     */
+    MessageRejected: "MessageRejected",
+} as const;
 
 export interface RoomStatusBarNotVisible {
     state: null;
 }
 
 export interface RoomStatusBarNoConnection {
-    state: RoomStatusBarState.ConnectionLost;
+    state: "ConnectionLost";
 }
 
 export interface RoomStatusBarConsentState {
-    state: RoomStatusBarState.NeedsConsent;
+    state: "NeedsConsent";
     consentUri: string;
 }
 
 export interface RoomStatusBarResourceLimitedState {
-    state: RoomStatusBarState.ResourceLimited;
+    state: "ResourceLimited";
     resourceLimit: "monthly_active_user" | "hs_disabled" | string;
     adminContactHref?: string;
 }
 
 export interface RoomStatusBarUnsentMessagesState {
-    state: RoomStatusBarState.UnsentMessages;
+    state: "UnsentMessages";
     isResending: boolean;
 }
 export interface RoomStatusBarLocalRoomError {
-    state: RoomStatusBarState.LocalRoomFailed;
+    state: "LocalRoomFailed";
 }
-
 export interface RoomStatusBarMessageRejectedRetryable {
-    state: RoomStatusBarState.MessageRejected;
+    state: "MessageRejected";
     canRetryInSeconds?: number;
     isResending: boolean;
     harms: string[];
     serverError?: string;
 }
 export interface RoomStatusBarMessageRejectedUnretryable {
-    state: RoomStatusBarState.MessageRejected;
+    state: "MessageRejected";
     harms: string[];
     serverError?: string;
 }
@@ -97,7 +118,7 @@ export type RoomStatusBarViewSnapshot =
     | RoomStatusBarMessageRejected;
 
 /**
- * The view model for the banner.
+ * The view model for RoomStatusBarView.
  */
 export type RoomStatusBarViewModel = ViewModel<RoomStatusBarViewSnapshot> & RoomStatusBarViewActions;
 
@@ -271,7 +292,7 @@ function RoomStatusBarViewMessageRejected({
  * <RoomStatusBarView vm={RoomStatusBarViewModel} />
  * ```
  */
-export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX.Element {
+export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
     const snapshot = useViewModel(vm);
     const bannerTitleId = useId();
@@ -287,7 +308,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
     const resendClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (ev) => {
             ev.preventDefault();
-            vm.onResendAllClick?.();
+            void vm.onResendAllClick?.();
         },
         [vm],
     );
@@ -307,7 +328,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
 
     if (snapshot.state === null) {
         // Nothing to show!
-        return <></>;
+        return null;
     }
 
     switch (snapshot.state) {
@@ -318,7 +339,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         <Text id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|server_connectivity_lost_title")}
                         </Text>
-                        <Text className={styles.description}>
+                        <Text className={styles.description} size="sm">
                             {_t("room|status_bar|server_connectivity_lost_description")}
                         </Text>
                     </div>
@@ -379,7 +400,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                 hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
                             }[snapshot.resourceLimit] || _t("room|status_bar|exceeded_resource_limit_title")}
                         </Text>
-                        <Text className={styles.description}>
+                        <Text className={styles.description} size="sm">
                             {_t("room|status_bar|exceeded_resource_limit_description")}
                         </Text>
                     </div>
@@ -418,18 +439,29 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                             <InlineSpinner />
                         ) : (
                             <>
-                                <Button size="sm" kind="destructive" Icon={DeleteIcon} onClick={deleteAllClick}>
-                                    {_t("room|status_bar|delete_all")}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    kind="secondary"
-                                    Icon={RestartIcon}
-                                    onClick={resendClick}
-                                    className={styles.container}
-                                >
-                                    {_t("room|status_bar|retry_all")}
-                                </Button>
+                                {vm.onDeleteAllClick && (
+                                    <Button
+                                        size="sm"
+                                        kind="destructive"
+                                        Icon={DeleteIcon}
+                                        disabled={snapshot.isResending}
+                                        onClick={deleteAllClick}
+                                    >
+                                        {_t("room|status_bar|delete_all")}
+                                    </Button>
+                                )}
+                                {vm.onResendAllClick && (
+                                    <Button
+                                        size="sm"
+                                        kind="secondary"
+                                        Icon={RestartIcon}
+                                        disabled={snapshot.isResending}
+                                        onClick={resendClick}
+                                        className={styles.container}
+                                    >
+                                        {_t("room|status_bar|retry_all")}
+                                    </Button>
+                                )}
                             </>
                         )
                     }
@@ -439,13 +471,16 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         <Text id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|some_messages_not_sent")}
                         </Text>
-                        <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
+                        <Text className={styles.description} size="sm">
+                            {_t("room|status_bar|select_messages_to_retry")}
+                        </Text>
                     </div>
                 </Banner>
             );
         case RoomStatusBarState.MessageRejected:
             return <RoomStatusBarViewMessageRejected snapshot={snapshot} actions={vm} />;
         default:
-            throw Error(`Unexpected unknown state for RoomStatusBar ${snapshot["state"]}`);
+            // We should never get into this state.
+            return null;
     }
 }

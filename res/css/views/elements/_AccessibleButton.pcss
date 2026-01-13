@@ -63,22 +63,6 @@ Please see LICENSE files in the repository root for full details.
             font-weight: var(--cpd-font-weight-semibold);
         }
 
-        &.mx_AccessibleButton_kind_confirm_sm {
-            background-color: var(--cpd-color-bg-action-primary-rest);
-
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
-            }
-        }
-
-        &.mx_AccessibleButton_kind_cancel_sm {
-            background-color: var(--cpd-color-bg-critical-primary);
-
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-            }
-        }
-
         &.mx_AccessibleButton_kind_icon,
         &.mx_AccessibleButton_kind_icon_primary,
         &.mx_AccessibleButton_kind_icon_primary_outline {
@@ -112,10 +96,6 @@ Please see LICENSE files in the repository root for full details.
     &.mx_AccessibleButton_kind_secondary {
         color: var(--cpd-color-text-primary);
         text-decoration: underline;
-    }
-
-    &.mx_AccessibleButton_kind_secondary_content {
-        color: $secondary-content;
     }
 
     &.mx_AccessibleButton_kind_danger {
@@ -174,26 +154,5 @@ Please see LICENSE files in the repository root for full details.
     &.mx_AccessibleButton_kind_danger_inline,
     &.mx_AccessibleButton_kind_content_inline {
         display: inline;
-    }
-
-    &.mx_AccessibleButton_kind_confirm_sm,
-    &.mx_AccessibleButton_kind_cancel_sm {
-        padding: 0px;
-        width: 16px;
-        height: 16px;
-        border-radius: 100%;
-        position: relative;
-        display: block;
-
-        &::before {
-            content: "";
-            display: block;
-            position: absolute;
-            inset: 0;
-            background-color: #ffffff;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: 80%;
-        }
     }
 }

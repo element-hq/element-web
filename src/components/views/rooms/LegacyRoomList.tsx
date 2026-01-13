@@ -14,6 +14,7 @@ import {
     RoomIcon,
     SearchIcon,
     ShareIcon,
+    VideoCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex.tsx";
@@ -25,7 +26,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads.ts";
 import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload.ts";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload.ts";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter.ts";
-import { _t, _td, type TranslationKey } from "../../../languageHandler.tsx";
+import { _t, _td } from "../../../languageHandler.tsx";
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 import SettingsStore from "../../../settings/SettingsStore.ts";
@@ -74,7 +75,6 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager.ts";
 import AccessibleButton from "../elements/AccessibleButton.tsx";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation.ts";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
-import { Icon as HashVideoIcon } from "../../../../res/img/element-icons/roomlist/hash-video.svg";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -269,7 +269,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
                                 label={_t("action|new_video_room")}
-                                icon={<HashVideoIcon />}
+                                icon={<VideoCallSolidIcon />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -320,7 +320,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                         {videoRoomsEnabled && (
                             <IconizedContextMenuOption
                                 label={_t("action|new_video_room")}
-                                icon={<HashVideoIcon />}
+                                icon={<VideoCallSolidIcon />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();

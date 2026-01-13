@@ -9,7 +9,7 @@ exports[`RoomListSearchView Storybook snapshots renders the default state 1`] = 
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_187yx_8 search _has-icon_187yx_57"
+      class="_button_13vu4_8 search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -44,7 +44,7 @@ exports[`RoomListSearchView Storybook snapshots renders the default state 1`] = 
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
+      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -76,7 +76,7 @@ exports[`RoomListSearchView Storybook snapshots renders with all buttons visible
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_187yx_8 search _has-icon_187yx_57"
+      class="_button_13vu4_8 search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -111,7 +111,7 @@ exports[`RoomListSearchView Storybook snapshots renders with all buttons visible
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
+      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -132,7 +132,7 @@ exports[`RoomListSearchView Storybook snapshots renders with all buttons visible
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
+      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -164,7 +164,7 @@ exports[`RoomListSearchView Storybook snapshots renders with dial pad button 1`]
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_187yx_8 search _has-icon_187yx_57"
+      class="_button_13vu4_8 search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -199,7 +199,7 @@ exports[`RoomListSearchView Storybook snapshots renders with dial pad button 1`]
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
+      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -220,7 +220,7 @@ exports[`RoomListSearchView Storybook snapshots renders with dial pad button 1`]
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_187yx_8 _has-icon_187yx_57 _icon-only_187yx_50"
+      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="secondary"
       data-size="sm"
       role="button"
@@ -252,7 +252,7 @@ exports[`RoomListSearchView Storybook snapshots renders without explore button 1
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_187yx_8 search _has-icon_187yx_57"
+      class="_button_13vu4_8 search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"

@@ -99,9 +99,7 @@
         "ok": "Oke",
         "open": "Buka",
         "open_menu": "Buka menu",
-        "pause": "Jeda",
         "pin": "Sematkan",
-        "play": "Mainkan",
         "proceed": "Lanjut",
         "quote": "Kutip",
         "react": "Bereaksi",
@@ -2193,26 +2191,6 @@
             "one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
             "other": "Saat ini menghapus pesan-pesan di %(count)s ruangan"
         },
-        "release_announcement": {
-            "done": "Selesai",
-            "filter": {
-                "description": "Saring obrolan Anda dengan satu klik. Klik untuk melihat lebih banyak filter.",
-                "title": "Filter cepat baru"
-            },
-            "intro": {
-                "description": "Daftar obrolan telah diperbarui agar lebih jelas dan mudah digunakan.",
-                "title": "Obrolan memiliki tampilan baru!"
-            },
-            "next": "Berikutnya",
-            "settings": {
-                "description": "Untuk menampilkan atau menyembunyikan pratinjau pesan, buka Semua pengaturan > Preferensi > Daftar ruangan",
-                "title": "Beberapa pengaturan telah dipindahkan"
-            },
-            "sort": {
-                "description": "Ubah urutan obrolan Anda dari yang terbaru ke A-Z",
-                "title": "Urutkan obrolan Anda"
-            }
-        },
         "room": {
             "more_options": "Opsi Lainnya",
             "open_room": "Buka ruangan %(roomName)s"
@@ -2878,10 +2856,6 @@
             "rule_suppress_notices": "Pesan dikirim oleh bot",
             "rule_tombstone": "Ketika ruangan telah ditingkatkan",
             "show_message_desktop_notification": "Tampilkan pesan di notifikasi desktop",
-            "sounds_release_announcement": {
-                "description": "Notifikasi ping dan dering panggilan Anda telah diperbarui—lebih jelas, lebih cepat, dan tidak mengganggu",
-                "title": "Kami telah menyegarkan suara Anda"
-            },
             "voip": "Panggilan Audio dan Video"
         },
         "preferences": {
@@ -3383,24 +3357,10 @@
         "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
     },
     "time": {
-        "about_day_ago": "1 hari yang lalu",
-        "about_hour_ago": "1 jam yang lalu",
-        "about_minute_ago": "1 menit yang lalu",
         "date_at_time": "%(date)s pada %(time)s",
-        "few_seconds_ago": "beberapa detik yang lalu",
         "hours_minutes_seconds_left": "Sisa %(hours)sj %(minutes)sm %(seconds)sd",
-        "in_about_day": "1 hari dari sekarang",
-        "in_about_hour": "1 jam dari sekarang",
-        "in_about_minute": "1 menit dari sekarang",
-        "in_few_seconds": "beberapa detik dari sekarang",
-        "in_n_days": "%(num)s hari dari sekarang",
-        "in_n_hours": "%(num)s jam dari sekarang",
-        "in_n_minutes": "%(num)s dari sekarang",
         "left": "%(timeRemaining)sd lagi",
         "minutes_seconds_left": "Sisa %(minutes)sm %(seconds)sd",
-        "n_days_ago": "%(num)s hari yang lalu",
-        "n_hours_ago": "%(num)s jam yang lalu",
-        "n_minutes_ago": "%(num)s menit yang lalu",
         "seconds_left": "%(seconds)sd lagi",
         "short_days": "%(value)sh",
         "short_days_hours_minutes_seconds": "%(days)sh %(hours)sj %(minutes)sm %(seconds)sd",
@@ -3455,11 +3415,9 @@
             "unable_to_find": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi tidak dapat menemukannya."
         },
         "m.audio": {
-            "audio_player": "Pemutar audio",
             "error_downloading_audio": "Terjadi kesalahan mengunduh audio",
             "error_processing_audio": "Terjadi kesalahan mengolah pesan suara",
-            "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara",
-            "unnamed_audio": "Audio tidak dinamai"
+            "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara"
         },
         "m.beacon_info": {
             "view_live_location": "Tampilkan lokasi langsung"

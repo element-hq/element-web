@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ChangeEvent, createRef } from "react";
 
 import Field from "../elements/Field";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import { type IFieldState, type IValidationResult } from "../elements/Validation";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";

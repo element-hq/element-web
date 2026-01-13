@@ -20,13 +20,13 @@ import {
     RoomEvent,
     EventStatus,
     MatrixSafetyError,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk/src/matrix"
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Resend from "../../Resend";
 import { Action } from "../../dispatcher/actions";
 import dis from "../../dispatcher/dispatcher";
-import { type LocalRoom, LocalRoomState } from "../../models/LocalRoom";
+import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 
 interface PropsWithRoom {
     room: Room | LocalRoom;
@@ -48,10 +48,20 @@ export class RoomStatusBarViewModel
     extends BaseViewModel<RoomStatusBarViewSnapshot, Props>
     implements RoomStatusBarViewModelInterface
 {
+    /**
+     * Check if the room has any unread messages. If it does, we should render the specific message
+     * depending on the kind of error encountered when sending them.
+     *
+     * Because a room can contain multiple unsent messages, the resultant state is based on the
+     * "most important" error to show.
+     *
+     * @param room The room being viewed.
+     * @param hasClickedTermsAndConditions Whether the terms and conditions button has just been pressed.
+     * @returns A snapshot if an error should be visible, or null if not.
+     */
     private static readonly determineStateForUnreadMessages = (
         room: Room,
         hasClickedTermsAndConditions: boolean,
-        isResending: boolean,
     ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
         if (unsentMessages.length === 0) {
@@ -60,29 +70,30 @@ export class RoomStatusBarViewModel
             };
         }
         if (hasClickedTermsAndConditions) {
-            // The user has just clicked (and we assume accepted) the terms and contitions, so show them the retry buttons
+            // The user has just clicked (and we *assume* accepted) the terms and contitions, so show them the retry buttons.
+            // If the user has not accepted the terms, we will just prompt the same error again anyway.
             return {
                 state: RoomStatusBarState.UnsentMessages,
-                isResending,
+                isResending: false,
             };
         }
+
+        // Filter through the errors and find the most important error.
         let resourceLimitError: MatrixError | null = null;
         let safetyError: MatrixSafetyError | null = null;
         for (const m of unsentMessages) {
-            if (m.error) {
-                if (m.error.errcode === "M_CONSENT_NOT_GIVEN") {
-                    // This is the most important thing to show, so break here if we find one.
-                    return {
-                        state: RoomStatusBarState.NeedsConsent,
-                        consentUri: m.error.data.consent_uri,
-                    };
-                }
-                if (m.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
-                    resourceLimitError = m.error;
-                }
-                if (m.error instanceof MatrixSafetyError) {
-                    safetyError = m.error;
-                }
+            if (m.error?.errcode === "M_CONSENT_NOT_GIVEN") {
+                // This is the most important thing to show, so break here if we find one.
+                return {
+                    state: RoomStatusBarState.NeedsConsent,
+                    consentUri: m.error.data.consent_uri,
+                };
+            }
+            if (m.error?.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
+                resourceLimitError = m.error;
+            }
+            if (m.error instanceof MatrixSafetyError) {
+                safetyError = m.error;
             }
         }
         if (resourceLimitError) {
@@ -107,6 +118,7 @@ export class RoomStatusBarViewModel
                     : undefined),
             };
         }
+        // Otherwise, we know there are unsent messages but the error is not special.
         return {
             state: RoomStatusBarState.UnsentMessages,
             isResending: false,
@@ -122,17 +134,23 @@ export class RoomStatusBarViewModel
         const isLocalRoomAndIsError = (room as LocalRoom)["isError"];
         if (isLocalRoomAndIsError !== undefined) {
             return {
-                // Local rooms do not have to worry about these other conditions
+                // Local room errors can only be about failed room creation.
                 state: isLocalRoomAndIsError ? RoomStatusBarState.LocalRoomFailed : null,
             };
         }
 
-        // If we're in the process of resending, don't flicker.
+        // If we're in the process of resending, always show a resending state so we don't flicker.
+        if (isResending) {
+            return {
+                state: RoomStatusBarState.UnsentMessages,
+                isResending,
+            };
+        }
+
         const syncState = client.getSyncState();
 
         // Highest priority.
-        // no conn bar trumps the "some not sent" msg since you can't resend without
-        // a connection!
+        // A no-connection bar trumps all else, as you won't be able to resend or do anything!
         if (syncState === SyncState.Error) {
             const syncData = client.getSyncStateData();
             if (syncData?.error?.name === "M_RESOURCE_LIMIT_EXCEEDED") {
@@ -141,15 +159,14 @@ export class RoomStatusBarViewModel
                 return {
                     state: null,
                 };
-            } else {
-                return {
-                    state: RoomStatusBarState.ConnectionLost,
-                };
             }
+            return {
+                state: RoomStatusBarState.ConnectionLost,
+            };
         }
 
-        // Then check messages.
-        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions, isResending);
+        // Connection is good, so check room messages for any failures.
+        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions);
     };
 
     private readonly client: MatrixClient;
@@ -159,8 +176,8 @@ export class RoomStatusBarViewModel
         const client = MatrixClientPeg.safeGet();
         super(props, RoomStatusBarViewModel.computeSnapshot(props.room, client, false, false));
         this.client = client;
-        client.on(ClientEvent.Sync, this.onClientSync);
-        props.room.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
+        this.disposables.trackListener(client, ClientEvent.Sync, this.onClientSync);
+        this.disposables.trackListener(props.room, RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
     }
 
     private readonly onClientSync = (): void => {
@@ -191,19 +208,6 @@ export class RoomStatusBarViewModel
         if (this.hasClickedTermsAndConditions && !this.snapshot.current.state) {
             this.hasClickedTermsAndConditions = false;
         }
-        if (
-            this.snapshot.current.state === RoomStatusBarState.MessageRejected &&
-            "canRetryInSeconds" in this.snapshot.current &&
-            this.snapshot.current.canRetryInSeconds
-        ) {
-            this.timeout = setTimeout(() => this.setSnapshot(), this.snapshot.current.canRetryInSeconds * 1000);
-        }
-    }
-
-    public dispose(): void {
-        this.client.off(ClientEvent.Sync, this.onClientSync);
-        this.props.room.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);
-        super.dispose();
     }
 
     public onTermsAndConditionsClicked = (): void => {
@@ -217,19 +221,25 @@ export class RoomStatusBarViewModel
         this.setSnapshot();
     };
 
-    public onResendAllClick = (): void => {
+    public onResendAllClick = async (): Promise<void> => {
         this.isResending = true;
         this.setSnapshot();
-        void Resend.resendUnsentEvents(this.props.room).finally(() => {
+        try {
+            await Resend.resendUnsentEvents(this.props.room);
+            dis.fire(Action.FocusSendMessageComposer);
+        } finally {
             this.isResending = false;
             this.setSnapshot();
-        });
-        dis.fire(Action.FocusSendMessageComposer);
+        }
     };
 
     public onRetryRoomCreationClick = (): void => {
-        // eslint-disable-next-line react-compiler/react-compiler
-        (this.props.room as LocalRoom).state = LocalRoomState.NEW;
+        if (this.props.room instanceof LocalRoom === false) {
+            throw Error("Tried to recreate local room, but room was not local.");
+        }
+
+        // This resets the local room state from error.
+        this.props.room.state = LocalRoomState.NEW;
         dis.dispatch({
             action: "local_room_event",
             roomId: this.props.room.roomId,

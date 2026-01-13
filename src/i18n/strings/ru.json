@@ -103,9 +103,7 @@
         "ok": "ОК",
         "open": "Открыть",
         "open_menu": "Открыть меню",
-        "pause": "Пауза",
         "pin": "Закрепить",
-        "play": "Воспроизведение",
         "proceed": "Продолжить",
         "quote": "Цитировать",
         "react": "Отреагировать",
@@ -2209,26 +2207,6 @@
             "one": "Удаляются сообщения в %(count)s комнате",
             "other": "Удаляются сообщения в %(count)s комнатах"
         },
-        "release_announcement": {
-            "done": "Готово",
-            "filter": {
-                "description": "Фильтруйте ваши чаты одним кликом. Разверните, чтобы увидеть больше фильтров.",
-                "title": "Новые быстрые фильтры"
-            },
-            "intro": {
-                "description": "Список чатов обновили, чтобы он был понятнее и проще в использовании.",
-                "title": "Чаты теперь выглядят по-новому!"
-            },
-            "next": "Далее",
-            "settings": {
-                "description": "Чтобы включить или выключить предварительный просмотр сообщений, зайди в Все настройки > Параметры > Список комнат",
-                "title": "Некоторые настройки были перемещены"
-            },
-            "sort": {
-                "description": "Измените порядок ваших чатов от последних до A-Я.",
-                "title": "Сортируйте ваши чаты"
-            }
-        },
         "room": {
             "more_options": "Дополнительные параметры",
             "open_room": "Открыть комнату %(roomName)s"
@@ -2898,10 +2876,6 @@
             "rule_suppress_notices": "Сообщения от ботов",
             "rule_tombstone": "При обновлении комнат",
             "show_message_desktop_notification": "Показывать текст сообщения в уведомлениях на рабочем столе",
-            "sounds_release_announcement": {
-                "description": "Ваши уведомления и сигналы вызова были обновлены — теперь они понятнее, быстрее и менее отвлекающие.",
-                "title": "Мы обновили ваши звуки"
-            },
             "voip": "Аудио и видео звонки"
         },
         "preferences": {
@@ -3412,24 +3386,10 @@
         "no_rooms_with_unread_threads": "У вас пока нет комнат с непрочитанными обсуждениями."
     },
     "time": {
-        "about_day_ago": "около суток назад",
-        "about_hour_ago": "около часа назад",
-        "about_minute_ago": "около минуты назад",
         "date_at_time": "%(date)s в %(time)s",
-        "few_seconds_ago": "несколько секунд назад",
         "hours_minutes_seconds_left": "Осталось %(hours)sч %(minutes)sм %(seconds)sс",
-        "in_about_day": "примерно через день",
-        "in_about_hour": "примерно через час",
-        "in_about_minute": "примерно через минуту",
-        "in_few_seconds": "несколько секунд назад",
-        "in_n_days": "%(num)s дней спустя",
-        "in_n_hours": "%(num)s часов спустя",
-        "in_n_minutes": "%(num)s минут спустя",
         "left": "Осталось %(timeRemaining)s",
         "minutes_seconds_left": "Осталось %(minutes)sм %(seconds)sс",
-        "n_days_ago": "%(num)s дней назад",
-        "n_hours_ago": "%(num)s часов назад",
-        "n_minutes_ago": "%(num)s минут назад",
         "seconds_left": "%(seconds)s осталось",
         "short_days": "%(value)sд",
         "short_days_hours_minutes_seconds": "%(days)s д %(hours)s ч %(minutes)s мин %(seconds)s с",
@@ -3484,11 +3444,9 @@
             "unable_to_find": "Попытка загрузить выбранный интервал истории чата этой комнаты не удалась, так как запрошенный элемент не найден."
         },
         "m.audio": {
-            "audio_player": "Аудиоплеер",
             "error_downloading_audio": "Ошибка загрузки аудио",
             "error_processing_audio": "Ошибка обработки звукового сообщения",
-            "error_processing_voice_message": "Ошибка при обработке голосового сообщения",
-            "unnamed_audio": "Безымянное аудио"
+            "error_processing_voice_message": "Ошибка при обработке голосового сообщения"
         },
         "m.beacon_info": {
             "view_live_location": "Посмотреть трансляцию местоположения"
@@ -3896,11 +3854,6 @@
                 "other": "Показать %(count)s других предварительных просмотров"
             }
         }
-    },
-    "truncated_list_n_more": {
-        "one": "%(count)s...",
-        "few": "И еще %(count)s...",
-        "many": "И еще %(count)s..."
     },
     "unsupported_browser": {
         "description": "Если вы продолжите, некоторые функции могут перестать работать, и существует риск потери данных в будущем. Обновите браузер, чтобы продолжить использование %(brand)s.",

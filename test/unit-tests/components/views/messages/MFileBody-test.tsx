@@ -85,4 +85,31 @@ describe("<MFileBody/>", () => {
         expect(getByRole("link", { name: "Download" })).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
+
+    it.each(["m.file", "m.audio", "m.video"])("should show %s generic placeholder", async (msgtype) => {
+        const mediaEvent = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "alt",
+                msgtype,
+                url: "mxc://server/image",
+            },
+        });
+
+        const { container, getByRole } = render(
+            <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
+                <MFileBody
+                    {...props}
+                    mxEvent={mediaEvent}
+                    mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                    showGenericPlaceholder={true}
+                />
+            </ScopedRoomContextProvider>,
+        );
+
+        expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
 });
