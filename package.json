@@ -249,7 +249,6 @@
         "eslint-plugin-unicorn": "^56.0.0",
         "express": "^5.0.0",
         "fake-indexeddb": "^6.0.0",
-        "fetch-mock": "12",
         "file-loader": "^6.0.0",
         "html-webpack-plugin": "^5.5.3",
         "husky": "^9.0.0",
