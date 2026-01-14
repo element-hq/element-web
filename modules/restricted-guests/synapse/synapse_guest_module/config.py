@@ -7,7 +7,18 @@
 # Originally licensed under the Apache License, Version 2.0:
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
+from typing import Optional
+
 import attr
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class MasConfig:
+    admin_api_base_url: str
+    oauth_base_url: str
+    client_id: str
+    # TODO: Add a filepath option for the secret as well.
+    client_secret: str
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -16,3 +27,4 @@ class GuestModuleConfig:
     display_name_suffix: str
     enable_user_reaper: bool
     user_expiration_seconds: int
+    mas: Optional[MasConfig] = None

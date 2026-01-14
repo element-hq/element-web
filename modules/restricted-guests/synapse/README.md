@@ -41,6 +41,17 @@ The module provides (optional) configuration options:
 - `enable_user_reaper` - if true, the module disables all users that are older than the configured expiration time. Default: `true`.
 - `user_expiration_seconds` - the expiration time in seconds when a guest user expires after their creation. Default: `86400` (=24 hours).
 
+If matrix-authentication-service (MAS) is configured, the module will need to
+interface with it in order to register/deactivate users. Provide the below
+options in order to give the module access to [MAS' Admin
+API](https://element-hq.github.io/matrix-authentication-service/topics/admin-api.html).
+
+- `mas` - optional configuration for Matrix Authentication Service (MAS). When set, the module creates users via MAS' admin API.
+  - `admin_api_base_url` - Base URL for MAS' admin API (e.g. `https://mas.example.org`). Trailing slashes will be automatically stripped.
+  - `oauth_base_url` - Base URL for MAS' OAuth endpoints (defaults to `admin_api_base_url` if not set). Trailing slashes will be automatically stripped.
+  - `client_id` - client ID for the automated tool. Must be a valid [ULID](https://github.com/ulid/spec). Generate one [here](https://ulidtools.com/).
+  - `client_secret` - client secret for the automated tool. Ideally long and cryptographically secure. Keep it a secret!
+
 Example configuration:
 
 ```yaml
@@ -49,6 +60,37 @@ modules:
       config:
           # Use a german suffix
           display_name_suffix: " (Gast)"
+          # The below is required if using MAS
+          mas:
+              admin_api_base_url: https://mas.example.org
+              oauth_base_url: https://mas.example.org
+              # The `client_id` must be a valid ULID:
+              # https://github.com/ulid/spec
+              # Generate ULID's easily at:
+              # https://ulidtools.com/
+              client_id: 000000000000000000000G0EST
+              client_secret: your-client-secret
+```
+
+Enable [the Admin API on a MAS
+listener](https://element-hq.github.io/matrix-authentication-service/topics/admin-api.html#enabling-the-api).
+Then, add the following to your MAS config file:
+
+```yaml
+policy:
+  data:
+    admin_clients:
+      - 000000000000000000000G0EST
+
+# ...
+
+clients:
+  # The `client_id` must be a valid ULID https://github.com/ulid/spec
+  # Generate ULID's easily at: https://ulidtools.com/
+  - client_id: 000000000000000000000G0EST
+    # The guest module uses the client_secret_basic authentication method.
+    client_auth_method: client_secret_basic
+    client_secret: your-client-secret
 ```
 
 ## Production installation

@@ -8,7 +8,7 @@
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
 import logging
-from typing import Any, Dict, Literal, Tuple, Union
+from typing import Any, Dict, Literal, Optional, Tuple, Union
 
 from synapse.module_api import (
     NOT_SPAM,
@@ -21,7 +21,8 @@ from synapse.module_api import (
 from synapse.module_api.errors import ConfigError
 from synapse.types import UserID
 
-from synapse_guest_module.config import GuestModuleConfig
+from synapse_guest_module.config import GuestModuleConfig, MasConfig
+from synapse_guest_module.mas_admin_client import MasAdminClient
 from synapse_guest_module.guest_registration_servlet import GuestRegistrationServlet
 from synapse_guest_module.guest_user_reaper import GuestUserReaper
 
@@ -33,7 +34,12 @@ class GuestModule:
         self._api = api
         self._config = config
 
-        self.registration_servlet = GuestRegistrationServlet(config, api)
+        mas_admin_client = (
+            MasAdminClient(api, config.mas) if config.mas is not None else None
+        )
+        self.registration_servlet = GuestRegistrationServlet(
+            config, api, mas_admin_client
+        )
         self._api.register_web_resource(
             "/_synapse/client/register_guest", self.registration_servlet
         )
@@ -81,11 +87,43 @@ class GuestModule:
                 "Config option 'user_expiration_seconds' must be a number"
             )
 
+        mas_config = config.get("mas")
+        mas: Optional[MasConfig] = None
+        if mas_config is not None:
+            if not isinstance(mas_config, dict):
+                raise ConfigError("Config option 'mas' must be an object")
+
+            admin_api_base_url = mas_config.get("admin_api_base_url")
+            if not isinstance(admin_api_base_url, str) or len(admin_api_base_url.strip()) == 0:
+                raise ConfigError("Config option 'mas.admin_api_base_url' is required and must be a string")
+
+            oauth_base_url = mas_config.get("oauth_base_url", admin_api_base_url)
+            if not isinstance(oauth_base_url, str) or len(oauth_base_url.strip()) == 0:
+                raise ConfigError(
+                    "Config option 'mas.oauth_base_url' must be a string"
+                )
+
+            client_id = mas_config.get("client_id")
+            if not isinstance(client_id, str) or len(client_id.strip()) == 0:
+                raise ConfigError("Config option 'mas.client_id' is required and must be a string")
+
+            client_secret = mas_config.get("client_secret")
+            if not isinstance(client_secret, str) or len(client_secret.strip()) == 0:
+                raise ConfigError("Config option 'mas.client_secret' is required and must be a string")
+
+            mas = MasConfig(
+                admin_api_base_url.strip(),
+                oauth_base_url.strip(),
+                client_id.strip(),
+                client_secret.strip(),
+            )
+
         return GuestModuleConfig(
             user_id_prefix,
             display_name_suffix,
             enable_user_reaper,
             user_expiration_seconds,
+            mas,
         )
 
     async def profile_update(
