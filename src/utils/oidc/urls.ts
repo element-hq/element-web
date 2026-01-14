@@ -31,23 +31,29 @@ export const getManageDeviceUrl = (
     accountManagementActionsSupported: string[] | undefined,
     deviceId: string,
 ): string => {
-    accountManagementActionsSupported ??= [];
     let action: string | undefined;
 
     // pick the action= parameter that the server supports:
-    if (accountManagementActionsSupported.includes(Action.DeviceView)) {
+    if (accountManagementActionsSupported?.includes(Action.DeviceView)) {
         // stable action
         action = Action.DeviceView;
-    } else if (accountManagementActionsSupported.includes("org.matrix.session_view")) {
+    } else if (accountManagementActionsSupported?.includes("org.matrix.session_view")) {
         // unstable action from earlier version of MSC4191, can be removed once stable is widely supported
         action = "org.matrix.session_view";
-    } else if (accountManagementActionsSupported.includes("session_view")) {
+    } else if (accountManagementActionsSupported?.includes("session_view")) {
         // unstable action from earlier version of MSC4191, can be removed once stable is widely supported
         action = "session_view";
     }
     if (!action) {
-        // fallback to unstable action for backwards compatibility
-        action = "org.matrix.session_view";
+        if (accountManagementActionsSupported) {
+            // the server gave a list of supported actions, but none we know about:
+            // send the stable action anyway
+            action = Action.DeviceView;
+        } else {
+            // the server did not provide a list of supported actions:
+            // to be backwards compatible, use the value that we used to always send
+            action = "org.matrix.session_view";
+        }
     }
     const url = getUrl(accountManagementEndpoint, action);
     url.searchParams.set("device_id", deviceId);
