@@ -7,11 +7,13 @@
 # Originally licensed under the Apache License, Version 2.0:
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
+import asyncio
 import logging
 from typing import Any, Dict, Literal, Optional, Tuple, Union
 
 from synapse.module_api import (
     NOT_SPAM,
+    LoggingTransaction,
     ModuleApi,
     ProfileInfo,
     UserProfile,
@@ -33,12 +35,20 @@ class GuestModule:
     def __init__(self, config: GuestModuleConfig, api: ModuleApi):
         self._api = api
         self._config = config
+        self._mas_tables_ready: asyncio.Event | None = None
 
         mas_admin_client = (
             MasAdminClient(api, config.mas) if config.mas is not None else None
         )
+        if config.mas is not None:
+            self._mas_tables_ready = asyncio.Event()
+            run_as_background_process(
+                "guest_module_mas_db_init",
+                self._init_mas_tables,
+                bg_start_span=False,
+            )
         self.registration_servlet = GuestRegistrationServlet(
-            config, api, mas_admin_client
+            config, api, mas_admin_client, self._mas_tables_ready
         )
         self._api.register_web_resource(
             "/_synapse/client/register_guest", self.registration_servlet
@@ -54,7 +64,9 @@ class GuestModule:
         )
 
         # Start the user reaper
-        self.reaper = GuestUserReaper(api, config)
+        self.reaper = GuestUserReaper(
+            api, config, mas_admin_client, self._mas_tables_ready
+        )
         if config.enable_user_reaper:
             run_as_background_process(
                 "guest_module_reaper_bg_task",
@@ -151,6 +163,39 @@ class GuestModule:
                     new_profile_display_name.strip() + self._config.display_name_suffix
                 )
                 await self._api.set_displayname(user_id_1, guest_display_name)
+
+    async def _init_mas_tables(self) -> None:
+        if self._mas_tables_ready is None:
+            return
+
+        try:
+            await self._api.run_db_interaction(
+                "guest_module_create_mas_tables",
+                self._create_mas_tables,
+            )
+        except Exception as err:
+            logger.error("Failed to initialize MAS tables: %s", err)
+        finally:
+            self._mas_tables_ready.set()
+
+    @staticmethod
+    def _create_mas_tables(txn: LoggingTransaction) -> None:
+        txn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS guest_module_mas_users (
+                mas_user_id TEXT PRIMARY KEY,
+                created_at BIGINT NOT NULL
+            )
+            """,
+            (),
+        )
+        txn.execute(
+            """
+            CREATE INDEX IF NOT EXISTS guest_module_mas_users_created_at
+            ON guest_module_mas_users (created_at)
+            """,
+            (),
+        )
 
     async def callback_user_may_create_room(
         self,

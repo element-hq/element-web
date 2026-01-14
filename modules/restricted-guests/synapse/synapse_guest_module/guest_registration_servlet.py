@@ -7,12 +7,15 @@
 # Originally licensed under the Apache License, Version 2.0:
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
+import asyncio
 import logging
 import secrets
 import string
+import time
 from typing import Any, Dict, Tuple
 
 from synapse.module_api import (
+    DatabasePool,
     DirectServeJsonResource,
     ModuleApi,
     parse_json_object_from_request,
@@ -38,11 +41,13 @@ class GuestRegistrationServlet(DirectServeJsonResource):
         config: GuestModuleConfig,
         api: ModuleApi,
         mas_admin_client: MasAdminClient | None = None,
+        mas_tables_ready: asyncio.Event | None = None,
     ):
         super().__init__()
         self._api = api
         self._config = config
         self._mas_admin_client = mas_admin_client
+        self._mas_tables_ready = mas_tables_ready
 
     async def _async_render_POST(self, request: Request) -> Tuple[int, Dict[str, Any]]:
         """On POST requests, generate a new username for a guest, check that it
@@ -55,7 +60,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
         displayname = json_dict.get("displayname")
         if not isinstance(displayname, str) or len(displayname.strip()) == 0:
             return 400, {"msg": "You must provide a 'displayname' as a string"}
-        
+
         displayname = displayname.strip()
 
         # make sure the regex is unique
@@ -96,6 +101,8 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                     displayname + self._config.display_name_suffix,
                 )
 
+                await self._store_mas_user(mas_user_id, int(time.time()))
+
                 # Determine how long to keep the access token valid for.
                 #
                 # If a user reaper is enabled, just have the token expire after
@@ -123,3 +130,21 @@ class GuestRegistrationServlet(DirectServeJsonResource):
             return 201, res
 
         return 500, {"msg": "Internal error: Could not find a free username"}
+
+    async def _store_mas_user(self, mas_user_id: str, created_at: int) -> None:
+        if self._mas_tables_ready is not None:
+            await self._mas_tables_ready.wait()
+
+        def store_user(txn: Any) -> None:
+            DatabasePool.simple_insert_txn(
+                txn,
+                table="guest_module_mas_users",
+                values={
+                    "mas_user_id": mas_user_id,
+                    "created_at": created_at,
+                },
+            )
+
+        await self._api.run_db_interaction(
+            "guest_module_store_mas_user", store_user
+        )
