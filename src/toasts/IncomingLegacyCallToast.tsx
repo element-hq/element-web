@@ -12,13 +12,13 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
+import { VolumeOffSolidIcon, VolumeOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
-import { VolumeOffSolidIcon, VolumeOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
