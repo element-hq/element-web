@@ -15,7 +15,6 @@ import ToastStore, { type IToast } from "../../stores/ToastStore";
 
 interface IState {
     toasts: IToast<any>[];
-    countSeen: number;
 }
 
 export default class ToastContainer extends React.Component<EmptyObject, IState> {
@@ -23,7 +22,6 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
         super(props);
         this.state = {
             toasts: ToastStore.sharedInstance().getToasts(),
-            countSeen: ToastStore.sharedInstance().getCountSeen(),
         };
     }
 
@@ -39,7 +37,6 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
     private onToastStoreUpdate = (): void => {
         this.setState({
             toasts: ToastStore.sharedInstance().getToasts(),
-            countSeen: ToastStore.sharedInstance().getCountSeen(),
         });
     };
 
@@ -61,11 +58,6 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
             });
             const content = React.createElement(component, toastProps);
 
-            let countIndicator;
-            if ((title && isStacked) || this.state.countSeen > 0) {
-                countIndicator = ` (${this.state.countSeen + 1}/${this.state.countSeen + totalCount})`;
-            }
-
             let titleElement;
             if (title) {
                 titleElement = (
@@ -73,7 +65,6 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
                         <Text size="lg" weight="semibold" as="h2">
                             {title}
                         </Text>
-                        <span className="mx_Toast_title_countIndicator">{countIndicator}</span>
                     </div>
                 );
             }

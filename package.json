@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.7",
+    "version": "1.12.8",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -92,7 +92,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^10.0.0",
         "@types/png-chunks-extract": "^1.0.2",
-        "@vector-im/compound-design-tokens": "6.4.3",
+        "@vector-im/compound-design-tokens": "6.6.0",
         "@vector-im/compound-web": "^8.3.4",
         "@vector-im/matrix-wysiwyg": "2.40.0",
         "@zxcvbn-ts/core": "^3.0.4",
@@ -294,7 +294,7 @@
         "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^11.0.0",
-        "typescript": "5.8.3",
+        "typescript": "5.9.3",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",

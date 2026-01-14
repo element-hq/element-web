@@ -416,7 +416,6 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         {this.getLocalNonAltAliases().map((alias) => {
                             return <option value={alias} key={alias} />;
                         })}
-                        ;
                     </datalist>
                     <EditableAliasesList
                         id="roomAltAliases"

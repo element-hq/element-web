@@ -8,7 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useMemo } from "react";
 import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { AdminIcon, SettingsSolidIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    AdminIcon,
+    AdvancedSettingsIcon,
+    SettingsSolidIcon,
+    VisibilityOnIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -23,7 +28,6 @@ import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsT
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import { Action } from "../../../dispatcher/actions";
 import { type NonEmptyArray } from "../../../@types/common";
-import { Icon as AdvancedIcon } from "../../../../res/img/element-icons/room/settings/advanced.svg";
 
 export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",
@@ -69,7 +73,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 ? new Tab(
                       SpaceSettingsTab.Advanced,
                       _td("common|advanced"),
-                      <AdvancedIcon />,
+                      <AdvancedSettingsIcon />,
                       <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )
                 : null,
