@@ -35,6 +35,7 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
 import { Action } from "../../dispatcher/actions";
+import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
 
 /**
  * These are the filters passed to the room skip list.
@@ -136,10 +137,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         if (!this.roomSkipList) throw new Error("Cannot resort room list before skip list is created.");
         if (!this.matrixClient) throw new Error("Cannot resort room list without matrix client.");
         if (this.roomSkipList.activeSortAlgorithm === algorithm) return;
-        const sorter =
-            algorithm === SortingAlgorithm.Alphabetic
-                ? new AlphabeticSorter()
-                : new RecencySorter(this.matrixClient.getSafeUserId());
+        const sorter = this.getSorterFromSortingAlgorithm(algorithm, this.matrixClient.getSafeUserId());
         this.roomSkipList.useNewSorter(sorter, this.getRooms());
         this.emit(LISTS_UPDATE_EVENT);
         SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
@@ -321,13 +319,25 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private getPreferredSorter(myUserId: string): Sorter {
         const preferred = SettingsStore.getValue("RoomList.preferredSorting");
-        switch (preferred) {
+        return this.getSorterFromSortingAlgorithm(preferred, myUserId);
+    }
+
+    /**
+     * Get a sorter instance from the sorting algorithm enum value.
+     * @param algorithm The sorting algorithm
+     * @param myUserId The user-id of the current user
+     * @returns the sorter instance
+     */
+    private getSorterFromSortingAlgorithm(algorithm: SortingAlgorithm, myUserId: string): Sorter {
+        switch (algorithm) {
             case SortingAlgorithm.Alphabetic:
                 return new AlphabeticSorter();
             case SortingAlgorithm.Recency:
                 return new RecencySorter(myUserId);
+            case SortingAlgorithm.Unread:
+                return new UnreadSorter(myUserId);
             default:
-                throw new Error(`Got unknown sort preference from RoomList.preferredSorting setting`);
+                throw new Error(`Unknown sorting algorithm: ${algorithm}`);
         }
     }
 
