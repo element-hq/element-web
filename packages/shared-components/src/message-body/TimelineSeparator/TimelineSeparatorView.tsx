@@ -5,11 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type JSX, type ReactNode } from "react";
+import React from "react";
+
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
-import { JSX, type ReactNode } from "react";
 import styles from "./TimelineSeparatorView.module.css";
-import React from "react";
+
 
 
 export const enum SeparatorKind {
