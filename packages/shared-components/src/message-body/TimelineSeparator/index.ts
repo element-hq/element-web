@@ -6,4 +6,4 @@
  */
 
 export type { TimelineSeparatorViewModel, TimelineSeparatorViewSnapshot } from "./TimelineSeparatorView";
-export { TimelineSeparatorView } from "./TimelineSeparatorView";
+export { TimelineSeparatorView, SeparatorKind } from "./TimelineSeparatorView";

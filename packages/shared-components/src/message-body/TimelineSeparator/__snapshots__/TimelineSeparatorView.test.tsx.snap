@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`TimelineSeparatorView Snapshot tests renders the timeline separator in default state 1`] = `
+<div>
+  <div
+    aria-label="Label Separator"
+    class="mx_TimelineSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    Timeline Separator
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparatorView Snapshot tests renders the timeline separator with HTML child 1`] = `
+<div>
+  <div
+    aria-label="Custom Label"
+    class="mx_TimelineSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <h2
+      aria-hidden="true"
+      class="mx_DateSeparator_dateHeading"
+    >
+      Thursday
+    </h2>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparatorView Snapshot tests renders the timeline separator without children 1`] = `
+<div>
+  <div
+    aria-label="Label Separator"
+    class="mx_TimelineSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;

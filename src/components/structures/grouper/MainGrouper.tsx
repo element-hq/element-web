@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { SeparatorKind } from "@element-hq/web-shared-components";
 
 import type MessagePanel from "../MessagePanel";
 import type { WrappedEvent } from "../MessagePanel";
@@ -17,7 +18,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
-import { SeparatorKind } from "../../views/messages/TimelineSeparator";
 
 const groupedStateEvents = [
     EventType.RoomMember,

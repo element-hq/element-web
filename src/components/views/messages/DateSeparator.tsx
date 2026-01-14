@@ -12,6 +12,12 @@ import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sd
 import { logger } from "matrix-js-sdk/src/logger";
 import { capitalize } from "lodash";
 import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    TimelineSeparatorView,
+    type TimelineSeparatorViewSnapshot,
+    MockViewModel,
+    SeparatorKind,
+} from "@element-hq/web-shared-components";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
@@ -32,7 +38,6 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import JumpToDatePicker from "./JumpToDatePicker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import TimelineSeparator from "./TimelineSeparator";
 import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
@@ -335,6 +340,11 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             );
         }
 
-        return <TimelineSeparator label={label}>{dateHeaderContent}</TimelineSeparator>;
+        const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
+            label,
+            SeparatorKind: SeparatorKind.Date,
+            children: dateHeaderContent,
+        });
+        return <TimelineSeparatorView vm={vm} />;
     }
 }

@@ -18,6 +18,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
+import {
+    TimelineSeparatorView,
+    type TimelineSeparatorViewSnapshot,
+    MockViewModel,
+    SeparatorKind,
+} from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
@@ -37,7 +43,6 @@ import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
 import ScrollPanel, { type IScrollState } from "./ScrollPanel";
 import DateSeparator from "../views/messages/DateSeparator";
-import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -754,11 +759,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 const text = _t("timeline|late_event_separator", {
                     dateTime: formatDate(mxEv.getDate() ?? new Date()),
                 });
+                const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
+                    label: text,
+                    SeparatorKind: SeparatorKind.LateEvent,
+                    children: text,
+                });
                 ret.push(
                     <li key={ts1}>
-                        <TimelineSeparator key={ts1} label={text}>
-                            {text}
-                        </TimelineSeparator>
+                        <TimelineSeparatorView key={ts1} vm={vm} />
                     </li>,
                 );
             }

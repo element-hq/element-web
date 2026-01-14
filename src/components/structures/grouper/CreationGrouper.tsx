@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { SeparatorKind } from "@element-hq/web-shared-components";
 
 import { BaseGrouper } from "./BaseGrouper";
 import { type WrappedEvent } from "../MessagePanel";
@@ -18,7 +19,6 @@ import { _t } from "../../../languageHandler";
 import DateSeparator from "../../views/messages/DateSeparator";
 import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
-import { SeparatorKind } from "../../views/messages/TimelineSeparator";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until

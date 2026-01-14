@@ -15,6 +15,7 @@ export * from "./composer/Banner";
 export * from "./composer/HistoryVisibleBannerView";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
+export * from "./message-body/TimelineSeparator/";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
