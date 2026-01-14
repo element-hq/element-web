@@ -18,6 +18,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { VolumeOffSolidIcon, VolumeOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
@@ -98,10 +99,6 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
             mx_IncomingLegacyCallToast_content_voice: isVoice,
             mx_IncomingLegacyCallToast_content_video: !isVoice,
         });
-        const silenceClass = classNames("mx_IncomingLegacyCallToast_iconButton", {
-            mx_IncomingLegacyCallToast_unSilence: this.state.silenced,
-            mx_IncomingLegacyCallToast_silence: !this.state.silenced,
-        });
 
         return (
             <React.Fragment>
@@ -130,11 +127,13 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
                     </div>
                 </div>
                 <AccessibleButton
-                    className={silenceClass}
+                    className="mx_IncomingLegacyCallToast_iconButton"
                     disabled={callForcedSilent}
                     onClick={this.onSilenceClick}
                     title={silenceButtonTooltip}
-                />
+                >
+                    {this.state.silenced ? <VolumeOffSolidIcon /> : <VolumeOnSolidIcon />}
+                </AccessibleButton>
             </React.Fragment>
         );
     }
