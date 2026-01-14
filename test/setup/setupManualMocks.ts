@@ -70,9 +70,6 @@ function setupFileStubMocks() {
 setupFileStubMocks();
 
 beforeEach(() => {
-    window.sessionStorage?.clear();
-    window.localStorage?.clear();
-
     // set up fetch API mock
     fetchMock.hardReset();
     fetchMock.catch(404);
@@ -83,6 +80,8 @@ beforeEach(() => {
 
 afterEach(() => {
     fetchMock.removeRoutes();
+    window.sessionStorage?.clear();
+    window.localStorage?.clear();
 });
 
 fetchMock.config.allowRelativeUrls = true;
