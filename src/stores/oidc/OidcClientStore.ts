@@ -73,7 +73,7 @@ export class OidcClientStore {
     private setAccountManagementEndpoint(
         endpoint: string | undefined,
         issuer: string,
-        supportedActions?: string[],
+        actionsSupported?: string[],
     ): void {
         // if no account endpoint is configured default to the issuer
         const url = new URL(endpoint ?? issuer);
@@ -82,7 +82,7 @@ export class OidcClientStore {
             url.searchParams.set("id_token_hint", idToken);
         }
         this._accountManagementEndpoint = url.toString();
-        this._accountManagementActionsSupported = supportedActions;
+        this._accountManagementActionsSupported = actionsSupported;
     }
 
     public get accountManagementEndpoint(): string | undefined {
