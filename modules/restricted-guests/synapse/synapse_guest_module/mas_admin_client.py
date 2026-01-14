@@ -78,6 +78,17 @@ class MasAdminClient:
 
         return device_id, access_token
 
+    async def deactivate_user(self, mas_user_id: str, token: str | None = None) -> None:
+        if token is None:
+            token = await self.request_admin_token()
+
+        url = self._build_admin_url(f"/api/admin/v1/users/{mas_user_id}/deactivate")
+        await self._api.http_client.post_json_get_json(
+            uri=url,
+            post_json={"skip_erase": True},
+            headers={"Authorization": [f"Bearer {token}"]},
+        )
+
     async def request_admin_token(self) -> str:
         url = self._build_oauth_url("/oauth2/token")
         basic_auth = base64.b64encode(
