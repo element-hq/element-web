@@ -19,7 +19,7 @@ import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icon
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { _t, UserFriendlyError } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import InviteReason from "../elements/InviteReason";
