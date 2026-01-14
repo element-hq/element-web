@@ -35,7 +35,12 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
-import { ErrorSolidIcon, InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    CircleIcon,
+    ErrorSolidIcon,
+    InfoIcon,
+    CheckCircleIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -1569,23 +1574,20 @@ interface ISentReceiptProps {
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     const isSent = !messageState || messageState === "sent";
     const isFailed = messageState === "not_sent";
-    const receiptClasses = classNames({
-        mx_EventTile_receiptSent: isSent,
-        mx_EventTile_receiptSending: !isSent && !isFailed,
-    });
 
-    let nonCssBadge: JSX.Element | undefined;
-    if (isFailed) {
-        nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-    }
-
+    let icon: JSX.Element | undefined;
     let label = _t("timeline|send_state_sending");
     if (messageState === "encrypting") {
+        icon = <CircleIcon />;
         label = _t("timeline|send_state_encrypting");
     } else if (isSent) {
+        icon = <CheckCircleIcon />;
         label = _t("timeline|send_state_sent");
     } else if (isFailed) {
+        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
         label = _t("timeline|send_state_failed");
+    } else {
+        icon = <CircleIcon />;
     }
 
     return (
@@ -1593,9 +1595,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             <div className="mx_ReadReceiptGroup">
                 <Tooltip label={label} placement="top-end">
                     <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">
-                            <span className={receiptClasses}>{nonCssBadge}</span>
-                        </span>
+                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
                     </div>
                 </Tooltip>
             </div>
