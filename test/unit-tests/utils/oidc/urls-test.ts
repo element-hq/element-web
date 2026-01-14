@@ -21,10 +21,15 @@ describe("OIDC urls", () => {
                 ),
             ).toEqual("https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234");
         });
-        it("defaults to unstable action", async () => {
+        it("defaults to stable action when no known action is supported", async () => {
             expect(getManageDeviceUrl(accountManagementEndpoint, [], deviceId)).toEqual(
-                "https://auth.com/manage?action=org.matrix.session_view&device_id=DEVICEID1234",
+                "https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234",
             );
+            expect(getManageDeviceUrl(accountManagementEndpoint, ["foo"], deviceId)).toEqual(
+                "https://auth.com/manage?action=org.matrix.device_view&device_id=DEVICEID1234",
+            );
+        });
+        it("defaults to backwards compatible action when no supported actions are provided", async () => {
             expect(getManageDeviceUrl(accountManagementEndpoint, undefined, deviceId)).toEqual(
                 "https://auth.com/manage?action=org.matrix.session_view&device_id=DEVICEID1234",
             );
