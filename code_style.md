@@ -272,6 +272,8 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 18. Components should serve a single, or near-single, purpose.
 19. Prefer to derive information from component properties rather than establish state.
 20. Do not use `React.Component::forceUpdate`.
+21. Prefer to use [compound typography components](https://compound.element.io/?path=/docs/compound-web_typography--docs) instead of raw HTML elements for text. This ensures consistent font usage and letter spacing across the app.
+22. If you can't use 21, don't forget to apply the correct CSS classes for font and letter spacing.
 
 ## Stylesheets (\*.pcss = PostCSS + Plugins)
 

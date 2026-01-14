@@ -163,6 +163,5 @@ function createReRenderFunction(client: MatrixClient, memberListRoom: Room): Ren
                 getRoomId: () => memberListRoom.roomId,
             });
         });
-        await new Promise((r) => setTimeout(r, 1000));
     };
 }
