@@ -22,15 +22,61 @@ class MasAdminClient:
         self._admin_api_base_url = config.admin_api_base_url.rstrip("/")
         self._oauth_base_url = config.oauth_base_url.rstrip("/")
 
-    async def create_user(self, username: str) -> None:
+    async def create_user(self, username: str) -> str:
+        """Creates a new user in MAS with the given username.
+        
+        Args:
+            username: The username (localpart) of the user to create.
+        
+        Returns:
+            The MAS ID of the created user.
+        """
         token = await self.request_admin_token()
         url = self._build_admin_url("/api/admin/v1/users")
 
-        await self._api.http_client.post_json_get_json(
+        response = await self._api.http_client.post_json_get_json(
             uri=url,
             post_json={"username": username},
             headers={"Authorization": [f"Bearer {token}"]},
         )
+        
+        mas_user_id = response.get("data", {}).get("id")
+        if mas_user_id is None or not isinstance(mas_user_id, str):
+            raise ValueError("MAS user creation response missing `data.id` field")
+
+        return mas_user_id
+
+    async def create_personal_session(
+        self, mas_user_id: str, expires_in: int
+    ) -> tuple[str, str]:
+        token = await self.request_admin_token()
+        url = self._build_admin_url("/api/admin/v1/personal-sessions")
+
+        request_body = {
+            "actor_user_id": mas_user_id,
+            "expires_in": expires_in,
+            "scope": "openid urn:matrix:client:api:*",
+            "human_name": "guest user",
+        }
+
+        response = await self._api.http_client.post_json_get_json(
+            uri=url,
+            post_json=request_body,
+            headers={"Authorization": [f"Bearer {token}"]},
+        )
+
+        data = response.get("data", {})
+        attributes = data.get("attributes", {}) if isinstance(data, dict) else {}
+        access_token = attributes.get("access_token")
+        # TODO: Is this the correct device ID?
+        device_id = data.get("id") if isinstance(data, dict) else None
+
+        if not isinstance(access_token, str) or len(access_token) == 0:
+            raise ValueError("MAS session response missing `access_token` field")
+        if not isinstance(device_id, str) or len(device_id) == 0:
+            raise ValueError("MAS session response missing device id")
+
+        return device_id, access_token
 
     async def request_admin_token(self) -> str:
         url = self._build_oauth_url("/oauth2/token")

@@ -74,13 +74,20 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                 continue
 
             if self._mas_admin_client is None:
-                logger.info("Registering local Synapse guest user with localpart '%s'", localpart)
+                logger.info(
+                    "Registering local Synapse guest user with localpart '%s'",
+                    localpart,
+                )
                 user_id = await self._api.register_user(
                     localpart, displayname + self._config.display_name_suffix
                 )
+
+                device_id, access_token, _, _ = await self._api.register_device(
+                    user_id
+                )
             else:
                 logger.info("Registering MAS guest user with username '%s'", localpart)
-                await self._mas_admin_client.create_user(localpart)
+                mas_user_id = await self._mas_admin_client.create_user(localpart)
 
                 user_id = self._api.get_qualified_user_id(localpart)
 
@@ -89,7 +96,20 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                     displayname + self._config.display_name_suffix,
                 )
 
-            device_id, access_token, _, _ = await self._api.register_device(user_id)
+                # Determine how long to keep the access token valid for.
+                #
+                # If a user reaper is enabled, just have the token expire after
+                # the configured period.
+                expires_in = (
+                    self._config.user_expiration_seconds
+                    if self._config.enable_user_reaper
+                    else 0
+                )
+                device_id, access_token = (
+                    await self._mas_admin_client.create_personal_session(
+                        mas_user_id, expires_in
+                    )
+                )
 
             logger.debug("Registered user '%s'", user_id)
 
