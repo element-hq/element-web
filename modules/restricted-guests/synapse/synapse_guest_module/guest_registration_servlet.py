@@ -17,9 +17,11 @@ from synapse.module_api import (
     ModuleApi,
     parse_json_object_from_request,
 )
+from synapse.types import UserID
 from twisted.web.server import Request
 
 from synapse_guest_module.config import GuestModuleConfig
+from synapse_guest_module.mas_admin_client import MasAdminClient
 
 logger = logging.getLogger("synapse.contrib." + __name__)
 
@@ -35,10 +37,12 @@ class GuestRegistrationServlet(DirectServeJsonResource):
         self,
         config: GuestModuleConfig,
         api: ModuleApi,
+        mas_admin_client: MasAdminClient | None = None,
     ):
         super().__init__()
         self._api = api
         self._config = config
+        self._mas_admin_client = mas_admin_client
 
     async def _async_render_POST(self, request: Request) -> Tuple[int, Dict[str, Any]]:
         """On POST requests, generate a new username for a guest, check that it
@@ -51,6 +55,8 @@ class GuestRegistrationServlet(DirectServeJsonResource):
         displayname = json_dict.get("displayname")
         if not isinstance(displayname, str) or len(displayname.strip()) == 0:
             return 400, {"msg": "You must provide a 'displayname' as a string"}
+        
+        displayname = displayname.strip()
 
         # make sure the regex is unique
         for _ in range(10):
@@ -67,14 +73,25 @@ class GuestRegistrationServlet(DirectServeJsonResource):
             ):
                 continue
 
-            logger.info("Register guest with user %s", localpart)
-            user_id = await self._api.register_user(
-                localpart, displayname.strip() + self._config.display_name_suffix
-            )
+            if self._mas_admin_client is None:
+                logger.info("Registering local Synapse guest user with localpart '%s'", localpart)
+                user_id = await self._api.register_user(
+                    localpart, displayname + self._config.display_name_suffix
+                )
+            else:
+                logger.info("Registering MAS guest user with username '%s'", localpart)
+                await self._mas_admin_client.create_user(localpart)
+
+                user_id = self._api.get_qualified_user_id(localpart)
+
+                await self._api.set_displayname(
+                    UserID.from_string(user_id),
+                    displayname + self._config.display_name_suffix,
+                )
 
             device_id, access_token, _, _ = await self._api.register_device(user_id)
 
-            logger.debug("Registered user %s", user_id)
+            logger.debug("Registered user '%s'", user_id)
 
             res = {
                 "userId": user_id,
