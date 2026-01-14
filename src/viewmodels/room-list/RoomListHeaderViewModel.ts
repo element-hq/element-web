@@ -52,10 +52,6 @@ export class RoomListHeaderViewModel
      * Used to manage event listeners.
      */
     private activeSpace: Room | null;
-    /**
-     * Reference to the settings watcher for video rooms feature flag.
-     */
-    private settingsFeatureVideoRef;
 
     /**
      * Computes the snapshot based on the current state.
@@ -94,7 +90,8 @@ export class RoomListHeaderViewModel
         super(props, RoomListHeaderViewModel.computeSnapshot(props));
 
         // Listen for video rooms feature flag changes
-        this.settingsFeatureVideoRef = SettingsStore.watchSetting("feature_video_rooms", null, this.updateSnapshot);
+        const settingsFeatureVideoRef = SettingsStore.watchSetting("feature_video_rooms", null, this.updateSnapshot);
+        this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
 
         // Listen for space changes
         this.disposables.trackListener(props.spaceStore, UPDATE_SELECTED_SPACE, this.onSpaceChange);
@@ -105,11 +102,6 @@ export class RoomListHeaderViewModel
         if (this.activeSpace) {
             this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.updateSnapshot);
         }
-    }
-
-    public dispose(): void {
-        SettingsStore.unwatchSetting(this.settingsFeatureVideoRef);
-        super.dispose();
     }
 
     /**
