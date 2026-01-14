@@ -4161,10 +4161,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.6.0.tgz#deac29620caa4c3c6e6669e1392acf40c5ca8eed"
-  integrity sha512-IqHldApA5nG3US8bsbH/W2cHx2a7lOF7sOE1HQRAUxLP1B3yfIo8sgw1u6g2kvj8DM4sFIZoKcQ3Lvwym+AsYw==
+"@vector-im/compound-design-tokens@6.8.0":
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.8.0.tgz#3711df7b22a065c4d49dedbd8b83241c73a619f9"
+  integrity sha512-RDJjnFg9yxkbSYqiAG5Nv4enD5h8Oq89su0izZIvuKRzBxLWkV2/+JoDM94zkjI4aDLYff3gwWMviqAxJKi+Lw==
 
 "@vector-im/compound-design-tokens@^6.4.3":
   version "6.5.0"
@@ -4195,7 +4195,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.40.0.tgz#53c9ca5ea907d91e4515da64f20a82e5586b882c"
   integrity sha512-8LRFLs5PEKYs4lOL7aJ4lL/hGCrvEvOYkCR3JggXYXDVMtX4LmfdlKYucSAe98pCmqAAbLRvlRcR1bTOYvM8ug==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@vitest/expect@3.2.4":
   version "3.2.4"
