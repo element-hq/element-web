@@ -180,7 +180,7 @@ export interface EventTileProps {
 
     // the status of this event - ie, mxEvent.status. Denormalised to here so
     // that we can tell when it changes.
-    eventSendStatus?: string;
+    eventSendStatus?: EventStatus;
 
     forExport?: boolean;
 
@@ -1192,7 +1192,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let msgOption: JSX.Element | undefined;
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-            msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+            msgOption = <SentReceipt messageState={this.props.eventSendStatus} />;
         } else if (this.props.showReadReceipts) {
             msgOption = (
                 <ReadReceiptGroup
@@ -1568,7 +1568,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps> {
 }
 
 interface ISentReceiptProps {
-    messageState: EventStatus | null;
+    messageState: EventStatus | undefined;
 }
 
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
@@ -1576,7 +1576,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     const isFailed = messageState === "not_sent";
 
     let icon: JSX.Element | undefined;
-    let label = _t("timeline|send_state_sending");
+    let label: string | undefined;
     if (messageState === "encrypting") {
         icon = <CircleIcon />;
         label = _t("timeline|send_state_encrypting");
@@ -1588,6 +1588,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
         label = _t("timeline|send_state_failed");
     } else {
         icon = <CircleIcon />;
+        label = _t("timeline|send_state_sending");
     }
 
     return (
