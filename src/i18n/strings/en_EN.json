@@ -2420,7 +2420,7 @@
             "history_visibility_legend": "Who can read history?",
             "history_visibility_shared": "Members (full history)",
             "history_visibility_warning": "Changes won't affect past messages, only new ones. <a>Learn more</a>",
-            "history_visibility_world_readable": "Anyone (history is public)\n",
+            "history_visibility_world_readable": "Anyone (history is public)",
             "join_rule_description": "Decide who can join %(roomName)s.",
             "join_rule_invite": "Private (invite only)",
             "join_rule_invite_description": "Only invited people can join.",

@@ -1,43 +1,39 @@
 {
-    "a11y": {
-        "seek_bar_label": "Hang keresősávja"
-    },
-    "action": {
-        "delete": "Törlés",
-        "dismiss": "Eltüntetés",
-        "explore_rooms": "Szobák felderítése",
-        "pause": "Szünet",
-        "play": "Lejátszás",
-        "search": "Keresés"
-    },
-    "encryption": {
-        "pinned_identity_changed": "Úgy tűnik, hogy %(displayName)s (<b>%(userId)s</b>) személyazonossága megváltozott. <a>További információ</a>",
-        "withdraw_verification_action": "Ellenőrzés visszavonása"
-    },
-    "left_panel": {
-        "open_dial_pad": "Számlap megnyitása"
-    },
-    "time": {
-        "about_day_ago": "egy napja",
-        "about_hour_ago": "egy órája",
-        "about_minute_ago": "egy perce",
-        "few_seconds_ago": "néhány másodperce",
-        "in_about_day": "egy nap múlva",
-        "in_about_hour": "egy óra múlva",
-        "in_about_minute": "egy perc múlva",
-        "in_few_seconds": "másodpercek múlva",
-        "in_n_days": "%(num)s nap múlva",
-        "in_n_hours": "%(num)s óra múlva",
-        "in_n_minutes": "%(num)s perc múlva",
-        "n_days_ago": "%(num)s nappal ezelőtt",
-        "n_hours_ago": "%(num)s órával ezelőtt",
-        "n_minutes_ago": "%(num)s perccel ezelőtt"
-    },
-    "timeline": {
-        "m.audio": {
-            "audio_player": "Hanglejátszó",
-            "error_downloading_audio": "Hiba a hang letöltésekor",
-            "unnamed_audio": "Névtelen hang"
-        }
+  "a11y": {
+    "seek_bar_label": "Hang keresősávja"
+  },
+  "action": {
+    "delete": "Törlés",
+    "dismiss": "Eltüntetés",
+    "explore_rooms": "Szobák felderítése",
+    "pause": "Szünet",
+    "play": "Lejátszás",
+    "search": "Keresés"
+  },
+  "left_panel": {
+    "open_dial_pad": "Számlap megnyitása"
+  },
+  "time": {
+    "about_day_ago": "egy napja",
+    "about_hour_ago": "egy órája",
+    "about_minute_ago": "egy perce",
+    "few_seconds_ago": "néhány másodperce",
+    "in_about_day": "egy nap múlva",
+    "in_about_hour": "egy óra múlva",
+    "in_about_minute": "egy perc múlva",
+    "in_few_seconds": "másodpercek múlva",
+    "in_n_days": "%(num)s nap múlva",
+    "in_n_hours": "%(num)s óra múlva",
+    "in_n_minutes": "%(num)s perc múlva",
+    "n_days_ago": "%(num)s nappal ezelőtt",
+    "n_hours_ago": "%(num)s órával ezelőtt",
+    "n_minutes_ago": "%(num)s perccel ezelőtt"
+  },
+  "timeline": {
+    "m.audio": {
+      "audio_player": "Hanglejátszó",
+      "error_downloading_audio": "Hiba a hang letöltésekor",
+      "unnamed_audio": "Névtelen hang"
     }
+  }
 }

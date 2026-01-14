@@ -1,35 +1,35 @@
 {
-    "action": {
-        "delete": "Xoá",
-        "dismiss": "Bỏ qua",
-        "explore_rooms": "Khám phá các phòng",
-        "pause": "Tạm dừng",
-        "play": "Chạy",
-        "search": "Tìm kiếm"
-    },
-    "left_panel": {
-        "open_dial_pad": "Mở bàn phím quay số"
-    },
-    "time": {
-        "about_day_ago": "khoảng một ngày trước",
-        "about_hour_ago": "khoảng một giờ trước",
-        "about_minute_ago": "khoảng một phút trước",
-        "few_seconds_ago": "vài giây trước",
-        "in_about_day": "khoảng một ngày kể từ bây giờ",
-        "in_about_hour": "khoảng một giờ kể từ bây giờ",
-        "in_about_minute": "khoảng một phút kể từ bây giờ",
-        "in_few_seconds": "một vài giây kể từ bây giờ",
-        "in_n_days": "%(num)s ngày kể từ bây giờ",
-        "in_n_hours": "%(num)s giờ kể từ bây giờ",
-        "in_n_minutes": "%(num)s phút kể từ bây giờ",
-        "n_days_ago": "%(num)s ngày trước",
-        "n_hours_ago": "%(num)s giờ trước",
-        "n_minutes_ago": "%(num)s phút trước"
-    },
-    "timeline": {
-        "m.audio": {
-            "error_downloading_audio": "Lỗi khi tải xuống âm thanh",
-            "unnamed_audio": "Âm thanh không tên"
-        }
+  "action": {
+    "delete": "Xoá",
+    "dismiss": "Bỏ qua",
+    "explore_rooms": "Khám phá các phòng",
+    "pause": "Tạm dừng",
+    "play": "Chạy",
+    "search": "Tìm kiếm"
+  },
+  "left_panel": {
+    "open_dial_pad": "Mở bàn phím quay số"
+  },
+  "time": {
+    "about_day_ago": "khoảng một ngày trước",
+    "about_hour_ago": "khoảng một giờ trước",
+    "about_minute_ago": "khoảng một phút trước",
+    "few_seconds_ago": "vài giây trước",
+    "in_about_day": "khoảng một ngày kể từ bây giờ",
+    "in_about_hour": "khoảng một giờ kể từ bây giờ",
+    "in_about_minute": "khoảng một phút kể từ bây giờ",
+    "in_few_seconds": "một vài giây kể từ bây giờ",
+    "in_n_days": "%(num)s ngày kể từ bây giờ",
+    "in_n_hours": "%(num)s giờ kể từ bây giờ",
+    "in_n_minutes": "%(num)s phút kể từ bây giờ",
+    "n_days_ago": "%(num)s ngày trước",
+    "n_hours_ago": "%(num)s giờ trước",
+    "n_minutes_ago": "%(num)s phút trước"
+  },
+  "timeline": {
+    "m.audio": {
+      "error_downloading_audio": "Lỗi khi tải xuống âm thanh",
+      "unnamed_audio": "Âm thanh không tên"
     }
+  }
 }

@@ -1520,18 +1520,6 @@
         "peek_join_prompt": "Je bekijkt %(roomName)s. Wilt je eraan deelnemen?",
         "read_topic": "Klik om het onderwerp te lezen",
         "rejoin_button": "Opnieuw toetreden",
-        "status_bar": {
-            "delete_all": "Verwijder alles",
-            "exceeded_resource_limit": "Je bericht is niet verstuurd omdat deze homeserver een systeembronlimiet heeft overschreden. <a>Neem contact op met je dienstbeheerder</a> om de dienst te blijven gebruiken.",
-            "homeserver_blocked": "Je bericht is niet verzonden omdat deze server is geblokkeerd door de beheerder. Neem <a>contact op met je servicebeheerder</a> om de service te blijven gebruiken.",
-            "monthly_user_limit_reached": "Je bericht is niet verstuurd omdat deze homeserver zijn limiet voor maandelijks actieve personen heeft bereikt. <a>Neem contact op met je beheerder</a> om de dienst te blijven gebruiken.",
-            "requires_consent_agreement": "Je kan geen berichten sturen totdat je <consentLink>onze algemene voorwaarden</consentLink> hebt gelezen en aanvaard.",
-            "retry_all": "Alles opnieuw proberen",
-            "select_messages_to_retry": "Je kan alles selecteren of per individueel bericht opnieuw versturen of verwijderen",
-            "server_connectivity_lost_description": "Verstuurde berichten zullen opgeslagen worden totdat je verbinding hersteld is.",
-            "server_connectivity_lost_title": "De verbinding met de server is verbroken.",
-            "some_messages_not_sent": "Enkele van jouw berichten zijn niet verstuurd"
-        },
         "unread_notifications_predecessor": {
             "other": "Je hebt %(count)s ongelezen meldingen in een vorige versie van deze kamer.",
             "one": "Je hebt %(count)s ongelezen meldingen in een vorige versie van deze kamer."
@@ -1742,7 +1730,6 @@
             "error_join_rule_change_unknown": "Onbekende fout",
             "guest_access_warning": "Personen met geschikte apps zullen aan de kamer kunnen deelnemen zonder een account te hebben.",
             "history_visibility_invited": "Alleen deelnemers (vanaf het moment dat ze uitgenodigd zijn)",
-            "history_visibility_joined": "Alleen deelnemers (vanaf het moment dat ze toegetreden zijn)",
             "history_visibility_legend": "Wie kan de geschiedenis lezen?",
             "history_visibility_shared": "Alleen deelnemers (vanaf het moment dat deze optie wordt geselecteerd)",
             "history_visibility_warning": "Wijzigingen aan de leesregels van de geschiedenis gelden alleen voor toekomstige berichten in deze kamer. De zichtbaarheid van de bestaande geschiedenis blijft ongewijzigd.",
@@ -2979,7 +2966,6 @@
         "hangup": "Ophangen",
         "hide_sidebar_button": "Zijbalk verbergen",
         "input_devices": "Invoer apparaten",
-        "join_button_tooltip_call_full": "Sorry — dit gesprek is momenteel vol",
         "maximise": "Scherm vullen",
         "misconfigured_server": "Oproep mislukt door verkeerd geconfigureerde server",
         "misconfigured_server_description": "Vraag je homeserver-beheerder (<code>%(homeserverDomain)s</code>) een TURN-server te configureren voor de betrouwbaarheid van de oproepen.",

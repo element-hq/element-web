@@ -1611,6 +1611,7 @@
         "files_button": "Rakitra",
         "pinned_messages": {
             "limits": {
+                "one": "",
                 "other": "Azonao atao ihany ny manoratra%(count)s gadget"
             }
         },
@@ -1789,18 +1790,6 @@
         "search": {
             "all_rooms_button": "Karohy ny efitrano rehetra",
             "this_room_button": "Karohy ity efitrano ity"
-        },
-        "status_bar": {
-            "delete_all": "Fafao daholo",
-            "exceeded_resource_limit": "Tsy nalefa ny hafatrao satria nihoatra ny fetran'ny loharanon-karena ity mpizara trano ity. Mba miangavy re<a> mifandraisa aminy mpitantana ny serivisy</a> hanohizana ny fampiasana ny serivisy.",
-            "homeserver_blocked": "Tsy nalefa ny hafatrao satria nosakanany mpitantana azy io server io. Mba miangavy re<a> mifandraisa amin'ny mpitantana ny serivisy</a> hanohizana ny fampiasana ny serivisy.",
-            "monthly_user_limit_reached": "Tsy nalefa ny hafatrao satria nahatratra ny fetran'ny mpampiasa mavitrika isam-bolana ity server ity. Mba miangavy re<a> mifandraisa amin'ny mpitantana ny serivisy</a> hanohizana ny fampiasana ny serivisy.",
-            "requires_consent_agreement": "Tsy afaka mandefa hafatra ianao raha tsy mandinika sy manaiky<consentLink> fepetra sy fepetra</consentLink> .",
-            "retry_all": "Andramo daholo",
-            "select_messages_to_retry": "Azonao atao ny misafidy ny hafatra rehetra na tsirairay mba hanandrana indray na hofafana",
-            "server_connectivity_lost_description": "Ny hafatra nalefa dia hotehirizina mandra-piverin'ny fifandraisanao.",
-            "server_connectivity_lost_title": "Very ny fifandraisana amin'ny mpizara.",
-            "some_messages_not_sent": "Ny sasany amin'ireo hafatrao dia mbola tsy nalefa"
         },
         "unknown_status_code_for_timeline_jump": "kaody sata tsy fantatra",
         "unread_notifications_predecessor": {
@@ -2029,7 +2018,6 @@
             "error_join_rule_change_unknown": "Tsy fahombiazana tsy fantatra",
             "guest_access_warning": "Ny olona manana mpanjifa tohanana dia afaka miditra ao amin'ny efitrano tsy manana kaonty misoratra anarana.",
             "history_visibility_invited": "Mpikambana ihany (hatramin'ny nanasana azy ireo)",
-            "history_visibility_joined": "Mpikambana ihany (hatramin'ny nidirany)",
             "history_visibility_legend": "Iza no mahay mamaky tantara?",
             "history_visibility_shared": "Mpikambana ihany (hatramin&#39;ny fotoana nifidianana ity safidy ity)",
             "history_visibility_warning": "Ny fanovana aminy olona afaka mamaky tantara dia tsy mihatra afa-tsy amin'ny hafatra ho avy ato amin'ity efitrano ity. Tsy hiova ny fahitana ny tantara efa misy.",
@@ -3266,6 +3254,7 @@
         }
     },
     "truncated_list_n_more": {
+        "one": "",
         "other": "SY%(count)s Bebe kokoa..."
     },
     "unsupported_server_description": "Ity mpizara ity dia mampiasa dikan-teny taloha any. Hiverina any amin'ny %(version)s mampiasa%(brand)s tsy misy hadisoana.",
@@ -3413,7 +3402,6 @@
         "hide_sidebar_button": "Afeno ny sidebar",
         "input_devices": "Fampidirana fitaovana",
         "jitsi_call": "Fihaonambe Jitsi",
-        "join_button_tooltip_call_full": "Miala tsiny — feno ity antso ity amin'izao fotoana izao",
         "legacy_call": "Antso",
         "maximise": "Ameno ny efijery",
         "maximise_call": "Ampitomboy ny antso",

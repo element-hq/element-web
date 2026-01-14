@@ -1,43 +1,39 @@
 {
-    "a11y": {
-        "seek_bar_label": "Förloppsfält för ljud"
-    },
-    "action": {
-        "delete": "Radera",
-        "dismiss": "Avvisa",
-        "explore_rooms": "Utforska rum",
-        "pause": "Pausa",
-        "play": "Spela",
-        "search": "Sök"
-    },
-    "encryption": {
-        "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b> ) identitet verkar ha ändrats.<a> Läs mer</a>",
-        "withdraw_verification_action": "Återkalla verifieringen"
-    },
-    "left_panel": {
-        "open_dial_pad": "Öppna knappsats"
-    },
-    "time": {
-        "about_day_ago": "cirka en dag sedan",
-        "about_hour_ago": "cirka en timme sedan",
-        "about_minute_ago": "cirka en minut sedan",
-        "few_seconds_ago": "några sekunder sedan",
-        "in_about_day": "om cirka en dag",
-        "in_about_hour": "om cirka en timme",
-        "in_about_minute": "om cirka en minut",
-        "in_few_seconds": "om några sekunder",
-        "in_n_days": "om %(num)s dagar",
-        "in_n_hours": "om %(num)s timmar",
-        "in_n_minutes": "om %(num)s minuter",
-        "n_days_ago": "%(num)s dagar sedan",
-        "n_hours_ago": "%(num)s timmar sedan",
-        "n_minutes_ago": "%(num)s minuter sedan"
-    },
-    "timeline": {
-        "m.audio": {
-            "audio_player": "Ljudspelare",
-            "error_downloading_audio": "Fel vid nedladdning av ljud",
-            "unnamed_audio": "Namnlöst ljud"
-        }
+  "a11y": {
+    "seek_bar_label": "Förloppsfält för ljud"
+  },
+  "action": {
+    "delete": "Radera",
+    "dismiss": "Avvisa",
+    "explore_rooms": "Utforska rum",
+    "pause": "Pausa",
+    "play": "Spela",
+    "search": "Sök"
+  },
+  "left_panel": {
+    "open_dial_pad": "Öppna knappsats"
+  },
+  "time": {
+    "about_day_ago": "cirka en dag sedan",
+    "about_hour_ago": "cirka en timme sedan",
+    "about_minute_ago": "cirka en minut sedan",
+    "few_seconds_ago": "några sekunder sedan",
+    "in_about_day": "om cirka en dag",
+    "in_about_hour": "om cirka en timme",
+    "in_about_minute": "om cirka en minut",
+    "in_few_seconds": "om några sekunder",
+    "in_n_days": "om %(num)s dagar",
+    "in_n_hours": "om %(num)s timmar",
+    "in_n_minutes": "om %(num)s minuter",
+    "n_days_ago": "%(num)s dagar sedan",
+    "n_hours_ago": "%(num)s timmar sedan",
+    "n_minutes_ago": "%(num)s minuter sedan"
+  },
+  "timeline": {
+    "m.audio": {
+      "audio_player": "Ljudspelare",
+      "error_downloading_audio": "Fel vid nedladdning av ljud",
+      "unnamed_audio": "Namnlöst ljud"
     }
+  }
 }

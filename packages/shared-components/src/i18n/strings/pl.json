@@ -1,43 +1,39 @@
 {
-    "a11y": {
-        "seek_bar_label": "Pasek wyszukiwania audio"
-    },
-    "action": {
-        "delete": "Usuń",
-        "dismiss": "Pomiń",
-        "explore_rooms": "Przeglądaj pokoje",
-        "pause": "Wstrzymaj",
-        "play": "Odtwórz",
-        "search": "Szukaj"
-    },
-    "encryption": {
-        "pinned_identity_changed": "Tożsamość %(displayName)s (<b>%(userId)s</b>) została zresetowana. <a>Dowiedz się więcej</a>",
-        "withdraw_verification_action": "Wycofaj weryfikację"
-    },
-    "left_panel": {
-        "open_dial_pad": "Otwórz klawiaturę numeryczną"
-    },
-    "time": {
-        "about_day_ago": "około dzień temu",
-        "about_hour_ago": "około godziny temu",
-        "about_minute_ago": "około minuty temu",
-        "few_seconds_ago": "kilka sekund temu",
-        "in_about_day": "około dnia od teraz",
-        "in_about_hour": "około godziny od teraz",
-        "in_about_minute": "około minuty od teraz",
-        "in_few_seconds": "za kilka sekund",
-        "in_n_days": "za %(num)s dni",
-        "in_n_hours": "za %(num)s godzin",
-        "in_n_minutes": "za %(num)s minut",
-        "n_days_ago": "%(num)s dni temu",
-        "n_hours_ago": "%(num)s godzin temu",
-        "n_minutes_ago": "%(num)s minut temu"
-    },
-    "timeline": {
-        "m.audio": {
-            "audio_player": "Odtwarzacz audio",
-            "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
-            "unnamed_audio": "Audio bez nazwy"
-        }
+  "a11y": {
+    "seek_bar_label": "Pasek wyszukiwania audio"
+  },
+  "action": {
+    "delete": "Usuń",
+    "dismiss": "Pomiń",
+    "explore_rooms": "Przeglądaj pokoje",
+    "pause": "Wstrzymaj",
+    "play": "Odtwórz",
+    "search": "Szukaj"
+  },
+  "left_panel": {
+    "open_dial_pad": "Otwórz klawiaturę numeryczną"
+  },
+  "time": {
+    "about_day_ago": "około dzień temu",
+    "about_hour_ago": "około godziny temu",
+    "about_minute_ago": "około minuty temu",
+    "few_seconds_ago": "kilka sekund temu",
+    "in_about_day": "około dnia od teraz",
+    "in_about_hour": "około godziny od teraz",
+    "in_about_minute": "około minuty od teraz",
+    "in_few_seconds": "za kilka sekund",
+    "in_n_days": "za %(num)s dni",
+    "in_n_hours": "za %(num)s godzin",
+    "in_n_minutes": "za %(num)s minut",
+    "n_days_ago": "%(num)s dni temu",
+    "n_hours_ago": "%(num)s godzin temu",
+    "n_minutes_ago": "%(num)s minut temu"
+  },
+  "timeline": {
+    "m.audio": {
+      "audio_player": "Odtwarzacz audio",
+      "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
+      "unnamed_audio": "Audio bez nazwy"
     }
+  }
 }

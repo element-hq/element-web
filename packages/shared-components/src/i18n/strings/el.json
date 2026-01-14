@@ -1,35 +1,35 @@
 {
-    "action": {
-        "delete": "Διαγραφή",
-        "dismiss": "Απόρριψη",
-        "explore_rooms": "Εξερευνήστε αίθουσες",
-        "pause": "Παύση",
-        "play": "Αναπαραγωγή",
-        "search": "Αναζήτηση"
-    },
-    "left_panel": {
-        "open_dial_pad": "Άνοιγμα πληκτρολογίου κλήσης"
-    },
-    "time": {
-        "about_day_ago": "σχεδόν μία μέρα πριν",
-        "about_hour_ago": "σχεδόν μία ώρα πριν",
-        "about_minute_ago": "σχεδόν ένα λεπτό πριν",
-        "few_seconds_ago": "λίγα δευτερόλεπτα πριν",
-        "in_about_day": "περίπου μια μέρα από τώρα",
-        "in_about_hour": "περίπου μία ώρα από τώρα",
-        "in_about_minute": "περίπου ένα λεπτό από τώρα",
-        "in_few_seconds": "λίγα δευτερόλεπτα από τώρα",
-        "in_n_days": "%(num)s μέρες από τώρα",
-        "in_n_hours": "%(num)s ώρες από τώρα",
-        "in_n_minutes": "%(num)s λεπτά από τώρα",
-        "n_days_ago": "%(num)s μέρες πριν",
-        "n_hours_ago": "%(num)s ώρες πριν",
-        "n_minutes_ago": "%(num)s λεπτά πριν"
-    },
-    "timeline": {
-        "m.audio": {
-            "error_downloading_audio": "Σφάλμα λήψης ήχου",
-            "unnamed_audio": "Ήχος χωρίς όνομα"
-        }
+  "action": {
+    "delete": "Διαγραφή",
+    "dismiss": "Απόρριψη",
+    "explore_rooms": "Εξερευνήστε αίθουσες",
+    "pause": "Παύση",
+    "play": "Αναπαραγωγή",
+    "search": "Αναζήτηση"
+  },
+  "left_panel": {
+    "open_dial_pad": "Άνοιγμα πληκτρολογίου κλήσης"
+  },
+  "time": {
+    "about_day_ago": "σχεδόν μία μέρα πριν",
+    "about_hour_ago": "σχεδόν μία ώρα πριν",
+    "about_minute_ago": "σχεδόν ένα λεπτό πριν",
+    "few_seconds_ago": "λίγα δευτερόλεπτα πριν",
+    "in_about_day": "περίπου μια μέρα από τώρα",
+    "in_about_hour": "περίπου μία ώρα από τώρα",
+    "in_about_minute": "περίπου ένα λεπτό από τώρα",
+    "in_few_seconds": "λίγα δευτερόλεπτα από τώρα",
+    "in_n_days": "%(num)s μέρες από τώρα",
+    "in_n_hours": "%(num)s ώρες από τώρα",
+    "in_n_minutes": "%(num)s λεπτά από τώρα",
+    "n_days_ago": "%(num)s μέρες πριν",
+    "n_hours_ago": "%(num)s ώρες πριν",
+    "n_minutes_ago": "%(num)s λεπτά πριν"
+  },
+  "timeline": {
+    "m.audio": {
+      "error_downloading_audio": "Σφάλμα λήψης ήχου",
+      "unnamed_audio": "Ήχος χωρίς όνομα"
     }
+  }
 }
