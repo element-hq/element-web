@@ -53,44 +53,15 @@ export class RoomListHeaderViewModel
      */
     private activeSpace: Room | null;
 
-    /**
-     * Computes the snapshot based on the current state.
-     */
-    private static readonly computeSnapshot = ({ matrixClient, spaceStore }: Props): RoomListHeaderViewSnapshot => {
-        const activeSpace = spaceStore.activeSpaceRoom;
-        const spaceName = activeSpace?.name;
-        const title = spaceName ?? getMetaSpaceName(spaceStore.activeSpace as MetaSpace, spaceStore.allRoomsInHome);
-
-        const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
-        const canCreateVideoRoom = SettingsStore.getValue("feature_video_rooms") && canCreateRoom;
-        const displayComposeMenu = canCreateRoom;
-        const displaySpaceMenu = Boolean(activeSpace);
-        const canInviteInSpace = Boolean(
-            activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
-        );
-        const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
-
-        const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
-        const activeSortOption =
-            sortingAlgorithm === SortingAlgorithm.Recency ? ("recent" as const) : ("alphabetical" as const);
-
-        return {
-            title,
-            displayComposeMenu,
-            displaySpaceMenu,
-            canCreateRoom,
-            canCreateVideoRoom,
-            canInviteInSpace,
-            canAccessSpaceSettings,
-            activeSortOption,
-        };
-    };
-
     public constructor(props: Props) {
-        super(props, RoomListHeaderViewModel.computeSnapshot(props));
+        super(props, getInitialSnapshot(props.spaceStore, props.matrixClient));
 
         // Listen for video rooms feature flag changes
-        const settingsFeatureVideoRef = SettingsStore.watchSetting("feature_video_rooms", null, this.updateSnapshot);
+        const settingsFeatureVideoRef = SettingsStore.watchSetting(
+            "feature_video_rooms",
+            null,
+            this.onVideoRoomsFeatureFlagChange,
+        );
         this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
 
         // Listen for space changes
@@ -100,7 +71,7 @@ export class RoomListHeaderViewModel
         // Listen for space name changes
         this.activeSpace = props.spaceStore.activeSpaceRoom;
         if (this.activeSpace) {
-            this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.updateSnapshot);
+            this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.onSpaceNameChange);
         }
     }
 
@@ -110,29 +81,40 @@ export class RoomListHeaderViewModel
     private readonly onSpaceChange = (): void => {
         const activeSpace = this.props.spaceStore.activeSpaceRoom;
 
-        this.activeSpace?.off(RoomEvent.Name, this.updateSnapshot);
+        this.activeSpace?.off(RoomEvent.Name, this.onSpaceNameChange);
         this.activeSpace = activeSpace;
 
         // Add new room listener if needed
         if (this.activeSpace) {
-            this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.updateSnapshot);
+            this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.onSpaceNameChange);
         }
 
-        this.updateSnapshot();
+        this.snapshot.merge({
+            ...computeHeaderSpaceState(this.props.spaceStore, this.props.matrixClient),
+        });
     };
 
     /**
      * Handles home behaviour change events.
      */
     private readonly onHomeBehaviourChange = (): void => {
-        this.updateSnapshot();
+        this.snapshot.merge({ title: getHeaderTitle(this.props.spaceStore) });
     };
 
     /**
-     * Updates the snapshot.
+     * Handles space name change events.
      */
-    private readonly updateSnapshot = (): void => {
-        this.snapshot.set(RoomListHeaderViewModel.computeSnapshot(this.props));
+    private onSpaceNameChange = (): void => {
+        this.snapshot.merge({ title: getHeaderTitle(this.props.spaceStore) });
+    };
+
+    /**
+     * Handles video rooms feature flag change events.
+     */
+    private readonly onVideoRoomsFeatureFlagChange = (): void => {
+        this.snapshot.merge({
+            canCreateVideoRoom: getCanCreateVideoRoom(this.snapshot.current.canCreateRoom),
+        });
     };
 
     public createChatRoom = (e: Event): void => {
@@ -186,6 +168,74 @@ export class RoomListHeaderViewModel
     public sort = (option: SortOption): void => {
         const sortingAlgorithm = option === "recent" ? SortingAlgorithm.Recency : SortingAlgorithm.Alphabetic;
         RoomListStoreV3.instance.resort(sortingAlgorithm);
-        this.updateSnapshot();
+        this.snapshot.merge({ activeSortOption: option });
+    };
+}
+
+/**
+ * Get the initial snapshot for the RoomListHeaderViewModel.
+ * @param spaceStore - The space store instance.
+ * @param matrixClient - The Matrix client instance.
+ * @returns
+ */
+function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
+    const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
+    const activeSortOption =
+        sortingAlgorithm === SortingAlgorithm.Recency ? ("recent" as const) : ("alphabetical" as const);
+
+    return {
+        activeSortOption,
+        ...computeHeaderSpaceState(spaceStore, matrixClient),
+    };
+}
+
+/**
+ * Get the header title based on the active space.
+ * @param spaceStore - The space store instance.
+ */
+function getHeaderTitle(spaceStore: SpaceStoreClass): string {
+    const activeSpace = spaceStore.activeSpaceRoom;
+    const spaceName = activeSpace?.name;
+    return spaceName ?? getMetaSpaceName(spaceStore.activeSpace as MetaSpace, spaceStore.allRoomsInHome);
+}
+
+/**
+ * Determine if the user can create a video room.
+ * @param canCreateRoom - Whether the user can create a room.
+ */
+function getCanCreateVideoRoom(canCreateRoom: boolean): boolean {
+    return SettingsStore.getValue("feature_video_rooms") && canCreateRoom;
+}
+
+/**
+ * Computes the header space state based on the active space and user permissions.
+ * @param spaceStore - The space store instance.
+ * @param matrixClient - The Matrix client instance.
+ * @returns The header space state containing title, permissions, and display flags.
+ */
+function computeHeaderSpaceState(
+    spaceStore: SpaceStoreClass,
+    matrixClient: MatrixClient,
+): Omit<RoomListHeaderViewSnapshot, "activeSortOption"> {
+    const activeSpace = spaceStore.activeSpaceRoom;
+    const title = getHeaderTitle(spaceStore);
+
+    const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
+    const canCreateVideoRoom = getCanCreateVideoRoom(canCreateRoom);
+    const displayComposeMenu = canCreateRoom;
+    const displaySpaceMenu = Boolean(activeSpace);
+    const canInviteInSpace = Boolean(
+        activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
+    );
+    const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
+
+    return {
+        title,
+        canCreateRoom,
+        canCreateVideoRoom,
+        displayComposeMenu,
+        displaySpaceMenu,
+        canInviteInSpace,
+        canAccessSpaceSettings,
     };
 }
