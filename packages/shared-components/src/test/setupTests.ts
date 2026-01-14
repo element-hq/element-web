@@ -12,11 +12,12 @@ import en from "../i18n/strings/en_EN.json";
 
 export function setupLanguageMock(): void {
     fetchMock
-        .get("/i18n/languages.json", {
+        .get("end:/i18n/languages.json", {
             en: "en_EN.json",
         })
         .get("end:en_EN.json", en);
 }
 setupLanguageMock();
+fetchMock.mockGlobal();
 
 setLanguage("en");

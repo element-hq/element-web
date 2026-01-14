@@ -10,7 +10,7 @@ import { env } from "process";
 import type { Config } from "jest";
 
 const config: Config = {
-    testEnvironment: "jsdom",
+    testEnvironment: "jest-fixed-jsdom",
     testEnvironmentOptions: {
         url: "http://localhost/",
     },
