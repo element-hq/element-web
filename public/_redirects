@@ -1,0 +1,6 @@
+# Cloudflare Pages Redirects for Tunetalks SPA
+# See: https://developers.cloudflare.com/pages/platform/redirects/
+
+# SPA fallback - serve index.html for all routes
+# This is required for client-side routing to work
+/*    /index.html   200

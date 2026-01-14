@@ -1,0 +1,68 @@
+# Tunetalks Web - Dockerfile
+# Custom build of Element Web branded as Tunetalks
+
+FROM node:20-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache git
+
+WORKDIR /src
+
+# Copy package files
+COPY package.json yarn.lock ./
+COPY patches ./patches
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Copy Tunetalks configuration
+COPY config.tunetalks.json ./config.json
+
+# Set environment variables for build
+ARG RIOT_OG_IMAGE_URL=https://tunetalks.com/assets/opengraph.png
+ARG CSP_EXTRA_SOURCE=https://tunetalks.com
+ARG VERSION=1.0.0
+
+ENV RIOT_OG_IMAGE_URL=$RIOT_OG_IMAGE_URL
+ENV CSP_EXTRA_SOURCE=$CSP_EXTRA_SOURCE
+ENV VERSION=$VERSION
+
+# Build the application
+RUN yarn build
+
+# Production stage with nginx
+FROM nginx:alpine
+
+# Copy built files
+COPY --from=builder /src/webapp /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY docker/nginx-templates/default.conf.template /etc/nginx/templates/
+
+# Add custom nginx config for Tunetalks
+RUN echo 'add_header X-Frame-Options SAMEORIGIN always;' > /etc/nginx/conf.d/security-headers.conf && \
+    echo 'add_header X-Content-Type-Options nosniff always;' >> /etc/nginx/conf.d/security-headers.conf && \
+    echo 'add_header X-XSS-Protection "1; mode=block" always;' >> /etc/nginx/conf.d/security-headers.conf && \
+    echo 'add_header Content-Security-Policy "frame-ancestors '\''self'\''" always;' >> /etc/nginx/conf.d/security-headers.conf
+
+# Set cache control for config files
+RUN echo 'location ~ ^/(config.*\.json|i18n|home|sites|index.html)$ {' > /etc/nginx/conf.d/cache-control.conf && \
+    echo '    add_header Cache-Control "no-cache";' >> /etc/nginx/conf.d/cache-control.conf && \
+    echo '}' >> /etc/nginx/conf.d/cache-control.conf
+
+# Expose port
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+
+# Labels
+LABEL maintainer="Tunetalks Team"
+LABEL description="Tunetalks Web - Secure Matrix Communication Platform"
+LABEL version="1.0.0"
+
+CMD ["nginx", "-g", "daemon off;"]

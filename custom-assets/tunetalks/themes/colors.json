@@ -1,0 +1,93 @@
+{
+    "brand": {
+        "name": "Tunetalks",
+        "tagline": "Nền tảng giao tiếp an toàn",
+        "description": "Tunetalks - Ứng dụng nhắn tin và gọi điện bảo mật dựa trên giao thức Matrix"
+    },
+    "colors": {
+        "primary": {
+            "main": "#0DBD8B",
+            "light": "#00E5A0",
+            "dark": "#0CA678",
+            "contrast": "#FFFFFF"
+        },
+        "secondary": {
+            "main": "#2E3338",
+            "light": "#4A5158",
+            "dark": "#1A1D20",
+            "contrast": "#FFFFFF"
+        },
+        "accent": {
+            "main": "#FF6B6B",
+            "light": "#FF8787",
+            "dark": "#EE5A52"
+        },
+        "background": {
+            "default": "#FFFFFF",
+            "paper": "#F8F9FA",
+            "dark": "#1A1D20"
+        },
+        "text": {
+            "primary": "#2E3338",
+            "secondary": "#6C757D",
+            "disabled": "#ADB5BD",
+            "hint": "#868E96"
+        },
+        "status": {
+            "success": "#28A745",
+            "warning": "#FFC107",
+            "error": "#DC3545",
+            "info": "#17A2B8"
+        }
+    },
+    "typography": {
+        "fontFamily": {
+            "primary": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            "heading": "Inter, sans-serif",
+            "monospace": "'Fira Code', 'Courier New', monospace"
+        },
+        "fontSize": {
+            "xs": "12px",
+            "sm": "14px",
+            "base": "16px",
+            "lg": "18px",
+            "xl": "20px",
+            "2xl": "24px",
+            "3xl": "30px",
+            "4xl": "36px"
+        }
+    },
+    "spacing": {
+        "unit": 8,
+        "xs": "4px",
+        "sm": "8px",
+        "md": "16px",
+        "lg": "24px",
+        "xl": "32px",
+        "2xl": "48px",
+        "3xl": "64px"
+    },
+    "borderRadius": {
+        "none": "0",
+        "sm": "4px",
+        "md": "8px",
+        "lg": "12px",
+        "xl": "16px",
+        "full": "9999px"
+    },
+    "shadows": {
+        "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+        "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+    },
+    "breakpoints": {
+        "xs": "0px",
+        "sm": "576px",
+        "md": "768px",
+        "lg": "992px",
+        "xl": "1200px",
+        "2xl": "1400px"
+    }
+}

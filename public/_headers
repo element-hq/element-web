@@ -1,0 +1,74 @@
+# Cloudflare Pages Headers for Tunetalks
+# See: https://developers.cloudflare.com/pages/platform/headers/
+
+# Security headers for all routes
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://matrix.tunetalks.me wss://matrix.tunetalks.me https:; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';
+
+# Cache static bundles aggressively (immutable)
+/bundles/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache themes aggressively
+/themes/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache vector icons
+/vector-icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache fonts
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache other static assets
+/*.js
+  Cache-Control: public, max-age=86400
+
+/*.css
+  Cache-Control: public, max-age=86400
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=86400
+
+/*.png
+  Cache-Control: public, max-age=86400
+
+/*.jpg
+  Cache-Control: public, max-age=86400
+
+/*.webp
+  Cache-Control: public, max-age=86400
+
+# Never cache config - must always be fresh
+/config.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Never cache manifest - may change with updates
+/manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Never cache service worker
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Never cache index.html - always serve fresh
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Root path
+/
+  Cache-Control: no-cache, no-store, must-revalidate

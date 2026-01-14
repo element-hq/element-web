@@ -1,0 +1,48 @@
+# Docker Compose for Tunetalks Web
+version: '3.8'
+
+services:
+  tunetalks-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.tunetalks
+      args:
+        RIOT_OG_IMAGE_URL: "https://tunetalks.com/assets/opengraph.png"
+        CSP_EXTRA_SOURCE: "https://tunetalks.com"
+        VERSION: "1.0.0"
+    container_name: tunetalks-web
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      # Mount custom config if needed
+      - ./config.tunetalks.json:/usr/share/nginx/html/config.json:ro
+      # Mount custom assets
+      - ./custom-assets:/usr/share/nginx/html/custom-assets:ro
+    restart: unless-stopped
+    networks:
+      - tunetalks-network
+    labels:
+      - "com.tunetalks.service=web"
+      - "com.tunetalks.version=1.0.0"
+
+  # Optional: Add your Matrix homeserver here
+  # synapse:
+  #   image: matrixdotorg/synapse:latest
+  #   container_name: tunetalks-synapse
+  #   ports:
+  #     - "8008:8008"
+  #   volumes:
+  #     - ./synapse-data:/data
+  #   environment:
+  #     - SYNAPSE_SERVER_NAME=tunetalks.com
+  #   networks:
+  #     - tunetalks-network
+
+networks:
+  tunetalks-network:
+    driver: bridge
+
+volumes:
+  synapse-data:
