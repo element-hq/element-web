@@ -6,10 +6,10 @@ exports[`EventTile should display failed to send status receipt 1`] = `
     aria-atomic="true"
     aria-live="off"
     class="mx_EventTile"
-    data-event-id="$0.8980163660547886-0.8220178053182281"
+    data-event-id="$0.030505183662363433-0.948583487442858"
     data-has-reply="false"
     data-layout="group"
-    data-scroll-tokens="$0.8980163660547886-0.8220178053182281"
+    data-scroll-tokens="$0.030505183662363433-0.948583487442858"
     data-self="true"
     tabindex="-1"
   >
@@ -42,7 +42,7 @@ exports[`EventTile should display failed to send status receipt 1`] = `
     </div>
     <div
       class="mx_EventTile_line"
-      id="1"
+      id="36"
     >
       <div
         class="mx_MTextBody mx_EventTile_content"
@@ -129,7 +129,7 @@ exports[`EventTile should display failed to send status receipt 1`] = `
         class="mx_ReadReceiptGroup"
       >
         <div
-          aria-labelledby="_r_c_"
+          aria-labelledby="_r_b0_"
           class="mx_ReadReceiptGroup_button"
           role="status"
         >
