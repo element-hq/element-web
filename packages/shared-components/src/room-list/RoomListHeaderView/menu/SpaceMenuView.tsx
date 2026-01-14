@@ -47,8 +47,8 @@ export function SpaceMenuView({ vm }: SpaceMenuViewProps): JSX.Element {
             title={title}
             align="start"
             trigger={
-                <IconButton className={styles.button} aria-label={_t("room_list|open_space_menu")} size="20px">
-                    <ChevronDownIcon color="var(--cpd-color-icon-secondary)" />
+                <IconButton className={styles.button} aria-label={_t("room_list|open_space_menu")} size="24px">
+                    <ChevronDownIcon />
                 </IconButton>
             }
         >

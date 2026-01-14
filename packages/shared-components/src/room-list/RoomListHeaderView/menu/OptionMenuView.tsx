@@ -43,8 +43,12 @@ export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
             showTitle={false}
             align="start"
             trigger={
-                <IconButton tooltip={_t("room_list|room_options")} aria-label={_t("room_list|room_options")}>
-                    <OverflowHorizontalIcon color="var(--cpd-color-icon-secondary)" />
+                <IconButton
+                    tooltip={_t("room_list|room_options")}
+                    aria-label={_t("room_list|room_options")}
+                    size="28px"
+                >
+                    <OverflowHorizontalIcon />
                 </IconButton>
             }
         >
