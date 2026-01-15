@@ -20,6 +20,10 @@ venv_path=${repo_root:-./}.venv
 if [ ! -d "$venv_path" ]; then
     "python${PYTHON_VERSION:-3}" -m venv "$venv_path"
     "$venv_path/bin/pip" install -e '.[dev]'
+
+    # Temp: downgrade prometheus-client until Synapse is compatible with 0.24.0+
+    # See https://github.com/element-hq/synapse/issues/19375
+    "$venv_path/bin/pip" install --force prometheus-client==0.23.1
 fi
 
 [ $# -gt 1 ] && . "$venv_path/bin/activate" && "$@"
