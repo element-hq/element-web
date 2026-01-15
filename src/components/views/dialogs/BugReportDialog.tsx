@@ -263,7 +263,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             <BaseDialog
                 className="mx_BugReportDialog"
                 onFinished={this.onCancel}
-                title={_t("bug_reporting|submit_debug_logs")}
+                title={this.isLocalOnly ? _t("bug_reporting|download_logs") : _t("bug_reporting|submit_debug_logs")}
                 contentId="mx_Dialog_content"
             >
                 <div className="mx_Dialog_content" id="mx_Dialog_content">

@@ -22,7 +22,7 @@ exports[`BugReportDialog renders when the config only allows local downloads: lo
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Submit debug logs
+        Download logs
       </h1>
     </div>
     <div
