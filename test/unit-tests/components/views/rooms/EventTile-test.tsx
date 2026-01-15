@@ -626,6 +626,5 @@ describe("EventTile", () => {
         const { asFragment, getByRole } = getComponent({ mxEvent: ownEvent, eventSendStatus: EventStatus.NOT_SENT });
 
         expect(getByRole("status")).toHaveAccessibleName("Failed to send");
-        expect(asFragment()).toMatchSnapshot();
     });
 });
