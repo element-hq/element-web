@@ -1995,7 +1995,6 @@
         "dm_invite_title": "Do you want to chat with %(user)s?",
         "drop_file_prompt": "Drop file here to upload",
         "edit_topic": "Edit topic",
-        "error_3pid_invite_email_lookup": "Unable to find user by email",
         "error_cancel_knock_title": "Failed to cancel",
         "error_join_403": "You need an invite to access this room.",
         "error_join_404_1": "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
