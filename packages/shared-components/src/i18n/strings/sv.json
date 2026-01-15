@@ -10,10 +10,6 @@
         "play": "Spela",
         "search": "Sök"
     },
-    "encryption": {
-        "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b> ) identitet verkar ha ändrats.<a> Läs mer</a>",
-        "withdraw_verification_action": "Återkalla verifieringen"
-    },
     "left_panel": {
         "open_dial_pad": "Öppna knappsats"
     },

@@ -3,6 +3,14 @@
         "emoji_picker": "이모지 선택",
         "jump_first_invite": "첫 초대로 건너뜁니다.",
         "message_composer": "메세지 작성자",
+        "n_unread_messages": {
+            "%(count)s개의 읽지 않은 메시지.": "other",
+            "1개의 읽지 않은 메시지.": "one"
+        },
+        "n_unread_messages_mentions": {
+            "언급을 포함한 %(count)s개의 읽지 않은 메시지.": "other",
+            "1개의 읽지 않은 언급.": "one"
+        },
         "recent_rooms": "최근 방",
         "room_messsage_not_sent": "%(roomName)s에 미발송 메시지가 있는 방을 엽니다.",
         "room_n_unread_invite": "공개 방 %(roomName)s에 초대 되었습니다.",
@@ -458,6 +466,10 @@
         "advanced": "고급",
         "all_chats": "모든 채팅",
         "analytics": "정보 분석",
+        "and_n_others": {
+            "외 한 명...": "one",
+            "외 %(count)s명...": "other"
+        },
         "appearance": "모습",
         "application": "애플리케이션",
         "are_you_sure": "확신합니까?",
@@ -627,11 +639,11 @@
         "mode_plain": "서식 숨기기",
         "mode_rich_text": "서식 표시",
         "no_perms_notice": "이 방에 글을 올릴 권한이 없습니다",
-        "placeholder": "암호화되지 않은 메시지를 보내다…",
+        "placeholder": "암호화되지 않은 메시지 보내기",
         "placeholder_encrypted": "메시지 보내기",
-        "placeholder_reply": "암호화되지 않은 답장을 보내세요…",
+        "placeholder_reply": "암호화되지 않은 답장 보내기",
         "placeholder_reply_encrypted": "답변 보내기",
-        "placeholder_thread": "암호화되지 않은 스레드에 답장하기…",
+        "placeholder_thread": "암호화되지 않은 스레드에 답장하기",
         "placeholder_thread_encrypted": "스레드에 답글 달기…",
         "poll_button": "투표",
         "poll_button_no_perms_description": "이 방에서 투표를 시작할 권한이 없습니다.",
@@ -1403,6 +1415,10 @@
     "inviting_user_and_n_others": {
         "other": "%(user)s 및 다른 %(count)s명 초대 중"
     },
+    "items_and_n_others": {
+        "<Items/>님 외 한 명": "one",
+        "<Items/>님 외 %(count)s명": "other"
+    },
     "keyboard": {
         "activate_button": "선택한 버튼 활성화",
         "alt": "Alt",
@@ -1977,6 +1993,8 @@
         "forget_room": "이 방 지우기",
         "forget_space": "스페이지 지우기",
         "header": {
+            "join_video_call": "영상 통화 참여하기",
+            "join_voice_call": "음성 통화 참여",
             "n_people_asking_to_join": {
                 "other": "%(count)s명이 참여 요청 중"
             },
@@ -2074,19 +2092,10 @@
             },
             "this_room_button": "이 방을 검색하세요"
         },
-        "status_bar": {
-            "delete_all": "전체 삭제",
-            "exceeded_resource_limit": "이 홈서버가 리소스 한도를 초과했기 때문에 메시지를 보낼 수 없었습니다. 서비스를 계속 사용하려면 <a>서비스 관리자에게 연락</a>해주세요.",
-            "homeserver_blocked": "이 홈서버가 관리자에 의해 차단되어 메시지가 전송되지 않았습니다. 서비스를 계속 이용하려면 **<a>서비스 관리자에게 문의</a>**하세요.",
-            "monthly_user_limit_reached": "이 홈서버가 월 간 활성 사용자 한도를 초과했기 때문에 메시지를 보낼 수 없었습니다. 서비스를 계속 사용하려면 <a>서비스 관리자에게 연락</a>해주세요.",
-            "requires_consent_agreement": "<consentLink>이용 약관</consentLink>을 검토하고 동의하기 전까진 메시지를 보낼 수 없습니다.",
-            "retry_all": "전체 재시도",
-            "select_messages_to_retry": "모든 메시지 또는 개별 메시지를 선택하여 재시도하거나 삭제할 수 있습니다.",
-            "server_connectivity_lost_description": "보낸 메시지는 연결이 돌아올 때까지 저장됩니다.",
-            "server_connectivity_lost_title": "서버 연결이 끊어졌습니다.",
-            "some_messages_not_sent": "일부 메시지가 전송되지 않았습니다"
-        },
         "unknown_status_code_for_timeline_jump": "알 수 없는 상태 코드",
+        "unread_notifications_predecessor": {
+            "이 방의 이전 버전에서 읽지 않은 %(count)s개의 알림이 있습니다.": "one"
+        },
         "upgrade_error_description": "서버가 선택한 방 버전을 지원하는지 확인한 뒤에 다시 시도해주세요.",
         "upgrade_error_title": "방 업그레이드 오류",
         "upgrade_warning_bar": "이 방을 업그레이드하면 현재 방의 인스턴스는 문을 닫고 같은 이름의 업그레이드된 방을 만듭니다.",
@@ -2094,6 +2103,9 @@
         "upgrade_warning_bar_unstable": "이 방은 방 버전 <roomVersion />에서 실행 중이고, 이 홈서버가 <i>불안정</i>으로 표시됩니다.",
         "upgrade_warning_bar_upgraded": "이 방은 이미 업그레이드됬습니다.",
         "upload": {
+            "uploading_multiple_file": {
+                "%(filename)s 외 %(count)s개를 올리는 중": "other"
+            },
             "uploading_single_file": "%(filename)s을(를) 올리는 중"
         },
         "video_room": "이 채팅방은 영상채팅방입니다",
@@ -2162,6 +2174,9 @@
         },
         "room_options": "채팅방 옵션",
         "show_less": "간단히 표시",
+        "show_n_more": {
+            "%(count)s개 더 보기": "other"
+        },
         "show_previews": "메시지 미리 보기 표시",
         "sort": "정렬",
         "sort_by": "정렬 기준",
@@ -2358,12 +2373,11 @@
             "error_join_rule_change_title": "조인 규칙을 업데이트하지 못했습니다.",
             "error_join_rule_change_unknown": "알 수 없는 오류",
             "guest_access_warning": "지원되는 클라이언트를 사용하는 사용자는 등록된 계정이 없어도 방에 참여할 수 있습니다.",
-            "history_visibility_invited": "구성원만(구성원이 초대받은 시점부터)",
-            "history_visibility_joined": "구성원만(구성원들이 참여한 시점부터)",
+            "history_visibility_invited": "초대된 회원들",
             "history_visibility_legend": "누가 기록을 읽을 수 있나요?",
-            "history_visibility_shared": "구성원만(이 설정을 선택한 시점부터)",
-            "history_visibility_warning": "기존 기록의 공개 설정은 변경되지 않습니다",
-            "history_visibility_world_readable": "누구나",
+            "history_visibility_shared": "회원 (전체 기록)",
+            "history_visibility_warning": "변경 사항은 이전 메시지에는 영향을 주지 않으며, 새 메시지에만 적용됩니다. <a>자세히 알아보기</a>",
+            "history_visibility_world_readable": "누구나 (대화 기록 공개)\n",
             "join_rule_description": "%(roomName)s에 누가 참여할 수 있는지 설정합니다.",
             "join_rule_invite": "비공개 (초대 필요)",
             "join_rule_invite_description": "초대한 경우에만 참여할 수 있습니다.",
@@ -3611,11 +3625,25 @@
         "send_state_sending": "메시지를 보내는 중…",
         "send_state_sent": "귀하의 메시지가 전송되었습니다",
         "summary": {
+            "banned": {
+                "님이 %(count)s번 출입 금지 당했습니다": "other",
+                "님이 출입 금지 당했습니다": "one"
+            },
+            "banned_multiple": {
+                "이 %(count)s번 출입 금지 당했습니다": "other",
+                "이 출입 금지 당했습니다": "one"
+            },
             "changed_avatar": {
                 "other": "%(oneUser)s님이 프로필 사진을 %(count)s회 변경했습니다"
             },
             "changed_avatar_multiple": {
                 "other": "%(severalUsers)s님이 프로필 사진을 %(count)s회 변경했습니다"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s님이 이름을 %(count)s번 변경했습니다."
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s님이 이름을 %(count)s번 변경했습니다."
             },
             "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
@@ -3624,11 +3652,59 @@
             "hidden_event_multiple": {
                 "other": "%(severalUsers)s님이 숨겨진 메시지 %(count)s개를 보냈습니다"
             },
+            "invite_withdrawn": {
+                "%(oneUser)s님이 초대를 %(count)s번 취소했습니다": "other",
+                "%(oneUser)s님이 초대를 취소했습니다": "one"
+            },
+            "invite_withdrawn_multiple": {
+                "%(severalUsers)s이 초대를 %(count)s번 취소했습니다": "other",
+                "%(severalUsers)s이 초대를 취소했습니다": "one"
+            },
+            "invited": {
+                "님이 초대받았습니다": "one",
+                "님이 %(count)s번 초대받았습니다": "other"
+            },
+            "invited_multiple": {
+                "%(count)s번 초대했습니다": "other",
+                "초대했습니다": "one"
+            },
+            "joined": {
+                "%(oneUser)s님이 %(count)s번 참여했습니다": "other",
+                "%(oneUser)s님이 참여했습니다": "one"
+            },
+            "joined_and_left": {
+                "%(oneUser)s님이 %(count)s번 참여하고 떠났습니다": "other",
+                "%(oneUser)s님이 참여하고 떠났습니다": "one"
+            },
+            "joined_and_left_multiple": {
+                "%(severalUsers)s님이 %(count)s번 참여하고 떠났습니다": "other",
+                "%(severalUsers)s님이 참여하고 떠났습니다": "one"
+            },
+            "joined_multiple": {
+                "%(severalUsers)s님이 참여했습니다": "one",
+                "%(severalUsers)s이 %(count)s번 참여했습니다": "other"
+            },
             "kicked": {
                 "other": "%(count)s회 제거됨"
             },
             "kicked_multiple": {
                 "other": "%(count)s회 제거됨"
+            },
+            "left": {
+                "%(oneUser)s님이 %(count)s번 떠났습니다": "other",
+                "%(oneUser)s님이 떠났습니다": "one"
+            },
+            "left_multiple": {
+                "%(severalUsers)s이 %(count)s번 떠났습니다": "other",
+                "%(severalUsers)s이 떠났습니다": "one"
+            },
+            "no_change": {
+                "%(oneUser)s님이 %(count)s번 변경 사항을 되돌렸습니다": "other",
+                "%(oneUser)s님이 변경 사항을 되돌렸습니다": "one"
+            },
+            "no_change_multiple": {
+                "%(severalUsers)s이 %(count)s번 변경 사항을 되돌렸습니다": "other",
+                "%(severalUsers)s이 변경 사항을 되돌렸습니다": "one"
             },
             "pinned_events": {
                 "other": "%(oneUser)s님이 이 채팅방의 <a>고정된 메시지</a>를 %(count)s회 변경했습니다"
@@ -3641,6 +3717,22 @@
             },
             "redacted_multiple": {
                 "other": "%(severalUsers)s님이 메시지 %(count)s개를 삭제했습니다"
+            },
+            "rejected_invite": {
+                "%(oneUser)s님이 초대를 %(count)s번 거절했습니다": "other",
+                "%(oneUser)s님이 초대를 거절했습니다": "one"
+            },
+            "rejected_invite_multiple": {
+                "%(severalUsers)s이 초대를 거절했습니다": "one",
+                "%(severalUsers)s이 초대를 %(count)s번 거절했습니다": "other"
+            },
+            "rejoined": {
+                "%(oneUser)s님이 %(count)s번 떠나고 다시 참여했습니다": "other",
+                "%(oneUser)s님이 떠나고 다시 참여했습니다": "one"
+            },
+            "rejoined_multiple": {
+                "%(severalUsers)s님이 떠나고 다시 참여했습니다": "one",
+                "%(severalUsers)s님이 %(count)s번 떠나고 다시 참여했습니다": "other"
             },
             "server_acls": {
                 "other": "%(oneUser)s님이 서버 ACL을 %(count)s회 변경했습니다."
@@ -3657,6 +3749,10 @@
         },
         "thread_info_basic": "한 스레드에서",
         "typing_indicator": {
+            "more_users": {
+                "%(names)s 외 %(count)s명이 적고 있습니다 …": "other",
+                "%(names)s 외 한 명이 적고 있습니다 …": "one"
+            },
             "one_user": "%(displayName)s님이 적고 있습니다 …",
             "two_users": "%(names)s님과 %(lastPerson)s님이 적고 있습니다 …"
         },
@@ -3667,6 +3763,9 @@
                 "other": "%(count)s 개의 다른 미리보기를 표시"
             }
         }
+    },
+    "truncated_list_n_more": {
+        "%(count)s개 더...": "other"
     },
     "unsupported_browser": {
         "description": "계속 진행할 경우 일부 기능이 작동하지 않을 수 있으며, 향후 데이터 손실 위험이 있습니다. %(brand)s 을 계속 사용하려면 브라우저를 업데이트하십시오.",
@@ -3708,7 +3807,10 @@
         "not_image": "선택하신 파일은 유효한 이미지 파일이 아닙니다.",
         "title": "파일 업로드",
         "title_progress": "파일 업로드 (총 %(total)s개 중 %(current)s개)",
-        "upload_all_button": "전부 업로드"
+        "upload_all_button": "전부 업로드",
+        "upload_n_others_button": {
+            "%(count)s개의 다른 파일 업로드": "one"
+        }
     },
     "user_info": {
         "admin_tools_section": "관리자 도구",
@@ -3746,6 +3848,10 @@
         "kick_space_warning": "관리자가 아닌 항목에는 여전히 접근할 수 있습니다.",
         "promote_warning": "사용자를 자신과 같은 권한 등급으로 올리는 것은 취소할 수 없습니다.",
         "redact": {
+            "confirm_button": {
+                "%(count)s개의 메시지 삭제": "other",
+                "1개의 메시지 삭제": "one"
+            },
             "confirm_description_1": {
                 "other": "%(user)s님이 작성한 %(count)s개의 메시지를 삭제하려고 합니다. 이 작업은 되돌릴 수 없으며, 대화에 참여한 모든 사용자에게서 해당 메시지가 영구적으로 삭제됩니다. 계속하시겠습니까?"
             },
@@ -3823,7 +3929,6 @@
         "hide_sidebar_button": "사이드바 숨기기",
         "input_devices": "입력 장치",
         "jitsi_call": "Jitsi 화상 회의",
-        "join_button_tooltip_call_full": "죄송합니다 — 현재 통화 중입니다",
         "legacy_call": "레거시 콜",
         "maximise": "화면 채우기",
         "maximise_call": "통화 최대화",

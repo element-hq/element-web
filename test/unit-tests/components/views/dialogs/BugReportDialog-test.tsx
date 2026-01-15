@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { render, waitFor, type RenderResult } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { type Mocked } from "jest-mock";
 
 import BugReportDialog, {
@@ -59,7 +59,6 @@ describe("BugReportDialog", () => {
         global.mx_rage_logger = prevLogger;
         jest.restoreAllMocks();
         SdkConfig.reset();
-        fetchMock.restore();
     });
 
     it("can close the bug reporter", async () => {

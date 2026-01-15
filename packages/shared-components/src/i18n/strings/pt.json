@@ -10,10 +10,6 @@
         "play": "Reproduzir",
         "search": "Pesquisar"
     },
-    "encryption": {
-        "pinned_identity_changed": "A identidade de %(displayName)s (<b>%(userId)s</b> ) foi alterada. <a> Saber mais</a>",
-        "withdraw_verification_action": "Retirar verificação"
-    },
     "left_panel": {
         "open_dial_pad": "Abre o teclado de marcação"
     },

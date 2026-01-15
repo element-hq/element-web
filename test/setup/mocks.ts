@@ -24,5 +24,5 @@ export const mocks = {
         setSinkId: jest.fn(),
         suspend: jest.fn(),
         decodeAudioData: jest.fn(),
-    },
+    } as unknown as AudioContext,
 };

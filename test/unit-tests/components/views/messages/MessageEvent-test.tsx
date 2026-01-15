@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, type RenderResult } from "jest-matrix-react";
 import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import fs from "fs";
 import path from "path";
 
@@ -96,13 +96,9 @@ describe("MessageEvent", () => {
         }
 
         function mockMedia() {
-            fetchMock.getOnce(
-                "https://server/_matrix/media/v3/download/server/image",
-                {
-                    body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
-                },
-                { sendAsJson: false },
-            );
+            fetchMock.getOnce("https://server/_matrix/media/v3/download/server/image", {
+                body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
+            });
         }
 
         it("should render a TextualBody and an ImageBody", () => {

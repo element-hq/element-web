@@ -10,10 +10,6 @@
         "play": "Воспроизведение",
         "search": "Поиск"
     },
-    "encryption": {
-        "pinned_identity_changed": "Идентичность %(displayName)s (<b>%(userId)s</b>), похоже, изменилась. <a>Узнать больше</a>",
-        "withdraw_verification_action": "Подтверждение верификации"
-    },
     "left_panel": {
         "open_dial_pad": "Открыть панель набора номера"
     },

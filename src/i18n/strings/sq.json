@@ -1686,18 +1686,6 @@
             "all_rooms_button": "Kërko në krejt dhomat",
             "this_room_button": "Kërko në këtë dhomë"
         },
-        "status_bar": {
-            "delete_all": "Fshiji krejt",
-            "exceeded_resource_limit": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home ka tejkaluar kufirin e një burimi. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-            "homeserver_blocked": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home është bllokuar nga përgjegjësi i tij. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-            "monthly_user_limit_reached": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home ka mbërritur në Kufirin Mujor të Përdoruesve Aktivë. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-            "requires_consent_agreement": "S’mund të dërgoni ndonjë mesazh, përpara se të shqyrtoni dhe pajtoheni me <consentLink>termat dhe kushtet tona</consentLink>.",
-            "retry_all": "Riprovoji krejt",
-            "select_messages_to_retry": "Për riprovim ose fshirje mund të përzgjidhni krejt mesazhet, ose të tillë individualë",
-            "server_connectivity_lost_description": "Mesazhet e dërguar do të depozitohen deri sa lidhja juaj të jetë rikthyer.",
-            "server_connectivity_lost_title": "Humbi lidhja me shërbyesin.",
-            "some_messages_not_sent": "Disa nga mesazhet tuaj s’janë dërguar"
-        },
         "unknown_status_code_for_timeline_jump": "kod i panjohur gjendjeje",
         "unread_notifications_predecessor": {
             "other": "Keni %(count)s njoftime të palexuar në një version të mëparshëm të kësaj dhome.",
@@ -1916,7 +1904,6 @@
             "error_join_rule_change_unknown": "Dështim i panjohur",
             "guest_access_warning": "Persona me klientë të mbuluar do të jenë në gjendje të hyjnë te dhoma pa pasur ndonjë llogari të regjistruar.",
             "history_visibility_invited": "Vetëm anëtarë (që kur qenë ftuar)",
-            "history_visibility_joined": "Vetëm anëtarë (që kur janë bërë pjesë)",
             "history_visibility_legend": "Kush mund të lexojë historikun?",
             "history_visibility_shared": "Vetëm anëtarët (që nga çasti i përzgjedhjes së kësaj mundësie)",
             "history_visibility_warning": "Ndryshime se cilët mund të lexojnë historikun do të vlejnë vetëm për mesazhe të ardhshëm në këtë dhomë. Dukshmëria e historikut ekzistues nuk do të ndryshohet.",
@@ -3218,7 +3205,6 @@
         "hangup": "Mbylle Thirrjen",
         "hide_sidebar_button": "Fshihe anështyllën",
         "input_devices": "Pajisje input-i",
-        "join_button_tooltip_call_full": "Na ndjeni — aktualisht kjo thirrje është plot",
         "maximise": "Mbushe ekranin",
         "misconfigured_server": "Thirrja dështoi për shkak shërbyesi të keqformësuar",
         "misconfigured_server_description": "Që thirrjet të funksionojnë pa probleme, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home (<code>%(homeserverDomain)s</code>) të formësojë një shërbyes TURN.",

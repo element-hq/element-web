@@ -1509,18 +1509,6 @@
         "peek_join_prompt": "Vista previa de %(roomName)s. Queres unirte?",
         "read_topic": "Preme para ler o tema",
         "rejoin_button": "Volta a unirte",
-        "status_bar": {
-            "delete_all": "Eliminar todo",
-            "exceeded_resource_limit": "A súa mensaxe non foi enviada porque o servidor superou o límite de recursos. Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo.",
-            "homeserver_blocked": "A mensaxe non se enviou porque este servidor de inicio foi bloqueado pola súa administración. <a>Contacta coa túa administración</a> para continuar utilizando este servizo.",
-            "monthly_user_limit_reached": "A súa mensaxe non foi enviada porque este servidor acadou o Límite Mensual de Usuaria Activa. Por favor <a>contacte coa administración do servizo</a> para continuar utilizando o servizo.",
-            "requires_consent_agreement": "Non vas poder enviar mensaxes ata que revises e aceptes <consentLink>os nosos termos e condicións</consentLink>.",
-            "retry_all": "Reintentar todo",
-            "select_messages_to_retry": "Podes elexir todo ou mensaxes individuais para reintentar ou eliminar",
-            "server_connectivity_lost_description": "As mensaxes enviadas gardaranse ate que retome a conexión.",
-            "server_connectivity_lost_title": "Perdeuse a conexión ao servidor.",
-            "some_messages_not_sent": "Algunha das túas mensaxes non se enviou"
-        },
         "unread_notifications_predecessor": {
             "other": "Tes %(count)s notificacións non lidas nunha versión previa desta sala.",
             "one": "Tes %(count)s notificacións non lidas nunha versión previa desta sala."
@@ -1729,7 +1717,6 @@
             "error_join_rule_change_unknown": "Fallo descoñecido",
             "guest_access_warning": "As persoas con clientes habilitados poderán unirse a sala sen ter que posuir unha conta rexistrada.",
             "history_visibility_invited": "Só participantes (desde que foron convidadas)",
-            "history_visibility_joined": "Só participantes (desde que se uniron)",
             "history_visibility_legend": "Quen pode ler o histórico?",
             "history_visibility_shared": "Só participantes (desde o momento en que se selecciona esta opción)",
             "history_visibility_warning": "Os cambios sobre quen pode ler o historial só se aplicarán as mensaxes futuras nesta sala. A visibilidade do historial precedente non cambiará.",

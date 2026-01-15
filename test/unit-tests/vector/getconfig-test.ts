@@ -6,11 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { getVectorConfig } from "../../../src/vector/getconfig";
-
-fetchMock.config.overwriteRoutes = true;
 
 describe("getVectorConfig()", () => {
     const elementDomain = "app.element.io";
@@ -31,7 +29,7 @@ describe("getVectorConfig()", () => {
         // stable value for cachebuster
         jest.spyOn(Date, "now").mockReturnValue(now);
         jest.clearAllMocks();
-        fetchMock.mockClear();
+        fetchMock.removeRoutes();
     });
 
     afterAll(() => {
@@ -39,15 +37,15 @@ describe("getVectorConfig()", () => {
     });
 
     it("requests specific config for document domain", async () => {
-        fetchMock.getOnce("express:/config.app.element.io.json", specificConfig);
-        fetchMock.getOnce("express:/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json*", specificConfig);
+        fetchMock.getOnce("express:/config.json*", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(specificConfig);
     });
 
     it("adds trailing slash to relativeLocation when not an empty string", async () => {
-        fetchMock.getOnce("express:../config.app.element.io.json", specificConfig);
-        fetchMock.getOnce("express:../config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", specificConfig);
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig("..")).resolves.toEqual(specificConfig);
     });
