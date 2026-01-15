@@ -18,7 +18,7 @@ yarn add @element-hq/web-shared-components
 yarn add @vector-im/compound-web
 ```
 
-(This avoids problems where we end up with different versions of React in the
+(This avoids problems where we end up with different versions of compound-web in the
 top-level project and web-shared-components).
 
 ## Usage
