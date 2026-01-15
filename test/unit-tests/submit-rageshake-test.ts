@@ -18,7 +18,7 @@ import {
 import fetchMock from "fetch-mock-jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
-import { collectBugReport } from "../../src/rageshake/submit-rageshake";
+import { collectBugReport, downloadBugReport } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { type ConsoleLogger } from "../../src/rageshake/rageshake";
 import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
@@ -66,6 +66,7 @@ describe("Rageshakes", () => {
 
     afterEach(() => {
         windowSpy.mockRestore();
+        jest.restoreAllMocks();
     });
 
     describe("Basic Information", () => {
@@ -516,7 +517,7 @@ describe("Rageshakes", () => {
         expect(settingsData.showHiddenEventsInTimeline).toEqual(true);
     });
 
-    it("should collect logs", async () => {
+    it("should collect logs for collectBugReport", async () => {
         const mockConsoleLogger = {
             flush: jest.fn(),
             consume: jest.fn(),
@@ -532,6 +533,37 @@ describe("Rageshakes", () => {
         } finally {
             global.mx_rage_logger = prevLogger;
         }
+    });
+
+    it.only("should collect logs for downloadBugReport", async () => {
+        const mockConsoleLogger = {
+            flush: jest.fn(),
+            consume: jest.fn(),
+            warn: jest.fn(),
+        } as unknown as Mocked<ConsoleLogger>;
+        mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
+
+        const prevLogger = global.mx_rage_logger;
+        global.mx_rage_logger = mockConsoleLogger;
+        const mockElement = {
+            href: "",
+            download: "",
+            click: jest.fn(),
+        };
+        jest.spyOn(document, "createElement").mockReturnValue(mockElement as any);
+        jest.spyOn(document, "body", "get").mockReturnValue({
+            appendChild: jest.fn(),
+            removeChild: jest.fn(),
+        } as any);
+        try {
+            await downloadBugReport({ sendLogs: true });
+        } finally {
+            global.mx_rage_logger = prevLogger;
+        }
+        expect(document.createElement).toHaveBeenCalledWith("a");
+        expect(mockElement.href).toMatch(/^data:application\/octet-stream;base64,.+/);
+        expect(mockElement.download).toEqual("rageshake.tar");
+        expect(mockElement.click).toHaveBeenCalledWith();
     });
 
     it("should notify progress", () => {

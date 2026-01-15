@@ -354,6 +354,12 @@ export default async function sendBugReport(bugReportEndpoint?: string, opts: IO
     return submitReport(bugReportEndpoint, body, progressCallback);
 }
 
+/**
+ * Loads a bug report into a tarball.
+ *
+ * @param opts optional dictionary of options
+ * @return Resolves with a Tarball object.
+ */
 export async function loadBugReport(opts: IOpts = {}): Promise<Tar> {
     const Tar = (await import("tar-js")).default;
     const progressCallback = opts.progressCallback || ((): void => {});
@@ -385,15 +391,8 @@ export async function loadBugReport(opts: IOpts = {}): Promise<Tar> {
  * Downloads the files from a bug report. This is the same as sendBugReport,
  * but instead causes the browser to download the files locally.
  *
- * @param {object} opts optional dictionary of options
- *
- * @param {string} opts.userText Any additional user input.
- *
- * @param {boolean} opts.sendLogs True to send logs
- *
- * @param {function(string)} opts.progressCallback Callback to call with progress updates
- *
- * @return {Promise} Resolved when the bug report is downloaded (or started).
+ * @param opts optional dictionary of options
+ * @return Resolved when the bug report is downloaded (or started).
  */
 export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
     const tape = await loadBugReport(opts);

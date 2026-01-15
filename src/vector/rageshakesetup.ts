@@ -67,26 +67,28 @@ window.mxSendRageshake = async function (text: string, withLogs?: boolean): Prom
         return;
     }
     if (url === "local") {
-        const tape = await loadBugReport({
-            userText: text,
-            sendLogs: withLogs,
-            progressCallback: logger.log.bind(console),
-        });
-        const blob = new Blob([new Uint8Array(tape.out)], { type: "application/gzip" });
-        const object = URL.createObjectURL(blob);
-        console.log(`Your logs are available at ${object}`);
-        return;
-    }
-    sendBugReport(url, {
-        userText: text,
-        sendLogs: withLogs,
-        progressCallback: logger.log.bind(console),
-    }).then(
-        () => {
+        try {
+            const tape = await loadBugReport({
+                userText: text,
+                sendLogs: withLogs,
+                progressCallback: logger.log.bind(console),
+            });
+            const blob = new Blob([new Uint8Array(tape.out)], { type: "application/gzip" });
+            const url = URL.createObjectURL(blob);
+            logger.log(`Your logs are available at ${url}`);
+        } catch (err) {
+            logger.error("Failed to load bug report", err);
+        }
+    } else {
+        try {
+            await sendBugReport(url, {
+                userText: text,
+                sendLogs: withLogs,
+                progressCallback: logger.log.bind(console),
+            });
             logger.log("Bug report sent!");
-        },
-        (err) => {
-            logger.error(err);
-        },
-    );
+        } catch (err) {
+            logger.error("Failed to send bug report", err);
+        }
+    }
 };
