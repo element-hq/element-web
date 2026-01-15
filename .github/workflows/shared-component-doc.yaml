@@ -1,0 +1,33 @@
+name: Publish shared component documentation
+on:
+    workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+    doc:
+        name: Publish Documentation
+        runs-on: ubuntu-latest
+        environment: SharedComponents
+        steps:
+            - name: 🧮 Checkout code
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+
+            - name: 🔧 Yarn cache
+              uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+              with:
+                  cache: "yarn"
+                  node-version-file: package.json
+
+            - name: 🔨 Install dependencies
+              run: "yarn install --pure-lockfile"
+
+            - name: 📖 Generate docs
+              run: yarn build:docs
+
+            - name: 🚀 Deploy to Cloudflare Pages
+              uses: cloudflare/wrangler-action@9681c2997648301493e78cacbfb790a9f19c833f # v3
+              with:
+                  apiToken: ${{ secrets.CF_PAGES_TOKEN }}
+                  accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
+                  command: pages deploy _docs --project-name=shared-components-docs
