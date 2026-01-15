@@ -1,35 +1,35 @@
 {
-  "action": {
-    "delete": "Forigi",
-    "dismiss": "Rezigni",
-    "explore_rooms": "Esplori ĉambrojn",
-    "pause": "Paŭzigi",
-    "play": "Ludi",
-    "search": "Serĉi"
-  },
-  "left_panel": {
-    "open_dial_pad": "Malfermi ciferplaton"
-  },
-  "time": {
-    "about_day_ago": "antaŭ ĉirkaŭ tago",
-    "about_hour_ago": "antaŭ ĉirkaŭ horo",
-    "about_minute_ago": "antaŭ ĉirkaŭ minuto",
-    "few_seconds_ago": "antaŭ kelkaj sekundoj",
-    "in_about_day": "ĉirkaŭ tagon de nun",
-    "in_about_hour": "ĉirkaŭ horon de nun",
-    "in_about_minute": "ĉirkaŭ minuton de nun",
-    "in_few_seconds": "kelkajn sekundojn de nun",
-    "in_n_days": "%(num)s tagojn de nun",
-    "in_n_hours": "%(num)s horojn de nun",
-    "in_n_minutes": "%(num)s minutojn de nun",
-    "n_days_ago": "antaŭ %(num)s tagoj",
-    "n_hours_ago": "antaŭ %(num)s horoj",
-    "n_minutes_ago": "antaŭ %(num)s minutoj"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "Eraris elŝuto de sondosiero",
-      "unnamed_audio": "Sennoma sondosiero"
+    "action": {
+        "delete": "Forigi",
+        "dismiss": "Rezigni",
+        "explore_rooms": "Esplori ĉambrojn",
+        "pause": "Paŭzigi",
+        "play": "Ludi",
+        "search": "Serĉi"
+    },
+    "left_panel": {
+        "open_dial_pad": "Malfermi ciferplaton"
+    },
+    "time": {
+        "about_day_ago": "antaŭ ĉirkaŭ tago",
+        "about_hour_ago": "antaŭ ĉirkaŭ horo",
+        "about_minute_ago": "antaŭ ĉirkaŭ minuto",
+        "few_seconds_ago": "antaŭ kelkaj sekundoj",
+        "in_about_day": "ĉirkaŭ tagon de nun",
+        "in_about_hour": "ĉirkaŭ horon de nun",
+        "in_about_minute": "ĉirkaŭ minuton de nun",
+        "in_few_seconds": "kelkajn sekundojn de nun",
+        "in_n_days": "%(num)s tagojn de nun",
+        "in_n_hours": "%(num)s horojn de nun",
+        "in_n_minutes": "%(num)s minutojn de nun",
+        "n_days_ago": "antaŭ %(num)s tagoj",
+        "n_hours_ago": "antaŭ %(num)s horoj",
+        "n_minutes_ago": "antaŭ %(num)s minutoj"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Eraris elŝuto de sondosiero",
+            "unnamed_audio": "Sennoma sondosiero"
+        }
     }
-  }
 }

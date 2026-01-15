@@ -1,39 +1,39 @@
 {
-  "a11y": {
-    "seek_bar_label": "Bar chwilio sain"
-  },
-  "action": {
-    "delete": "Dileu",
-    "dismiss": "Gwrthod",
-    "explore_rooms": "Archwilio Ystafelloedd",
-    "pause": "Oedi",
-    "play": "Chwarae",
-    "search": "Chwilio"
-  },
-  "left_panel": {
-    "open_dial_pad": "Agor y pad deialu"
-  },
-  "time": {
-    "about_day_ago": "tua diwrnod yn ôl",
-    "about_hour_ago": "tua awr yn ol",
-    "about_minute_ago": "tua munud yn ôl",
-    "few_seconds_ago": "ychydig eiliadau yn ôl",
-    "in_about_day": "tua diwrnod o nawr",
-    "in_about_hour": "tuag awr o hyn",
-    "in_about_minute": "tua munud o nawr",
-    "in_few_seconds": "ychydig eiliadau o nawr",
-    "in_n_days": "%(num)s diwrnod o nawr",
-    "in_n_hours": "%(num)s awr o nawr",
-    "in_n_minutes": "%(num)s munud o nawr",
-    "n_days_ago": "%(num)s diwrnod yn ôl",
-    "n_hours_ago": "%(num)s awr yn ôl",
-    "n_minutes_ago": "%(num)s munud yn ôl"
-  },
-  "timeline": {
-    "m.audio": {
-      "audio_player": "Chwaraewr sain",
-      "error_downloading_audio": "Gwall wrth llwytho i lawrsain",
-      "unnamed_audio": "Sain dienw"
+    "a11y": {
+        "seek_bar_label": "Bar chwilio sain"
+    },
+    "action": {
+        "delete": "Dileu",
+        "dismiss": "Gwrthod",
+        "explore_rooms": "Archwilio Ystafelloedd",
+        "pause": "Oedi",
+        "play": "Chwarae",
+        "search": "Chwilio"
+    },
+    "left_panel": {
+        "open_dial_pad": "Agor y pad deialu"
+    },
+    "time": {
+        "about_day_ago": "tua diwrnod yn ôl",
+        "about_hour_ago": "tua awr yn ol",
+        "about_minute_ago": "tua munud yn ôl",
+        "few_seconds_ago": "ychydig eiliadau yn ôl",
+        "in_about_day": "tua diwrnod o nawr",
+        "in_about_hour": "tuag awr o hyn",
+        "in_about_minute": "tua munud o nawr",
+        "in_few_seconds": "ychydig eiliadau o nawr",
+        "in_n_days": "%(num)s diwrnod o nawr",
+        "in_n_hours": "%(num)s awr o nawr",
+        "in_n_minutes": "%(num)s munud o nawr",
+        "n_days_ago": "%(num)s diwrnod yn ôl",
+        "n_hours_ago": "%(num)s awr yn ôl",
+        "n_minutes_ago": "%(num)s munud yn ôl"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Chwaraewr sain",
+            "error_downloading_audio": "Gwall wrth llwytho i lawrsain",
+            "unnamed_audio": "Sain dienw"
+        }
     }
-  }
 }

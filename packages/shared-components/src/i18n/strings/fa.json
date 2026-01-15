@@ -1,29 +1,29 @@
 {
-  "action": {
-    "delete": "پاک‌کردن",
-    "dismiss": "نادیده بگیر",
-    "explore_rooms": "جستجو در اتاق ها",
-    "pause": "متوقف‌کردن",
-    "play": "اجرا کردن",
-    "search": "جستجو"
-  },
-  "left_panel": {
-    "open_dial_pad": "باز کردن صفحه شماره‌گیری"
-  },
-  "time": {
-    "about_day_ago": "حدود یک روز قبل",
-    "about_hour_ago": "حدود یک ساعت قبل",
-    "about_minute_ago": "حدود یک دقیقه قبل",
-    "few_seconds_ago": "چند ثانیه قبل",
-    "in_about_day": "حدود یک روز دیگر",
-    "in_about_hour": "حدود یک ساعت دیگر",
-    "in_about_minute": "حدود یک دقیقه دیگر",
-    "in_few_seconds": "چند ثانیه دیگر",
-    "in_n_days": "%(num)s روز دیگر",
-    "in_n_hours": "%(num)s ساعت دیگر",
-    "in_n_minutes": "%(num)s دقیقه دیگر",
-    "n_days_ago": "%(num)s روز قبل",
-    "n_hours_ago": "%(num)s ساعت قبل",
-    "n_minutes_ago": "%(num)s دقیقه قبل"
-  }
+    "action": {
+        "delete": "پاک‌کردن",
+        "dismiss": "نادیده بگیر",
+        "explore_rooms": "جستجو در اتاق ها",
+        "pause": "متوقف‌کردن",
+        "play": "اجرا کردن",
+        "search": "جستجو"
+    },
+    "left_panel": {
+        "open_dial_pad": "باز کردن صفحه شماره‌گیری"
+    },
+    "time": {
+        "about_day_ago": "حدود یک روز قبل",
+        "about_hour_ago": "حدود یک ساعت قبل",
+        "about_minute_ago": "حدود یک دقیقه قبل",
+        "few_seconds_ago": "چند ثانیه قبل",
+        "in_about_day": "حدود یک روز دیگر",
+        "in_about_hour": "حدود یک ساعت دیگر",
+        "in_about_minute": "حدود یک دقیقه دیگر",
+        "in_few_seconds": "چند ثانیه دیگر",
+        "in_n_days": "%(num)s روز دیگر",
+        "in_n_hours": "%(num)s ساعت دیگر",
+        "in_n_minutes": "%(num)s دقیقه دیگر",
+        "n_days_ago": "%(num)s روز قبل",
+        "n_hours_ago": "%(num)s ساعت قبل",
+        "n_minutes_ago": "%(num)s دقیقه قبل"
+    }
 }

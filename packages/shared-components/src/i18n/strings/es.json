@@ -1,39 +1,39 @@
 {
-  "a11y": {
-    "seek_bar_label": "Barra de búsqueda de audio"
-  },
-  "action": {
-    "delete": "Borrar",
-    "dismiss": "Omitir",
-    "explore_rooms": "Explorar salas",
-    "pause": "Pausar",
-    "play": "Reproducir",
-    "search": "Buscar"
-  },
-  "left_panel": {
-    "open_dial_pad": "Abrir teclado numérico"
-  },
-  "time": {
-    "about_day_ago": "hace aprox. un día",
-    "about_hour_ago": "hace aprox. una hora",
-    "about_minute_ago": "hace aproximadamente un minuto",
-    "few_seconds_ago": "hace unos segundos",
-    "in_about_day": "dentro de un día",
-    "in_about_hour": "dentro de una hora",
-    "in_about_minute": "dentro de un minuto",
-    "in_few_seconds": "dentro de unos segundos",
-    "in_n_days": "dentro de %(num)s días",
-    "in_n_hours": "dentro de %(num)s horas",
-    "in_n_minutes": "dentro de %(num)s minutos",
-    "n_days_ago": "hace %(num)s días",
-    "n_hours_ago": "hace %(num)s horas",
-    "n_minutes_ago": "hace %(num)s minutos"
-  },
-  "timeline": {
-    "m.audio": {
-      "audio_player": "Reproductor de audio",
-      "error_downloading_audio": "Error al descargar el audio",
-      "unnamed_audio": "Audio sin título"
+    "a11y": {
+        "seek_bar_label": "Barra de búsqueda de audio"
+    },
+    "action": {
+        "delete": "Borrar",
+        "dismiss": "Omitir",
+        "explore_rooms": "Explorar salas",
+        "pause": "Pausar",
+        "play": "Reproducir",
+        "search": "Buscar"
+    },
+    "left_panel": {
+        "open_dial_pad": "Abrir teclado numérico"
+    },
+    "time": {
+        "about_day_ago": "hace aprox. un día",
+        "about_hour_ago": "hace aprox. una hora",
+        "about_minute_ago": "hace aproximadamente un minuto",
+        "few_seconds_ago": "hace unos segundos",
+        "in_about_day": "dentro de un día",
+        "in_about_hour": "dentro de una hora",
+        "in_about_minute": "dentro de un minuto",
+        "in_few_seconds": "dentro de unos segundos",
+        "in_n_days": "dentro de %(num)s días",
+        "in_n_hours": "dentro de %(num)s horas",
+        "in_n_minutes": "dentro de %(num)s minutos",
+        "n_days_ago": "hace %(num)s días",
+        "n_hours_ago": "hace %(num)s horas",
+        "n_minutes_ago": "hace %(num)s minutos"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Reproductor de audio",
+            "error_downloading_audio": "Error al descargar el audio",
+            "unnamed_audio": "Audio sin título"
+        }
     }
-  }
 }

@@ -1,35 +1,35 @@
 {
-  "a11y": {
-    "seek_bar_label": "Audio meklēšanas josla"
-  },
-  "action": {
-    "delete": "Izdzēst",
-    "dismiss": "Atmest",
-    "explore_rooms": "Pārlūkot istabas",
-    "pause": "Pauzēt",
-    "play": "Atskaņot",
-    "search": "Meklēt"
-  },
-  "time": {
-    "about_day_ago": "aptuveni dienu iepriekš",
-    "about_hour_ago": "aptuveni stundu iepriekš",
-    "about_minute_ago": "aptuveni minūti iepriekš",
-    "few_seconds_ago": "pirms dažām sekundēm",
-    "in_about_day": "aptuveni dienu kopš šī brīža",
-    "in_about_hour": "aptuveni stundu kopš šī brīža",
-    "in_about_minute": "aptuveni minūti kopš šī brīža",
-    "in_few_seconds": "dažas sekundes kopš šī brīža",
-    "in_n_days": "%(num)s dienas kopš šī brīža",
-    "in_n_hours": "%(num)s stundas kopš šī brīža",
-    "in_n_minutes": "%(num)s minūtes kopš šī brīža",
-    "n_days_ago": "%(num)s dienas iepriekš",
-    "n_hours_ago": "%(num)s stundas iepriekš",
-    "n_minutes_ago": "%(num)s minūtes iepriekš"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "Kļūda skaņas lejupielādēšanā",
-      "unnamed_audio": "Nenosaukts audio"
+    "a11y": {
+        "seek_bar_label": "Audio meklēšanas josla"
+    },
+    "action": {
+        "delete": "Izdzēst",
+        "dismiss": "Atmest",
+        "explore_rooms": "Pārlūkot istabas",
+        "pause": "Pauzēt",
+        "play": "Atskaņot",
+        "search": "Meklēt"
+    },
+    "time": {
+        "about_day_ago": "aptuveni dienu iepriekš",
+        "about_hour_ago": "aptuveni stundu iepriekš",
+        "about_minute_ago": "aptuveni minūti iepriekš",
+        "few_seconds_ago": "pirms dažām sekundēm",
+        "in_about_day": "aptuveni dienu kopš šī brīža",
+        "in_about_hour": "aptuveni stundu kopš šī brīža",
+        "in_about_minute": "aptuveni minūti kopš šī brīža",
+        "in_few_seconds": "dažas sekundes kopš šī brīža",
+        "in_n_days": "%(num)s dienas kopš šī brīža",
+        "in_n_hours": "%(num)s stundas kopš šī brīža",
+        "in_n_minutes": "%(num)s minūtes kopš šī brīža",
+        "n_days_ago": "%(num)s dienas iepriekš",
+        "n_hours_ago": "%(num)s stundas iepriekš",
+        "n_minutes_ago": "%(num)s minūtes iepriekš"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Kļūda skaņas lejupielādēšanā",
+            "unnamed_audio": "Nenosaukts audio"
+        }
     }
-  }
 }

@@ -1,32 +1,32 @@
 {
-  "action": {
-    "delete": "წაშლა",
-    "dismiss": "დახურვა",
-    "explore_rooms": "ოთახების დათავლიერება",
-    "pause": "პაუზა",
-    "play": "დაკვრა",
-    "search": "ძიება"
-  },
-  "time": {
-    "about_day_ago": "დაახლოებით ერთი დღის წინ",
-    "about_hour_ago": "დაახლოებით ერთი საათის წინ",
-    "about_minute_ago": "დაახლოებით ერთი წუთის წინ",
-    "few_seconds_ago": "რამდენიმე წამის წინ",
-    "in_about_day": "დაახლოებით ერთი დღის შემდეგ",
-    "in_about_hour": "დაახლოებით ერთი საათის შემდეგ",
-    "in_about_minute": "დაახლოებით ერთი წუთის შემდეგ",
-    "in_few_seconds": "რამდენიმე წამის შემდეგ",
-    "in_n_days": "%(num)sდღეებიდან",
-    "in_n_hours": "%(num)sსაათის შემდეგ",
-    "in_n_minutes": "%(num)sწუთის შემდეგ",
-    "n_days_ago": "%(num)sდღის წინ",
-    "n_hours_ago": "%(num)sსაათის წინ",
-    "n_minutes_ago": "%(num)sწუთის წინ"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "შეცდომა აუდიოს ჩამოტვირთვისას",
-      "unnamed_audio": "უსახელო აუდიო"
+    "action": {
+        "delete": "წაშლა",
+        "dismiss": "დახურვა",
+        "explore_rooms": "ოთახების დათავლიერება",
+        "pause": "პაუზა",
+        "play": "დაკვრა",
+        "search": "ძიება"
+    },
+    "time": {
+        "about_day_ago": "დაახლოებით ერთი დღის წინ",
+        "about_hour_ago": "დაახლოებით ერთი საათის წინ",
+        "about_minute_ago": "დაახლოებით ერთი წუთის წინ",
+        "few_seconds_ago": "რამდენიმე წამის წინ",
+        "in_about_day": "დაახლოებით ერთი დღის შემდეგ",
+        "in_about_hour": "დაახლოებით ერთი საათის შემდეგ",
+        "in_about_minute": "დაახლოებით ერთი წუთის შემდეგ",
+        "in_few_seconds": "რამდენიმე წამის შემდეგ",
+        "in_n_days": "%(num)sდღეებიდან",
+        "in_n_hours": "%(num)sსაათის შემდეგ",
+        "in_n_minutes": "%(num)sწუთის შემდეგ",
+        "n_days_ago": "%(num)sდღის წინ",
+        "n_hours_ago": "%(num)sსაათის წინ",
+        "n_minutes_ago": "%(num)sწუთის წინ"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "შეცდომა აუდიოს ჩამოტვირთვისას",
+            "unnamed_audio": "უსახელო აუდიო"
+        }
     }
-  }
 }

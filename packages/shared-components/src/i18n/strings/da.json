@@ -1,35 +1,35 @@
 {
-  "a11y": {
-    "seek_bar_label": "Progressionsmarkør for lydafspiller"
-  },
-  "action": {
-    "delete": "Slet",
-    "dismiss": "Afvis",
-    "explore_rooms": "Udforsk rum",
-    "pause": "Pausér",
-    "play": "Afspil",
-    "search": "Søg"
-  },
-  "time": {
-    "about_day_ago": "omkring en dag siden",
-    "about_hour_ago": "for omkring en time siden",
-    "about_minute_ago": "for omkring et minut siden",
-    "few_seconds_ago": "for et par sekunder siden",
-    "in_about_day": "om cirka en dag fra nu",
-    "in_about_hour": "omkring en time fra nu",
-    "in_about_minute": "omkring et minut fra nu",
-    "in_few_seconds": "et par sekunder fra nu",
-    "in_n_days": "%(num)s dage fra nu",
-    "in_n_hours": "%(num)s timer fra nu",
-    "in_n_minutes": "%(num)s minutter fra nu",
-    "n_days_ago": "%(num)s dage siden",
-    "n_hours_ago": "%(num)s timer siden",
-    "n_minutes_ago": "%(num)s minutter siden"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "Fejl ved download af lyd",
-      "unnamed_audio": "Unavngiven lyd"
+    "a11y": {
+        "seek_bar_label": "Progressionsmarkør for lydafspiller"
+    },
+    "action": {
+        "delete": "Slet",
+        "dismiss": "Afvis",
+        "explore_rooms": "Udforsk rum",
+        "pause": "Pausér",
+        "play": "Afspil",
+        "search": "Søg"
+    },
+    "time": {
+        "about_day_ago": "omkring en dag siden",
+        "about_hour_ago": "for omkring en time siden",
+        "about_minute_ago": "for omkring et minut siden",
+        "few_seconds_ago": "for et par sekunder siden",
+        "in_about_day": "om cirka en dag fra nu",
+        "in_about_hour": "omkring en time fra nu",
+        "in_about_minute": "omkring et minut fra nu",
+        "in_few_seconds": "et par sekunder fra nu",
+        "in_n_days": "%(num)s dage fra nu",
+        "in_n_hours": "%(num)s timer fra nu",
+        "in_n_minutes": "%(num)s minutter fra nu",
+        "n_days_ago": "%(num)s dage siden",
+        "n_hours_ago": "%(num)s timer siden",
+        "n_minutes_ago": "%(num)s minutter siden"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Fejl ved download af lyd",
+            "unnamed_audio": "Unavngiven lyd"
+        }
     }
-  }
 }

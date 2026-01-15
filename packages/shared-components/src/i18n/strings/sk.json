@@ -1,44 +1,44 @@
 {
-  "a11y": {
-    "seek_bar_label": "Panel vyhľadávania zvuku"
-  },
-  "action": {
-    "delete": "Vymazať",
-    "dismiss": "Zamietnuť",
-    "explore_rooms": "Preskúmať miestnosti",
-    "pause": "Pozastaviť",
-    "play": "Prehrať",
-    "search": "Hľadať"
-  },
-  "left_panel": {
-    "open_dial_pad": "Otvoriť číselník"
-  },
-  "room": {
-    "status_bar": {
-      "history_visible": "Správy, ktoré odošlete, budú zdieľané s novými členmi pozvanými do tejto miestnosti. <a>Zistiť viac</a>"
+    "a11y": {
+        "seek_bar_label": "Panel vyhľadávania zvuku"
+    },
+    "action": {
+        "delete": "Vymazať",
+        "dismiss": "Zamietnuť",
+        "explore_rooms": "Preskúmať miestnosti",
+        "pause": "Pozastaviť",
+        "play": "Prehrať",
+        "search": "Hľadať"
+    },
+    "left_panel": {
+        "open_dial_pad": "Otvoriť číselník"
+    },
+    "room": {
+        "status_bar": {
+            "history_visible": "Správy, ktoré odošlete, budú zdieľané s novými členmi pozvanými do tejto miestnosti. <a>Zistiť viac</a>"
+        }
+    },
+    "time": {
+        "about_day_ago": "asi pred jedným dňom",
+        "about_hour_ago": "približne pred hodinou",
+        "about_minute_ago": "približne pred minútou",
+        "few_seconds_ago": "pred pár sekundami",
+        "in_about_day": "približne o deň",
+        "in_about_hour": "približne o hodinu",
+        "in_about_minute": "približne o minútu",
+        "in_few_seconds": "o pár sekúnd",
+        "in_n_days": "o %(num)s dní",
+        "in_n_hours": "o %(num)s hodín",
+        "in_n_minutes": "o %(num)s minút",
+        "n_days_ago": "pred %(num)s dňami",
+        "n_hours_ago": "pred %(num)s hodinami",
+        "n_minutes_ago": "pred %(num)s minútami"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Prehrávač zvuku",
+            "error_downloading_audio": "Chyba pri sťahovaní zvuku",
+            "unnamed_audio": "Nepomenovaný zvukový záznam"
+        }
     }
-  },
-  "time": {
-    "about_day_ago": "asi pred jedným dňom",
-    "about_hour_ago": "približne pred hodinou",
-    "about_minute_ago": "približne pred minútou",
-    "few_seconds_ago": "pred pár sekundami",
-    "in_about_day": "približne o deň",
-    "in_about_hour": "približne o hodinu",
-    "in_about_minute": "približne o minútu",
-    "in_few_seconds": "o pár sekúnd",
-    "in_n_days": "o %(num)s dní",
-    "in_n_hours": "o %(num)s hodín",
-    "in_n_minutes": "o %(num)s minút",
-    "n_days_ago": "pred %(num)s dňami",
-    "n_hours_ago": "pred %(num)s hodinami",
-    "n_minutes_ago": "pred %(num)s minútami"
-  },
-  "timeline": {
-    "m.audio": {
-      "audio_player": "Prehrávač zvuku",
-      "error_downloading_audio": "Chyba pri sťahovaní zvuku",
-      "unnamed_audio": "Nepomenovaný zvukový záznam"
-    }
-  }
 }

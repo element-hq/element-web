@@ -1,35 +1,35 @@
 {
-  "action": {
-    "delete": "删除",
-    "dismiss": "忽略",
-    "explore_rooms": "查找房间",
-    "pause": "暂停",
-    "play": "播放",
-    "search": "搜索"
-  },
-  "left_panel": {
-    "open_dial_pad": "打开拨号键盘"
-  },
-  "time": {
-    "about_day_ago": "约一天前",
-    "about_hour_ago": "约一小时前",
-    "about_minute_ago": "约一分钟前",
-    "few_seconds_ago": "数秒前",
-    "in_about_day": "从现在开始约一天",
-    "in_about_hour": "从现在开始约一小时",
-    "in_about_minute": "从现在开始约一分钟",
-    "in_few_seconds": "从现在开始数秒",
-    "in_n_days": "从现在开始%(num)s天",
-    "in_n_hours": "从现在开始%(num)s小时",
-    "in_n_minutes": "从现在开始%(num)s分钟",
-    "n_days_ago": "%(num)s天前",
-    "n_hours_ago": "%(num)s小时前",
-    "n_minutes_ago": "%(num)s分钟前"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "下载音频时出错",
-      "unnamed_audio": "未命名的音频"
+    "action": {
+        "delete": "删除",
+        "dismiss": "忽略",
+        "explore_rooms": "查找房间",
+        "pause": "暂停",
+        "play": "播放",
+        "search": "搜索"
+    },
+    "left_panel": {
+        "open_dial_pad": "打开拨号键盘"
+    },
+    "time": {
+        "about_day_ago": "约一天前",
+        "about_hour_ago": "约一小时前",
+        "about_minute_ago": "约一分钟前",
+        "few_seconds_ago": "数秒前",
+        "in_about_day": "从现在开始约一天",
+        "in_about_hour": "从现在开始约一小时",
+        "in_about_minute": "从现在开始约一分钟",
+        "in_few_seconds": "从现在开始数秒",
+        "in_n_days": "从现在开始%(num)s天",
+        "in_n_hours": "从现在开始%(num)s小时",
+        "in_n_minutes": "从现在开始%(num)s分钟",
+        "n_days_ago": "%(num)s天前",
+        "n_hours_ago": "%(num)s小时前",
+        "n_minutes_ago": "%(num)s分钟前"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "下载音频时出错",
+            "unnamed_audio": "未命名的音频"
+        }
     }
-  }
 }

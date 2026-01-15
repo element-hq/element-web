@@ -1,38 +1,38 @@
 {
-  "a11y": {
-    "seek_bar_label": "Barra de procura de áudio"
-  },
-  "action": {
-    "delete": "Apagar",
-    "dismiss": "Descartar",
-    "explore_rooms": "Explorar rooms",
-    "pause": "Pausar",
-    "play": "Reproduzir",
-    "search": "Pesquisar"
-  },
-  "left_panel": {
-    "open_dial_pad": "Abre o teclado de marcação"
-  },
-  "time": {
-    "about_day_ago": "há cerca de um dia",
-    "about_hour_ago": "há cerca de uma hora",
-    "about_minute_ago": "há cerca de um minuto",
-    "few_seconds_ago": "há alguns segundos atrás",
-    "in_about_day": "daqui a um dia",
-    "in_about_hour": "daqui a uma hora",
-    "in_about_minute": "daqui a um minuto",
-    "in_few_seconds": "daqui a alguns segundos",
-    "in_n_days": "daqui a %(num)s dias",
-    "in_n_hours": "daqui a %(num)s horas",
-    "in_n_minutes": "daqui a %(num)s minutos",
-    "n_days_ago": "%(num)s dias atrás",
-    "n_hours_ago": "%(num)s horas atrás",
-    "n_minutes_ago": "%(num)s minutos atrás"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "Erro ao descarregar áudio",
-      "unnamed_audio": "Áudio sem nome"
+    "a11y": {
+        "seek_bar_label": "Barra de procura de áudio"
+    },
+    "action": {
+        "delete": "Apagar",
+        "dismiss": "Descartar",
+        "explore_rooms": "Explorar rooms",
+        "pause": "Pausar",
+        "play": "Reproduzir",
+        "search": "Pesquisar"
+    },
+    "left_panel": {
+        "open_dial_pad": "Abre o teclado de marcação"
+    },
+    "time": {
+        "about_day_ago": "há cerca de um dia",
+        "about_hour_ago": "há cerca de uma hora",
+        "about_minute_ago": "há cerca de um minuto",
+        "few_seconds_ago": "há alguns segundos atrás",
+        "in_about_day": "daqui a um dia",
+        "in_about_hour": "daqui a uma hora",
+        "in_about_minute": "daqui a um minuto",
+        "in_few_seconds": "daqui a alguns segundos",
+        "in_n_days": "daqui a %(num)s dias",
+        "in_n_hours": "daqui a %(num)s horas",
+        "in_n_minutes": "daqui a %(num)s minutos",
+        "n_days_ago": "%(num)s dias atrás",
+        "n_hours_ago": "%(num)s horas atrás",
+        "n_minutes_ago": "%(num)s minutos atrás"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Erro ao descarregar áudio",
+            "unnamed_audio": "Áudio sem nome"
+        }
     }
-  }
 }

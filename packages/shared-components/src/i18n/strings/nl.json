@@ -1,38 +1,38 @@
 {
-  "a11y": {
-    "seek_bar_label": "Audio zoekbalk"
-  },
-  "action": {
-    "delete": "Verwijderen",
-    "dismiss": "Sluiten",
-    "explore_rooms": "Kamers ontdekken",
-    "pause": "Pauze",
-    "play": "Afspelen",
-    "search": "Zoeken"
-  },
-  "left_panel": {
-    "open_dial_pad": "Kiestoetsen openen"
-  },
-  "time": {
-    "about_day_ago": "ongeveer een dag geleden",
-    "about_hour_ago": "ongeveer een uur geleden",
-    "about_minute_ago": "ongeveer een minuut geleden",
-    "few_seconds_ago": "enige tellen geleden",
-    "in_about_day": "over een dag of zo",
-    "in_about_hour": "over ongeveer een uur",
-    "in_about_minute": "over ongeveer een minuut",
-    "in_few_seconds": "over een paar tellen",
-    "in_n_days": "over %(num)s dagen",
-    "in_n_hours": "over %(num)s uur",
-    "in_n_minutes": "over %(num)s minuten",
-    "n_days_ago": "%(num)s dagen geleden",
-    "n_hours_ago": "%(num)s uur geleden",
-    "n_minutes_ago": "%(num)s minuten geleden"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "Fout bij downloaden van audio",
-      "unnamed_audio": "Naamloze audio"
+    "a11y": {
+        "seek_bar_label": "Audio zoekbalk"
+    },
+    "action": {
+        "delete": "Verwijderen",
+        "dismiss": "Sluiten",
+        "explore_rooms": "Kamers ontdekken",
+        "pause": "Pauze",
+        "play": "Afspelen",
+        "search": "Zoeken"
+    },
+    "left_panel": {
+        "open_dial_pad": "Kiestoetsen openen"
+    },
+    "time": {
+        "about_day_ago": "ongeveer een dag geleden",
+        "about_hour_ago": "ongeveer een uur geleden",
+        "about_minute_ago": "ongeveer een minuut geleden",
+        "few_seconds_ago": "enige tellen geleden",
+        "in_about_day": "over een dag of zo",
+        "in_about_hour": "over ongeveer een uur",
+        "in_about_minute": "over ongeveer een minuut",
+        "in_few_seconds": "over een paar tellen",
+        "in_n_days": "over %(num)s dagen",
+        "in_n_hours": "over %(num)s uur",
+        "in_n_minutes": "over %(num)s minuten",
+        "n_days_ago": "%(num)s dagen geleden",
+        "n_hours_ago": "%(num)s uur geleden",
+        "n_minutes_ago": "%(num)s minuten geleden"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Fout bij downloaden van audio",
+            "unnamed_audio": "Naamloze audio"
+        }
     }
-  }
 }

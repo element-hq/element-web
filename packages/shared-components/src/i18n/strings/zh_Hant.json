@@ -1,35 +1,35 @@
 {
-  "action": {
-    "delete": "刪除",
-    "dismiss": "關閉",
-    "explore_rooms": "探索聊天室",
-    "pause": "暫停",
-    "play": "播放",
-    "search": "搜尋"
-  },
-  "left_panel": {
-    "open_dial_pad": "開啟撥號鍵盤"
-  },
-  "time": {
-    "about_day_ago": "大約一天前",
-    "about_hour_ago": "大約一小時前",
-    "about_minute_ago": "大約一分鐘前",
-    "few_seconds_ago": "數秒前",
-    "in_about_day": "從現在開始大約一天",
-    "in_about_hour": "從現在開始大約一小時",
-    "in_about_minute": "從現在開始大約一分鐘",
-    "in_few_seconds": "從現在開始數秒鐘",
-    "in_n_days": "從現在開始 %(num)s 天",
-    "in_n_hours": "從現在開始 %(num)s 小時",
-    "in_n_minutes": "從現在開始 %(num)s 分鐘",
-    "n_days_ago": "%(num)s 天前",
-    "n_hours_ago": "%(num)s 小時前",
-    "n_minutes_ago": "%(num)s 分鐘前"
-  },
-  "timeline": {
-    "m.audio": {
-      "error_downloading_audio": "下載音訊時發生錯誤",
-      "unnamed_audio": "未命名的音訊"
+    "action": {
+        "delete": "刪除",
+        "dismiss": "關閉",
+        "explore_rooms": "探索聊天室",
+        "pause": "暫停",
+        "play": "播放",
+        "search": "搜尋"
+    },
+    "left_panel": {
+        "open_dial_pad": "開啟撥號鍵盤"
+    },
+    "time": {
+        "about_day_ago": "大約一天前",
+        "about_hour_ago": "大約一小時前",
+        "about_minute_ago": "大約一分鐘前",
+        "few_seconds_ago": "數秒前",
+        "in_about_day": "從現在開始大約一天",
+        "in_about_hour": "從現在開始大約一小時",
+        "in_about_minute": "從現在開始大約一分鐘",
+        "in_few_seconds": "從現在開始數秒鐘",
+        "in_n_days": "從現在開始 %(num)s 天",
+        "in_n_hours": "從現在開始 %(num)s 小時",
+        "in_n_minutes": "從現在開始 %(num)s 分鐘",
+        "n_days_ago": "%(num)s 天前",
+        "n_hours_ago": "%(num)s 小時前",
+        "n_minutes_ago": "%(num)s 分鐘前"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "下載音訊時發生錯誤",
+            "unnamed_audio": "未命名的音訊"
+        }
     }
-  }
 }

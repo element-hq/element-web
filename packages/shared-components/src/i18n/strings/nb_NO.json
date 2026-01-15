@@ -1,38 +1,38 @@
 {
-  "a11y": {
-    "seek_bar_label": "Søkelinje for lyd"
-  },
-  "action": {
-    "delete": "Slett",
-    "dismiss": "Avvis",
-    "explore_rooms": "Se alle rom",
-    "play": "Spill av",
-    "search": "Søk"
-  },
-  "left_panel": {
-    "open_dial_pad": "Åpne nummerpanelet"
-  },
-  "time": {
-    "about_day_ago": "cirka 1 dag siden",
-    "about_hour_ago": "cirka 1 time siden",
-    "about_minute_ago": "cirka 1 minutt siden",
-    "few_seconds_ago": "noen sekunder siden",
-    "in_about_day": "rundt en dag fra nå",
-    "in_about_hour": "rundt en time fra nå",
-    "in_about_minute": "rundt et minutt fra nå",
-    "in_few_seconds": "om noen sekunder fra nå",
-    "in_n_days": "%(num)s dager fra nå",
-    "in_n_hours": "%(num)s timer fra nå",
-    "in_n_minutes": "%(num)s minutter fra nå",
-    "n_days_ago": "%(num)s dager siden",
-    "n_hours_ago": "%(num)s timer siden",
-    "n_minutes_ago": "%(num)s minutter siden"
-  },
-  "timeline": {
-    "m.audio": {
-      "audio_player": "Lydavspiller",
-      "error_downloading_audio": "Feil ved nedlasting av lyd",
-      "unnamed_audio": "Ikke navngitt lyd"
+    "a11y": {
+        "seek_bar_label": "Søkelinje for lyd"
+    },
+    "action": {
+        "delete": "Slett",
+        "dismiss": "Avvis",
+        "explore_rooms": "Se alle rom",
+        "play": "Spill av",
+        "search": "Søk"
+    },
+    "left_panel": {
+        "open_dial_pad": "Åpne nummerpanelet"
+    },
+    "time": {
+        "about_day_ago": "cirka 1 dag siden",
+        "about_hour_ago": "cirka 1 time siden",
+        "about_minute_ago": "cirka 1 minutt siden",
+        "few_seconds_ago": "noen sekunder siden",
+        "in_about_day": "rundt en dag fra nå",
+        "in_about_hour": "rundt en time fra nå",
+        "in_about_minute": "rundt et minutt fra nå",
+        "in_few_seconds": "om noen sekunder fra nå",
+        "in_n_days": "%(num)s dager fra nå",
+        "in_n_hours": "%(num)s timer fra nå",
+        "in_n_minutes": "%(num)s minutter fra nå",
+        "n_days_ago": "%(num)s dager siden",
+        "n_hours_ago": "%(num)s timer siden",
+        "n_minutes_ago": "%(num)s minutter siden"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Lydavspiller",
+            "error_downloading_audio": "Feil ved nedlasting av lyd",
+            "unnamed_audio": "Ikke navngitt lyd"
+        }
     }
-  }
 }
