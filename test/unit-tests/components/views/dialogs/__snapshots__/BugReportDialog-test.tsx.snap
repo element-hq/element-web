@@ -29,10 +29,10 @@ exports[`BugReportDialog renders when the config only allows local downloads: lo
       class="mx_Dialog_content"
       id="mx_Dialog_content"
     >
-      <p>
-        <strong>
-          Reminder: Your browser is unsupported, so your experience may be unpredictable.
-        </strong>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+      >
+        Reminder: Your browser is unsupported, so your experience may be unpredictable.
       </p>
       <p
         class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"

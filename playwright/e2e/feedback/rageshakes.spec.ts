@@ -115,7 +115,7 @@ test.describe("Rageshakes", () => {
             await dialog.getByRole("textbox", { name: "Notes" }).fill("These are some notes");
             await expect(dialog).toMatchScreenshot("rageshake_via_url.png");
             await dialog.getByRole("button", { name: "Send logs" }).click();
-            await expect(page.getByRole("dialog", { name: "Logs sent" })).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Logs sent" })).toBeVisible();
         });
     });
     test.describe("via local download", () => {
