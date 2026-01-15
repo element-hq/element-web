@@ -253,11 +253,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             (window.Modernizr && Object.values(window.Modernizr).some((support) => support === false)) ||
             !getBrowserSupport()
         ) {
-            warning = (
-                <p>
-                    <strong>{_t("bug_reporting|unsupported_browser")}</strong>
-                </p>
-            );
+            warning = <Text weight="semibold">{_t("bug_reporting|unsupported_browser")}</Text>;
         }
 
         return (
@@ -277,7 +273,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                         </>
                     ) : (
                         <>
-                            <Text weight="bold">
+                            <Text weight="semibold">
                                 {_t(
                                     "bug_reporting|before_submitting",
                                     {},
