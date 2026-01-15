@@ -1,6 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2024 The Matrix.org Foundation C.I.C.
+Copyright 2026 Element Creations Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -49,7 +48,8 @@ test.describe("Rageshakes", () => {
         });
 
         test("should be able to open bug report dialog via feedback dialog", async ({ page, app, user }) => {
-            (await app.openUserMenu()).getByRole("menuitem", { name: "Feedback" }).click();
+            const menu = await app.openUserMenu();
+            await menu.getByRole("menuitem", { name: "Feedback" }).click();
             const feedbackDialog = page.getByRole("dialog", { name: "Feedback" });
             await feedbackDialog.getByRole("button", { name: "debug logs" }).click();
             await expect(page.getByRole("dialog", { name: "Submit debug logs" })).toBeVisible();

@@ -6,12 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { render } from "jest-matrix-react";
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
+import { afterEach } from "node:test";
+import userEvent from "@testing-library/user-event";
 
 import { BugReportDialogButton } from "../../../../../src/components/views/elements/BugReportDialogButton";
-import { afterEach } from "node:test";
 import SdkConfig from "../../../../../src/SdkConfig";
-import userEvent from "@testing-library/user-event";
 import Modal from "../../../../../src/Modal";
 import BugReportDialog from "../../../../../src/components/views/dialogs/BugReportDialog";
 
