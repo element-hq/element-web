@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { render, type RenderResult, screen } from "jest-matrix-react";
 import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
@@ -22,8 +22,6 @@ import { waitForLoadingSpinner, waitForWelcomeComponent } from "../test-utils";
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
-
-fetchMock.config.overwriteRoutes = true;
 
 describe("Wrapper", () => {
     beforeEach(async () => {

@@ -20,7 +20,7 @@ import {
     RoomMember,
     RoomState,
 } from "matrix-js-sdk/src/matrix";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import escapeHtml from "escape-html";
 import { type RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
 import { mocked } from "jest-mock";

@@ -11,7 +11,7 @@ import { render, screen, waitFor } from "jest-matrix-react";
 import { DEVICE_CODE_SCOPE, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import UnwrappedUserMenu from "../../../../src/components/structures/UserMenu";
 import { stubClient, wrapInSdkContext } from "../../../test-utils";
