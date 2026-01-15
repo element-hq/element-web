@@ -86,9 +86,7 @@
         "no": "Nee",
         "ok": "Oké",
         "open": "Openen",
-        "pause": "Pauze",
         "pin": "Vastmaken",
-        "play": "Afspelen",
         "proceed": "Doorgaan",
         "quote": "Citeren",
         "react": "Reageren",
@@ -1522,18 +1520,6 @@
         "peek_join_prompt": "Je bekijkt %(roomName)s. Wilt je eraan deelnemen?",
         "read_topic": "Klik om het onderwerp te lezen",
         "rejoin_button": "Opnieuw toetreden",
-        "status_bar": {
-            "delete_all": "Verwijder alles",
-            "exceeded_resource_limit": "Je bericht is niet verstuurd omdat deze homeserver een systeembronlimiet heeft overschreden. <a>Neem contact op met je dienstbeheerder</a> om de dienst te blijven gebruiken.",
-            "homeserver_blocked": "Je bericht is niet verzonden omdat deze server is geblokkeerd door de beheerder. Neem <a>contact op met je servicebeheerder</a> om de service te blijven gebruiken.",
-            "monthly_user_limit_reached": "Je bericht is niet verstuurd omdat deze homeserver zijn limiet voor maandelijks actieve personen heeft bereikt. <a>Neem contact op met je beheerder</a> om de dienst te blijven gebruiken.",
-            "requires_consent_agreement": "Je kan geen berichten sturen totdat je <consentLink>onze algemene voorwaarden</consentLink> hebt gelezen en aanvaard.",
-            "retry_all": "Alles opnieuw proberen",
-            "select_messages_to_retry": "Je kan alles selecteren of per individueel bericht opnieuw versturen of verwijderen",
-            "server_connectivity_lost_description": "Verstuurde berichten zullen opgeslagen worden totdat je verbinding hersteld is.",
-            "server_connectivity_lost_title": "De verbinding met de server is verbroken.",
-            "some_messages_not_sent": "Enkele van jouw berichten zijn niet verstuurd"
-        },
         "unread_notifications_predecessor": {
             "other": "Je hebt %(count)s ongelezen meldingen in een vorige versie van deze kamer.",
             "one": "Je hebt %(count)s ongelezen meldingen in een vorige versie van deze kamer."
@@ -1744,7 +1730,6 @@
             "error_join_rule_change_unknown": "Onbekende fout",
             "guest_access_warning": "Personen met geschikte apps zullen aan de kamer kunnen deelnemen zonder een account te hebben.",
             "history_visibility_invited": "Alleen deelnemers (vanaf het moment dat ze uitgenodigd zijn)",
-            "history_visibility_joined": "Alleen deelnemers (vanaf het moment dat ze toegetreden zijn)",
             "history_visibility_legend": "Wie kan de geschiedenis lezen?",
             "history_visibility_shared": "Alleen deelnemers (vanaf het moment dat deze optie wordt geselecteerd)",
             "history_visibility_warning": "Wijzigingen aan de leesregels van de geschiedenis gelden alleen voor toekomstige berichten in deze kamer. De zichtbaarheid van de bestaande geschiedenis blijft ongewijzigd.",
@@ -2420,24 +2405,10 @@
         "show_thread_filter": "Toon:"
     },
     "time": {
-        "about_day_ago": "ongeveer een dag geleden",
-        "about_hour_ago": "ongeveer een uur geleden",
-        "about_minute_ago": "ongeveer een minuut geleden",
         "date_at_time": "%(date)s om %(time)s",
-        "few_seconds_ago": "enige tellen geleden",
         "hours_minutes_seconds_left": "%(hours)su, %(minutes)sm %(seconds)ss over",
-        "in_about_day": "over een dag of zo",
-        "in_about_hour": "over ongeveer een uur",
-        "in_about_minute": "over ongeveer een minuut",
-        "in_few_seconds": "over een paar tellen",
-        "in_n_days": "over %(num)s dagen",
-        "in_n_hours": "over %(num)s uur",
-        "in_n_minutes": "over %(num)s minuten",
         "left": "%(timeRemaining)s over",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss over",
-        "n_days_ago": "%(num)s dagen geleden",
-        "n_hours_ago": "%(num)s uur geleden",
-        "n_minutes_ago": "%(num)s minuten geleden",
         "seconds_left": "%(seconds)s's over",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)su %(minutes)sm %(seconds)ss",
@@ -2477,8 +2448,7 @@
         "m.audio": {
             "error_downloading_audio": "Fout bij downloaden van audio",
             "error_processing_audio": "Fout bij verwerking audiobericht",
-            "error_processing_voice_message": "Fout bij verwerking spraakbericht",
-            "unnamed_audio": "Naamloze audio"
+            "error_processing_voice_message": "Fout bij verwerking spraakbericht"
         },
         "m.beacon_info": {
             "view_live_location": "Bekijk live locatie"
@@ -2996,7 +2966,6 @@
         "hangup": "Ophangen",
         "hide_sidebar_button": "Zijbalk verbergen",
         "input_devices": "Invoer apparaten",
-        "join_button_tooltip_call_full": "Sorry — dit gesprek is momenteel vol",
         "maximise": "Scherm vullen",
         "misconfigured_server": "Oproep mislukt door verkeerd geconfigureerde server",
         "misconfigured_server_description": "Vraag je homeserver-beheerder (<code>%(homeserverDomain)s</code>) een TURN-server te configureren voor de betrouwbaarheid van de oproepen.",

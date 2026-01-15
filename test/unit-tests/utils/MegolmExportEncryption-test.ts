@@ -59,8 +59,8 @@ const TEST_VECTORS = [
     ],
 ];
 
-function stringToArray(s: string): ArrayBufferLike {
-    return new TextEncoder().encode(s).buffer;
+function stringToArray(s: string): ArrayBuffer {
+    return new TextEncoder().encode(s).buffer as ArrayBuffer;
 }
 
 describe("MegolmExportEncryption", function () {

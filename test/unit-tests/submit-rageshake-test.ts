@@ -15,7 +15,7 @@ import {
     TypedEventEmitter,
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
 import { collectBugReport } from "../../src/rageshake/submit-rageshake";
@@ -25,8 +25,6 @@ import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Sett
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 
 describe("Rageshakes", () => {
-    const RUST_CRYPTO_VERSION = "Rust SDK 0.7.0 (691ec63), Vodozemac 0.5.0";
-    const OLM_CRYPTO_VERSION = "Olm 3.2.15";
     let mockClient: Mocked<MatrixClient>;
     const mockHttpAPI: MatrixHttpApi<IHttpOpts & { onlyData: true }> = new MatrixHttpApi(
         new TypedEventEmitter<HttpApiEvent, HttpApiEventHandlerMap>(),
@@ -36,8 +34,6 @@ describe("Rageshakes", () => {
             onlyData: true,
         },
     );
-    let windowSpy: jest.SpyInstance;
-    let mockWindow: Mocked<Window>;
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
@@ -53,21 +49,8 @@ describe("Rageshakes", () => {
             ed25519: "",
             curve25519: "",
         });
-        mockWindow = {
-            matchMedia: jest.fn().mockReturnValue({ matches: false }),
-            navigator: {
-                userAgent: "",
-            },
-        } as unknown as Mocked<Window>;
-        // @ts-ignore - We just need partial mock
-        windowSpy = jest.spyOn(global, "window", "get").mockReturnValue(mockWindow);
 
-        fetchMock.restore();
-        fetchMock.catch(404);
-    });
-
-    afterEach(() => {
-        windowSpy.mockRestore();
+        jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as any);
     });
 
     describe("Basic Information", () => {
@@ -99,7 +82,7 @@ describe("Rageshakes", () => {
         ];
 
         it.each(mediaQueryTests)("should collect %s", async (_, query, label, matches) => {
-            mocked(mockWindow.matchMedia).mockImplementation((q): MediaQueryList => {
+            mocked(window.matchMedia).mockImplementation((q): MediaQueryList => {
                 if (q === query) {
                     return { matches: matches } as unknown as MediaQueryList;
                 }
@@ -141,13 +124,13 @@ describe("Rageshakes", () => {
         });
 
         it("should collect user agent", async () => {
-            jest.replaceProperty(mockWindow.navigator, "userAgent", "jest navigator");
+            jest.spyOn(window.navigator, "userAgent", "get").mockReturnValue("jest navigator");
             const formData = await collectBugReport();
             const userAgent = formData.get("user_agent");
             expect(userAgent).toBe("jest navigator");
 
             // @ts-ignore - Need to force navigator to be undefined for test
-            jest.replaceProperty(mockWindow, "navigator", undefined);
+            jest.spyOn(window.navigator, "userAgent", "get").mockReturnValue(undefined);
             const formDataWithoutNav = await collectBugReport();
             expect(formDataWithoutNav.get("user_agent")).toBe("UNKNOWN");
         });
@@ -310,10 +293,6 @@ describe("Rageshakes", () => {
     });
 
     describe("Synapse info", () => {
-        beforeEach(() => {
-            fetchMock.reset();
-        });
-
         it("should collect synapse admin keys if available", async () => {
             fetchMock.get("path:/_synapse/admin/v1/server_version", {
                 server_version: "1.101.0 (b=matrix-org-hotfixes,6dbedcf601)",
@@ -445,11 +424,9 @@ describe("Rageshakes", () => {
             // @ts-ignore - Need to mock the safari
             jest.replaceProperty(mockNavigator, "storage", undefined);
 
-            const mockDocument = {
+            const spy = jest.spyOn(global, "document", "get").mockReturnValue({
                 hasStorageAccess: jest.fn().mockReturnValue(true),
-            } as unknown as Mocked<Document>;
-
-            const spy = jest.spyOn(global, "document", "get").mockReturnValue(mockDocument);
+            } as any);
 
             const formData = await collectBugReport();
             expect(formData.get("storageManager_persisted")).toBe("true");
@@ -489,14 +466,12 @@ describe("Rageshakes", () => {
             crypto: true,
         };
         const disabledFeatures = ["cssanimations", "d0", "d1"];
-        const mockWindow = {
+        const windowSpy = jest.spyOn(global, "window", "get").mockReturnValue({
             matchMedia: jest.fn().mockReturnValue({ matches: false }),
             Modernizr: {
                 ...allFeatures,
             },
-        } as unknown as Mocked<Window>;
-        // @ts-ignore - We just need partial mock
-        const windowSpy = jest.spyOn(global, "window", "get").mockReturnValue(mockWindow);
+        } as any);
 
         const formData = await collectBugReport();
 
@@ -534,52 +509,6 @@ describe("Rageshakes", () => {
         } finally {
             global.mx_rage_logger = prevLogger;
         }
-    });
-
-    describe("A-Element-R label", () => {
-        test("should add A-Element-R label if rust crypto", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(RUST_CRYPTO_VERSION);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-        });
-
-        test("should add A-Element-R label if rust crypto and new version", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue("Rust SDK 0.9.3 (909d09fd), Vodozemac 0.8.1");
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-        });
-
-        test("should not add A-Element-R label if not rust crypto", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(OLM_CRYPTO_VERSION);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).not.toContain("A-Element-R");
-        });
-
-        test("should add A-Element-R label to the set of requested labels", async () => {
-            mocked(mockClient.getCrypto()!.getVersion).mockReturnValue(RUST_CRYPTO_VERSION);
-
-            const formData = await collectBugReport({
-                labels: ["Z-UISI", "Foo"],
-            });
-            const labelNames = formData.getAll("label");
-            expect(labelNames).toContain("A-Element-R");
-            expect(labelNames).toContain("Z-UISI");
-            expect(labelNames).toContain("Foo");
-        });
-
-        test("should not panic if there is no crypto", async () => {
-            mocked(mockClient.getCrypto).mockReturnValue(undefined);
-
-            const formData = await collectBugReport();
-            const labelNames = formData.getAll("label");
-            expect(labelNames).not.toContain("A-Element-R");
-        });
     });
 
     it("should notify progress", () => {

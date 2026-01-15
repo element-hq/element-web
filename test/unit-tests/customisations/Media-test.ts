@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { mocked } from "jest-mock";
 
 import { mediaFromMxc } from "../../../src/customisations/Media";
@@ -20,7 +20,7 @@ describe("Media", () => {
             (mxc) => `https://matrix.org/_matrix/media/r0/download/${mxc.slice(6)}`,
         );
 
-        fetchMockJest.get("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", {
+        fetchMock.get("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", {
             status: 404,
             body: { errcode: "M_NOT_FOUND", error: "Not found" },
         });

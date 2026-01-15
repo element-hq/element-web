@@ -40,6 +40,7 @@ import {
     VisibilityOnIcon,
     ShareIcon,
     CopyIcon,
+    TreeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -74,8 +75,6 @@ import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadP
 import { CardContext } from "../right_panel/context";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
-import { Icon as ViewInRoomIcon } from "../../../../res/img/element-icons/view-in-room.svg";
-import { Icon as ChildRelationshipIcon } from "../../../../res/img/element-icons/child-relationship.svg";
 
 interface IReplyInThreadButton {
     mxEvent: MatrixEvent;
@@ -570,7 +569,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         if (relatedEventId && SettingsStore.getValue("developerMode")) {
             jumpToRelatedEventButton = (
                 <IconizedContextMenuOption
-                    icon={<ChildRelationshipIcon />}
+                    icon={<TreeIcon />}
                     label={_t("timeline|context_menu|view_related_event")}
                     onClick={() => this.onJumpToRelatedEventClick(relatedEventId)}
                 />
@@ -691,7 +690,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         if (isThreadRootEvent) {
             viewInRoomButton = (
                 <IconizedContextMenuOption
-                    icon={<ViewInRoomIcon />}
+                    icon={<VisibilityOnIcon />}
                     label={_t("timeline|mab|view_in_room")}
                     onClick={this.viewInRoom}
                 />

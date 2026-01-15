@@ -103,9 +103,7 @@
         "ok": "ОК",
         "open": "Открыть",
         "open_menu": "Открыть меню",
-        "pause": "Пауза",
         "pin": "Закрепить",
-        "play": "Воспроизведение",
         "proceed": "Продолжить",
         "quote": "Цитировать",
         "react": "Отреагировать",
@@ -2117,18 +2115,6 @@
             },
             "this_room_button": "Поиск в этой комнате"
         },
-        "status_bar": {
-            "delete_all": "Удалить все",
-            "exceeded_resource_limit": "Ваше сообщение не было отправлено, потому что этот домашний сервер превысил лимит ресурсов. <a>обратитесь к администратору службы</a>, чтобы продолжить использование службы.",
-            "homeserver_blocked": "Ваше сообщение не отправлено, поскольку домашний сервер заблокирован его администратором. <a>Обратитесь к администратору службы</a>, чтобы продолжить её использование.",
-            "monthly_user_limit_reached": "Ваше сообщение не было отправлено, потому что этот домашний сервер превысил месячный лимит активных пользователей. <a>обратитесь к администратору службы</a>, чтобы продолжить использование службы.",
-            "requires_consent_agreement": "Вы не можете отправлять сообщения до тех пор, пока вы не примете <consentLink>наши правила и положения</consentLink>.",
-            "retry_all": "Повторить все",
-            "select_messages_to_retry": "Вы можете выбрать все или отдельные сообщения для повторной попытки или удаления",
-            "server_connectivity_lost_description": "Отправленные сообщения будут сохранены, пока соединение не восстановится.",
-            "server_connectivity_lost_title": "Связь с сервером потеряна.",
-            "some_messages_not_sent": "Некоторые из ваших сообщений не были отправлены"
-        },
         "unknown_status_code_for_timeline_jump": "неизвестный код состояния",
         "unread_notifications_predecessor": {
             "other": "У вас есть %(count)s непрочитанных уведомлений в предыдущей версии этой комнаты.",
@@ -2416,7 +2402,6 @@
             "error_join_rule_change_unknown": "Неизвестная ошибка",
             "guest_access_warning": "Люди с поддерживаемыми клиентами смогут присоединиться к комнате, не имея зарегистрированной учётной записи.",
             "history_visibility_invited": "Только участники (с момента их приглашения)",
-            "history_visibility_joined": "Только участники (с момента их входа)",
             "history_visibility_legend": "Кто может читать историю?",
             "history_visibility_shared": "Только участники (с момента выбора этого параметра)",
             "history_visibility_warning": "Видимость существующей истории сообщений в этой комнате не изменится.",
@@ -3388,24 +3373,10 @@
         "no_rooms_with_unread_threads": "У вас пока нет комнат с непрочитанными обсуждениями."
     },
     "time": {
-        "about_day_ago": "около суток назад",
-        "about_hour_ago": "около часа назад",
-        "about_minute_ago": "около минуты назад",
         "date_at_time": "%(date)s в %(time)s",
-        "few_seconds_ago": "несколько секунд назад",
         "hours_minutes_seconds_left": "Осталось %(hours)sч %(minutes)sм %(seconds)sс",
-        "in_about_day": "примерно через день",
-        "in_about_hour": "примерно через час",
-        "in_about_minute": "примерно через минуту",
-        "in_few_seconds": "несколько секунд назад",
-        "in_n_days": "%(num)s дней спустя",
-        "in_n_hours": "%(num)s часов спустя",
-        "in_n_minutes": "%(num)s минут спустя",
         "left": "Осталось %(timeRemaining)s",
         "minutes_seconds_left": "Осталось %(minutes)sм %(seconds)sс",
-        "n_days_ago": "%(num)s дней назад",
-        "n_hours_ago": "%(num)s часов назад",
-        "n_minutes_ago": "%(num)s минут назад",
         "seconds_left": "%(seconds)s осталось",
         "short_days": "%(value)sд",
         "short_days_hours_minutes_seconds": "%(days)s д %(hours)s ч %(minutes)s мин %(seconds)s с",
@@ -3460,11 +3431,9 @@
             "unable_to_find": "Попытка загрузить выбранный интервал истории чата этой комнаты не удалась, так как запрошенный элемент не найден."
         },
         "m.audio": {
-            "audio_player": "Аудиоплеер",
             "error_downloading_audio": "Ошибка загрузки аудио",
             "error_processing_audio": "Ошибка обработки звукового сообщения",
-            "error_processing_voice_message": "Ошибка при обработке голосового сообщения",
-            "unnamed_audio": "Безымянное аудио"
+            "error_processing_voice_message": "Ошибка при обработке голосового сообщения"
         },
         "m.beacon_info": {
             "view_live_location": "Посмотреть трансляцию местоположения"
@@ -4042,7 +4011,6 @@
         "hide_sidebar_button": "Скрыть боковую панель",
         "input_devices": "Устройства ввода",
         "jitsi_call": "Конференция Jitsi",
-        "join_button_tooltip_call_full": "Извините — этот вызов в настоящее время заполнен",
         "legacy_call": "Звонок (устаревший)",
         "maximise": "Заполнить экран",
         "maximise_call": "Развернуть звонок",

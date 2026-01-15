@@ -58,7 +58,7 @@ exports[`UrlPreviewSettings should display the correct preview when the room is 
               class="_label_19upo_59"
               for="mx_SettingsFlag_vY7Q4uEh9K38"
             >
-              urlPreviewsEnabled_e2ee
+              Enable URL previews for this room (only affects you)
             </label>
           </div>
         </div>

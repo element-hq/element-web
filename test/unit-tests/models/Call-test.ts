@@ -481,7 +481,14 @@ describe("ElementCall", () => {
     let alice: RoomMember;
     let roomSession: Mocked<MatrixRTCSession>;
     function setRoomMembers(memberIds: string[]) {
-        jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
+        jest.spyOn(room, "getJoinedMembers").mockReturnValue(
+            memberIds.map(
+                (id) =>
+                    ({
+                        userId: id,
+                    }) as RoomMember,
+            ),
+        );
     }
 
     beforeEach(() => {
@@ -1051,7 +1058,7 @@ describe("ElementCall", () => {
             setRoomMembers(["@user:example.com", "@user2:example.com", "@user4:example.com"]);
         });
         it("don't sent notify event if there are existing room call members", async () => {
-            jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
+            jest.spyOn(MatrixRTCSession, "sessionMembershipsForSlot").mockResolvedValue([
                 { application: "m.call", callId: "" } as unknown as CallMembership,
             ]);
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");

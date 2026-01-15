@@ -83,6 +83,13 @@ test.describe("Room Status Bar", () => {
             const banner = page.getByRole("region", { name: "Room status bar" });
             await expect(banner).toBeVisible({ timeout: 15000 });
             await expect(banner).toMatchScreenshot("consent.png");
+
+            // Click consent
+            await banner.getByRole("link", { name: "View Terms and Conditions" }).click();
+            await page.unroute("**/_matrix/client/**/send**");
+            // Should now be allowed to retry.
+            await banner.getByRole("button", { name: "Retry all" }).click();
+            await expect(banner).not.toBeVisible();
         },
     );
     test.describe("Message fails to send", () => {
@@ -161,7 +168,7 @@ test.describe("Room Status Bar", () => {
                 await composer.fill("Hello");
                 await composer.press("Enter");
 
-                const banner = page.getByText("!Some of your messages have");
+                const banner = page.getByRole("status", { name: "Could not start a chat with this user" });
                 await expect(banner).toBeVisible();
                 await expect(banner).toMatchScreenshot("local_room_create_failed.png");
 

@@ -85,9 +85,7 @@
         "no": "否",
         "ok": "確定",
         "open": "開啟",
-        "pause": "暫停",
         "pin": "圖釘",
-        "play": "播放",
         "proceed": "繼續",
         "quote": "引用",
         "react": "反應",
@@ -1777,18 +1775,6 @@
             "all_rooms_button": "搜尋所有聊天室",
             "this_room_button": "搜尋此聊天室"
         },
-        "status_bar": {
-            "delete_all": "刪除全部",
-            "exceeded_resource_limit": "您的訊息未傳送，因為其家伺服器已超過一項資源限制。請<a>聯絡您的服務管理員</a>以繼序使用服務。",
-            "homeserver_blocked": "您的訊息並未傳送，因為此家伺服器已被其管理員封鎖。請<a>聯絡您的服務管理員</a>以繼續使用服務。",
-            "monthly_user_limit_reached": "您的訊息未被傳送，因為其家伺服器已經達到了其每月活躍使用者限制。請<a>聯絡您的服務管理員</a>以繼續使用服務。",
-            "requires_consent_agreement": "您在審閱並同意<consentLink>我們的條款與細則</consentLink>前無法傳送訊息。",
-            "retry_all": "重試全部",
-            "select_messages_to_retry": "您可以選取全部或單獨的訊息來重試或刪除",
-            "server_connectivity_lost_description": "傳送的訊息會在您的連線恢復前先儲存起來。",
-            "server_connectivity_lost_title": "對伺服器的連線已中斷。",
-            "some_messages_not_sent": "您的部份訊息未傳送"
-        },
         "unknown_status_code_for_timeline_jump": "未知狀態代碼",
         "unread_notifications_predecessor": {
             "other": "您在此聊天室的先前版本有 %(count)s 個未讀的通知。",
@@ -2009,7 +1995,6 @@
             "error_join_rule_change_unknown": "未知錯誤",
             "guest_access_warning": "有受支援的客戶端的夥伴不需要註冊帳號就可以加入聊天室。",
             "history_visibility_invited": "僅限成員（自他們被邀請開始）",
-            "history_visibility_joined": "僅限成員（自他們加入開始）",
             "history_visibility_legend": "誰可以閱讀紀錄？",
             "history_visibility_shared": "僅限成員（自選取此選項開始）",
             "history_visibility_warning": "對可閱讀訊息紀錄的使用者的變更，僅適用於此聊天室的新訊息。現有訊息的顯示狀態將保持不變。",
@@ -2835,24 +2820,10 @@
         "show_thread_filter": "顯示："
     },
     "time": {
-        "about_day_ago": "大約一天前",
-        "about_hour_ago": "大約一小時前",
-        "about_minute_ago": "大約一分鐘前",
         "date_at_time": "%(date)s 於 %(time)s",
-        "few_seconds_ago": "數秒前",
         "hours_minutes_seconds_left": "剩餘 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
-        "in_about_day": "從現在開始大約一天",
-        "in_about_hour": "從現在開始大約一小時",
-        "in_about_minute": "從現在開始大約一分鐘",
-        "in_few_seconds": "從現在開始數秒鐘",
-        "in_n_days": "從現在開始 %(num)s 天",
-        "in_n_hours": "從現在開始 %(num)s 小時",
-        "in_n_minutes": "從現在開始 %(num)s 分鐘",
         "left": "剩下 %(timeRemaining)s",
         "minutes_seconds_left": "剩餘 %(minutes)s 分鐘 %(seconds)s 秒",
-        "n_days_ago": "%(num)s 天前",
-        "n_hours_ago": "%(num)s 小時前",
-        "n_minutes_ago": "%(num)s 分鐘前",
         "seconds_left": "剩 %(seconds)s 秒",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)s 天 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
@@ -2895,8 +2866,7 @@
         "m.audio": {
             "error_downloading_audio": "下載音訊時發生錯誤",
             "error_processing_audio": "處理音訊訊息時出現問題",
-            "error_processing_voice_message": "處理語音訊息時發生錯誤",
-            "unnamed_audio": "未命名的音訊"
+            "error_processing_voice_message": "處理語音訊息時發生錯誤"
         },
         "m.beacon_info": {
             "view_live_location": "檢視即時位置"
@@ -3440,7 +3410,6 @@
         "hangup": "掛斷",
         "hide_sidebar_button": "隱藏側邊欄",
         "input_devices": "輸入裝置",
-        "join_button_tooltip_call_full": "抱歉 — 此通話目前已滿",
         "maximise": "填滿螢幕",
         "misconfigured_server": "由於伺服器設定錯誤，無法通話",
         "misconfigured_server_description": "請聯繫您家伺服器（<code>%(homeserverDomain)s</code>）的管理員建立一套 TURN 伺服器，使通話能更穩定運作。",

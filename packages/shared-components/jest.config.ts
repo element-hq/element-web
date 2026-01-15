@@ -10,7 +10,7 @@ import { env } from "process";
 import type { Config } from "jest";
 
 const config: Config = {
-    testEnvironment: "jsdom",
+    testEnvironment: "jest-fixed-jsdom",
     testEnvironmentOptions: {
         url: "http://localhost/",
     },
@@ -30,7 +30,7 @@ const config: Config = {
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
     },
     transformIgnorePatterns: [
-        "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs|@storybook|storybook)).+$",
+        "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs|@storybook|storybook|matrix-web-i18n)).+$",
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",

@@ -101,9 +101,7 @@
         "ok": "Rendben",
         "open": "Megnyitás",
         "open_menu": "Menü megnyitása",
-        "pause": "Szünet",
         "pin": "Kitűzés",
-        "play": "Lejátszás",
         "proceed": "Folytatás",
         "quote": "Idézés",
         "react": "Reakció",
@@ -2096,18 +2094,6 @@
             },
             "this_room_button": "Keresés ebben a szobában"
         },
-        "status_bar": {
-            "delete_all": "Mind törlése",
-            "exceeded_resource_limit": "Az üzenete nem lett elküldve, mert a Matrix-kiszolgáló túllépett egy erőforráskorlátot. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás adminisztrátorával</a>.",
-            "homeserver_blocked": "Az üzenete nem lett elküldve, mert a Matrix-kiszolgáló adminisztrátora letiltotta. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás adminisztrátorával</a>.",
-            "monthly_user_limit_reached": "Az üzenete nem lett elküldve, mert ez a Matrix-kiszolgáló elérte a havi aktív felhasználói korlátot. A szolgáltatás használatának folytatásához <a>vegye fel a kapcsolatot a szolgáltatás adminisztrátorával</a>.",
-            "requires_consent_agreement": "Nem tudsz üzenetet küldeni amíg nem olvasod el és nem fogadod el a <consentLink>felhasználási feltételeket</consentLink>.",
-            "retry_all": "Összes újraküldése",
-            "select_messages_to_retry": "Újraküldéshez vagy törléshez kiválaszthatja az üzeneteket egyenként vagy az összeset együtt",
-            "server_connectivity_lost_description": "Az elküldött üzenetek tárolva lesznek, amíg a kapcsolata újra elérhető nem lesz.",
-            "server_connectivity_lost_title": "A kapcsolat megszakadt a kiszolgálóval.",
-            "some_messages_not_sent": "Néhány üzenete nem lett elküldve"
-        },
         "unknown_status_code_for_timeline_jump": "ismeretlen állapotkód",
         "unread_notifications_predecessor": {
             "%(count)s olvasatlan értesítésed van a régi verziójú szobában.": "one"
@@ -2390,7 +2376,6 @@
             "error_join_rule_change_unknown": "Ismeretlen hiba",
             "guest_access_warning": "A támogatott klienseket használó emberek még regisztrált fiók nélkül is beléphetnek a szobába.",
             "history_visibility_invited": "Csak tagoknak (a meghívásuk idejétől)",
-            "history_visibility_joined": "Csak tagoknak (amióta csatlakoztak)",
             "history_visibility_legend": "Ki olvashatja a régi üzeneteket?",
             "history_visibility_shared": "Csak tagok számára (a beállítás kiválasztásától)",
             "history_visibility_warning": "A régi üzenetek láthatósága nem fog változni.",
@@ -3342,24 +3327,10 @@
         "no_rooms_with_unread_threads": "Nincsenek még olvasatlan üzenetszálakkal rendelkező szobái."
     },
     "time": {
-        "about_day_ago": "egy napja",
-        "about_hour_ago": "egy órája",
-        "about_minute_ago": "egy perce",
         "date_at_time": "%(date)s %(time)s",
-        "few_seconds_ago": "néhány másodperce",
         "hours_minutes_seconds_left": "%(hours)s ó %(minutes)s p %(seconds)s mp van hátra",
-        "in_about_day": "egy nap múlva",
-        "in_about_hour": "egy óra múlva",
-        "in_about_minute": "egy perc múlva",
-        "in_few_seconds": "másodpercek múlva",
-        "in_n_days": "%(num)s nap múlva",
-        "in_n_hours": "%(num)s óra múlva",
-        "in_n_minutes": "%(num)s perc múlva",
         "left": "Maradék idő: %(timeRemaining)s",
         "minutes_seconds_left": "%(minutes)s p %(seconds)s mp van hátra",
-        "n_days_ago": "%(num)s nappal ezelőtt",
-        "n_hours_ago": "%(num)s órával ezelőtt",
-        "n_minutes_ago": "%(num)s perccel ezelőtt",
         "seconds_left": "%(seconds)s mp van hátra",
         "short_days": "%(value)s n",
         "short_days_hours_minutes_seconds": "%(days)s n %(hours)s ó %(minutes)s p %(seconds)s mp",
@@ -3414,11 +3385,9 @@
             "unable_to_find": "Megpróbálta betölteni a szoba megadott időpontjának megfelelő adatait, de az nem található."
         },
         "m.audio": {
-            "audio_player": "Hanglejátszó",
             "error_downloading_audio": "Hiba a hang letöltésekor",
             "error_processing_audio": "Hiba a hangüzenet feldolgozásánál",
-            "error_processing_voice_message": "Hiba a hangüzenet feldolgozásánál",
-            "unnamed_audio": "Névtelen hang"
+            "error_processing_voice_message": "Hiba a hangüzenet feldolgozásánál"
         },
         "m.beacon_info": {
             "view_live_location": "Élő földrajzi helyzet megtekintése"
@@ -3988,7 +3957,6 @@
         "hide_sidebar_button": "Oldalsáv elrejtése",
         "input_devices": "Beviteli eszközök",
         "jitsi_call": "Jitsi konferencia",
-        "join_button_tooltip_call_full": "Bocsánat — ez a hívás betelt",
         "legacy_call": "Örökölt hívás",
         "maximise": "Képernyő kitöltése",
         "maximise_call": "Maximalizálja a hívást",

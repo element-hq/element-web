@@ -34,7 +34,7 @@ import {
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import {
     clearAllModals,
@@ -1645,7 +1645,7 @@ describe("<SessionManagerTab />", () => {
                 ],
             });
             mockCrypto.exportSecretsBundle = jest.fn();
-            fetchMock.mock(delegatedAuthConfig.jwks_uri!, {
+            fetchMock.route(delegatedAuthConfig.jwks_uri!, {
                 status: 200,
                 headers: {
                     "Content-Type": "application/json",

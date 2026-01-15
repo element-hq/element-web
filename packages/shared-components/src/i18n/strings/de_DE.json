@@ -1,0 +1,44 @@
+{
+    "a11y": {
+        "seek_bar_label": "Audio-Suchleiste"
+    },
+    "action": {
+        "delete": "Löschen",
+        "dismiss": "Ausblenden",
+        "explore_rooms": "Chats erkunden",
+        "pause": "Pausieren",
+        "play": "Abspielen",
+        "search": "Suchen"
+    },
+    "left_panel": {
+        "open_dial_pad": "Wähltastatur öffnen"
+    },
+    "room": {
+        "status_bar": {
+            "history_visible": "Diese Gruppe wurde konfiguriert, neuen Mitgliedern Zugriff auf den vergangenen Nachrichtenverlauf zu gestatten. <a>Mehr erfahren</a>"
+        }
+    },
+    "time": {
+        "about_day_ago": "vor etwa einem Tag",
+        "about_hour_ago": "vor etwa einer Stunde",
+        "about_minute_ago": "vor etwa einer Minute",
+        "few_seconds_ago": "vor ein paar Sekunden",
+        "in_about_day": "in etwa einem Tag",
+        "in_about_hour": "in etwa einer Stunde",
+        "in_about_minute": "in etwa einer Minute",
+        "in_few_seconds": "in ein paar Sekunden",
+        "in_n_days": "in %(num)s Tagen",
+        "in_n_hours": "in %(num)s Stunden",
+        "in_n_minutes": "In etwa %(num)s Minuten",
+        "n_days_ago": "vor %(num)s Tagen",
+        "n_hours_ago": "vor %(num)s Stunden",
+        "n_minutes_ago": "vor %(num)s Minuten"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Audio-Player",
+            "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
+            "unnamed_audio": "Unbenannte Audiodatei"
+        }
+    }
+}

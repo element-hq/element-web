@@ -92,9 +92,7 @@
         "ok": "OK",
         "open": "Åbn",
         "open_menu": "Åbn menu",
-        "pause": "Pausér",
         "pin": "Fastgør",
-        "play": "Afspil",
         "proceed": "Fortsæt",
         "quote": "Citat",
         "react": "Reager",
@@ -1823,18 +1821,6 @@
             "all_rooms_button": "Søg i alle rum",
             "this_room_button": "Søg i dette rum"
         },
-        "status_bar": {
-            "delete_all": "Slet alle",
-            "exceeded_resource_limit": "Din besked blev ikke sendt, fordi denne hjemmeserver har overskredet en ressourcegrænse. <a>Kontakt din serviceadministrator </a> for at fortsætte med at bruge tjenesten.",
-            "homeserver_blocked": "Din besked blev ikke sendt, fordi denne hjemmeserver er blevet blokeret af dens administrator. <a>Kontakt din serviceadministrator </a> for at fortsætte med at bruge tjenesten.",
-            "monthly_user_limit_reached": "Din besked blev ikke sendt, fordi denne hjemmeserver har nået sin månedlige aktive brugergrænse. <a>Kontakt din serviceadministrator </a> for at fortsætte med at bruge tjenesten.",
-            "requires_consent_agreement": "Du kan ikke sende nogen beskeder, før du har gennemgået og accepteret <consentLink>vores vilkår og betingelser</consentLink>.",
-            "retry_all": "Prøv alle igen",
-            "select_messages_to_retry": "Du kan vælge alle eller enkelte beskeder, for at forsøge med dem igen eller slette dem.",
-            "server_connectivity_lost_description": "Sendte beskeder vil blive gemt, indtil din forbindelse er genoprettet.",
-            "server_connectivity_lost_title": "Forbindelsen til serveren er gået tabt.",
-            "some_messages_not_sent": "Nogle af dine beskeder er ikke blevet sendt"
-        },
         "unknown_status_code_for_timeline_jump": "ukendt statuskode",
         "unread_notifications_predecessor": {
             "one": "Du har %(count)s ulæst notifikation i en tidligere version af dette rum.",
@@ -2073,7 +2059,6 @@
             "error_join_rule_change_unknown": "Ukendt fejl",
             "guest_access_warning": "Personer med understøttede klienter, vil kunne tilslutte sig rummet uden at have en registreret konto.",
             "history_visibility_invited": "Kun medlemmer (siden de blev inviteret)",
-            "history_visibility_joined": "Kun medlemmer (fra de kom ind)",
             "history_visibility_legend": "Hvem kan læse historikken?",
             "history_visibility_shared": "Kun medlemmer (siden det tidspunkt, hvor denne indstilling blev valgt)",
             "history_visibility_warning": "Synligheden af ​​den eksisterende historik vil ikke blive ændret.",
@@ -2886,24 +2871,10 @@
         "show_thread_filter": "Vis:"
     },
     "time": {
-        "about_day_ago": "omkring en dag siden",
-        "about_hour_ago": "for omkring en time siden",
-        "about_minute_ago": "for omkring et minut siden",
         "date_at_time": "%(date)s om %(time)s",
-        "few_seconds_ago": "for et par sekunder siden",
         "hours_minutes_seconds_left": "%(hours)st %(minutes)sm %(seconds)ss tilbage",
-        "in_about_day": "om cirka en dag fra nu",
-        "in_about_hour": "omkring en time fra nu",
-        "in_about_minute": "omkring et minut fra nu",
-        "in_few_seconds": "et par sekunder fra nu",
-        "in_n_days": "%(num)s dage fra nu",
-        "in_n_hours": "%(num)s timer fra nu",
-        "in_n_minutes": "%(num)s minutter fra nu",
         "left": "%(timeRemaining)s tilbage",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss tilbage",
-        "n_days_ago": "%(num)s dage siden",
-        "n_hours_ago": "%(num)s timer siden",
-        "n_minutes_ago": "%(num)s minutter siden",
         "seconds_left": "%(seconds)ss tilbage",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
@@ -2951,8 +2922,7 @@
         "m.audio": {
             "error_downloading_audio": "Fejl ved download af lyd",
             "error_processing_audio": "Fejl ved behandling af lydbesked",
-            "error_processing_voice_message": "Fejl ved behandling af talebesked",
-            "unnamed_audio": "Unavngiven lyd"
+            "error_processing_voice_message": "Fejl ved behandling af talebesked"
         },
         "m.beacon_info": {
             "view_live_location": "Se live lokation"
@@ -3502,7 +3472,6 @@
         "hide_sidebar_button": "Skjul sidebjælke",
         "input_devices": "Inputenheder",
         "jitsi_call": "Jitsi fællesopkald",
-        "join_button_tooltip_call_full": "Beklager - dette opkald er i øjeblikket fuldt",
         "legacy_call": "Gammel opkaldsmetode",
         "maximise": "Udfyld skærmen",
         "maximise_call": "Maksimér opkaldet",

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useRef, type JSX, useCallback, useEffect, useState } from "react";
+import React, { useRef, type JSX, useCallback, useEffect, useState, useMemo } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
 
 import { isModifiedKeyEvent, Key } from "../../Keyboard";
@@ -75,6 +75,13 @@ export interface IListViewProps<Item, Context> extends Omit<
      */
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
+
+/**
+ * Utility type for the prop scrollIntoViewOnChange allowing it to be memoised by a caller without repeating types
+ */
+export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
+    VirtuosoProps<Item, ListContext<Context>>["scrollIntoViewOnChange"]
+>;
 
 /**
  * A generic virtualized list component built on top of react-virtuoso.
@@ -286,11 +293,14 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         }
     }, []);
 
-    const listContext: ListContext<Context> = {
-        tabIndexKey: tabIndexKey,
-        focused: isFocused,
-        context: props.context || ({} as Context),
-    };
+    const listContext: ListContext<Context> = useMemo(
+        () => ({
+            tabIndexKey: tabIndexKey,
+            focused: isFocused,
+            context: props.context || ({} as Context),
+        }),
+        [tabIndexKey, isFocused, props.context],
+    );
 
     return (
         <Virtuoso

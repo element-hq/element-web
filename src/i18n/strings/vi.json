@@ -83,9 +83,7 @@
         "no": "Không",
         "ok": "Ok",
         "open": "Mở",
-        "pause": "Tạm dừng",
         "pin": "Ghim",
-        "play": "Chạy",
         "proceed": "Tiếp tục",
         "quote": "Trích",
         "react": "Phản ứng",
@@ -1631,17 +1629,6 @@
             "all_rooms_button": "Tìm tất cả phòng",
             "this_room_button": "Tìm trong phòng này"
         },
-        "status_bar": {
-            "delete_all": "Xóa hết",
-            "exceeded_resource_limit": "Thư của bạn không gửi được vì máy chủ(homeserver) đã vượt quá giới hạn tài nguyên. Vui lòng <a>liên hệ với quản trị viên</a> để tiếp tục sử dụng dịch vụ.",
-            "monthly_user_limit_reached": "Tin nhắn của bạn không được gửi vì máy chủ này đã đạt đến Giới hạn Người dùng Hoạt động Hàng tháng. Vui lòng <a>liên hệ với quản trị viên dịch vụ của bạn</a> để tiếp tục sử dụng dịch vụ.",
-            "requires_consent_agreement": "Bạn không thể gửi bất kỳ tin nhắn nào cho đến khi bạn xem xét và đồng ý với các <consentLink>điều khoản và điều kiện của chúng tôi</consentLink>.",
-            "retry_all": "Thử lại tất cả",
-            "select_messages_to_retry": "Bạn có thể chọn tất cả hoặc từng tin nhắn để thử lại hoặc xóa",
-            "server_connectivity_lost_description": "Các tin nhắn đã gửi sẽ được lưu trữ cho đến khi kết nối của bạn trở lại.",
-            "server_connectivity_lost_title": "Kết nối đến máy chủ đã bị mất.",
-            "some_messages_not_sent": "Một số tin nhắn của bạn chưa được gửi đi"
-        },
         "unread_notifications_predecessor": {
             "one": "Bạn có %(count)s thông báo chưa đọc trong phiên bản trước của phòng này.",
             "other": "Bạn có %(count)s thông báo chưa đọc trong phiên bản trước của phòng này."
@@ -1857,7 +1844,6 @@
             "error_join_rule_change_unknown": "Thất bại không xác định",
             "guest_access_warning": "Những người có khách hàng được hỗ trợ sẽ có thể tham gia phòng mà không cần đăng ký tài khoản.",
             "history_visibility_invited": "Chỉ dành cho thành viên (từ thời điểm được mời)",
-            "history_visibility_joined": "Chỉ dành cho thành viên (từ thời điểm tham gia)",
             "history_visibility_legend": "Ai có thể đọc lịch sử phòng chat?",
             "history_visibility_shared": "Chỉ dành cho thành viên (từ thời điểm chọn thiết lập này)",
             "history_visibility_warning": "Thay đổi ai có thể đọc lịch sử phòng chat chỉ được áp dụng đối với các tin nhắn từ thời điểm này.",
@@ -2597,23 +2583,9 @@
         "show_thread_filter": "Hiển thị:"
     },
     "time": {
-        "about_day_ago": "khoảng một ngày trước",
-        "about_hour_ago": "khoảng một giờ trước",
-        "about_minute_ago": "khoảng một phút trước",
         "date_at_time": "%(date)s lúc %(time)s",
-        "few_seconds_ago": "vài giây trước",
         "hours_minutes_seconds_left": "Còn lại %(hours)s giờ %(minutes)s phút %(seconds)s giây",
-        "in_about_day": "khoảng một ngày kể từ bây giờ",
-        "in_about_hour": "khoảng một giờ kể từ bây giờ",
-        "in_about_minute": "khoảng một phút kể từ bây giờ",
-        "in_few_seconds": "một vài giây kể từ bây giờ",
-        "in_n_days": "%(num)s ngày kể từ bây giờ",
-        "in_n_hours": "%(num)s giờ kể từ bây giờ",
-        "in_n_minutes": "%(num)s phút kể từ bây giờ",
         "minutes_seconds_left": "Còn lại %(minutes)s phút %(seconds)s giây",
-        "n_days_ago": "%(num)s ngày trước",
-        "n_hours_ago": "%(num)s giờ trước",
-        "n_minutes_ago": "%(num)s phút trước",
         "seconds_left": "Còn %(seconds)s giây",
         "short_days": "%(value)sngày",
         "short_days_hours_minutes_seconds": "%(days)s ngày %(hours)s giờ %(minutes)s phút %(seconds)s giây",
@@ -2656,8 +2628,7 @@
         "m.audio": {
             "error_downloading_audio": "Lỗi khi tải xuống âm thanh",
             "error_processing_audio": "Lỗi khi xử lý tin nhắn âm thanh",
-            "error_processing_voice_message": "Lỗi khi xử lý tin nhắn thoại",
-            "unnamed_audio": "Âm thanh không tên"
+            "error_processing_voice_message": "Lỗi khi xử lý tin nhắn thoại"
         },
         "m.call": {
             "video_call_ended": "Cuộc gọi truyền hình đã kết thúc",
@@ -3169,7 +3140,6 @@
         "hangup": "Dập máy",
         "hide_sidebar_button": "Ẩn thanh bên",
         "input_devices": "Thiết bị đầu vào",
-        "join_button_tooltip_call_full": "Xin lỗi — cuộc gọi này đang đầy",
         "maximise": "Vừa màn hình",
         "misconfigured_server": "Thực hiện cuộc gọi thất bại do thiết lập máy chủ sai",
         "misconfigured_server_description": "Vui lòng yêu cầu quản trị viên máy chủ của bạn (<code>%(homeserverDomain)s</code>) thiết lập máy chủ TURN để cuộc gọi hoạt động ổn định.",

@@ -1,0 +1,38 @@
+{
+    "a11y": {
+        "seek_bar_label": "Ses arama çubuğu"
+    },
+    "action": {
+        "delete": "Sil",
+        "dismiss": "Kapat",
+        "explore_rooms": "Odaları keşfet",
+        "pause": "Durdur",
+        "play": "Oynat",
+        "search": "Ara"
+    },
+    "left_panel": {
+        "open_dial_pad": "Arama tuşlarını aç"
+    },
+    "time": {
+        "about_day_ago": "yaklaşık bir gün önce",
+        "about_hour_ago": "yaklaşık bir saat önce",
+        "about_minute_ago": "yaklaşık bir dakika önce",
+        "few_seconds_ago": "bir kaç saniye önce",
+        "in_about_day": "şu andan itibaren yaklaşık bir gün",
+        "in_about_hour": "şu andan itibaren yaklaşık bir saat",
+        "in_about_minute": "şu andan itibaren yaklaşık bir dakika",
+        "in_few_seconds": "şu andan itibaren bir kaç saniye",
+        "in_n_days": "şu andan itibaren %(num)s gün",
+        "in_n_hours": "şu andan itibaren %(num)s saat",
+        "in_n_minutes": "şu andan itibaren %(num)s dakika",
+        "n_days_ago": "%(num)s gün önce",
+        "n_hours_ago": "%(num)s saat önce",
+        "n_minutes_ago": "%(num)s dakika önce"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Ses dosyası indirilirken hata oluştu",
+            "unnamed_audio": "İsimsiz ses"
+        }
+    }
+}

@@ -99,9 +99,7 @@
         "ok": "Oke",
         "open": "Buka",
         "open_menu": "Buka menu",
-        "pause": "Jeda",
         "pin": "Sematkan",
-        "play": "Mainkan",
         "proceed": "Lanjut",
         "quote": "Kutip",
         "react": "Bereaksi",
@@ -2101,18 +2099,6 @@
             },
             "this_room_button": "Cari ruangan ini"
         },
-        "status_bar": {
-            "delete_all": "Hapus semua",
-            "exceeded_resource_limit": "Pesan Anda tidak terkirim karena homeserver ini melebihi sebuah batas sumber daya. Mohon <a>hubungi administrator layanan Anda</a> untuk melanjutkan menggunakan layanannya.",
-            "homeserver_blocked": "Pesan Anda tidak dikirim karena homeserver ini telah diblokir oleh administrator. Mohon <a>hubungi administrator layanan Anda</a> untuk terus menggunakan layanan ini.",
-            "monthly_user_limit_reached": "Pesan Anda tidak terkirim karena homesever ini telah mencapat batas Pengguna Aktif Bulanan. Mohon <a>hubungi administrator layanan Anda</a> untuk melanjutkan menggunakan layanannya.",
-            "requires_consent_agreement": "Anda tidak dapat mengirimkan pesan apa saja sampai Anda lihat dan terima <consentLink>syarat dan ketentuan kami</consentLink>.",
-            "retry_all": "Coba ulang semua",
-            "select_messages_to_retry": "Anda dapat memilih semua atau beberapa pesan untuk dicoba lagi atau dihapus",
-            "server_connectivity_lost_description": "Pesan yang akan dikirim akan disimpan sampai koneksi Anda telah kembali.",
-            "server_connectivity_lost_title": "Koneksi ke server telah hilang.",
-            "some_messages_not_sent": "Beberapa pesan Anda tidak terkirim"
-        },
         "unknown_status_code_for_timeline_jump": "kode keadaan tidak diketahui",
         "unread_notifications_predecessor": {
             "one": "Anda punya %(count)s notifikasi yang belum dibaca dalam versi sebelumnya dari ruangan ini.",
@@ -2400,7 +2386,6 @@
             "error_join_rule_change_unknown": "Kesalahan yang tidak diketahui",
             "guest_access_warning": "Orang-orang dengan klien yang didukung akan dapat bergabung ruangan ini tanpa harus memiliki sebuah akun yang terdaftar.",
             "history_visibility_invited": "Anggota saja (sejak mereka diundang)",
-            "history_visibility_joined": "Anggota saja (sejak mereka bergabung)",
             "history_visibility_legend": "Siapa yang dapat membaca riwayat?",
             "history_visibility_shared": "Anggota saja (sejak memilih opsi ini)",
             "history_visibility_warning": "Visibilitas riwayat yang ada tidak akan berubah.",
@@ -3359,24 +3344,10 @@
         "no_rooms_with_unread_threads": "Anda belum memiliki ruangan dengan utas yang belum dibaca."
     },
     "time": {
-        "about_day_ago": "1 hari yang lalu",
-        "about_hour_ago": "1 jam yang lalu",
-        "about_minute_ago": "1 menit yang lalu",
         "date_at_time": "%(date)s pada %(time)s",
-        "few_seconds_ago": "beberapa detik yang lalu",
         "hours_minutes_seconds_left": "Sisa %(hours)sj %(minutes)sm %(seconds)sd",
-        "in_about_day": "1 hari dari sekarang",
-        "in_about_hour": "1 jam dari sekarang",
-        "in_about_minute": "1 menit dari sekarang",
-        "in_few_seconds": "beberapa detik dari sekarang",
-        "in_n_days": "%(num)s hari dari sekarang",
-        "in_n_hours": "%(num)s jam dari sekarang",
-        "in_n_minutes": "%(num)s dari sekarang",
         "left": "%(timeRemaining)sd lagi",
         "minutes_seconds_left": "Sisa %(minutes)sm %(seconds)sd",
-        "n_days_ago": "%(num)s hari yang lalu",
-        "n_hours_ago": "%(num)s jam yang lalu",
-        "n_minutes_ago": "%(num)s menit yang lalu",
         "seconds_left": "%(seconds)sd lagi",
         "short_days": "%(value)sh",
         "short_days_hours_minutes_seconds": "%(days)sh %(hours)sj %(minutes)sm %(seconds)sd",
@@ -3431,11 +3402,9 @@
             "unable_to_find": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi tidak dapat menemukannya."
         },
         "m.audio": {
-            "audio_player": "Pemutar audio",
             "error_downloading_audio": "Terjadi kesalahan mengunduh audio",
             "error_processing_audio": "Terjadi kesalahan mengolah pesan suara",
-            "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara",
-            "unnamed_audio": "Audio tidak dinamai"
+            "error_processing_voice_message": "Terjadi kesalahan mengolah pesan suara"
         },
         "m.beacon_info": {
             "view_live_location": "Tampilkan lokasi langsung"
@@ -4009,7 +3978,6 @@
         "hide_sidebar_button": "Sembunyikan sisi bilah",
         "input_devices": "Perangkat masukan",
         "jitsi_call": "Konferensi Jitsi",
-        "join_button_tooltip_call_full": "Maaf — panggilan ini saat ini penuh",
         "legacy_call": "Panggilan Lawas",
         "maximise": "Penuhi layar",
         "maximise_call": "Maksimalkan panggilan",

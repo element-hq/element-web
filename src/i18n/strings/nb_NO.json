@@ -101,9 +101,7 @@
         "ok": "OK",
         "open": "Åpne",
         "open_menu": "Åpne meny",
-        "pause": "Pause",
         "pin": "Fest",
-        "play": "Spill av",
         "proceed": "Fortsett",
         "quote": "Sitat",
         "react": "Reager",
@@ -2120,19 +2118,6 @@
             },
             "this_room_button": "Søk i dette rommet"
         },
-        "status_bar": {
-            "delete_all": "Slett alle",
-            "exceeded_resource_limit": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har overskredet en ressursgrense. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
-            "history_visible": "Dette rommet er konfigurert slik at nye medlemmer kan lese historikken. <a>Lær mer</a>",
-            "homeserver_blocked": "Meldingen din ble ikke sendt fordi denne hjemmeserveren er blokkert av administratoren. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
-            "monthly_user_limit_reached": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har nådd sin månedlige aktive brukergrense. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
-            "requires_consent_agreement": "Du kan ikke sende noen meldinger før du har lest gjennom og godtar <consentLink>våre vilkår og betingelser</consentLink>.",
-            "retry_all": "Prøv alle igjen",
-            "select_messages_to_retry": "Du kan velge alle eller individuelle meldinger for å prøve på nytt eller slette",
-            "server_connectivity_lost_description": "Sendte meldinger vil bli lagret til tilkoblingen er tilbake.",
-            "server_connectivity_lost_title": "Tilkoblingen til tjeneren er nede.",
-            "some_messages_not_sent": "Noen av meldingene dine er ikke sendt"
-        },
         "unknown_status_code_for_timeline_jump": "ukjent statuskode",
         "unread_notifications_predecessor": {
             "one": "Du har %(count)s ulest varsel i en tidligere versjon av dette rommet.",
@@ -2421,7 +2406,6 @@
             "error_join_rule_change_unknown": "Ukjent feil",
             "guest_access_warning": "Personer med støttede klienter vil kunne bli med i rommet uten å ha en registrert konto.",
             "history_visibility_invited": "Kun medlemmer (f.o.m. da de ble invitert)",
-            "history_visibility_joined": "Kun medlemmer (f.o.m. de ble med)",
             "history_visibility_legend": "Hvem kan lese historikken?",
             "history_visibility_shared": "Kun medlemmer (f.o.m. da denne innstillingen ble valgt)",
             "history_visibility_warning": "Endringer for hvem som kan lese historikken, vil kun bli benyttet for fremtidige meldinger i dette rommet. Synligheten til den eksisterende historikken vil forbli uendret.",
@@ -3383,24 +3367,10 @@
         "no_rooms_with_unread_threads": "Du har ikke rom med uleste tråder ennå."
     },
     "time": {
-        "about_day_ago": "cirka 1 dag siden",
-        "about_hour_ago": "cirka 1 time siden",
-        "about_minute_ago": "cirka 1 minutt siden",
         "date_at_time": "%(date)s klokken %(time)s",
-        "few_seconds_ago": "noen sekunder siden",
         "hours_minutes_seconds_left": "%(hours)st%(minutes)s m%(seconds)s s igjen",
-        "in_about_day": "rundt en dag fra nå",
-        "in_about_hour": "rundt en time fra nå",
-        "in_about_minute": "rundt et minutt fra nå",
-        "in_few_seconds": "om noen sekunder fra nå",
-        "in_n_days": "%(num)s dager fra nå",
-        "in_n_hours": "%(num)s timer fra nå",
-        "in_n_minutes": "%(num)s minutter fra nå",
         "left": "%(timeRemaining)s igjen",
         "minutes_seconds_left": "%(minutes)sm%(seconds)s s igjen",
-        "n_days_ago": "%(num)s dager siden",
-        "n_hours_ago": "%(num)s timer siden",
-        "n_minutes_ago": "%(num)s minutter siden",
         "seconds_left": "%(seconds)ser igjen",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s t %(minutes)s m %(seconds)s er",
@@ -3455,11 +3425,9 @@
             "unable_to_find": "Prøvde å laste inn et bestemt punkt i dette rommets tidslinje, men klarte ikke å finne det."
         },
         "m.audio": {
-            "audio_player": "Lydavspiller",
             "error_downloading_audio": "Feil ved nedlasting av lyd",
             "error_processing_audio": "Feil ved prosessering av lydmelding",
-            "error_processing_voice_message": "Feil ved prosessering av talemelding",
-            "unnamed_audio": "Ikke navngitt lyd"
+            "error_processing_voice_message": "Feil ved prosessering av talemelding"
         },
         "m.beacon_info": {
             "view_live_location": "Se lokasjon i sanntid"
@@ -4030,7 +3998,6 @@
         "hide_sidebar_button": "Skjul sidepanel",
         "input_devices": "Inndataenheter",
         "jitsi_call": "Jitsi Conference",
-        "join_button_tooltip_call_full": "Beklager - denne samtalen er for øyeblikket full",
         "legacy_call": "Eldre samtale",
         "maximise": "Fyll skjermen",
         "maximise_call": "Maksimer samtalen",

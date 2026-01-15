@@ -26,10 +26,73 @@ import {
     RoomNotifState,
     getUnreadNotificationCount,
     determineUnreadState,
+    getUnsentMessages,
 } from "../../src/RoomNotifs";
 import { NotificationLevel } from "../../src/stores/notifications/NotificationLevel";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import { mkThread } from "../test-utils/threads";
+
+describe("getUnsentMessages", () => {
+    const ROOM_ID = "!roomId";
+    let room: Room;
+    let event: MatrixEvent;
+    let client: MatrixClient;
+    beforeEach(() => {
+        client = stubClient();
+        room = new Room(ROOM_ID, client, client.getUserId()!, {
+            pendingEventOrdering: PendingEventOrdering.Detached,
+        });
+        event = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: "@user1:server",
+            room: "!room1:server",
+            content: {},
+        });
+        event.status = EventStatus.NOT_SENT;
+    });
+
+    it("returns no unsent messages", () => {
+        expect(getUnsentMessages(room)).toHaveLength(0);
+    });
+
+    it("checks the event status", () => {
+        room.addPendingEvent(event, "123");
+
+        expect(getUnsentMessages(room)).toHaveLength(1);
+        event.status = EventStatus.SENT;
+
+        expect(getUnsentMessages(room)).toHaveLength(0);
+    });
+
+    it("only returns events related to a thread", () => {
+        room.addPendingEvent(event, "123");
+
+        const { rootEvent, events } = mkThread({
+            room,
+            client,
+            authorId: "@alice:example.org",
+            participantUserIds: ["@alice:example.org"],
+            length: 2,
+        });
+        rootEvent.status = EventStatus.NOT_SENT;
+        room.addPendingEvent(rootEvent, rootEvent.getId()!);
+        for (const event of events) {
+            event.status = EventStatus.NOT_SENT;
+            room.addPendingEvent(event, Date.now() + Math.random() + "");
+        }
+
+        const pendingEvents = getUnsentMessages(room, rootEvent.getId());
+
+        expect(pendingEvents[0].threadRootId).toBe(rootEvent.getId());
+        expect(pendingEvents[1].threadRootId).toBe(rootEvent.getId());
+        expect(pendingEvents[2].threadRootId).toBe(rootEvent.getId());
+
+        // Filters out the non thread events
+        expect(pendingEvents.every((ev) => ev.getId() !== event.getId())).toBe(true);
+    });
+});
 
 describe("RoomNotifs test", () => {
     let client: jest.Mocked<MatrixClient>;

@@ -101,9 +101,7 @@
         "ok": "OK",
         "open": "Open",
         "open_menu": "Open menu",
-        "pause": "Pause",
         "pin": "Pin",
-        "play": "Play",
         "proceed": "Proceed",
         "quote": "Quote",
         "react": "React",
@@ -1998,7 +1996,6 @@
         "dm_invite_title": "Do you want to chat with %(user)s?",
         "drop_file_prompt": "Drop file here to upload",
         "edit_topic": "Edit topic",
-        "error_3pid_invite_email_lookup": "Unable to find user by email",
         "error_cancel_knock_title": "Failed to cancel",
         "error_join_403": "You need an invite to access this room.",
         "error_join_404_1": "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
@@ -2130,19 +2127,6 @@
                 "other": "%(count)s results found for “<query/>”"
             },
             "this_room_button": "Search this room"
-        },
-        "status_bar": {
-            "delete_all": "Delete all",
-            "exceeded_resource_limit": "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
-            "history_visible": "This room has been configured so that new members can read history. <a>Learn More</a>",
-            "homeserver_blocked": "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.",
-            "monthly_user_limit_reached": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.",
-            "requires_consent_agreement": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
-            "retry_all": "Retry all",
-            "select_messages_to_retry": "You can select all or individual messages to retry or delete",
-            "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
-            "server_connectivity_lost_title": "Connectivity to the server has been lost.",
-            "some_messages_not_sent": "Some of your messages have not been sent"
         },
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {
@@ -2436,7 +2420,7 @@
             "history_visibility_legend": "Who can read history?",
             "history_visibility_shared": "Members (full history)",
             "history_visibility_warning": "Changes won't affect past messages, only new ones. <a>Learn more</a>",
-            "history_visibility_world_readable": "Anyone (history is public)\n",
+            "history_visibility_world_readable": "Anyone (history is public)",
             "join_rule_description": "Decide who can join %(roomName)s.",
             "join_rule_invite": "Private (invite only)",
             "join_rule_invite_description": "Only invited people can join.",
@@ -3394,24 +3378,10 @@
         "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet."
     },
     "time": {
-        "about_day_ago": "about a day ago",
-        "about_hour_ago": "about an hour ago",
-        "about_minute_ago": "about a minute ago",
         "date_at_time": "%(date)s at %(time)s",
-        "few_seconds_ago": "a few seconds ago",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
-        "in_about_day": "about a day from now",
-        "in_about_hour": "about an hour from now",
-        "in_about_minute": "about a minute from now",
-        "in_few_seconds": "a few seconds from now",
-        "in_n_days": "%(num)s days from now",
-        "in_n_hours": "%(num)s hours from now",
-        "in_n_minutes": "%(num)s minutes from now",
         "left": "%(timeRemaining)s left",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss left",
-        "n_days_ago": "%(num)s days ago",
-        "n_hours_ago": "%(num)s hours ago",
-        "n_minutes_ago": "%(num)s minutes ago",
         "seconds_left": "%(seconds)ss left",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3466,11 +3436,9 @@
             "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it."
         },
         "m.audio": {
-            "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "error_processing_audio": "Error processing audio message",
-            "error_processing_voice_message": "Error processing voice message",
-            "unnamed_audio": "Unnamed audio"
+            "error_processing_voice_message": "Error processing voice message"
         },
         "m.beacon_info": {
             "view_live_location": "View live location"

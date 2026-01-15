@@ -6,6 +6,8 @@
  */
 
 import { type CallMembership, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MockedObject } from "jest-mock";
 
 import { ElementCall } from "../../../src/models/Call";
 import { CallStore } from "../../../src/stores/CallStore";
@@ -16,11 +18,22 @@ import {
     enableCalls,
 } from "../../test-utils";
 
-enableCalls();
+describe("CallStore", () => {
+    let client: MockedObject<MatrixClient>;
+    let room: Room;
+    beforeEach(() => {
+        enableCalls();
+        const res = setUpClientRoomAndStores();
+        client = res.client;
+        room = res.room;
+    });
 
-test("CallStore constructs one call for one MatrixRTC session", () => {
-    const { client, room } = setUpClientRoomAndStores();
-    try {
+    afterEach(() => {
+        cleanUpClientRoomAndStores(client, room);
+        jest.restoreAllMocks();
+    });
+
+    it("constructs one call for one MatrixRTC session", () => {
         setupAsyncStoreWithClient(CallStore.instance, client);
         const getSpy = jest.spyOn(ElementCall, "get");
 
@@ -32,7 +45,25 @@ test("CallStore constructs one call for one MatrixRTC session", () => {
         expect(getSpy).toHaveBeenCalledTimes(1);
         expect(getSpy).toHaveReturnedWith(expect.any(ElementCall));
         expect(CallStore.instance.getCall(room.roomId)).not.toBe(null);
-    } finally {
-        cleanUpClientRoomAndStores(client, room);
-    }
+        expect(CallStore.instance.getConfiguredRTCTransports()).toHaveLength(0);
+    });
+    it("calculates RTC transports with both modern and legacy endpoints", async () => {
+        client._unstable_getRTCTransports.mockResolvedValue([
+            { type: "type-a", some_data: "value" },
+            { type: "type-b", some_data: "foo" },
+        ]);
+        client.getClientWellKnown.mockReturnValue({
+            "org.matrix.msc4143.rtc_foci": [
+                { type: "type-c", other_data: "bar" },
+                { type: "type-d", other_data: "baz" },
+            ],
+        });
+        await setupAsyncStoreWithClient(CallStore.instance, client);
+        expect(CallStore.instance.getConfiguredRTCTransports()).toEqual([
+            { type: "type-a", some_data: "value" },
+            { type: "type-b", some_data: "foo" },
+            { type: "type-c", other_data: "bar" },
+            { type: "type-d", other_data: "baz" },
+        ]);
+    });
 });
