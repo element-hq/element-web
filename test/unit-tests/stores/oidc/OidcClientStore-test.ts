@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { mocked } from "jest-mock";
 import { OidcClient } from "oidc-client-ts";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -188,13 +188,14 @@ describe("OidcClientStore", () => {
             // spy and call through
             jest.spyOn(OidcClient.prototype, "revokeToken").mockClear();
 
-            fetchMock.resetHistory();
+            fetchMock.clearHistory();
+            fetchMock.removeRoute("revocation-endpoint");
             fetchMock.post(
                 authConfig.revocation_endpoint,
                 {
                     status: 200,
                 },
-                { sendAsJson: true },
+                { name: "revocation-endpoint" },
             );
         });
 
@@ -219,21 +220,14 @@ describe("OidcClientStore", () => {
 
         it("should still attempt to revoke refresh token when access token revocation fails", async () => {
             // fail once, then succeed
+            fetchMock.removeRoute("revocation-endpoint");
             fetchMock
-                .postOnce(
-                    authConfig.revocation_endpoint,
-                    {
-                        status: 404,
-                    },
-                    { overwriteRoutes: true, sendAsJson: true },
-                )
-                .post(
-                    authConfig.revocation_endpoint,
-                    {
-                        status: 200,
-                    },
-                    { sendAsJson: true },
-                );
+                .postOnce(authConfig.revocation_endpoint, {
+                    status: 404,
+                })
+                .post(authConfig.revocation_endpoint, {
+                    status: 200,
+                });
 
             const store = new OidcClientStore(mockClient);
 

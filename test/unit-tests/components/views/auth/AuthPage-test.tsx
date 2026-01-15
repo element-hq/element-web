@@ -10,12 +10,10 @@ import React from "react";
 import { render } from "jest-matrix-react";
 
 import AuthPage from "../../../../../src/components/views/auth/AuthPage";
-import { setupLanguageMock } from "../../../../setup/setupLanguage";
 import SdkConfig from "../../../../../src/SdkConfig.ts";
 
 describe("<AuthPage />", () => {
     beforeEach(() => {
-        setupLanguageMock();
         SdkConfig.reset();
         // @ts-ignore private access
         AuthPage.welcomeBackgroundUrl = undefined;

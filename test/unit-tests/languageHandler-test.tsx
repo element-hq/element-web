@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { type Translation } from "matrix-web-i18n";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 
@@ -28,7 +28,6 @@ import {
     getLanguagesFromBrowser,
 } from "../../src/languageHandler";
 import { stubClient } from "../test-utils";
-import { setupLanguageMock } from "../setup/setupLanguage";
 
 async function setupTranslationOverridesForTests(overrides: TranslationStringsObject) {
     const lookupUrl = "/translations.json";
@@ -167,15 +166,13 @@ describe("languageHandler", () => {
 
     describe("getAllLanguagesWithLabels", () => {
         it("should handle unknown language sanely", async () => {
-            fetchMock.getOnce(
-                "/i18n/languages.json",
-                {
+            fetchMock.modifyRoute("languages", {
+                response: {
                     en: "en_EN.json",
                     de: "de_DE.json",
                     qq: "qq.json",
                 },
-                { overwriteRoutes: true },
-            );
+            });
             await expect(getAllLanguagesWithLabels()).resolves.toMatchInlineSnapshot(`
                 [
                   {
@@ -195,7 +192,6 @@ describe("languageHandler", () => {
                   },
                 ]
             `);
-            setupLanguageMock(); // restore language mock
         });
     });
 
@@ -290,10 +286,10 @@ describe("languageHandler JSX", function () {
     });
 
     describe("when translations exist in language", () => {
-        beforeEach(function () {
+        beforeEach(async () => {
             stubClient();
 
-            setLanguage("en");
+            await setLanguage("en");
             setMissingEntryGenerator((key) => key.split("|", 2)[1]);
         });
 
@@ -326,10 +322,10 @@ describe("languageHandler JSX", function () {
     });
 
     describe("for a non-en language", () => {
-        beforeEach(() => {
+        beforeEach(async () => {
             stubClient();
-            setLanguage("lv");
-            // counterpart doesnt expose any way to restore default config
+            await setLanguage("lv");
+            // counterpart doesn't expose any way to restore default config
             // missingEntryGenerator is mocked in the root setup file
             // reset to default here
             const counterpartDefaultMissingEntryGen = function (key: string) {
