@@ -98,7 +98,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Threads"
-      aria-labelledby="_r_18m_"
+      aria-labelledby="_r_12m_"
       class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
@@ -125,7 +125,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Room info"
-      aria-labelledby="_r_18r_"
+      aria-labelledby="_r_12r_"
       class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
