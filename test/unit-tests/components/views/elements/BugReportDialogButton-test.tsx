@@ -29,13 +29,13 @@ describe("<BugReportDialogButton />", () => {
         expect(container).toBeEmptyDOMElement();
     });
 
-    it("renders 'submit' label if a URL is provided", () => {
+    it("renders 'submit' label if a URL is configured", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
         const { container } = getComponent({ });
         expect(container).toMatchSnapshot();
     });
 
-    it("renders 'submit' label if a URL is provided", () => {
+    it("renders 'download' label if 'loca' is configured", () => {
         SdkConfig.put({ bug_report_endpoint_url: "local" });
         const { container } = getComponent({ });
         expect(container).toMatchSnapshot();
