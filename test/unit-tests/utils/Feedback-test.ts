@@ -6,33 +6,53 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
-
 import SdkConfig from "../../../src/SdkConfig";
 import { shouldShowFeedback } from "../../../src/utils/Feedback";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../src/settings/UIFeature";
 
-jest.mock("../../../src/SdkConfig");
-jest.mock("../../../src/settings/SettingsStore");
+const realGetValue = SettingsStore.getValue;
 
 describe("shouldShowFeedback", () => {
+    afterEach(() => {
+        SdkConfig.reset();
+        jest.restoreAllMocks();
+    });
+
     it("should return false if bug_report_endpoint_url is falsey", () => {
-        mocked(SdkConfig).get.mockReturnValue({
-            bug_report_endpoint_url: null,
+        SdkConfig.put({
+            bug_report_endpoint_url: undefined,
         });
-        expect(shouldShowFeedback()).toBeFalsy();
+        expect(shouldShowFeedback()).toEqual(false);
+    });
+
+    it("should return false if bug_report_endpoint_url is 'test'", () => {
+        SdkConfig.put({
+            bug_report_endpoint_url: "local",
+        });
+        expect(shouldShowFeedback()).toEqual(false);
     });
 
     it("should return false if UIFeature.Feedback is disabled", () => {
-        mocked(SettingsStore).getValue.mockReturnValue(false);
-        expect(shouldShowFeedback()).toBeFalsy();
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+            if (key === UIFeature.Feedback) {
+                return false;
+            }
+            return realGetValue(key, ...params);
+        });
+        expect(shouldShowFeedback()).toEqual(false);
     });
 
     it("should return true if bug_report_endpoint_url is set and UIFeature.Feedback is true", () => {
-        mocked(SdkConfig).get.mockReturnValue({
+        SdkConfig.put({
             bug_report_endpoint_url: "https://rageshake.server",
         });
-        mocked(SettingsStore).getValue.mockReturnValue(true);
-        expect(shouldShowFeedback()).toBeTruthy();
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+            if (key === UIFeature.Feedback) {
+                return true;
+            }
+            return realGetValue(key, ...params);
+        });
+        expect(shouldShowFeedback()).toEqual(true);
     });
 });
