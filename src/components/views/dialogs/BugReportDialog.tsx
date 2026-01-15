@@ -276,24 +276,18 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                         </>
                     ) : (
                         <>
-                            <Text>
-                                <strong>
-                                    {_t(
-                                        "bug_reporting|before_submitting",
-                                        {},
-                                        {
-                                            a: (sub) => (
-                                                <a
-                                                    target="_blank"
-                                                    href={SdkConfig.get().feedback.new_issue_url}
-                                                    rel="noreferrer noopener"
-                                                >
-                                                    {sub}
-                                                </a>
-                                            ),
-                                        },
-                                    )}
-                                </strong>
+                            <Text weight="bold">
+                                {_t(
+                                    "bug_reporting|before_submitting",
+                                    {},
+                                    {
+                                        a: (sub) => (
+                                            <Link target="_blank" href={SdkConfig.get().feedback.new_issue_url}>
+                                                {sub}
+                                            </Link>
+                                        ),
+                                    },
+                                )}
                             </Text>
 
                             <div className="mx_BugReportDialog_download">
