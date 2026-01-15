@@ -16,28 +16,29 @@ import Modal from "../../../../../src/Modal";
 import BugReportDialog from "../../../../../src/components/views/dialogs/BugReportDialog";
 
 describe("<BugReportDialogButton />", () => {
-    const getComponent = (props: ComponentProps<typeof BugReportDialogButton> = {}) => render(<BugReportDialogButton {...props} />);
+    const getComponent = (props: ComponentProps<typeof BugReportDialogButton> = {}) =>
+        render(<BugReportDialogButton {...props} />);
 
     afterEach(() => {
         SdkConfig.reset();
         jest.restoreAllMocks();
-    })
+    });
 
     it("renders nothing if the bug reporter is disabled", () => {
         SdkConfig.put({ bug_report_endpoint_url: undefined });
-        const { container } = getComponent({ });
+        const { container } = getComponent({});
         expect(container).toBeEmptyDOMElement();
     });
 
     it("renders 'submit' label if a URL is configured", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
-        const { container } = getComponent({ });
+        const { container } = getComponent({});
         expect(container).toMatchSnapshot();
     });
 
     it("renders 'download' label if 'loca' is configured", () => {
         SdkConfig.put({ bug_report_endpoint_url: "local" });
-        const { container } = getComponent({ });
+        const { container } = getComponent({});
         expect(container).toMatchSnapshot();
     });
 
@@ -46,6 +47,6 @@ describe("<BugReportDialogButton />", () => {
         const spy = jest.spyOn(Modal, "createDialog");
         const { getByRole } = getComponent({ label: "a label", error: "an error" });
         await userEvent.click(getByRole("button"));
-        expect(spy).toHaveBeenCalledWith(BugReportDialog, {"error": "an error", "label": "a label"});
+        expect(spy).toHaveBeenCalledWith(BugReportDialog, { error: "an error", label: "a label" });
     });
 });
