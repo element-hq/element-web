@@ -2,19 +2,16 @@
 
 Shared React components library for Element Web, Aurora, Element modules... This package provides opinionated UI components built on top of the [Compound Design System](https://compound.element.io) and [Compound Web](https://github.com/element-hq/compound-web). This is not a design system by itself, but rather a set of big chunks of components.
 
-## Installation
+## Installation in a new project
+
+When adding this library to a new project, as well as installing `@element-hq/web-shared-components` as normal, you will also need to add [compound-web](https://github.com/element-hq/compound-web) as a peer dependency:
 
 ```bash
 yarn add @element-hq/web-shared-components
-```
-
-### Peer Dependencies
-
-This package requires compound web to be added as a peer dependency:
-
-```bash
 yarn add @vector-im/compound-web
 ```
+
+(This avoids problems where we end up with different versions of React in the top-level project and web-shared-components).
 
 ## Usage
 
@@ -35,13 +32,13 @@ or in CSS file:
 
 ### Using Components
 
-There is two kinds of components in this library:
+There are two kinds of components in this library:
 
 - _regular_ react component which doesn't follow specific pattern.
 - _view_ component(MVVM pattern).
 
 > [!TIP]
-> Theses components are available in the project storybook.
+> These components are available in the project storybook.
 
 #### Regular Components
 
@@ -111,7 +108,7 @@ yarn storybook
 
 ### Write components
 
-Most the components should be written as [MVVM pattern](../../docs/MVVM.md) view components. See existing components for examples. The exception are low level components that don't need a view model.
+Most components should be written as [MVVM pattern](../../docs/MVVM.md) view components. See existing components for examples. The exceptions are low level components that don't need a view model.
 
 ### Tests
 
