@@ -7,7 +7,6 @@ exports[`E2eMessageSharedIcon renders correctly for a known user 1`] = `
     aria-labelledby="_r_0_"
     class="mx_EventTile_e2eIcon"
     data-testid="e2e-padlock"
-    tabindex="0"
   >
     <svg
       color="var(--cpd-color-icon-tertiary)"
@@ -37,7 +36,6 @@ exports[`E2eMessageSharedIcon renders correctly for an unknown user 1`] = `
     aria-labelledby="_r_6_"
     class="mx_EventTile_e2eIcon"
     data-testid="e2e-padlock"
-    tabindex="0"
   >
     <svg
       color="var(--cpd-color-icon-tertiary)"
