@@ -4,7 +4,7 @@ Shared React components library for Element Web, Aurora, Element
 modules... This package provides opinionated UI components built on top of the
 [Compound Design System](https://compound.element.io) and [Compound
 Web](https://github.com/element-hq/compound-web). This is not a design system
-by itself, but rather a set of big chunks of components.
+by itself, but rather a set of larger components.
 
 ## Installation in a new project
 
