@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`DisambiguatedProfileView renders the default state 1`] = `
+<div>
+  <div
+    class="disambiguatedProfile"
+    data-testid="disambiguated-profile"
+  >
+    <span
+      class="displayName"
+      dir="auto"
+    >
+      Alice
+    </span>
+  </div>
+</div>
+`;
+
+exports[`DisambiguatedProfileView renders the full example 1`] = `
+<div>
+  <div
+    class="disambiguatedProfile"
+    data-testid="disambiguated-profile"
+    title="Eve (@eve:matrix.org)"
+  >
+    <span
+      class="displayName mx_Username_color3 emphasize"
+      dir="auto"
+    >
+      Eve
+    </span>
+    <span
+      class="mxid"
+      data-testid="disambiguated-profile-mxid"
+    >
+      @eve:matrix.org
+    </span>
+  </div>
+</div>
+`;
+
+exports[`DisambiguatedProfileView renders with MXID for disambiguation 1`] = `
+<div>
+  <div
+    class="disambiguatedProfile"
+    data-testid="disambiguated-profile"
+  >
+    <span
+      class="displayName"
+      dir="auto"
+    >
+      Alice
+    </span>
+    <span
+      class="mxid"
+      data-testid="disambiguated-profile-mxid"
+    >
+      @alice:example.org
+    </span>
+  </div>
+</div>
+`;
+
+exports[`DisambiguatedProfileView renders with color class 1`] = `
+<div>
+  <div
+    class="disambiguatedProfile"
+    data-testid="disambiguated-profile"
+  >
+    <span
+      class="displayName mx_Username_color1"
+      dir="auto"
+    >
+      Bob
+    </span>
+  </div>
+</div>
+`;
+
+exports[`DisambiguatedProfileView renders with emphasized display name 1`] = `
+<div>
+  <div
+    class="disambiguatedProfile"
+    data-testid="disambiguated-profile"
+  >
+    <span
+      class="displayName emphasize"
+      dir="auto"
+    >
+      Charlie
+    </span>
+  </div>
+</div>
+`;
+
+exports[`DisambiguatedProfileView renders with tooltip 1`] = `
+<div>
+  <div
+    class="disambiguatedProfile"
+    data-testid="disambiguated-profile"
+    title="Diana (@diana:example.org)"
+  >
+    <span
+      class="displayName"
+      dir="auto"
+    >
+      Diana
+    </span>
+    <span
+      class="mxid"
+      data-testid="disambiguated-profile-mxid"
+    >
+      @diana:example.org
+    </span>
+  </div>
+</div>
+`;
