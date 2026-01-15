@@ -623,7 +623,7 @@ describe("EventTile", () => {
             msg: "Hello world!",
             event: true,
         });
-        const { asFragment, getByRole } = getComponent({ mxEvent: ownEvent, eventSendStatus: EventStatus.NOT_SENT });
+        const { getByRole } = getComponent({ mxEvent: ownEvent, eventSendStatus: EventStatus.NOT_SENT });
 
         expect(getByRole("status")).toHaveAccessibleName("Failed to send");
     });
