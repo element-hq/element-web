@@ -51,7 +51,6 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
-        "e2e_state": "State of the end-to-end encryption",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",

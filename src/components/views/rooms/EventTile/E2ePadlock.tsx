@@ -12,7 +12,7 @@ import React, { type ReactNode } from "react";
 import { ErrorSolidIcon, InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { _t } from "../utils/i18n";
+import { _t } from "../../../../languageHandler.tsx";
 
 /**
  * The icon to display in an {@link E2ePadlock}.
@@ -53,7 +53,12 @@ export function E2ePadlock(props: IE2ePadlockProps): ReactNode {
     // https://github.com/element-hq/compound/issues/294
     return (
         <Tooltip label={props.title} isTriggerInteractive={true}>
-            <div data-testid="e2e-padlock" className="mx_EventTile_e2eIcon" aria-label={_t("timeline|e2e_state")}>
+            <div
+                data-testid="e2e-padlock"
+                className="mx_EventTile_e2eIcon"
+                tabIndex={0}
+                aria-label={_t("timeline|e2e_state")}
+            >
                 {icons[props.icon]}
             </div>
         </Tooltip>
