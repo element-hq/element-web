@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { render } from "jest-matrix-react";
 import React from "react";
 
-import { E2ePadlock, E2ePadlockIcon } from "../../../../../../src/components/views/rooms/EventTile/E2ePadlock.tsx";
+import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock.tsx";
 
 describe("E2ePadlock", () => {
     it("renders a 'Normal' icon", () => {

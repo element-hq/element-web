@@ -14,6 +14,7 @@ export * from "./avatar/AvatarWithDetails";
 export * from "./composer/Banner";
 export * from "./composer/HistoryVisibleBannerView";
 export * from "./event-tiles/TextualEventView";
+export * from "./event-tiles/E2ePadlock";
 export * from "./message-body/MediaBody";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";

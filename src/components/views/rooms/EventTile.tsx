@@ -35,6 +35,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
+import { E2ePadlock, E2ePadlockIcon } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -84,7 +85,6 @@ import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
-import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 
 export type GetRelationsForEvent = (
     eventId: string,
