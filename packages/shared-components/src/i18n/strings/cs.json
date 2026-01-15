@@ -10,10 +10,6 @@
         "play": "Přehrát",
         "search": "Hledání"
     },
-    "encryption": {
-        "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
-        "withdraw_verification_action": "Zrušit ověření"
-    },
     "left_panel": {
         "open_dial_pad": "Otevřít číselník"
     },

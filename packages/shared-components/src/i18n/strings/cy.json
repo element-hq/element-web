@@ -10,10 +10,6 @@
         "play": "Chwarae",
         "search": "Chwilio"
     },
-    "encryption": {
-        "pinned_identity_changed": "Cafodd hunaniaeth (<b>%(userId)s</b>) %(displayName)s ei ailosod. <a>Dysgu rhagor</a>",
-        "withdraw_verification_action": "Tynnu'r dilysiad yn ôl"
-    },
     "left_panel": {
         "open_dial_pad": "Agor y pad deialu"
     },

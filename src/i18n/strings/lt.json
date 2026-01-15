@@ -1076,10 +1076,6 @@
         "not_found_title_name": "%(roomName)s neegzistuoja.",
         "peek_join_prompt": "Jūs peržiūrite %(roomName)s. Norite prie jo prisijungti?",
         "rejoin_button": "Prisijungti iš naujo",
-        "status_bar": {
-            "server_connectivity_lost_description": "Išsiųstos žinutės bus saugomos tol, kol atsiras ryšys.",
-            "server_connectivity_lost_title": "Jungiamumas su šiuo serveriu buvo prarastas."
-        },
         "unread_notifications_predecessor": {
             "one": "Jūs turite %(count)s neperskaitytą pranešimą ankstesnėje šio kambario versijoje.",
             "other": "Jūs turite %(count)s neperskaitytus(-ų) pranešimus(-ų) ankstesnėje šio kambario versijoje."
@@ -1276,7 +1272,6 @@
             "error_join_rule_change_unknown": "Nežinomas sutrikimas",
             "guest_access_warning": "Žmonės su palaikomais klientais galės prisijungti prie kambario neturėdami registruotos paskyros.",
             "history_visibility_invited": "Tik nariai (nuo jų pakvietimo)",
-            "history_visibility_joined": "Tik nariai (nuo jų prisijungimo)",
             "history_visibility_legend": "Kas gali skaityti istoriją?",
             "history_visibility_shared": "Tik nariai (nuo šios parinkties pasirinkimo momento)",
             "history_visibility_warning": "Kas gali skaityti istoriją nustatymų pakeitimai bus taikomi tik būsimoms šio kambario žinutėms. Esamos istorijos matomumas nepakis.",

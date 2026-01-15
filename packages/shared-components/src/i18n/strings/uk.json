@@ -10,10 +10,6 @@
         "play": "Відтворити",
         "search": "Пошук"
     },
-    "encryption": {
-        "pinned_identity_changed": "Ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
-        "withdraw_verification_action": "Відкликати верифікацію"
-    },
     "left_panel": {
         "open_dial_pad": "Відкрити номеронабирач"
     },

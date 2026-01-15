@@ -1550,6 +1550,8 @@
         "files_button": "Datnes",
         "pinned_messages": {
             "limits": {
+                "zero": "",
+                "one": "",
                 "other": "Varat piespraust ne vairāk kā %(count)s logrīkus"
             }
         },
@@ -1734,18 +1736,6 @@
         "search": {
             "all_rooms_button": "Meklēt visas istabas",
             "this_room_button": "Meklēt šajā istabā"
-        },
-        "status_bar": {
-            "delete_all": "Izdzēst visu",
-            "exceeded_resource_limit": "Tava ziņa netika nosūtīta, jo šis mājasserveris ir pārsniedzis resursu ierobežojumu. Lūgums <a>sazināties ar pakalpojuma pārvaldītāju</a>, lai turpinātu izmantot pakalpojumu.",
-            "homeserver_blocked": "Tava ziņa netika nosūtīta, jo pārvaldītājs ir bloķējis šo mājasserveri. Lūgums <a>sazināties ar pakalpojuma pārvaldītāju</a>, lai turpinātu izmantot pakalpojumu.",
-            "monthly_user_limit_reached": "Tava ziņa netika nosūtīta, jo šis mājasserveris ir sasniedzis ikmēneša aktīvo lietotāju ierobežojumu. Lūgums <a>sazināties ar pakalpojuma pārvaldītāju</a>, lai turpinātu izmantot pakalpojumu.",
-            "requires_consent_agreement": "Jūs nevarat nosūtīt ziņojumus, kamēr neesat izskatījis un piekritis <consentLink>mūsu noteikumiem un nosacījumiem</consentLink>.",
-            "retry_all": "Atkārtoti mēģināt visu",
-            "select_messages_to_retry": "Var atlasīt visas vai atsevišķas ziņas, lai mēģinātu atkārtoti vai izdzēstu",
-            "server_connectivity_lost_description": "Sūtītās ziņas tiks saglabātas līdz brīdim, kad savienojums tiks atjaunots.",
-            "server_connectivity_lost_title": "Savienojums ar serveri pārtrūka.",
-            "some_messages_not_sent": "Daži no jūsu ziņojumiem nav nosūtīti"
         },
         "unknown_status_code_for_timeline_jump": "nezināms statusa kods",
         "unread_notifications_predecessor": {
@@ -1977,7 +1967,6 @@
             "error_join_rule_change_unknown": "Nezināma kļūme",
             "guest_access_warning": "Cilvēki ar atbalstītām lietotnēm varēs pievienoties istabai bez reģistrēta konta.",
             "history_visibility_invited": "Tikai dalībnieki (no to uzaicināšanas brīža)",
-            "history_visibility_joined": "Tikai dalībnieki (kopš pievienošanās)",
             "history_visibility_legend": "Kas var lasīt vēsturi?",
             "history_visibility_shared": "Tikai dalībnieki (no šī parametra iestatīšanas brīža)",
             "history_visibility_warning": "Izmaiņas attiecībā uz to, kas var lasīt vēsturi, attieksies tikai uz nākamajiem ziņām šajā istabā. Esošās vēstures redzamība nemainīsies.",
@@ -3374,7 +3363,6 @@
         "hangup": "Beigt zvanu",
         "hide_sidebar_button": "Paslēpt sānjoslu",
         "input_devices": "Ievades ierīces",
-        "join_button_tooltip_call_full": "Atvainojiet, šis zvans pašlaik ir pilns",
         "maximise": "Aizpildīt ekrānu",
         "metaspace_video_rooms": {
             "conference_room_section": "Konferences"
