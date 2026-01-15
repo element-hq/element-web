@@ -45,11 +45,10 @@ interface IState {
     downloadProgress: string | null;
 }
 
-const isLocalOnly = SdkConfig.get().bug_report_endpoint_url === "local";
-
 export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
     private unmounted: boolean;
     private issueRef: React.RefObject<Field | null>;
+    private readonly isLocalOnly: boolean;
 
     public constructor(props: BugReportDialogProps) {
         super(props);
@@ -62,11 +61,13 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             text: props.initialText || "",
             progress: null,
             downloadBusy: false,
-            downloadProgress: null
+            downloadProgress: null,
         };
 
         this.unmounted = false;
         this.issueRef = React.createRef();
+        // This config is static at runtime, but may change during tests.
+        this.isLocalOnly = SdkConfig.get().bug_report_endpoint_url === "local";
     }
 
     public componentDidMount(): void {
@@ -144,7 +145,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
         this.setState({ busy: true, progress: null, err: null });
         this.sendProgressCallback(_t("bug_reporting|preparing_logs"));
 
-        if (isLocalOnly) {
+        if (this.isLocalOnly) {
             // Shouldn't reach here, but throw in case we do.
             this.setState({
                 err: _t("bug_reporting|failed_send_logs_causes|unknown_error"),
@@ -268,66 +269,73 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     {warning}
                     <Text>{_t("bug_reporting|description")}</Text>
-                    <Text>
-                        {isLocalOnly ? (
-                            <strong>
-                                {_t(
-                                    "bug_reporting|before_submitting",
-                                    {},
-                                    {
-                                        a: (sub) => (
-                                            <a
-                                                target="_blank"
-                                                href={SdkConfig.get().feedback.new_issue_url}
-                                                rel="noreferrer noopener"
-                                            >
-                                                {sub}
-                                            </a>
-                                        ),
-                                    },
-                                )}
-                            </strong>
-                        ) : (
-                            _t("bug_reporting|local_only_description")
-                        )}
-                    </Text>
+                    {this.isLocalOnly ? (
+                        <>
+                            <Text>{_t("bug_reporting|local_only_description")}</Text>
+                            {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
+                        </>
+                    ) : (
+                        <>
+                            <Text>
+                                <strong>
+                                    {_t(
+                                        "bug_reporting|before_submitting",
+                                        {},
+                                        {
+                                            a: (sub) => (
+                                                <a
+                                                    target="_blank"
+                                                    href={SdkConfig.get().feedback.new_issue_url}
+                                                    rel="noreferrer noopener"
+                                                >
+                                                    {sub}
+                                                </a>
+                                            ),
+                                        },
+                                    )}
+                                </strong>
+                            </Text>
 
-                    <div className="mx_BugReportDialog_download">
-                        <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
-                            {_t("bug_reporting|download_logs")}
-                        </AccessibleButton>
-                        {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
-                    </div>
+                            <div className="mx_BugReportDialog_download">
+                                <AccessibleButton
+                                    onClick={this.onDownload}
+                                    kind="link"
+                                    disabled={this.state.downloadBusy}
+                                >
+                                    {_t("bug_reporting|download_logs")}
+                                </AccessibleButton>
+                                {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
+                            </div>
 
-                    <Field
-                        type="text"
-                        className="mx_BugReportDialog_field_input"
-                        label={_t("bug_reporting|github_issue")}
-                        onChange={this.onIssueUrlChange}
-                        value={this.state.issueUrl}
-                        placeholder="https://github.com/vector-im/element-web/issues/..."
-                        ref={this.issueRef}
-                        disabled={isLocalOnly}
-                    />
-                    <Field
-                        className="mx_BugReportDialog_field_input"
-                        element="textarea"
-                        disabled={isLocalOnly}
-                        label={_t("bug_reporting|textarea_label")}
-                        rows={5}
-                        onChange={this.onTextChange}
-                        value={this.state.text}
-                        placeholder={_t("bug_reporting|additional_context")}
-                    />
-                    {progress}
-                    {error}
+                            <Field
+                                type="text"
+                                className="mx_BugReportDialog_field_input"
+                                label={_t("bug_reporting|github_issue")}
+                                onChange={this.onIssueUrlChange}
+                                value={this.state.issueUrl}
+                                placeholder="https://github.com/vector-im/element-web/issues/..."
+                                ref={this.issueRef}
+                            />
+                            <Field
+                                className="mx_BugReportDialog_field_input"
+                                element="textarea"
+                                label={_t("bug_reporting|textarea_label")}
+                                rows={5}
+                                onChange={this.onTextChange}
+                                value={this.state.text}
+                                placeholder={_t("bug_reporting|additional_context")}
+                            />
+                            {progress}
+                            {error}
+                        </>
+                    )}
                 </div>
                 <DialogButtons
-                    primaryButton={_t("bug_reporting|send_logs")}
-                    onPrimaryButtonClick={this.onSubmit}
+                    primaryButton={this.isLocalOnly ? _t("bug_reporting|download_logs") : _t("bug_reporting|send_logs")}
+                    onPrimaryButtonClick={this.isLocalOnly ? this.onDownload : this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}
-                    disabled={this.state.busy || isLocalOnly}
+                    disabled={this.isLocalOnly ? this.state.downloadBusy : this.state.busy}
                 />
             </BaseDialog>
         );

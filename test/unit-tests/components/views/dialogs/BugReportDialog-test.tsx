@@ -70,13 +70,21 @@ describe("BugReportDialog", () => {
 
     it("can submit a bug report", async () => {
         const { getByLabelText, getByText } = renderComponent();
-        fetchMock.postOnce(BUG_REPORT_URL, { report_url: "https://exmaple.org/report/url" });
+        fetchMock.postOnce(BUG_REPORT_URL, { report_url: "https://example.org/report/url" });
         await userEvent.type(getByLabelText("GitHub issue"), "https://example.org/some/issue");
         await userEvent.type(getByLabelText("Notes"), "Additional text");
         await userEvent.click(getByText("Send logs"));
         await waitFor(() => expect(getByText("Thank you!")).toBeInTheDocument());
         expect(onFinished).toHaveBeenCalledWith(false);
         expect(fetchMock).toHaveFetched(BUG_REPORT_URL);
+    });
+
+    it("renders when the config only allows local downloads", async () => {
+        SdkConfig.put({
+            bug_report_endpoint_url: "local",
+        });
+        const { container } = renderComponent();
+        expect(container).toMatchSnapshot("local-bug-reporter");
     });
 
     it.each([
