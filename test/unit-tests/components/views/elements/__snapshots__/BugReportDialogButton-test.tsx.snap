@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<BugReportDialogButton /> renders 'submit' label if a URL is provided 1`] = `
+<div>
+  <button
+    class="_button_13vu4_8"
+    data-kind="secondary"
+    data-size="sm"
+    role="button"
+    tabindex="0"
+  >
+    Submit debug logs
+  </button>
+</div>
+`;
+
+exports[`<BugReportDialogButton /> renders 'submit' label if a URL is provided 2`] = `
+<div>
+  <button
+    class="_button_13vu4_8"
+    data-kind="secondary"
+    data-size="sm"
+    role="button"
+    tabindex="0"
+  >
+    Download logs
+  </button>
+</div>
+`;

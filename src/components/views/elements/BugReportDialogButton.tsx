@@ -9,7 +9,10 @@ import BugReportDialog, { BugReportDialogProps } from "../dialogs/BugReportDialo
  * Renders a button to open the BugReportDialog *if* the configuration
  * supports it.
  */
-export function BugReportDialogButton({label, error}: Pick<BugReportDialogProps, "label"|"error">) {
+export function BugReportDialogButton({
+    label,
+    error,
+}: Pick<BugReportDialogProps, "label" | "error">): React.ReactElement | null {
     const bugReportUrl = SdkConfig.get().bug_report_endpoint_url;
     const onClick = useCallback(() => {
         Modal.createDialog(BugReportDialog, {
@@ -21,7 +24,9 @@ export function BugReportDialogButton({label, error}: Pick<BugReportDialogProps,
     if (!bugReportUrl) {
         return null;
     }
-    return <Button kind="secondary" size="sm" onClick={onClick}>
-        {bugReportUrl === "local" ? _t("bug_reporting|download_logs") : _t("bug_reporting|submit_debug_logs")}
-    </Button>;
+    return (
+        <Button kind="secondary" size="sm" onClick={onClick}>
+            {bugReportUrl === "local" ? _t("bug_reporting|download_logs") : _t("bug_reporting|submit_debug_logs")}
+        </Button>
+    );
 }
