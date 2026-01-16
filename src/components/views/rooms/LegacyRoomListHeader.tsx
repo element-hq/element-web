@@ -15,6 +15,8 @@ import {
     SearchIcon,
     UserAddIcon,
     VideoCallSolidIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -131,7 +133,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
     const pendingActions = usePendingActions();
 
-    const canShowMainMenu = activeSpace || spaceKey === MetaSpace.Home;
+    const canShowMainMenu = !!activeSpace || spaceKey === MetaSpace.Home;
 
     useEffect(() => {
         if (mainMenuDisplayed && !canShowMainMenu) {
@@ -392,7 +394,11 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             onClick: openMainMenu,
             isExpanded: mainMenuDisplayed,
             className: "mx_LegacyRoomListHeader_contextMenuButton",
-            children: title,
+            children: (
+                <>
+                    {title} {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </>
+            ),
         };
 
         if (!!activeSpace) {
@@ -422,7 +428,9 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     isExpanded={plusMenuDisplayed}
                     className="mx_LegacyRoomListHeader_plusButton"
                     title={_t("action|add")}
-                />
+                >
+                    <PlusIcon />
+                </ContextMenuTooltipButton>
             )}
 
             {contextMenu}
