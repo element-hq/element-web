@@ -406,8 +406,7 @@ export const SETTINGS: Settings = {
                     </p>
                 </>
             ),
-            faq: () =>
-                shouldShowFeedback() && (
+            faq: () => (
                     <>
                         <h4>{_t("labs|video_rooms_faq1_question")}</h4>
                         <p>{_t("labs|video_rooms_faq1_answer")}</p>
