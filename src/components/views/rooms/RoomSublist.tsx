@@ -16,6 +16,7 @@ import React, { type JSX, type ComponentType, createRef, type ReactComponentElem
 import {
     ChevronDownIcon,
     ChevronRightIcon,
+    ChevronUpIcon,
     OverflowHorizontalIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -763,9 +764,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         className={showMoreBtnClasses}
                         aria-label={label}
                     >
-                        <span className="mx_RoomSublist_showMoreButtonChevron mx_RoomSublist_showNButtonChevron">
-                            {/* set by CSS masking */}
-                        </span>
+                        <ChevronDownIcon className="mx_RoomSublist_showNButtonChevron" />
                         {showMoreText}
                     </RovingAccessibleButton>
                 );
@@ -781,9 +780,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         className={showMoreBtnClasses}
                         aria-label={label}
                     >
-                        <span className="mx_RoomSublist_showLessButtonChevron mx_RoomSublist_showNButtonChevron">
-                            {/* set by CSS masking */}
-                        </span>
+                        <ChevronUpIcon className="mx_RoomSublist_showNButtonChevron" />
                         {showLessText}
                     </RovingAccessibleButton>
                 );
