@@ -233,6 +233,7 @@ describe("RolesRoomSettingsTab", () => {
             return null;
         });
         mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+        mocked(room.getMember).mockReturnValue({ powerLevel: 100 } as any);
         const { container } = await renderTab();
 
         const selector = container.querySelector(`[placeholder="${cli.getUserId()}"]`)!;
