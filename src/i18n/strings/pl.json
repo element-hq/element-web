@@ -1962,7 +1962,6 @@
         "dm_invite_title": "Czy chcesz rozmawiać z %(user)s?",
         "drop_file_prompt": "Upuść plik tutaj, aby go przesłać",
         "edit_topic": "Edytuj temat",
-        "error_3pid_invite_email_lookup": "Nie udało się znaleźć użytkownika za pomocą e-maila",
         "error_cancel_knock_title": "Nie udało się anulować",
         "error_join_403": "Potrzebujesz zaproszenia, aby dołączyć do tego pokoju.",
         "error_join_404_1": "Spróbowałeś dołączyć za pomocą ID pokoju bez podania listy serwerów, z których można dołączyć. ID pokojów to wewnętrzne identyfikatory, których nie da się użyć bez dodatkowych informacji.",

@@ -1987,7 +1987,6 @@
         "dm_invite_title": "Vil du prate med %(user)s?",
         "drop_file_prompt": "Slipp ned en fil her for å laste opp",
         "edit_topic": "Rediger emne",
-        "error_3pid_invite_email_lookup": "Kan ikke finne bruker via e-post",
         "error_cancel_knock_title": "Kunne ikke avbryte",
         "error_join_403": "Du trenger en invitasjon for å få tilgang til dette rommet.",
         "error_join_404_1": "Du forsøkte å bli med ved hjelp av en rom-ID uten å oppgi en liste over servere du kan bli med gjennom. Rom-ID-er er interne identifikatorer og kan ikke brukes til å bli med i et rom uten ytterligere informasjon.",

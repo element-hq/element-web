@@ -8,10 +8,31 @@
         "explore_rooms": "Archwilio Ystafelloedd",
         "pause": "Oedi",
         "play": "Chwarae",
+        "retry": "Ceisio eto",
         "search": "Chwilio"
     },
     "left_panel": {
         "open_dial_pad": "Agor y pad deialu"
+    },
+    "room": {
+        "status_bar": {
+            "delete_all": "Dileu'r cyfan",
+            "exceeded_resource_limit_description": "Cysylltwch â gweinyddwr eich gwasanaeth i barhau i ddefnyddio'r gwasanaeth.",
+            "exceeded_resource_limit_title": "Dyw eich neges heb ei anfon oherwydd bod y gweinydd cartref hwn wedi mynd y tu hwnt i derfyn ei adnoddau.",
+            "failed_to_create_room_title": "Methwyd dechrau sgwrs gyda'r defnyddiwr hwn",
+            "history_visible": "Mae'r ystafell hon wedi'i ffurfweddu fel y gall aelodau newydd ddarllen hanes. <a>Dysgu Mwy</a>",
+            "homeserver_blocked_title": "Dyw eich neges heb ei anfon oherwydd bod y gweinydd cartref hwn wedi'i rwystro gan ei weinyddwr.",
+            "monthly_user_limit_reached_title": "Dyw eich neges heb ei anfon oherwydd bod y gweinydd cartref hwn wedi cyrraedd ei Derfyn Defnyddiwr Gweithredol Misol.",
+            "requires_consent_agreement_title": "Does dim modd i chi anfon unrhyw negeseuon nes i chi adolygu a chytuno â'n telerau ac amodau.",
+            "retry_all": "Ail-geisio popeth",
+            "select_messages_to_retry": "Gallwch ddewis pob neges neu negeseuon unigol i geisio eto neu eu dileu",
+            "server_connectivity_lost_description": "Bydd negeseuon sy'n cael eu hanfon yn cael eu cadw nes bod eich cysylltiad wedi dychwelyd.",
+            "server_connectivity_lost_title": "Mae'r cysylltiad â'r gweinydd wedi'i golli.",
+            "some_messages_not_sent": "Dyw rhai o'ch negeseuon heb eu hanfon"
+        }
+    },
+    "terms": {
+        "tac_button": "Adolygwch y telerau a'r amodau"
     },
     "time": {
         "about_day_ago": "tua diwrnod yn ôl",

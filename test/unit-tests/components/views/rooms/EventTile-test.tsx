@@ -10,6 +10,7 @@ import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
+    EventStatus,
     EventType,
     type IEventDecryptionResult,
     type MatrixClient,
@@ -636,5 +637,21 @@ describe("EventTile", () => {
 
         // The event tile should now show the not encrypted status
         await waitFor(() => expect(screen.getByText("Not encrypted")).toBeInTheDocument());
+    });
+
+    it.each([
+        [EventStatus.NOT_SENT, "Failed to send"],
+        [EventStatus.SENDING, "Sending your message…"],
+        [EventStatus.ENCRYPTING, "Encrypting your message…"],
+    ])("should display %s status icon", (eventSendStatus, text) => {
+        const ownEvent = mkMessage({
+            room: room.roomId,
+            user: client.getSafeUserId(),
+            msg: "Hello world!",
+            event: true,
+        });
+        const { getByRole } = getComponent({ mxEvent: ownEvent, eventSendStatus });
+
+        expect(getByRole("status")).toHaveAccessibleName(text);
     });
 });

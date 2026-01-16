@@ -1964,7 +1964,6 @@
         "dm_invite_title": "%(user)s felhasználóval szeretnél beszélgetni?",
         "drop_file_prompt": "Feltöltéshez húzz ide egy fájlt",
         "edit_topic": "Téma szerkesztése",
-        "error_3pid_invite_email_lookup": "E-mail alapján nem található a felhasználó",
         "error_cancel_knock_title": "Nem sikerült megszakítani",
         "error_join_403": "Meghívóra van szüksége a szoba eléréséhez.",
         "error_join_404_1": "A belépéshez csak a szoba azonosítóját adta meg a kiszolgáló nélkül. A szobaazonosító egy belső azonosító, amellyel további információk nélkül nem lehet belépni szobába.",

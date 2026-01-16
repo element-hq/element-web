@@ -1140,7 +1140,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1167,7 +1167,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1194,7 +1194,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-label="Threads"
             aria-labelledby="_r_a_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1221,7 +1221,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           <button
             aria-label="Room info"
             aria-labelledby="_r_f_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1679,7 +1679,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1706,7 +1706,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1733,7 +1733,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-label="Threads"
             aria-labelledby="_r_5o_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -1760,7 +1760,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           <button
             aria-label="Room info"
             aria-labelledby="_r_5t_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2154,7 +2154,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2181,7 +2181,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2208,7 +2208,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-label="Threads"
             aria-labelledby="_r_2q_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2235,7 +2235,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-label="Room info"
             aria-labelledby="_r_2v_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2629,7 +2629,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2656,7 +2656,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2683,7 +2683,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Threads"
             aria-labelledby="_r_fm_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2710,7 +2710,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Room info"
             aria-labelledby="_r_fr_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2843,7 +2843,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Video call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2870,7 +2870,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-disabled="false"
             aria-label="Voice call"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2897,7 +2897,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Threads"
             aria-labelledby="_r_fm_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -2924,7 +2924,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           <button
             aria-label="Room info"
             aria-labelledby="_r_fr_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -3358,7 +3358,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           <button
             aria-label="Chat"
             aria-labelledby="_r_kg_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -3385,7 +3385,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           <button
             aria-label="Threads"
             aria-labelledby="_r_kl_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -3412,7 +3412,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
           <button
             aria-label="Room info"
             aria-labelledby="_r_kq_"
-            class="_icon-button_1pz9o_8"
+            class="_icon-button_1215g_8"
             data-kind="primary"
             role="button"
             style="--cpd-icon-button-size: 32px;"
@@ -3527,7 +3527,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               </div>
               <button
                 aria-labelledby="_r_l8_"
-                class="_icon-button_1pz9o_8"
+                class="_icon-button_1215g_8"
                 data-kind="secondary"
                 data-testid="base-card-close-button"
                 role="button"

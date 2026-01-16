@@ -7,6 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
+import {
+    PopOutIcon,
+    ExpandIcon,
+    PinSolidIcon,
+    VoiceCallSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
 import RoomAvatar from "../../avatars/RoomAvatar";
@@ -23,24 +29,26 @@ const LegacyCallViewHeaderControls: React.FC<LegacyCallControlsProps> = ({ onExp
         <div className="mx_LegacyCallViewHeader_controls">
             {onMaximize && (
                 <AccessibleButton
-                    className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_fullscreen"
+                    className="mx_LegacyCallViewHeader_button"
                     onClick={onMaximize}
                     title={_t("voip|maximise")}
-                />
+                >
+                    <ExpandIcon />
+                </AccessibleButton>
             )}
             {onPin && (
-                <AccessibleButton
-                    className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_pin"
-                    onClick={onPin}
-                    title={_t("action|pin")}
-                />
+                <AccessibleButton className="mx_LegacyCallViewHeader_button" onClick={onPin} title={_t("action|pin")}>
+                    <PinSolidIcon />
+                </AccessibleButton>
             )}
             {onExpand && (
                 <AccessibleButton
-                    className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_expand"
+                    className="mx_LegacyCallViewHeader_button"
                     onClick={onExpand}
                     title={_t("voip|expand")}
-                />
+                >
+                    <PopOutIcon />
+                </AccessibleButton>
             )}
         </div>
     );
@@ -84,7 +92,9 @@ const LegacyCallViewHeader: React.FC<LegacyCallViewHeaderProps> = ({
     if (!pipMode) {
         return (
             <div className="mx_LegacyCallViewHeader">
-                <div className="mx_LegacyCallViewHeader_icon" />
+                <div className="mx_LegacyCallViewHeader_icon">
+                    <VoiceCallSolidIcon />
+                </div>
                 <span className="mx_LegacyCallViewHeader_text">{_t("action|call")}</span>
                 <LegacyCallViewHeaderControls onMaximize={onMaximize} />
             </div>

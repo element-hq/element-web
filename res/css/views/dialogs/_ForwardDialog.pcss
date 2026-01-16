@@ -134,34 +134,16 @@ Please see LICENSE files in the repository root for full details.
                         visibility: hidden;
                     }
 
-                    .mx_ForwardList_sendIcon,
-                    .mx_NotificationBadge {
+                    & > svg {
                         position: absolute;
+                        width: 14px;
+                        height: 14px;
+                        color: $accent;
                     }
 
                     .mx_NotificationBadge {
                         /* Match the failed to send indicator's color with the disabled button */
                         background-color: $button-danger-disabled-fg-color;
-                    }
-
-                    &.mx_ForwardList_sending .mx_ForwardList_sendIcon {
-                        background-color: $accent;
-                        mask-image: url("@vector-im/compound-design-tokens/icons/circle.svg");
-                        mask-position: center;
-                        mask-repeat: no-repeat;
-                        mask-size: 14px;
-                        width: 14px;
-                        height: 14px;
-                    }
-
-                    &.mx_ForwardList_sent .mx_ForwardList_sendIcon {
-                        background-color: $accent;
-                        mask-image: url("@vector-im/compound-design-tokens/icons/check-circle.svg");
-                        mask-position: center;
-                        mask-repeat: no-repeat;
-                        mask-size: 14px;
-                        width: 14px;
-                        height: 14px;
                     }
                 }
             }

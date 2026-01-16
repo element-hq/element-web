@@ -2021,7 +2021,6 @@
         "dm_invite_title": "Želiš li razgovarati s korisnikom %(user)s?",
         "drop_file_prompt": "Ovdje ispusti datoteku za prijenos",
         "edit_topic": "Uredi temu",
-        "error_3pid_invite_email_lookup": "Nije moguće pronaći korisnika putem e-pošte",
         "error_cancel_knock_title": "Otkazivanje nije uspjelo",
         "error_join_403": "Za pristup ovoj sobi potrebna vam je pozivnica.",
         "error_join_404_1": "Pokušali ste se pridružiti koristeći ID sobe bez navođenja popisa poslužitelja putem kojih se možete pridružiti. ID-ovi soba interni su identifikatori i ne mogu se upotrijebiti za pridruživanje sobi bez pružanja dodatnih informacija.",

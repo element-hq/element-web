@@ -35,6 +35,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
+import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -176,7 +177,7 @@ export interface EventTileProps {
 
     // the status of this event - ie, mxEvent.status. Denormalised to here so
     // that we can tell when it changes.
-    eventSendStatus?: string;
+    eventSendStatus?: EventStatus;
 
     forExport?: boolean;
 
@@ -1196,7 +1197,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let msgOption: JSX.Element | undefined;
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-            msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+            msgOption = <SentReceipt messageState={this.props.eventSendStatus} />;
         } else if (this.props.showReadReceipts) {
             msgOption = (
                 <ReadReceiptGroup
@@ -1526,29 +1527,27 @@ function E2ePadlockDecryptionFailure(): JSX.Element {
 }
 
 interface ISentReceiptProps {
-    messageState: EventStatus | null;
+    messageState: EventStatus | undefined;
 }
 
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     const isSent = !messageState || messageState === "sent";
     const isFailed = messageState === "not_sent";
-    const receiptClasses = classNames({
-        mx_EventTile_receiptSent: isSent,
-        mx_EventTile_receiptSending: !isSent && !isFailed,
-    });
 
-    let nonCssBadge: JSX.Element | undefined;
-    if (isFailed) {
-        nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-    }
-
-    let label = _t("timeline|send_state_sending");
+    let icon: JSX.Element | undefined;
+    let label: string | undefined;
     if (messageState === "encrypting") {
+        icon = <CircleIcon />;
         label = _t("timeline|send_state_encrypting");
     } else if (isSent) {
+        icon = <CheckCircleIcon />;
         label = _t("timeline|send_state_sent");
     } else if (isFailed) {
+        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
         label = _t("timeline|send_state_failed");
+    } else {
+        icon = <CircleIcon />;
+        label = _t("timeline|send_state_sending");
     }
 
     return (
@@ -1556,9 +1555,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             <div className="mx_ReadReceiptGroup">
                 <Tooltip label={label} placement="top-end">
                     <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">
-                            <span className={receiptClasses}>{nonCssBadge}</span>
-                        </span>
+                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
                     </div>
                 </Tooltip>
             </div>

@@ -16,7 +16,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
       />
       <button
         aria-labelledby="_r_e_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -127,7 +127,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               </span>
             </p>
             <button
-              class="_icon-button_1pz9o_8 mx_RoomSummaryCard_topic_chevron"
+              class="_icon-button_1215g_8 mx_RoomSummaryCard_topic_chevron"
               data-kind="primary"
               role="button"
               style="--cpd-icon-button-size: 24px;"
@@ -180,7 +180,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         aria-orientation="vertical"
         role="menubar"
       >
-        <div
+        <button
           aria-checked="false"
           class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
@@ -212,13 +212,14 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               class="_input_udcm8_24"
               id="_r_j_"
               role="switch"
+              tabindex="-1"
               type="checkbox"
             />
             <div
               class="_ui_udcm8_34"
             />
           </div>
-        </div>
+        </button>
         <button
           class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
@@ -729,7 +730,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       />
       <button
         aria-labelledby="_r_0_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -855,7 +856,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         aria-orientation="vertical"
         role="menubar"
       >
-        <div
+        <button
           aria-checked="false"
           class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
@@ -887,13 +888,14 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
               class="_input_udcm8_24"
               id="_r_5_"
               role="switch"
+              tabindex="-1"
               type="checkbox"
             />
             <div
               class="_ui_udcm8_34"
             />
           </div>
-        </div>
+        </button>
         <button
           class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
@@ -1404,7 +1406,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
       />
       <button
         aria-labelledby="_r_7_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -1515,7 +1517,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               </span>
             </p>
             <button
-              class="_icon-button_1pz9o_8 mx_RoomSummaryCard_topic_chevron"
+              class="_icon-button_1215g_8 mx_RoomSummaryCard_topic_chevron"
               data-kind="primary"
               role="button"
               style="--cpd-icon-button-size: 24px;"
@@ -1568,7 +1570,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         aria-orientation="vertical"
         role="menubar"
       >
-        <div
+        <button
           aria-checked="false"
           class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
@@ -1600,13 +1602,14 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               class="_input_udcm8_24"
               id="_r_c_"
               role="switch"
+              tabindex="-1"
               type="checkbox"
             />
             <div
               class="_ui_udcm8_34"
             />
           </div>
-        </div>
+        </button>
         <button
           class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
