@@ -1924,7 +1924,6 @@
         "dm_invite_title": "Vill du chatta med %(user)s?",
         "drop_file_prompt": "Släpp en fil här för att ladda upp",
         "edit_topic": "Redigera ämne",
-        "error_3pid_invite_email_lookup": "Kan inte hitta användaren via e-post",
         "error_cancel_knock_title": "Misslyckades att avbryta",
         "error_join_403": "Du behöver en inbjudan för att komma åt det här rummet.",
         "error_join_404_1": "Du försökte gå med med ett rums-ID utan att tillhandahålla en lista över servrar att gå med via. Rums-ID:n är interna identifierare och kan inte användas för att gå med i ett rum utan ytterligare information.",

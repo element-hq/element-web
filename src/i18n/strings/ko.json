@@ -1963,7 +1963,6 @@
         "dm_invite_title": "%(user)s님과 대화하겠습니까?",
         "drop_file_prompt": "업로드할 파일을 여기에 놓으세요",
         "edit_topic": "주제 편집",
-        "error_3pid_invite_email_lookup": "이메일로 사용자를 찾을 수 없습니다",
         "error_cancel_knock_title": "취소 실패",
         "error_join_403": "이 방에 접근하려면 초대장이 필요합니다.",
         "error_join_404_1": "방 ID만 입력하고 연결할 서버 목록을 제공하지 않은 상태로 방에 참여하려고 시도했습니다. 방 ID는 내부 식별자이므로 추가 정보 없이는 방에 참여할 수 없습니다.",

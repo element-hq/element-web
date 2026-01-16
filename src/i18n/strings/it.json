@@ -1696,7 +1696,6 @@
         "dm_invite_title": "Vuoi chattare con %(user)s?",
         "drop_file_prompt": "Trascina un file qui per l'invio",
         "edit_topic": "Modifica argomento",
-        "error_3pid_invite_email_lookup": "Impossibile trovare l'utente per email",
         "error_cancel_knock_title": "Annullamento fallito",
         "error_join_403": "Ti serve un invito per entrare in questa stanza.",
         "error_join_404_1": "Hai provato ad entrare usando un ID stanza senza fornire una lista di server attraverso cui entrare. Gli ID stanza sono identificativi interni e non possono essere usati per entrare in una stanza senza informazioni aggiuntive.",
