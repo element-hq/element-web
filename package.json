@@ -30,8 +30,8 @@
     ],
     "scripts": {
         "i18n": "matrix-gen-i18n src res && yarn i18n:sort && yarn i18n:lint",
-        "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
-        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
+        "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json && yarn --cwd packages/shared-components i18n:sort",
+        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null && yarn --cwd packages/shared-components i18n:lint",
         "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
         "make-component": "node scripts/make-react-component.js",
         "rethemendex": "./res/css/rethemendex.sh",
