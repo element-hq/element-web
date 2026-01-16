@@ -36,6 +36,7 @@ import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { isMimeTypeAllowed } from "../../../utils/blobs.ts";
+import { ImageErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 enum Placeholder {
     NoImage,
@@ -674,7 +675,11 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 errorText = _t("timeline|m.image|error_downloading");
             }
 
-            return <MediaProcessingError className="mx_MImageBody">{errorText}</MediaProcessingError>;
+            return (
+                <MediaProcessingError className="mx_MImageBody" Icon={ImageErrorIcon}>
+                    {errorText}
+                </MediaProcessingError>
+            );
         }
 
         let contentUrl = this.state.contentUrl;
