@@ -114,23 +114,10 @@ Please see LICENSE files in the repository root for full details.
         height: 20px;
         width: 20px;
 
-        &::before {
-            content: "";
-
+        svg {
             height: inherit;
             width: inherit;
-            background-color: $tertiary-content;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
+            color: $tertiary-content;
         }
-    }
-
-    .mx_IncomingLegacyCallToast_silence::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/volume-on-solid.svg");
-    }
-
-    .mx_IncomingLegacyCallToast_unSilence::before {
-        mask-image: url("@vector-im/compound-design-tokens/icons/volume-off-solid.svg");
     }
 }

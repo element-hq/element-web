@@ -46,13 +46,10 @@ Please see LICENSE files in the repository root for full details.
     line-height: 24px; /* in px to match the avatar */
 }
 
-.mx_CallEvent_inactive .mx_CallEvent_title::before {
+.mx_CallEvent_inactive .mx_CallEvent_title svg {
     display: inline-block;
     vertical-align: middle;
-    content: "";
-    background-color: $secondary-content;
-    mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
-    mask-size: 16px;
+    color: $secondary-content;
     width: 16px;
     height: 16px;
     margin-right: $spacing-8;

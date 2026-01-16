@@ -15,6 +15,8 @@ import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
+import { Icon as ImgSizeNormalIcon } from "../../../../res/img/element-icons/settings/img-size-normal.svg";
+import { Icon as ImgSizeLargeIcon } from "../../../../res/img/element-icons/settings/img-size-large.svg";
 
 interface IState {
     size: ImageSize;
@@ -42,7 +44,7 @@ export default class ImageSizePanel extends React.Component<EmptyObject, IState>
             <SettingsSubsection heading={_t("settings|appearance|timeline_image_size")}>
                 <div className="mx_ImageSizePanel_radios">
                     <label>
-                        <div className="mx_ImageSizePanel_size mx_ImageSizePanel_sizeDefault" />
+                        <ImgSizeNormalIcon className="mx_ImageSizePanel_size" />
                         <StyledRadioButton
                             name="image_size"
                             value={ImageSize.Normal}
@@ -53,7 +55,7 @@ export default class ImageSizePanel extends React.Component<EmptyObject, IState>
                         </StyledRadioButton>
                     </label>
                     <label>
-                        <div className="mx_ImageSizePanel_size mx_ImageSizePanel_sizeLarge" />
+                        <ImgSizeLargeIcon className="mx_ImageSizePanel_size" />
                         <StyledRadioButton
                             name="image_size"
                             value={ImageSize.Large}

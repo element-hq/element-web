@@ -1637,6 +1637,7 @@
         "files_button": "Filer",
         "pinned_messages": {
             "limits": {
+                "one": "",
                 "other": "Du kan kun fastgøre op til %(count)s widgets"
             }
         },
@@ -1705,7 +1706,6 @@
         "dm_invite_title": "Vil du chatte med %(user)s?",
         "drop_file_prompt": "Slip filen her for at uploade",
         "edit_topic": "Redigér emne",
-        "error_3pid_invite_email_lookup": "Kan ikke finde brugeren via e-mail",
         "error_cancel_knock_title": "Kunne ikke annullere",
         "error_join_403": "Du skal bruge en invitation for at få adgang til dette rum.",
         "error_join_404_1": "Du forsøgte at deltage ved hjælp af et rum-ID uden at angive en liste over servere at deltage igennem. Rum-ID'er er interne identifikatorer og kan ikke bruges til at deltage i et rum uden yderligere oplysninger.",
@@ -1819,18 +1819,6 @@
         "search": {
             "all_rooms_button": "Søg i alle rum",
             "this_room_button": "Søg i dette rum"
-        },
-        "status_bar": {
-            "delete_all": "Slet alle",
-            "exceeded_resource_limit": "Din besked blev ikke sendt, fordi denne hjemmeserver har overskredet en ressourcegrænse. <a>Kontakt din serviceadministrator </a> for at fortsætte med at bruge tjenesten.",
-            "homeserver_blocked": "Din besked blev ikke sendt, fordi denne hjemmeserver er blevet blokeret af dens administrator. <a>Kontakt din serviceadministrator </a> for at fortsætte med at bruge tjenesten.",
-            "monthly_user_limit_reached": "Din besked blev ikke sendt, fordi denne hjemmeserver har nået sin månedlige aktive brugergrænse. <a>Kontakt din serviceadministrator </a> for at fortsætte med at bruge tjenesten.",
-            "requires_consent_agreement": "Du kan ikke sende nogen beskeder, før du har gennemgået og accepteret <consentLink>vores vilkår og betingelser</consentLink>.",
-            "retry_all": "Prøv alle igen",
-            "select_messages_to_retry": "Du kan vælge alle eller enkelte beskeder, for at forsøge med dem igen eller slette dem.",
-            "server_connectivity_lost_description": "Sendte beskeder vil blive gemt, indtil din forbindelse er genoprettet.",
-            "server_connectivity_lost_title": "Forbindelsen til serveren er gået tabt.",
-            "some_messages_not_sent": "Nogle af dine beskeder er ikke blevet sendt"
         },
         "unknown_status_code_for_timeline_jump": "ukendt statuskode",
         "unread_notifications_predecessor": {
@@ -2070,7 +2058,6 @@
             "error_join_rule_change_unknown": "Ukendt fejl",
             "guest_access_warning": "Personer med understøttede klienter, vil kunne tilslutte sig rummet uden at have en registreret konto.",
             "history_visibility_invited": "Kun medlemmer (siden de blev inviteret)",
-            "history_visibility_joined": "Kun medlemmer (fra de kom ind)",
             "history_visibility_legend": "Hvem kan læse historikken?",
             "history_visibility_shared": "Kun medlemmer (siden det tidspunkt, hvor denne indstilling blev valgt)",
             "history_visibility_warning": "Synligheden af ​​den eksisterende historik vil ikke blive ændret.",
@@ -3333,6 +3320,7 @@
         }
     },
     "truncated_list_n_more": {
+        "one": "",
         "other": "Og %(count)s mere..."
     },
     "unsupported_server_description": "Denne server bruger en ældre version af Matrix. Opgrader til Matrix %(version)s for at kunne bruge %(brand)s uden fejl.",
@@ -3483,7 +3471,6 @@
         "hide_sidebar_button": "Skjul sidebjælke",
         "input_devices": "Inputenheder",
         "jitsi_call": "Jitsi fællesopkald",
-        "join_button_tooltip_call_full": "Beklager - dette opkald er i øjeblikket fuldt",
         "legacy_call": "Gammel opkaldsmetode",
         "maximise": "Udfyld skærmen",
         "maximise_call": "Maksimér opkaldet",

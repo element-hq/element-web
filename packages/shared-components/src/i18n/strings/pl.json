@@ -10,10 +10,6 @@
         "play": "Odtwórz",
         "search": "Szukaj"
     },
-    "encryption": {
-        "pinned_identity_changed": "Tożsamość %(displayName)s (<b>%(userId)s</b>) została zresetowana. <a>Dowiedz się więcej</a>",
-        "withdraw_verification_action": "Wycofaj weryfikację"
-    },
     "left_panel": {
         "open_dial_pad": "Otwórz klawiaturę numeryczną"
     },

@@ -1638,18 +1638,6 @@
         "read_topic": "クリックしてトピックを読む",
         "rejecting": "招待を拒否しています…",
         "rejoin_button": "再参加",
-        "status_bar": {
-            "delete_all": "全て削除",
-            "exceeded_resource_limit": "このホームサーバーがリソース制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
-            "homeserver_blocked": "このホームサーバーが管理者によりブロックされているため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
-            "monthly_user_limit_reached": "このホームサーバーが月間アクティブユーザー制限を超えたため、メッセージを送信できませんでした。サービスを引き続き使用するには、<a>サービスの管理者にお問い合わせ</a>ください。",
-            "requires_consent_agreement": "<consentLink>利用規約</consentLink> を確認して同意するまでは、いかなるメッセージも送信できません。",
-            "retry_all": "全て再試行",
-            "select_messages_to_retry": "全てのメッセージ、あるいは個別のメッセージを選択して、再送を試みるか削除することができます",
-            "server_connectivity_lost_description": "送信されたメッセージは、接続が復旧するまで保存されます。",
-            "server_connectivity_lost_title": "サーバーとの接続が失われました。",
-            "some_messages_not_sent": "いくつかのメッセージが送信されませんでした"
-        },
         "unread_notifications_predecessor": {
             "one": "このルームの以前のバージョンに、未読の通知が%(count)s件あります。",
             "other": "このルームの以前のバージョンに、未読の通知が%(count)s件あります。"
@@ -1865,7 +1853,6 @@
             "error_join_rule_change_unknown": "不明なエラー",
             "guest_access_warning": "サポートしているクライアントから、登録済のアカウントを使用せずルームに参加できるようになります。",
             "history_visibility_invited": "メンバーのみ（招待を送った時点から）",
-            "history_visibility_joined": "メンバーのみ（参加した時点から）",
             "history_visibility_legend": "履歴の閲覧権限",
             "history_visibility_shared": "メンバーのみ（この設定を選択した時点から）",
             "history_visibility_warning": "履歴の閲覧権限に関する変更は、今後、このルームで表示されるメッセージにのみ適用されます。既存の履歴の見え方には影響しません。",
@@ -3155,7 +3142,6 @@
         "hangup": "電話を切る",
         "hide_sidebar_button": "サイドバーを表示しない",
         "input_devices": "入力装置",
-        "join_button_tooltip_call_full": "すみません ― この通話は現在満員です",
         "maximise": "全画面",
         "misconfigured_server": "サーバーの不正な設定のため通話に失敗しました",
         "misconfigured_server_description": "安定した通話のために、ホームサーバー（<code>%(homeserverDomain)s</code>）の管理者にTURNサーバーの設定を依頼してください。",
