@@ -19,7 +19,7 @@
 # Build
 
 - [Customisations](customisations.md)
-- [Modules](modules.md)
+- [Deprecated Modules](deprecated-modules.md)
 - [Native Node modules](native-node-modules.md)
 
 # Contribution
