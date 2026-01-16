@@ -40,6 +40,8 @@
 - [Feature flags](feature-flags.md)
 - [OIDC and delegated authentication](oidc.md)
 - [Release Process](release.md)
+- [MVVM](MVVM.md)
+- [Settings](settings.md)
 
 # Deep dive
 
