@@ -1243,13 +1243,6 @@
         "not_found_title_name": "%(roomName)s לא קיים.",
         "peek_join_prompt": "אתם צופים ב־%(roomName)s. האם תרצו להצטרף?",
         "rejoin_button": "הצטרפות מחדש",
-        "status_bar": {
-            "exceeded_resource_limit": "ההודעה שלך לא נשלחה מכיוון ששרת הבית הזה חרג ממגבלת המשאבים. אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות.",
-            "monthly_user_limit_reached": "ההודעה שלך לא נשלחה מכיוון ששרת הבתים הזה הגיע למגבלת המשתמשים הפעילים החודשיים שלה. אנא <a> פנה למנהל השירות שלך </a> כדי להמשיך להשתמש בשירות.",
-            "requires_consent_agreement": "אינך יכול לשלוח שום הודעה עד שתבדוק ותסכים ל <consentLink> התנאים וההגבלות שלנו </consentLink>.",
-            "server_connectivity_lost_description": "הודעות שנשלחו יאוחסנו עד שהחיבור שלך יחזור.",
-            "server_connectivity_lost_title": "הקישוריות לשרת אבדה."
-        },
         "unread_notifications_predecessor": {
             "one": "יש לך %(count)s הודעה שלא נקראה בגירסה קודמת של חדר זה.",
             "other": "יש לך %(count)s הודעות שלא נקראו בגרסה קודמת של חדר זה."
@@ -1428,7 +1421,6 @@
             "error_join_rule_change_unknown": "כשל לא ידוע",
             "guest_access_warning": "אורחים בעלי תוכנת התחברות מתאימה יוכלו להצטרף לחדר גם אם אין להם חשבון משתמש.",
             "history_visibility_invited": "חברים בלבד (מאז שהוזמנו)",
-            "history_visibility_joined": "חברים בלבד (מאז שהצטרפו)",
             "history_visibility_legend": "למי מותר לקרוא הסטוריה?",
             "history_visibility_shared": "חברים בלבד (מרגע בחירת אפשרות זו)",
             "history_visibility_warning": "שינויים במי שיכול לקרוא היסטוריה יחולו רק על הודעות עתידיות בחדר זה. נראות ההיסטוריה הקיימת לא תשתנה.",

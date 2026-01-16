@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 import { merge } from "lodash";
 
@@ -44,21 +44,29 @@ export function setupLanguageMock() {
     const enTranslations = merge(enElementWeb, enSharedComponents);
     const deTranslations = merge(deElementWeb, deSharedComponents);
 
+    fetchMock.mockGlobal();
     fetchMock
-        .get("/i18n/languages.json", {
-            en: "en_EN.json",
-            de: "de_DE.json",
-            lv: "lv.json",
-        })
+        .get(
+            "end:/i18n/languages.json",
+            {
+                en: "en_EN.json",
+                de: "de_DE.json",
+                lv: "lv.json",
+            },
+            { name: "languages" },
+        )
         .get("end:en_EN.json", enTranslations)
         .get("end:de_DE.json", deTranslations)
         .get("end:lv.json", lv);
 }
-setupLanguageMock();
+beforeEach(setupLanguageMock);
+afterEach(() => fetchMock.callHistory.flush());
 
+// Initialise the fetchMock before the test starts so the languageHandler.setLanguage call below can function
+setupLanguageMock();
 languageHandler.setLanguage("en");
 languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
 
-// Set up the mdule API (so the i18n API exists)
+// Set up the module API (so the i18n API exists)
 const moduleLoader = new ModuleLoader(ModuleApi.instance);
 window.mxModuleLoader = moduleLoader;

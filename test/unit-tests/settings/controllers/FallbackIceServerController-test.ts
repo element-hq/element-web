@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -15,7 +15,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 
 describe("FallbackIceServerController", () => {
     beforeEach(() => {
-        fetchMockJest.get("https://matrix.org/_matrix/client/versions", { versions: ["v1.4"] });
+        fetchMock.get("https://matrix.org/_matrix/client/versions", { versions: ["v1.4"] });
     });
 
     afterEach(() => {

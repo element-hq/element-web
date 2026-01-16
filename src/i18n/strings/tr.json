@@ -1777,6 +1777,7 @@
                 "other": "%(count)s Sabitlenmiş mesaj"
             },
             "limits": {
+                "one": "",
                 "other": "En fazla %(count)s widget'ı sabitleyebilirsiniz"
             },
             "menu": "Menüyü aç",
@@ -1854,7 +1855,6 @@
         "dm_invite_title": "%(user)s ile sohbet etmek ister misin?",
         "drop_file_prompt": "Yüklemek için dosyaları buraya bırakın",
         "edit_topic": "Başlığı Düzenle",
-        "error_3pid_invite_email_lookup": "Kullanıcı e-posta ile bulunamıyor",
         "error_cancel_knock_title": "İptal edilemedi",
         "error_join_403": "Bu odaya erişmek için bir davetiyeye ihtiyacınız var.",
         "error_join_404_1": "Sunucu listesi sağlamadan bir oda kimliği kullanarak katılmaya çalıştınız. Oda kimlikleri dahili tanımlayıcılardır ve ek bilgi olmadan bir odaya katılmak için kullanılamazlar.",
@@ -1977,18 +1977,6 @@
                 "other": "\"<query/>\" için %(count)s sonuç bulundu"
             },
             "this_room_button": "Bu odayı ara"
-        },
-        "status_bar": {
-            "delete_all": "Tümünü sil",
-            "exceeded_resource_limit": "Bu ana sunucu bir kaynak sınırını aştığı için mesajınız gönderilemedi. Hizmeti kullanmaya devam etmek için lütfen <a>hizmet yöneticinizle</a> iletişime geçin.",
-            "homeserver_blocked": "Bu ana sunucu yöneticisi tarafından engellendiği için mesajınız gönderilemedi. Hizmeti kullanmaya devam etmek için lütfen <a>hizmet yöneticinizle</a> iletişime geçin.",
-            "monthly_user_limit_reached": "Bu ana sunucu Aylık Aktif Kullanıcı Limitine ulaştığı için mesajınız gönderilmedi. Hizmeti kullanmaya devam etmek için lütfen <a>hizmet yöneticinizle</a> iletişime geçin.",
-            "requires_consent_agreement": "<consentLink>Şartlar ve koşullarımızı </consentLink> inceleyip kabul edene kadar herhangi bir mesaj gönderemezsiniz.",
-            "retry_all": "Tümünü yeniden dene",
-            "select_messages_to_retry": "Yeniden denemek veya silmek için mesajların hepsini seçebilir veya tek tek seçebilirsiniz",
-            "server_connectivity_lost_description": "Gönderilen iletiler bağlantınız geri gelene kadar saklanacak.",
-            "server_connectivity_lost_title": "Sunucuyla olan bağlantı kesildi.",
-            "some_messages_not_sent": "Bazı mesajlarınız gönderilmedi"
         },
         "unknown_status_code_for_timeline_jump": "bilinmeyen durum kodu",
         "unread_notifications_predecessor": {
@@ -2235,7 +2223,6 @@
             "error_join_rule_change_unknown": "Bilinmeyen hata",
             "guest_access_warning": "Desteklenen istemciye sahip kişiler, kayıtlı bir hesaba sahip olmadan odaya katılabilecekler.",
             "history_visibility_invited": "Sadece üyeler (davet edildiklerinden beri)",
-            "history_visibility_joined": "Sadece üyeler (katıldıklarından beri)",
             "history_visibility_legend": "Geçmişi kimler okuyabilir ?",
             "history_visibility_shared": "Sadece üyeler ( bu seçeneği seçtiğinizden itibaren)",
             "history_visibility_warning": "Geçmişi kimin okuyabileceğini değiştirmek yalnızca odadaki yeni iletileri etkiler. Var olan geçmiş değişmeden kalacaktır.",
@@ -3777,7 +3764,6 @@
         "hide_sidebar_button": "Kenar çubuğunu gizle",
         "input_devices": "Giriş aygıtları",
         "jitsi_call": "Jitsi Konferansı",
-        "join_button_tooltip_call_full": "Üzgünüz - bu çağrı şu anda dolu",
         "legacy_call": "Eski Tip Çağrı",
         "maximise": "Ekranı kapla",
         "maximise_call": "Arama ekranı kapla",

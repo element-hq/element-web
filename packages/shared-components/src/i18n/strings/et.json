@@ -10,10 +10,6 @@
         "play": "Esita",
         "search": "Otsing"
     },
-    "encryption": {
-        "pinned_identity_changed": "Kasutaja %(displayName)s (<b>%(userId)s</b>) võrguidentiteet on lähtestatud. <a>Lisateave</a>",
-        "withdraw_verification_action": "Eemalda verifitseerimine"
-    },
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik"
     },

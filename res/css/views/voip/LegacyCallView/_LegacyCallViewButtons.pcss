@@ -44,15 +44,10 @@ Please see LICENSE files in the repository root for full details.
 
         box-shadow: 0px 4px 4px 0px #00000026; /* Same on both themes */
 
-        &::before {
-            content: "";
+        svg {
             display: inline-block;
 
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
-
-            background-color: $call-view-button-on-foreground;
+            color: $call-view-button-on-foreground;
 
             height: 24px;
             width: 24px;
@@ -66,102 +61,59 @@ Please see LICENSE files in the repository root for full details.
             right: 0;
             bottom: 0;
 
-            &::before {
+            svg {
                 width: 16px;
                 height: 16px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/chevron-up.svg");
             }
+        }
 
-            &.mx_LegacyCallViewButtons_dropdownButton_collapsed::before {
-                transform: rotate(180deg);
-            }
+        &.mx_LegacyCallViewButtons_button_mic svg {
+            height: 20px;
+            width: 20px;
         }
 
         /* State buttons */
         &.mx_LegacyCallViewButtons_button_on {
             background-color: $call-view-button-on-background;
 
-            &::before {
-                background-color: $call-view-button-on-foreground;
-            }
-
-            &.mx_LegacyCallViewButtons_button_mic::before {
-                height: 20px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/mic-on-solid.svg");
-                width: 20px;
-            }
-
-            &.mx_LegacyCallViewButtons_button_vid::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
+            svg {
+                color: $call-view-button-on-foreground;
             }
 
             &.mx_LegacyCallViewButtons_button_screensharing {
                 background-color: $accent;
 
-                &::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/share-screen-solid.svg");
-                    background-color: white; /* Same on both themes */
+                svg {
+                    color: white; /* Same on both themes */
                 }
-            }
-
-            &.mx_LegacyCallViewButtons_button_sidebar::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/list-view.svg");
             }
         }
 
         &.mx_LegacyCallViewButtons_button_off {
             background-color: $call-view-button-off-background;
 
-            &::before {
-                background-color: $call-view-button-off-foreground;
+            svg {
+                color: $call-view-button-off-foreground;
             }
 
-            &.mx_LegacyCallViewButtons_button_mic::before {
-                height: 20px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/mic-off-solid.svg");
-                width: 20px;
-            }
-
-            &.mx_LegacyCallViewButtons_button_vid::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-off-solid.svg");
-            }
-
-            &.mx_LegacyCallViewButtons_button_screensharing {
-                background-color: $call-view-button-on-background;
-
-                &::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/share-screen-solid.svg");
-                    background-color: $call-view-button-on-foreground;
-                }
-            }
-
+            &.mx_LegacyCallViewButtons_button_screensharing,
             &.mx_LegacyCallViewButtons_button_sidebar {
                 background-color: $call-view-button-on-background;
 
-                &::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/spotlight-view.svg");
-                    background-color: $call-view-button-on-foreground;
+                svg {
+                    color: $call-view-button-on-foreground;
                 }
             }
         }
         /* State buttons */
 
         /* Stateless buttons */
-        &.mx_LegacyCallViewButtons_dialpad::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/dial-pad.svg");
-        }
-
         &.mx_LegacyCallViewButtons_button_hangup {
             background-color: $alert;
 
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/end-call.svg");
-                background-color: white; /* Same on both themes */
+            svg {
+                color: white; /* Same on both themes */
             }
-        }
-
-        &.mx_LegacyCallViewButtons_button_more::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
         }
         /* Stateless buttons */
 

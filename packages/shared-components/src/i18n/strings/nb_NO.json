@@ -6,13 +6,8 @@
         "delete": "Slett",
         "dismiss": "Avvis",
         "explore_rooms": "Se alle rom",
-        "pause": "Pause",
         "play": "Spill av",
         "search": "Søk"
-    },
-    "encryption": {
-        "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
-        "withdraw_verification_action": "Trekk tilbake verifisering"
     },
     "left_panel": {
         "open_dial_pad": "Åpne nummerpanelet"

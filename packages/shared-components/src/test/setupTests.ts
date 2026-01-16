@@ -6,18 +6,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { setLanguage } from "../../src/utils/i18n";
 import en from "../i18n/strings/en_EN.json";
 
 export function setupLanguageMock(): void {
     fetchMock
-        .get("/i18n/languages.json", {
+        .get("end:/i18n/languages.json", {
             en: "en_EN.json",
         })
         .get("end:en_EN.json", en);
 }
 setupLanguageMock();
+fetchMock.mockGlobal();
 
 setLanguage("en");

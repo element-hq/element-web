@@ -385,8 +385,8 @@ test.describe("Timeline", () => {
 
                 // Make sure the second message was sent
                 await expect(
-                    page.locator(".mx_RoomView_MessageList > .mx_EventTile_last .mx_EventTile_receiptSent"),
-                ).toBeVisible();
+                    page.locator(".mx_RoomView_MessageList > .mx_EventTile_last").getByRole("status"),
+                ).toHaveAccessibleName("Your message was sent");
 
                 // 1. Alignment of collapsed GELS (generic event list summary) and messages
                 // Check inline start spacing of collapsed GELS
@@ -468,8 +468,8 @@ test.describe("Timeline", () => {
                     page.locator(".mx_GenericEventListSummary .mx_EventTile_last .mx_RedactedBody"),
                 ).toBeVisible();
                 await expect(
-                    page.locator(".mx_GenericEventListSummary .mx_EventTile_last .mx_EventTile_receiptSent"),
-                ).toBeVisible();
+                    page.locator(".mx_GenericEventListSummary .mx_EventTile_last").getByRole("status"),
+                ).toHaveAccessibleName("Your message was sent");
                 // Record alignment of expanded GELS and placeholder of deleted message on messagePanel
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot(
                     "expanded-gels-redaction-placeholder.png",
@@ -502,8 +502,8 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_EventTile_emote .mx_EventTile_avatar")).toHaveCSS("margin-left", "99px");
                 // Make sure emote was sent
                 await expect(
-                    page.locator(".mx_EventTile_last.mx_EventTile_emote .mx_EventTile_receiptSent"),
-                ).toBeVisible();
+                    page.locator(".mx_EventTile_last.mx_EventTile_emote").getByRole("status"),
+                ).toHaveAccessibleName("Your message was sent");
                 // Record alignment of expanded GELS, placeholder of deleted message, and emote
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-emote-irc-layout.png", {
                     // Exclude timestamp from snapshot of mx_MainSplit
@@ -772,7 +772,9 @@ test.describe("Timeline", () => {
 
             // Wait until the file is sent
             await expect(page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
-            await expect(page.locator(".mx_EventTile.mx_EventTile_last .mx_EventTile_receiptSent")).toBeVisible();
+            await expect(page.locator(".mx_EventTile.mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+                "Your message was sent",
+            );
 
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
@@ -1151,7 +1153,9 @@ test.describe("Timeline", () => {
             // Assert that 'reply2' was sent
             await expect(page.locator(".mx_RoomView_body .mx_EventTile_last").getByText(reply2)).toBeVisible();
 
-            await expect(page.locator(".mx_EventTile_last .mx_EventTile_receiptSent")).toBeVisible();
+            await expect(page.locator(".mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+                "Your message was sent",
+            );
 
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
@@ -1301,7 +1305,7 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
                 const lastEventTileIrc = page.locator(".mx_EventTile_last[data-layout='irc']");
                 await expect(lastEventTileIrc.locator(".mx_MTextBody").first()).toBeVisible();
-                await expect(lastEventTileIrc.locator(".mx_EventTile_receiptSent")).toBeVisible(); // rendered at the bottom of EventTile
+                await expect(lastEventTileIrc.getByRole("status")).toHaveAccessibleName("Your message was sent"); // rendered at the bottom of EventTile
                 // Take a snapshot in IRC layout
                 await expect(page.locator(".mx_ScrollPanel")).toMatchScreenshot(
                     "long-strings-with-reply-irc-layout.png",
@@ -1314,7 +1318,7 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
                 const lastEventTileGroup = page.locator(".mx_EventTile_last[data-layout='group']");
                 await expect(lastEventTileGroup.locator(".mx_MTextBody").first()).toBeVisible();
-                await expect(lastEventTileGroup.locator(".mx_EventTile_receiptSent")).toBeVisible();
+                await expect(lastEventTileGroup.getByRole("status")).toHaveAccessibleName("Your message was sent");
                 await expect(page.locator(".mx_ScrollPanel")).toMatchScreenshot(
                     "long-strings-with-reply-modern-layout.png",
                     screenshotOptions,
@@ -1326,7 +1330,7 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
                 const lastEventTileBubble = page.locator(".mx_EventTile_last[data-layout='bubble']");
                 await expect(lastEventTileBubble.locator(".mx_MTextBody").first()).toBeVisible();
-                await expect(lastEventTileBubble.locator(".mx_EventTile_receiptSent")).toBeVisible();
+                await expect(lastEventTileBubble.getByRole("status")).toHaveAccessibleName("Your message was sent");
                 await expect(page.locator(".mx_ScrollPanel")).toMatchScreenshot(
                     "long-strings-with-reply-bubble-layout.png",
                     screenshotOptions,

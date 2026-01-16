@@ -5,7 +5,7 @@ exports[`QuickSettingsButton should render the quick settings button in expanded
   <button
     aria-expanded="true"
     aria-label="Quick settings"
-    class="_icon-button_1pz9o_8 mx_QuickSettingsButton expanded"
+    class="_icon-button_1215g_8 mx_QuickSettingsButton expanded"
     data-kind="primary"
     role="button"
     style="--cpd-icon-button-size: 32px;"

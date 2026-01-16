@@ -829,7 +829,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               >
                 <label>
                   <div
-                    class="mx_ImageSizePanel_size mx_ImageSizePanel_sizeDefault"
+                    class="mx_ImageSizePanel_size"
                   />
                   <label
                     class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
@@ -855,7 +855,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                 </label>
                 <label>
                   <div
-                    class="mx_ImageSizePanel_size mx_ImageSizePanel_sizeLarge"
+                    class="mx_ImageSizePanel_size"
                   />
                   <label
                     class="mx_StyledRadioButton mx_StyledRadioButton_enabled"

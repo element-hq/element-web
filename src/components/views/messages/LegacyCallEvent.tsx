@@ -11,6 +11,7 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { Clock } from "@element-hq/web-shared-components";
+import { VolumeOffSolidIcon, VolumeOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -99,18 +100,14 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
     }
 
     private renderSilenceIcon(): JSX.Element {
-        const silenceClass = classNames({
-            mx_LegacyCallEvent_iconButton: true,
-            mx_LegacyCallEvent_unSilence: this.state.silenced,
-            mx_LegacyCallEvent_silence: !this.state.silenced,
-        });
-
         return (
             <AccessibleButton
-                className={silenceClass}
+                className="mx_LegacyCallEvent_iconButton"
                 onClick={this.props.callEventGrouper.toggleSilenced}
                 title={this.state.silenced ? _t("voip|unsilence") : _t("voip|silence")}
-            />
+            >
+                {this.state.silenced ? <VolumeOffSolidIcon /> : <VolumeOnSolidIcon />}
+            </AccessibleButton>
         );
     }
 

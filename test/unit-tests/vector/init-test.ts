@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jest-fixed-jsdom
  * @jest-environment-options {"url": "https://app.element.io/?loginToken=123&state=abc&code=xyz&no_universal_links&something_else=value"}
  */
 
@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { waitFor, screen } from "jest-matrix-react";
 
 import { loadApp, showError, showIncompatibleBrowser } from "../../../src/vector/init.tsx";

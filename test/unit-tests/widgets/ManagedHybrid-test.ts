@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../../src/widgets/ManagedHybrid";
 import { stubClient } from "../../test-utils";
@@ -63,7 +63,7 @@ describe("addManagedHybridWidget", () => {
         fetchMock.mockClear();
         await addManagedHybridWidget(room);
         expect(logSpy).toHaveBeenCalledWith("User not allowed to modify widgets in !room:server");
-        expect(fetchMock).toHaveBeenCalledTimes(0);
+        expect(fetchMock).toHaveFetchedTimes(0);
     });
 
     it("should noop if no widget_build_url", async () => {
@@ -71,7 +71,7 @@ describe("addManagedHybridWidget", () => {
 
         fetchMock.mockClear();
         await addManagedHybridWidget(room);
-        expect(fetchMock).toHaveBeenCalledTimes(0);
+        expect(fetchMock).toHaveFetchedTimes(0);
     });
 
     it("should add the widget successfully", async () => {
@@ -87,7 +87,7 @@ describe("addManagedHybridWidget", () => {
         });
 
         await addManagedHybridWidget(room);
-        expect(fetchMock).toHaveBeenCalledWith("https://widget-build-url?roomId=!room:server");
+        expect(fetchMock).toHaveFetched("https://widget-build-url?roomId=!room:server");
         expect(setRoomWidgetContentSpy).toHaveBeenCalledWith(room.client, room.roomId, "WIDGET_ID", {
             "key": "value",
             "io.element.managed_hybrid": true,

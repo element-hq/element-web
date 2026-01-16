@@ -7,7 +7,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -109,7 +109,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       </div>
       <button
         aria-label="Copy"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -169,7 +169,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -328,7 +328,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -509,7 +509,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -626,7 +626,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -728,7 +728,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       </div>
       <button
         aria-label="Copy"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 28px;"

@@ -1290,17 +1290,6 @@
         "not_found_title_name": "%(roomName)s ne ekzistas.",
         "peek_join_prompt": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
         "rejoin_button": "Re-aliĝi",
-        "status_bar": {
-            "delete_all": "Forigi ĉiujn",
-            "exceeded_resource_limit": "Via mesaĝo ne sendiĝis, ĉar tiu ĉi hejmservilo atingis rimedan limon. Bonvolu <a>kontakti vian administranton de servo</a> por plue uzadi la servon.",
-            "monthly_user_limit_reached": "Via mesaĝo ne sendiĝis, ĉar tiu ĉi hejmservilo atingis sian monatan limon de aktivaj uzantoj. Bonvolu <a>kontakti vian administranton de servo</a> por plue uzadi la servon.",
-            "requires_consent_agreement": "Vi ne povas sendi mesaĝojn ĝis vi tralegos kaj konsentos <consentLink>niajn uzokondiĉojn</consentLink>.",
-            "retry_all": "Reprovi ĉiujn",
-            "select_messages_to_retry": "Vi povas elekti ĉiujn aŭ unuopajn mesaĝojn, por reprovi aŭ forigi",
-            "server_connectivity_lost_description": "Senditaj mesaĝoj konserviĝos ĝis via konekto refunkcios.",
-            "server_connectivity_lost_title": "Konekto al la servilo perdiĝis.",
-            "some_messages_not_sent": "Kelkaj viaj mesaĝoj ne sendiĝis"
-        },
         "unread_notifications_predecessor": {
             "other": "Vi havas %(count)s nelegitajn sciigojn en antaŭa versio de ĉi tiu ĉambro.",
             "one": "Vi havas %(count)s nelegitan sciigon en antaŭa versio de ĉi tiu ĉambro."
@@ -1488,7 +1477,6 @@
             "error_join_rule_change_unknown": "Nekonata malsukceso",
             "guest_access_warning": "Personoj kun subtenataj klientoj povos aliĝi al la ĉambro sen registrita konto.",
             "history_visibility_invited": "Nur ĉambranoj (ekde la invito)",
-            "history_visibility_joined": "Nur ĉambranoj (ekde la aliĝo)",
             "history_visibility_legend": "Kiu povas legi la historion?",
             "history_visibility_shared": "Nur ĉambranoj (ekde ĉi tiu elekto)",
             "history_visibility_warning": "Ŝanĝoj al legebleco de historio nur efektiviĝos por osaj mesaĝoj de ĉi tiu ĉambro. La videbleco de jama historio ne ŝanĝiĝos.",

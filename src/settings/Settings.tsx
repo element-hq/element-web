@@ -1142,7 +1142,7 @@ export const SETTINGS: Settings = {
     "urlPreviewsEnabled_e2ee": {
         supportedLevels: [SettingLevel.ROOM_DEVICE],
         displayName: {
-            "room-account": _td("settings|inline_url_previews_room_account"),
+            "room-device": _td("settings|inline_url_previews_room_account"),
         },
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),

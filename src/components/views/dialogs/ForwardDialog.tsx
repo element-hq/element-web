@@ -23,6 +23,7 @@ import {
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -127,12 +128,12 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
         className = "mx_ForwardList_sending";
         disabled = true;
         title = _t("forward|sending");
-        icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
+        icon = <CircleIcon aria-label={title} />;
     } else if (sendState === SendState.Sent) {
         className = "mx_ForwardList_sent";
         disabled = true;
         title = _t("forward|sent");
-        icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
+        icon = <CheckCircleIcon aria-label={title} />;
     } else {
         className = "mx_ForwardList_sendFailed";
         disabled = true;

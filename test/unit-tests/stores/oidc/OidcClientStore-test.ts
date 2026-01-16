@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { mocked } from "jest-mock";
 import { OidcClient } from "oidc-client-ts";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -26,6 +26,7 @@ describe("OidcClientStore", () => {
     const clientId = "test-client-id";
     const authConfig = makeDelegatedAuthConfig();
     const account = authConfig.issuer + "account";
+    const accountManagementActionsSupported = ["action1", "action2"];
 
     const mockClient = getMockClientWithEventEmitter({
         getAuthMetadata: jest.fn(),
@@ -41,6 +42,7 @@ describe("OidcClientStore", () => {
             .mockResolvedValue({
                 ...authConfig,
                 account_management_uri: account,
+                account_management_actions_supported: accountManagementActionsSupported,
                 authorization_endpoint: "authorization-endpoint",
                 token_endpoint: "token-endpoint",
             });
@@ -130,6 +132,15 @@ describe("OidcClientStore", () => {
             expect(store.accountManagementEndpoint).toEqual(account);
         });
 
+        it("should set account management actions supported when configured", async () => {
+            const store = new OidcClientStore(mockClient);
+
+            // @ts-ignore private property
+            await store.getOidcClient();
+
+            expect(store.accountManagementActionsSupported).toEqual(accountManagementActionsSupported);
+        });
+
         it("should set account management endpoint to issuer when not configured", async () => {
             mocked(discoverAndValidateOIDCIssuerWellKnown)
                 .mockClear()
@@ -177,13 +188,14 @@ describe("OidcClientStore", () => {
             // spy and call through
             jest.spyOn(OidcClient.prototype, "revokeToken").mockClear();
 
-            fetchMock.resetHistory();
+            fetchMock.clearHistory();
+            fetchMock.removeRoute("revocation-endpoint");
             fetchMock.post(
                 authConfig.revocation_endpoint,
                 {
                     status: 200,
                 },
-                { sendAsJson: true },
+                { name: "revocation-endpoint" },
             );
         });
 
@@ -208,21 +220,14 @@ describe("OidcClientStore", () => {
 
         it("should still attempt to revoke refresh token when access token revocation fails", async () => {
             // fail once, then succeed
+            fetchMock.removeRoute("revocation-endpoint");
             fetchMock
-                .postOnce(
-                    authConfig.revocation_endpoint,
-                    {
-                        status: 404,
-                    },
-                    { overwriteRoutes: true, sendAsJson: true },
-                )
-                .post(
-                    authConfig.revocation_endpoint,
-                    {
-                        status: 200,
-                    },
-                    { sendAsJson: true },
-                );
+                .postOnce(authConfig.revocation_endpoint, {
+                    status: 404,
+                })
+                .post(authConfig.revocation_endpoint, {
+                    status: 200,
+                });
 
             const store = new OidcClientStore(mockClient);
 
@@ -244,10 +249,12 @@ describe("OidcClientStore", () => {
             mockClient.getAuthMetadata.mockResolvedValue({
                 ...authConfig,
                 account_management_uri: account,
+                account_management_actions_supported: accountManagementActionsSupported,
             });
             const store = new OidcClientStore(mockClient);
             await store.readyPromise;
             expect(store.accountManagementEndpoint).toBe(account);
+            expect(store.accountManagementActionsSupported).toEqual(accountManagementActionsSupported);
         });
     });
 });
