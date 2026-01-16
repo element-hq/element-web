@@ -19,8 +19,8 @@ import { BaseRecencySorter } from "./BaseRecencySorter";
  * Invites -> Calls (new and ongoing) -> Mentions (@) -> Count ([1])/ Marked as unread -> Activity (dot) -> None -> Low Priority -> Mute
  */
 export class UnreadSorter extends BaseRecencySorter implements Sorter {
-    public get type(): SortingAlgorithm.Recency {
-        return SortingAlgorithm.Recency;
+    public get type(): SortingAlgorithm.Unread {
+        return SortingAlgorithm.Unread;
     }
 
     protected getScore(room: Room): number {
