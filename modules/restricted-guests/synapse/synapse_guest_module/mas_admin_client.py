@@ -5,7 +5,7 @@
 
 import base64
 import logging
-from typing import Any, Dict
+from typing import Any, Awaitable, Dict, Optional
 
 from synapse.module_api import ModuleApi
 

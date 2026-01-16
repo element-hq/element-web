@@ -121,3 +121,46 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
                 ),
             ]
         )
+
+    async def test_deactivate_expired_mas_users_success(self) -> None:
+        module, module_api, store = create_module(
+            {
+                "mas": {
+                    "admin_api_base_url": "https://mas.example.org",
+                    "oauth_base_url": "https://oauth.mas.example.org",
+                    "client_id": "client-id",
+                    "client_secret": "client-secret",
+                },
+            }
+        )
+
+        now = int(time.time())
+        store.conn.executemany(
+            "INSERT INTO guest_module_mas_users VALUES (?, ?)",
+            [
+                ["mas-old-1", 0],
+                ["mas-active", now],
+            ],
+        )
+
+        # These two methods are `AsyncMock`s, so no need to use `make_awaitable`.`
+        token_response = {"access_token": "mas_admin_token"}
+        module_api.http_client.post_urlencoded_get_json.return_value = token_response
+        module_api.http_client.post_json_get_json.return_value = {}
+
+        await module.reaper.deactivate_expired_guest_users()
+
+        deactivate_call = call(
+            uri="https://mas.example.org/api/admin/v1/users/mas-old-1/deactivate",
+            post_json={"skip_erase": True},
+            headers={"Authorization": ["Bearer mas_admin_token"]},
+        )
+        self.assertIn(
+            deactivate_call,
+            module_api.http_client.post_json_get_json.await_args_list,
+        )
+
+        remaining_users = store.conn.execute(
+            "SELECT mas_user_id FROM guest_module_mas_users"
+        ).fetchall()
+        self.assertEqual(remaining_users, [("mas-active",)])

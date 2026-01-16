@@ -12,7 +12,7 @@ from synapse.module_api import ProfileInfo, UserProfile
 from synapse.module_api.errors import ConfigError
 from synapse.types import UserID
 
-from synapse_guest_module.config import GuestModuleConfig
+from synapse_guest_module.config import GuestModuleConfig, MasConfig
 from synapse_guest_module.guest_module import GuestModule
 from tests import create_module
 
@@ -28,10 +28,11 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
                 display_name_suffix=" (Guest)",
                 enable_user_reaper=True,
                 user_expiration_seconds=24 * 60 * 60,
+                mas=None,
             ),
         )
 
-    async def test_parse_config_custom(self) -> None:
+    async def test_parse_config_no_mas(self) -> None:
         config = GuestModule.parse_config(
             {
                 "user_id_prefix": "tmp-",
@@ -48,6 +49,35 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
                 display_name_suffix=" (Temporary)",
                 enable_user_reaper=False,
                 user_expiration_seconds=100,
+                mas=None,
+            ),
+        )
+
+    async def test_parse_config_mas(self) -> None:
+        config = GuestModule.parse_config(
+            {
+                "mas": {
+                    "admin_api_base_url": "https://mas.example.org",
+                    "client_id": "client-id",
+                    "client_secret": "client-secret",
+                },
+            }
+        )
+
+        self.assertEqual(
+            config,
+            GuestModuleConfig(
+                user_id_prefix="guest-",
+                display_name_suffix=" (Guest)",
+                enable_user_reaper=True,
+                user_expiration_seconds=24 * 60 * 60,
+                mas=MasConfig(
+                    admin_api_base_url="https://mas.example.org",
+                    oauth_base_url="https://mas.example.org",
+                    client_id="client-id",
+                    client_secret="client-secret",
+                    client_secret_filepath=None,
+                ),
             ),
         )
 
