@@ -1,20 +1,25 @@
 # @element-hq/web-shared-components
 
-Shared React components library for Element Web, Aurora, Element modules... This package provides opinionated UI components built on top of the [Compound Design System](https://compound.element.io) and [Compound Web](https://github.com/element-hq/compound-web). This is not a design system by itself, but rather a set of big chunks of components.
+Shared React components library for Element Web, Aurora, Element
+modules... This package provides opinionated UI components built on top of the
+[Compound Design System](https://compound.element.io) and [Compound
+Web](https://github.com/element-hq/compound-web). This is not a design system
+by itself, but rather a set of larger components.
 
-## Installation
+## Installation in a new project
+
+When adding this library to a new project, as well as installing
+`@element-hq/web-shared-components` as normal, you will also need to add
+[compound-web](https://github.com/element-hq/compound-web) as a peer
+dependency:
 
 ```bash
 yarn add @element-hq/web-shared-components
-```
-
-### Peer Dependencies
-
-This package requires compound web to be added as a peer dependency:
-
-```bash
 yarn add @vector-im/compound-web
 ```
+
+(This avoids problems where we end up with different versions of compound-web in the
+top-level project and web-shared-components).
 
 ## Usage
 
@@ -35,13 +40,13 @@ or in CSS file:
 
 ### Using Components
 
-There is two kinds of components in this library:
+There are two kinds of components in this library:
 
 - _regular_ react component which doesn't follow specific pattern.
 - _view_ component(MVVM pattern).
 
 > [!TIP]
-> Theses components are available in the project storybook.
+> These components are available in the project storybook.
 
 #### Regular Components
 
@@ -56,7 +61,8 @@ function MyApp() {
 
 #### View (MVVM) Components
 
-These components follow the [MVVM pattern](../../docs/MVVM.md). A ViewModel instance should be provided as a prop.
+These components follow the [MVVM pattern](../../docs/MVVM.md). A ViewModel
+instance should be provided as a prop.
 
 Here's a basic example:
 
@@ -111,7 +117,9 @@ yarn storybook
 
 ### Write components
 
-Most the components should be written as [MVVM pattern](../../docs/MVVM.md) view components. See existing components for examples. The exception are low level components that don't need a view model.
+Most components should be written as [MVVM pattern](../../docs/MVVM.md) view
+components. See existing components for examples. The exceptions are low level
+components that don't need a view model.
 
 ### Tests
 
@@ -119,7 +127,8 @@ Two types of tests are available: unit tests and visual regression tests.
 
 ### Unit Tests
 
-These tests cover the logic of the components and utilities. Built with Jest and React Testing Library.
+These tests cover the logic of the components and utilities. Built with Jest
+and React Testing Library.
 
 ```bash
 yarn test
@@ -127,7 +136,8 @@ yarn test
 
 ### Visual Regression Tests
 
-These tests ensure the UI components render correctly. They need Storybook to be running and they will run in docker using [Playwright](../../playwright.md).
+These tests ensure the UI components render correctly. They need Storybook to
+be running and they will run in docker using [Playwright](../../playwright.md).
 
 First run storybook:
 
@@ -141,7 +151,9 @@ Then, in another terminal, run:
 yarn test:storybook:update
 ```
 
-Each story will be rendered and a screenshot will be taken and compared to the existing baseline. If there are visual changes or AXE violation, the test will fail.
+Each story will be rendered and a screenshot will be taken and compared to the
+existing baseline. If there are visual changes or AXE violation, the test will
+fail.
 
 ### Translations
 
