@@ -1975,7 +1975,6 @@
         "dm_invite_title": "Deseja conversar com %(user)s?",
         "drop_file_prompt": "Arraste um arquivo aqui para enviar",
         "edit_topic": "Editar tópico",
-        "error_3pid_invite_email_lookup": "Não foi possível encontrar o usuário por e-mail",
         "error_cancel_knock_title": "Falha ao cancelar",
         "error_join_403": "Você precisa de um convite para acessar esta sala.",
         "error_join_404_1": "Você tentou entrar usando um ID de sala sem fornecer uma lista de servidores pelos quais ingressar. Os IDs das salas são identificadores internos e não podem ser usados para entrar em uma sala sem informações adicionais.",

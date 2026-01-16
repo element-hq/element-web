@@ -1994,7 +1994,6 @@
         "dm_invite_title": "Möchtest du mit %(user)s schreiben?",
         "drop_file_prompt": "Datei hier loslassen zum hochladen",
         "edit_topic": "Thema bearbeiten",
-        "error_3pid_invite_email_lookup": "Kann Benutzer nicht via E-Mail-Adresse finden",
         "error_cancel_knock_title": "Abbrechen gescheitert",
         "error_join_403": "Du kannst diesem Chat nur auf Einladung beitreten.",
         "error_join_404_1": "Du hast versucht einen Chat via Chat-ID, aber ohne Angabe von Servern zu betreten. Chat-IDs sind interne Kennungen und können nicht ohne weitere Informationen zum Beitritt von Chats genutzt werden.",

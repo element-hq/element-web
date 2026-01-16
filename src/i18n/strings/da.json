@@ -1706,7 +1706,6 @@
         "dm_invite_title": "Vil du chatte med %(user)s?",
         "drop_file_prompt": "Slip filen her for at uploade",
         "edit_topic": "Redigér emne",
-        "error_3pid_invite_email_lookup": "Kan ikke finde brugeren via e-mail",
         "error_cancel_knock_title": "Kunne ikke annullere",
         "error_join_403": "Du skal bruge en invitation for at få adgang til dette rum.",
         "error_join_404_1": "Du forsøgte at deltage ved hjælp af et rum-ID uden at angive en liste over servere at deltage igennem. Rum-ID'er er interne identifikatorer og kan ikke bruges til at deltage i et rum uden yderligere oplysninger.",

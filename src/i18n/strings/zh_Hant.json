@@ -1672,7 +1672,6 @@
         "dm_invite_title": "您想要與 %(user)s 聊天嗎？",
         "drop_file_prompt": "把文件放在這裡上傳",
         "edit_topic": "編輯主題",
-        "error_3pid_invite_email_lookup": "無法透過電子郵件找到使用者",
         "error_cancel_knock_title": "取消失敗",
         "error_join_403": "您需要邀請才能存取此聊天室。",
         "error_join_404_1": "您嘗試使用聊天室 ID 加入，但未提供要加入的伺服器清單。聊天室 ID 是內部識別字串，不能用於在沒有附加資訊的情況下加入聊天室。",

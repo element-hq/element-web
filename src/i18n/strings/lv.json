@@ -1623,7 +1623,6 @@
         "dm_invite_title": "Vai vēlaties sarakstīties ar %(user)s?",
         "drop_file_prompt": "Ievilkt datni šeit, lai augšupielādētu",
         "edit_topic": "Rediģēt tematu",
-        "error_3pid_invite_email_lookup": "Nevar atrast lietotāju pēc e-pasta adreses",
         "error_cancel_knock_title": "Neizdevās atcelt",
         "error_join_403": "Jums ir nepieciešams uzaicinājums, lai piekļūtu šai istabai.",
         "error_join_404_1": "Jūs mēģinājāt pievienoties, izmantojot istabas ID, nesniedzot serveru sarakstu, caur kuriem pievienoties. Istabu ID ir iekšējie identifikatori, un tos nevar izmantot, lai pievienotos istabai bez papildu informācijas.",
