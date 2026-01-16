@@ -106,6 +106,12 @@ class GuestUserReaper:
                     logger.error('Failed to delete user "%s": %s', user_id, e)
 
     async def _deactivate_expired_mas_users(self) -> None:
+        """Deactivate all MAS users that are older than the specified expiration
+        interval. This uses the MAS admin API to disable the user.
+        """
+
+        assert self._mas_admin_client is not None
+
         if self._mas_tables_ready is not None:
             await self._mas_tables_ready.wait()
 

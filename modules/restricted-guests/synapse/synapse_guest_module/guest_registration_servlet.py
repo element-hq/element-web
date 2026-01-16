@@ -87,9 +87,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                     localpart, displayname + self._config.display_name_suffix
                 )
 
-                device_id, access_token, _, _ = await self._api.register_device(
-                    user_id
-                )
+                device_id, access_token, _, _ = await self._api.register_device(user_id)
             else:
                 logger.info("Registering MAS guest user with username '%s'", localpart)
                 mas_user_id = await self._mas_admin_client.create_user(localpart)
@@ -112,10 +110,11 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                     if self._config.enable_user_reaper
                     else 0
                 )
-                device_id, access_token = (
-                    await self._mas_admin_client.create_personal_session(
-                        mas_user_id, expires_in
-                    )
+                (
+                    device_id,
+                    access_token,
+                ) = await self._mas_admin_client.create_personal_session(
+                    mas_user_id, expires_in
                 )
 
             logger.debug("Registered user '%s'", user_id)
@@ -145,6 +144,4 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                 },
             )
 
-        await self._api.run_db_interaction(
-            "guest_module_store_mas_user", store_user
-        )
+        await self._api.run_db_interaction("guest_module_store_mas_user", store_user)

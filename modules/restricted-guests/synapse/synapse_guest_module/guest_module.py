@@ -24,9 +24,9 @@ from synapse.module_api.errors import ConfigError
 from synapse.types import UserID
 
 from synapse_guest_module.config import GuestModuleConfig, MasConfig
-from synapse_guest_module.mas_admin_client import MasAdminClient
 from synapse_guest_module.guest_registration_servlet import GuestRegistrationServlet
 from synapse_guest_module.guest_user_reaper import GuestUserReaper
+from synapse_guest_module.mas_admin_client import MasAdminClient
 
 logger = logging.getLogger("synapse.contrib." + __name__)
 
@@ -106,22 +106,30 @@ class GuestModule:
                 raise ConfigError("Config option 'mas' must be an object")
 
             admin_api_base_url = mas_config.get("admin_api_base_url")
-            if not isinstance(admin_api_base_url, str) or len(admin_api_base_url.strip()) == 0:
-                raise ConfigError("Config option 'mas.admin_api_base_url' is required and must be a string")
+            if (
+                not isinstance(admin_api_base_url, str)
+                or len(admin_api_base_url.strip()) == 0
+            ):
+                raise ConfigError(
+                    "Config option 'mas.admin_api_base_url' is required and must be a string"
+                )
 
             oauth_base_url = mas_config.get("oauth_base_url", admin_api_base_url)
             if not isinstance(oauth_base_url, str) or len(oauth_base_url.strip()) == 0:
-                raise ConfigError(
-                    "Config option 'mas.oauth_base_url' must be a string"
-                )
+                raise ConfigError("Config option 'mas.oauth_base_url' must be a string")
 
             client_id = mas_config.get("client_id")
             if not isinstance(client_id, str) or len(client_id.strip()) == 0:
-                raise ConfigError("Config option 'mas.client_id' is required and must be a string")
+                raise ConfigError(
+                    "Config option 'mas.client_id' is required and must be a string"
+                )
 
             client_secret = mas_config.get("client_secret")
             if client_secret is not None:
-                if not isinstance(client_secret, str) or len(client_secret.strip()) == 0:
+                if (
+                    not isinstance(client_secret, str)
+                    or len(client_secret.strip()) == 0
+                ):
                     raise ConfigError(
                         "Config option 'mas.client_secret' must be a string"
                     )
@@ -129,7 +137,10 @@ class GuestModule:
 
             client_secret_filepath = mas_config.get("client_secret_filepath")
             if client_secret_filepath is not None:
-                if not isinstance(client_secret_filepath, str) or len(client_secret_filepath.strip()) == 0:
+                if (
+                    not isinstance(client_secret_filepath, str)
+                    or len(client_secret_filepath.strip()) == 0
+                ):
                     raise ConfigError(
                         "Config option 'mas.client_secret_filepath' must be a string"
                     )
@@ -139,7 +150,7 @@ class GuestModule:
                 raise ConfigError(
                     "Config option 'mas.client_secret' or 'mas.client_secret_filepath' is required"
                 )
-            
+
             if client_secret is not None and client_secret_filepath is not None:
                 raise ConfigError(
                     "Config option 'mas.client_secret' and 'mas.client_secret_filepath' are mutually exclusive"

@@ -47,11 +47,11 @@ options in order to give the module access to [MAS' Admin
 API](https://element-hq.github.io/matrix-authentication-service/topics/admin-api.html).
 
 - `mas` - optional configuration for Matrix Authentication Service (MAS). When set, the module creates users via MAS' admin API.
-  - `admin_api_base_url` - Base URL for MAS' admin API (e.g. `https://mas.example.org`). Trailing slashes will be automatically stripped.
-  - `oauth_base_url` - Base URL for MAS' OAuth endpoints (defaults to `admin_api_base_url` if not set). Trailing slashes will be automatically stripped.
-  - `client_id` - client ID for the automated tool. Must be a valid [ULID](https://github.com/ulid/spec). Generate one [here](https://ulidtools.com/).
-  - `client_secret` - client secret for the automated tool. Ideally long and cryptographically secure. Keep it a secret!
-  - `client_secret_filepath` - path to a plaintext file containing the client secret. If set, this is used instead of `client_secret`.
+    - `admin_api_base_url` - Base URL for MAS' admin API (e.g. `https://mas.example.org`). Trailing slashes will be automatically stripped.
+    - `oauth_base_url` - Base URL for MAS' OAuth endpoints (defaults to `admin_api_base_url` if not set). Trailing slashes will be automatically stripped.
+    - `client_id` - client ID for the automated tool. Must be a valid [ULID](https://github.com/ulid/spec). Generate one [here](https://ulidtools.com/).
+    - `client_secret` - client secret for the automated tool. Ideally long and cryptographically secure. Keep it a secret!
+    - `client_secret_filepath` - path to a plaintext file containing the client secret. If set, this is used instead of `client_secret`.
 
 Example configuration:
 
@@ -81,19 +81,19 @@ Then, add the following to your MAS config file:
 
 ```yaml
 policy:
-  data:
-    admin_clients:
-      - 000000000000000000000G0EST
+    data:
+        admin_clients:
+            - 000000000000000000000G0EST
 
 # ...
 
 clients:
-  # The `client_id` must be a valid ULID https://github.com/ulid/spec
-  # Generate ULID's easily at: https://ulidtools.com/
-  - client_id: 000000000000000000000G0EST
-    # The guest module uses the client_secret_basic authentication method.
-    client_auth_method: client_secret_basic
-    client_secret: your-client-secret
+    # The `client_id` must be a valid ULID https://github.com/ulid/spec
+    # Generate ULID's easily at: https://ulidtools.com/
+    - client_id: 000000000000000000000G0EST
+      # The guest module uses the client_secret_basic authentication method.
+      client_auth_method: client_secret_basic
+      client_secret: your-client-secret
 ```
 
 ## Production installation

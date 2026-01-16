@@ -25,10 +25,10 @@ class MasAdminClient:
 
     async def create_user(self, username: str) -> str:
         """Creates a new user in MAS with the given username.
-        
+
         Args:
             username: The username (localpart) of the user to create.
-        
+
         Returns:
             The MAS ID of the created user.
         """
@@ -40,8 +40,8 @@ class MasAdminClient:
             post_json={"username": username},
             headers={"Authorization": [f"Bearer {token}"]},
         )
-        
-        mas_user_id = response.get("data", {}).get("id")
+
+        mas_user_id: str = response.get("data", {}).get("id")
         if mas_user_id is None or not isinstance(mas_user_id, str):
             raise ValueError("MAS user creation response missing `data.id` field")
 
@@ -109,7 +109,7 @@ class MasAdminClient:
         if not isinstance(access_token, str) or len(access_token) == 0:
             raise ValueError("MAS token response missing access_token")
         return access_token
-    
+
     def _load_client_secret(self) -> str:
         """Source the MAS client secret from either configuration or a file."""
         if self._config.client_secret_filepath is not None:
@@ -141,13 +141,13 @@ class MasAdminClient:
         self, url: str, data: Dict[str, str], headers: Dict[str, Any]
     ) -> Any:
         http_client = self._api.http_client
-        post_urlencoded = getattr(http_client, "post_urlencoded_get_json", None)
-        if callable(post_urlencoded):
+        post_urlencoded: Optional[Awaitable[Any]] = getattr(
+            http_client, "post_urlencoded_get_json", None
+        )
+        if post_urlencoded is not None and callable(post_urlencoded):
             return await post_urlencoded(url, data, headers=headers)
 
-        logger.debug(
-            "MAS client falling back to post_json_get_json for %s", url
-        )
+        logger.debug("MAS client falling back to post_json_get_json for %s", url)
         return await http_client.post_json_get_json(
             uri=url, post_json=data, headers=headers
         )
