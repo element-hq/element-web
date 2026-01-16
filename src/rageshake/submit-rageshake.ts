@@ -423,7 +423,7 @@ export async function submitFeedback(
 ): Promise<void> {
     const bugReportEndpointUrl = SdkConfig.get().bug_report_endpoint_url;
     if (!bugReportEndpointUrl || bugReportEndpointUrl === "local") {
-        throw Error("Bug report URL is not set or local");
+        throw new Error("Bug report URL is not set or local");
     }
     let version: string | undefined;
     try {
