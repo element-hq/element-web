@@ -343,12 +343,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                     open={tooltipOpen}
                     onOpenChange={this.onTooltipOpenChange}
                 >
-                    <>
-                        {fieldInput}
-                        {inputDecoration}
-                    </>
+                    {fieldInput}
                 </Tooltip>
                 <label htmlFor={this.id}>{this.props.label}</label>
+                {inputDecoration}
                 {postfixContainer}
             </div>
         );
