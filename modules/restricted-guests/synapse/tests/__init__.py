@@ -9,8 +9,8 @@
 
 import sqlite3
 from asyncio import Future
-from typing import Any, Awaitable, Callable, Dict, Tuple, TypeVar
-from unittest.mock import Mock
+from typing import Any, Awaitable, Callable, Dict, List, Tuple, TypeVar
+from unittest.mock import AsyncMock, Mock
 
 from synapse.http.client import SimpleHttpClient
 from synapse.module_api import ModuleApi
@@ -81,6 +81,20 @@ def make_awaitable(result: TV) -> Awaitable[TV]:
     return future
 
 
+def set_async_return_value(target: Any, value: Any) -> None:
+    if isinstance(target, AsyncMock):
+        target.return_value = value
+    else:
+        target.return_value = make_awaitable(value)
+
+
+def set_async_side_effect(target: Any, values: List[Any]) -> None:
+    if isinstance(target, AsyncMock):
+        target.side_effect = values
+    else:
+        target.side_effect = [make_awaitable(value) for value in values]
+
+
 def get_qualified_user_id(username: str) -> str:
     return f"@{username}:matrix.local"
 
@@ -127,6 +141,17 @@ def create_module(
         module._mas_tables_ready.set()  # type: ignore[union-attr]
 
     return module, module_api, store
+
+
+def mas_config_override() -> Dict[str, Any]:
+    return {
+        "mas": {
+            "admin_api_base_url": "https://mas.example.org",
+            "oauth_base_url": "https://oauth.mas.example.org",
+            "client_id": "client-id",
+            "client_secret": "client-secret",
+        },
+    }
 
 
 def _setup_db(conn: sqlite3.Connection) -> None:

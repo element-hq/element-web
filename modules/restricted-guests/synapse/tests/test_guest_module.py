@@ -7,17 +7,20 @@
 # Originally licensed under the Apache License, Version 2.0:
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
+from typing import Tuple
+from unittest.mock import Mock
 import aiounittest
+from parameterized import parameterized_class  # type: ignore[import-untyped]
 from synapse.module_api import ProfileInfo, UserProfile
 from synapse.module_api.errors import ConfigError
 from synapse.types import UserID
 
 from synapse_guest_module.config import GuestModuleConfig, MasConfig
 from synapse_guest_module.guest_module import GuestModule
-from tests import create_module
+from tests import SQLiteStore, create_module, mas_config_override
 
 
-class GuestModuleTest(aiounittest.AsyncTestCase):
+class GuestModuleConfigTest(aiounittest.AsyncTestCase):
     async def test_parse_config_empty(self) -> None:
         config = GuestModule.parse_config({})
 
@@ -121,8 +124,20 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
                 }
             )
 
+
+@parameterized_class(
+    ("variant", "config_override"),
+    [
+        ("synapse", None),
+        ("mas", mas_config_override()),
+    ],
+)
+class GuestModuleRuntimeTest(aiounittest.AsyncTestCase):
+    def create_module(self) -> Tuple[GuestModule, Mock, SQLiteStore]:
+        return create_module(self.config_override)
+
     async def test_profile_update_no_guest(self) -> None:
-        module, module_api, _ = create_module()
+        module, module_api, _ = self.create_module()
 
         await module.profile_update(
             "@my-user:matrix.local",
@@ -134,7 +149,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         module_api.set_displayname.assert_not_called()
 
     async def test_profile_update_guest_keep(self) -> None:
-        module, module_api, _ = create_module()
+        module, module_api, _ = self.create_module()
 
         await module.profile_update(
             "@guest-asdf:matrix.local",
@@ -146,7 +161,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         module_api.set_displayname.assert_not_called()
 
     async def test_profile_update_guest_add_and_trim(self) -> None:
-        module, module_api, _ = create_module()
+        module, module_api, _ = self.create_module()
 
         await module.profile_update(
             "@guest-asdf:matrix.local",
@@ -161,7 +176,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         )
 
     async def test_callback_user_may_create_room_no_guest(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         allow = await module.callback_user_may_create_room(
             "@my-user:matrix.local",
@@ -170,7 +185,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         self.assertTrue(allow)
 
     async def test_callback_user_may_create_room_guest(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         allow = await module.callback_user_may_create_room(
             "@guest-asdf:matrix.local",
@@ -179,7 +194,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         self.assertFalse(allow)
 
     async def test_callback_user_may_invite_no_guest(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         allow = await module.callback_user_may_invite(
             "@my-user:matrix.local",
@@ -190,7 +205,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         self.assertTrue(allow)
 
     async def test_callback_user_may_invite_guest(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         allow = await module.callback_user_may_invite(
             "@guest-asdf:matrix.local",
@@ -201,7 +216,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         self.assertFalse(allow)
 
     async def test_callback_check_username_for_spam_no_guest(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         allow = await module.callback_check_username_for_spam(
             UserProfile(
@@ -214,7 +229,7 @@ class GuestModuleTest(aiounittest.AsyncTestCase):
         self.assertFalse(allow)
 
     async def test_callback_check_username_for_spam_guest(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         allow = await module.callback_check_username_for_spam(
             UserProfile(
