@@ -515,7 +515,7 @@ describe("Rageshakes", () => {
         }
     });
 
-    it.only("should collect logs for downloadBugReport", async () => {
+    it("should collect logs for downloadBugReport", async () => {
         const mockConsoleLogger = {
             flush: jest.fn(),
             consume: jest.fn(),
