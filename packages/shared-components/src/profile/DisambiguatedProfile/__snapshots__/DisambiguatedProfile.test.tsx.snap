@@ -3,11 +3,11 @@
 exports[`DisambiguatedProfileView renders the default state 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
     data-testid="disambiguated-profile"
   >
     <span
-      class="displayName"
+      class=""
       dir="auto"
     >
       Alice
@@ -19,18 +19,18 @@ exports[`DisambiguatedProfileView renders the default state 1`] = `
 exports[`DisambiguatedProfileView renders the full example 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
     data-testid="disambiguated-profile"
     title="Eve (@eve:matrix.org)"
   >
     <span
-      class="displayName mx_Username_color3 emphasize"
+      class="mx_Username_color3 mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Eve
     </span>
     <span
-      class="mxid"
+      class="mx_DisambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
       data-testid="disambiguated-profile-mxid"
     >
       @eve:matrix.org
@@ -42,17 +42,17 @@ exports[`DisambiguatedProfileView renders the full example 1`] = `
 exports[`DisambiguatedProfileView renders with MXID for disambiguation 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
     data-testid="disambiguated-profile"
   >
     <span
-      class="displayName"
+      class=""
       dir="auto"
     >
       Alice
     </span>
     <span
-      class="mxid"
+      class="mx_DisambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
       data-testid="disambiguated-profile-mxid"
     >
       @alice:example.org
@@ -64,11 +64,11 @@ exports[`DisambiguatedProfileView renders with MXID for disambiguation 1`] = `
 exports[`DisambiguatedProfileView renders with color class 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
     data-testid="disambiguated-profile"
   >
     <span
-      class="displayName mx_Username_color1"
+      class="mx_Username_color1"
       dir="auto"
     >
       Bob
@@ -80,11 +80,11 @@ exports[`DisambiguatedProfileView renders with color class 1`] = `
 exports[`DisambiguatedProfileView renders with emphasized display name 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
     data-testid="disambiguated-profile"
   >
     <span
-      class="displayName emphasize"
+      class="mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Charlie
@@ -96,18 +96,18 @@ exports[`DisambiguatedProfileView renders with emphasized display name 1`] = `
 exports[`DisambiguatedProfileView renders with tooltip 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
     data-testid="disambiguated-profile"
     title="Diana (@diana:example.org)"
   >
     <span
-      class="displayName"
+      class=""
       dir="auto"
     >
       Diana
     </span>
     <span
-      class="mxid"
+      class="mx_DisambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
       data-testid="disambiguated-profile-mxid"
     >
       @diana:example.org

@@ -7,7 +7,6 @@
 
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
-import classNames from "classnames";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import {
@@ -50,7 +49,7 @@ WithMxid.args = {
 export const WithColorClass = Template.bind({});
 WithColorClass.args = {
     displayName: "Bob",
-    colorClass: classNames("mx_Username_color1"),
+    colorClass: "mx_Username_color1"
 };
 
 export const Emphasized = Template.bind({});
@@ -70,7 +69,7 @@ export const FullExample = Template.bind({});
 FullExample.args = {
     displayName: "Eve",
     mxid: "@eve:matrix.org",
-    colorClass: classNames("mx_Username_color3"),
+    colorClass: "mx_Username_color3",
     emphasizeDisplayName: true,
     title: "Eve (@eve:matrix.org)",
 };

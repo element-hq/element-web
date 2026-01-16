@@ -5,30 +5,21 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.disambiguatedProfile {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cpd-space-1x);
-    max-width: 100%;
-    overflow: hidden;
-}
-
-.displayName {
+.mx_DisambiguatedProfile {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
 }
 
-.emphasize {
-    font-weight: var(--cpd-font-weight-semibold);
+.mx_DisambiguatedProfile_displayName {
+    font: var(--cpd-font-body-md-semibold);
+    margin-inline-end: 0;
+    line-height: 1;
 }
 
-.mxid {
+.mx_DisambiguatedProfile_mxid {
     color: var(--cpd-color-text-secondary);
     font-size: var(--cpd-font-size-body-sm);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex-shrink: 1;
+    margin-inline-start: 5px;
 }
-

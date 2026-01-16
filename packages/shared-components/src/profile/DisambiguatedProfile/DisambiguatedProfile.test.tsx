@@ -137,6 +137,6 @@ describe("DisambiguatedProfileView", () => {
 
         render(<DisambiguatedProfileView vm={vm} />);
         const displayNameElement = screen.getByText("Emphasized User");
-        expect(displayNameElement.className).toMatch(/emphasize/);
+        expect(displayNameElement).toHaveClass("mx_DisambiguatedProfile_displayName");
     });
 });

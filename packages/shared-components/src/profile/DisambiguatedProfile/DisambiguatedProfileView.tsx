@@ -12,23 +12,10 @@ import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
 import styles from "./DisambiguatedProfile.module.css";
 
-
-interface MemberInfo {
-    userId: string;
-    roomId: string;
-    rawDisplayName?: string;
-    disambiguate: boolean;
-}
-
 /**
  * The snapshot representing the current state of the DisambiguatedProfile.
  */
 export interface DisambiguatedProfileViewSnapshot {
-
-    /**
-     * Optional member information for disambiguation.
-     */
-    member?: MemberInfo | null;
     /**
      * The display name to show.
      */
@@ -51,7 +38,6 @@ export interface DisambiguatedProfileViewSnapshot {
      */
     title?: string;
 }
-
 
 /**
  * Actions that can be performed on the DisambiguatedProfile.
@@ -89,13 +75,14 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, emphasizeDisplayName, mxid, title } = useViewModel(vm);
 
-    const displayNameClasses = classNames(styles.displayName, colorClass, {
-        [styles.emphasize]: emphasizeDisplayName,
+    const displayNameClasses = classNames(colorClass, {
+        [styles.mx_DisambiguatedProfile_displayName]: emphasizeDisplayName,
+        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
 
     return (
         <div
-            className={styles.disambiguatedProfile}
+            className={classNames(styles.mx_DisambiguatedProfile, "mx_DisambiguatedProfile")}
             title={title}
             onClick={vm.onClick}
             data-testid="disambiguated-profile"
@@ -104,7 +91,10 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
                 {displayName}
             </span>
             {mxid && (
-                <span className={styles.mxid} data-testid="disambiguated-profile-mxid">
+                <span
+                    className={classNames(styles.mx_DisambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}
+                    data-testid="disambiguated-profile-mxid"
+                >
                     {mxid}
                 </span>
             )}
