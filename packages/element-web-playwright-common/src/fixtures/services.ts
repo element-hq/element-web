@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { test as base } from "@playwright/test";
 import { type MailpitClient } from "mailpit-api";
 import { Network, type StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
@@ -20,6 +19,9 @@ import {
     type StartedMailpitContainer,
 } from "../testcontainers/index.js";
 import { Logger } from "../utils/logger.js";
+// We want to avoid using `mergeTests` in index.ts because it drops useful type information about the fixtures. Instead,
+// we add `axe` into our fixture suite by using its `test` as a base, so that there is a linear hierarchy.
+import { test as base } from "./axe.js";
 
 /**
  * Test-scoped fixtures available in the test
