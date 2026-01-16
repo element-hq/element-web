@@ -13,7 +13,7 @@ exports[`<OptionMenuView /> should match snapshot 1`] = `
     data-state="closed"
     id="radix-_r_0_"
     role="button"
-    style="--cpd-icon-button-size: 32px;"
+    style="--cpd-icon-button-size: 28px; padding: 4px;"
     tabindex="0"
     type="button"
   >
@@ -22,7 +22,6 @@ exports[`<OptionMenuView /> should match snapshot 1`] = `
       style="--cpd-icon-button-size: 100%;"
     >
       <svg
-        color="var(--cpd-color-icon-secondary)"
         fill="currentColor"
         height="1em"
         viewBox="0 0 24 24"

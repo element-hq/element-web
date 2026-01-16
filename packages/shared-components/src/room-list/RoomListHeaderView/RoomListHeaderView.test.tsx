@@ -13,7 +13,7 @@ import * as stories from "./RoomListHeaderView.stories";
 
 const { Default, NoComposeMenu, NoSpaceMenu } = composeStories(stories);
 
-describe("RoomListSearchView", () => {
+describe("RoomListHeaderView", () => {
     it("renders the default state", () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();

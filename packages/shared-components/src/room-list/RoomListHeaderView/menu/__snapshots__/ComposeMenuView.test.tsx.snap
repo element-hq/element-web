@@ -7,12 +7,12 @@ exports[`<ComposeMenuView /> should match snapshot 1`] = `
     aria-expanded="false"
     aria-haspopup="menu"
     aria-labelledby="_r_2_"
-    class="_icon-button_1pz9o_8"
+    class="_icon-button_1215g_8"
     data-kind="primary"
     data-state="closed"
     id="radix-_r_0_"
     role="button"
-    style="--cpd-icon-button-size: 32px;"
+    style="--cpd-icon-button-size: 36px; padding: 6px;"
     tabindex="0"
     type="button"
   >
@@ -22,7 +22,6 @@ exports[`<ComposeMenuView /> should match snapshot 1`] = `
     >
       <svg
         aria-hidden="true"
-        color="var(--cpd-color-icon-secondary)"
         fill="currentColor"
         height="1em"
         viewBox="0 0 24 24"
