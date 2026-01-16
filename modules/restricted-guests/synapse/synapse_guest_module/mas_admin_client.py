@@ -18,9 +18,10 @@ class MasAdminClient:
     def __init__(self, api: ModuleApi, config: MasConfig):
         self._api = api
         self._config = config
-        # Strip trailing any slashes if present
+        # Strip any trailing slashes if present
         self._admin_api_base_url = config.admin_api_base_url.rstrip("/")
         self._oauth_base_url = config.oauth_base_url.rstrip("/")
+        self._client_secret = self._load_client_secret()
 
     async def create_user(self, username: str) -> str:
         """Creates a new user in MAS with the given username.
@@ -56,7 +57,7 @@ class MasAdminClient:
             "actor_user_id": mas_user_id,
             "expires_in": expires_in,
             "scope": "openid urn:matrix:client:api:*",
-            "human_name": "guest user",
+            "human_name": "guest session",
         }
 
         response = await self._api.http_client.post_json_get_json(
@@ -92,7 +93,7 @@ class MasAdminClient:
     async def request_admin_token(self) -> str:
         url = self._build_oauth_url("/oauth2/token")
         basic_auth = base64.b64encode(
-            f"{self._config.client_id}:{self._config.client_secret}".encode("utf-8")
+            f"{self._config.client_id}:{self._client_secret}".encode("utf-8")
         ).decode("ascii")
         headers = {
             "Authorization": [f"Basic {basic_auth}"],
@@ -108,6 +109,33 @@ class MasAdminClient:
         if not isinstance(access_token, str) or len(access_token) == 0:
             raise ValueError("MAS token response missing access_token")
         return access_token
+    
+    def _load_client_secret(self) -> str:
+        """Source the MAS client secret from either configuration or a file."""
+        if self._config.client_secret_filepath is not None:
+            try:
+                with open(
+                    self._config.client_secret_filepath, "r", encoding="utf-8"
+                ) as secret_file:
+                    client_secret = secret_file.read().strip()
+            except Exception as err:
+                raise ValueError(
+                    f"Failed to read MAS client secret file: {err}"
+                ) from err
+
+            if len(client_secret) == 0:
+                raise ValueError("MAS client secret file is empty")
+
+            return client_secret
+
+        if self._config.client_secret is None:
+            raise ValueError("MAS client secret is not configured")
+
+        client_secret = self._config.client_secret.strip()
+        if len(client_secret) == 0:
+            raise ValueError("MAS client secret is empty")
+
+        return client_secret
 
     async def _post_urlencoded_get_json(
         self, url: str, data: Dict[str, str], headers: Dict[str, Any]

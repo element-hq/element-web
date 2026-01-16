@@ -120,14 +120,37 @@ class GuestModule:
                 raise ConfigError("Config option 'mas.client_id' is required and must be a string")
 
             client_secret = mas_config.get("client_secret")
-            if not isinstance(client_secret, str) or len(client_secret.strip()) == 0:
-                raise ConfigError("Config option 'mas.client_secret' is required and must be a string")
+            if client_secret is not None:
+                if not isinstance(client_secret, str) or len(client_secret.strip()) == 0:
+                    raise ConfigError(
+                        "Config option 'mas.client_secret' must be a string"
+                    )
+                client_secret = client_secret.strip()
+
+            client_secret_filepath = mas_config.get("client_secret_filepath")
+            if client_secret_filepath is not None:
+                if not isinstance(client_secret_filepath, str) or len(client_secret_filepath.strip()) == 0:
+                    raise ConfigError(
+                        "Config option 'mas.client_secret_filepath' must be a string"
+                    )
+                client_secret_filepath = client_secret_filepath.strip()
+
+            if client_secret is None and client_secret_filepath is None:
+                raise ConfigError(
+                    "Config option 'mas.client_secret' or 'mas.client_secret_filepath' is required"
+                )
+            
+            if client_secret is not None and client_secret_filepath is not None:
+                raise ConfigError(
+                    "Config option 'mas.client_secret' and 'mas.client_secret_filepath' are mutually exclusive"
+                )
 
             mas = MasConfig(
                 admin_api_base_url.strip(),
                 oauth_base_url.strip(),
                 client_id.strip(),
-                client_secret.strip(),
+                client_secret,
+                client_secret_filepath,
             )
 
         return GuestModuleConfig(

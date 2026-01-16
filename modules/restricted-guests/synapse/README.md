@@ -51,6 +51,7 @@ API](https://element-hq.github.io/matrix-authentication-service/topics/admin-api
   - `oauth_base_url` - Base URL for MAS' OAuth endpoints (defaults to `admin_api_base_url` if not set). Trailing slashes will be automatically stripped.
   - `client_id` - client ID for the automated tool. Must be a valid [ULID](https://github.com/ulid/spec). Generate one [here](https://ulidtools.com/).
   - `client_secret` - client secret for the automated tool. Ideally long and cryptographically secure. Keep it a secret!
+  - `client_secret_filepath` - path to a plaintext file containing the client secret. If set, this is used instead of `client_secret`.
 
 Example configuration:
 
@@ -70,6 +71,8 @@ modules:
               # https://ulidtools.com/
               client_id: 000000000000000000000G0EST
               client_secret: your-client-secret
+              # Alternatively, load the secret from a file:
+              # client_secret_filepath: /run/secrets/mas-client-secret
 ```
 
 Enable [the Admin API on a MAS

@@ -17,8 +17,8 @@ class MasConfig:
     admin_api_base_url: str
     oauth_base_url: str
     client_id: str
-    # TODO: Add a filepath option for the secret as well.
-    client_secret: str
+    client_secret: Optional[str] = None
+    client_secret_filepath: Optional[str] = None
 
 
 @attr.s(frozen=True, auto_attribs=True)
