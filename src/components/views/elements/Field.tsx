@@ -19,6 +19,7 @@ import React, {
 import classNames from "classnames";
 import { debounce } from "lodash";
 import { Tooltip } from "@vector-im/compound-web";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IFieldState, type IValidationResult } from "./Validation";
 
@@ -326,6 +327,11 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             mx_Field_invalid: hasValidationFlag ? !forceValidity : onValidate && this.state.valid === false,
         });
 
+        let inputDecoration: JSX.Element | undefined;
+        if (this.props.element === "select") {
+            inputDecoration = <ChevronDownIcon className="mx_Field_select_chevron" />;
+        }
+
         return (
             <div className={fieldClasses}>
                 {prefixContainer}
@@ -337,7 +343,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                     open={tooltipOpen}
                     onOpenChange={this.onTooltipOpenChange}
                 >
-                    {fieldInput}
+                    <>
+                        {fieldInput}
+                        {inputDecoration}
+                    </>
                 </Tooltip>
                 <label htmlFor={this.id}>{this.props.label}</label>
                 {postfixContainer}
