@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 
@@ -28,8 +28,7 @@ describe("getOidcClientId()", () => {
     const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
 
     beforeEach(() => {
-        fetchMockJest.mockClear();
-        fetchMockJest.resetBehavior();
+        fetchMock.removeRoutes();
         mockPlatformPeg();
         Object.defineProperty(PlatformPeg.get(), "baseUrl", {
             get(): string {
@@ -51,7 +50,7 @@ describe("getOidcClientId()", () => {
     it("should return static clientId when configured", async () => {
         expect(await getOidcClientId(delegatedAuthConfig, staticOidcClients)).toEqual("abc123");
         // didn't try to register
-        expect(fetchMockJest).toHaveFetchedTimes(0);
+        expect(fetchMock).toHaveFetchedTimes(0);
     });
 
     it("should throw when no static clientId is configured and no registration endpoint", async () => {
@@ -63,7 +62,7 @@ describe("getOidcClientId()", () => {
             OidcError.DynamicRegistrationNotSupported,
         );
         // didn't try to register
-        expect(fetchMockJest).toHaveFetchedTimes(0);
+        expect(fetchMock).toHaveFetchedTimes(0);
     });
 
     it("should handle when staticOidcClients object is falsy", async () => {
@@ -75,28 +74,23 @@ describe("getOidcClientId()", () => {
             OidcError.DynamicRegistrationNotSupported,
         );
         // didn't try to register
-        expect(fetchMockJest).toHaveFetchedTimes(0);
+        expect(fetchMock).toHaveFetchedTimes(0);
     });
 
     it("should make correct request to register client", async () => {
-        fetchMockJest.post(delegatedAuthConfig.registration_endpoint!, {
+        fetchMock.post(delegatedAuthConfig.registration_endpoint!, {
             status: 200,
             body: JSON.stringify({ client_id: dynamicClientId }),
         });
         expect(await getOidcClientId(delegatedAuthConfig)).toEqual(dynamicClientId);
         // didn't try to register
-        expect(fetchMockJest).toHaveBeenCalledWith(
-            delegatedAuthConfig.registration_endpoint!,
-            expect.objectContaining({
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-            }),
-        );
-        expect(JSON.parse(fetchMockJest.mock.calls[0][1]!.body as string)).toEqual(
-            expect.objectContaining({
+        expect(fetchMock).toHaveFetched(delegatedAuthConfig.registration_endpoint!, {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: {
                 client_name: clientName,
                 client_uri: baseUrl,
                 response_types: ["code"],
@@ -106,19 +100,19 @@ describe("getOidcClientId()", () => {
                 token_endpoint_auth_method: "none",
                 application_type: "web",
                 logo_uri: `${baseUrl}/vector-icons/1024.png`,
-            }),
-        );
+            },
+        });
     });
 
     it("should throw when registration request fails", async () => {
-        fetchMockJest.post(delegatedAuthConfig.registration_endpoint!, {
+        fetchMock.post(delegatedAuthConfig.registration_endpoint!, {
             status: 500,
         });
         await expect(getOidcClientId(delegatedAuthConfig)).rejects.toThrow(OidcError.DynamicRegistrationFailed);
     });
 
     it("should throw when registration response is invalid", async () => {
-        fetchMockJest.post(delegatedAuthConfig.registration_endpoint!, {
+        fetchMock.post(delegatedAuthConfig.registration_endpoint!, {
             status: 200,
             // no clientId in response
             body: "{}",

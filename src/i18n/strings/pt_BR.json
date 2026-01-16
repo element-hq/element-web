@@ -2106,18 +2106,6 @@
             },
             "this_room_button": "Pesquise nesta sala"
         },
-        "status_bar": {
-            "delete_all": "Excluir​•​tudo",
-            "exceeded_resource_limit": "Sua mensagem não foi enviada porque este servidor local excedeu o limite de recursos. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
-            "homeserver_blocked": "Sua​•​mensagem​•​não​•​foi​•​enviada​•​porque​•​esse​•​servidor​•​doméstico​•​foi​•​bloqueado​•​pelo​•​administrador.​•​<a>Entre​•​em​•​contato​•​com​•​o​•​administrador​•​do​•​serviço​•​</a>​•​para​•​continuar​•​usando​•​o​•​serviço.",
-            "monthly_user_limit_reached": "Sua mensagem não foi enviada porque este homeserver atingiu seu Limite de usuário ativo mensal. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
-            "requires_consent_agreement": "Você não pode enviar nenhuma mensagem até revisar e concordar com <consentLink>nossos termos e condições</consentLink>.",
-            "retry_all": "Repetir​•​tudo",
-            "select_messages_to_retry": "Você​•​pode​•​selecionar​•​todas​•​as​•​mensagens​•​ou​•​mensagens​•​individuais​•​para​•​tentar​•​novamente​•​ou​•​excluir",
-            "server_connectivity_lost_description": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
-            "server_connectivity_lost_title": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
-            "some_messages_not_sent": "Algumas​•​de​•​suas​•​mensagens​•​não​•​foram​•​enviadas"
-        },
         "unknown_status_code_for_timeline_jump": "código​•​de​•​status​•​desconhecido",
         "unread_notifications_predecessor": {
             "other": "Você tem %(count)s notificações não lidas em uma versão anterior desta sala.",
@@ -2405,7 +2393,6 @@
             "error_join_rule_change_unknown": "Falha desconhecida",
             "guest_access_warning": "Pessoas com clientes suportados poderão entrar na sala sem ter uma conta registrada.",
             "history_visibility_invited": "Somente membros (desde que tenham sido convidados)",
-            "history_visibility_joined": "Apenas participantes (desde que entraram na sala)",
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
             "history_visibility_shared": "Apenas participantes (a partir do momento em que esta opção for selecionada)",
             "history_visibility_warning": "A visibilidade do histórico existente não será alterada.",
@@ -3998,7 +3985,6 @@
         "hide_sidebar_button": "Esconder a barra lateral",
         "input_devices": "Dispositivos de entrada",
         "jitsi_call": "Jitsi",
-        "join_button_tooltip_call_full": "Desculpe, esta chamada está lotada no momento",
         "legacy_call": "Legacy",
         "maximise": "Preencher tela",
         "maximise_call": "Maximizar chamada",

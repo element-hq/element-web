@@ -1736,17 +1736,6 @@
             },
             "this_room_button": "Etsi tästä huoneesta"
         },
-        "status_bar": {
-            "delete_all": "Poista kaikki",
-            "exceeded_resource_limit": "Viestiäsi ei lähetetty, koska tämä kotipalvelin on ylittänyt resurssirajan. <a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttämistä.",
-            "monthly_user_limit_reached": "Viestiäsi ei lähetetty, koska tämä kotipalvelin on saavuttanut kuukausittaisten aktiivisten käyttäjien rajan. <a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttämistä.",
-            "requires_consent_agreement": "Et voi lähettää viestejä ennen kuin luet ja hyväksyt <consentLink>käyttöehtomme</consentLink>.",
-            "retry_all": "Yritä kaikkia uudelleen",
-            "select_messages_to_retry": "Voit valita kaikki tai yksittäisiä viestejä yritettäväksi uudelleen tai poistettavaksi",
-            "server_connectivity_lost_description": "Lähetetyt viestit tallennetaan kunnes yhteys on taas muodostettu.",
-            "server_connectivity_lost_title": "Yhteys palvelimeen menetettiin.",
-            "some_messages_not_sent": "Osaa viesteistäsi ei ole lähetetty"
-        },
         "unknown_status_code_for_timeline_jump": "tuntematon tilakoodi",
         "unread_notifications_predecessor": {
             "other": "Sinulla on %(count)s lukematonta ilmoitusta huoneen edellisessä versiossa.",
@@ -1997,7 +1986,6 @@
             "error_join_rule_change_unknown": "Tuntematon virhe",
             "guest_access_warning": "Käyttäjät, joilla on tuettu asiakasohjelma, voivat liittyä huoneeseen ilman rekisteröityä käyttäjätiliä.",
             "history_visibility_invited": "Vain jäsenet (kutsumisestaan lähtien)",
-            "history_visibility_joined": "Vain jäsenet (liittymisestään lähtien)",
             "history_visibility_legend": "Ketkä voivat lukea historiaa?",
             "history_visibility_shared": "Vain jäsenet (tämän valinnan tekemisestä lähtien)",
             "history_visibility_warning": "Muutokset historian lukuoikeuksiin pätevät vain tuleviin viesteihin tässä huoneessa. Nykyisen historian näkyvyys ei muutu.",
@@ -3390,7 +3378,6 @@
         "hide_sidebar_button": "Piilota sivupalkki",
         "input_devices": "Sisääntulolaitteet",
         "jitsi_call": "Jitsi-konferenssi",
-        "join_button_tooltip_call_full": "Pahoittelut — tämä puhelu on täynnä",
         "maximise_call": "Suurenna puhelu",
         "metaspace_video_rooms": {
             "conference_room_section": "Konferenssit"

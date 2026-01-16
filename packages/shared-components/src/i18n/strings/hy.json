@@ -10,10 +10,6 @@
         "play": "Միացնել",
         "search": "Որոնել"
     },
-    "encryption": {
-        "pinned_identity_changed": "%(displayName)s-ի (<b>%(userId)s</b> ) ինքնությունը վերակայվել է։ <a> Իմանալ ավելին</a>",
-        "withdraw_verification_action": "Հետ կանչել հաստատումը"
-    },
     "left_panel": {
         "open_dial_pad": "Բացեք թվերի հավաքման վահանակը"
     },

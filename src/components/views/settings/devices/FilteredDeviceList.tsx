@@ -46,7 +46,8 @@ interface Props {
      * Removes session info as that can be seen in the account management
      * Changes sign out button to be a manage button
      */
-    delegatedAuthAccountUrl?: string;
+    accountManagementEndpoint?: string;
+    accountManagementActionsSupported?: string[];
     ref?: Ref<HTMLDivElement>;
 }
 
@@ -175,7 +176,8 @@ const DeviceListItem: React.FC<{
     setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
     supportsMSC3881?: boolean | undefined;
     isSelectDisabled?: boolean;
-    delegatedAuthAccountUrl?: string;
+    accountManagementEndpoint?: string;
+    accountManagementActionsSupported?: string[];
 }> = ({
     device,
     pusher,
@@ -191,7 +193,8 @@ const DeviceListItem: React.FC<{
     toggleSelected,
     supportsMSC3881,
     isSelectDisabled,
-    delegatedAuthAccountUrl,
+    accountManagementEndpoint,
+    accountManagementActionsSupported,
 }) => {
     const tileContent = (
         <>
@@ -227,7 +230,8 @@ const DeviceListItem: React.FC<{
                     setPushNotifications={setPushNotifications}
                     supportsMSC3881={supportsMSC3881}
                     className="mx_FilteredDeviceList_deviceDetails"
-                    delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                    accountManagementEndpoint={accountManagementEndpoint}
+                    accountManagementActionsSupported={accountManagementActionsSupported}
                 />
             )}
         </li>
@@ -254,7 +258,8 @@ export const FilteredDeviceList = ({
     setPushNotifications,
     setSelectedDeviceIds,
     supportsMSC3881,
-    delegatedAuthAccountUrl,
+    accountManagementEndpoint,
+    accountManagementActionsSupported,
     ref,
 }: Props): JSX.Element => {
     const sortedDevices = getFilteredSortedDevices(devices, filter);
@@ -314,7 +319,7 @@ export const FilteredDeviceList = ({
                 selectedDeviceCount={selectedDeviceIds.length}
                 isAllSelected={isAllSelected}
                 toggleSelectAll={toggleSelectAll}
-                isSelectDisabled={!!delegatedAuthAccountUrl}
+                isSelectDisabled={!!accountManagementEndpoint}
             >
                 {selectedDeviceIds.length ? (
                     <>
@@ -364,7 +369,7 @@ export const FilteredDeviceList = ({
                         isExpanded={expandedDeviceIds.includes(device.device_id)}
                         isSigningOut={signingOutDeviceIds.includes(device.device_id)}
                         isSelected={isDeviceSelected(device.device_id, selectedDeviceIds)}
-                        isSelectDisabled={!!delegatedAuthAccountUrl}
+                        isSelectDisabled={!!accountManagementEndpoint}
                         onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
                         onSignOutDevice={() => onSignOutDevices([device.device_id])}
                         saveDeviceName={(deviceName: string) => saveDeviceName(device.device_id, deviceName)}
@@ -376,7 +381,8 @@ export const FilteredDeviceList = ({
                         setPushNotifications={setPushNotifications}
                         toggleSelected={() => toggleSelection(device.device_id)}
                         supportsMSC3881={supportsMSC3881}
-                        delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                        accountManagementEndpoint={accountManagementEndpoint}
+                        accountManagementActionsSupported={accountManagementActionsSupported}
                     />
                 ))}
             </ol>
