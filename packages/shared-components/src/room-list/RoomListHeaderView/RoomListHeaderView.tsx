@@ -19,7 +19,7 @@ import styles from "./RoomListHeaderView.module.css";
 /**
  * The available sorting options for the room list.
  */
-export type SortOption = "recent" | "alphabetical";
+export type SortOption = "recent" | "alphabetical" | "unread-first";
 
 export interface RoomListHeaderViewSnapshot {
     /**
