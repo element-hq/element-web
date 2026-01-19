@@ -9,34 +9,33 @@ import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
+import { getUserNameColorClass } from "../../../utils/FormattingUtils";
+import UserIdentifier from "../../../customisations/UserIdentifier";
+import { _t } from "../../../languageHandler";
 import { useViewModel } from "../../useViewModel";
 import styles from "./DisambiguatedProfile.module.css";
+
+
+interface MemberInfo {
+    userId: string;
+    roomId: string;
+    rawDisplayName?: string;
+    disambiguate: boolean;
+}
+
 
 /**
  * The snapshot representing the current state of the DisambiguatedProfile.
  */
 export interface DisambiguatedProfileViewSnapshot {
-    /**
-     * The display name to show.
-     */
-    displayName: string;
-    /**
-     * Optional color class for username coloring.
-     */
-    colorClass?: string;
-    /**
-     * Whether to emphasize the display name styling.
-     */
+
+
+    member?: MemberInfo | null;
+    fallbackName: string;
+    colored?: boolean;
     emphasizeDisplayName?: boolean;
-    /**
-     * Optional MXID identifier to show for disambiguation.
-     * Only shown when disambiguation is needed.
-     */
-    mxid?: string;
-    /**
-     * Optional tooltip title text.
-     */
-    title?: string;
+    withTooltip?: boolean;
+    
 }
 
 /**
@@ -59,7 +58,7 @@ interface DisambiguatedProfileViewProps {
     /**
      * The view model for the disambiguated profile.
      */
-    vm: DisambiguatedProfileViewModel;
+    vm: DisambiguatedProfileViewModel & DisambiguatedProfileViewActions;
 }
 
 /**
@@ -72,32 +71,52 @@ interface DisambiguatedProfileViewProps {
  * <DisambiguatedProfileView vm={disambiguatedProfileViewModel} />
  * ```
  */
-export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
-    const { displayName, colorClass, emphasizeDisplayName, mxid, title } = useViewModel(vm);
+export default class DisambiguatedProfileView extends React.Component<DisambiguatedProfileViewProps> {
+    render(): JSX.Element {
+        const { vm } = this.props;
+        const { fallbackName, member, colored, emphasizeDisplayName, withTooltip } = useViewModel(vm);
 
-    const displayNameClasses = classNames(colorClass, {
-        [styles.mx_DisambiguatedProfile_displayName]: emphasizeDisplayName,
-        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
-    });
+        const rawDisplayName = member?.rawDisplayName || fallbackName;
+        const mxid = member?.userId;
+
+        let colorClass: string | undefined;
+        if (colored) {
+            colorClass = getUserNameColorClass(mxid ?? "");
+        }
+
+        let mxidElement;
+        let title: string | undefined;
+
+        if (mxid) {
+            const identifier =
+                UserIdentifier.getDisplayUserIdentifier?.(mxid, {
+                    withDisplayName: true,
+                    roomId: member.roomId,
+                }) ?? mxid;
+            if (member?.disambiguate) {
+                mxidElement = <span className="mx_DisambiguatedProfile_mxid">{identifier}</span>;
+            }
+            title = _t("timeline|disambiguated_profile", {
+                displayName: rawDisplayName,
+                matrixId: identifier,
+            });
+        }
+
+        const displayNameClasses = classNames(colorClass, {
+            mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
+        });
 
     return (
         <div
             className={classNames(styles.mx_DisambiguatedProfile, "mx_DisambiguatedProfile")}
-            title={title}
+            title={withTooltip ? title : undefined}
             onClick={vm.onClick}
-            data-testid="disambiguated-profile"
         >
             <span className={displayNameClasses} dir="auto">
-                {displayName}
+                {rawDisplayName}
             </span>
-            {mxid && (
-                <span
-                    className={classNames(styles.mx_DisambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}
-                    data-testid="disambiguated-profile-mxid"
-                >
-                    {mxid}
-                </span>
-            )}
+            {mxidElement}
         </div>
     );
+}
 }
