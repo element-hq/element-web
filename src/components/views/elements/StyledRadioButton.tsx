@@ -30,7 +30,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps> {
     };
 
     public render(): React.ReactNode {
-        const { children, className, disabled, outlined, childrenInLabel, inputRef, ...otherProps } = this.props;
+        const { children, className, disabled, outlined, childrenInLabel, inputRef, icon, ...otherProps } = this.props;
         const _className = classnames("mx_StyledRadioButton", className, {
             mx_StyledRadioButton_disabled: disabled,
             mx_StyledRadioButton_enabled: !disabled,
@@ -49,7 +49,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps> {
                 />
                 <div>
                     {/* Empty div is used to render the radio button circle */}
-                    {this.props.icon ?? <div />}
+                    {icon ?? <div />}
                 </div>
             </React.Fragment>
         );
