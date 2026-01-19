@@ -34,7 +34,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -82,7 +82,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -193,7 +193,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -241,7 +241,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -289,7 +289,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
