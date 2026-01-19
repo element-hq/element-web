@@ -849,18 +849,16 @@ legend {
     line-height: $font-24px;
     margin-right: 0;
 
-    span {
-        display: flex;
-        align-items: center;
+    display: flex;
+    align-items: center;
 
-        &::before {
-            content: "";
-            display: inline-block;
-            background-color: $button-fg-color;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            margin-right: 8px;
-        }
+    svg {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        color: $button-fg-color;
+        margin-right: 8px;
+        vertical-align: middle;
     }
 }
 
