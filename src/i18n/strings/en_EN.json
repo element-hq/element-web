@@ -1708,6 +1708,20 @@
         "toast_description": "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.",
         "toast_title": "Use app for a better experience"
     },
+    "msc4335_matrix_org_user_limit_exceeded": {
+        "hard_limit": "You have reached the usage limits of your plan on the matrix.org homeserver.",
+        "hard_limit_button": "Learn more",
+        "soft_limit": "You have reached the usage limits of your Free plan on the matrix.org homeserver. You can upgrade to Premium to increase the limits and to support the work of the Matrix.org Foundation.",
+        "soft_limit_button": "Get Premium",
+        "title": "Usage limit exceeded"
+    },
+    "msc4335_user_limit_exceeded": {
+        "hard_limit": "You have exceeded a usage limit imposed by your homeserver.",
+        "hard_limit_button": "Learn more",
+        "soft_limit": "You have exceeded a usage limit imposed by your homeserver. You may be able to increase your limit.",
+        "soft_limit_button": "Learn more",
+        "title": "Account limit exceeded"
+    },
     "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "No more results",
     "notif_panel": {
