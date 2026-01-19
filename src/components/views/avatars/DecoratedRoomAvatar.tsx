@@ -46,6 +46,7 @@ interface IProps {
     tooltipProps?: {
         tabIndex?: number;
     };
+    className?: string;
 }
 
 interface IState {
@@ -186,7 +187,8 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
     public render(): React.ReactNode {
         // Spread the remaining props to make it work with compound component
-        const { room, size, displayBadge, hideIfDot, oobData, viewAvatarOnClick, tooltipProps, ...props } = this.props;
+        const { room, size, displayBadge, hideIfDot, oobData, viewAvatarOnClick, tooltipProps, className, ...props } =
+            this.props;
 
         let badge: React.ReactNode;
         if (this.props.displayBadge && this.state.notificationState) {
@@ -211,9 +213,13 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
             );
         }
 
-        const classes = classNames("mx_DecoratedRoomAvatar", {
-            mx_DecoratedRoomAvatar_cutout: icon,
-        });
+        const classes = classNames(
+            "mx_DecoratedRoomAvatar",
+            {
+                mx_DecoratedRoomAvatar_cutout: icon,
+            },
+            className,
+        );
 
         return (
             <div className={classes} {...props}>
