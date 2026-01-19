@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import classNames from "classnames";
 import { type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { Icon as TrophyIcon } from "../../../../res/img/element-icons/trophy.svg";
@@ -85,6 +86,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { chi
             disabled={isEnded}
             aria-label={ariaLabel}
             onChange={() => onOptionSelected?.(answer.id)}
+            icon={isChecked ? <CheckIcon /> : <span />}
         >
             <div aria-hidden="true">{children}</div>
         </StyledRadioButton>
