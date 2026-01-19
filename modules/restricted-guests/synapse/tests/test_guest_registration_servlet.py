@@ -17,6 +17,7 @@ from twisted.web.server import Request
 from twisted.web.test.requesthelper import DummyRequest
 
 from synapse_guest_module import GuestModule
+from synapse_guest_module.mas_admin_client import MasAdminClient
 from tests import (
     SQLiteStore,
     create_module,
@@ -88,6 +89,9 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
         request.content = io.BytesIO(b'{"displayname":"My Name "}')
 
         if self.config_override is not None:
+            module.registration_servlet._mas_admin_client._generate_device_id = (  # type: ignore[method-assign,union-attr]
+                lambda: "MASDEVICE123"
+            )
             set_async_return_value(
                 module_api.http_client.post_urlencoded_get_json,
                 {"access_token": "mas_admin_token"},
@@ -98,7 +102,7 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
                     {"data": {"id": "mas-user-id"}},
                     {
                         "data": {
-                            "id": "MASDEVICE",
+                            "id": "MASDEVICE123",
                             "attributes": {"access_token": "mas_access_token"},
                         }
                     },
@@ -126,8 +130,16 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
                 response,
                 {
                     "accessToken": "mas_access_token",
-                    "deviceId": "MASDEVICE",
+                    "deviceId": "MASDEVICE123",
                     "homeserverUrl": "https://matrix.local:1234/",
                     # "userId" was already checked by self.assertRegex and was removed from the object
                 },
             )
+
+
+class MasAdminClientTest(aiounittest.AsyncTestCase):
+    async def test_generate_device_id_format(self) -> None:
+        device_id = MasAdminClient._generate_device_id()
+
+        self.assertGreaterEqual(len(device_id), 10)
+        self.assertRegex(device_id, r"^[A-Za-z0-9-]+$")
