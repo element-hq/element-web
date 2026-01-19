@@ -35,11 +35,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
-import {
-    CircleIcon,
-    CheckCircleIcon,
-    ThreadsIcon,
-} from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
