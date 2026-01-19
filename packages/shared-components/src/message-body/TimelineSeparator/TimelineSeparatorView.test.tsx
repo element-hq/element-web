@@ -13,7 +13,7 @@ import * as stories from "./TimelineSeparatorView.stories.tsx";
 import { TimelineSeparatorView, SeparatorKind, type TimelineSeparatorViewSnapshot } from "./TimelineSeparatorView";
 import { MockViewModel } from "../../viewmodel/MockViewModel";
 
-const { Default, WithHtmlChild, WithoutChildren } = composeStories(stories);
+const { Default, WithHtmlChild, WithoutChildren, WithDateEvent, WithLateEvent } = composeStories(stories);
 
 describe("TimelineSeparatorView", () => {
     afterEach(() => {
@@ -31,6 +31,15 @@ describe("TimelineSeparatorView", () => {
             expect(container).toMatchSnapshot();
         });
 
+        it("renders the timeline separator without children", () => {
+            const { container } = render(<WithDateEvent />);
+            expect(container).toMatchSnapshot();
+        });
+        
+        it("renders the timeline separator without children", () => {
+            const { container } = render(<WithLateEvent />);
+            expect(container).toMatchSnapshot();
+        });
         it("renders the timeline separator without children", () => {
             const { container } = render(<WithoutChildren />);
             expect(container).toMatchSnapshot();

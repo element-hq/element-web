@@ -47,10 +47,27 @@ WithHtmlChild.args = {
     children: <h2 className={styles.mx_DateSeparator_dateHeading} aria-hidden="true">Thursday</h2>,
 };
 
+export const WithDateEvent = Template.bind({});
+WithDateEvent.args = {
+    label: "Date Event Separator",
+    children: "Wednesday",
+    SeparatorKind: SeparatorKind.Date,
+};
+
+export const WithLateEvent = Template.bind({});
+WithLateEvent.args = {
+    label: "Late Event Separator",
+    children: "Fri, Jan 9, 2026",
+    SeparatorKind: SeparatorKind.LateEvent,
+};
+
 export const WithoutChildren = Template.bind({});
 WithoutChildren.args = {
     children: undefined,
+    label: "Separator without children",
+    SeparatorKind: SeparatorKind.None,
 };
+
 
 
 
