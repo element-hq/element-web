@@ -26,11 +26,11 @@ interface IProps {
 export default function MSC4335UserLimitExceededDialog({ onFinished: _onFinished, title, error }: IProps): JSX.Element {
     function onFinished(success?: boolean): void {
         _onFinished?.(success);
-    };
+    }
 
     function onClick(): void {
         // noop as using href
-    };
+    }
 
     const matrixClient = useMatrixClientContext();
     const isMatrixDotOrg = useMemo(() => matrixClient?.getDomain() === "matrix.org", [matrixClient]);
@@ -38,19 +38,23 @@ export default function MSC4335UserLimitExceededDialog({ onFinished: _onFinished
     return (
         <BaseDialog
             className="mx_ErrorDialog"
-            title={title || _t("msc4335_user_limit_exceeded|title")}
+            title={
+                title ||
+                (isMatrixDotOrg
+                    ? _t("msc4335_matrix_org_user_limit_exceeded|title")
+                    : _t("msc4335_user_limit_exceeded|title"))
+            }
             contentId="mx_Dialog_content"
             onFinished={onFinished}
         >
             <div className="mx_Dialog_content" id="mx_Dialog_content">
                 {error.canUpgrade
-                    ? (isMatrixDotOrg ? _t(
-                            "msc4335_matrix_org_user_limit_exceeded|soft_limit",
-                        ) : _t("msc4335_user_limit_exceeded|soft_limit"))
-                    : (isMatrixDotOrg ? _t(
-                            "msc4335_matrix_org_user_limit_exceeded|hard_limit",
-                        ) : _t("msc4335_user_limit_exceeded|hard_limit"))
-                    }
+                    ? isMatrixDotOrg
+                        ? _t("msc4335_matrix_org_user_limit_exceeded|soft_limit")
+                        : _t("msc4335_user_limit_exceeded|soft_limit")
+                    : isMatrixDotOrg
+                      ? _t("msc4335_matrix_org_user_limit_exceeded|hard_limit")
+                      : _t("msc4335_user_limit_exceeded|hard_limit")}
             </div>
             <div className="mx_Dialog_buttons">
                 <div className="mx_Dialog_buttons_row">
@@ -63,14 +67,13 @@ export default function MSC4335UserLimitExceededDialog({ onFinished: _onFinished
                         data-testid="learn-more"
                         onClick={onClick}
                     >
-                {error.canUpgrade
-                    ? (isMatrixDotOrg ? _t(
-                            "msc4335_matrix_org_user_limit_exceeded|soft_limit_button",
-                        ) : _t("msc4335_user_limit_exceeded|soft_limit_button"))
-                    : (isMatrixDotOrg ? _t(
-                            "msc4335_matrix_org_user_limit_exceeded|hard_limit_button",
-                        ) : _t("msc4335_user_limit_exceeded|hard_limit_button"))
-                    }
+                        {error.canUpgrade
+                            ? isMatrixDotOrg
+                                ? _t("msc4335_matrix_org_user_limit_exceeded|soft_limit_button")
+                                : _t("msc4335_user_limit_exceeded|soft_limit_button")
+                            : isMatrixDotOrg
+                              ? _t("msc4335_matrix_org_user_limit_exceeded|hard_limit_button")
+                              : _t("msc4335_user_limit_exceeded|hard_limit_button")}
                     </AccessibleButton>
                 </div>
             </div>
