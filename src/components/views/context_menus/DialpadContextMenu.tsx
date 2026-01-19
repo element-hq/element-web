@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import ContextMenu, { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
@@ -65,7 +66,9 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
             <ContextMenu {...this.props}>
                 <div className="mx_DialPadContextMenuWrapper">
                     <div>
-                        <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick} />
+                        <AccessibleButton className="mx_DialPadContextMenu_cancel" onClick={this.onCancelClick}>
+                            <CloseIcon />
+                        </AccessibleButton>
                     </div>
                     <div className="mx_DialPadContextMenu_header">
                         <Field

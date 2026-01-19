@@ -496,10 +496,9 @@ legend {
 }
 
 @define-mixin customisedCancelButton {
-    cursor: pointer;
-    position: relative;
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
+    padding: var(--cpd-space-1x);
     border-radius: 14px;
     background-color: var(--cpd-color-bg-subtle-secondary);
 
@@ -507,18 +506,10 @@ legend {
         background-color: var(--cpd-color-bg-subtle-primary);
     }
 
-    &::before {
-        content: "";
-        width: 28px;
-        height: 28px;
-        left: 0;
-        top: 0;
-        position: absolute;
-        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 20px;
-        background-color: var(--cpd-color-icon-secondary);
+    svg {
+        width: inherit;
+        height: inherit;
+        color: var(--cpd-color-icon-secondary);
     }
 }
 
