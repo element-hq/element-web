@@ -9,6 +9,7 @@
 
 from typing import Tuple
 from unittest.mock import Mock
+
 import aiounittest
 from parameterized import parameterized_class  # type: ignore[import-untyped]
 from synapse.module_api import ProfileInfo, UserProfile

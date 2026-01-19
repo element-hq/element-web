@@ -15,8 +15,8 @@ import aiounittest
 from parameterized import parameterized_class  # type: ignore[import-untyped]
 from twisted.web.server import Request
 from twisted.web.test.requesthelper import DummyRequest
-from synapse_guest_module import GuestModule
 
+from synapse_guest_module import GuestModule
 from tests import (
     SQLiteStore,
     create_module,
