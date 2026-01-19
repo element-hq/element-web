@@ -230,6 +230,7 @@ module.exports = (env, argv) => {
                 "net": false,
                 "tls": false,
                 "crypto": false,
+                "path": false,
 
                 // Polyfill needed by counterpart
                 "util": require.resolve("util/"),
@@ -757,7 +758,6 @@ module.exports = (env, argv) => {
                     runtimeErrors: false,
                 },
             },
-
             static: {
                 // Where to serve static assets from
                 directory: "./webapp",

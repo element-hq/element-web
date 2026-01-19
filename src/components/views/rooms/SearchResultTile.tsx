@@ -9,29 +9,29 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-right";
+import { IconButton } from "@vector-im/compound-web";
 
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import RoomContext from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import DateSeparator from "../messages/DateSeparator";
 import EventTile from "./EventTile";
-import { shouldFormContinuation } from "../../structures/MessagePanel";
-import { wantsDateSeparator } from "../../../DateUtils";
 import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
 import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { _t } from "../../../languageHandler";
 
 interface IProps {
     // a list of strings to be highlighted in the results
     searchHighlights?: string[];
-    // href for the highlights in this result
-    resultLink?: string;
-    // timeline of the search result
-    timeline: MatrixEvent[];
-    // indexes of the matching events (not contextual ones)
-    ourEventsIndexes: number[];
+    resultEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
+    showDateSeparator?: boolean;
 }
 
 export default class SearchResultTile extends React.Component<IProps> {
@@ -44,7 +44,7 @@ export default class SearchResultTile extends React.Component<IProps> {
     public constructor(props: IProps) {
         super(props);
 
-        this.buildLegacyCallEventGroupers(this.props.timeline);
+        this.buildLegacyCallEventGroupers([this.props.resultEvent]);
     }
 
     private buildLegacyCallEventGroupers(events?: MatrixEvent[]): void {
@@ -52,81 +52,61 @@ export default class SearchResultTile extends React.Component<IProps> {
     }
 
     public render(): React.ReactNode {
-        const timeline = this.props.timeline;
-        const resultEvent = timeline[this.props.ourEventsIndexes[0]];
+        const resultEvent = this.props.resultEvent;
         const eventId = resultEvent.getId();
+        if (!eventId) return null;
+
+        const cli = MatrixClientPeg.safeGet();
+        if (!haveRendererForEvent(resultEvent, cli, this.context?.showHiddenEvents)) return null;
 
         const ts1 = resultEvent.getTs();
-        const ret = [<DateSeparator key={ts1 + "-search"} roomId={resultEvent.getRoomId()!} ts={ts1} />];
+        const ret: React.ReactNode[] = [];
+        if (this.props.showDateSeparator !== false) {
+            ret.push(<DateSeparator key={ts1 + "-search"} roomId={resultEvent.getRoomId()!} ts={ts1} />);
+        }
         const layout = SettingsStore.getValue("layout");
         const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
 
-        const cli = MatrixClientPeg.safeGet();
-        for (let j = 0; j < timeline.length; j++) {
-            const mxEv = timeline[j];
-            let highlights: string[] | undefined;
-            const contextual = !this.props.ourEventsIndexes.includes(j);
-            if (!contextual) {
-                highlights = this.props.searchHighlights;
-            }
+        ret.push(
+            <EventTile
+                key={`${eventId}-search`}
+                mxEvent={resultEvent}
+                layout={layout}
+                contextual={false}
+                highlights={this.props.searchHighlights}
+                permalinkCreator={this.props.permalinkCreator}
+                isTwelveHour={isTwelveHour}
+                alwaysShowTimestamps={alwaysShowTimestamps}
+                lastInSection={true}
+                continuation={false}
+                callEventGrouper={this.callEventGroupers.get(resultEvent.getContent().call_id)}
+            />,
+        );
 
-            if (haveRendererForEvent(mxEv, cli, this.context?.showHiddenEvents)) {
-                // do we need a date separator since the last event?
-                const prevEv = timeline[j - 1];
-                // is this a continuation of the previous message?
-                const continuation =
-                    prevEv &&
-                    !wantsDateSeparator(prevEv.getDate() || undefined, mxEv.getDate() || undefined) &&
-                    shouldFormContinuation(
-                        prevEv,
-                        mxEv,
-                        cli,
-                        this.context?.showHiddenEvents,
-                        TimelineRenderingType.Search,
-                    );
-
-                let lastInSection = true;
-                const nextEv = timeline[j + 1];
-                if (nextEv) {
-                    const willWantDateSeparator = wantsDateSeparator(
-                        mxEv.getDate() || undefined,
-                        nextEv.getDate() || undefined,
-                    );
-                    lastInSection =
-                        willWantDateSeparator ||
-                        mxEv.getSender() !== nextEv.getSender() ||
-                        !shouldFormContinuation(
-                            mxEv,
-                            nextEv,
-                            cli,
-                            this.context?.showHiddenEvents,
-                            TimelineRenderingType.Search,
-                        );
-                }
-
-                ret.push(
-                    <EventTile
-                        key={`${eventId}+${j}`}
-                        mxEvent={mxEv}
-                        layout={layout}
-                        contextual={contextual}
-                        highlights={highlights}
-                        permalinkCreator={this.props.permalinkCreator}
-                        highlightLink={this.props.resultLink}
-                        isTwelveHour={isTwelveHour}
-                        alwaysShowTimestamps={alwaysShowTimestamps}
-                        lastInSection={lastInSection}
-                        continuation={continuation}
-                        callEventGrouper={this.callEventGroupers.get(mxEv.getContent().call_id)}
-                    />,
-                );
-            }
-        }
+        const onJumpToEvent = (ev: React.MouseEvent): void => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                event_id: eventId,
+                highlighted: true,
+                room_id: resultEvent.getRoomId(),
+                metricsTrigger: undefined,
+            });
+        };
 
         return (
-            <li data-scroll-tokens={eventId}>
+            <li data-scroll-tokens={eventId} className="mx_SearchResultTile">
                 <ol>{ret}</ol>
+                <IconButton
+                    className="mx_SearchResultTile_jump"
+                    aria-label={_t("timeline|mab|view_in_room")}
+                    title={_t("timeline|mab|view_in_room")}
+                    onClick={onJumpToEvent}
+                >
+                    <ChevronRightIcon />
+                </IconButton>
             </li>
         );
     }

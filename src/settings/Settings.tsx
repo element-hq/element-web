@@ -51,6 +51,7 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import WebEventIndexController from "./controllers/WebEventIndexController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -1240,6 +1241,7 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|security|enable_message_search"),
         default: true,
+        controller: new WebEventIndexController(),
     },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

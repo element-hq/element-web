@@ -23,6 +23,8 @@ import GenericToast from "../../components/views/toasts/GenericToast.tsx";
 import SdkConfig from "../../SdkConfig.ts";
 import type { ActionPayload } from "../../dispatcher/payloads.ts";
 import * as SessionLock from "../../utils/SessionLock.ts";
+import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import { WebEventIndexManager } from "../../indexing/web/WebEventIndexManager";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -38,6 +40,7 @@ function getNormalizedAppVersion(version: string): string {
 export default class WebPlatform extends BasePlatform {
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
     private readonly registerServiceWorkerPromise: Promise<void>;
+    private readonly eventIndexManager: BaseEventIndexManager = new WebEventIndexManager();
 
     public constructor() {
         super();
@@ -194,6 +197,10 @@ export default class WebPlatform extends BasePlatform {
 
     public async canSelfUpdate(): Promise<boolean> {
         return true;
+    }
+
+    public getEventIndexingManager(): BaseEventIndexManager | null {
+        return this.eventIndexManager;
     }
 
     // Exported for tests

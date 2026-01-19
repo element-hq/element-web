@@ -138,6 +138,38 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
+    .mx_RoomSearchView_tabs {
+        padding: 0 var(--cpd-space-3x) var(--cpd-space-2x);
+    }
+
+    .mx_RoomSearchView_groupHeader {
+        padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    }
+
+    .mx_RoomSearchView_groupHeaderLabel {
+        font-size: var(--cpd-font-size-body-sm);
+        color: var(--cpd-color-text-secondary);
+        text-align: center;
+    }
+
+    .mx_SearchResultTile {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--cpd-space-2x);
+
+        > ol {
+            flex: 1;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .mx_SearchResultTile_jump {
+        flex-shrink: 0;
+        margin-top: var(--cpd-space-2x);
+    }
+
     a {
         text-decoration: none;
         color: inherit;

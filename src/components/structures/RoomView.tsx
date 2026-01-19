@@ -1772,7 +1772,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private onSearch = (term: string, scope = SearchScope.Room): void => {
-        const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
+        const effectiveScope = scope === SearchScope.All ? SearchScope.Room : scope;
+        const roomId = effectiveScope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
         const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
@@ -1785,7 +1786,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 searchId: new Date().getTime(),
                 roomId,
                 term,
-                scope,
+                scope: effectiveScope,
                 promise,
                 abortController,
             },
@@ -1793,7 +1794,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchScopeChange = (scope: SearchScope): void => {
-        this.onSearch(this.state.search?.term ?? "", scope);
+        this.onSearch(this.state.search?.term ?? "", SearchScope.Room);
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {

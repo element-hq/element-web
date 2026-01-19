@@ -21,6 +21,7 @@ import {
 
 import { type ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";
+import PlatformPeg from "./PlatformPeg";
 import { isNotUndefined } from "./Typeguards";
 
 const SEARCH_LIMIT = 10;
@@ -44,8 +45,8 @@ async function serverSideSearch(
                 filter: filter,
                 order_by: SearchOrderBy.Recent,
                 event_context: {
-                    before_limit: 1,
-                    after_limit: 1,
+                    before_limit: 0,
+                    after_limit: 0,
                     include_profile: true,
                 },
             },
@@ -88,7 +89,7 @@ function compareEvents(a: ISearchResult, b: ISearchResult): number {
     return 0;
 }
 
-async function combinedSearch(
+export async function combinedSearch(
     client: MatrixClient,
     searchTerm: string,
     abortSignal?: AbortSignal,
@@ -159,8 +160,8 @@ async function localSearch(
 
     const searchArgs: ISearchArgs = {
         search_term: searchTerm,
-        before_limit: 1,
-        after_limit: 1,
+        before_limit: 0,
+        after_limit: 0,
         limit: SEARCH_LIMIT,
         order_by_recency: true,
         room_id: undefined,
@@ -603,9 +604,13 @@ async function eventIndexSearch(
     abortSignal?: AbortSignal,
 ): Promise<ISearchResults> {
     let searchPromise: Promise<ISearchResults>;
+    const isWeb = PlatformPeg.get()?.getHumanReadableName() === "Web Platform";
 
     if (roomId !== undefined) {
-        if (await client.getCrypto()?.isEncryptionEnabledInRoom(roomId)) {
+        // Web 端：所有房间统一走本地 IndexedDB，行为对齐 FluffyChat（不依赖 homeserver 的 /search）。
+        if (isWeb) {
+            searchPromise = localSearchProcess(client, term, roomId);
+        } else if (await client.getCrypto()?.isEncryptionEnabledInRoom(roomId)) {
             // The search is for a single encrypted room, use our local
             // search method.
             searchPromise = localSearchProcess(client, term, roomId);
@@ -615,9 +620,8 @@ async function eventIndexSearch(
             searchPromise = serverSideSearchProcess(client, term, roomId, abortSignal);
         }
     } else {
-        // Search across all rooms, combine a server side search and a
-        // local search.
-        searchPromise = combinedSearch(client, term, abortSignal);
+        // Search across all rooms, use server-side search only.
+        searchPromise = serverSideSearchProcess(client, term, roomId, abortSignal);
     }
 
     return searchPromise;

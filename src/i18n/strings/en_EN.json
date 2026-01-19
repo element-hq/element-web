@@ -2126,6 +2126,9 @@
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"
             },
+            "tab_messages": "Messages",
+            "tab_gallery": "Gallery",
+            "tab_files": "Files",
             "this_room_button": "Search this room"
         },
         "status_bar": {
@@ -2548,7 +2551,8 @@
         "warning_kind_files": "This version of %(brand)s does not support viewing some encrypted files",
         "warning_kind_files_app": "Use the <a>Desktop app</a> to see all encrypted files",
         "warning_kind_search": "This version of %(brand)s does not support searching encrypted messages",
-        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages"
+        "warning_kind_search_app": "Use the <a>Desktop app</a> to search encrypted messages",
+        "warning_kind_search_settings": "Enable message search in <a>settings</a> to search encrypted messages"
     },
     "setting": {
         "help_about": {

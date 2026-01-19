@@ -14,6 +14,8 @@ import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 import { UserTab } from "../dialogs/UserTab";
 import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 
@@ -61,10 +63,33 @@ export default function SearchWarning({ isRoomEncrypted, kind, showLogo = true }
 
     const brand = SdkConfig.get("brand");
     const desktopBuilds = SdkConfig.getObject("desktop_builds");
+    const indexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing");
+    const canIndex = EventIndexPeg.platformHasSupport() && EventIndexPeg.supportIsInstalled();
 
     let text: ReactNode | undefined;
     let logo: JSX.Element | undefined;
-    if (desktopBuilds?.get("available")) {
+    if (canIndex && !indexingEnabled) {
+        text = _t(
+            "seshat|warning_kind_search_settings",
+            {},
+            {
+                a: (sub) => (
+                    <AccessibleButton
+                        kind="link_inline"
+                        onClick={(evt: ButtonEvent) => {
+                            evt.preventDefault();
+                            dis.dispatch({
+                                action: Action.ViewUserSettings,
+                                initialTabId: UserTab.Security,
+                            });
+                        }}
+                    >
+                        {sub}
+                    </AccessibleButton>
+                ),
+            },
+        );
+    } else if (desktopBuilds?.get("available")) {
         logo = <img alt="" src={desktopBuilds.get("logo")} width="32px" />;
         const buildUrl = desktopBuilds.get("url");
         switch (kind) {

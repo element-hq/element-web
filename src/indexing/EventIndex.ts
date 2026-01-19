@@ -89,6 +89,10 @@ export default class EventIndex extends EventEmitter {
         this.logger = logger.getChild("EventIndex");
     }
 
+    private isWebPlatform(): boolean {
+        return PlatformPeg.get()?.getHumanReadableName() === "Web Platform";
+    }
+
     public async init(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
@@ -96,7 +100,7 @@ export default class EventIndex extends EventEmitter {
         // If the index is empty, set a flag so that we add the initial checkpoints once we sync.
         // We do this check here rather than in `onSync` because, by the time `onSync` is called, there will
         // have been a few events added to the index.
-        if (await indexManager.isEventIndexEmpty()) {
+        if (!this.isWebPlatform() && (await indexManager.isEventIndexEmpty())) {
             this.needsInitialCheckpoints = true;
         }
 
@@ -167,7 +171,7 @@ export default class EventIndex extends EventEmitter {
                     roomId: room.roomId,
                     token: token,
                     direction: Direction.Backward,
-                    fullCrawl: true,
+                    fullCrawl: this.shouldFullCrawl(),
                 };
 
                 const forwardCheckpoint: ICrawlerCheckpoint = {
@@ -208,8 +212,11 @@ export default class EventIndex extends EventEmitter {
                 await this.addInitialCheckpoints();
             }
 
-            // Start the crawler if it's not already running.
-            this.startCrawler();
+            // Web 端不做全量后台爬取：仅在用户“搜索更多”等按需触发时回溯，避免启动时大量索引占用资源。
+            if (!this.isWebPlatform()) {
+                // Start the crawler if it's not already running.
+                this.startCrawler();
+            }
 
             // Commit any queued up live events
             await indexManager.commitLiveEvents();
@@ -219,6 +226,11 @@ export default class EventIndex extends EventEmitter {
             logErrorAndShowErrorDialog("Event indexer threw an unexpected error", e);
         });
     };
+
+    private shouldFullCrawl(): boolean {
+        const platform = PlatformPeg.get();
+        return platform?.getHumanReadableName() !== "Web Platform";
+    }
 
     /*
      * The Room.timeline listener.
@@ -239,8 +251,9 @@ export default class EventIndex extends EventEmitter {
 
         const client = MatrixClientPeg.safeGet();
 
-        // We only index encrypted rooms locally.
-        if (!client.isRoomEncrypted(ev.getRoomId()!)) return;
+        const roomId = ev.getRoomId()!;
+        // Web 端：所有房间都走本地索引；其它平台保持原逻辑（仅加密房间本地索引）。
+        if (!this.isWebPlatform() && !client.isRoomEncrypted(roomId)) return;
 
         if (ev.isRedaction()) {
             return this.redactEvent(ev);
@@ -418,7 +431,7 @@ export default class EventIndex extends EventEmitter {
         const checkpoint = {
             roomId: room.roomId,
             token: token,
-            fullCrawl: fullCrawl,
+            fullCrawl: fullCrawl && this.shouldFullCrawl(),
             direction: Direction.Backward,
         };
 
@@ -431,6 +444,142 @@ export default class EventIndex extends EventEmitter {
         }
 
         this.crawlerCheckpoints.push(checkpoint);
+    }
+
+    private takeRoomCheckpoint(roomId: string): ICrawlerCheckpoint | null {
+        const index = this.crawlerCheckpoints.findIndex(
+            (checkpoint) => checkpoint.roomId === roomId && checkpoint.direction === Direction.Backward,
+        );
+        if (index === -1) return null;
+        return this.crawlerCheckpoints.splice(index, 1)[0] ?? null;
+    }
+
+    private async crawlCheckpoint(
+        checkpoint: ICrawlerCheckpoint,
+        limit: number,
+    ): Promise<{ nextCheckpoint: ICrawlerCheckpoint | null; eventsAlreadyAdded: boolean }> {
+        const client = MatrixClientPeg.safeGet();
+        const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) {
+            throw new Error("Event indexing is not supported on this platform");
+        }
+
+        const eventMapper = client.getEventMapper({ preventReEmit: true });
+        let res: Awaited<ReturnType<MatrixClient["createMessagesRequest"]>>;
+
+        try {
+            res = await client.createMessagesRequest(checkpoint.roomId, checkpoint.token, limit, checkpoint.direction);
+        } catch (e) {
+            if (e instanceof HTTPError && e.httpStatus === 403) {
+                this.logger.debug(
+                    "Removing checkpoint as we don't have permissions to fetch messages from this room.",
+                    JSON.stringify(checkpoint),
+                );
+                try {
+                    await indexManager.removeCrawlerCheckpoint(checkpoint);
+                } catch (removeError) {
+                    this.logger.warn(`Error removing checkpoint ${JSON.stringify(checkpoint)}:`, removeError);
+                }
+                return { nextCheckpoint: null, eventsAlreadyAdded: true };
+            }
+            throw e;
+        }
+
+        if (res.chunk.length === 0) {
+            this.logger.debug("Done with the checkpoint", JSON.stringify(checkpoint));
+            try {
+                await indexManager.removeCrawlerCheckpoint(checkpoint);
+            } catch (e) {
+                this.logger.warn("Error removing checkpoint", JSON.stringify(checkpoint), e);
+            }
+            return { nextCheckpoint: null, eventsAlreadyAdded: true };
+        }
+
+        const matrixEvents = res.chunk.map(eventMapper);
+        let stateEvents: MatrixEvent[] = [];
+        if (res.state !== undefined) {
+            stateEvents = res.state.map(eventMapper);
+        }
+
+        const profiles: Record<string, IMatrixProfile> = {};
+
+        stateEvents.forEach((ev) => {
+            if (ev.getContent().membership === KnownMembership.Join) {
+                profiles[ev.getSender()!] = {
+                    displayname: ev.getContent().displayname,
+                    avatar_url: ev.getContent().avatar_url,
+                };
+            }
+        });
+
+        const decryptionPromises = matrixEvents
+            .filter((event) => event.isEncrypted())
+            .map((event) => client.decryptEventIfNeeded(event, { emit: false }));
+
+        await Promise.all(decryptionPromises);
+
+        const filteredEvents = matrixEvents.filter(this.isValidEvent);
+        const redactionEvents = matrixEvents.filter((ev) => ev.isRedaction());
+
+        const events = filteredEvents.map((ev) => {
+            const e = this.eventToJson(ev);
+
+            let profile: IMatrixProfile = {};
+            if (e.sender in profiles) profile = profiles[e.sender];
+            return { event: e, profile };
+        });
+
+        let newCheckpoint: ICrawlerCheckpoint | null = null;
+        if (res.end) {
+            newCheckpoint = {
+                roomId: checkpoint.roomId,
+                token: res.end,
+                fullCrawl: checkpoint.fullCrawl,
+                direction: checkpoint.direction,
+            };
+        }
+
+        for (const ev of redactionEvents) {
+            const eventId = ev.getAssociatedId();
+            if (eventId) {
+                await indexManager.deleteEvent(eventId);
+            } else {
+                this.logger.warn("Redaction event doesn't contain a valid associated event id", ev);
+            }
+        }
+
+        let eventsAlreadyAdded = await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint);
+        if (events.length === 0) {
+            // Don't stop crawling just because this batch didn't contain indexable events.
+            eventsAlreadyAdded = false;
+        }
+
+        if (!newCheckpoint) {
+            this.logger.debug(
+                "The server didn't return a valid new checkpoint, not continuing the crawl.",
+                JSON.stringify(checkpoint),
+            );
+            return { nextCheckpoint: null, eventsAlreadyAdded };
+        }
+
+        // 避免卡在同一个 token 上无限回溯：只有在 token 未推进时才停止。
+        if (eventsAlreadyAdded === true && newCheckpoint.token === checkpoint.token) {
+            this.logger.debug(
+                "Checkpoint did not advance, stopping the crawl",
+                JSON.stringify(checkpoint),
+            );
+            await indexManager.removeCrawlerCheckpoint(newCheckpoint);
+            return { nextCheckpoint: null, eventsAlreadyAdded };
+        }
+
+        if (eventsAlreadyAdded === true) {
+            this.logger.debug(
+                "Checkpoint had no new events inserted, continuing the crawl",
+                JSON.stringify(checkpoint),
+            );
+        }
+
+        return { nextCheckpoint: newCheckpoint, eventsAlreadyAdded };
     }
 
     /**
@@ -446,7 +595,6 @@ export default class EventIndex extends EventEmitter {
     private async crawlerFunc(): Promise<void> {
         let cancelled = false;
 
-        const client = MatrixClientPeg.safeGet();
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
 
@@ -494,175 +642,13 @@ export default class EventIndex extends EventEmitter {
 
             idle = false;
 
-            // We have a checkpoint, let us fetch some messages, again, very
-            // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper({ preventReEmit: true });
-            // TODO we need to ensure to use member lazy loading with this
-            // request so we get the correct profiles.
-            let res: Awaited<ReturnType<MatrixClient["createMessagesRequest"]>>;
-
             try {
-                res = await client.createMessagesRequest(
-                    checkpoint.roomId,
-                    checkpoint.token,
-                    EVENTS_PER_CRAWL,
-                    checkpoint.direction,
-                );
-            } catch (e) {
-                if (e instanceof HTTPError && e.httpStatus === 403) {
-                    this.logger.debug(
-                        "Removing checkpoint as we don't have ",
-                        "permissions to fetch messages from this room.",
-                        JSON.stringify(checkpoint),
-                    );
-                    try {
-                        await indexManager.removeCrawlerCheckpoint(checkpoint);
-                    } catch (e) {
-                        this.logger.warn(`Error removing checkpoint ${JSON.stringify(checkpoint)}:`, e);
-                        // We don't push the checkpoint here back, it will
-                        // hopefully be removed after a restart. But let us
-                        // ignore it for now as we don't want to hammer the
-                        // endpoint.
-                    }
-                    continue;
-                }
-
-                this.logger.warn(`Error crawling using checkpoint ${JSON.stringify(checkpoint)}:`, e);
-                this.crawlerCheckpoints.push(checkpoint);
-                continue;
-            }
-
-            if (cancelled) {
-                this.crawlerCheckpoints.push(checkpoint);
-                break;
-            }
-
-            if (res.chunk.length === 0) {
-                this.logger.debug("Done with the checkpoint", JSON.stringify(checkpoint));
-                // We got to the start/end of our timeline, lets just
-                // delete our checkpoint and go back to sleep.
-                try {
-                    await indexManager.removeCrawlerCheckpoint(checkpoint);
-                } catch (e) {
-                    this.logger.warn("Error removing checkpoint", JSON.stringify(checkpoint), e);
-                }
-                continue;
-            }
-
-            // Convert the plain JSON events into Matrix events so they get
-            // decrypted if necessary.
-            const matrixEvents = res.chunk.map(eventMapper);
-            let stateEvents: MatrixEvent[] = [];
-            if (res.state !== undefined) {
-                stateEvents = res.state.map(eventMapper);
-            }
-
-            const profiles: Record<string, IMatrixProfile> = {};
-
-            stateEvents.forEach((ev) => {
-                if (ev.getContent().membership === KnownMembership.Join) {
-                    profiles[ev.getSender()!] = {
-                        displayname: ev.getContent().displayname,
-                        avatar_url: ev.getContent().avatar_url,
-                    };
-                }
-            });
-
-            const decryptionPromises = matrixEvents
-                .filter((event) => event.isEncrypted())
-                .map((event) => {
-                    return client.decryptEventIfNeeded(event, { emit: false });
-                });
-
-            // Let us wait for all the events to get decrypted.
-            await Promise.all(decryptionPromises);
-
-            // TODO if there are no events at this point we're missing a lot
-            // decryption keys, do we want to retry this checkpoint at a later
-            // stage?
-            const filteredEvents = matrixEvents.filter(this.isValidEvent);
-
-            // Collect the redaction events, so we can delete the redacted events from the index.
-            const redactionEvents = matrixEvents.filter((ev) => ev.isRedaction());
-
-            // Let us convert the events back into a format that EventIndex can
-            // consume.
-            const events = filteredEvents.map((ev) => {
-                const e = this.eventToJson(ev);
-
-                let profile: IMatrixProfile = {};
-                if (e.sender in profiles) profile = profiles[e.sender];
-                const object = {
-                    event: e,
-                    profile: profile,
-                };
-                return object;
-            });
-
-            let newCheckpoint: ICrawlerCheckpoint | null = null;
-
-            // The token can be null for some reason. Don't create a checkpoint
-            // in that case since adding it to the db will fail.
-            if (res.end) {
-                // Create a new checkpoint so we can continue crawling the room
-                // for messages.
-                newCheckpoint = {
-                    roomId: checkpoint.roomId,
-                    token: res.end,
-                    fullCrawl: checkpoint.fullCrawl,
-                    direction: checkpoint.direction,
-                };
-            }
-
-            try {
-                for (let i = 0; i < redactionEvents.length; i++) {
-                    const ev = redactionEvents[i];
-                    const eventId = ev.getAssociatedId();
-
-                    if (eventId) {
-                        await indexManager.deleteEvent(eventId);
-                    } else {
-                        this.logger.warn("Redaction event doesn't contain a valid associated event id", ev);
-                    }
-                }
-
-                const eventsAlreadyAdded = await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint);
-
-                // We didn't get a valid new checkpoint from the server, nothing
-                // to do here anymore.
-                if (!newCheckpoint) {
-                    this.logger.debug(
-                        "The server didn't return a valid new checkpoint, not continuing the crawl.",
-                        JSON.stringify(checkpoint),
-                    );
-                    continue;
-                }
-
-                // If all events were already indexed we assume that we caught
-                // up with our index and don't need to crawl the room further.
-                // Let us delete the checkpoint in that case, otherwise push
-                // the new checkpoint to be used by the crawler.
-                if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
-                    this.logger.debug(
-                        "Checkpoint had already all events",
-                        "added, stopping the crawl",
-                        JSON.stringify(checkpoint),
-                    );
-                    await indexManager.removeCrawlerCheckpoint(newCheckpoint);
-                } else {
-                    if (eventsAlreadyAdded === true) {
-                        this.logger.debug(
-                            "Checkpoint had already all events",
-                            "added, but continuing due to a full crawl",
-                            JSON.stringify(checkpoint),
-                        );
-                    }
-                    this.crawlerCheckpoints.push(newCheckpoint);
+                const { nextCheckpoint } = await this.crawlCheckpoint(checkpoint, EVENTS_PER_CRAWL);
+                if (nextCheckpoint) {
+                    this.crawlerCheckpoints.push(nextCheckpoint);
                 }
             } catch (e) {
                 this.logger.warn("Error during a crawl", e);
-                // An error occurred, put the checkpoint back so we
-                // can retry.
                 this.crawlerCheckpoints.push(checkpoint);
             }
         }
@@ -717,6 +703,50 @@ export default class EventIndex extends EventEmitter {
     public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents | undefined> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         return indexManager?.searchEventIndex(searchArgs);
+    }
+
+    public hasBackfillForRoom(roomId: string): boolean {
+        if (this.currentCheckpoint?.roomId === roomId && this.currentCheckpoint.direction === Direction.Backward) {
+            return true;
+        }
+        return this.crawlerCheckpoints.some(
+            (checkpoint) => checkpoint.roomId === roomId && checkpoint.direction === Direction.Backward,
+        );
+    }
+
+    public async backfillRoom(
+        roomId: string,
+        limit = EVENTS_PER_CRAWL,
+    ): Promise<{ exhausted: boolean; error?: unknown }> {
+        const client = MatrixClientPeg.safeGet();
+        if (!this.isWebPlatform() && !client.isRoomEncrypted(roomId)) {
+            return { exhausted: true };
+        }
+
+        if (this.currentCheckpoint?.roomId === roomId) {
+            return { exhausted: false };
+        }
+
+        let checkpoint = this.takeRoomCheckpoint(roomId);
+        if (!checkpoint) {
+            await this.addRoomCheckpoint(roomId, false);
+            checkpoint = this.takeRoomCheckpoint(roomId);
+        }
+
+        if (!checkpoint) return { exhausted: true };
+
+        try {
+            const { nextCheckpoint } = await this.crawlCheckpoint(checkpoint, limit);
+            if (nextCheckpoint) {
+                this.crawlerCheckpoints.push(nextCheckpoint);
+                return { exhausted: false };
+            }
+            return { exhausted: true };
+        } catch (e) {
+            this.logger.warn("Error backfilling room events", roomId, e);
+            this.crawlerCheckpoints.push(checkpoint);
+            return { exhausted: false, error: e };
+        }
     }
 
     /**

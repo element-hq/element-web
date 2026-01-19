@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import { IconButton, Link } from "@vector-im/compound-web";
+import { IconButton } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { PosthogScreenTracker } from "../../../PosthogTrackers";
@@ -24,9 +24,7 @@ interface Props {
     onCancelClick(): void;
 }
 
-const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSearchScopeChange, onCancelClick }) => {
-    const scope = searchInfo?.scope ?? SearchScope.Room;
-
+const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onCancelClick }) => {
     return (
         <>
             <PosthogScreenTracker screenName="RoomSearch" />
@@ -49,16 +47,6 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                     </div>
                 </div>
                 <div className="mx_RoomSearchAuxPanel_buttons">
-                    <Link
-                        onClick={() =>
-                            onSearchScopeChange(scope === SearchScope.Room ? SearchScope.All : SearchScope.Room)
-                        }
-                        kind="primary"
-                    >
-                        {scope === SearchScope.All
-                            ? _t("room|search|this_room_button")
-                            : _t("room|search|all_rooms_button")}
-                    </Link>
                     <IconButton
                         onClick={onCancelClick}
                         destructive
