@@ -5,6 +5,8 @@
 
 import base64
 import logging
+import secrets
+import string
 from typing import Any, Awaitable, Dict, Optional
 
 from synapse.module_api import ModuleApi
@@ -53,10 +55,11 @@ class MasAdminClient:
         token = await self.request_admin_token()
         url = self._build_admin_url("/api/admin/v1/personal-sessions")
 
+        device_id = self._generate_device_id()
         request_body = {
             "actor_user_id": mas_user_id,
             "expires_in": expires_in,
-            "scope": "openid urn:matrix:client:api:*",
+            "scope": f"openid urn:matrix:client:api:* urn:matrix:client:device:{device_id}",
             "human_name": "guest session",
         }
 
@@ -69,13 +72,11 @@ class MasAdminClient:
         data = response.get("data", {})
         attributes = data.get("attributes", {}) if isinstance(data, dict) else {}
         access_token = attributes.get("access_token")
-        # TODO: Is this the correct device ID?
-        device_id = data.get("id") if isinstance(data, dict) else None
+
+        print(response)
 
         if not isinstance(access_token, str) or len(access_token) == 0:
             raise ValueError("MAS session response missing `access_token` field")
-        if not isinstance(device_id, str) or len(device_id) == 0:
-            raise ValueError("MAS session response missing device id")
 
         return device_id, access_token
 
@@ -136,6 +137,23 @@ class MasAdminClient:
             raise ValueError("MAS client secret is empty")
 
         return client_secret
+
+    @staticmethod
+    def _generate_device_id() -> str:
+        """Generate a MAS device ID.
+
+        Device IDs must be at least 10 characters long and contain only
+        [A-Za-z0-9-].
+
+        The generated device ID is purposefully non-cryptographically random,
+        as the value is public.
+
+        Returns:
+            The generated Device ID.
+        """
+        length = 16
+        alphabet = string.ascii_letters + string.digits + "-"
+        return "".join(secrets.choice(alphabet) for _ in range(length))
 
     async def _post_urlencoded_get_json(
         self, url: str, data: Dict[str, str], headers: Dict[str, Any]
