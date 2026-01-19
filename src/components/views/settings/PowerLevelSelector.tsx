@@ -32,7 +32,7 @@ interface PowerLevelSelectorProps {
      */
     canChangeLevels: boolean;
     /**
-     * The current user power level
+     * The current user's own power level
      */
     currentUserLevel: number;
     /**
@@ -105,6 +105,7 @@ export function PowerLevelSelector({
                         disabled={!canChange}
                         label={userId}
                         key={userId}
+                        maxValue={currentUserLevel}
                         onChange={async (value) => {
                             const userLevelsTmp = Object.assign({}, userLevels);
                             userLevelsTmp[userId] = value;
