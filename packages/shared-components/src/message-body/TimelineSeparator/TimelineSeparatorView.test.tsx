@@ -10,7 +10,7 @@ import { composeStories } from "@storybook/react-vite";
 import React from "react";
 
 import * as stories from "./TimelineSeparatorView.stories.tsx";
-import { TimelineSeparatorView, SeparatorKind, type TimelineSeparatorViewSnapshot } from "./TimelineSeparatorView";
+import { TimelineSeparatorView, type TimelineSeparatorViewSnapshot } from "./TimelineSeparatorView";
 import { MockViewModel } from "../../viewmodel/MockViewModel";
 
 const { Default, WithHtmlChild, WithoutChildren, WithDateEvent, WithLateEvent } = composeStories(stories);
@@ -56,7 +56,6 @@ describe("TimelineSeparatorView", () => {
         it("should have aria-label matching the provided label", () => {
             const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
                 label: "Today",
-                SeparatorKind: SeparatorKind.Date,
                 children: "Today",
             });
 
@@ -82,7 +81,6 @@ describe("TimelineSeparatorView", () => {
         it("should render children between hr elements", () => {
             const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
                 label: "Yesterday",
-                SeparatorKind: SeparatorKind.Date,
                 children: <span data-testid="custom-child">Yesterday</span>,
             });
 
@@ -95,7 +93,6 @@ describe("TimelineSeparatorView", () => {
         it("should render without children when none provided", () => {
             const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
                 label: "Empty separator",
-                SeparatorKind: SeparatorKind.None,
                 children: undefined,
             });
 
@@ -103,23 +100,6 @@ describe("TimelineSeparatorView", () => {
             const separator = screen.getByRole("separator");
             // Should only contain the two hr elements
             expect(separator.childNodes).toHaveLength(2);
-        });
-
-        it("should handle different SeparatorKind values", () => {
-            const kinds = [SeparatorKind.None, SeparatorKind.Date, SeparatorKind.LateEvent];
-
-            kinds.forEach((kind) => {
-                const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
-                    label: `Separator kind ${kind}`,
-                    SeparatorKind: kind,
-                    children: undefined,
-                });
-
-                const { unmount } = render(<TimelineSeparatorView vm={vm} />);
-                const separator = screen.getByRole("separator");
-                expect(separator).toBeDefined();
-                unmount();
-            });
         });
     });
 });

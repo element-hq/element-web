@@ -13,13 +13,6 @@ import { useViewModel } from "../../useViewModel";
 import styles from "./TimelineSeparatorView.module.css";
 
 
-
-export const enum SeparatorKind {
-    None,
-    Date,
-    LateEvent,
-}
-
 /**
  * Snapshot interface for the timeline separator view model.
  */
@@ -28,10 +21,6 @@ export interface TimelineSeparatorViewSnapshot {
      * Accessible label for the separator (for example: "Today", "Yesterday", or a date).
      */
     label: string;
-    /**
-     * The kind of separator to render.
-     */
-    SeparatorKind: SeparatorKind;
     /**
      * Optional children to render inside the timeline separator (e.g. a label node).
      */

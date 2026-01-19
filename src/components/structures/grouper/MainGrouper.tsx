@@ -8,10 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { SeparatorKind } from "@element-hq/web-shared-components";
 
 import type MessagePanel from "../MessagePanel";
-import type { WrappedEvent } from "../MessagePanel";
+import { SeparatorKind, type WrappedEvent } from "../MessagePanel";
 import { BaseGrouper } from "./BaseGrouper";
 import { hasText } from "../../../TextForEvent";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { SeparatorKind } from "@element-hq/web-shared-components";
+
 
 import { BaseGrouper } from "./BaseGrouper";
-import { type WrappedEvent } from "../MessagePanel";
+import { SeparatorKind, type WrappedEvent } from "../MessagePanel";
 import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";

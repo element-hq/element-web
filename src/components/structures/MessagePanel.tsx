@@ -22,7 +22,6 @@ import {
     TimelineSeparatorView,
     type TimelineSeparatorViewSnapshot,
     MockViewModel,
-    SeparatorKind,
 } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
@@ -61,6 +60,12 @@ import { getLateEventInfo } from "./grouper/LateEventGrouper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
+
+export const enum SeparatorKind {
+    None,
+    Date,
+    LateEvent,
+}
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
@@ -261,6 +266,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
+    static Date: SeparatorKind;
 
     public constructor(props: IProps) {
         super(props);

@@ -16,7 +16,6 @@ import {
     TimelineSeparatorView,
     type TimelineSeparatorViewSnapshot,
     MockViewModel,
-    SeparatorKind,
 } from "@element-hq/web-shared-components";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
@@ -342,7 +341,6 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
         const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
             label,
-            SeparatorKind: SeparatorKind.Date,
             children: dateHeaderContent,
         });
         return <TimelineSeparatorView vm={vm} />;

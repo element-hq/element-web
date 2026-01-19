@@ -5,4 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { TimelineSeparatorView, SeparatorKind } from "./TimelineSeparatorView";
+export { TimelineSeparatorView, type TimelineSeparatorViewSnapshot } from "./TimelineSeparatorView";
