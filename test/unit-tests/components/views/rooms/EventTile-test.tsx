@@ -28,6 +28,7 @@ import {
     EventShieldReason,
 } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
+import { getByTestId } from "@testing-library/dom";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -331,6 +332,28 @@ describe("EventTile", () => {
             const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
             expect(e2eIcons).toHaveLength(1);
             expect(e2eIcons[0]).toHaveAccessibleName(expectedText);
+        });
+
+        it("shows the correct reason code for a forwarded message", async () => {
+            mxEvent = await mkEncryptedMatrixEvent({
+                plainContent: { msgtype: "m.text", body: "msg1" },
+                plainType: "m.room.message",
+                sender: "@alice:example.org",
+                roomId: room.roomId,
+            });
+            // @ts-ignore assignment to private member
+            mxEvent.keyForwardedBy = "@bob:example.org";
+            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
+                shieldColour: EventShieldColour.GREY,
+                shieldReason: EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
+            } as EventEncryptionInfo);
+
+            const { container } = getComponent();
+
+            const e2eIcon = await waitFor(() => getByTestId(container, "e2e-padlock"));
+            expect(e2eIcon).toHaveAccessibleName(
+                "@bob:example.org (@bob:example.org) shared this message since you were not in the room when it was sent.",
+            );
         });
 
         describe("undecryptable event", () => {
