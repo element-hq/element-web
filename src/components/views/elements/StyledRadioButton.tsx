@@ -49,7 +49,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps> {
                 />
                 <div>
                     {/* Empty div is used to render the radio button circle */}
-                    {icon ?? <div />}
+                    <div>{icon}</div>
                 </div>
             </React.Fragment>
         );

@@ -86,7 +86,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { chi
             disabled={isEnded}
             aria-label={ariaLabel}
             onChange={() => onOptionSelected?.(answer.id)}
-            icon={isChecked ? <CheckIcon /> : <span />}
+            icon={isChecked ? <CheckIcon /> : undefined}
         >
             <div aria-hidden="true">{children}</div>
         </StyledRadioButton>
