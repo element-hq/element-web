@@ -195,6 +195,10 @@ const masTest = base.extend<
                         endpoint: `${MAS_INTERNAL_URL}/`,
                         secret: MAS_SHARED_SECRET,
                     },
+                    // Must be disabled when using MAS.
+                    password_config: {
+                        enabled: false,
+                    },
                 } as Partial<SynapseConfig>)
                 .withMatrixAuthenticationService(guestMas)
                 .withNetwork(network)
