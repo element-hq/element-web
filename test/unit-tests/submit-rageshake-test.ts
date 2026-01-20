@@ -18,11 +18,13 @@ import {
 import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
-import { collectBugReport, downloadBugReport } from "../../src/rageshake/submit-rageshake";
+import { collectBugReport, downloadBugReport, submitFeedback } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { type ConsoleLogger } from "../../src/rageshake/rageshake";
 import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
+import SdkConfig from "../../src/SdkConfig.ts";
+import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -552,5 +554,23 @@ describe("Rageshakes", () => {
         collectBugReport({ progressCallback });
 
         expect(progressCallback).toHaveBeenCalled();
+    });
+
+    describe("submitFeedback", () => {
+        afterEach(() => {
+            SdkConfig.reset();
+        });
+        it("fails if the URL is not defined", async () => {
+            SdkConfig.put({ bug_report_endpoint_url: undefined });
+            await expect(() => submitFeedback("label", "comment")).rejects.toThrow(
+                "Bug report URL is not set or local",
+            );
+        });
+        it("fails if the URL is 'local'", async () => {
+            SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
+            await expect(() => submitFeedback("label", "comment")).rejects.toThrow(
+                "Bug report URL is not set or local",
+            );
+        });
     });
 });

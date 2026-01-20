@@ -55,7 +55,7 @@ describe("mxSendRageshake", () => {
     });
 
     it("Provides a rageshake locally", async () => {
-        SdkConfig.put({ bug_report_endpoint_url: "local" });
+        SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
         const urlSpy = jest.spyOn(URL, "createObjectURL");
         await window.mxSendRageshake("Hello world");
         expect(fetchMock).not.toHaveFetched(RAGESHAKE_URL);

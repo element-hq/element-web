@@ -17,6 +17,7 @@ import BugReportDialog, {
 import SdkConfig from "../../../../../src/SdkConfig";
 import { type ConsoleLogger } from "../../../../../src/rageshake/rageshake";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { BugReportEndpointURLLocal } from "../../../../../src/IConfigOptions";
 
 const BUG_REPORT_URL = "https://example.org/submit";
 
@@ -80,7 +81,7 @@ describe("BugReportDialog", () => {
 
     it("renders when the config only allows local downloads", async () => {
         SdkConfig.put({
-            bug_report_endpoint_url: "local",
+            bug_report_endpoint_url: BugReportEndpointURLLocal,
         });
         const { container } = renderComponent();
         expect(container).toMatchSnapshot("local-bug-reporter");

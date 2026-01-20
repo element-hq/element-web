@@ -701,7 +701,7 @@ describe("ElementCall", () => {
 
         it.each([
             [undefined, null],
-            ["local", null],
+            [BugReportEndpointURLLocal, null],
             ["other-value", "other-value"],
         ])("passes rageshake URL through widget URL", async (configSetting, expectedValue) => {
             // Test with the preference set to false

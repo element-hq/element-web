@@ -14,6 +14,7 @@ import { BugReportDialogButton } from "../../../../../src/components/views/eleme
 import SdkConfig from "../../../../../src/SdkConfig";
 import Modal from "../../../../../src/Modal";
 import BugReportDialog from "../../../../../src/components/views/dialogs/BugReportDialog";
+import { BugReportEndpointURLLocal } from "../../../../../src/IConfigOptions";
 
 describe("<BugReportDialogButton />", () => {
     const getComponent = (props: ComponentProps<typeof BugReportDialogButton> = {}) =>
@@ -37,13 +38,13 @@ describe("<BugReportDialogButton />", () => {
     });
 
     it("renders 'download' label if 'loca' is configured", () => {
-        SdkConfig.put({ bug_report_endpoint_url: "local" });
+        SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
         const { container } = getComponent({});
         expect(container).toMatchSnapshot();
     });
 
     it("passes through props to dialog", async () => {
-        SdkConfig.put({ bug_report_endpoint_url: "local" });
+        SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
         const spy = jest.spyOn(Modal, "createDialog");
         const { getByRole } = getComponent({ label: "a label", error: "an error" });
         await userEvent.click(getByRole("button"));

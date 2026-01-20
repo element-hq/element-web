@@ -28,7 +28,7 @@ describe("shouldShowFeedback", () => {
 
     it("should return false if bug_report_endpoint_url is 'test'", () => {
         SdkConfig.put({
-            bug_report_endpoint_url: "local",
+            bug_report_endpoint_url: BugReportEndpointURLLocal,
         });
         expect(shouldShowFeedback()).toEqual(false);
     });
