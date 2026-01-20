@@ -46,7 +46,9 @@ export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
                 <IconButton
                     tooltip={_t("room_list|room_options")}
                     aria-label={_t("room_list|room_options")}
+                    // 28px icon with a 20px icon
                     size="28px"
+                    style={{ padding: "4px" }}
                 >
                     <OverflowHorizontalIcon />
                 </IconButton>

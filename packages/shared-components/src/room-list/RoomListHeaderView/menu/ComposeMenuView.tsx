@@ -45,7 +45,8 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
             title={_t("action|open_menu")}
             align="start"
             trigger={
-                <IconButton size="36px" tooltip={_t("action|new_conversation")}>
+                // 36px button with a 24px icon
+                <IconButton size="36px" style={{ padding: "6px" }} tooltip={_t("action|new_conversation")}>
                     <ComposeIcon aria-hidden />
                 </IconButton>
             }
