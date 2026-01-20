@@ -1798,13 +1798,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
-        this.setState({
-            search: {
-                ...this.state.search!,
-                count: searchResults?.count,
-                error: error ?? undefined,
-                inProgress,
-            },
+        // 搜索过程中用户可能会关闭搜索面板（将 this.state.search 置为 undefined）。
+        // 此时若仍有异步更新回调进来，不能“复活”一个缺少 promise 等字段的 search state，
+        // 否则 RoomSearchView 会收到 undefined promise 并在 `.then` 处崩溃。
+        this.setState((prevState) => {
+            if (!prevState.search) return null;
+            return {
+                search: {
+                    ...prevState.search,
+                    count: searchResults?.count,
+                    error: error ?? undefined,
+                    inProgress,
+                },
+            };
         });
     };
 

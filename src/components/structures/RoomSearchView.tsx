@@ -376,7 +376,16 @@ export const RoomSearchView = ({
     // Mount & unmount effect
     useEffect(() => {
         aborted.current = false;
-        handleSearchResult(promise);
+        // 理论上 promise 一定存在（由 RoomView.onSearch 构造）。
+        // 但在极端竞态（例如搜索被取消后仍收到异步更新）下，可能出现 search state 被错误“复活”
+        // 且缺少 promise 的情况。这里加一层防御，避免 `.then` 访问 undefined 触发白屏。
+        const maybePromise: unknown = promise;
+        if (maybePromise && typeof (maybePromise as any).then === "function") {
+            handleSearchResult(maybePromise as Promise<ISearchResults>);
+        } else {
+            logger.error("Search initialisation failed: missing search promise");
+            onUpdate(false, null, new Error("Search initialisation failed"));
+        }
         return () => {
             aborted.current = true;
             abortController?.abort();
