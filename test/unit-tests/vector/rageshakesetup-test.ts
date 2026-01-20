@@ -11,6 +11,7 @@ import type { Mocked } from "jest-mock";
 import type { ConsoleLogger } from "../../../src/rageshake/rageshake";
 import SdkConfig from "../../../src/SdkConfig";
 import "../../../src/vector/rageshakesetup";
+import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions";
 
 const RAGESHAKE_URL = "https://logs.example.org/logtome";
 

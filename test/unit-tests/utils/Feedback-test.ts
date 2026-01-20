@@ -10,6 +10,7 @@ import SdkConfig from "../../../src/SdkConfig";
 import { shouldShowFeedback } from "../../../src/utils/Feedback";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../src/settings/UIFeature";
+import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions";
 
 const realGetValue = SettingsStore.getValue;
 
