@@ -430,7 +430,6 @@
         },
         "github_issue": "GitHub issue",
         "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
-        "local_only_description": "Your configuration only allows you to download logs locally.",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
         "logs_sent": "Logs sent",
         "matrix_security_issue": "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
