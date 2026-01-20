@@ -44,7 +44,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+              uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
