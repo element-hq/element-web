@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions";
 import { test, expect } from "../../element-web-test";
 
 function formDataParser(data: string, contentType: string | null): Record<string, string> {
@@ -122,7 +121,7 @@ test.describe("Rageshakes", () => {
     test.describe("via local download", () => {
         test.use({
             config: {
-                bug_report_endpoint_url: BugReportEndpointURLLocal,
+                bug_report_endpoint_url: "local",
             },
         });
 
