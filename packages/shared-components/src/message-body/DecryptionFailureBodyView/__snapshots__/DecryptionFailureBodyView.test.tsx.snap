@@ -1,29 +1,29 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`DecryptionFailureBody Should display "The sender has blocked you from receiving this message" 1`] = `
+exports[`DecryptionFailureBodyView Should display "The sender has blocked you from receiving this message" 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content"
+    class="mx_DecryptionFailureBody decryptionFailureBodyView"
   >
     The sender has blocked you from receiving this message because your device is unverified
   </div>
 </div>
 `;
 
-exports[`DecryptionFailureBody Should display "Unable to decrypt message" 1`] = `
+exports[`DecryptionFailureBodyView Should display "Unable to decrypt message" 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content"
+    class="mx_DecryptionFailureBody decryptionFailureBodyView"
   >
     Unable to decrypt message
   </div>
 </div>
 `;
 
-exports[`DecryptionFailureBody should handle messages from users who change identities after verification 1`] = `
+exports[`DecryptionFailureBodyView should handle messages from users who change identities after verification 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content mx_DecryptionFailureSenderTrustRequirement"
+    class="mx_DecryptionFailureBody decryptionFailureBodyView decryptionFailureBodyViewError"
   >
     <span>
       <svg

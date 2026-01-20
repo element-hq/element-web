@@ -1,22 +1,53 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2022-2024 The Matrix.org Foundation C.I.C.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import classNames from "classnames";
 import React, { type JSX, useContext } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import { BlockIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
-import { _t } from "../../../languageHandler";
-import { type IBodyProps } from "./IBodyProps";
-import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
+import { type ViewModel } from "../../viewmodel/ViewModel";
+import { useViewModel } from "../../useViewModel";
+import styles from "./DecryptionFailureBodyView.module.css";
+import { useI18n } from "../../utils/i18nContext";
+import { LocalDeviceVerificationStateContext } from "../../utils/LocalDeviceVerificationStateContext";
 
-function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string | JSX.Element {
+export interface DecryptionFailureBodyViewSnapshot {
+    // TODO
+    mxEvent: MatrixEvent;
+    // TODO
+    ref?: React.RefObject<any>;
+    /**
+     * The CSS class name.
+     */
+    className?: string;
+}
+
+/**
+ * The view model for the component.
+ */
+export type DecryptionFailureBodyViewModel = ViewModel<DecryptionFailureBodyViewSnapshot>;
+
+interface DecryptionFailureBodyViewProps {
+    /**
+     * The view model for the component.
+     */
+    vm: DecryptionFailureBodyViewModel;
+}
+
+function getErrorMessage(
+    i18nApi: I18nApi,
+    mxEvent: MatrixEvent,
+    isVerified: boolean | undefined,
+): string | JSX.Element {
+    const _t = i18nApi.translate;
+
     switch (mxEvent.decryptionFailureReason) {
         case DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE:
             return _t("timeline|decryption_failure|blocked");
@@ -64,21 +95,36 @@ function errorClassName(mxEvent: MatrixEvent): string | null {
     switch (mxEvent.decryptionFailureReason) {
         case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
         case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-            return "mx_DecryptionFailureSenderTrustRequirement";
+            return styles.decryptionFailureBodyViewError;
 
         default:
             return null;
     }
 }
 
-// A placeholder element for messages that could not be decrypted
-export const DecryptionFailureBody = ({ mxEvent, ref }: IBodyProps): JSX.Element => {
+/**
+ * A placeholder element for messages that could not be decrypted
+ *
+ * @example
+ * ```tsx
+ * <DecryptionFailureBody vm={DecryptionFailureBodyViewModel} />
+ * ```
+ */
+export function DecryptionFailureBodyView({ vm }: Readonly<DecryptionFailureBodyViewProps>): JSX.Element {
+    const i18nApi = useI18n();
+    const { mxEvent, ref, className } = useViewModel(vm);
     const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const classes = classNames("mx_DecryptionFailureBody", "mx_EventTile_content", errorClassName(mxEvent));
+    const classes = classNames(
+        "mx_DecryptionFailureBody",
+        styles.decryptionFailureBodyView,
+        errorClassName(mxEvent),
+        className,
+    );
 
+    // Keep mx_DecryptionFailureBody to support the compatibility with existing timeline and the all the layout
     return (
         <div className={classes} ref={ref}>
-            {getErrorMessage(mxEvent, verificationState)}
+            {getErrorMessage(i18nApi, mxEvent, verificationState)}
         </div>
     );
-};
+}

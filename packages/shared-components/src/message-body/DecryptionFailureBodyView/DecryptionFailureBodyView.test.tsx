@@ -1,6 +1,5 @@
 /*
- * Copyright 2024 New Vector Ltd.
- * Copyright 2023 The Matrix.org Foundation C.I.C.
+ * Copyright 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -9,32 +8,31 @@
 import React from "react";
 import { render } from "jest-matrix-react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
+import { mkMatrixEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 
-import { mkEvent } from "../../../../test-utils";
-import { DecryptionFailureBody } from "../../../../../src/components/views/messages/DecryptionFailureBody";
-import { LocalDeviceVerificationStateContext } from "../../../../../src/contexts/LocalDeviceVerificationStateContext";
+import { DecryptionFailureBodyView } from "./DecryptionFailureBodyView";
+import { MockViewModel } from "../../viewmodel";
+import { LocalDeviceVerificationStateContext } from "../../utils/LocalDeviceVerificationStateContext";
 
-describe("DecryptionFailureBody", () => {
-    function customRender(event: MatrixEvent, localDeviceVerified: boolean = false) {
+describe("DecryptionFailureBodyView", () => {
+    function customRender(event: MatrixEvent, localDeviceVerified: boolean = false): ReturnType<typeof render> {
         return render(
             <LocalDeviceVerificationStateContext.Provider value={localDeviceVerified}>
-                <DecryptionFailureBody mxEvent={event} />
+                <DecryptionFailureBodyView vm={new MockViewModel({ mxEvent: event })} />
             </LocalDeviceVerificationStateContext.Provider>,
         );
     }
 
     it(`Should display "Unable to decrypt message"`, () => {
         // When
-        const event = mkEvent({
+        const event = mkMatrixEvent({
             type: "m.room.message",
-            room: "myfakeroom",
-            user: "myfakeuser",
+            roomId: "myfakeroom",
+            sender: "myfakeuser",
             content: {
                 msgtype: "m.bad.encrypted",
             },
-            event: true,
         });
         const { container } = customRender(event);
 

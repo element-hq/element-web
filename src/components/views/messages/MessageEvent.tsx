@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { createRef } from "react";
+import React, { type JSX, createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,6 +18,7 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
+import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
@@ -36,8 +37,8 @@ import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
-import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -248,7 +249,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (this.props.mxEvent.isDecryptionFailure()) {
-                BodyType = DecryptionFailureBody;
+                BodyType = DecryptionFailureBodyWrapper;
             } else if (type && this.evTypes.has(type)) {
                 BodyType = this.evTypes.get(type)!;
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
@@ -328,3 +329,8 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
         <TextualBody {...{ ...props, ref: undefined }} />
     </div>
 );
+
+function DecryptionFailureBodyWrapper({ mxEvent }: IBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent }));
+    return <DecryptionFailureBodyView vm={vm} />;
+}

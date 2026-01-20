@@ -36,13 +36,13 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
@@ -86,6 +86,7 @@ import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1373,7 +1374,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 {this.props.mxEvent.isRedacted() ? (
                                     <RedactedBody mxEvent={this.props.mxEvent} />
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBody mxEvent={this.props.mxEvent} />
+                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
                                 ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
@@ -1568,4 +1569,13 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             </div>
         </div>
     );
+}
+
+interface DecryptionFailureBodyWrapper {
+    mxEvent: MatrixEvent;
+}
+
+function DecryptionFailureBodyWrapper({ mxEvent }: DecryptionFailureBodyWrapper): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent }));
+    return <DecryptionFailureBodyView vm={vm} />;
 }
