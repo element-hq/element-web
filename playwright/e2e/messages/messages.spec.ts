@@ -12,12 +12,16 @@ import { type Locator, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 
+async function waitForMessageSentStatus(msgTile: Locator): Promise<void> {
+    await expect(msgTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
+}
+
 async function sendMessage(page: Page, message: string): Promise<Locator> {
     await page.getByRole("textbox", { name: "Send an unencrypted message…" }).fill(message);
     await page.getByRole("button", { name: "Send message" }).click();
 
     const msgTile = page.locator(".mx_EventTile_last");
-    await msgTile.locator(".mx_EventTile_receiptSent").waitFor();
+    await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
 
@@ -31,7 +35,7 @@ async function sendMultilineMessages(page: Page, messages: string[]) {
     await page.getByRole("button", { name: "Send message" }).click();
 
     const msgTile = page.locator(".mx_EventTile_last");
-    await msgTile.locator(".mx_EventTile_receiptSent").waitFor();
+    await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
 
@@ -44,7 +48,7 @@ async function replyMessage(page: Page, message: Locator, replyMessage: string):
     await page.getByRole("button", { name: "Send message" }).click();
 
     const msgTile = page.locator(".mx_EventTile_last");
-    await msgTile.locator(".mx_EventTile_receiptSent").waitFor();
+    await waitForMessageSentStatus(msgTile);
     return msgTile;
 }
 

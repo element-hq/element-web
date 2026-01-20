@@ -31,26 +31,17 @@ Please see LICENSE files in the repository root for full details.
             background-color: $quinary-content;
         }
 
-        &::before {
-            content: "";
+        svg {
             width: 20px;
             height: 20px;
             top: 3px;
             right: 0;
             position: absolute;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $tertiary-content;
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
+            color: $tertiary-content;
         }
 
         &[aria-expanded="true"] {
             background-color: $quinary-content;
-
-            &::before {
-                transform: rotate(180deg);
-            }
         }
     }
 
@@ -66,23 +57,18 @@ Please see LICENSE files in the repository root for full details.
         box-sizing: border-box;
         flex-shrink: 0;
 
-        &::before {
-            content: "";
+        svg {
             width: 16px;
             height: 16px;
             position: absolute;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $secondary-content;
-            mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
+            color: $secondary-content;
         }
 
         &:hover {
             background-color: $tertiary-content;
 
-            &::before {
-                background-color: $background;
+            svg {
+                color: $background;
             }
         }
     }

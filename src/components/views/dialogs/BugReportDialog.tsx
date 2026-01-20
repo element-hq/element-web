@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2019 The Matrix.org Foundation C.I.C.
@@ -10,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { Link } from "@vector-im/compound-web";
+import { Link, Text } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
@@ -26,6 +27,7 @@ import { sendSentryReport } from "../../../sentry";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
+import { BugReportEndpointURLLocal } from "../../../IConfigOptions";
 
 export interface BugReportDialogProps {
     onFinished: (success: boolean) => void;
@@ -48,6 +50,7 @@ interface IState {
 export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
     private unmounted: boolean;
     private issueRef: React.RefObject<Field | null>;
+    private readonly isLocalOnly: boolean;
 
     public constructor(props: BugReportDialogProps) {
         super(props);
@@ -65,6 +68,8 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
 
         this.unmounted = false;
         this.issueRef = React.createRef();
+        // This config is static at runtime, but may change during tests.
+        this.isLocalOnly = SdkConfig.get().bug_report_endpoint_url === BugReportEndpointURLLocal;
     }
 
     public componentDidMount(): void {
@@ -141,6 +146,14 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
 
         this.setState({ busy: true, progress: null, err: null });
         this.sendProgressCallback(_t("bug_reporting|preparing_logs"));
+
+        if (this.isLocalOnly) {
+            // Shouldn't reach here, but throw in case we do.
+            this.setState({
+                err: _t("bug_reporting|failed_send_logs_causes|unknown_error"),
+            });
+            return;
+        }
 
         sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
             userText,
@@ -241,77 +254,77 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
             (window.Modernizr && Object.values(window.Modernizr).some((support) => support === false)) ||
             !getBrowserSupport()
         ) {
-            warning = (
-                <p>
-                    <strong>{_t("bug_reporting|unsupported_browser")}</strong>
-                </p>
-            );
+            warning = <Text weight="semibold">{_t("bug_reporting|unsupported_browser")}</Text>;
         }
 
         return (
             <BaseDialog
                 className="mx_BugReportDialog"
                 onFinished={this.onCancel}
-                title={_t("bug_reporting|submit_debug_logs")}
+                title={this.isLocalOnly ? _t("bug_reporting|download_logs") : _t("bug_reporting|submit_debug_logs")}
                 contentId="mx_Dialog_content"
             >
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     {warning}
-                    <p>{_t("bug_reporting|description")}</p>
-                    <p>
-                        <strong>
-                            {_t(
-                                "bug_reporting|before_submitting",
-                                {},
-                                {
-                                    a: (sub) => (
-                                        <a
-                                            target="_blank"
-                                            href={SdkConfig.get().feedback.new_issue_url}
-                                            rel="noreferrer noopener"
-                                        >
-                                            {sub}
-                                        </a>
-                                    ),
-                                },
-                            )}
-                        </strong>
-                    </p>
+                    <Text>{_t("bug_reporting|description")}</Text>
+                    {this.isLocalOnly ? (
+                        <>{this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}</>
+                    ) : (
+                        <>
+                            <Text weight="semibold">
+                                {_t(
+                                    "bug_reporting|before_submitting",
+                                    {},
+                                    {
+                                        a: (sub) => (
+                                            <Link target="_blank" href={SdkConfig.get().feedback.new_issue_url}>
+                                                {sub}
+                                            </Link>
+                                        ),
+                                    },
+                                )}
+                            </Text>
 
-                    <div className="mx_BugReportDialog_download">
-                        <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
-                            {_t("bug_reporting|download_logs")}
-                        </AccessibleButton>
-                        {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
-                    </div>
+                            <div className="mx_BugReportDialog_download">
+                                <AccessibleButton
+                                    onClick={this.onDownload}
+                                    kind="link"
+                                    disabled={this.state.downloadBusy}
+                                >
+                                    {_t("bug_reporting|download_logs")}
+                                </AccessibleButton>
+                                {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
+                            </div>
 
-                    <Field
-                        type="text"
-                        className="mx_BugReportDialog_field_input"
-                        label={_t("bug_reporting|github_issue")}
-                        onChange={this.onIssueUrlChange}
-                        value={this.state.issueUrl}
-                        placeholder="https://github.com/vector-im/element-web/issues/..."
-                        ref={this.issueRef}
-                    />
-                    <Field
-                        className="mx_BugReportDialog_field_input"
-                        element="textarea"
-                        label={_t("bug_reporting|textarea_label")}
-                        rows={5}
-                        onChange={this.onTextChange}
-                        value={this.state.text}
-                        placeholder={_t("bug_reporting|additional_context")}
-                    />
-                    {progress}
-                    {error}
+                            <Field
+                                type="text"
+                                className="mx_BugReportDialog_field_input"
+                                label={_t("bug_reporting|github_issue")}
+                                onChange={this.onIssueUrlChange}
+                                value={this.state.issueUrl}
+                                placeholder="https://github.com/vector-im/element-web/issues/..."
+                                ref={this.issueRef}
+                            />
+                            <Field
+                                className="mx_BugReportDialog_field_input"
+                                element="textarea"
+                                label={_t("bug_reporting|textarea_label")}
+                                rows={5}
+                                onChange={this.onTextChange}
+                                value={this.state.text}
+                                placeholder={_t("bug_reporting|additional_context")}
+                            />
+                            {progress}
+                            {error}
+                        </>
+                    )}
                 </div>
                 <DialogButtons
-                    primaryButton={_t("bug_reporting|send_logs")}
-                    onPrimaryButtonClick={this.onSubmit}
+                    primaryButton={this.isLocalOnly ? _t("bug_reporting|download_logs") : _t("bug_reporting|send_logs")}
+                    onPrimaryButtonClick={this.isLocalOnly ? this.onDownload : this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}
-                    disabled={this.state.busy}
+                    disabled={this.isLocalOnly ? this.state.downloadBusy : this.state.busy}
                 />
             </BaseDialog>
         );

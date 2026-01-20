@@ -405,15 +405,14 @@ export const SETTINGS: Settings = {
                     </p>
                 </>
             ),
-            faq: () =>
-                SdkConfig.get().bug_report_endpoint_url && (
-                    <>
-                        <h4>{_t("labs|video_rooms_faq1_question")}</h4>
-                        <p>{_t("labs|video_rooms_faq1_answer")}</p>
-                        <h4>{_t("labs|video_rooms_faq2_question")}</h4>
-                        <p>{_t("labs|video_rooms_faq2_answer")}</p>
-                    </>
-                ),
+            faq: () => (
+                <>
+                    <h4>{_t("labs|video_rooms_faq1_question")}</h4>
+                    <p>{_t("labs|video_rooms_faq1_answer")}</p>
+                    <h4>{_t("labs|video_rooms_faq2_question")}</h4>
+                    <p>{_t("labs|video_rooms_faq2_answer")}</p>
+                </>
+            ),
             feedbackLabel: "video-room-feedback",
             feedbackSubheading: _td("labs|video_rooms_feedbackSubheading"),
             // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -1142,7 +1141,7 @@ export const SETTINGS: Settings = {
     "urlPreviewsEnabled_e2ee": {
         supportedLevels: [SettingLevel.ROOM_DEVICE],
         displayName: {
-            "room-account": _td("settings|inline_url_previews_room_account"),
+            "room-device": _td("settings|inline_url_previews_room_account"),
         },
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),

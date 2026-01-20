@@ -1696,7 +1696,6 @@
         "dm_invite_title": "Vuoi chattare con %(user)s?",
         "drop_file_prompt": "Trascina un file qui per l'invio",
         "edit_topic": "Modifica argomento",
-        "error_3pid_invite_email_lookup": "Impossibile trovare l'utente per email",
         "error_cancel_knock_title": "Annullamento fallito",
         "error_join_403": "Ti serve un invito per entrare in questa stanza.",
         "error_join_404_1": "Hai provato ad entrare usando un ID stanza senza fornire una lista di server attraverso cui entrare. Gli ID stanza sono identificativi interni e non possono essere usati per entrare in una stanza senza informazioni aggiuntive.",
@@ -1806,18 +1805,6 @@
         "search": {
             "all_rooms_button": "Cerca in tutte le stanze",
             "this_room_button": "Cerca in questa stanza"
-        },
-        "status_bar": {
-            "delete_all": "Elimina tutti",
-            "exceeded_resource_limit": "Il tuo messaggio non è stato inviato perché questo homeserver ha oltrepassato un limite di risorse. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
-            "homeserver_blocked": "Il tuo messaggio non è stato inviato perché questo homeserver è stato bloccato dal suo amministratore. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
-            "monthly_user_limit_reached": "Il tuo messaggio non è stato inviato perché questo homeserver ha raggiunto il suo limite di utenti attivi mensili. <a>Contatta l'amministratore del servizio</a> per continuare ad usarlo.",
-            "requires_consent_agreement": "Non puoi inviare alcun messaggio fino a quando non leggi ed accetti <consentLink>i nostri termini e condizioni</consentLink>.",
-            "retry_all": "Riprova tutti",
-            "select_messages_to_retry": "Puoi selezionare tutti o alcuni messaggi da riprovare o eliminare",
-            "server_connectivity_lost_description": "I messaggi inviati saranno salvati fino al ritorno della connessione.",
-            "server_connectivity_lost_title": "Connessione al server persa.",
-            "some_messages_not_sent": "Alcuni tuoi messaggi non sono stati inviati"
         },
         "unknown_status_code_for_timeline_jump": "codice di stato sconosciuto",
         "unread_notifications_predecessor": {
@@ -2046,7 +2033,6 @@
             "error_join_rule_change_unknown": "Errore sconosciuto",
             "guest_access_warning": "Le persone con client supportati potranno entrare nella stanza senza avere un account registrato.",
             "history_visibility_invited": "Solo i membri (da quando sono stati invitati)",
-            "history_visibility_joined": "Solo i membri (da quando sono entrati)",
             "history_visibility_legend": "Chi può leggere la cronologia?",
             "history_visibility_shared": "Solo i membri (dal momento in cui selezioni questa opzione)",
             "history_visibility_warning": "Le modifiche a chi può leggere la cronologia si applicheranno solo ai messaggi futuri in questa stanza. La visibilità della cronologia esistente rimarrà invariata.",
@@ -3434,7 +3420,6 @@
         "hide_sidebar_button": "Nascondi barra laterale",
         "input_devices": "Dispositivi di input",
         "jitsi_call": "Conferenza Jitsi",
-        "join_button_tooltip_call_full": "Spiacenti — questa chiamata è piena",
         "legacy_call": "Chiamata legacy",
         "maximise": "Riempi schermo",
         "maximise_call": "Massimizza la chiamata",

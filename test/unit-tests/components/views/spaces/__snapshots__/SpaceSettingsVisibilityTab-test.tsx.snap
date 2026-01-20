@@ -10,6 +10,378 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space Access renders guest 
 />
 `;
 
+exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses section with publish toggle 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h3"
+        >
+          Visibility
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <fieldset
+            class="mx_SettingsFieldset"
+            data-testid="access-fieldset"
+          >
+            <legend
+              class="mx_SettingsFieldset_legend"
+            >
+              Access
+            </legend>
+            <div
+              class="mx_SettingsFieldset_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Decide who can view and join mock-space.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFieldset_content"
+            >
+              <label
+                class="mx_StyledRadioButton mx_JoinRuleSettings_radioButton mx_StyledRadioButton_disabled"
+              >
+                <input
+                  aria-describedby="joinRule-invite-description"
+                  disabled=""
+                  id="joinRule-invite"
+                  name="joinRule"
+                  type="radio"
+                  value="invite"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  class="mx_StyledRadioButton_content"
+                >
+                  Private (invite only)
+                </div>
+                <div
+                  class="mx_StyledRadioButton_spacer"
+                />
+              </label>
+              <span
+                id="joinRule-invite-description"
+              >
+                Only invited people can join.
+              </span>
+              <label
+                class="mx_StyledRadioButton mx_JoinRuleSettings_radioButton mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
+              >
+                <input
+                  aria-describedby="joinRule-public-description"
+                  checked=""
+                  disabled=""
+                  id="joinRule-public"
+                  name="joinRule"
+                  type="radio"
+                  value="public"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  class="mx_StyledRadioButton_content"
+                >
+                  Public
+                </div>
+                <div
+                  class="mx_StyledRadioButton_spacer"
+                />
+              </label>
+              <span
+                id="joinRule-public-description"
+              >
+                Anyone can find and join.
+              </span>
+              <form
+                class="_root_19upo_16"
+              >
+                <div>
+                  <div
+                    aria-expanded="false"
+                    class="mx_AccessibleButton mx_SettingsTab_showAdvanced mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+                    data-testid="toggle-guest-access-btn"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Show advanced
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_19upo_32"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_udcm8_10"
+                    >
+                      <input
+                        checked=""
+                        class="_input_udcm8_24"
+                        id="_r_3j_"
+                        role="switch"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_udcm8_34"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="_r_3j_"
+                    >
+                      Preview Space
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="radix-_r_3l_"
+                    >
+                      Allow people to preview your space before they join.
+                    </span>
+                  </div>
+                </div>
+                <p>
+                  <strong>
+                    Recommended for public spaces.
+                  </strong>
+                </p>
+              </form>
+            </div>
+          </fieldset>
+          <form
+            class="_root_19upo_16"
+          >
+            <div
+              class="mx_SettingsSection"
+            >
+              <h2
+                class="mx_Heading_h3"
+              >
+                Address
+              </h2>
+              <div
+                class="mx_SettingsSection_subSections"
+              >
+                <fieldset
+                  class="mx_SettingsFieldset"
+                  data-testid="published-address-fieldset"
+                >
+                  <legend
+                    class="mx_SettingsFieldset_legend"
+                  >
+                    Published Addresses
+                  </legend>
+                  <div
+                    class="mx_SettingsFieldset_description"
+                  >
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Published addresses can be used by anyone on any server to join your space. To publish an address, it needs to be set as a local address first.
+                    </div>
+                  </div>
+                  <div
+                    class="mx_SettingsFieldset_content"
+                  >
+                    <div
+                      class="mx_Field mx_Field_select"
+                    >
+                      <select
+                        disabled=""
+                        id="canonicalAlias"
+                        label="Main address"
+                        placeholder="Main address"
+                        type="text"
+                      >
+                        <option
+                          value=""
+                        >
+                          not specified
+                        </option>
+                      </select>
+                      <label
+                        for="canonicalAlias"
+                      >
+                        Main address
+                      </label>
+                      <svg
+                        class="mx_Field_select_chevron"
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="_inline-field_19upo_32"
+                    >
+                      <div
+                        class="_inline-field-control_19upo_44"
+                      >
+                        <div
+                          class="_container_udcm8_10"
+                        >
+                          <input
+                            class="_input_udcm8_24"
+                            disabled=""
+                            id="_r_3u_"
+                            role="switch"
+                            type="checkbox"
+                          />
+                          <div
+                            class="_ui_udcm8_34"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="_inline-field-body_19upo_38"
+                      >
+                        <label
+                          class="_label_19upo_59"
+                          for="_r_3u_"
+                        >
+                          Publish this room to the public in matrix.org's room directory?
+                        </label>
+                        <span
+                          class="_message_19upo_85 _help-message_19upo_91"
+                          id="radix-_r_40_"
+                        >
+                          You must have permission to set the main address to publish this room.
+                        </span>
+                      </div>
+                    </div>
+                    <datalist
+                      id="mx_AliasSettings_altRecommendations"
+                    />
+                    <div
+                      class="mx_EditableItemList"
+                      id="roomAltAliases"
+                    >
+                      <div
+                        class="mx_EditableItemList_label"
+                      >
+                        No other published addresses yet, add one below
+                      </div>
+                      <ul />
+                      <div />
+                    </div>
+                  </div>
+                </fieldset>
+                <fieldset
+                  class="mx_SettingsFieldset"
+                  data-testid="local-address-fieldset"
+                >
+                  <legend
+                    class="mx_SettingsFieldset_legend"
+                  >
+                    Local Addresses
+                  </legend>
+                  <div
+                    class="mx_SettingsFieldset_description"
+                  >
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Set addresses for this space so users can find this space through your homeserver (matrix.org)
+                    </div>
+                  </div>
+                  <div
+                    class="mx_SettingsFieldset_content"
+                  >
+                    <details>
+                      <summary
+                        class="mx_AliasSettings_localAddresses"
+                      >
+                        Show more
+                      </summary>
+                      <div
+                        class="mx_EditableItemList"
+                        id="roomAliases"
+                      >
+                        <div
+                          class="mx_EditableItemList_label"
+                        >
+                          This space has no local addresses
+                        </div>
+                        <div
+                          class="mx_Field mx_Field_input mx_RoomAliasField mx_Field_labelAlwaysTopLeft"
+                        >
+                          <span
+                            class="mx_Field_prefix"
+                          >
+                            <span>
+                              #
+                            </span>
+                          </span>
+                          <input
+                            autocomplete="off"
+                            id="mx_Field_9"
+                            label="Room address"
+                            maxlength="243"
+                            placeholder="e.g. my-room"
+                            type="text"
+                            value=""
+                          />
+                          <label
+                            for="mx_Field_9"
+                          >
+                            Room address
+                          </label>
+                          <span
+                            class="mx_Field_postfix"
+                          >
+                            <span
+                              title=":matrix.org"
+                            >
+                              :matrix.org
+                            </span>
+                          </span>
+                        </div>
+                        <div
+                          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                          role="button"
+                          tabindex="0"
+                        >
+                          Add
+                        </div>
+                      </div>
+                    </details>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
 <DocumentFragment>
   <div
@@ -156,6 +528,9 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
               </form>
             </div>
           </fieldset>
+          <form
+            class="_root_19upo_16"
+          />
         </div>
       </div>
     </div>

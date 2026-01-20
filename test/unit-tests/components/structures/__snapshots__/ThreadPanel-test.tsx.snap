@@ -7,7 +7,7 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
   >
     <button
       aria-labelledby="_r_0_"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -57,7 +57,7 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
   >
     <button
       aria-labelledby="_r_6_"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 28px;"

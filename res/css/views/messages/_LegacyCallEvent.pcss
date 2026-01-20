@@ -30,24 +30,11 @@ Please see LICENSE files in the repository root for full details.
         .mx_LegacyCallEvent_iconButton {
             display: inline-flex;
 
-            &::before {
-                content: "";
-
+            svg {
                 height: 16px;
                 width: 16px;
-                background-color: $secondary-content;
-                mask-repeat: no-repeat;
-                mask-size: contain;
-                mask-position: center;
+                color: $secondary-content;
             }
-        }
-
-        .mx_LegacyCallEvent_silence::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/volume-on-solid.svg");
-        }
-
-        .mx_LegacyCallEvent_unSilence::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/volume-off-solid.svg");
         }
 
         &.mx_LegacyCallEvent_voice {

@@ -27,36 +27,42 @@ Please see LICENSE files in the repository root for full details.
         width: 25%; /* 8px for a 32x32 avatar */
         height: 25%;
         border-radius: 50%;
-    }
 
-    .mx_DecoratedRoomAvatar_icon::before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        right: 0;
-        position: absolute;
-        border-radius: 8px;
+        &::before,
+        svg {
+            width: 100%;
+            height: 100%;
+            right: 0;
+            position: absolute;
+            border-radius: 8px;
+        }
     }
 
     .mx_DecoratedRoomAvatar_icon_globe svg {
-        width: inherit;
-        height: inherit;
+        /* Oversize the icon to account for the dead space around the icon within the canvas */
+        width: 120%;
+        height: 120%;
+        margin: -10%;
         color: $secondary-content;
     }
 
     .mx_DecoratedRoomAvatar_icon_offline::before {
+        content: "";
         background-color: $presence-offline;
     }
 
     .mx_DecoratedRoomAvatar_icon_online::before {
+        content: "";
         background-color: $accent;
     }
 
     .mx_DecoratedRoomAvatar_icon_away::before {
+        content: "";
         background-color: $presence-away;
     }
 
     .mx_DecoratedRoomAvatar_icon_busy::before {
+        content: "";
         background-color: $presence-busy;
     }
 

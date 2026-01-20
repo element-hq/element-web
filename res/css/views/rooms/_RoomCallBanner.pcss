@@ -31,16 +31,12 @@ Please see LICENSE files in the repository root for full details.
     font-weight: var(--cpd-font-weight-semibold);
     padding-right: $spacing-8;
 
-    &::before {
+    svg {
         display: inline-block;
         vertical-align: middle;
-        content: "";
-        background-color: $secondary-content;
-        mask-size: 16px;
-        mask-position: center;
+        color: $secondary-content;
         width: 16px;
-        height: 1.2em; /* to match line height */
+        height: 16px;
         margin-right: 8px;
-        mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
     }
 }

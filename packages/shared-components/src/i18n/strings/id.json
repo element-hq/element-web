@@ -10,10 +10,6 @@
         "play": "Mainkan",
         "search": "Cari"
     },
-    "encryption": {
-        "pinned_identity_changed": "Identitas (<b>%(userId)s</b>) %(displayName)s tampaknya telah berubah. <a>Pelajari lebih lanjut</a>",
-        "withdraw_verification_action": "Tolak verifikasi"
-    },
     "left_panel": {
         "open_dial_pad": "Buka tombol penyetel"
     },

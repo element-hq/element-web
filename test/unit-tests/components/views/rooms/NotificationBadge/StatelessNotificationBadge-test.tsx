@@ -25,7 +25,7 @@ describe("StatelessNotificationBadge", () => {
             <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Highlight} knocked={true} />,
         );
         expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
-        expect(container.querySelector(".mx_NotificationBadge_knocked")).toBeInTheDocument();
+        expect(container.querySelector("svg")).toHaveAccessibleName("Request to join sent");
     });
 
     it("has dot style for activity", () => {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import ServerPickerDialog from "../../../../../src/components/views/dialogs/ServerPickerDialog";
 import SdkConfig from "../../../../../src/SdkConfig";
@@ -54,7 +54,7 @@ describe("<ServerPickerDialog />", () => {
             validated_server_config: defaultServerConfig,
         });
 
-        fetchMock.resetHistory();
+        fetchMock.clearHistory();
         fetchMock.catch({
             status: 404,
             body: '{"errcode": "M_UNRECOGNIZED", "error": "Unrecognized request"}',

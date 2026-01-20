@@ -423,6 +423,20 @@ describe("<RoomPreviewBar />", () => {
                     await testJoinButton({ inviterName, invitedEmail })();
                 });
 
+                it("renders email mismatch message when no email bound", async () => {
+                    MatrixClientPeg.safeGet().lookupThreePid = jest.fn().mockReturnValue({});
+                    const component = getComponent({ inviterName, invitedEmail });
+                    await waitForElementToBeRemoved(() => component.queryByRole("progressbar"));
+
+                    expect(getMessage(component)).toMatchSnapshot();
+                    expect(MatrixClientPeg.safeGet().lookupThreePid).toHaveBeenCalledWith(
+                        "email",
+                        invitedEmail,
+                        "mock-token",
+                    );
+                    await testJoinButton({ inviterName, invitedEmail })();
+                });
+
                 it("renders invite message when invite email mxid match", async () => {
                     MatrixClientPeg.safeGet().lookupThreePid = jest.fn().mockReturnValue({ mxid: userId });
                     const component = getComponent({ inviterName, invitedEmail });

@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 $button-size: 32px;
-$icon-size: 24px;
-$button-gap: 24px;
+$button-gap: var(--cpd-space-3x);
 
 :root {
     --image-view-panel-height: 68px;
@@ -82,6 +81,8 @@ $button-gap: 24px;
 }
 
 .mx_ImageView_toolbar {
+    --icon-size: 24px;
+
     padding-right: 16px;
     pointer-events: initial;
     display: flex;
@@ -89,60 +90,30 @@ $button-gap: 24px;
     flex-grow: 1;
     flex-basis: 0;
     justify-content: flex-end;
-    gap: calc($button-gap - ($button-size - $icon-size));
+    gap: $button-gap;
 }
 
 .mx_ImageView_button {
-    padding: calc(($button-size - $icon-size) / 2);
+    padding: calc(($button-size - var(--icon-size)) / 2);
+    width: var(--icon-size);
+    height: var(--icon-size);
     display: block;
 
-    &::before {
-        content: "";
-        height: $icon-size;
-        width: $icon-size;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        mask-position: center;
+    svg {
+        height: inherit;
+        width: inherit;
         display: block;
-        background-color: $icon-button-color;
+        color: $icon-button-color;
     }
 }
 
-.mx_ImageView_button_rotateCW::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/rotate-right.svg");
-}
-
-.mx_ImageView_button_rotateCCW::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/rotate-left.svg");
-}
-
-.mx_ImageView_button_zoomOut::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/zoom-out.svg");
-}
-
-.mx_ImageView_button_zoomIn::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/zoom-in.svg");
-}
-
-.mx_ImageView_button_download::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/download.svg");
-}
-
-.mx_ImageView_button_more::before {
-    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
-    mask-size: 28px;
+.mx_ImageView_button_more {
+    --icon-size: 28px;
 }
 
 .mx_ImageView_button_close {
-    padding: calc($button-size - $button-size);
     border-radius: 100%;
     background: #21262c; /* same on all themes */
-    &::before {
-        width: $button-size;
-        height: $button-size;
-        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-        mask-size: 24px;
-    }
 }
 
 @media (prefers-reduced-motion) {
