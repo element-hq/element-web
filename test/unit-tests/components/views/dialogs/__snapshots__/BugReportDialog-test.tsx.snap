@@ -39,11 +39,6 @@ exports[`BugReportDialog renders when the config only allows local downloads: lo
       >
         Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.
       </p>
-      <p
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
-      >
-        Your configuration only allows you to download logs locally.
-      </p>
     </div>
     <div
       class="mx_Dialog_buttons"
