@@ -61,9 +61,15 @@ import { getLateEventInfo } from "./grouper/LateEventGrouper";
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
 
+/**
+ * Indicates which separator (if any) should be rendered between timeline events.
+ */
 export const enum SeparatorKind {
+    /** No separator should be shown between the two events. */
     None,
+    /** Insert a date separator (oriented by event date boundaries). */
     Date,
+    /** Insert a late-event separator when events belong to different late groups. */
     LateEvent,
 }
 
@@ -266,7 +272,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
-    static Date: SeparatorKind;
 
     public constructor(props: IProps) {
         super(props);
