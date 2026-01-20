@@ -40,6 +40,7 @@ const config: Config = {
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "counterpart": "<rootDir>/node_modules/counterpart",
+        "@vector-im/compound-web": "<rootDir>/node_modules/@vector-im/compound-web",
     },
     transformIgnorePatterns: [
         "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n)).+$",
