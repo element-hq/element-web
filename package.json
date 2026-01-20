@@ -287,7 +287,7 @@
         "storybook": "^10.0.7",
         "stylelint": "^16.23.0",
         "stylelint-config-standard": "^39.0.0",
-        "stylelint-scss": "^6.0.0",
+        "stylelint-scss": "^7.0.0",
         "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^11.0.0",
