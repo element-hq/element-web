@@ -50,6 +50,7 @@ const MAX_TS = Number.MAX_SAFE_INTEGER;
 const MAX_EVENT_ID = "\uffff";
 // 单次搜索最多扫描的记录数，避免罕见关键词导致一次性遍历整个 IndexedDB 卡顿。
 const MAX_SCAN_RECORDS = 2000;
+const TEXT_MESSAGE_TYPES = new Set(["m.text", "m.notice", "m.emote"]);
 
 let db: IDBDatabase | null = null;
 let dbName: string | null = null;
@@ -137,6 +138,16 @@ function getCutoffTs(): number {
     return Date.now() - maxEventAgeMs;
 }
 
+async function setMaxEventAgeDays(days?: number): Promise<void> {
+    if (typeof days !== "number" || !Number.isFinite(days)) return;
+    if (days <= 0) {
+        // 0/负数：不做“按时间淘汰”，允许索引任意历史（对齐 FluffyChat 的“按需拉取/无限回溯”体验）。
+        maxEventAgeMs = 0;
+        return;
+    }
+    maxEventAgeMs = Math.max(1, Math.floor(days)) * DAY_MS;
+}
+
 function isEventTooOld(ev: IEventWithRoomId, cutoffTs: number): boolean {
     if (!cutoffTs) return false;
     const ts = ev.origin_server_ts;
@@ -145,17 +156,11 @@ function isEventTooOld(ev: IEventWithRoomId, cutoffTs: number): boolean {
 }
 
 function extractBody(ev: IEventWithRoomId): string | null {
+    if (ev.type !== "m.room.message") return null;
     const content = (ev as any).content ?? {};
-    switch (ev.type) {
-        case "m.room.message":
-            return content.body ?? null;
-        case "m.room.name":
-            return content.name ?? null;
-        case "m.room.topic":
-            return content.topic ?? null;
-        default:
-            return null;
-    }
+    const msgtype = content.msgtype;
+    if (typeof msgtype !== "string" || !TEXT_MESSAGE_TYPES.has(msgtype)) return null;
+    return content.body ?? null;
 }
 
 function hasUrl(content: any): boolean {
@@ -243,10 +248,11 @@ function parseNextBatch(nextBatch?: string): { key?: IDBValidKey; count?: number
     if (!nextBatch) return {};
     try {
         const parsed = JSON.parse(nextBatch);
-        if (parsed && typeof parsed === "object" && "key" in parsed) {
+        if (parsed && typeof parsed === "object") {
+            // 兼容 { key, count, exhausted } 以及“仅 metadata 不带 key”的情况（例如本地索引为空时）。
             return {
-                key: (parsed as { key?: IDBValidKey }).key,
-                count: (parsed as any).count,
+                key: (parsed as any).key as IDBValidKey | undefined,
+                count: (parsed as any).count as number | undefined,
                 exhausted: Boolean((parsed as any).exhausted),
             };
         }
@@ -361,6 +367,7 @@ async function scanRoomForMatches(
                 exhausted = true;
                 // 记录已扫描到的最老事件 key，便于在 backfill 后继续向更老历史推进。
                 if (lastKey) nextKey = lastKey;
+                else if (startKey) nextKey = startKey;
                 resolved = true;
                 resolve();
                 return;
@@ -368,6 +375,17 @@ async function scanRoomForMatches(
             scanned += 1;
             lastKey = cursor.key as IDBValidKey;
             const record = cursor.value as EventRecord;
+            // 仅把“文本消息”纳入搜索结果，避免房间名/主题/文件名等噪音干扰（对齐 FluffyChat 体验）。
+            if (record.type !== "m.room.message" || !TEXT_MESSAGE_TYPES.has(record.msgtype ?? "")) {
+                if (scanned >= MAX_SCAN_RECORDS) {
+                    nextKey = cursor.key as IDBValidKey;
+                    resolved = true;
+                    resolve();
+                    return;
+                }
+                cursor.continue();
+                return;
+            }
             const bodyLower = record.body_lower ?? "";
             if (bodyLower.includes(termLower)) {
                 records.push(record);
@@ -431,7 +449,8 @@ async function searchEventIndex(searchArgs: ISearchArgs): Promise<IResultRoomEve
         count: totalCount,
         highlights: [term],
         results,
-        next_batch: nextKey ? JSON.stringify({ key: nextKey, count: totalCount, exhausted }) : undefined,
+        // 始终返回包含 exhausted 的 next_batch（即使没有 key），让上层能判断是否需要 backfill。
+        next_batch: JSON.stringify({ key: nextKey, count: totalCount, exhausted }),
     };
 }
 
@@ -650,6 +669,7 @@ async function deleteEventIndex(): Promise<void> {
 const handlers: Record<string, (...args: any[]) => Promise<any>> = {
     supportsEventIndexing,
     initEventIndex,
+    setMaxEventAgeDays,
     addEventToIndex,
     deleteEvent,
     isEventIndexEmpty,

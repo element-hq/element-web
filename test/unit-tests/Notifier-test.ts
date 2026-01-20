@@ -19,7 +19,7 @@ import {
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
-import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
@@ -433,26 +433,15 @@ describe("Notifier", () => {
         });
 
         it("should not show toast when group call is already connected", () => {
-            const spyCallMemberships = jest.spyOn(MatrixRTCSession, "callMembershipsForRoom").mockReturnValue([
-                new CallMembership(
-                    mkEvent({
-                        event: true,
-                        room: testRoom.roomId,
-                        user: userId,
-                        type: EventType.GroupCallMemberPrefix,
-                        content: {},
-                    }),
-                    {
-                        call_id: "123",
-                        application: "m.call",
-                        focus_active: { type: "livekit" },
-                        foci_preferred: [],
-                        device_id: "DEVICE",
-                    },
-                ),
+            const spyCallMemberships = jest.spyOn(MatrixRTCSession as any, "callMembershipsForRoom").mockReturnValue([
+                // Notifier 只需要判断 m.sender === cli.getUserId()，这里不必构造完整 CallMembership 实例。
+                { sender: userId } as any,
             ]);
 
-            const roomSession = MatrixRTCSession.roomSessionForRoom(mockClient, testRoom);
+            const roomSession =
+                (MatrixRTCSession as any).roomSessionForRoom?.(mockClient, testRoom) ??
+                // 旧版 matrix-js-sdk 可能没有 roomSessionForRoom：此处仅为满足 mock 结构。
+                ({} as any);
 
             mockClient.matrixRTC.getRoomSession.mockReturnValue(roomSession);
             emitCallNotificationEvent();

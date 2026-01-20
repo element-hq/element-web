@@ -486,8 +486,17 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     private performCustomEventHandling(ev: MatrixEvent): void {
         const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(ev.getRoomId());
-        const thisUserHasConnectedDevice =
-            room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
+        const thisUserHasConnectedDevice = (() => {
+            if (!room) return false;
+            const callMembershipsForRoom = (MatrixRTCSession as unknown as any)?.callMembershipsForRoom;
+            if (typeof callMembershipsForRoom !== "function") return false;
+            try {
+                return callMembershipsForRoom(room).some((m: any) => m?.sender === cli.getUserId());
+            } catch (e) {
+                logger.warn("Failed to evaluate MatrixRTC call memberships for room", e);
+                return false;
+            }
+        })();
 
         if (EventType.RTCNotification === ev.getType() && !thisUserHasConnectedDevice) {
             const content = ev.getContent() as IRTCNotificationContent;

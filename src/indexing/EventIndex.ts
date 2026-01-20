@@ -38,6 +38,9 @@ import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
+import { type ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
 import {
     type ICrawlerCheckpoint,
     type IEventAndProfile,
@@ -64,6 +67,8 @@ interface ICrawler {
  */
 export default class EventIndex extends EventEmitter {
     private crawler: ICrawler | null = null;
+    private activeRoomId: string | null = null;
+    private activeRoomChangedDispatchToken: string | undefined;
 
     /**
      * A list of checkpoints which are awaiting processing by the crawler, once it has done with `currentCheckpoint`.
@@ -93,6 +98,15 @@ export default class EventIndex extends EventEmitter {
         return PlatformPeg.get()?.getHumanReadableName() === "Web Platform";
     }
 
+    /**
+     * Web 端对齐 FluffyChat：只在“用户正在查看的房间”按需建立索引。
+     * 也就是说：不做跨房间的后台索引/预抓取，避免资源占用与隐私暴露面扩大。
+     */
+    private shouldIndexRoom(roomId: string): boolean {
+        if (!this.isWebPlatform()) return true;
+        return Boolean(this.activeRoomId) && this.activeRoomId === roomId;
+    }
+
     public async init(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
@@ -107,6 +121,7 @@ export default class EventIndex extends EventEmitter {
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
         this.logger.debug("Loaded checkpoints", JSON.stringify(this.crawlerCheckpoints));
 
+        this.registerActiveRoomChangedListener();
         this.registerListeners();
     }
 
@@ -121,6 +136,23 @@ export default class EventIndex extends EventEmitter {
         client.on(RoomEvent.TimelineReset, this.onTimelineReset);
         client.on(RoomStateEvent.Events, this.onRoomStateEvent);
     }
+
+    private registerActiveRoomChangedListener(): void {
+        if (this.activeRoomChangedDispatchToken) return;
+        this.activeRoomChangedDispatchToken = defaultDispatcher.register(this.onDispatch);
+    }
+
+    private removeActiveRoomChangedListener(): void {
+        if (!this.activeRoomChangedDispatchToken) return;
+        defaultDispatcher.unregister(this.activeRoomChangedDispatchToken);
+        this.activeRoomChangedDispatchToken = undefined;
+    }
+
+    private onDispatch = (payload: { action?: string }): void => {
+        if (payload.action !== Action.ActiveRoomChanged) return;
+        const { newRoomId } = payload as ActiveRoomChangedPayload;
+        this.activeRoomId = newRoomId;
+    };
 
     /**
      * Remove the event index specific event listeners.
@@ -252,6 +284,7 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.safeGet();
 
         const roomId = ev.getRoomId()!;
+        if (!this.shouldIndexRoom(roomId)) return;
         // Web 端：所有房间都走本地索引；其它平台保持原逻辑（仅加密房间本地索引）。
         if (!this.isWebPlatform() && !client.isRoomEncrypted(roomId)) return;
 
@@ -270,6 +303,7 @@ export default class EventIndex extends EventEmitter {
     };
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
+        if (this.isWebPlatform()) return;
         if (!MatrixClientPeg.safeGet().isRoomEncrypted(state.roomId)) return;
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
@@ -304,6 +338,7 @@ export default class EventIndex extends EventEmitter {
      */
     private onTimelineReset = async (room: Room | undefined): Promise<void> => {
         if (!room) return;
+        if (this.isWebPlatform()) return;
         if (!MatrixClientPeg.safeGet().isRoomEncrypted(room.roomId)) return;
 
         this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
@@ -687,6 +722,7 @@ export default class EventIndex extends EventEmitter {
     public async close(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         this.removeListeners();
+        this.removeActiveRoomChangedListener();
         this.stopCrawler();
         await indexManager?.closeEventIndex();
     }

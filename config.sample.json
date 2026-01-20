@@ -38,6 +38,7 @@
     "setting_defaults": {
         "breadcrumbs": true
     },
+    "local_event_index_max_event_age_days": 0,
     "jitsi": {
         "preferred_domain": "meet.element.io"
     },

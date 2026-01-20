@@ -152,6 +152,57 @@ Please see LICENSE files in the repository root for full details.
         text-align: center;
     }
 
+    .mx_RoomSearchResultItem {
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-2x);
+        padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    }
+
+    .mx_RoomSearchResultItem_time {
+        flex-shrink: 0;
+        width: 52px;
+        text-align: right;
+        color: var(--cpd-color-text-secondary);
+        font: var(--cpd-font-body-sm-regular);
+    }
+
+    .mx_RoomSearchResultItem_avatar {
+        flex-shrink: 0;
+    }
+
+    .mx_RoomSearchResultItem_content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .mx_RoomSearchResultItem_sender {
+        font: var(--cpd-font-body-md-semibold);
+        margin-bottom: 2px;
+    }
+
+    .mx_RoomSearchResultItem_snippet {
+        color: var(--cpd-color-text-secondary);
+        font: var(--cpd-font-body-sm-regular);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-break: break-word;
+    }
+
+    /* RoomSearchView 使用“节选 + 高亮”而非 EventTile，补齐高亮样式 */
+    .mx_EventTile_searchHighlight {
+        background-color: $accent;
+        color: $accent-fg-color;
+        border-radius: 5px;
+        padding-inline: 2px;
+    }
+
+    .mx_RoomSearchResultItem_jump {
+        flex-shrink: 0;
+    }
+
     .mx_SearchResultTile {
         display: flex;
         align-items: flex-start;

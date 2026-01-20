@@ -1064,7 +1064,9 @@
         "empty_description": "從聊天中附加檔案，或將其拖放到聊天室的任何地方。",
         "empty_heading": "此聊天室中沒有可見的檔案",
         "guest_note": "您必須<a>註冊</a>以使用此功能",
-        "peek_note": "您必須加入聊天室來檢視它的檔案"
+        "peek_note": "您必須加入聊天室來檢視它的檔案",
+        "search_placeholder": "按檔案名稱搜尋…",
+        "tab_media": "媒體"
     },
     "forward": {
         "filter_placeholder": "搜尋聊天室或夥伴",
@@ -1775,6 +1777,7 @@
         "rejoin_button": "重新加入",
         "search": {
             "all_rooms_button": "搜尋所有聊天室",
+            "placeholder": "搜尋訊息…（按 Enter）",
             "this_room_button": "搜尋此聊天室"
         },
         "status_bar": {

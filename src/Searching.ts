@@ -24,7 +24,11 @@ import EventIndexPeg from "./indexing/EventIndexPeg";
 import PlatformPeg from "./PlatformPeg";
 import { isNotUndefined } from "./Typeguards";
 
-const SEARCH_LIMIT = 10;
+const SERVER_SEARCH_LIMIT = 10;
+// FluffyChat 风格：本地搜索一次拉取更多结果，减少“显示更多”的点击次数。
+const LOCAL_SEARCH_LIMIT = 30;
+// combinedSearch/combinedPagination 使用的结果窗口大小：保持与服务端搜索分页一致。
+const SEARCH_LIMIT = SERVER_SEARCH_LIMIT;
 
 async function serverSideSearch(
     client: MatrixClient,
@@ -33,7 +37,7 @@ async function serverSideSearch(
     abortSignal?: AbortSignal,
 ): Promise<{ response: ISearchResponse; query: ISearchRequestBody }> {
     const filter: IRoomEventFilter = {
-        limit: SEARCH_LIMIT,
+        limit: SERVER_SEARCH_LIMIT,
     };
 
     if (roomId !== undefined) filter.rooms = [roomId];
@@ -162,7 +166,7 @@ async function localSearch(
         search_term: searchTerm,
         before_limit: 0,
         after_limit: 0,
-        limit: SEARCH_LIMIT,
+        limit: LOCAL_SEARCH_LIMIT,
         order_by_recency: true,
         room_id: undefined,
     };

@@ -9,18 +9,51 @@ Please see LICENSE files in the repository root for full details.
 .mx_FilePanel {
     order: 2;
     flex: 1 1 0;
-    overflow-y: auto;
     display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
 
-    .mx_RoomView_messageListWrapper {
-        flex-direction: row;
-        align-items: center;
+    .mx_FilePanel_controls {
+        padding: var(--cpd-space-3x);
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-2x);
+    }
+
+    .mx_FilePanel_scrollPanel {
+        flex: 1;
+        min-height: 0;
+
+        .mx_RoomView_messageListWrapper {
+            justify-content: flex-start;
+        }
+
+        .mx_RoomView_MessageList {
+            width: 100%;
+            gap: var(--cpd-space-6x);
+            justify-content: flex-start;
+        }
+    }
+
+    .mx_FilePanel_groupHeader {
+        padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    }
+
+    .mx_FilePanel_groupHeaderLabel {
+        font: var(--cpd-font-body-sm-regular);
+        color: var(--cpd-color-text-secondary);
+    }
+
+    .mx_FilePanel_loading,
+    .mx_FilePanel_noMore {
+        padding: var(--cpd-space-3x);
+        display: flex;
         justify-content: center;
     }
 
-    .mx_RoomView_MessageList {
-        width: 100%;
-        gap: var(--cpd-space-6x);
+    .mx_FilePanel_empty {
+        padding: var(--cpd-space-3x);
     }
 
     /* FIXME: rather than having EventTile's default CSS be for MessagePanel,
@@ -73,5 +106,26 @@ Please see LICENSE files in the repository root for full details.
     .mx_EventTile_line {
         margin-inline-end: 0;
         padding-inline-start: 0;
+    }
+
+    /* FilePanel 复用 SearchResultTile：去掉有序列表序号，并把“跳转 >”固定在同一行右侧 */
+    .mx_SearchResultTile {
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-2x);
+
+        > ol {
+            flex: 1;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            min-width: 0;
+        }
+    }
+
+    .mx_SearchResultTile_jump {
+        flex-shrink: 0;
+        margin-top: 0;
+        align-self: center;
     }
 }

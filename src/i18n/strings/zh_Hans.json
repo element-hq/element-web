@@ -976,7 +976,9 @@
         "empty_description": "从聊天中附加文件或将文件拖放到房间的任何地方。",
         "empty_heading": "此房间中没有文件可见",
         "guest_note": "你必须 <a>注册</a> 以使用此功能",
-        "peek_note": "你必须加入房间以看到它的文件"
+        "peek_note": "你必须加入房间以看到它的文件",
+        "search_placeholder": "按文件名搜索…",
+        "tab_media": "媒体"
     },
     "forward": {
         "filter_placeholder": "搜索房间或用户",
@@ -1611,6 +1613,7 @@
         "peek_join_prompt": "你正在预览 %(roomName)s。想加入吗？",
         "read_topic": "点击阅读话题",
         "search": {
+            "placeholder": "搜索消息…（回车）",
             "tab_messages": "消息",
             "tab_gallery": "图库",
             "tab_files": "文件"

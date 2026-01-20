@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 
+import SdkConfig from "../../SdkConfig";
 import BaseEventIndexManager, {
     type ICrawlerCheckpoint,
     type IEventAndProfile,
@@ -99,7 +100,11 @@ export class WebEventIndexManager extends BaseEventIndexManager {
     }
 
     public async initEventIndex(userId: string, deviceId: string): Promise<void> {
-        return this.rpc.call("initEventIndex", userId, deviceId);
+        await this.rpc.call("initEventIndex", userId, deviceId);
+        const days = SdkConfig.get("local_event_index_max_event_age_days");
+        if (typeof days === "number") {
+            await this.rpc.call("setMaxEventAgeDays", days);
+        }
     }
 
     public async addEventToIndex(ev: IEventAndProfile["event"], profile: IEventAndProfile["profile"]): Promise<void> {

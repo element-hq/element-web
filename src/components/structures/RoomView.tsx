@@ -41,7 +41,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { debounce, throttle } from "lodash";
+import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
@@ -1928,9 +1928,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         defaultDispatcher.fire(Action.ViewRoomDirectory);
     };
 
-    private onSearchChange = debounce((term: string): void => {
+    private onSearchChange = (term: string): void => {
         this.onSearch(term);
-    }, 300);
+    };
 
     private onCancelSearchClick = (): Promise<void> => {
         return new Promise<void>((resolve) => {

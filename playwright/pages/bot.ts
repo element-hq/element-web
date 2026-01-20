@@ -152,20 +152,26 @@ export class Bot extends Client {
                 };
 
                 // Store the cached secret storage key and return it when `getSecretStorageKey` is called
-                let cachedKey: { keyId: string; key: Uint8Array };
+                let cachedKey: { keyId: string; key: Uint8Array<ArrayBuffer> };
                 const cacheSecretStorageKey = (
                     keyId: string,
                     keyInfo: SecretStorageKeyDescription,
                     key: Uint8Array,
                 ) => {
+                    const arrayBufferKey = (() => {
+                        if (key.buffer instanceof ArrayBuffer) return key as unknown as Uint8Array<ArrayBuffer>;
+                        const buffer = new ArrayBuffer(key.byteLength);
+                        new Uint8Array(buffer).set(key);
+                        return new Uint8Array(buffer);
+                    })();
                     cachedKey = {
                         keyId,
-                        key,
+                        key: arrayBufferKey,
                     };
                 };
 
                 const getSecretStorageKey = () =>
-                    Promise.resolve<[string, Uint8Array]>([cachedKey.keyId, cachedKey.key]);
+                    Promise.resolve<[string, Uint8Array<ArrayBuffer>]>([cachedKey.keyId, cachedKey.key]);
 
                 const cryptoCallbacks = {
                     getCrossSigningKey,

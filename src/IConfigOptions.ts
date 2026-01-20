@@ -90,6 +90,10 @@ export interface IConfigOptions {
 
     setting_defaults?: Record<string, any>; // <SettingName, Value>
 
+    // Web 端本地消息索引（IndexedDB）默认只保留最近 90 天，以控制磁盘占用。
+    // 设为 0（或负数）表示不限制事件年龄，可搜索更久的历史（会显著增加本地存储占用）。
+    local_event_index_max_event_age_days?: number;
+
     integrations_ui_url?: string;
     integrations_rest_url?: string;
     integrations_widgets_urls?: string[];

@@ -200,19 +200,43 @@ const RoomSummaryCardView: React.FC<IProps> = ({
     );
 
     const header = onSearchChange && (
-        <Form.Root className="mx_RoomSummaryCard_search" onSubmit={(e) => e.preventDefault()}>
+        <Form.Root
+            className="mx_RoomSummaryCard_search"
+            onSubmit={(e) => {
+                e.preventDefault();
+                const trimmed = searchValue.trim();
+                if (trimmed) {
+                    onSearchChange(trimmed);
+                } else {
+                    onSearchCancel?.();
+                }
+            }}
+        >
             <Search
                 placeholder={_t("room|search|placeholder")}
                 name="room_message_search"
                 onChange={(e) => {
-                    setSearchValue(e.currentTarget.value);
-                    onSearchChange(e.currentTarget.value);
+                    const value = e.currentTarget.value;
+                    setSearchValue(value);
+                    // 清空输入时直接退出搜索，避免停留在旧结果页造成困惑。
+                    if (!value.trim()) onSearchCancel?.();
                 }}
                 value={searchValue}
                 className="mx_no_textinput"
                 ref={vm.searchInputRef}
                 autoFocus={focusRoomSearch}
-                onKeyDown={vm.onUpdateSearchInput}
+                onKeyDown={(e) => {
+                    vm.onUpdateSearchInput(e);
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        const trimmed = e.currentTarget.value.trim();
+                        if (trimmed) {
+                            onSearchChange(trimmed);
+                        } else {
+                            onSearchCancel?.();
+                        }
+                    }
+                }}
             />
         </Form.Root>
     );

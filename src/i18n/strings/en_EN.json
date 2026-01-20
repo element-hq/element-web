@@ -1287,7 +1287,9 @@
         "empty_description": "Attach files from chat or just drag and drop them anywhere in a room.",
         "empty_heading": "No files visible in this room",
         "guest_note": "You must <a>register</a> to use this functionality",
-        "peek_note": "You must join the room to see its files"
+        "peek_note": "You must join the room to see its files",
+        "search_placeholder": "Search by file name…",
+        "tab_media": "Media"
     },
     "forward": {
         "filter_placeholder": "Search for rooms or people",
@@ -2121,7 +2123,7 @@
         "room_is_low_priority": "This is a low priority room",
         "search": {
             "all_rooms_button": "Search all rooms",
-            "placeholder": "Search messages…",
+            "placeholder": "Search messages… (press Enter)",
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"
