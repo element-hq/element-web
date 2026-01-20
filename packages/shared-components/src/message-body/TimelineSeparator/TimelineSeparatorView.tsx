@@ -53,7 +53,7 @@ interface TimelineSeparatorViewProps {
 export function TimelineSeparatorView({ vm }: Readonly<TimelineSeparatorViewProps>): JSX.Element {
     const {
         label, children,
-    } = useViewModel<TimelineSeparatorViewSnapshot>(vm);
+    } = useViewModel(vm);
 
     return (
         <div className={styles.mx_TimelineSeparator} role="separator" aria-label={label}>
