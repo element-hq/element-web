@@ -37,3 +37,6 @@ storybook-static
 /packages/shared-components/node_modules
 /packages/shared-components/dist
 /packages/shared-components/src/i18nKeys.d.ts
+
+# TSC incremental compilation information
+*.tsbuildinfo
