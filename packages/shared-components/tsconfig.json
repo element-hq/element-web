@@ -19,9 +19,6 @@
             "jest-matrix-react": ["./src/test/utils/jest-matrix-react"]
         }
     },
-    "paths": {
-        "#types/*": ["./node_modules/vite/types/*"]
-    },
     "include": ["./src/**/*.ts", "./src/**/*.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
