@@ -4,7 +4,7 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator in 
 <div>
   <div
     aria-label="Label Separator"
-    class="mx_TimelineSeparator"
+    class="mx_TimelineSeparator timelineSeparator"
     role="separator"
   >
     <hr
@@ -22,7 +22,7 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator wit
 <div>
   <div
     aria-label="Custom Label"
-    class="mx_TimelineSeparator"
+    class="mx_TimelineSeparator timelineSeparator"
     role="separator"
   >
     <hr
@@ -30,7 +30,7 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator wit
     />
     <h2
       aria-hidden="true"
-      class="mx_DateSeparator_dateHeading"
+      class="timelineSeparator"
     >
       Thursday
     </h2>
@@ -45,7 +45,7 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator wit
 <div>
   <div
     aria-label="Date Event Separator"
-    class="mx_TimelineSeparator"
+    class="mx_TimelineSeparator timelineSeparator"
     role="separator"
   >
     <hr
@@ -63,7 +63,7 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator wit
 <div>
   <div
     aria-label="Late Event Separator"
-    class="mx_TimelineSeparator"
+    class="mx_TimelineSeparator timelineSeparator"
     role="separator"
   >
     <hr
@@ -81,7 +81,7 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator wit
 <div>
   <div
     aria-label="Separator without children"
-    class="mx_TimelineSeparator"
+    class="mx_TimelineSeparator timelineSeparator"
     role="separator"
   >
     <hr

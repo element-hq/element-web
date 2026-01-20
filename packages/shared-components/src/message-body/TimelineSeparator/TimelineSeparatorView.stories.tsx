@@ -42,7 +42,7 @@ export const Default = Template.bind({});
 export const WithHtmlChild = Template.bind({});
 WithHtmlChild.args = {
     label: "Custom Label",
-    children: <h2 className={styles.mx_DateSeparator_dateHeading} aria-hidden="true">Thursday</h2>,
+    children: <h2 className={styles.timelineSeparator} aria-hidden="true">Thursday</h2>,
 };
 
 export const WithDateEvent = Template.bind({});

@@ -7,6 +7,7 @@
 
 import { type JSX, type ReactNode } from "react";
 import React from "react";
+import classNames from "classnames";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
@@ -55,8 +56,9 @@ export function TimelineSeparatorView({ vm }: Readonly<TimelineSeparatorViewProp
         label, children,
     } = useViewModel(vm);
 
+    // Keep mx_TimelineSeparator to support the compatibility with existing timeline and the all the layout
     return (
-        <div className={styles.mx_TimelineSeparator} role="separator" aria-label={label}>
+        <div className={classNames("mx_TimelineSeparator", styles.timelineSeparator)} role="separator" aria-label={label}>
             <hr role="none" />
             {children}
             <hr role="none" />

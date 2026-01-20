@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_TimelineSeparator {
+.timelineSeparator {
     clear: both;
     margin: 4px 0;
     display: flex;
@@ -14,33 +14,9 @@
     color: var(--cpd-color-text-primary);
 }
 
-.mx_TimelineSeparator > hr {
+.timelineSeparator > hr {
     flex: 1 1 0;
     height: 0;
     border: none;
     border-bottom: 1px solid var(--cpd-color-gray-400);
-}
-
-.mx_DateSeparator_dateContent {
-    padding: 0 25px;
-}
-
-.mx_DateSeparator_dateHeading {
-    flex: 0 0 auto;
-    margin: 0;
-    font-size: inherit;
-    font-weight: inherit;
-    color: inherit;
-    text-transform: capitalize;
-}
-
-.mx_DateSeparator_jumpToDateMenu {
-    display: flex;
-}
-
-.mx_DateSeparator_chevron {
-    align-self: center;
-    width: 16px;
-    height: 16px;
-    color: var(--cpd-color-icon-secondary);
 }
