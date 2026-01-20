@@ -54,14 +54,13 @@ export function initRageshakeStore(): Promise<void> {
     return rageshake.tryInitStorage();
 }
 
-window.mxSendRageshake = async function (text: string, withLogs?: boolean): Promise<void> {
+window.mxSendRageshake = async function (text: string, withLogs = true): Promise<void> {
     const url = SdkConfig.get().bug_report_endpoint_url;
     if (!url) {
         logger.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
         return;
     }
 
-    if (withLogs === undefined) withLogs = true;
     if (!text || !text.trim()) {
         logger.error("Cannot send a rageshake without a message - please tell us what went wrong");
         return;
