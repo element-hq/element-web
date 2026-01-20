@@ -22,7 +22,7 @@ export interface TimelineSeparatorViewSnapshot {
      */
     label: string;
     /**
-     * Optional children to render inside the timeline separator (e.g. a label node).
+     * Optional children to render inside the timeline separator
      */
     children?: ReactNode;
 }
