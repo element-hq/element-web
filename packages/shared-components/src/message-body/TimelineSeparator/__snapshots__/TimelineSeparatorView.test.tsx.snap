@@ -44,7 +44,43 @@ exports[`TimelineSeparatorView Snapshot tests renders the timeline separator wit
 exports[`TimelineSeparatorView Snapshot tests renders the timeline separator without children 1`] = `
 <div>
   <div
-    aria-label="Label Separator"
+    aria-label="Date Event Separator"
+    class="mx_TimelineSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    Wednesday
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparatorView Snapshot tests renders the timeline separator without children 2`] = `
+<div>
+  <div
+    aria-label="Late Event Separator"
+    class="mx_TimelineSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    Fri, Jan 9, 2026
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparatorView Snapshot tests renders the timeline separator without children 3`] = `
+<div>
+  <div
+    aria-label="Separator without children"
     class="mx_TimelineSeparator"
     role="separator"
   >
