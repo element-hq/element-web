@@ -36,12 +36,6 @@ export default defineConfig({
             },
         },
     },
-    resolve: {
-        alias: {
-            // Alias used by i18n.tsx
-            $webapp: resolve(__dirname, "..", "..", "webapp"),
-        },
-    },
     plugins: [
         dts({
             rollupTypes: true,
