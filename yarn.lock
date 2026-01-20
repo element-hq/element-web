@@ -1542,10 +1542,10 @@
   resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-1.9.0.tgz#2e4fcc8809418c8670d4f0576bc4a9a235bc6c50"
   integrity sha512-Ao/V9w+wysZK4bh61LlKlznF10n2ZbD6KcUI46/zUMttXbmJn3ahvbzhEpwYcD+Cjy3ag5ycxLIIGkKV/fncXg==
 
-"@element-hq/element-web-playwright-common@2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-2.2.3.tgz#4fe5d6d9b6dd6f3ec8b835db2b404ae037426213"
-  integrity sha512-5HgWj5k9OevqqJrWdQEdY91kejcZyAozNNLzMFelzTw1Gh/ubmKnAfSSMH3EJoiWXjBs1s3DIOGWV/bn03DfbA==
+"@element-hq/element-web-playwright-common@2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-playwright-common/-/element-web-playwright-common-2.2.4.tgz#b5cc29a2f02e168d43da11c30c895a8ade99299c"
+  integrity sha512-zeJQl+TuAsOoXDmc+7SSvrTtxfRRYsRs9WuhkjsLbZrDOzh3H7h5EDiQAAwZbBgLAm36kz4OLSpr3vBy8d09Gw==
   dependencies:
     "@axe-core/playwright" "^4.10.1"
     "@testcontainers/postgresql" "^11.0.0"
