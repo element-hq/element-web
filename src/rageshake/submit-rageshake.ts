@@ -21,6 +21,7 @@ import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 import { getServerVersionFromFederationApi } from "../components/views/dialogs/devtools/ServerInfo";
 import type * as Tar from "tar-js";
+import { BugReportEndpointURLLocal } from "../IConfigOptions";
 
 interface IOpts {
     labels?: string[];
@@ -343,7 +344,7 @@ async function collectLogs(
  *         the server does not respond with an expected body format.
  */
 export default async function sendBugReport(bugReportEndpoint?: string, opts: IOpts = {}): Promise<string> {
-    if (!bugReportEndpoint || bugReportEndpoint === "local") {
+    if (!bugReportEndpoint || bugReportEndpoint === BugReportEndpointURLLocal) {
         throw new Error("No bug report endpoint has been set.");
     }
 
@@ -422,7 +423,7 @@ export async function submitFeedback(
     extraData: Record<string, any> = {},
 ): Promise<void> {
     const bugReportEndpointUrl = SdkConfig.get().bug_report_endpoint_url;
-    if (!bugReportEndpointUrl || bugReportEndpointUrl === "local") {
+    if (!bugReportEndpointUrl || bugReportEndpointUrl === BugReportEndpointURLLocal) {
         throw new Error("Bug report URL is not set or local");
     }
     let version: string | undefined;

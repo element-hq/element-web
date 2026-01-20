@@ -27,6 +27,7 @@ import { sendSentryReport } from "../../../sentry";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
+import { BugReportEndpointURLLocal } from "../../../IConfigOptions";
 
 export interface BugReportDialogProps {
     onFinished: (success: boolean) => void;
@@ -68,7 +69,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
         this.unmounted = false;
         this.issueRef = React.createRef();
         // This config is static at runtime, but may change during tests.
-        this.isLocalOnly = SdkConfig.get().bug_report_endpoint_url === "local";
+        this.isLocalOnly = SdkConfig.get().bug_report_endpoint_url === BugReportEndpointURLLocal;
     }
 
     public componentDidMount(): void {

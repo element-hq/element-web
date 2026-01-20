@@ -23,6 +23,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import * as rageshake from "../rageshake/rageshake";
 import SdkConfig from "../SdkConfig";
 import sendBugReport, { loadBugReport } from "../rageshake/submit-rageshake";
+import { BugReportEndpointURLLocal } from "../IConfigOptions";
 
 export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves
@@ -65,7 +66,7 @@ window.mxSendRageshake = async function (text: string, withLogs = true): Promise
         logger.error("Cannot send a rageshake without a message - please tell us what went wrong");
         return;
     }
-    if (url === "local") {
+    if (url === BugReportEndpointURLLocal) {
         try {
             const tape = await loadBugReport({
                 userText: text,

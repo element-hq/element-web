@@ -12,6 +12,7 @@ import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import BugReportDialog, { type BugReportDialogProps } from "../dialogs/BugReportDialog";
+import { BugReportEndpointURLLocal } from "../../../IConfigOptions";
 
 /**
  * Renders a button to open the BugReportDialog *if* the configuration
@@ -34,7 +35,9 @@ export function BugReportDialogButton({
     }
     return (
         <Button kind="secondary" size="sm" onClick={onClick}>
-            {bugReportUrl === "local" ? _t("bug_reporting|download_logs") : _t("bug_reporting|submit_debug_logs")}
+            {bugReportUrl === BugReportEndpointURLLocal
+                ? _t("bug_reporting|download_logs")
+                : _t("bug_reporting|submit_debug_logs")}
         </Button>
     );
 }

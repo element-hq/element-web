@@ -17,6 +17,12 @@ import { type ValidatedServerConfig } from "./utils/ValidatedServerConfig";
 /* eslint-disable camelcase */
 /* eslint @typescript-eslint/naming-convention: ["error", { "selector": "property", "format": ["snake_case"] } ] */
 
+/**
+ * Bug reports are enabled but must only be locally
+ * downloadable.
+ */
+export const BugReportEndpointURLLocal = "local";
+
 // see element-web config.md for non-developer docs
 export interface IConfigOptions {
     // dev note: while true that this is arbitrary JSON, it's valuable to enforce that all
@@ -101,7 +107,7 @@ export interface IConfigOptions {
     /**
      * Bug report endpoint URL. "local" means the logs should not be uploaded.
      */
-    bug_report_endpoint_url?: "local" | string; // omission disables bug reporting
+    bug_report_endpoint_url?: typeof BugReportEndpointURLLocal | string; // omission disables bug reporting
     uisi_autorageshake_app?: string; // defaults to "element-auto-uisi"
     sentry?: {
         dsn: string;
