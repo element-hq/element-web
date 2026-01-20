@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 New Vector Ltd.
+ * Copyright 2026 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -16,6 +16,10 @@ import { useI18n } from "../../utils/i18nContext";
 import { getUserNameColorClass } from "../../utils/FormattingUtils";
 import UserIdentifier from "../../utils/UserIdentifier";
 
+
+/**
+ * Information about a member for disambiguation purposes.
+ */
 
 interface MemberInfo {
     userId: string;

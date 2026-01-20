@@ -68,7 +68,13 @@ describe("DisambiguatedProfileView", () => {
 
     it("should display the display name", () => {
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "Test User",
+            member: {
+                rawDisplayName: "Eve",
+                userId: "@eve:matrix.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "Eve",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -77,8 +83,13 @@ describe("DisambiguatedProfileView", () => {
 
     it("should display the MXID when provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "Test User",
-            mxid: "@test:example.org",
+            member: {
+                rawDisplayName: "Test User",
+                userId: "@test:example.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "Test User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -87,7 +98,13 @@ describe("DisambiguatedProfileView", () => {
 
     it("should not display the MXID when not provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "Test User",
+            member: {
+                rawDisplayName: "Test User",
+                userId: "@test:example.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "Test User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -97,7 +114,14 @@ describe("DisambiguatedProfileView", () => {
     it("should call onClick when clicked", async () => {
         const user = userEvent.setup();
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "Clickable User",
+            member: {
+                rawDisplayName: "Clickable User",
+                userId: "@clickable:example.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "Clickable User",
+            
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -107,8 +131,14 @@ describe("DisambiguatedProfileView", () => {
 
     it("should display tooltip title when provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "User With Tooltip",
-            title: "User With Tooltip (@user:example.org)",
+            member: {
+                rawDisplayName: "User With Tooltip",
+                userId: "@user:example.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "User With Tooltip",  
+            withTooltip: true,        
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -120,8 +150,13 @@ describe("DisambiguatedProfileView", () => {
 
     it("should apply color class when provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "Colored User",
-            colorClass: "mx_Username_color5",
+            member: {
+                rawDisplayName: "Colored User",
+                userId: "@colored:example.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "Colored User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -131,7 +166,13 @@ describe("DisambiguatedProfileView", () => {
 
     it("should apply emphasis styling when emphasizeDisplayName is true", () => {
         const vm = new DisambiguatedProfileViewModel({
-            displayName: "Emphasized User",
+            member: {
+                rawDisplayName: "Emphasized User",
+                userId: "@emphasized:example.org",
+                roomId: "!room:example.org",
+                disambiguate: false,
+            },
+            fallbackName: "Emphasized User",
             emphasizeDisplayName: true,
         });
 
