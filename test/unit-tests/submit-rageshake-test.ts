@@ -18,11 +18,13 @@ import {
 import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
-import { collectBugReport } from "../../src/rageshake/submit-rageshake";
+import { collectBugReport, downloadBugReport, submitFeedback } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { type ConsoleLogger } from "../../src/rageshake/rageshake";
 import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
+import SdkConfig from "../../src/SdkConfig.ts";
+import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -51,6 +53,10 @@ describe("Rageshakes", () => {
         });
 
         jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as any);
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     describe("Basic Information", () => {
@@ -493,7 +499,7 @@ describe("Rageshakes", () => {
         expect(settingsData.showHiddenEventsInTimeline).toEqual(true);
     });
 
-    it("should collect logs", async () => {
+    it("should collect logs for collectBugReport", async () => {
         const mockConsoleLogger = {
             flush: jest.fn(),
             consume: jest.fn(),
@@ -511,11 +517,60 @@ describe("Rageshakes", () => {
         }
     });
 
+    it("should collect logs for downloadBugReport", async () => {
+        const mockConsoleLogger = {
+            flush: jest.fn(),
+            consume: jest.fn(),
+            warn: jest.fn(),
+        } as unknown as Mocked<ConsoleLogger>;
+        mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
+
+        const prevLogger = global.mx_rage_logger;
+        global.mx_rage_logger = mockConsoleLogger;
+        const mockElement = {
+            href: "",
+            download: "",
+            click: jest.fn(),
+        };
+        jest.spyOn(document, "createElement").mockReturnValue(mockElement as any);
+        jest.spyOn(document, "body", "get").mockReturnValue({
+            appendChild: jest.fn(),
+            removeChild: jest.fn(),
+        } as any);
+        try {
+            await downloadBugReport({ sendLogs: true });
+        } finally {
+            global.mx_rage_logger = prevLogger;
+        }
+        expect(document.createElement).toHaveBeenCalledWith("a");
+        expect(mockElement.href).toMatch(/^data:application\/octet-stream;base64,.+/);
+        expect(mockElement.download).toEqual("rageshake.tar");
+        expect(mockElement.click).toHaveBeenCalledWith();
+    });
+
     it("should notify progress", () => {
         const progressCallback = jest.fn();
 
         collectBugReport({ progressCallback });
 
         expect(progressCallback).toHaveBeenCalled();
+    });
+
+    describe("submitFeedback", () => {
+        afterEach(() => {
+            SdkConfig.reset();
+        });
+        it("fails if the URL is not defined", async () => {
+            SdkConfig.put({ bug_report_endpoint_url: undefined });
+            await expect(() => submitFeedback("label", "comment")).rejects.toThrow(
+                "Bug report URL is not set or local",
+            );
+        });
+        it("fails if the URL is 'local'", async () => {
+            SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
+            await expect(() => submitFeedback("label", "comment")).rejects.toThrow(
+                "Bug report URL is not set or local",
+            );
+        });
     });
 });

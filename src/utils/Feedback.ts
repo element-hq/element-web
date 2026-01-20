@@ -6,10 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { BugReportEndpointURLLocal } from "../IConfigOptions";
 import SdkConfig from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import { UIFeature } from "../settings/UIFeature";
 
 export function shouldShowFeedback(): boolean {
-    return !!SdkConfig.get().bug_report_endpoint_url && SettingsStore.getValue(UIFeature.Feedback);
+    const url = SdkConfig.get().bug_report_endpoint_url;
+    return !!url && url !== BugReportEndpointURLLocal && SettingsStore.getValue(UIFeature.Feedback);
 }

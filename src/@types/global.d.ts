@@ -80,7 +80,7 @@ declare global {
     function setTimeout(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
 
     interface Window {
-        mxSendRageshake: (text: string, withLogs?: boolean) => void;
+        mxSendRageshake: (text: string, withLogs?: boolean) => Promise<void>;
         matrixLogger: typeof logger;
         matrixChat?: MatrixChat;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
