@@ -199,6 +199,8 @@ const masTest = base.extend<
                     password_config: {
                         enabled: false,
                     },
+                    // Must be disabled when using MAS.
+                    enable_registration: false,
                 } as Partial<SynapseConfig>)
                 .withMatrixAuthenticationService(guestMas)
                 .withNetwork(network)
