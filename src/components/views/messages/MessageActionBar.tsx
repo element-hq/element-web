@@ -32,10 +32,10 @@ import {
     ThreadsIcon,
     EditIcon,
     ReactionAddIcon,
+    ExpandIcon,
+    CollapseIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
-import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
@@ -572,7 +572,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         key="expand"
                         placement="left"
                     >
-                        {this.props.isQuoteExpanded ? <CollapseMessageIcon /> : <ExpandMessageIcon />}
+                        {this.props.isQuoteExpanded ? <CollapseIcon /> : <ExpandIcon />}
                     </RovingAccessibleButton>,
                 );
             }

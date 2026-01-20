@@ -1,0 +1,39 @@
+{
+    "a11y": {
+        "seek_bar_label": "Панель гортання аудіо"
+    },
+    "action": {
+        "delete": "Видалити",
+        "dismiss": "Відхилити",
+        "explore_rooms": "Каталог кімнат",
+        "pause": "Призупинити",
+        "play": "Відтворити",
+        "search": "Пошук"
+    },
+    "left_panel": {
+        "open_dial_pad": "Відкрити номеронабирач"
+    },
+    "time": {
+        "about_day_ago": "близько доби тому",
+        "about_hour_ago": "близько години тому",
+        "about_minute_ago": "близько хвилини тому",
+        "few_seconds_ago": "Декілька секунд тому",
+        "in_about_day": "приблизно через день",
+        "in_about_hour": "приблизно через годину",
+        "in_about_minute": "приблизно через хвилинку",
+        "in_few_seconds": "декілька секунд тому",
+        "in_n_days": "%(num)s днів по тому",
+        "in_n_hours": "%(num)s годин по тому",
+        "in_n_minutes": "%(num)s хвилин по тому",
+        "n_days_ago": "%(num)s днів тому",
+        "n_hours_ago": "%(num)s годин тому",
+        "n_minutes_ago": "%(num)s хвилин тому"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Звуковий програвач",
+            "error_downloading_audio": "Помилка завантаження аудіо",
+            "unnamed_audio": "Аудіо без назви"
+        }
+    }
+}

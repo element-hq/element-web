@@ -699,6 +699,10 @@ async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessi
  * Also stops the old MatrixClient and clears old credentials/etc out of
  * storage before starting the new client.
  *
+ * This function does not work for OIDC login.
+ * Storage is cleared early in the process so the required data is lost.
+ * You must use {@link attemptDelegatedAuthLogin} followed by {@link restoreSessionFromStorage} for OIDC login.
+ *
  * @param {IMatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started

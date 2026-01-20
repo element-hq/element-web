@@ -191,20 +191,24 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.user!.presence = "offline";
                 });
 
-                await act(reRender);
+                await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_MemberTileView");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_MemberTileView");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
 
             it("by power level", async () => {
                 const { reRender, root, memberListRoom } = rendered;
                 // We already have admin, moderator, and default users so leave them alone
 
-                await act(reRender);
+                await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_EntityTile");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_EntityTile");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
 
             it("by last active timestamp", async () => {
@@ -229,10 +233,12 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.user!.lastActiveAgo = 100;
                 });
 
-                await act(reRender);
+                await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_EntityTile");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_EntityTile");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
 
             it("by name", async () => {
@@ -247,10 +253,12 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     u.powerLevel = 100;
                 });
 
-                await act(reRender);
+                await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_EntityTile");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_EntityTile");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
         });
     });

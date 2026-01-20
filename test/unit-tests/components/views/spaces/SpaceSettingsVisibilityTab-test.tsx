@@ -17,6 +17,7 @@ import {
     GuestAccess,
     HistoryVisibility,
     JoinRule,
+    Visibility,
 } from "matrix-js-sdk/src/matrix";
 
 import _SpaceSettingsVisibilityTab from "../../../../../src/components/views/spaces/SpaceSettingsVisibilityTab";
@@ -35,6 +36,7 @@ jest.useFakeTimers();
 
 describe("<SpaceSettingsVisibilityTab />", () => {
     const mockMatrixClient = createTestClient() as MatrixClient;
+    mocked(mockMatrixClient.isVersionSupported).mockImplementation(async (v) => v === "v1.4");
 
     const makeJoinEvent = (rule: JoinRule = JoinRule.Invite) =>
         mkEvent({
@@ -72,6 +74,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
     ): Room => {
         const events = [makeJoinEvent(joinRule), makeGuestAccessEvent(guestRule), makeHistoryEvent(historyRule)];
         const space = mkSpace(client, mockSpaceId);
+        mocked(client.getRoom).mockImplementation((roomId) => (roomId === mockSpaceId ? space : null));
         const getStateEvents = mockStateEventImplementation(events);
         mocked(space.currentState).getStateEvents.mockImplementation(getStateEvents);
         mocked(space.currentState).mayClientSendStateEvent.mockReturnValue(false);
@@ -132,6 +135,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
         const joinRule = JoinRule.Public;
         const guestRule = GuestAccess.CanJoin;
         const historyRule = HistoryVisibility.Joined;
+        mocked(mockMatrixClient.getRoomDirectoryVisibility).mockResolvedValue({ visibility: Visibility.Public });
 
         describe("Access", () => {
             it("renders guest access section toggle", async () => {
@@ -235,12 +239,16 @@ describe("<SpaceSettingsVisibilityTab />", () => {
             });
         });
 
-        it("renders addresses section", () => {
+        it("renders addresses section with publish toggle", async () => {
             const space = makeMockSpace(mockMatrixClient, joinRule, guestRule);
-            const { getByTestId } = getComponent({ space });
+            const { findByLabelText, getByTestId, asFragment } = getComponent({ space });
 
             expect(getByTestId("published-address-fieldset")).toBeTruthy();
             expect(getByTestId("local-address-fieldset")).toBeTruthy();
+            await expect(
+                findByLabelText("Publish this room to the public in matrix.org's room directory?"),
+            ).resolves.toBeInTheDocument();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 });

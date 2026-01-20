@@ -81,9 +81,7 @@
         "no": "不",
         "ok": "确定",
         "open": "打开",
-        "pause": "暂停",
         "pin": "别针",
-        "play": "播放",
         "proceed": "继续",
         "quote": "引述",
         "react": "回应",
@@ -1611,18 +1609,6 @@
         "peek_join_prompt": "你正在预览 %(roomName)s。想加入吗？",
         "read_topic": "点击阅读话题",
         "rejoin_button": "重新加入",
-        "status_bar": {
-            "delete_all": "删除全部",
-            "exceeded_resource_limit": "你的消息未被发送，因为本家服务器已达到其使用量限制之一。请 <a>联系你的服务管理员</a> 以继续使用本服务。",
-            "homeserver_blocked": "你的消息未被发送，因为此家服务器已被其管理员屏蔽。请<a>联系你的服务管理员</a>以继续使用服务。",
-            "monthly_user_limit_reached": "你的消息未被发送，因为本家服务器已达到其每月活跃用户限制。请 <a>联系你的服务管理员</a> 以继续使用本服务。",
-            "requires_consent_agreement": "在你查看并同意 <consentLink>我们的条款与要求</consentLink> 之前，你不能发送任何消息。",
-            "retry_all": "全部重试",
-            "select_messages_to_retry": "你可以选择全部或单独的消息来重试或删除",
-            "server_connectivity_lost_description": "已发送的消息会被保存直到你的连接回来。",
-            "server_connectivity_lost_title": "到服务器的连接已经丢失。",
-            "some_messages_not_sent": "你的部分消息未被发送"
-        },
         "unread_notifications_predecessor": {
             "other": "你在此房间的先前版本中有 %(count)s 条未读通知。",
             "one": "你在此房间的先前版本中有 %(count)s 条未读通知。"
@@ -1837,7 +1823,6 @@
             "error_join_rule_change_unknown": "未知失败",
             "guest_access_warning": "拥有受支持客户端的人无需注册账户即可加入房间。",
             "history_visibility_invited": "只有成员（从他们被邀请开始）",
-            "history_visibility_joined": "只有成员（从他们加入开始）",
             "history_visibility_legend": "谁可以阅读历史消息？",
             "history_visibility_shared": "仅成员（从选中此选项时开始）",
             "history_visibility_warning": "历史记录阅读权限的更改只会应用到此房间中将来的消息。既有历史记录的可见性将不会更改。",
@@ -2522,24 +2507,10 @@
         "show_thread_filter": "显示："
     },
     "time": {
-        "about_day_ago": "约一天前",
-        "about_hour_ago": "约一小时前",
-        "about_minute_ago": "约一分钟前",
         "date_at_time": "%(date)s 的 %(time)s",
-        "few_seconds_ago": "数秒前",
         "hours_minutes_seconds_left": "剩余%(hours)s小时%(minutes)s分钟%(seconds)s秒",
-        "in_about_day": "从现在开始约一天",
-        "in_about_hour": "从现在开始约一小时",
-        "in_about_minute": "从现在开始约一分钟",
-        "in_few_seconds": "从现在开始数秒",
-        "in_n_days": "从现在开始%(num)s天",
-        "in_n_hours": "从现在开始%(num)s小时",
-        "in_n_minutes": "从现在开始%(num)s分钟",
         "left": "剩余%(timeRemaining)s",
         "minutes_seconds_left": "剩余%(minutes)s分钟%(seconds)s秒",
-        "n_days_ago": "%(num)s天前",
-        "n_hours_ago": "%(num)s小时前",
-        "n_minutes_ago": "%(num)s分钟前",
         "seconds_left": "剩余 %(seconds)s 秒",
         "short_days": "%(value)s 天",
         "short_days_hours_minutes_seconds": "%(days)s天%(hours)s小时%(minutes)s分钟%(seconds)s秒",
@@ -2581,8 +2552,7 @@
         "m.audio": {
             "error_downloading_audio": "下载音频时出错",
             "error_processing_audio": "处理音频消息时出错",
-            "error_processing_voice_message": "处理语音消息时发生错误",
-            "unnamed_audio": "未命名的音频"
+            "error_processing_voice_message": "处理语音消息时发生错误"
         },
         "m.beacon_info": {
             "view_live_location": "查看实时位置"
@@ -3095,7 +3065,6 @@
         "hangup": "挂断",
         "hide_sidebar_button": "隐藏侧边栏",
         "input_devices": "输入设备",
-        "join_button_tooltip_call_full": "抱歉——目前线路拥挤",
         "maximise": "填满屏幕",
         "misconfigured_server": "服务器配置错误导致通话失败",
         "misconfigured_server_description": "请联系你的家服务器（<code>%(homeserverDomain)s</code>）的管理员配置 TURN 服务器，以确保通话过程稳定。",

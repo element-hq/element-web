@@ -100,9 +100,7 @@
         "ok": "OK",
         "open": "Öppna",
         "open_menu": "Öppna menyn",
-        "pause": "Pausa",
         "pin": "Häftstift",
-        "play": "Spela",
         "proceed": "Fortsätt",
         "quote": "Citera",
         "react": "Reagera",
@@ -1926,7 +1924,6 @@
         "dm_invite_title": "Vill du chatta med %(user)s?",
         "drop_file_prompt": "Släpp en fil här för att ladda upp",
         "edit_topic": "Redigera ämne",
-        "error_3pid_invite_email_lookup": "Kan inte hitta användaren via e-post",
         "error_cancel_knock_title": "Misslyckades att avbryta",
         "error_join_403": "Du behöver en inbjudan för att komma åt det här rummet.",
         "error_join_404_1": "Du försökte gå med med ett rums-ID utan att tillhandahålla en lista över servrar att gå med via. Rums-ID:n är interna identifierare och kan inte användas för att gå med i ett rum utan ytterligare information.",
@@ -2052,18 +2049,6 @@
                 "other": "%(count)sResultat hittades för ”<query/>”"
             },
             "this_room_button": "Sök i det här rummet"
-        },
-        "status_bar": {
-            "delete_all": "Radera alla",
-            "exceeded_resource_limit": "Ditt meddelande skickades inte eftersom hemservern har överskridit en av sina resursgränser. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
-            "homeserver_blocked": "Ditt meddelande skickades inte eftersom att den här hemservern har blockerats av sin administratör. Vänligen <a>kontakta din tjänsteadministratör</a> för att fortsätta använda tjänsten.",
-            "monthly_user_limit_reached": "Ditt meddelande skickades inte eftersom hemservern har nått sin månatliga gräns för användaraktivitet. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
-            "requires_consent_agreement": "Du kan inte skicka några meddelanden innan du granskar och godkänner <consentLink>våra villkor</consentLink>.",
-            "retry_all": "Försök alla igen",
-            "select_messages_to_retry": "Du kan välja alla eller individuella meddelanden att försöka igen eller radera",
-            "server_connectivity_lost_description": "Skickade meddelanden kommer att lagras tills anslutningen är tillbaka.",
-            "server_connectivity_lost_title": "Anslutning till servern har brutits.",
-            "some_messages_not_sent": "Vissa av dina meddelanden har inte skickats"
         },
         "unknown_status_code_for_timeline_jump": "okänd statuskod",
         "unread_notifications_predecessor": {
@@ -2348,7 +2333,6 @@
             "error_join_rule_change_unknown": "Okänt fel",
             "guest_access_warning": "Personer med stödda klienter kommer kunna gå med i rummet utan ett registrerat konto.",
             "history_visibility_invited": "Endast medlemmar (från när de blev inbjudna)",
-            "history_visibility_joined": "Endast medlemmar (från när de gick med)",
             "history_visibility_legend": "Vilka kan läsa historik?",
             "history_visibility_shared": "Endast medlemmar (från tidpunkten för när denna inställning valdes)",
             "history_visibility_warning": "Ändringar av vem som kan läsa historiken gäller endast för framtida meddelanden i detta rum. Synligheten för befintlig historik kommer att vara oförändrad.",
@@ -3297,24 +3281,10 @@
         "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än."
     },
     "time": {
-        "about_day_ago": "cirka en dag sedan",
-        "about_hour_ago": "cirka en timme sedan",
-        "about_minute_ago": "cirka en minut sedan",
         "date_at_time": "%(date)s vid %(time)s",
-        "few_seconds_ago": "några sekunder sedan",
         "hours_minutes_seconds_left": "%(hours)st %(minutes)sm %(seconds)ss kvar",
-        "in_about_day": "om cirka en dag",
-        "in_about_hour": "om cirka en timme",
-        "in_about_minute": "om cirka en minut",
-        "in_few_seconds": "om några sekunder",
-        "in_n_days": "om %(num)s dagar",
-        "in_n_hours": "om %(num)s timmar",
-        "in_n_minutes": "om %(num)s minuter",
         "left": "%(timeRemaining)s kvar",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss kvar",
-        "n_days_ago": "%(num)s dagar sedan",
-        "n_hours_ago": "%(num)s timmar sedan",
-        "n_minutes_ago": "%(num)s minuter sedan",
         "seconds_left": "%(seconds)ss kvar",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
@@ -3369,11 +3339,9 @@
             "unable_to_find": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den."
         },
         "m.audio": {
-            "audio_player": "Ljudspelare",
             "error_downloading_audio": "Fel vid nedladdning av ljud",
             "error_processing_audio": "Fel vid hantering av ljudmeddelande",
-            "error_processing_voice_message": "Fel vid hantering av röstmeddelande",
-            "unnamed_audio": "Namnlöst ljud"
+            "error_processing_voice_message": "Fel vid hantering av röstmeddelande"
         },
         "m.beacon_info": {
             "view_live_location": "Se realtidsposition"
@@ -3946,7 +3914,6 @@
         "hide_sidebar_button": "Göm sidopanel",
         "input_devices": "Ingångsenheter",
         "jitsi_call": "Jitsi-gruppsamtal",
-        "join_button_tooltip_call_full": "Tyvärr - det här samtalet är för närvarande fullt",
         "legacy_call": "Standardsamtal",
         "maximise": "Fyll skärmen",
         "maximise_call": "Maximera samtal",

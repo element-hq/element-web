@@ -7,7 +7,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"

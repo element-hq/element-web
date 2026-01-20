@@ -1,0 +1,58 @@
+{
+    "a11y": {
+        "seek_bar_label": "Audio-Suchleiste"
+    },
+    "action": {
+        "delete": "Löschen",
+        "dismiss": "Ausblenden",
+        "explore_rooms": "Chats erkunden",
+        "pause": "Pausieren",
+        "play": "Abspielen",
+        "retry": "Erneut versuchen",
+        "search": "Suchen"
+    },
+    "left_panel": {
+        "open_dial_pad": "Wähltastatur öffnen"
+    },
+    "room": {
+        "status_bar": {
+            "delete_all": "Alle löschen",
+            "exceeded_resource_limit_title": "Deine Nachricht konnte nicht versendet werden, da dein Homeserver ein Ressourcenlimit überschritten hat.",
+            "failed_to_create_room_title": "Es konnte kein Chat mit diesem Nutzer gestartet werden",
+            "history_visible": "Diese Gruppe wurde konfiguriert, neuen Mitgliedern Zugriff auf den vergangenen Nachrichtenverlauf zu gestatten. <a>Mehr erfahren</a>",
+            "homeserver_blocked_title": "Deine Nachricht konnte nicht versendet werden, da der Admin deinen Homeserver gesperrt hat.",
+            "monthly_user_limit_reached_title": "Deine Nachricht konnte nicht versendet werden, da dein Homeserver das monatliche Nutzerlimit erreicht hat.",
+            "requires_consent_agreement_title": "Du kannst erst dann Nachrichten verschicken, wenn du unsere Geschäftsbedingungen gelesen und akzeptiert hast.",
+            "select_messages_to_retry": "Du kannst einzelne oder alle Nachrichten erneut senden oder löschen",
+            "server_connectivity_lost_description": "Nachrichten werden gespeichert und gesendet, wenn die Internetverbindung wiederhergestellt ist.",
+            "server_connectivity_lost_title": "Verbindung zum Server wurde unterbrochen.",
+            "some_messages_not_sent": "Einige Nachrichten konnten nicht gesendet werden"
+        }
+    },
+    "terms": {
+        "tac_button": "Geschäftsbedingungen anzeigen"
+    },
+    "time": {
+        "about_day_ago": "vor etwa einem Tag",
+        "about_hour_ago": "vor etwa einer Stunde",
+        "about_minute_ago": "vor etwa einer Minute",
+        "few_seconds_ago": "vor ein paar Sekunden",
+        "in_about_day": "in etwa einem Tag",
+        "in_about_hour": "in etwa einer Stunde",
+        "in_about_minute": "in etwa einer Minute",
+        "in_few_seconds": "in ein paar Sekunden",
+        "in_n_days": "in %(num)s Tagen",
+        "in_n_hours": "in %(num)s Stunden",
+        "in_n_minutes": "In etwa %(num)s Minuten",
+        "n_days_ago": "vor %(num)s Tagen",
+        "n_hours_ago": "vor %(num)s Stunden",
+        "n_minutes_ago": "vor %(num)s Minuten"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Audio-Player",
+            "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
+            "unnamed_audio": "Unbenannte Audiodatei"
+        }
+    }
+}

@@ -12,7 +12,7 @@ import sanitizeHtml from "sanitize-html";
 import classnames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, type TranslationKey } from "../../languageHandler";
+import { _t } from "../../languageHandler";
 import dis from "../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixClientContext from "../../contexts/MatrixClientContext";

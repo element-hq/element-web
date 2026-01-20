@@ -7,9 +7,9 @@
             <circle cx="161.936" cy="61.1488" r="11.6596" fill="black"/>
         </mask>
     </defs>
-    <rect x="0.5" y="0.5" width="220" height="147" rx="7.5" stroke="#E3E8F0"/>
-    <rect x="57" y="14" width="10" height="10" rx="1.5" fill="#E3E8F0"/>
-    <rect x="70" y="14" width="60" height="10" rx="1.5" fill="#E3E8F0"/>
-    <path d="M0 8C0 3.58173 3.58172 0 8 0H45C45.5523 0 46 0.447715 46 1V147C46 147.552 45.5523 148 45 148H8C3.58172 148 0 144.418 0 140V8Z" fill="#E3E8F0"/>
-    <rect x="57" y="32" width="137" height="102.021" rx="5.82979" fill="#E3E8F0" mask="url(#mountains)"/>
+    <rect x="0.5" y="0.5" width="220" height="147" rx="7.5" stroke="currentColor"/>
+    <rect x="57" y="14" width="10" height="10" rx="1.5" fill="currentColor"/>
+    <rect x="70" y="14" width="60" height="10" rx="1.5" fill="currentColor"/>
+    <path d="M0 8C0 3.58173 3.58172 0 8 0H45C45.5523 0 46 0.447715 46 1V147C46 147.552 45.5523 148 45 148H8C3.58172 148 0 144.418 0 140V8Z" fill="currentColor"/>
+    <rect x="57" y="32" width="137" height="102.021" rx="5.82979" fill="currentColor" mask="url(#mountains)"/>
 </svg>

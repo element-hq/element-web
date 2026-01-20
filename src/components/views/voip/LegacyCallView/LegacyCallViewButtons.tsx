@@ -8,9 +8,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, useState, type Ref, type FC } from "react";
+import React, { createRef, useState, type Ref, type FC, type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import {
+    ChevronDownIcon,
+    ChevronUpIcon,
+    DialPadIcon,
+    EndCallIcon,
+    ListViewIcon,
+    MicOffSolidIcon,
+    MicOnSolidIcon,
+    OverflowHorizontalIcon,
+    ShareScreenSolidIcon,
+    SpotlightViewIcon,
+    VideoCallOffSolidIcon,
+    VideoCallSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import LegacyCallContextMenu from "../../context_menus/LegacyCallContextMenu";
 import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
@@ -38,7 +52,9 @@ const CONTROLS_HIDE_DELAY = 2000;
 type ButtonProps = Omit<AccessibleButtonProps<"div">, "title" | "element"> & {
     state: boolean;
     onLabel?: string;
+    onIcon: JSX.Element;
     offLabel?: string;
+    offIcon: JSX.Element;
     forceHide?: boolean;
     onHover?: (hovering: boolean) => void;
     ref?: Ref<HTMLElement>;
@@ -49,7 +65,9 @@ const LegacyCallViewToggleButton: FC<ButtonProps> = ({
     state: isOn,
     className,
     onLabel,
+    onIcon,
     offLabel,
+    offIcon,
     forceHide,
     onHover,
     ref,
@@ -71,6 +89,7 @@ const LegacyCallViewToggleButton: FC<ButtonProps> = ({
             onTooltipOpenChange={onHover}
             {...props}
         >
+            {isOn ? onIcon : offIcon}
             {children}
         </AccessibleButton>
     );
@@ -83,10 +102,6 @@ interface IDropdownButtonProps extends ButtonProps {
 const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, deviceKinds, ...props }) => {
     const [menuDisplayed, buttonRef, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     const [hoveringDropdown, setHoveringDropdown] = useState(false);
-
-    const classes = classNames("mx_LegacyCallViewButtons_button", "mx_LegacyCallViewButtons_dropdownButton", {
-        mx_LegacyCallViewButtons_dropdownButton_collapsed: !menuDisplayed,
-    });
 
     const onClick = (event: ButtonEvent): void => {
         event.stopPropagation();
@@ -101,8 +116,10 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
             {...props}
         >
             <LegacyCallViewToggleButton
-                className={classes}
+                className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dropdownButton"
                 onClick={onClick}
+                onIcon={<ChevronUpIcon />}
+                offIcon={<ChevronDownIcon />}
                 onHover={(hovering) => setHoveringDropdown(hovering)}
                 state={state}
             />
@@ -267,19 +284,23 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
 
                 {this.props.buttonsVisibility.dialpad && (
                     <ContextMenuTooltipButton
-                        className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dialpad"
+                        className="mx_LegacyCallViewButtons_button"
                         ref={this.dialpadButton}
                         onClick={this.onDialpadClick}
                         isExpanded={this.state.showDialpad}
                         title={_t("voip|dialpad")}
                         placement="top"
-                    />
+                    >
+                        <DialPadIcon />
+                    </ContextMenuTooltipButton>
                 )}
                 <LegacyCallViewDropdownButton
                     state={!this.props.buttonsState.micMuted}
                     className="mx_LegacyCallViewButtons_button_mic"
                     onLabel={_t("voip|disable_microphone")}
+                    onIcon={<MicOnSolidIcon />}
                     offLabel={_t("voip|enable_microphone")}
+                    offIcon={<MicOffSolidIcon />}
                     onClick={this.props.handlers.onMicMuteClick}
                     deviceKinds={[MediaDeviceKindEnum.AudioInput, MediaDeviceKindEnum.AudioOutput]}
                 />
@@ -288,7 +309,9 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                         state={!this.props.buttonsState.vidMuted}
                         className="mx_LegacyCallViewButtons_button_vid"
                         onLabel={_t("voip|disable_camera")}
+                        onIcon={<VideoCallSolidIcon />}
                         offLabel={_t("voip|enable_camera")}
+                        offIcon={<VideoCallOffSolidIcon />}
                         onClick={this.props.handlers.onVidMuteClick}
                         deviceKinds={[MediaDeviceKindEnum.VideoInput]}
                     />
@@ -298,7 +321,9 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                         state={this.props.buttonsState.screensharing}
                         className="mx_LegacyCallViewButtons_button_screensharing"
                         onLabel={_t("voip|stop_screenshare")}
+                        onIcon={<ShareScreenSolidIcon />}
                         offLabel={_t("voip|start_screenshare")}
+                        offIcon={<ShareScreenSolidIcon />}
                         onClick={this.props.handlers.onScreenshareClick}
                     />
                 )}
@@ -307,26 +332,32 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                         state={this.props.buttonsState.sidebarShown}
                         className="mx_LegacyCallViewButtons_button_sidebar"
                         onLabel={_t("voip|hide_sidebar_button")}
+                        onIcon={<ListViewIcon />}
                         offLabel={_t("voip|show_sidebar_button")}
+                        offIcon={<SpotlightViewIcon />}
                         onClick={this.props.handlers.onToggleSidebarClick}
                     />
                 )}
                 {this.props.buttonsVisibility.contextMenu && (
                     <ContextMenuTooltipButton
-                        className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_more"
+                        className="mx_LegacyCallViewButtons_button"
                         onClick={this.onMoreClick}
                         ref={this.contextMenuButton}
                         isExpanded={this.state.showMoreMenu}
                         title={_t("voip|more_button")}
                         placement="top"
-                    />
+                    >
+                        <OverflowHorizontalIcon />
+                    </ContextMenuTooltipButton>
                 )}
                 <AccessibleButton
                     className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_hangup"
                     onClick={this.props.handlers.onHangupClick}
                     title={_t("voip|hangup")}
                     placement="top"
-                />
+                >
+                    <EndCallIcon />
+                </AccessibleButton>
             </div>
         );
     }

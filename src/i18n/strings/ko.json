@@ -98,9 +98,7 @@
         "ok": "네",
         "open": "열기",
         "open_menu": "메뉴 열기",
-        "pause": "일시중지",
         "pin": "핀",
-        "play": "재생",
         "proceed": "진행",
         "quote": "인용",
         "react": "리액션",
@@ -641,11 +639,11 @@
         "mode_plain": "서식 숨기기",
         "mode_rich_text": "서식 표시",
         "no_perms_notice": "이 방에 글을 올릴 권한이 없습니다",
-        "placeholder": "암호화되지 않은 메시지를 보내다…",
+        "placeholder": "암호화되지 않은 메시지 보내기",
         "placeholder_encrypted": "메시지 보내기",
-        "placeholder_reply": "암호화되지 않은 답장을 보내세요…",
+        "placeholder_reply": "암호화되지 않은 답장 보내기",
         "placeholder_reply_encrypted": "답변 보내기",
-        "placeholder_thread": "암호화되지 않은 스레드에 답장하기…",
+        "placeholder_thread": "암호화되지 않은 스레드에 답장하기",
         "placeholder_thread_encrypted": "스레드에 답글 달기…",
         "poll_button": "투표",
         "poll_button_no_perms_description": "이 방에서 투표를 시작할 권한이 없습니다.",
@@ -1965,7 +1963,6 @@
         "dm_invite_title": "%(user)s님과 대화하겠습니까?",
         "drop_file_prompt": "업로드할 파일을 여기에 놓으세요",
         "edit_topic": "주제 편집",
-        "error_3pid_invite_email_lookup": "이메일로 사용자를 찾을 수 없습니다",
         "error_cancel_knock_title": "취소 실패",
         "error_join_403": "이 방에 접근하려면 초대장이 필요합니다.",
         "error_join_404_1": "방 ID만 입력하고 연결할 서버 목록을 제공하지 않은 상태로 방에 참여하려고 시도했습니다. 방 ID는 내부 식별자이므로 추가 정보 없이는 방에 참여할 수 없습니다.",
@@ -1995,6 +1992,8 @@
         "forget_room": "이 방 지우기",
         "forget_space": "스페이지 지우기",
         "header": {
+            "join_video_call": "영상 통화 참여하기",
+            "join_voice_call": "음성 통화 참여",
             "n_people_asking_to_join": {
                 "other": "%(count)s명이 참여 요청 중"
             },
@@ -2091,18 +2090,6 @@
                 "other": "<query/>”에 대해 %(count)s개의 결과가 발견되었습니다"
             },
             "this_room_button": "이 방을 검색하세요"
-        },
-        "status_bar": {
-            "delete_all": "전체 삭제",
-            "exceeded_resource_limit": "이 홈서버가 리소스 한도를 초과했기 때문에 메시지를 보낼 수 없었습니다. 서비스를 계속 사용하려면 <a>서비스 관리자에게 연락</a>해주세요.",
-            "homeserver_blocked": "이 홈서버가 관리자에 의해 차단되어 메시지가 전송되지 않았습니다. 서비스를 계속 이용하려면 **<a>서비스 관리자에게 문의</a>**하세요.",
-            "monthly_user_limit_reached": "이 홈서버가 월 간 활성 사용자 한도를 초과했기 때문에 메시지를 보낼 수 없었습니다. 서비스를 계속 사용하려면 <a>서비스 관리자에게 연락</a>해주세요.",
-            "requires_consent_agreement": "<consentLink>이용 약관</consentLink>을 검토하고 동의하기 전까진 메시지를 보낼 수 없습니다.",
-            "retry_all": "전체 재시도",
-            "select_messages_to_retry": "모든 메시지 또는 개별 메시지를 선택하여 재시도하거나 삭제할 수 있습니다.",
-            "server_connectivity_lost_description": "보낸 메시지는 연결이 돌아올 때까지 저장됩니다.",
-            "server_connectivity_lost_title": "서버 연결이 끊어졌습니다.",
-            "some_messages_not_sent": "일부 메시지가 전송되지 않았습니다"
         },
         "unknown_status_code_for_timeline_jump": "알 수 없는 상태 코드",
         "unread_notifications_predecessor": {
@@ -2385,12 +2372,11 @@
             "error_join_rule_change_title": "조인 규칙을 업데이트하지 못했습니다.",
             "error_join_rule_change_unknown": "알 수 없는 오류",
             "guest_access_warning": "지원되는 클라이언트를 사용하는 사용자는 등록된 계정이 없어도 방에 참여할 수 있습니다.",
-            "history_visibility_invited": "구성원만(구성원이 초대받은 시점부터)",
-            "history_visibility_joined": "구성원만(구성원들이 참여한 시점부터)",
+            "history_visibility_invited": "초대된 회원들",
             "history_visibility_legend": "누가 기록을 읽을 수 있나요?",
-            "history_visibility_shared": "구성원만(이 설정을 선택한 시점부터)",
-            "history_visibility_warning": "기존 기록의 공개 설정은 변경되지 않습니다",
-            "history_visibility_world_readable": "누구나",
+            "history_visibility_shared": "회원 (전체 기록)",
+            "history_visibility_warning": "변경 사항은 이전 메시지에는 영향을 주지 않으며, 새 메시지에만 적용됩니다. <a>자세히 알아보기</a>",
+            "history_visibility_world_readable": "누구나 (대화 기록 공개)\n",
             "join_rule_description": "%(roomName)s에 누가 참여할 수 있는지 설정합니다.",
             "join_rule_invite": "비공개 (초대 필요)",
             "join_rule_invite_description": "초대한 경우에만 참여할 수 있습니다.",
@@ -3330,24 +3316,10 @@
         "no_rooms_with_unread_threads": "아직 읽지 않은 스레드가 있는 방이 없습니다."
     },
     "time": {
-        "about_day_ago": "약 1일 전",
-        "about_hour_ago": "약 1 시간 전",
-        "about_minute_ago": "약 1분 전",
         "date_at_time": "%(date)s, %(time)s",
-        "few_seconds_ago": "몇 초 전",
         "hours_minutes_seconds_left": "남은 시간: %(hours)s시간 %(minutes)s분 %(seconds)s초",
-        "in_about_day": "하루 정도 후",
-        "in_about_hour": "지금부터 한 시간 정도 후에",
-        "in_about_minute": "지금부터 약 1분 후",
-        "in_few_seconds": "몇 초 후",
-        "in_n_days": "지금부터 %(num)s 일 후에",
-        "in_n_hours": "지금부터 %(num)s 시간 후",
-        "in_n_minutes": "지금부터 %(num)s분 후",
         "left": "%(timeRemaining)s 남음",
         "minutes_seconds_left": "남은 시간: %(minutes)s분 %(seconds)s초",
-        "n_days_ago": "%(num)s일 전",
-        "n_hours_ago": "%(num)s 시간 전",
-        "n_minutes_ago": "%(num)s분 전",
         "seconds_left": "남은 시간: %(seconds)s초",
         "short_days": "%(value)s일",
         "short_days_hours_minutes_seconds": "%(days)s일 %(hours)s시간 %(minutes)s분 %(seconds)s초",
@@ -3402,11 +3374,9 @@
             "unable_to_find": "이 방의 타임라인에서 특정 시점을 불러오려고 했지만, 찾을 수 없었습니다."
         },
         "m.audio": {
-            "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
             "error_processing_audio": "오디오 메시지 처리 중 오류 발생",
-            "error_processing_voice_message": "음성 메시지 처리 중 오류 발생",
-            "unnamed_audio": "이름 없는 오디오"
+            "error_processing_voice_message": "음성 메시지 처리 중 오류 발생"
         },
         "m.beacon_info": {
             "view_live_location": "실시간 위치 보기"
@@ -3669,12 +3639,10 @@
                 "other": "%(severalUsers)s님이 프로필 사진을 %(count)s회 변경했습니다"
             },
             "changed_name": {
-                "%(oneUser)s님이 이름을 %(count)s번 바꿨습니다": "other",
-                "%(oneUser)s님이 이름을 바꿨습니다": "one"
+                "other": "%(oneUser)s님이 이름을 %(count)s번 변경했습니다."
             },
             "changed_name_multiple": {
-                "%(severalUsers)s이 이름을 %(count)s번 바꿨습니다": "other",
-                "%(severalUsers)s이 이름을 바꿨습니다": "one"
+                "other": "%(severalUsers)s님이 이름을 %(count)s번 변경했습니다."
             },
             "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
@@ -3960,7 +3928,6 @@
         "hide_sidebar_button": "사이드바 숨기기",
         "input_devices": "입력 장치",
         "jitsi_call": "Jitsi 화상 회의",
-        "join_button_tooltip_call_full": "죄송합니다 — 현재 통화 중입니다",
         "legacy_call": "레거시 콜",
         "maximise": "화면 채우기",
         "maximise_call": "통화 최대화",

@@ -88,9 +88,7 @@
         "ok": "OK",
         "open": "Abrir",
         "open_menu": "Abrir menu",
-        "pause": "Pausar",
         "pin": "Fixar",
-        "play": "Reproduzir",
         "proceed": "Prosseguir",
         "quote": "Citar",
         "react": "Reagir",
@@ -1859,7 +1857,6 @@
         "dm_invite_title": "Queres conversar com %(user)s?",
         "drop_file_prompt": "Arraste um arquivo aqui para enviar",
         "edit_topic": "Editar tópico",
-        "error_3pid_invite_email_lookup": "Não é possível encontrar o utilizador por e-mail",
         "error_cancel_knock_title": "Falha ao cancelar",
         "error_join_403": "Precisas de um convite para aceder a esta sala.",
         "error_join_404_1": "Tentaste juntar-te usando um ID de sala sem fornecer uma lista de servidores através dos quais te podes juntar. Os IDs de sala são identificadores internos e não podem ser utilizados para aceder a uma sala sem informações adicionais.",
@@ -1982,18 +1979,6 @@
                 "other": "%(count)s resultados encontrados para \"<query/>\""
             },
             "this_room_button": "Pesquisar esta sala"
-        },
-        "status_bar": {
-            "delete_all": "Eliminar tudo",
-            "exceeded_resource_limit": "A tua mensagem não foi enviada porque este servidor doméstico excedeu um limite de recursos. Por favor, <a>contacta o teu administrador de serviço</a> para continuares a utilizar o serviço.",
-            "homeserver_blocked": "A tua mensagem não foi enviada porque este servidor doméstico foi bloqueado pelo seu administrador. Por favor, <a>contacta o teu administrador de serviço</a> para continuares a usar o serviço.",
-            "monthly_user_limit_reached": "A tua mensagem não foi enviada porque este servidor atingiu o limite mensal de utilizadores activos. Por favor <a>contacta o teu administrador de serviço</a> para continuares a usar o serviço.",
-            "requires_consent_agreement": "Não podes enviar quaisquer mensagens até reveres e concordares com <consentLink>os nossos termos e condições</consentLink>.",
-            "retry_all": "Tentar tudo de novo",
-            "select_messages_to_retry": "Podes selecionar todas as mensagens ou mensagens individuais para repetir ou apagar",
-            "server_connectivity_lost_description": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
-            "server_connectivity_lost_title": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
-            "some_messages_not_sent": "Algumas das tuas mensagens não foram enviadas"
         },
         "unknown_status_code_for_timeline_jump": "código de estado desconhecido",
         "unread_notifications_predecessor": {
@@ -2262,7 +2247,6 @@
             "error_join_rule_change_unknown": "Falha desconhecida",
             "guest_access_warning": "As pessoas com clientes apoiados poderão juntar-se à sala sem terem uma conta registada.",
             "history_visibility_invited": "Apenas membros (desde que tenham sido convidados)",
-            "history_visibility_joined": "Apenas membros (desde que aderiram)",
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
             "history_visibility_shared": "Apenas membros (desde o momento em que seleccionas esta opção)",
             "history_visibility_warning": "As alterações a quem pode ler o histórico só se aplicam a mensagens futuras nesta sala. A visibilidade do histórico existente permanecerá inalterada.",
@@ -3182,24 +3166,10 @@
         "no_rooms_with_unread_threads": "Ainda não tens salas com tópicos não lidos."
     },
     "time": {
-        "about_day_ago": "há cerca de um dia",
-        "about_hour_ago": "há cerca de uma hora",
-        "about_minute_ago": "há cerca de um minuto",
         "date_at_time": "%(date)s às %(time)s",
-        "few_seconds_ago": "há alguns segundos atrás",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "daqui a um dia",
-        "in_about_hour": "daqui a uma hora",
-        "in_about_minute": "daqui a um minuto",
-        "in_few_seconds": "daqui a alguns segundos",
-        "in_n_days": "daqui a %(num)s dias",
-        "in_n_hours": "daqui a %(num)s horas",
-        "in_n_minutes": "daqui a %(num)s minutos",
         "left": "%(timeRemaining)s ainda",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "%(num)s dias atrás",
-        "n_hours_ago": "%(num)s horas atrás",
-        "n_minutes_ago": "%(num)s minutos atrás",
         "seconds_left": "%(seconds)ss restantes",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3256,8 +3226,7 @@
         "m.audio": {
             "error_downloading_audio": "Erro ao descarregar áudio",
             "error_processing_audio": "Erro no processamento da mensagem de áudio",
-            "error_processing_voice_message": "Erro no processamento da mensagem de voz",
-            "unnamed_audio": "Áudio sem nome"
+            "error_processing_voice_message": "Erro no processamento da mensagem de voz"
         },
         "m.beacon_info": {
             "view_live_location": "Vê a localização ao vivo"
@@ -3829,7 +3798,6 @@
         "hide_sidebar_button": "Ocultar barra lateral",
         "input_devices": "Dispositivos de entrada",
         "jitsi_call": "Conferência Jitsi",
-        "join_button_tooltip_call_full": "Desculpa, neste momento, esta chamada está cheia",
         "legacy_call": "Chamada Legacy",
         "maximise": "Preenche o ecrã",
         "maximise_call": "Maximiza a chamada",

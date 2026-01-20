@@ -26,7 +26,7 @@ exports[`<EmbeddedPage /> should show error if unable to load 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<EmbeddedPage /> should translate _t strings 1`] = `
+exports[`<EmbeddedPage /> should translate _t strings ["] 1`] = `
 <DocumentFragment>
   <div
     class="undefined_guest"
@@ -42,7 +42,7 @@ exports[`<EmbeddedPage /> should translate _t strings 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<EmbeddedPage /> should translate _t strings 2`] = `
+exports[`<EmbeddedPage /> should translate _t strings [&#27;] 1`] = `
 <DocumentFragment>
   <div
     class="undefined_guest"
@@ -58,7 +58,7 @@ exports[`<EmbeddedPage /> should translate _t strings 2`] = `
 </DocumentFragment>
 `;
 
-exports[`<EmbeddedPage /> should translate _t strings 3`] = `
+exports[`<EmbeddedPage /> should translate _t strings [&#34;] 1`] = `
 <DocumentFragment>
   <div
     class="undefined_guest"
@@ -74,7 +74,7 @@ exports[`<EmbeddedPage /> should translate _t strings 3`] = `
 </DocumentFragment>
 `;
 
-exports[`<EmbeddedPage /> should translate _t strings 4`] = `
+exports[`<EmbeddedPage /> should translate _t strings ['] 1`] = `
 <DocumentFragment>
   <div
     class="undefined_guest"

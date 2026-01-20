@@ -84,9 +84,7 @@
         "next": "Fanarahana",
         "no": "Tsya",
         "ok": "Eny",
-        "pause": "Mihato",
         "pin": "Hahantona",
-        "play": "Milalao",
         "proceed": "Izotra",
         "quote": "Notsongaina",
         "react": "Mamaly",
@@ -1682,7 +1680,6 @@
         "dm_invite_title": "Te hiresaka amin'ny%(user)s ?",
         "drop_file_prompt": "Alefaso eto ny rakitra raha ampidirina",
         "edit_topic": "Ahitsio lohahevitra",
-        "error_3pid_invite_email_lookup": "Tsy mahita mpampiasa amin'ny mailaka",
         "error_cancel_knock_title": "Tsy nahavita nanafoana",
         "error_join_403": "Mila fanasana ianao hidirana amin'ity efitrano ity.",
         "error_join_404_1": "Nanandrana niditra taminy fampiasana ID efitrano ianao nefa tsy nanome lisitry ny lohamilina hidirana. Ny ID efitrano dia famantarana anatiny ary tsy azo ampiasaina hanatevin-daharana efitrano iray raha tsy misy fampahalalana fanampiny.",
@@ -1792,18 +1789,6 @@
         "search": {
             "all_rooms_button": "Karohy ny efitrano rehetra",
             "this_room_button": "Karohy ity efitrano ity"
-        },
-        "status_bar": {
-            "delete_all": "Fafao daholo",
-            "exceeded_resource_limit": "Tsy nalefa ny hafatrao satria nihoatra ny fetran'ny loharanon-karena ity mpizara trano ity. Mba miangavy re<a> mifandraisa aminy mpitantana ny serivisy</a> hanohizana ny fampiasana ny serivisy.",
-            "homeserver_blocked": "Tsy nalefa ny hafatrao satria nosakanany mpitantana azy io server io. Mba miangavy re<a> mifandraisa amin'ny mpitantana ny serivisy</a> hanohizana ny fampiasana ny serivisy.",
-            "monthly_user_limit_reached": "Tsy nalefa ny hafatrao satria nahatratra ny fetran'ny mpampiasa mavitrika isam-bolana ity server ity. Mba miangavy re<a> mifandraisa amin'ny mpitantana ny serivisy</a> hanohizana ny fampiasana ny serivisy.",
-            "requires_consent_agreement": "Tsy afaka mandefa hafatra ianao raha tsy mandinika sy manaiky<consentLink> fepetra sy fepetra</consentLink> .",
-            "retry_all": "Andramo daholo",
-            "select_messages_to_retry": "Azonao atao ny misafidy ny hafatra rehetra na tsirairay mba hanandrana indray na hofafana",
-            "server_connectivity_lost_description": "Ny hafatra nalefa dia hotehirizina mandra-piverin'ny fifandraisanao.",
-            "server_connectivity_lost_title": "Very ny fifandraisana amin'ny mpizara.",
-            "some_messages_not_sent": "Ny sasany amin'ireo hafatrao dia mbola tsy nalefa"
         },
         "unknown_status_code_for_timeline_jump": "kaody sata tsy fantatra",
         "unread_notifications_predecessor": {
@@ -2032,7 +2017,6 @@
             "error_join_rule_change_unknown": "Tsy fahombiazana tsy fantatra",
             "guest_access_warning": "Ny olona manana mpanjifa tohanana dia afaka miditra ao amin'ny efitrano tsy manana kaonty misoratra anarana.",
             "history_visibility_invited": "Mpikambana ihany (hatramin'ny nanasana azy ireo)",
-            "history_visibility_joined": "Mpikambana ihany (hatramin'ny nidirany)",
             "history_visibility_legend": "Iza no mahay mamaky tantara?",
             "history_visibility_shared": "Mpikambana ihany (hatramin&#39;ny fotoana nifidianana ity safidy ity)",
             "history_visibility_warning": "Ny fanovana aminy olona afaka mamaky tantara dia tsy mihatra afa-tsy amin'ny hafatra ho avy ato amin'ity efitrano ity. Tsy hiova ny fahitana ny tantara efa misy.",
@@ -2820,24 +2804,10 @@
         "header": "Hetsika kofehy"
     },
     "time": {
-        "about_day_ago": "Tokony ho iray andro izay",
-        "about_hour_ago": "Manakaiky adin'iray Teo ho eo",
-        "about_minute_ago": "Misy iray minitra Teo izay",
         "date_at_time": "% (Mihaona amin'ny % (fotoana",
-        "few_seconds_ago": "Segondra vitsy lasa",
         "hours_minutes_seconds_left": "% (ora) s h%(minitra) s m%(segondra) s ny tavela",
-        "in_about_day": "Anatiny iray andro eo ho eo",
-        "in_about_hour": "Adiny iray eo ho eo",
-        "in_about_minute": "Afaka iray minitra eo ho eo",
-        "in_few_seconds": "Afaka segondra vitsy",
-        "in_n_days": "%(num) s andro manomboka izao",
-        "in_n_hours": "% (num) sAnatiny ora vitsivitsy",
-        "in_n_minutes": "% (Num) sAfaka minitra vitsy",
         "left": "%(timeRemaining) sAnkavia",
         "minutes_seconds_left": "% (minutes) sm% (segondra) s ny ambiny",
-        "n_days_ago": "%(num)s Andro vitsivitsy izay",
-        "n_hours_ago": "%(num)sOra maromaro",
-        "n_minutes_ago": "%(Num)s Minitra vitsivitsy izay",
         "seconds_left": "% (secondes) s ny ambiny",
         "short_days": "% (Sandales d",
         "short_days_hours_minutes_seconds": "%(andro) s d % (ora) sh% (minitra) s m % (segondra)s s",
@@ -2882,8 +2852,7 @@
         "m.audio": {
             "error_downloading_audio": "Hadisoana tamin'ny fampidinana feo",
             "error_processing_audio": "Hadisoana tamin'ny fanodinana hafatra audio",
-            "error_processing_voice_message": "Hadisoana tamin'ny fanodinana hafatra feo",
-            "unnamed_audio": "Audio tsy voatonona anarana"
+            "error_processing_voice_message": "Hadisoana tamin'ny fanodinana hafatra feo"
         },
         "m.beacon_info": {
             "view_live_location": "Jereo ny toerana mivantana"
@@ -3432,7 +3401,6 @@
         "hide_sidebar_button": "Afeno ny sidebar",
         "input_devices": "Fampidirana fitaovana",
         "jitsi_call": "Fihaonambe Jitsi",
-        "join_button_tooltip_call_full": "Miala tsiny — feno ity antso ity amin'izao fotoana izao",
         "legacy_call": "Antso",
         "maximise": "Ameno ny efijery",
         "maximise_call": "Ampitomboy ny antso",

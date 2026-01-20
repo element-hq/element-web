@@ -15,14 +15,16 @@ import {
     TypedEventEmitter,
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
-import { collectBugReport } from "../../src/rageshake/submit-rageshake";
+import { collectBugReport, downloadBugReport, submitFeedback } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { type ConsoleLogger } from "../../src/rageshake/rageshake";
 import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
+import SdkConfig from "../../src/SdkConfig.ts";
+import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -34,8 +36,6 @@ describe("Rageshakes", () => {
             onlyData: true,
         },
     );
-    let windowSpy: jest.SpyInstance;
-    let mockWindow: Mocked<Window>;
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
@@ -51,21 +51,12 @@ describe("Rageshakes", () => {
             ed25519: "",
             curve25519: "",
         });
-        mockWindow = {
-            matchMedia: jest.fn().mockReturnValue({ matches: false }),
-            navigator: {
-                userAgent: "",
-            },
-        } as unknown as Mocked<Window>;
-        // @ts-ignore - We just need partial mock
-        windowSpy = jest.spyOn(global, "window", "get").mockReturnValue(mockWindow);
 
-        fetchMock.restore();
-        fetchMock.catch(404);
+        jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as any);
     });
 
     afterEach(() => {
-        windowSpy.mockRestore();
+        jest.restoreAllMocks();
     });
 
     describe("Basic Information", () => {
@@ -97,7 +88,7 @@ describe("Rageshakes", () => {
         ];
 
         it.each(mediaQueryTests)("should collect %s", async (_, query, label, matches) => {
-            mocked(mockWindow.matchMedia).mockImplementation((q): MediaQueryList => {
+            mocked(window.matchMedia).mockImplementation((q): MediaQueryList => {
                 if (q === query) {
                     return { matches: matches } as unknown as MediaQueryList;
                 }
@@ -139,13 +130,13 @@ describe("Rageshakes", () => {
         });
 
         it("should collect user agent", async () => {
-            jest.replaceProperty(mockWindow.navigator, "userAgent", "jest navigator");
+            jest.spyOn(window.navigator, "userAgent", "get").mockReturnValue("jest navigator");
             const formData = await collectBugReport();
             const userAgent = formData.get("user_agent");
             expect(userAgent).toBe("jest navigator");
 
             // @ts-ignore - Need to force navigator to be undefined for test
-            jest.replaceProperty(mockWindow, "navigator", undefined);
+            jest.spyOn(window.navigator, "userAgent", "get").mockReturnValue(undefined);
             const formDataWithoutNav = await collectBugReport();
             expect(formDataWithoutNav.get("user_agent")).toBe("UNKNOWN");
         });
@@ -308,10 +299,6 @@ describe("Rageshakes", () => {
     });
 
     describe("Synapse info", () => {
-        beforeEach(() => {
-            fetchMock.reset();
-        });
-
         it("should collect synapse admin keys if available", async () => {
             fetchMock.get("path:/_synapse/admin/v1/server_version", {
                 server_version: "1.101.0 (b=matrix-org-hotfixes,6dbedcf601)",
@@ -443,11 +430,9 @@ describe("Rageshakes", () => {
             // @ts-ignore - Need to mock the safari
             jest.replaceProperty(mockNavigator, "storage", undefined);
 
-            const mockDocument = {
+            const spy = jest.spyOn(global, "document", "get").mockReturnValue({
                 hasStorageAccess: jest.fn().mockReturnValue(true),
-            } as unknown as Mocked<Document>;
-
-            const spy = jest.spyOn(global, "document", "get").mockReturnValue(mockDocument);
+            } as any);
 
             const formData = await collectBugReport();
             expect(formData.get("storageManager_persisted")).toBe("true");
@@ -487,14 +472,12 @@ describe("Rageshakes", () => {
             crypto: true,
         };
         const disabledFeatures = ["cssanimations", "d0", "d1"];
-        const mockWindow = {
+        const windowSpy = jest.spyOn(global, "window", "get").mockReturnValue({
             matchMedia: jest.fn().mockReturnValue({ matches: false }),
             Modernizr: {
                 ...allFeatures,
             },
-        } as unknown as Mocked<Window>;
-        // @ts-ignore - We just need partial mock
-        const windowSpy = jest.spyOn(global, "window", "get").mockReturnValue(mockWindow);
+        } as any);
 
         const formData = await collectBugReport();
 
@@ -516,7 +499,7 @@ describe("Rageshakes", () => {
         expect(settingsData.showHiddenEventsInTimeline).toEqual(true);
     });
 
-    it("should collect logs", async () => {
+    it("should collect logs for collectBugReport", async () => {
         const mockConsoleLogger = {
             flush: jest.fn(),
             consume: jest.fn(),
@@ -534,11 +517,60 @@ describe("Rageshakes", () => {
         }
     });
 
+    it("should collect logs for downloadBugReport", async () => {
+        const mockConsoleLogger = {
+            flush: jest.fn(),
+            consume: jest.fn(),
+            warn: jest.fn(),
+        } as unknown as Mocked<ConsoleLogger>;
+        mockConsoleLogger.flush.mockReturnValue("line 1\nline 2\n");
+
+        const prevLogger = global.mx_rage_logger;
+        global.mx_rage_logger = mockConsoleLogger;
+        const mockElement = {
+            href: "",
+            download: "",
+            click: jest.fn(),
+        };
+        jest.spyOn(document, "createElement").mockReturnValue(mockElement as any);
+        jest.spyOn(document, "body", "get").mockReturnValue({
+            appendChild: jest.fn(),
+            removeChild: jest.fn(),
+        } as any);
+        try {
+            await downloadBugReport({ sendLogs: true });
+        } finally {
+            global.mx_rage_logger = prevLogger;
+        }
+        expect(document.createElement).toHaveBeenCalledWith("a");
+        expect(mockElement.href).toMatch(/^data:application\/octet-stream;base64,.+/);
+        expect(mockElement.download).toEqual("rageshake.tar");
+        expect(mockElement.click).toHaveBeenCalledWith();
+    });
+
     it("should notify progress", () => {
         const progressCallback = jest.fn();
 
         collectBugReport({ progressCallback });
 
         expect(progressCallback).toHaveBeenCalled();
+    });
+
+    describe("submitFeedback", () => {
+        afterEach(() => {
+            SdkConfig.reset();
+        });
+        it("fails if the URL is not defined", async () => {
+            SdkConfig.put({ bug_report_endpoint_url: undefined });
+            await expect(() => submitFeedback("label", "comment")).rejects.toThrow(
+                "Bug report URL is not set or local",
+            );
+        });
+        it("fails if the URL is 'local'", async () => {
+            SdkConfig.put({ bug_report_endpoint_url: BugReportEndpointURLLocal });
+            await expect(() => submitFeedback("label", "comment")).rejects.toThrow(
+                "Bug report URL is not set or local",
+            );
+        });
     });
 });

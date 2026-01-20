@@ -101,9 +101,7 @@
         "ok": "Ok",
         "open": "Abrir",
         "open_menu": "Abrir menu",
-        "pause": "Pausar",
         "pin": "Alfinete",
-        "play": "Reproduzir",
         "proceed": "Prosseguir",
         "quote": "Citar",
         "react": "Adicionar reação",
@@ -1977,7 +1975,6 @@
         "dm_invite_title": "Deseja conversar com %(user)s?",
         "drop_file_prompt": "Arraste um arquivo aqui para enviar",
         "edit_topic": "Editar tópico",
-        "error_3pid_invite_email_lookup": "Não foi possível encontrar o usuário por e-mail",
         "error_cancel_knock_title": "Falha ao cancelar",
         "error_join_403": "Você precisa de um convite para acessar esta sala.",
         "error_join_404_1": "Você tentou entrar usando um ID de sala sem fornecer uma lista de servidores pelos quais ingressar. Os IDs das salas são identificadores internos e não podem ser usados para entrar em uma sala sem informações adicionais.",
@@ -2107,18 +2104,6 @@
                 "other": "%(count)s resultados encontrados para “<query/>”"
             },
             "this_room_button": "Pesquise nesta sala"
-        },
-        "status_bar": {
-            "delete_all": "Excluir​•​tudo",
-            "exceeded_resource_limit": "Sua mensagem não foi enviada porque este servidor local excedeu o limite de recursos. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
-            "homeserver_blocked": "Sua​•​mensagem​•​não​•​foi​•​enviada​•​porque​•​esse​•​servidor​•​doméstico​•​foi​•​bloqueado​•​pelo​•​administrador.​•​<a>Entre​•​em​•​contato​•​com​•​o​•​administrador​•​do​•​serviço​•​</a>​•​para​•​continuar​•​usando​•​o​•​serviço.",
-            "monthly_user_limit_reached": "Sua mensagem não foi enviada porque este homeserver atingiu seu Limite de usuário ativo mensal. Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando o serviço.",
-            "requires_consent_agreement": "Você não pode enviar nenhuma mensagem até revisar e concordar com <consentLink>nossos termos e condições</consentLink>.",
-            "retry_all": "Repetir​•​tudo",
-            "select_messages_to_retry": "Você​•​pode​•​selecionar​•​todas​•​as​•​mensagens​•​ou​•​mensagens​•​individuais​•​para​•​tentar​•​novamente​•​ou​•​excluir",
-            "server_connectivity_lost_description": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
-            "server_connectivity_lost_title": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
-            "some_messages_not_sent": "Algumas​•​de​•​suas​•​mensagens​•​não​•​foram​•​enviadas"
         },
         "unknown_status_code_for_timeline_jump": "código​•​de​•​status​•​desconhecido",
         "unread_notifications_predecessor": {
@@ -2407,7 +2392,6 @@
             "error_join_rule_change_unknown": "Falha desconhecida",
             "guest_access_warning": "Pessoas com clientes suportados poderão entrar na sala sem ter uma conta registrada.",
             "history_visibility_invited": "Somente membros (desde que tenham sido convidados)",
-            "history_visibility_joined": "Apenas participantes (desde que entraram na sala)",
             "history_visibility_legend": "Quem pode ler o histórico da sala?",
             "history_visibility_shared": "Apenas participantes (a partir do momento em que esta opção for selecionada)",
             "history_visibility_warning": "A visibilidade do histórico existente não será alterada.",
@@ -3366,24 +3350,10 @@
         "no_rooms_with_unread_threads": "Você ainda não tem salas com tópicos não lidos."
     },
     "time": {
-        "about_day_ago": "há aproximadamente um dia",
-        "about_hour_ago": "há aproximadamente uma hora",
-        "about_minute_ago": "há aproximadamente um minuto",
         "date_at_time": "%(date)s às %(time)s",
-        "few_seconds_ago": "há alguns segundos",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "dentro de aproximadamente um dia",
-        "in_about_hour": "dentro de aproximadamente uma hora",
-        "in_about_minute": "dentro de aproximadamente um minuto",
-        "in_few_seconds": "dentro de alguns segundos",
-        "in_n_days": "dentro de %(num)s dias",
-        "in_n_hours": "dentro de %(num)s horas",
-        "in_n_minutes": "dentro de %(num)s minutos",
         "left": "%(timeRemaining)s restante(s)",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "há %(num)s dias",
-        "n_hours_ago": "há %(num)s horas",
-        "n_minutes_ago": "há %(num)s minutos",
         "seconds_left": "%(seconds)s restantes",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s h %(minutes)s m %(seconds)s s",
@@ -3438,11 +3408,9 @@
             "unable_to_find": "Não foi possível carregar um trecho específico da conversa desta sala."
         },
         "m.audio": {
-            "audio_player": "Reprodutor de Áudio",
             "error_downloading_audio": "Erro ao baixar o áudio",
             "error_processing_audio": "Erro ao processar a mensagem de áudio",
-            "error_processing_voice_message": "Erro ao processar a mensagem de voz",
-            "unnamed_audio": "Áudio sem nome"
+            "error_processing_voice_message": "Erro ao processar a mensagem de voz"
         },
         "m.beacon_info": {
             "view_live_location": "Ver localização ao vivo"
@@ -4016,7 +3984,6 @@
         "hide_sidebar_button": "Esconder a barra lateral",
         "input_devices": "Dispositivos de entrada",
         "jitsi_call": "Jitsi",
-        "join_button_tooltip_call_full": "Desculpe, esta chamada está lotada no momento",
         "legacy_call": "Legacy",
         "maximise": "Preencher tela",
         "maximise_call": "Maximizar chamada",

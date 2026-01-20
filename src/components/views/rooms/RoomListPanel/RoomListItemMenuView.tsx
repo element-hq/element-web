@@ -7,17 +7,19 @@
 
 import React, { type JSX, useState } from "react";
 import { IconButton, Menu, MenuItem, Separator, ToggleMenuItem } from "@vector-im/compound-web";
-import MarkAsReadIcon from "@vector-im/compound-design-tokens/assets/web/icons/mark-as-read";
-import MarkAsUnreadIcon from "@vector-im/compound-design-tokens/assets/web/icons/mark-as-unread";
-import FavouriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite";
-import ArrowDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-down";
-import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
-import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
-import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
-import OverflowIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
-import NotificationIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-solid";
-import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-off-solid";
-import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import {
+    MarkAsReadIcon,
+    MarkAsUnreadIcon,
+    FavouriteIcon,
+    ArrowDownIcon,
+    UserAddIcon,
+    LinkIcon,
+    LeaveIcon,
+    OverflowHorizontalIcon,
+    NotificationsSolidIcon,
+    NotificationsOffSolidIcon,
+    CheckIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { Flex } from "@element-hq/web-shared-components";
 import classNames from "classnames";
@@ -81,7 +83,7 @@ function MoreOptionsMenu({ vm }: MoreOptionsMenuProps): JSX.Element {
                     aria-label={_t("room_list|room|more_options")}
                     size="24px"
                 >
-                    <OverflowIcon />
+                    <OverflowHorizontalIcon />
                 </IconButton>
             }
         >
@@ -190,7 +192,7 @@ function NotificationMenu({ vm }: NotificationMenuProps): JSX.Element {
                     tooltip={_t("room_list|notification_options")}
                     aria-label={_t("room_list|notification_options")}
                 >
-                    {vm.isNotificationMute ? <NotificationOffIcon /> : <NotificationIcon />}
+                    {vm.isNotificationMute ? <NotificationsOffSolidIcon /> : <NotificationsSolidIcon />}
                 </IconButton>
             }
         >

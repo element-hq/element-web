@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useContext } from "react";
 import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ErrorSolidIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -191,6 +191,7 @@ const NewRoomIntro: React.FC = () => {
                             showSpaceInvite(parentSpace!);
                         }}
                     >
+                        <UserAddIcon />
                         {_t("invite|to_space", { spaceName: parentSpace.name })}
                     </AccessibleButton>
                     {room.canInvite(cli.getSafeUserId()) && (
@@ -201,6 +202,7 @@ const NewRoomIntro: React.FC = () => {
                                 defaultDispatcher.dispatch({ action: "view_invite", roomId });
                             }}
                         >
+                            <UserAddIcon />
                             {_t("room|intro|room_invite")}
                         </AccessibleButton>
                     )}
@@ -216,6 +218,7 @@ const NewRoomIntro: React.FC = () => {
                             defaultDispatcher.dispatch({ action: "view_invite", roomId });
                         }}
                     >
+                        <UserAddIcon />
                         {_t("room|invite_this_room")}
                     </AccessibleButton>
                 </div>

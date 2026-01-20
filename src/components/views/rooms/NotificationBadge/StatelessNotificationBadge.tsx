@@ -8,12 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type Ref, type JSX, type ReactNode } from "react";
 import classNames from "classnames";
+import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { formatCount } from "../../../../utils/FormattingUtils";
 import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { type XOR } from "../../../../@types/common";
+import { _t } from "../../../../languageHandler.tsx";
 
 interface Props {
     symbol: string | null;
@@ -70,11 +72,16 @@ export const StatelessNotificationBadge = ({
         symbol = formatCount(count);
     }
 
+    let icon: JSX.Element | undefined;
+    if (knocked) {
+        icon = <AskToJoinIcon aria-label={_t("room|knock_sent")} />;
+    }
+
     // We show a dot if either:
     // * The props force us to, or
     // * It's just an activity-level notification or (in theory) lower and the room isn't knocked
     const badgeType =
-        forceDot || (level <= NotificationLevel.Activity && !knocked)
+        forceDot || (level <= NotificationLevel.Activity && !icon)
             ? "dot"
             : !symbol || symbol.length < 3
               ? "badge_2char"
@@ -95,10 +102,12 @@ export const StatelessNotificationBadge = ({
         "cpd-theme-light": badgeType !== "dot",
     });
 
+    const content = icon || <span className="mx_NotificationBadge_count">{symbol}</span>;
+
     if (props.onClick) {
         return (
             <AccessibleButton {...props} className={classes} onClick={props.onClick} ref={props.ref}>
-                <span className="mx_NotificationBadge_count">{symbol}</span>
+                {content}
                 {props.children}
             </AccessibleButton>
         );
@@ -106,7 +115,7 @@ export const StatelessNotificationBadge = ({
 
     return (
         <div className={classes} ref={props.ref}>
-            <span className="mx_NotificationBadge_count">{symbol}</span>
+            {content}
         </div>
     );
 };

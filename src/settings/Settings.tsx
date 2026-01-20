@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 // Import these directly from shared-components to avoid circular deps
-import { _t, _td, type TranslationKey } from "@element-hq/web-shared-components";
+import { _t, _td } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
@@ -405,15 +405,14 @@ export const SETTINGS: Settings = {
                     </p>
                 </>
             ),
-            faq: () =>
-                SdkConfig.get().bug_report_endpoint_url && (
-                    <>
-                        <h4>{_t("labs|video_rooms_faq1_question")}</h4>
-                        <p>{_t("labs|video_rooms_faq1_answer")}</p>
-                        <h4>{_t("labs|video_rooms_faq2_question")}</h4>
-                        <p>{_t("labs|video_rooms_faq2_answer")}</p>
-                    </>
-                ),
+            faq: () => (
+                <>
+                    <h4>{_t("labs|video_rooms_faq1_question")}</h4>
+                    <p>{_t("labs|video_rooms_faq1_answer")}</p>
+                    <h4>{_t("labs|video_rooms_faq2_question")}</h4>
+                    <p>{_t("labs|video_rooms_faq2_answer")}</p>
+                </>
+            ),
             feedbackLabel: "video-room-feedback",
             feedbackSubheading: _td("labs|video_rooms_feedbackSubheading"),
             // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -1142,7 +1141,7 @@ export const SETTINGS: Settings = {
     "urlPreviewsEnabled_e2ee": {
         supportedLevels: [SettingLevel.ROOM_DEVICE],
         displayName: {
-            "room-account": _td("settings|inline_url_previews_room_account"),
+            "room-device": _td("settings|inline_url_previews_room_account"),
         },
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),

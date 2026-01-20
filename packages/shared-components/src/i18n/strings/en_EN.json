@@ -1,0 +1,60 @@
+{
+    "a11y": {
+        "seek_bar_label": "Audio seek bar"
+    },
+    "action": {
+        "delete": "Delete",
+        "dismiss": "Dismiss",
+        "explore_rooms": "Explore rooms",
+        "pause": "Pause",
+        "play": "Play",
+        "retry": "Retry",
+        "search": "Search"
+    },
+    "left_panel": {
+        "open_dial_pad": "Open dial pad"
+    },
+    "room": {
+        "status_bar": {
+            "delete_all": "Delete all",
+            "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
+            "exceeded_resource_limit_title": "Your message wasn't sent because this homeserver has exceeded a resource limit.",
+            "failed_to_create_room_title": "Could not start a chat with this user",
+            "history_visible": "This room has been configured so that new members can read history. <a>Learn More</a>",
+            "homeserver_blocked_title": "Your message wasn't sent because this homeserver has been blocked by its administrator.",
+            "monthly_user_limit_reached_title": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit.",
+            "requires_consent_agreement_title": "You can't send any messages until you review and agree to our terms and conditions.",
+            "retry_all": "Retry all",
+            "select_messages_to_retry": "You can select all or individual messages to retry or delete",
+            "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
+            "server_connectivity_lost_title": "Connectivity to the server has been lost.",
+            "some_messages_not_sent": "Some of your messages have not been sent"
+        }
+    },
+    "terms": {
+        "tac_button": "Review terms and conditions"
+    },
+    "time": {
+        "about_day_ago": "about a day ago",
+        "about_hour_ago": "about an hour ago",
+        "about_minute_ago": "about a minute ago",
+        "few_seconds_ago": "a few seconds ago",
+        "in_about_day": "about a day from now",
+        "in_about_hour": "about an hour from now",
+        "in_about_minute": "about a minute from now",
+        "in_few_seconds": "a few seconds from now",
+        "in_n_days": "%(num)s days from now",
+        "in_n_hours": "%(num)s hours from now",
+        "in_n_minutes": "%(num)s minutes from now",
+        "n_days_ago": "%(num)s days ago",
+        "n_hours_ago": "%(num)s hours ago",
+        "n_minutes_ago": "%(num)s minutes ago"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Audio player",
+            "error_downloading_audio": "Error downloading audio",
+            "unnamed_audio": "Unnamed audio"
+        }
+    }
+}

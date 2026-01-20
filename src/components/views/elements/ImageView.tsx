@@ -11,6 +11,15 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef, type CSSProperties, useEffect } from "react";
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    CloseIcon,
+    DownloadIcon,
+    OverflowHorizontalIcon,
+    RotateLeftIcon,
+    RotateRightIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -501,24 +510,11 @@ export default class ImageView extends React.Component<IProps, IState> {
                     onClick={this.onOpenContextMenu}
                     ref={this.contextMenuButton}
                     isExpanded={this.state.contextMenuDisplayed}
-                />
+                >
+                    <OverflowHorizontalIcon />
+                </ContextMenuTooltipButton>
             );
         }
-
-        const zoomOutButton = (
-            <AccessibleButton
-                className="mx_ImageView_button mx_ImageView_button_zoomOut"
-                title={_t("action|zoom_out")}
-                onClick={this.onZoomOutClick}
-            />
-        );
-        const zoomInButton = (
-            <AccessibleButton
-                className="mx_ImageView_button mx_ImageView_button_zoomIn"
-                title={_t("action|zoom_in")}
-                onClick={this.onZoomInClick}
-            />
-        );
 
         let title: JSX.Element | undefined;
         if (this.props.mxEvent?.getContent()) {
@@ -544,18 +540,34 @@ export default class ImageView extends React.Component<IProps, IState> {
                     {info}
                     {title}
                     <div className="mx_ImageView_toolbar">
-                        {zoomOutButton}
-                        {zoomInButton}
                         <AccessibleButton
-                            className="mx_ImageView_button mx_ImageView_button_rotateCCW"
+                            className="mx_ImageView_button"
+                            title={_t("action|zoom_out")}
+                            onClick={this.onZoomOutClick}
+                        >
+                            <ZoomOutIcon />
+                        </AccessibleButton>
+                        <AccessibleButton
+                            className="mx_ImageView_button"
+                            title={_t("action|zoom_in")}
+                            onClick={this.onZoomInClick}
+                        >
+                            <ZoomInIcon />
+                        </AccessibleButton>
+                        <AccessibleButton
+                            className="mx_ImageView_button"
                             title={_t("lightbox|rotate_left")}
                             onClick={this.onRotateCounterClockwiseClick}
-                        />
+                        >
+                            <RotateLeftIcon />
+                        </AccessibleButton>
                         <AccessibleButton
-                            className="mx_ImageView_button mx_ImageView_button_rotateCW"
+                            className="mx_ImageView_button"
                             title={_t("lightbox|rotate_right")}
                             onClick={this.onRotateClockwiseClick}
-                        />
+                        >
+                            <RotateRightIcon />
+                        </AccessibleButton>
                         <DownloadButton
                             url={this.props.src}
                             fileName={this.props.name}
@@ -567,7 +579,9 @@ export default class ImageView extends React.Component<IProps, IState> {
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("action|close")}
                             onClick={this.props.onFinished}
-                        />
+                        >
+                            <CloseIcon />
+                        </AccessibleButton>
                         {this.renderContextMenu()}
                     </div>
                 </div>
@@ -612,10 +626,12 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
 
     return (
         <AccessibleButton
-            className="mx_ImageView_button mx_ImageView_button_download"
+            className="mx_ImageView_button"
             title={loading ? _t("timeline|download_action_downloading") : _t("action|download")}
             onClick={download}
             disabled={loading}
-        />
+        >
+            <DownloadIcon />
+        </AccessibleButton>
     );
 };

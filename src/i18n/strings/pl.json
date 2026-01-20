@@ -102,9 +102,7 @@
         "ok": "OK",
         "open": "Otwórz",
         "open_menu": "Otwórz menu",
-        "pause": "Wstrzymaj",
         "pin": "Przypnij",
-        "play": "Odtwórz",
         "proceed": "Kontynuuj",
         "quote": "Cytuj",
         "react": "Dodaj reakcję",
@@ -1964,7 +1962,6 @@
         "dm_invite_title": "Czy chcesz rozmawiać z %(user)s?",
         "drop_file_prompt": "Upuść plik tutaj, aby go przesłać",
         "edit_topic": "Edytuj temat",
-        "error_3pid_invite_email_lookup": "Nie udało się znaleźć użytkownika za pomocą e-maila",
         "error_cancel_knock_title": "Nie udało się anulować",
         "error_join_403": "Potrzebujesz zaproszenia, aby dołączyć do tego pokoju.",
         "error_join_404_1": "Spróbowałeś dołączyć za pomocą ID pokoju bez podania listy serwerów, z których można dołączyć. ID pokojów to wewnętrzne identyfikatory, których nie da się użyć bez dodatkowych informacji.",
@@ -2096,18 +2093,6 @@
                 "many": "Znaleziono %(count)s wyników dla \"<query/>\""
             },
             "this_room_button": "Wyszukaj ten pokój"
-        },
-        "status_bar": {
-            "delete_all": "Usuń wszystkie",
-            "exceeded_resource_limit": "Wiadomość nie została wysłana, ponieważ serwer domowy przekroczył limit swoich zasobów. <a>Skontaktuj się z administratorem serwisu</a>, aby kontynuować.",
-            "homeserver_blocked": "Wiadomość nie została wysłana, ponieważ serwer domowy został zablokowany przez jego administratora. <a>Skontaktuj się z administratorem serwisu</a>, aby kontynuować.",
-            "monthly_user_limit_reached": "Wiadomość nie została wysłana, ponieważ serwer domowy przekroczył miesięczny limit aktywnych użytkowników. <a>Skontaktuj się z administratorem serwisu</a>, aby kontynuować.",
-            "requires_consent_agreement": "Nie możesz wysłać żadnej wiadomości, dopóki nie zaakceptujesz <consentLink>naszych warunków i kondycji</consentLink>.",
-            "retry_all": "Spróbuj ponownie wszystkie",
-            "select_messages_to_retry": "Możesz zaznaczyć wszystkie lub wybrane wiadomości, aby spróbować ponownie lub je usunąć",
-            "server_connectivity_lost_description": "Wysłane wiadomości będą przechowywane aż do momentu odzyskania połączenia.",
-            "server_connectivity_lost_title": "Połączenie z serwerem zostało utracone.",
-            "some_messages_not_sent": "Niektóre z Twoich wiadomości nie zostały wysłane"
         },
         "unknown_status_code_for_timeline_jump": "nieznany kod statusu",
         "unread_notifications_predecessor": {
@@ -2397,7 +2382,6 @@
             "error_join_rule_change_unknown": "Nieznany błąd",
             "guest_access_warning": "Osoby ze wspieranymi klientami będą mogli dołączyć do pokoju bez posiadania konta.",
             "history_visibility_invited": "Tylko członkowie (od kiedy zostali zaproszeni)",
-            "history_visibility_joined": "Tylko członkowie (od kiedy dołączyli)",
             "history_visibility_legend": "Kto może czytać historię?",
             "history_visibility_shared": "Tylko członkowie (od momentu włączenia tej opcji)",
             "history_visibility_warning": "Widoczność istniejącej historii nie ulegnie zmianie.",
@@ -3356,24 +3340,10 @@
         "no_rooms_with_unread_threads": "Nie masz jeszcze pokoi z nieprzeczytanymi wątkami."
     },
     "time": {
-        "about_day_ago": "około dzień temu",
-        "about_hour_ago": "około godziny temu",
-        "about_minute_ago": "około minuty temu",
         "date_at_time": "%(date)s o %(time)s",
-        "few_seconds_ago": "kilka sekund temu",
         "hours_minutes_seconds_left": "pozostało %(hours)s godz. %(minutes)s min. %(seconds)ss",
-        "in_about_day": "około dnia od teraz",
-        "in_about_hour": "około godziny od teraz",
-        "in_about_minute": "około minuty od teraz",
-        "in_few_seconds": "za kilka sekund",
-        "in_n_days": "za %(num)s dni",
-        "in_n_hours": "za %(num)s godzin",
-        "in_n_minutes": "za %(num)s minut",
         "left": "%(timeRemaining)s pozostało",
         "minutes_seconds_left": "pozostało %(minutes)s min. %(seconds)ss",
-        "n_days_ago": "%(num)s dni temu",
-        "n_hours_ago": "%(num)s godzin temu",
-        "n_minutes_ago": "%(num)s minut temu",
         "seconds_left": "pozostało %(seconds)ss",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)s godz. %(minutes)s min. %(seconds)ss",
@@ -3428,11 +3398,9 @@
             "unable_to_find": "Próbowano załadować konkretny punkt na osi czasu w tym pokoju, ale nie można go znaleźć."
         },
         "m.audio": {
-            "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
             "error_processing_audio": "Wystąpił błąd procesowania wiadomości audio",
-            "error_processing_voice_message": "Wystąpił błąd procesowania wiadomości głosowej",
-            "unnamed_audio": "Audio bez nazwy"
+            "error_processing_voice_message": "Wystąpił błąd procesowania wiadomości głosowej"
         },
         "m.beacon_info": {
             "view_live_location": "Pokaż lokalizację na żywo"
@@ -4013,7 +3981,6 @@
         "hide_sidebar_button": "Ukryj pasek boczny",
         "input_devices": "Urządzenia wejściowe",
         "jitsi_call": "Konferencja Jitsi",
-        "join_button_tooltip_call_full": "Przepraszamy — to połączenie jest już zapełnione",
         "legacy_call": "Połączenie w starszej technologii.",
         "maximise": "Wypełnij ekran",
         "maximise_call": "Maksymalizuj połączenie",
