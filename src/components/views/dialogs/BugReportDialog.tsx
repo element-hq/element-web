@@ -267,9 +267,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                     {warning}
                     <Text>{_t("bug_reporting|description")}</Text>
                     {this.isLocalOnly ? (
-                        <>
-                            {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
-                        </>
+                        <>{this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}</>
                     ) : (
                         <>
                             <Text weight="semibold">
