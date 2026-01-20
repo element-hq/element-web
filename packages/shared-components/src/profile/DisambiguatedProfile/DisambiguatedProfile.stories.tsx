@@ -29,8 +29,13 @@ export default {
     component: DisambiguatedProfileViewWrapper,
     tags: ["autodocs"],
     args: {
-        displayName: "Alice",
-        emphasizeDisplayName: false,
+        member: {
+            rawDisplayName: "Alice",
+            userId: "@alice:example.org",
+            roomId: "!room:example.org",
+            disambiguate: false,
+        },
+        emphasizeDisplayName: true,
         onClick: fn(),
     },
 } as Meta<typeof DisambiguatedProfileViewWrapper>;
@@ -43,34 +48,57 @@ export const Default = Template.bind({});
 
 export const WithMxid = Template.bind({});
 WithMxid.args = {
-    displayName: "Alice",
-    mxid: "@alice:example.org",
+    member: {
+        rawDisplayName: "Alice",
+        userId: "@alice:example.org",
+        roomId: "!room:example.org",
+        disambiguate: true,
+    },
+    colored: true,
 };
 
 export const WithColorClass = Template.bind({});
 WithColorClass.args = {
-    displayName: "Bob",
-    colorClass: "mx_Username_color1"
+    member: {
+        rawDisplayName: "Bob",
+        userId: "@bob:example.org",
+        roomId: "!room:example.org",
+        disambiguate: false,
+    },
+    colored: true,
 };
 
 export const Emphasized = Template.bind({});
 Emphasized.args = {
-    displayName: "Charlie",
+    member: {
+        rawDisplayName: "Charlie",
+        userId: "@charlie:example.org",
+        roomId: "!room:example.org",
+        disambiguate: false,
+    },
     emphasizeDisplayName: true,
 };
 
 export const WithTooltip = Template.bind({});
 WithTooltip.args = {
-    displayName: "Diana",
-    mxid: "@diana:example.org",
-    title: "Diana (@diana:example.org)",
+    member: {
+        rawDisplayName: "Diana",
+        userId: "@diana:example.org",
+        roomId: "!room:example.org",
+        disambiguate: false,
+    },
+    withTooltip: true,
 };
 
 export const FullExample = Template.bind({});
 FullExample.args = {
-    displayName: "Eve",
-    mxid: "@eve:matrix.org",
-    colorClass: "mx_Username_color3",
+    member: {
+        rawDisplayName: "Eve",
+        userId: "@eve:matrix.org",
+        roomId: "!room:example.org",
+        disambiguate: false,
+    },
+    colored: true,
     emphasizeDisplayName: true,
-    title: "Eve (@eve:matrix.org)",
+    withTooltip: true,
 };

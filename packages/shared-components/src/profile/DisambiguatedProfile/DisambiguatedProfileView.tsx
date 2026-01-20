@@ -5,15 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type MouseEventHandler } from "react";
+import React, {JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
-import { getUserNameColorClass } from "../../../utils/FormattingUtils";
-import UserIdentifier from "../../../customisations/UserIdentifier";
-import { _t } from "../../../languageHandler";
 import { useViewModel } from "../../useViewModel";
 import styles from "./DisambiguatedProfile.module.css";
+
+import { useI18n } from "../../utils/i18nContext";
+import { getUserNameColorClass } from "../../utils/FormattingUtils";
+import UserIdentifier from "../../utils/UserIdentifier";
 
 
 interface MemberInfo {
@@ -28,7 +29,6 @@ interface MemberInfo {
  * The snapshot representing the current state of the DisambiguatedProfile.
  */
 export interface DisambiguatedProfileViewSnapshot {
-
 
     member?: MemberInfo | null;
     fallbackName: string;
@@ -58,7 +58,8 @@ interface DisambiguatedProfileViewProps {
     /**
      * The view model for the disambiguated profile.
      */
-    vm: DisambiguatedProfileViewModel & DisambiguatedProfileViewActions;
+    vm: DisambiguatedProfileViewModel;
+    
 }
 
 /**
@@ -71,10 +72,8 @@ interface DisambiguatedProfileViewProps {
  * <DisambiguatedProfileView vm={disambiguatedProfileViewModel} />
  * ```
  */
-export default class DisambiguatedProfileView extends React.Component<DisambiguatedProfileViewProps> {
-    render(): JSX.Element {
-        const { vm } = this.props;
-        const { fallbackName, member, colored, emphasizeDisplayName, withTooltip } = useViewModel(vm);
+export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>)  :JSX.Element {
+    const { fallbackName, member, colored, emphasizeDisplayName, withTooltip } = useViewModel(vm);
 
         const rawDisplayName = member?.rawDisplayName || fallbackName;
         const mxid = member?.userId;
@@ -86,6 +85,7 @@ export default class DisambiguatedProfileView extends React.Component<Disambigua
 
         let mxidElement;
         let title: string | undefined;
+        const { translate: _t } = useI18n();
 
         if (mxid) {
             const identifier =
@@ -118,5 +118,4 @@ export default class DisambiguatedProfileView extends React.Component<Disambigua
             {mxidElement}
         </div>
     );
-}
 }

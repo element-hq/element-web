@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { useIdColorHash } from "@vector-im/compound-web";
+
 /**
  * format a size in bytes into a human readable form
  * e.g: 1024 -> 1.00 KB
@@ -19,4 +21,10 @@ export function formatBytes(bytes: number, decimals = 2): string {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+export function getUserNameColorClass(userId: string): string {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const number = useIdColorHash(userId);
+    return `mx_Username_color${number}`;
 }

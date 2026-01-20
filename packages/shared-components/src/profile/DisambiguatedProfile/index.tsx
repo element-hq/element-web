@@ -6,7 +6,7 @@
  */
 
 export {
-    default as DisambiguatedProfileView,
+    DisambiguatedProfileView,
     type DisambiguatedProfileViewModel,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewActions,
