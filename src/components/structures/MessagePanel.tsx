@@ -20,8 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 import {
     TimelineSeparatorView,
-    type TimelineSeparatorViewSnapshot,
-    MockViewModel,
+    useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
@@ -57,6 +56,7 @@ import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
+import { TimelineSeparatorViewModel } from "../../viewmodels/message-body/TimelineSeparatorViewModel";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -770,14 +770,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 const text = _t("timeline|late_event_separator", {
                     dateTime: formatDate(mxEv.getDate() ?? new Date()),
                 });
-                const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
-                    label: text,
-                    SeparatorKind: SeparatorKind.LateEvent,
-                    children: text,
-                });
+                const timeLineSeperatorVM = useCreateAutoDisposedViewModel(() => new TimelineSeparatorViewModel({ label: text, children: text }));
                 ret.push(
                     <li key={ts1}>
-                        <TimelineSeparatorView key={ts1} vm={vm} />
+                        <TimelineSeparatorView key={ts1} vm={timeLineSeperatorVM} />
                     </li>,
                 );
             }

@@ -7,15 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
-import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
+import React, { ReactNode, type JSX } from "react";
+import { Direction, ConnectionError, MatrixError, HTTPError, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { capitalize } from "lodash";
 import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import {
     TimelineSeparatorView,
-    type TimelineSeparatorViewSnapshot,
-    MockViewModel,
+    useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
@@ -38,6 +37,7 @@ import IconizedContextMenu, {
 import JumpToDatePicker from "./JumpToDatePicker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import RoomContext from "../../../contexts/RoomContext";
+import { TimelineSeparatorViewModel } from "../../../viewmodels/message-body/TimelineSeparatorViewModel";
 
 interface IProps {
     roomId: string;
@@ -339,10 +339,17 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             );
         }
 
-        const vm = new MockViewModel<TimelineSeparatorViewSnapshot>({
-            label,
-            children: dateHeaderContent,
-        });
-        return <TimelineSeparatorView vm={vm} />;
+        return <TimeLineSeperatorBodyWrapper label={label} children={dateHeaderContent} />;
     }
 }
+
+interface TimeLineSeperatorBodyWrapper {
+    label: string;
+    children?: ReactNode;
+}
+
+function TimeLineSeperatorBodyWrapper({ label, children }: TimeLineSeperatorBodyWrapper): JSX.Element {
+    const dateSeperatorVM = useCreateAutoDisposedViewModel(() => new TimelineSeparatorViewModel({ label, children }));
+    return <TimelineSeparatorView vm={dateSeperatorVM} />;
+}
+ 
