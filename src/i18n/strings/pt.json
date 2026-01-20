@@ -1857,7 +1857,6 @@
         "dm_invite_title": "Queres conversar com %(user)s?",
         "drop_file_prompt": "Arraste um arquivo aqui para enviar",
         "edit_topic": "Editar tópico",
-        "error_3pid_invite_email_lookup": "Não é possível encontrar o utilizador por e-mail",
         "error_cancel_knock_title": "Falha ao cancelar",
         "error_join_403": "Precisas de um convite para aceder a esta sala.",
         "error_join_404_1": "Tentaste juntar-te usando um ID de sala sem fornecer uma lista de servidores através dos quais te podes juntar. Os IDs de sala são identificadores internos e não podem ser utilizados para aceder a uma sala sem informações adicionais.",

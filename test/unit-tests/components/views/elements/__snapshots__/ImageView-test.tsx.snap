@@ -23,40 +23,154 @@ exports[`<ImageView /> renders correctly 1`] = `
         <div
           aria-describedby="_r_2_"
           aria-label="Zoom out"
-          class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomOut"
+          class="mx_AccessibleButton mx_ImageView_button"
           role="button"
           tabindex="0"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.5 9.5q.425 0 .713.287.288.288.287.713a.97.97 0 0 1-.287.713.97.97 0 0 1-.713.287h-6a.97.97 0 0 1-.713-.287.97.97 0 0 1-.287-.713q0-.425.287-.713A.97.97 0 0 1 7.5 9.5z"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M10.5 3a7.5 7.5 0 0 1 5.963 12.049l3.244 3.244a1 1 0 1 1-1.414 1.414l-3.244-3.244A7.5 7.5 0 1 1 10.5 3m0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </div>
         <div
           aria-label="Zoom in"
-          class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomIn"
+          class="mx_AccessibleButton mx_ImageView_button"
           role="button"
           tabindex="0"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              clip-path="url(#a)"
+            >
+              <path
+                d="M10.5 6.5q.425 0 .713.287.288.288.287.713v2h2q.425 0 .713.287.288.288.287.713a.97.97 0 0 1-.287.713.97.97 0 0 1-.713.287h-2v2a.97.97 0 0 1-.287.713.97.97 0 0 1-.713.287.97.97 0 0 1-.713-.287.97.97 0 0 1-.287-.713v-2h-2a.97.97 0 0 1-.713-.287.97.97 0 0 1-.287-.713q0-.425.287-.713A.97.97 0 0 1 7.5 9.5h2v-2q0-.425.287-.713A.97.97 0 0 1 10.5 6.5"
+              />
+              <path
+                clip-rule="evenodd"
+                d="M10.5 3a7.5 7.5 0 0 1 5.963 12.049l3.244 3.244a1 1 0 1 1-1.414 1.414l-3.244-3.244A7.5 7.5 0 1 1 10.5 3m0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+              />
+              <path
+                d="M7.875 11.375h1.75v1.75q0 .372.252.623A.85.85 0 0 0 10.5 14a.85.85 0 0 0 .623-.252.85.85 0 0 0 .252-.623v-1.75h1.75a.85.85 0 0 0 .623-.252A.85.85 0 0 0 14 10.5a.85.85 0 0 0-.252-.623.85.85 0 0 0-.623-.252h-1.75v-1.75a.85.85 0 0 0-.252-.623A.85.85 0 0 0 10.5 7a.85.85 0 0 0-.623.252.85.85 0 0 0-.252.623v1.75h-1.75a.85.85 0 0 0-.623.252A.85.85 0 0 0 7 10.5q0 .372.252.623a.85.85 0 0 0 .623.252"
+              />
+            </g>
+            <defs>
+              <clippath
+                id="a"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                />
+              </clippath>
+            </defs>
+          </svg>
+        </div>
         <div
           aria-label="Rotate Left"
-          class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_rotateCCW"
+          class="mx_AccessibleButton mx_ImageView_button"
           role="button"
           tabindex="0"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.56 7.98C6.1 7.52 5.31 7.6 5 8.17c-.28.51-.5 1.03-.67 1.58-.19.63.31 1.25.96 1.25h.01c.43 0 .82-.28.94-.7q.18-.6.48-1.17c.22-.37.15-.84-.16-1.15M5.31 13h-.02c-.65 0-1.15.62-.96 1.25.16.54.38 1.07.66 1.58.31.57 1.11.66 1.57.2.3-.31.38-.77.17-1.15-.2-.37-.36-.76-.48-1.16a.97.97 0 0 0-.94-.72m2.85 6.02q.765.42 1.59.66c.62.18 1.24-.32 1.24-.96v-.03c0-.43-.28-.82-.7-.94-.4-.12-.78-.28-1.15-.48a.97.97 0 0 0-1.16.17l-.03.03c-.45.45-.36 1.24.21 1.55M13 4.07v-.66c0-.89-1.08-1.34-1.71-.71L9.17 4.83c-.4.4-.4 1.04 0 1.43l2.13 2.08c.63.62 1.7.17 1.7-.72V6.09c2.84.48 5 2.94 5 5.91 0 2.73-1.82 5.02-4.32 5.75a.97.97 0 0 0-.68.94v.02c0 .65.61 1.14 1.23.96A7.976 7.976 0 0 0 20 12c0-4.08-3.05-7.44-7-7.93"
+            />
+          </svg>
+        </div>
         <div
           aria-label="Rotate Right"
-          class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_rotateCW"
+          class="mx_AccessibleButton mx_ImageView_button"
           role="button"
           tabindex="0"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              clip-path="url(#a)"
+            >
+              <path
+                d="M14.83 4.83 12.7 2.7c-.62-.62-1.7-.18-1.7.71v.66C7.06 4.56 4 7.92 4 12c0 3.64 2.43 6.71 5.77 7.68.62.18 1.23-.32 1.23-.96v-.03a.97.97 0 0 0-.68-.94A5.98 5.98 0 0 1 6 12c0-2.97 2.16-5.43 5-5.91v1.53c0 .89 1.07 1.33 1.7.71l2.13-2.08a.99.99 0 0 0 0-1.42m4.84 4.93q-.24-.825-.66-1.59c-.31-.57-1.1-.66-1.56-.2l-.01.01c-.31.31-.38.78-.17 1.16.2.37.36.76.48 1.16.12.42.51.7.94.7h.02c.65 0 1.15-.62.96-1.24M13 18.68v.02c0 .65.62 1.14 1.24.96q.825-.24 1.59-.66c.57-.31.66-1.1.2-1.56l-.02-.02a.97.97 0 0 0-1.16-.17c-.37.21-.76.37-1.16.49-.41.12-.69.51-.69.94m4.44-2.65c.46.46 1.25.37 1.56-.2.28-.51.5-1.04.67-1.59.18-.62-.31-1.24-.96-1.24h-.02c-.44 0-.82.28-.94.7q-.18.6-.48 1.17c-.21.38-.13.86.17 1.16"
+              />
+            </g>
+            <defs>
+              <clippath
+                id="a"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                />
+              </clippath>
+            </defs>
+          </svg>
+        </div>
         <div
           aria-label="Download"
-          class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_download"
+          class="mx_AccessibleButton mx_ImageView_button"
           role="button"
           tabindex="0"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-3.6-3.6a.95.95 0 0 1-.275-.7q0-.425.275-.7.274-.275.712-.288t.713.263L11 12.15V5q0-.424.287-.713A.97.97 0 0 1 12 4q.424 0 .713.287Q13 4.576 13 5v7.15l1.875-1.875q.274-.274.713-.263.437.014.712.288a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-3.6 3.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063M6 20q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18v-2q0-.424.287-.713A.97.97 0 0 1 5 15q.424 0 .713.287Q6 15.576 6 16v2h12v-2q0-.424.288-.713A.97.97 0 0 1 19 15q.424 0 .712.287.288.288.288.713v2q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20z"
+            />
+          </svg>
+        </div>
         <div
           aria-label="Close"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_close"
           role="button"
           tabindex="0"
-        />
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
       </div>
     </div>
     <div

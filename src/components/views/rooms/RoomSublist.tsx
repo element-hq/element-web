@@ -13,6 +13,12 @@ import classNames from "classnames";
 import { type Enable, Resizable } from "re-resizable";
 import { type Direction } from "re-resizable/lib/resizer";
 import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type ReactNode } from "react";
+import {
+    ChevronDownIcon,
+    ChevronRightIcon,
+    ChevronUpIcon,
+    OverflowHorizontalIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -608,7 +614,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     onClick={this.onOpenMenuClick}
                     title={_t("room_list|sublist_options")}
                     isExpanded={!!this.state.contextMenuPosition}
-                />
+                >
+                    <OverflowHorizontalIcon />
+                </ContextMenuTooltipButton>
                 {contextMenu}
             </React.Fragment>
         );
@@ -642,11 +650,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         addRoomButton = <AuxButtonComponent tabIndex={tabIndex} />;
                     }
 
-                    const collapseClasses = classNames({
-                        mx_RoomSublist_collapseBtn: true,
-                        mx_RoomSublist_collapseBtn_collapsed: !this.state.isExpanded && !this.props.forceExpanded,
-                    });
-
+                    const collapsed = !this.state.isExpanded && !this.props.forceExpanded;
                     const classes = classNames({
                         mx_RoomSublist_headerContainer: true,
                         mx_RoomSublist_headerContainer_withAux: !!addRoomButton,
@@ -682,7 +686,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                         onContextMenu={this.onContextMenu}
                                         title={this.props.isMinimized ? this.props.label : undefined}
                                     >
-                                        <span className={collapseClasses} />
+                                        <span className="mx_RoomSublist_collapseBtn">
+                                            {collapsed ? <ChevronRightIcon /> : <ChevronDownIcon />}
+                                        </span>
                                         <span id={getLabelId(this.props.tagId)}>{this.props.label}</span>
                                     </AccessibleButton>
                                     {this.renderMenu()}
@@ -758,9 +764,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         className={showMoreBtnClasses}
                         aria-label={label}
                     >
-                        <span className="mx_RoomSublist_showMoreButtonChevron mx_RoomSublist_showNButtonChevron">
-                            {/* set by CSS masking */}
-                        </span>
+                        <ChevronDownIcon className="mx_RoomSublist_showNButtonChevron" />
                         {showMoreText}
                     </RovingAccessibleButton>
                 );
@@ -776,9 +780,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         className={showMoreBtnClasses}
                         aria-label={label}
                     >
-                        <span className="mx_RoomSublist_showLessButtonChevron mx_RoomSublist_showNButtonChevron">
-                            {/* set by CSS masking */}
-                        </span>
+                        <ChevronUpIcon className="mx_RoomSublist_showNButtonChevron" />
                         {showLessText}
                     </RovingAccessibleButton>
                 );

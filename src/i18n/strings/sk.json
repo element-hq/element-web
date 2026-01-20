@@ -2019,7 +2019,6 @@
         "dm_invite_title": "Chcete konverzovať s %(user)s?",
         "drop_file_prompt": "Pretiahnutím sem nahráte súbor",
         "edit_topic": "Upraviť tému",
-        "error_3pid_invite_email_lookup": "Nie je možné nájsť používateľa podľa e-mailu",
         "error_cancel_knock_title": "Nepodarilo sa zrušiť",
         "error_join_403": "Na prístup do tejto miestnosti potrebujete pozvánku.",
         "error_join_404_1": "Pokúsili ste sa pripojiť pomocou ID miestnosti bez uvedenia zoznamu serverov, cez ktoré sa môžete pripojiť. ID miestností sú interné identifikátory a bez ďalších informácií ich nemožno použiť na pripojenie k miestnosti.",

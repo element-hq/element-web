@@ -1994,7 +1994,6 @@
         "dm_invite_title": "Voulez-vous discuter avec %(user)s ?",
         "drop_file_prompt": "Glisser le fichier ici pour l’envoyer",
         "edit_topic": "Modifier le sujet",
-        "error_3pid_invite_email_lookup": "Impossible de trouver un utilisateur avec son courriel",
         "error_cancel_knock_title": "Erreur lors de l’annulation",
         "error_join_403": "Vous avez besoin d’une invitation pour accéder à ce salon.",
         "error_join_404_1": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires.",

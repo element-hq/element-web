@@ -192,7 +192,9 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                     title={_t("action|add_people")}
                     isExpanded={menuDisplayed}
                     ref={handle}
-                />
+                >
+                    <PlusIcon />
+                </ContextMenuTooltipButton>
 
                 {contextMenu}
             </>
@@ -208,7 +210,9 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                 className="mx_RoomSublist_auxButton"
                 aria-label={_t("action|start_chat")}
                 title={_t("action|start_chat")}
-            />
+            >
+                <PlusIcon />
+            </AccessibleButton>
         );
     }
 
@@ -375,7 +379,9 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                     title={_t("room_list|add_room_label")}
                     isExpanded={menuDisplayed}
                     ref={handle}
-                />
+                >
+                    <PlusIcon />
+                </ContextMenuTooltipButton>
 
                 {contextMenu}
             </>

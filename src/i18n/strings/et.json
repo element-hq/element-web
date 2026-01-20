@@ -1995,7 +1995,6 @@
         "dm_invite_title": "Kas sa soovid vestelda %(user)s'ga?",
         "drop_file_prompt": "Faili üleslaadimiseks lohista ta siia",
         "edit_topic": "Muuda teemat",
-        "error_3pid_invite_email_lookup": "E-posti aadressi alusel ei õnnestu kasutajat leida",
         "error_cancel_knock_title": "Tühistamine ei õnnestunud",
         "error_join_403": "Ligipääsuks siia jututuppa on sul vaja kutset.",
         "error_join_404_1": "Sa proovisid liituda jututoaga tema tunnuse alusel nii, et serveri nime polnud näidatud. Jututoa tunnused on sisemised identifikaatorid ja ilma lisateabeta neid liitumiseks kasutada ei saa.",

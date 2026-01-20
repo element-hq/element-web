@@ -2000,7 +2000,6 @@
         "dm_invite_title": "Chcete si povídat s %(user)s?",
         "drop_file_prompt": "Přetažením sem nahrajete",
         "edit_topic": "Upravit téma",
-        "error_3pid_invite_email_lookup": "Nelze najít uživatele podle e-mailu",
         "error_cancel_knock_title": "Nepodařilo se zrušit",
         "error_join_403": "Pro vstup do této místnosti potřebujete pozvánku.",
         "error_join_404_1": "Pokusili jste se připojit pomocí ID místnosti, aniž byste zadali seznam serverů, přes které se chcete připojit. ID místnosti jsou interní identifikátory a nelze je použít k připojení k místnosti bez dalších informací.",

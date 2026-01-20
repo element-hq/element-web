@@ -118,23 +118,11 @@ Please see LICENSE files in the repository root for full details.
             padding: 8px 36px;
         }
 
-        .mx_AddExistingToSpace_retryButton {
-            margin-left: 12px;
-            padding-left: 24px;
-            position: relative;
-
-            &::before {
-                content: "";
-                position: absolute;
-                background-color: $primary-content;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
-                mask-image: url("@vector-im/compound-design-tokens/icons/restart.svg");
-                width: 18px;
-                height: 18px;
-                left: 0;
-            }
+        .mx_AddExistingToSpaceDialog_retryButton svg {
+            color: $primary-content;
+            width: 18px;
+            height: 18px;
+            margin-right: var(--cpd-space-2x);
         }
     }
 }
@@ -185,25 +173,17 @@ Please see LICENSE files in the repository root for full details.
             }
         }
 
-        .mx_Dropdown_menu {
-            .mx_SubspaceSelector_dropdownOptionActive {
-                color: $accent;
-                padding-right: 32px;
-                position: relative;
+        .mx_SubspaceSelector_dropdownOptionActive {
+            color: $accent;
+            padding-right: 24px;
+            position: relative;
 
-                &::before {
-                    content: "";
-                    width: 20px;
-                    height: 20px;
-                    top: 8px;
-                    right: 0;
-                    position: absolute;
-                    mask-position: center;
-                    mask-size: contain;
-                    mask-repeat: no-repeat;
-                    background-color: $accent;
-                    mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
-                }
+            svg {
+                width: 20px;
+                height: 20px;
+                right: 0;
+                position: absolute;
+                color: $accent;
             }
         }
     }
@@ -225,7 +205,8 @@ Please see LICENSE files in the repository root for full details.
         margin-bottom: auto;
     }
 
-    .mx_DecoratedRoomAvatar, /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */ {
+    /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */
+    .mx_DecoratedRoomAvatar {
         margin-right: 12px;
     }
 

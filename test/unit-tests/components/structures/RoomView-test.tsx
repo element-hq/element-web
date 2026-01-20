@@ -24,16 +24,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import {
-    act,
-    cleanup,
-    fireEvent,
-    render,
-    type RenderResult,
-    screen,
-    waitFor,
-    waitForElementToBeRemoved,
-} from "jest-matrix-react";
+import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -872,12 +863,13 @@ describe("RoomView", () => {
             await waitFor(() => {
                 expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
             });
-            const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
 
             await userEvent.hover(getByText("search term"));
             await userEvent.click(await findByLabelText("Edit"));
 
-            await prom;
+            await waitFor(() => {
+                expect(container.querySelector(".mx_RoomView_searchResultsPanel")).not.toBeInTheDocument();
+            });
         });
 
         it("should switch rooms when edit is clicked on a search result for a different room", async () => {

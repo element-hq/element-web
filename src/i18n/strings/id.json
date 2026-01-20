@@ -1970,7 +1970,6 @@
         "dm_invite_title": "Apakah Anda ingin mengobrol dengan %(user)s?",
         "drop_file_prompt": "Lepaskan file di sini untuk mengunggah",
         "edit_topic": "Edit topik",
-        "error_3pid_invite_email_lookup": "Tidak dapat mencari pengguna dengan surel",
         "error_cancel_knock_title": "Gagal membatalkan",
         "error_join_403": "Anda memerlukan undangan untuk mengakses ruangan ini.",
         "error_join_404_1": "Anda mencoba untuk bergabung menggunakan sebuah ID ruangan tanpa menyediakan daftar server untuk bergabung melalui server. ID ruangan adalah pengenal internal dan tidak dapat digunakan untuk bergabung dengan sebuah ruangan tanpa informasi tambahan.",
