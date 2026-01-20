@@ -49,6 +49,7 @@ import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
+import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions.ts";
 
 const { enabledSettings } = enableCalls();
 
