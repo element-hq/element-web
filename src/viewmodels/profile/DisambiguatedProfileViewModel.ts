@@ -9,7 +9,6 @@ import {
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { ReactNode } from "react";
  
 /**
  * ViewModel for the timeline separator, providing the current state of the component.
@@ -24,17 +23,28 @@ export class DisambiguatedProfileViewModel
     * @param children optional React nodes to render between the separators
      */
     private static readonly computeSnapshot = (
-        label: string,
-        children?: ReactNode,
+        member: { userId: string; roomId: string; rawDisplayName?: string; disambiguate: boolean } | null | undefined,
+        fallbackName: string,
+        colored?: boolean,
+        emphasizeDisplayName?: boolean,
+        withTooltip?: boolean,
     ): DisambiguatedProfileViewSnapshot => {
         return {
-            label,
-            children,
+            member: {
+                userId: member?.userId ?? "",
+                roomId: member?.roomId ?? "",
+                rawDisplayName: member?.rawDisplayName ?? "",
+                disambiguate: member?.disambiguate ?? false,
+            },
+            fallbackName,
+            colored,
+            emphasizeDisplayName,
+            withTooltip,
         };
     };
  
     public constructor(props: DisambiguatedProfileViewSnapshot) {
-        super(props, DisambiguatedProfileViewModel.computeSnapshot(props.label, props.children));
+        super(props, DisambiguatedProfileViewModel.computeSnapshot(props.member, props.fallbackName, props.colored, props.emphasizeDisplayName, props.withTooltip));
     }
  
     /**
@@ -42,7 +52,7 @@ export class DisambiguatedProfileViewModel
      */
     private readonly setSnapshot = (): void => {
         this.snapshot.set(
-            DisambiguatedProfileViewModel.computeSnapshot(this.props.label, this.props.children),
+            DisambiguatedProfileViewModel.computeSnapshot(this.props.member, this.props.fallbackName, this.props.colored, this.props.emphasizeDisplayName, this.props.withTooltip),
         );
     };
  
