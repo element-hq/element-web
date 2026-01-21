@@ -9,7 +9,7 @@ import {
     type TimelineSeparatorViewSnapshot,
     type TimelineSeparatorViewModel as TimelineSeparatorViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
  
 /**
  * ViewModel for the timeline separator, providing the current state of the component.
@@ -25,7 +25,7 @@ export class TimelineSeparatorViewModel
      */
     private static readonly computeSnapshot = (
         label: string,
-        children?: ReactNode,
+        children?: PropsWithChildren["children"],
     ): TimelineSeparatorViewSnapshot => {
         return {
             label,
