@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type FormEvent } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import FocusLock from "react-focus-lock";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -91,7 +92,9 @@ export default abstract class ScrollableBaseModal<
                         onClick={this.onCancel}
                         className="mx_CompoundDialog_cancelButton"
                         aria-label={_t("dialog_close_label")}
-                    />
+                    >
+                        <CloseIcon />
+                    </AccessibleButton>
                     <form onSubmit={this.onSubmit} className="mx_CompoundDialog_form">
                         <div className="mx_CompoundDialog_content">{this.renderContent()}</div>
                         <div className="mx_CompoundDialog_footer">
