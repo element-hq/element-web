@@ -54,11 +54,11 @@ jobs:
 
             - name: Run Visual tests
               working-directory: packages/shared-components
-              run: "yarn test:storybook:ci"
+              run: "yarn test:storybook --run"
 
             - name: Upload received images & diffs
               if: always()
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: received-images
-                  path: packages/shared-components/playwright/shared-component-received
+                  path: packages/shared-components/__vis__/linux
