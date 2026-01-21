@@ -121,7 +121,7 @@
         "typescript": "^5.9.3",
         "vite": "^7.1.9",
         "vite-plugin-dts": "^4.5.4",
-        "vite-plugin-node-polyfills": "^0.24.0"
+        "vite-plugin-node-polyfills": "^0.25.0"
     },
     "engines": {
         "node": ">=20.0.0"
