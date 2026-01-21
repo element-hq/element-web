@@ -1,2 +1,7 @@
 # Ignore test failure screenshots
 /src/**/__screenshots__/
+
+# Ignore vis diffs & local baseline
+/__vis__/**/__diffs__
+/__vis__/**/__results__
+/__vis__/local
