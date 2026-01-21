@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
 
 import { setLanguage } from "../../src/utils/i18n";
 import en from "../i18n/strings/en_EN.json";
