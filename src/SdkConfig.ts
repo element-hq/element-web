@@ -29,6 +29,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         preferred_domain: "meet.element.io",
     },
     element_call: {
+        url: undefined,
         use_exclusively: false,
         participant_limit: 8,
         brand: "Element Call",
