@@ -1697,7 +1697,7 @@
     classnames "^2.5.1"
     counterpart "^0.18.6"
     lodash "^4.17.21"
-    matrix-web-i18n "3.5.2"
+    matrix-web-i18n "3.6.0"
     patch-package "^8.0.1"
     react-merge-refs "^3.0.2"
     temporal-polyfill "^0.3.0"
@@ -9701,10 +9701,10 @@ matrix-events-sdk@0.0.1:
     unhomoglyph "^1.0.6"
     uuid "13"
 
-matrix-web-i18n@3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.2.tgz#a394cbd5762128d6f532937e952fa1a804364bbb"
-  integrity sha512-LA2jTF3S2KN4lmk9ntx8SeGio45wX66r5EL4lSXlUYRGHj83x3VUyFFRLgap9znRRAjIJK/PJq1fIwj1A9BU3g==
+matrix-web-i18n@3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.6.0.tgz#50efd34e454449685866155336e2ce3432e7a813"
+  integrity sha512-oY4YZCU8OqDZzmCiJpo8XrATa7XNOB5oFyIpE7O0jjaIEeu6LnQrHmm/fpsYkPUENVzGJm1YdoOtvcBrQx+h2g==
   dependencies:
     "@babel/parser" "^7.28.5"
     "@babel/traverse" "^7.28.5"
