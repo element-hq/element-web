@@ -28,7 +28,7 @@ const config: StorybookConfig = {
         return mergeConfig(config, {
             plugins: [
                 // Needed for counterpart to work
-                nodePolyfills({ include: ["process", "util"] }),
+                nodePolyfills({ include: ["util"] }),
                 {
                     name: "language-middleware",
                     configureServer(server) {
