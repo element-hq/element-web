@@ -5,11 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen } from "jest-matrix-react";
+import { render, screen, fireEvent } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { fireEvent } from "@testing-library/dom";
+import { describe, it, vi, afterEach, expect } from "vitest";
 
 import * as stories from "./AudioPlayerView.stories.tsx";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
@@ -21,7 +21,7 @@ const { Default, NoMediaName, NoSize, HasError } = composeStories(stories);
 
 describe("AudioPlayerView", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("renders the audio player in default state", () => {
@@ -44,9 +44,9 @@ describe("AudioPlayerView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    const onKeyDown = jest.fn();
-    const togglePlay = jest.fn();
-    const onSeekbarChange = jest.fn();
+    const onKeyDown = vi.fn();
+    const togglePlay = vi.fn();
+    const onSeekbarChange = vi.fn();
 
     class AudioPlayerViewModel extends MockViewModel<AudioPlayerViewSnapshot> implements AudioPlayerViewActions {
         public onKeyDown = onKeyDown;

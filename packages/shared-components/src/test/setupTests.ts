@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import fetchMock from "@fetch-mock/vitest";
 import { cleanup } from "@test-utils";
 import { afterEach } from "vitest";
+import "@testing-library/jest-dom/vitest";
 
 import { setLanguage } from "../../src/utils/i18n";
 import en from "../i18n/strings/en_EN.json";

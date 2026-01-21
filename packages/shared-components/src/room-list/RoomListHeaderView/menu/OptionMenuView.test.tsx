@@ -6,15 +6,16 @@
  */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
+import { vi, describe, it, afterEach, expect } from "vitest";
 
 import { OptionMenuView } from "./OptionMenuView";
 import { defaultSnapshot, MockedViewModel } from "../test-utils";
 
 describe("<OptionMenuView />", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("should match snapshot", () => {
