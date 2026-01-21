@@ -261,11 +261,11 @@ Two types of tests are available: unit tests and visual regression tests.
 
 ### Unit Tests
 
-These tests cover the logic of the components and utilities. Built with Jest
+These tests cover the logic of the components and utilities. Built with Vitest
 and React Testing Library.
 
 ```bash
-yarn test
+yarn test:unit
 ```
 
 ### Visual Regression Tests
