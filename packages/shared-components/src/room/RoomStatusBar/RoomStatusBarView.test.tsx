@@ -9,6 +9,7 @@ import React from "react";
 import { render } from "jest-matrix-react";
 import { composeStories } from "@storybook/react-vite";
 import userEvent from "@testing-library/user-event";
+import { describe, it, vi, expect } from "vitest";
 
 import * as stories from "./RoomStatusBarView.stories.tsx";
 
@@ -33,12 +34,12 @@ describe("RoomStatusBarView", () => {
     });
     it("renders unsent messages", async () => {
         const { container } = render(
-            <WithUnsentMessages onDeleteAllClick={jest.fn()} onRetryRoomCreationClick={jest.fn()} />,
+            <WithUnsentMessages onDeleteAllClick={vi.fn()} onRetryRoomCreationClick={vi.fn()} />,
         );
         expect(container).toMatchSnapshot();
     });
     it("renders unsent messages and deletes all", async () => {
-        const onDeleteAllClick = jest.fn();
+        const onDeleteAllClick = vi.fn();
         const { container, getByRole } = render(<WithUnsentMessages onDeleteAllClick={onDeleteAllClick} />);
         expect(container).toMatchSnapshot();
 
@@ -47,7 +48,7 @@ describe("RoomStatusBarView", () => {
         expect(onDeleteAllClick).toHaveBeenCalled();
     });
     it("renders unsent messages and resends all", async () => {
-        const onResendAllClick = jest.fn();
+        const onResendAllClick = vi.fn();
         const { container, getByRole } = render(<WithUnsentMessages onResendAllClick={onResendAllClick} />);
         expect(container).toMatchSnapshot();
 
@@ -56,7 +57,7 @@ describe("RoomStatusBarView", () => {
         expect(onResendAllClick).toHaveBeenCalled();
     });
     it("renders local room error", async () => {
-        const onRetryRoomCreationClick = jest.fn();
+        const onRetryRoomCreationClick = vi.fn();
         const { container, getByRole } = render(
             <WithLocalRoomRetry onRetryRoomCreationClick={onRetryRoomCreationClick} />,
         );

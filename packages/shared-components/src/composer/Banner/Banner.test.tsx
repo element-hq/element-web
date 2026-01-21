@@ -7,6 +7,7 @@
 
 import React from "react";
 import { render } from "jest-matrix-react";
+import { describe, it, expect } from "vitest";
 import { composeStories } from "@storybook/react-vite";
 
 import * as stories from "./Banner.stories.tsx";

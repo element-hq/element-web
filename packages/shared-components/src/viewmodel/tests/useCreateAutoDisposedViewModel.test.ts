@@ -5,6 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { renderHook } from "jest-matrix-react";
+import { describe, it, expect } from "vitest";
 
 import { BaseViewModel } from "../BaseViewModel";
 import { useCreateAutoDisposedViewModel } from "../useCreateAutoDisposedViewModel";

@@ -8,13 +8,14 @@
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { vi, describe, it, afterEach, expect } from "vitest";
 
 import { SpaceMenuView } from "./SpaceMenuView";
 import { defaultSnapshot, MockedViewModel } from "../test-utils";
 
 describe("<SpaceMenuView />", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("should match snapshot", () => {

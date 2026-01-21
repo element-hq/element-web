@@ -9,6 +9,7 @@ import { render, screen } from "jest-matrix-react";
 import React from "react";
 import { composeStories } from "@storybook/react-vite";
 import userEvent from "@testing-library/user-event";
+import { describe, it, vi, expect } from "vitest";
 
 import * as stories from "./PillInput.stories";
 import { PillInput } from "./PillInput";
@@ -28,7 +29,7 @@ describe("PillInput", () => {
 
     it("calls onRemoveChildren when backspace is pressed and input is empty", async () => {
         const user = userEvent.setup();
-        const mockOnRemoveChildren = jest.fn();
+        const mockOnRemoveChildren = vi.fn();
 
         render(<PillInput onRemoveChildren={mockOnRemoveChildren} />);
 

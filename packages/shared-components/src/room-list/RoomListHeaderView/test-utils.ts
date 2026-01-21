@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { vi } from "vitest";
+
 import { MockViewModel } from "../../viewmodel";
 import { type RoomListHeaderViewActions, type RoomListHeaderViewSnapshot } from "./RoomListHeaderView";
 
@@ -12,15 +14,15 @@ import { type RoomListHeaderViewActions, type RoomListHeaderViewSnapshot } from 
  * A mocked ViewModel for the RoomListHeaderView, for use in tests.
  */
 export class MockedViewModel extends MockViewModel<RoomListHeaderViewSnapshot> implements RoomListHeaderViewActions {
-    public createChatRoom = jest.fn();
-    public createRoom = jest.fn();
-    public createVideoRoom = jest.fn();
-    public openSpaceHome = jest.fn();
-    public openSpaceSettings = jest.fn();
-    public inviteInSpace = jest.fn();
-    public sort = jest.fn();
-    public openSpacePreferences = jest.fn();
-    public toggleMessagePreview = jest.fn();
+    public createChatRoom = vi.fn<() => void>();
+    public createRoom = vi.fn<() => void>();
+    public createVideoRoom = vi.fn<() => void>();
+    public openSpaceHome = vi.fn<() => void>();
+    public openSpaceSettings = vi.fn<() => void>();
+    public inviteInSpace = vi.fn<() => void>();
+    public sort = vi.fn<() => void>();
+    public openSpacePreferences = vi.fn<() => void>();
+    public toggleMessagePreview = vi.fn<() => void>();
 }
 
 export const defaultSnapshot: RoomListHeaderViewSnapshot = {
