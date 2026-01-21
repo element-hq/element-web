@@ -4,10 +4,9 @@ exports[`DisambiguatedProfileView renders the default state 1`] = `
 <div>
   <div
     class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
-    data-testid="disambiguated-profile"
   >
     <span
-      class=""
+      class="mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Alice
@@ -20,20 +19,13 @@ exports[`DisambiguatedProfileView renders the full example 1`] = `
 <div>
   <div
     class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
-    data-testid="disambiguated-profile"
-    title="Eve (@eve:matrix.org)"
+    title="timeline|disambiguated_profile"
   >
     <span
-      class="mx_Username_color3 mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Eve
-    </span>
-    <span
-      class="mx_DisambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
-      data-testid="disambiguated-profile-mxid"
-    >
-      @eve:matrix.org
     </span>
   </div>
 </div>
@@ -43,17 +35,15 @@ exports[`DisambiguatedProfileView renders with MXID for disambiguation 1`] = `
 <div>
   <div
     class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
-    data-testid="disambiguated-profile"
   >
     <span
-      class=""
+      class="mx_Username_color3 mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Alice
     </span>
     <span
       class="mx_DisambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
-      data-testid="disambiguated-profile-mxid"
     >
       @alice:example.org
     </span>
@@ -65,10 +55,9 @@ exports[`DisambiguatedProfileView renders with color class 1`] = `
 <div>
   <div
     class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
-    data-testid="disambiguated-profile"
   >
     <span
-      class="mx_Username_color1"
+      class="mx_Username_color4 mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Bob
@@ -81,7 +70,6 @@ exports[`DisambiguatedProfileView renders with emphasized display name 1`] = `
 <div>
   <div
     class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
-    data-testid="disambiguated-profile"
   >
     <span
       class="mx_DisambiguatedProfile_displayName"
@@ -97,20 +85,13 @@ exports[`DisambiguatedProfileView renders with tooltip 1`] = `
 <div>
   <div
     class="mx_DisambiguatedProfile mx_DisambiguatedProfile"
-    data-testid="disambiguated-profile"
-    title="Diana (@diana:example.org)"
+    title="timeline|disambiguated_profile"
   >
     <span
-      class=""
+      class="mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Diana
-    </span>
-    <span
-      class="mx_DisambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
-      data-testid="disambiguated-profile-mxid"
-    >
-      @diana:example.org
     </span>
   </div>
 </div>
