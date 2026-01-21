@@ -20,6 +20,7 @@ export class MockedViewModel extends MockViewModel<RoomListHeaderViewSnapshot> i
     public inviteInSpace = jest.fn();
     public sort = jest.fn();
     public openSpacePreferences = jest.fn();
+    public toggleMessagePreview = jest.fn();
 }
 
 export const defaultSnapshot: RoomListHeaderViewSnapshot = {
@@ -31,4 +32,5 @@ export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     canInviteInSpace: true,
     canAccessSpaceSettings: true,
     activeSortOption: "recent",
+    isMessagePreviewEnabled: true,
 };

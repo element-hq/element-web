@@ -77,4 +77,17 @@ describe("<OptionMenuView />", () => {
 
         expect(vm.sort).toHaveBeenCalledWith("recent");
     });
+
+    it("should toggle message preview", async () => {
+        const user = userEvent.setup();
+
+        const vm = new MockedViewModel({ ...defaultSnapshot, isMessagePreviewEnabled: true });
+        render(<OptionMenuView vm={vm} />);
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+        expect(screen.getByRole("menuitemcheckbox", { name: "Show message previews" })).toBeChecked();
+
+        await user.click(screen.getByRole("menuitemcheckbox", { name: "Show message previews" }));
+        expect(vm.toggleMessagePreview).toHaveBeenCalled();
+    });
 });

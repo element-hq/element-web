@@ -30,12 +30,16 @@ import { createRoom, hasCreateRoomRights } from "../../components/viewmodels/roo
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 export interface Props {
     /**
      * The Matrix client instance.
      */
     matrixClient: MatrixClient;
+    /**
+     * The space store instance.
+     */
     spaceStore: SpaceStoreClass;
 }
 
@@ -170,6 +174,12 @@ export class RoomListHeaderViewModel
         RoomListStoreV3.instance.resort(sortingAlgorithm);
         this.snapshot.merge({ activeSortOption: option });
     };
+
+    public toggleMessagePreview = (): void => {
+        const isMessagePreviewEnabled = SettingsStore.getValue("RoomList.showMessagePreview");
+        SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, !isMessagePreviewEnabled);
+        this.snapshot.merge({ isMessagePreviewEnabled });
+    };
 }
 
 /**
@@ -182,9 +192,11 @@ function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixCli
     const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
     const activeSortOption =
         sortingAlgorithm === SortingAlgorithm.Recency ? ("recent" as const) : ("alphabetical" as const);
+    const isMessagePreviewEnabled = SettingsStore.getValue("RoomList.showMessagePreview");
 
     return {
         activeSortOption,
+        isMessagePreviewEnabled,
         ...computeHeaderSpaceState(spaceStore, matrixClient),
     };
 }
@@ -216,7 +228,7 @@ function getCanCreateVideoRoom(canCreateRoom: boolean): boolean {
 function computeHeaderSpaceState(
     spaceStore: SpaceStoreClass,
     matrixClient: MatrixClient,
-): Omit<RoomListHeaderViewSnapshot, "activeSortOption"> {
+): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
 
