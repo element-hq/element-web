@@ -81,9 +81,18 @@ import {
 } from "./utils/tokens/tokens";
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
+import baseConfig from "../config.json";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
+
+const CONFIG = baseConfig as Record<string, unknown>;
+
+const DEFAULT_JWT_VALIDATE_URL =
+    (typeof CONFIG.jwt_validate_url === "string" && CONFIG.jwt_validate_url) || "";
+
+const DEFAULT_JWT_FAILURE_REDIRECT_URL =
+    (typeof CONFIG.jwt_failure_redirect_url === "string" && CONFIG.jwt_failure_redirect_url) || "";
 
 type JwtLoginPayload = {
     access_token?: string;
@@ -91,6 +100,10 @@ type JwtLoginPayload = {
     user_id?: string;
     device_id?: string;
     home_server?: string;
+    user_email?: string;
+    data?: {
+        user_email?: string;
+    };
     well_known?: {
         "m.homeserver"?: {
             base_url?: string;
@@ -126,6 +139,19 @@ function resolveJwtHomeserverUrl(payload: JwtLoginPayload, fallback?: string): s
     }
 
     return fallback;
+}
+
+
+
+async function handleJwtValidationFailure(): Promise<void> {
+    const { finished } = Modal.createDialog(ErrorDialog, {
+        title: _t("auth|oidc|error_title"),
+        description: "Login credentials failed.",
+        button: _t("action|ok"),
+    });
+    await finished;
+    const redirectUrl = DEFAULT_JWT_FAILURE_REDIRECT_URL;
+    window.location.assign(redirectUrl);
 }
 
 dis.register((payload) => {
@@ -246,6 +272,21 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             if (!accessToken) {
                 logger.warn("JWT login requested but payload has no access_token");
             } else {
+                const email =
+                    (payload?.data?.user_email as string | undefined) ??
+                    (payload?.user_email as string | undefined) ??
+                    (fragmentQueryParams.email as string | undefined) ??
+                    (fragmentQueryParams.user_email as string | undefined);
+                const password =
+                    (fragmentQueryParams.password as string | undefined) ??
+                    (fragmentQueryParams.user_password as string | undefined);
+
+                const isValid = await validateJwtViaApi(jwtParam, email, password);
+                if (!isValid) {
+                    await handleJwtValidationFailure();
+                    return false;
+                }
+
                 const homeserverUrl = resolveJwtHomeserverUrl(payload, guestHsUrl);
                 if (!homeserverUrl) {
                     logger.warn("JWT login requested but no homeserver URL could be determined");
@@ -262,6 +303,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                             identityServerUrl: guestIsUrl,
                             guest: isGuest,
                         });
+                        window.location.assign("#/");
                         return true;
                     } catch (error) {
                         logger.error("Failed to log in via JWT fragment", error);
