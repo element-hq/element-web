@@ -8,9 +8,8 @@
 import { Link } from "@vector-im/compound-web";
 import React, { type JSX } from "react";
 
-import { useViewModel } from "../../useViewModel";
 import { _t } from "../../utils/i18n";
-import { type ViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../viewmodel";
 import { Banner } from "../Banner";
 
 export interface HistoryVisibleBannerViewActions {

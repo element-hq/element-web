@@ -7,7 +7,8 @@
 
 import { useMemo } from "react";
 
-import { MockViewModel, type ViewModel } from "./viewmodel";
+import { MockViewModel } from "./MockViewModel";
+import { type ViewModel } from "./ViewModel";
 
 /**
  * Hook helper to return a mocked view model created with the given snapshot and actions.
