@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RoomListHeaderView renders the default state 1`] = `
+exports[`RoomListHeaderView > renders the default state 1`] = `
 <div>
   <header
     aria-label="Room options"
@@ -128,7 +128,7 @@ exports[`RoomListHeaderView renders the default state 1`] = `
 </div>
 `;
 
-exports[`RoomListHeaderView renders without compose menu 1`] = `
+exports[`RoomListHeaderView > renders without compose menu 1`] = `
 <div>
   <header
     aria-label="Room options"
@@ -251,7 +251,7 @@ exports[`RoomListHeaderView renders without compose menu 1`] = `
 </div>
 `;
 
-exports[`RoomListHeaderView renders without space menu 1`] = `
+exports[`RoomListHeaderView > renders without space menu 1`] = `
 <div>
   <header
     aria-label="Room options"
