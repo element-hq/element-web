@@ -81,9 +81,100 @@ import {
 } from "./utils/tokens/tokens";
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
+import baseConfig from "../config.json";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
+
+const CONFIG = baseConfig as Record<string, unknown>;
+
+const DEFAULT_JWT_VALIDATE_URL =
+    (typeof CONFIG.jwt_validate_url === "string" && CONFIG.jwt_validate_url) || "";
+
+const DEFAULT_JWT_FAILURE_REDIRECT_URL =
+    (typeof CONFIG.jwt_failure_redirect_url === "string" && CONFIG.jwt_failure_redirect_url) || "";
+
+type JwtLoginPayload = {
+    access_token?: string;
+    refresh_token?: string;
+    user_id?: string;
+    device_id?: string;
+    home_server?: string;
+    user_email?: string;
+    data?: {
+        user_email?: string;
+    };
+    well_known?: {
+        "m.homeserver"?: {
+            base_url?: string;
+        };
+    };
+};
+
+function decodeJwtPayload(token: string): JwtLoginPayload | null {
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+
+    const payloadPart = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = payloadPart.padEnd(Math.ceil(payloadPart.length / 4) * 4, "=");
+
+    try {
+        const binary = atob(padded);
+        const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+        const json = new TextDecoder().decode(bytes);
+        return JSON.parse(json);
+    } catch {
+        return null;
+    }
+}
+
+function resolveJwtHomeserverUrl(payload: JwtLoginPayload, fallback?: string): string | undefined {
+    const wellKnownUrl = payload.well_known?.["m.homeserver"]?.base_url;
+    if (wellKnownUrl) return wellKnownUrl;
+
+    const homeServer = payload.home_server;
+    if (homeServer) {
+        if (homeServer.startsWith("http://") || homeServer.startsWith("https://")) return homeServer;
+        return `https://${homeServer}`;
+    }
+
+    return fallback;
+}
+
+async function validateJwtViaApi(jwt: string, email?: string, password?: string): Promise<boolean> {
+    try {
+        const validateUrl = DEFAULT_JWT_VALIDATE_URL;
+        console.log("JWT validate URL:", validateUrl);
+        const response = await fetch(validateUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`,
+            }
+        });
+        console.log("JWT validate response status:", response.status);
+
+        if (response.status === 200) return true;
+        if (response.status === 401) return false;
+
+        logger.warn("JWT validation failed with unexpected status", response.status);
+        return false;
+    } catch (error) {
+        logger.error("JWT validation request failed", error);
+        return false;
+    }
+}
+
+async function handleJwtValidationFailure(): Promise<void> {
+    const { finished } = Modal.createDialog(ErrorDialog, {
+        title: _t("auth|oidc|error_title"),
+        description: "Login credentials failed.",
+        button: _t("action|ok"),
+    });
+    await finished;
+    const redirectUrl = DEFAULT_JWT_FAILURE_REDIRECT_URL;
+    window.location.assign(redirectUrl);
+}
 
 dis.register((payload) => {
     if (payload.action === Action.TriggerLogout) {
@@ -193,6 +284,54 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         if (enableGuest && !guestHsUrl) {
             logger.warn("Cannot enable guest access: can't determine HS URL to use");
             enableGuest = false;
+        }
+
+        const jwtParam = fragmentQueryParams.jwt;
+        if (typeof jwtParam === "string" && jwtParam.length > 0) {
+            const payload = decodeJwtPayload(jwtParam);
+            const accessToken = payload?.access_token;
+
+            if (!accessToken) {
+                logger.warn("JWT login requested but payload has no access_token");
+            } else {
+                const email =
+                    (payload?.data?.user_email as string | undefined) ??
+                    (payload?.user_email as string | undefined) ??
+                    (fragmentQueryParams.email as string | undefined) ??
+                    (fragmentQueryParams.user_email as string | undefined);
+                const password =
+                    (fragmentQueryParams.password as string | undefined) ??
+                    (fragmentQueryParams.user_password as string | undefined);
+
+                const isValid = await validateJwtViaApi(jwtParam, email, password);
+                if (!isValid) {
+                    await handleJwtValidationFailure();
+                    return false;
+                }
+
+                const homeserverUrl = resolveJwtHomeserverUrl(payload, guestHsUrl);
+                if (!homeserverUrl) {
+                    logger.warn("JWT login requested but no homeserver URL could be determined");
+                } else {
+                    try {
+                        const { user_id: userId, device_id: deviceId, is_guest: isGuest } =
+                            await getUserIdFromAccessToken(accessToken, homeserverUrl, guestIsUrl);
+                        await setLoggedIn({
+                            userId,
+                            deviceId,
+                            accessToken,
+                            refreshToken: payload?.refresh_token,
+                            homeserverUrl,
+                            identityServerUrl: guestIsUrl,
+                            guest: isGuest,
+                        });
+                        window.location.assign("#/");
+                        return true;
+                    } catch (error) {
+                        logger.error("Failed to log in via JWT fragment", error);
+                    }
+                }
+            }
         }
 
         if (enableGuest && guestHsUrl && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
@@ -646,6 +785,8 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
         const decryptedRefreshToken =
             refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
 
+        // console.log("Matrix access token >>>>> ", decryptedAccessToken);
+        
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
 

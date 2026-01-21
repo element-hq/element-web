@@ -27,6 +27,23 @@ export function parseQsFromFragment(location: Location): { location: string; par
 
     if (hashparts.length > 1) {
         result.params = decodeParams(hashparts[1]);
+        if (result.location.startsWith("/jwt=") || result.location.startsWith("jwt=")) {
+            const raw = result.location.startsWith("/jwt=")
+                ? result.location.substring("/jwt=".length)
+                : result.location.substring("jwt=".length);
+            result.location = "/";
+            if (raw) {
+                result.params.jwt = raw;
+            }
+        }
+    } else if (result.location.startsWith("/jwt=") || result.location.startsWith("jwt=")) {
+        const raw = result.location.startsWith("/jwt=")
+            ? result.location.substring("/jwt=".length)
+            : result.location.substring("jwt=".length);
+        result.location = "/";
+        if (raw) {
+            result.params = { jwt: raw };
+        }
     }
     return result;
 }
