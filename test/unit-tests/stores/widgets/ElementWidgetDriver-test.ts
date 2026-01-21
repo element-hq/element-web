@@ -131,7 +131,8 @@ describe("ElementWidgetDriver", () => {
             "org.matrix.msc3819.receive.to_device:m.call.replaces",
             "org.matrix.msc4157.send.delayed_event",
             "org.matrix.msc4157.update_delayed_event",
-            "org.matrix.msc4354.send_sticky_event",
+            "org.matrix.msc4407.send.sticky_event",
+            "org.matrix.msc4407.receive.sticky_event",
             // RTC decline events (send/receive, unstable/stable)
             "org.matrix.msc2762.send.event:org.matrix.msc4310.rtc.decline",
             "org.matrix.msc2762.send.event:m.rtc.decline",
