@@ -123,7 +123,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
                     roomId: member.roomId,
                 }) ?? mxid;
             if (member?.disambiguate) {
-                mxidElement = <span className="mx_DisambiguatedProfile_mxid">{identifier}</span>;
+                mxidElement = <span className={styles.mx_DisambiguatedProfile_mxid}>{identifier}</span>;
             }
             title = _t("timeline|disambiguated_profile", {
                 displayName: rawDisplayName,
@@ -132,7 +132,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
         }
 
         const displayNameClasses = classNames(colorClass, {
-            mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
+            [styles.mx_DisambiguatedProfile_displayName]: emphasizeDisplayName,
         });
 
     return (
