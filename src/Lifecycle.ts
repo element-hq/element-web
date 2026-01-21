@@ -141,7 +141,29 @@ function resolveJwtHomeserverUrl(payload: JwtLoginPayload, fallback?: string): s
     return fallback;
 }
 
+async function validateJwtViaApi(jwt: string, email?: string, password?: string): Promise<boolean> {
+    try {
+        const validateUrl = DEFAULT_JWT_VALIDATE_URL;
+        console.log("JWT validate URL:", validateUrl);
+        const response = await fetch(validateUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`,
+            }
+        });
+        console.log("JWT validate response status:", response.status);
 
+        if (response.status === 200) return true;
+        if (response.status === 401) return false;
+
+        logger.warn("JWT validation failed with unexpected status", response.status);
+        return false;
+    } catch (error) {
+        logger.error("JWT validation request failed", error);
+        return false;
+    }
+}
 
 async function handleJwtValidationFailure(): Promise<void> {
     const { finished } = Modal.createDialog(ErrorDialog, {
