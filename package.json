@@ -86,7 +86,7 @@
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "^5",
         "@formatjs/intl-segmenter": "^12.0.0",
-        "@matrix-org/analytics-events": "^0.30.0",
+        "@matrix-org/analytics-events": "^0.31.0",
         "@matrix-org/emojibase-bindings": "^1.5.0",
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@matrix-org/spec": "^1.7.0",
