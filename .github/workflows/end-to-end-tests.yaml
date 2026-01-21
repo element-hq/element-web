@@ -54,7 +54,7 @@ jobs:
               with:
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -133,7 +133,7 @@ jobs:
                   name: webapp
                   path: webapp
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   cache: "yarn"
                   cache-dependency-path: yarn.lock
@@ -147,7 +147,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+              uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -200,7 +200,7 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               if: inputs.skip != true
               with:
                   cache: "yarn"

@@ -6,15 +6,27 @@
         "delete": "Delete",
         "dismiss": "Dismiss",
         "explore_rooms": "Explore rooms",
+        "invite": "Invite",
+        "new_conversation": "New conversation",
+        "new_room": "New room",
+        "new_video_room": "New video room",
+        "open_menu": "Open menu",
         "pause": "Pause",
         "play": "Play",
         "retry": "Retry",
-        "search": "Search"
+        "search": "Search",
+        "start_chat": "Start chat"
+    },
+    "common": {
+        "preferences": "Preferences"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad"
     },
     "room": {
+        "context_menu": {
+            "title": "Room options"
+        },
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
@@ -29,6 +41,21 @@
             "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
             "server_connectivity_lost_title": "Connectivity to the server has been lost.",
             "some_messages_not_sent": "Some of your messages have not been sent"
+        }
+    },
+    "room_list": {
+        "appearance": "Appearance",
+        "open_space_menu": "Open space menu",
+        "room_options": "Room Options",
+        "show_message_previews": "Show message previews",
+        "sort": "Sort",
+        "sort_type": {
+            "activity": "Activity",
+            "atoz": "A-Z"
+        },
+        "space_menu": {
+            "home": "Space home",
+            "space_settings": "Space settings"
         }
     },
     "terms": {

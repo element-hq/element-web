@@ -43,7 +43,7 @@ describe("RoomStatusBarViewModel", () => {
     beforeEach(() => {
         client = stubClient() as MockedObject<MatrixClient>;
         room = mkRoom(client, "!example");
-        room.on.mockImplementationOnce((_event, fn) => {
+        jest.spyOn(room, "on").mockImplementationOnce((_event, fn) => {
             roomEmitFn = fn as any;
             return room;
         });
