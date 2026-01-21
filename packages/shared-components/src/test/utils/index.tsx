@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-// Copied from element-web/test/test-utils because, seemingly, if we
+// Copied from element-web/test/@test-utils because, seemingly, if we
 // set that as the modules directory to use it directly, it fails to
 // actually put the right thing in the context somehow.
 

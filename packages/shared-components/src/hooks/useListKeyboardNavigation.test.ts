@@ -6,7 +6,7 @@
  */
 
 import { type KeyboardEvent } from "react";
-import { renderHook } from "jest-matrix-react";
+import { renderHook } from "@test-utils";
 import { vi, describe, expect, it, beforeEach, afterEach } from "vitest";
 
 import { useListKeyboardNavigation } from "./useListKeyboardNavigation";

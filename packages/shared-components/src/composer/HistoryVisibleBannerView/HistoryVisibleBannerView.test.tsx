@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { render } from "jest-matrix-react";
+import { render } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, vi, expect } from "vitest";
 

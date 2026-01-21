@@ -16,7 +16,7 @@
         "lib": ["es2022", "es2024.promise", "dom", "dom.iterable"],
         "strict": true,
         "paths": {
-            "jest-matrix-react": ["./src/test/utils/jest-matrix-react"]
+            "@test-utils": ["./src/test/utils/index"]
         }
     },
     "include": ["./src/**/*.ts", "./src/**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx"],
