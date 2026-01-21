@@ -10,7 +10,7 @@ import { WithTooltip, IconButton, TooltipLinkList } from "storybook/internal/com
 import React from "react";
 import { GlobeIcon } from "@storybook/icons";
 
-const languages = JSON.parse(process.env.STORYBOOK_LANGUAGES);
+const languages: string[] = JSON.parse(process.env.STORYBOOK_LANGUAGES!);
 
 /**
  * Returns the title of a language in the user's locale.

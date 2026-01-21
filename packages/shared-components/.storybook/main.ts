@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { StorybookConfig } from "@storybook/react-vite";
-import path from "node:path";
 import fs from "node:fs";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { mergeConfig } from "vite";
