@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type JSX } from "react";
+import { PropsWithChildren, type JSX } from "react";
 import React from "react";
 import classNames from "classnames";
 
@@ -25,7 +25,7 @@ export interface TimelineSeparatorViewSnapshot {
     /**
      * Optional children to render inside the timeline separator
      */
-    children?: React.PropsWithChildren["children"];
+    children?: PropsWithChildren["children"];
 }
 
 /**
