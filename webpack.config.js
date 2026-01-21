@@ -221,8 +221,9 @@ module.exports = (env, argv) => {
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
 
-                // Make shared-components imports resolve to EW counterpart
+                // Make shared-components imports resolve to EW deps
                 "counterpart": path.resolve(__dirname, "node_modules/counterpart"),
+                "@vector-im/compound-web": path.resolve(__dirname, "node_modules/@vector-im/compound-web"),
             },
             fallback: {
                 // Mock out the NodeFS module: The opus decoder imports this wrongly.

@@ -31,9 +31,6 @@ jobs:
                   cache: "yarn"
                   node-version: "lts/*"
 
-            - name: Install element web dependencies
-              run: yarn install --frozen-lockfile
-
             - name: Install dependencies
               working-directory: packages/shared-components
               run: yarn install --frozen-lockfile
@@ -56,7 +53,8 @@ jobs:
               run: "yarn playwright install --with-deps --only-shell"
 
             - name: Run Visual tests
-              run: "yarn --cwd packages/shared-components test:storybook:ci"
+              working-directory: packages/shared-components
+              run: "yarn test:storybook:ci"
 
             - name: Upload received images & diffs
               if: always()

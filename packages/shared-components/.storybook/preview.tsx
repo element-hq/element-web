@@ -1,6 +1,6 @@
 import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@storybook/react-vite";
 
-import "../../../res/css/shared.pcss";
+import "./compound.pcss";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { setLanguage } from "../src/utils/i18n";

@@ -26,15 +26,9 @@ const config: StorybookConfig = {
     },
     async viteFinal(config) {
         return mergeConfig(config, {
-            resolve: {
-                alias: {
-                    // Alias used by i18n.tsx
-                    $webapp: path.resolve("../../webapp"),
-                },
-            },
             plugins: [
                 // Needed for counterpart to work
-                nodePolyfills({ include: ["process", "util"] }),
+                nodePolyfills({ include: ["util"] }),
                 {
                     name: "language-middleware",
                     configureServer(server) {
