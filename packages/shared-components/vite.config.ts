@@ -1,10 +1,9 @@
 /*
- *
  * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
- * /
+ *
  */
 
 import { dirname, resolve } from "node:path";
@@ -35,12 +34,6 @@ export default defineConfig({
                     "react-dom": "ReactDom",
                 },
             },
-        },
-    },
-    resolve: {
-        alias: {
-            // Alias used by i18n.tsx
-            $webapp: resolve(__dirname, "..", "..", "webapp"),
         },
     },
     plugins: [
