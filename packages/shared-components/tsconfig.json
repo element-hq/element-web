@@ -14,6 +14,7 @@
         "declaration": true,
         "jsx": "react",
         "lib": ["es2022", "es2024.promise", "dom", "dom.iterable"],
+        "types": [],
         "strict": true,
         "paths": {
             "@test-utils": ["./src/test/utils/index"]
