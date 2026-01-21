@@ -10,16 +10,17 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-}
 
-.mx_DisambiguatedProfile_displayName {
-    font: var(--cpd-font-body-md-semibold);
-    margin-inline-end: var(--cpdSpace0X);
-    line-height: 1;
-}
+    .mx_DisambiguatedProfile_displayName {
+        font: var(--cpd-font-body-md-semibold);
+        margin-inline-end: 0;
+        /* keeps the height in check, important for the bubble apperance */
+        line-height: 1;
+    }
 
-.mx_DisambiguatedProfile_mxid {
-    color: var(--cpd-color-text-secondary);
-    font-size: var(--cpd-font-size-body-sm);
-    margin-inline-start: 5px; /* there were no 5px spaces in compound */
+    .mx_DisambiguatedProfile_mxid {
+        color: var(--cpd-color-text-secondary);
+        font-size: var(--cpd-font-size-body-sm);
+        margin-inline-start: 5px;
+    }
 }

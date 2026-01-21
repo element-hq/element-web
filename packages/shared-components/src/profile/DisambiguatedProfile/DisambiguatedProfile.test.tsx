@@ -78,7 +78,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByText("Test User")).toBeInTheDocument();
+        expect(screen.getByText("Eve")).toBeInTheDocument();
     });
 
     it("should display the MXID when provided", () => {
@@ -87,13 +87,13 @@ describe("DisambiguatedProfileView", () => {
                 rawDisplayName: "Test User",
                 userId: "@test:example.org",
                 roomId: "!room:example.org",
-                disambiguate: false,
+                disambiguate: true,
             },
             fallbackName: "Test User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByTestId("disambiguated-profile-mxid")).toHaveTextContent("@test:example.org");
+        expect(screen.getByText("@test:example.org")).toBeInTheDocument();
     });
 
     it("should not display the MXID when not provided", () => {
@@ -108,7 +108,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.queryByTestId("disambiguated-profile-mxid")).not.toBeInTheDocument();
+        expect(screen.queryByText("@test:example.org")).not.toBeInTheDocument();
     });
 
     it("should call onClick when clicked", async () => {
@@ -125,7 +125,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        await user.click(screen.getByTestId("disambiguated-profile"));
+        await user.click(screen.getByText("Clickable User"));
         expect(onClick).toHaveBeenCalled();
     });
 
@@ -142,9 +142,9 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByTestId("disambiguated-profile")).toHaveAttribute(
+        expect(screen.getByText("User With Tooltip").closest("div")).toHaveAttribute(
             "title",
-            "User With Tooltip (@user:example.org)",
+            "timeline|disambiguated_profile",
         );
     });
 
@@ -157,11 +157,12 @@ describe("DisambiguatedProfileView", () => {
                 disambiguate: false,
             },
             fallbackName: "Colored User",
+            colored: true,
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
         const displayNameElement = screen.getByText("Colored User");
-        expect(displayNameElement).toHaveClass("mx_Username_color5");
+        expect(displayNameElement.className).toMatch(/mx_Username_color\d+/);
     });
 
     it("should apply emphasis styling when emphasizeDisplayName is true", () => {

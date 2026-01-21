@@ -5,13 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, {JSX, type MouseEventHandler } from "react";
+import React, {type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
 import styles from "./DisambiguatedProfile.module.css";
-
 import { useI18n } from "../../utils/i18nContext";
 import { getUserNameColorClass } from "../../utils/FormattingUtils";
 import UserIdentifier from "../../utils/UserIdentifier";
@@ -123,7 +122,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
                     roomId: member.roomId,
                 }) ?? mxid;
             if (member?.disambiguate) {
-                mxidElement = <span className={styles.mx_DisambiguatedProfile_mxid}>{identifier}</span>;
+                mxidElement = <span className={classNames(styles.mx_DisambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}>{identifier}</span>;
             }
             title = _t("timeline|disambiguated_profile", {
                 displayName: rawDisplayName,
@@ -133,6 +132,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
 
         const displayNameClasses = classNames(colorClass, {
             [styles.mx_DisambiguatedProfile_displayName]: emphasizeDisplayName,
+            "mx_DisambiguatedProfile_displayName": emphasizeDisplayName,
         });
 
     return (
