@@ -7,7 +7,7 @@
 
 .timelineSeparator {
     clear: both;
-    margin: 4px 0;
+    margin: var(--cpdSpace1X, var(--cpdSpace0X));
     display: flex;
     align-items: center;
     font: var(--cpd-font-body-md-regular);

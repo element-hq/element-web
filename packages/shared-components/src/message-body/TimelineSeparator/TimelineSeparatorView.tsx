@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type JSX, type ReactNode } from "react";
+import { type JSX } from "react";
 import React from "react";
 import classNames from "classnames";
 
@@ -25,7 +25,7 @@ export interface TimelineSeparatorViewSnapshot {
     /**
      * Optional children to render inside the timeline separator
      */
-    children?: ReactNode;
+    children?: React.PropsWithChildren["children"];
 }
 
 /**
@@ -41,15 +41,12 @@ interface TimelineSeparatorViewProps {
 }
 
 /**
- * TimelineSeparator component renders a visual separator inside the message timeline.
+ * TimelineSeparatorView component renders a visual separator inside the message timeline.
  * It draws horizontal rules with an accessible label and optional children rendered between them.
- * The component expects a view model that provides the label and any children to render.
  *
- * @example
- * ```tsx
  * @param label the accessible label string describing the separator (used for `aria-label`)
  * @param children optional React nodes to render between the separators
- * ```
+ * 
  */
 export function TimelineSeparatorView({ vm }: Readonly<TimelineSeparatorViewProps>): JSX.Element {
     const {

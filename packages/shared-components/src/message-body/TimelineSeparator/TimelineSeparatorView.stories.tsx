@@ -12,16 +12,10 @@ import { TimelineSeparatorView, type TimelineSeparatorViewSnapshot } from "./Tim
 import { useMockedViewModel } from "../../useMockedViewModel";
 import styles from "./TimelineSeparatorView.module.css";
 
-type TimelineSeparatorProps = TimelineSeparatorViewSnapshot & {} ;
+type TimelineSeparatorProps = TimelineSeparatorViewSnapshot;
 const TimelineSeparatorViewWrapper = (props: TimelineSeparatorProps): JSX.Element => {
-    const vm = useMockedViewModel<TimelineSeparatorViewSnapshot, TimelineSeparatorProps>(
-        {
-            ...props,
-        },
-        {
-            label: "",
-        }
-    );
+    // There is no action (undefined second param)
+    const vm = useMockedViewModel(props, undefined);
     return <TimelineSeparatorView vm={vm} />;
 };
 
