@@ -14,12 +14,12 @@
 
 .mx_DisambiguatedProfile_displayName {
     font: var(--cpd-font-body-md-semibold);
-    margin-inline-end: 0;
+    margin-inline-end: var(--cpdSpace0X);
     line-height: 1;
 }
 
 .mx_DisambiguatedProfile_mxid {
     color: var(--cpd-color-text-secondary);
     font-size: var(--cpd-font-size-body-sm);
-    margin-inline-start: 5px;
+    margin-inline-start: 5px; /* there were no 5px spaces in compound */
 }

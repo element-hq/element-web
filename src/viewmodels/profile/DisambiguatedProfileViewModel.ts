@@ -6,21 +6,27 @@
  */
 import {
     BaseViewModel,
+    type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
  
 /**
- * ViewModel for the timeline separator, providing the current state of the component.
+ * ViewModel for the disambiguated profile, providing the current state of the component.
  * It listens to updates and computes a snapshot.
  */
 export class DisambiguatedProfileViewModel
-    extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewSnapshot>
+    extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions>
     implements DisambiguatedProfileViewModelInterface
 {
+    public onClick?: DisambiguatedProfileViewActions["onClick"];
     /**
-    * @param label the accessible label string describing the separator (used for `aria-label`)
-    * @param children optional React nodes to render between the separators
+    * @param member the member whose profile is being displayed
+    * @param fallbackName the name to use if the member has no display name
+    * @param colored whether to color the display name
+    * @param emphasizeDisplayName whether to emphasize the display name
+    * @param withTooltip whether to show a tooltip on hover
+    * @param onClick optional click handler for the profile
      */
     private static readonly computeSnapshot = (
         member: { userId: string; roomId: string; rawDisplayName?: string; disambiguate: boolean } | null | undefined,
@@ -43,8 +49,18 @@ export class DisambiguatedProfileViewModel
         };
     };
  
-    public constructor(props: DisambiguatedProfileViewSnapshot) {
-        super(props, DisambiguatedProfileViewModel.computeSnapshot(props.member, props.fallbackName, props.colored, props.emphasizeDisplayName, props.withTooltip));
+    public constructor(props: DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions) {
+        super(
+            props,
+            DisambiguatedProfileViewModel.computeSnapshot(
+                props.member,
+                props.fallbackName,
+                props.colored,
+                props.emphasizeDisplayName,
+                props.withTooltip,
+            ),
+        );
+        this.onClick = props.onClick;
     }
  
     /**
@@ -52,7 +68,13 @@ export class DisambiguatedProfileViewModel
      */
     private readonly setSnapshot = (): void => {
         this.snapshot.set(
-            DisambiguatedProfileViewModel.computeSnapshot(this.props.member, this.props.fallbackName, this.props.colored, this.props.emphasizeDisplayName, this.props.withTooltip),
+            DisambiguatedProfileViewModel.computeSnapshot(
+                this.props.member,
+                this.props.fallbackName,
+                this.props.colored,
+                this.props.emphasizeDisplayName,
+                this.props.withTooltip,
+            ),
         );
     };
  
@@ -60,8 +82,9 @@ export class DisambiguatedProfileViewModel
      * Updates the properties of the view model and recomputes the snapshot.
      * @param newProps
      */
-    public setProps(newProps: Partial<DisambiguatedProfileViewSnapshot>): void {
+    public setProps(newProps: Partial<DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions>): void {
         this.props = { ...this.props, ...newProps };
+        this.onClick = this.props.onClick;
         this.setSnapshot();
     }
 }
