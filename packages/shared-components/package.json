@@ -65,7 +65,7 @@
     "devDependencies": {
         "@casualbot/jest-sonar-reporter": "^2.5.0",
         "@element-hq/element-web-playwright-common": "2.2.4",
-        "@fetch-mock/jest": "^0.2.20",
+        "@fetch-mock/vitest": "^0.2.18",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@playwright/test": "1.57.0",
         "@storybook/addon-a11y": "^10.0.7",
