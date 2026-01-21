@@ -7409,10 +7409,10 @@ math-intrinsics@^1.1.0:
   resolved "https://registry.yarnpkg.com/math-intrinsics/-/math-intrinsics-1.1.0.tgz#a0dd74be81e2aa5c2f27e65ce283605ee4e2b7f9"
   integrity sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==
 
-matrix-web-i18n@3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.5.2.tgz#a394cbd5762128d6f532937e952fa1a804364bbb"
-  integrity sha512-LA2jTF3S2KN4lmk9ntx8SeGio45wX66r5EL4lSXlUYRGHj83x3VUyFFRLgap9znRRAjIJK/PJq1fIwj1A9BU3g==
+matrix-web-i18n@3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.6.0.tgz#50efd34e454449685866155336e2ce3432e7a813"
+  integrity sha512-oY4YZCU8OqDZzmCiJpo8XrATa7XNOB5oFyIpE7O0jjaIEeu6LnQrHmm/fpsYkPUENVzGJm1YdoOtvcBrQx+h2g==
   dependencies:
     "@babel/parser" "^7.28.5"
     "@babel/traverse" "^7.28.5"
