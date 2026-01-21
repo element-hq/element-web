@@ -18,7 +18,7 @@ export abstract class BaseRecencySorter implements Sorter {
     }
 
     public comparator(roomA: Room, roomB: Room, cache?: any): number {
-        // First check if the rooms are low priority or muted
+        // First check if any of the rooms are special cases
         const exceptionalOrdering = this.getScore(roomA) - this.getScore(roomB);
         if (exceptionalOrdering !== 0) return exceptionalOrdering;
 
