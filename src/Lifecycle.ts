@@ -784,7 +784,9 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
         const decryptedAccessToken = await tryDecryptToken(pickleKey, accessToken, ACCESS_TOKEN_IV);
         const decryptedRefreshToken =
             refreshToken && (await tryDecryptToken(pickleKey, refreshToken, REFRESH_TOKEN_IV));
-        console.log("Matrix access token >>>>> ", decryptedAccessToken);
+
+        // console.log("Matrix access token >>>>> ", decryptedAccessToken);
+        
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
 
