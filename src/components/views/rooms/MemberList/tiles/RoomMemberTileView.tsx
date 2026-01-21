@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
-import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
 import { type RoomMember } from "../../../../../models/rooms/RoomMember";
 import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 import { E2EIconView } from "./common/E2EIconView";
@@ -17,6 +17,7 @@ import { _t } from "../../../../../languageHandler";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
 import { type MemberWithSeparator } from "../../../../viewmodels/memberlist/MemberListViewModel";
+import { DisambiguatedProfileViewModel } from "../../../../../viewmodels/profile/DisambiguatedProfileViewModel";
 
 interface IProps {
     /**
@@ -46,7 +47,8 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         />
     );
     const name = vm.name;
-    const nameJSX = <DisambiguatedProfile withTooltip member={member} fallbackName={name || ""} />;
+    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(() => new DisambiguatedProfileViewModel({fallbackName: name || "", member, withTooltip: true}));
+    const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} />;
 
     const presenceState = member.presenceState;
     let presenceJSX: JSX.Element | undefined;

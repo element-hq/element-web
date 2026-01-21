@@ -9,11 +9,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-
+import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
 import { DisambiguatedProfileViewModel } from "../../../viewmodels/profile/DisambiguatedProfileViewModel";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
-import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -27,7 +26,7 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         member: mxEvent.sender,
     });
 
-      const disambiguatedProfileVM = useCreateAutoDisposedViewModel(() => new DisambiguatedProfileViewModel({fallbackName: mxEvent.getSender() ?? "", onClick, member, colored: true, emphasizeDisplayName: true, withTooltip }));
+    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(() => new DisambiguatedProfileViewModel({fallbackName: mxEvent.getSender() ?? "", onClick, member, colored: true, emphasizeDisplayName: true, withTooltip }));
 
 
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
