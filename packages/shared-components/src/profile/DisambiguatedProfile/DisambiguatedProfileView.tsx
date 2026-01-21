@@ -20,11 +20,22 @@ import UserIdentifier from "../../utils/UserIdentifier";
 /**
  * Information about a member for disambiguation purposes.
  */
-
 interface MemberInfo {
+    /**
+    * The user's Matrix ID.
+    */
     userId: string;
+    /** 
+     * The room ID where the member is present. 
+     */
     roomId: string;
+    /** 
+     * The raw display name of the user. 
+     */
     rawDisplayName?: string;
+    /** 
+     * Whether to show disambiguation (i.e., the MXID) alongside the display name. 
+     */
     disambiguate: boolean;
 }
 
@@ -34,12 +45,26 @@ interface MemberInfo {
  */
 export interface DisambiguatedProfileViewSnapshot {
 
+    /**
+     * The member information for disambiguation.
+     */
     member?: MemberInfo | null;
+    /** 
+     * The fallback name to use if the member's display name is not available.
+     */
     fallbackName: string;
+    /** 
+     * Whether to apply color styling to the display name.
+     */
     colored?: boolean;
+    /** 
+     * Whether to emphasize the display name.
+     */
     emphasizeDisplayName?: boolean;
+    /** 
+     * Whether to show a tooltip with additional information.
+     */
     withTooltip?: boolean;
-    
 }
 
 /**

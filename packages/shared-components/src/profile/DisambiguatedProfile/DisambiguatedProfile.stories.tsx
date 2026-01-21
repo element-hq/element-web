@@ -26,7 +26,7 @@ const DisambiguatedProfileViewWrapper = ({ onClick, ...rest }: DisambiguatedProf
 
 export default {
     title: "Profile/DisambiguatedProfile",
-    component: DisambiguatedProfileViewWrapper,
+    component: DisambiguatedProfileView,
     tags: ["autodocs"],
     args: {
         member: {
@@ -38,7 +38,7 @@ export default {
         emphasizeDisplayName: true,
         onClick: fn(),
     },
-} as Meta<typeof DisambiguatedProfileViewWrapper>;
+} as Meta<typeof DisambiguatedProfileView>;
 
 const Template: StoryFn<typeof DisambiguatedProfileViewWrapper> = (args) => (
     <DisambiguatedProfileViewWrapper {...args} />
