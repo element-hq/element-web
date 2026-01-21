@@ -337,7 +337,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case SortingAlgorithm.Unread:
                 return new UnreadSorter(myUserId);
             default:
-                throw new Error(`Unknown sorting algorithm: ${algorithm}`);
+                logger.info(
+                    `RoomListStoreV3: There is no sorting implementation for algorithm ${algorithm}, defaulting to recency sorter`,
+                );
+                return new RecencySorter(myUserId);
         }
     }
 
