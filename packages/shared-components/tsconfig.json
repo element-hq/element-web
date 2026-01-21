@@ -19,6 +19,6 @@
             "jest-matrix-react": ["./src/test/utils/jest-matrix-react"]
         }
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+    "include": ["./src/**/*.ts", "./src/**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
