@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type JSX, type ReactNode } from "react";
+import { type PropsWithChildren, type JSX } from "react";
 import React from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -28,7 +28,7 @@ export interface ReactionsRowButtonTooltipViewSnapshot {
     /**
      * The children to wrap with the tooltip.
      */
-    children: ReactNode;
+    children?: PropsWithChildren["children"];
 }
 
 export type ReactionsRowButtonTooltipViewModel = ViewModel<ReactionsRowButtonTooltipViewSnapshot>;
