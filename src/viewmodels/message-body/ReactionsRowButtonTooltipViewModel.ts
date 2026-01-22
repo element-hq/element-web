@@ -5,7 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
@@ -36,10 +35,7 @@ export interface ReactionsRowButtonTooltipViewModelProps {
      * Whether to render custom image reactions.
      */
     customReactionImagesEnabled?: boolean;
-    /**
-     * The children to wrap with the tooltip.
-     */
-    children: ReactNode;
+
 }
 
 /**
@@ -82,14 +78,12 @@ export class ReactionsRowButtonTooltipViewModel
             return {
                 formattedSenders,
                 caption,
-                children,
             };
         }
 
         return {
             formattedSenders: undefined,
             caption: undefined,
-            children,
         };
     };
 

@@ -111,15 +111,10 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
         }
 
         const reactionsRowButtonTooltipVM = useCreateAutoDisposedViewModel(() => new ReactionsRowButtonTooltipViewModel({mxEvent: this.props.mxEvent, content: content, reactionEvents: reactionEvents, customReactionImagesEnabled: this.props.customReactionImagesEnabled}));
-
+       
         return (
 
-            <ReactionsRowButtonTooltipView vm={reactionsRowButtonTooltipVM}
-                mxEvent={this.props.mxEvent}
-                content={content}
-                reactionEvents={reactionEvents}
-                customReactionImagesEnabled={this.props.customReactionImagesEnabled}
-            >
+            <ReactionsRowButtonTooltipView vm={reactionsRowButtonTooltipVM}>
                 <AccessibleButton
                     className={classes}
                     aria-label={label}

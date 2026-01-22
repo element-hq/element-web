@@ -25,10 +25,6 @@ export interface ReactionsRowButtonTooltipViewSnapshot {
      * The caption to display (e.g., the shortcode of the reaction).
      */
     caption?: string;
-    /**
-     * The children to wrap with the tooltip.
-     */
-    children?: PropsWithChildren["children"];
 }
 
 export type ReactionsRowButtonTooltipViewModel = ViewModel<ReactionsRowButtonTooltipViewSnapshot>;
@@ -38,14 +34,18 @@ interface ReactionsRowButtonTooltipViewProps {
      * The view model for the reactions row button tooltip.
      */
     vm: ReactionsRowButtonTooltipViewModel;
+        /**
+     * The children to wrap with the tooltip.
+     */
+    children?: PropsWithChildren["children"];
     
 }
 
 /**
  * Type alias for the ReactionsRowButtonTooltip view model.
  */
-export function ReactionsRowButtonTooltipView({ vm }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
-    const { formattedSenders, caption, children } = useViewModel(vm);
+export function ReactionsRowButtonTooltipView({ vm, children }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
+    const { formattedSenders, caption } = useViewModel(vm);
 
     if (formattedSenders) {
         return (
