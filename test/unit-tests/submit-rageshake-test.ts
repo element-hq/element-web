@@ -26,6 +26,7 @@ import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 import SdkConfig from "../../src/SdkConfig.ts";
 import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
 import { Notifier } from "../../src/Notifier.ts";
+import { MatrixClientPeg } from "../../src/MatrixClientPeg.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -357,8 +358,6 @@ describe("Rageshakes", () => {
     });
 
     describe("Settings Store", () => {
-        const mockSettingsStore = mocked(SettingsStore);
-
         beforeEach(() => {
             jest.spyOn(Notifier, "isPossible").mockReturnValue(true);
         });
@@ -373,8 +372,8 @@ describe("Rageshakes", () => {
                 "feature_notification_settings2",
             ] as unknown[] as FeatureSettingKey[];
             const enabledFeatures: SettingKey[] = ["feature_video_rooms"];
-            jest.spyOn(mockSettingsStore, "getFeatureSettingNames").mockReturnValue(someFeatures);
-            jest.spyOn(mockSettingsStore, "getValue").mockImplementation((settingName): any => {
+            jest.spyOn(SettingsStore, "getFeatureSettingNames").mockReturnValue(someFeatures);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 return enabledFeatures.includes(settingName);
             });
 
@@ -383,7 +382,7 @@ describe("Rageshakes", () => {
         });
 
         it("should collect low bandWidth enabled", async () => {
-            jest.spyOn(mockSettingsStore, "getValue").mockImplementation((settingName): any => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName == "lowBandwidth") {
                     return true;
                 }
@@ -393,7 +392,7 @@ describe("Rageshakes", () => {
             expect(formData.get("lowBandwidth")).toBe("enabled");
         });
         it("should collect low bandWidth disabled", async () => {
-            jest.spyOn(mockSettingsStore, "getValue").mockImplementation((settingName): any => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName == "lowBandwidth") {
                     return false;
                 }
@@ -404,6 +403,8 @@ describe("Rageshakes", () => {
         });
 
         it("should handle settings throwing when logged out", async () => {
+            jest.mocked(MatrixClientPeg.get).mockRestore();
+            jest.mocked(MatrixClientPeg.safeGet).mockRestore();
             jest.spyOn(Notifier, "isPossible").mockImplementation(() => {
                 throw new Error("Test");
             });
@@ -412,6 +413,15 @@ describe("Rageshakes", () => {
             expect(JSON.parse(formData.get("mx_local_settings") as string)["notificationsEnabled"]).toBe(
                 "Failed to read setting!",
             );
+        });
+
+        it("should handle reading notification settings when logged out", async () => {
+            jest.mocked(MatrixClientPeg.get).mockRestore();
+            jest.mocked(MatrixClientPeg.safeGet).mockRestore();
+            jest.spyOn(Notifier, "isPossible").mockReturnValue(true);
+
+            const formData = await collectBugReport();
+            expect(JSON.parse(formData.get("mx_local_settings") as string)["notificationsEnabled"]).toBe(false);
         });
     });
 
