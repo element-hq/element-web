@@ -261,25 +261,17 @@ Two types of tests are available: unit tests and visual regression tests.
 
 ### Unit Tests
 
-These tests cover the logic of the components and utilities. Built with Jest
+These tests cover the logic of the components and utilities. Built with Vitest
 and React Testing Library.
 
 ```bash
-yarn test
+yarn test:unit
 ```
 
 ### Visual Regression Tests
 
-These tests ensure the UI components render correctly. They need Storybook to
-be running and they will run in docker using [Playwright](../../playwright.md).
-
-First run storybook:
-
-```bash
-yarn storybook
-```
-
-Then, in another terminal, run:
+These tests ensure the UI components render correctly.
+Built with Storybook and run under vitest using playwright.
 
 ```bash
 yarn test:storybook:update

@@ -80,7 +80,7 @@ const withI18nProvider: Decorator = (Story) => {
 };
 
 const preview: Preview = {
-    tags: ["autodocs"],
+    tags: ["autodocs", "snapshot"],
     decorators: [withThemeProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {

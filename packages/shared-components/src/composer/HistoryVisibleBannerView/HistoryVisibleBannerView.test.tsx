@@ -6,8 +6,9 @@
  */
 
 import React from "react";
-import { render } from "jest-matrix-react";
+import { render } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
+import { describe, it, vi, expect } from "vitest";
 
 import * as stories from "./HistoryVisibleBannerView.stories.tsx";
 
@@ -15,7 +16,7 @@ const { Default } = composeStories(stories);
 
 describe("HistoryVisibleBannerView", () => {
     it("renders a history visible banner", () => {
-        const dismissFn = jest.fn();
+        const dismissFn = vi.fn();
 
         const { container } = render(<Default onClose={dismissFn} />);
         expect(container).toMatchSnapshot();

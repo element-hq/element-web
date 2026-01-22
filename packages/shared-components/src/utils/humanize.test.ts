@@ -5,13 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { describe, it, beforeAll, vi, expect } from "vitest";
+
 import { humanizeTime } from "./humanize";
 
 describe("humanizeTime", () => {
     const now = new Date("2025-08-01T12:00:00Z").getTime();
 
     beforeAll(() => {
-        jest.useFakeTimers().setSystemTime(now);
+        vi.useFakeTimers().setSystemTime(now);
     });
 
     it.each([
