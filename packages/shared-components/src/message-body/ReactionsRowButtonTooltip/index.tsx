@@ -5,4 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { ReactionsRowButtonTooltipView } from "./ReactionsRowButtonTooltipView";
+export {
+    ReactionsRowButtonTooltipView,
+    type ReactionsRowButtonTooltipViewSnapshot,
+    type ReactionsRowButtonTooltipViewModel,
+} from "./ReactionsRowButtonTooltipView";

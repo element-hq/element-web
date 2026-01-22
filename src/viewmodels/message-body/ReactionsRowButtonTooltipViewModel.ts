@@ -1,92 +1,114 @@
 /*
- * Copyright 2026 Element Creations Ltd.
+ * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    DecryptionFailureReason,
-    type DecryptionFailureBodyViewSnapshot as DecryptionFailureBodyViewSnapshotInterface,
-    type DecryptionFailureBodyViewModel as DecryptionFailureBodyViewModelInterface,
+    type ReactionsRowButtonTooltipViewSnapshot,
+    type ReactionsRowButtonTooltipViewModel as ReactionsRowButtonTooltipViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-export interface DecryptionFailureBodyViewModelProps {
+import { _t } from "../../languageHandler";
+import { formatList } from "../../utils/FormattingUtils";
+import { unicodeToShortcode } from "../../HtmlUtils";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { REACTION_SHORTCODE_KEY } from "../../components/views/messages/ReactionsRow";
+
+export interface ReactionsRowButtonTooltipViewModelProps {
     /**
-     * The message event being rendered.
+     * The event we're displaying reactions for.
      */
     mxEvent: MatrixEvent;
     /**
-     * The local device verification state.
+     * The reaction content / key / emoji.
      */
-    verificationState?: boolean;
+    content: string;
     /**
-     * Custom CSS class to apply to the component
+     * A list of Matrix reaction events for this key.
      */
-    className?: string;
+    reactionEvents: MatrixEvent[];
+    /**
+     * Whether to render custom image reactions.
+     */
+    customReactionImagesEnabled?: boolean;
+    /**
+     * The children to wrap with the tooltip.
+     */
+    children: ReactNode;
 }
 
 /**
- * ViewModel for the decryption failure body, providing the current state of the component.
+ * ViewModel for the reactions row button tooltip, providing the formatted sender list and caption.
  */
-export class DecryptionFailureBodyViewModel
-    extends BaseViewModel<DecryptionFailureBodyViewSnapshotInterface, DecryptionFailureBodyViewModelProps>
-    implements DecryptionFailureBodyViewModelInterface
+export class ReactionsRowButtonTooltipViewModel
+    extends BaseViewModel<ReactionsRowButtonTooltipViewSnapshot, ReactionsRowButtonTooltipViewModelProps>
+    implements ReactionsRowButtonTooltipViewModelInterface
 {
     /**
-     * @param mxEvent - The message event being rendered
-     * @param verificationState - The local device verification state
-     * @param className - Custom CSS class to apply to the component
+     * Computes the snapshot for the reactions row button tooltip.
+     * @param props - The view model properties
+     * @returns The computed snapshot with formattedSenders, caption, and children
      */
     private static readonly computeSnapshot = (
-        mxEvent: MatrixEvent,
-        verificationState?: boolean,
-        className?: string,
-    ): DecryptionFailureBodyViewSnapshotInterface => {
-        //Convert enum DecryptionFailureCode to enum DecryptionFailureReason
-        const failureReason =
-            mxEvent.decryptionFailureReason == null
-                ? null
-                : (Object.values(DecryptionFailureReason) as string[]).includes(
-                        mxEvent.decryptionFailureReason.toString(),
-                    )
-                  ? (mxEvent.decryptionFailureReason.toString() as DecryptionFailureReason)
-                  : DecryptionFailureReason.UNKNOWN_ERROR;
+        props: ReactionsRowButtonTooltipViewModelProps,
+    ): ReactionsRowButtonTooltipViewSnapshot => {
+        const { mxEvent, content, reactionEvents, customReactionImagesEnabled, children } = props;
+
+        const client = MatrixClientPeg.get();
+        const room = client?.getRoom(mxEvent.getRoomId());
+
+        if (room) {
+            const senders: string[] = [];
+            let customReactionName: string | undefined;
+
+            for (const reactionEvent of reactionEvents) {
+                const member = room.getMember(reactionEvent.getSender()!);
+                const name = member?.name ?? reactionEvent.getSender()!;
+                senders.push(name);
+                customReactionName =
+                    (customReactionImagesEnabled && REACTION_SHORTCODE_KEY.findIn(reactionEvent.getContent())) ||
+                    undefined;
+            }
+
+            const shortName = unicodeToShortcode(content) || customReactionName;
+            const formattedSenders = formatList(senders, 6);
+            const caption = shortName ? _t("timeline|reactions|tooltip_caption", { shortName }) : undefined;
+
+            return {
+                formattedSenders,
+                caption,
+                children,
+            };
+        }
 
         return {
-            decryptionFailureReason: failureReason,
-            isLocalDeviceVerified: verificationState,
-            className,
+            formattedSenders: undefined,
+            caption: undefined,
+            children,
         };
     };
 
-    public constructor(props: DecryptionFailureBodyViewModelProps) {
-        super(
-            props,
-            DecryptionFailureBodyViewModel.computeSnapshot(props.mxEvent, props.verificationState, props.className),
-        );
+    public constructor(props: ReactionsRowButtonTooltipViewModelProps) {
+        super(props, ReactionsRowButtonTooltipViewModel.computeSnapshot(props));
     }
 
     /**
      * Sets the snapshot and emits an update to subscribers.
      */
     private readonly setSnapshot = (): void => {
-        this.snapshot.set(
-            DecryptionFailureBodyViewModel.computeSnapshot(
-                this.props.mxEvent,
-                this.props.verificationState,
-                this.props.className,
-            ),
-        );
+        this.snapshot.set(ReactionsRowButtonTooltipViewModel.computeSnapshot(this.props));
     };
 
     /**
      * Updates the properties of the view model and recomputes the snapshot.
-     * @param newProps
+     * @param newProps - Partial properties to update
      */
-    public setProps(newProps: Partial<DecryptionFailureBodyViewModelProps>): void {
+    public setProps(newProps: Partial<ReactionsRowButtonTooltipViewModelProps>): void {
         this.props = { ...this.props, ...newProps };
         this.setSnapshot();
     }
