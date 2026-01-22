@@ -270,8 +270,8 @@ yarn test:unit
 
 ### Visual Regression Tests
 
-These tests ensure the UI components render correctly. They need Storybook to
-be running, and they will run in docker using [Playwright](../../playwright.md).
+These tests ensure the UI components render correctly.
+Built with Storybook and run under vitest using playwright.
 
 ```bash
 yarn test:storybook:update
