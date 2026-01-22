@@ -92,7 +92,7 @@ jobs:
                       !coverage/lcov-report
 
     complete:
-        name: Unit & Integration tests
+        name: jest-tests
         needs: [jest_ew, vitest_sc]
         if: always()
         runs-on: ubuntu-24.04
