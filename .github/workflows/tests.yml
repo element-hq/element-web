@@ -92,14 +92,14 @@ jobs:
                       !coverage/lcov-report
 
     complete:
-        name: jest-tests
-        needs: jest_ew
+        name: Unit & Integration tests
+        needs: [jest_ew, vitest_sc]
         if: always()
         runs-on: ubuntu-24.04
         permissions:
             statuses: write
         steps:
-            - if: needs.jest_ew.result != 'skipped' && needs.jest_ew.result != 'success'
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
 
             - name: Skip SonarCloud in merge queue
@@ -113,8 +113,8 @@ jobs:
                   sha: ${{ github.sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    jest_sc:
-        name: Jest (Shared Components)
+    vitest_sc:
+        name: Vitest (Shared Components)
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout code
