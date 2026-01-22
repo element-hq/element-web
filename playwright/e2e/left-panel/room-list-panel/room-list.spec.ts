@@ -137,7 +137,7 @@ test.describe("Room list", () => {
 
             roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
             await roomItemMenu.click();
-            
+
             // The Mute room option should be selected
             await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");
