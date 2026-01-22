@@ -8,11 +8,11 @@
 import React, { useCallback, useRef, type JSX, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { isEqual } from "lodash";
+import { type ListContext, ListView, type ScrollIntoViewOnChange } from "@element-hq/web-shared-components";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
-import { type ListContext, ListView, type ScrollIntoViewOnChange } from "../../../utils/ListView";
 import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
