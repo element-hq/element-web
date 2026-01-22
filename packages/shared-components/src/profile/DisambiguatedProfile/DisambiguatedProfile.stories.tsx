@@ -26,7 +26,7 @@ const DisambiguatedProfileViewWrapper = ({ onClick, ...rest }: DisambiguatedProf
 
 export default {
     title: "Profile/DisambiguatedProfile",
-    component: DisambiguatedProfileView,
+    component: DisambiguatedProfileViewWrapper,
     tags: ["autodocs"],
     args: {
         member: {
