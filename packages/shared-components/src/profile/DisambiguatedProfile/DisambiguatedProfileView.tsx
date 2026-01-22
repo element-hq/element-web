@@ -122,7 +122,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
                     roomId: member.roomId,
                 }) ?? mxid;
             if (member?.disambiguate) {
-                mxidElement = <span className={classNames(styles.mx_DisambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}>{identifier}</span>;
+                mxidElement = <span className={classNames(styles.disambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}>{identifier}</span>;
             }
             title = _t("timeline|disambiguated_profile", {
                 displayName: rawDisplayName,
@@ -131,13 +131,13 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
         }
 
         const displayNameClasses = classNames(colorClass, {
-            [styles.mx_DisambiguatedProfile_displayName]: emphasizeDisplayName,
+            [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
             "mx_DisambiguatedProfile_displayName": emphasizeDisplayName,
         });
 
     return (
         <div
-            className={classNames(styles.mx_DisambiguatedProfile, "mx_DisambiguatedProfile")}
+            className={classNames(styles.disambiguatedProfile, "mx_DisambiguatedProfile")}
             title={withTooltip ? title : undefined}
             onClick={vm.onClick}
         >

@@ -5,20 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_DisambiguatedProfile {
+.disambiguatedProfile {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
 
-    .mx_DisambiguatedProfile_displayName {
+    .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
         margin-inline-end: 0;
         /* keeps the height in check, important for the bubble apperance */
         line-height: 1;
     }
 
-    .mx_DisambiguatedProfile_mxid {
+    .disambiguatedProfile_mxid {
         color: var(--cpd-color-text-secondary);
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;
