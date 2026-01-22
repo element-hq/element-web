@@ -1690,8 +1690,16 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@link:packages/shared-components":
-  version "0.0.0"
-  uid ""
+  version "0.0.0-test.12"
+  dependencies:
+    "@element-hq/element-web-module-api" "^1.8.0"
+    "@vector-im/compound-design-tokens" "^6.4.3"
+    classnames "^2.5.1"
+    counterpart "^0.18.6"
+    lodash "^4.17.21"
+    matrix-web-i18n "3.6.0"
+    react-merge-refs "^3.0.2"
+    temporal-polyfill "^0.3.0"
 
 "@emnapi/core@^1.4.3":
   version "1.7.0"
@@ -4410,7 +4418,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.40.0":
   version "2.40.0"
@@ -9520,9 +9527,9 @@ lodash.uniq@^4.5.0:
   integrity sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==
 
 lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+  version "4.17.23"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
+  integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
 
 log-update@^6.1.0:
   version "6.1.0"
