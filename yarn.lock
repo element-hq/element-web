@@ -2503,10 +2503,10 @@
     pbf "^4.0.1"
     supercluster "^8.0.1"
 
-"@matrix-org/analytics-events@^0.30.0":
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.30.0.tgz#67e87e56518fec5330978bf1fcc8d7bb66cdd9d1"
-  integrity sha512-RYIgYdYIvJoTzWaTeqskNGYt6w+6wKP43xMcfpdTKhDm/o2s4keuzRnRG9Qkfg10/3dGOjYCPfH78cXPKDzxeg==
+"@matrix-org/analytics-events@^0.31.0":
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.31.0.tgz#bc5647012b798979f15aff894034b2ba7c6dc028"
+  integrity sha512-rZrtHt6X1cnleWPPSp56fngYBiq2Db1jQt+bATEUlDwwiMCrG3D5ojYqOQ03MlgySLIZLBAAam//bZAqiGWOwQ==
 
 "@matrix-org/emojibase-bindings@^1.5.0":
   version "1.5.0"
@@ -9712,10 +9712,18 @@ matrix-web-i18n@3.6.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.14.0, matrix-widget-api@^1.15.0:
+matrix-widget-api@^1.14.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.16.0.tgz#e232f1ed6b840feea58d693d877fb8a05b181aee"
   integrity sha512-OCsCzEN54jWamvWkBa7PqcKdlOhLA+nJbUyqsATHvzb4/NMcjdUZWSDurZxyNE5eYlNwxClA6Hw20mzJEKJbvg==
+  dependencies:
+    "@types/events" "^3.0.0"
+    events "^3.2.0"
+
+matrix-widget-api@^1.16.1:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.16.1.tgz#a447f28f0af07e1bdc960881971de7d1ec9e6464"
+  integrity sha512-oCfTV4xNPo02qIgveqdkIyKQjOPpsjhF3bmJBotHrhr8TsrhVa7kx8PtuiUPnQTjz0tdBle7falR2Fw8VKsedw==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
