@@ -22,7 +22,6 @@ const config: Config = {
         "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
-        "\\$webapp/i18n/languages.json": "<rootDir>/../../__mocks__/languages.json",
         "^react$": "<rootDir>/node_modules/react",
         "^react-dom$": "<rootDir>/node_modules/react-dom",
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
@@ -47,11 +46,6 @@ const config: Config = {
 // if we're running under GHA, enable the GHA reporter
 if (env["GITHUB_ACTIONS"] !== undefined) {
     const reporters: Config["reporters"] = [["github-actions", { silent: false }], "summary"];
-
-    // if we're running against the develop branch, also enable the slow test reporter
-    if (env["GITHUB_REF"] == "refs/heads/develop") {
-        reporters.push("<rootDir>/../../test/slowReporter.cjs");
-    }
     config.reporters = reporters;
 }
 

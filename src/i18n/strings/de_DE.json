@@ -978,6 +978,7 @@
         "import_invalid_passphrase": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
         "key_storage_out_of_sync": "Ihr Schlüsselspeicher ist nicht synchronisiert.",
         "key_storage_out_of_sync_description": "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin Zugriff auf den Schlüsselspeicher und den Nachrichtenverlauf zu haben.",
+        "message_shared_by": "Diese Nachricht wurde von %(displayName)s(%(userId)s ) weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.",
         "messages_not_secure": {
             "cause_1": "Dein Heim-Server",
             "cause_2": "Der Heim-Server der Person, die du verifizierst",

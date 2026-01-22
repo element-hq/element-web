@@ -8,6 +8,8 @@
 import { type Page } from "@playwright/test";
 
 import { expect, test } from "../../../element-web-test";
+import { type Bot } from "../../../pages/bot";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 
 test.describe("Room list", () => {
     test.use({
@@ -392,13 +394,8 @@ test.describe("Room list", () => {
             await expect(room).toMatchScreenshot("room-list-item-mention.png");
         });
 
-        test("should render a message preview", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
-            await app.settings.openUserSettings("Preferences");
-            await page.getByRole("switch", { name: "Show message previews" }).click();
-            await app.closeDialog();
-
+        async function checkMessagePreview(page: Page, app: ElementAppPage, bot: Bot) {
             const roomListView = getRoomList(page);
-
             const roomId = await app.client.createRoom({ name: "activity" });
 
             // focus the user menu to avoid to have hover decoration
@@ -411,7 +408,30 @@ test.describe("Room list", () => {
             const room = roomListView.getByRole("option", { name: "activity" });
             await expect(room.getByText("I am a robot. Beep.")).toBeVisible();
             await expect(room).toMatchScreenshot("room-list-item-message-preview.png");
-        });
+        }
+
+        test(
+            "should render a message preview when enable in settings",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                await app.settings.openUserSettings("Preferences");
+                await page.getByRole("switch", { name: "Show message previews" }).click();
+                await app.closeDialog();
+
+                await checkMessagePreview(page, app, bot);
+            },
+        );
+
+        test(
+            "should render a message preview when enabled in header",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                await page.getByRole("button", { name: "Room Options" }).click();
+                await page.getByRole("menuitemcheckbox", { name: "Show message previews" }).click();
+
+                await checkMessagePreview(page, app, bot);
+            },
+        );
 
         test("should render an activity decoration", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
             const roomListView = getRoomList(page);

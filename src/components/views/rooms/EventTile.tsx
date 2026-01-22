@@ -35,7 +35,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
-import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -498,6 +498,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return (
             <div className="mx_ThreadPanel_replies">
+                <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{this.state.thread.length}</span>
                 <ThreadMessagePreview thread={this.state.thread} />
             </div>
@@ -515,12 +516,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             if (this.props.highlightLink) {
                 return (
                     <a className="mx_ThreadSummary_icon" href={this.props.highlightLink}>
+                        <ThreadsIcon />
                         {_t("timeline|thread_info_basic")}
                     </a>
                 );
             }
 
-            return <p className="mx_ThreadSummary_icon">{_t("timeline|thread_info_basic")}</p>;
+            return (
+                <p className="mx_ThreadSummary_icon">
+                    <ThreadsIcon />
+                    {_t("timeline|thread_info_basic")}
+                </p>
+            );
         }
     }
 
