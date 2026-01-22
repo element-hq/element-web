@@ -16,4 +16,4 @@ set -e
 yarn
 
 # Now run the screenshot update, we set CI=1 to inform vis to update the real baselines
-CI=1 /work/node_modules/.bin/vitest --run --update --project=storybook
+CI=1 /work/node_modules/.bin/vitest --run --update --project=storybook "$@"
