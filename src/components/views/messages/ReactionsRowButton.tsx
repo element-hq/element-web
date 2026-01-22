@@ -9,12 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import classNames from "classnames";
 import { EventType, type MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { ReactionsRowButtonTooltipView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
 import dis from "../../../dispatcher/dispatcher";
-import ReactionsRowButtonTooltip from "./ReactionsRowButtonTooltip";
+import { ReactionsRowButtonTooltipViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonTooltipViewModel";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
@@ -109,8 +110,11 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
             }
         }
 
+        const reactionsRowButtonTooltipVM = useCreateAutoDisposedViewModel(() => new ReactionsRowButtonTooltipViewModel({mxEvent: this.props.mxEvent, content: content, reactionEvents: reactionEvents, customReactionImagesEnabled: this.props.customReactionImagesEnabled}));
+
         return (
-            <ReactionsRowButtonTooltip
+
+            <ReactionsRowButtonTooltipView vm={reactionsRowButtonTooltipVM}
                 mxEvent={this.props.mxEvent}
                 content={content}
                 reactionEvents={reactionEvents}
@@ -127,7 +131,8 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
                         {count}
                     </span>
                 </AccessibleButton>
-            </ReactionsRowButtonTooltip>
+            </ReactionsRowButtonTooltipView>
         );
     }
 }
+

@@ -14,7 +14,6 @@ import { useViewModel } from "../../useViewModel";
 
 /**
  * Snapshot interface for the ReactionsRowButtonTooltip view.
- * Contains pre-computed data ready for rendering.
  */
 export interface ReactionsRowButtonTooltipViewSnapshot {
     /**
@@ -42,6 +41,9 @@ interface ReactionsRowButtonTooltipViewProps {
     
 }
 
+/**
+ * Type alias for the ReactionsRowButtonTooltip view model.
+ */
 export function ReactionsRowButtonTooltipView({ vm }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
     const { formattedSenders, caption, children } = useViewModel(vm);
 
