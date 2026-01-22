@@ -61,12 +61,6 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
 }
 
 export default defineConfig({
-    css: {
-        modules: {
-            // Stabilise snapshots by stripping the hash component of the CSS module class name
-            generateScopedName: (name) => name,
-        },
-    },
     test: {
         coverage: {
             provider: "v8",
@@ -112,6 +106,12 @@ export default defineConfig({
                         instances: [{ browser: "chromium" }],
                     },
                     setupFiles: ["src/test/setupTests.ts"],
+                },
+                css: {
+                    modules: {
+                        // Stabilise snapshots by stripping the hash component of the CSS module class name
+                        generateScopedName: (name) => name,
+                    },
                 },
             },
         ],
