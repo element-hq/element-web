@@ -25,14 +25,4 @@ export class MockedViewModel extends MockViewModel<RoomListHeaderViewSnapshot> i
     public toggleMessagePreview = vi.fn<() => void>();
 }
 
-export const defaultSnapshot: RoomListHeaderViewSnapshot = {
-    title: "Rooms",
-    displayComposeMenu: true,
-    displaySpaceMenu: true,
-    canCreateRoom: true,
-    canCreateVideoRoom: true,
-    canInviteInSpace: true,
-    canAccessSpaceSettings: true,
-    activeSortOption: "recent",
-    isMessagePreviewEnabled: true,
-};
+export { defaultSnapshot } from "./default-snapshot";
