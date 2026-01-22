@@ -31,10 +31,8 @@ export * from "./utils/i18n";
 export * from "./utils/i18nContext";
 export * from "./utils/humanize";
 export * from "./utils/DateUtils";
-export * from "./utils/LocalDeviceVerificationStateContext";
 export * from "./utils/numbers";
 export * from "./utils/FormattingUtils";
 export * from "./utils/I18nApi";
-
 // MVVM
 export * from "./viewmodel";

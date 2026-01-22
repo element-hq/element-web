@@ -6,26 +6,21 @@
  */
 
 import React, { type JSX } from "react";
-import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
-import { mkMatrixEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import { DecryptionFailureBodyView, type DecryptionFailureBodyViewSnapshot } from "./DecryptionFailureBodyView";
+import {
+    DecryptionFailureBodyView,
+    DecryptionFailureReason,
+    type DecryptionFailureBodyViewSnapshot,
+} from "./DecryptionFailureBodyView";
 import { useMockedViewModel } from "../../useMockedViewModel";
-import { LocalDeviceVerificationStateContext } from "../../utils/LocalDeviceVerificationStateContext";
 
 type DecryptionFailureBodyProps = DecryptionFailureBodyViewSnapshot;
 
-const DecryptionFailureBodyViewWrapper = ({
-    ...rest
-}: DecryptionFailureBodyProps & { localDeviceVerificationStateContext: boolean }): JSX.Element => {
+const DecryptionFailureBodyViewWrapper = ({ ...rest }: DecryptionFailureBodyProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {});
 
-    return (
-        <LocalDeviceVerificationStateContext.Provider value={rest.localDeviceVerificationStateContext}>
-            <DecryptionFailureBodyView vm={vm} />
-        </LocalDeviceVerificationStateContext.Provider>
-    );
+    return <DecryptionFailureBodyView vm={vm} />;
 };
 
 export default {
@@ -34,115 +29,46 @@ export default {
     tags: ["autodocs"],
     argTypes: {
         vm: { table: { disable: true } },
+        decryptionFailureReason: {
+            options: [null as unknown as string].concat(
+                Object.entries(DecryptionFailureReason)
+                    .filter(([key, value]) => key === value)
+                    .map(([key]) => key),
+            ),
+            control: { type: "select" },
+        },
     },
     args: {
+        decryptionFailureReason: null,
+        isLocalDeviceVerified: true,
         className: "custom-class",
-        ref: undefined,
-        localDeviceVerificationStateContext: true,
     },
 } as Meta<typeof DecryptionFailureBodyView>;
 
-const Template: StoryFn<typeof DecryptionFailureBodyViewWrapper> = (args, { loaded }) => (
-    <DecryptionFailureBodyViewWrapper {...args} mxEvent={loaded.mxEvent} />
+const Template: StoryFn<typeof DecryptionFailureBodyViewWrapper> = (args) => (
+    <DecryptionFailureBodyViewWrapper {...args} />
 );
 
 export const Default = Template.bind({});
-Default.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
 
-export const UnableToDecrypt = Template.bind({});
-UnableToDecrypt.loaders = [
-    async () => ({
-        mxEvent: mkMatrixEvent({
-            type: "m.room.message",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-            content: {
-                msgtype: "m.bad.encrypted",
-            },
-        }),
-    }),
-];
-
-export const BlockedFromReceiving = Template.bind({});
-BlockedFromReceiving.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
-
-export const NoBackupKey = Template.bind({});
-NoBackupKey.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
-
-export const LocalDeviceNotVerified = Template.bind({});
-LocalDeviceNotVerified.args = {
-    localDeviceVerificationStateContext: false,
+export const HasErrorClassName = Template.bind({});
+HasErrorClassName.args = {
+    decryptionFailureReason: DecryptionFailureReason.UNSIGNED_SENDER_DEVICE,
 };
-LocalDeviceNotVerified.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
 
-export const PreJoinMessages = Template.bind({});
-PreJoinMessages.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
+export const HasErrorBlockIcon = Template.bind({});
+HasErrorBlockIcon.args = {
+    decryptionFailureReason: DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
+};
 
-export const UserChangeIdentity = Template.bind({});
-UserChangeIdentity.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
+export const HasBackupConfiguredVerifiedFalse = Template.bind({});
+HasBackupConfiguredVerifiedFalse.args = {
+    decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
+    isLocalDeviceVerified: false,
+};
 
-export const MessageFromUnverifiedDevice = Template.bind({});
-MessageFromUnverifiedDevice.loaders = [
-    async () => ({
-        mxEvent: await mkDecryptionFailureMatrixEvent({
-            code: DecryptionFailureCode.UNSIGNED_SENDER_DEVICE,
-            msg: "withheld",
-            roomId: "myfakeroom",
-            sender: "myfakeuser",
-        }),
-    }),
-];
+export const HasBackupConfiguredVerifiedTrue = Template.bind({});
+HasBackupConfiguredVerifiedTrue.args = {
+    decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
+    isLocalDeviceVerified: true,
+};

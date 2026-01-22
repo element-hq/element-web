@@ -10,8 +10,8 @@ import React, { type PropsWithChildren, useEffect, useState, type JSX } from "re
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LocalDeviceVerificationStateContext } from "@element-hq/web-shared-components";
 
+import { LocalDeviceVerificationStateContext } from "../../contexts/LocalDeviceVerificationStateContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
 

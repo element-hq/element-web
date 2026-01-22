@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef } from "react";
+import React, { type JSX, createRef, useContext } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -20,6 +20,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
+import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
@@ -331,6 +332,7 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
 );
 
 function DecryptionFailureBodyWrapper({ mxEvent }: IBodyProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent }));
+    const verificationState = useContext(LocalDeviceVerificationStateContext);
+    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent, verificationState }));
     return <DecryptionFailureBodyView vm={vm} />;
 }

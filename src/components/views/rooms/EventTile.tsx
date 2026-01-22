@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
+import React, { createRef, useContext, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -38,6 +38,7 @@ import { uniqueId } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
+import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -84,9 +85,12 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
+import {
+    DecryptionFailureBodyViewModel,
+    type DecryptionFailureBodyViewModelProps,
+} from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1571,11 +1575,8 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     );
 }
 
-interface DecryptionFailureBodyWrapper {
-    mxEvent: MatrixEvent;
-}
-
-function DecryptionFailureBodyWrapper({ mxEvent }: DecryptionFailureBodyWrapper): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent }));
+function DecryptionFailureBodyWrapper({ mxEvent }: DecryptionFailureBodyViewModelProps): JSX.Element {
+    const verificationState = useContext(LocalDeviceVerificationStateContext);
+    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent, verificationState }));
     return <DecryptionFailureBodyView vm={vm} />;
 }

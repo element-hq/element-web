@@ -7,6 +7,7 @@
 
 export {
     DecryptionFailureBodyView,
+    DecryptionFailureReason,
     type DecryptionFailureBodyViewModel,
     type DecryptionFailureBodyViewSnapshot,
 } from "./DecryptionFailureBodyView";

@@ -10,8 +10,8 @@ import { act, render } from "jest-matrix-react";
 import React, { useContext } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import { LocalDeviceVerificationStateContext } from "@element-hq/web-shared-components";
 
+import { LocalDeviceVerificationStateContext } from "../../../../src/contexts/LocalDeviceVerificationStateContext";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientContextProvider } from "../../../../src/components/structures/MatrixClientContextProvider";
 import {
