@@ -36,5 +36,3 @@ export * from "./utils/I18nApi";
 
 // MVVM
 export * from "./viewmodel";
-export * from "./useMockedViewModel";
-export * from "./useViewModel";
