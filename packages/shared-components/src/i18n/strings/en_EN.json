@@ -23,6 +23,12 @@
     "left_panel": {
         "open_dial_pad": "Open dial pad"
     },
+    "notifications": {
+        "all_messages": "All messages",
+        "default_settings": "Match default settings",
+        "mentions_keywords": "Mentions and keywords",
+        "mute_room": "Mute room"
+    },
     "room": {
         "context_menu": {
             "title": "Room options"
@@ -44,8 +50,63 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "Open room %(roomName)s",
+            "invitation": "Open room %(roomName)s invitation.",
+            "mention": {
+                "one": "Open room %(roomName)s with 1 unread mention.",
+                "other": "Open room %(roomName)s with %(count)s unread mentions."
+            },
+            "unread": {
+                "one": "Open room %(roomName)s with 1 unread message.",
+                "other": "Open room %(roomName)s with %(count)s unread messages."
+            },
+            "unsent_message": "Open room %(roomName)s with an unsent message."
+        },
         "appearance": "Appearance",
+        "collapse_filters": "Collapse filter list",
+        "empty": {
+            "no_chats": "No chats yet",
+            "no_chats_description": "Get started by messaging someone or by creating a room",
+            "no_chats_description_no_room_rights": "Get started by messaging someone",
+            "no_favourites": "You don't have favourite chats yet",
+            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_invites": "You don't have any unread invites",
+            "no_lowpriority": "You don't have any low priority rooms",
+            "no_mentions": "You don't have any unread mentions",
+            "no_people": "You don’t have direct chats with anyone yet",
+            "no_people_description": "You can deselect filters in order to see your other chats",
+            "no_rooms": "You’re not in any room yet",
+            "no_rooms_description": "You can deselect filters in order to see your other chats",
+            "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
+            "show_chats": "Show all chats"
+        },
+        "expand_filters": "Expand filter list",
+        "filters": {
+            "favourite": "Favourites",
+            "invites": "Invites",
+            "low_priority": "Low priority",
+            "mentions": "Mentions",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unreads"
+        },
+        "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy room link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread"
+        },
+        "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
+        "room": {
+            "more_options": "More Options"
+        },
         "room_options": "Room Options",
         "show_message_previews": "Show message previews",
         "sort": "Sort",

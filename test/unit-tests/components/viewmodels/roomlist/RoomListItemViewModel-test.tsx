@@ -5,276 +5,435 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { renderHook, waitFor } from "jest-matrix-react";
-import { type Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { type MatrixClient, type MatrixEvent, Room, RoomEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
-import dispatcher from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { useRoomListItemViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
-import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../test-utils";
-import {
-    hasAccessToNotificationMenu,
-    hasAccessToOptionsMenu,
-} from "../../../../../src/components/viewmodels/roomlist/utils";
+import { RoomListItemViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
+import { createTestClient, flushPromises } from "../../../../test-utils";
 import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
-import * as UseCallModule from "../../../../../src/hooks/useCall";
+import { NotificationStateEvents } from "../../../../../src/stores/notifications/NotificationState";
 import { type MessagePreview, MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
+import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { useMessagePreviewToggle } from "../../../../../src/components/viewmodels/roomlist/useMessagePreviewToggle";
+import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import dispatcher from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+import { CallStore } from "../../../../../src/stores/CallStore";
+import type { Call } from "../../../../../src/models/Call";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
-    hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
-    hasAccessToNotificationMenu: jest.fn().mockReturnValue(false),
+    hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
+    hasAccessToNotificationMenu: jest.fn().mockReturnValue(true),
 }));
 
-jest.mock("../../../../../src/components/viewmodels/roomlist/useMessagePreviewToggle", () => ({
-    useMessagePreviewToggle: jest.fn().mockReturnValue({ shouldShowMessagePreview: true }),
+jest.mock("../../../../../src/stores/CallStore", () => ({
+    __esModule: true,
+    CallStore: {
+        instance: {
+            getCall: jest.fn(),
+            on: jest.fn(),
+            off: jest.fn(),
+            emit: jest.fn(),
+        },
+    },
+    CallStoreEvent: {
+        ConnectedCalls: "connected_calls",
+    },
 }));
 
 describe("RoomListItemViewModel", () => {
+    let matrixClient: MatrixClient;
     let room: Room;
+    let notificationState: RoomNotificationState;
+    let viewModel: RoomListItemViewModel;
 
     beforeEach(() => {
-        const matrixClient = createTestClient();
-        room = mkStubRoom("roomId", "roomName", matrixClient);
+        matrixClient = createTestClient();
+        room = new Room("!room:server", matrixClient, matrixClient.getSafeUserId(), {
+            pendingEventOrdering: PendingEventOrdering.Detached,
+        });
+
+        // Set room name
+        room.name = "Test Room";
+
+        notificationState = new RoomNotificationState(room, false);
+        jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
 
         const dmRoomMap = {
-            getUserIdForRoomId: jest.fn(),
-            getDMRoomsForUserId: jest.fn(),
+            getUserIdForRoomId: jest.fn().mockReturnValue(undefined),
         } as unknown as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
 
-        mocked(useMessagePreviewToggle).mockReturnValue({
-            shouldShowMessagePreview: false,
-            toggleMessagePreview: jest.fn(),
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === "RoomList.showMessagePreview") return false;
+            return false;
         });
+        jest.spyOn(SettingsStore, "watchSetting").mockImplementation(() => "watcher-id");
+
+        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue(null);
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
     });
 
     afterEach(() => {
+        viewModel?.dispose();
         jest.restoreAllMocks();
     });
 
-    it("should dispatch view room action on openRoom", async () => {
-        const { result: vm } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
+    describe("Initialization", () => {
+        it("should initialize with room data", async () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
-        const fn = jest.spyOn(dispatcher, "dispatch");
-        vm.current.openRoom();
-        expect(fn).toHaveBeenCalledWith(
-            expect.objectContaining({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                metricsTrigger: "RoomList",
-            }),
-        );
-    });
+            // Wait for async initialization
+            await flushPromises();
 
-    it("should show context menu if user has access to options menu", async () => {
-        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
-        const { result: vm } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
-        expect(vm.current.showContextMenu).toBe(true);
-    });
-
-    it("should show hover menu if user has access to options menu", async () => {
-        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
-        const { result: vm } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
-        expect(vm.current.showHoverMenu).toBe(true);
-    });
-
-    it("should show hover menu if user has access to notification menu", async () => {
-        mocked(hasAccessToNotificationMenu).mockReturnValue(true);
-        const { result: vm } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
-        expect(vm.current.showHoverMenu).toBe(true);
-    });
-
-    it("should not show hover menu if user has an invitation notification", async () => {
-        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
-
-        const notificationState = new RoomNotificationState(room, false);
-        jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
-        jest.spyOn(notificationState, "invited", "get").mockReturnValue(false);
-
-        const { result: vm } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
-        expect(vm.current.showHoverMenu).toBe(true);
-    });
-
-    it("should return a message preview if one is available and they are enabled", async () => {
-        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
-            text: "Message look like this",
-        } as MessagePreview);
-        mocked(useMessagePreviewToggle).mockReturnValue({
-            shouldShowMessagePreview: true,
-            toggleMessagePreview: jest.fn(),
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.id).toBe("!room:server");
+            expect(snapshot.name).toBe("Test Room");
         });
 
-        const { result: vm } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
-        await waitFor(() => expect(vm.current.messagePreview).toBe("Message look like this"));
+        it("should load message preview when enabled", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
+                text: "Hello world!",
+            } as MessagePreview);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            // Wait for async message preview load
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().messagePreview).toBe("Hello world!");
+        });
+
+        it("should not load message preview when disabled", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().messagePreview).toBeUndefined();
+        });
     });
 
-    it("should hide message previews when disabled", async () => {
-        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
-            text: "Message look like this",
-        } as MessagePreview);
+    describe("Notification state", () => {
+        it("should reflect notification state", async () => {
+            jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
+            jest.spyOn(notificationState, "count", "get").mockReturnValue(5);
 
-        const { result: vm, rerender } = renderHook(
-            () => useRoomListItemViewModel(room),
-            withClientContextRenderOptions(room.client),
-        );
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
-        // This doesn't seem to test that the hook actually triggers an update,
-        // but I can't see how to test that.
-        rerender();
+            await flushPromises();
 
-        expect(vm.current.messagePreview).toBe(undefined);
-    });
-
-    it("should check message preview when room change", async () => {
-        const otherRoom = mkStubRoom("roomId2", "roomName2", room.client);
-
-        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
-            text: "Message look like this",
-        } as MessagePreview);
-        mocked(useMessagePreviewToggle).mockReturnValue({
-            shouldShowMessagePreview: true,
-            toggleMessagePreview: jest.fn(),
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.notification.hasAnyNotificationOrActivity).toBe(true);
+            expect(snapshot.notification.count).toBe(5);
         });
 
-        const { result: vm, rerender } = renderHook((props) => useRoomListItemViewModel(props), {
-            initialProps: room,
-            ...withClientContextRenderOptions(room.client),
-        });
-        await waitFor(() => expect(vm.current.messagePreview).toBe("Message look like this"));
+        it("should update when notification state changes", async () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
-        jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue(null);
-        rerender(otherRoom);
-        await waitFor(() => expect(vm.current.messagePreview).toBe(undefined));
-    });
+            await flushPromises();
+            expect(viewModel.getSnapshot().notification.count).toBe(0);
 
-    describe("notification", () => {
-        let notificationState: RoomNotificationState;
-        beforeEach(() => {
-            notificationState = new RoomNotificationState(room, false);
-            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+            jest.spyOn(notificationState, "count", "get").mockReturnValue(3);
+            notificationState.emit(NotificationStateEvents.Update);
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().notification.count).toBe(3);
         });
 
-        it("should show notification decoration if there is call has participant", () => {
-            jest.spyOn(UseCallModule, "useParticipantCount").mockReturnValue(1);
-
-            const { result: vm } = renderHook(
-                () => useRoomListItemViewModel(room),
-                withClientContextRenderOptions(room.client),
-            );
-            expect(vm.current.showNotificationDecoration).toBe(true);
-        });
-
-        it.each([
-            {
-                label: "hasAnyNotificationOrActivity",
-                mock: () => jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true),
-            },
-            { label: "muted", mock: () => jest.spyOn(notificationState, "muted", "get").mockReturnValue(true) },
-        ])("should show notification decoration if $label=true", ({ mock }) => {
-            mock();
-            const { result: vm } = renderHook(
-                () => useRoomListItemViewModel(room),
-                withClientContextRenderOptions(room.client),
-            );
-            expect(vm.current.showNotificationDecoration).toBe(true);
-        });
-
-        it("should be bold if there is a notification", () => {
+        it("should show bold text when has notifications", async () => {
             jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
 
-            const { result: vm } = renderHook(
-                () => useRoomListItemViewModel(room),
-                withClientContextRenderOptions(room.client),
-            );
-            expect(vm.current.isBold).toBe(true);
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().isBold).toBe(true);
         });
 
-        it("should recompute notification state when room changes", () => {
-            const newRoom = mkStubRoom("room2", "Room 2", room.client);
-            const newNotificationState = new RoomNotificationState(newRoom, false);
+        it("should show mention badge", async () => {
+            jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
 
-            const { result, rerender } = renderHook((room) => useRoomListItemViewModel(room), {
-                ...withClientContextRenderOptions(room.client),
-                initialProps: room,
-            });
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
-            expect(result.current.showNotificationDecoration).toBe(false);
+            await flushPromises();
 
-            jest.spyOn(newNotificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
-            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(newNotificationState);
-            rerender(newRoom);
+            expect(viewModel.getSnapshot().notification.isMention).toBe(true);
+        });
 
-            expect(result.current.showNotificationDecoration).toBe(true);
+        it("should show invitation state", async () => {
+            jest.spyOn(notificationState, "invited", "get").mockReturnValue(true);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().notification.invited).toBe(true);
         });
     });
 
-    describe("a11yLabel", () => {
-        let notificationState: RoomNotificationState;
-        beforeEach(() => {
-            notificationState = new RoomNotificationState(room, false);
-            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+    describe("Message preview", () => {
+        it("should update message preview when store emits update", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
+                text: "Initial message",
+            } as MessagePreview);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().messagePreview).toBe("Initial message");
+
+            // Update preview
+            jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
+                text: "Updated message",
+            } as MessagePreview);
+
+            MessagePreviewStore.instance.emit(UPDATE_EVENT);
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().messagePreview).toBe("Updated message");
         });
 
-        it.each([
-            {
-                label: "unsent message",
-                mock: () => jest.spyOn(notificationState, "isUnsentMessage", "get").mockReturnValue(true),
-                expected: "Open room roomName with an unsent message.",
-            },
-            {
-                label: "invitation",
-                mock: () => jest.spyOn(notificationState, "invited", "get").mockReturnValue(true),
-                expected: "Open room roomName invitation.",
-            },
-            {
-                label: "mention",
-                mock: () => {
-                    jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
-                    jest.spyOn(notificationState, "count", "get").mockReturnValue(3);
-                },
-                expected: "Open room roomName with 3 unread messages including mentions.",
-            },
-            {
-                label: "unread",
-                mock: () => {
-                    jest.spyOn(notificationState, "hasUnreadCount", "get").mockReturnValue(true);
-                    jest.spyOn(notificationState, "count", "get").mockReturnValue(3);
-                },
-                expected: "Open room roomName with 3 unread messages.",
-            },
-            {
-                label: "default",
-                expected: "Open room roomName",
-            },
-        ])("should return the $label label", ({ mock, expected }) => {
-            mock?.();
-            const { result: vm } = renderHook(
-                () => useRoomListItemViewModel(room),
-                withClientContextRenderOptions(room.client),
-            );
-            expect(vm.current.a11yLabel).toBe(expected);
+        it("should show/hide preview when setting changes", async () => {
+            let showPreview = false;
+            let watchCallback: any;
+
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => showPreview);
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((_setting, _room, callback) => {
+                watchCallback = callback;
+                return "watcher-id";
+            });
+            jest.spyOn(MessagePreviewStore.instance, "getPreviewForRoom").mockResolvedValue({
+                text: "Test message",
+            } as MessagePreview);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().messagePreview).toBeUndefined();
+
+            // Enable previews
+            showPreview = true;
+            watchCallback(null, "device", true);
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().messagePreview).toBe("Test message");
+        });
+    });
+
+    describe("Room tags", () => {
+        it("should reflect favorite tag", async () => {
+            room.tags = { [DefaultTagID.Favourite]: { order: 0 } };
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().isFavourite).toBe(true);
+        });
+
+        it("should reflect low priority tag", async () => {
+            room.tags = { [DefaultTagID.LowPriority]: { order: 0 } };
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().isLowPriority).toBe(true);
+        });
+
+        it("should update when room tags change", async () => {
+            room.tags = {};
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().isFavourite).toBe(false);
+
+            room.tags = { [DefaultTagID.Favourite]: { order: 0 } };
+            const tagEvent = {
+                getContent: () => ({ tags: { [DefaultTagID.Favourite]: { order: 0 } } }),
+            } as MatrixEvent;
+            room.emit(RoomEvent.Tags, tagEvent, room);
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().isFavourite).toBe(true);
+        });
+    });
+
+    describe("Call state", () => {
+        it("should show voice call indicator", async () => {
+            const mockCall = {
+                callType: CallType.Voice,
+                participants: new Map([[matrixClient.getUserId()!, {}]]),
+            } as unknown as Call;
+
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().notification.callType).toBe("voice");
+        });
+
+        it("should show video call indicator", async () => {
+            const mockCall = {
+                callType: CallType.Video,
+                participants: new Map([[matrixClient.getUserId()!, {}]]),
+            } as unknown as Call;
+
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().notification.callType).toBe("video");
+        });
+
+        it("should not show call indicator when no participants", async () => {
+            const mockCall = {
+                callType: CallType.Voice,
+                participants: new Map(),
+            } as unknown as Call;
+
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
+        });
+    });
+
+    describe("Room name updates", () => {
+        it("should update when room name changes", async () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().name).toBe("Test Room");
+
+            room.name = "Updated Room";
+            room.emit(RoomEvent.Name, room);
+
+            await flushPromises();
+            expect(viewModel.getSnapshot().name).toBe("Updated Room");
+        });
+    });
+
+    describe("DM detection", () => {
+        it("should detect DM rooms", async () => {
+            const dmRoomMap = DMRoomMap.shared();
+            jest.spyOn(dmRoomMap, "getUserIdForRoomId").mockReturnValue("@user:server");
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            // DM rooms should not show copy room link option
+            expect(viewModel.getSnapshot().canCopyRoomLink).toBe(false);
+        });
+
+        it("should detect non-DM rooms", async () => {
+            const dmRoomMap = DMRoomMap.shared();
+            jest.spyOn(dmRoomMap, "getUserIdForRoomId").mockReturnValue(undefined);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().canCopyRoomLink).toBe(true);
+        });
+    });
+
+    describe("Actions", () => {
+        it("should dispatch view room action on openRoom", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            viewModel.onOpenRoom();
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: "!room:server",
+                metricsTrigger: "RoomList",
+            });
+        });
+
+        it("should return room object", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            expect(viewModel.getSnapshot().room).toBe(room);
+        });
+
+        it("should dispatch view_invite action when onInvite is called", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            viewModel.onInvite();
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "view_invite",
+                roomId: "!room:server",
+            });
+        });
+
+        it("should dispatch copy_room action when onCopyRoomLink is called", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            viewModel.onCopyRoomLink();
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "copy_room",
+                room_id: "!room:server",
+            });
+        });
+
+        it("should dispatch leave_room action when onLeaveRoom is called for normal room", () => {
+            room.tags = {};
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            viewModel.onLeaveRoom();
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "leave_room",
+                room_id: "!room:server",
+            });
+        });
+
+        it("should dispatch forget_room action when onLeaveRoom is called for archived room", () => {
+            room.tags = { [DefaultTagID.Archived]: { order: 0 } };
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            viewModel.onLeaveRoom();
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "forget_room",
+                room_id: "!room:server",
+            });
+        });
+    });
+
+    describe("Cleanup", () => {
+        it("should unsubscribe from all events on dispose", () => {
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            const offSpy = jest.spyOn(notificationState, "off");
+
+            viewModel.dispose();
+
+            expect(offSpy).toHaveBeenCalled();
         });
     });
 });

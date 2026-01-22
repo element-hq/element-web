@@ -38,7 +38,7 @@ const test = base.extend<{
 
 test.describe("Sliding Sync", () => {
     const checkOrder = async (wantOrder: string[], page: Page) => {
-        await expect(page.getByTestId("room-list").locator(".mx_RoomListItemView_text")).toHaveText(wantOrder);
+        await expect(page.getByTestId("room-list").getByTestId("room-name")).toHaveText(wantOrder);
     };
 
     const bumpRoom = async (roomId: string, app: ElementAppPage) => {
