@@ -57,7 +57,7 @@ interface ReactionsRowButtonTooltipViewProps {
 }
 
 
-export function ReactionsRowButtonTooltip({ vm }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
+export function ReactionsRowButtonTooltipView({ vm }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
     const { mxEvent, content, reactionEvents, customReactionImagesEnabled, children } = useViewModel(vm);
 
     

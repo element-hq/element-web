@@ -10,12 +10,6 @@ import React, { type PropsWithChildren } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { unicodeToShortcode } from "../../../HtmlUtils";
-import { _t } from "../../../languageHandler";
-import { formatList } from "../../../utils/FormattingUtils";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
-
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;

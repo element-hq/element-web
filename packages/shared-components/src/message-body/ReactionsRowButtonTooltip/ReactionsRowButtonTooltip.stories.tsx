@@ -7,18 +7,18 @@
 
 import React from "react";
 
-import { ReactionsRowButtonTooltip } from "./ReactionsRowButtonTooltip";
+import { ReactionsRowButtonTooltipView } from "./ReactionsRowButtonTooltipView";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 
 export default {
     title: "MessageBody/ReactionsRowButtonTooltip",
-    component: ReactionsRowButtonTooltip,
+    component: ReactionsRowButtonTooltipView,
     tags: ["autodocs"],
     args: {
         children: "Media content goes here",
     },
-} as Meta<typeof ReactionsRowButtonTooltip>;
+} as Meta<typeof ReactionsRowButtonTooltipView>;
 
-const Template: StoryFn<typeof ReactionsRowButtonTooltip> = (args) => <ReactionsRowButtonTooltip {...args} />;
+const Template: StoryFn<typeof ReactionsRowButtonTooltipView> = (args) => <ReactionsRowButtonTooltipView {...args} />;
 
 export const Default = Template.bind({});
