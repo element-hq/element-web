@@ -897,6 +897,7 @@ export default class SettingsStore {
                 settingMap[settingKey] = SettingsStore.getValue(settingKey);
             } catch (e) {
                 logger.warn("Failed to read setting", settingKey, e);
+                settingMap[settingKey] = "Failed to read setting!";
             }
         }
         return JSON.stringify(settingMap);

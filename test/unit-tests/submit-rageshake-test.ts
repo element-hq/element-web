@@ -25,6 +25,7 @@ import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Sett
 import { SettingLevel } from "../../src/settings/SettingLevel.ts";
 import SdkConfig from "../../src/SdkConfig.ts";
 import { BugReportEndpointURLLocal } from "../../src/IConfigOptions.ts";
+import { Notifier } from "../../src/Notifier.ts";
 
 describe("Rageshakes", () => {
     let mockClient: Mocked<MatrixClient>;
@@ -358,6 +359,10 @@ describe("Rageshakes", () => {
     describe("Settings Store", () => {
         const mockSettingsStore = mocked(SettingsStore);
 
+        beforeEach(() => {
+            jest.spyOn(Notifier, "isPossible").mockReturnValue(true);
+        });
+
         afterEach(() => {
             jest.restoreAllMocks();
         });
@@ -396,6 +401,17 @@ describe("Rageshakes", () => {
 
             const formData = await collectBugReport();
             expect(formData.get("lowBandwidth")).toBeNull();
+        });
+
+        it("should handle settings throwing when logged out", async () => {
+            jest.spyOn(Notifier, "isPossible").mockImplementation(() => {
+                throw new Error("Test");
+            });
+
+            const formData = await collectBugReport();
+            expect(JSON.parse(formData.get("mx_local_settings") as string)["notificationsEnabled"]).toBe(
+                "Failed to read setting!",
+            );
         });
     });
 
