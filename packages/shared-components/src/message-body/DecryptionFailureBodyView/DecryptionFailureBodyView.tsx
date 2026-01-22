@@ -180,12 +180,13 @@ export function DecryptionFailureBodyView({ vm, ref }: Readonly<DecryptionFailur
     const { decryptionFailureReason, isLocalDeviceVerified, className } = useViewModel(vm);
     const classes = classNames(
         "mx_DecryptionFailureBody",
+        "mx_EventTile_content",
         styles.decryptionFailureBodyView,
         errorClassName(decryptionFailureReason),
         className,
     );
 
-    // Keep mx_DecryptionFailureBody to support the compatibility with existing timeline and the all the layout
+    // Keep mx_DecryptionFailureBody and mx_EventTile_content to support the compatibility with existing timeline and the all the layout
     return (
         <div className={classes} ref={ref}>
             {getErrorMessage(i18nApi, decryptionFailureReason, isLocalDeviceVerified)}

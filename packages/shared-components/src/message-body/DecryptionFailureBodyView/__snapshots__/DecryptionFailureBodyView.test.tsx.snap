@@ -3,7 +3,7 @@
 exports[`DecryptionFailureBodyView Should display "The sender has blocked you from receiving this message" 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody decryptionFailureBodyView"
+    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView"
   >
     The sender has blocked you from receiving this message because your device is unverified
   </div>
@@ -13,7 +13,7 @@ exports[`DecryptionFailureBodyView Should display "The sender has blocked you fr
 exports[`DecryptionFailureBodyView Should display "Unable to decrypt message" 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody decryptionFailureBodyView"
+    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView"
   >
     Unable to decrypt message
   </div>
@@ -23,7 +23,7 @@ exports[`DecryptionFailureBodyView Should display "Unable to decrypt message" 1`
 exports[`DecryptionFailureBodyView should handle messages from users who change identities after verification 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody decryptionFailureBodyView decryptionFailureBodyViewError"
+    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView decryptionFailureBodyViewError"
   >
     <span>
       <svg
