@@ -893,7 +893,11 @@ export default class SettingsStore {
         for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
             (s) => SETTINGS[s].shouldExportToRageshake !== false,
         )) {
-            settingMap[settingKey] = SettingsStore.getValue(settingKey);
+            try {
+                settingMap[settingKey] = SettingsStore.getValue(settingKey);
+            } catch (e) {
+                logger.warn("Failed to read setting", settingKey, e);
+            }
         }
         return JSON.stringify(settingMap);
     }
