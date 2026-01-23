@@ -1,15 +1,14 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-.mx_EventTileBubble {
+.container {
     --EventTileBubble_margin-block: 10px;
 
-    background-color: $dark-panel-bg-color;
+    background-color: var(--cpd-color-bg-subtle-secondary);
     padding: 10px;
     border-radius: 8px;
     /* Reserve space for external timestamps, but also cap the width */
@@ -29,24 +28,24 @@ Please see LICENSE files in the repository root for full details.
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
-        margin-top: $spacing-4;
+        margin-top: var(--cpd-space-1x);
     }
 
-    .mx_EventTileBubble_title,
-    .mx_EventTileBubble_subtitle {
+    .title,
+    .subtitle {
         grid-column: 2;
         overflow-wrap: break-word;
         min-inline-size: 50px;
     }
 
-    .mx_EventTileBubble_title {
+    .title {
         font-weight: var(--cpd-font-weight-semibold);
-        font-size: $font-15px;
+        font-size: var(--cpd-font-size-body-md);
         grid-row: 1;
     }
 
-    .mx_EventTileBubble_subtitle {
-        font-size: $font-12px;
+    .subtitle {
+        font-size: var(--cpd-font-size-body-sm);
         grid-row: 2;
     }
 
@@ -54,6 +53,6 @@ Please see LICENSE files in the repository root for full details.
         grid-column: 4;
         grid-row: 1 / 3;
         align-self: center;
-        margin-left: $spacing-16;
+        margin-left: var(--cpd-space-4x);
     }
 }

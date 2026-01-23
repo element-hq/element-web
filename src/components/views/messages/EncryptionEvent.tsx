@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type Ref, type ReactNode } from "react";
+import React, { type JSX, type ReactNode } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { ErrorSolidIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { _t } from "../../../languageHandler";
-import EventTileBubble from "./EventTileBubble";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { objectHasDiff } from "../../../utils/objects";
@@ -23,7 +23,7 @@ import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 interface IProps {
     mxEvent: MatrixEvent;
     timestamp?: JSX.Element;
-    ref?: Ref<HTMLDivElement>;
+    ref?: React.RefObject<any>;
 }
 
 const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {

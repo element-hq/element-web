@@ -61,7 +61,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
           </div>
         </li>
         <div
-          class="mx_EventTileBubble mx_HistoryTile"
+          class="mx_EventTileBubble _container_bh4yj_8 mx_HistoryTile"
         >
           <svg
             fill="currentColor"
@@ -75,7 +75,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
             />
           </svg>
           <div
-            class="mx_EventTileBubble_title"
+            class="_title_bh4yj_34"
           >
             You can't see earlier messages
           </div>

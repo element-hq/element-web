@@ -11,13 +11,13 @@ import React, { type JSX, useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixEvent, type Room, type RoomState } from "matrix-js-sdk/src/matrix";
 import { ChatSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import EventTileBubble from "./EventTileBubble";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { useRoomState } from "../../../hooks/useRoomState";
 import SettingsStore from "../../../settings/SettingsStore";

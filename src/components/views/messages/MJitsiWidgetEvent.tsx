@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import WidgetStore from "../../../stores/WidgetStore";
-import EventTileBubble from "./EventTileBubble";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 

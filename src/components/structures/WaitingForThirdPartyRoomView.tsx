@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { type RefObject } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomHeader from "../views/rooms/RoomHeader/RoomHeader.tsx";
 import ScrollPanel from "./ScrollPanel";
-import EventTileBubble from "../views/messages/EventTileBubble";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { UnwrappedEventTile } from "../views/rooms/EventTile";
 import { _t } from "../../languageHandler";
