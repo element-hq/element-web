@@ -6,9 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
+
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ListView, type IListViewProps, type ListContext } from "./ListView";
+
 import "./ListView.stories.css";
 
 interface SimpleItem {
@@ -25,7 +27,7 @@ const SimpleItemComponent = ({
     item: SimpleItem;
     context: ListContext<undefined>;
     onFocus: (item: SimpleItem, e: React.FocusEvent) => void;
-}) => {
+}): React.JSX.Element => {
     const tabIndex = context.tabIndexKey === item.id ? 0 : -1;
     return (
         <div
