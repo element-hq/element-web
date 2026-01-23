@@ -11,10 +11,8 @@ IMAGE_NAME="element-web-playwright-common"
 build_image() {
   echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
 
-  # Fetch the playwright version
-  # .data.version is for yarn classic
-  # .children.Version is for yarn berry
-  PW_VERSION=$(yarn info --manifest --json @playwright/test | jq -r '.data.version // .children.Version')
+  # Check the playwright version
+  PW_VERSION=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name | split("@") | last')
   echo "with Playwright version $PW_VERSION"
 
   # Build image
