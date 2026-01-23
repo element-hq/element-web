@@ -9,9 +9,9 @@ import React from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ListView, type IListViewProps, type ListContext } from "./ListView";
+import { List, type IListProps, type ListContext } from "./List";
 
-import "./ListView.stories.css";
+import "./List.stories.css";
 
 interface SimpleItem {
     id: string;
@@ -47,8 +47,8 @@ const defaultItems: SimpleItem[] = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 const meta = {
-    title: "Utils/ListView",
-    component: ListView<SimpleItem, undefined>,
+    title: "Utils/List",
+    component: List<SimpleItem, undefined>,
     tags: ["autodocs"],
     args: {
         items: defaultItems,
@@ -77,21 +77,21 @@ const meta = {
             description: "Optional additional context data to pass to rendered items",
         },
         onKeyDown: {
-            description: "Callback for keyboard events not handled by ListView",
+            description: "Callback for keyboard events not handled by List",
         },
     },
-} satisfies Meta<IListViewProps<SimpleItem, undefined>>;
+} satisfies Meta<IListProps<SimpleItem, undefined>>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default ListView with basic items
+ * Default List with basic items
  */
 export const Default: Story = {};
 
 /**
- * ListView with a large number of items to demonstrate virtualization
+ * List with a large number of items to demonstrate virtualization
  */
 export const LargeList: Story = {
     args: {
@@ -104,7 +104,7 @@ export const LargeList: Story = {
 };
 
 /**
- * ListView with some disabled items that cannot be focused
+ * List with some disabled items that cannot be focused
  */
 export const WithDisabledItems: Story = {
     args: {
@@ -118,7 +118,7 @@ export const WithDisabledItems: Story = {
 };
 
 /**
- * ListView with custom styling
+ * List with custom styling
  */
 export const CustomStyling: Story = {
     args: {

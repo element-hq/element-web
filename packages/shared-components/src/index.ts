@@ -24,7 +24,7 @@ export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
-export * from "./utils/ListView";
+export * from "./utils/List";
 
 // Utils
 export * from "./utils/i18n";

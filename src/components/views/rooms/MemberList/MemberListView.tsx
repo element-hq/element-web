@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { type JSX, useCallback } from "react";
-import { Flex, type ListContext, ListView } from "@element-hq/web-shared-components";
+import { Flex, type ListContext, List } from "@element-hq/web-shared-components";
 
 import {
     type MemberWithSeparator,
@@ -108,7 +108,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 <Form.Root onSubmit={(e) => e.preventDefault()}>
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
-                <ListView
+                <List
                     items={vm.members}
                     getItemComponent={getItemComponent}
                     getItemKey={getItemKey}

@@ -8,7 +8,7 @@
 import React, { useCallback, useRef, type JSX, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { isEqual } from "lodash";
-import { type ListContext, ListView, type ScrollIntoViewOnChange } from "@element-hq/web-shared-components";
+import { type ListContext, List, type ScrollIntoViewOnChange } from "@element-hq/web-shared-components";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
@@ -118,7 +118,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
     );
 
     return (
-        <ListView
+        <List
             context={context}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             initialTopMostItemIndex={activeIndex}

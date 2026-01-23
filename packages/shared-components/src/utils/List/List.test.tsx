@@ -10,7 +10,7 @@ import { render, screen, fireEvent } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { ListView, type IListViewProps } from "./ListView";
+import { List, type IListProps } from "./List";
 
 const expectTabIndex = (element: Element, expected: string): void => {
     expect(element.getAttribute("tabindex")).toBe(expected);
@@ -29,7 +29,7 @@ interface TestItem {
 const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
-describe("ListView", () => {
+describe("List", () => {
     const mockGetItemComponent = vi.fn();
     const mockIsItemFocusable = vi.fn();
 
@@ -40,25 +40,25 @@ describe("ListView", () => {
         { id: "3", name: "Item 3" },
     ];
 
-    const defaultProps: IListViewProps<TestItemWithSeparator, any> = {
+    const defaultProps: IListProps<TestItemWithSeparator, any> = {
         items: defaultItems,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
     };
 
-    const getListViewComponent = (
-        props: Partial<IListViewProps<TestItemWithSeparator, any>> = {},
+    const getListComponent = (
+        props: Partial<IListProps<TestItemWithSeparator, any>> = {},
     ): React.JSX.Element => {
         const mergedProps = { ...defaultProps, ...props };
-        return <ListView {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
+        return <List {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
     };
 
-    const renderListViewWithHeight = (
-        props: Partial<IListViewProps<TestItemWithSeparator, any>> = {},
+    const renderListWithHeight = (
+        props: Partial<IListProps<TestItemWithSeparator, any>> = {},
     ): ReturnType<typeof render> => {
         const mergedProps = { ...defaultProps, ...props };
-        return render(getListViewComponent(mergedProps), {
+        return render(getListComponent(mergedProps), {
             wrapper: ({ children }: PropsWithChildren) => (
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
                     <>{children}</>
@@ -86,20 +86,20 @@ describe("ListView", () => {
     });
 
     describe("Rendering", () => {
-        it("should render the ListView component", () => {
-            renderListViewWithHeight();
+        it("should render the List component", () => {
+            renderListWithHeight();
             expect(screen.getByRole("grid")).toBeDefined();
         });
 
         it("should render with empty items array", () => {
-            renderListViewWithHeight({ items: [] });
+            renderListWithHeight({ items: [] });
             expect(screen.getByRole("grid")).toBeDefined();
         });
     });
 
     describe("Keyboard Navigation", () => {
         it("should handle ArrowDown key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
@@ -113,7 +113,7 @@ describe("ListView", () => {
         });
 
         it("should handle ArrowUp key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus and navigate down to second item
@@ -130,7 +130,7 @@ describe("ListView", () => {
         });
 
         it("should handle Home key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus and navigate to a later item
@@ -151,7 +151,7 @@ describe("ListView", () => {
         });
 
         it("should handle End key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus on the list (starts at first item)
@@ -172,7 +172,7 @@ describe("ListView", () => {
         });
 
         it("should handle PageDown key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus on the list (starts at first item)
@@ -190,7 +190,7 @@ describe("ListView", () => {
         });
 
         it("should handle PageUp key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus and navigate to last item to have something to page up from
@@ -209,7 +209,7 @@ describe("ListView", () => {
         });
 
         it("should not handle keyboard navigation when modifier keys are pressed", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
@@ -270,7 +270,7 @@ describe("ListView", () => {
                 return (item as TestItem).isFocusable !== false;
             });
 
-            renderListViewWithHeight({ items: mixedItems });
+            renderListWithHeight({ items: mixedItems });
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
@@ -297,7 +297,7 @@ describe("ListView", () => {
                 return (item as TestItem).isFocusable !== false;
             });
 
-            renderListViewWithHeight({ items: mixedItems });
+            renderListWithHeight({ items: mixedItems });
             const container = screen.getByRole("grid");
 
             // Focus and go to last item first, then navigate up
@@ -315,7 +315,7 @@ describe("ListView", () => {
 
     describe("Focus Management", () => {
         it("should focus first item when list gains focus for the first time", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // Initial focus should go to first item
@@ -331,7 +331,7 @@ describe("ListView", () => {
         });
 
         it("should restore last focused item when regaining focus", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // Focus and navigate to simulate previous usage
@@ -354,7 +354,7 @@ describe("ListView", () => {
         });
 
         it("should not interfere with focus if item is already focused", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // Focus once
@@ -404,7 +404,7 @@ describe("ListView", () => {
                 },
             );
 
-            const { container } = renderListViewWithHeight({ items: largerItems });
+            const { container } = renderListWithHeight({ items: largerItems });
             const listContainer = screen.getByRole("grid");
 
             // Step 1: Focus the list initially (this sets tabIndexKey to first item: "item-0")
@@ -456,7 +456,7 @@ describe("ListView", () => {
 
     describe("Accessibility", () => {
         it("should set correct ARIA attributes", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             expectAttribute(container, "role", "grid");
@@ -465,7 +465,7 @@ describe("ListView", () => {
         });
 
         it("should update aria-rowcount when items change", () => {
-            const { rerender } = renderListViewWithHeight();
+            const { rerender } = renderListWithHeight();
             let container = screen.getByRole("grid");
             expectAttribute(container, "aria-rowcount", "4");
 
@@ -475,7 +475,7 @@ describe("ListView", () => {
                 { id: "2", name: "Item 2" },
             ];
             rerender(
-                getListViewComponent({
+                getListComponent({
                     ...defaultProps,
                     items: fewerItems,
                 }),
@@ -486,7 +486,7 @@ describe("ListView", () => {
         });
 
         it("should handle custom ARIA label", () => {
-            renderListViewWithHeight({ "aria-label": "Custom list label" });
+            renderListWithHeight({ "aria-label": "Custom list label" });
             const container = screen.getByRole("grid");
 
             expectAttribute(container, "aria-label", "Custom list label");

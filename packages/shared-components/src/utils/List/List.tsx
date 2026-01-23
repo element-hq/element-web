@@ -42,7 +42,7 @@ export type ListContext<Context> = {
     context: Context;
 };
 
-export interface IListViewProps<Item, Context> extends Omit<
+export interface IListProps<Item, Context> extends Omit<
     VirtuosoProps<Item, ListContext<Context>>,
     "data" | "itemContent" | "context"
 > {
@@ -89,7 +89,7 @@ export interface IListViewProps<Item, Context> extends Omit<
 
     /**
      * Callback function to handle key down events on the list container.
-     * ListView handles keyboard navigation for focus(up, down, home, end, pageUp, pageDown)
+     * List handles keyboard navigation for focus(up, down, home, end, pageUp, pageDown)
      * and stops propagation otherwise the event bubbles and this callback is called for the use of the parent.
      * @param e - The keyboard event
      * @returns
@@ -111,7 +111,7 @@ export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
  * @template Item - The type of data items in the list
  * @template Context - The type of additional context data passed to items
  */
-export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
+export function List<Item, Context = any>(props: IListProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const { items, getItemComponent, isItemFocusable, getItemKey, context, onKeyDown, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -267,7 +267,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     const onFocusForGetItemComponent = useCallback(
         (item: Item, e: React.FocusEvent) => {
             // If one of the item components has been focused directly, set the focused and tabIndex state
-            // and stop propagation so the ListViews onFocus doesn't also handle it.
+            // and stop propagation so the List's onFocus doesn't also handle it.
             const key = getItemKey(item);
             setIsFocused(true);
             setTabIndexKey(key);

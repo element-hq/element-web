@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { ListView } from "./ListView";
-export type { IListViewProps, ListContext, ScrollIntoViewOnChange } from "./ListView";
+export { List } from "./List";
+export type { IListProps, ListContext, ScrollIntoViewOnChange } from "./List";
 
 // Re-export VirtuosoMockContext for testing purposes
 // Tests should import this from shared-components to ensure context compatibility
