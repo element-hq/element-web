@@ -16,7 +16,6 @@ import {
 } from "./DisambiguatedProfileView";
 import { useMockedViewModel } from "../../useMockedViewModel";
 
-
 type DisambiguatedProfileProps = DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions;
 
 const DisambiguatedProfileViewWrapper = ({ onClick, ...rest }: DisambiguatedProfileProps): JSX.Element => {
@@ -28,17 +27,19 @@ export default {
     title: "Profile/DisambiguatedProfile",
     component: DisambiguatedProfileViewWrapper,
     tags: ["autodocs"],
+    argTypes: {
+        displayName: { control: "text" },
+        colorClass: { control: "text" },
+        displayIdentifier: { control: "text" },
+        title: { control: "text" },
+        emphasizeDisplayName: { control: "boolean" },
+    },
     args: {
-        member: {
-            rawDisplayName: "Alice",
-            userId: "@alice:example.org",
-            roomId: "!room:example.org",
-            disambiguate: false,
-        },
+        displayName: "Alice",
         emphasizeDisplayName: true,
         onClick: fn(),
     },
-} as Meta<typeof DisambiguatedProfileView>;
+} as Meta<typeof DisambiguatedProfileViewWrapper>;
 
 const Template: StoryFn<typeof DisambiguatedProfileViewWrapper> = (args) => (
     <DisambiguatedProfileViewWrapper {...args} />
@@ -48,57 +49,34 @@ export const Default = Template.bind({});
 
 export const WithMxid = Template.bind({});
 WithMxid.args = {
-    member: {
-        rawDisplayName: "Alice",
-        userId: "@alice:example.org",
-        roomId: "!room:example.org",
-        disambiguate: true,
-    },
-    colored: true,
+    displayName: "Alice",
+    displayIdentifier: "@alice:example.org",
+    colorClass: "mx_Username_color1",
 };
 
 export const WithColorClass = Template.bind({});
 WithColorClass.args = {
-    member: {
-        rawDisplayName: "Bob",
-        userId: "@bob:example.org",
-        roomId: "!room:example.org",
-        disambiguate: false,
-    },
-    colored: true,
+    displayName: "Bob",
+    colorClass: "mx_Username_color3",
 };
 
 export const Emphasized = Template.bind({});
 Emphasized.args = {
-    member: {
-        rawDisplayName: "Charlie",
-        userId: "@charlie:example.org",
-        roomId: "!room:example.org",
-        disambiguate: false,
-    },
+    displayName: "Charlie",
     emphasizeDisplayName: true,
 };
 
 export const WithTooltip = Template.bind({});
 WithTooltip.args = {
-    member: {
-        rawDisplayName: "Diana",
-        userId: "@diana:example.org",
-        roomId: "!room:example.org",
-        disambiguate: false,
-    },
-    withTooltip: true,
+    displayName: "Diana",
+    title: "Diana (@diana:example.org)",
 };
 
 export const FullExample = Template.bind({});
 FullExample.args = {
-    member: {
-        rawDisplayName: "Eve",
-        userId: "@eve:matrix.org",
-        roomId: "!room:example.org",
-        disambiguate: false,
-    },
-    colored: true,
+    displayName: "Eve",
+    displayIdentifier: "@eve:matrix.org",
+    colorClass: "mx_Username_color5",
+    title: "Eve (@eve:matrix.org)",
     emphasizeDisplayName: true,
-    withTooltip: true,
 };

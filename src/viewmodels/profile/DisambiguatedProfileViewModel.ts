@@ -10,81 +10,124 @@ import {
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
- 
+
+import { _t } from "../../languageHandler";
+import { getUserNameColorClass } from "../../utils/FormattingUtils";
+import UserIdentifier from "../../customisations/UserIdentifier";
+
+/**
+ * Information about a member for disambiguation purposes.
+ */
+interface MemberInfo {
+    /**
+     * The user's Matrix ID.
+     */
+    userId: string;
+    /**
+     * The room ID context for disambiguation.
+     */
+    roomId: string;
+    /**
+     * The raw display name of the user, if available.
+     */
+    rawDisplayName?: string;
+    /**
+     * Whether the user is set to have disambiguation name.
+     */
+    disambiguate: boolean;
+}
+
+/**
+ * Props for the DisambiguatedProfileViewModel.
+ */
+export interface DisambiguatedProfileViewModelProps {
+    /**
+     * The member information for disambiguation.
+     */
+    member?: MemberInfo | null;
+    /**
+     * The fallback name to use if the member's display name is not available.
+     */
+    fallbackName: string;
+    /**
+     * Whether to apply color styling to the display name.
+     */
+    colored?: boolean;
+    /**
+     * Whether to emphasize the display name.
+     */
+    emphasizeDisplayName?: boolean;
+    /**
+     * Whether to show a tooltip with additional information.
+     */
+    withTooltip?: boolean;
+    /**
+     * Optional click handler for the profile.
+     */
+    onClick?: DisambiguatedProfileViewActions["onClick"];
+}
+
 /**
  * ViewModel for the disambiguated profile, providing the current state of the component.
- * It listens to updates and computes a snapshot.
+ * It computes pre-rendered values for the View including color classes, display identifiers, and tooltips.
  */
 export class DisambiguatedProfileViewModel
-    extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions>
+    extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewModelProps>
     implements DisambiguatedProfileViewModelInterface
 {
-    public onClick?: DisambiguatedProfileViewActions["onClick"];
-    /**
-    * @param member the member whose profile is being displayed
-    * @param fallbackName the name to use if the member has no display name
-    * @param colored whether to color the display name
-    * @param emphasizeDisplayName whether to emphasize the display name
-    * @param withTooltip whether to show a tooltip on hover
-    * @param onClick optional click handler for the profile
-     */
+    onClick?: DisambiguatedProfileViewActions["onClick"];
+
     private static readonly computeSnapshot = (
-        member: { userId: string; roomId: string; rawDisplayName?: string; disambiguate: boolean } | null | undefined,
-        fallbackName: string,
-        colored?: boolean,
-        emphasizeDisplayName?: boolean,
-        withTooltip?: boolean,
+        props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
+        const { member, fallbackName, colored, emphasizeDisplayName, withTooltip } = props;
+
+        // Compute display name
+        const displayName = member?.rawDisplayName || fallbackName;
+        const mxid = member?.userId;
+
+        // Compute color class if coloring is enabled
+        let colorClass: string | undefined;
+        if (colored && mxid) {
+            colorClass = getUserNameColorClass(mxid);
+        }
+
+        // Compute display identifier for disambiguation
+        let displayIdentifier: string | undefined;
+        let title: string | undefined;
+
+        if (mxid) {
+            const identifier =
+                UserIdentifier.getDisplayUserIdentifier?.(mxid, {
+                    withDisplayName: true,
+                    roomId: member?.roomId,
+                }) ?? mxid;
+
+            // Only show identifier if disambiguation is needed
+            if (member?.disambiguate) {
+                displayIdentifier = identifier;
+            }
+
+            // Compute tooltip title if enabled
+            if (withTooltip) {
+                title = _t("timeline|disambiguated_profile", {
+                    displayName,
+                    matrixId: identifier,
+                });
+            }
+        }
+
         return {
-            member: {
-                userId: member?.userId ?? "",
-                roomId: member?.roomId ?? "",
-                rawDisplayName: member?.rawDisplayName ?? "",
-                disambiguate: member?.disambiguate ?? false,
-            },
-            fallbackName,
-            colored,
+            displayName,
+            colorClass,
+            displayIdentifier,
+            title,
             emphasizeDisplayName,
-            withTooltip,
         };
     };
- 
-    public constructor(props: DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions) {
-        super(
-            props,
-            DisambiguatedProfileViewModel.computeSnapshot(
-                props.member,
-                props.fallbackName,
-                props.colored,
-                props.emphasizeDisplayName,
-                props.withTooltip,
-            ),
-        );
+
+    public constructor(props: DisambiguatedProfileViewModelProps) {
+        super(props, DisambiguatedProfileViewModel.computeSnapshot(props));
         this.onClick = props.onClick;
-    }
- 
-    /**
-     * Sets the snapshot and emits an update to subscribers.
-     */
-    private readonly setSnapshot = (): void => {
-        this.snapshot.set(
-            DisambiguatedProfileViewModel.computeSnapshot(
-                this.props.member,
-                this.props.fallbackName,
-                this.props.colored,
-                this.props.emphasizeDisplayName,
-                this.props.withTooltip,
-            ),
-        );
-    };
- 
-    /**
-     * Updates the properties of the view model and recomputes the snapshot.
-     * @param newProps
-     */
-    public setProps(newProps: Partial<DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions>): void {
-        this.props = { ...this.props, ...newProps };
-        this.onClick = this.props.onClick;
-        this.setSnapshot();
     }
 }

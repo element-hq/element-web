@@ -5,65 +5,40 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, {type JSX, type MouseEventHandler } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../useViewModel";
 import styles from "./DisambiguatedProfile.module.css";
-import { useI18n } from "../../utils/i18nContext";
-import { getUserNameColorClass } from "../../utils/FormattingUtils";
-import UserIdentifier from "../../utils/UserIdentifier";
-
-
-/**
- * Information about a member for disambiguation purposes.
- */
-interface MemberInfo {
-    /**
-    * The user's Matrix ID.
-    */
-    userId: string;
-    /** 
-     * The room ID where the member is present. 
-     */
-    roomId: string;
-    /** 
-     * The raw display name of the user. 
-     */
-    rawDisplayName?: string;
-    /** 
-     * Whether to show disambiguation (i.e., the MXID) alongside the display name. 
-     */
-    disambiguate: boolean;
-}
-
 
 /**
  * The snapshot representing the current state of the DisambiguatedProfile.
  */
 export interface DisambiguatedProfileViewSnapshot {
-
     /**
-     * The member information for disambiguation.
+     * The display name to show.
      */
-    member?: MemberInfo | null;
-    /** 
-     * The fallback name to use if the member's display name is not available.
+    displayName: string;
+    /**
+     * The CSS class for coloring the display name (e.g., "mx_Username_color1").
+     * Undefined if coloring is not enabled.
      */
-    fallbackName: string;
-    /** 
-     * Whether to apply color styling to the display name.
+    colorClass?: string;
+    /**
+     * The formatted user identifier to display when disambiguation is needed.
+     * Undefined if disambiguation is not required.
      */
-    colored?: boolean;
-    /** 
-     * Whether to emphasize the display name.
+    displayIdentifier?: string;
+    /**
+     * The tooltip title text (pre-translated).
+     * Undefined if tooltip is not enabled.
+     */
+    title?: string;
+    /**
+     * Whether to emphasize the display name with additional styling.
      */
     emphasizeDisplayName?: boolean;
-    /** 
-     * Whether to show a tooltip with additional information.
-     */
-    withTooltip?: boolean;
 }
 
 /**
@@ -87,7 +62,6 @@ interface DisambiguatedProfileViewProps {
      * The view model for the disambiguated profile.
      */
     vm: DisambiguatedProfileViewModel;
-    
 }
 
 /**
@@ -100,51 +74,28 @@ interface DisambiguatedProfileViewProps {
  * <DisambiguatedProfileView vm={disambiguatedProfileViewModel} />
  * ```
  */
-export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>)  :JSX.Element {
-    const { fallbackName, member, colored, emphasizeDisplayName, withTooltip } = useViewModel(vm);
+export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
+    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
 
-        const rawDisplayName = member?.rawDisplayName || fallbackName;
-        const mxid = member?.userId;
-
-        let colorClass: string | undefined;
-        if (colored) {
-            colorClass = getUserNameColorClass(mxid ?? "");
-        }
-
-        let mxidElement;
-        let title: string | undefined;
-        const { translate: _t } = useI18n();
-
-        if (mxid) {
-            const identifier =
-                UserIdentifier.getDisplayUserIdentifier?.(mxid, {
-                    withDisplayName: true,
-                    roomId: member.roomId,
-                }) ?? mxid;
-            if (member?.disambiguate) {
-                mxidElement = <span className={classNames(styles.disambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}>{identifier}</span>;
-            }
-            title = _t("timeline|disambiguated_profile", {
-                displayName: rawDisplayName,
-                matrixId: identifier,
-            });
-        }
-
-        const displayNameClasses = classNames(colorClass, {
-            [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
-            "mx_DisambiguatedProfile_displayName": emphasizeDisplayName,
-        });
+    const displayNameClasses = classNames(colorClass, {
+        [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
+        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
+    });
 
     return (
         <div
             className={classNames(styles.disambiguatedProfile, "mx_DisambiguatedProfile")}
-            title={withTooltip ? title : undefined}
+            title={title}
             onClick={vm.onClick}
         >
             <span className={displayNameClasses} dir="auto">
-                {rawDisplayName}
+                {displayName}
             </span>
-            {mxidElement}
+            {displayIdentifier && (
+                <span className={classNames(styles.disambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}>
+                    {displayIdentifier}
+                </span>
+            )}
         </div>
     );
 }

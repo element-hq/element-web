@@ -19,13 +19,18 @@ exports[`DisambiguatedProfileView renders the full example 1`] = `
 <div>
   <div
     class="disambiguatedProfile mx_DisambiguatedProfile"
-    title="timeline|disambiguated_profile"
+    title="Eve (@eve:matrix.org)"
   >
     <span
-      class="mx_Username_color2 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color5 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Eve
+    </span>
+    <span
+      class="disambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
+    >
+      @eve:matrix.org
     </span>
   </div>
 </div>
@@ -37,7 +42,7 @@ exports[`DisambiguatedProfileView renders with MXID for disambiguation 1`] = `
     class="disambiguatedProfile mx_DisambiguatedProfile"
   >
     <span
-      class="mx_Username_color3 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color1 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Alice
@@ -57,7 +62,7 @@ exports[`DisambiguatedProfileView renders with color class 1`] = `
     class="disambiguatedProfile mx_DisambiguatedProfile"
   >
     <span
-      class="mx_Username_color4 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color3 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Bob
@@ -85,7 +90,7 @@ exports[`DisambiguatedProfileView renders with tooltip 1`] = `
 <div>
   <div
     class="disambiguatedProfile mx_DisambiguatedProfile"
-    title="timeline|disambiguated_profile"
+    title="Diana (@diana:example.org)"
   >
     <span
       class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"

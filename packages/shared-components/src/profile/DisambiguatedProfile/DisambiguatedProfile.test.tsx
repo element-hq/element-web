@@ -9,8 +9,7 @@ import { render, screen } from "jest-matrix-react";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import '@testing-library/jest-dom';
-
+import "@testing-library/jest-dom";
 
 import * as stories from "./DisambiguatedProfile.stories";
 import {
@@ -68,13 +67,7 @@ describe("DisambiguatedProfileView", () => {
 
     it("should display the display name", () => {
         const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "Eve",
-                userId: "@eve:matrix.org",
-                roomId: "!room:example.org",
-                disambiguate: false,
-            },
-            fallbackName: "Eve",
+            displayName: "Eve",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -83,45 +76,18 @@ describe("DisambiguatedProfileView", () => {
 
     it("should display the MXID when provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "Test User",
-                userId: "@test:example.org",
-                roomId: "!room:example.org",
-                disambiguate: true,
-            },
-            fallbackName: "Test User",
+            displayName: "Test User",
+            displayIdentifier: "@test:example.org",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
         expect(screen.getByText("@test:example.org")).toBeInTheDocument();
     });
 
-    it("should not display the MXID when not provided", () => {
-        const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "Test User",
-                userId: "@test:example.org",
-                roomId: "!room:example.org",
-                disambiguate: false,
-            },
-            fallbackName: "Test User",
-        });
-
-        render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.queryByText("@test:example.org")).not.toBeInTheDocument();
-    });
-
     it("should call onClick when clicked", async () => {
         const user = userEvent.setup();
         const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "Clickable User",
-                userId: "@clickable:example.org",
-                roomId: "!room:example.org",
-                disambiguate: false,
-            },
-            fallbackName: "Clickable User",
-            
+            displayName: "Clickable User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
@@ -131,49 +97,31 @@ describe("DisambiguatedProfileView", () => {
 
     it("should display tooltip title when provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "User With Tooltip",
-                userId: "@user:example.org",
-                roomId: "!room:example.org",
-                disambiguate: false,
-            },
-            fallbackName: "User With Tooltip",  
-            withTooltip: true,        
+            displayName: "User With Tooltip",
+            title: "User With Tooltip (@user:example.org)",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
         expect(screen.getByText("User With Tooltip").closest("div")).toHaveAttribute(
             "title",
-            "timeline|disambiguated_profile",
+            "User With Tooltip (@user:example.org)",
         );
     });
 
     it("should apply color class when provided", () => {
         const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "Colored User",
-                userId: "@colored:example.org",
-                roomId: "!room:example.org",
-                disambiguate: false,
-            },
-            fallbackName: "Colored User",
-            colored: true,
+            displayName: "Colored User",
+            colorClass: "mx_Username_color3",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
         const displayNameElement = screen.getByText("Colored User");
-        expect(displayNameElement.className).toMatch(/mx_Username_color\d+/);
+        expect(displayNameElement).toHaveClass("mx_Username_color3");
     });
 
     it("should apply emphasis styling when emphasizeDisplayName is true", () => {
         const vm = new DisambiguatedProfileViewModel({
-            member: {
-                rawDisplayName: "Emphasized User",
-                userId: "@emphasized:example.org",
-                roomId: "!room:example.org",
-                disambiguate: false,
-            },
-            fallbackName: "Emphasized User",
+            displayName: "Emphasized User",
             emphasizeDisplayName: true,
         });
 
