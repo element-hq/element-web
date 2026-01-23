@@ -15,6 +15,7 @@ import {
     type ILoginFlow,
     type LoginRequest,
     type OidcClientConfig,
+    ISSOFlow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -127,7 +128,7 @@ export default class Login {
         // If an m.login.sso flow is present which is also flagged as being for MSC3824 OIDC compatibility then we only
         // return that flow as (per MSC3824) it is the only one that the user should be offered to give the best experience
         const oidcCompatibilityFlow = flows.find(
-            (f) => f.type === "m.login.sso" && DELEGATED_OIDC_COMPATIBILITY.findIn(f),
+            (f) => f.type === "m.login.sso" && DELEGATED_OIDC_COMPATIBILITY.findIn(f as ISSOFlow),
         );
         this.flows = oidcCompatibilityFlow ? [oidcCompatibilityFlow] : flows;
         return this.flows;
