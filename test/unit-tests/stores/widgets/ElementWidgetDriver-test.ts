@@ -595,7 +595,7 @@ describe("ElementWidgetDriver", () => {
         });
     });
 
-    describe("sendStickyEvent", () => {
+    describe("StickyEvent", () => {
         let driver: WidgetDriver;
         const roomId = "!this-room-id";
 
@@ -620,6 +620,41 @@ describe("ElementWidgetDriver", () => {
                 EventType.RoomMessage,
                 {},
             );
+        });
+
+        it("Reads sticky message", async () => {
+            const mockStickyEvent = new MatrixEvent({
+                sender: "@alice:example.org",
+                type: EventType.RTCMembership,
+                content: {
+                    msc4354_sticky_key: "7f433807-26aa-441b-810f-43b3fd6d0955",
+                },
+            });
+            const mockRoom: Partial<Room> = {
+                roomId: roomId,
+                _unstable_getStickyEvents: jest.fn().mockReturnValue([mockStickyEvent]),
+            };
+            client.getRoom.mockImplementation((roomId) => {
+                if (roomId === mockRoom.roomId) return mockRoom as Room;
+                return null;
+            });
+
+            {
+                const stickyEvents = await driver.readStickyEvents(roomId);
+
+                expect(stickyEvents.length).toBe(1);
+                const stickyEvent = stickyEvents[0];
+                expect(stickyEvent.type).toEqual(mockStickyEvent.getType());
+                expect(stickyEvent.sender).toEqual(mockStickyEvent.getSender());
+                expect(stickyEvent.content).toEqual(mockStickyEvent.getContent());
+            }
+
+            {
+                const stickyEvents = await driver.readStickyEvents("!another-room-id");
+                expect(stickyEvents.length).toBe(0);
+            }
+
+            expect(mockRoom._unstable_getStickyEvents).toHaveBeenCalled();
         });
     });
 
