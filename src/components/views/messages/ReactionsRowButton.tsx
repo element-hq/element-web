@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import classNames from "classnames";
 import { EventType, type MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
-import { ReactionsRowButtonTooltipView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { ReactionsRowButtonTooltipView } from "@element-hq/web-shared-components";
 
 import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";
@@ -40,6 +40,38 @@ export interface IProps {
 export default class ReactionsRowButton extends React.PureComponent<IProps> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
+
+    private ReactionsRowButtonTooltipViewModel: ReactionsRowButtonTooltipViewModel;
+
+    public constructor(props: IProps) {
+        super(props);
+        this.ReactionsRowButtonTooltipViewModel = new ReactionsRowButtonTooltipViewModel({
+            mxEvent: props.mxEvent,
+            content: props.content,
+            reactionEvents: props.reactionEvents,
+            customReactionImagesEnabled: props.customReactionImagesEnabled,
+        });
+    }
+
+    public componentDidUpdate(prevProps: IProps): void {
+        if (
+            prevProps.mxEvent !== this.props.mxEvent ||
+            prevProps.content !== this.props.content ||
+            prevProps.reactionEvents !== this.props.reactionEvents ||
+            prevProps.customReactionImagesEnabled !== this.props.customReactionImagesEnabled
+        ) {
+            this.ReactionsRowButtonTooltipViewModel.setProps({
+                mxEvent: this.props.mxEvent,
+                content: this.props.content,
+                reactionEvents: this.props.reactionEvents,
+                customReactionImagesEnabled: this.props.customReactionImagesEnabled,
+            });
+        }
+    }
+
+    public componentWillUnmount(): void {
+        this.ReactionsRowButtonTooltipViewModel.dispose();
+    }
 
     public onClick = (): void => {
         const { mxEvent, myReactionEvent, content } = this.props;
@@ -110,11 +142,8 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
             }
         }
 
-        const reactionsRowButtonTooltipVM = useCreateAutoDisposedViewModel(() => new ReactionsRowButtonTooltipViewModel({mxEvent: this.props.mxEvent, content: content, reactionEvents: reactionEvents, customReactionImagesEnabled: this.props.customReactionImagesEnabled}));
-       
         return (
-
-            <ReactionsRowButtonTooltipView vm={reactionsRowButtonTooltipVM}>
+            <ReactionsRowButtonTooltipView vm={this.ReactionsRowButtonTooltipViewModel}>
                 <AccessibleButton
                     className={classes}
                     aria-label={label}
@@ -130,4 +159,3 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
         );
     }
 }
-

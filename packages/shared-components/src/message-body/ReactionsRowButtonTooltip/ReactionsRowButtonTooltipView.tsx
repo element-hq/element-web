@@ -18,7 +18,6 @@ import { useViewModel } from "../../useViewModel";
 export interface ReactionsRowButtonTooltipViewSnapshot {
     /**
      * The formatted list of sender names who reacted.
-     * If undefined, the tooltip should not be shown.
      */
     formattedSenders?: string;
     /**
@@ -34,17 +33,19 @@ interface ReactionsRowButtonTooltipViewProps {
      * The view model for the reactions row button tooltip.
      */
     vm: ReactionsRowButtonTooltipViewModel;
-        /**
+    /**
      * The children to wrap with the tooltip.
      */
     children?: PropsWithChildren["children"];
-    
 }
 
 /**
  * Type alias for the ReactionsRowButtonTooltip view model.
  */
-export function ReactionsRowButtonTooltipView({ vm, children }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
+export function ReactionsRowButtonTooltipView({
+    vm,
+    children,
+}: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
     const { formattedSenders, caption } = useViewModel(vm);
 
     if (formattedSenders) {

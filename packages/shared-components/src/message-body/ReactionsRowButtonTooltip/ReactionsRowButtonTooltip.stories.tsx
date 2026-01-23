@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../useMockedViewModel";
@@ -14,9 +14,11 @@ import {
     type ReactionsRowButtonTooltipViewSnapshot,
 } from "./ReactionsRowButtonTooltipView";
 
-const ReactionsRowButtonTooltipViewWrapper = (props: ReactionsRowButtonTooltipViewSnapshot): JSX.Element => {
-    const vm = useMockedViewModel(props, {});
-    return <ReactionsRowButtonTooltipView vm={vm} />;
+type WrapperProps = ReactionsRowButtonTooltipViewSnapshot & PropsWithChildren;
+
+const ReactionsRowButtonTooltipViewWrapper = ({ children, ...snapshotProps }: WrapperProps): JSX.Element => {
+    const vm = useMockedViewModel(snapshotProps, {});
+    return <ReactionsRowButtonTooltipView vm={vm}>{children}</ReactionsRowButtonTooltipView>;
 };
 
 export default {
@@ -36,13 +38,11 @@ const Template: StoryFn<typeof ReactionsRowButtonTooltipViewWrapper> = (args) =>
     <ReactionsRowButtonTooltipViewWrapper {...args} />
 );
 
-
 export const Default = Template.bind({});
 Default.args = {
     formattedSenders: "Alice, Bob and Charlie",
     caption: ":thumbsup:",
 };
-
 
 export const ManySenders = Template.bind({});
 ManySenders.args = {
@@ -51,14 +51,12 @@ ManySenders.args = {
     children: <button>❤️ 8</button>,
 };
 
-
 export const WithoutCaption = Template.bind({});
 WithoutCaption.args = {
     formattedSenders: "Alice and Bob",
     caption: undefined,
     children: <button>🎉 2</button>,
 };
-
 
 export const NoTooltip = Template.bind({});
 NoTooltip.args = {

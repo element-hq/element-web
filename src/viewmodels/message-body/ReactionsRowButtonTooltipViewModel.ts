@@ -35,7 +35,6 @@ export interface ReactionsRowButtonTooltipViewModelProps {
      * Whether to render custom image reactions.
      */
     customReactionImagesEnabled?: boolean;
-
 }
 
 /**
@@ -53,7 +52,7 @@ export class ReactionsRowButtonTooltipViewModel
     private static readonly computeSnapshot = (
         props: ReactionsRowButtonTooltipViewModelProps,
     ): ReactionsRowButtonTooltipViewSnapshot => {
-        const { mxEvent, content, reactionEvents, customReactionImagesEnabled, children } = props;
+        const { mxEvent, content, reactionEvents, customReactionImagesEnabled } = props;
 
         const client = MatrixClientPeg.get();
         const room = client?.getRoom(mxEvent.getRoomId());
