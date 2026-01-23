@@ -63,8 +63,9 @@ class GuestRegistrationServlet(DirectServeJsonResource):
 
         displayname = displayname.strip()
 
-        # make sure the regex is unique
+        # Attempt up to 10 times to generate a localpart
         for _ in range(10):
+            # generate a random string as a suffix
             random_string = "".join(
                 secrets.choice(string.ascii_lowercase + string.digits)
                 for _ in range(32)
