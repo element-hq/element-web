@@ -50,15 +50,24 @@ class MasAdminClient:
         return mas_user_id
 
     async def create_personal_session(
-        self, mas_user_id: str, expires_in: int
+        self, mas_user_id: str, expires_in_sec: int
     ) -> tuple[str, str]:
+        """Creates a new personal session for the given MAS user.
+        
+        Args:
+            mas_user_id: The MAS user ID.
+            expires_in_sec: The session expiration time in seconds.
+        
+        Returns:
+            A tuple of (device_id, access_token).
+        """
         token = await self.request_admin_token()
         url = self._build_admin_url("/api/admin/v1/personal-sessions")
 
         device_id = self._generate_device_id()
         request_body = {
             "actor_user_id": mas_user_id,
-            "expires_in": expires_in,
+            "expires_in": expires_in_sec,
             "scope": f"openid urn:matrix:client:api:* urn:matrix:client:device:{device_id}",
             "human_name": "guest session",
         }
@@ -72,8 +81,6 @@ class MasAdminClient:
         data = response.get("data", {})
         attributes = data.get("attributes", {}) if isinstance(data, dict) else {}
         access_token = attributes.get("access_token")
-
-        print(response)
 
         if not isinstance(access_token, str) or len(access_token) == 0:
             raise ValueError("MAS session response missing `access_token` field")

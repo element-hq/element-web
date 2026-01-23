@@ -110,7 +110,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                 #
                 # If a user reaper is enabled, just have the token expire after
                 # the configured period.
-                expires_in = (
+                expires_in_sec = (
                     self._config.user_expiration_seconds
                     if self._config.enable_user_reaper
                     else 0
@@ -119,7 +119,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                     device_id,
                     access_token,
                 ) = await self._mas_admin_client.create_personal_session(
-                    mas_user_id, expires_in
+                    mas_user_id, expires_in_sec
                 )
 
             logger.debug("Registered user '%s'", user_id)
