@@ -56,7 +56,11 @@ jobs:
               working-directory: packages/shared-components
               run: "yarn test:storybook --run"
 
-            - run: git diff --exit-code
+            # Workaround for vis silently adding new baselines if they didn't exist
+            # Can be removed once https://github.com/repobuddy/visual-testing/issues/516 is released
+            - run: |
+                  git add -N .
+                  git diff --exit-code
 
             - name: Upload received images & diffs
               if: always()
