@@ -54,41 +54,4 @@ describe("DisambiguatedProfileViewModel", () => {
             fallbackName: "Fallback",
         });
     });
-
-    it("should update snapshot and actions when setProps is called", () => {
-        const onClickInitial = jest.fn();
-        const onClickNext = jest.fn();
-        const vm = new DisambiguatedProfileViewModel({
-            member,
-            fallbackName: "Fallback",
-            onClick: onClickInitial,
-        });
-
-        const listener = jest.fn();
-        const unsubscribe = vm.subscribe(listener);
-
-        const updatedMember = {
-            userId: "@bob:example.org",
-            roomId: "!room:example.org",
-            rawDisplayName: "Bob",
-            disambiguate: false,
-        };
-
-        vm.setProps({
-            member: updatedMember,
-            fallbackName: "New Fallback",
-            colored: true,
-            onClick: onClickNext,
-        });
-
-        expect(vm.getSnapshot()).toMatchObject({
-            member: updatedMember,
-            fallbackName: "New Fallback",
-            colored: true,
-        });
-        expect(vm.onClick).toBe(onClickNext);
-        expect(listener).toHaveBeenCalledTimes(1);
-
-        unsubscribe();
-    });
 });

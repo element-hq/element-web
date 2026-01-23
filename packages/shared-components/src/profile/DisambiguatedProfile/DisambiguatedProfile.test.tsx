@@ -5,11 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen } from "jest-matrix-react";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { render, screen } from "@test-utils";
 
 import * as stories from "./DisambiguatedProfile.stories";
 import {
@@ -23,7 +23,7 @@ const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample 
 
 describe("DisambiguatedProfileView", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("renders the default state", () => {
@@ -56,7 +56,7 @@ describe("DisambiguatedProfileView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    const onClick = jest.fn();
+    const onClick = vi.fn();
 
     class DisambiguatedProfileViewModel
         extends MockViewModel<DisambiguatedProfileViewSnapshot>

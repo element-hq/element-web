@@ -8,8 +8,7 @@
 import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
+import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./DisambiguatedProfile.module.css";
 
 /**
