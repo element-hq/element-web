@@ -8,7 +8,7 @@ import { type Meta, type StoryFn } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import { useMockedViewModel } from "../../useMockedViewModel";
+import { useMockedViewModel } from "../../viewmodel";
 import {
     HistoryVisibleBannerView,
     type HistoryVisibleBannerViewActions,

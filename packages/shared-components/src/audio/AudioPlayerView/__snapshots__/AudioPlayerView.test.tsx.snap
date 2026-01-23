@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AudioPlayerView renders the audio player in default state 1`] = `
+exports[`AudioPlayerView > renders the audio player in default state 1`] = `
 <div>
   <div
     aria-label="Audio player"
@@ -91,7 +91,7 @@ exports[`AudioPlayerView renders the audio player in default state 1`] = `
 </div>
 `;
 
-exports[`AudioPlayerView renders the audio player in error state 1`] = `
+exports[`AudioPlayerView > renders the audio player in error state 1`] = `
 <div>
   <div
     aria-label="Audio player"
@@ -187,7 +187,7 @@ exports[`AudioPlayerView renders the audio player in error state 1`] = `
 </div>
 `;
 
-exports[`AudioPlayerView renders the audio player without media name 1`] = `
+exports[`AudioPlayerView > renders the audio player without media name 1`] = `
 <div>
   <div
     aria-label="Audio player"
@@ -278,7 +278,7 @@ exports[`AudioPlayerView renders the audio player without media name 1`] = `
 </div>
 `;
 
-exports[`AudioPlayerView renders the audio player without size 1`] = `
+exports[`AudioPlayerView > renders the audio player without size 1`] = `
 <div>
   <div
     aria-label="Audio player"

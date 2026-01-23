@@ -121,31 +121,157 @@ Most components should be written as [MVVM pattern](../../docs/MVVM.md) view
 components. See existing components for examples. The exceptions are low level
 components that don't need a view model.
 
+### Write Storybook Stories
+
+All components should have accompanying Storybook stories for documentation and visual testing. Stories are written in TypeScript using the [Component Story Format (CSF)](https://storybook.js.org/docs/api/csf).
+
+#### Story File Structure
+
+Place the story file next to the component with the `.stories.tsx` extension:
+
+```
+MyComponent/
+├── MyComponent.tsx
+├── MyComponent.module.css
+└── MyComponent.stories.tsx
+```
+
+#### Regular Component Stories
+
+For regular React components (non-MVVM), create stories by defining a meta object and story variations:
+
+```tsx
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+import { MyComponent } from "./MyComponent";
+
+const meta = {
+    title: "Category/MyComponent",
+    component: MyComponent,
+    tags: ["autodocs"],
+    args: {
+        // Default args for all stories
+        label: "Default Label",
+        onClick: fn(), // Mock function for tracking interactions
+    },
+} satisfies Meta<typeof MyComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// Default story uses the default args
+export const Default: Story = {};
+
+// Override specific args for variations
+export const WithCustomLabel: Story = {
+    args: {
+        label: "Custom Label",
+    },
+};
+
+export const Disabled: Story = {
+    args: {
+        disabled: true,
+    },
+};
+```
+
+#### MVVM Component Stories
+
+For MVVM components, create a wrapper component that uses `useMockedViewModel`:
+
+```tsx
+import React, { type JSX } from "react";
+import { fn } from "storybook/test";
+import type { Meta, StoryFn } from "@storybook/react-vite";
+import { MyComponentView, type MyComponentViewSnapshot, type MyComponentViewActions } from "./MyComponentView";
+import { useMockedViewModel } from "../../useMockedViewModel";
+
+// Combine snapshot and actions for easier typing
+type MyComponentProps = MyComponentViewSnapshot & MyComponentViewActions;
+
+// Wrapper component that creates a mocked ViewModel
+const MyComponentViewWrapper = ({ onAction, ...rest }: MyComponentProps): JSX.Element => {
+    const vm = useMockedViewModel(rest, {
+        onAction,
+    });
+    return <MyComponentView vm={vm} />;
+};
+
+export default {
+    title: "Category/MyComponentView",
+    component: MyComponentViewWrapper,
+    tags: ["autodocs"],
+    args: {
+        // Snapshot properties (state)
+        title: "Default Title",
+        isLoading: false,
+        // Action properties (callbacks)
+        onAction: fn(),
+    },
+} as Meta<typeof MyComponentViewWrapper>;
+
+const Template: StoryFn<typeof MyComponentViewWrapper> = (args) => <MyComponentViewWrapper {...args} />;
+
+export const Default = Template.bind({});
+
+export const Loading = Template.bind({});
+Loading.args = {
+    isLoading: true,
+};
+```
+
+Thanks to this approach, we can directly use primitives in the story arguments instead of a view model object.
+
+#### Linking Figma Designs
+
+This package uses [@storybook/addon-designs](https://github.com/storybookjs/addon-designs) to embed Figma designs directly in Storybook. This helps developers compare their implementation with the design specs.
+
+1. **Get the Figma URL**: Open your design in Figma, click "Share" → "Copy link"
+2. **Add to story parameters**: Include the `design` object in the meta's `parameters`
+3. **Supported URL formats**:
+    - File links: `https://www.figma.com/file/...`
+    - Design links: `https://www.figma.com/design/...`
+    - Specific node: `https://www.figma.com/design/...?node-id=123-456`
+
+Example with Figma integration:
+
+```tsx
+export default {
+    title: "Room List/RoomListSearchView",
+    component: RoomListSearchViewWrapper,
+    tags: ["autodocs"],
+    args: {
+        // ... your args
+    },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=98-1979",
+        },
+    },
+} as Meta<typeof RoomListSearchViewWrapper>;
+```
+
+The Figma design will appear in the "Design" tab in Storybook.
+
 ### Tests
 
 Two types of tests are available: unit tests and visual regression tests.
 
 ### Unit Tests
 
-These tests cover the logic of the components and utilities. Built with Jest
+These tests cover the logic of the components and utilities. Built with Vitest
 and React Testing Library.
 
 ```bash
-yarn test
+yarn test:unit
 ```
 
 ### Visual Regression Tests
 
-These tests ensure the UI components render correctly. They need Storybook to
-be running and they will run in docker using [Playwright](../../playwright.md).
-
-First run storybook:
-
-```bash
-yarn storybook
-```
-
-Then, in another terminal, run:
+These tests ensure the UI components render correctly.
+Built with Storybook and run under vitest using playwright.
 
 ```bash
 yarn test:storybook:update

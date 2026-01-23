@@ -496,10 +496,9 @@ legend {
 }
 
 @define-mixin customisedCancelButton {
-    cursor: pointer;
-    position: relative;
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
+    padding: var(--cpd-space-1x);
     border-radius: 14px;
     background-color: var(--cpd-color-bg-subtle-secondary);
 
@@ -507,18 +506,10 @@ legend {
         background-color: var(--cpd-color-bg-subtle-primary);
     }
 
-    &::before {
-        content: "";
-        width: 28px;
-        height: 28px;
-        left: 0;
-        top: 0;
-        position: absolute;
-        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 20px;
-        background-color: var(--cpd-color-icon-secondary);
+    svg {
+        width: inherit;
+        height: inherit;
+        color: var(--cpd-color-icon-secondary);
     }
 }
 
@@ -858,18 +849,16 @@ legend {
     line-height: $font-24px;
     margin-right: 0;
 
-    span {
-        display: flex;
-        align-items: center;
+    display: flex;
+    align-items: center;
 
-        &::before {
-            content: "";
-            display: inline-block;
-            background-color: $button-fg-color;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            margin-right: 8px;
-        }
+    svg {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        color: $button-fg-color;
+        margin-right: 8px;
+        vertical-align: middle;
     }
 }
 
@@ -882,15 +871,11 @@ legend {
 }
 
 @define-mixin ThreadSummaryIcon {
-    content: "";
     display: inline-block;
-    mask-image: url("@vector-im/compound-design-tokens/icons/threads.svg");
-    mask-position: center;
-    mask-repeat: no-repeat;
-    mask-size: contain;
     height: 18px;
-    min-width: 18px;
-    background-color: $icon-button-color !important;
+    width: 18px;
+    flex-shrink: 0;
+    color: $icon-button-color;
 }
 
 @define-mixin composerButtonHighLight {

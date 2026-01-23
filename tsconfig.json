@@ -7,7 +7,7 @@
         "esModuleInterop": true,
         "useDefineForClassFields": true,
         "module": "es2022",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "target": "es2022",
         "noUnusedLocals": true,
         "sourceMap": false,

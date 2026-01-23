@@ -6,8 +6,9 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render } from "jest-matrix-react";
+import { render } from "@test-utils";
 import React from "react";
+import { describe, it, vi, beforeAll, expect } from "vitest";
 
 import * as stories from "./RichItem.stories";
 
@@ -15,7 +16,7 @@ const { Default, Selected, WithoutTimestamp } = composeStories(stories);
 
 describe("RichItem", () => {
     beforeAll(() => {
-        jest.useFakeTimers().setSystemTime(new Date("2025-08-01T12:00:00Z"));
+        vi.useFakeTimers().setSystemTime(new Date("2025-08-01T12:00:00Z"));
     });
 
     it("renders the item in default state", () => {

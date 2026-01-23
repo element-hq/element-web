@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { Glass } from "@vector-im/compound-web";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
@@ -92,7 +93,9 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                     onClick={this.onSkipClick}
                     className="mx_CompleteSecurity_skip"
                     aria-label={_t("encryption|verification|after_new_login|skip_verification")}
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
             );
         }
 

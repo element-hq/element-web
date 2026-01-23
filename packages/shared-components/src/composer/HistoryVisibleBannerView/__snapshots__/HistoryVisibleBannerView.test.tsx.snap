@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`HistoryVisibleBannerView renders a history visible banner 1`] = `
+exports[`HistoryVisibleBannerView > renders a history visible banner 1`] = `
 <div>
   <div
     class="banner"
