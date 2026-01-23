@@ -14,7 +14,7 @@ import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 
 import styles from "./SpaceMenuView.module.css";
-import { useViewModel } from "../../../useViewModel";
+import { useViewModel } from "../../../viewmodel";
 import { useI18n } from "../../../utils/i18nContext";
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
 

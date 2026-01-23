@@ -124,7 +124,19 @@ exports[`ReportRoomDialog displays admin message 1`] = `
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"

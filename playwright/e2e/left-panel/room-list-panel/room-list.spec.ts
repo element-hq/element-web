@@ -121,23 +121,23 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
-            await expect(roomItem.getByTestId("notification-decoration")).not.toBeVisible();
+            // Not hovered, the room decoration should be the muted icon
+            await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
 
             // Put focus on the room list
             await roomListView.getByRole("option", { name: "Open room room28" }).click();
 
-            // Scroll to the end of the room list
-            await app.scrollListToBottom(roomListView);
-
-            // The room decoration should have the muted icon
+            // During hover the room decoration should still be the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
 
             await roomItem.hover();
+
             // On hover, the room should show the muted icon
             await expect(roomItem).toMatchScreenshot("room-list-item-hover-silent.png");
 
             roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
             await roomItemMenu.click();
+
             // The Mute room option should be selected
             await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RichItem renders the list 1`] = `
+exports[`RichItem > renders the list 1`] = `
 <div>
   <div
     style="height: 220px; overflow: hidden;"
@@ -163,7 +163,7 @@ exports[`RichItem renders the list 1`] = `
 </div>
 `;
 
-exports[`RichItem renders the list with isEmpty=true 1`] = `
+exports[`RichItem > renders the list with isEmpty=true 1`] = `
 <div>
   <div
     style="height: 220px; overflow: hidden;"

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
-import { RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CloseIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../../views/elements/AccessibleButton";
@@ -77,7 +77,9 @@ export const VerifyEmailModal: React.FC<Props> = ({
                 onClick={onCloseClick}
                 className="mx_Dialog_cancelButton"
                 aria-label={_t("dialog_close_label")}
-            />
+            >
+                <CloseIcon />
+            </AccessibleButton>
         </>
     );
 };

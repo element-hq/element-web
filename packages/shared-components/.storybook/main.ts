@@ -6,17 +6,32 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { StorybookConfig } from "@storybook/react-vite";
-import path from "node:path";
 import fs from "node:fs";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { mergeConfig } from "vite";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // Get a list of available languages so the language selector can display them at runtime
 const languages = fs.readdirSync("src/i18n/strings").map((f) => f.slice(0, -5));
 
+/**
+ * This function is used to resolve the absolute path of a package.
+ * It is needed in projects that use Yarn PnP or are set up within a monorepo.
+ */
+function getAbsolutePath(value: string): any {
+    return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}
+
 const config: StorybookConfig = {
     stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-    addons: ["@storybook/addon-docs", "@storybook/addon-designs", "@storybook/addon-a11y"],
+    addons: [
+        "@storybook/addon-docs",
+        "@storybook/addon-designs",
+        "@storybook/addon-a11y",
+        "@storybook/addon-vitest",
+        getAbsolutePath("storybook-addon-vis"),
+    ],
     framework: "@storybook/react-vite",
     core: {
         disableTelemetry: true,
@@ -28,7 +43,7 @@ const config: StorybookConfig = {
         return mergeConfig(config, {
             plugins: [
                 // Needed for counterpart to work
-                nodePolyfills({ include: ["util"] }),
+                nodePolyfills({ include: ["util"], globals: { global: false } }),
                 {
                     name: "language-middleware",
                     configureServer(server) {

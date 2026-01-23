@@ -6,15 +6,16 @@
  */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
+import { vi, describe, it, afterEach, expect } from "vitest";
 
 import { OptionMenuView } from "./OptionMenuView";
 import { defaultSnapshot, MockedViewModel } from "../test-utils";
 
 describe("<OptionMenuView />", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("should match snapshot", () => {
@@ -36,6 +37,7 @@ describe("<OptionMenuView />", () => {
 
         expect(screen.getByRole("menuitemradio", { name: "A-Z" })).toBeChecked();
         expect(screen.getByRole("menuitemradio", { name: "Activity" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Unread first" })).not.toBeChecked();
     });
 
     it("should show Activity selected if activeSortOption is recent", async () => {
@@ -49,7 +51,23 @@ describe("<OptionMenuView />", () => {
         await user.click(button);
 
         expect(screen.getByRole("menuitemradio", { name: "A-Z" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Unread first" })).not.toBeChecked();
         expect(screen.getByRole("menuitemradio", { name: "Activity" })).toBeChecked();
+    });
+
+    it("should show `Unread First` selected if activeSortOption is unread-first", async () => {
+        const user = userEvent.setup();
+
+        const vm = new MockedViewModel({ ...defaultSnapshot, activeSortOption: "unread-first" });
+        render(<OptionMenuView vm={vm} />);
+
+        // Open the menu
+        const button = screen.getByRole("button", { name: "Room Options" });
+        await user.click(button);
+
+        expect(screen.getByRole("menuitemradio", { name: "A-Z" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Activity" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Unread first" })).toBeChecked();
     });
 
     it("should sort A to Z", async () => {
@@ -76,6 +94,19 @@ describe("<OptionMenuView />", () => {
         await user.click(screen.getByRole("menuitemradio", { name: "Activity" }));
 
         expect(vm.sort).toHaveBeenCalledWith("recent");
+    });
+
+    it("should sort by unread first", async () => {
+        const user = userEvent.setup();
+
+        const vm = new MockedViewModel({ ...defaultSnapshot, activeSortOption: "recent" });
+        render(<OptionMenuView vm={vm} />);
+
+        await user.click(screen.getByRole("button", { name: "Room Options" }));
+
+        await user.click(screen.getByRole("menuitemradio", { name: "Unread first" }));
+
+        expect(vm.sort).toHaveBeenCalledWith("unread-first");
     });
 
     it("should toggle message preview", async () => {

@@ -14,11 +14,12 @@
         "declaration": true,
         "jsx": "react",
         "lib": ["es2022", "es2024.promise", "dom", "dom.iterable"],
+        "types": [],
         "strict": true,
         "paths": {
-            "jest-matrix-react": ["./src/test/utils/jest-matrix-react"]
+            "@test-utils": ["./src/test/utils/index"]
         }
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+    "include": ["./src/**/*.ts", "./src/**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

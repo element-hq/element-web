@@ -10,7 +10,7 @@ import React, { type JSX, useState } from "react";
 import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
-import { useViewModel } from "../../../useViewModel";
+import { useViewModel } from "../../../viewmodel";
 import { useI18n } from "../../../utils/i18nContext";
 import styles from "./OptionMenuView.module.css";
 
@@ -59,6 +59,11 @@ export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
                 label={_t("room_list|sort_type|activity")}
                 checked={activeSortOption === "recent"}
                 onSelect={() => vm.sort("recent")}
+            />
+            <RadioMenuItem
+                label={_t("room_list|sort_type|unread_first")}
+                checked={activeSortOption === "unread-first"}
+                onSelect={() => vm.sort("unread-first")}
             />
             <RadioMenuItem
                 label={_t("room_list|sort_type|atoz")}

@@ -14,7 +14,7 @@ import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
 import { useI18n } from "../../../utils/i18nContext";
-import { useViewModel } from "../../../useViewModel";
+import { useViewModel } from "../../../viewmodel";
 
 interface ComposeMenuViewProps {
     /**

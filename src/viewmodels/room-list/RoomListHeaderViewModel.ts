@@ -170,14 +170,27 @@ export class RoomListHeaderViewModel
     };
 
     public sort = (option: SortOption): void => {
-        const sortingAlgorithm = option === "recent" ? SortingAlgorithm.Recency : SortingAlgorithm.Alphabetic;
+        let sortingAlgorithm: SortingAlgorithm;
+        switch (option) {
+            case "alphabetical":
+                sortingAlgorithm = SortingAlgorithm.Alphabetic;
+                break;
+            case "recent":
+                sortingAlgorithm = SortingAlgorithm.Recency;
+                break;
+            case "unread-first":
+                sortingAlgorithm = SortingAlgorithm.Unread;
+                break;
+        }
         RoomListStoreV3.instance.resort(sortingAlgorithm);
         this.snapshot.merge({ activeSortOption: option });
     };
 
     public toggleMessagePreview = (): void => {
-        const isMessagePreviewEnabled = SettingsStore.getValue("RoomList.showMessagePreview");
-        SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, !isMessagePreviewEnabled);
+        PosthogTrackers.trackInteraction("WebRoomListMessagePreviewToggle");
+
+        const isMessagePreviewEnabled = !SettingsStore.getValue("RoomList.showMessagePreview");
+        SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
         this.snapshot.merge({ isMessagePreviewEnabled });
     };
 }
@@ -190,8 +203,20 @@ export class RoomListHeaderViewModel
  */
 function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
     const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
-    const activeSortOption =
-        sortingAlgorithm === SortingAlgorithm.Recency ? ("recent" as const) : ("alphabetical" as const);
+
+    let activeSortOption: SortOption;
+    switch (sortingAlgorithm) {
+        case SortingAlgorithm.Alphabetic:
+            activeSortOption = "alphabetical";
+            break;
+        case SortingAlgorithm.Recency:
+            activeSortOption = "recent";
+            break;
+        case SortingAlgorithm.Unread:
+            activeSortOption = "unread-first";
+            break;
+    }
+
     const isMessagePreviewEnabled = SettingsStore.getValue("RoomList.showMessagePreview");
 
     return {

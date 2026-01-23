@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<SpaceMenuView /> should match snapshot 1`] = `
+exports[`<SpaceMenuView /> > should match snapshot 1`] = `
 <DocumentFragment>
   <button
     aria-disabled="false"

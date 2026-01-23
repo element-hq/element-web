@@ -271,6 +271,7 @@ describe("RoomListHeaderViewModel", () => {
         it.each([
             ["recent" as const, SortingAlgorithm.Recency],
             ["alphabetical" as const, SortingAlgorithm.Alphabetic],
+            ["unread-first" as const, SortingAlgorithm.Unread],
         ])("should resort when sort is called with '%s'", (option, expectedAlgorithm) => {
             const resortSpy = jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(jest.fn());
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
@@ -292,6 +293,7 @@ describe("RoomListHeaderViewModel", () => {
             vm.toggleMessagePreview();
 
             expect(setValueSpy).toHaveBeenCalledWith("RoomList.showMessagePreview", null, expect.anything(), false);
+            expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(false);
         });
     });
 });

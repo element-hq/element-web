@@ -51,7 +51,8 @@
         "sort": "Sort",
         "sort_type": {
             "activity": "Activity",
-            "atoz": "A-Z"
+            "atoz": "A-Z",
+            "unread_first": "Unread first"
         },
         "space_menu": {
             "home": "Space home",

@@ -13,6 +13,11 @@ Please see LICENSE files in the repository root for full details.
     border-bottom: 1px solid $separator;
     background-color: $background;
     transition: all 0.2s ease;
+
+    button:has(svg.mx_RoomHeader_toggled) {
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
+    }
 }
 
 .mx_RoomHeader:hover {
@@ -91,6 +96,8 @@ Please see LICENSE files in the repository root for full details.
         background: var(--cpd-color-bg-success-subtle);
         color: var(--cpd-color-text-action-accent);
         font: var(--cpd-font-body-sm-semibold);
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
     }
 }
 
