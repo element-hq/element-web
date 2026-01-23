@@ -14,26 +14,39 @@ import { MockViewModel } from "../../viewmodel";
 
 describe("DecryptionFailureBodyView", () => {
     function customRender(
-        decryptionFailureReason: DecryptionFailureReason | null,
+        decryptionFailureReason: DecryptionFailureReason,
         isLocalDeviceVerified: boolean = false,
+        extraClassNames: string[] | undefined = undefined,
     ): ReturnType<typeof render> {
         return render(
-            <DecryptionFailureBodyView vm={new MockViewModel({ decryptionFailureReason, isLocalDeviceVerified })} />,
+            <DecryptionFailureBodyView
+                vm={new MockViewModel({ decryptionFailureReason, isLocalDeviceVerified, extraClassNames })}
+            />,
         );
     }
 
     function customRenderWithRef(ref: React.RefObject<any>): ReturnType<typeof render> {
         return render(
             <DecryptionFailureBodyView
-                vm={new MockViewModel({ decryptionFailureReason: DecryptionFailureReason.UNKNOWN_ERROR })}
+                vm={new MockViewModel({ decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT })}
                 ref={ref}
             />,
         );
     }
 
+    it("Should display with extra class names", () => {
+        // When
+        const { container } = customRender(DecryptionFailureReason.UNABLE_TO_DECRYPT, true, ["class1", "class2"]);
+
+        // Then
+        expect(container.firstChild).toHaveClass("class1");
+        expect(container.firstChild).toHaveClass("class2");
+        expect(container).toMatchSnapshot();
+    });
+
     it(`Should display "Unable to decrypt message"`, () => {
         // When
-        const { container } = customRender(null);
+        const { container } = customRender(DecryptionFailureReason.UNABLE_TO_DECRYPT);
 
         // Then
         expect(container).toMatchSnapshot();
@@ -53,6 +66,7 @@ describe("DecryptionFailureBodyView", () => {
 
         // Then
         expect(container).toHaveTextContent("Historical messages are not available on this device");
+        expect(container).toMatchSnapshot();
     });
 
     it.each([true, false])(
@@ -77,6 +91,7 @@ describe("DecryptionFailureBodyView", () => {
 
         // Then
         expect(container).toHaveTextContent("You don't have access to this message");
+        expect(container).toMatchSnapshot();
     });
 
     it("should handle messages from users who change identities after verification", async () => {
@@ -91,8 +106,9 @@ describe("DecryptionFailureBodyView", () => {
         // When
         const { container } = customRender(DecryptionFailureReason.UNSIGNED_SENDER_DEVICE);
 
-        // Then
+        // Thenu
         expect(container).toHaveTextContent("Sent from an insecure device");
+        expect(container).toMatchSnapshot();
     });
 
     it("should handle ref input", async () => {

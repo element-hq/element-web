@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import {
     BaseViewModel,
     DecryptionFailureReason,
@@ -17,15 +17,15 @@ export interface DecryptionFailureBodyViewModelProps {
     /**
      * The message event being rendered.
      */
-    mxEvent: MatrixEvent;
+    decryptionFailureCode: DecryptionFailureCode | null;
     /**
      * The local device verification state.
      */
     verificationState?: boolean;
     /**
-     * Custom CSS class to apply to the component
+     * Extra CSS classes to apply to the component
      */
-    className?: string;
+    extraClassNames?: string[];
 }
 
 /**
@@ -36,36 +36,56 @@ export class DecryptionFailureBodyViewModel
     implements DecryptionFailureBodyViewModelInterface
 {
     /**
+     * Convert enum DecryptionFailureCode to enum DecryptionFailureReason.
+     */
+    private static getDecryptionReasonFromCode(
+        decryptionFailureCode: DecryptionFailureCode | null,
+    ): DecryptionFailureReason {
+        switch (decryptionFailureCode) {
+            case DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED:
+                return DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED;
+            case DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP:
+                return DecryptionFailureReason.HISTORICAL_MESSAGE_NO_KEY_BACKUP;
+            case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
+                return DecryptionFailureReason.HISTORICAL_MESSAGE_USER_NOT_JOINED;
+            case DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE:
+                return DecryptionFailureReason.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE;
+            case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+                return DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED;
+            case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                return DecryptionFailureReason.UNSIGNED_SENDER_DEVICE;
+            default:
+                return DecryptionFailureReason.UNABLE_TO_DECRYPT;
+        }
+    }
+
+    /**
      * @param mxEvent - The message event being rendered
      * @param verificationState - The local device verification state
      * @param className - Custom CSS class to apply to the component
      */
     private static readonly computeSnapshot = (
-        mxEvent: MatrixEvent,
+        decryptionFailureCode: DecryptionFailureCode | null,
         verificationState?: boolean,
-        className?: string,
+        extraClassNames?: string[],
     ): DecryptionFailureBodyViewSnapshotInterface => {
-        //Convert enum DecryptionFailureCode to enum DecryptionFailureReason
-        const failureReason =
-            mxEvent.decryptionFailureReason == null
-                ? null
-                : (Object.values(DecryptionFailureReason) as string[]).includes(
-                        mxEvent.decryptionFailureReason.toString(),
-                    )
-                  ? (mxEvent.decryptionFailureReason.toString() as DecryptionFailureReason)
-                  : DecryptionFailureReason.UNKNOWN_ERROR;
-
+        // Keep mx_DecryptionFailureBody and mx_EventTile_content to support the compatibility with existing timeline and the all the layout
+        const defaultClassNames = ["mx_DecryptionFailureBody", "mx_EventTile_content"];
         return {
-            decryptionFailureReason: failureReason,
+            decryptionFailureReason: DecryptionFailureBodyViewModel.getDecryptionReasonFromCode(decryptionFailureCode),
             isLocalDeviceVerified: verificationState,
-            className,
+            extraClassNames: extraClassNames ? defaultClassNames.concat(extraClassNames) : defaultClassNames,
         };
     };
 
     public constructor(props: DecryptionFailureBodyViewModelProps) {
         super(
             props,
-            DecryptionFailureBodyViewModel.computeSnapshot(props.mxEvent, props.verificationState, props.className),
+            DecryptionFailureBodyViewModel.computeSnapshot(
+                props.decryptionFailureCode,
+                props.verificationState,
+                props.extraClassNames,
+            ),
         );
     }
 
@@ -75,9 +95,9 @@ export class DecryptionFailureBodyViewModel
     private readonly setSnapshot = (): void => {
         this.snapshot.set(
             DecryptionFailureBodyViewModel.computeSnapshot(
-                this.props.mxEvent,
+                this.props.decryptionFailureCode,
                 this.props.verificationState,
-                this.props.className,
+                this.props.extraClassNames,
             ),
         );
     };

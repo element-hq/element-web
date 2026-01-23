@@ -17,14 +17,25 @@ describe("DecryptionFailureBodyViewModel", () => {
 
     it("should return the snapshot", () => {
         const vm = new DecryptionFailureBodyViewModel({
-            mxEvent: fakeEvent,
+            decryptionFailureCode: fakeEvent.decryptionFailureReason,
             verificationState: true,
-            className: "custom-class",
         });
         expect(vm.getSnapshot()).toMatchObject({
-            decryptionFailureReason: null,
+            decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
             isLocalDeviceVerified: true,
-            className: "custom-class",
+        });
+    });
+
+    it("should return the snapshot with extra class names", () => {
+        const vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: fakeEvent.decryptionFailureReason,
+            verificationState: true,
+            extraClassNames: ["custom-class"],
+        });
+        expect(vm.getSnapshot()).toMatchObject({
+            decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
+            isLocalDeviceVerified: true,
+            extraClassNames: ["mx_DecryptionFailureBody", "mx_EventTile_content", "custom-class"],
         });
     });
 
@@ -37,32 +48,31 @@ describe("DecryptionFailureBodyViewModel", () => {
         });
 
         const vm = new DecryptionFailureBodyViewModel({
-            mxEvent: event,
+            decryptionFailureCode: event.decryptionFailureReason,
             verificationState: true,
-            className: "custom-class",
         });
 
         expect(vm.getSnapshot()).toMatchObject({
             decryptionFailureReason: DecryptionFailureReason.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE,
             isLocalDeviceVerified: true,
-            className: "custom-class",
+            extraClassNames: ["mx_DecryptionFailureBody", "mx_EventTile_content"],
         });
     });
 
     it("should update snapshot when setProps is called with new className", () => {
         const vm = new DecryptionFailureBodyViewModel({
-            mxEvent: fakeEvent,
-            className: "custom-class",
+            decryptionFailureCode: fakeEvent.decryptionFailureReason,
+            extraClassNames: ["custom-class"],
         });
-        expect(vm.getSnapshot().className).toBe("custom-class");
+        expect(vm.getSnapshot().extraClassNames).toContain("custom-class");
 
-        vm.setProps({ className: "new-custom-class" });
-        expect(vm.getSnapshot().className).toBe("new-custom-class");
+        vm.setProps({ extraClassNames: ["new-custom-class"] });
+        expect(vm.getSnapshot().extraClassNames).toContain("new-custom-class");
     });
 
     it("should update snapshot when setProps is called with new verificationState", () => {
         const vm = new DecryptionFailureBodyViewModel({
-            mxEvent: fakeEvent,
+            decryptionFailureCode: fakeEvent.decryptionFailureReason,
             verificationState: false,
         });
         expect(vm.getSnapshot().isLocalDeviceVerified).toBe(false);

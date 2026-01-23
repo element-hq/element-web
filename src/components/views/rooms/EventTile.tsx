@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, useContext, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
+import React, { createRef, useContext, useEffect, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -85,10 +85,7 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
-import {
-    DecryptionFailureBodyViewModel,
-    type DecryptionFailureBodyViewModelProps,
-} from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 
@@ -1575,8 +1572,22 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     );
 }
 
-function DecryptionFailureBodyWrapper({ mxEvent }: DecryptionFailureBodyViewModelProps): JSX.Element {
+/**
+ * Bridge decryption-failure events into the view model using current local verification state.
+ * This wrapper can be removed after EventTile has been changed to a function component.
+ */
+function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent, verificationState }));
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new DecryptionFailureBodyViewModel({
+                decryptionFailureCode: mxEvent.decryptionFailureReason,
+                verificationState,
+            }),
+    );
+    useEffect(() => {
+        vm.setProps({ decryptionFailureCode: mxEvent.decryptionFailureReason, verificationState });
+    }, [mxEvent.decryptionFailureReason, verificationState, vm]);
+
     return <DecryptionFailureBodyView vm={vm} />;
 }

@@ -3,7 +3,7 @@
 exports[`DecryptionFailureBodyView > Should display "The sender has blocked you from receiving this message" 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView"
+    class="decryptionFailureBodyView"
   >
     The sender has blocked you from receiving this message because your device is unverified
   </div>
@@ -13,9 +13,53 @@ exports[`DecryptionFailureBodyView > Should display "The sender has blocked you 
 exports[`DecryptionFailureBodyView > Should display "Unable to decrypt message" 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView"
+    class="decryptionFailureBodyView"
   >
     Unable to decrypt message
+  </div>
+</div>
+`;
+
+exports[`DecryptionFailureBodyView > Should display with extra class names 1`] = `
+<div>
+  <div
+    class="decryptionFailureBodyView class1 class2"
+  >
+    Unable to decrypt message
+  </div>
+</div>
+`;
+
+exports[`DecryptionFailureBodyView > should handle historical messages with no key backup 1`] = `
+<div>
+  <div
+    class="decryptionFailureBodyView"
+  >
+    Historical messages are not available on this device
+  </div>
+</div>
+`;
+
+exports[`DecryptionFailureBodyView > should handle messages from unverified devices 1`] = `
+<div>
+  <div
+    class="decryptionFailureBodyView decryptionFailureBodyViewError"
+  >
+    <span>
+      <svg
+        class="mx_Icon mx_Icon_16"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12q0-1.35-.437-2.6A8 8 0 0 0 18.3 7.1L7.1 18.3q1.05.825 2.3 1.262T12 20m-6.3-3.1L16.9 5.7a8 8 0 0 0-2.3-1.263A7.8 7.8 0 0 0 12 4Q8.65 4 6.325 6.325T4 12q0 1.35.438 2.6A8 8 0 0 0 5.7 16.9"
+        />
+      </svg>
+      Sent from an insecure device.
+    </span>
   </div>
 </div>
 `;
@@ -23,7 +67,7 @@ exports[`DecryptionFailureBodyView > Should display "Unable to decrypt message" 
 exports[`DecryptionFailureBodyView > should handle messages from users who change identities after verification 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView decryptionFailureBodyViewError"
+    class="decryptionFailureBodyView decryptionFailureBodyViewError"
   >
     <span>
       <svg
@@ -44,46 +88,12 @@ exports[`DecryptionFailureBodyView > should handle messages from users who chang
 </div>
 `;
 
-exports[`DecryptionFailureBodyView Should display "The sender has blocked you from receiving this message" 1`] = `
+exports[`DecryptionFailureBodyView > should handle undecryptable pre-join messages 1`] = `
 <div>
   <div
-    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView"
+    class="decryptionFailureBodyView"
   >
-    The sender has blocked you from receiving this message because your device is unverified
-  </div>
-</div>
-`;
-
-exports[`DecryptionFailureBodyView Should display "Unable to decrypt message" 1`] = `
-<div>
-  <div
-    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView"
-  >
-    Unable to decrypt message
-  </div>
-</div>
-`;
-
-exports[`DecryptionFailureBodyView should handle messages from users who change identities after verification 1`] = `
-<div>
-  <div
-    class="mx_DecryptionFailureBody mx_EventTile_content decryptionFailureBodyView decryptionFailureBodyViewError"
-  >
-    <span>
-      <svg
-        class="mx_Icon mx_Icon_16"
-        fill="currentColor"
-        height="1em"
-        viewBox="0 0 24 24"
-        width="1em"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12q0-1.35-.437-2.6A8 8 0 0 0 18.3 7.1L7.1 18.3q1.05.825 2.3 1.262T12 20m-6.3-3.1L16.9 5.7a8 8 0 0 0-2.3-1.263A7.8 7.8 0 0 0 12 4Q8.65 4 6.325 6.325T4 12q0 1.35.438 2.6A8 8 0 0 0 5.7 16.9"
-        />
-      </svg>
-      Sender's verified identity was reset
-    </span>
+    You don't have access to this message
   </div>
 </div>
 `;

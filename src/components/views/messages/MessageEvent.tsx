@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef, useContext } from "react";
+import React, { type JSX, createRef, useContext, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -331,8 +331,21 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
     </div>
 );
 
+/**
+ * Bridge decryption-failure events into the view model using current local verification state.
+ * This wrapper can be removed after MessageEvent has been changed to a function component.
+ */
 function DecryptionFailureBodyWrapper({ mxEvent }: IBodyProps): JSX.Element {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(() => new DecryptionFailureBodyViewModel({ mxEvent, verificationState }));
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new DecryptionFailureBodyViewModel({
+                decryptionFailureCode: mxEvent.decryptionFailureReason,
+                verificationState,
+            }),
+    );
+    useEffect(() => {
+        vm.setProps({ decryptionFailureCode: mxEvent.decryptionFailureReason, verificationState });
+    }, [mxEvent.decryptionFailureReason, verificationState, vm]);
     return <DecryptionFailureBodyView vm={vm} />;
 }

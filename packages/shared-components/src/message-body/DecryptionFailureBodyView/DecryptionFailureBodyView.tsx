@@ -19,17 +19,8 @@ import { useI18n } from "../../utils/i18nContext";
  * A reason code for a failure to decrypt an event.
  */
 export enum DecryptionFailureReason {
-    /** Message was encrypted with a Megolm session whose keys have not been shared with us. */
-    MEGOLM_UNKNOWN_INBOUND_SESSION_ID = "MEGOLM_UNKNOWN_INBOUND_SESSION_ID",
-
-    /** A special case of {@link MEGOLM_UNKNOWN_INBOUND_SESSION_ID}: the sender has told us it is withholding the key. */
-    MEGOLM_KEY_WITHHELD = "MEGOLM_KEY_WITHHELD",
-
     /** A special case of {@link MEGOLM_KEY_WITHHELD}: the sender has told us it is withholding the key, because the current device is unverified. */
     MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE = "MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE",
-
-    /** Message was encrypted with a Megolm session which has been shared with us, but in a later ratchet state. */
-    OLM_UNKNOWN_MESSAGE_INDEX = "OLM_UNKNOWN_MESSAGE_INDEX",
 
     /**
      * Message was sent before the current device was created; there is no key backup on the server, so this
@@ -44,12 +35,6 @@ export enum DecryptionFailureReason {
     HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED = "HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED",
 
     /**
-     * Message was sent before the current device was created; there was a (usable) key backup on the server, but we
-     * still can't decrypt. (Either the session isn't in the backup, or we just haven't gotten around to checking yet.)
-     */
-    HISTORICAL_MESSAGE_WORKING_BACKUP = "HISTORICAL_MESSAGE_WORKING_BACKUP",
-
-    /**
      * Message was sent when the user was not a member of the room.
      */
     HISTORICAL_MESSAGE_USER_NOT_JOINED = "HISTORICAL_MESSAGE_USER_NOT_JOINED",
@@ -60,34 +45,30 @@ export enum DecryptionFailureReason {
     SENDER_IDENTITY_PREVIOUSLY_VERIFIED = "SENDER_IDENTITY_PREVIOUSLY_VERIFIED",
 
     /**
-     * The sender device is not cross-signed.  This will only be used if the
+     * The sender device is not cross-signed. This will only be used if the
      * device isolation mode is set to `OnlySignedDevicesIsolationMode`.
      */
     UNSIGNED_SENDER_DEVICE = "UNSIGNED_SENDER_DEVICE",
 
     /**
-     * We weren't able to link the message back to any known device.  This will
-     * only be used if the device isolation mode is set to `OnlySignedDevicesIsolationMode`.
+     * Default message for decryption failures.
      */
-    UNKNOWN_SENDER_DEVICE = "UNKNOWN_SENDER_DEVICE",
-
-    /** Unknown or unclassified error. */
-    UNKNOWN_ERROR = "UNKNOWN_ERROR",
+    UNABLE_TO_DECRYPT = "UNABLE_TO_DECRYPT",
 }
 
 export interface DecryptionFailureBodyViewSnapshot {
     /**
      * The decryption failure reason of the event.
      */
-    decryptionFailureReason: DecryptionFailureReason | null;
+    decryptionFailureReason: DecryptionFailureReason;
     /**
      * The local device verification state.
      */
     isLocalDeviceVerified?: boolean;
     /**
-     * Custom CSS class to apply to the component
+     * Extra CSS classes to apply to the component
      */
-    className?: string;
+    extraClassNames?: string[];
 }
 
 /**
@@ -108,7 +89,7 @@ interface DecryptionFailureBodyViewProps {
 
 function getErrorMessage(
     i18nApi: I18nApi,
-    decryptionFailureReason: DecryptionFailureReason | null,
+    decryptionFailureReason: DecryptionFailureReason,
     isVerified?: boolean,
 ): string | JSX.Element {
     const _t = i18nApi.translate;
@@ -156,7 +137,7 @@ function getErrorMessage(
 }
 
 /** Get an extra CSS class, specific to the decryption failure reason */
-function errorClassName(decryptionFailureReason: DecryptionFailureReason | null): string | null {
+function errorClassName(decryptionFailureReason: DecryptionFailureReason): string | null {
     switch (decryptionFailureReason) {
         case DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
         case DecryptionFailureReason.UNSIGNED_SENDER_DEVICE:
@@ -177,16 +158,13 @@ function errorClassName(decryptionFailureReason: DecryptionFailureReason | null)
  */
 export function DecryptionFailureBodyView({ vm, ref }: Readonly<DecryptionFailureBodyViewProps>): JSX.Element {
     const i18nApi = useI18n();
-    const { decryptionFailureReason, isLocalDeviceVerified, className } = useViewModel(vm);
+    const { decryptionFailureReason, isLocalDeviceVerified, extraClassNames } = useViewModel(vm);
     const classes = classNames(
-        "mx_DecryptionFailureBody",
-        "mx_EventTile_content",
         styles.decryptionFailureBodyView,
         errorClassName(decryptionFailureReason),
-        className,
+        extraClassNames,
     );
 
-    // Keep mx_DecryptionFailureBody and mx_EventTile_content to support the compatibility with existing timeline and the all the layout
     return (
         <div className={classes} ref={ref}>
             {getErrorMessage(i18nApi, decryptionFailureReason, isLocalDeviceVerified)}
