@@ -9,8 +9,7 @@ import { type PropsWithChildren, type JSX } from "react";
 import React from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
+import { type ViewModel, useViewModel } from "../../viewmodel";
 
 /**
  * Snapshot interface for the ReactionsRowButtonTooltip view.
