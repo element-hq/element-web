@@ -132,7 +132,14 @@ function DeclineCallButtonWithNotificationEvent({
 }
 
 interface Props {
+    /**
+     * A MatrixRTC notification event which has a content type of `IRTCNotificationContent`
+     */
     notificationEvent: MatrixEvent;
+    /**
+     * The unique key of the toast notification, used to dismiss the toast if the
+     * notification expires for any reason.
+     */
     toastKey: string;
 }
 
