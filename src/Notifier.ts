@@ -521,6 +521,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
 
         let callMembership = room?.findEventById(referencedMembershipEventId);
+
         if (!callMembership) {
             // Attempt to fetch from the homeserver, if we do not have the event locally.
             // This is a rare case as obviously the referenced event for a m.call notification must
@@ -531,6 +532,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
                 logger.warn(`Call membership for notification could not be found`, ex);
             }
         }
+        // If the event could not be found even after requesting it from the homeserver.
         if (!callMembership) {
             // We will not show a call notification if there is no valid call membership.
             logger.warn(
