@@ -8,7 +8,11 @@
 import React, { useCallback, useRef, type JSX, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { isEqual } from "lodash";
-import { type VirtualizedListContext, VirtualizedList, type ScrollIntoViewOnChange } from "@element-hq/web-shared-components";
+import {
+    type VirtualizedListContext,
+    VirtualizedList,
+    type ScrollIntoViewOnChange,
+} from "@element-hq/web-shared-components";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";

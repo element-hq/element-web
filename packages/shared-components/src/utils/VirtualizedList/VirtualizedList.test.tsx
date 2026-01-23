@@ -47,7 +47,9 @@ describe("VirtualizedList", () => {
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
     };
 
-    const getListComponent = (props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {}): React.JSX.Element => {
+    const getListComponent = (
+        props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {},
+    ): React.JSX.Element => {
         const mergedProps = { ...defaultProps, ...props };
         return <VirtualizedList {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
     };
