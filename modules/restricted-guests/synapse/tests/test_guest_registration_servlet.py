@@ -18,14 +18,7 @@ from twisted.web.test.requesthelper import DummyRequest
 
 from synapse_guest_module import GuestModule
 from synapse_guest_module.mas_admin_client import MasAdminClient
-from tests import (
-    SQLiteStore,
-    create_module,
-    make_awaitable,
-    mas_config_override,
-    set_async_return_value,
-    set_async_side_effect,
-)
+from tests import SQLiteStore, create_module, make_awaitable, mas_config_override
 
 
 @parameterized_class(

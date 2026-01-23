@@ -52,11 +52,11 @@ class MasAdminClient:
         self, mas_user_id: str, expires_in_sec: int
     ) -> tuple[str, str]:
         """Creates a new personal session for the given MAS user.
-        
+
         Args:
             mas_user_id: The MAS user ID.
             expires_in_sec: The session expiration time in seconds.
-        
+
         Returns:
             A tuple of (device_id, access_token).
         """
@@ -104,7 +104,7 @@ class MasAdminClient:
 
         Returns:
             The admin access token.
-        
+
         Raises:
             ValueError: If the token response is invalid.
             HttpResponseException: On a non-2xx HTTP response.
@@ -122,7 +122,9 @@ class MasAdminClient:
             "scope": "urn:mas:admin",
         }
 
-        response = await self._api.http_client.post_urlencoded_get_json(url, data, headers)
+        response = await self._api.http_client.post_urlencoded_get_json(
+            url, data, headers
+        )
         access_token = response.get("access_token")
         if not isinstance(access_token, str) or len(access_token) == 0:
             raise ValueError("MAS token response missing access_token")

@@ -97,7 +97,9 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                 # This is the Matrix user ID (i.e. "@guest_abc123:matrix.org")
                 user_id = self._api.get_qualified_user_id(localpart)
 
-                logger.info(f"Registered guest user: '{user_id}' (MAS ID: '{mas_user_id}')")
+                logger.info(
+                    f"Registered guest user: '{user_id}' (MAS ID: '{mas_user_id}')"
+                )
 
                 await self._api.set_displayname(
                     UserID.from_string(user_id),
@@ -135,9 +137,11 @@ class GuestRegistrationServlet(DirectServeJsonResource):
 
         return 500, {"msg": "Internal error: Could not find a free username"}
 
-    async def _store_mas_user(self, mas_user_id: str, user_id: str, created_at_sec: int) -> None:
+    async def _store_mas_user(
+        self, mas_user_id: str, user_id: str, created_at_sec: int
+    ) -> None:
         """Store details about the MAS user in the DB
-        
+
         Args:
             mas_user_id: The MAS user ID
             user_id: The Matrix user ID
