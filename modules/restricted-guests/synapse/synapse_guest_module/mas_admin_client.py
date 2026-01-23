@@ -7,7 +7,6 @@ import base64
 import logging
 import random
 import string
-from typing import Any, Awaitable, Dict, Optional
 
 from synapse.module_api import ModuleApi
 
@@ -123,7 +122,7 @@ class MasAdminClient:
             "scope": "urn:mas:admin",
         }
 
-        response = await self._post_urlencoded_get_json(url, data, headers)
+        response = await self._api.http_client.post_urlencoded_get_json(url, data, headers)
         access_token = response.get("access_token")
         if not isinstance(access_token, str) or len(access_token) == 0:
             raise ValueError("MAS token response missing access_token")
@@ -172,35 +171,6 @@ class MasAdminClient:
         length = 16
         alphabet = string.ascii_letters + string.digits + "-"
         return "".join(random.choices(alphabet, k=length))
-
-    async def _post_urlencoded_get_json(
-        self, url: str, data: Dict[str, str], headers: Dict[str, Any]
-    ) -> Any:
-        """Helper to POST JSON data and get JSON response.
-
-        Args:
-            url: The URL to POST to.
-            data: The form data to POST.
-            headers: Additional headers to include in the request.
-        
-        Returns:
-            The JSON response from the server.
-        
-        Raises:
-            HttpResponseException: On a non-2xx HTTP response.
-            ValueError: if the response was not JSON.
-        """
-        http_client = self._api.http_client
-        post_urlencoded: Optional[Awaitable[Any]] = getattr(
-            http_client, "post_urlencoded_get_json", None
-        )
-        if post_urlencoded is not None and callable(post_urlencoded):
-            return await post_urlencoded(url, data, headers=headers)
-
-        logger.debug("MAS client falling back to post_json_get_json for %s", url)
-        return await http_client.post_json_get_json(
-            uri=url, post_json=data, headers=headers
-        )
 
     def _build_admin_url(self, path: str) -> str:
         if not path.startswith("/"):
