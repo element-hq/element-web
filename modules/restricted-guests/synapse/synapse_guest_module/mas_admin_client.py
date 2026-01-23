@@ -99,6 +99,17 @@ class MasAdminClient:
         )
 
     async def request_admin_token(self) -> str:
+        """
+        Uses the client credentials flow to request an admin access token
+        from MAS.
+
+        Returns:
+            The admin access token.
+        
+        Raises:
+            ValueError: If the token response is invalid.
+            HttpResponseException: On a non-2xx HTTP response.
+        """
         url = self._build_oauth_url("/oauth2/token")
         basic_auth = base64.b64encode(
             f"{self._config.client_id}:{self._client_secret}".encode("utf-8")
@@ -165,6 +176,20 @@ class MasAdminClient:
     async def _post_urlencoded_get_json(
         self, url: str, data: Dict[str, str], headers: Dict[str, Any]
     ) -> Any:
+        """Helper to POST JSON data and get JSON response.
+
+        Args:
+            url: The URL to POST to.
+            data: The form data to POST.
+            headers: Additional headers to include in the request.
+        
+        Returns:
+            The JSON response from the server.
+        
+        Raises:
+            HttpResponseException: On a non-2xx HTTP response.
+            ValueError: if the response was not JSON.
+        """
         http_client = self._api.http_client
         post_urlencoded: Optional[Awaitable[Any]] = getattr(
             http_client, "post_urlencoded_get_json", None
