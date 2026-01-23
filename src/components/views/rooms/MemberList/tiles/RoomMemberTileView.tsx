@@ -47,7 +47,9 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         />
     );
     const name = vm.name;
-    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(() => new DisambiguatedProfileViewModel({fallbackName: name || "", member, withTooltip: true}));
+    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
+        () => new DisambiguatedProfileViewModel({ fallbackName: name, member, withTooltip: true }),
+    );
     const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} />;
 
     const presenceState = member.presenceState;

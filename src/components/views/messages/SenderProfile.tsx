@@ -26,12 +26,20 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         member: mxEvent.sender,
     });
 
-    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(() => new DisambiguatedProfileViewModel({fallbackName: mxEvent.getSender() ?? "", onClick, member, colored: true, emphasizeDisplayName: true, withTooltip }));
-
+    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
+        () =>
+            new DisambiguatedProfileViewModel({
+                fallbackName: mxEvent.getSender() ?? "",
+                onClick,
+                member,
+                colored: true,
+                emphasizeDisplayName: true,
+                withTooltip,
+            }),
+    );
 
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
-        <DisambiguatedProfileView vm={disambiguatedProfileVM}
-        />
+        <DisambiguatedProfileView vm={disambiguatedProfileVM} />
     ) : (
         <></>
     );
