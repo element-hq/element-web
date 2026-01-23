@@ -136,10 +136,10 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
 
         now = int(time.time())
         store.conn.executemany(
-            "INSERT INTO guest_module_mas_users VALUES (?, ?)",
+            "INSERT INTO guest_module_mas_users VALUES (?, ?, ?)",
             [
-                ["mas-old-1", 0],
-                ["mas-active", now],
+                ["mas-old-1", "@old-1:localhost", 0],
+                ["mas-active", "@active:localhost", now],
             ],
         )
 
@@ -161,6 +161,6 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
         )
 
         remaining_users = store.conn.execute(
-            "SELECT mas_user_id FROM guest_module_mas_users"
+            "SELECT mas_user_id, user_id FROM guest_module_mas_users"
         ).fetchall()
-        self.assertEqual(remaining_users, [("mas-active",)])
+        self.assertEqual(remaining_users, [("mas-active", "@active:localhost")])

@@ -104,7 +104,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                     displayname + self._config.display_name_suffix,
                 )
 
-                await self._store_mas_user(mas_user_id, int(time.time()))
+                await self._store_mas_user(mas_user_id, user_id, int(time.time()))
 
                 # Determine how long to keep the access token valid for.
                 #
@@ -135,7 +135,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
 
         return 500, {"msg": "Internal error: Could not find a free username"}
 
-    async def _store_mas_user(self, mas_user_id: str, created_at: int) -> None:
+    async def _store_mas_user(self, mas_user_id: str, user_id: str, created_at: int) -> None:
         if self._mas_tables_ready is not None:
             await self._mas_tables_ready.wait()
 
@@ -145,6 +145,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                 table="guest_module_mas_users",
                 values={
                     "mas_user_id": mas_user_id,
+                    "user_id": user_id,
                     "created_at": created_at,
                 },
             )
