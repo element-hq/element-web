@@ -83,7 +83,7 @@
         "@types/react-dom": "^19.2.3",
         "@typescript-eslint/eslint-plugin": "^8.53.1",
         "@typescript-eslint/parser": "^8.53.1",
-        "@vector-im/compound-web": "^8.3.5",
+        "@vector-im/compound-web": "^8.3.6",
         "@vitejs/plugin-react": "^5.1.2",
         "@vitest/browser-playwright": "^4.0.17",
         "@vitest/coverage-v8": "^4.0.17",
