@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { render } from "@test-utils";
 import React from "react";
-import { render } from "jest-matrix-react";
+import { describe, it, expect } from "vitest";
 
 import { DecryptionFailureBodyView, DecryptionFailureReason } from "./DecryptionFailureBodyView";
 import { MockViewModel } from "../../viewmodel";
@@ -18,6 +19,15 @@ describe("DecryptionFailureBodyView", () => {
     ): ReturnType<typeof render> {
         return render(
             <DecryptionFailureBodyView vm={new MockViewModel({ decryptionFailureReason, isLocalDeviceVerified })} />,
+        );
+    }
+
+    function customRenderWithRef(ref: React.RefObject<any>): ReturnType<typeof render> {
+        return render(
+            <DecryptionFailureBodyView
+                vm={new MockViewModel({ decryptionFailureReason: DecryptionFailureReason.UNKNOWN_ERROR })}
+                ref={ref}
+            />,
         );
     }
 
@@ -84,15 +94,6 @@ describe("DecryptionFailureBodyView", () => {
         // Then
         expect(container).toHaveTextContent("Sent from an insecure device");
     });
-
-    function customRenderWithRef(ref: React.RefObject<any>): ReturnType<typeof render> {
-        return render(
-            <DecryptionFailureBodyView
-                vm={new MockViewModel({ decryptionFailureReason: DecryptionFailureReason.UNKNOWN_ERROR })}
-                ref={ref}
-            />,
-        );
-    }
 
     it("should handle ref input", async () => {
         const ref = React.createRef<HTMLDivElement>();
