@@ -160,5 +160,5 @@ def _setup_db(conn: sqlite3.Connection) -> None:
         "CREATE TABLE users(name text, deactivated smallint, creation_ts bigint)"
     )
     conn.execute(
-        "CREATE TABLE guest_module_mas_users(mas_user_id text, user_id text, created_at bigint)"
+        "CREATE TABLE guest_module_mas_users(mas_user_id text, user_id text, created_at_sec bigint)"
     )

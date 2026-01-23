@@ -219,15 +219,15 @@ class GuestModule:
             CREATE TABLE IF NOT EXISTS guest_module_mas_users (
                 mas_user_id TEXT PRIMARY KEY,
                 user_id TEXT,
-                created_at BIGINT NOT NULL
+                created_at_sec BIGINT NOT NULL
             )
             """,
             (),
         )
         txn.execute(
             """
-            CREATE INDEX IF NOT EXISTS guest_module_mas_users_created_at
-            ON guest_module_mas_users (created_at)
+            CREATE INDEX IF NOT EXISTS guest_module_mas_users_created_at_sec
+            ON guest_module_mas_users (created_at_sec)
             """,
             (),
         )

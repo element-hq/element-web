@@ -121,7 +121,7 @@ class GuestUserReaper:
                 """
                 SELECT mas_user_id
                 FROM guest_module_mas_users
-                WHERE created_at < ?
+                WHERE created_at_sec < ?
                 """,
                 (expire_ts_seconds,),
             )

@@ -135,7 +135,14 @@ class GuestRegistrationServlet(DirectServeJsonResource):
 
         return 500, {"msg": "Internal error: Could not find a free username"}
 
-    async def _store_mas_user(self, mas_user_id: str, user_id: str, created_at: int) -> None:
+    async def _store_mas_user(self, mas_user_id: str, user_id: str, created_at_sec: int) -> None:
+        """Store details about the MAS user in the DB
+        
+        Args:
+            mas_user_id: The MAS user ID
+            user_id: The Matrix user ID
+            created_at_sec: The creation timestamp in seconds since the unix epoch
+        """
         if self._mas_tables_ready is not None:
             await self._mas_tables_ready.wait()
 
@@ -146,7 +153,7 @@ class GuestRegistrationServlet(DirectServeJsonResource):
                 values={
                     "mas_user_id": mas_user_id,
                     "user_id": user_id,
-                    "created_at": created_at,
+                    "created_at_sec": created_at_sec,
                 },
             )
 
