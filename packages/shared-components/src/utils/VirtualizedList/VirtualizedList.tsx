@@ -33,7 +33,7 @@ export function isModifiedKeyEvent(event: React.KeyboardEvent): boolean {
  * Context object passed to each list item containing the currently focused key
  * and any additional context data from the parent component.
  */
-export type ListContext<Context> = {
+export type VirtualizedListContext<Context> = {
     /** The key of item that should have tabIndex == 0 */
     tabIndexKey?: string;
     /** Whether an item in the list is currently focused */
@@ -42,8 +42,8 @@ export type ListContext<Context> = {
     context: Context;
 };
 
-export interface IListProps<Item, Context> extends Omit<
-    VirtuosoProps<Item, ListContext<Context>>,
+export interface IVirtualizedListProps<Item, Context> extends Omit<
+    VirtuosoProps<Item, VirtualizedListContext<Context>>,
     "data" | "itemContent" | "context"
 > {
     /**
@@ -63,13 +63,13 @@ export interface IListProps<Item, Context> extends Omit<
     getItemComponent: (
         index: number,
         item: Item,
-        context: ListContext<Context>,
+        context: VirtualizedListContext<Context>,
         onFocus: (item: Item, e: React.FocusEvent) => void,
     ) => JSX.Element;
 
     /**
      * Optional additional context data to pass to each rendered item.
-     * This will be available in the ListContext passed to getItemComponent.
+     * This will be available in the VirtualizedListContext passed to getItemComponent.
      */
     context?: Context;
 
@@ -101,7 +101,7 @@ export interface IListProps<Item, Context> extends Omit<
  * Utility type for the prop scrollIntoViewOnChange allowing it to be memoised by a caller without repeating types
  */
 export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
-    VirtuosoProps<Item, ListContext<Context>>["scrollIntoViewOnChange"]
+    VirtuosoProps<Item, VirtualizedListContext<Context>>["scrollIntoViewOnChange"]
 >;
 
 /**
@@ -111,7 +111,7 @@ export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
  * @template Item - The type of data items in the list
  * @template Context - The type of additional context data passed to items
  */
-export function List<Item, Context = any>(props: IListProps<Item, Context>): React.ReactElement {
+export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const { items, getItemComponent, isItemFocusable, getItemKey, context, onKeyDown, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -277,7 +277,7 @@ export function List<Item, Context = any>(props: IListProps<Item, Context>): Rea
     );
 
     const getItemComponentInternal = useCallback(
-        (index: number, item: Item, context: ListContext<Context>): JSX.Element =>
+        (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>
             getItemComponent(index, item, context, onFocusForGetItemComponent),
         [getItemComponent, onFocusForGetItemComponent],
     );
@@ -315,7 +315,7 @@ export function List<Item, Context = any>(props: IListProps<Item, Context>): Rea
         }
     }, []);
 
-    const listContext: ListContext<Context> = useMemo(
+    const listContext: VirtualizedListContext<Context> = useMemo(
         () => ({
             tabIndexKey: tabIndexKey,
             focused: isFocused,

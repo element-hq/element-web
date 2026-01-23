@@ -9,9 +9,9 @@ import React from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { List, type IListProps, type ListContext } from "./List";
+import { VirtualizedList, type IVirtualizedListProps, type VirtualizedListContext } from "./VirtualizedList";
 
-import "./List.stories.css";
+import "./VirtualizedList.stories.css";
 
 interface SimpleItem {
     id: string;
@@ -25,7 +25,7 @@ const SimpleItemComponent = ({
     onFocus,
 }: {
     item: SimpleItem;
-    context: ListContext<undefined>;
+    context: VirtualizedListContext<undefined>;
     onFocus: (item: SimpleItem, e: React.FocusEvent) => void;
 }): React.JSX.Element => {
     const tabIndex = context.tabIndexKey === item.id ? 0 : -1;
@@ -47,8 +47,8 @@ const defaultItems: SimpleItem[] = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 const meta = {
-    title: "Utils/List",
-    component: List<SimpleItem, undefined>,
+    title: "Utils/VirtualizedList",
+    component: VirtualizedList<SimpleItem, undefined>,
     tags: ["autodocs"],
     args: {
         items: defaultItems,
@@ -80,7 +80,7 @@ const meta = {
             description: "Callback for keyboard events not handled by List",
         },
     },
-} satisfies Meta<IListProps<SimpleItem, undefined>>;
+} satisfies Meta<IVirtualizedListProps<SimpleItem, undefined>>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

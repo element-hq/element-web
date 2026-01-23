@@ -10,7 +10,7 @@ import { render, screen, fireEvent } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { List, type IListProps } from "./List";
+import { VirtualizedList, type IVirtualizedListProps } from "./VirtualizedList";
 
 const expectTabIndex = (element: Element, expected: string): void => {
     expect(element.getAttribute("tabindex")).toBe(expected);
@@ -29,7 +29,7 @@ interface TestItem {
 const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
-describe("List", () => {
+describe("VirtualizedList", () => {
     const mockGetItemComponent = vi.fn();
     const mockIsItemFocusable = vi.fn();
 
@@ -40,20 +40,20 @@ describe("List", () => {
         { id: "3", name: "Item 3" },
     ];
 
-    const defaultProps: IListProps<TestItemWithSeparator, any> = {
+    const defaultProps: IVirtualizedListProps<TestItemWithSeparator, any> = {
         items: defaultItems,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
     };
 
-    const getListComponent = (props: Partial<IListProps<TestItemWithSeparator, any>> = {}): React.JSX.Element => {
+    const getListComponent = (props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {}): React.JSX.Element => {
         const mergedProps = { ...defaultProps, ...props };
-        return <List {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
+        return <VirtualizedList {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
     };
 
     const renderListWithHeight = (
-        props: Partial<IListProps<TestItemWithSeparator, any>> = {},
+        props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {},
     ): ReturnType<typeof render> => {
         const mergedProps = { ...defaultProps, ...props };
         return render(getListComponent(mergedProps), {
@@ -84,7 +84,7 @@ describe("List", () => {
     });
 
     describe("Rendering", () => {
-        it("should render the List component", () => {
+        it("should render the VirtualizedList component", () => {
             renderListWithHeight();
             expect(screen.getByRole("grid")).toBeDefined();
         });

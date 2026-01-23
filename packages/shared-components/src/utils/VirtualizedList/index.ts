@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { List } from "./List";
-export type { IListProps, ListContext, ScrollIntoViewOnChange } from "./List";
+export { VirtualizedList } from "./VirtualizedList";
+export type { IVirtualizedListProps, VirtualizedListContext, ScrollIntoViewOnChange } from "./VirtualizedList";
 
 // Re-export VirtuosoMockContext for testing purposes
 // Tests should import this from shared-components to ensure context compatibility
