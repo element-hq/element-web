@@ -5,7 +5,7 @@
 
 import base64
 import logging
-import secrets
+import random
 import string
 from typing import Any, Awaitable, Dict, Optional
 
@@ -171,7 +171,7 @@ class MasAdminClient:
         """
         length = 16
         alphabet = string.ascii_letters + string.digits + "-"
-        return "".join(secrets.choice(alphabet) for _ in range(length))
+        return "".join(random.choices(alphabet, k=length))
 
     async def _post_urlencoded_get_json(
         self, url: str, data: Dict[str, str], headers: Dict[str, Any]
