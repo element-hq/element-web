@@ -490,11 +490,12 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     private async handleRTCNotification(ev: MatrixEvent, toaster: ToastStore, room: Room): Promise<void> {
         // TODO: Use the call_id to get the *correct* call. We assume there is only one call per room here.
         const rtcSession = room && room.client.matrixRTC.getRoomSession(room);
-        if (rtcSession?.slotDescription?.application == "m.call") {
+        if (
+            rtcSession?.slotDescription?.application == "m.call" &&
+            rtcSession.memberships.some((membership) => membership.userId === room.client.getUserId())
+        ) {
             // If we're already joined to the session, don't notify.
-            if (rtcSession.memberships.some((membership) => membership.userId === room.client.getUserId())) {
-                return;
-            }
+            return;
         }
 
         // XXX: Should use parseCallNotificationContent once the types are exported.
