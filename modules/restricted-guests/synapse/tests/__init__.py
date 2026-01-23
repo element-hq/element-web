@@ -9,8 +9,8 @@
 
 import sqlite3
 from asyncio import Future
-from typing import Any, Awaitable, Callable, Dict, List, Tuple, TypeVar
-from unittest.mock import AsyncMock, Mock
+from typing import Any, Awaitable, Callable, Dict, Tuple, TypeVar
+from unittest.mock import Mock
 
 from synapse.http.client import SimpleHttpClient
 from synapse.module_api import ModuleApi
@@ -79,20 +79,6 @@ def make_awaitable(result: TV) -> Awaitable[TV]:
     future = Future()  # type: ignore
     future.set_result(result)
     return future
-
-
-def set_async_return_value(target: Any, value: Any) -> None:
-    if isinstance(target, AsyncMock):
-        target.return_value = value
-    else:
-        target.return_value = make_awaitable(value)
-
-
-def set_async_side_effect(target: Any, values: List[Any]) -> None:
-    if isinstance(target, AsyncMock):
-        target.side_effect = values
-    else:
-        target.side_effect = [make_awaitable(value) for value in values]
 
 
 def get_qualified_user_id(username: str) -> str:

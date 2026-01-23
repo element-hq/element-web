@@ -92,22 +92,20 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
             module.registration_servlet._mas_admin_client._generate_device_id = (  # type: ignore[method-assign,union-attr]
                 lambda: "MASDEVICE123"
             )
-            set_async_return_value(
-                module_api.http_client.post_urlencoded_get_json,
-                {"access_token": "mas_admin_token"},
-            )
-            set_async_side_effect(
-                module_api.http_client.post_json_get_json,
-                [
-                    {"data": {"id": "mas-user-id"}},
-                    {
-                        "data": {
-                            "id": "MASDEVICE123",
-                            "attributes": {"access_token": "mas_access_token"},
-                        }
-                    },
-                ],
-            )
+
+            # `make_awaitable` is not needed here as both methods are already `AsyncMock`.
+            module_api.http_client.post_urlencoded_get_json.return_value = {
+                "access_token": "mas_admin_token"
+            }
+            module_api.http_client.post_json_get_json.side_effect = [
+                {"data": {"id": "mas-user-id"}},
+                {
+                    "data": {
+                        "id": "MASDEVICE123",
+                        "attributes": {"access_token": "mas_access_token"},
+                    }
+                },
+            ]
 
         status, response = await module.registration_servlet._async_render_POST(request)
 
