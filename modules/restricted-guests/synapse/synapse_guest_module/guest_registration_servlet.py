@@ -90,10 +90,14 @@ class GuestRegistrationServlet(DirectServeJsonResource):
 
                 device_id, access_token, _, _ = await self._api.register_device(user_id)
             else:
-                logger.info("Registering MAS guest user with username '%s'", localpart)
-                mas_user_id = await self._mas_admin_client.create_user(localpart)
+                logger.info("Registering MAS guest user with localpart '%s'", localpart)
 
+                # This will be the MAS-specific user ID (i.e. "01KFNJEB720EAGR907PSXRXQ51")
+                mas_user_id = await self._mas_admin_client.create_user(localpart)
+                # This is the Matrix user ID (i.e. "@guest_abc123:matrix.org")
                 user_id = self._api.get_qualified_user_id(localpart)
+
+                logger.info(f"Registered guest user: '{user_id}' (MAS ID: '{mas_user_id}')")
 
                 await self._api.set_displayname(
                     UserID.from_string(user_id),
