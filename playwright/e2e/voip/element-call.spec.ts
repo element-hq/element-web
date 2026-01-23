@@ -74,7 +74,7 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
         },
         "m.relates_to": {
             event_id: resp.event_id,
-            rel_type: "org.matrix.msc4075.rtc.notification.parent",
+            rel_type: "m.reference",
         },
         "m.call.intent": intent,
         "notification_type": notification,

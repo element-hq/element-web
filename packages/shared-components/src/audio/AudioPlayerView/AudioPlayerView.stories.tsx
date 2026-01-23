@@ -10,7 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
-import { useMockedViewModel } from "../../useMockedViewModel";
+import { useMockedViewModel } from "../../viewmodel";
 
 type AudioPlayerProps = AudioPlayerViewSnapshot & AudioPlayerViewActions;
 const AudioPlayerViewWrapper = ({ togglePlay, onKeyDown, onSeekbarChange, ...rest }: AudioPlayerProps): JSX.Element => {

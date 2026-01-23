@@ -10,8 +10,7 @@ import { RestartIcon, DeleteIcon } from "@vector-im/compound-design-tokens/asset
 import { Button, InlineSpinner, Text } from "@vector-im/compound-web";
 
 import styles from "./RoomStatusBarView.module.css";
-import { useViewModel } from "../../useViewModel";
-import { type ViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../viewmodel";
 import { useI18n } from "../../utils/i18nContext";
 import { Banner } from "../../composer/Banner";
 export interface RoomStatusBarViewActions {

@@ -72,6 +72,14 @@ export default class ToastStore extends EventEmitter {
         }
     }
 
+    /**
+     * Is a toast currently present on the store.
+     * @param key The toast key to look for.
+     */
+    public hasToast(key: string): boolean {
+        return this.toasts.some((toast) => toast.key === key);
+    }
+
     public getToasts(): IToast<any>[] {
         return this.toasts;
     }

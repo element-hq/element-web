@@ -1698,7 +1698,6 @@
     counterpart "^0.18.6"
     lodash "^4.17.21"
     matrix-web-i18n "3.6.0"
-    patch-package "^8.0.1"
     react-merge-refs "^3.0.2"
     temporal-polyfill "^0.3.0"
 
@@ -9528,9 +9527,9 @@ lodash.uniq@^4.5.0:
   integrity sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==
 
 lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+  version "4.17.23"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
+  integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
 
 log-update@^6.1.0:
   version "6.1.0"
@@ -9712,15 +9711,7 @@ matrix-web-i18n@3.6.0:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.14.0:
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.16.0.tgz#e232f1ed6b840feea58d693d877fb8a05b181aee"
-  integrity sha512-OCsCzEN54jWamvWkBa7PqcKdlOhLA+nJbUyqsATHvzb4/NMcjdUZWSDurZxyNE5eYlNwxClA6Hw20mzJEKJbvg==
-  dependencies:
-    "@types/events" "^3.0.0"
-    events "^3.2.0"
-
-matrix-widget-api@^1.16.1:
+matrix-widget-api@^1.14.0, matrix-widget-api@^1.16.1:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.16.1.tgz#a447f28f0af07e1bdc960881971de7d1ec9e6464"
   integrity sha512-oCfTV4xNPo02qIgveqdkIyKQjOPpsjhF3bmJBotHrhr8TsrhVa7kx8PtuiUPnQTjz0tdBle7falR2Fw8VKsedw==
@@ -10412,7 +10403,7 @@ pascal-case@^3.1.2:
     no-case "^3.0.4"
     tslib "^2.0.3"
 
-patch-package@^8.0.0, patch-package@^8.0.1:
+patch-package@^8.0.0:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/patch-package/-/patch-package-8.0.1.tgz#79d02f953f711e06d1f8949c8a13e5d3d7ba1a60"
   integrity sha512-VsKRIA8f5uqHQ7NGhwIna6Bx6D9s/1iXlA1hthBVBEbkq+t4kXD0HHt+rJhf/Z+Ci0F/HCB2hvn0qLdLG+Qxlw==
