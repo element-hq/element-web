@@ -193,6 +193,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 EventType.Reaction,
                 EventType.RoomRedaction,
                 "io.element.call.reaction",
+                "io.element.call.terminate", // Element Call terminate event
                 //  MSC4310: Add dev and final event to ease future transition,
                 EventType.RTCDecline,
                 "m.rtc.decline",

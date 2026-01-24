@@ -256,13 +256,23 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         // TODO: Replace these with proper widget params
         // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
         if (!opts?.asPopout) {
-            parsed.searchParams.set("widgetId", this.widget.id);
-            parsed.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
-
-            // Give the widget a scalar token if we're supposed to (more legacy)
-            // TODO: Stop doing this
-            if (this.scalarToken) {
-                parsed.searchParams.set("scalar_token", this.scalarToken);
+            // Check if URL uses hash fragment for parameters (e.g., Element Call uses #?params)
+            if (parsed.hash.startsWith("#?")) {
+                // Add parameters to hash fragment instead of query string
+                const hashParams = new URLSearchParams(parsed.hash.slice(2));
+                hashParams.set("widgetId", this.widget.id);
+                hashParams.set("parentUrl", window.location.href.split("#", 2)[0]);
+                if (this.scalarToken) {
+                    hashParams.set("scalar_token", this.scalarToken);
+                }
+                parsed.hash = "#?" + hashParams.toString();
+            } else {
+                // Legacy way: add to query string
+                parsed.searchParams.set("widgetId", this.widget.id);
+                parsed.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
+                if (this.scalarToken) {
+                    parsed.searchParams.set("scalar_token", this.scalarToken);
+                }
             }
         }
 
