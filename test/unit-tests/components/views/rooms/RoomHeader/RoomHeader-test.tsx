@@ -100,7 +100,7 @@ describe("RoomHeader", () => {
         };
     }
 
-    beforeEach(async () => {
+    beforeEach(() => {
         client = stubClient();
         room = new Room(ROOM_ID, client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -706,6 +706,25 @@ describe("RoomHeader", () => {
 
             expect(getByLabelText(document.body, "Public room")).toBeInTheDocument();
         });
+    });
+
+    it("shows a history icon if the room is encrypted and has shared history", () => {
+        mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
+        room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    type: "m.room.history_visibility",
+                    content: { history_visibility: "shared" },
+                    sender: MatrixClientPeg.get()!.getSafeUserId(),
+                    state_key: "",
+                    room_id: room.roomId,
+                }),
+            ],
+            { addToState: true },
+        );
+
+        render(<RoomHeader room={room} />, getWrapper());
+        waitFor(() => getByLabelText(document.body, "New members see history"));
     });
 
     describe("dm", () => {
