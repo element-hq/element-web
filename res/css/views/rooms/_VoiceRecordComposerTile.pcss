@@ -7,23 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_VoiceRecordComposerTile_stop {
-    /* 28px plus a 2px border makes this a 32px square (as intended) */
-    width: 28px;
-    height: 28px;
+    /* 20px + 4px padding + 2px border makes this a 32px square (as intended) */
+    width: 20px;
+    height: 20px;
+    padding: var(--cpd-space-1x);
     border: 2px solid $voice-record-stop-border-color;
     border-radius: 32px;
     margin-right: 2px; /* between us and the waveform component */
-    position: relative;
 
-    &::after {
-        content: "";
-        width: 14px;
-        height: 14px;
-        position: absolute;
-        top: 7px;
-        left: 7px;
-        border-radius: 2px;
-        background-color: $voice-record-stop-symbol-color;
+    svg {
+        width: inherit;
+        height: inherit;
+        color: $voice-record-stop-symbol-color;
     }
 }
 

@@ -1,3 +1,53 @@
+Changes in [1.12.8](https://github.com/element-hq/element-web/releases/tag/v1.12.8) (2026-01-13)
+================================================================================================
+## 🦖 Deprecations
+
+* Remove `element_call.participant_limit` config and associated code. ([#31638](https://github.com/element-hq/element-web/pull/31638)). Contributed by @Half-Shot.
+
+## ✨ Features
+
+* Switch to rendering svg icons rather than masking them ([#31557](https://github.com/element-hq/element-web/pull/31557)). Contributed by @t3chguy.
+* Update history visibility UX ([#31635](https://github.com/element-hq/element-web/pull/31635)). Contributed by @langleyd.
+* Show correct call icon for joining a call. ([#31489](https://github.com/element-hq/element-web/pull/31489)). Contributed by @Half-Shot.
+* Update StopGapWidgetDriver to support sticky events ([#31205](https://github.com/element-hq/element-web/pull/31205)). Contributed by @Half-Shot.
+* Remove release announcements for new sounds \& room list ([#31544](https://github.com/element-hq/element-web/pull/31544)). Contributed by @t3chguy.
+* Add button to restore from backup into /devtools ([#31581](https://github.com/element-hq/element-web/pull/31581)). Contributed by @mxandreas.
+* Switch to non-solid compound icons for room settings \& composer ([#31561](https://github.com/element-hq/element-web/pull/31561)). Contributed by @t3chguy.
+* Support encrypted state events MSC4362 ([#31513](https://github.com/element-hq/element-web/pull/31513)). Contributed by @andybalaam.
+* Update prop type \& documentation for HistoryVisibleBanner and VM. ([#31545](https://github.com/element-hq/element-web/pull/31545)). Contributed by @kaylendog.
+* Switch to Compound icons in more places ([#31560](https://github.com/element-hq/element-web/pull/31560)). Contributed by @t3chguy.
+* Switch to rendering svg icons rather than masking them ([#31550](https://github.com/element-hq/element-web/pull/31550)). Contributed by @t3chguy.
+* Make AccessibleButton contrast control compatible ([#31308](https://github.com/element-hq/element-web/pull/31308)). Contributed by @t3chguy.
+* Switch to compound-design-tokens for platform icons ([#31543](https://github.com/element-hq/element-web/pull/31543)). Contributed by @t3chguy.
+* Switch to rendering svg icons rather than masking them ([#31531](https://github.com/element-hq/element-web/pull/31531)). Contributed by @t3chguy.
+* Switch to rendering svg icons rather than css masking ([#31517](https://github.com/element-hq/element-web/pull/31517)). Contributed by @t3chguy.
+* Auto approve matrix rtc member event (`m.rtc.member`) (sticky events) ([#31452](https://github.com/element-hq/element-web/pull/31452)). Contributed by @toger5.
+* Size Autocomplete relative to the RoomView height rather than the viewport height ([#31425](https://github.com/element-hq/element-web/pull/31425)). Contributed by @langleyd.
+* Implement UI for history visibility acknowledgement. ([#31156](https://github.com/element-hq/element-web/pull/31156)). Contributed by @kaylendog.
+* Export disposing hook from package ([#31498](https://github.com/element-hq/element-web/pull/31498)). Contributed by @MidhunSureshR.
+* Change `header-panel-bg-hover` to use `var(--cpd-color-bg-action-secondary-hovered)` for better custom theming ([#31457](https://github.com/element-hq/element-web/pull/31457)). Contributed by @th0mcat.
+* Improve icon rendering in iconized context menu ([#31458](https://github.com/element-hq/element-web/pull/31458)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix space settings visibility tab crashing ([#31705](https://github.com/element-hq/element-web/pull/31705)). Contributed by @RiotRobot.
+* Fix expand/collapse reply preview not showing in some cases ([#31639](https://github.com/element-hq/element-web/pull/31639)). Contributed by @t3chguy.
+* Fix bundled font or custom font not applied after theme switch ([#31591](https://github.com/element-hq/element-web/pull/31591)). Contributed by @florianduros.
+* Add ol override CSS for markdown-body ([#31618](https://github.com/element-hq/element-web/pull/31618)). Contributed by @niamu.
+* Fix reaction left margin in timeline card ([#31625](https://github.com/element-hq/element-web/pull/31625)). Contributed by @t3chguy.
+* Open right panel timeline when jumping to event with maximised widget ([#31626](https://github.com/element-hq/element-web/pull/31626)). Contributed by @t3chguy.
+* Fix Compound Link elements not having an underline. ([#31583](https://github.com/element-hq/element-web/pull/31583)). Contributed by @Half-Shot.
+* Recalculate mentions metadata of forwarded messages based on message body ([#31193](https://github.com/element-hq/element-web/pull/31193)). Contributed by @twassman.
+* Fix Room Preview Card Layout ([#31611](https://github.com/element-hq/element-web/pull/31611)). Contributed by @germain-gg.
+* Fix: WidgetMessaging not properly closed causing side effects and bugs ([#31598](https://github.com/element-hq/element-web/pull/31598)). Contributed by @BillCarsonFr.
+* Handle cross-signing keys missing locally and/or from secret storage ([#31367](https://github.com/element-hq/element-web/pull/31367)). Contributed by @uhoreg.
+* fix: Allow wrapping in `Banner` component. ([#31532](https://github.com/element-hq/element-web/pull/31532)). Contributed by @kaylendog.
+* Update algorithm for history visible banner. ([#31577](https://github.com/element-hq/element-web/pull/31577)). Contributed by @kaylendog.
+* Fix styling issue when using EW modules ([#31533](https://github.com/element-hq/element-web/pull/31533)). Contributed by @florianduros.
+* Prevent history visible banner from displaying in threads. ([#31535](https://github.com/element-hq/element-web/pull/31535)). Contributed by @kaylendog.
+* Make the feedback icon be the right color in dark theme ([#31527](https://github.com/element-hq/element-web/pull/31527)). Contributed by @robintown.
+
+
 Changes in [1.12.7](https://github.com/element-hq/element-web/releases/tag/v1.12.7) (2025-12-16)
 ================================================================================================
 ## ✨ Features

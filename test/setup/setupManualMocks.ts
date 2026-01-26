@@ -6,9 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
-import { TextDecoder, TextEncoder } from "util";
-import { Response } from "node-fetch";
+import fetchMock, { manageFetchMockGlobally } from "@fetch-mock/jest";
+import { jest } from "@jest/globals";
 
 import { mocks } from "./mocks";
 
@@ -46,7 +45,7 @@ window.ClipboardEvent = MyClipboardEvent as any;
 
 // matchMedia is not included in jsdom
 // TODO: Extract this to a function and have tests that need it opt into it.
-const mockMatchMedia = (query: string) => ({
+global.matchMedia = (query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -54,35 +53,39 @@ const mockMatchMedia = (query: string) => ({
     removeListener: jest.fn(), // Deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    dispatchEvent: jest.fn<(event: Event) => boolean>(),
 });
-global.matchMedia = mockMatchMedia;
 
 // maplibre requires a createObjectURL mock
-global.URL.createObjectURL = jest.fn();
+global.URL.createObjectURL = jest.fn((obj) => "blob");
 global.URL.revokeObjectURL = jest.fn();
-
-// polyfilling TextEncoder as it is not available on JSDOM
-// view https://github.com/facebook/jest/issues/9983
-// XXX: Node's implementation has marginally different types, so we fudge it
-(globalThis as any).TextEncoder = TextEncoder;
-// @ts-ignore
-global.TextDecoder = TextDecoder;
 
 // prevent errors whenever a component tries to manually scroll.
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 window.HTMLAudioElement.prototype.canPlayType = jest.fn((format) => (format === "audio/mpeg" ? "probably" : ""));
 
-// set up fetch API mock
-fetchMock.config.overwriteRoutes = false;
-fetchMock.catch("");
-fetchMock.get("/image-file-stub", "image file stub");
-fetchMock.get("/_matrix/client/versions", {});
-// @ts-ignore
-window.fetch = fetchMock.sandbox();
+function setupFileStubMocks() {
+    fetchMock.get("end:/image-file-stub", "image file stub", { sticky: true });
+}
+setupFileStubMocks();
 
-// @ts-ignore
-window.Response = Response;
+beforeEach(() => {
+    // set up fetch API mock
+    fetchMock.hardReset();
+    fetchMock.catch(404);
+    setupFileStubMocks();
+    fetchMock.get("/_matrix/client/versions", {}, { sticky: true });
+    fetchMock.mockGlobal();
+});
+
+afterEach(() => {
+    fetchMock.removeRoutes();
+    window.sessionStorage?.clear();
+    window.localStorage?.clear();
+});
+
+fetchMock.config.allowRelativeUrls = true;
+manageFetchMockGlobally(jest);
 
 // set up AudioContext API mock
-global.AudioContext = jest.fn().mockImplementation(() => ({ ...mocks.AudioContext }));
+global.AudioContext = jest.fn<() => AudioContext>().mockImplementation(() => ({ ...mocks.AudioContext }));

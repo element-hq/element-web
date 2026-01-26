@@ -1468,15 +1468,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1qhtc_10"
+                        class="_container_1ug7n_10"
                       >
                         <input
-                          class="_input_1qhtc_18"
+                          class="_input_1ug7n_18"
                           id="mx_media_previews_off"
                           type="radio"
                         />
                         <div
-                          class="_ui_1qhtc_19"
+                          class="_ui_1ug7n_19"
                         />
                       </div>
                     </div>
@@ -1498,15 +1498,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1qhtc_10"
+                        class="_container_1ug7n_10"
                       >
                         <input
-                          class="_input_1qhtc_18"
+                          class="_input_1ug7n_18"
                           id="mx_media_previews_private"
                           type="radio"
                         />
                         <div
-                          class="_ui_1qhtc_19"
+                          class="_ui_1ug7n_19"
                         />
                       </div>
                     </div>
@@ -1528,16 +1528,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1qhtc_10"
+                        class="_container_1ug7n_10"
                       >
                         <input
                           checked=""
-                          class="_input_1qhtc_18"
+                          class="_input_1ug7n_18"
                           id="mx_media_previews_on"
                           type="radio"
                         />
                         <div
-                          class="_ui_1qhtc_19"
+                          class="_ui_1ug7n_19"
                         />
                       </div>
                     </div>

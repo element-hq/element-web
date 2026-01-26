@@ -536,4 +536,29 @@ describe("<MessageActionBar />", () => {
             await waitFor(() => expect(screen.getByLabelText("Unpin")).toBeInTheDocument());
         });
     });
+
+    describe("expand/collapse quote buttons", () => {
+        it.each([
+            ["expand", false],
+            ["collapse", true],
+        ])("should render %s", (state, value) => {
+            const { getByLabelText } = getComponent({
+                mxEvent: new MatrixEvent({
+                    type: EventType.RoomMessage,
+                    sender: userId,
+                    room_id: roomId,
+                    content: {
+                        "msgtype": MsgType.Text,
+                        "body": "Hello",
+                        "m.relates_to": {
+                            "m.in_reply_to": { event_id: alicesMessageEvent.getId() },
+                        },
+                    },
+                    event_id: "$alices_reply",
+                }),
+                isQuoteExpanded: value,
+            });
+            expect(getByLabelText(`${state[0].toUpperCase()}${state.slice(1)} quotes`)).toBeInTheDocument();
+        });
+    });
 });

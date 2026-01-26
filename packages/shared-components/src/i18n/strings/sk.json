@@ -10,10 +10,6 @@
         "play": "Prehrať",
         "search": "Hľadať"
     },
-    "encryption": {
-        "pinned_identity_changed": "Zdá sa, že identita (<b>%(userId)s</b>) používateľa %(displayName)s bola obnovená. <a>Zistiť viac </a>",
-        "withdraw_verification_action": "Zrušiť overenie"
-    },
     "left_panel": {
         "open_dial_pad": "Otvoriť číselník"
     },

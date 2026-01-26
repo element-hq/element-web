@@ -4,7 +4,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 <div
   aria-labelledby="radix-_r_1m_"
   aria-orientation="vertical"
-  class="_menu_1glhz_8"
+  class="_menu_1w1u7_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -17,7 +17,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   tabindex="-1"
 >
   <h3
-    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1w1u7_63"
     id="_r_1u_"
   >
     Threads activity
@@ -34,7 +34,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -82,7 +82,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -129,7 +129,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
   aria-labelledby="radix-_r_2a_"
   aria-orientation="vertical"
-  class="_menu_1glhz_8"
+  class="_menu_1w1u7_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -142,7 +142,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
   tabindex="-1"
 >
   <h3
-    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1w1u7_63"
     id="_r_2i_"
   >
     Threads activity
@@ -163,7 +163,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
 <div
   aria-labelledby="radix-_r_2j_"
   aria-orientation="vertical"
-  class="_menu_1glhz_8"
+  class="_menu_1w1u7_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -176,7 +176,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
   tabindex="-1"
 >
   <h3
-    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1glhz_74"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_1w1u7_63"
     id="_r_2r_"
   >
     Threads activity
@@ -193,7 +193,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -241,7 +241,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
@@ -289,7 +289,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_lqfwq_50"
+        class="mx_DecoratedRoomAvatar _icon_lqfwq_50"
       >
         <span
           class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"

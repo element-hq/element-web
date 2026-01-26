@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-
-import WarningSvg from "../../../../res/img/warning.svg";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface IProps {
     errorMsg?: string;
@@ -18,7 +17,7 @@ const AppWarning: React.FC<IProps> = (props) => {
     return (
         <div className="mx_AppWarning">
             <div>
-                <img src={WarningSvg} alt="" />
+                <WarningIcon width="24px" height="24px" />
             </div>
             <div>
                 <span>{props.errorMsg || "Error"}</span>

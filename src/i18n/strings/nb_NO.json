@@ -1909,6 +1909,7 @@
                 "other": "%(count)s festede meldinger"
             },
             "limits": {
+                "one": "",
                 "other": "Du kan bare feste opptil %(count)s widgets"
             },
             "menu": "Åpne meny",
@@ -1986,7 +1987,6 @@
         "dm_invite_title": "Vil du prate med %(user)s?",
         "drop_file_prompt": "Slipp ned en fil her for å laste opp",
         "edit_topic": "Rediger emne",
-        "error_3pid_invite_email_lookup": "Kan ikke finne bruker via e-post",
         "error_cancel_knock_title": "Kunne ikke avbryte",
         "error_join_403": "Du trenger en invitasjon for å få tilgang til dette rommet.",
         "error_join_404_1": "Du forsøkte å bli med ved hjelp av en rom-ID uten å oppgi en liste over servere du kan bli med gjennom. Rom-ID-er er interne identifikatorer og kan ikke brukes til å bli med i et rom uten ytterligere informasjon.",
@@ -2117,19 +2117,6 @@
             },
             "this_room_button": "Søk i dette rommet"
         },
-        "status_bar": {
-            "delete_all": "Slett alle",
-            "exceeded_resource_limit": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har overskredet en ressursgrense. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
-            "history_visible": "Dette rommet er konfigurert slik at nye medlemmer kan lese historikken. <a>Lær mer</a>",
-            "homeserver_blocked": "Meldingen din ble ikke sendt fordi denne hjemmeserveren er blokkert av administratoren. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
-            "monthly_user_limit_reached": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har nådd sin månedlige aktive brukergrense. Ta <a> kontakt med tjenesteadministratoren din </a> for å fortsette å bruke tjenesten.",
-            "requires_consent_agreement": "Du kan ikke sende noen meldinger før du har lest gjennom og godtar <consentLink>våre vilkår og betingelser</consentLink>.",
-            "retry_all": "Prøv alle igjen",
-            "select_messages_to_retry": "Du kan velge alle eller individuelle meldinger for å prøve på nytt eller slette",
-            "server_connectivity_lost_description": "Sendte meldinger vil bli lagret til tilkoblingen er tilbake.",
-            "server_connectivity_lost_title": "Tilkoblingen til tjeneren er nede.",
-            "some_messages_not_sent": "Noen av meldingene dine er ikke sendt"
-        },
         "unknown_status_code_for_timeline_jump": "ukjent statuskode",
         "unread_notifications_predecessor": {
             "one": "Du har %(count)s ulest varsel i en tidligere versjon av dette rommet.",
@@ -2216,6 +2203,9 @@
         },
         "room_options": "Rominnstillinger",
         "show_less": "Vis mindre",
+        "show_n_more": {
+            "Vis %(count)s til": "Vis %(count)s mer"
+        },
         "show_previews": "Vis forhåndsvisninger av meldinger",
         "sort": "Sorter",
         "sort_by": "Sorter etter",
@@ -2415,7 +2405,6 @@
             "error_join_rule_change_unknown": "Ukjent feil",
             "guest_access_warning": "Personer med støttede klienter vil kunne bli med i rommet uten å ha en registrert konto.",
             "history_visibility_invited": "Kun medlemmer (f.o.m. da de ble invitert)",
-            "history_visibility_joined": "Kun medlemmer (f.o.m. de ble med)",
             "history_visibility_legend": "Hvem kan lese historikken?",
             "history_visibility_shared": "Kun medlemmer (f.o.m. da denne innstillingen ble valgt)",
             "history_visibility_warning": "Endringer for hvem som kan lese historikken, vil kun bli benyttet for fremtidige meldinger i dette rommet. Synligheten til den eksisterende historikken vil forbli uendret.",
@@ -3708,6 +3697,9 @@
                 "one": "%(oneUser)s endret navn",
                 "other": "%(oneUser)s endret navn %(count)s ganger"
             },
+            "changed_name_multiple": {
+                "%(severalUsers)s endret navnene sine": "one"
+            },
             "format": "%(nameList)s%(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)ssendte en skjult melding",
@@ -3721,6 +3713,9 @@
                 "one": "%(oneUser)sfikk invitasjonen trukket tilbake",
                 "other": "%(oneUser)sfikk invitasjonen trukket tilbake %(count)s ganger"
             },
+            "invite_withdrawn_multiple": {
+                "%(severalUsers)sfikk sine invitasjoner trukket tilbake": "one"
+            },
             "invited": {
                 "one": "ble invitert",
                 "other": "ble invitert %(count)s ganger"
@@ -3732,6 +3727,9 @@
             "joined": {
                 "one": "%(oneUser)sble med",
                 "other": "%(oneUser)sble med %(count)s ganger"
+            },
+            "joined_and_left": {
+                "%(oneUser)sble med og forlot igjen": "one"
             },
             "joined_and_left_multiple": {
                 "one": "%(severalUsers)sble med og forlot",
@@ -3832,6 +3830,9 @@
             }
         }
     },
+    "truncated_list_n_more": {
+        "Og %(count)s til...": "other"
+    },
     "unsupported_browser": {
         "description": "Hvis du fortsetter, kan noen funksjoner slutte å fungere, og det er en risiko for at du kan miste data i fremtiden. Oppdater nettleseren din for å fortsette å bruke%(brand)s.",
         "title": "%(brand)s støtter ikke denne nettleseren"
@@ -3872,7 +3873,11 @@
         "not_image": "Filen du har valgt, er ikke en gyldig bildefil.",
         "title": "Last opp filer",
         "title_progress": "Last opp filer (%(current)s av %(total)s)",
-        "upload_all_button": "Last opp alle"
+        "upload_all_button": "Last opp alle",
+        "upload_n_others_button": {
+            "Last opp %(count)s andre filer": "Last opp %(count)s andre filer",
+            "Last opp %(count)s annen fil": "Last opp %(count)s en annen fil"
+        }
     },
     "user_info": {
         "admin_tools_section": "Adminverktøy",
@@ -3910,6 +3915,10 @@
         "kick_space_warning": "De vil fortsatt kunne få tilgang til det du ikke er administrator av.",
         "promote_warning": "Du vil ikke kunne angre denne endringen ettersom du promoterer brukeren til å ha samme tilgangsnivå som deg selv.",
         "redact": {
+            "confirm_button": {
+                "Slett %(count)s meldinger": "Fjern 1 melding",
+                "Slett 1 melding": "Fjern %(count)s meldinger"
+            },
             "confirm_description_1": {
                 "one": "Du er i ferd med å fjerne %(count)s melding fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?",
                 "other": "Du er i ferd med å fjerne %(count)s meldinger fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?"
@@ -3988,7 +3997,6 @@
         "hide_sidebar_button": "Skjul sidepanel",
         "input_devices": "Inndataenheter",
         "jitsi_call": "Jitsi Conference",
-        "join_button_tooltip_call_full": "Beklager - denne samtalen er for øyeblikket full",
         "legacy_call": "Eldre samtale",
         "maximise": "Fyll skjermen",
         "maximise_call": "Maksimer samtalen",

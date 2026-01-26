@@ -1,0 +1,12 @@
+diff --git a/node_modules/@vector-im/matrix-wysiwyg/package.json b/node_modules/@vector-im/matrix-wysiwyg/package.json
+index 8163a3b..dfef973 100644
+--- a/node_modules/@vector-im/matrix-wysiwyg/package.json
++++ b/node_modules/@vector-im/matrix-wysiwyg/package.json
+@@ -11,6 +11,7 @@
+     "license": "SEE LICENSE IN README.md",
+     "exports": {
+         ".": {
++            "types": "./dist/index.d.ts",
+             "import": "./dist/matrix-wysiwyg.js",
+             "require": "./dist/matrix-wysiwyg.umd.cjs"
+         }

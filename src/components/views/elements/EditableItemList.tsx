@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ChangeEvent } from "react";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import Field from "./Field";
@@ -74,12 +75,14 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
 
         return (
             <div className="mx_EditableItem">
-                <div
+                <AccessibleButton
                     onClick={this.onRemove}
                     className="mx_EditableItem_delete"
                     title={_t("action|remove")}
                     role="button"
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );

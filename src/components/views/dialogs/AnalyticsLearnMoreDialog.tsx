@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
@@ -72,9 +73,18 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
                     {_t("analytics|pseudonymous_usage_data", { analyticsOwner })}
                 </div>
                 <ul className="mx_AnalyticsLearnMore_bullets">
-                    <li>{_t("analytics|bullet_1", {}, { Bold: (sub) => <strong>{sub}</strong> })}</li>
-                    <li>{_t("analytics|bullet_2", {}, { Bold: (sub) => <strong>{sub}</strong> })}</li>
-                    <li>{_t("analytics|disable_prompt")}</li>
+                    <li>
+                        <CheckCircleIcon />
+                        {_t("analytics|bullet_1", {}, { Bold: (sub) => <strong>{sub}</strong> })}
+                    </li>
+                    <li>
+                        <CheckCircleIcon />
+                        {_t("analytics|bullet_2", {}, { Bold: (sub) => <strong>{sub}</strong> })}
+                    </li>
+                    <li>
+                        <CheckCircleIcon />
+                        {_t("analytics|disable_prompt")}
+                    </li>
                 </ul>
                 {privacyPolicyLink}
             </div>

@@ -6,13 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-// fake-indexeddb needs this and the tests crash without it
-// https://github.com/dumbmatter/fakeIndexedDB?tab=readme-ov-file#jsdom-often-used-with-jest
-import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
 import React, { type ComponentProps } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
@@ -1629,7 +1626,7 @@ describe("<MatrixChat />", () => {
 
         // Flaky test, see https://github.com/element-hq/element-web/issues/30337
         it("waits for other tab to stop during startup", async () => {
-            fetchMock.get("/welcome.html", { body: "<h1>Hello</h1>" });
+            fetchMock.get("end:/welcome.html", { body: "<h1>Hello</h1>" });
             jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
 
             // simulate an active window

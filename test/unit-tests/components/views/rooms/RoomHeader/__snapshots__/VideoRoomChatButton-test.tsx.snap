@@ -4,7 +4,7 @@ exports[`<VideoRoomChatButton /> renders button with an unread marker when room 
 <button
   aria-label="Chat"
   aria-labelledby="_r_6_"
-  class="_icon-button_1pz9o_8"
+  class="_icon-button_1215g_8"
   data-indicator="default"
   data-kind="primary"
   role="button"

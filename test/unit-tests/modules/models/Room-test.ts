@@ -39,12 +39,14 @@ describe("Room", () => {
 
             const room = new Room(sdkRoom);
             const fn = jest.fn();
+            const onSpy = jest.spyOn(sdkRoom, "on");
+            const offSpy = jest.spyOn(sdkRoom, "off");
 
             room.name.watch(fn);
-            expect(sdkRoom.on).toHaveBeenCalledTimes(1);
+            expect(onSpy).toHaveBeenCalledTimes(1);
 
             room.name.unwatch(fn);
-            expect(sdkRoom.off).toHaveBeenCalledTimes(1);
+            expect(offSpy).toHaveBeenCalledTimes(1);
         });
     });
 });

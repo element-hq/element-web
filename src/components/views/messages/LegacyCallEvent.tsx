@@ -6,11 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { Clock } from "@element-hq/web-shared-components";
+import {
+    EndCallIcon,
+    VideoCallDeclinedSolidIcon,
+    VideoCallMissedSolidIcon,
+    VideoCallSolidIcon,
+    VoiceCallMissedSolidIcon,
+    VoiceCallSolidIcon,
+    VolumeOffSolidIcon,
+    VolumeOnSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -33,6 +43,17 @@ interface IState {
     silenced: boolean;
     narrow: boolean;
     length: number;
+}
+
+export function getCallStateIcon(isVoice: boolean, state: undefined | "missed" | "declined"): JSX.Element {
+    let icon = isVoice ? <VoiceCallSolidIcon /> : <VideoCallSolidIcon />;
+    if (state === "missed") {
+        icon = isVoice ? <VoiceCallMissedSolidIcon /> : <VideoCallMissedSolidIcon />;
+    } else if (state === "declined") {
+        icon = isVoice ? <EndCallIcon /> : <VideoCallDeclinedSolidIcon />;
+    }
+
+    return <div className="mx_LegacyCallEvent_type_icon">{icon}</div>;
 }
 
 export default class LegacyCallEvent extends React.PureComponent<IProps, IState> {
@@ -89,28 +110,25 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
     private renderCallBackButton(text: string): JSX.Element {
         return (
             <AccessibleButton
-                className="mx_LegacyCallEvent_content_button mx_LegacyCallEvent_content_button_callBack"
+                className="mx_LegacyCallEvent_content_button"
                 onClick={this.props.callEventGrouper.callBack}
                 kind="primary"
             >
-                <span> {text} </span>
+                {this.props.callEventGrouper.isVoice ? <VoiceCallSolidIcon /> : <VideoCallSolidIcon />}
+                {text}
             </AccessibleButton>
         );
     }
 
     private renderSilenceIcon(): JSX.Element {
-        const silenceClass = classNames({
-            mx_LegacyCallEvent_iconButton: true,
-            mx_LegacyCallEvent_unSilence: this.state.silenced,
-            mx_LegacyCallEvent_silence: !this.state.silenced,
-        });
-
         return (
             <AccessibleButton
-                className={silenceClass}
+                className="mx_LegacyCallEvent_iconButton"
                 onClick={this.props.callEventGrouper.toggleSilenced}
                 title={this.state.silenced ? _t("voip|unsilence") : _t("voip|silence")}
-            />
+            >
+                {this.state.silenced ? <VolumeOffSolidIcon /> : <VolumeOnSolidIcon />}
+            </AccessibleButton>
         );
     }
 
@@ -125,18 +143,20 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                 <div className="mx_LegacyCallEvent_content">
                     {silenceIcon}
                     <AccessibleButton
-                        className="mx_LegacyCallEvent_content_button mx_LegacyCallEvent_content_button_reject"
+                        className="mx_LegacyCallEvent_content_button"
                         onClick={this.props.callEventGrouper.rejectCall}
                         kind="danger"
                     >
-                        <span> {_t("action|decline")} </span>
+                        <EndCallIcon />
+                        {_t("action|decline")}
                     </AccessibleButton>
                     <AccessibleButton
-                        className="mx_LegacyCallEvent_content_button mx_LegacyCallEvent_content_button_answer"
+                        className="mx_LegacyCallEvent_content_button"
                         onClick={this.props.callEventGrouper.answerCall}
                         kind="primary"
                     >
-                        <span> {_t("action|accept")} </span>
+                        {this.props.callEventGrouper.isVoice ? <VoiceCallSolidIcon /> : <VideoCallSolidIcon />}
+                        {_t("action|accept")}
                     </AccessibleButton>
                     {this.props.timestamp}
                 </div>
@@ -268,13 +288,21 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             mx_LegacyCallEvent_voice: isVoice,
             mx_LegacyCallEvent_video: !isVoice,
             mx_LegacyCallEvent_narrow: this.state.narrow,
-            mx_LegacyCallEvent_missed: this.props.callEventGrouper.callWasMissed,
-            mx_LegacyCallEvent_noAnswer: callState === CallState.Ended && hangupReason === CallErrorCode.InviteTimeout,
-            mx_LegacyCallEvent_rejected: callState === CallState.Ended && this.props.callEventGrouper.gotRejected,
         });
+
         let silenceIcon;
         if (this.state.narrow && this.state.callState === CallState.Ringing) {
             silenceIcon = this.renderSilenceIcon();
+        }
+
+        let iconState: Parameters<typeof getCallStateIcon>[1] = undefined;
+        if (this.props.callEventGrouper.callWasMissed) {
+            iconState = "missed";
+        } else if (
+            callState === CallState.Ended &&
+            (hangupReason === CallErrorCode.InviteTimeout || this.props.callEventGrouper.gotRejected)
+        ) {
+            iconState = "declined";
         }
 
         return (
@@ -286,7 +314,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                         <div className="mx_LegacyCallEvent_info_basic">
                             <div className="mx_LegacyCallEvent_sender">{sender}</div>
                             <div className="mx_LegacyCallEvent_type">
-                                <div className="mx_LegacyCallEvent_type_icon" />
+                                {getCallStateIcon(!!isVoice, iconState)}
                                 {callType}
                             </div>
                         </div>

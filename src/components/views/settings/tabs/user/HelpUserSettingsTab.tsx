@@ -13,16 +13,15 @@ import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import Modal from "../../../../../Modal";
 import PlatformPeg from "../../../../../PlatformPeg";
 import UpdateCheckButton from "../../UpdateCheckButton";
-import BugReportDialog from "../../../dialogs/BugReportDialog";
 import CopyableText from "../../../elements/CopyableText";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import ExternalLink from "../../../elements/ExternalLink";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import { BugReportDialogButton } from "../../../elements/BugReportDialogButton";
 
 interface IState {
     appVersion: string | null;
@@ -78,10 +77,6 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
         this.context.store.deleteAllData().then(() => {
             PlatformPeg.get()?.reload();
         });
-    };
-
-    private onBugReport = (): void => {
-        Modal.createDialog(BugReportDialog, {});
     };
 
     private renderLegal(): ReactNode {
@@ -231,9 +226,7 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
                         </>
                     }
                 >
-                    <AccessibleButton onClick={this.onBugReport} kind="primary_outline">
-                        {_t("bug_reporting|submit_debug_logs")}
-                    </AccessibleButton>
+                    <BugReportDialogButton />
                     <SettingsSubsectionText>
                         {_t(
                             "bug_reporting|matrix_security_issue",

@@ -14,6 +14,7 @@ import Field from "./Field";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { objectHasDiff } from "../../../utils/objects";
+import { arrayHasDiff } from "../../../utils/arrays.ts";
 
 const CUSTOM_VALUE = "SELECT_VALUE_CUSTOM";
 
@@ -38,7 +39,6 @@ interface Props<K extends undefined | string> {
 }
 
 interface IState {
-    levelRoleMap: Partial<Record<number | "undefined", string>>;
     // List of power levels to show in the drop-down
     options: number[];
 
@@ -47,7 +47,7 @@ interface IState {
     custom?: boolean;
 }
 
-export default class PowerSelector<K extends undefined | string> extends React.Component<Props<K>, IState> {
+export default class PowerSelector<K extends undefined | string> extends React.PureComponent<Props<K>, IState> {
     public static defaultProps: Partial<Props<any>> = {
         maxValue: Infinity,
         usersDefault: 0,
@@ -58,7 +58,6 @@ export default class PowerSelector<K extends undefined | string> extends React.C
         super(props);
 
         this.state = {
-            levelRoleMap: {},
             // List of power levels to show in the drop-down
             options: [],
 
@@ -85,6 +84,7 @@ export default class PowerSelector<K extends undefined | string> extends React.C
     private initStateFromProps(): void {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap(this.props.usersDefault);
+
         const options = Object.keys(levelRoleMap)
             .filter((level) => {
                 return (
@@ -93,11 +93,13 @@ export default class PowerSelector<K extends undefined | string> extends React.C
             })
             .map((level) => parseInt(level));
 
+        if (arrayHasDiff(options, this.state.options)) {
+            this.setState({ options });
+        }
+
         const isCustom = levelRoleMap[this.props.value] === undefined;
 
         this.setState({
-            levelRoleMap,
-            options,
             custom: isCustom,
             customValue: this.props.value,
             selectValue: isCustom ? CUSTOM_VALUE : this.props.value,

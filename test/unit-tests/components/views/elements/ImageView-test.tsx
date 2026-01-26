@@ -9,7 +9,7 @@
 import React from "react";
 import { mocked } from "jest-mock";
 import { render, fireEvent, waitFor } from "jest-matrix-react";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import ImageView from "../../../../../src/components/views/elements/ImageView";
@@ -23,7 +23,6 @@ jest.mock("../../../../../src/utils/FileDownloader");
 describe("<ImageView />", () => {
     beforeEach(() => {
         jest.resetAllMocks();
-        fetchMock.reset();
     });
 
     it("renders correctly", () => {

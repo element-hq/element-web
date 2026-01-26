@@ -29,6 +29,7 @@ import {
     Thread,
     ThreadEvent,
     ReceiptType,
+    EventStatus,
 } from "matrix-js-sdk/src/matrix";
 import { debounce } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -1004,6 +1005,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         lastReadEventIndex: number | null,
     ): lastReadEvent is MatrixEvent {
         if (!lastReadEvent) return false;
+        if (lastReadEvent.status === EventStatus.NOT_SENT) return false;
 
         // We want to avoid sending out read receipts when we are looking at
         // events in the past which are before the latest RR.

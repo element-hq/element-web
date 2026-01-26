@@ -6,39 +6,40 @@
  */
 
 import counterpart from "counterpart";
+import { vi, describe, it, beforeEach, expect } from "vitest";
 
 import { registerTranslations, setMissingEntryGenerator, getLocale, setLocale } from "./i18n";
 
 describe("i18n utils", () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("should wrap registerTranslations", () => {
-        jest.spyOn(counterpart, "registerTranslations");
+        vi.spyOn(counterpart, "registerTranslations");
 
         registerTranslations("en", { test: "This is a test" });
         expect(counterpart.registerTranslations).toHaveBeenCalledWith("en", { test: "This is a test" });
     });
 
     it("should wrap setMissingEntryGenerator", () => {
-        jest.spyOn(counterpart, "setMissingEntryGenerator");
+        vi.spyOn(counterpart, "setMissingEntryGenerator");
 
-        const dummyFn = jest.fn();
+        const dummyFn = vi.fn();
 
         setMissingEntryGenerator(dummyFn);
         expect(counterpart.setMissingEntryGenerator).toHaveBeenCalledWith(dummyFn);
     });
 
     it("should wrap getLocale", () => {
-        jest.spyOn(counterpart, "getLocale");
+        vi.spyOn(counterpart, "getLocale");
 
         getLocale();
         expect(counterpart.getLocale).toHaveBeenCalled();
     });
 
     it("should wrap setLocale", () => {
-        jest.spyOn(counterpart, "setLocale");
+        vi.spyOn(counterpart, "setLocale");
 
         setLocale("en");
         expect(counterpart.setLocale).toHaveBeenCalledWith("en");

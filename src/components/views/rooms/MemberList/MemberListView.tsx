@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React, { type JSX, useCallback } from "react";
-import { Flex } from "@element-hq/web-shared-components";
+import { Flex, type VirtualizedListContext, VirtualizedList } from "@element-hq/web-shared-components";
 
 import {
     type MemberWithSeparator,
@@ -19,7 +19,6 @@ import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "../../right_panel/BaseCard";
 import { _t } from "../../../../languageHandler";
-import { type ListContext, ListView } from "../../../utils/ListView";
 
 interface IProps {
     roomId: string;
@@ -54,7 +53,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         (
             index: number,
             item: MemberWithSeparator,
-            context: ListContext<any>,
+            context: VirtualizedListContext<any>,
             onFocus: (item: MemberWithSeparator, e: React.FocusEvent) => void,
         ): JSX.Element => {
             const itemKey = getItemKey(item);
@@ -109,7 +108,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                 <Form.Root onSubmit={(e) => e.preventDefault()}>
                     <MemberListHeaderView vm={vm} />
                 </Form.Root>
-                <ListView
+                <VirtualizedList
                     items={vm.members}
                     getItemComponent={getItemComponent}
                     getItemKey={getItemKey}

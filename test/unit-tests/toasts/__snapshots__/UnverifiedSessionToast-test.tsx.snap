@@ -30,9 +30,6 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
           >
             New login. Was this you?
           </h2>
-          <span
-            class="mx_Toast_title_countIndicator"
-          />
         </div>
         <div
           class="mx_Toast_body"

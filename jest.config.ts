@@ -11,7 +11,7 @@ import { env } from "process";
 import type { Config } from "jest";
 
 const config: Config = {
-    testEnvironment: "jsdom",
+    testEnvironment: "jest-fixed-jsdom",
     testEnvironmentOptions: {
         url: "http://localhost/",
         // This is needed to be able to load dual CJS/ESM WASM packages e.g. rust crypto & matrix-wywiwyg
@@ -39,11 +39,11 @@ const config: Config = {
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
-        "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
         "counterpart": "<rootDir>/node_modules/counterpart",
+        "@vector-im/compound-web": "<rootDir>/node_modules/@vector-im/compound-web",
     },
     transformIgnorePatterns: [
-        "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n)).+$",
+        "/node_modules/(?!(mime|matrix-js-sdk|uuid|p-retry|is-network-error|react-merge-refs|is-ip|ip-regex|super-regex|function-timeout|time-span|convert-hrtime|clone-regexp|is-regexp|matrix-web-i18n|await-lock|@element-hq/web-shared-components|react-virtuoso)).+$",
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",

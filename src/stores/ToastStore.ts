@@ -22,6 +22,15 @@ export interface IToast<C extends ComponentClass> {
     component: C;
     className?: string;
     bodyClassName?: string;
+
+    /**
+     * What to do if the user clicks the close button. If this is undefined, the
+     * close button is not displayed.
+     *
+     * Note: the close button is only displayed if the toast has a title (i.e. if {@link title} is truthy).
+     */
+    onCloseButtonClicked?: () => void;
+
     props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
 }
 
@@ -30,9 +39,6 @@ export interface IToast<C extends ComponentClass> {
  */
 export default class ToastStore extends EventEmitter {
     private toasts: IToast<any>[] = [];
-    // The count of toasts which have been seen & dealt with in this stack
-    // where the count resets when the stack of toasts clears.
-    private countSeen = 0;
 
     public static sharedInstance(): ToastStore {
         if (!window.mxToastStore) window.mxToastStore = new ToastStore();
@@ -41,7 +47,6 @@ export default class ToastStore extends EventEmitter {
 
     public reset(): void {
         this.toasts = [];
-        this.countSeen = 0;
     }
 
     /**
@@ -68,27 +73,23 @@ export default class ToastStore extends EventEmitter {
     }
 
     public dismissToast(key: string): void {
-        if (this.toasts[0] && this.toasts[0].key === key) {
-            this.countSeen++;
-        }
-
         const length = this.toasts.length;
         this.toasts = this.toasts.filter((t) => t.key !== key);
         if (length !== this.toasts.length) {
             logger.info(`Removed toast with key '${key}'`);
-            if (this.toasts.length === 0) {
-                this.countSeen = 0;
-            }
-
             this.emit("update");
         }
     }
 
-    public getToasts(): IToast<any>[] {
-        return this.toasts;
+    /**
+     * Is a toast currently present on the store.
+     * @param key The toast key to look for.
+     */
+    public hasToast(key: string): boolean {
+        return this.toasts.some((toast) => toast.key === key);
     }
 
-    public getCountSeen(): number {
-        return this.countSeen;
+    public getToasts(): IToast<any>[] {
+        return this.toasts;
     }
 }

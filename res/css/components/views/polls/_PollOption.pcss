@@ -59,28 +59,19 @@ Please see LICENSE files in the repository root for full details.
     /* override checked radio button styling to show checkmark instead */
     .mx_StyledRadioButton_checked {
         input[type="radio"]:checked + div {
-            position: relative;
-            border-width: 2px;
             border-color: var(--cpd-color-icon-primary);
             background-color: var(--cpd-color-icon-primary);
 
-            &::before {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
-                mask-size: 12px 12px;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                background-color: var(--cpd-color-icon-on-solid-primary);
-                width: 12px;
-                height: 12px;
-            }
-
             div {
-                visibility: hidden;
+                background: none;
+
+                svg {
+                    color: var(--cpd-color-icon-on-solid-primary);
+                    width: 12px;
+                    height: 12px;
+                    margin: -2px;
+                    display: block;
+                }
             }
         }
     }

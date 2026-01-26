@@ -56,8 +56,7 @@ describe("DevtoolsDialog", () => {
         const copiedBtn = getByLabelText(container, "Copied!");
 
         expect(copiedBtn).toBeInTheDocument();
-        expect(navigator.clipboard.writeText).toHaveBeenCalled();
-        await expect(navigator.clipboard.readText()).resolves.toBe(room.roomId);
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(room.roomId);
     });
 
     it("copies the thread root id when provided", async () => {
@@ -72,7 +71,6 @@ describe("DevtoolsDialog", () => {
         const copiedBtn = getByLabelText(container, "Copied!");
 
         expect(copiedBtn).toBeInTheDocument();
-        expect(navigator.clipboard.writeText).toHaveBeenCalled();
-        await expect(navigator.clipboard.readText()).resolves.toBe(threadRootId);
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(threadRootId);
     });
 });

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import SdkConfig from "../../src/SdkConfig";
 import PlatformPeg from "../../src/PlatformPeg";
@@ -15,8 +15,6 @@ import WebPlatform from "../../src/vector/platform/WebPlatform";
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
-
-fetchMock.config.overwriteRoutes = true;
 
 describe("Loading server config", function () {
     beforeEach(async () => {

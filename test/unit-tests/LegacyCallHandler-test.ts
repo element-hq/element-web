@@ -20,7 +20,7 @@ import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/we
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
@@ -416,11 +416,7 @@ describe("LegacyCallHandler without third party protocols", () => {
         audioElement.id = "remoteAudio";
         document.body.appendChild(audioElement);
 
-        fetchMock.get(
-            "/media/ring.mp3",
-            { body: new Blob(["1", "2", "3", "4"], { type: "audio/mpeg" }) },
-            { sendAsJson: false },
-        );
+        fetchMock.get("end:/media/ring.mp3", { body: new Blob(["1", "2", "3", "4"], { type: "audio/mpeg" }) });
     });
 
     afterEach(() => {
@@ -438,9 +434,9 @@ describe("LegacyCallHandler without third party protocols", () => {
     it("should cache sounds between playbacks", async () => {
         await callHandler.play(AudioID.Ring);
         expect(mockAudioBufferSourceNode.start).toHaveBeenCalled();
-        expect(fetchMock.calls("/media/ring.mp3")).toHaveLength(1);
+        expect(fetchMock).toHaveFetchedTimes(1, "end:/media/ring.mp3");
         await callHandler.play(AudioID.Ring);
-        expect(fetchMock.calls("/media/ring.mp3")).toHaveLength(1);
+        expect(fetchMock).toHaveFetchedTimes(1, "end:/media/ring.mp3");
     });
 
     it("should allow silencing an incoming call ring", async () => {

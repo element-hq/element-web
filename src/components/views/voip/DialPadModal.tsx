@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, createRef, type SyntheticEvent } from "react";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
@@ -106,7 +107,9 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
         return (
             <div className="mx_DialPadModal">
                 <div>
-                    <AccessibleButton className="mx_DialPadModal_cancel" onClick={this.onCancelClick} />
+                    <AccessibleButton className="mx_DialPadModal_cancel" onClick={this.onCancelClick}>
+                        <CloseIcon />
+                    </AccessibleButton>
                 </div>
                 <div className="mx_DialPadModal_header">
                     <form onSubmit={this.onFormSubmit}>{dialPadField}</form>

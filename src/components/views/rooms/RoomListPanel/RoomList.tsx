@@ -8,11 +8,15 @@
 import React, { useCallback, useRef, type JSX, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { isEqual } from "lodash";
+import {
+    type VirtualizedListContext,
+    VirtualizedList,
+    type ScrollIntoViewOnChange,
+} from "@element-hq/web-shared-components";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
 import { RoomListItemView } from "./RoomListItemView";
-import { type ListContext, ListView, type ScrollIntoViewOnChange } from "../../../utils/ListView";
 import { type FilterKey } from "../../../../stores/room-list-v3/skip-list/filters";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -53,7 +57,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
         (
             index: number,
             item: Room,
-            context: ListContext<Context>,
+            context: VirtualizedListContext<Context>,
             onFocus: (item: Room, e: React.FocusEvent) => void,
         ): JSX.Element => {
             const itemKey = item.roomId;
@@ -118,7 +122,7 @@ export function RoomList({ vm: { roomsResult, activeIndex } }: RoomListProps): J
     );
 
     return (
-        <ListView
+        <VirtualizedList
             context={context}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             initialTopMostItemIndex={activeIndex}
