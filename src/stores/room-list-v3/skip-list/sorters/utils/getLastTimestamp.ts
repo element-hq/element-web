@@ -26,6 +26,12 @@ export function shouldCauseReorder(event: MatrixEvent): boolean {
     return true;
 }
 
+/**
+ * For a given room, this function returns a timestamp that can be used for recency sorting.
+ * @param r room for which the timestamp is calculated
+ * @param userId mxId of the current user
+ * @returns timestamp
+ */
 export const getLastTimestamp = (r: Room, userId: string): number => {
     const mainTimelineLastTs = ((): number => {
         const timeline = r.getLiveTimeline().getEvents();
