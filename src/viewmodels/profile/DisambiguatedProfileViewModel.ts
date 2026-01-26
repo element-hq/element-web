@@ -75,7 +75,7 @@ export class DisambiguatedProfileViewModel
     extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewModelProps>
     implements DisambiguatedProfileViewModelInterface
 {
-    onClick?: DisambiguatedProfileViewActions["onClick"];
+    public onClick?: DisambiguatedProfileViewActions["onClick"];
 
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
