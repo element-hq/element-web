@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ReactNode } from "react";
+import { Ref, type ReactNode } from "react";
 import { type IContent, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -87,21 +87,25 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
      */
     includeDir?: boolean;
     /**
+     * does something
+     */
+    ref?: Ref<HTMLElement>;
+    /**
      * Whether to render the content in a div or span.
      */
     as: "span" | "div";
     /**
      * Whether big emoji should be enabled.
      */
-    enableBigEmoji: boolean;
+    enableBigEmoji?: boolean;
     /**
      * Whether media is visible in the event.
      */
-    mediaIsVisible: boolean;
+    mediaIsVisible?: boolean;
     /**
      * Whether to show pill avatars.
      */
-    shouldShowPillAvatar: boolean;
+    shouldShowPillAvatar?: boolean;
 }
 
 /**

@@ -59,7 +59,7 @@ export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyV
     const As = as;
 
     return (
-        <As ref={ref as React.Ref<HTMLDivElement> & React.Ref<HTMLSpanElement>} className={className} dir={dir}>
+        <As ref={ref as any} className={className} dir={dir}>
             {children}
         </As>
     );

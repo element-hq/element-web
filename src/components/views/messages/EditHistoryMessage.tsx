@@ -10,7 +10,8 @@ import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import EventContentBody from "./EventContentBody.tsx";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
+//import EventContentBody from "./EventContentBody.tsx";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
@@ -21,6 +22,7 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { EventContentBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -124,6 +126,21 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
 
     public render(): React.ReactNode {
         const { mxEvent } = this.props;
+        const eventContentBodyVM = useCreateAutoDisposedViewModel(
+            () =>
+                new EventContentBodyViewModel({
+                    as: "span",
+                    mxEvent: mxEvent,
+                    content: content,
+                    highlights: [],
+                    stripReply: true,
+                    renderTooltipsForAmbiguousLinks: true,
+                    renderMentionPills: true,
+                    renderCodeBlocks: true,
+                    renderSpoilers: true,
+                    linkify: true,
+                }),
+        );
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
@@ -133,20 +150,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = (
-                    <EventContentBody
-                        as="span"
-                        mxEvent={mxEvent}
-                        content={content}
-                        highlights={[]}
-                        stripReply
-                        renderTooltipsForAmbiguousLinks
-                        renderMentionPills
-                        renderCodeBlocks
-                        renderSpoilers
-                        linkify
-                    />
-                );
+                contentElements = <EventContentBodyView vm={eventContentBodyVM} as={"span"} />;
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();

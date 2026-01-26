@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 
-import EventContentBody from "./EventContentBody.tsx";
+// import EventContentBody from "./EventContentBody.tsx";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
@@ -29,6 +30,7 @@ import { options as linkifyOpts } from "../../../linkify-matrix";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
+import { EventContentBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -323,23 +325,25 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
-        let body = (
-            <EventContentBody
-                as={willHaveWrapper ? "span" : "div"}
-                includeDir={false}
-                mxEvent={mxEvent}
-                content={content}
-                stripReply={stripReply}
-                linkify
-                highlights={this.props.highlights}
-                ref={this.contentRef}
-                renderTooltipsForAmbiguousLinks
-                renderKeywordPills
-                renderMentionPills
-                renderCodeBlocks
-                renderSpoilers
-            />
+        const eventContentBodyVM = useCreateAutoDisposedViewModel(
+            () =>
+                new EventContentBodyViewModel({
+                    as: willHaveWrapper ? "span" : "div",
+                    includeDir: false,
+                    mxEvent: mxEvent,
+                    content: content,
+                    stripReply: stripReply,
+                    linkify: true,
+                    highlights: this.props.highlights,
+                    ref: this.contentRef,
+                    renderTooltipsForAmbiguousLinks: true,
+                    renderKeywordPills: true,
+                    renderMentionPills: true,
+                    renderCodeBlocks: true,
+                    renderSpoilers: true,
+                }),
         );
+        let body = <EventContentBodyView vm={eventContentBodyVM} as={willHaveWrapper ? "span" : "div"} />;
 
         if (this.props.replacingEventId) {
             body = (
