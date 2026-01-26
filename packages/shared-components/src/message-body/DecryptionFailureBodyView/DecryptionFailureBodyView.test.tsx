@@ -44,78 +44,95 @@ describe("DecryptionFailureBodyView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it(`Should display "Unable to decrypt message"`, () => {
+    it.each([true, false])(`Should display "Unable to decrypt message and device verification is %s"`, (verified) => {
         // When
-        const { container } = customRender(DecryptionFailureReason.UNABLE_TO_DECRYPT);
+        const { container } = customRender(DecryptionFailureReason.UNABLE_TO_DECRYPT, verified);
 
         // Then
         expect(container).toHaveTextContent("Unable to decrypt message");
         expect(container).toMatchSnapshot();
     });
 
-    it(`Should display "The sender has blocked you from receiving this message"`, async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE);
+    it.each([true, false])(
+        `Should display "The sender has blocked you from receiving this message and device verification is %s"`,
+        (verified) => {
+            // When
+            const { container } = customRender(
+                DecryptionFailureReason.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE,
+                verified,
+            );
 
-        // Then
-        expect(container).toHaveTextContent(
-            "The sender has blocked you from receiving this message because your device is unverified",
-        );
-        expect(container).toMatchSnapshot();
-    });
+            // Then
+            expect(container).toHaveTextContent(
+                "The sender has blocked you from receiving this message because your device is unverified",
+            );
+            expect(container).toMatchSnapshot();
+        },
+    );
 
-    it("should handle historical messages with no key backup", async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.HISTORICAL_MESSAGE_NO_KEY_BACKUP);
+    it.each([true, false])(
+        "should handle historical messages with no key backup and device verification is %s",
+        (verified) => {
+            // When
+            const { container } = customRender(DecryptionFailureReason.HISTORICAL_MESSAGE_NO_KEY_BACKUP, verified);
 
-        // Then
-        expect(container).toHaveTextContent("Historical messages are not available on this device");
-        expect(container).toMatchSnapshot();
-    });
+            // Then
+            expect(container).toHaveTextContent("Historical messages are not available on this device");
+            expect(container).toMatchSnapshot();
+        },
+    );
 
-    it("should handle historical messages when there is a backup and device verification is true", async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED, true);
+    it.each([true, false])(
+        "should handle historical messages when there is a backup and device verification is %s",
+        async (verified) => {
+            // When
+            const { container } = customRender(
+                DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
+                verified,
+            );
 
-        // Then
-        expect(container).toHaveTextContent("Unable to decrypt");
-        expect(container).toMatchSnapshot();
-    });
+            // Then
+            expect(container).toHaveTextContent(
+                verified ? "Unable to decrypt" : "You need to verify this device for access to historical messages",
+            );
+        },
+    );
 
-    it("should handle historical messages when there is a backup and device verification is false", async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED, false);
+    it.each([true, false])(
+        "should handle undecryptable pre-join messages and device verification is %s",
+        (verified) => {
+            // When
+            const { container } = customRender(DecryptionFailureReason.HISTORICAL_MESSAGE_USER_NOT_JOINED, verified);
 
-        // Then
-        expect(container).toHaveTextContent("You need to verify this device for access to historical messages");
-    });
+            // Then
+            expect(container).toHaveTextContent("You don't have access to this message");
+            expect(container).toMatchSnapshot();
+        },
+    );
 
-    it("should handle undecryptable pre-join messages", async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.HISTORICAL_MESSAGE_USER_NOT_JOINED);
+    it.each([true, false])(
+        "should handle messages from users who change identities after verification and device verification is %s",
+        (verified) => {
+            // When
+            const { container } = customRender(DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED, verified);
 
-        // Then
-        expect(container).toHaveTextContent("You don't have access to this message");
-        expect(container).toMatchSnapshot();
-    });
+            // Then
+            expect(container).toHaveTextContent("Sender's verified identity was reset");
+            expect(container).toMatchSnapshot();
+        },
+    );
 
-    it("should handle messages from users who change identities after verification", async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED);
+    it.each([true, false])(
+        "should handle messages from unverified devices and device verification is %s",
+        (verified) => {
+            // When
+            const { container } = customRender(DecryptionFailureReason.UNSIGNED_SENDER_DEVICE, verified);
 
-        // Then
-        expect(container).toHaveTextContent("Sender's verified identity was reset");
-        expect(container).toMatchSnapshot();
-    });
-
-    it("should handle messages from unverified devices", async () => {
-        // When
-        const { container } = customRender(DecryptionFailureReason.UNSIGNED_SENDER_DEVICE);
-
-        // Thenu
-        expect(container).toHaveTextContent("Sent from an insecure device");
-        expect(container).toMatchSnapshot();
-    });
+            // Then
+            expect(container).toHaveTextContent("Sent from an insecure device");
+            expect(container).toMatchSnapshot();
+        },
+    );
 
     it("should handle ref input", async () => {
         const ref = React.createRef<HTMLDivElement>();

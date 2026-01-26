@@ -90,7 +90,7 @@ interface DecryptionFailureBodyViewProps {
 function getErrorMessage(
     i18nApi: I18nApi,
     decryptionFailureReason: DecryptionFailureReason,
-    isVerified?: boolean,
+    isLocalDeviceVerified?: boolean,
 ): string | JSX.Element {
     const _t = i18nApi.translate;
 
@@ -102,7 +102,7 @@ function getErrorMessage(
             return _t("timeline|decryption_failure|historical_event_no_key_backup");
 
         case DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED:
-            if (isVerified === false) {
+            if (isLocalDeviceVerified === false) {
                 // The user seems to have a key backup, so prompt them to verify in the hope that doing so will
                 // mean we can restore from backup and we'll get the key for this message.
                 return _t("timeline|decryption_failure|historical_event_unverified_device");
@@ -142,10 +142,8 @@ function errorClassName(decryptionFailureReason: DecryptionFailureReason): strin
         case DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
         case DecryptionFailureReason.UNSIGNED_SENDER_DEVICE:
             return styles.decryptionFailureBodyViewError;
-
-        default:
-            return null;
     }
+    return null;
 }
 
 /**
