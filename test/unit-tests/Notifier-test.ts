@@ -350,7 +350,11 @@ describe("Notifier", () => {
             ["This was a triumph", '<span data-mx-spoiler="triumph">This was a triumph</span>', "[Spoiler]"],
             ["foo bar baz", "foo <span data-mx-spoiler>bar</span> baz", "foo [Spoiler] baz"],
             ["foo foo foo", "foo <span data-mx-spoiler>foo</span> foo", "foo [Spoiler] foo"],
-            ["a b c d e", "a <span data-mx-spoiler>b</span> c <span data-mx-spoiler>d</span> e", "a [Spoiler] c [Spoiler] e"],
+            [
+                "a b c d e",
+                "a <span data-mx-spoiler>b</span> c <span data-mx-spoiler>d</span> e",
+                "a [Spoiler] c [Spoiler] e",
+            ],
             ["foo  foo", "foo <span data-mx-spoiler></span> foo", "foo [Spoiler] foo"],
             ["foo bar baz", "foo <span data-mx-spoiler>b<em>a</em>r</span> baz", "foo [Spoiler] baz"],
             ["foobar", "<span data-mx-spoiler>foo</span><span data-mx-spoiler>bar</span>", "[Spoiler][Spoiler]"],
