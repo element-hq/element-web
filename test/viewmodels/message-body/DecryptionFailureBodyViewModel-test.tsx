@@ -36,60 +36,68 @@ describe("DecryptionFailureBodyViewModel", () => {
     });
 
     it("should return the snapshot with converted failure reason", async () => {
-        const vm = new DecryptionFailureBodyViewModel({
+        let vm = new DecryptionFailureBodyViewModel({
             decryptionFailureCode: DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
-            verificationState: true,
         });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(
             DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
         );
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.HISTORICAL_MESSAGE_NO_KEY_BACKUP,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.HISTORICAL_MESSAGE_NO_KEY_BACKUP);
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(
             DecryptionFailureReason.HISTORICAL_MESSAGE_USER_NOT_JOINED,
         );
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.MEGOLM_KEY_WITHHELD });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.MEGOLM_KEY_WITHHELD,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(
             DecryptionFailureReason.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE,
         );
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.OLM_UNKNOWN_MESSAGE_INDEX,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED });
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
+        });
         expect(vm.getSnapshot().decryptionFailureReason).toBe(
             DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
         );
 
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.UNKNOWN_ERROR });
-        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
-
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.UNKNOWN_SENDER_DEVICE });
-        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
-
-        vm.setProps({ decryptionFailureCode: DecryptionFailureCode.UNSIGNED_SENDER_DEVICE });
-        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNSIGNED_SENDER_DEVICE);
-    });
-
-    it("should update snapshot when setProps is called with new className", () => {
-        const vm = new DecryptionFailureBodyViewModel({
+        vm = new DecryptionFailureBodyViewModel({
             decryptionFailureCode: DecryptionFailureCode.UNKNOWN_ERROR,
-            extraClassNames: ["custom-class"],
         });
-        expect(vm.getSnapshot().extraClassNames).toContain("custom-class");
+        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
 
-        vm.setProps({ extraClassNames: ["new-custom-class"] });
-        expect(vm.getSnapshot().extraClassNames).toContain("new-custom-class");
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.UNKNOWN_SENDER_DEVICE,
+        });
+        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
+
+        vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.UNSIGNED_SENDER_DEVICE,
+        });
+        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNSIGNED_SENDER_DEVICE);
     });
 
     it("should update snapshot when setProps is called with new verificationState", () => {
@@ -99,7 +107,7 @@ describe("DecryptionFailureBodyViewModel", () => {
         });
         expect(vm.getSnapshot().isLocalDeviceVerified).toBe(false);
 
-        vm.setProps({ verificationState: true });
+        vm.setVerificationState(true);
         expect(vm.getSnapshot().isLocalDeviceVerified).toBe(true);
     });
 });

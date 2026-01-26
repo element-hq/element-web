@@ -90,9 +90,11 @@ export class DecryptionFailureBodyViewModel
     }
 
     /**
-     * Sets the snapshot and emits an update to subscribers.
+     * Updates the properties of the view model and recomputes the snapshot.
+     * @param newProps
      */
-    private readonly setSnapshot = (): void => {
+    public setVerificationState(verificationState?: boolean): void {
+        this.props.verificationState = verificationState;
         this.snapshot.set(
             DecryptionFailureBodyViewModel.computeSnapshot(
                 this.props.decryptionFailureCode,
@@ -100,14 +102,5 @@ export class DecryptionFailureBodyViewModel
                 this.props.extraClassNames,
             ),
         );
-    };
-
-    /**
-     * Updates the properties of the view model and recomputes the snapshot.
-     * @param newProps
-     */
-    public setProps(newProps: Partial<DecryptionFailureBodyViewModelProps>): void {
-        this.props = { ...this.props, ...newProps };
-        this.setSnapshot();
     }
 }

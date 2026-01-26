@@ -1586,8 +1586,8 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
             }),
     );
     useEffect(() => {
-        vm.setProps({ decryptionFailureCode: mxEvent.decryptionFailureReason, verificationState });
-    }, [mxEvent.decryptionFailureReason, verificationState, vm]);
+        vm.setVerificationState(verificationState);
+    }, [verificationState, vm]);
 
     return <DecryptionFailureBodyView vm={vm} />;
 }

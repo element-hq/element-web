@@ -345,7 +345,7 @@ function DecryptionFailureBodyWrapper({ mxEvent }: IBodyProps): JSX.Element {
             }),
     );
     useEffect(() => {
-        vm.setProps({ decryptionFailureCode: mxEvent.decryptionFailureReason, verificationState });
-    }, [mxEvent.decryptionFailureReason, verificationState, vm]);
+        vm.setVerificationState(verificationState);
+    }, [verificationState, vm]);
     return <DecryptionFailureBodyView vm={vm} />;
 }
