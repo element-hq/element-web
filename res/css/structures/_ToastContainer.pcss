@@ -38,6 +38,7 @@ Please see LICENSE files in the repository root for full details.
         grid-template-columns: 22px 1fr;
         column-gap: 8px;
         row-gap: 4px;
+        align-items: center;
         padding: var(--cpd-space-3x);
 
         &.mx_Toast_hasIcon {
@@ -47,9 +48,16 @@ Please see LICENSE files in the repository root for full details.
                 grid-column: 1;
             }
 
-            .mx_Toast_title,
-            .mx_Toast_body {
+            .mx_Toast_title {
                 grid-column: 2;
+            }
+
+            .mx_Toast_body {
+                grid-column: 2 / 4;
+            }
+
+            .mx_Toast_closebutton {
+                grid-column: 3;
             }
         }
         &:not(.mx_Toast_hasIcon) {
