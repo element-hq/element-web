@@ -54,7 +54,7 @@ describe("HistoryVisibleBannerViewModel", () => {
     });
 
     it("should not show the banner in unencrypted rooms", () => {
-        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
+        const vm = new HistoryVisibleBannerViewModel({ room });
         expect(vm.getSnapshot().visible).toBe(false);
     });
 
@@ -76,7 +76,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
+        const vm = new HistoryVisibleBannerViewModel({ room });
         expect(vm.getSnapshot().visible).toBe(false);
     });
 
@@ -99,7 +99,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
+        const vm = new HistoryVisibleBannerViewModel({ room });
         expect(vm.getSnapshot().visible).toBe(false);
         vm.dispose();
     });
@@ -145,7 +145,7 @@ describe("HistoryVisibleBannerViewModel", () => {
             }),
         ]);
 
-        const vm = new HistoryVisibleBannerViewModel({ room, threadId: null });
+        const vm = new HistoryVisibleBannerViewModel({ room });
         expect(vm.getSnapshot().visible).toBe(true);
         await vm.onClose();
         expect(vm.getSnapshot().visible).toBe(false);
