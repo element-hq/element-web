@@ -30,6 +30,16 @@ exports[`DecryptionFailureBodyView > Should display with extra class names 1`] =
 </div>
 `;
 
+exports[`DecryptionFailureBodyView > should handle historical messages when there is a backup and device verification is true 1`] = `
+<div>
+  <div
+    class="decryptionFailureBodyView"
+  >
+    Unable to decrypt message
+  </div>
+</div>
+`;
+
 exports[`DecryptionFailureBodyView > should handle historical messages with no key backup 1`] = `
 <div>
   <div
