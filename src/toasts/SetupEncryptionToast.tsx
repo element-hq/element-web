@@ -65,6 +65,18 @@ const getIcon = (state: DeviceStateForToast): IToast<any>["icon"] => {
     }
 };
 
+const shouldShowCloseButton = (state: DeviceStateForToast): boolean => {
+    switch (state) {
+        case "key_storage_out_of_sync":
+        case "identity_needs_reset":
+            return true;
+        case "set_up_recovery":
+        case "verify_this_session":
+        case "turn_on_key_storage":
+            return false;
+    }
+};
+
 const getSetupCaption = (state: DeviceStateForToast): string => {
     switch (state) {
         case "set_up_recovery":
@@ -299,10 +311,15 @@ export const showToast = (state: DeviceStateForToast): void => {
         }
     };
 
+    const onCloseButtonClicked = shouldShowCloseButton(state)
+        ? () => DeviceListener.sharedInstance().dismissEncryptionSetup()
+        : undefined;
+
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
         title: getTitle(state),
         icon: getIcon(state),
+        onCloseButtonClicked,
         props: {
             description: getDescription(state),
             primaryLabel: getSetupCaption(state),
