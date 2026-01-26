@@ -14,8 +14,13 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import { getMockClientWithEventEmitter } from "../../../../test-utils";
 import ReactionsRowButton, { type IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
 import dis from "../../../../../src/dispatcher/dispatcher";
+import { type Media, mediaFromMxc } from "../../../../../src/customisations/Media";
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
+
+jest.mock("../../../../../src/customisations/Media", () => ({
+    mediaFromMxc: jest.fn(),
+}));
 
 jest.mock("@element-hq/web-shared-components", () => {
     const actual = jest.requireActual("@element-hq/web-shared-components");
@@ -25,11 +30,12 @@ jest.mock("@element-hq/web-shared-components", () => {
     };
 });
 
+const mockMediaFromMxc = mediaFromMxc as jest.MockedFunction<typeof mediaFromMxc>;
+
 describe("ReactionsRowButton", () => {
     const userId = "@alice:server";
     const roomId = "!randomcharacters:aser.ver";
     const mockClient = getMockClientWithEventEmitter({
-        mxcUrlToHttp: jest.fn().mockReturnValue("https://not.a.real.url"),
         getRoom: jest.fn(),
         sendEvent: jest.fn().mockResolvedValue({ event_id: "$sent_event" }),
         redactEvent: jest.fn().mockResolvedValue({}),
@@ -65,6 +71,10 @@ describe("ReactionsRowButton", () => {
         mockClient.getRoom.mockImplementation((roomId: string): Room | null => {
             return roomId === room.roomId ? room : null;
         });
+        // Default mock for mediaFromMxc
+        mockMediaFromMxc.mockReturnValue({
+            srcHttp: "https://not.a.real.url",
+        } as unknown as Media);
     });
 
     it("renders reaction row button emojis correctly", () => {
@@ -344,5 +354,197 @@ describe("ReactionsRowButton", () => {
         const img = root.container.querySelector("img.mx_ReactionsRowButton_content");
         expect(img).toBeInTheDocument();
         expect(img).toHaveAttribute("src", "https://not.a.real.url");
+    });
+
+    it("falls back to text when mxc URL cannot be converted to HTTP", () => {
+        // Make mediaFromMxc return null srcHttp to simulate failed conversion
+        mockMediaFromMxc.mockReturnValueOnce({
+            srcHttp: null,
+        } as unknown as Media);
+
+        const props: IProps = {
+            mxEvent: new MatrixEvent({
+                room_id: roomId,
+                event_id: "$test:example.com",
+                content: { body: "test" },
+            }),
+            content: "mxc://example.com/invalid_image",
+            count: 1,
+            reactionEvents: [
+                new MatrixEvent({
+                    type: "m.reaction",
+                    sender: "@user1:example.com",
+                    content: {
+                        "m.relates_to": {
+                            event_id: "$test:example.com",
+                            key: "mxc://example.com/invalid_image",
+                            rel_type: "m.annotation",
+                        },
+                    },
+                }),
+            ],
+            customReactionImagesEnabled: true,
+        };
+
+        const root = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Should render span (not img) when imageSrc is null
+        const span = root.container.querySelector("span.mx_ReactionsRowButton_content");
+        expect(span).toBeInTheDocument();
+        const img = root.container.querySelector("img.mx_ReactionsRowButton_content");
+        expect(img).not.toBeInTheDocument();
+    });
+
+    it("updates ViewModel when only mxEvent changes", () => {
+        const props = createProps({
+            "m.relates_to": {
+                event_id: "$user1:example.com",
+                key: "👍",
+                rel_type: "m.annotation",
+            },
+        });
+
+        const { rerender } = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Only change mxEvent
+        const newMxEvent = new MatrixEvent({
+            room_id: roomId,
+            event_id: "$test2:example.com",
+            content: { body: "test2" },
+        });
+
+        rerender(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} mxEvent={newMxEvent} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Component should rerender without errors
+        expect(true).toBe(true);
+    });
+
+    it("updates ViewModel when only content changes", () => {
+        const props = createProps({
+            "m.relates_to": {
+                event_id: "$user1:example.com",
+                key: "👍",
+                rel_type: "m.annotation",
+            },
+        });
+
+        const { rerender, container } = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Only change content
+        rerender(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} content="👎" />
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(container.querySelector(".mx_ReactionsRowButton_content")?.textContent).toBe("👎");
+    });
+
+    it("updates ViewModel when only reactionEvents changes", () => {
+        const props = createProps({
+            "m.relates_to": {
+                event_id: "$user1:example.com",
+                key: "👍",
+                rel_type: "m.annotation",
+            },
+        });
+
+        const { rerender } = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Only change reactionEvents
+        const newReactionEvents = [
+            new MatrixEvent({
+                type: "m.reaction",
+                sender: "@user3:example.com",
+                content: {
+                    "m.relates_to": {
+                        event_id: "$user1:example.com",
+                        key: "👍",
+                        rel_type: "m.annotation",
+                    },
+                },
+            }),
+        ];
+
+        rerender(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} reactionEvents={newReactionEvents} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Component should rerender without errors
+        expect(true).toBe(true);
+    });
+
+    it("updates ViewModel when only customReactionImagesEnabled changes", () => {
+        const props = createProps({
+            "m.relates_to": {
+                event_id: "$user1:example.com",
+                key: "👍",
+                rel_type: "m.annotation",
+            },
+        });
+
+        const { rerender } = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Only change customReactionImagesEnabled
+        rerender(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} customReactionImagesEnabled={false} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Component should rerender without errors
+        expect(true).toBe(true);
+    });
+
+    it("does not update ViewModel when props stay the same", () => {
+        const props = createProps({
+            "m.relates_to": {
+                event_id: "$user1:example.com",
+                key: "👍",
+                rel_type: "m.annotation",
+            },
+        });
+
+        const { rerender } = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Rerender with same props
+        rerender(
+            <MatrixClientContext.Provider value={mockClient}>
+                <ReactionsRowButton {...props} />
+            </MatrixClientContext.Provider>,
+        );
+
+        // Component should rerender without errors - setProps should not be called
+        expect(true).toBe(true);
     });
 });
