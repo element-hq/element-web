@@ -104,29 +104,6 @@ describe("HistoryVisibleBannerViewModel", () => {
         vm.dispose();
     });
 
-    it("should not show the banner in threads", () => {
-        upsertRoomStateEvents(room, [
-            mkEvent({
-                event: true,
-                type: "m.room.encryption",
-                user: "@user1:server",
-                content: {},
-            }),
-            mkEvent({
-                event: true,
-                type: "m.room.history_visibility",
-                user: "@user1:server",
-                content: {
-                    history_visibility: "shared",
-                },
-            }),
-        ]);
-
-        const vm = new HistoryVisibleBannerViewModel({ room, threadId: "some thread ID" });
-        expect(vm.getSnapshot().visible).toBe(false);
-        vm.dispose();
-    });
-
     it("should show the banner in encrypted rooms with non-joined history visibility", async () => {
         upsertRoomStateEvents(room, [
             mkEvent({

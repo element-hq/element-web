@@ -17,7 +17,6 @@ import { SettingLevel } from "../../settings/SettingLevel";
 
 interface Props {
     room: Room;
-    threadId?: string | null;
 }
 
 export class HistoryVisibleBannerViewModel
@@ -34,17 +33,13 @@ export class HistoryVisibleBannerViewModel
      */
     private readonly acknowledgedWatcher: string;
 
-    private static readonly computeSnapshot = (
-        room: Room,
-        threadId?: string | null,
-    ): HistoryVisibleBannerViewSnapshot => {
+    private static readonly computeSnapshot = (room: Room): HistoryVisibleBannerViewSnapshot => {
         const featureEnabled = SettingsStore.getValue("feature_share_history_on_invite");
         const acknowledged = SettingsStore.getValue("acknowledgedHistoryVisibility", room.roomId);
 
         return {
             visible:
                 featureEnabled &&
-                !threadId &&
                 room.hasEncryptionStateEvent() &&
                 room.getHistoryVisibility() !== HistoryVisibility.Joined &&
                 !acknowledged,
@@ -52,7 +47,7 @@ export class HistoryVisibleBannerViewModel
     };
 
     public constructor(props: Props) {
-        super(props, HistoryVisibleBannerViewModel.computeSnapshot(props.room, props.threadId));
+        super(props, HistoryVisibleBannerViewModel.computeSnapshot(props.room));
 
         this.disposables.trackListener(props.room, RoomStateEvent.Update, () => this.setSnapshot());
 
@@ -82,7 +77,7 @@ export class HistoryVisibleBannerViewModel
             );
         }
 
-        this.snapshot.set(HistoryVisibleBannerViewModel.computeSnapshot(this.props.room, this.props.threadId));
+        this.snapshot.set(HistoryVisibleBannerViewModel.computeSnapshot(this.props.room));
     }
 
     /**

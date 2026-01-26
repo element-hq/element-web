@@ -11,7 +11,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { HistoryVisibleBannerViewModel } from "../../../viewmodels/composer/HistoryVisibleBannerViewModel";
 
-export const HistoryVisibleBanner: React.FC<{ room: Room; threadId?: string | null }> = (props) => {
-    const vm = useCreateAutoDisposedViewModel(() => new HistoryVisibleBannerViewModel(props));
+export const HistoryVisibleBanner: React.FC<{ room: Room }> = ({ room }) => {
+    const vm = useCreateAutoDisposedViewModel(() => new HistoryVisibleBannerViewModel({ room }));
     return <HistoryVisibleBannerView vm={vm} />;
 };
