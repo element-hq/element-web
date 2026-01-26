@@ -60,6 +60,7 @@ import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
+import { defaultWatchManager } from "../../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -708,9 +709,9 @@ describe("RoomHeader", () => {
         });
     });
 
-    it("shows a history icon if the room is encrypted and has shared history", () => {
+    it("shows a history icon if the room is encrypted and has shared history", async () => {
         mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
-        room.addLiveEvents(
+        await room.addLiveEvents(
             [
                 new MatrixEvent({
                     type: "m.room.history_visibility",
@@ -722,9 +723,25 @@ describe("RoomHeader", () => {
             ],
             { addToState: true },
         );
+        let featureEnabled = true;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
+        );
 
         render(<RoomHeader room={room} />, getWrapper());
-        waitFor(() => getByLabelText(document.body, "New members see history"));
+        await waitFor(() => getByLabelText(document.body, "New members see history"));
+
+        // Disable the labs flag and check the icon disappears
+        featureEnabled = false;
+        act(() =>
+            defaultWatchManager.notifyUpdate(
+                "feature_share_history_on_invite",
+                null,
+                SettingLevel.DEVICE,
+                featureEnabled,
+            ),
+        );
+        expect(queryByLabelText(document.body, "New members see history")).not.toBeInTheDocument();
     });
 
     describe("dm", () => {

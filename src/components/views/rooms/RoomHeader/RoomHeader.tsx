@@ -404,6 +404,7 @@ export default function RoomHeader({
     const roomName = useRoomName(room);
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const historyVisibility = useRoomState(room, (state) => state.getHistoryVisibility());
+    const historySharingEnabled = useFeatureEnabled("feature_share_history_on_invite");
     const dmMember = useDmMember(room);
     const isDirectMessage = !!dmMember;
     const isRoomEncrypted = useIsEncrypted(client, room);
@@ -490,6 +491,7 @@ export default function RoomHeader({
                                 )}
 
                                 {isRoomEncrypted &&
+                                    historySharingEnabled &&
                                     (historyVisibility === HistoryVisibility.Shared ||
                                         historyVisibility === HistoryVisibility.WorldReadable) && (
                                         <Tooltip label={_t("room|header|shared_history_tooltip")} placement="right">
