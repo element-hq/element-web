@@ -10,6 +10,7 @@ import type { Meta, StoryFn } from "@storybook/react-vite";
 
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 import { EventContentBodyView, type EventContentBodyViewSnapshot } from "./EventContentBodyView";
+import styles from "./EventContentBody.module.css";
 
 type EventContentBodyStoryProps = EventContentBodyViewSnapshot & {
     as: "div" | "span";
@@ -26,7 +27,7 @@ export default {
     tags: ["autodocs"],
     args: {
         as: "div",
-        className: "mx_EventTile_body",
+        className: styles.EventTile_body,
         dir: "auto",
     },
 } as Meta<typeof EventContentBodyWrapper>;
@@ -36,22 +37,22 @@ const Template: StoryFn<typeof EventContentBodyWrapper> = (args) => <EventConten
 export const PlainText = Template.bind({});
 PlainText.args = {
     children: "Hello, this is a plain text message.",
-    className: "mx_EventTile_body translate",
+    className: styles.EventTile_body,
 };
 
 export const BigEmoji = Template.bind({});
 BigEmoji.args = {
     children: (
         <>
-            <span className="mx_Emoji" title=":wave:">
+            <span className={styles.Emoji} title=":wave:">
                 👋
             </span>
-            <span className="mx_Emoji" title=":smile:">
+            <span className={styles.Emoji} title=":smile:">
                 😊
             </span>
         </>
     ),
-    className: "mx_EventTile_body mx_EventTile_bigEmoji translate",
+    className: `${styles.EventTile_body} ${styles.EventTile_bigEmoji}`,
 };
 
 export const HtmlContent = Template.bind({});
@@ -61,7 +62,7 @@ HtmlContent.args = {
             This is <strong>bold</strong> and <em>italic</em> text with a <a href="https://matrix.org">link</a>.
         </p>
     ),
-    className: "mx_EventTile_body markdown-body translate",
+    className: `${styles.EventTile_body} ${styles.markdownBody}`,
 };
 
 export const CodeBlock = Template.bind({});
@@ -75,22 +76,22 @@ CodeBlock.args = {
             </code>
         </pre>
     ),
-    className: "mx_EventTile_body markdown-body translate",
+    className: `${styles.EventTile_body} ${styles.markdownBody}`,
 };
 
 export const AsSpan = Template.bind({});
 AsSpan.args = {
     as: "span",
     children: "This is rendered as a span element.",
-    className: "mx_EventTile_body translate",
+    className: `${styles.EventTile_body}`,
 };
 
 export const WithHighlight = Template.bind({});
 WithHighlight.args = {
     children: (
         <>
-            Message with a <span className="mx_EventTile_searchHighlight">highlighted</span> word.
+            Message with a <span className={styles.EventTile_searchHighlight}>highlighted</span> word.
         </>
     ),
-    className: "mx_EventTile_body translate",
+    className: styles.EventTile_body,
 };
