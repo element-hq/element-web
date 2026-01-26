@@ -1690,8 +1690,17 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@link:packages/shared-components":
-  version "0.0.0"
-  uid ""
+  version "0.0.0-test.12"
+  dependencies:
+    "@element-hq/element-web-module-api" "^1.8.0"
+    "@vector-im/compound-design-tokens" "^6.4.3"
+    classnames "^2.5.1"
+    counterpart "^0.18.6"
+    lodash "^4.17.21"
+    matrix-web-i18n "3.6.0"
+    react-merge-refs "^3.0.2"
+    temporal-polyfill "^0.3.0"
+
 
 "@emnapi/core@^1.4.3":
   version "1.7.0"
@@ -11588,6 +11597,11 @@ react-transition-group@^4.4.1:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-virtuoso@^4.14.0:
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.18.1.tgz#3eb7078f2739a31b96c723374019e587deeb6ebc"
+  integrity sha512-KF474cDwaSb9+SJ380xruBB4P+yGWcVkcu26HtMqYNMTYlYbrNy8vqMkE+GpAApPPufJqgOLMoWMFG/3pJMXUA==
 
 react@^19.0.0:
   version "19.2.3"
