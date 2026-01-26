@@ -5,16 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Ref, type ReactNode } from "react";
+import { type Ref, type ReactNode } from "react";
 import { type IContent, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-
 import {
     BaseViewModel,
     type EventContentBodyViewSnapshot,
     type EventContentBodyViewModel as EventContentBodyViewModelInterface,
 } from "@element-hq/web-shared-components";
+
 import { bodyToNode } from "../../HtmlUtils";
 import PlatformPeg from "../../PlatformPeg";
 import {

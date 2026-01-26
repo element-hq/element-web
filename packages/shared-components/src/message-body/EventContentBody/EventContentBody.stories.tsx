@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import type { Meta, StoryFn } from "@storybook/react-vite";
 
+import type { Meta, StoryFn } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 import { EventContentBodyView, type EventContentBodyViewSnapshot } from "./EventContentBodyView";
 import styles from "./EventContentBody.module.css";
