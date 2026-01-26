@@ -131,18 +131,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_8_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_MwbPDmfGtm"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -229,18 +229,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_c_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_GQvdMWe954"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -328,18 +328,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_g_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_DVIAu5CsiH"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -449,11 +449,11 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                   class="_inline-field-control_19upo_44"
                 >
                   <div
-                    class="_container_1md5v_10"
+                    class="_container_153f2_10"
                   >
                     <input
                       aria-labelledby="_r_k_"
-                      class="_input_1md5v_18"
+                      class="_input_153f2_18"
                       disabled=""
                       id="checkbox_RD7nyrA2oh"
                       role="presentation"
@@ -461,7 +461,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                       type="checkbox"
                     />
                     <div
-                      class="_ui_1md5v_19"
+                      class="_ui_153f2_19"
                     >
                       <svg
                         aria-hidden="true"
@@ -549,18 +549,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_t_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_jWVJIPauy1"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -720,18 +720,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_3i_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_EetmBG4yVC"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -818,18 +818,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_3m_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_eEefiPqpMR"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
@@ -917,18 +917,18 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                 class="_inline-field-control_19upo_44"
               >
                 <div
-                  class="_container_1md5v_10"
+                  class="_container_153f2_10"
                 >
                   <input
                     aria-labelledby="_r_3q_"
-                    class="_input_1md5v_18"
+                    class="_input_153f2_18"
                     id="checkbox_MwbPDmfGtm"
                     role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
                   <div
-                    class="_ui_1md5v_19"
+                    class="_ui_153f2_19"
                   >
                     <svg
                       aria-hidden="true"
