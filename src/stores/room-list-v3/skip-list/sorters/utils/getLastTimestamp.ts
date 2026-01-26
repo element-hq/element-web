@@ -10,7 +10,7 @@ import { EventTimeline, EventType, type MatrixEvent, type Room } from "matrix-js
 import { EffectiveMembership, getEffectiveMembership } from "../../../../../utils/membership";
 import * as Unread from "../../../../../Unread";
 
-export function shouldCauseReorder(event: MatrixEvent): boolean {
+function shouldCauseReorder(event: MatrixEvent): boolean {
     const type = event.getType();
     const content = event.getContent();
     const prevContent = event.getPrevContent();
