@@ -6,7 +6,8 @@
  */
 
 import React from "react";
-import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LockSolidIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Tooltip } from "@vector-im/compound-web";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { EventTileBubble } from "./EventTileBubble";
@@ -19,7 +20,7 @@ export default {
         title: "Title goes here",
         subtitle: "Subtitle goes here",
         className: "custom-class",
-        icon: undefined
+        icon: <ErrorSolidIcon />,
     },
 } as Meta<typeof EventTileBubble>;
 
@@ -45,7 +46,6 @@ HasChildren.args = {
 export const HasTimestamp = Template.bind({});
 HasTimestamp.args = {
     className: undefined,
-    icon: <LockSolidIcon />,
     timestamp: <div>timestamp</div>,
     children: undefined,
 };
@@ -53,7 +53,6 @@ HasTimestamp.args = {
 export const HasTimestampAndChildren = Template.bind({});
 HasTimestampAndChildren.args = {
     className: undefined,
-    icon: <LockSolidIcon />,
     timestamp: <div>timestamp</div>,
     children: <div>children</div>,
 };
@@ -65,6 +64,11 @@ IsCryptoEventBubble.args = {
     title: "Encryption enabled",
     subtitle: "Messages here are end-to-end encrypted. Verify XYZ in their profile - tap on their profile picture.",
     timestamp: undefined,
-    children: undefined,
+    children: (
+        <Tooltip description="Thu, 17 Nov 2022, 4:58:32 pm">
+            <span aria-hidden={true} aria-live="off">
+                04:58
+            </span>
+        </Tooltip>
+    ),
 };
-
