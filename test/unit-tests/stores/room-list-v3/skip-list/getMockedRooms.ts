@@ -14,7 +14,7 @@ export function getMockedRooms(client: MatrixClient, roomCount: number = 100): R
         const roomId = `!foo${i}:matrix.org`;
         const room = mkStubRoom(roomId, `Foo Room ${i}`, client);
         const event = mkMessage({ room: roomId, user: `@foo${i}:matrix.org`, ts: i + 1, event: true });
-        room.timeline.push(event);
+        jest.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([event]);
         rooms.push(room);
     }
     return rooms;
