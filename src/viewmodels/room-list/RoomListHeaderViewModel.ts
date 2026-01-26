@@ -189,8 +189,8 @@ export class RoomListHeaderViewModel
     public toggleMessagePreview = (): void => {
         PosthogTrackers.trackInteraction("WebRoomListMessagePreviewToggle");
 
-        const isMessagePreviewEnabled = SettingsStore.getValue("RoomList.showMessagePreview");
-        SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, !isMessagePreviewEnabled);
+        const isMessagePreviewEnabled = !SettingsStore.getValue("RoomList.showMessagePreview");
+        SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
         this.snapshot.merge({ isMessagePreviewEnabled });
     };
 }

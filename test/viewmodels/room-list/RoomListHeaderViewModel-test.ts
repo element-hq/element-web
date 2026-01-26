@@ -293,6 +293,7 @@ describe("RoomListHeaderViewModel", () => {
             vm.toggleMessagePreview();
 
             expect(setValueSpy).toHaveBeenCalledWith("RoomList.showMessagePreview", null, expect.anything(), false);
+            expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(false);
         });
     });
 });
