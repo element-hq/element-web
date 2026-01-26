@@ -1701,7 +1701,6 @@
     react-merge-refs "^3.0.2"
     temporal-polyfill "^0.3.0"
 
-
 "@emnapi/core@^1.4.3":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@emnapi/core/-/core-1.7.0.tgz#135de4e8858763989112281bdf38ca02439db7c3"
@@ -4419,7 +4418,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.40.0-53c9ca5ea907d91e4515da64f20a82e5586b882c-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.40.0":
   version "2.40.0"
