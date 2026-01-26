@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import {
     ReactionsRowButtonTooltipViewModel,
@@ -13,13 +13,12 @@ import {
 } from "../../../src/viewmodels/message-body/ReactionsRowButtonTooltipViewModel";
 import { stubClient, mkStubRoom, mkEvent } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { unicodeToShortcode } from "../../../src/HtmlUtils";
 
 jest.mock("../../../src/HtmlUtils", () => ({
     ...jest.requireActual("../../../src/HtmlUtils"),
     unicodeToShortcode: jest.fn(),
 }));
-
-import { unicodeToShortcode } from "../../../src/HtmlUtils";
 
 const mockedUnicodeToShortcode = jest.mocked(unicodeToShortcode);
 

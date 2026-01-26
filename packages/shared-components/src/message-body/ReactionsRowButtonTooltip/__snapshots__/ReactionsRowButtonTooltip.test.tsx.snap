@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ReactionsRowButtonTooltip renders the tooltip with formatted senders and caption 1`] = `
+exports[`ReactionsRowButtonTooltip > renders the tooltip with formatted senders and caption 1`] = `
 <div>
   <button>
     👍 3
@@ -8,7 +8,7 @@ exports[`ReactionsRowButtonTooltip renders the tooltip with formatted senders an
 </div>
 `;
 
-exports[`ReactionsRowButtonTooltip renders the tooltip with many senders 1`] = `
+exports[`ReactionsRowButtonTooltip > renders the tooltip with many senders 1`] = `
 <div>
   <button>
     ❤️ 8
@@ -16,7 +16,7 @@ exports[`ReactionsRowButtonTooltip renders the tooltip with many senders 1`] = `
 </div>
 `;
 
-exports[`ReactionsRowButtonTooltip renders the tooltip without a caption 1`] = `
+exports[`ReactionsRowButtonTooltip > renders the tooltip without a caption 1`] = `
 <div>
   <button>
     🎉 2
