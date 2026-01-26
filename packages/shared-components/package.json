@@ -59,6 +59,7 @@
         "lodash": "^4.17.21",
         "matrix-web-i18n": "3.6.0",
         "react-merge-refs": "^3.0.2",
+        "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
