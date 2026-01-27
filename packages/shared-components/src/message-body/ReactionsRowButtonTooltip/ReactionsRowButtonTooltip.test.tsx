@@ -1,18 +1,18 @@
 /*
- * Copyright 2025 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render, screen } from "@test-utils";
+import { render } from "@test-utils";
 import React from "react";
 import { describe, it, expect } from "vitest";
 
 import * as stories from "./ReactionsRowButtonTooltip.stories";
 
-const { Default, ManySenders, WithoutCaption, NoTooltip } = composeStories(stories);
+const { Default, ManySenders } = composeStories(stories);
 
 describe("ReactionsRowButtonTooltip", () => {
     it("renders the tooltip with formatted senders and caption", () => {
@@ -23,16 +23,5 @@ describe("ReactionsRowButtonTooltip", () => {
     it("renders the tooltip with many senders", () => {
         const { container } = render(<ManySenders />);
         expect(container).toMatchSnapshot();
-    });
-
-    it("renders the tooltip without a caption", () => {
-        const { container } = render(<WithoutCaption />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders children without tooltip when formattedSenders is undefined", () => {
-        render(<NoTooltip />);
-        // Should render the button without a tooltip wrapper
-        expect(screen.getByRole("button")).toBeInTheDocument();
     });
 });

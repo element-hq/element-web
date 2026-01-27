@@ -421,14 +421,13 @@ describe("ReactionsRowButton", () => {
             content: { body: "test2" },
         });
 
-        rerender(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} mxEvent={newMxEvent} />
-            </MatrixClientContext.Provider>,
-        );
-
-        // Component should rerender without errors
-        expect(true).toBe(true);
+        expect(() =>
+            rerender(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ReactionsRowButton {...props} mxEvent={newMxEvent} />
+                </MatrixClientContext.Provider>,
+            ),
+        ).not.toThrow();
     });
 
     it("updates ViewModel when only content changes", () => {
@@ -486,14 +485,13 @@ describe("ReactionsRowButton", () => {
             }),
         ];
 
-        rerender(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} reactionEvents={newReactionEvents} />
-            </MatrixClientContext.Provider>,
-        );
-
-        // Component should rerender without errors
-        expect(true).toBe(true);
+        expect(() =>
+            rerender(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ReactionsRowButton {...props} reactionEvents={newReactionEvents} />
+                </MatrixClientContext.Provider>,
+            ),
+        ).not.toThrow();
     });
 
     it("updates ViewModel when only customReactionImagesEnabled changes", () => {
@@ -512,14 +510,13 @@ describe("ReactionsRowButton", () => {
         );
 
         // Only change customReactionImagesEnabled
-        rerender(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} customReactionImagesEnabled={false} />
-            </MatrixClientContext.Provider>,
-        );
-
-        // Component should rerender without errors
-        expect(true).toBe(true);
+        expect(() =>
+            rerender(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ReactionsRowButton {...props} customReactionImagesEnabled={false} />
+                </MatrixClientContext.Provider>,
+            ),
+        ).not.toThrow();
     });
 
     it("does not update ViewModel when props stay the same", () => {
@@ -537,14 +534,13 @@ describe("ReactionsRowButton", () => {
             </MatrixClientContext.Provider>,
         );
 
-        // Rerender with same props
-        rerender(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
-
-        // Component should rerender without errors - setProps should not be called
-        expect(true).toBe(true);
+        // Rerender with same props - setProps should not be called
+        expect(() =>
+            rerender(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ReactionsRowButton {...props} />
+                </MatrixClientContext.Provider>,
+            ),
+        ).not.toThrow();
     });
 });

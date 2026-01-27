@@ -41,11 +41,12 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    private ReactionsRowButtonTooltipViewModel: ReactionsRowButtonTooltipViewModel;
+    private reactionsRowButtonTooltipViewModel: ReactionsRowButtonTooltipViewModel;
 
-    public constructor(props: IProps) {
-        super(props);
-        this.ReactionsRowButtonTooltipViewModel = new ReactionsRowButtonTooltipViewModel({
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+        super(props, context);
+        this.reactionsRowButtonTooltipViewModel = new ReactionsRowButtonTooltipViewModel({
+            client: context,
             mxEvent: props.mxEvent,
             content: props.content,
             reactionEvents: props.reactionEvents,
@@ -60,7 +61,8 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
             prevProps.reactionEvents !== this.props.reactionEvents ||
             prevProps.customReactionImagesEnabled !== this.props.customReactionImagesEnabled
         ) {
-            this.ReactionsRowButtonTooltipViewModel.setProps({
+            this.reactionsRowButtonTooltipViewModel.setProps({
+                client: this.context,
                 mxEvent: this.props.mxEvent,
                 content: this.props.content,
                 reactionEvents: this.props.reactionEvents,
@@ -70,7 +72,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
     }
 
     public componentWillUnmount(): void {
-        this.ReactionsRowButtonTooltipViewModel.dispose();
+        this.reactionsRowButtonTooltipViewModel.dispose();
     }
 
     public onClick = (): void => {
@@ -143,7 +145,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
         }
 
         return (
-            <ReactionsRowButtonTooltipView vm={this.ReactionsRowButtonTooltipViewModel}>
+            <ReactionsRowButtonTooltipView vm={this.reactionsRowButtonTooltipViewModel}>
                 <AccessibleButton
                     className={classes}
                     aria-label={label}

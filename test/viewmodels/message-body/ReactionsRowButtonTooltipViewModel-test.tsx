@@ -1,18 +1,17 @@
 /*
- * Copyright 2025 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import {
     ReactionsRowButtonTooltipViewModel,
     type ReactionsRowButtonTooltipViewModelProps,
 } from "../../../src/viewmodels/message-body/ReactionsRowButtonTooltipViewModel";
 import { stubClient, mkStubRoom, mkEvent } from "../../test-utils";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { unicodeToShortcode } from "../../../src/HtmlUtils";
 
 jest.mock("../../../src/HtmlUtils", () => ({
@@ -23,7 +22,7 @@ jest.mock("../../../src/HtmlUtils", () => ({
 const mockedUnicodeToShortcode = jest.mocked(unicodeToShortcode);
 
 describe("ReactionsRowButtonTooltipViewModel", () => {
-    let client: ReturnType<typeof stubClient>;
+    let client: MatrixClient;
     let room: Room;
     let mxEvent: MatrixEvent;
 
@@ -43,6 +42,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
     const createProps = (
         overrides?: Partial<ReactionsRowButtonTooltipViewModelProps>,
     ): ReactionsRowButtonTooltipViewModelProps => ({
+        client,
         mxEvent,
         content: "👍",
         reactionEvents: [],
@@ -85,9 +85,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
     });
 
     it("should return undefined snapshot when MatrixClient is unavailable", () => {
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
-
-        const vm = new ReactionsRowButtonTooltipViewModel(createProps());
+        const vm = new ReactionsRowButtonTooltipViewModel(createProps({ client: null }));
         const snapshot = vm.getSnapshot();
 
         expect(snapshot.formattedSenders).toBeUndefined();

@@ -1,11 +1,11 @@
 /*
- * Copyright 2025 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     type ReactionsRowButtonTooltipViewSnapshot,
@@ -15,10 +15,13 @@ import {
 import { _t } from "../../languageHandler";
 import { formatList } from "../../utils/FormattingUtils";
 import { unicodeToShortcode } from "../../HtmlUtils";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { REACTION_SHORTCODE_KEY } from "../../components/views/messages/ReactionsRow";
 
 export interface ReactionsRowButtonTooltipViewModelProps {
+    /**
+     * The Matrix client instance.
+     */
+    client: MatrixClient | null;
     /**
      * The event we're displaying reactions for.
      */
@@ -52,9 +55,8 @@ export class ReactionsRowButtonTooltipViewModel
     private static readonly computeSnapshot = (
         props: ReactionsRowButtonTooltipViewModelProps,
     ): ReactionsRowButtonTooltipViewSnapshot => {
-        const { mxEvent, content, reactionEvents, customReactionImagesEnabled } = props;
+        const { client, mxEvent, content, reactionEvents, customReactionImagesEnabled } = props;
 
-        const client = MatrixClientPeg.get();
         const room = client?.getRoom(mxEvent.getRoomId());
 
         if (room) {
