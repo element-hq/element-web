@@ -25,16 +25,11 @@ describe("DisambiguatedProfileViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toEqual({
-            member: {
-                userId: "@alice:example.org",
-                roomId: "!room:example.org",
-                rawDisplayName: "Alice",
-                disambiguate: true,
-            },
-            fallbackName: "Fallback",
-            colored: true,
+            displayName: "Alice",
+            colorClass: "mx_Username_color3",
+            displayIdentifier: "@alice:example.org",
+            title: "Alice (@alice:example.org)",
             emphasizeDisplayName: true,
-            withTooltip: true,
         });
     });
 
@@ -45,13 +40,11 @@ describe("DisambiguatedProfileViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            member: {
-                userId: "",
-                roomId: "",
-                rawDisplayName: "",
-                disambiguate: false,
-            },
-            fallbackName: "Fallback",
+            displayName: "Fallback",
+            colorClass: undefined,
+            displayIdentifier: undefined,
+            title: undefined,
+            emphasizeDisplayName: undefined,
         });
     });
 });
