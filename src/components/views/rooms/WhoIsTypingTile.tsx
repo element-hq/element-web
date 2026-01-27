@@ -167,7 +167,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
                 <MemberAvatar
                     key={u.userId}
                     member={u}
-                    size="24px"
+                    size="14px"
                     resizeMethod="crop"
                     viewUserOnClick={true}
                     aria-live="off"
@@ -207,12 +207,12 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         }
 
         return (
-            <li className="mx_WhoIsTypingTile" aria-atomic="true">
+            <div className="mx_WhoIsTypingTile" aria-atomic="true">
                 <div className="mx_WhoIsTypingTile_avatars">
                     {this.renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit)}
                 </div>
                 <div className="mx_WhoIsTypingTile_label">{typingString}</div>
-            </li>
+            </div>
         );
     }
 }
