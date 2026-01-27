@@ -1690,7 +1690,7 @@
     yaml "^2.7.0"
 
 "@element-hq/web-shared-components@link:packages/shared-components":
-  version "0.0.0-test.12"
+  version "0.0.1"
   dependencies:
     "@element-hq/element-web-module-api" "^1.8.0"
     "@vector-im/compound-design-tokens" "^6.4.3"
@@ -1699,6 +1699,7 @@
     lodash "^4.17.21"
     matrix-web-i18n "3.6.0"
     react-merge-refs "^3.0.2"
+    react-virtuoso "^4.14.0"
     temporal-polyfill "^0.3.0"
 
 "@emnapi/core@^1.4.3":
@@ -4391,10 +4392,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@vector-im/compound-design-tokens@6.8.0":
-  version "6.8.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.8.0.tgz#3711df7b22a065c4d49dedbd8b83241c73a619f9"
-  integrity sha512-RDJjnFg9yxkbSYqiAG5Nv4enD5h8Oq89su0izZIvuKRzBxLWkV2/+JoDM94zkjI4aDLYff3gwWMviqAxJKi+Lw==
+"@vector-im/compound-design-tokens@6.9.0":
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-6.9.0.tgz#626d06fcf2afa37db7633425271a6de9e2b38933"
+  integrity sha512-LFmJW77wdV/b8ii/R2nrpge4ewtM/tSC3krDGFhENVNgYqbKUz00adZhKXAufJANxzGdAd4PsiFGa16YRlVLrQ==
 
 "@vector-im/compound-design-tokens@^6.4.3":
   version "6.5.0"
