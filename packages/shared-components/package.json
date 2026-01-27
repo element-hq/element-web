@@ -48,9 +48,6 @@
         "lint:js": "eslint --max-warnings 0 src && prettier --check .",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
-    "resolutions": {
-        "playwright": "1.58.0"
-    },
     "dependencies": {
         "@element-hq/element-web-module-api": "^1.8.0",
         "@vector-im/compound-design-tokens": "^6.4.3",
@@ -66,7 +63,7 @@
         "@element-hq/element-web-playwright-common": "2.2.5",
         "@fetch-mock/vitest": "^0.2.18",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
-        "@playwright/test": "1.58.0",
+        "@playwright/test": "1.57.0",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
         "@storybook/addon-docs": "^10.0.7",
