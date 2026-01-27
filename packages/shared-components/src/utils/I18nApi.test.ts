@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { describe, it, expect } from "vitest";
+
 import { I18nApi } from "./I18nApi";
 
 describe("I18nApi", () => {

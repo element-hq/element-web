@@ -12,7 +12,6 @@ export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
 export * from "./composer/Banner";
-export * from "./composer/HistoryVisibleBannerView";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./pill-input/Pill";
@@ -20,9 +19,11 @@ export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
+export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./utils/VirtualizedList";
 
 // Utils
 export * from "./utils/i18n";
@@ -35,5 +36,3 @@ export * from "./utils/I18nApi";
 
 // MVVM
 export * from "./viewmodel";
-export * from "./useMockedViewModel";
-export * from "./useViewModel";

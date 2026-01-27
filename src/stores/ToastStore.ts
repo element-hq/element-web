@@ -22,6 +22,15 @@ export interface IToast<C extends ComponentClass> {
     component: C;
     className?: string;
     bodyClassName?: string;
+
+    /**
+     * What to do if the user clicks the close button. If this is undefined, the
+     * close button is not displayed.
+     *
+     * Note: the close button is only displayed if the toast has a title (i.e. if {@link title} is truthy).
+     */
+    onCloseButtonClicked?: () => void;
+
     props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
 }
 
@@ -70,6 +79,14 @@ export default class ToastStore extends EventEmitter {
             logger.info(`Removed toast with key '${key}'`);
             this.emit("update");
         }
+    }
+
+    /**
+     * Is a toast currently present on the store.
+     * @param key The toast key to look for.
+     */
+    public hasToast(key: string): boolean {
+        return this.toasts.some((toast) => toast.key === key);
     }
 
     public getToasts(): IToast<any>[] {

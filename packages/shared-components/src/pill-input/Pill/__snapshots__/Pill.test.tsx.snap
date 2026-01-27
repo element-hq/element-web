@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Pill renders the pill 1`] = `
+exports[`Pill > renders the pill 1`] = `
 <div>
   <div
     class="flex pill"
@@ -45,7 +45,7 @@ exports[`Pill renders the pill 1`] = `
 </div>
 `;
 
-exports[`Pill renders the pill without close button 1`] = `
+exports[`Pill > renders the pill without close button 1`] = `
 <div>
   <div
     class="flex pill"

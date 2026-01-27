@@ -93,13 +93,13 @@ jobs:
 
     complete:
         name: jest-tests
-        needs: jest_ew
+        needs: [jest_ew, vitest_sc]
         if: always()
         runs-on: ubuntu-24.04
         permissions:
             statuses: write
         steps:
-            - if: needs.jest_ew.result != 'skipped' && needs.jest_ew.result != 'success'
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
 
             - name: Skip SonarCloud in merge queue
@@ -113,8 +113,8 @@ jobs:
                   sha: ${{ github.sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    jest_sc:
-        name: Jest (Shared Components)
+    vitest_sc:
+        name: Vitest (Shared Components)
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout code
@@ -128,34 +128,38 @@ jobs:
                   node-version: "lts/*"
                   cache: "yarn"
 
-            - name: Install EW Deps
-              run: "yarn install"
-
             - name: Install Shared Component Deps
               working-directory: "packages/shared-components"
               run: "yarn install"
 
-            - name: Jest Cache
+            - name: Cache storybook & vitest
               uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
               with:
-                  path: /tmp/jest_cache
-                  key: ${{ hashFiles('**/yarn.lock') }}
+                  path: |
+                      packages/shared-components/node_modules/.cache
+                      packages/shared-components/node_modules/.vite/vitest
+                  key: ${{ hashFiles('packages/shared-components/yarn.lock') }}
 
-            - name: Get number of CPU cores
-              id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
+            - name: Get installed Playwright version
+              working-directory: packages/shared-components
+              id: playwright
+              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+
+            - name: Cache playwright binaries
+              uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+              id: playwright-cache
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
+
+            - name: Install Playwright browsers
+              working-directory: packages/shared-components
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: "yarn playwright install --with-deps --only-shell"
 
             - name: Run tests
               working-directory: "packages/shared-components"
-              run: |
-                  yarn test \
-                      --coverage=${{ env.ENABLE_COVERAGE }} \
-                      --ci \
-                      --max-workers ${{ steps.cpu-cores.outputs.count }} \
-                      --cacheDirectory /tmp/jest_cache
-              env:
-                  # tell jest to use coloured output
-                  FORCE_COLOR: true
+              run: yarn test:unit --coverage=${{ env.ENABLE_COVERAGE }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'

@@ -18,7 +18,7 @@ import { type SettingLevel } from "../SettingLevel";
 // default action on this rule is dont_notify, but it could be something else
 export function isPushNotifyDisabled(): boolean {
     // Return the value of the master push rule as a default
-    const masterRule = MatrixClientPeg.safeGet().pushProcessor.getPushRuleById(".m.rule.master");
+    const masterRule = MatrixClientPeg.get()?.pushProcessor.getPushRuleById(".m.rule.master");
 
     if (!masterRule) {
         logger.warn("No master push rule! Notifications are disabled for this user.");

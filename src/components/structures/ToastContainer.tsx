@@ -8,10 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { Text } from "@vector-im/compound-web";
+import { IconButton, Text } from "@vector-im/compound-web";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ToastStore, { type IToast } from "../../stores/ToastStore";
+import { _t } from "../../languageHandler";
 
 interface IState {
     toasts: IToast<any>[];
@@ -47,7 +49,7 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
         let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const { title, icon, key, component, className, bodyClassName, props } = topToast;
+            const { title, icon, key, component, className, bodyClassName, onCloseButtonClicked, props } = topToast;
             const bodyClasses = classNames("mx_Toast_body", bodyClassName);
             const toastClasses = classNames("mx_Toast_toast", className, {
                 mx_Toast_hasIcon: !!icon,
@@ -61,11 +63,24 @@ export default class ToastContainer extends React.Component<EmptyObject, IState>
             let titleElement;
             if (title) {
                 titleElement = (
-                    <div className="mx_Toast_title">
-                        <Text size="lg" weight="semibold" as="h2">
-                            {title}
-                        </Text>
-                    </div>
+                    <>
+                        <div className="mx_Toast_title">
+                            <Text size="lg" weight="semibold" as="h2">
+                                {title}
+                            </Text>
+                        </div>
+                        {onCloseButtonClicked && (
+                            <IconButton
+                                className="mx_Toast_closebutton"
+                                size="28px"
+                                onClick={onCloseButtonClicked}
+                                tooltip={_t("action|close")}
+                                kind="secondary"
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        )}
+                    </>
                 );
             }
 

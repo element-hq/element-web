@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Seekbar renders the clock 1`] = `
+exports[`Seekbar > renders the clock 1`] = `
 <div>
   <input
     aria-label="Audio seek bar"
