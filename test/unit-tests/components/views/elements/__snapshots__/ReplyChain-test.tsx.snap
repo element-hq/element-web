@@ -31,10 +31,10 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
                 u
               </span>
               <div
-                class="mx_DisambiguatedProfile"
+                class="_disambiguatedProfile_1u1d2_8 mx_DisambiguatedProfile"
               >
                 <span
-                  class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                  class="mx_Username_color2 _disambiguatedProfile_displayName_1u1d2_14 mx_DisambiguatedProfile_displayName"
                   dir="auto"
                 >
                   @userId:matrix.org
