@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type JSHandle, type Page } from "@playwright/test";
-import { type PageFunctionOn } from "playwright-core/types/structs";
 
 import { Network } from "./network";
 import type {
@@ -29,6 +28,9 @@ import type {
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { type CredentialsOptionalAccessToken } from "./bot";
+
+// Based on PageFunctionOn from playwright-core/types/structs
+type PageFunction<Object, Arg, Return> = (o: Object, arg?: Arg) => Return;
 
 export class Client {
     public network: Network;
@@ -57,11 +59,11 @@ export class Client {
     }
 
     public evaluate<R, Arg, O extends MatrixClient = MatrixClient>(
-        pageFunction: PageFunctionOn<O, Arg, R>,
+        pageFunction: PageFunction<O, Arg, R>,
         arg: Arg,
     ): Promise<R>;
     public evaluate<R, O extends MatrixClient = MatrixClient>(
-        pageFunction: PageFunctionOn<O, void, R>,
+        pageFunction: PageFunction<O, void, R>,
         arg?: any,
     ): Promise<R>;
     public async evaluate<T>(fn: (client: MatrixClient) => T, arg?: any): Promise<T> {
@@ -70,11 +72,11 @@ export class Client {
     }
 
     public evaluateHandle<R, Arg, O extends MatrixClient = MatrixClient>(
-        pageFunction: PageFunctionOn<O, Arg, R>,
+        pageFunction: PageFunction<O, Arg, R>,
         arg: Arg,
     ): Promise<JSHandle<R>>;
     public evaluateHandle<R, O extends MatrixClient = MatrixClient>(
-        pageFunction: PageFunctionOn<O, void, R>,
+        pageFunction: PageFunction<O, void, R>,
         arg?: any,
     ): Promise<JSHandle<R>>;
     public async evaluateHandle<T>(fn: (client: MatrixClient) => T, arg?: any): Promise<JSHandle<T>> {
