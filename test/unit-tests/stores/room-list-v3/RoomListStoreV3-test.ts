@@ -106,7 +106,7 @@ describe("RoomListStoreV3", () => {
             // Let's pretend like a new timeline event came on the room in 37th index.
             const room = rooms[37];
             const event = mkMessage({ room: room.roomId, user: `@foo${3}:matrix.org`, ts: 1000, event: true });
-            room.timeline.push(event);
+            jest.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([event]);
 
             const payload = {
                 action: "MatrixActions.Room.timeline",
@@ -827,7 +827,7 @@ describe("RoomListStoreV3", () => {
             let ts = 1000;
             for (const room of [rooms[14], rooms[34]]) {
                 const event = mkMessage({ room: room.roomId, user: `@foo${3}:matrix.org`, ts: 1000, event: true });
-                room.timeline.push(event);
+                jest.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([event]);
 
                 const payload = {
                     action: "MatrixActions.Room.timeline",
