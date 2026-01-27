@@ -1,15 +1,24 @@
 /*
-Copyright 2024 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-import React from "react";
-import { render, screen, fireEvent } from "jest-matrix-react";
+import React, { type PropsWithChildren } from "react";
+import { render, screen, fireEvent } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { ListView, type IListViewProps } from "../../../../../src/components/utils/ListView";
+import { VirtualizedList, type IVirtualizedListProps } from "./VirtualizedList";
+
+const expectTabIndex = (element: Element, expected: string): void => {
+    expect(element.getAttribute("tabindex")).toBe(expected);
+};
+
+const expectAttribute = (element: Element, attr: string, expected: string): void => {
+    expect(element.getAttribute(attr)).toBe(expected);
+};
 
 interface TestItem {
     id: string;
@@ -20,9 +29,9 @@ interface TestItem {
 const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
-describe("ListView", () => {
-    const mockGetItemComponent = jest.fn();
-    const mockIsItemFocusable = jest.fn();
+describe("VirtualizedList", () => {
+    const mockGetItemComponent = vi.fn();
+    const mockIsItemFocusable = vi.fn();
 
     const defaultItems: TestItemWithSeparator[] = [
         { id: "1", name: "Item 1" },
@@ -31,22 +40,26 @@ describe("ListView", () => {
         { id: "3", name: "Item 3" },
     ];
 
-    const defaultProps: IListViewProps<TestItemWithSeparator, any> = {
+    const defaultProps: IVirtualizedListProps<TestItemWithSeparator, any> = {
         items: defaultItems,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
         getItemKey: (item) => (typeof item === "string" ? item : item.id),
     };
 
-    const getListViewComponent = (props: Partial<IListViewProps<TestItemWithSeparator, any>> = {}) => {
+    const getListComponent = (
+        props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {},
+    ): React.JSX.Element => {
         const mergedProps = { ...defaultProps, ...props };
-        return <ListView {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
+        return <VirtualizedList {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
     };
 
-    const renderListViewWithHeight = (props: Partial<IListViewProps<TestItemWithSeparator, any>> = {}) => {
+    const renderListWithHeight = (
+        props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {},
+    ): ReturnType<typeof render> => {
         const mergedProps = { ...defaultProps, ...props };
-        return render(getListViewComponent(mergedProps), {
-            wrapper: ({ children }) => (
+        return render(getListComponent(mergedProps), {
+            wrapper: ({ children }: PropsWithChildren) => (
                 <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
                     <>{children}</>
                 </VirtuosoMockContext.Provider>
@@ -55,12 +68,12 @@ describe("ListView", () => {
     };
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         mockGetItemComponent.mockImplementation((index: number, item: TestItemWithSeparator, context: any) => {
             const itemKey = typeof item === "string" ? item : item.id;
             const isFocused = context.tabIndexKey === itemKey;
             return (
-                <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1}>
+                <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1} role="gridcell">
                     {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
                 </div>
             );
@@ -69,24 +82,24 @@ describe("ListView", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     describe("Rendering", () => {
-        it("should render the ListView component", () => {
-            renderListViewWithHeight();
-            expect(screen.getByRole("grid")).toBeInTheDocument();
+        it("should render the VirtualizedList component", () => {
+            renderListWithHeight();
+            expect(screen.getByRole("grid")).toBeDefined();
         });
 
         it("should render with empty items array", () => {
-            renderListViewWithHeight({ items: [] });
-            expect(screen.getByRole("grid")).toBeInTheDocument();
+            renderListWithHeight({ items: [] });
+            expect(screen.getByRole("grid")).toBeDefined();
         });
     });
 
     describe("Keyboard Navigation", () => {
         it("should handle ArrowDown key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
@@ -94,13 +107,13 @@ describe("ListView", () => {
 
             // ArrowDown should skip the non-focusable item at index 1 and go to index 2
             const items = container.querySelectorAll(".mx_item");
-            expect(items[2]).toHaveAttribute("tabindex", "0");
-            expect(items[0]).toHaveAttribute("tabindex", "-1");
-            expect(items[1]).toHaveAttribute("tabindex", "-1");
+            expectTabIndex(items[2], "0");
+            expectTabIndex(items[0], "-1");
+            expectTabIndex(items[1], "-1");
         });
 
         it("should handle ArrowUp key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus and navigate down to second item
@@ -112,12 +125,12 @@ describe("ListView", () => {
 
             // Verify focus moved back to first item
             const items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0");
-            expect(items[1]).toHaveAttribute("tabindex", "-1");
+            expectTabIndex(items[0], "0");
+            expectTabIndex(items[1], "-1");
         });
 
         it("should handle Home key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus and navigate to a later item
@@ -130,15 +143,15 @@ describe("ListView", () => {
 
             // Verify focus moved to first item
             const items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0");
+            expectTabIndex(items[0], "0");
             // Check that other items are not focused
             for (let i = 1; i < items.length; i++) {
-                expect(items[i]).toHaveAttribute("tabindex", "-1");
+                expectTabIndex(items[i], "-1");
             }
         });
 
         it("should handle End key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus on the list (starts at first item)
@@ -151,15 +164,15 @@ describe("ListView", () => {
             const items = container.querySelectorAll(".mx_item");
             // Should focus on the last visible item
             const lastIndex = items.length - 1;
-            expect(items[lastIndex]).toHaveAttribute("tabindex", "0");
+            expectTabIndex(items[lastIndex], "0");
             // Check that other items are not focused
             for (let i = 0; i < lastIndex; i++) {
-                expect(items[i]).toHaveAttribute("tabindex", "-1");
+                expectTabIndex(items[i], "-1");
             }
         });
 
         it("should handle PageDown key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus on the list (starts at first item)
@@ -172,12 +185,12 @@ describe("ListView", () => {
             const items = container.querySelectorAll(".mx_item");
             // PageDown should move to the last visible item since we only have 4 items
             const lastIndex = items.length - 1;
-            expect(items[lastIndex]).toHaveAttribute("tabindex", "0");
-            expect(items[0]).toHaveAttribute("tabindex", "-1");
+            expectTabIndex(items[lastIndex], "0");
+            expectTabIndex(items[0], "-1");
         });
 
         it("should handle PageUp key navigation", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // First focus and navigate to last item to have something to page up from
@@ -190,56 +203,56 @@ describe("ListView", () => {
             // Verify focus moved up
             const items = container.querySelectorAll(".mx_item");
             // PageUp should move back to the first item since we only have 4 items
-            expect(items[0]).toHaveAttribute("tabindex", "0");
+            expectTabIndex(items[0], "0");
             const lastIndex = items.length - 1;
-            expect(items[lastIndex]).toHaveAttribute("tabindex", "-1");
+            expectTabIndex(items[lastIndex], "-1");
         });
 
         it("should not handle keyboard navigation when modifier keys are pressed", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
 
             // Store initial state - first item should be focused
             const initialItems = container.querySelectorAll(".mx_item");
-            expect(initialItems[0]).toHaveAttribute("tabindex", "0");
-            expect(initialItems[2]).toHaveAttribute("tabindex", "-1");
+            expectTabIndex(initialItems[0], "0");
+            expectTabIndex(initialItems[2], "-1");
 
             // Test ArrowDown with Ctrl modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", ctrlKey: true });
 
             let items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
-            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+            expectTabIndex(items[0], "0"); // Should still be on first item
+            expectTabIndex(items[2], "-1"); // Should not have moved to third item
 
             // Test ArrowDown with Alt modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", altKey: true });
 
             items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
-            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+            expectTabIndex(items[0], "0"); // Should still be on first item
+            expectTabIndex(items[2], "-1"); // Should not have moved to third item
 
             // Test ArrowDown with Shift modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", shiftKey: true });
 
             items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
-            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+            expectTabIndex(items[0], "0"); // Should still be on first item
+            expectTabIndex(items[2], "-1"); // Should not have moved to third item
 
             // Test ArrowDown with Meta/Cmd modifier - should NOT navigate
             fireEvent.keyDown(container, { code: "ArrowDown", metaKey: true });
 
             items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0"); // Should still be on first item
-            expect(items[2]).toHaveAttribute("tabindex", "-1"); // Should not have moved to third item
+            expectTabIndex(items[0], "0"); // Should still be on first item
+            expectTabIndex(items[2], "-1"); // Should not have moved to third item
 
             // Test normal ArrowDown without modifiers - SHOULD navigate
             fireEvent.keyDown(container, { code: "ArrowDown" });
 
             items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "-1"); // Should have moved from first item
-            expect(items[2]).toHaveAttribute("tabindex", "0"); // Should have moved to third item (skipping separator)
+            expectTabIndex(items[0], "-1"); // Should have moved from first item
+            expectTabIndex(items[2], "0"); // Should have moved to third item (skipping separator)
         });
 
         it("should skip non-focusable items when navigating down", async () => {
@@ -257,7 +270,7 @@ describe("ListView", () => {
                 return (item as TestItem).isFocusable !== false;
             });
 
-            renderListViewWithHeight({ items: mixedItems });
+            renderListWithHeight({ items: mixedItems });
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
@@ -266,9 +279,9 @@ describe("ListView", () => {
             // Verify it skipped the non-focusable item at index 1
             // and went directly to the focusable item at index 2
             const items = container.querySelectorAll(".mx_item");
-            expect(items[2]).toHaveAttribute("tabindex", "0"); // Item 3 is focused
-            expect(items[0]).toHaveAttribute("tabindex", "-1"); // Item 1 is not focused
-            expect(items[1]).toHaveAttribute("tabindex", "-1"); // Item 2 (non-focusable) is not focused
+            expectTabIndex(items[2], "0"); // Item 3 is focused
+            expectTabIndex(items[0], "-1"); // Item 1 is not focused
+            expectTabIndex(items[1], "-1"); // Item 2 (non-focusable) is not focused
         });
 
         it("should skip non-focusable items when navigating up", () => {
@@ -284,7 +297,7 @@ describe("ListView", () => {
                 return (item as TestItem).isFocusable !== false;
             });
 
-            renderListViewWithHeight({ items: mixedItems });
+            renderListWithHeight({ items: mixedItems });
             const container = screen.getByRole("grid");
 
             // Focus and go to last item first, then navigate up
@@ -295,14 +308,14 @@ describe("ListView", () => {
             // Verify it skipped non-focusable items
             // and went to the first focusable item
             const items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0"); // Item 1 is focused
-            expect(items[3]).toHaveAttribute("tabindex", "-1"); // Item 3 is not focused anymore
+            expectTabIndex(items[0], "0"); // Item 1 is focused
+            expectTabIndex(items[3], "-1"); // Item 3 is not focused anymore
         });
     });
 
     describe("Focus Management", () => {
         it("should focus first item when list gains focus for the first time", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // Initial focus should go to first item
@@ -310,15 +323,15 @@ describe("ListView", () => {
 
             // Verify first item gets focus
             const items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0");
+            expectTabIndex(items[0], "0");
             // Other items should not be focused
             for (let i = 1; i < items.length; i++) {
-                expect(items[i]).toHaveAttribute("tabindex", "-1");
+                expectTabIndex(items[i], "-1");
             }
         });
 
         it("should restore last focused item when regaining focus", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // Focus and navigate to simulate previous usage
@@ -327,7 +340,7 @@ describe("ListView", () => {
 
             // Verify item 2 is focused
             let items = container.querySelectorAll(".mx_item");
-            expect(items[2]).toHaveAttribute("tabindex", "0"); // ArrowDown skips to item 2
+            expectTabIndex(items[2], "0"); // ArrowDown skips to item 2
 
             // Simulate blur by focusing elsewhere
             fireEvent.blur(container);
@@ -337,11 +350,11 @@ describe("ListView", () => {
 
             // Verify focus is restored to the previously focused item
             items = container.querySelectorAll(".mx_item");
-            expect(items[2]).toHaveAttribute("tabindex", "0"); // Should still be item 2
+            expectTabIndex(items[2], "0"); // Should still be item 2
         });
 
         it("should not interfere with focus if item is already focused", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
             // Focus once
@@ -350,7 +363,7 @@ describe("ListView", () => {
             // Focus again when already focused
             fireEvent.focus(container);
 
-            expect(container).toBeInTheDocument();
+            expect(container).toBeDefined();
         });
 
         it("should not scroll to top when clicking an item after manual scroll", () => {
@@ -360,7 +373,7 @@ describe("ListView", () => {
                 name: `Item ${i}`,
             }));
 
-            const mockOnClick = jest.fn();
+            const mockOnClick = vi.fn();
 
             mockGetItemComponent.mockImplementation(
                 (
@@ -376,7 +389,13 @@ describe("ListView", () => {
                             className="mx_item"
                             data-testid={`row-${index}`}
                             tabIndex={isFocused ? 0 : -1}
+                            role="button"
                             onClick={() => mockOnClick(item)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    mockOnClick(item);
+                                }
+                            }}
                             onFocus={(e) => onFocus(item, e)}
                         >
                             {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
@@ -385,7 +404,7 @@ describe("ListView", () => {
                 },
             );
 
-            const { container } = renderListViewWithHeight({ items: largerItems });
+            const { container } = renderListWithHeight({ items: largerItems });
             const listContainer = screen.getByRole("grid");
 
             // Step 1: Focus the list initially (this sets tabIndexKey to first item: "item-0")
@@ -393,8 +412,8 @@ describe("ListView", () => {
 
             // Verify first item is focused initially and tabIndexKey is set to first item
             let items = container.querySelectorAll(".mx_item");
-            expect(items[0]).toHaveAttribute("tabindex", "0");
-            expect(items[0]).toHaveAttribute("data-testid", "row-0");
+            expectTabIndex(items[0], "0");
+            expectAttribute(items[0], "data-testid", "row-0");
 
             // Step 2: Simulate manual scrolling (mouse wheel, scroll bar drag, etc.)
             // This changes which items are visible but DOES NOT change tabIndexKey
@@ -426,7 +445,7 @@ describe("ListView", () => {
 
             // With the fix applied: the clicked item should become focused (tabindex="0")
             // This validates that the fix prevents unwanted scrolling back to the top
-            expect(clickTargetItem).toHaveAttribute("tabindex", "0");
+            expectTabIndex(clickTargetItem, "0");
 
             // The key validation: ensure we haven't scrolled back to the top
             // item-0 should still not be visible (if the fix is working)
@@ -437,18 +456,18 @@ describe("ListView", () => {
 
     describe("Accessibility", () => {
         it("should set correct ARIA attributes", () => {
-            renderListViewWithHeight();
+            renderListWithHeight();
             const container = screen.getByRole("grid");
 
-            expect(container).toHaveAttribute("role", "grid");
-            expect(container).toHaveAttribute("aria-rowcount", "4");
-            expect(container).toHaveAttribute("aria-colcount", "1");
+            expectAttribute(container, "role", "grid");
+            expectAttribute(container, "aria-rowcount", "4");
+            expectAttribute(container, "aria-colcount", "1");
         });
 
         it("should update aria-rowcount when items change", () => {
-            const { rerender } = renderListViewWithHeight();
+            const { rerender } = renderListWithHeight();
             let container = screen.getByRole("grid");
-            expect(container).toHaveAttribute("aria-rowcount", "4");
+            expectAttribute(container, "aria-rowcount", "4");
 
             // Update with fewer items
             const fewerItems = [
@@ -456,21 +475,21 @@ describe("ListView", () => {
                 { id: "2", name: "Item 2" },
             ];
             rerender(
-                getListViewComponent({
+                getListComponent({
                     ...defaultProps,
                     items: fewerItems,
                 }),
             );
 
             container = screen.getByRole("grid");
-            expect(container).toHaveAttribute("aria-rowcount", "2");
+            expectAttribute(container, "aria-rowcount", "2");
         });
 
         it("should handle custom ARIA label", () => {
-            renderListViewWithHeight({ "aria-label": "Custom list label" });
+            renderListWithHeight({ "aria-label": "Custom list label" });
             const container = screen.getByRole("grid");
 
-            expect(container).toHaveAttribute("aria-label", "Custom list label");
+            expectAttribute(container, "aria-label", "Custom list label");
         });
     });
 });

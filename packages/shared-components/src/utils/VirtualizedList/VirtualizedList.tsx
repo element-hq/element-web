@@ -8,12 +8,32 @@ Please see LICENSE files in the repository root for full details.
 import React, { useRef, type JSX, useCallback, useEffect, useState, useMemo } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
 
-import { isModifiedKeyEvent, Key } from "../../Keyboard";
+/**
+ * Keyboard key codes
+ */
+export const Key = {
+    ARROW_UP: "ArrowUp",
+    ARROW_DOWN: "ArrowDown",
+    HOME: "Home",
+    END: "End",
+    PAGE_UP: "PageUp",
+    PAGE_DOWN: "PageDown",
+    ENTER: "Enter",
+    SPACE: "Space",
+} as const;
+
+/**
+ * Check if a keyboard event includes modifier keys
+ */
+export function isModifiedKeyEvent(event: React.KeyboardEvent): boolean {
+    return event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
+}
+
 /**
  * Context object passed to each list item containing the currently focused key
  * and any additional context data from the parent component.
  */
-export type ListContext<Context> = {
+export type VirtualizedListContext<Context> = {
     /** The key of item that should have tabIndex == 0 */
     tabIndexKey?: string;
     /** Whether an item in the list is currently focused */
@@ -22,8 +42,8 @@ export type ListContext<Context> = {
     context: Context;
 };
 
-export interface IListViewProps<Item, Context> extends Omit<
-    VirtuosoProps<Item, ListContext<Context>>,
+export interface IVirtualizedListProps<Item, Context> extends Omit<
+    VirtuosoProps<Item, VirtualizedListContext<Context>>,
     "data" | "itemContent" | "context"
 > {
     /**
@@ -43,13 +63,13 @@ export interface IListViewProps<Item, Context> extends Omit<
     getItemComponent: (
         index: number,
         item: Item,
-        context: ListContext<Context>,
+        context: VirtualizedListContext<Context>,
         onFocus: (item: Item, e: React.FocusEvent) => void,
     ) => JSX.Element;
 
     /**
      * Optional additional context data to pass to each rendered item.
-     * This will be available in the ListContext passed to getItemComponent.
+     * This will be available in the VirtualizedListContext passed to getItemComponent.
      */
     context?: Context;
 
@@ -66,9 +86,10 @@ export interface IListViewProps<Item, Context> extends Omit<
      * @return The key to use for focusing the item
      */
     getItemKey: (item: Item) => string;
+
     /**
      * Callback function to handle key down events on the list container.
-     * ListView handles keyboard navigation for focus(up, down, home, end, pageUp, pageDown)
+     * List handles keyboard navigation for focus(up, down, home, end, pageUp, pageDown)
      * and stops propagation otherwise the event bubbles and this callback is called for the use of the parent.
      * @param e - The keyboard event
      * @returns
@@ -80,7 +101,7 @@ export interface IListViewProps<Item, Context> extends Omit<
  * Utility type for the prop scrollIntoViewOnChange allowing it to be memoised by a caller without repeating types
  */
 export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
-    VirtuosoProps<Item, ListContext<Context>>["scrollIntoViewOnChange"]
+    VirtuosoProps<Item, VirtualizedListContext<Context>>["scrollIntoViewOnChange"]
 >;
 
 /**
@@ -90,7 +111,7 @@ export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
  * @template Item - The type of data items in the list
  * @template Context - The type of additional context data passed to items
  */
-export function ListView<Item, Context = any>(props: IListViewProps<Item, Context>): React.ReactElement {
+export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const { items, getItemComponent, isItemFocusable, getItemKey, context, onKeyDown, ...virtuosoProps } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -213,11 +234,11 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
                 handled = true;
             } else if (e.code === Key.PAGE_DOWN && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, `start`);
+                scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, "start");
                 handled = true;
             } else if (e.code === Key.PAGE_UP && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, `start`);
+                scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, "start");
                 handled = true;
             }
 
@@ -246,7 +267,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     const onFocusForGetItemComponent = useCallback(
         (item: Item, e: React.FocusEvent) => {
             // If one of the item components has been focused directly, set the focused and tabIndex state
-            // and stop propagation so the ListViews onFocus doesn't also handle it.
+            // and stop propagation so the List's onFocus doesn't also handle it.
             const key = getItemKey(item);
             setIsFocused(true);
             setTabIndexKey(key);
@@ -256,10 +277,11 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
     );
 
     const getItemComponentInternal = useCallback(
-        (index: number, item: Item, context: ListContext<Context>): JSX.Element =>
+        (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>
             getItemComponent(index, item, context, onFocusForGetItemComponent),
         [getItemComponent, onFocusForGetItemComponent],
     );
+
     /**
      * Handles focus events on the list.
      * Sets the focused state and scrolls to the focused item if it is not currently visible.
@@ -293,7 +315,7 @@ export function ListView<Item, Context = any>(props: IListViewProps<Item, Contex
         }
     }, []);
 
-    const listContext: ListContext<Context> = useMemo(
+    const listContext: VirtualizedListContext<Context> = useMemo(
         () => ({
             tabIndexKey: tabIndexKey,
             focused: isFocused,
