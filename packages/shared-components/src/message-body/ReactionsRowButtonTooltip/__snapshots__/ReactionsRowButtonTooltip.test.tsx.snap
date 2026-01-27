@@ -15,11 +15,3 @@ exports[`ReactionsRowButtonTooltip > renders the tooltip with many senders 1`] =
   </button>
 </div>
 `;
-
-exports[`ReactionsRowButtonTooltip > renders the tooltip without a caption 1`] = `
-<div>
-  <button>
-    🎉 2
-  </button>
-</div>
-`;
