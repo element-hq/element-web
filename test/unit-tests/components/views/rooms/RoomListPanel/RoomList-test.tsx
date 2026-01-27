@@ -9,7 +9,7 @@ import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render } from "jest-matrix-react";
 import { fireEvent } from "@testing-library/dom";
-import { VirtuosoMockContext } from "react-virtuoso";
+import { VirtuosoMockContext } from "@element-hq/web-shared-components";
 
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";

@@ -289,3 +289,10 @@ To generate translation strings for this package, run:
 ```bash
 yarn i18n
 ```
+
+## Publish a new version
+
+Two steps are required to publish a new version of this package:
+
+1. Bump the version in `package.json` following semver rules and open a PR.
+2. Once merged run the [github workflow](https://github.com/element-hq/element-web/actions/workflows/shared-component-publish.yaml)
