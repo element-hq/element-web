@@ -49,7 +49,7 @@
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "resolutions": {
-        "playwright": "1.57.0"
+        "playwright": "1.58.0"
     },
     "dependencies": {
         "@element-hq/element-web-module-api": "^1.8.0",
@@ -63,10 +63,10 @@
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "2.2.4",
+        "@element-hq/element-web-playwright-common": "2.2.5",
         "@fetch-mock/vitest": "^0.2.18",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
-        "@playwright/test": "1.57.0",
+        "@playwright/test": "1.58.0",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
         "@storybook/addon-docs": "^10.0.7",
