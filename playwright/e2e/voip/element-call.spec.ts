@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { readFile } from "node:fs/promises";
-import { type Page } from "playwright-core";
+import { type Page } from "@playwright/test";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
