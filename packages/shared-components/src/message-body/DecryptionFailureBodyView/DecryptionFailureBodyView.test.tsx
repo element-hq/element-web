@@ -5,12 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { composeStories } from "@storybook/react-vite";
 import { render } from "@test-utils";
 import React from "react";
 import { describe, it, expect } from "vitest";
 
 import { DecryptionFailureBodyView, DecryptionFailureReason } from "./DecryptionFailureBodyView";
 import { MockViewModel } from "../../viewmodel";
+import * as stories from "./DecryptionFailureBodyView.stories";
+
+const { HasExtraClassNames } = composeStories(stories);
 
 describe("DecryptionFailureBodyView", () => {
     function customRender(
@@ -36,11 +40,9 @@ describe("DecryptionFailureBodyView", () => {
 
     it("Should display with extra class names", () => {
         // When
-        const { container } = customRender(DecryptionFailureReason.UNABLE_TO_DECRYPT, true, ["class1", "class2"]);
+        const { container } = render(<HasExtraClassNames />);
 
         // Then
-        expect(container.firstChild).toHaveClass("class1");
-        expect(container.firstChild).toHaveClass("class2");
         expect(container).toMatchSnapshot();
     });
 
@@ -84,7 +86,7 @@ describe("DecryptionFailureBodyView", () => {
 
     it.each([true, false])(
         "should handle historical messages when there is a backup and device verification is %s",
-        async (verified) => {
+        (verified) => {
             // When
             const { container } = customRender(
                 DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
@@ -136,7 +138,7 @@ describe("DecryptionFailureBodyView", () => {
 
     it("should handle ref input", async () => {
         const ref = React.createRef<HTMLDivElement>();
-        // Whenq
+        // When
         const { container } = customRenderWithRef(ref);
 
         // Then

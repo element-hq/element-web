@@ -87,6 +87,13 @@ interface DecryptionFailureBodyViewProps {
     ref?: React.RefObject<any>;
 }
 
+/**
+ * Resolve the localized error message for a decryption failure reason.
+ *
+ * @param i18nApi - I18n API used to translate message keys.
+ * @param decryptionFailureReason - Reason code for the decryption failure.
+ * @param isLocalDeviceVerified - Whether the local device is verified, used for certain historical cases.
+ */
 function getErrorMessage(
     i18nApi: I18nApi,
     decryptionFailureReason: DecryptionFailureReason,
@@ -118,7 +125,7 @@ function getErrorMessage(
         case DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
             return (
                 <span>
-                    <BlockIcon className="mx_Icon mx_Icon_16" />
+                    <BlockIcon className={styles.icon} width="16px" height="16px" />
                     {_t("timeline|decryption_failure|sender_identity_previously_verified")}
                 </span>
             );
@@ -128,7 +135,7 @@ function getErrorMessage(
             //   To be revisited as part of https://github.com/element-hq/element-meta/issues/2449
             return (
                 <span>
-                    <BlockIcon className="mx_Icon mx_Icon_16" />
+                    <BlockIcon className={styles.icon} width="16px" height="16px" />
                     {_t("timeline|decryption_failure|sender_unsigned_device")}
                 </span>
             );
@@ -136,12 +143,14 @@ function getErrorMessage(
     return _t("timeline|decryption_failure|unable_to_decrypt");
 }
 
-/** Get an extra CSS class, specific to the decryption failure reason */
+/**
+ * Get the extra CSS class for the given decryption failure reason, when one applies.
+ */
 function errorClassName(decryptionFailureReason: DecryptionFailureReason): string | null {
     switch (decryptionFailureReason) {
         case DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
         case DecryptionFailureReason.UNSIGNED_SENDER_DEVICE:
-            return styles.decryptionFailureBodyViewError;
+            return styles.error;
     }
     return null;
 }
@@ -151,17 +160,13 @@ function errorClassName(decryptionFailureReason: DecryptionFailureReason): strin
  *
  * @example
  * ```tsx
- * <DecryptionFailureBody vm={DecryptionFailureBodyViewModel} />
+ * <DecryptionFailureBodyView vm={DecryptionFailureBodyViewModel} />
  * ```
  */
 export function DecryptionFailureBodyView({ vm, ref }: Readonly<DecryptionFailureBodyViewProps>): JSX.Element {
     const i18nApi = useI18n();
     const { decryptionFailureReason, isLocalDeviceVerified, extraClassNames } = useViewModel(vm);
-    const classes = classNames(
-        styles.decryptionFailureBodyView,
-        errorClassName(decryptionFailureReason),
-        extraClassNames,
-    );
+    const classes = classNames(styles.content, errorClassName(decryptionFailureReason), extraClassNames);
 
     return (
         <div className={classes} ref={ref}>

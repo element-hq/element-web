@@ -60,9 +60,9 @@ export class DecryptionFailureBodyViewModel
     }
 
     /**
-     * @param mxEvent - The message event being rendered
-     * @param verificationState - The local device verification state
-     * @param className - Custom CSS class to apply to the component
+     * @param decryptionFailureCode - The decryption failure code for the event.
+     * @param verificationState - The local device verification state.
+     * @param extraClassNames - Extra CSS classes to apply to the component.
      */
     private static readonly computeSnapshot = (
         decryptionFailureCode: DecryptionFailureCode | null,
@@ -91,16 +91,10 @@ export class DecryptionFailureBodyViewModel
 
     /**
      * Updates the properties of the view model and recomputes the snapshot.
-     * @param newProps
+     * @param verificationState - The updated local device verification state.
      */
     public setVerificationState(verificationState?: boolean): void {
         this.props.verificationState = verificationState;
-        this.snapshot.set(
-            DecryptionFailureBodyViewModel.computeSnapshot(
-                this.props.decryptionFailureCode,
-                this.props.verificationState,
-                this.props.extraClassNames,
-            ),
-        );
+        this.snapshot.merge({ isLocalDeviceVerified: verificationState });
     }
 }

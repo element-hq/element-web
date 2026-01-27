@@ -335,7 +335,7 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
  * Bridge decryption-failure events into the view model using current local verification state.
  * This wrapper can be removed after MessageEvent has been changed to a function component.
  */
-function DecryptionFailureBodyWrapper({ mxEvent }: IBodyProps): JSX.Element {
+function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -347,5 +347,5 @@ function DecryptionFailureBodyWrapper({ mxEvent }: IBodyProps): JSX.Element {
     useEffect(() => {
         vm.setVerificationState(verificationState);
     }, [verificationState, vm]);
-    return <DecryptionFailureBodyView vm={vm} />;
+    return <DecryptionFailureBodyView vm={vm} ref={ref} />;
 }

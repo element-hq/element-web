@@ -28,7 +28,6 @@ export default {
     component: DecryptionFailureBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {
-        vm: { table: { disable: true } },
         decryptionFailureReason: {
             options: Object.entries(DecryptionFailureReason)
                 .filter(([key, value]) => key === value)
@@ -39,7 +38,7 @@ export default {
     args: {
         decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
         isLocalDeviceVerified: true,
-        extraClassNames: ["custom-class"],
+        extraClassNames: ["extra_class"],
     },
 } as Meta<typeof DecryptionFailureBodyViewWrapper>;
 
@@ -48,6 +47,12 @@ const Template: StoryFn<typeof DecryptionFailureBodyViewWrapper> = (args) => (
 );
 
 export const Default = Template.bind({});
+
+export const HasExtraClassNames = Template.bind({});
+HasExtraClassNames.args = {
+    decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
+    extraClassNames: ["extra_class_1", "extra_class_2"],
+};
 
 export const HasErrorClassName = Template.bind({});
 HasErrorClassName.args = {

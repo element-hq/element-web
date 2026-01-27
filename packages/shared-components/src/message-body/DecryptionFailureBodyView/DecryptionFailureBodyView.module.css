@@ -5,17 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.decryptionFailureBodyView {
+.content {
     color: var(--cpd-color-text-secondary);
     font-style: italic;
 }
 
 /* Formatting for errors due to sender trust requirement failures */
-.decryptionFailureBodyViewError > span {
+.error > span {
     /* some space between the (/) icon and text */
     display: inline-flex;
     gap: var(--cpd-space-1x);
 
     /* Center vertically */
     align-items: center;
+}
+
+.icon {
+    box-sizing: border-box;
+    flex: 0 0 16px;
 }
