@@ -130,4 +130,20 @@ export class DisambiguatedProfileViewModel
         super(props, DisambiguatedProfileViewModel.computeSnapshot(props));
         this.onClick = props.onClick;
     }
+
+    /**
+     * Sets the snapshot and emits an update to subscribers.
+     */
+    private readonly setSnapshot = (): void => {
+        this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
+    };
+
+    /**
+     * Updates the properties of the view model and recomputes the snapshot.
+     * @param newProps - Partial properties to update
+     */
+    public setProps(newProps: Partial<DisambiguatedProfileViewModelProps>): void {
+        this.props = { ...this.props, ...newProps };
+        this.setSnapshot();
+    }
 }

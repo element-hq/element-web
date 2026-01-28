@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
@@ -37,6 +37,17 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 withTooltip,
             }),
     );
+
+    useEffect(() => {
+        disambiguatedProfileVM.setProps({
+            fallbackName: mxEvent.getSender() ?? "",
+            onClick,
+            member,
+            colored: true,
+            emphasizeDisplayName: true,
+            withTooltip,
+        });
+    }, [disambiguatedProfileVM, mxEvent, onClick, member, withTooltip]);
 
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
         <DisambiguatedProfileView vm={disambiguatedProfileVM} />
