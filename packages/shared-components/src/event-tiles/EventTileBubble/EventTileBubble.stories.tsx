@@ -17,10 +17,10 @@ export default {
     component: EventTileBubble,
     tags: ["autodocs"],
     args: {
+        icon: <ErrorSolidIcon />,
         title: "Title goes here",
         subtitle: "Subtitle goes here",
         className: "custom-class",
-        icon: <ErrorSolidIcon />,
     },
 } as Meta<typeof EventTileBubble>;
 

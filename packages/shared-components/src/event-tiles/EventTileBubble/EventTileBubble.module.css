@@ -6,13 +6,13 @@
  */
 
 .container {
-    --EventTileBubble_margin-block: 10px;
-
     background-color: var(--cpd-color-bg-subtle-secondary);
     padding: 10px;
     border-radius: 8px;
     /* Reserve space for external timestamps, but also cap the width */
-    max-width: min(calc(100% - 2 * var(--MessageTimestamp-width)), 600px);
+    /* Legacy variable: --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
+    /* max-width: min(calc(100% - 2 * var(--MessageTimestamp-width)), 600px); */
+    max-width: min(calc(100% - 2 * 46px), 600px);
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content min-content;
