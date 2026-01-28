@@ -43,7 +43,7 @@
         "test:storybook:update": "playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules",
         "prepare": "patch-package && vite build",
         "storybook": "storybook dev -p 6007",
-        "build:storybook": "yarn build:doc && storybook build",
+        "build:storybook": "yarn build:doc && storybook build && node scripts/storybook-build-i18n.ts",
         "build:doc": "typedoc",
         "lint": "yarn lint:types && yarn lint:js",
         "lint:js": "eslint --max-warnings 0 src && prettier --check .",
