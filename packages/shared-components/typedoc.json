@@ -1,5 +1,19 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": ["src/index.ts"],
-    "out": "_docs"
+    "plugin": ["typedoc-plugin-markdown"],
+    "out": "typedoc",
+    "hidePageHeader": true,
+    "hidePageTitle": true,
+    "hideBreadcrumbs": true,
+    "useCodeBlocks": true,
+    "parametersFormat": "table",
+    "propertiesFormat": "table",
+    "enumMembersFormat": "table",
+    "typeDeclarationFormat": "table",
+    "indexFormat": "table",
+    "publicPath": "https://github.com/element-hq/element-web/blob/develop/packages/shared-components/",
+    "sourceLinkTemplate": "https://github.com/element-hq/element-web/blob/develop/{path}#L{line}",
+    "name": "@element-hq/web-shared-components",
+    "categorizeByGroup": true
 }

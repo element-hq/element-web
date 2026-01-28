@@ -9,4 +9,4 @@
 # Ignore coverage report
 /coverage/
 # Ignore generated docs
-_docs
+typedoc

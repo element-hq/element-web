@@ -255,6 +255,44 @@ export default {
 
 The Figma design will appear in the "Design" tab in Storybook.
 
+#### Non-UI Utility Stories
+
+For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
+
+**Example:** `src/utils/humanize.stories.tsx`
+
+```tsx
+const meta = {
+    title: "utils/humanize",
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <h1>humanize</h1>
+                    <Markdown>{humanizeTimeDoc}</Markdown>
+                </>
+            ),
+        },
+    },
+    tags: ["autodocs"],
+} satisfies Meta;
+
+export default meta;
+
+// Docs-only story - renders nothing but triggers autodocs
+export const Docs = {
+    render: () => null,
+};
+```
+
+**Workflow:**
+
+1. Write TsDoc in your utility function
+2. Export the function from `src/index.ts`
+3. Run `yarn build:doc` to generate TypeDoc markdown
+4. Create a `.stories.tsx` file importing the generated markdown
+5. The documentation appears automatically in Storybook
+
 ### Tests
 
 Two types of tests are available: unit tests and visual regression tests.
