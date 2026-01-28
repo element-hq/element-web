@@ -1175,8 +1175,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
         const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
         const timestamp = showTimestamp && ts ? messageTimestamp : dummyTimestamp;
-        const linkedTimestamp =
-            timestamp !== dummyTimestamp && !this.props.hideTimestamp ? linkedMessageTimestamp : dummyTimestamp;
+        const linkedTimestampContent = timestamp !== dummyTimestamp ? linkedMessageTimestamp : dummyTimestamp;
+        const linkedTimestampClass = classNames({
+            mx_EventTile_timestampContainer_hidden: !showTimestamp,
+        });
+        const linkedTimestamp = <div className={linkedTimestampClass}>{linkedTimestampContent}</div>;
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
