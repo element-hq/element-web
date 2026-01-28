@@ -1,0 +1,13 @@
+diff --git a/node_modules/linkify-html/dist/linkify-html.mjs b/node_modules/linkify-html/dist/linkify-html.mjs
+index 63b1fe5..f61e3b7 100644
+--- a/node_modules/linkify-html/dist/linkify-html.mjs
++++ b/node_modules/linkify-html/dist/linkify-html.mjs
+@@ -201,6 +201,8 @@ var EventedTokenizer = /** @class */function () {
+           this.consume();
+           if (this.delegate.endDoctype) this.delegate.endDoctype();
+           this.transitionTo("beforeData" /* beforeData */);
++        } else {
++          throw new Error("Unexpected token");
+         }
+       },
+       doctypePublicIdentifierDoubleQuoted: function () {
