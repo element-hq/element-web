@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
     # It's a volume rather than a directory because otherwise things tend to start picking up
     # files from it in the native environment and break.
     --with-node-modules)
-      RUN_ARGS+=(--mount "type=volume,src=ew-docker-node-modules,dst=/work/node_modules,volume-nocopy")
+      RUN_ARGS+=(--mount "type=volume,src=ew-docker-node-modules,dst=/work/node_modules,volume-nocopy" -e YARN_INSTALL=true)
       shift
       ;;
     # Sets a different entrypoint (in which case the default arguments to the script will be ignored)
