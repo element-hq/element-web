@@ -23,7 +23,7 @@ const meta = {
             ),
         },
     },
-    tags: ["autodocs"],
+    tags: ["autodocs", "skip-test"],
 } satisfies Meta;
 
 export default meta;

@@ -259,9 +259,15 @@ The Figma design will appear in the "Design" tab in Storybook.
 
 For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
 
-**Example:** `src/utils/humanize.stories.tsx`
+`src/utils/humanize.stories.tsx`
 
 ```tsx
+import React from "react";
+import { Markdown } from "@storybook/addon-docs/blocks";
+
+import type { Meta } from "@storybook/react-vite";
+import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
+
 const meta = {
     title: "utils/humanize",
     parameters: {
@@ -274,7 +280,7 @@ const meta = {
             ),
         },
     },
-    tags: ["autodocs"],
+    tags: ["autodocs", "skip-test"],
 } satisfies Meta;
 
 export default meta;
@@ -284,6 +290,9 @@ export const Docs = {
     render: () => null,
 };
 ```
+
+> [!NOTE]
+> Be sure to include the `skip-test` tag in your utility stories to prevent them from running as visual tests.
 
 **Workflow:**
 
