@@ -25,9 +25,11 @@ jobs:
                   node-version-file: package.json
 
             - name: 🔨 Install dependencies
+              working-directory: packages/shared-components
               run: "yarn install --pure-lockfile"
 
             - name: 📖 Generate docs
+              working-directory: packages/shared-components
               run: yarn build:docs
 
             - name: 🚀 Deploy to Cloudflare Pages
@@ -35,4 +37,5 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
+                  workingDirectory: "packages/shared-components"
                   command: pages deploy _docs --project-name=shared-components-docs
