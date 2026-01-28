@@ -1,6 +1,11 @@
 name: Publish shared component documentation
 on:
     workflow_dispatch: {}
+    push:
+        branches:
+            - "develop"
+        paths:
+            - "packages/shared-components/**/*"
 
 permissions: {}
 
