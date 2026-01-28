@@ -19,6 +19,7 @@ import {
     type MatrixError,
     RoomEvent,
     EventStatus,
+    MatrixSafetyError,
 } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -61,6 +62,7 @@ export class RoomStatusBarViewModel
     private static readonly determineStateForUnreadMessages = (
         room: Room,
         hasClickedTermsAndConditions: boolean,
+        isResending: boolean,
     ): RoomStatusBarViewSnapshot => {
         const unsentMessages = room.getPendingEvents().filter((ev) => ev.status === EventStatus.NOT_SENT);
         if (unsentMessages.length === 0) {
@@ -73,12 +75,13 @@ export class RoomStatusBarViewModel
             // If the user has not accepted the terms, we will just prompt the same error again anyway.
             return {
                 state: RoomStatusBarState.UnsentMessages,
-                isResending: false,
+                isResending,
             };
         }
 
         // Filter through the errors and find the most important error.
         let resourceLimitError: MatrixError | null = null;
+        let safetyError: MatrixSafetyError | null = null;
         for (const m of unsentMessages) {
             if (m.error?.errcode === "M_CONSENT_NOT_GIVEN") {
                 // This is the most important thing to show, so break here if we find one.
@@ -90,6 +93,9 @@ export class RoomStatusBarViewModel
             if (m.error?.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
                 resourceLimitError = m.error;
             }
+            if (m.error instanceof MatrixSafetyError) {
+                safetyError = m.error;
+            }
         }
         if (resourceLimitError) {
             return {
@@ -98,10 +104,25 @@ export class RoomStatusBarViewModel
                 adminContactHref: resourceLimitError.data.admin_contact,
             };
         }
+        if (safetyError) {
+            const canRetry = !!safetyError.expiry;
+            return {
+                state: RoomStatusBarState.MessageRejected,
+                harms: [...safetyError.harms],
+                serverError: safetyError.error,
+                ...(canRetry
+                    ? {
+                          isResending,
+                          canRetryInSeconds:
+                              safetyError.expiry && Math.ceil((safetyError.expiry.getTime() - Date.now()) / 1000),
+                      }
+                    : undefined),
+            };
+        }
         // Otherwise, we know there are unsent messages but the error is not special.
         return {
             state: RoomStatusBarState.UnsentMessages,
-            isResending: false,
+            isResending,
         };
     };
 
@@ -119,12 +140,9 @@ export class RoomStatusBarViewModel
             };
         }
 
-        // If we're in the process of resending, always show a resending state so we don't flicker.
+        // If we're in the process of resending, *always* show a resending state so we don't flicker.
         if (isResending) {
-            return {
-                state: RoomStatusBarState.UnsentMessages,
-                isResending,
-            };
+            return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions, true);
         }
 
         const syncState = client.getSyncState();
@@ -146,10 +164,11 @@ export class RoomStatusBarViewModel
         }
 
         // Connection is good, so check room messages for any failures.
-        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions);
+        return this.determineStateForUnreadMessages(room, hasClickedTermsAndConditions, false);
     };
 
     private readonly client: MatrixClient;
+    private timeout?: ReturnType<typeof globalThis.setTimeout>;
 
     public constructor(props: Props) {
         const client = MatrixClientPeg.safeGet();
@@ -171,6 +190,10 @@ export class RoomStatusBarViewModel
     private hasClickedTermsAndConditions = false;
 
     private setSnapshot(): void {
+        if (this.timeout) {
+            // If we had a timer going, clear it.
+            clearTimeout(this.timeout);
+        }
         this.snapshot.set(
             RoomStatusBarViewModel.computeSnapshot(
                 this.props.room,
