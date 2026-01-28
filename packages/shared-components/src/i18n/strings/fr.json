@@ -6,21 +6,32 @@
         "delete": "Supprimer",
         "dismiss": "Ignorer",
         "explore_rooms": "Parcourir les salons",
+        "invite": "Inviter",
+        "new_conversation": "Nouvelle conversation",
+        "new_room": "Nouveau salon",
+        "new_video_room": "Nouveau salon visio",
+        "open_menu": "Ouvrir le menu",
         "pause": "Pause",
         "play": "Lecture",
         "retry": "Réessayer",
-        "search": "Rechercher"
+        "search": "Rechercher",
+        "start_chat": "Démarrer une discussion"
+    },
+    "common": {
+        "preferences": "Préférences"
     },
     "left_panel": {
         "open_dial_pad": "Ouvrir le pavé de numérotation"
     },
     "room": {
+        "context_menu": {
+            "title": "Options du salon"
+        },
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit_description": "Veuillez contacter votre administrateur pour continuer à utiliser le service.",
             "exceeded_resource_limit_title": "Votre message n'a pas pu être envoyé car ce serveur d'accueil a dépassé sa limite de ressources.",
             "failed_to_create_room_title": "Impossible de démarrer une discussion avec cet utilisateur",
-            "history_visible": "Ce salon a été configuré afin que les nouveaux membres puissent lire l'historique.<a> En savori plus</a>",
             "homeserver_blocked_title": "Votre message n'a pas pu être envoyé car ce serveur d'accueil a été bloqué par son administrateur.",
             "monthly_user_limit_reached_title": "Votre message n'a pas pu être envoyé car ce serveur d'accueil a atteint sa limite mensuelle d'utilisateurs actifs.",
             "requires_consent_agreement_title": "Vous ne pouvez envoyer aucun message tant que vous n'aurez pas consulté et accepté nos conditions générales.",
@@ -29,6 +40,19 @@
             "server_connectivity_lost_description": "Les messages envoyés seront stockés jusqu’à ce que votre connexion revienne.",
             "server_connectivity_lost_title": "La connexion avec le serveur a été perdue.",
             "some_messages_not_sent": "Certains de vos messages n’ont pas été envoyés"
+        }
+    },
+    "room_list": {
+        "open_space_menu": "Ouvrir le menu de l’espace",
+        "room_options": "Options du salon",
+        "sort": "Trier",
+        "sort_type": {
+            "activity": "Activité",
+            "atoz": "A-Z"
+        },
+        "space_menu": {
+            "home": "Accueil de l’espace",
+            "space_settings": "Paramètres de l'espace"
         }
     },
     "terms": {

@@ -93,14 +93,12 @@
         "maximise": "Maximizar",
         "mention": "Mencionar",
         "minimise": "Minimizar",
-        "new_conversation": "Nova conversa",
         "new_room": "Nova sala",
         "new_video_room": "Nova sala de vídeo",
         "next": "Próximo",
         "no": "Não",
         "ok": "Ok",
         "open": "Abrir",
-        "open_menu": "Abrir menu",
         "pin": "Alfinete",
         "proceed": "Prosseguir",
         "quote": "Citar",
@@ -2179,7 +2177,6 @@
             "mark_unread": "Marcar como não lido"
         },
         "notification_options": "Alterar notificações",
-        "open_space_menu": "Abrir menu do espaço",
         "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens em %(count)s sala",
@@ -2189,26 +2186,16 @@
             "more_options": "Mais opções",
             "open_room": "Abrir sala %(roomName)s"
         },
-        "room_options": "Opções da Sala",
         "show_less": "Mostrar menos",
         "show_n_more": {
             "other": "Mostrar %(count)s a mais",
             "one": "Mostrar %(count)s a mais"
         },
         "show_previews": "Mostrar pré-visualizações de mensagens",
-        "sort": "Ordenar",
         "sort_by": "Classificar por",
         "sort_by_activity": "Atividade recente",
         "sort_by_alphabet": "De A a Z",
-        "sort_type": {
-            "activity": "Atividade",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Mostrar salas não lidas em primeiro",
-        "space_menu": {
-            "home": "Espaço",
-            "space_settings": "Configurações de espaço"
-        },
         "space_menu_label": "Menu de %(spaceName)s",
         "sublist_options": "Opções da Lista",
         "suggested_rooms_heading": "Salas sugeridas"
