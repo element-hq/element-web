@@ -146,7 +146,7 @@ async function validateJwtViaApi(jwt: string, email?: string, password?: string)
         const validateUrl = DEFAULT_JWT_VALIDATE_URL;
         console.log("JWT validate URL:", validateUrl);
         const response = await fetch(validateUrl, {
-            method: "POST",
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`,
