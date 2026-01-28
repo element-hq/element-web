@@ -18,8 +18,8 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Form, InlineSpinner, SettingsToggleInput } from "@vector-im/compound-web";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as WarningIcon } from "../../../../../../res/img/warning.svg";
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";

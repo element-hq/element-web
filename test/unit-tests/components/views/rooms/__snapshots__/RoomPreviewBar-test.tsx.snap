@@ -252,6 +252,19 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
 </div>
 `;
 
+exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders email mismatch message when no email bound 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    This invite to RoomPreviewBar-test-room was sent to test@test.com
+  </h3>
+  <p>
+    Share this email in Settings to receive invites directly in Element.
+  </p>
+</div>
+`;
+
 exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders invite message when invite email mxid match 1`] = `
 <div
   class="mx_RoomPreviewBar_message"

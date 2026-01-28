@@ -410,7 +410,9 @@ test.describe("Threads", () => {
             await textbox.fill("Please come here");
             await textbox.press("Enter");
             // Wait until the reply is sent
-            await expect(locator.locator(".mx_EventTile_last .mx_EventTile_receiptSent")).toBeVisible();
+            await expect(locator.locator(".mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+                "Your message was sent",
+            );
 
             // Take a snapshot of reply to the shared location
             await page.addStyleTag({ content: css });

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Pill renders the pill 1`] = `
+exports[`Pill > renders the pill 1`] = `
 <div>
   <div
     class="flex pill"
@@ -18,7 +18,7 @@ exports[`Pill renders the pill 1`] = `
     <button
       aria-describedby="_r_0_"
       aria-label="Delete"
-      class="_icon-button_1pz9o_8 mx_Dialog_nonDialogButton"
+      class="_icon-button_1215g_8 mx_Dialog_nonDialogButton"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 16px;"
@@ -29,7 +29,6 @@ exports[`Pill renders the pill 1`] = `
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
-          color="var(--cpd-color-icon-tertiary)"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -46,7 +45,7 @@ exports[`Pill renders the pill 1`] = `
 </div>
 `;
 
-exports[`Pill renders the pill without close button 1`] = `
+exports[`Pill > renders the pill without close button 1`] = `
 <div>
   <div
     class="flex pill"

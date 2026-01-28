@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render, screen } from "jest-matrix-react";
+import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { describe, it, vi, afterEach, expect } from "vitest";
 
 import * as stories from "./RoomListSearchView.stories";
 import {
@@ -22,7 +23,7 @@ const { Default, WithDialPad, WithoutExplore, AllButtons } = composeStories(stor
 
 describe("RoomListSearchView", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("Storybook snapshots", () => {
@@ -48,9 +49,9 @@ describe("RoomListSearchView", () => {
     });
 
     describe("User interactions", () => {
-        const onSearchClick = jest.fn();
-        const onDialPadClick = jest.fn();
-        const onExploreClick = jest.fn();
+        const onSearchClick = vi.fn();
+        const onDialPadClick = vi.fn();
+        const onExploreClick = vi.fn();
 
         class TestViewModel extends MockViewModel<RoomListSearchViewSnapshot> implements RoomListSearchViewActions {
             public onSearchClick = onSearchClick;

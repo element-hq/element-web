@@ -35,7 +35,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
-import { ErrorSolidIcon, InfoIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -84,6 +84,8 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
+import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
+import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -175,7 +177,7 @@ export interface EventTileProps {
 
     // the status of this event - ie, mxEvent.status. Denormalised to here so
     // that we can tell when it changes.
-    eventSendStatus?: string;
+    eventSendStatus?: EventStatus;
 
     forExport?: boolean;
 
@@ -496,6 +498,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return (
             <div className="mx_ThreadPanel_replies">
+                <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{this.state.thread.length}</span>
                 <ThreadMessagePreview thread={this.state.thread} />
             </div>
@@ -513,12 +516,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             if (this.props.highlightLink) {
                 return (
                     <a className="mx_ThreadSummary_icon" href={this.props.highlightLink}>
+                        <ThreadsIcon />
                         {_t("timeline|thread_info_basic")}
                     </a>
                 );
             }
 
-            return <p className="mx_ThreadSummary_icon">{_t("timeline|thread_info_basic")}</p>;
+            return (
+                <p className="mx_ThreadSummary_icon">
+                    <ThreadsIcon />
+                    {_t("timeline|thread_info_basic")}
+                </p>
+            );
         }
     }
 
@@ -732,6 +741,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     return null;
                 default:
                     return <E2ePadlockDecryptionFailure />;
+            }
+        }
+
+        if (this.state.shieldReason === EventShieldReason.AUTHENTICITY_NOT_GUARANTEED) {
+            // This may happen if the message was forwarded to us by another user, in which case we can show a better message
+            const forwarder = this.props.mxEvent.getKeyForwardingUser();
+            if (forwarder) {
+                return <E2eMessageSharedIcon keyForwardingUserId={forwarder} roomId={ev.getRoomId()!} />;
             }
         }
 
@@ -1187,7 +1204,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let msgOption: JSX.Element | undefined;
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-            msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+            msgOption = <SentReceipt messageState={this.props.eventSendStatus} />;
         } else if (this.props.showReadReceipts) {
             msgOption = (
                 <ReadReceiptGroup
@@ -1508,84 +1525,36 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
 };
 export default SafeEventTile;
 
-function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} {...props} />;
+function E2ePadlockUnencrypted(): JSX.Element {
+    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} />;
 }
 
-function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return (
-        <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} {...props} />
-    );
-}
-
-enum E2ePadlockIcon {
-    /** Compound Info icon in grey */
-    Normal = "normal",
-
-    /** Compound ErrorSolid icon in red */
-    Warning = "warning",
-
-    /** Compound ErrorSolid icon in grey */
-    DecryptionFailure = "decryption_failure",
-}
-
-interface IE2ePadlockProps {
-    icon: E2ePadlockIcon;
-    title: string;
-}
-
-class E2ePadlock extends React.Component<IE2ePadlockProps> {
-    private static icons: Record<E2ePadlockIcon, JSX.Element> = {
-        [E2ePadlockIcon.Normal]: <InfoIcon color="var(--cpd-color-icon-tertiary)" />,
-        [E2ePadlockIcon.Warning]: <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />,
-        [E2ePadlockIcon.DecryptionFailure]: <ErrorSolidIcon color="var(--cpd-color-icon-tertiary)" />,
-    };
-
-    public constructor(props: IE2ePadlockProps) {
-        super(props);
-
-        this.state = {
-            hover: false,
-        };
-    }
-
-    public render(): ReactNode {
-        // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
-        // https://github.com/element-hq/compound/issues/294
-        return (
-            <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className="mx_EventTile_e2eIcon" tabIndex={0} aria-label={_t("timeline|e2e_state")}>
-                    {E2ePadlock.icons[this.props.icon]}
-                </div>
-            </Tooltip>
-        );
-    }
+function E2ePadlockDecryptionFailure(): JSX.Element {
+    return <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} />;
 }
 
 interface ISentReceiptProps {
-    messageState: EventStatus | null;
+    messageState: EventStatus | undefined;
 }
 
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     const isSent = !messageState || messageState === "sent";
     const isFailed = messageState === "not_sent";
-    const receiptClasses = classNames({
-        mx_EventTile_receiptSent: isSent,
-        mx_EventTile_receiptSending: !isSent && !isFailed,
-    });
 
-    let nonCssBadge: JSX.Element | undefined;
-    if (isFailed) {
-        nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-    }
-
-    let label = _t("timeline|send_state_sending");
+    let icon: JSX.Element | undefined;
+    let label: string | undefined;
     if (messageState === "encrypting") {
+        icon = <CircleIcon />;
         label = _t("timeline|send_state_encrypting");
     } else if (isSent) {
+        icon = <CheckCircleIcon />;
         label = _t("timeline|send_state_sent");
     } else if (isFailed) {
+        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
         label = _t("timeline|send_state_failed");
+    } else {
+        icon = <CircleIcon />;
+        label = _t("timeline|send_state_sending");
     }
 
     return (
@@ -1593,9 +1562,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             <div className="mx_ReadReceiptGroup">
                 <Tooltip label={label} placement="top-end">
                     <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">
-                            <span className={receiptClasses}>{nonCssBadge}</span>
-                        </span>
+                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
                     </div>
                 </Tooltip>
             </div>

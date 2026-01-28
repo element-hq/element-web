@@ -49,6 +49,7 @@ import { type SettingKey } from "../../../src/settings/Settings.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
+import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions.ts";
 
 const { enabledSettings } = enableCalls();
 
@@ -481,18 +482,25 @@ describe("ElementCall", () => {
     let alice: RoomMember;
     let roomSession: Mocked<MatrixRTCSession>;
     function setRoomMembers(memberIds: string[]) {
-        jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
+        jest.spyOn(room, "getJoinedMembers").mockReturnValue(
+            memberIds.map(
+                (id) =>
+                    ({
+                        userId: id,
+                    }) as RoomMember,
+            ),
+        );
     }
 
     beforeEach(() => {
         jest.useFakeTimers();
         ({ client, room, alice, roomSession } = setUpClientRoomAndStores());
-        SdkConfig.reset();
     });
 
     afterEach(() => {
         jest.runOnlyPendingTimers();
         jest.useRealTimers();
+        SdkConfig.reset();
         cleanUpClientRoomAndStores(client, room);
     });
 
@@ -690,6 +698,24 @@ describe("ElementCall", () => {
             expect(urlParams2.has("allowIceFallback")).toBe(true);
 
             SettingsStore.getValue = originalGetValue;
+        });
+
+        it.each([
+            [undefined, null],
+            [BugReportEndpointURLLocal, null],
+            ["other-value", "other-value"],
+        ])("passes rageshake URL through widget URL", async (configSetting, expectedValue) => {
+            // Test with the preference set to false
+            SdkConfig.put({
+                bug_report_endpoint_url: configSetting,
+            });
+            ElementCall.create(room);
+            const call1 = Call.get(room);
+            if (!(call1 instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams1 = new URLSearchParams(new URL(call1.widget.url).hash.slice(1));
+            expect(urlParams1.get("rageshakeSubmitUrl")).toBe(expectedValue);
+            call1.destroy();
         });
 
         it("passes analyticsID and posthog params through widget URL", async () => {

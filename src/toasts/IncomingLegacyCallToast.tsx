@@ -11,13 +11,20 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import classNames from "classnames";
+import {
+    EndCallIcon,
+    VideoCallSolidIcon,
+    VoiceCallSolidIcon,
+    VolumeOffSolidIcon,
+    VolumeOnSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { getCallStateIcon } from "../components/views/messages/LegacyCallEvent.tsx";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
@@ -94,47 +101,42 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
             silenceButtonTooltip = _t("voip|silenced");
         }
 
-        const contentClass = classNames("mx_IncomingLegacyCallToast_content", {
-            mx_IncomingLegacyCallToast_content_voice: isVoice,
-            mx_IncomingLegacyCallToast_content_video: !isVoice,
-        });
-        const silenceClass = classNames("mx_IncomingLegacyCallToast_iconButton", {
-            mx_IncomingLegacyCallToast_unSilence: this.state.silenced,
-            mx_IncomingLegacyCallToast_silence: !this.state.silenced,
-        });
-
         return (
             <React.Fragment>
                 <RoomAvatar room={room ?? undefined} size="32px" />
-                <div className={contentClass}>
+                <div className="mx_IncomingLegacyCallToast_content">
                     <span className="mx_LegacyCallEvent_caller">{room ? room.name : _t("voip|unknown_caller")}</span>
                     <div className="mx_LegacyCallEvent_type">
-                        <div className="mx_LegacyCallEvent_type_icon" />
+                        {getCallStateIcon(isVoice, undefined)}
                         {isVoice ? _t("voip|voice_call") : _t("voip|video_call")}
                     </div>
                     <div className="mx_IncomingLegacyCallToast_buttons">
                         <AccessibleButton
-                            className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_decline"
+                            className="mx_IncomingLegacyCallToast_button"
                             onClick={this.onRejectClick}
                             kind="danger"
                         >
-                            <span> {_t("action|decline")} </span>
+                            <EndCallIcon />
+                            {_t("action|decline")}
                         </AccessibleButton>
                         <AccessibleButton
-                            className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_accept"
+                            className="mx_IncomingLegacyCallToast_button"
                             onClick={this.onAnswerClick}
                             kind="primary"
                         >
-                            <span> {_t("action|accept")} </span>
+                            {isVoice ? <VoiceCallSolidIcon /> : <VideoCallSolidIcon />}
+                            {_t("action|accept")}
                         </AccessibleButton>
                     </div>
                 </div>
                 <AccessibleButton
-                    className={silenceClass}
+                    className="mx_IncomingLegacyCallToast_iconButton"
                     disabled={callForcedSilent}
                     onClick={this.onSilenceClick}
                     title={silenceButtonTooltip}
-                />
+                >
+                    {this.state.silenced ? <VolumeOffSolidIcon /> : <VolumeOnSolidIcon />}
+                </AccessibleButton>
             </React.Fragment>
         );
     }

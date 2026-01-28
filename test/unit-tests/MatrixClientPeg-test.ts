@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import { advanceDateAndTime, stubClient } from "../test-utils";
 import { type IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
@@ -69,7 +69,7 @@ describe("MatrixClientPeg", () => {
         beforeEach(() => {
             // instantiate a MatrixClientPegClass instance, with a new MatrixClient
             testPeg = new PegClass();
-            fetchMockJest.get("http://example.com/_matrix/client/versions", {});
+            fetchMock.get("http://example.com/_matrix/client/versions", {});
             testPeg.replaceUsingCreds({
                 accessToken: "SEKRET",
                 homeserverUrl: "http://example.com",

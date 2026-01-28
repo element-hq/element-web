@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { DeleteIcon, StopSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
@@ -262,7 +262,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                     className="mx_VoiceRecordComposerTile_stop"
                     onClick={this.onRecordStartEndClick}
                     title={tooltip}
-                />
+                >
+                    <StopSolidIcon />
+                </AccessibleButton>
             );
             if (this.state.recorder && !this.state.recorder?.isRecording) {
                 stopBtn = null;

@@ -10,8 +10,8 @@ import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import { type ViewModel } from "../../viewmodel/ViewModel.ts";
-import { useViewModel } from "../../useViewModel.ts";
 import { useI18n } from "../../utils/i18nContext.ts";
+import { useViewModel } from "../../viewmodel/useViewModel.ts";
 
 export interface WidgetContextMenuSnapshot {
     /**

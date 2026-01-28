@@ -11,12 +11,13 @@ import { IconButton } from "@vector-im/compound-web";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../useMockedViewModel";
+
 import {
     type WidgetContextMenuAction,
     type WidgetContextMenuSnapshot,
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
+import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 
 type WidgetContextMenuViewModelProps = WidgetContextMenuSnapshot & WidgetContextMenuAction;
 

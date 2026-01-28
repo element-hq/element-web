@@ -15,6 +15,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
+import { ImageErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MFileBody from "./MFileBody";
 import Modal from "../../../Modal";
@@ -674,7 +675,11 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 errorText = _t("timeline|m.image|error_downloading");
             }
 
-            return <MediaProcessingError className="mx_MImageBody">{errorText}</MediaProcessingError>;
+            return (
+                <MediaProcessingError className="mx_MImageBody" Icon={ImageErrorIcon}>
+                    {errorText}
+                </MediaProcessingError>
+            );
         }
 
         let contentUrl = this.state.contentUrl;

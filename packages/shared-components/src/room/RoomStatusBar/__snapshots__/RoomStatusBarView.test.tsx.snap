@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RoomStatusBarView renders connection lost 1`] = `
+exports[`RoomStatusBarView > renders connection lost 1`] = `
 <div>
   <div
     aria-labelledby="_r_0_"
@@ -50,7 +50,7 @@ exports[`RoomStatusBarView renders connection lost 1`] = `
 </div>
 `;
 
-exports[`RoomStatusBarView renders consent link 1`] = `
+exports[`RoomStatusBarView > renders consent link 1`] = `
 <div>
   <div
     aria-labelledby="_r_2_"
@@ -108,7 +108,7 @@ exports[`RoomStatusBarView renders consent link 1`] = `
 </div>
 `;
 
-exports[`RoomStatusBarView renders local room error 1`] = `
+exports[`RoomStatusBarView > renders local room error 1`] = `
 <div>
   <div
     aria-labelledby="_r_6_"
@@ -171,7 +171,7 @@ exports[`RoomStatusBarView renders local room error 1`] = `
 </div>
 `;
 
-exports[`RoomStatusBarView renders resource limit error 1`] = `
+exports[`RoomStatusBarView > renders resource limit error 1`] = `
 <div>
   <div
     aria-labelledby="_r_1_"
@@ -234,7 +234,7 @@ exports[`RoomStatusBarView renders resource limit error 1`] = `
 </div>
 `;
 
-exports[`RoomStatusBarView renders unsent messages 1`] = `
+exports[`RoomStatusBarView > renders unsent messages 1`] = `
 <div>
   <div
     aria-labelledby="_r_3_"
@@ -329,7 +329,7 @@ exports[`RoomStatusBarView renders unsent messages 1`] = `
 </div>
 `;
 
-exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
+exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
 <div>
   <div
     aria-labelledby="_r_4_"
@@ -424,7 +424,7 @@ exports[`RoomStatusBarView renders unsent messages and deletes all 1`] = `
 </div>
 `;
 
-exports[`RoomStatusBarView renders unsent messages and resends all 1`] = `
+exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
 <div>
   <div
     aria-labelledby="_r_5_"

@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useCallback } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -66,7 +67,10 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
     return (
         <div className="mx_RoomCallBanner" onClick={onClick}>
             <div className="mx_RoomCallBanner_text">
-                <span className="mx_RoomCallBanner_label">{_t("voip|video_call")}</span>
+                <span className="mx_RoomCallBanner_label">
+                    <VideoCallSolidIcon />
+                    {_t("voip|video_call")}
+                </span>
                 <SessionDuration session={call.session} />
             </div>
 

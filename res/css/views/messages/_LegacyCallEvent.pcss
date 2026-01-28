@@ -30,67 +30,10 @@ Please see LICENSE files in the repository root for full details.
         .mx_LegacyCallEvent_iconButton {
             display: inline-flex;
 
-            &::before {
-                content: "";
-
+            svg {
                 height: 16px;
                 width: 16px;
-                background-color: $secondary-content;
-                mask-repeat: no-repeat;
-                mask-size: contain;
-                mask-position: center;
-            }
-        }
-
-        .mx_LegacyCallEvent_silence::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/volume-on-solid.svg");
-        }
-
-        .mx_LegacyCallEvent_unSilence::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/volume-off-solid.svg");
-        }
-
-        &.mx_LegacyCallEvent_voice {
-            .mx_LegacyCallEvent_type_icon::before,
-            .mx_LegacyCallEvent_content_button_callBack span::before,
-            .mx_LegacyCallEvent_content_button_answer span::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/voice-call-solid.svg");
-            }
-
-            &.mx_LegacyCallEvent_rejected,
-            &.mx_LegacyCallEvent_noAnswer {
-                .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/end-call.svg");
-                }
-            }
-        }
-
-        &.mx_LegacyCallEvent_video {
-            .mx_LegacyCallEvent_type_icon::before,
-            .mx_LegacyCallEvent_content_button_callBack span::before,
-            .mx_LegacyCallEvent_content_button_answer span::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
-            }
-
-            &.mx_LegacyCallEvent_rejected,
-            &.mx_LegacyCallEvent_noAnswer {
-                .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/video-call-declined-solid.svg");
-                }
-            }
-        }
-
-        &.mx_LegacyCallEvent_missed {
-            &.mx_LegacyCallEvent_voice {
-                .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/voice-call-missed-solid.svg");
-                }
-            }
-
-            &.mx_LegacyCallEvent_video {
-                .mx_LegacyCallEvent_type_icon::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/video-call-missed-solid.svg");
-                }
+                color: $secondary-content;
             }
         }
 
@@ -119,26 +62,8 @@ Please see LICENSE files in the repository root for full details.
                 }
 
                 .mx_LegacyCallEvent_type {
-                    display: flex;
-                    align-items: center;
                     font-weight: 400;
                     color: $secondary-content;
-
-                    .mx_LegacyCallEvent_type_icon {
-                        height: 13px;
-                        width: 13px;
-                        margin-right: 5px;
-
-                        &::before {
-                            content: "";
-                            position: absolute;
-                            height: 13px;
-                            width: 13px;
-                            background-color: $secondary-content;
-                            mask-repeat: no-repeat;
-                            mask-size: contain;
-                        }
-                    }
                 }
             }
         }
@@ -158,19 +83,6 @@ Please see LICENSE files in the repository root for full details.
                 @mixin LegacyCallButton;
                 padding: 0 $spacing-12;
                 font-size: inherit;
-
-                span::before {
-                    mask-size: 16px;
-                    width: 16px;
-                    height: 16px;
-                    flex-shrink: 0;
-                }
-            }
-
-            .mx_LegacyCallEvent_content_button_reject {
-                span::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/end-call.svg");
-                }
             }
 
             .mx_LegacyCallEvent_content_tooltip {
@@ -199,6 +111,21 @@ Please see LICENSE files in the repository root for full details.
                 align-items: center;
             }
         }
+    }
+}
+
+.mx_LegacyCallEvent_type_icon {
+    height: 16px;
+    width: 16px;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: -2px;
+
+    svg {
+        position: absolute;
+        height: inherit;
+        width: inherit;
+        color: $tertiary-content;
     }
 }
 

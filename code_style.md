@@ -272,20 +272,43 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 18. Components should serve a single, or near-single, purpose.
 19. Prefer to derive information from component properties rather than establish state.
 20. Do not use `React.Component::forceUpdate`.
+21. Prefer to use [compound typography components](https://compound.element.io/?path=/docs/compound-web_typography--docs) instead of raw HTML elements for text. This ensures consistent font usage and letter spacing across the app.
+22. If you can't use 21, don't forget to apply the correct CSS classes for font and letter spacing.
 
-## Stylesheets (\*.pcss = PostCSS + Plugins)
+## Stylesheets
 
-Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, but actually it is not.
+1. Keep indentation/nesting to a minimum. Maximum suggested nesting is 5 layers.
+2. Components should render only within the bounding box of their outermost DOM element. Page-absolute positioning and negative CSS margins and similar are generally not cool and stop the component from being reused easily in different places.
 
-1. The view's CSS file MUST have the same name as the component (e.g. `view/rooms/_MessageTile.css` for `MessageTile.tsx` component).
+### PostCSS (\*.pcss = PostCSS + Plugins)
+
+> [!NOTE]
+> We use PostCSS + some plugins to process our styles. It looks like SCSS, but actually it is not.
+
+**PostCSS should be use when working in the main Element Web codebase (not shared-components).**
+
+#### Naming and file structure
+
+1. The view's CSS file MUST have the same name as the component (e.g. `res/css/components/views/rooms/_RoomTile.pcss` for `RoomTile.tsx` component).
 2. Per-view CSS is optional - it could choose to inherit all its styling from the context of the rest of the app, although this is unusual.
-3. Class names must be prefixed with "mx\_".
+3. Class names must be prefixed with `mx_`.
 4. Class names must strictly denote the component which defines them.
    For example: `mx_MyFoo` for `MyFoo` component.
-5. Class names for DOM elements within a view which aren't components are named by appending a lower camel case identifier to the view's class name - e.g. .mx_MyFoo_randomDiv is how you'd name the class of an arbitrary div within the MyFoo view.
-6. Use the `$font` variables instead of manual values.
-7. Keep indentation/nesting to a minimum. Maximum suggested nesting is 5 layers.
-8. Use the whole class name instead of shortcuts:
+5. Class names for DOM elements within a view which aren't components are named by appending a lower camel case identifier to the view's class name.
+   For example: `.mx_MyFoo_randomDiv` is how you'd name the class of an arbitrary div within the MyFoo view.
+
+#### Variables
+
+6. Use the `$font-*` variables instead of manual font-size values (e.g., `$font-12px`, `$font-15px`).
+    - Note: These are deprecated. Prefer Compound typography tokens like `var(--cpd-font-body-md-regular)` for new code.
+7. Use theme color variables like `$primary-content`, `$secondary-content`, `$accent`, `$alert` for colors.
+    - Prefer Compound color tokens like `var(--cpd-color-text-primary)` for new code.
+8. Use spacing variables like `$spacing-8`, `$spacing-12`, `$spacing-16` where available.
+    - Prefer Compound spacing tokens like `var(--cpd-space-2x)` for new code.
+
+#### Syntax and formatting
+
+10. Use the whole class name instead of shortcuts:
 
     ```scss
     .mx_MyFoo {
@@ -296,7 +319,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-9. Break multiple selectors over multiple lines this way:
+11. Break multiple selectors over multiple lines this way:
 
     ```scss
     .mx_MyFoo,
@@ -306,8 +329,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-10. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
-11. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
+12. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
     [documented](#comments) for what the values mean:
 
     ```scss
@@ -318,9 +340,81 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-12. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
-13. The CSS for a component can override the rules for child components. For instance, .mxRoomList .mx_RoomTile {} would be the selector to override styles of RoomTiles when viewed in the context of a RoomList view. Overrides must be scoped to the View's CSS class - i.e. don't just define .mx_RoomTile {} in RoomList.css - only RoomTile.css is allowed to define its own CSS. Instead, say .mx_RoomList .mx_RoomTile {} to scope the override only to the context of RoomList views. N.B. overrides should be relatively rare as in general CSS inheritance should be enough.
-14. Components should render only within the bounding box of their outermost DOM element. Page-absolute positioning and negative CSS margins and similar are generally not cool and stop the component from being reused easily in different places.
+13. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
+
+#### Component overrides
+
+14. The CSS for a component can override the rules for child components. For instance, `.mx_RoomList .mx_RoomTile {}` would be the selector to override styles of RoomTiles when viewed in the context of a RoomList view. Overrides must be scoped to the View's CSS class - i.e. don't just define `.mx_RoomTile {}` in RoomList.pcss - only RoomTile.pcss is allowed to define its own CSS. Instead, say `.mx_RoomList .mx_RoomTile {}` to scope the override only to the context of RoomList views. N.B. overrides should be relatively rare as in general CSS inheritance should be enough.
+
+### CSS module (\*.module.css)
+
+**CSS modules provide locally-scoped class names and are the preferred approach for new shared components.**
+
+#### Naming and file structure
+
+1. The CSS module file MUST have the same name as the component with `.module.css` extension.
+   For example: `PlayPauseButton.module.css` for `PlayPauseButton.tsx`.
+2. Place the CSS module file in the same directory as the component.
+3. Class names should be semantic and describe their purpose, NOT prefixed with `mx_`.
+   For example: `.button`, `.label`, `.content`, `.title`.
+4. Use camelCase for multi-word class names: `.playButton`, `.primaryAction`, `.errorMessage`.
+
+#### Importing and usage
+
+5. Import the CSS module as `styles`:
+
+    ```tsx
+    import styles from "./MyComponent.module.css";
+    ```
+
+6. Apply classes using the styles object:
+
+    ```tsx
+    <div className={styles.container}>
+        <span className={styles.label}>{label}</span>
+        <button className={styles.button}>Click me</button>
+    </div>
+    ```
+
+7. Combine multiple classes using `classNames` utility:
+
+    ```tsx
+    import classNames from "classnames";
+
+    <div className={classNames(styles.pill, className)}>
+        <span className={styles.label}>{label}</span>
+    </div>;
+    ```
+
+#### Styling guidelines
+
+8. Use Compound Design Tokens for all styling values:
+    - Colors: `var(--cpd-color-bg-subtle-primary)`, `var(--cpd-color-text-primary)`
+    - Typography: `var(--cpd-font-body-md-regular)`, `var(--cpd-font-heading-sm-semibold)`
+    - Spacing: `var(--cpd-space-2x)`, `var(--cpd-space-4x)`
+    - Border radius: `var(--cpd-radius-pill-effect)` or standard px values for design-specific needs
+
+9. Use CSS custom properties for component-specific themeable values:
+
+    ```css
+    .flex {
+        display: var(--mx-flex-display, unset);
+        flex-direction: var(--mx-flex-direction, unset);
+        align-items: var(--mx-flex-align, unset);
+        gap: var(--mx-flex-gap, unset);
+    }
+    ```
+
+10. Avoid nesting selectors when possible. CSS modules provide scoping, so nesting is rarely needed.
+11. If `!important` is necessary (e.g., to override Compound component styles), add a [comment](#comments) explaining why:
+
+    ```css
+    .button {
+        background-color: var(--cpd-color-bg-subtle-primary) !important; /* override Compound default */
+    }
+    ```
+
+12. CSS modules do not support PostCSS variables (`$variable`). Always use CSS custom properties (`var(--variable)`) or direct values.
 
 ## Tests
 

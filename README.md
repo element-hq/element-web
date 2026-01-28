@@ -194,6 +194,17 @@ To add a new translation, head to the [translating doc](docs/translating.md).
 
 For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
+# Extending Element Web with Modules
+
+Element Web supports a module system that allows you to extend or modify functionality at runtime. Modules are loaded dynamically and provide a safe, predictable API for customization.
+
+## What are modules?
+
+Modules are extensions that can add or modify Element Web's functionality. They are:
+
+- Built using the [`@element-hq/element-web-module-api`](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api)
+- Loaded in EW via [config.json](docs/config.md#modules)
+
 # Triaging issues
 
 Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/element-hq/element-meta/wiki/Triage-process).

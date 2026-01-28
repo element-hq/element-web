@@ -407,6 +407,7 @@ If you run your own rageshake server to collect bug reports, the following optio
 1. `bug_report_endpoint_url`: URL for where to submit rageshake logs to. Rageshakes include feedback submissions and bug reports. When
    not present in the config, the app will disable all rageshake functionality. Set to `https://rageshakes.element.io/api/submit` to submit
    rageshakes to us, or use your own rageshake server.
+   You may also set the value to `"local"` if you wish to only store logs locally, in order to download them for debugging.
 2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
    alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
    (in contrast to other rageshakes submitted by the app, which use `element-web`).

@@ -7,17 +7,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-
-import { Icon as WarningIcon } from "../../../../../res/img/warning.svg";
+import { FileErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface Props {
     className?: string;
+    Icon?: typeof FileErrorIcon;
     children: React.ReactNode;
 }
 
-const MediaProcessingError: React.FC<Props> = ({ className, children }) => (
+const MediaProcessingError: React.FC<Props> = ({ className, children, Icon = FileErrorIcon }) => (
     <span className={className}>
-        <WarningIcon className="mx_MediaProcessingError_Icon" width="16" height="16" />
+        <Icon className="mx_MediaProcessingError_Icon" width="16" height="16" />
         {children}
     </span>
 );

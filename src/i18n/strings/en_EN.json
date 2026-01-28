@@ -93,14 +93,12 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_conversation": "New conversation",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
         "no": "No",
         "ok": "OK",
         "open": "Open",
-        "open_menu": "Open menu",
         "pin": "Pin",
         "proceed": "Proceed",
         "quote": "Quote",
@@ -978,6 +976,7 @@
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
         "key_storage_out_of_sync_description": "Confirm your recovery key to maintain access to your key storage and message history.",
+        "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -1995,7 +1994,6 @@
         "dm_invite_title": "Do you want to chat with %(user)s?",
         "drop_file_prompt": "Drop file here to upload",
         "edit_topic": "Edit topic",
-        "error_3pid_invite_email_lookup": "Unable to find user by email",
         "error_cancel_knock_title": "Failed to cancel",
         "error_join_403": "You need an invite to access this room.",
         "error_join_404_1": "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
@@ -2033,7 +2031,8 @@
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "room_is_public": "This room is public"
+            "room_is_public": "This room is public",
+            "shared_history_tooltip": "New members see history"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
@@ -2202,7 +2201,6 @@
             "mark_unread": "Mark as unread"
         },
         "notification_options": "Notification options",
-        "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
@@ -2212,26 +2210,16 @@
             "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
-        "room_options": "Room Options",
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
         },
         "show_previews": "Show previews of messages",
-        "sort": "Sort",
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Activity",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Show rooms with unread messages first",
-        "space_menu": {
-            "home": "Space home",
-            "space_settings": "Space Settings"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
         "suggested_rooms_heading": "Suggested Rooms"
@@ -2420,7 +2408,7 @@
             "history_visibility_legend": "Who can read history?",
             "history_visibility_shared": "Members (full history)",
             "history_visibility_warning": "Changes won't affect past messages, only new ones. <a>Learn more</a>",
-            "history_visibility_world_readable": "Anyone (history is public)\n",
+            "history_visibility_world_readable": "Anyone (history is public)",
             "join_rule_description": "Decide who can join %(roomName)s.",
             "join_rule_invite": "Private (invite only)",
             "join_rule_invite_description": "Only invited people can join.",

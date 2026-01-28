@@ -577,6 +577,7 @@
         "someone": "Keegi",
         "space": "Tühikuklahv",
         "spaces": "Kogukonnakeskused",
+        "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel",
         "sticker": "Kleeps",
         "stickerpack": "Kleepsupakk",
         "success": "Õnnestus",
@@ -684,6 +685,8 @@
         "join_rule_restricted_label": "Kõik <SpaceName/> kogukonna liikmed saavad seda jututuba leida ning võivad temaga liituda.",
         "name_validation_required": "Palun sisesta jututoa nimi",
         "room_visibility_label": "Jututoa nähtavus",
+        "state_encrypted_warning": "Sellega võtad kasutusele olekusündmuste krüptimise, mis võimaldab serverist peita metateabe, nagu jututubade nimed ja teemad. See metateave pole nähtav ka jututoaga hiljem liitujatele ning neile, kelle kliendid ei toeta MSC4362 spetsifikatsiooni.",
+        "state_encryption_label": "Krüptitud olekusündmused",
         "title_private_room": "Loo omavaheline jututuba",
         "title_public_room": "Loo avalik jututuba",
         "title_video_room": "Loo uus videotuba",
@@ -1523,6 +1526,8 @@
         "dynamic_room_predecessors": "Jututoa dünaamilised eellased",
         "dynamic_room_predecessors_description": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
         "element_call_video_rooms": "Element Call videotoad",
+        "encrypted_state_events": "Krüptitud olekusündmused (MSC4362)",
+        "encrypted_state_events_description": "Sellega võtad kasutusele olekusündmuste krüptimise, mis võimaldab serverist peita metateabe, nagu jututubade nimed ja teemad. See metateave pole nähtav ka jututoaga hiljem liitujatele ning neile, kelle kliendid ei toeta MSC4362 spetsifikatsiooni.",
         "exclude_insecure_devices": "Sõnumite saatmisel ja vastuvõtmisel välista ebaturvalised seadmed",
         "exclude_insecure_devices_description": "Kui see režiim on kasutusel, siis krüptitud sõnumeid ei jagata verifitseerimata seadmetega ja verifitseerimata seadmetest saabunud sõnumite puhul näidatakse vaid veateadet. Palun arvesta, et selle töörežiimi puhul sa ilmselt ei saa suhelda kasutajatega, kes pole kõiki oma seadmeid korrektselt verifitseerinud.",
         "experimental_description": "Soovid katsetada? Proovi meie uusimaid arendusmõtteid. Need funktsionaalsused pole üldsegi veel valmis, nad võivad toimida puudulikult, võivad muutuda või sootuks lõpetamata jääda. <a>Lisateavet leiad siit</a>.",
@@ -1912,6 +1917,7 @@
                 "other": "%(count)s esiletõstetud sõnumit"
             },
             "limits": {
+                "one": "",
                 "other": "Sa saad esile tõsta kuni %(count)s vidinat"
             },
             "menu": "Ava menüü",
@@ -1989,7 +1995,6 @@
         "dm_invite_title": "Kas sa soovid vestelda %(user)s'ga?",
         "drop_file_prompt": "Faili üleslaadimiseks lohista ta siia",
         "edit_topic": "Muuda teemat",
-        "error_3pid_invite_email_lookup": "E-posti aadressi alusel ei õnnestu kasutajat leida",
         "error_cancel_knock_title": "Tühistamine ei õnnestunud",
         "error_join_403": "Ligipääsuks siia jututuppa on sul vaja kutset.",
         "error_join_404_1": "Sa proovisid liituda jututoaga tema tunnuse alusel nii, et serveri nime polnud näidatud. Jututoa tunnused on sisemised identifikaatorid ja ilma lisateabeta neid liitumiseks kasutada ei saa.",
@@ -2119,18 +2124,6 @@
                 "other": "„<query/>“ päringule leidub %(count)s vastust"
             },
             "this_room_button": "Otsi sellest jututoast"
-        },
-        "status_bar": {
-            "delete_all": "Kustuta kõik",
-            "exceeded_resource_limit": "Sinu sõnumit ei saadetud, kuna see koduserver on ületanud on ületanud ressursipiirangu. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
-            "homeserver_blocked": "Sinu sõnumit ei saadetud, kuna see koduserver blokeeritud serveri haldaja poolt. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
-            "monthly_user_limit_reached": "Sinu sõnumit ei saadetud, kuna see koduserver on saavutanud igakuise aktiivsete kasutajate piiri. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
-            "requires_consent_agreement": "Sa ei saa saata ühtego sõnumit enne, kui oled läbi lugenud ja nõustunud <consentLink>meie kasutustingimustega</consentLink>.",
-            "retry_all": "Proovi kõikidega uuesti",
-            "select_messages_to_retry": "Sa võid valida kas kõik või mõned sõnumid kas kustutamiseks või uuesti saatmiseks",
-            "server_connectivity_lost_description": "Saadetud sõnumid salvestatakse seniks, kuni võrguühendus on taastunud.",
-            "server_connectivity_lost_title": "Ühendus sinu serveriga on katkenud.",
-            "some_messages_not_sent": "Mõned sinu sõnumid on saatmata"
         },
         "unknown_status_code_for_timeline_jump": "teadmata olekukood",
         "unread_notifications_predecessor": {
@@ -2420,12 +2413,11 @@
             "error_join_rule_change_title": "Liitumisreeglite uuendamine ei õnnestunud",
             "error_join_rule_change_unknown": "Määratlemata viga",
             "guest_access_warning": "Kõik kes kasutavad sobilikke klientrakendusi, saavad jututoaga liituda ilma kasutajakonto registreerimiseta.",
-            "history_visibility_invited": "Ainult liikmetele (alates nende kutsumise ajast)",
-            "history_visibility_joined": "Ainult liikmetele (alates liitumisest)",
+            "history_visibility_invited": "Liikmetele alates nende kutsumise ajast",
             "history_visibility_legend": "Kes võivad lugeda ajalugu?",
-            "history_visibility_shared": "Ainult liikmetele (alates selle seadistuse kasutuselevõtmisest)",
-            "history_visibility_warning": "Senise ajaloo nähtavus ei muutu.",
-            "history_visibility_world_readable": "Kõik kasutajad",
+            "history_visibility_shared": "Ainult liikmetele (kogu ajalugu)",
+            "history_visibility_warning": "Muudatused ei mõjuta senise ajaloo nähtavust, vaid uute oma. <a>Lisateave</a>",
+            "history_visibility_world_readable": "Kõik kasutajad (ajalugu on avalik)\n",
             "join_rule_description": "Vali, kes saavad liituda %(roomName)s jututoaga.",
             "join_rule_invite": "Privaatne jututuba (eeldab kutset)",
             "join_rule_invite_description": "Liitumine toimub vaid kutse alusel.",
@@ -3538,6 +3530,7 @@
             "enabled_dm": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
             "enabled_local": "Sõnumid siin vestluses on läbivalt krüptitud.",
             "parameters_changed": "Mõned krüptimise parameetrid on muutunud.",
+            "state_enabled": "Selle jututoa sõnumid ja olekusündmused on läbivalt krüptitud. Kui uued kasutajad liituvad, siis saad nad verifitseerida tunnuspildile klõpsates.",
             "unsupported": "Selles jututoas kasutatud krüptimine ei ole toetatud."
         },
         "m.room.guest_access": {
@@ -4017,7 +4010,6 @@
         "hide_sidebar_button": "Peida külgpaan",
         "input_devices": "Sisendseadmed",
         "jitsi_call": "Jitsi-põhine kõne",
-        "join_button_tooltip_call_full": "Vabandust, selles kõnes ei saa rohkem osalejaid olla",
         "legacy_call": "Vana lahendusega kõne",
         "maximise": "Täida ekraan",
         "maximise_call": "Tee kõneaken suureks",

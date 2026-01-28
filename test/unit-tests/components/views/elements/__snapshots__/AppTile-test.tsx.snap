@@ -35,7 +35,7 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
         </div>
         <button
           aria-labelledby="_r_2_"
-          class="_icon-button_1pz9o_8"
+          class="_icon-button_1215g_8"
           data-kind="secondary"
           data-testid="base-card-close-button"
           role="button"

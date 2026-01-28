@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type JSHandle, type Locator, type Page } from "@playwright/test";
 
-import type { MatrixEvent, IContent, Room } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, IContent, Room, Preset } from "matrix-js-sdk/src/matrix";
 import { test as base, expect } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type Client } from "../../../pages/client";
@@ -37,7 +37,11 @@ export const test = base.extend<{
 
     room1Name: "Room 1",
     room1: async ({ room1Name: name, app, user, bot }, use) => {
-        const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        const roomId = await app.client.createRoom({
+            name,
+            invite: [bot.credentials.userId],
+            preset: "public_chat" as Preset,
+        });
         await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },

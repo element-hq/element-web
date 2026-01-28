@@ -22,6 +22,9 @@ Please see LICENSE files in the repository root for full details.
     /* Fix for the blurred avatar-background */
     z-index: 1;
 
+    /* For enhanced visibility under contrast control */
+    outline: 1px solid transparent;
+
     /* Create another flexbox so the Panel fills the container */
     display: flex;
     flex-direction: column;
@@ -66,6 +69,8 @@ Please see LICENSE files in the repository root for full details.
 
     &:hover .mx_SpacePanel_toggleCollapse {
         opacity: 1;
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
     }
 
     ul {

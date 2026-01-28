@@ -12,12 +12,11 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import SdkConfig from "../../../SdkConfig";
-import BugReportDialog from "../dialogs/BugReportDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 import ViewSource from "../../structures/ViewSource";
 import { type Layout } from "../../../settings/enums/Layout";
+import { BugReportDialogButton } from "../elements/BugReportDialogButton";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -42,13 +41,6 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
         return { error };
     }
 
-    private onBugReport = (): void => {
-        Modal.createDialog(BugReportDialog, {
-            label: "react-soft-crash-tile",
-            error: this.state.error,
-        });
-    };
-
     private onViewSource = (): void => {
         Modal.createDialog(
             ViewSource,
@@ -69,18 +61,6 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
                 mx_EventTile_tileError: true,
             };
 
-            let submitLogsButton;
-            if (SdkConfig.get().bug_report_endpoint_url) {
-                submitLogsButton = (
-                    <>
-                        &nbsp;
-                        <AccessibleButton kind="link" onClick={this.onBugReport}>
-                            {_t("bug_reporting|submit_debug_logs")}
-                        </AccessibleButton>
-                    </>
-                );
-            }
-
             let viewSourceButton;
             if (mxEvent && SettingsStore.getValue("developerMode")) {
                 viewSourceButton = (
@@ -99,7 +79,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
                         <span>
                             {_t("timeline|error_rendering_message")}
                             {mxEvent && ` (${mxEvent.getType()})`}
-                            {submitLogsButton}
+                            <BugReportDialogButton error={this.state.error} label="react-tile-soft-crash" />
                             {viewSourceButton}
                         </span>
                     </div>

@@ -45,7 +45,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     <button
       aria-disabled="false"
       aria-label="Video call"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 32px;"
@@ -56,7 +56,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
-          aria-labelledby="_r_18c_"
+          aria-labelledby="_r_134_"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -72,7 +72,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     <button
       aria-disabled="false"
       aria-label="Voice call"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 32px;"
@@ -83,7 +83,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
-          aria-labelledby="_r_18h_"
+          aria-labelledby="_r_139_"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -98,8 +98,8 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Threads"
-      aria-labelledby="_r_18m_"
-      class="_icon-button_1pz9o_8"
+      aria-labelledby="_r_13e_"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 32px;"
@@ -125,8 +125,8 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Room info"
-      aria-labelledby="_r_18r_"
-      class="_icon-button_1pz9o_8"
+      aria-labelledby="_r_13j_"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 32px;"

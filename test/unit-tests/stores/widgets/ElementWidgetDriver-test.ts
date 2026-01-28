@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, type MockedObject } from "jest-mock";
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import {
     type MatrixClient,
     ClientEvent,
@@ -131,7 +131,8 @@ describe("ElementWidgetDriver", () => {
             "org.matrix.msc3819.receive.to_device:m.call.replaces",
             "org.matrix.msc4157.send.delayed_event",
             "org.matrix.msc4157.update_delayed_event",
-            "org.matrix.msc4354.send_sticky_event",
+            "org.matrix.msc4407.send.sticky_event",
+            "org.matrix.msc4407.receive.sticky_event",
             // RTC decline events (send/receive, unstable/stable)
             "org.matrix.msc2762.send.event:org.matrix.msc4310.rtc.decline",
             "org.matrix.msc2762.send.event:m.rtc.decline",
@@ -792,7 +793,7 @@ describe("ElementWidgetDriver", () => {
                 return null;
             });
 
-            fetchMockJest.get("https://example.com/_matrix/media/v3/download/example.com/test_file", "test contents");
+            fetchMock.get("https://example.com/_matrix/media/v3/download/example.com/test_file", "test contents");
 
             const result = await driver.downloadFile("mxc://example.com/test_file");
             // A type test is impossible here because of

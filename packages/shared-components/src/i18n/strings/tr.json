@@ -10,10 +10,6 @@
         "play": "Oynat",
         "search": "Ara"
     },
-    "encryption": {
-        "pinned_identity_changed": "%(displayName)s'ın (<b>%(userId)s</b>) kimliği değişmiş gibi görünüyor. <a>Daha fazla bilgi </a>",
-        "withdraw_verification_action": "Doğrulamayı iptal et"
-    },
     "left_panel": {
         "open_dial_pad": "Arama tuşlarını aç"
     },

@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { screen, render } from "jest-matrix-react";
+import { screen, render } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { IconButton } from "@vector-im/compound-web";
 import { composeStories } from "@storybook/react-vite";
@@ -21,12 +21,13 @@ import * as stories from "./WidgetContextMenuView.stories.tsx";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 import { I18nApi } from "../../utils/I18nApi.ts";
 import { I18nContext } from "../../utils/i18nContext.ts";
+import { describe, vi, expect, it, afterEach } from "vitest";
 
 const { Default, OnlyBasicModification } = composeStories(stories);
 
 describe("<WidgetContextMenuView />", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("renders widget contextmenu with all options", () => {
@@ -39,17 +40,17 @@ describe("<WidgetContextMenuView />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    const onKeyDown = jest.fn();
-    const togglePlay = jest.fn();
-    const onSeekbarChange = jest.fn();
+    const onKeyDown = vi.fn();
+    const togglePlay = vi.fn();
+    const onSeekbarChange = vi.fn();
 
-    const onStreamAudioClick = jest.fn();
-    const onEditClick = jest.fn();
-    const onSnapshotClick = jest.fn();
-    const onDeleteClick = jest.fn();
-    const onRevokeClick = jest.fn();
-    const onFinished = jest.fn();
-    const onMoveButton = jest.fn();
+    const onStreamAudioClick = vi.fn();
+    const onEditClick = vi.fn();
+    const onSnapshotClick = vi.fn();
+    const onDeleteClick = vi.fn();
+    const onRevokeClick = vi.fn();
+    const onFinished = vi.fn();
+    const onMoveButton = vi.fn();
     class WidgetContextMenuViewModel
         extends MockViewModel<WidgetContextMenuSnapshot>
         implements WidgetContextMenuAction
