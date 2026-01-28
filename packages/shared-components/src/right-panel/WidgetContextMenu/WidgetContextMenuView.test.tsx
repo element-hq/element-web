@@ -11,6 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { IconButton } from "@vector-im/compound-web";
 import { composeStories } from "@storybook/react-vite";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import { describe, vi, expect, it, afterEach } from "vitest";
 
 import {
     type WidgetContextMenuAction,
@@ -21,7 +22,6 @@ import * as stories from "./WidgetContextMenuView.stories.tsx";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 import { I18nApi } from "../../utils/I18nApi.ts";
 import { I18nContext } from "../../utils/i18nContext.ts";
-import { describe, vi, expect, it, afterEach } from "vitest";
 
 const { Default, OnlyBasicModification } = composeStories(stories);
 

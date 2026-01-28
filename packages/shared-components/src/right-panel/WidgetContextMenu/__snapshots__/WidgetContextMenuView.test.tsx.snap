@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<WidgetContextMenuView /> renders widget contextmenu with all options 1`] = `
+exports[`<WidgetContextMenuView /> > renders widget contextmenu with all options 1`] = `
 <div
   aria-hidden="true"
   data-aria-hidden="true"
@@ -11,7 +11,7 @@ exports[`<WidgetContextMenuView /> renders widget contextmenu with all options 1
     aria-expanded="true"
     aria-haspopup="menu"
     aria-label="context menu trigger button"
-    class="_icon-button_1pz9o_8"
+    class="_icon-button_1215g_8"
     data-kind="primary"
     data-state="open"
     id="radix-_r_0_"
@@ -41,7 +41,7 @@ exports[`<WidgetContextMenuView /> renders widget contextmenu with all options 1
 </div>
 `;
 
-exports[`<WidgetContextMenuView /> renders widget contextmenu without only basic modification 1`] = `
+exports[`<WidgetContextMenuView /> > renders widget contextmenu without only basic modification 1`] = `
 <div
   aria-hidden="true"
   data-aria-hidden="true"
@@ -52,7 +52,7 @@ exports[`<WidgetContextMenuView /> renders widget contextmenu without only basic
     aria-expanded="true"
     aria-haspopup="menu"
     aria-label="context menu trigger button"
-    class="_icon-button_1pz9o_8"
+    class="_icon-button_1215g_8"
     data-kind="primary"
     data-state="open"
     id="radix-_r_a_"

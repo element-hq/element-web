@@ -11,7 +11,6 @@ import { IconButton } from "@vector-im/compound-web";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-
 import {
     type WidgetContextMenuAction,
     type WidgetContextMenuSnapshot,
