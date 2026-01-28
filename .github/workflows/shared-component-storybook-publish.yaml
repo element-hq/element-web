@@ -1,4 +1,4 @@
-name: Publish shared component documentation
+name: Publish shared component storybook
 on:
     workflow_dispatch: {}
     push:
@@ -11,7 +11,7 @@ permissions: {}
 
 jobs:
     doc:
-        name: Publish Documentation
+        name: Publish storybook
         runs-on: ubuntu-latest
         environment: SharedComponents
         steps:
@@ -28,9 +28,9 @@ jobs:
               working-directory: packages/shared-components
               run: "yarn install --pure-lockfile"
 
-            - name: 📖 Generate docs
+            - name: 📖 Build Storybook
               working-directory: packages/shared-components
-              run: yarn build:docs
+              run: yarn build:storybook
 
             - name: 🚀 Deploy to Cloudflare Pages
               uses: cloudflare/wrangler-action@9681c2997648301493e78cacbfb790a9f19c833f # v3
@@ -38,4 +38,4 @@ jobs:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
                   workingDirectory: "packages/shared-components"
-                  command: pages deploy _docs --project-name=shared-components-docs
+                  command: pages deploy storybook-static --project-name=shared-components-storybook
