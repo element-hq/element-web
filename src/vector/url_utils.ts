@@ -33,7 +33,10 @@ export function parseQsFromFragment(location: Location): { location: string; par
                 : result.location.substring("jwt=".length);
             result.location = "/";
             if (raw) {
-                result.params.jwt = raw;
+                const jwt = raw.split("/")[0];
+                if (jwt) {
+                    result.params.jwt = jwt;
+                }
             }
         }
     } else if (result.location.startsWith("/jwt=") || result.location.startsWith("jwt=")) {
@@ -42,7 +45,10 @@ export function parseQsFromFragment(location: Location): { location: string; par
             : result.location.substring("jwt=".length);
         result.location = "/";
         if (raw) {
-            result.params = { jwt: raw };
+            const jwt = raw.split("/")[0];
+            if (jwt) {
+                result.params = { jwt };
+            }
         }
     }
     return result;
