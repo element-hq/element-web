@@ -83,7 +83,7 @@ describe("RoomSkipList", () => {
                 ts: totalRooms - i,
                 event: true,
             });
-            room.timeline.push(event);
+            jest.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([event]);
             skipList.reInsertRoom(room);
             expect(skipList.size).toEqual(rooms.length);
         }

@@ -2031,7 +2031,8 @@
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "room_is_public": "This room is public"
+            "room_is_public": "This room is public",
+            "shared_history_tooltip": "New members see history"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
