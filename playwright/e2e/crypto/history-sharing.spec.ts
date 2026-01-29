@@ -50,7 +50,9 @@ test.describe("History sharing", function () {
             // Bob should now be able to decrypt the event
             await expect(bobPage.getByText("A message from Alice")).toBeVisible();
 
-            const mask = [bobPage.locator(".mx_MessageTimestamp")];
+            // Exclude message timestamps and RR avatars from the screenshot. Bob sometimes sees Alice's RR on the
+            // previous event, which is surprising but not what we're testing here.
+            const mask = [bobPage.locator(".mx_MessageTimestamp"), bobPage.locator(".mx_ReadReceiptGroup_container")];
             await expect(bobPage.locator(".mx_RoomView_body")).toMatchScreenshot("shared-history-invite-accepted.png", {
                 mask,
             });

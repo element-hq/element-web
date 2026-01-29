@@ -275,17 +275,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_4yVCeEefiP"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -332,17 +332,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_qpMRMwbPDm"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -389,17 +389,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_fGtmGQvdMW"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -463,17 +463,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_e954DVIAu5"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -520,16 +520,16 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_CsiHRD7nyr"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -576,17 +576,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_A2ohjWVJIP"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -671,17 +671,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_auy1OmnTid"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -729,17 +729,17 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_X4ePDS0OpW"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -786,18 +786,18 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           aria-describedby="_r_2g_"
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           disabled=""
                           id="checkbox_wAHG75JNTN"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1296,16 +1296,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_OEPN1su1JY"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1352,16 +1352,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_VtOyR5kbu3"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1408,16 +1408,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_pEwuLn9Enn"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1481,16 +1481,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_YuxfFEpOsz"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1537,15 +1537,15 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_tWhQkBerF1"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1592,16 +1592,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_ejc4GFes1U"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1686,16 +1686,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_FzOK2nvfGF"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1743,16 +1743,16 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_MldL2r2vbs"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -1799,17 +1799,17 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1md5v_10"
+                        class="_container_153f2_10"
                       >
                         <input
                           aria-describedby="_r_11_"
                           checked=""
-                          class="_input_1md5v_18"
+                          class="_input_153f2_18"
                           id="checkbox_SwicmKUiOB"
                           type="checkbox"
                         />
                         <div
-                          class="_ui_1md5v_19"
+                          class="_ui_153f2_19"
                         >
                           <svg
                             aria-hidden="true"
@@ -2223,15 +2223,15 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                         class="_inline-field-control_19upo_44"
                       >
                         <div
-                          class="_container_1md5v_10"
+                          class="_container_153f2_10"
                         >
                           <input
-                            class="_input_1md5v_18"
+                            class="_input_153f2_18"
                             id="checkbox_dvqsxEaZtl"
                             type="checkbox"
                           />
                           <div
-                            class="_ui_1md5v_19"
+                            class="_ui_153f2_19"
                           >
                             <svg
                               aria-hidden="true"
