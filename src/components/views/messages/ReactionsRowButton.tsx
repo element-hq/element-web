@@ -61,6 +61,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
             prevProps.reactionEvents !== this.props.reactionEvents ||
             prevProps.customReactionImagesEnabled !== this.props.customReactionImagesEnabled
         ) {
+            // View model bails out if derived snapshot hasn't changed.
             this.reactionsRowButtonTooltipViewModel.setProps({
                 client: this.context,
                 mxEvent: this.props.mxEvent,

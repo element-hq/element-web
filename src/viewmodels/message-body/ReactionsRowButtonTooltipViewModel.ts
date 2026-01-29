@@ -93,18 +93,21 @@ export class ReactionsRowButtonTooltipViewModel
     }
 
     /**
-     * Sets the snapshot and emits an update to subscribers.
-     */
-    private readonly setSnapshot = (): void => {
-        this.snapshot.set(ReactionsRowButtonTooltipViewModel.computeSnapshot(this.props));
-    };
-
-    /**
      * Updates the properties of the view model and recomputes the snapshot.
      * @param newProps - Partial properties to update
      */
     public setProps(newProps: Partial<ReactionsRowButtonTooltipViewModelProps>): void {
         this.props = { ...this.props, ...newProps };
-        this.setSnapshot();
+        const nextSnapshot = ReactionsRowButtonTooltipViewModel.computeSnapshot(this.props);
+        const currentSnapshot = this.snapshot.current;
+
+        if (
+            nextSnapshot.formattedSenders === currentSnapshot.formattedSenders &&
+            nextSnapshot.caption === currentSnapshot.caption
+        ) {
+            return;
+        }
+
+        this.snapshot.set(nextSnapshot);
     }
 }
