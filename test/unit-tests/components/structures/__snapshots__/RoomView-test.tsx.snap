@@ -152,7 +152,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="mx_EventTileBubble _container_qwaxa_8 mx_cryptoEvent"
+                  class="mx_EventTileBubble _container_1hd1x_8 mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -167,12 +167,12 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                     />
                   </svg>
                   <div
-                    class="_title_qwaxa_34"
+                    class="_title_1hd1x_34"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_qwaxa_35"
+                    class="_subtitle_1hd1x_35"
                   >
                     <span>
                        
@@ -342,7 +342,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="mx_NewRoomIntro"
               >
                 <div
-                  class="mx_EventTileBubble _container_qwaxa_8 mx_cryptoEvent"
+                  class="mx_EventTileBubble _container_1hd1x_8 mx_cryptoEvent"
                 >
                   <svg
                     color="var(--cpd-color-icon-critical-primary)"
@@ -357,12 +357,12 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                     />
                   </svg>
                   <div
-                    class="_title_qwaxa_34"
+                    class="_title_1hd1x_34"
                   >
                     End-to-end encryption isn't enabled
                   </div>
                   <div
-                    class="_subtitle_qwaxa_35"
+                    class="_subtitle_1hd1x_35"
                   >
                     <span>
                        
@@ -717,7 +717,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               style="height: 400px;"
             >
               <div
-                class="mx_EventTileBubble _container_qwaxa_8 mx_cryptoEvent mx_cryptoEvent_icon"
+                class="mx_EventTileBubble _container_1hd1x_8 mx_cryptoEvent mx_cryptoEvent_icon"
               >
                 <svg
                   fill="currentColor"
@@ -731,12 +731,12 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                   />
                 </svg>
                 <div
-                  class="_title_qwaxa_34"
+                  class="_title_1hd1x_34"
                 >
                   Encryption enabled
                 </div>
                 <div
-                  class="_subtitle_qwaxa_35"
+                  class="_subtitle_1hd1x_35"
                 >
                   Messages in this chat will be end-to-end encrypted.
                 </div>
