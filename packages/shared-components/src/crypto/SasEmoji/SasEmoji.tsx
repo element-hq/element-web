@@ -23,6 +23,10 @@ export type Props = {
     className?: string;
 };
 
+/**
+ * Renders the 7 emoji used for SAS verification.
+ * The component is responsive so can be rendered in any context, dialog, side panel.
+ */
 export function SasEmoji({ emoji, className }: Props): JSX.Element {
     const { language } = useI18n();
 
