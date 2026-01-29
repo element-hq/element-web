@@ -2032,7 +2032,8 @@
                 "other": "%(count)s people asking to join"
             },
             "room_is_public": "This room is public",
-            "shared_history_tooltip": "New members see history"
+            "shared_history_tooltip": "New members see history",
+            "world_readable_history_tooltip": "Anyone can see history"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
