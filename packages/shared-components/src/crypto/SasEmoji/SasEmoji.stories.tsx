@@ -16,6 +16,12 @@ const meta = {
     args: {
         emoji: ["🍕", "🌽", "🚀", "🔒", "🔧", "🍓", "⌛"],
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/XLWIAB5n8yObYvU0INKPK1/Verification-by-Emoji?node-id=1-2935&t=NrV9JnuItrAyyh53-4",
+        },
+    },
 } satisfies Meta<typeof SasEmoji>;
 
 export default meta;
