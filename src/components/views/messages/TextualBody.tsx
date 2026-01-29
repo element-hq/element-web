@@ -390,7 +390,13 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
 
-        let body = <EventContentBodyView vm={this.EventContentBodyViewModel} as={willHaveWrapper ? "span" : "div"} />;
+        let body = (
+            <EventContentBodyView
+                vm={this.EventContentBodyViewModel}
+                as={willHaveWrapper ? "span" : "div"}
+                ref={this.contentRef}
+            />
+        );
 
         if (this.props.replacingEventId) {
             body = (
