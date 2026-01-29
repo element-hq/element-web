@@ -95,14 +95,12 @@
         "maximise": "Развернуть",
         "mention": "Упомянуть",
         "minimise": "Свернуть",
-        "new_conversation": "Новый диалог",
         "new_room": "Новая комната",
         "new_video_room": "Новая видеокомната",
         "next": "Далее",
         "no": "Нет",
         "ok": "ОК",
         "open": "Открыть",
-        "open_menu": "Открыть меню",
         "pin": "Закрепить",
         "proceed": "Продолжить",
         "quote": "Цитировать",
@@ -2197,7 +2195,6 @@
             "mark_unread": "Отметить как непрочитанное"
         },
         "notification_options": "Настройки уведомлений",
-        "open_space_menu": "Открыть меню пространств",
         "primary_filters": "Фильтры комнат",
         "redacting_messages_status": {
             "one": "Удаляются сообщения в %(count)s комнате",
@@ -2207,26 +2204,16 @@
             "more_options": "Дополнительные параметры",
             "open_room": "Открыть комнату %(roomName)s"
         },
-        "room_options": "Настройки комнаты",
         "show_less": "Показать меньше",
         "show_n_more": {
             "other": "Показать ещё %(count)s",
             "one": "Показать ещё %(count)s"
         },
         "show_previews": "Показывать последнее сообщение",
-        "sort": "Сортировать",
         "sort_by": "Сортировать",
         "sort_by_activity": "По активности",
         "sort_by_alphabet": "А-Я",
-        "sort_type": {
-            "activity": "Активность",
-            "atoz": "А-Я"
-        },
         "sort_unread_first": "Комнаты с непрочитанными сообщениями в начале",
-        "space_menu": {
-            "home": "Пространство — Главная",
-            "space_settings": "Настройки Пространства"
-        },
         "space_menu_label": "Меню %(spaceName)s",
         "sublist_options": "Настройки списка",
         "suggested_rooms_heading": "Предлагаемые комнаты"

@@ -20,7 +20,6 @@
             "exceeded_resource_limit_description": "Cysylltwch â gweinyddwr eich gwasanaeth i barhau i ddefnyddio'r gwasanaeth.",
             "exceeded_resource_limit_title": "Dyw eich neges heb ei anfon oherwydd bod y gweinydd cartref hwn wedi mynd y tu hwnt i derfyn ei adnoddau.",
             "failed_to_create_room_title": "Methwyd dechrau sgwrs gyda'r defnyddiwr hwn",
-            "history_visible": "Mae'r ystafell hon wedi'i ffurfweddu fel y gall aelodau newydd ddarllen hanes. <a>Dysgu Mwy</a>",
             "homeserver_blocked_title": "Dyw eich neges heb ei anfon oherwydd bod y gweinydd cartref hwn wedi'i rwystro gan ei weinyddwr.",
             "monthly_user_limit_reached_title": "Dyw eich neges heb ei anfon oherwydd bod y gweinydd cartref hwn wedi cyrraedd ei Derfyn Defnyddiwr Gweithredol Misol.",
             "requires_consent_agreement_title": "Does dim modd i chi anfon unrhyw negeseuon nes i chi adolygu a chytuno â'n telerau ac amodau.",

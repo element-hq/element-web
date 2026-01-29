@@ -97,14 +97,12 @@
         "maximise": "Maximalizovať",
         "mention": "Zmieniť sa",
         "minimise": "Minimalizovať",
-        "new_conversation": "Nová konverzácia",
         "new_room": "Nová miestnosť",
         "new_video_room": "Nová video miestnosť",
         "next": "Ďalej",
         "no": "Nie",
         "ok": "OK",
         "open": "Otvoriť",
-        "open_menu": "Otvoriť ponuku",
         "pin": "Špendlík",
         "proceed": "Pokračovať",
         "quote": "Citovať",
@@ -692,6 +690,7 @@
         "join_rule_restricted_label": "Každý v <SpaceName/> bude môcť nájsť túto miestnosť a pripojiť sa k nej.",
         "name_validation_required": "Zadajte prosím názov miestnosti",
         "room_visibility_label": "Viditeľnosť miestnosti",
+        "state_encrypted_warning": "Umožňuje experimentálnu podporu šifrovania stavových udalostí, ktoré skryjú metadáta, ako sú názvy miestností a témy, pred serverom. Tieto metadáta budú tiež skryté pred ľuďmi, ktorí sa k miestnostiam pripoja neskôr, a ľuďmi, ktorých klienti nepodporujú MSC4362.",
         "state_encryption_label": "Šifrovať stavové udalosti",
         "title_private_room": "Vytvoriť súkromnú miestnosť",
         "title_public_room": "Vytvoriť verejnú miestnosť",
@@ -986,6 +985,7 @@
         "import_invalid_passphrase": "Kontrola overenia zlyhala: Nesprávne heslo?",
         "key_storage_out_of_sync": "Vaše úložisko kľúčov nie je synchronizované.",
         "key_storage_out_of_sync_description": "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.",
+        "message_shared_by": "%(displayName)s (%(userId)s ) zdieľal túto správu čase, keď ste ešte neboli v miestnosti, keď bola odoslaná.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ku ktorému je pripojený používateľ, ktorého overujete",
@@ -1542,6 +1542,7 @@
         "dynamic_room_predecessors_description": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
         "element_call_video_rooms": "Element Call video miestnosti",
         "encrypted_state_events": "Zašifrované stavy udalostí (MSC4362)",
+        "encrypted_state_events_description": "Umožňuje experimentálnu podporu šifrovania stavových udalostí, ktoré skryjú metadáta, ako sú názvy miestností a témy, pred serverom. Tieto metadáta budú tiež skryté pred ľuďmi, ktorí sa k miestnostiam pripoja neskôr, a ľuďmi, ktorých klienti nepodporujú MSC4362.",
         "exclude_insecure_devices": "Vylúčiť nezabezpečené zariadenia pri odosielaní/prijímaní správ",
         "exclude_insecure_devices_description": "Ak je tento režim povolený, šifrované správy nebudú zdieľané s neoverenými zariadeniami a správy z neoverených zariadení sa zobrazia ako chyba. Upozorňujeme, že ak povolíte tento režim, možno nebudete môcť komunikovať s používateľmi, ktorí svoje zariadenia neoverili.",
         "experimental_description": "Chcete experimentovať? Vyskúšajte naše najnovšie nápady vo vývojovom štádiu. Tieto funkcie nie sú dokončené; môžu byť nestabilné, môžu sa zmeniť alebo môžu byť úplne zrušené. <a>Zistiť viac</a>.",
@@ -2232,7 +2233,6 @@
             "mark_unread": "Označiť ako neprečítané"
         },
         "notification_options": "Možnosti oznámenia",
-        "open_space_menu": "Otvoriť ponuku priestoru",
         "primary_filters": "Filtre zoznamu miestností",
         "redacting_messages_status": {
             "one": "V súčasnosti sa odstraňujú správy v %(count)s miestnosti",
@@ -2243,7 +2243,6 @@
             "more_options": "Viac možností",
             "open_room": "Otvoriť miestnosť %(roomName)s"
         },
-        "room_options": "Možnosti miestnosti",
         "show_less": "Zobraziť menej",
         "show_n_more": {
             "one": "Zobraziť %(count)s ďalšiu",
@@ -2251,19 +2250,10 @@
             "other": "Zobraziť %(count)s ďalších"
         },
         "show_previews": "Zobraziť náhľady správ",
-        "sort": "Zoradiť",
         "sort_by": "Zoradiť podľa",
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Aktivita",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Najprv ukázať miestnosti s neprečítanými správami",
-        "space_menu": {
-            "home": "Domov priestoru",
-            "space_settings": "Nastavenia priestoru"
-        },
         "space_menu_label": "%(spaceName)s ponuka",
         "sublist_options": "Možnosti zoznamu",
         "suggested_rooms_heading": "Navrhované miestnosti"
@@ -2452,7 +2442,7 @@
             "history_visibility_legend": "Kto môže čítať históriu?",
             "history_visibility_shared": "Členovia (úplná história)",
             "history_visibility_warning": "Zmeny neovplyvnia predchádzajúce správy, iba nové. <a> Zistiť viac</a>",
-            "history_visibility_world_readable": "Ktokoľvek (história je verejná)\n",
+            "history_visibility_world_readable": "Ktokoľvek (história je verejná)",
             "join_rule_description": "Určite, kto sa môže pripojiť k %(roomName)s.",
             "join_rule_invite": "Súkromné (len pre pozvaných)",
             "join_rule_invite_description": "Pripojiť sa môžu len pozvaní ľudia.",
@@ -3575,6 +3565,7 @@
             "enabled_dm": "Správy sú tu end-to-end šifrované. Overte %(displayName)s v ich profile - ťuknite na ich profilový obrázok.",
             "enabled_local": "Správy v tejto konverzácii sú šifrované od vás až k príjemcovi.",
             "parameters_changed": "Niektoré parametre šifrovania boli zmenené.",
+            "state_enabled": "Správy a udalosti v tejto miestnosti sú šifrované end-to-end. Keď sa ľudia pripoja, môžete ich overiť v ich profile, stačí ťuknúť na ich profilový obrázok.",
             "unsupported": "Šifrovanie používané v tejto miestnosti nie je podporované."
         },
         "m.room.guest_access": {

@@ -33,11 +33,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
             >
               <div
-                class="_container_1qhtc_10"
+                class="_container_1ug7n_10"
               >
                 <input
                   checked=""
-                  class="_input_1qhtc_18"
+                  class="_input_1ug7n_18"
                   id="radix-_r_0_"
                   name="layout"
                   title=""
@@ -45,7 +45,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   value="group"
                 />
                 <div
-                  class="_ui_1qhtc_19"
+                  class="_ui_1ug7n_19"
                 />
               </div>
               <span>
@@ -173,10 +173,10 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
             >
               <div
-                class="_container_1qhtc_10"
+                class="_container_1ug7n_10"
               >
                 <input
-                  class="_input_1qhtc_18"
+                  class="_input_1ug7n_18"
                   id="radix-_r_9_"
                   name="layout"
                   title=""
@@ -184,7 +184,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   value="bubble"
                 />
                 <div
-                  class="_ui_1qhtc_19"
+                  class="_ui_1ug7n_19"
                 />
               </div>
               <span>
@@ -312,10 +312,10 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
             >
               <div
-                class="_container_1qhtc_10"
+                class="_container_1ug7n_10"
               >
                 <input
-                  class="_input_1qhtc_18"
+                  class="_input_1ug7n_18"
                   id="radix-_r_i_"
                   name="layout"
                   title=""
@@ -323,7 +323,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   value="irc"
                 />
                 <div
-                  class="_ui_1qhtc_19"
+                  class="_ui_1ug7n_19"
                 />
               </div>
               <span>

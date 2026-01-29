@@ -1,3 +1,34 @@
+Changes in [1.12.9](https://github.com/element-hq/element-web/releases/tag/v1.12.9) (2026-01-27)
+================================================================================================
+## ✨ Features
+
+* Allow local log downloads when a rageshake URL is not configured. ([#31716](https://github.com/element-hq/element-web/pull/31716)). Contributed by @Half-Shot.
+* Improve icon rendering accessibility ([#31776](https://github.com/element-hq/element-web/pull/31776)). Contributed by @t3chguy.
+* Show "Bob shared this message" on messages shared via MSC4268 ([#31684](https://github.com/element-hq/element-web/pull/31684)). Contributed by @richvdh.
+* Update the way we render icons for accessibility ([#31731](https://github.com/element-hq/element-web/pull/31731)). Contributed by @t3chguy.
+* Switch from css masks to rendering svg ([#31681](https://github.com/element-hq/element-web/pull/31681)). Contributed by @t3chguy.
+* Support for stable MSC4191 account management action parameter ([#31701](https://github.com/element-hq/element-web/pull/31701)). Contributed by @hughns.
+* Support for stable m.oauth UIA stage from MSC4312 ([#31704](https://github.com/element-hq/element-web/pull/31704)). Contributed by @hughns.
+* Switch to Compound icons to replace old icons ([#31667](https://github.com/element-hq/element-web/pull/31667)). Contributed by @t3chguy.
+* Switch from svg masks to svg rendering in more places ([#31652](https://github.com/element-hq/element-web/pull/31652)). Contributed by @t3chguy.
+* Switch from svg masks to svg rendering in more places ([#31650](https://github.com/element-hq/element-web/pull/31650)). Contributed by @t3chguy.
+* Update notification icons using Compound icons ([#31671](https://github.com/element-hq/element-web/pull/31671)). Contributed by @t3chguy.
+* Memoise ListView context  ([#31668](https://github.com/element-hq/element-web/pull/31668)). Contributed by @t3chguy.
+* Switch emoji picker to use emoji for header icons ([#31645](https://github.com/element-hq/element-web/pull/31645)). Contributed by @t3chguy.
+* Replace icons with Compound alternatives ([#31642](https://github.com/element-hq/element-web/pull/31642)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Fix avatar decorations in thread activity centre not being atop avatar ([#31789](https://github.com/element-hq/element-web/pull/31789)). Contributed by @t3chguy.
+* Fix room settings roles tab getting confused if power level change fails ([#31768](https://github.com/element-hq/element-web/pull/31768)). Contributed by @t3chguy.
+* Custom themes now import highlights in css ([#31758](https://github.com/element-hq/element-web/pull/31758)). Contributed by @Philldomd.
+* Use correct translation for url preview settings ([#31740](https://github.com/element-hq/element-web/pull/31740)). Contributed by @florianduros.
+* Fix error shown if accepting a 3pid invite ([#31735](https://github.com/element-hq/element-web/pull/31735)). Contributed by @dbkr.
+* Ensure correct focus configuration for Element Call before allowing users to call. ([#31490](https://github.com/element-hq/element-web/pull/31490)). Contributed by @Half-Shot.
+* Fix emoji font in emoji picker header buttons ([#31679](https://github.com/element-hq/element-web/pull/31679)). Contributed by @t3chguy.
+* fix flaky test by waiting for chat panel before counting messages ([#31633](https://github.com/element-hq/element-web/pull/31633)). Contributed by @BillCarsonFr.
+
+
 Changes in [1.12.8](https://github.com/element-hq/element-web/releases/tag/v1.12.8) (2026-01-13)
 ================================================================================================
 ## 🦖 Deprecations

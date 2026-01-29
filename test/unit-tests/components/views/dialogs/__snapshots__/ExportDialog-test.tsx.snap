@@ -173,15 +173,15 @@ exports[`<ExportDialog /> renders export dialog 1`] = `
           class="_inline-field-control_19upo_44"
         >
           <div
-            class="_container_1md5v_10"
+            class="_container_153f2_10"
           >
             <input
-              class="_input_1md5v_18"
+              class="_input_153f2_18"
               id="include-attachments"
               type="checkbox"
             />
             <div
-              class="_ui_1md5v_19"
+              class="_ui_153f2_19"
             >
               <svg
                 aria-hidden="true"
