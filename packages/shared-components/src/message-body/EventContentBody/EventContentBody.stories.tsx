@@ -6,6 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import hljs from "highlight.js"; // is required to highlight the js code block
+import "highlight.js/styles/atom-one-light.min.css"; // is required to style the highlighted code blocks
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
@@ -69,11 +71,14 @@ export const CodeBlock = Template.bind({});
 CodeBlock.args = {
     children: (
         <pre>
-            <code className="language-javascript">
-                {`function hello() {
-  console.log("Hello, world!");
-}`}
-            </code>
+            <code
+                className="language-js"
+                dangerouslySetInnerHTML={{
+                    __html: hljs.highlight(`function hello() {\n  console.log("Hello, world!");\n}`, {
+                        language: "javascript",
+                    }).value,
+                }}
+            />
         </pre>
     ),
     className: `${styles.EventTile_body} ${styles.markdownBody}`,
