@@ -93,14 +93,12 @@
         "maximise": "Maximieren",
         "mention": "Erwähnen",
         "minimise": "Minimieren",
-        "new_conversation": "Neue Unterhaltung",
         "new_room": "Neue Gruppe",
         "new_video_room": "Neuer Videochat",
         "next": "Weiter",
         "no": "Nein",
         "ok": "Ok",
         "open": "Öffnen",
-        "open_menu": "Menu öffnen",
         "pin": "Anheften",
         "proceed": "Fortfahren",
         "quote": "Zitieren",
@@ -2201,7 +2199,6 @@
             "mark_unread": "Als ungelesen markieren"
         },
         "notification_options": "Benachrichtigungsoptionen",
-        "open_space_menu": "Öffne Menü für Spaces",
         "primary_filters": "Filter für die Chatliste",
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Chat",
@@ -2211,26 +2208,16 @@
             "more_options": "Weitere Optionen",
             "open_room": "Öffne Chat %(roomName)s"
         },
-        "room_options": "Chatroomoptionen",
         "show_less": "Weniger anzeigen",
         "show_n_more": {
             "other": "%(count)s weitere anzeigen",
             "one": "%(count)s weitere anzeigen"
         },
         "show_previews": "Nachrichtenvorschau anzeigen",
-        "sort": "Sortieren",
         "sort_by": "Sortieren nach",
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
-        "sort_type": {
-            "activity": "Aktivität",
-            "atoz": "A–Z"
-        },
         "sort_unread_first": "Zeige Chats mit ungelesenen Nachrichten zuerst",
-        "space_menu": {
-            "home": "Space-Übersicht",
-            "space_settings": "Space Einstellungen"
-        },
         "space_menu_label": "%(spaceName)s-Menü",
         "sublist_options": "Optionen anzeigen",
         "suggested_rooms_heading": "Vorgeschlagene Chats"
