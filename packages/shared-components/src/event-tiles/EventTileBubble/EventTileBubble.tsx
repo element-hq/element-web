@@ -46,7 +46,7 @@ export interface EventTileBubbleProps {
  *
  * @example
  * ```tsx
- * <EventTileBubble icon={<Icon />} title="Room created"} />
+ * <EventTileBubble icon={<Icon />} title="Room created" />
  * ```
  */
 export function EventTileBubble({
@@ -58,7 +58,7 @@ export function EventTileBubble({
     children,
     ref,
 }: EventTileBubbleProps): JSX.Element {
-    // Keep mx_EventTileBubble to support the compatibility with existing timeline and the all the layout
+    // Keep mx_EventTileBubble to preserve compatibility with the existing timeline layouts.
     return (
         <div className={classNames("mx_EventTileBubble", styles.container, className)} ref={ref}>
             {icon}
