@@ -8,19 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useContext, useEffect } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
-import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
-import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
+import { ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
-import UIStore from "../../../stores/UIStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import Heading from "../typography/Heading";
+import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel";
 
 interface IProps {
     room: Room;
@@ -47,36 +45,28 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     // Don't render anything as we are about to transition
     if (!app || !isRight) return null;
 
-    let contextMenu: JSX.Element | undefined;
-    if (menuDisplayed) {
-        const rect = handle.current?.getBoundingClientRect();
-        const rightMargin = rect ? rect.right : 0;
-        const bottomMargin = rect ? rect.bottom : 0;
-        contextMenu = (
-            <WidgetContextMenu
-                chevronFace={ChevronFace.None}
-                right={UIStore.instance.windowWidth - rightMargin - 12}
-                top={bottomMargin + 12}
-                onFinished={closeMenu}
-                app={app}
-            />
-        );
-    }
+    const contextMenu: JSX.Element = (
+        <WidgetContextMenu
+            trigger={
+                <ContextMenuButton
+                    className="mx_BaseCard_header_title_button--option"
+                    ref={handle}
+                    onClick={openMenu}
+                    isExpanded={menuDisplayed}
+                    label={_t("common|options")}
+                />
+            }
+            onFinished={closeMenu}
+            app={app}
+            menuDisplayed={menuDisplayed}
+        />
+    );
 
     const header = (
         <div className="mx_BaseCard_header_title">
             <Heading size="4" className="mx_BaseCard_header_title_heading" as="h1">
                 {WidgetUtils.getWidgetName(app)}
             </Heading>
-            <ContextMenuButton
-                className="mx_BaseCard_header_title_button--option"
-                ref={handle}
-                onClick={openMenu}
-                isExpanded={menuDisplayed}
-                label={_t("common|options")}
-            >
-                <OverflowHorizontalIcon />
-            </ContextMenuButton>
             {contextMenu}
         </div>
     );

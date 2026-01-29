@@ -23,6 +23,7 @@ export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
 
 // Utils
