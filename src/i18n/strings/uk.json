@@ -95,14 +95,12 @@
         "maximise": "Розгорнути",
         "mention": "Згадати",
         "minimise": "Згорнути",
-        "new_conversation": "Нова розмова",
         "new_room": "Нова кімната",
         "new_video_room": "Нова відеокімната",
         "next": "Далі",
         "no": "НІ",
         "ok": "Гаразд",
         "open": "Відкрити",
-        "open_menu": "Відкрити меню",
         "pin": "Кнопка",
         "proceed": "Продовжити",
         "quote": "Цитувати",
@@ -2194,7 +2192,6 @@
             "mark_unread": "Позначити непрочитаним"
         },
         "notification_options": "Параметри сповіщень",
-        "open_space_menu": "Відкрити меню простору",
         "primary_filters": "Фільтри списку кімнат",
         "redacting_messages_status": {
             "one": "Триває видалення повідомлень в %(count)s кімнаті",
@@ -2204,26 +2201,16 @@
             "more_options": "Інші опції",
             "open_room": "Відкрити кімнату %(roomName)s"
         },
-        "room_options": "Параметри кімнати",
         "show_less": "Згорнути",
         "show_n_more": {
             "other": "Показати ще %(count)s",
             "one": "Показати ще %(count)s"
         },
         "show_previews": "Показувати попередній перегляд повідомлень",
-        "sort": "Сортувати",
         "sort_by": "Упорядкувати за",
         "sort_by_activity": "Активністю",
         "sort_by_alphabet": "А-Я",
-        "sort_type": {
-            "activity": "Діяльність",
-            "atoz": "А-Я"
-        },
         "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
-        "space_menu": {
-            "home": "Домівка простору",
-            "space_settings": "Налаштування простору"
-        },
         "space_menu_label": "%(spaceName)s — меню",
         "sublist_options": "Параметри переліку",
         "suggested_rooms_heading": "Пропоновані кімнати"

@@ -93,14 +93,12 @@
         "maximise": "Maksimer",
         "mention": "Nevn",
         "minimise": "Minimer",
-        "new_conversation": "Ny samtale",
         "new_room": "Nytt rom",
         "new_video_room": "Nytt videorom",
         "next": "Neste",
         "no": "Nei",
         "ok": "OK",
         "open": "Åpne",
-        "open_menu": "Åpne meny",
         "pin": "Fest",
         "proceed": "Fortsett",
         "quote": "Sitat",
@@ -1909,7 +1907,6 @@
                 "other": "%(count)s festede meldinger"
             },
             "limits": {
-                "one": "",
                 "other": "Du kan bare feste opptil %(count)s widgets"
             },
             "menu": "Åpne meny",
@@ -2191,7 +2188,6 @@
             "mark_unread": "Marker som ulest"
         },
         "notification_options": "Varselsinnstillinger",
-        "open_space_menu": "Åpne Område-meny",
         "primary_filters": "Filtre for romliste",
         "redacting_messages_status": {
             "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
@@ -2201,25 +2197,15 @@
             "more_options": "Flere alternativer",
             "open_room": "Åpne rom %(roomName)s"
         },
-        "room_options": "Rominnstillinger",
         "show_less": "Vis mindre",
         "show_n_more": {
             "Vis %(count)s til": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
-        "sort": "Sorter",
         "sort_by": "Sorter etter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
-        "sort_type": {
-            "activity": "Aktivitet",
-            "atoz": "A-Å"
-        },
         "sort_unread_first": "Vis rom med uleste meldinger først",
-        "space_menu": {
-            "home": "Område hjem",
-            "space_settings": "Område innstillinger"
-        },
         "space_menu_label": "",
         "sublist_options": "Liste alternativer",
         "suggested_rooms_heading": "Foreslåtte rom"
@@ -2404,9 +2390,9 @@
             "error_join_rule_change_title": "Kunne ikke oppdatere reglene for medlemskap",
             "error_join_rule_change_unknown": "Ukjent feil",
             "guest_access_warning": "Personer med støttede klienter vil kunne bli med i rommet uten å ha en registrert konto.",
-            "history_visibility_invited": "Kun medlemmer (f.o.m. da de ble invitert)",
+            "history_visibility_invited": "Medlemmer siden invitert",
             "history_visibility_legend": "Hvem kan lese historikken?",
-            "history_visibility_shared": "Kun medlemmer (f.o.m. da denne innstillingen ble valgt)",
+            "history_visibility_shared": "Medlemmer (full historikk)",
             "history_visibility_warning": "Endringer for hvem som kan lese historikken, vil kun bli benyttet for fremtidige meldinger i dette rommet. Synligheten til den eksisterende historikken vil forbli uendret.",
             "history_visibility_world_readable": "Alle",
             "join_rule_description": "Bestem hvem som kan bli med i %(roomName)s.",
