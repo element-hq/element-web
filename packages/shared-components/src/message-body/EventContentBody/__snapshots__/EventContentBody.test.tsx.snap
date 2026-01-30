@@ -67,44 +67,9 @@ exports[`EventContentBodyView > renders code block correctly 1`] = `
     dir="auto"
   >
     <pre>
-      <code
-        class="language-js"
-      >
-        <span
-          class="hljs-keyword"
-        >
-          function
-        </span>
-         
-        <span
-          class="hljs-title function_"
-        >
-          hello
-        </span>
-        (
-        <span
-          class="hljs-params"
-        />
-        ) {
-  
-        <span
-          class="hljs-variable language_"
-        >
-          console
-        </span>
-        .
-        <span
-          class="hljs-title function_"
-        >
-          log
-        </span>
-        (
-        <span
-          class="hljs-string"
-        >
-          "Hello, world!"
-        </span>
-        );
+      <code>
+        function hello() {
+  console.log("Hello, world!");
 }
       </code>
     </pre>
