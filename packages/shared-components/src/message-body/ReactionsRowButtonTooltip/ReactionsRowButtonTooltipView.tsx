@@ -23,6 +23,10 @@ export interface ReactionsRowButtonTooltipViewSnapshot {
      * The caption to display (e.g., the shortcode of the reaction).
      */
     caption?: string;
+    /**
+     * Whether the tooltip should be forced open.
+     */
+    tooltipOpen?: boolean;
 }
 
 export type ReactionsRowButtonTooltipViewModel = ViewModel<ReactionsRowButtonTooltipViewSnapshot>;
@@ -45,11 +49,16 @@ export function ReactionsRowButtonTooltipView({
     vm,
     children,
 }: Readonly<ReactionsRowButtonTooltipViewProps>): JSX.Element {
-    const { formattedSenders, caption } = useViewModel(vm);
+    const { formattedSenders, caption, tooltipOpen } = useViewModel(vm);
 
     if (formattedSenders) {
         return (
-            <Tooltip description={formattedSenders} caption={caption} placement="right">
+            <Tooltip
+                description={formattedSenders}
+                caption={caption}
+                placement="right"
+                open={tooltipOpen}
+            >
                 {children}
             </Tooltip>
         );

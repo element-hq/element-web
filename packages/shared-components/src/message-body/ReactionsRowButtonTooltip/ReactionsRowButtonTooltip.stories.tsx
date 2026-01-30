@@ -42,6 +42,7 @@ export const Default = Template.bind({});
 Default.args = {
     formattedSenders: "Alice, Bob and Charlie",
     caption: ":thumbsup:",
+    tooltipOpen: true,
 };
 
 export const ManySenders = Template.bind({});
@@ -49,6 +50,7 @@ ManySenders.args = {
     formattedSenders: "Alice, Bob, Charlie, David, Eve, Frank and 2 others",
     caption: ":heart:",
     children: <button>❤️ 8</button>,
+    tooltipOpen: true,
 };
 
 export const WithoutCaption = Template.bind({});
@@ -56,6 +58,7 @@ WithoutCaption.args = {
     formattedSenders: "Alice and Bob",
     caption: undefined,
     children: <button>🎉 2</button>,
+    tooltipOpen: true,
 };
 
 export const NoTooltip = Template.bind({});
