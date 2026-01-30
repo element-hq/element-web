@@ -70,7 +70,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         />
         <section
           class="_flex_4dswl_9 mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
@@ -805,7 +805,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         />
         <section
           class="_flex_4dswl_9 mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
@@ -1502,7 +1502,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         />
         <section
           class="_flex_4dswl_9 mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
