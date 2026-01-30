@@ -62,7 +62,7 @@
         "dismiss": "Abaikan",
         "done": "Selesai",
         "download": "Unduh",
-        "edit": "Sunting",
+        "edit": "Edit",
         "enable": "Aktifkan",
         "enter_fullscreen": "Masuki layar penuh",
         "exit_fullscreeen": "Keluar dari layar penuh",
@@ -91,14 +91,12 @@
         "maximise": "Maksimalkan",
         "mention": "Sebutkan",
         "minimise": "Minimalkan",
-        "new_conversation": "Percakapan baru",
         "new_room": "Ruangan baru",
         "new_video_room": "Ruangan video baru",
         "next": "Lanjut",
         "no": "Tidak",
         "ok": "Oke",
         "open": "Buka",
-        "open_menu": "Buka menu",
         "pin": "Sematkan",
         "proceed": "Lanjut",
         "quote": "Kutip",
@@ -575,6 +573,7 @@
         "someone": "Seseorang",
         "space": "Space",
         "spaces": "Space",
+        "state_encryption_enabled": "Enkripsi status eksperimental diaktifkan",
         "sticker": "Stiker",
         "stickerpack": "Paket Stiker",
         "success": "Berhasil",
@@ -636,7 +635,7 @@
             "link_field_label": "Tautan",
             "text_field_label": "Teks",
             "title_create": "Buat sebuah tautan",
-            "title_edit": "Sunting tautan"
+            "title_edit": "Edit tautan"
         },
         "mode_plain": "Sembunyikan format",
         "mode_rich_text": "Tampilkan formatting",
@@ -647,7 +646,7 @@
         "placeholder_reply_encrypted": "Kirim balasan…",
         "placeholder_thread": "Balas utas tidak terenkripsi…",
         "placeholder_thread_encrypted": "Balas utas…",
-        "poll_button": "Pemungutan suara",
+        "poll_button": "Jajak pendapat",
         "poll_button_no_perms_description": "Anda tidak memiliki izin untuk memulai sebuah poll di ruangan ini.",
         "poll_button_no_perms_title": "Izin Dibutuhkan",
         "replying_title": "Membalas",
@@ -682,6 +681,8 @@
         "join_rule_restricted_label": "Semuanya di <SpaceName/> dapat menemukan dan bergabung ruangan ini.",
         "name_validation_required": "Mohon masukkan sebuah nama untuk ruangan",
         "room_visibility_label": "Visibilitas ruangan",
+        "state_encrypted_warning": "Memungkinkan dukungan eksperimental untuk mengenkripsi peristiwa status, yang menyembunyikan metadata seperti nama ruangan dan topik dari server. Metadata ini juga akan disembunyikan dari orang-orang yang bergabung ke ruangan nanti, serta orang-orang yang kliennya tidak mendukung MSC4362.",
+        "state_encryption_label": "Enkripsi peristiwa status",
         "title_private_room": "Buat sebuah ruangan privat",
         "title_public_room": "Buat sebuah ruangan publik",
         "title_video_room": "Buat sebuah ruangan video",
@@ -842,6 +843,7 @@
         "number_of_users": "Jumlah pengguna",
         "only_joined_members": "Hanya pengguna yang bergabung",
         "original_event_source": "Sumber peristiwa asli",
+        "restore_from_backup": "Pulihkan dari cadangan",
         "room_encrypted": "Ruangan <strong>terenkripsi ✅</strong>",
         "room_id": "ID ruangan: %(roomId)s",
         "room_not_encrypted": "Ruangan <strong>tidak terenkripsi 🚨</strong>",
@@ -950,6 +952,7 @@
         "bootstrap_title": "Menyiapkan kunci",
         "confirm_encryption_setup_body": "Klik tombol di bawah untuk mengkonfirmasi menyiapkan enkripsi.",
         "confirm_encryption_setup_title": "Konfirmasi pengaturan enkripsi",
+        "continue_with_reset": "Lanjutkan dengan pengaturan ulang",
         "cross_signing_room_normal": "Ruangan ini dienkripsi secara ujung ke ujung",
         "cross_signing_room_verified": "Semuanya di ruangan ini telah terverifikasi",
         "cross_signing_room_warning": "Seseorang menggunakan sesi yang tidak dikenal",
@@ -965,10 +968,12 @@
         "event_shield_reason_unverified_identity": "Dienkripsi oleh pengguna yang tidak diverifikasi.",
         "export_unsupported": "Browser Anda tidak mendukung ekstensi kriptografi yang dibutuhkan",
         "forgot_recovery_key": "Lupa kunci pemulihan?",
+        "identity_needs_reset_description": "Anda harus mengatur ulang identitas kriptografi Anda untuk memastikan akses ke riwayat pesan Anda.",
         "import_invalid_keyfile": "Bukan keyfile %(brand)s yang absah",
         "import_invalid_passphrase": "Pemeriksaan autentikasi gagal: kata sandi salah?",
         "key_storage_out_of_sync": "Penyimpanan kunci Anda tidak tersinkron.",
         "key_storage_out_of_sync_description": "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.",
+        "message_shared_by": "%(displayName)s (%(userId)s) telah membagikan pesan ini sejak Anda tidak berada di ruangan saat pesan tersebut dikirim.",
         "messages_not_secure": {
             "cause_1": "Homeserver Anda",
             "cause_2": "Homeserver pengguna yang Anda memverifikasi",
@@ -1517,6 +1522,8 @@
         "dynamic_room_predecessors": "Pendahulu ruang dinamis",
         "dynamic_room_predecessors_description": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
         "element_call_video_rooms": "Ruangan video Element Call",
+        "encrypted_state_events": "Peristiwa status terenkripsi (MSC4362)",
+        "encrypted_state_events_description": "Memungkinkan dukungan eksperimental untuk mengenkripsi peristiwa status, yang menyembunyikan metadata seperti nama ruangan dan topik dari server. Metadata ini juga akan disembunyikan dari orang-orang yang bergabung ke ruangan nanti, serta orang-orang yang kliennya tidak mendukung MSC4362.",
         "exclude_insecure_devices": "Kecualikan perangkat tidak aman ketika mengirim/menerima pesan",
         "exclude_insecure_devices_description": "Jika mode ini diaktifkan, pesan terenkripsi tidak akan dibagikan dengan perangkat yang tidak terverifikasi, dan pesan dari perangkat yang tidak terverifikasi akan ditampilkan sebagai kesalahan. Perlu diperhatikan bahwa jika Anda mengaktifkan mode ini, Anda mungkin tidak dapat berkomunikasi dengan pengguna yang belum memverifikasi perangkat mereka.",
         "experimental_description": "Merasa eksperimental? Coba ide terkini kami dalam pengembangan. Fitur ini belum selesai; mereka mungkin tidak stabil, mungkin berubah, atau dihapus sama sekali. <a>Pelajari lebih lanjut</a>.",
@@ -1756,17 +1763,26 @@
         "end_message": "Poll telah berakhir. Jawaban teratas: %(topAnswer)s",
         "end_message_no_votes": "Poll telah berakhir. Tidak ada yang memberi suara.",
         "end_title": "Akhiri Poll",
+        "ended_poll_label": "Jajak pendapat berakhir",
         "error_ending_description": "Maaf, poll tidak berakhir. Silakan coba lagi.",
         "error_ending_title": "Gagal untuk mengakhiri poll",
         "error_voting_description": "Maaf, suara Anda tidak didaftarkan. Silakan coba lagi.",
         "error_voting_title": "Suara tidak didaftarkan",
         "failed_send_poll_description": "Maaf, poll yang Anda buat tidak dapat dikirim.",
         "failed_send_poll_title": "Gagal untuk mengirim poll",
-        "notes": "Hasil hanya akan disediakan ketika Anda mengakhiri pemungutan suara",
+        "notes": "Hasil hanya akan disediakan ketika Anda mengakhiri jajak pendapat",
+        "option_label": "Pilihan %(number)s, %(answer)s",
+        "option_label_winning_with_total": {
+            "other": "Pilihan %(number)s, %(answer)s, pilihan yang menang, %(count)s suara"
+        },
+        "option_label_with_total": {
+            "other": "Pilihan %(number)s, %(answer)s, %(count)s suara"
+        },
         "options_add_button": "Tambahkan opsi",
         "options_heading": "Buat opsi",
         "options_label": "Opsi %(number)s",
         "options_placeholder": "Tulis sebuah opsi",
+        "poll_label": "Jajak pendapat",
         "topic_heading": "Apa pertanyaan atau topik poll Anda?",
         "topic_label": "Pertanyaan atau topik",
         "topic_placeholder": "Tulis sesuatu…",
@@ -1780,12 +1796,12 @@
             "other": "Berdasarkan oleh %(count)s suara"
         },
         "total_no_votes": "Tidak ada suara",
-        "total_not_ended": "Hasil akan tersedia setelah pemungutan suara berakhir",
-        "type_closed": "Pemungutan suara tertutup",
-        "type_heading": "Tipe pemungutan suara",
-        "type_open": "Pemungutan suara terbuka",
-        "unable_edit_description": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
-        "unable_edit_title": "Tidak dapat mengedit poll"
+        "total_not_ended": "Hasil akan tersedia setelah jajak pendapat berakhir",
+        "type_closed": "Jajak pendapat tertutup",
+        "type_heading": "Jenis jajak pendapat",
+        "type_open": "Jajak pendapat terbuka",
+        "unable_edit_description": "Maaf, Anda tidak dapat mengedit jajak pendapat setelah suara-suara diberikan.",
+        "unable_edit_title": "Tidak dapat mengedit jajak pendapat"
     },
     "power_level": {
         "admin": "Admin",
@@ -1906,30 +1922,28 @@
         },
         "pinned_messages_button": "Pesan yang disematkan",
         "poll": {
-            "active_heading": "Pemungutan suara yang aktif",
-            "empty_active": "Tidak ada pemungutan suara yang aktif di ruangan ini",
-            "empty_active_load_more": "Tidak ada pemungutan suara yang aktif. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+            "active_heading": "Jajak pendapat yang aktif",
+            "empty_active": "Tidak ada jajak pendapat yang aktif di ruangan ini",
+            "empty_active_load_more": "Tidak ada jajak pendapat yang aktif. Muat lebih banyak jajak pendapat untuk melihat jajak pendapat untuk bulan-bulan terakhir",
             "empty_active_load_more_n_days": {
-                "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-                "other": "Tidak ada pemungutan suara yang aktif %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
+                "other": "Tidak ada jajak pendapat yang aktif %(count)s hari terakhir. Muat lebih banyak jajak pendapat untuk melihat jajak pendapat untuk bulan-bulan terakhir"
             },
-            "empty_past": "Tidak ada pemungutan suara sebelumnya di ruangan ini",
-            "empty_past_load_more": "Tidak ada pemungutan suara sebelumnya. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+            "empty_past": "Tidak ada jajak pendapat sebelumnya di ruangan ini",
+            "empty_past_load_more": "Tidak ada jajak pendapat sebelumnya. Muat lebih banyak jajak pendapat untuk melihat jajak pendapat untuk bulan-bulan terakhir",
             "empty_past_load_more_n_days": {
-                "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-                "other": "Tidak ada pemungutan suara untuk %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
+                "other": "Tidak ada jajak pendapat untuk %(count)s hari terakhir. Muat lebih banyak jajak pendapat untuk melihat jajak pendapat untuk bulan-bulan terakhir"
             },
             "final_result": {
                 "other": "Hasil akhir bedasarkan dari %(count)s suara",
                 "one": "Hasil akhir bedasarkan dari %(count)s suara"
             },
-            "load_more": "Muat lebih banyak pemungutan suara",
-            "loading": "Memuat pemungutan suara",
-            "past_heading": "Pemungutan suara sebelumnya",
-            "view_in_timeline": "Tampilkan pemungutan suara di lini masa",
-            "view_poll": "Tampilkan pemungutan suara"
+            "load_more": "Muat lebih banyak jajak pendapat",
+            "loading": "Memuat jajak pendapat",
+            "past_heading": "Jajak pendapat sebelumnya",
+            "view_in_timeline": "Tampilkan jajak pendapat di lini masa",
+            "view_poll": "Tampilkan jajak pendapat"
         },
-        "polls_button": "Pemungutan suara",
+        "polls_button": "Jajak pendapat",
         "room_summary_card": {
             "title": "Informasi ruangan"
         },
@@ -2001,6 +2015,8 @@
         "forget_room": "Lupakan ruangan ini",
         "forget_space": "Lupakan space ini",
         "header": {
+            "join_video_call": "Gabung ke panggilan video",
+            "join_voice_call": "Gabung ke panggilan suara",
             "n_people_asking_to_join": {
                 "other": "%(count)s orang meminta untuk bergabung"
             },
@@ -2016,7 +2032,7 @@
         "intro": {
             "display_topic": "Topik: <topic/>",
             "dm_caption": "Hanya Anda berdua yang ada dalam percakapan ini, kecuali jika salah satu dari Anda mengundang siapa saja untuk bergabung.",
-            "edit_topic": "Topik: <topic/> (<a>sunting</a>)",
+            "edit_topic": "Topik: <topic/> (<a>edit</a>)",
             "enable_encryption_prompt": "Aktifkan enkripsi di pengaturan.",
             "encrypted_3pid_dm_pending_join": "Setelah semuanya bergabung, Anda akan dapat mengobrol",
             "no_avatar_label": "Tambahkan sebuah foto supaya orang-orang dapat menemukan ruangan Anda.",
@@ -2172,7 +2188,6 @@
             "mark_unread": "Tandai sebagai belum dibaca"
         },
         "notification_options": "Opsi notifikasi",
-        "open_space_menu": "Buka menu space",
         "primary_filters": "Filter daftar ruangan",
         "redacting_messages_status": {
             "one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
@@ -2182,26 +2197,16 @@
             "more_options": "Opsi Lainnya",
             "open_room": "Buka ruangan %(roomName)s"
         },
-        "room_options": "Opsi Ruangan",
         "show_less": "Tampilkan lebih sedikit",
         "show_n_more": {
             "one": "Tampilkan %(count)s lagi",
             "other": "Tampilkan %(count)s lagi"
         },
         "show_previews": "Tampilkan tampilan pesan",
-        "sort": "Urutkan",
         "sort_by": "Sortir berdasarkan",
         "sort_by_activity": "Aktivitas",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Aktivitas",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Tampilkan ruangan dengan pesan yang belum dibaca dahulu",
-        "space_menu": {
-            "home": "Beranda space",
-            "space_settings": "Pengaturan Space"
-        },
         "space_menu_label": "Menu %(spaceName)s",
         "sublist_options": "Tampilkan daftar opsi",
         "suggested_rooms_heading": "Ruangan yang Disarankan"
@@ -2290,6 +2295,8 @@
             "no_aliases_space": "Space ini tidak memiliki alamat lokal",
             "other_section": "Lainnya",
             "publish_toggle": "Publikasi ruangan ini ke publik di direktori ruangan %(domain)s?",
+            "publish_warn_invite_only": "Anda tidak dapat mempublikasikan ruangan yang hanya dapat diakses melalui undangan.",
+            "publish_warn_no_canonical_permission": "Anda harus memiliki izin untuk mengatur alamat utama agar dapat mempublikasikan ruangan ini.",
             "published_aliases_description": "Untuk mempublikasikan sebuah alamat, itu harus diatur sebagai alamat lokal dahulu.",
             "published_aliases_explainer_room": "Alamat yang dipublikasikan dapat digunakan oleh siapa saja di server apa saja untuk bergabung dengan ruangan Anda.",
             "published_aliases_explainer_space": "Alamat yang dipublikasikan dapat digunakan oleh siapa saja di server apa saja untuk bergabung dengan space Anda.",
@@ -2384,11 +2391,11 @@
             "error_join_rule_change_title": "Gagal untuk memperbarui aturan bergabung",
             "error_join_rule_change_unknown": "Kesalahan yang tidak diketahui",
             "guest_access_warning": "Orang-orang dengan klien yang didukung akan dapat bergabung ruangan ini tanpa harus memiliki sebuah akun yang terdaftar.",
-            "history_visibility_invited": "Anggota saja (sejak mereka diundang)",
+            "history_visibility_invited": "Anggota sejak diundang",
             "history_visibility_legend": "Siapa yang dapat membaca riwayat?",
-            "history_visibility_shared": "Anggota saja (sejak memilih opsi ini)",
-            "history_visibility_warning": "Visibilitas riwayat yang ada tidak akan berubah.",
-            "history_visibility_world_readable": "Siapa Saja",
+            "history_visibility_shared": "Anggota saja (riwayat lengkap)",
+            "history_visibility_warning": "Perubahan tidak akan memengaruhi pesan-pesan sebelumnya, hanya pesan-pesan baru. <a>Pelajari lebih lanjut</a>",
+            "history_visibility_world_readable": "Siapa saja (riwayat bersifat umum)",
             "join_rule_description": "Putuskan siapa yang dapat bergabung %(roomName)s.",
             "join_rule_invite": "Privat (undangan saja)",
             "join_rule_invite_description": "Hanya orang yang diundang dapat bergabung.",
@@ -2444,10 +2451,12 @@
             "error_failed_save": "Gagal untuk memperbarui visibilitas untuk space ini",
             "error_update_guest_access": "Gagal untuk memperbarui akses tamu untuk space ini",
             "error_update_history_visibility": "Gagal untuk memperbarui visibilitas riwayat untuk space ini",
-            "guest_access_explainer": "Tamu dapat bergabung sebuah space tanpa harus mempunyai akun.",
+            "guest_access_disabled": "Anda tidak memiliki izin untuk mengubah akses tamu.",
+            "guest_access_explainer": "Tamu dapat bergabung sebuah space tanpa harus mempunyai akun. Ini mungkin berguna untuk space publik.",
             "guest_access_label": "Aktifkan akses tamu",
             "history_visibility_anyone_space": "Tampilkan Space",
             "history_visibility_anyone_space_description": "Memungkinkan orang-orang untuk memperlihatkan space Anda sebelum mereka bergabung.",
+            "history_visibility_anyone_space_disabled": "Anda tidak memiliki izin untuk mengubah visibilitas riwayat.",
             "history_visibility_anyone_space_recommendation": "Direkomendasikan untuk space publik.",
             "title": "Visibilitas"
         },
@@ -2867,7 +2876,7 @@
             "room_directory_heading": "Direktori ruangan",
             "room_list_heading": "Daftar ruangan",
             "show_avatars_pills": "Tampilkan avatar di sebutan pengguna, ruangan, dan peristiwa",
-            "show_polls_button": "Tampilkan tombol pemungutan suara",
+            "show_polls_button": "Tampilkan tombol jajak pendapat",
             "startup_window_behaviour_label": "Perilaku saat memulai dan jendela",
             "surround_text": "Kelilingi teks yang dipilih saat mengetik karakter khusus",
             "time_heading": "Tampilkan waktu",
@@ -2901,6 +2910,7 @@
             "message_search_indexing": "Saat ini mengindeks: %(currentRoom)s",
             "message_search_indexing_idle": "Tidak mengindeks pesan saat ini untuk ruangan apa saja.",
             "message_search_intro": "%(brand)s mengcache pesan terenkripsi secara lokal supaya dapat muncul di hasil pencarian dengan aman:",
+            "message_search_pending_rooms": "Ruangan yang menunggu pengindeksan: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s dari %(totalRooms)s",
             "message_search_section": "Pencarian pesan",
             "message_search_sleep_time": "Seberapa cepat pesan akan diunduh.",
@@ -3498,6 +3508,7 @@
             "enabled_dm": "Pesan-pesan di sini dienkripsi secara ujung ke ujung. Verifikasi %(displayName)s di profilnya — ketuk pada profilnya.",
             "enabled_local": "Pesan di obrolan ini akan dienkripsi secara ujung ke ujung.",
             "parameters_changed": "Beberapa parameter enkripsi telah diubah.",
+            "state_enabled": "Pesan dan peristiwa status di ruangan ini dienkripsi secara ujung ke ujung. Saat orang bergabung, Anda dapat memverifikasi mereka di profil mereka, cukup ketuk gambar profil mereka.",
             "unsupported": "Enkripsi yang digunakan di ruangan ini tidak didukung."
         },
         "m.room.guest_access": {
@@ -4036,6 +4047,7 @@
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",
+        "voice_call_using": "Panggilan suara menggunakan:",
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",

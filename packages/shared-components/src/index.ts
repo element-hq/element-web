@@ -12,6 +12,7 @@ export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
 export * from "./composer/Banner";
+export * from "./crypto/SasEmoji";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./pill-input/Pill";
@@ -24,6 +25,7 @@ export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
 
 // Utils

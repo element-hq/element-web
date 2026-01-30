@@ -97,14 +97,12 @@
         "maximise": "Maksimiziraj",
         "mention": "Spomeni",
         "minimise": "Minimiziraj",
-        "new_conversation": "Novi razgovor",
         "new_room": "Nova soba",
         "new_video_room": "Nova videosoba",
         "next": "Dalje",
         "no": "Ne",
         "ok": "U redu",
         "open": "Otvori",
-        "open_menu": "Otvori izbornik",
         "pin": "Prikvači",
         "proceed": "Nastavi",
         "quote": "Citiraj",
@@ -2234,7 +2232,6 @@
             "mark_unread": "Označi kao nepročitano"
         },
         "notification_options": "Mogućnosti obavijesti",
-        "open_space_menu": "Otvori izbornik prostora",
         "primary_filters": "Filtri popisa soba",
         "redacting_messages_status": {
             "one": "Trenutačno se uklanjaju poruke u %(count)s sobi",
@@ -2245,7 +2242,6 @@
             "more_options": "Više mogućnosti",
             "open_room": "Otvori sobu %(roomName)s"
         },
-        "room_options": "Mogućnosti soba",
         "show_less": "Prikaži manje",
         "show_n_more": {
             "one": "Prikaži još %(count)s",
@@ -2253,19 +2249,10 @@
             "other": "Prikaži još %(count)s"
         },
         "show_previews": "Prikaži preglede poruka",
-        "sort": "Razvrstaj",
         "sort_by": "Poredaj po",
         "sort_by_activity": "Aktivnost",
         "sort_by_alphabet": "A – Z",
-        "sort_type": {
-            "activity": "Aktivnost",
-            "atoz": "A – Z"
-        },
         "sort_unread_first": "Prvo prikaži sobe s nepročitanim porukama",
-        "space_menu": {
-            "home": "Početna stranica prostora",
-            "space_settings": "Postavke prostora"
-        },
         "space_menu_label": "Izbornik za %(spaceName)s",
         "sublist_options": "Mogućnosti popisa",
         "suggested_rooms_heading": "Predložene sobe"

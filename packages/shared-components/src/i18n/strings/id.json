@@ -6,12 +6,57 @@
         "delete": "Hapus",
         "dismiss": "Abaikan",
         "explore_rooms": "Jelajahi ruangan",
+        "invite": "Undang",
+        "new_conversation": "Percakapan baru",
+        "new_room": "Ruangan baru",
+        "new_video_room": "Ruangan video baru",
+        "open_menu": "Buka menu",
         "pause": "Jeda",
         "play": "Mainkan",
-        "search": "Cari"
+        "retry": "Coba lagi",
+        "search": "Cari",
+        "start_chat": "Mulai obrolan"
+    },
+    "common": {
+        "preferences": "Preferensi"
     },
     "left_panel": {
         "open_dial_pad": "Buka tombol penyetel"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Opsi ruangan"
+        },
+        "status_bar": {
+            "delete_all": "Hapus semua",
+            "exceeded_resource_limit_description": "Silakan hubungi administrator layanan Anda untuk melanjutkan penggunaan layanan.",
+            "exceeded_resource_limit_title": "Pesan Anda tidak terkirim karena homeserver ini telah melampaui batas sumber daya.",
+            "failed_to_create_room_title": "Tidak dapat memulai obrolan dengan pengguna ini",
+            "homeserver_blocked_title": "Pesan Anda tidak terkirim karena homeserver ini telah diblokir oleh administratornya.",
+            "monthly_user_limit_reached_title": "Pesan Anda tidak terkirim karena homeserver ini telah mencapai Batas Pengguna Aktif Bulanan.",
+            "requires_consent_agreement_title": "Anda tidak dapat mengirim pesan apa pun sampai Anda meninjau dan menyetujui syarat dan ketentuan kami.",
+            "retry_all": "Coba ulang semua",
+            "select_messages_to_retry": "Anda dapat memilih semua atau beberapa pesan untuk dicoba lagi atau dihapus",
+            "server_connectivity_lost_description": "Pesan yang akan dikirim akan disimpan sampai koneksi Anda telah kembali.",
+            "server_connectivity_lost_title": "Koneksi ke server telah hilang.",
+            "some_messages_not_sent": "Beberapa pesan Anda tidak terkirim"
+        }
+    },
+    "room_list": {
+        "open_space_menu": "Buka menu space",
+        "room_options": "Opsi Ruangan",
+        "sort": "Urutan",
+        "sort_type": {
+            "activity": "Aktivitas",
+            "atoz": "A-Z"
+        },
+        "space_menu": {
+            "home": "Beranda space",
+            "space_settings": "Pengaturan space"
+        }
+    },
+    "terms": {
+        "tac_button": "Lihat syarat dan ketentuan"
     },
     "time": {
         "about_day_ago": "1 hari yang lalu",

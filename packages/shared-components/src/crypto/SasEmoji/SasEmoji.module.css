@@ -1,0 +1,33 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cpd-space-2x);
+    justify-content: space-evenly;
+}
+
+.segment {
+    display: inline-block;
+    margin-bottom: var(--cpd-space-4x);
+    text-align: center;
+    /* Allow maximum 4 per line, accounting for 8px gap */
+    min-width: calc(25% - 8px);
+}
+
+.emoji {
+    /* Use the Twemoji font for consistency with other clients */
+    font-family: Twemoji, var(--cpd-font-family-sans);
+    font-size: var(--cpd-font-size-heading-xl);
+}
+
+.label {
+    font-weight: var(--cpd-font-weight-regular);
+    font-size: var(--cpd-font-size-body-lg);
+    color: var(--cpd-color-text-secondary);
+}
