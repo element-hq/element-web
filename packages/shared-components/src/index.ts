@@ -20,6 +20,7 @@ export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
+export * from "./room/HistoryVisibilityBadge";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
 export * from "./room-list/RoomListHeaderView";
