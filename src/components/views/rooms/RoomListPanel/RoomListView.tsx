@@ -5,33 +5,42 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { useCallback, type JSX, type ReactNode } from "react";
+import { RoomListView as SharedRoomListView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import { useRoomListViewModel } from "../../../viewmodels/roomlist/RoomListViewModel";
-import { RoomList } from "./RoomList";
-import { EmptyRoomList } from "./EmptyRoomList";
-import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
+import { RoomListViewViewModel } from "../../../viewmodels/roomlist/RoomListViewViewModel";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { RoomAvatarView } from "../../avatars/RoomAvatarView";
+import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
+import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 
 /**
- * Host the room list and the (future) room filters
+ * RoomListView component using shared components with proper MVVM pattern.
  */
 export function RoomListView(): JSX.Element {
-    const vm = useRoomListViewModel();
-    const isRoomListEmpty = vm.roomsResult.rooms.length === 0;
-    let listBody;
-    if (vm.isLoadingRooms) {
-        listBody = <div className="mx_RoomListSkeleton" />;
-    } else if (isRoomListEmpty) {
-        listBody = <EmptyRoomList vm={vm} />;
-    } else {
-        listBody = <RoomList vm={vm} />;
-    }
-    return (
-        <>
-            <div>
-                <RoomListPrimaryFilters vm={vm} />
-            </div>
-            {listBody}
-        </>
-    );
+    const matrixClient = useMatrixClientContext();
+
+    // Create and auto-dispose ViewModel instance
+    const vm = useCreateAutoDisposedViewModel(() => new RoomListViewViewModel({ client: matrixClient }));
+
+    // Render avatar for each room - memoized to prevent re-renders
+    const renderAvatar = useCallback((room: any): ReactNode => {
+        return <RoomAvatarView room={room} />;
+    }, []);
+
+    // Handle keyboard navigation for landmarks
+    const onKeyDown = useCallback((ev: React.KeyboardEvent) => {
+        const navAction = getKeyBindingsManager().getNavigationAction(ev);
+        if (navAction === KeyBindingAction.NextLandmark || navAction === KeyBindingAction.PreviousLandmark) {
+            LandmarkNavigation.findAndFocusNextLandmark(
+                Landmark.ROOM_LIST,
+                navAction === KeyBindingAction.PreviousLandmark,
+            );
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    }, []);
+
+    return <SharedRoomListView vm={vm} renderAvatar={renderAvatar} onKeyDown={onKeyDown} />;
 }
