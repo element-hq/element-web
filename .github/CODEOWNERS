@@ -16,6 +16,7 @@
 /src/components/views/dialogs/devtools/Crypto.tsx                       @element-hq/element-crypto-web-reviewers
 /playwright/e2e/crypto/                                                 @element-hq/element-crypto-web-reviewers
 /playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
+/packages/shared-components/src/crypto/                                 @element-hq/element-crypto-web-reviewers
 
 
 /src/models/Call.ts                       @element-hq/element-call-reviewers

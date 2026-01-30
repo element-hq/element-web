@@ -2017,7 +2017,8 @@
                 "Csatlakozást kér": "one",
                 "%(count)s csatlakozást kérő ember": "other"
             },
-            "room_is_public": "Ez egy nyilvános szoba"
+            "room_is_public": "Ez egy nyilvános szoba",
+            "shared_history_tooltip": "Az új tagok látják az előzményeket"
         },
         "header_avatar_open_settings_label": "Szobabeállítások megnyitása",
         "header_face_pile_tooltip": "Taglista váltása",

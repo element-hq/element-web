@@ -744,6 +744,29 @@ describe("RoomHeader", () => {
         expect(queryByLabelText(document.body, "New members see history")).not.toBeInTheDocument();
     });
 
+    it("shows a user icon if the room is encrypted and has world readable history", async () => {
+        mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
+        await room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    type: "m.room.history_visibility",
+                    content: { history_visibility: "world_readable" },
+                    sender: MatrixClientPeg.get()!.getSafeUserId(),
+                    state_key: "",
+                    room_id: room.roomId,
+                }),
+            ],
+            { addToState: true },
+        );
+        const featureEnabled = true;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
+        );
+
+        render(<RoomHeader room={room} />, getWrapper());
+        await waitFor(() => getByLabelText(document.body, "Anyone can see history"));
+    });
+
     describe("dm", () => {
         beforeEach(() => {
             // Make the mocked room a DM
