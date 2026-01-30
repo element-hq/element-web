@@ -97,14 +97,12 @@
         "maximise": "Mwyhau",
         "mention": "Crybwyll",
         "minimise": "Lleihau",
-        "new_conversation": "Sgwrs newydd",
         "new_room": "Ystafell newydd",
         "new_video_room": "Ystafell fideo newydd",
         "next": "Nesaf",
         "no": "Na",
         "ok": "Iawn",
         "open": "Agor",
-        "open_menu": "Agor dewislen",
         "pin": "Pinio",
         "proceed": "Parhau",
         "quote": "Dyfyniad",
@@ -2212,7 +2210,6 @@
             "mark_unread": "Marcio fel heb ei ddarllen"
         },
         "notification_options": "Dewisiadau hysbysu",
-        "open_space_menu": "Agor dewislen gofod",
         "primary_filters": "Hidlau rhestr ystafelloedd",
         "redacting_messages_status": {
             "Yn tynnu negeseuon mewn %(count)s ystafell": "other"
@@ -2221,25 +2218,15 @@
             "more_options": "Rhagor o Ddewisiadau",
             "open_room": "Agor ystafell %(roomName)s"
         },
-        "room_options": "Dewisiadau Ystafelloedd",
         "show_less": "Dangos llai",
         "show_n_more": {
             "Dangos %(count)s yn rhagor": "other"
         },
         "show_previews": "Dangos rhagolwg o negeseuon",
-        "sort": "Trefnu",
         "sort_by": "Trefnu yn ôl",
         "sort_by_activity": "Gweithgaredd",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Gweithgaredd",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Dangos ystafelloedd gyda negeseuon heb eu darllen yn gyntaf",
-        "space_menu": {
-            "home": "Cartref gofod",
-            "space_settings": "Gosodiadau Gofod"
-        },
         "space_menu_label": "Dewislen %(spaceName)s",
         "sublist_options": "Dewisiadau rhestr",
         "suggested_rooms_heading": "Awgrym o Ystafelloedd"

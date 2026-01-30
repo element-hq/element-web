@@ -50,6 +50,7 @@
     },
     "dependencies": {
         "@element-hq/element-web-module-api": "^1.8.0",
+        "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "^6.4.3",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
