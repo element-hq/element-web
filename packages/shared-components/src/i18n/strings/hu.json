@@ -43,12 +43,15 @@
         }
     },
     "room_list": {
+        "appearance": "Megjelenítés",
         "open_space_menu": "Tér menü megnyitása",
         "room_options": "Szobabeállítások",
+        "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "sort": "Rendezés",
         "sort_type": {
             "activity": "Tevékenység",
-            "atoz": "A–Z"
+            "atoz": "A–Z",
+            "unread_first": "Olvasatlan elöl"
         },
         "space_menu": {
             "home": "Kezdő tér",
