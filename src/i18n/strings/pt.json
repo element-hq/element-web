@@ -87,7 +87,6 @@
         "no": "Não",
         "ok": "OK",
         "open": "Abrir",
-        "open_menu": "Abrir menu",
         "pin": "Fixar",
         "proceed": "Prosseguir",
         "quote": "Citar",
@@ -2044,7 +2043,6 @@
             "mark_unread": "Marcar como não lido"
         },
         "notification_options": "Opções de notificação",
-        "open_space_menu": "Abrir menu do espaço",
         "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens na %(count)s sala",
@@ -2064,10 +2062,6 @@
         "sort_by_activity": "Atividade",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Mostra primeiro as salas com mensagens não lidas",
-        "space_menu": {
-            "home": "Casa do espaço",
-            "space_settings": "Configurações de espaço"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "Lista de opções",
         "suggested_rooms_heading": "Salas sugeridas"

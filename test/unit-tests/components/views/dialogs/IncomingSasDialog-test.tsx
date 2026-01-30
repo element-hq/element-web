@@ -34,7 +34,7 @@ describe("IncomingSasDialog", () => {
 
     it("should show some emojis once keys are exchanged", () => {
         const mockVerifier = makeMockVerifier();
-        const { container } = renderComponent(mockVerifier);
+        const { getAllByText } = renderComponent(mockVerifier);
 
         // fire the ShowSas event
         const sasEvent = makeMockSasCallbacks();
@@ -42,11 +42,8 @@ describe("IncomingSasDialog", () => {
             mockVerifier.emit(VerifierEvent.ShowSas, sasEvent);
         });
 
-        const emojis = container.getElementsByClassName("mx_VerificationShowSas_emojiSas_block");
-        expect(emojis.length).toEqual(7);
-        for (const emoji of emojis) {
-            expect(emoji).toHaveTextContent("🦄Unicorn");
-        }
+        expect(getAllByText("🦄")).toHaveLength(7);
+        expect(getAllByText("Unicorn")).toHaveLength(7);
     });
 });
 

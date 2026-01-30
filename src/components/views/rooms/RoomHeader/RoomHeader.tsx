@@ -22,7 +22,7 @@ import { HistoryVisibility, JoinRule, type Room } from "matrix-js-sdk/src/matrix
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Flex, Box } from "@element-hq/web-shared-components";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { HistoryIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
@@ -391,6 +391,40 @@ function RoomHeaderButtons({
     );
 }
 
+/** Create an icon to warn the user about shared history visibility, in encrypted rooms.
+ *
+ * Note that we use the same icon as in the room summary card and elsewhere, to aid user recognition.
+ */
+function historyVisibilityIcon(historyVisibility: HistoryVisibility): JSX.Element | null {
+    if (historyVisibility === HistoryVisibility.Shared) {
+        return (
+            <Tooltip label={_t("room|header|shared_history_tooltip")} placement="right">
+                <HistoryIcon
+                    width="16px"
+                    height="16px"
+                    className="mx_RoomHeader_icon"
+                    color="var(--cpd-color-icon-info-primary)"
+                    aria-label={_t("room|header|shared_history_tooltip")}
+                />
+            </Tooltip>
+        );
+    } else if (historyVisibility === HistoryVisibility.WorldReadable) {
+        return (
+            <Tooltip label={_t("room|header|world_readable_history_tooltip")} placement="right">
+                <UserProfileSolidIcon
+                    width="16px"
+                    height="16px"
+                    className="mx_RoomHeader_icon"
+                    color="var(--cpd-color-icon-info-primary)"
+                    aria-label={_t("room|header|world_readable_history_tooltip")}
+                />
+            </Tooltip>
+        );
+    } else {
+        return null;
+    }
+}
+
 export default function RoomHeader({
     room,
     additionalButtons,
@@ -490,20 +524,7 @@ export default function RoomHeader({
                                     </Tooltip>
                                 )}
 
-                                {isRoomEncrypted &&
-                                    historySharingEnabled &&
-                                    (historyVisibility === HistoryVisibility.Shared ||
-                                        historyVisibility === HistoryVisibility.WorldReadable) && (
-                                        <Tooltip label={_t("room|header|shared_history_tooltip")} placement="right">
-                                            <HistoryIcon
-                                                width="16px"
-                                                height="16px"
-                                                className="mx_RoomHeader_icon"
-                                                color="var(--cpd-color-icon-info-primary)"
-                                                aria-label={_t("room|header|shared_history_tooltip")}
-                                            />
-                                        </Tooltip>
-                                    )}
+                                {isRoomEncrypted && historySharingEnabled && historyVisibilityIcon(historyVisibility)}
                             </Text>
                         </Box>
                     </button>

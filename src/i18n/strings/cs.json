@@ -95,14 +95,12 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
-        "new_conversation": "Nová konverzace",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
         "no": "Ne",
         "ok": "OK",
         "open": "Otevřít",
-        "open_menu": "Otevřít nabídku",
         "pin": "Připnout",
         "proceed": "Pokračovat",
         "quote": "Citovat",
@@ -2209,7 +2207,6 @@
             "mark_unread": "Označit jako nepřečtené"
         },
         "notification_options": "Možnosti oznámení",
-        "open_space_menu": "Otevřít nabídku prostoru",
         "primary_filters": "Filtry seznamu místností",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
@@ -2219,26 +2216,16 @@
             "more_options": "Více možností",
             "open_room": "Otevřít místnost %(roomName)s"
         },
-        "room_options": "Možnosti místnosti",
         "show_less": "Zobrazit méně",
         "show_n_more": {
             "other": "Zobrazit %(count)s dalších",
             "one": "Zobrazit %(count)s další"
         },
         "show_previews": "Zobrazovat náhledy zpráv",
-        "sort": "Řadit",
         "sort_by": "Řadit dle",
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A–Z",
-        "sort_type": {
-            "activity": "Aktivita",
-            "atoz": "A–Z"
-        },
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
-        "space_menu": {
-            "home": "Domov prostoru",
-            "space_settings": "Nastavení prostoru"
-        },
         "space_menu_label": "Nabídka pro %(spaceName)s",
         "sublist_options": "Možnosti seznamu",
         "suggested_rooms_heading": "Doporučené místnosti"

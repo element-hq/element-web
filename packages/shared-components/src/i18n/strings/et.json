@@ -13,11 +13,6 @@
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik"
     },
-    "room": {
-        "status_bar": {
-            "history_visible": "See jututuba on seadistatud sel viisil, et uued liikmed saavad lugeda varasemat ajalugu.<a> Lisateave</a>"
-        }
-    },
     "time": {
         "about_day_ago": "umbes päev tagasi",
         "about_hour_ago": "umbes tund aega tagasi",
