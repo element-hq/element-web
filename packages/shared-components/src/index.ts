@@ -16,6 +16,7 @@ export * from "./crypto/SasEmoji";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./message-body/DecryptionFailureBodyView";
+export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
