@@ -73,11 +73,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-    args: {
-        roomNotifState: RoomNotifState.AllMessages,
-    },
+// Reusable play function to open the menu
+const openMenu: Story["play"] = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: "Notification options" });
+    await userEvent.click(trigger);
 };
+
+export const Default: Story = {};
 
 export const Muted: Story = {
     args: {
@@ -86,45 +89,26 @@ export const Muted: Story = {
 };
 
 export const Open: Story = {
-    args: {
-        roomNotifState: RoomNotifState.AllMessages,
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const trigger = canvas.getByRole("button", { name: "Notification options" });
-        await userEvent.click(trigger);
-    },
+    play: openMenu,
 };
 
 export const OpenMuted: Story = {
     args: {
         roomNotifState: RoomNotifState.Mute,
     },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const trigger = canvas.getByRole("button", { name: "Notification options" });
-        await userEvent.click(trigger);
-    },
+    play: openMenu,
 };
 
 export const AllMessagesLoud: Story = {
     args: {
         roomNotifState: RoomNotifState.AllMessagesLoud,
     },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const trigger = canvas.getByRole("button", { name: "Notification options" });
-        await userEvent.click(trigger);
-    },
+    play: openMenu,
 };
 
 export const MentionsOnly: Story = {
     args: {
         roomNotifState: RoomNotifState.MentionsOnly,
     },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const trigger = canvas.getByRole("button", { name: "Notification options" });
-        await userEvent.click(trigger);
-    },
+    play: openMenu,
 };
