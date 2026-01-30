@@ -667,6 +667,11 @@
   dependencies:
     "@babel/runtime" "^7.17.9"
 
+"@matrix-org/spec@^1.7.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.16.0.tgz#c88f4ed521e4c0bd3a4c108bcaf13f25173a0fdc"
+  integrity sha512-xUKHkwGXXISMCfTrx6JW6uGEK5O8IeZVOjBm7FX1h/ihpK6l50nlSIMRYdtz4V6q3pvOVBOCft4hPYTJVeTZDA==
+
 "@mdx-js/react@^3.0.0":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@mdx-js/react/-/react-3.1.1.tgz#24bda7fffceb2fe256f954482123cda1be5f5fef"

@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ComponentProps } from "react";
 import { type Device } from "matrix-js-sdk/src/matrix";
-import { type GeneratedSas, type EmojiMapping } from "matrix-js-sdk/src/crypto-api";
-import SasEmoji from "@matrix-org/spec/sas-emoji.json";
+import { type GeneratedSas } from "matrix-js-sdk/src/crypto-api";
+import { SasEmoji } from "@element-hq/web-shared-components";
 
-import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 
@@ -34,52 +34,6 @@ interface IState {
     cancelling?: boolean;
 }
 
-const SasEmojiMap = new Map<
-    string, // lowercase
-    {
-        description: string;
-        translations: {
-            [normalizedLanguageKey: string]: string;
-        };
-    }
->(
-    SasEmoji.map(({ description, translated_descriptions: translations }) => [
-        description.toLowerCase(),
-        {
-            description,
-            // Normalize the translation keys
-            translations: Object.keys(translations).reduce<Record<string, string>>((o, k) => {
-                for (const key of getNormalizedLanguageKeys(k)) {
-                    o[key] = translations[k as keyof typeof translations]!;
-                }
-                return o;
-            }, {}),
-        },
-    ]),
-);
-
-/**
- * Translate given EmojiMapping into the target locale
- * @param mapping - the given EmojiMapping to translate
- * @param locale - the BCP 47 locale to translate to, will fall back to English as the base locale for Matrix SAS Emoji.
- */
-export function tEmoji(mapping: EmojiMapping, locale: string): string {
-    const name = mapping[1];
-    const emoji = SasEmojiMap.get(name.toLowerCase());
-    if (!emoji) {
-        console.warn("Emoji not found for translation", name);
-        return name;
-    }
-
-    for (const key of getNormalizedLanguageKeys(locale)) {
-        if (!!emoji.translations[key]) {
-            return emoji.translations[key];
-        }
-    }
-
-    return emoji.description;
-}
-
 export default class VerificationShowSas extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
@@ -100,25 +54,14 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
     };
 
     public render(): React.ReactNode {
-        const locale = getUserLanguage();
-
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {
-            const emojiBlocks = this.props.sas.emoji.map((emoji, i) => (
-                <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
-                    <div className="mx_VerificationShowSas_emojiSas_emoji" aria-hidden={true}>
-                        {emoji[0]}
-                    </div>
-                    <div className="mx_VerificationShowSas_emojiSas_label">{tEmoji(emoji, locale)}</div>
-                </div>
-            ));
             sasDisplay = (
-                <div className="mx_VerificationShowSas_emojiSas">
-                    {emojiBlocks.slice(0, 4)}
-                    <div className="mx_VerificationShowSas_emojiSas_break" />
-                    {emojiBlocks.slice(4)}
-                </div>
+                <SasEmoji
+                    className="mx_VerificationShowSas_emojiSas"
+                    emoji={this.props.sas.emoji.map((e) => e[0]) as ComponentProps<typeof SasEmoji>["emoji"]}
+                />
             );
             sasCaption = this.props.isSelf
                 ? _t("encryption|verification|confirm_the_emojis")

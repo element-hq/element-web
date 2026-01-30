@@ -456,41 +456,38 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
           Confirm that the emojis below match those shown on your other device.
         </p>
         <div
-          class="mx_VerificationShowSas_emojiSas"
+          class="_container_1lqqy_8 mx_VerificationShowSas_emojiSas"
         >
           <div
-            class="mx_VerificationShowSas_emojiSas_block"
+            class="_segment_1lqqy_15"
           >
             <div
               aria-hidden="true"
-              class="mx_VerificationShowSas_emojiSas_emoji"
+              class="_emoji_1lqqy_23"
             >
               🐶
             </div>
             <div
-              class="mx_VerificationShowSas_emojiSas_label"
+              class="_label_1lqqy_29"
             >
               Dog
             </div>
           </div>
           <div
-            class="mx_VerificationShowSas_emojiSas_block"
+            class="_segment_1lqqy_15"
           >
             <div
               aria-hidden="true"
-              class="mx_VerificationShowSas_emojiSas_emoji"
+              class="_emoji_1lqqy_23"
             >
               🐱
             </div>
             <div
-              class="mx_VerificationShowSas_emojiSas_label"
+              class="_label_1lqqy_29"
             >
               Cat
             </div>
           </div>
-          <div
-            class="mx_VerificationShowSas_emojiSas_break"
-          />
         </div>
         <p />
         <div
