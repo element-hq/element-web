@@ -53,12 +53,7 @@ export function ReactionsRowButtonTooltipView({
 
     if (formattedSenders) {
         return (
-            <Tooltip
-                description={formattedSenders}
-                caption={caption}
-                placement="right"
-                open={tooltipOpen}
-            >
+            <Tooltip description={formattedSenders} caption={caption} placement="right" open={tooltipOpen}>
                 {children}
             </Tooltip>
         );
