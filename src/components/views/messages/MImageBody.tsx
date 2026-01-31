@@ -24,7 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
 import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
-import ImageView from "../elements/ImageView";
+import type ImageView from "../elements/ImageView";
 import { type IBodyProps } from "./IBodyProps";
 import { type ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

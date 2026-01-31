@@ -109,7 +109,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
                     setTimeline(t);
                     setTimelineReady(true);
                 }
-            } catch (e) {
+            } catch {
                 // Fallback: use live timeline if event timeline cannot be obtained.
                 if (!cancelled) {
                     const live = timelineSet.getLiveTimeline?.() ?? null;
@@ -140,9 +140,8 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
     useEffect(() => {
         const id = currentEvent.getId() ?? null;
-        if (id !== currentEventId) setCurrentEventId(id);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentEvent]);
+        setCurrentEventId(prev => (prev === id ? prev : id));
+    }, [currentEvent, setCurrentEventId]);
 
     const [isPaginating, setIsPaginating] = useState(false);
 
@@ -183,7 +182,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
         }
 
         const MAX_PAGES = 5;
-        
+
         // Try paginating backwards until we either find an earlier image
         // or determine that we're at the start of the room history.
         for (let page = 0; page < MAX_PAGES; page++) {
@@ -252,7 +251,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
                     setSrc(resolved);
                     setLoading(false);
                 }
-            } catch (e) {
+            } catch {
                 if (!cancelled) {
                     setSrc(null);
                     setLoading(false);
