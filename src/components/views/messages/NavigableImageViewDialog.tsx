@@ -183,7 +183,9 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
         }
 
         const MAX_PAGES = 5;
-
+        
+        // Try paginating backwards until we either find an earlier image
+        // or determine that we're at the start of the room history.
         for (let page = 0; page < MAX_PAGES; page++) {
             const ok = await paginateBackwards();
             if (!ok) {
