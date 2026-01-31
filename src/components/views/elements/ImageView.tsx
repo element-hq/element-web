@@ -39,7 +39,7 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { presentableTextForFile } from "../../../utils/FileUtils";
-import AccessibleButton from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
 
 // Max scale to keep gaps around the image
@@ -433,6 +433,20 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
+    private stopPropagation = (e: ButtonEvent): void => {
+        e.stopPropagation();
+    };
+
+    private onPrevClick = (e: ButtonEvent): void => {
+        e.stopPropagation();
+        this.props.onPrev?.();
+    };
+
+    private onNextClick = (e: ButtonEvent): void => {
+        e.stopPropagation();
+        this.props.onNext?.();
+    };
+
     private renderContextMenu(): JSX.Element {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuDisplayed && this.props.mxEvent) {
@@ -612,7 +626,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <div
                     className="mx_ImageView_image_wrapper"
                     ref={this.imageWrapper}
-                    style={{ position: "relative" }}   // TEMP
                     onMouseDown={this.props.onFinished}
                     onMouseMove={this.onMoving}
                     onMouseUp={this.onEndMoving}
@@ -622,11 +635,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                     <AccessibleButton
                         className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_prev"
                         title={_t("action|back")}
-                        onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            this.props.onPrev?.();
-                        }}
+                        onMouseDown={this.stopPropagation}
+                        onClick={this.onPrevClick}
                     >
                         <ChevronLeftIcon />
                     </AccessibleButton>
@@ -635,11 +645,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                     <AccessibleButton
                         className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_next"
                         title={_t("action|next")}
-                        onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            this.props.onNext?.();
-                        }}
+                        onMouseDown={this.stopPropagation}
+                        onClick={this.onNextClick}
                     >
                         <ChevronRightIcon />
                     </AccessibleButton>
