@@ -37,6 +37,7 @@ import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { isMimeTypeAllowed } from "../../../utils/blobs.ts";
+import NavigableImageViewDialog from "./NavigableImageViewDialog";
 
 enum Placeholder {
     NoImage,
@@ -138,7 +139,19 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 };
             }
 
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+            //Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+            Modal.createDialog(
+                NavigableImageViewDialog,
+                {
+                    initialEvent: this.props.mxEvent,
+                    permalinkCreator: this.props.permalinkCreator,
+                    thumbnailInfo: params.thumbnailInfo,
+                },
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+
         }
     };
 
