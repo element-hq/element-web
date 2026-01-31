@@ -27,6 +27,43 @@ $button-gap: var(--cpd-space-3x);
     align-items: center;
     height: 100%;
     overflow: hidden;
+    position: relative;
+}
+
+.mx_ImageView_nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    pointer-events: initial;
+
+    --icon-size: 24px;
+    padding: calc(($button-size - var(--icon-size)) / 2);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+
+    transition: background 120ms ease;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.6);
+        outline-offset: 2px;
+    }
+    svg {
+        color: $lightbox-fg-color;
+    }
+}
+
+.mx_ImageView_nav_prev {
+    left: 16px;
+}
+
+.mx_ImageView_nav_next {
+    right: 16px;
 }
 
 .mx_ImageView_image {
