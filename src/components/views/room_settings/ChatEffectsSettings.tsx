@@ -22,7 +22,7 @@ import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton
 import { useSettingValueAt } from "../../../hooks/useSettings.ts";
 
 /**
- * The URL preview settings for a room
+ * The chat effects settings for a room
  */
 interface ChatEffectsSettingsProps {
     /**
@@ -57,7 +57,7 @@ function onClickUserSettings(e: ButtonEvent): void {
 }
 
 /**
- * The description for the visual effects enabled settings
+ * The description for the chat effects enabled settings
  */
 
 function Description(): JSX.Element {
