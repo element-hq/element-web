@@ -23,6 +23,7 @@ import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
+import { ChatEffectsSettings } from "../../../room_settings/ChatEffectsSettings";
 import { MediaPreviewAccountSettings } from "../user/MediaPreviewAccountSettings";
 
 interface IProps {
@@ -100,6 +101,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
                     <SettingsSection heading={_t("room_settings|general|other_section")}>
                         {urlPreviewSettings}
+                        <ChatEffectsSettings room={room} />
                         <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                             <MediaPreviewAccountSettings roomId={room.roomId} />
                         </SettingsSubsection>

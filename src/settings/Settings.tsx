@@ -1268,7 +1268,10 @@ export const SETTINGS: Settings = {
     },
     "showChatEffects": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("settings|show_chat_effects"),
+        displayName: {
+            default: _td("settings|show_chat_effects"),
+            room: _td("settings|show_chat_effects_room"),
+        },
         default: true,
         controller: new ReducedMotionController(),
     },
