@@ -11,7 +11,7 @@ import { render, screen } from "jest-matrix-react";
 import { waitFor } from "@testing-library/dom";
 import { Form } from "@vector-im/compound-web";
 
-import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../test-utils";
+import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../test-utils/index.ts";
 import { ChatEffectsSettings } from "../../../../../src/components/views/room_settings/ChatEffectsSettings.tsx";
 import SettingsStore from "../../../../../src/settings/SettingsStore.ts";
 import dis from "../../../../../src/dispatcher/dispatcher.ts";

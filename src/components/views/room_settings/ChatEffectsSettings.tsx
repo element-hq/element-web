@@ -63,7 +63,6 @@ function onClickUserSettings(e: ButtonEvent): void {
 function Description(): JSX.Element {
     const chatEffectsEnabled = useSettingValueAt(SettingLevel.ACCOUNT, "showChatEffects");
 
-    let previewsForAccount: ReactNode | undefined;
     const button = {
         a: (sub: string) => (
             <AccessibleButton kind="link_inline" onClick={onClickUserSettings}>
@@ -72,7 +71,7 @@ function Description(): JSX.Element {
         ),
     };
 
-    previewsForAccount = chatEffectsEnabled
+    const previewsForAccount = chatEffectsEnabled
         ? _t("room_settings|general|user_chat_effects_default_on", {}, button)
         : _t("room_settings|general|user_chat_effects_default_off", {}, button);
 
