@@ -1443,10 +1443,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
-    [UIFeature.BulkUnverifiedSessionsReminder]: {
-        supportedLevels: LEVELS_UI_FEATURE,
-        default: true,
-    },
     [UIFeature.AllowCreatingPublicSpaces]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,

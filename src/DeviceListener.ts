@@ -43,7 +43,6 @@ import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
 import SettingsStore, { type CallbackFn } from "./settings/SettingsStore";
-import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 import { asyncSomeParallel } from "./utils/arrays.ts";
@@ -125,7 +124,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.
     private client?: MatrixClient;
     private shouldRecordClientInformation = false;
-    private enableBulkUnverifiedSessionsReminder = true;
     private deviceClientInformationSettingWatcherRef: string | undefined;
     private deviceState: DeviceState = "ok";
 
@@ -151,7 +149,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
         this.shouldRecordClientInformation = SettingsStore.getValue("deviceClientInformationOptIn");
         // only configurable in config, so we don't need to watch the value
-        this.enableBulkUnverifiedSessionsReminder = SettingsStore.getValue(UIFeature.BulkUnverifiedSessionsReminder);
         this.deviceClientInformationSettingWatcherRef = SettingsStore.watchSetting(
             "deviceClientInformationOptIn",
             null,
@@ -592,12 +589,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
 
         // Display or hide the batch toast for old unverified sessions
         // don't show the toast if the current device is unverified
-        if (
-            oldUnverifiedDeviceIds.size > 0 &&
-            isCurrentDeviceTrusted &&
-            this.enableBulkUnverifiedSessionsReminder &&
-            !isBulkUnverifiedSessionsReminderSnoozed
-        ) {
+        if (oldUnverifiedDeviceIds.size > 0 && isCurrentDeviceTrusted && !isBulkUnverifiedSessionsReminderSnoozed) {
             showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
         } else {
             hideBulkUnverifiedSessionsToast();
