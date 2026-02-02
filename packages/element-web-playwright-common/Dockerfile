@@ -8,4 +8,4 @@ RUN apt-get update && apt-get -y install docker.io fonts-dejavu
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
