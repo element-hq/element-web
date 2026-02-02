@@ -59,7 +59,7 @@ import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
 import { goto, join } from "./slash-commands/join";
 import { manuallyVerifyDevice } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
-import { runUpgradeRoomCommand } from "./slash-commands/upgraderoom/runUpgradeRoomCommand";
+import upgraderoom from "./slash-commands/upgraderoom/upgraderoom";
 
 export { CommandCategories, Command };
 
@@ -143,17 +143,7 @@ export const Commands = [
         },
         category: CommandCategories.messages,
     }),
-    new Command({
-        command: "upgraderoom",
-        args: "<new_version> [<additional-creator-user-id> ...]",
-        description: _td("slash_command|upgraderoom"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            return runUpgradeRoomCommand(this, cli, roomId, threadId, args);
-        },
-        category: CommandCategories.admin,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
+    upgraderoom,
     new Command({
         command: "jumptodate",
         args: "<YYYY-MM-DD>",
