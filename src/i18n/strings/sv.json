@@ -99,7 +99,6 @@
         "no": "Nej",
         "ok": "OK",
         "open": "Öppna",
-        "open_menu": "Öppna menyn",
         "pin": "Häftstift",
         "proceed": "Fortsätt",
         "quote": "Citera",
@@ -2124,7 +2123,6 @@
             "mark_unread": "Markera som oläst"
         },
         "notification_options": "Aviseringsinställningar",
-        "open_space_menu": "Öppna utrymmesmenyn",
         "primary_filters": "Filter för rumslista",
         "redacting_messages_status": {
             "one": "Tar just nu bort meddelanden i %(count)s rum",
@@ -2134,26 +2132,16 @@
             "more_options": "Fler alternativ",
             "open_room": "Öppet rummet %(roomName)s"
         },
-        "room_options": "Rumsalternativ",
         "show_less": "Visa mindre",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"
         },
         "show_previews": "Visa förhandsgranskningar av meddelanden",
-        "sort": "Sortera",
         "sort_by": "Sortera efter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Ö",
-        "sort_type": {
-            "activity": "Aktivitet",
-            "atoz": "A-Ö"
-        },
         "sort_unread_first": "Visa rum med olästa meddelanden först",
-        "space_menu": {
-            "home": "Utrymmeshem",
-            "space_settings": "Utrymmesinställningar"
-        },
         "space_menu_label": "%(spaceName)s-alternativ",
         "sublist_options": "Listalternativ",
         "suggested_rooms_heading": "Föreslagna rum"
@@ -3308,12 +3296,7 @@
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
         "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
         "decryption_failure": {
-            "blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet eftersom din enhet inte är verifierad",
-            "historical_event_no_key_backup": "Historiska meddelanden är inte tillgängliga på den här enheten",
-            "historical_event_unverified_device": "Du måste verifiera den här enheten för att få åtkomst till historiska meddelanden",
-            "historical_event_user_not_joined": "Du har inte tillgång till det här meddelandet",
             "sender_identity_previously_verified": "Avsändarens verifierade identitet har ändrats",
-            "sender_unsigned_device": "Skickat från en osäker enhet.",
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

@@ -91,7 +91,6 @@
         "no": "Nej",
         "ok": "OK",
         "open": "Åbn",
-        "open_menu": "Åbn menu",
         "pin": "Fastgør",
         "proceed": "Fortsæt",
         "quote": "Citat",
@@ -1862,7 +1861,6 @@
             "other": "Tilslutter sig i øjeblikket %(count)s rum"
         },
         "notification_options": "Notifikationsindstillinger",
-        "open_space_menu": "Åbn menu for gruppe",
         "redacting_messages_status": {
             "one": "Fjerner i øjeblikket beskeder i %(count)s rum",
             "other": "Fjerner i øjeblikket beskeder i %(count)s rum"
@@ -1877,10 +1875,6 @@
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
         "sort_unread_first": "Vis rum med ulæste beskeder først",
-        "space_menu": {
-            "home": "Hjem for gruppe",
-            "space_settings": "Indstillinger for grupper"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "Liste over muligheder",
         "suggested_rooms_heading": "Foreslåede rum"
@@ -2896,9 +2890,6 @@
         },
         "creation_summary_dm": "%(creator)s oprettede denne samtale.",
         "creation_summary_room": "%(creator)s oprettede og konfigurerede rummet.",
-        "decryption_failure": {
-            "historical_event_user_not_joined": "Du har ikke adgang til denne besked"
-        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Downloader",

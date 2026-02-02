@@ -5,21 +5,33 @@
     "action": {
         "delete": "Löschen",
         "dismiss": "Ausblenden",
+        "edit": "Bearbeiten",
         "explore_rooms": "Chats erkunden",
+        "invite": "Einladen",
+        "new_room": "Neue Gruppe",
+        "new_video_room": "Neuer Videochat",
+        "open_menu": "Menü öffnen",
         "pause": "Pausieren",
         "play": "Abspielen",
+        "remove": "Entfernen",
         "retry": "Erneut versuchen",
-        "search": "Suchen"
+        "search": "Suchen",
+        "start_chat": "Neuer Chat"
+    },
+    "common": {
+        "preferences": "Einstellungen"
     },
     "left_panel": {
         "open_dial_pad": "Wähltastatur öffnen"
     },
     "room": {
+        "context_menu": {
+            "title": "Chatoptionen"
+        },
         "status_bar": {
             "delete_all": "Alle löschen",
             "exceeded_resource_limit_title": "Deine Nachricht konnte nicht versendet werden, da dein Homeserver ein Ressourcenlimit überschritten hat.",
             "failed_to_create_room_title": "Es konnte kein Chat mit diesem Nutzer gestartet werden",
-            "history_visible": "Diese Gruppe wurde konfiguriert, neuen Mitgliedern Zugriff auf den vergangenen Nachrichtenverlauf zu gestatten. <a>Mehr erfahren</a>",
             "homeserver_blocked_title": "Deine Nachricht konnte nicht versendet werden, da der Admin deinen Homeserver gesperrt hat.",
             "monthly_user_limit_reached_title": "Deine Nachricht konnte nicht versendet werden, da dein Homeserver das monatliche Nutzerlimit erreicht hat.",
             "requires_consent_agreement_title": "Du kannst erst dann Nachrichten verschicken, wenn du unsere Geschäftsbedingungen gelesen und akzeptiert hast.",
@@ -27,6 +39,22 @@
             "server_connectivity_lost_description": "Nachrichten werden gespeichert und gesendet, wenn die Internetverbindung wiederhergestellt ist.",
             "server_connectivity_lost_title": "Verbindung zum Server wurde unterbrochen.",
             "some_messages_not_sent": "Einige Nachrichten konnten nicht gesendet werden"
+        }
+    },
+    "room_list": {
+        "appearance": "Darstellung",
+        "open_space_menu": "Menü für Spaces öffnen",
+        "room_options": "Chatoptionen",
+        "show_message_previews": "Nachrichtenvorschau anzeigen",
+        "sort": "Sortieren",
+        "sort_type": {
+            "activity": "Aktivität",
+            "atoz": "A–Z",
+            "unread_first": "Ungelesen zuerst"
+        },
+        "space_menu": {
+            "home": "Space Home",
+            "space_settings": "Space Einstellungen"
         }
     },
     "terms": {
@@ -49,10 +77,29 @@
         "n_minutes_ago": "vor %(num)s Minuten"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "Der Absender hat den Empfang dieser Nachricht blockiert, da dein Gerät nicht verifiziert ist.",
+            "historical_event_no_key_backup": "Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar",
+            "historical_event_unverified_device": "Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren",
+            "historical_event_user_not_joined": "Du hast keinen Zugriff auf diese Nachricht",
+            "sender_identity_previously_verified": "Die verifizierte Identität des Absenders wurde zurückgesetzt",
+            "sender_unsigned_device": "Von einem unsicheren Gerät verschickt.",
+            "unable_to_decrypt": "Nachricht kann nicht entschlüsselt werden"
+        },
         "m.audio": {
             "audio_player": "Audio-Player",
             "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
             "unnamed_audio": "Unbenannte Audiodatei"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Nach links schieben",
+            "move_right": "Nach rechts schieben",
+            "remove": "Für alle entfernen",
+            "revoke": "Berechtigungen widerrufen",
+            "screenshot": "Bildschirmfoto",
+            "start_audio_stream": "Audiostream starten"
         }
     }
 }

@@ -316,15 +316,15 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
       </div>
       <label>
         <div
-          class="_container_1md5v_10"
+          class="_container_153f2_10"
         >
           <input
             checked=""
-            class="_input_1md5v_18"
+            class="_input_153f2_18"
             type="checkbox"
           />
           <div
-            class="_ui_1md5v_19"
+            class="_ui_153f2_19"
           >
             <svg
               aria-hidden="true"
@@ -513,14 +513,14 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
       </div>
       <label>
         <div
-          class="_container_1md5v_10"
+          class="_container_153f2_10"
         >
           <input
-            class="_input_1md5v_18"
+            class="_input_153f2_18"
             type="checkbox"
           />
           <div
-            class="_ui_1md5v_19"
+            class="_ui_153f2_19"
           >
             <svg
               aria-hidden="true"

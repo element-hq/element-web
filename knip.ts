@@ -52,6 +52,9 @@ export default {
         "@jest/globals",
         "vitest-environment-jest-fixed-jsdom",
 
+        // We import this in some tests, transitive dep of @playwright/test
+        "playwright-core",
+
         // Used by matrix-js-sdk, which means we have to include them as a
         // dependency so that // we can run `tsc` (since we import the typescript
         // source of js-sdk, rather than the transpiled and annotated JS like you

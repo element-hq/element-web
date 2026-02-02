@@ -98,30 +98,7 @@ For more information about visual testing, see [Visual Testing](playwright#visua
 
 ### Shared Components Tests
 
-The shared-components package uses Playwright (via Storybook test runner) to validate component rendering across different states and configurations.
-
-**Run Storybook tests:**
-
-```sh
-cd packages/shared-components
-yarn test:storybook
-```
-
-**Run Storybook tests in CI mode:**
-
-```sh
-cd packages/shared-components
-yarn test:storybook:ci
-```
-
-**Update Storybook screenshots:**
-
-```sh
-cd packages/shared-components
-yarn test:storybook:update
-```
-
-This uses the same Docker-based screenshot rendering as Element Web to ensure consistency across platforms.
+See the [Shared Components README](../packages/shared-components/README.md#visual-regression-tests) for instructions on running the shared components Playwright tests.
 
 ### Projects
 
@@ -147,13 +124,6 @@ Misc:
 - `playwright/snapshots/` - Visual regression test screenshots
 - `playwright/pages/` - Page object models
 - `playwright/plugins/` - Custom Playwright plugins
-
-**Shared components tests** are located in `packages/shared-components/`:
-
-- `packages/shared-components/playwright/snapshots/` - Storybook screenshot baselines
-- `packages/shared-components/.storybook/` - Storybook configuration
-
-The shared components use Storybook's test runner (powered by Playwright) to validate component rendering across different states and configurations.
 
 ### Homeserver Setup
 

@@ -93,14 +93,12 @@
         "maximise": "Suurenda maksimaalseks",
         "mention": "Maini",
         "minimise": "Väike vaade",
-        "new_conversation": "Uus vestlus",
         "new_room": "Uus jututuba",
         "new_video_room": "Uus videotuba",
         "next": "Järgmine",
         "no": "Ei",
         "ok": "Sobib",
         "open": "Ava",
-        "open_menu": "Ava menüü",
         "pin": "Tõsta esile",
         "proceed": "Jätka",
         "quote": "Tsiteeri",
@@ -978,6 +976,7 @@
         "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
         "key_storage_out_of_sync": "Sinu krüptovõtmete hoidla pole sünkroonis.",
         "key_storage_out_of_sync_description": "Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti.",
+        "message_shared_by": "Kuna sa polnud sõnumi saatmise ajal jututoas, siis %(displayName)s (%(userId)s) jagas seda sõnumit sinuga.",
         "messages_not_secure": {
             "cause_1": "Sinu koduserver",
             "cause_2": "Sinu poolt verifitseeritava kasutaja koduserver",
@@ -1917,7 +1916,6 @@
                 "other": "%(count)s esiletõstetud sõnumit"
             },
             "limits": {
-                "one": "",
                 "other": "Sa saad esile tõsta kuni %(count)s vidinat"
             },
             "menu": "Ava menüü",
@@ -2026,11 +2024,15 @@
         "forget_room": "Unusta see jututuba",
         "forget_space": "Unusta see kogukond",
         "header": {
+            "join_video_call": "Liitu videokõnega",
+            "join_voice_call": "Liitu häälkõnega",
             "n_people_asking_to_join": {
                 "one": "Üks huviline soovib liituda",
                 "other": "%(count)s huvilist soovivad liituda"
             },
-            "room_is_public": "See jututuba on avalik"
+            "room_is_public": "See jututuba on avalik",
+            "shared_history_tooltip": "Uued liikmed näevad ajalugu",
+            "world_readable_history_tooltip": "Kõik võivad ajalugu näha"
         },
         "header_avatar_open_settings_label": "Ava jututoa seadistused",
         "header_face_pile_tooltip": "Lülita liikmete nimekiri sisse/välja",
@@ -2199,7 +2201,6 @@
             "mark_unread": "Märgi mitteloetuks"
         },
         "notification_options": "Teavituste eelistused",
-        "open_space_menu": "Ava kogukonna menüü",
         "primary_filters": "Jututubade loendi filtrid",
         "redacting_messages_status": {
             "other": "Kustutame sõnumeid %(count)s jututoas",
@@ -2209,26 +2210,16 @@
             "more_options": "Täiendavad seadistused",
             "open_room": "Ava jututuba: %(roomName)s"
         },
-        "room_options": "Jututoa valikud",
         "show_less": "Näita vähem",
         "show_n_more": {
             "one": "Näita veel %(count)s vestlust",
             "other": "Näita veel %(count)s vestlust"
         },
         "show_previews": "Näita sõnumite eelvaateid",
-        "sort": "Järjesta",
         "sort_by": "Järjestamisviis",
         "sort_by_activity": "Aktiivsuse alusel",
         "sort_by_alphabet": "Tähestiku järjekorras",
-        "sort_type": {
-            "activity": "Aktiivsuse alusel",
-            "atoz": "Tähestiku alusel"
-        },
         "sort_unread_first": "Näita lugemata sõnumitega jututubasid esimesena",
-        "space_menu": {
-            "home": "Kogukonna avaleht",
-            "space_settings": "Kogukonna seadistused"
-        },
         "space_menu_label": "%(spaceName)s menüü",
         "sublist_options": "Loendi valikud",
         "suggested_rooms_heading": "Soovitatud jututoad"
@@ -2417,7 +2408,7 @@
             "history_visibility_legend": "Kes võivad lugeda ajalugu?",
             "history_visibility_shared": "Ainult liikmetele (kogu ajalugu)",
             "history_visibility_warning": "Muudatused ei mõjuta senise ajaloo nähtavust, vaid uute oma. <a>Lisateave</a>",
-            "history_visibility_world_readable": "Kõik kasutajad (ajalugu on avalik)\n",
+            "history_visibility_world_readable": "Kõik (ajalugu on avalik)",
             "join_rule_description": "Vali, kes saavad liituda %(roomName)s jututoaga.",
             "join_rule_invite": "Privaatne jututuba (eeldab kutset)",
             "join_rule_invite_description": "Liitumine toimub vaid kutse alusel.",
@@ -3402,12 +3393,7 @@
         "creation_summary_dm": "%(creator)s alustas seda otsesuhtlust.",
         "creation_summary_room": "%(creator)s lõi ja seadistas jututoa.",
         "decryption_failure": {
-            "blocked": "Saatja on blokeerinud võimaluse, et sa saaksid selle sõnumi",
-            "historical_event_no_key_backup": "Varasemad sõnumid pole selles seadmes loetavad",
-            "historical_event_unverified_device": "Varasemate sõnumite nägemiseks pead selle seadme verifitseerima",
-            "historical_event_user_not_joined": "Sul puudub ligipääs sellele sõnumile",
             "sender_identity_previously_verified": "Saatja verifitseeritud võrguidentiteet on lähtestatud",
-            "sender_unsigned_device": "Krüptitud seadme poolt, mida tema omanik pole verifitseerinud.",
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3593,7 +3579,7 @@
         },
         "m.room.power_levels": {
             "changed": "%(senderName)s muutis õiguseid: %(powerLevelDiffText)s.",
-            "user_from_to": "%(userId)s õigused muutusid: %(fromPowerLevel)s -> %(toPowerLevel)s"
+            "user_from_to": "kasutaja „%(userId)s“ õigused muutusid: %(fromPowerLevel)s → %(toPowerLevel)s"
         },
         "m.room.server_acl": {
             "all_servers_banned": "🎉 Kõikidel serveritel on keeld seda jututuba teenindada! Seega seda jututuba ei saa enam kasutada.",
@@ -3616,11 +3602,11 @@
         },
         "m.widget": {
             "added": "%(senderName)s lisas vidina %(widgetName)s",
-            "jitsi_ended": "%(senderName)s lõpetas video rühmakõne",
-            "jitsi_join_right_prompt": "Liitu konverentsiga selle jututoa infolehelt paremal",
-            "jitsi_join_top_prompt": "Liitu konverentsiga selle jututoa ülaosas",
-            "jitsi_started": "%(senderName)s alustas video rühmakõnet",
-            "jitsi_updated": "%(senderName)s uuendas video rühmakõne",
+            "jitsi_ended": "%(senderName)s lõpetas videokonverentsi kõne",
+            "jitsi_join_right_prompt": "Liitu konverentsikõnega selle jututoa infolehelt paremal",
+            "jitsi_join_top_prompt": "Liitu konverentsikõnega selle jututoa ülaosas",
+            "jitsi_started": "%(senderName)s alustas videokonverentsi kõnet",
+            "jitsi_updated": "%(senderName)s uuendas videokonverentsi kõnet",
             "modified": "%(senderName)s muutis vidinat %(widgetName)s",
             "removed": "%(senderName)s eemaldas vidina %(widgetName)s"
         },
@@ -4155,7 +4141,7 @@
             "move_right": "Liigu paremale",
             "remove": "Eemalda kõigilt",
             "revoke": "Tühista õigused",
-            "screenshot": "Tee foto",
+            "screenshot": "Pildista",
             "start_audio_stream": "Käivita audiovoog"
         },
         "cookie_warning": "See vidin võib kasutada küpsiseid.",

@@ -281,6 +281,11 @@ Each story will be rendered and a screenshot will be taken and compared to the
 existing baseline. If there are visual changes or AXE violation, the test will
 fail.
 
+Screenshots are located in `packages/shared-components/__vis__/`.
+
+> [!IMPORTANT]
+> In case of docker issues with Playwright, see [playwright EW documentation](https://github.com/element-hq/element-web/blob/develop/docs/playwright.md#supported-container-runtimes).
+
 ### Translations
 
 First see our [translation guide](../../docs/translation.md) and [translation dev guide](../../docs/translation-dev.md).
@@ -289,3 +294,10 @@ To generate translation strings for this package, run:
 ```bash
 yarn i18n
 ```
+
+## Publish a new version
+
+Two steps are required to publish a new version of this package:
+
+1. Bump the version in `package.json` following semver rules and open a PR.
+2. Once merged run the [github workflow](https://github.com/element-hq/element-web/actions/workflows/shared-component-publish.yaml)

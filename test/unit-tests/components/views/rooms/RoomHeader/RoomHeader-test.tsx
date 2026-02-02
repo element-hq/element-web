@@ -60,6 +60,7 @@ import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
+import { defaultWatchManager } from "../../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -100,7 +101,7 @@ describe("RoomHeader", () => {
         };
     }
 
-    beforeEach(async () => {
+    beforeEach(() => {
         client = stubClient();
         room = new Room(ROOM_ID, client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -706,6 +707,64 @@ describe("RoomHeader", () => {
 
             expect(getByLabelText(document.body, "Public room")).toBeInTheDocument();
         });
+    });
+
+    it("shows a history icon if the room is encrypted and has shared history", async () => {
+        mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
+        await room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    type: "m.room.history_visibility",
+                    content: { history_visibility: "shared" },
+                    sender: MatrixClientPeg.get()!.getSafeUserId(),
+                    state_key: "",
+                    room_id: room.roomId,
+                }),
+            ],
+            { addToState: true },
+        );
+        let featureEnabled = true;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
+        );
+
+        render(<RoomHeader room={room} />, getWrapper());
+        await waitFor(() => getByLabelText(document.body, "New members see history"));
+
+        // Disable the labs flag and check the icon disappears
+        featureEnabled = false;
+        act(() =>
+            defaultWatchManager.notifyUpdate(
+                "feature_share_history_on_invite",
+                null,
+                SettingLevel.DEVICE,
+                featureEnabled,
+            ),
+        );
+        expect(queryByLabelText(document.body, "New members see history")).not.toBeInTheDocument();
+    });
+
+    it("shows a user icon if the room is encrypted and has world readable history", async () => {
+        mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
+        await room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    type: "m.room.history_visibility",
+                    content: { history_visibility: "world_readable" },
+                    sender: MatrixClientPeg.get()!.getSafeUserId(),
+                    state_key: "",
+                    room_id: room.roomId,
+                }),
+            ],
+            { addToState: true },
+        );
+        const featureEnabled = true;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
+        );
+
+        render(<RoomHeader room={room} />, getWrapper());
+        await waitFor(() => getByLabelText(document.body, "Anyone can see history"));
     });
 
     describe("dm", () => {

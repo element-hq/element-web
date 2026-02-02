@@ -1,6 +1,6 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "0.0.0-test.12",
+    "version": "0.0.1",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
@@ -48,21 +48,20 @@
         "lint:js": "eslint --max-warnings 0 src && prettier --check .",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
-    "resolutions": {
-        "playwright": "1.57.0"
-    },
     "dependencies": {
         "@element-hq/element-web-module-api": "^1.8.0",
+        "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "^6.4.3",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
         "lodash": "^4.17.21",
         "matrix-web-i18n": "3.6.0",
         "react-merge-refs": "^3.0.2",
+        "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "2.2.4",
+        "@element-hq/element-web-playwright-common": "2.2.5",
         "@fetch-mock/vitest": "^0.2.18",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@playwright/test": "1.57.0",
@@ -83,7 +82,7 @@
         "@types/react-dom": "^19.2.3",
         "@typescript-eslint/eslint-plugin": "^8.53.1",
         "@typescript-eslint/parser": "^8.53.1",
-        "@vector-im/compound-web": "^8.3.5",
+        "@vector-im/compound-web": "^8.3.6",
         "@vitejs/plugin-react": "^5.1.2",
         "@vitest/browser-playwright": "^4.0.17",
         "@vitest/coverage-v8": "^4.0.17",
@@ -108,7 +107,7 @@
         "vite": "^7.3.1",
         "vite-plugin-dts": "^4.5.4",
         "vite-plugin-node-polyfills": "^0.25.0",
-        "vitest": "^4.0.17",
+        "vitest": "^4.0.18",
         "vitest-browser-react": "^2.0.2",
         "vitest-sonar-reporter": "^3.0.0"
     },
