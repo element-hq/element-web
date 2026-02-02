@@ -8,6 +8,8 @@ SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 
 IMAGE_NAME="element-web-playwright-common"
 
+if docker --version | grep -q podman; then docker_is_podman=1; fi
+
 build_image() {
   echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
 
@@ -59,7 +61,10 @@ while [[ $# -gt 0 ]]; do
     # It's a volume rather than a directory because otherwise things tend to start picking up
     # files from it in the native environment and break.
     --with-node-modules)
-      RUN_ARGS+=(--mount "type=volume,src=ew-docker-node-modules,dst=/work/node_modules,volume-nocopy" -e YARN_INSTALL=true)
+      mount_param="type=volume,src=ew-docker-node-modules,dst=/work/node_modules"
+      # podman doesn't support `volume-nocopy`
+      if [ -z "$docker_is_podman" ]; then mount_param+=",volume-nocopy"; fi
+      RUN_ARGS+=(--mount "${mount_param}" -e YARN_INSTALL=true)
       shift
       ;;
     # Sets a different entrypoint (in which case the default arguments to the script will be ignored)
@@ -84,7 +89,7 @@ popd > /dev/null
 for LINK in $SYMLINKS; do
   TARGET=$(readlink -f "node_modules/$LINK") || true
   if [ -d "$TARGET" ]; then
-     if docker --version | grep -q podman; then
+     if [ -n "$docker_is_podman" ]; then
         echo -e "\033[31m" >&2
         cat <<'EOF' >&2
 WARNING: `node_modules` contains symlinks, and the support for this in
