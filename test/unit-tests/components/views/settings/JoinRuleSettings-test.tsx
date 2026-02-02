@@ -197,7 +197,7 @@ describe("<JoinRuleSettings />", () => {
 
                 fireEvent.click(within(dialog).getByText("Upgrade"));
 
-                expect(client.upgradeRoom).toHaveBeenCalledWith(roomId, preferredRoomVersion);
+                expect(client.upgradeRoom).toHaveBeenCalledWith(roomId, preferredRoomVersion, undefined);
 
                 expect(within(dialog).getByText("Upgrading room")).toBeInTheDocument();
 
@@ -245,7 +245,7 @@ describe("<JoinRuleSettings />", () => {
 
                 fireEvent.click(within(dialog).getByText("Upgrade"));
 
-                expect(client.upgradeRoom).toHaveBeenCalledWith(roomId, preferredRoomVersion);
+                expect(client.upgradeRoom).toHaveBeenCalledWith(roomId, preferredRoomVersion, undefined);
 
                 expect(within(dialog).getByText("Upgrading room")).toBeInTheDocument();
 

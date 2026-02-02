@@ -2774,9 +2774,6 @@
         },
         "creation_summary_dm": "%(creator)s uzsāka šo tiešo saraksti.",
         "creation_summary_room": "%(creator)s izveidoja un nokonfigurēja istabu.",
-        "decryption_failure": {
-            "historical_event_unverified_device": "Ir jāapliecina šī ierīce, lai piekļūtu senākām ziņām."
-        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Atšifrē",
         "download_action_downloading": "Lejupielādē",

@@ -53,6 +53,7 @@ export async function upgradeRoom(
     awaitRoom = false,
     progressCallback?: (progress: RoomUpgradeProgress) => void,
     inhibitInviteProgressDialog = false,
+    additionalCreators?: string[],
 ): Promise<string> {
     const cli = room.client;
     let spinnerModal: IHandle<any> | undefined;
@@ -91,7 +92,7 @@ export async function upgradeRoom(
 
     let newRoomId: string;
     try {
-        ({ replacement_room: newRoomId } = await cli.upgradeRoom(room.roomId, targetVersion));
+        ({ replacement_room: newRoomId } = await cli.upgradeRoom(room.roomId, targetVersion, additionalCreators));
     } catch (e) {
         if (!handleError) throw e;
         logger.error(e);

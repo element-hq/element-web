@@ -162,9 +162,9 @@ export function useRoomSummaryCardViewModel(
     const e2eStatus = roomContext.e2eStatus;
     const isVideoRoom = calcIsVideoRoom(room);
 
-    const roomState = useRoomState(room);
-    // used to check if the room is public or not
-    const roomJoinRule = roomState.getJoinRule();
+    const { roomJoinRule } = useRoomState(room, (state) => ({
+        roomJoinRule: state.getJoinRule(),
+    }));
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const pinCount = usePinnedEvents(room).length;
     // value to check if the user can invite to the room

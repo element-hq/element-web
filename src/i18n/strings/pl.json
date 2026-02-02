@@ -3355,12 +3355,7 @@
         "creation_summary_dm": "%(creator)s utworzył tę wiadomość prywatną.",
         "creation_summary_room": "%(creator)s stworzył i skonfigurował pokój.",
         "decryption_failure": {
-            "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości ponieważ twoje urządzenie nie zostało zweryfikowane",
-            "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
-            "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
-            "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
             "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy została zresetowana",
-            "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
