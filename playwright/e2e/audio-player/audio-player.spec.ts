@@ -64,6 +64,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Assert that the play button can be found and is visible
             await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
+            await locator.getByRole("button", { name: "Play" }).blur();
 
             if (monospace) {
                 // Assert that the monospace timer is visible
