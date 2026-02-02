@@ -6,17 +6,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
+import React, { type PropsWithChildren } from "react";
+import classNames from "classnames";
 
-interface Props {
+import styles from "./TimelineSeparator.module.css";
+
+/**
+ * Timeline separator props
+ */
+export interface TimelineSeparatorProps {
+    /**
+     * Accessible label for the separator (for example: "Today", "Yesterday", or a date).
+     */
     label: string;
-    children?: ReactNode;
-}
-
-export const enum SeparatorKind {
-    None,
-    Date,
-    LateEvent,
+    /**
+     * Optional children to render inside the timeline separator
+     */
+    children?: PropsWithChildren["children"];
 }
 
 /**
@@ -25,10 +31,14 @@ export const enum SeparatorKind {
  * @param label the accessible label string describing the separator
  * @param children the children to draw within the timeline separator
  */
-const TimelineSeparator: React.FC<Props> = ({ label, children }) => {
+const TimelineSeparator: React.FC<TimelineSeparatorProps> = ({ label, children }) => {
     // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
     return (
-        <div className="mx_TimelineSeparator" role="separator" aria-label={label}>
+        <div
+            className={classNames("mx_TimelineSeparator", styles.timelineSeparator)}
+            role="separator"
+            aria-label={label}
+        >
             <hr role="none" />
             {children}
             <hr role="none" />
