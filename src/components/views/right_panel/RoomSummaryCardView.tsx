@@ -174,28 +174,28 @@ const RoomSummaryCardView: React.FC<IProps> = ({
             >
                 {!vm.isDirectMessage && vm.roomJoinRule === JoinRule.Public && (
                     <Badge kind="blue">
-                        <PublicIcon width="1em" color="var(--cpd-color-icon-info-primary)" />
+                        <PublicIcon width="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|public_room")}
                     </Badge>
                 )}
 
                 {vm.isRoomEncrypted && vm.e2eStatus !== E2EStatus.Warning && (
                     <Badge kind="green">
-                        <LockIcon width="1em" />
+                        <LockIcon width="1rem" />
                         {_t("common|encrypted")}
                     </Badge>
                 )}
 
                 {!vm.isRoomEncrypted && (
                     <Badge kind="blue">
-                        <LockOffIcon width="1em" color="var(--cpd-color-icon-info-primary)" />
+                        <LockOffIcon width="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|unencrypted")}
                     </Badge>
                 )}
 
                 {vm.e2eStatus === E2EStatus.Warning && (
                     <Badge kind="red">
-                        <ErrorSolidIcon width="1em" />
+                        <ErrorSolidIcon width="1rem" />
                         {_t("common|not_trusted")}
                     </Badge>
                 )}

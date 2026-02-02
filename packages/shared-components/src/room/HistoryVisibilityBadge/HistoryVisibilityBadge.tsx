@@ -24,6 +24,8 @@ interface Props {
 export function HistoryVisibilityBadge({ historyVisibility }: Props): JSX.Element | null {
     const iconProps = {
         color: "var(--cpd-color-icon-info-primary)",
+        width: "1rem", // 16px at the default font size, per the design
+        height: "1rem",
     };
     switch (historyVisibility) {
         case "invited":
