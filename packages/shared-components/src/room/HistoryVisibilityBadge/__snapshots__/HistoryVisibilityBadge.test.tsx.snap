@@ -9,9 +9,9 @@ exports[`HistoryVisibilityBadge > renders the badge for invited 1`] = `
     <svg
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
-      height="1em"
+      height="1rem"
       viewBox="0 0 24 24"
-      width="1em"
+      width="1rem"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -32,9 +32,9 @@ exports[`HistoryVisibilityBadge > renders the badge for joined 1`] = `
     <svg
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
-      height="1em"
+      height="1rem"
       viewBox="0 0 24 24"
-      width="1em"
+      width="1rem"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -55,9 +55,9 @@ exports[`HistoryVisibilityBadge > renders the badge for shared 1`] = `
     <svg
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
-      height="1em"
+      height="1rem"
       viewBox="0 0 24 24"
-      width="1em"
+      width="1rem"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -81,9 +81,9 @@ exports[`HistoryVisibilityBadge > renders the badge for world_readable 1`] = `
     <svg
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
-      height="1em"
+      height="1rem"
       viewBox="0 0 24 24"
-      width="1em"
+      width="1rem"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
