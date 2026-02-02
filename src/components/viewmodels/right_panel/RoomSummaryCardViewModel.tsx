@@ -162,8 +162,9 @@ export function useRoomSummaryCardViewModel(
     const e2eStatus = roomContext.e2eStatus;
     const isVideoRoom = calcIsVideoRoom(room);
 
-    const { roomJoinRule } = useRoomState(room, (state) => ({
+    const { historyVisibility, roomJoinRule } = useRoomState(room, (state) => ({
         roomJoinRule: state.getJoinRule(),
+        historyVisibility: state.getHistoryVisibility(),
     }));
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const pinCount = usePinnedEvents(room).length;
@@ -258,7 +259,7 @@ export function useRoomSummaryCardViewModel(
         isRoomEncrypted,
         roomJoinRule,
         e2eStatus,
-        historyVisibility: roomState.getHistoryVisibility(),
+        historyVisibility,
         isVideoRoom,
         alias,
         isFavorite,
