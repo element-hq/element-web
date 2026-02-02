@@ -352,7 +352,6 @@ export interface Settings {
     "developerMode": IBaseSetting<boolean>;
     "automaticErrorReporting": IBaseSetting<boolean>;
     "automaticDecryptionErrorReporting": IBaseSetting<boolean>;
-    "automaticKeyBackNotEnabledReporting": IBaseSetting<boolean>;
     "debug_scroll_panel": IBaseSetting<boolean>;
     "debug_timeline_panel": IBaseSetting<boolean>;
     "debug_registration": IBaseSetting<boolean>;
@@ -1319,11 +1318,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new ReloadOnChangeController(),
-    },
-    "automaticKeyBackNotEnabledReporting": {
-        displayName: _td("labs|automatic_debug_logs_key_backup"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: false,
     },
     "debug_scroll_panel": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
