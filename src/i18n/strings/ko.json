@@ -3332,12 +3332,7 @@
         "creation_summary_dm": "%(creator)s 이 DM을 생성했습니다.",
         "creation_summary_room": "%(creator)s님이 방을 만드고 설정했습니다.",
         "decryption_failure": {
-            "blocked": "발신자가 귀하의 기기가 인증되지 않았기 때문에 이 메시지를 수신하지 못하도록 차단했습니다.",
-            "historical_event_no_key_backup": "이 기기에서는 과거 메시지를 확인할 수 없습니다.",
-            "historical_event_unverified_device": "이 기기를 인증해야 과거 메시지에 접근할 수 있습니다",
-            "historical_event_user_not_joined": "이 메시지에 액세스할 수 없습니다.",
             "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
-            "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

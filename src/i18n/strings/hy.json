@@ -3298,12 +3298,7 @@
         "creation_summary_dm": "%(creator)s-ն ստեղծեց այս DM-ը (անձնական հաղորդագրություններ)։",
         "creation_summary_room": "%(creator)s-ն ստեղծել և կարգավորել է սենյակը։",
         "decryption_failure": {
-            "blocked": "Ուղարկողը արգելափակել է այս հաղորդագրությունն ստանալու հնարավորությունը, քանի որ ձեր սարքը հաստատված չէ։",
-            "historical_event_no_key_backup": "Պատմական հաղորդագրությունները հասանելի չեն այս սարքի վրա",
-            "historical_event_unverified_device": "Դուք պետք է հաստատեք այս սարքը՝ պատմական հաղորդագրությունների հասանելիության համար",
-            "historical_event_user_not_joined": "Դուք հասանելիություն չունեք այս հաղորդագրություններին",
             "sender_identity_previously_verified": "Ուղարկողի վավերացված ինքնությունը վերակայվել է։",
-            "sender_unsigned_device": "Ուղարկվել է անապահով սարքից։",
             "unable_to_decrypt": "Հնարավոր չէ վերծանել հաղորդագրությունը"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",

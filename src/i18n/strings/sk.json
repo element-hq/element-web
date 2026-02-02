@@ -3436,12 +3436,7 @@
         "creation_summary_dm": "%(creator)s vytvoril/a túto priamu správu.",
         "creation_summary_room": "%(creator)s vytvoril a nastavil miestnosť.",
         "decryption_failure": {
-            "blocked": "Odosielateľ vám zablokoval prijímanie tejto správy, pretože vaše zariadenie nie je overené",
-            "historical_event_no_key_backup": "Staré správy nie sú na tomto zariadení k dispozícii",
-            "historical_event_unverified_device": "Musíte overiť toto zariadenie pre prístup k starším správam",
-            "historical_event_user_not_joined": "K tejto správe nemáte prístup",
             "sender_identity_previously_verified": "Overená totožnosť odosielateľa sa zmenila",
-            "sender_unsigned_device": "Odoslané z nezabezpečeného zariadenia.",
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

@@ -3296,12 +3296,7 @@
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
         "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
         "decryption_failure": {
-            "blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet eftersom din enhet inte är verifierad",
-            "historical_event_no_key_backup": "Historiska meddelanden är inte tillgängliga på den här enheten",
-            "historical_event_unverified_device": "Du måste verifiera den här enheten för att få åtkomst till historiska meddelanden",
-            "historical_event_user_not_joined": "Du har inte tillgång till det här meddelandet",
             "sender_identity_previously_verified": "Avsändarens verifierade identitet har ändrats",
-            "sender_unsigned_device": "Skickat från en osäker enhet.",
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
