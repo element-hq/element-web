@@ -3441,12 +3441,7 @@
         "creation_summary_dm": "%(creator)s izradio/la je ovu izravnu poruku.",
         "creation_summary_room": "%(creator)s izradio/la je i konfigurirao/la sobu.",
         "decryption_failure": {
-            "blocked": "Pošiljatelj je blokirao primanje ove poruke jer vaš uređaj nije potvrđen",
-            "historical_event_no_key_backup": "Prijašnje poruke nisu dostupne na ovom uređaju",
-            "historical_event_unverified_device": "Trebate potvrditi ovaj uređaj kako biste mogli pristupiti prijašnjim porukama",
-            "historical_event_user_not_joined": "Nemate pristup ovoj poruci",
             "sender_identity_previously_verified": "Pošiljateljev potvrđeni identitet je poništen",
-            "sender_unsigned_device": "Poslano s nesigurnog uređaja.",
             "unable_to_decrypt": "Nije moguće dešifrirati poruku"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

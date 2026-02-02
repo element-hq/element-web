@@ -2890,9 +2890,6 @@
         },
         "creation_summary_dm": "%(creator)s oprettede denne samtale.",
         "creation_summary_room": "%(creator)s oprettede og konfigurerede rummet.",
-        "decryption_failure": {
-            "historical_event_user_not_joined": "Du har ikke adgang til denne besked"
-        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Downloader",
