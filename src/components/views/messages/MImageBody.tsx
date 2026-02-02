@@ -151,7 +151,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 undefined,
                 true,
             );
-
         }
     };
 

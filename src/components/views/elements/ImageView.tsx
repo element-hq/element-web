@@ -20,7 +20,7 @@ import {
     ZoomInIcon,
     ZoomOutIcon,
     ChevronLeftIcon,
-    ChevronRightIcon
+    ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -630,27 +630,27 @@ export default class ImageView extends React.Component<IProps, IState> {
                     onMouseMove={this.onMoving}
                     onMouseUp={this.onEndMoving}
                     onMouseLeave={this.onEndMoving}
-                >   
-                {this.props.hasPrev && this.props.onPrev && (
-                    <AccessibleButton
-                        className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_prev"
-                        title={_t("action|back")}
-                        onMouseDown={this.stopPropagation}
-                        onClick={this.onPrevClick}
-                    >
-                        <ChevronLeftIcon />
-                    </AccessibleButton>
-                )}
-                {this.props.hasNext && this.props.onNext && (
-                    <AccessibleButton
-                        className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_next"
-                        title={_t("action|next")}
-                        onMouseDown={this.stopPropagation}
-                        onClick={this.onNextClick}
-                    >
-                        <ChevronRightIcon />
-                    </AccessibleButton>
-                )}
+                >
+                    {this.props.hasPrev && this.props.onPrev && (
+                        <AccessibleButton
+                            className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_prev"
+                            title={_t("action|back")}
+                            onMouseDown={this.stopPropagation}
+                            onClick={this.onPrevClick}
+                        >
+                            <ChevronLeftIcon />
+                        </AccessibleButton>
+                    )}
+                    {this.props.hasNext && this.props.onNext && (
+                        <AccessibleButton
+                            className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_next"
+                            title={_t("action|next")}
+                            onMouseDown={this.stopPropagation}
+                            onClick={this.onNextClick}
+                        >
+                            <ChevronRightIcon />
+                        </AccessibleButton>
+                    )}
                     <img
                         src={this.props.src}
                         style={style}

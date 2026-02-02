@@ -23,12 +23,8 @@ jest.mock("../../../../../src/components/views/elements/ImageView", () => {
                 <div data-testid="hasPrev">{String(Boolean(props.hasPrev))}</div>
                 <div data-testid="hasNext">{String(Boolean(props.hasNext))}</div>
 
-                <button onClick={() => props.onPrev?.()}>
-                    prev
-                </button>
-                <button onClick={() => props.onNext?.()}>
-                    next
-                </button>
+                <button onClick={() => props.onPrev?.()}>prev</button>
+                <button onClick={() => props.onNext?.()}>next</button>
             </div>
         );
     };
@@ -102,7 +98,7 @@ describe("NavigableImageViewDialog", () => {
 
         expect(await screen.findByTestId("name")).toHaveTextContent("second");
         expect(screen.getByTestId("hasNext")).toHaveTextContent("false");
-        expect(screen.getByTestId("hasPrev")).toHaveTextContent("true")
+        expect(screen.getByTestId("hasPrev")).toHaveTextContent("true");
         await userEvent.click(screen.getByText("prev"));
         expect(await screen.findByTestId("name")).toHaveTextContent("first");
     });
@@ -125,10 +121,7 @@ describe("NavigableImageViewDialog", () => {
 
         await userEvent.click(screen.getByText("prev"));
 
-        expect(mockClient.paginateEventTimeline).toHaveBeenCalledWith(
-          timeline,
-          { backwards: true, limit: 50 }
-        );
+        expect(mockClient.paginateEventTimeline).toHaveBeenCalledWith(timeline, { backwards: true, limit: 50 });
 
         await waitFor(() => {
             expect(screen.getByTestId("hasPrev")).toHaveTextContent("false");

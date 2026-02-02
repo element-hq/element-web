@@ -140,7 +140,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
     useEffect(() => {
         const id = currentEvent.getId() ?? null;
-        setCurrentEventId(prev => (prev === id ? prev : id));
+        setCurrentEventId((prev) => (prev === id ? prev : id));
     }, [currentEvent, setCurrentEventId]);
 
     const [isPaginating, setIsPaginating] = useState(false);
