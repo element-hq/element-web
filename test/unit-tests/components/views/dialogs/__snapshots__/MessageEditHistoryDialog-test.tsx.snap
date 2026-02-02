@@ -41,7 +41,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
             <li>
               <div
                 aria-label="Thu, Jan 1, 1970"
-                class="mx_TimelineSeparator"
+                class="mx_TimelineSeparator _timelineSeparator_qrwge_8"
                 role="separator"
               >
                 <hr
@@ -171,7 +171,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
             <li>
               <div
                 aria-label="Thu, Jan 1, 1970"
-                class="mx_TimelineSeparator"
+                class="mx_TimelineSeparator _timelineSeparator_qrwge_8"
                 role="separator"
               >
                 <hr
