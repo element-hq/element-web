@@ -1406,10 +1406,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         return sortBy(spaces, [this.getSpaceTagOrdering, "roomId"]);
     }
 
-    private async setRootSpaceOrder(space: Room, order?: string): Promise<void> {
+    private async setRootSpaceOrder(space: Room, order: string): Promise<void> {
         this.spaceOrderLocalEchoMap.set(space.roomId, order);
         try {
-            await this.matrixClient?.setRoomAccountData(space.roomId, EventType.SpaceOrder, order ? { order } : {});
+            await this.matrixClient?.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order });
         } catch (e) {
             logger.warn("Failed to set root space order", e);
             if (this.spaceOrderLocalEchoMap.get(space.roomId) === order) {
