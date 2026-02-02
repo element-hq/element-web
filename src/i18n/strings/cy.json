@@ -3394,12 +3394,7 @@
         "creation_summary_dm": "Creodd %(creator)s y DM hwn.",
         "creation_summary_room": "Mae %(creator)s wedi creu a ffurfweddu'r ystafell.",
         "decryption_failure": {
-            "blocked": "Mae'r anfonwr wedi eich rhwystro rhag derbyn y neges hon oherwydd bod eich dyfais heb ei gwirio",
-            "historical_event_no_key_backup": "Nid yw negeseuon hanesyddol ar gael ar y ddyfais hon",
-            "historical_event_unverified_device": "Mae angen i chi wirio'r ddyfais hon ar gyfer mynediad i negeseuon hanesyddol",
-            "historical_event_user_not_joined": "Nid oes gennych fynediad i'r neges hon",
             "sender_identity_previously_verified": "Cafodd hunaniaeth yr anfonwr ei hailosod",
-            "sender_unsigned_device": "Wedi'i anfon o ddyfais ansicr.",
             "unable_to_decrypt": "Methu dadgryptio'r neges"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

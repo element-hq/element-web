@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { throttle } from "lodash";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { NotificationLevel } from "./NotificationLevel";
@@ -63,23 +64,27 @@ export class SpaceNotificationState extends NotificationState {
         this.calculateTotalState();
     };
 
-    private calculateTotalState(): void {
-        const snapshot = this.snapshot();
+    private calculateTotalState = throttle(
+        (): void => {
+            const snapshot = this.snapshot();
 
-        this._count = 0;
-        this._level = NotificationLevel.None;
-        for (const [roomId, state] of Object.entries(this.states)) {
-            const room = this.rooms.find((r) => r.roomId === roomId);
-            const roomTags = room ? RoomListStore.instance.getTagsForRoom(room) : [];
+            this._count = 0;
+            this._level = NotificationLevel.None;
+            for (const [roomId, state] of Object.entries(this.states)) {
+                const room = this.rooms.find((r) => r.roomId === roomId);
+                const roomTags = room ? RoomListStore.instance.getTagsForRoom(room) : [];
 
-            // We ignore unreads in LowPriority rooms, see https://github.com/vector-im/element-web/issues/16836
-            if (roomTags.includes(DefaultTagID.LowPriority) && state.level === NotificationLevel.Activity) continue;
+                // We ignore unreads in LowPriority rooms, see https://github.com/vector-im/element-web/issues/16836
+                if (roomTags.includes(DefaultTagID.LowPriority) && state.level === NotificationLevel.Activity) continue;
 
-            this._count += state.count;
-            this._level = Math.max(this.level, state.level);
-        }
+                this._count += state.count;
+                this._level = Math.max(this.level, state.level);
+            }
 
-        // finally, publish an update if needed
-        this.emitIfUpdated(snapshot);
-    }
+            // finally, publish an update if needed
+            this.emitIfUpdated(snapshot);
+        },
+        100,
+        { leading: false, trailing: true },
+    );
 }

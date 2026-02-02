@@ -3158,12 +3158,7 @@
         "creation_summary_dm": "%(creator)s bu DM'yi oluşturdu.",
         "creation_summary_room": "%(creator)s odayı oluşturdu ve yapılandırdı.",
         "decryption_failure": {
-            "blocked": "Cihazınız doğrulanmamış olduğu için gönderen kişi bu mesajı almanızı engelledi",
-            "historical_event_no_key_backup": "Geçmiş mesajlar bu cihazda kullanılamıyor",
-            "historical_event_unverified_device": "Geçmiş mesajlara erişim için bu cihazı doğrulamanız gerekir",
-            "historical_event_user_not_joined": "Bu mesaja erişiminiz yok",
             "sender_identity_previously_verified": "Gönderenin doğrulanmış kimliği değişti",
-            "sender_unsigned_device": "Güvenli olmayan bir cihazdan gönderildi",
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

@@ -3400,12 +3400,7 @@
         "creation_summary_dm": "%(creator)s начал(а) этот чат.",
         "creation_summary_room": "%(creator)s создал(а) и настроил(а) комнату.",
         "decryption_failure": {
-            "blocked": "Отправитель заблокировал получение этого сообщения, поскольку ваше устройство не проверено.",
-            "historical_event_no_key_backup": "История сообщений недоступна на этом устройстве",
-            "historical_event_unverified_device": "Вам необходимо подтвердить это устройство для доступа к истории сообщений.",
-            "historical_event_user_not_joined": "У вас нет доступа к этому сообщению",
             "sender_identity_previously_verified": "Подтвержденная личность изменилась",
-            "sender_unsigned_device": "Отправлено с незащищенного устройства",
             "unable_to_decrypt": "Не удалось расшифровать сообщение"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

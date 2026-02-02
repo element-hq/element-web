@@ -16,6 +16,8 @@ export * from "./crypto/SasEmoji";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/EventContentBody";
 export * from "./message-body/MediaBody";
+export * from "./message-body/DecryptionFailureBodyView";
+export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
@@ -36,6 +38,5 @@ export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 export * from "./utils/FormattingUtils";
 export * from "./utils/I18nApi";
-
 // MVVM
 export * from "./viewmodel";
