@@ -15,7 +15,7 @@ import {
     type ILoginFlow,
     type LoginRequest,
     type OidcClientConfig,
-    ISSOFlow,
+    type ISSOFlow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 

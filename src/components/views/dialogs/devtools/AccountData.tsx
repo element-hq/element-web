@@ -12,7 +12,7 @@ import {
     type AccountDataEvents,
     type IContent,
     type MatrixEvent,
-    RoomAccountDataEvents,
+    type RoomAccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
