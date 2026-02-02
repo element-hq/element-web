@@ -91,7 +91,6 @@
         "no": "Nej",
         "ok": "OK",
         "open": "Åbn",
-        "open_menu": "Åbn menu",
         "pin": "Fastgør",
         "proceed": "Fortsæt",
         "quote": "Citat",
@@ -1611,6 +1610,7 @@
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Kunne ikke dekryptere %(failedCount)s sessioner!",
         "count_of_successfully_restored_keys": "%(sessionCount)s nøgler blev gendannet",
+        "enter_key_description": "Få adgang til din sikre beskedhistorik, og opsæt sikker chat ved at indtaste din gendannelsesnøgle.",
         "enter_key_title": "Indtast gendannelsesnøgle",
         "enter_phrase_description": "Få adgang til historikken for dine sikre beskeder og opsæt sikker beskedfunktion ved at indtaste din sikkerhedskode.",
         "enter_phrase_title": "Indtast adgangsfrase",
@@ -1637,7 +1637,6 @@
         "files_button": "Filer",
         "pinned_messages": {
             "limits": {
-                "one": "",
                 "other": "Du kan kun fastgøre op til %(count)s widgets"
             }
         },
@@ -1862,7 +1861,6 @@
             "other": "Tilslutter sig i øjeblikket %(count)s rum"
         },
         "notification_options": "Notifikationsindstillinger",
-        "open_space_menu": "Åbn menu for gruppe",
         "redacting_messages_status": {
             "one": "Fjerner i øjeblikket beskeder i %(count)s rum",
             "other": "Fjerner i øjeblikket beskeder i %(count)s rum"
@@ -1877,10 +1875,6 @@
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
         "sort_unread_first": "Vis rum med ulæste beskeder først",
-        "space_menu": {
-            "home": "Hjem for gruppe",
-            "space_settings": "Indstillinger for grupper"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "Liste over muligheder",
         "suggested_rooms_heading": "Foreslåede rum"
@@ -2057,11 +2051,11 @@
             "error_join_rule_change_title": "Kunne ikke opdatere reglerne for tilmelding",
             "error_join_rule_change_unknown": "Ukendt fejl",
             "guest_access_warning": "Personer med understøttede klienter, vil kunne tilslutte sig rummet uden at have en registreret konto.",
-            "history_visibility_invited": "Kun medlemmer (siden de blev inviteret)",
+            "history_visibility_invited": "Medlemmer siden de blev inviteret",
             "history_visibility_legend": "Hvem kan læse historikken?",
-            "history_visibility_shared": "Kun medlemmer (siden det tidspunkt, hvor denne indstilling blev valgt)",
-            "history_visibility_warning": "Synligheden af ​​den eksisterende historik vil ikke blive ændret.",
-            "history_visibility_world_readable": "Enhver",
+            "history_visibility_shared": "Medlemmer (fuld historik)",
+            "history_visibility_warning": "Ændringer vil ikke påvirke tidligere beskeder, kun nye. <a>Læs mere</a>",
+            "history_visibility_world_readable": "Alle (historikken er offentlig)",
             "join_rule_description": "Bestem hvem der kan deltage i %(roomName)s .",
             "join_rule_invite": "Privat (kun tilgængeligt med invitation)",
             "join_rule_invite_description": "Kun inviterede personer kan deltage i dette rum.",
@@ -2116,7 +2110,7 @@
             "error_failed_save": "Kunne ikke opdatere visningen af denne gruppe",
             "error_update_guest_access": "Det lykkedes ikke at opdatere gæsteadgangen til dette rum.",
             "error_update_history_visibility": "Det lykkedes ikke at opdatere synligheden af historikken i denne gruppe.",
-            "guest_access_explainer": "Gæster kan tilslutte sig en gruppe uden at have en konto.",
+            "guest_access_explainer": "Gæster kan tilslutte sig en gruppe uden at have en konto. Dette kan være nyttigt i offentlige grupper.",
             "guest_access_label": "Aktivér gæsteadgang",
             "history_visibility_anyone_space": "Forhåndsvis gruppe",
             "history_visibility_anyone_space_description": "Tillad andre at få forhåndsvist din gruppe før de tilslutter sig.",
@@ -2896,9 +2890,6 @@
         },
         "creation_summary_dm": "%(creator)s oprettede denne samtale.",
         "creation_summary_room": "%(creator)s oprettede og konfigurerede rummet.",
-        "decryption_failure": {
-            "historical_event_user_not_joined": "Du har ikke adgang til denne besked"
-        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Downloader",
@@ -3320,7 +3311,6 @@
         }
     },
     "truncated_list_n_more": {
-        "one": "",
         "other": "Og %(count)s mere..."
     },
     "unsupported_server_description": "Denne server bruger en ældre version af Matrix. Opgrader til Matrix %(version)s for at kunne bruge %(brand)s uden fejl.",

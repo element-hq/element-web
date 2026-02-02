@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
+import React, { createRef, useContext, useEffect, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -35,14 +35,15 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
-import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
+import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
@@ -84,6 +85,7 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 
@@ -498,6 +500,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return (
             <div className="mx_ThreadPanel_replies">
+                <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{this.state.thread.length}</span>
                 <ThreadMessagePreview thread={this.state.thread} />
             </div>
@@ -515,12 +518,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             if (this.props.highlightLink) {
                 return (
                     <a className="mx_ThreadSummary_icon" href={this.props.highlightLink}>
+                        <ThreadsIcon />
                         {_t("timeline|thread_info_basic")}
                     </a>
                 );
             }
 
-            return <p className="mx_ThreadSummary_icon">{_t("timeline|thread_info_basic")}</p>;
+            return (
+                <p className="mx_ThreadSummary_icon">
+                    <ThreadsIcon />
+                    {_t("timeline|thread_info_basic")}
+                </p>
+            );
         }
     }
 
@@ -1366,7 +1375,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 {this.props.mxEvent.isRedacted() ? (
                                     <RedactedBody mxEvent={this.props.mxEvent} />
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBody mxEvent={this.props.mxEvent} />
+                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
                                 ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
@@ -1561,4 +1570,24 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             </div>
         </div>
     );
+}
+
+/**
+ * Bridge decryption-failure events into the view model using current local verification state.
+ * This wrapper can be removed after EventTile has been changed to a function component.
+ */
+function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
+    const verificationState = useContext(LocalDeviceVerificationStateContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new DecryptionFailureBodyViewModel({
+                decryptionFailureCode: mxEvent.decryptionFailureReason,
+                verificationState,
+            }),
+    );
+    useEffect(() => {
+        vm.setVerificationState(verificationState);
+    }, [verificationState, vm]);
+
+    return <DecryptionFailureBodyView vm={vm} />;
 }

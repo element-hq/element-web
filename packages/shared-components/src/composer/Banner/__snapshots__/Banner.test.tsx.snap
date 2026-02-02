@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AvatarWithDetails renders a banner with an action 1`] = `
+exports[`AvatarWithDetails > renders a banner with an action 1`] = `
 <div>
   <div
     class="banner"
@@ -68,7 +68,7 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
+exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
 <div>
   <div
     class="banner"
@@ -105,7 +105,7 @@ exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a critical banner 1`] = `
+exports[`AvatarWithDetails > renders a critical banner 1`] = `
 <div>
   <div
     class="banner"
@@ -151,7 +151,7 @@ exports[`AvatarWithDetails renders a critical banner 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a default banner 1`] = `
+exports[`AvatarWithDetails > renders a default banner 1`] = `
 <div>
   <div
     class="banner"
@@ -201,7 +201,7 @@ exports[`AvatarWithDetails renders a default banner 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a info banner 1`] = `
+exports[`AvatarWithDetails > renders a info banner 1`] = `
 <div>
   <div
     class="banner"
@@ -252,7 +252,7 @@ exports[`AvatarWithDetails renders a info banner 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a success banner 1`] = `
+exports[`AvatarWithDetails > renders a success banner 1`] = `
 <div>
   <div
     class="banner"

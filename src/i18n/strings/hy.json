@@ -99,7 +99,6 @@
         "no": "Ոչ",
         "ok": "Լավ",
         "open": "Բաց(ել)",
-        "open_menu": "Բացել ընտրացանկը",
         "pin": "Քորոց",
         "proceed": "Շարունակել",
         "quote": "Մեջբերում",
@@ -2126,7 +2125,6 @@
             "mark_unread": "Նշել որպես չկարդացված"
         },
         "notification_options": "Ծանուցման ընտրանքներ",
-        "open_space_menu": "Բացել տարածքների մենյուն",
         "primary_filters": "Սենյակների ցանկի ֆիլտրեր",
         "redacting_messages_status": {
             "one": "Ներկայումս ջնջվում են %(count)s սենյակում",
@@ -2136,26 +2134,16 @@
             "more_options": "Լրացուցիչ ընտրանքներ",
             "open_room": "Բացել %(roomName)s սենյակը"
         },
-        "room_options": "Սենյակի պարամետրեր",
         "show_less": "Ցուցադրել ավելի քիչ",
         "show_n_more": {
             "one": "Ցուցադրել ևս %(count)s",
             "other": "Ցուցադրել ևս %(count)s"
         },
         "show_previews": "Ցուցադրել հաղորդագրությունների նախադիտումները",
-        "sort": "Տեսակավորել",
         "sort_by": "Տեսակավորել ըստ",
         "sort_by_activity": "Գործունեություն",
         "sort_by_alphabet": "Ա—Ֆ",
-        "sort_type": {
-            "activity": "Գործունեություն",
-            "atoz": "Ա–Ֆ"
-        },
         "sort_unread_first": "Սկզբում ցուցադրել չկարդացված հաղորդագրություններով սենյակները",
-        "space_menu": {
-            "home": "Տարածքի գլխավոր էջ",
-            "space_settings": "Տարածքի կարգավորումներ"
-        },
         "space_menu_label": "%(spaceName)s-ի մենյուն",
         "sublist_options": "Ցուցակի ընտրանքներ",
         "suggested_rooms_heading": "Խորհուդ տրվող սենյակներ"
@@ -3310,12 +3298,7 @@
         "creation_summary_dm": "%(creator)s-ն ստեղծեց այս DM-ը (անձնական հաղորդագրություններ)։",
         "creation_summary_room": "%(creator)s-ն ստեղծել և կարգավորել է սենյակը։",
         "decryption_failure": {
-            "blocked": "Ուղարկողը արգելափակել է այս հաղորդագրությունն ստանալու հնարավորությունը, քանի որ ձեր սարքը հաստատված չէ։",
-            "historical_event_no_key_backup": "Պատմական հաղորդագրությունները հասանելի չեն այս սարքի վրա",
-            "historical_event_unverified_device": "Դուք պետք է հաստատեք այս սարքը՝ պատմական հաղորդագրությունների հասանելիության համար",
-            "historical_event_user_not_joined": "Դուք հասանելիություն չունեք այս հաղորդագրություններին",
             "sender_identity_previously_verified": "Ուղարկողի վավերացված ինքնությունը վերակայվել է։",
-            "sender_unsigned_device": "Ուղարկվել է անապահով սարքից։",
             "unable_to_decrypt": "Հնարավոր չէ վերծանել հաղորդագրությունը"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",

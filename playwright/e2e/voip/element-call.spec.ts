@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { readFile } from "node:fs/promises";
-import { type Page } from "playwright-core";
+import { type Page } from "@playwright/test";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -74,7 +74,7 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
         },
         "m.relates_to": {
             event_id: resp.event_id,
-            rel_type: "org.matrix.msc4075.rtc.notification.parent",
+            rel_type: "m.reference",
         },
         "m.call.intent": intent,
         "notification_type": notification,

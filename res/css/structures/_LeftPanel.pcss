@@ -36,6 +36,8 @@ Please see LICENSE files in the repository root for full details.
         display: flex;
         overflow: hidden;
         position: relative;
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
 
         &[data-collapsed] {
             max-width: var(--collapsedWidth);
@@ -122,6 +124,8 @@ Please see LICENSE files in the repository root for full details.
                 border-radius: 8px;
                 background-color: $panel-actions;
                 margin-left: 8px;
+                /* For enhanced visibility under contrast control */
+                outline: 1px solid transparent;
 
                 svg {
                     width: inherit;

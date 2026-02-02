@@ -86,7 +86,6 @@
         "no": "Hayır",
         "ok": "Tamam",
         "open": "Aç",
-        "open_menu": "Menüyü aç",
         "pin": "PIN Kodu",
         "proceed": "İlerle",
         "quote": "Alıntı",
@@ -2021,7 +2020,6 @@
         },
         "list_title": "Oda listesi",
         "notification_options": "Bildirim ayarları",
-        "open_space_menu": "Açık alan menüsü",
         "primary_filters": "Oda listesi filtreleri",
         "redacting_messages_status": {
             "one": "Şu anda %(count)s odadaki mesajlar kaldırılıyor",
@@ -2040,10 +2038,6 @@
         "sort_by_activity": "Aktivite",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
-        "space_menu": {
-            "home": "Alan ana sayfa",
-            "space_settings": "Alan Ayarları"
-        },
         "space_menu_label": "%(spaceName)s menü",
         "sublist_options": "Liste seçenekleri",
         "suggested_rooms_heading": "Önerilen Odalar"
@@ -3164,12 +3158,7 @@
         "creation_summary_dm": "%(creator)s bu DM'yi oluşturdu.",
         "creation_summary_room": "%(creator)s odayı oluşturdu ve yapılandırdı.",
         "decryption_failure": {
-            "blocked": "Cihazınız doğrulanmamış olduğu için gönderen kişi bu mesajı almanızı engelledi",
-            "historical_event_no_key_backup": "Geçmiş mesajlar bu cihazda kullanılamıyor",
-            "historical_event_unverified_device": "Geçmiş mesajlara erişim için bu cihazı doğrulamanız gerekir",
-            "historical_event_user_not_joined": "Bu mesaja erişiminiz yok",
             "sender_identity_previously_verified": "Gönderenin doğrulanmış kimliği değişti",
-            "sender_unsigned_device": "Güvenli olmayan bir cihazdan gönderildi",
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

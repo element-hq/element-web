@@ -1,0 +1,14 @@
+diff --git a/node_modules/await-lock/package.json b/node_modules/await-lock/package.json
+index 84a2734..cbda839 100644
+--- a/node_modules/await-lock/package.json
++++ b/node_modules/await-lock/package.json
+@@ -6,7 +6,8 @@
+   "exports": {
+     ".": {
+       "types": "./build/AwaitLock.d.ts",
+-      "import": "./build/AwaitLock.js"
++      "import": "./build/AwaitLock.js",
++      "require": "./build/AwaitLock.js"
+     }
+   },
+   "files": [

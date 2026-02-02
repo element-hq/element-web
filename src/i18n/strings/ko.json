@@ -97,7 +97,6 @@
         "no": "아니오",
         "ok": "네",
         "open": "열기",
-        "open_menu": "메뉴 열기",
         "pin": "핀",
         "proceed": "진행",
         "quote": "인용",
@@ -971,6 +970,7 @@
         "import_invalid_passphrase": "인증 확인 실패: 비밀번호를 틀리셨나요?",
         "key_storage_out_of_sync": "키 저장소가 동기화되지 않았습니다.",
         "key_storage_out_of_sync_description": "키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요.",
+        "message_shared_by": "메시지가 전송될 당시 방에 계시지 않아, %(displayName)s(%(userId)s)님이 이 메시지를 공유했습니다.",
         "messages_not_secure": {
             "cause_1": "당신의 홈 서버",
             "cause_2": "사용자가 확인 중인 홈 서버에 연결된 사용자",
@@ -2162,7 +2162,6 @@
             "mark_unread": "읽지 않음으로 표시"
         },
         "notification_options": "알림 옵션",
-        "open_space_menu": "스페이스 메뉴 열기",
         "primary_filters": "채팅방 목록 필터",
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
@@ -2171,25 +2170,15 @@
             "more_options": "옵션 더보기",
             "open_room": "채팅방 %(roomName)s 열기"
         },
-        "room_options": "채팅방 옵션",
         "show_less": "간단히 표시",
         "show_n_more": {
             "%(count)s개 더 보기": "other"
         },
         "show_previews": "메시지 미리 보기 표시",
-        "sort": "정렬",
         "sort_by": "정렬 기준",
         "sort_by_activity": "활동내역",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "활동",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "읽지 않은 메시지가 있는 방을 먼저 표시",
-        "space_menu": {
-            "home": "스페이스 홈",
-            "space_settings": "스페이스 설정"
-        },
         "space_menu_label": "%(spaceName)s 메뉴",
         "sublist_options": "목록 옵션",
         "suggested_rooms_heading": "추천 방"
@@ -3343,12 +3332,7 @@
         "creation_summary_dm": "%(creator)s 이 DM을 생성했습니다.",
         "creation_summary_room": "%(creator)s님이 방을 만드고 설정했습니다.",
         "decryption_failure": {
-            "blocked": "발신자가 귀하의 기기가 인증되지 않았기 때문에 이 메시지를 수신하지 못하도록 차단했습니다.",
-            "historical_event_no_key_backup": "이 기기에서는 과거 메시지를 확인할 수 없습니다.",
-            "historical_event_unverified_device": "이 기기를 인증해야 과거 메시지에 접근할 수 있습니다",
-            "historical_event_user_not_joined": "이 메시지에 액세스할 수 없습니다.",
             "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
-            "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
