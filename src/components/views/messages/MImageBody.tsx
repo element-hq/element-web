@@ -146,6 +146,8 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                     initialEvent: this.props.mxEvent,
                     permalinkCreator: this.props.permalinkCreator,
                     thumbnailInfo: params.thumbnailInfo,
+                    initialSrc: httpUrl,
+                    initialName: params.name,
                 },
                 "mx_Dialog_lightbox",
                 undefined,

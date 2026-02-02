@@ -141,6 +141,14 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private animatingLoading = false;
     private imageIsLoaded = false;
+    private didAnimateFromThumbnail = false;
+    private lastThumbnailSignature: string | null = null;
+
+    private getThumbnailSignature(): string | null {
+        const t = this.props.thumbnailInfo;
+        if (!t) return null;
+        return `${t.positionX},${t.positionY},${t.width},${t.height}`;
+    }
 
     public componentDidMount(): void {
         // We have to use addEventListener() because the listener
@@ -150,6 +158,57 @@ export default class ImageView extends React.Component<IProps, IState> {
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current?.addEventListener("load", this.imageLoaded);
+
+        // Capture initial thumbnail signature (if any)
+        this.lastThumbnailSignature = this.getThumbnailSignature();
+    }
+
+    public componentDidUpdate(prevProps: IProps): void {
+        const prevEventId = prevProps.mxEvent?.getId() ?? null;
+        const nextEventId = this.props.mxEvent?.getId() ?? null;
+
+        // Only reset interaction state when the event changes through navigation,
+        // not when the src changes for the same event.
+        const navigatedToDifferentEvent = prevEventId !== nextEventId;
+
+        if (navigatedToDifferentEvent) {
+            this.imageIsLoaded = false;
+            this.animatingLoading = false;
+
+            // Allow thumbnail animation again for the new initial event if it has thumbnailInfo.
+            this.didAnimateFromThumbnail = false;
+
+            // Reset the thumbnail signature baseline for the new event.
+            this.lastThumbnailSignature = this.getThumbnailSignature();
+
+            // Reset panning/zoom/rotation so the new image doesn't inherit the previous state.
+            // Use the constructor-style initial translation if we have thumbnailInfo; otherwise 0.
+            const { thumbnailInfo } = this.props;
+            let translationX = 0;
+            let translationY = 0;
+
+            if (thumbnailInfo) {
+                translationX = thumbnailInfo.positionX + thumbnailInfo.width / 2 - UIStore.instance.windowWidth / 2;
+                translationY =
+                    thumbnailInfo.positionY +
+                    thumbnailInfo.height / 2 -
+                    UIStore.instance.windowHeight / 2 -
+                    getPanelHeight() / 2;
+            }
+
+            this.setState({
+                translationX,
+                translationY,
+                zoom: 0,
+                rotation: 0,
+            });
+        }
+
+        // If thumbnailInfo changes, refresh our signature
+        const newSig = this.getThumbnailSignature();
+        if (newSig !== this.lastThumbnailSignature) {
+            this.lastThumbnailSignature = newSig;
+        }
     }
 
     public componentWillUnmount(): void {
@@ -163,22 +222,39 @@ export default class ImageView extends React.Component<IProps, IState> {
         // First, we calculate the zoom, so that the image has the same size as
         // the thumbnail
         const { thumbnailInfo } = this.props;
-        if (thumbnailInfo?.width) {
+        const sig = this.getThumbnailSignature();
+        const canAnimateFromThumb =
+            !!thumbnailInfo?.width &&
+            !this.didAnimateFromThumbnail &&
+            // if signature exists, ensure we only animate for the "current" one
+            (sig === null || sig === this.lastThumbnailSignature);
+
+        if (canAnimateFromThumb) {
+            // Start at thumbnail zoom
+            this.didAnimateFromThumbnail = true;
+
             this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
+
+            // Once the zoom is set, we the image is considered loaded and we can
+            // start animating it into the center of the screen
+            this.imageIsLoaded = true;
+            this.animatingLoading = true;
+            this.setZoomAndRotation();
+            this.setState({
+                translationX: 0,
+                translationY: 0,
+            });
+
+            // Once the position is set, there is no need to animate anymore
+            this.animatingLoading = false;
+            return;
         }
-
-        // Once the zoom is set, we the image is considered loaded and we can
-        // start animating it into the center of the screen
+        // Navigating between images without doing the thumbnail animation.
         this.imageIsLoaded = true;
-        this.animatingLoading = true;
-        this.setZoomAndRotation();
-        this.setState({
-            translationX: 0,
-            translationY: 0,
-        });
-
-        // Once the position is set, there is no need to animate anymore
         this.animatingLoading = false;
+
+        // Ensure minZoom/maxZoom are correct for this image and current wrapper size
+        this.setZoomAndRotation();
     };
 
     private recalculateZoom = (): void => {

@@ -10,7 +10,6 @@ import { type MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 
 import ImageView from "../elements/ImageView";
-import Spinner from "../elements/Spinner";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -25,6 +24,8 @@ type Props = {
         width: number;
         height: number;
     };
+    initialSrc: string;
+    initialName?: string;
     onFinished(): void;
 };
 
@@ -72,7 +73,8 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
         setCurrentEventId(props.initialEvent.getId() ?? null);
         setCanPaginateBackwards(true);
         setAtStartOfRoomImages(false);
-    }, [props.initialEvent]);
+        setSrc(props.initialSrc);
+    }, [props.initialEvent, props.initialSrc]);
 
     useEffect(() => {
         let cancelled = false;
@@ -158,7 +160,12 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
         }
     }, [client, timeline, isPaginating, canPaginateBackwards]);
 
-    const hasPrev = !(index === 0 && atStartOfRoomImages);
+    // Only show "Back" if:
+    // we have a previous image in the currently known list, or
+    // we have a real timeline and can paginate further backwards (meaning "Back" can actually do something)
+    const hasPrev = index > 0 || (Boolean(timeline) && canPaginateBackwards && !atStartOfRoomImages);
+
+    // Only show "Next" if we have a next image in the currently known list
     const hasNext = index < images.length - 1;
 
     const onPrev = useCallback(async () => {
@@ -227,76 +234,50 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
     }, [index, images]);
 
     // Resolve src via MediaEventHelper
-    const [src, setSrc] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [src, setSrc] = useState<string | null>(props.initialSrc);
 
     const helperRef = useRef<MediaEventHelper | null>(null);
 
     useEffect(() => {
         let cancelled = false;
+        const controller = new AbortController();
 
         // Destroy previous helper
         helperRef.current?.destroy();
-
         const helper = new MediaEventHelper(currentEvent);
         helperRef.current = helper;
 
-        setLoading(true);
-        setSrc(null);
-
         (async () => {
             try {
-                const resolved = (await helper.sourceUrl.value) ?? (await helper.thumbnailUrl.value);
+                const resolved =
+                    (await helper.sourceUrl.value) ?? (await helper.thumbnailUrl.value) ?? props.initialSrc;
+
                 if (!cancelled) {
                     setSrc(resolved);
-                    setLoading(false);
                 }
             } catch {
                 if (!cancelled) {
-                    setSrc(null);
-                    setLoading(false);
+                    setSrc(props.initialSrc);
                 }
             }
         })();
 
         return () => {
             cancelled = true;
+            controller.abort();
             helper.destroy();
             if (helperRef.current === helper) helperRef.current = null;
         };
-    }, [currentEvent]);
+    }, [currentEvent, props.initialSrc]);
 
-    if (!timelineReady) {
-        return (
-            <div className="mx_ImageView">
-                <Spinner size={32} />
-            </div>
-        );
-    }
-
-    if (loading) {
-        return (
-            <div className="mx_ImageView">
-                <Spinner size={32} />
-            </div>
-        );
-    }
-
-    if (!src) {
-        return (
-            <div className="mx_ImageView">
-                <div style={{ color: "white", padding: 16 }}>{_t("timeline|m.image|error")}</div>
-            </div>
-        );
-    }
-
+    const isInitial = currentEvent.getId() === props.initialEvent.getId();
     return (
         <ImageView
-            src={src}
-            name={eventToName(currentEvent)}
+            src={src ?? props.initialSrc}
+            name={eventToName(currentEvent) ?? props.initialName}
             mxEvent={currentEvent}
             permalinkCreator={props.permalinkCreator}
-            thumbnailInfo={index === 0 ? props.thumbnailInfo : undefined}
+            thumbnailInfo={isInitial ? props.thumbnailInfo : undefined}
             onFinished={() => {
                 // Clean up any remaining object URLs before closing
                 helperRef.current?.destroy();
