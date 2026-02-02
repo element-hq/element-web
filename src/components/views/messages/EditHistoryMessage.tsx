@@ -71,6 +71,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             renderCodeBlocks: true,
             renderSpoilers: true,
             linkify: true,
+            enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
+            shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
         });
     }
 
@@ -88,6 +90,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
                 renderCodeBlocks: true,
                 renderSpoilers: true,
                 linkify: true,
+                enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
+                shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
             });
         }
     }

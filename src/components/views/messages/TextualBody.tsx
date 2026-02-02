@@ -76,6 +76,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             renderMentionPills: true,
             renderCodeBlocks: true,
             renderSpoilers: true,
+            enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
+            shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
         });
     }
 
@@ -115,6 +117,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 renderMentionPills: true,
                 renderCodeBlocks: true,
                 renderSpoilers: true,
+                enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
+                shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
             });
         }
 
