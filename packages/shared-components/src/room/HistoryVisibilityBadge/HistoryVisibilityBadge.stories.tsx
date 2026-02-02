@@ -12,7 +12,6 @@ const meta = {
     title: "Room/HistoryVisibilityBadge",
     component: HistoryVisibilityBadge,
     tags: ["autodocs"],
-    args: { historyVisibility: "invited" },
     parameters: {
         design: {
             type: "figma",
@@ -22,5 +21,9 @@ const meta = {
 } satisfies Meta<typeof HistoryVisibilityBadge>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
-export const Default: Story = {};
+export const InvitedHistoryVisibility: Story = { args: { historyVisibility: "invited" } };
+export const JoinedHistoryVisibility: Story = { args: { historyVisibility: "joined" } };
+export const SharedHistoryVisibility: Story = { args: { historyVisibility: "shared" } };
+export const WorldReadableHistoryVisibility: Story = { args: { historyVisibility: "world_readable" } };
