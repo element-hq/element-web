@@ -37,7 +37,13 @@ test.describe("Key storage out of sync toast", () => {
         // playwright only evaluates the 'first()' call initially, not subsequent times it checks, so
         // it would always be checking the same toast, even if another one is now the first.
         await expect(page.getByRole("alert")).toHaveCount(2);
-        await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
+        await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png", {
+            css: `
+                    .mx_ToastContainer {
+                        background-color: magenta !important;
+                    }
+                `,
+        });
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
 

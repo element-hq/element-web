@@ -949,6 +949,10 @@ test.describe("Timeline", () => {
             await page.getByRole("textbox", { name: "Edit message" }).press("Enter");
 
             const newTile = page.locator(".mx_EventTile");
+            const codeBlock = newTile.locator(".mx_EventTile_pre_container");
+            await expect(codeBlock).toBeVisible();
+            await codeBlock.hover();
+            await expect(newTile.locator(".mx_EventTile_copyButton")).toBeVisible();
             await expect(newTile).toMatchScreenshot("edited-code-block.png", {
                 css: `
                     .mx_MessageTimestamp {

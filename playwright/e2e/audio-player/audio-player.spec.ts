@@ -102,33 +102,28 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 }
             `,
             mask: [page.getByTestId("audio-player-seek")],
+            clip: undefined,
         };
 
         // Take a snapshot of mx_EventTile_last on IRC layout
-        await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
-            `${detail.replaceAll(" ", "-")}-irc-layout.png`,
-            screenshotOptions,
-        );
+        screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-irc-layout.png`, screenshotOptions);
 
         // Take a snapshot on modern/group layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
         const groupTile = page.locator(".mx_EventTile_last[data-layout='group']");
         await groupTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(groupTile);
-        await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
-            `${detail.replaceAll(" ", "-")}-group-layout.png`,
-            screenshotOptions,
-        );
+        screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-group-layout.png`, screenshotOptions);
 
         // Take a snapshot on bubble layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
         const bubbleTile = page.locator(".mx_EventTile_last[data-layout='bubble']");
         await bubbleTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(bubbleTile);
-        await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
-            `${detail.replaceAll(" ", "-")}-bubble-layout.png`,
-            screenshotOptions,
-        );
+        screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
     };
 
     test.beforeEach(async ({ page, app, user }) => {
