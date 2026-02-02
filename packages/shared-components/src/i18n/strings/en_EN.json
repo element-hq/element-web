@@ -5,6 +5,7 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "invite": "Invite",
         "new_conversation": "New conversation",
@@ -13,6 +14,7 @@
         "open_menu": "Open menu",
         "pause": "Pause",
         "play": "Play",
+        "remove": "Remove",
         "retry": "Retry",
         "search": "Search",
         "start_chat": "Start chat"
@@ -78,10 +80,29 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "The sender has blocked you from receiving this message because your device is unverified",
+            "historical_event_no_key_backup": "Historical messages are not available on this device",
+            "historical_event_unverified_device": "You need to verify this device for access to historical messages",
+            "historical_event_user_not_joined": "You don't have access to this message",
+            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_unsigned_device": "Sent from an insecure device.",
+            "unable_to_decrypt": "Unable to decrypt message"
+        },
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Move left",
+            "move_right": "Move right",
+            "remove": "Remove for everyone",
+            "revoke": "Revoke permissions",
+            "screenshot": "Take a picture",
+            "start_audio_stream": "Start audio stream"
         }
     }
 }

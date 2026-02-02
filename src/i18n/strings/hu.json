@@ -93,14 +93,12 @@
         "maximise": "Teljes méret",
         "mention": "Megemlítés",
         "minimise": "Lecsukás",
-        "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
         "new_video_room": "Új videószoba",
         "next": "Következő",
         "no": "Nem",
         "ok": "Rendben",
         "open": "Megnyitás",
-        "open_menu": "Menü megnyitása",
         "pin": "Kitűzés",
         "proceed": "Folytatás",
         "quote": "Idézés",
@@ -575,6 +573,7 @@
         "someone": "Valaki",
         "space": "Tér",
         "spaces": "Terek",
+        "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve",
         "sticker": "Matrica",
         "stickerpack": "Matricacsomag",
         "success": "Sikeres",
@@ -682,6 +681,8 @@
         "join_rule_restricted_label": "A(z) <SpaceName/> térben bárki megtalálhatja és beléphet a szobába.",
         "name_validation_required": "Adjon meg egy nevet a szobához",
         "room_visibility_label": "Szoba láthatósága",
+        "state_encrypted_warning": "Engedélyezi az állapotesemények titkosításának kísérleti támogatását, amely elrejti a metaadatokat, például a szobák nevét és témáit a kiszolgáló elől. Ezek a metaadatok a később a szobákhoz csatlakozók, valamint az MSC4362 szabványt nem támogató ügyfelek elől is rejtve lesznek.",
+        "state_encryption_label": "Állapotesemények titkosítása",
         "title_private_room": "Privát szoba létrehozása",
         "title_public_room": "Nyilvános szoba létrehozása",
         "title_video_room": "Videószoba létrehozása",
@@ -842,6 +843,7 @@
         "number_of_users": "Felhasználószám",
         "only_joined_members": "Csak csatlakozott felhasználók",
         "original_event_source": "Eredeti esemény forráskódja",
+        "restore_from_backup": "Helyreállítás biztonsági mentésből",
         "room_encrypted": "A szoba <strong>titkosítva van ✅</strong>",
         "room_id": "Szoba azon.: %(roomId)s",
         "room_not_encrypted": "A szoba <strong>nincs titkosítva 🚨</strong>",
@@ -950,6 +952,7 @@
         "bootstrap_title": "Kulcsok beállítása",
         "confirm_encryption_setup_body": "Az alábbi gomb megnyomásával erősítsd meg, hogy megadod a titkosítási beállításokat.",
         "confirm_encryption_setup_title": "Erősítse meg a titkosítási beállításokat",
+        "continue_with_reset": "Folytatás az alaphelyzetbe állítással",
         "cross_signing_room_normal": "Ez a szoba végpontok közti titkosítást használ",
         "cross_signing_room_verified": "A szobában mindenki ellenőrizve van",
         "cross_signing_room_warning": "Valaki ellenőrizetlen munkamenetet használ",
@@ -965,10 +968,12 @@
         "event_shield_reason_unverified_identity": "Nem ellenőrzött felhasználó által titkosítva.",
         "export_unsupported": "A böngészője nem támogatja a szükséges titkosítási kiterjesztéseket",
         "forgot_recovery_key": "Elfelejtette a helyreállítási kulcsot?",
+        "identity_needs_reset_description": "Az üzenetelőzményekhez való hozzáférés biztosítása érdekében vissza kell állítania titkosítási személyazonosságát.",
         "import_invalid_keyfile": "Nem érvényes %(brand)s kulcsfájl",
         "import_invalid_passphrase": "Hitelesítési ellenőrzés sikertelen: hibás jelszó?",
         "key_storage_out_of_sync": "A kulcstároló nincs szinkronban.",
         "key_storage_out_of_sync_description": "Erősítse meg a helyreállítási kulcsot, hogy továbbra is hozzáférjen a kulcstárolóhoz és az üzenetelőzményekhez.",
+        "message_shared_by": "%(displayName)s (%(userId)s) megosztotta ezt az üzenetet, mivel nem volt a szobában, amikor elküldték.",
         "messages_not_secure": {
             "cause_1": "Saját Matrix-kiszolgáló",
             "cause_2": "Az ellenőrizendő felhasználó ehhez a Matrix-kiszolgálóhoz kapcsolódik:",
@@ -1512,6 +1517,8 @@
         "dynamic_room_predecessors": "A dinamikus szoba előfutárai",
         "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)",
         "element_call_video_rooms": "Element Call videószobák",
+        "encrypted_state_events": "Titkosított állapotesemények (MSC4362)",
+        "encrypted_state_events_description": "Engedélyezi az állapotesemények titkosításának kísérleti támogatását, amely elrejti a metaadatokat, például a szobák nevét és témáit a kiszolgáló elől. Ezek a metaadatok a később a szobákhoz csatlakozók, valamint az MSC4362 szabványt nem támogató kliensek előtt is rejtve lesznek.",
         "exclude_insecure_devices": "A nem biztonságos eszközök kizárása üzenetek küldésekor vagy fogadásakor",
         "exclude_insecure_devices_description": "Ha ez a mód engedélyezve van, a titkosított üzenetek nem kerülnek megosztásra a nem ellenőrzött eszközökkel, és a nem ellenőrzött eszközökről érkező üzenetek hibaként jelennek meg. Ne feledje, hogy ha engedélyezi ezt a módot, előfordulhat, hogy nem tud kommunikálni azokkal a felhasználókkal, akik nem ellenőrizték eszközüket.",
         "experimental_description": "Kísérletező kedvében van? Próbálja ki a legújabb fejlesztési ötleteinket. Ezek nincsenek befejezve; lehet, hogy instabilak, megváltozhatnak vagy el is tűnhetnek. <a>Tudjon meg többet</a>.",
@@ -1751,6 +1758,7 @@
         "end_message": "A szavazás le lett zárva. Nyertes válasz: %(topAnswer)s",
         "end_message_no_votes": "A szavazás le lett zárva. Nem lettek leadva szavazatok.",
         "end_title": "Szavazás lezárása",
+        "ended_poll_label": "A szavazás lezárult",
         "error_ending_description": "Sajnáljuk, a szavazás nem lett lezárva. Kérjük, próbáld újra.",
         "error_ending_title": "Nem sikerült a szavazás lezárása",
         "error_voting_description": "Sajnos az Ön szavazata nem lett rögzítve. Kérjük ismételje meg újra.",
@@ -1758,10 +1766,20 @@
         "failed_send_poll_description": "Sajnos a szavazás amit készített nem lett elküldve.",
         "failed_send_poll_title": "A szavazást nem sikerült beküldeni",
         "notes": "Az eredmény csak a szavazás végeztével válik láthatóvá",
+        "option_label": "%(number)s. lehetőség, %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "%(number)s. lehetőség, %(answer)s, nyertes lehetőség, %(count)s szavazat",
+            "other": "%(number)s. lehetőség, %(answer)s, nyertes lehetőség, %(count)s szavazat"
+        },
+        "option_label_with_total": {
+            "one": "%(number)s. lehetőség, %(answer)s, %(count)s szavazat",
+            "other": "%(number)s. lehetőség, %(answer)s, %(count)s szavazat"
+        },
         "options_add_button": "Lehetőség hozzáadása",
         "options_heading": "Adjon hozzá választható lehetőségeket",
         "options_label": "%(number)s. lehetőség",
         "options_placeholder": "Adjon meg egy lehetőséget",
+        "poll_label": "Szavazás",
         "topic_heading": "Mi a szavazás kérdése vagy tárgya?",
         "topic_label": "Kérdés vagy téma",
         "topic_placeholder": "Írjon valamit…",
@@ -1887,7 +1905,6 @@
                 "other": "%(count)s kitűzött üzenet"
             },
             "limits": {
-                "one": "",
                 "other": "Legfeljebb %(count)s kisalkalmazást tűzhet ki"
             },
             "menu": "Menü megnyitása",
@@ -1994,11 +2011,14 @@
         "forget_room": "Szoba elfelejtése",
         "forget_space": "Ennek a térnek az elfelejtése",
         "header": {
+            "join_video_call": "Csatlakozás a videóhíváshoz",
+            "join_voice_call": "Csatlakozás a hanghíváshoz",
             "n_people_asking_to_join": {
                 "Csatlakozást kér": "one",
                 "%(count)s csatlakozást kérő ember": "other"
             },
-            "room_is_public": "Ez egy nyilvános szoba"
+            "room_is_public": "Ez egy nyilvános szoba",
+            "shared_history_tooltip": "Az új tagok látják az előzményeket"
         },
         "header_avatar_open_settings_label": "Szobabeállítások megnyitása",
         "header_face_pile_tooltip": "Taglista váltása",
@@ -2164,7 +2184,6 @@
             "mark_unread": "Megjelölés olvasatlanként"
         },
         "notification_options": "Értesítési beállítások",
-        "open_space_menu": "Tér menü megnyitása",
         "primary_filters": "Szobalistaszűrők",
         "redacting_messages_status": {
             "Üzenet törlése %(count)s szobából": "other"
@@ -2173,25 +2192,15 @@
             "more_options": "További lehetőségek",
             "open_room": "A(z) %(roomName)s szoba megnyitása"
         },
-        "room_options": "Szobabeállítások",
         "show_less": "Kevesebb megjelenítése",
         "show_n_more": {
             "Még %(count)s megjelenítése": "one"
         },
         "show_previews": "Üzenet-előnézet megjelenítése",
-        "sort": "Rendezés",
         "sort_by": "Rendezés",
         "sort_by_activity": "Aktivitás",
         "sort_by_alphabet": "A–Z",
-        "sort_type": {
-            "activity": "Tevékenység",
-            "atoz": "A–Z"
-        },
         "sort_unread_first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elöl",
-        "space_menu": {
-            "home": "Tér kezdőlapja",
-            "space_settings": "Tér beállításai"
-        },
         "space_menu_label": "%(spaceName)s menű",
         "sublist_options": "Lista beállításai",
         "suggested_rooms_heading": "Javasolt szobák"
@@ -2280,6 +2289,8 @@
             "no_aliases_space": "Ennek a térnek nincs helyi címe",
             "other_section": "Egyéb",
             "publish_toggle": "Publikálod a szobát a(z) %(domain)s szoba listájába?",
+            "publish_warn_invite_only": "Nem tehet közzé olyan szobát, amelybe csak meghívóval lehet belépni.",
+            "publish_warn_no_canonical_permission": "Engedéllyel kell rendelkeznie a szoba közzétételéhez szükséges fő cím beállításához.",
             "published_aliases_description": "A cím publikálásához először helyi címet kell beállítani.",
             "published_aliases_explainer_room": "A közzétett címet bárki használhatja a szobába való belépéshez, bármelyik kiszolgálóról.",
             "published_aliases_explainer_space": "A közzétett címet bárki használhatja a térbe való belépéshez, bármelyik kiszolgálóról.",
@@ -2374,11 +2385,11 @@
             "error_join_rule_change_title": "A csatlakozási szabályokat nem sikerült frissíteni",
             "error_join_rule_change_unknown": "Ismeretlen hiba",
             "guest_access_warning": "A támogatott klienseket használó emberek még regisztrált fiók nélkül is beléphetnek a szobába.",
-            "history_visibility_invited": "Csak tagoknak (a meghívásuk idejétől)",
+            "history_visibility_invited": "Tagok a meghívásuktól",
             "history_visibility_legend": "Ki olvashatja a régi üzeneteket?",
-            "history_visibility_shared": "Csak tagok számára (a beállítás kiválasztásától)",
-            "history_visibility_warning": "A régi üzenetek láthatósága nem fog változni.",
-            "history_visibility_world_readable": "Bárki",
+            "history_visibility_shared": "Tagok (teljes előzmények)",
+            "history_visibility_warning": "A változtatások nem érintik a korábbi üzeneteket, csak az újakat.<a>Tudjon meg többet</a>",
+            "history_visibility_world_readable": "Bárki (az előzmények nyilvánosak)",
             "join_rule_description": "Döntse el ki léphet be ide: %(roomName)s.",
             "join_rule_invite": "Privát (csak meghívóval)",
             "join_rule_invite_description": "Csak a meghívott emberek léphetnek be.",
@@ -2433,10 +2444,12 @@
             "error_failed_save": "A tér láthatóságának frissítése sikertelen",
             "error_update_guest_access": "A tér vendéghozzáférésének frissítése sikertelen",
             "error_update_history_visibility": "A tér régi üzeneteinek láthatóságának frissítése sikertelen",
-            "guest_access_explainer": "A vendégek fiók nélkül is beléphetnek a térbe.",
+            "guest_access_disabled": "Nincs jogosultsága a vendéghozzáférés módosítására.",
+            "guest_access_explainer": "A vendégek fiók nélkül is csatlakozhatnak egy térhez. Ez hasznos lehet a nyilvános terek esetén.",
             "guest_access_label": "Vendéghozzáférés engedélyezése",
             "history_visibility_anyone_space": "Tér előnézete",
             "history_visibility_anyone_space_description": "A tér előnézetének engedélyezése a belépés előtt.",
+            "history_visibility_anyone_space_disabled": "Nincs jogosultsága az előzmények láthatóságának módosítására.",
             "history_visibility_anyone_space_recommendation": "A nyilvános terekhez ajánlott.",
             "title": "Láthatóság"
         },
@@ -2889,6 +2902,7 @@
             "message_search_indexing": "Indexelés alatt: %(currentRoom)s",
             "message_search_indexing_idle": "Jelenleg egyik szoba indexelése sem történik.",
             "message_search_intro": "%(brand)s a kereshetőség érdekében a titkosított üzeneteket biztonságos módon helyileg tárolja:",
+            "message_search_pending_rooms": "Indexelésre váró szobák: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s / %(totalRooms)s",
             "message_search_section": "Üzenet keresése",
             "message_search_sleep_time": "Milyen gyorsan legyenek az üzenetek letöltve.",
@@ -3480,6 +3494,7 @@
             "enabled_dm": "Az itt található üzenetek végpontok közti titkosítással rendelkeznek. Ellenőrizze %(displayName)s felhasználót a profilján – kattintson a a profilképére.",
             "enabled_local": "Az üzenetek ebben a beszélgetésben végponti titkosítással vannak védve.",
             "parameters_changed": "Néhány titkosítási paraméter megváltozott.",
+            "state_enabled": "Az ebben a szobában lévő üzenetek és állapotesemények végpontok közötti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak koppintson a profilképére.",
             "unsupported": "A szobában használt titkosítás nem támogatott."
         },
         "m.room.guest_access": {
@@ -4014,6 +4029,7 @@
         "video_call_using": "Videóhívás:",
         "voice_call": "Hanghívás",
         "voice_call_incoming": "Bejövő hanghívás",
+        "voice_call_using": "Hanghívás a következő használatával:",
         "you_are_presenting": "Ön tartja a bemutatót"
     },
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",

@@ -93,14 +93,12 @@
         "maximise": "Maximiser",
         "mention": "Mentionner",
         "minimise": "Minimiser",
-        "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
         "no": "Non",
         "ok": "OK",
         "open": "Ouvrir",
-        "open_menu": "Ouvrir le menu",
         "pin": "Épingler",
         "proceed": "Appliquer",
         "quote": "Citer",
@@ -2201,7 +2199,6 @@
             "mark_unread": "Marquer comme non lu"
         },
         "notification_options": "Paramètres de notifications",
-        "open_space_menu": "Ouvrir le menu de l’espace",
         "primary_filters": "Filtre de la liste des salons",
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
@@ -2211,26 +2208,16 @@
             "more_options": "Plus d’options",
             "open_room": "Ouvrir salon %(roomName)s"
         },
-        "room_options": "Options du salon",
         "show_less": "En voir moins",
         "show_n_more": {
             "other": "En afficher %(count)s de plus",
             "one": "En afficher %(count)s de plus"
         },
         "show_previews": "Afficher un aperçu des messages",
-        "sort": "Trier",
         "sort_by": "Trier par",
         "sort_by_activity": "Activité",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Activité",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Afficher les salons non lus en premier",
-        "space_menu": {
-            "home": "Accueil de l’espace",
-            "space_settings": "Paramètres de l'espace"
-        },
         "space_menu_label": "Menu %(spaceName)s",
         "sublist_options": "Options de liste",
         "suggested_rooms_heading": "Salons recommandés"
