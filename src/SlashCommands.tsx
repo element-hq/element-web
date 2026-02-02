@@ -61,6 +61,7 @@ import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
 import { goto, join } from "./slash-commands/join";
 import { manuallyVerifyDevice } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
+import { parseUpgradeRoomArgs } from "./slash-commands/upgraderoom/parseUpgradeRoomArgs";
 
 export { CommandCategories, Command };
 
@@ -146,11 +147,15 @@ export const Commands = [
     }),
     new Command({
         command: "upgraderoom",
-        args: "<new_version>",
+        args: "<new_version> [<additional-creator-user-id> ...]",
         description: _td("slash_command|upgraderoom"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
-            if (args) {
+            if (!args) {
+                return reject(this.getUsage());
+            }
+            const parsedArgs = parseUpgradeRoomArgs(args);
+            if (parsedArgs) {
                 const room = cli.getRoom(roomId);
                 if (!room?.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
                     return reject(new UserFriendlyError("slash_command|upgraderoom_permission_error"));
@@ -158,7 +163,7 @@ export const Commands = [
 
                 const { finished } = Modal.createDialog(
                     RoomUpgradeWarningDialog,
-                    { roomId: roomId, targetVersion: args },
+                    { roomId: roomId, targetVersion: parsedArgs.targetVersion },
                     /*className=*/ undefined,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,
@@ -167,7 +172,17 @@ export const Commands = [
                 return success(
                     finished.then(async ([resp]): Promise<void> => {
                         if (!resp?.continue) return;
-                        await upgradeRoom(room, args, resp.invite);
+                        await upgradeRoom(
+                            room,
+                            parsedArgs.targetVersion,
+                            resp.invite,
+                            true,
+                            true,
+                            false,
+                            undefined,
+                            false,
+                            parsedArgs.additionalCreators,
+                        );
                     }),
                 );
             }
