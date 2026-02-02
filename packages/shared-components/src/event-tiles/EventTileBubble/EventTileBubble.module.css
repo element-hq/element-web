@@ -7,7 +7,7 @@
 
 .container {
     background-color: var(--cpd-color-bg-subtle-secondary);
-    padding: 10px;
+    padding: var(--cpd-space-3x);
     border-radius: 8px;
     /* Reserve space for external timestamps, but also cap the width */
     /* Legacy variable: --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
@@ -47,13 +47,5 @@
     .subtitle {
         font-size: var(--cpd-font-size-body-sm);
         grid-row: 2;
-    }
-
-    /* Keep mx_MessageTimestamp to preserve compatibility with the existing timeline layouts. */
-    .mx_MessageTimestamp {
-        grid-column: 4;
-        grid-row: 1 / 3;
-        align-self: center;
-        margin-left: var(--cpd-space-4x);
     }
 }

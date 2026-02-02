@@ -60,11 +60,12 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
         return (
             <EventTileBubble
                 icon={<LockSolidIcon />}
-                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
                 title={stateEncrypted ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled")}
                 subtitle={subtitle}
-                timestamp={timestamp}
-            />
+            >
+                {timestamp}
+            </EventTileBubble>
         );
     }
 
@@ -72,23 +73,25 @@ const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
         return (
             <EventTileBubble
                 icon={<LockSolidIcon />}
-                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
                 title={_t("common|encryption_enabled")}
                 subtitle={_t("timeline|m.room.encryption|disable_attempt")}
-                timestamp={timestamp}
-            />
+            >
+                {timestamp}
+            </EventTileBubble>
         );
     }
 
     return (
         <EventTileBubble
             icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
-            className="mx_cryptoEvent"
+            className="mx_EventTileBubble mx_cryptoEvent"
             title={_t("timeline|m.room.encryption|disabled")}
             subtitle={_t("timeline|m.room.encryption|unsupported")}
             ref={ref}
-            timestamp={timestamp}
-        />
+        >
+            {timestamp}
+        </EventTileBubble>
     );
 };
 

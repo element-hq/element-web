@@ -28,17 +28,13 @@ export interface EventTileBubbleProps {
      */
     className?: string;
     /**
-     * Optional timestamp element rendered at the end of the bubble.
-     */
-    timestamp?: JSX.Element;
-    /**
      * Optional children rendered between subtitle and timestamp.
      */
     children?: JSX.Element;
     /**
      * Forwarded ref for the container element.
      */
-    ref?: React.RefObject<any>;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
 /**
@@ -54,18 +50,15 @@ export function EventTileBubble({
     title,
     subtitle,
     className,
-    timestamp,
     children,
     ref,
 }: EventTileBubbleProps): JSX.Element {
-    // Keep mx_EventTileBubble to preserve compatibility with the existing timeline layouts.
     return (
-        <div className={classNames("mx_EventTileBubble", styles.container, className)} ref={ref}>
+        <div className={classNames(styles.container, className)} ref={ref}>
             {icon}
             <div className={styles.title}>{title}</div>
             {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
             {children}
-            {timestamp}
         </div>
     );
 }

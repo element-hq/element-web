@@ -43,32 +43,35 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             return (
                 <EventTileBubble
                     icon={<VideoCallSolidIcon />}
-                    className="mx_MJitsiWidgetEvent"
+                    className="mx_EventTileBubble mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_ended", { senderName })}
-                    timestamp={this.props.timestamp}
-                />
+                >
+                    {this.props.timestamp}
+                </EventTileBubble>
             );
         } else if (prevUrl) {
             // modified
             return (
                 <EventTileBubble
                     icon={<VideoCallSolidIcon />}
-                    className="mx_MJitsiWidgetEvent"
+                    className="mx_EventTileBubble mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_updated", { senderName })}
                     subtitle={joinCopy}
-                    timestamp={this.props.timestamp}
-                />
+                >
+                    {this.props.timestamp}
+                </EventTileBubble>
             );
         } else {
             // assume added
             return (
                 <EventTileBubble
                     icon={<VideoCallSolidIcon />}
-                    className="mx_MJitsiWidgetEvent"
+                    className="mx_EventTileBubble mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_started", { senderName })}
                     subtitle={joinCopy}
-                    timestamp={this.props.timestamp}
-                />
+                >
+                    {this.props.timestamp}
+                </EventTileBubble>
             );
         }
     }

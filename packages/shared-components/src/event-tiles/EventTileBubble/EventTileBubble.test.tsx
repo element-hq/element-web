@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -12,8 +12,7 @@ import React from "react";
 
 import * as stories from "./EventTileBubble.stories.tsx";
 
-const { Default, HasLockSolidIcon, HasChildren, HasTimestamp, HasTimestampAndChildren, IsCryptoEventBubble } =
-    composeStories(stories);
+const { Default, HasLockSolidIcon, HasChildren, IsCryptoEventBubble } = composeStories(stories);
 
 describe("EventTileBubble", () => {
     it("renders the event tile bubble", () => {
@@ -28,16 +27,6 @@ describe("EventTileBubble", () => {
 
     it("renders the event tile bubble with children", () => {
         const { container } = render(<HasChildren />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders the event tile bubble with timestamp", () => {
-        const { container } = render(<HasTimestamp />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders the event tile bubble with timestamp and children", () => {
-        const { container } = render(<HasTimestampAndChildren />);
         expect(container).toMatchSnapshot();
     });
 

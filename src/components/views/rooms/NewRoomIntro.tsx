@@ -296,7 +296,7 @@ const NewRoomIntro: React.FC = () => {
             {!hasExpectedEncryptionSettings(cli, room) && (
                 <EventTileBubble
                     icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
-                    className="mx_cryptoEvent"
+                    className="mx_EventTileBubble mx_cryptoEvent"
                     title={_t("room|intro|unencrypted_warning")}
                     subtitle={subtitle}
                 />

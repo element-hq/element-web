@@ -30,7 +30,7 @@ const HistoryTile: React.FC = () => {
     return (
         <EventTileBubble
             icon={<VisibilityOffIcon />}
-            className="mx_HistoryTile"
+            className="mx_EventTileBubble mx_HistoryTile"
             title={_t("timeline|historical_messages_unavailable")}
             subtitle={subtitle}
         />

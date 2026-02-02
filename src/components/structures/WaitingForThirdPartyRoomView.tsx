@@ -45,7 +45,7 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                         <ScrollPanel className="mx_RoomView_messagePanel">
                             <EventTileBubble
                                 icon={<LockSolidIcon />}
-                                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                                className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
                                 title={_t("room|waiting_for_join_title", { brand })}
                                 subtitle={_t("room|waiting_for_join_subtitle", { brand })}
                             />
