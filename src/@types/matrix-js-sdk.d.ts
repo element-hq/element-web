@@ -18,7 +18,7 @@ import { type MediaPreviewConfig } from "./media_preview.ts";
 import {
     type INVITE_RULES_ACCOUNT_DATA_TYPE,
     type InviteConfigAccountData,
-    type MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE,
+    type INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE,
 } from "./invite-rules.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
@@ -96,7 +96,7 @@ declare module "matrix-js-sdk/src/types" {
         // MSC4155: Invite filtering
         [INVITE_RULES_ACCOUNT_DATA_TYPE]: InviteConfigAccountData;
 
-        [MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE]: { default_action?: "allow" | "block" };
+        [INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE]: { default_action?: "allow" | "block" };
 
         "io.element.msc4278.media_preview_config": MediaPreviewConfig;
 
