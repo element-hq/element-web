@@ -92,16 +92,16 @@ export default defineConfig({
                         providerOptions: {
                             launch: {
                                 args: [
-                                    '--disable-gpu', // Disables GPU hardware acceleration. If software renderer is not in place, then the GPU process won't launch.
-                                    '--disable-gpu-rasterization', // Disable GPU rasterization, i.e. rasterize on the CPU only. Overrides the kEnableGpuRasterization flag.
-                                    '--disable-gpu-compositing', // Prevent the compositor from using its GPU implementation.
-                                    '--disable-font-subpixel-positioning', // Force disables font subpixel positioning. This affects the character glyph sharpness, kerning, hinting and layout.
-                                    '--disable-software-rasterizer', // Disables the use of a 3D software rasterizer. (Necessary to make --disable-gpu work)
-                                    '--ppapi-subpixel-rendering-setting=0', // The enum value of FontRenderParams::subpixel_rendering to be passed to Ppapi processes.
-                                    '--force-device-scale-factor=1', // Overrides the device scale factor for the browser UI and the contents.
-                                    '--force-color-profile=srgb', // Force all monitors to be treated as though they have the specified color profile.
+                                    "--disable-gpu", // Disables GPU hardware acceleration. If software renderer is not in place, then the GPU process won't launch.
+                                    "--disable-gpu-rasterization", // Disable GPU rasterization, i.e. rasterize on the CPU only. Overrides the kEnableGpuRasterization flag.
+                                    "--disable-gpu-compositing", // Prevent the compositor from using its GPU implementation.
+                                    "--disable-font-subpixel-positioning", // Force disables font subpixel positioning. This affects the character glyph sharpness, kerning, hinting and layout.
+                                    "--disable-software-rasterizer", // Disables the use of a 3D software rasterizer. (Necessary to make --disable-gpu work)
+                                    "--ppapi-subpixel-rendering-setting=0", // The enum value of FontRenderParams::subpixel_rendering to be passed to Ppapi processes.
+                                    "--force-device-scale-factor=1", // Overrides the device scale factor for the browser UI and the contents.
+                                    "--force-color-profile=srgb", // Force all monitors to be treated as though they have the specified color profile.
                                 ],
-                            }
+                            },
                         },
                         instances: [{ browser: "chromium" }],
                     },
