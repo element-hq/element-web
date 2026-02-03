@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ReactionsRowButton > renders the custom image reaction button 1`] = `
+<div>
+  <div
+    aria-label="Alice reacted with :test:"
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <img
+      alt=":test:"
+      class="mx_ReactionsRowButton_content"
+      height="16"
+      src="https://example.com/reaction.png"
+      width="16"
+    />
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</div>
+`;
+
+exports[`ReactionsRowButton > renders the default reaction button 1`] = `
+<div>
+  <div
+    aria-label="Alice and Bob reacted with 👍"
+    class="mx_AccessibleButton mx_ReactionsRowButton"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_content"
+    >
+      👍
+    </span>
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</div>
+`;
+
+exports[`ReactionsRowButton > renders the selected reaction button 1`] = `
+<div>
+  <div
+    aria-label="Alice and Bob reacted with 👍"
+    class="mx_AccessibleButton mx_ReactionsRowButton mx_ReactionsRowButton_selected"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_content"
+    >
+      👍
+    </span>
+    <span
+      aria-hidden="true"
+      class="mx_ReactionsRowButton_count"
+    >
+      2
+    </span>
+  </div>
+</div>
+`;
