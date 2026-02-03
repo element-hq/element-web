@@ -23,7 +23,7 @@ import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 interface IProps {
     mxEvent: MatrixEvent;
     timestamp?: JSX.Element;
-    ref?: React.RefObject<any>;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
 const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {

@@ -117,7 +117,7 @@ export interface IEventTileOps {
     unhideWidget(): void;
 }
 
-export interface IEventTileType extends React.Component {
+export interface IEventTileType extends React.Component<HTMLDivElement> {
     getEventTileOps?(): IEventTileOps;
     getMediaHelper(): MediaEventHelper | undefined;
 }
