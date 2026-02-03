@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, fireEvent, screen } from "jest-matrix-react";
-import { Room, type MatrixClient, JoinRule, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient, JoinRule, MatrixEvent, HistoryVisibility } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -56,6 +56,7 @@ describe("<RoomSummaryCard />", () => {
         e2eStatus: undefined,
         isVideoRoom: false,
         roomJoinRule: JoinRule.Public,
+        historyVisibility: HistoryVisibility.Shared,
         alias: "",
         isFavorite: false,
         canInviteToState: true,
