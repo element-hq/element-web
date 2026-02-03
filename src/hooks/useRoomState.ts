@@ -12,14 +12,32 @@ import { type Room, type RoomState, RoomStateEvent } from "matrix-js-sdk/src/mat
 import { useTypedEventEmitter } from "./useEventEmitter";
 
 type Mapper<T> = (roomState: RoomState) => T;
-const defaultMapper: Mapper<RoomState> = (roomState: RoomState) => roomState;
 
-// Hook to simplify watching Matrix Room state
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const useRoomState = <T extends any = RoomState>(
-    room?: Room,
-    mapper: Mapper<T> = defaultMapper as Mapper<T>,
-): T => {
+/**
+ * A hook to watch the state of a room.
+ *
+ * Call `useRoomState` in a component to watch the state of a room.
+ *
+ * A mapper function must be provided to process the room state into outputs suitable for the component. The mapper
+ * function will be called whenever the room state changes.
+ *
+ * @example
+ * ```
+ * function MyComponent({room}: Props): JSX.Element {
+ *   const { historyVisibility, joinRule } = useRoomState(room, state => ({
+ *      historyVisibility: state.getHistoryVisibility(),
+ *      joinRule: state.getJoinRule(),
+ *   }));
+ *   // ...
+ * ```
+ *
+ * @param room - The room to watch. If this is undefined, the returned value will also be undefined.
+ * @param mapper - A function to process the room state into outputs suitable for the component.
+ * @returns The output of `mapper`, or `undefined` if `room` is undefined.
+ */
+export function useRoomState<T>(room: Room, mapper: Mapper<T>): T;
+export function useRoomState<T>(room: Room | undefined, mapper: Mapper<T>): T | undefined;
+export function useRoomState<T>(room: Room | undefined, mapper: Mapper<T>): T | undefined {
     // Create a ref that stores mapper
     const savedMapper = useRef(mapper);
 
@@ -28,7 +46,7 @@ export const useRoomState = <T extends any = RoomState>(
         savedMapper.current = mapper;
     }, [mapper]);
 
-    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : (undefined as T));
+    const [value, setValue] = useState<T | undefined>(room ? mapper(room.currentState) : undefined);
 
     const update = useCallback(() => {
         if (!room) return;
@@ -39,8 +57,8 @@ export const useRoomState = <T extends any = RoomState>(
     useEffect(() => {
         update();
         return () => {
-            setValue(room ? savedMapper.current(room.currentState) : (undefined as T));
+            setValue(room ? savedMapper.current(room.currentState) : undefined);
         };
     }, [room, update]);
     return value;
-};
+}
