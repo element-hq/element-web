@@ -39,8 +39,9 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
         >
           <div
             aria-label="Thu, Jan 1, 1970"
-            class="mx_TimelineSeparator _timelineSeparator_qrwge_8"
+            class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qrwge_8"
             role="separator"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <hr
               role="none"
