@@ -55,7 +55,7 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/yarn.lock') }}
@@ -133,7 +133,7 @@ jobs:
               run: "yarn install"
 
             - name: Cache storybook & vitest
-              uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               with:
                   path: |
                       packages/shared-components/node_modules/.cache
@@ -146,7 +146,7 @@ jobs:
               run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
