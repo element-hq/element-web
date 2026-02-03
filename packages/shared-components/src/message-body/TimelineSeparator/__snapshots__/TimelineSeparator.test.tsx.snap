@@ -4,8 +4,9 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator in 
 <div>
   <div
     aria-label="Label Separator"
-    class="mx_TimelineSeparator timelineSeparator"
+    class="flex timelineSeparator"
     role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
@@ -22,8 +23,9 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Custom Label"
-    class="mx_TimelineSeparator timelineSeparator"
+    class="flex timelineSeparator"
     role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
@@ -45,8 +47,9 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Date Event Separator"
-    class="mx_TimelineSeparator timelineSeparator"
+    class="flex timelineSeparator"
     role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
@@ -63,8 +66,9 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Late Event Separator"
-    class="mx_TimelineSeparator timelineSeparator"
+    class="flex timelineSeparator"
     role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
@@ -81,8 +85,9 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Separator without children"
-    class="mx_TimelineSeparator timelineSeparator"
+    class="flex timelineSeparator"
     role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
