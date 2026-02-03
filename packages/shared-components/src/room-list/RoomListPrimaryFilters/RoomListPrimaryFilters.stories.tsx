@@ -19,6 +19,12 @@ const meta: Meta<typeof RoomListPrimaryFilters> = {
     args: {
         onToggleFilter: fn(),
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel-2025?node-id=98-1979&t=vafb4zoYMNLRuAbh-4",
+        },
+    },
 };
 
 export default meta;

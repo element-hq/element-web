@@ -34,6 +34,12 @@ const meta = {
         ),
     ],
     args: defaultProps,
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=101-13062",
+        },
+    },
 } satisfies Meta<typeof NotificationDecoration>;
 
 export default meta;
