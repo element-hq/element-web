@@ -102,11 +102,11 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     display: none !important;
                 }
                 /* Stabilize play button appearance in CI (disabled due to decoding) */
-                button[aria-label="Play"][aria-disabled="true"] {
+                button[aria-label="Play"] {
                     opacity: 1 !important;
                 }
-                button[aria-label="Play"][aria-disabled="true"] svg,
-                button[aria-label="Play"][aria-disabled="true"] path {
+                button[aria-label="Play"] svg,
+                button[aria-label="Play"] path {
                     fill: magenta !important;
                     stroke: magenta !important;
                 }
