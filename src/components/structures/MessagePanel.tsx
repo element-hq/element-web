@@ -768,7 +768,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 });
                 ret.push(
                     <li key={ts1}>
-                        <TimelineSeparator key={ts1} label={text}>
+                        <TimelineSeparator key={ts1} label={text} className="mx_TimelineSeparator">
                             {text}
                         </TimelineSeparator>
                     </li>,

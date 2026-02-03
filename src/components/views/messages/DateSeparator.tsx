@@ -335,6 +335,10 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             );
         }
 
-        return <TimelineSeparator label={label}>{dateHeaderContent}</TimelineSeparator>;
+        return (
+            <TimelineSeparator label={label} className="mx_TimelineSeparator">
+                {dateHeaderContent}
+            </TimelineSeparator>
+        );
     }
 }
