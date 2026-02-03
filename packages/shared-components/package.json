@@ -106,6 +106,7 @@
         "storybook-addon-vis": "^3.1.2",
         "typedoc": "^0.28.16",
         "typedoc-plugin-markdown": "^4.9.0",
+        "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "^5.9.3",
         "vite": "^7.3.1",
         "vite-plugin-dts": "^4.5.4",

@@ -1,7 +1,7 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": ["src/index.ts"],
-    "plugin": ["typedoc-plugin-markdown"],
+    "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-missing-exports"],
     "out": "typedoc",
     "hidePageHeader": true,
     "hidePageTitle": true,
