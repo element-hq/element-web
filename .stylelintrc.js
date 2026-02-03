@@ -56,7 +56,6 @@ module.exports = {
                     { from: "res/css/views/rooms/_EditMessageComposer.pcss", type: "css" },
                     { from: "res/css/views/right_panel/_BaseCard.pcss", type: "css" },
                     { from: "res/css/views/messages/_MessageTimestamp.pcss", type: "css" },
-                    { from: "res/css/views/messages/_EventTileBubble.pcss", type: "css" },
                     { from: "res/css/views/messages/_MessageActionBar.pcss", type: "css" },
                     { from: "res/css/views/voip/LegacyCallView/_LegacyCallViewButtons.pcss", type: "css" },
                     { from: "res/css/views/elements/_ToggleSwitch.pcss", type: "css" },

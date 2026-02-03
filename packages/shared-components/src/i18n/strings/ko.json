@@ -6,21 +6,32 @@
         "delete": "삭제",
         "dismiss": "버리기",
         "explore_rooms": "방 검색",
+        "invite": "초대",
+        "new_conversation": "새로운 대화",
+        "new_room": "새로운 방",
+        "new_video_room": "새로운 비디오룸",
+        "open_menu": "메뉴 열기",
         "pause": "일시중지",
         "play": "재생",
         "retry": "재시도",
-        "search": "찾기"
+        "search": "찾기",
+        "start_chat": "채팅 시작"
+    },
+    "common": {
+        "preferences": "환경설정"
     },
     "left_panel": {
         "open_dial_pad": "다이얼 패드 열기"
     },
     "room": {
+        "context_menu": {
+            "title": "채팅방 옵션"
+        },
         "status_bar": {
             "delete_all": "전체 삭제",
             "exceeded_resource_limit_description": "서비스를 계속 이용하시려면 서비스 관리자에게 문의하십시오.",
             "exceeded_resource_limit_title": "이 홈 서버가 리소스 한도를 초과하여 귀하의 메시지가 전송되지 않았습니다.",
             "failed_to_create_room_title": "이 사용자와 채팅을 시작할 수 없습니다",
-            "history_visible": "이 방은 새 멤버가 대화 기록을 볼 수 있도록 설정되었습니다. <a>자세히 알아보기</a>",
             "homeserver_blocked_title": "귀하의 메시지는 이 홈서버 관리자에 의해 차단되었기 때문에 전송되지 않았습니다.",
             "monthly_user_limit_reached_title": "해당 홈서버의 월간 활성 사용자 수 제한에 도달하여 메시지가 전송되지 않았습니다.",
             "requires_consent_agreement_title": "이용약관을 검토하고 동의하기 전까지는 메시지를 보낼 수 없습니다.",
@@ -29,6 +40,19 @@
             "server_connectivity_lost_description": "보낸 메시지는 연결이 복구될 때까지 저장됩니다.",
             "server_connectivity_lost_title": "서버와의 연결이 끊어졌습니다.",
             "some_messages_not_sent": "일부 메시지가 전송되지 않았습니다."
+        }
+    },
+    "room_list": {
+        "open_space_menu": "스페이스 메뉴 열기",
+        "room_options": "채팅방 옵션",
+        "sort": "정렬",
+        "sort_type": {
+            "activity": "활동내역",
+            "atoz": "A-Z"
+        },
+        "space_menu": {
+            "home": "스페이스 홈",
+            "space_settings": "스페이스 설정"
         }
     },
     "terms": {

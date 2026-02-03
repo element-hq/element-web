@@ -87,7 +87,6 @@
         "no": "Não",
         "ok": "OK",
         "open": "Abrir",
-        "open_menu": "Abrir menu",
         "pin": "Fixar",
         "proceed": "Prosseguir",
         "quote": "Citar",
@@ -2044,7 +2043,6 @@
             "mark_unread": "Marcar como não lido"
         },
         "notification_options": "Opções de notificação",
-        "open_space_menu": "Abrir menu do espaço",
         "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens na %(count)s sala",
@@ -2064,10 +2062,6 @@
         "sort_by_activity": "Atividade",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Mostra primeiro as salas com mensagens não lidas",
-        "space_menu": {
-            "home": "Casa do espaço",
-            "space_settings": "Configurações de espaço"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "Lista de opções",
         "suggested_rooms_heading": "Salas sugeridas"
@@ -3193,12 +3187,7 @@
         "creation_summary_dm": "%(creator)s criou esta DM.",
         "creation_summary_room": "%(creator)s criou e configurou a sala.",
         "decryption_failure": {
-            "blocked": "O remetente impediu-te de receber esta mensagem porque o teu dispositivo não foi verificado",
-            "historical_event_no_key_backup": "As mensagens históricas não estão disponíveis neste dispositivo",
-            "historical_event_unverified_device": "Tens de verificar este dispositivo para acederes às mensagens históricas",
-            "historical_event_user_not_joined": "Não tens acesso a esta mensagem",
             "sender_identity_previously_verified": "A identidade verificada do remetente foi alterada",
-            "sender_unsigned_device": "Enviado de um dispositivo inseguro.",
             "unable_to_decrypt": "Não é possível desencriptar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

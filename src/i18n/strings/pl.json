@@ -101,7 +101,6 @@
         "no": "Nie",
         "ok": "OK",
         "open": "Otwórz",
-        "open_menu": "Otwórz menu",
         "pin": "Przypnij",
         "proceed": "Kontynuuj",
         "quote": "Cytuj",
@@ -2168,7 +2167,6 @@
             "mark_unread": "Oznacz jako nieprzeczytane"
         },
         "notification_options": "Opcje powiadomień",
-        "open_space_menu": "Otwórz menu przestrzeni",
         "primary_filters": "Filtry listy pomieszczeń",
         "redacting_messages_status": {
             "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
@@ -2178,7 +2176,6 @@
             "more_options": "Więcej opcji",
             "open_room": "Otwórz pokój %(roomName)s"
         },
-        "room_options": "Opcje pokoju",
         "show_less": "Pokaż mniej",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
@@ -2186,19 +2183,10 @@
             "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
-        "sort": "Sortuj",
         "sort_by": "Sortuj według",
         "sort_by_activity": "Aktywności",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Aktywność",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
-        "space_menu": {
-            "home": "Główna Space",
-            "space_settings": "Ustawienia Space"
-        },
         "space_menu_label": "menu %(spaceName)s",
         "sublist_options": "Ustawienia listy",
         "suggested_rooms_heading": "Sugerowane pokoje"
@@ -3367,12 +3355,7 @@
         "creation_summary_dm": "%(creator)s utworzył tę wiadomość prywatną.",
         "creation_summary_room": "%(creator)s stworzył i skonfigurował pokój.",
         "decryption_failure": {
-            "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości ponieważ twoje urządzenie nie zostało zweryfikowane",
-            "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
-            "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
-            "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
             "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy została zresetowana",
-            "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

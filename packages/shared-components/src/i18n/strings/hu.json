@@ -6,12 +6,60 @@
         "delete": "Törlés",
         "dismiss": "Eltüntetés",
         "explore_rooms": "Szobák felderítése",
+        "invite": "Meghívás",
+        "new_conversation": "Új beszélgetés",
+        "new_room": "Új szoba",
+        "new_video_room": "Új videószoba",
+        "open_menu": "Menü megnyitása",
         "pause": "Szünet",
         "play": "Lejátszás",
-        "search": "Keresés"
+        "retry": "Újra",
+        "search": "Keresés",
+        "start_chat": "Csevegés indítása"
+    },
+    "common": {
+        "preferences": "Beállítások"
     },
     "left_panel": {
         "open_dial_pad": "Számlap megnyitása"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Szobabeállítások"
+        },
+        "status_bar": {
+            "delete_all": "Összes törlése",
+            "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a szolgáltatóval.",
+            "exceeded_resource_limit_title": "Az üzenet nem került elküldésre, mert ez a Matrix-kiszolgáló túllépte az erőforráskorlátot.",
+            "failed_to_create_room_title": "Nem sikerült csevegést indítani ezzel a felhasználóval",
+            "homeserver_blocked_title": "Az üzenet nem került elküldésre, mert ezt a Matrix-kiszolgálót az adminisztrátora blokkolta.",
+            "monthly_user_limit_reached_title": "Az üzenet nem került elküldésre, mert ez a Matrix-kiszolgáló elérte a havi aktív felhasználói korlátját.",
+            "requires_consent_agreement_title": "Addig nem küldhet üzeneteket, amíg nem olvasta el és nem fogadta el a felhasználási feltételeinket.",
+            "retry_all": "Összes újraküldése",
+            "select_messages_to_retry": "Újraküldéshez vagy törléshez kiválaszthatja az üzeneteket egyenként vagy az összeset együtt",
+            "server_connectivity_lost_description": "Az elküldött üzenetek tárolva lesznek, amíg a kapcsolata újra elérhető nem lesz.",
+            "server_connectivity_lost_title": "Megszakadt a kapcsolat a kiszolgálóval.",
+            "some_messages_not_sent": "Néhány üzenete nem lett elküldve"
+        }
+    },
+    "room_list": {
+        "appearance": "Megjelenítés",
+        "open_space_menu": "Tér menü megnyitása",
+        "room_options": "Szobabeállítások",
+        "show_message_previews": "Üzenetelőnézetek megjelenítése",
+        "sort": "Rendezés",
+        "sort_type": {
+            "activity": "Tevékenység",
+            "atoz": "A–Z",
+            "unread_first": "Olvasatlan elöl"
+        },
+        "space_menu": {
+            "home": "Kezdő tér",
+            "space_settings": "Térbeállítások"
+        }
+    },
+    "terms": {
+        "tac_button": "Általános Szerződési Feltételek elolvasása"
     },
     "time": {
         "about_day_ago": "egy napja",

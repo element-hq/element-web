@@ -1508,7 +1508,6 @@
         "ask_to_join": "Enable ask to join",
         "automatic_debug_logs": "Automatically send debug logs on any error",
         "automatic_debug_logs_decryption": "Automatically send debug logs on decryption errors",
-        "automatic_debug_logs_key_backup": "Automatically send debug logs when key backup is not functioning",
         "beta_description": "What's next for %(brand)s? Labs are the best way to get things early, test out new features and help shape them before they actually launch.",
         "beta_feature": "This is a beta feature",
         "beta_feedback_leave_button": "To leave the beta, visit your settings.",
@@ -2032,7 +2031,8 @@
                 "other": "%(count)s people asking to join"
             },
             "room_is_public": "This room is public",
-            "shared_history_tooltip": "New members see history"
+            "shared_history_tooltip": "New members see history",
+            "world_readable_history_tooltip": "Anyone can see history"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
@@ -3393,12 +3393,7 @@
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
         "decryption_failure": {
-            "blocked": "The sender has blocked you from receiving this message because your device is unverified",
-            "historical_event_no_key_backup": "Historical messages are not available on this device",
-            "historical_event_unverified_device": "You need to verify this device for access to historical messages",
-            "historical_event_user_not_joined": "You don't have access to this message",
             "sender_identity_previously_verified": "Sender's verified identity was reset",
-            "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

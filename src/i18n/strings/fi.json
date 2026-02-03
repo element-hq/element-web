@@ -88,7 +88,6 @@
         "no": "Ei",
         "ok": "OK",
         "open": "Avaa",
-        "open_menu": "Avaa valikko",
         "pin": "Kiinnitä",
         "proceed": "Jatka",
         "quote": "Lainaa",
@@ -1791,7 +1790,6 @@
             "mark_unread": "Merkitse lukemattomaksi"
         },
         "notification_options": "Ilmoitusasetukset",
-        "open_space_menu": "Avaa avaruusvalikko",
         "redacting_messages_status": {
             "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
             "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
@@ -1808,13 +1806,7 @@
         "sort_by": "Lajittelutapa",
         "sort_by_activity": "Aktiivisuus",
         "sort_by_alphabet": "A-Ö",
-        "sort_type": {
-            "atoz": "A-Ö"
-        },
         "sort_unread_first": "Näytä ensimmäisenä huoneet, joissa on lukemattomia viestejä",
-        "space_menu": {
-            "space_settings": "Avaruuden asetukset"
-        },
         "space_menu_label": "%(spaceName)s-valikko",
         "sublist_options": "Lajittele",
         "suggested_rooms_heading": "Ehdotetut huoneet"
@@ -2828,7 +2820,6 @@
         "creation_summary_dm": "%(creator)s loi tämän yksityisviestin.",
         "creation_summary_room": "%(creator)s loi ja määritti huoneen.",
         "decryption_failure": {
-            "historical_event_user_not_joined": "Sinulla ei ole pääsyä tähän viestiin",
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

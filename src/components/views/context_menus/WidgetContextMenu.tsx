@@ -84,26 +84,6 @@ const showMoveButtons = (app: IWidget, room: Room | undefined, showUnpin: boolea
     return [widgetIndex > 0, widgetIndex < pinnedWidgets.length - 1];
 };
 
-export const showContextMenu = (
-    cli: MatrixClient,
-    room: Room | undefined,
-    app: IWidget,
-    userWidget: boolean,
-    showUnpin: boolean,
-    onDeleteClick: (() => void) | undefined,
-): boolean => {
-    const canModify = userWidget || WidgetUtils.canUserModifyWidgets(cli, room?.roomId);
-    const widgetMessaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(app));
-    return (
-        showStreamAudioStreamButton(app) ||
-        showEditButton(app, canModify) ||
-        showRevokeButton(cli, room?.roomId, app, userWidget) ||
-        showDeleteButton(canModify, onDeleteClick) ||
-        showSnapshotButton(widgetMessaging) ||
-        showMoveButtons(app, room, showUnpin).some(Boolean)
-    );
-};
-
 export const WidgetContextMenu: React.FC<IProps> = ({
     onFinished,
     app,
