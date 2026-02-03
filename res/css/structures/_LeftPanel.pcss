@@ -14,15 +14,22 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_LeftPanel_outerWrapper {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    max-width: 50%;
+    // max-width: 50%;
     position: relative;
 }
 
 .mx_LeftPanel_wrapper,
 .mx_LeftPanel {
     --collapsedWidth: 68px;
+}
+
+.mx_Separator {
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
 }
 
 .mx_LeftPanel_wrapper {
@@ -32,6 +39,7 @@ Please see LICENSE files in the repository root for full details.
     height: 100%; /* ensure space panel is still scrollable with an outer wrapper */
 
     .mx_LeftPanel_wrapper--user {
+        width: 100%;
         background-color: $roomlist-bg-color;
         display: flex;
         overflow: hidden;
