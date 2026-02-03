@@ -64,7 +64,8 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Assert that the play button can be found and is visible
             await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
-            await locator.getByRole("button", { name: "Play" }).blur();
+            await locator.getByRole("button", { name: "Play" }).focus();
+            await expect(locator.getByRole("button", { name: "Play" })).toBeFocused();
 
             if (monospace) {
                 // Assert that the monospace timer is visible
@@ -128,6 +129,8 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     };
 
     test.beforeEach(async ({ page, app, user }) => {
+        test.slow();
+
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 
