@@ -335,7 +335,7 @@ Screenshots are located in `packages/shared-components/__vis__/`.
 
 ### Translations
 
-First see our [translation guide](../../docs/translation.md) and [translation dev guide](../../docs/translation-dev.md).
+First see our [translation guide](../../docs/translating.md) and [translation dev guide](../../docs/translating-dev.md).
 To generate translation strings for this package, run:
 
 ```bash
