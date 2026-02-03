@@ -139,7 +139,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 };
             }
 
-            //Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
             Modal.createDialog(
                 NavigableImageViewDialog,
                 {

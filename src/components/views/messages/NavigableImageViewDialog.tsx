@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { type MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type EventTimeline, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 
 import ImageView from "../elements/ImageView";
@@ -15,7 +15,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 
-type Props = {
+type Props = Readonly<{
     initialEvent: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
     thumbnailInfo?: {
@@ -27,7 +27,7 @@ type Props = {
     initialSrc: string;
     initialName?: string;
     onFinished(): void;
-};
+}>;
 
 function isImageEvent(ev: MatrixEvent): boolean {
     if (!ev || ev.isRedacted()) return false;
@@ -41,13 +41,13 @@ function eventToName(ev: MatrixEvent): string {
     return content?.body && content.body.length > 0 ? content.body : _t("common|attachment");
 }
 
-function getTimelineEvents(t: any, initialEvent: MatrixEvent): MatrixEvent[] {
+function getTimelineEvents(t: EventTimeline | null, initialEvent: MatrixEvent): MatrixEvent[] {
     const events: MatrixEvent[] = (t?.getEvents?.() as MatrixEvent[]) ?? [];
     // If timeline isn't ready or empty, fall back to initial event so we can still render
     return events.length ? events : [initialEvent];
 }
 
-function computeImageEventsFromTimeline(t: any, initialEvent: MatrixEvent): MatrixEvent[] {
+function computeImageEventsFromTimeline(t: EventTimeline | null, initialEvent: MatrixEvent): MatrixEvent[] {
     const events = getTimelineEvents(t, initialEvent);
     return events.filter(isImageEvent);
 }
@@ -57,7 +57,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
     const roomId = props.initialEvent.getRoomId();
     const room = roomId ? client.getRoom(roomId) : null;
 
-    const [timeline, setTimeline] = useState<any | null>(null);
+    const [timeline, setTimeline] = useState<EventTimeline | null>(null);
     const [timelineReady, setTimelineReady] = useState(false);
 
     const [canPaginateBackwards, setCanPaginateBackwards] = useState(true);
@@ -135,7 +135,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
     const index = useMemo(() => {
         if (!currentEventId) return 0;
         const i = images.findIndex((e) => e.getId() === currentEventId);
-        return i >= 0 ? i : 0;
+        return Math.max(i, 0);
     }, [images, currentEventId]);
 
     const currentEvent = images[index] ?? props.initialEvent;

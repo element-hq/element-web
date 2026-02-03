@@ -509,16 +509,16 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
-    private stopPropagation = (e: ButtonEvent): void => {
+    private readonly stopPropagation = (e: ButtonEvent): void => {
         e.stopPropagation();
     };
 
-    private onPrevClick = (e: ButtonEvent): void => {
+    private readonly onPrevClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         this.props.onPrev?.();
     };
 
-    private onNextClick = (e: ButtonEvent): void => {
+    private readonly onNextClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         this.props.onNext?.();
     };
