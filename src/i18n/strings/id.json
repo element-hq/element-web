@@ -3380,12 +3380,7 @@
         "creation_summary_dm": "%(creator)s membuat pesan langsung ini.",
         "creation_summary_room": "%(creator)s membuat dan mengatur ruangan ini.",
         "decryption_failure": {
-            "blocked": "Pengirim telah mencegah Anda menerima pesan ini",
-            "historical_event_no_key_backup": "Riwayat pesan tidak tersedia di perangkat ini",
-            "historical_event_unverified_device": "Anda harus memverifikasi perangkat ini untuk mengakses riwayat pesan",
-            "historical_event_user_not_joined": "Anda tidak memiliki akses ke pesan ini",
             "sender_identity_previously_verified": "Identitas terverifikasi telah berubah",
-            "sender_unsigned_device": "Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya.",
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
