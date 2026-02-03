@@ -15,5 +15,13 @@
     "publicPath": "https://github.com/element-hq/element-web/blob/develop/packages/shared-components/",
     "sourceLinkTemplate": "https://github.com/element-hq/element-web/blob/develop/{path}#L{line}",
     "name": "@element-hq/web-shared-components",
-    "categorizeByGroup": true
+    "categorizeByGroup": true,
+    "externalSymbolLinkMappings": {
+        "@types/react": {
+            "*": "https://react.dev/"
+        },
+        "react-virtuoso": {
+            "*": "https://virtuoso.dev/"
+        }
+    }
 }
