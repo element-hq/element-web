@@ -93,7 +93,9 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
-        }
+        },
+        "message_timestamp_received_at": "Received at: %(dateTime)s",
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
     },
     "widget": {
         "context_menu": {

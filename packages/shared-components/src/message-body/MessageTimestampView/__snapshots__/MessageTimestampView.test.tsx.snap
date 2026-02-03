@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MessageTimestampView > renders the message timestamp in default state 1`] = `
+<div>
+  <span
+    aria-hidden="false"
+    aria-live="off"
+    class="extra_class content"
+    role="button"
+    tabindex="0"
+  >
+    04:58
+  </span>
+</div>
+`;
+
+exports[`MessageTimestampView > renders the message timestamp with extra class names 1`] = `
+<div>
+  <span
+    aria-hidden="false"
+    aria-live="off"
+    class="extra_class content"
+    role="button"
+    tabindex="0"
+  >
+    04:58
+  </span>
+</div>
+`;
+
+exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
+<div>
+  <a
+    aria-live="off"
+    class="extra_class content"
+    href="~"
+    role="button"
+  >
+    04:58
+  </a>
+</div>
+`;
+
+exports[`MessageTimestampView > renders the message timestamp with inhibit tooltip 1`] = `
+<div>
+  <span
+    aria-hidden="false"
+    aria-live="off"
+    class="extra_class_1 extra_class_2 content"
+    role="button"
+    tabindex="0"
+  >
+    04:58
+  </span>
+</div>
+`;
+
+exports[`MessageTimestampView > renders the message timestamp with received timestamp 1`] = `
+<div>
+  <span
+    aria-hidden="false"
+    aria-live="off"
+    class="extra_class content"
+    role="button"
+    tabindex="0"
+  >
+    <svg
+      class="icon"
+      fill="currentColor"
+      height="16"
+      viewBox="0 0 24 24"
+      width="16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7.803a6 6 0 0 1-.72-2H5v-3.172l4-4 3.585 3.585a6 6 0 0 1 1.172-1.656l-3.343-3.343a2 2 0 0 0-2.828 0L5 13V5h14v7.083c.718.12 1.393.368 2 .72V5a2 2 0 0 0-2-2z"
+      />
+      <path
+        d="M17 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0m1 5a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1m-1 7a1 1 0 1 1 2 0 1 1 0 0 1-2 0"
+      />
+    </svg>
+    04:58
+  </span>
+</div>
+`;
