@@ -13,6 +13,7 @@ export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
 export * from "./composer/Banner";
 export * from "./crypto/SasEmoji";
+export * from "./event-tiles/EventTileBubble";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
 export * from "./message-body/DecryptionFailureBodyView";
