@@ -771,7 +771,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <div className={bodyClasses}>
                         <Group>
                             <SpacePanel />
-                            <Panel collapsible minSize="200px" defaultSize="200px">
+                            <Panel collapsible minSize="72px" defaultSize="200px">
                                 <div className="mx_LeftPanel_outerWrapper">
                                     <LeftPanelLiveShareWarning isMinimized={shouldUseMinimizedUI || false} />
 
