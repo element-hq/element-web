@@ -44,9 +44,7 @@ import { UIComponent, UIFeature } from "./settings/UIFeature";
 import { CHAT_EFFECTS } from "./effects";
 import LegacyCallHandler from "./LegacyCallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
-import { upgradeRoom } from "./utils/RoomUpgrade";
 import DevtoolsDialog from "./components/views/dialogs/DevtoolsDialog";
-import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
 import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
@@ -61,7 +59,7 @@ import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
 import { goto, join } from "./slash-commands/join";
 import { manuallyVerifyDevice } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
-import { parseUpgradeRoomArgs } from "./slash-commands/upgraderoom/parseUpgradeRoomArgs";
+import upgraderoom from "./slash-commands/upgraderoom/upgraderoom";
 
 export { CommandCategories, Command };
 
@@ -145,52 +143,7 @@ export const Commands = [
         },
         category: CommandCategories.messages,
     }),
-    new Command({
-        command: "upgraderoom",
-        args: "<new_version> [<additional-creator-user-id> ...]",
-        description: _td("slash_command|upgraderoom"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            if (!args) {
-                return reject(this.getUsage());
-            }
-            const parsedArgs = parseUpgradeRoomArgs(args);
-            if (parsedArgs) {
-                const room = cli.getRoom(roomId);
-                if (!room?.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
-                    return reject(new UserFriendlyError("slash_command|upgraderoom_permission_error"));
-                }
-
-                const { finished } = Modal.createDialog(
-                    RoomUpgradeWarningDialog,
-                    { roomId: roomId, targetVersion: parsedArgs.targetVersion },
-                    /*className=*/ undefined,
-                    /*isPriority=*/ false,
-                    /*isStatic=*/ true,
-                );
-
-                return success(
-                    finished.then(async ([resp]): Promise<void> => {
-                        if (!resp?.continue) return;
-                        await upgradeRoom(
-                            room,
-                            parsedArgs.targetVersion,
-                            resp.invite,
-                            true,
-                            true,
-                            false,
-                            undefined,
-                            false,
-                            parsedArgs.additionalCreators,
-                        );
-                    }),
-                );
-            }
-            return reject(this.getUsage());
-        },
-        category: CommandCategories.admin,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
+    upgraderoom,
     new Command({
         command: "jumptodate",
         args: "<YYYY-MM-DD>",

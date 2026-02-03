@@ -22,10 +22,6 @@ import { warnSelfDemote } from "../../src/components/views/right_panel/UserInfo"
 import dispatcher from "../../src/dispatcher/dispatcher";
 import QuestionDialog from "../../src/components/views/dialogs/QuestionDialog";
 import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
-import RoomUpgradeWarningDialog, {
-    type IFinishedOpts,
-} from "../../src/components/views/dialogs/RoomUpgradeWarningDialog";
-import { parseUpgradeRoomArgs } from "../../src/slash-commands/upgraderoom/parseUpgradeRoomArgs";
 
 jest.mock("../../src/components/views/right_panel/UserInfo");
 
@@ -120,67 +116,6 @@ describe("SlashCommands", () => {
                 setCurrentLocalRoom();
                 expect(command.isEnabled(client, roomId)).toBe(false);
             });
-        });
-    });
-
-    describe("/upgraderoom", () => {
-        beforeEach(() => {
-            command = findCommand("upgraderoom")!;
-            setCurrentRoom();
-        });
-
-        it("should be enabled by default", () => {
-            expect(command.isEnabled(client, roomId)).toBe(true);
-        });
-
-        it("should return usage if given no args", () => {
-            expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
-            expect(command.run(client, roomId, null, "").error).toBe(command.getUsage());
-        });
-
-        it("should accept arguments of a room version with no additional creators", () => {
-            expect(parseUpgradeRoomArgs("12")).toEqual({ targetVersion: "12" });
-        });
-
-        it("should accept arguments of a room version and additional creators", () => {
-            expect(parseUpgradeRoomArgs("13 @u:s.co")).toEqual({
-                targetVersion: "13",
-                additionalCreators: ["@u:s.co"],
-            });
-
-            expect(parseUpgradeRoomArgs("14  @u:s.co @v:s.co  @w:z.uk")).toEqual({
-                targetVersion: "14",
-                additionalCreators: ["@u:s.co", "@v:s.co", "@w:z.uk"],
-            });
-        });
-
-        it("should upgrade the room when given valid arguments", async () => {
-            // Given we mock out creating dialogs and upgrading rooms
-            const createDialog = jest.spyOn(Modal, "createDialog");
-            const upgradeRoom = jest.fn().mockResolvedValue({ replacement_room: "!newroom" });
-            const resp: IFinishedOpts = { continue: true, invite: false };
-            createDialog.mockReturnValue({
-                finished: Promise.resolve([resp]),
-                close: jest.fn(),
-            });
-            client.upgradeRoom = upgradeRoom;
-
-            // When we run a room upgrade
-            const result = command.run(client, roomId, null, "12 @foo:bar.com @baz:qux.uk");
-            expect(result.promise).toBeDefined();
-            await result.promise;
-
-            // Then we warned the user
-            expect(createDialog).toHaveBeenCalledWith(
-                RoomUpgradeWarningDialog,
-                { roomId: "!room:example.com", targetVersion: "12" },
-                undefined,
-                false,
-                true,
-            );
-
-            // And when they said yes, we called into upgradeRoom
-            expect(upgradeRoom).toHaveBeenCalledWith("!room:example.com", "12", ["@foo:bar.com", "@baz:qux.uk"]);
         });
     });
 
