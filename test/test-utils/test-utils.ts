@@ -32,6 +32,7 @@ import {
     type EventStatus,
     type ICreateRoomOpts,
     RoomState,
+    HistoryVisibility,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
@@ -673,6 +674,7 @@ export function mkStubRoom(
             maySendRedactionForEvent: jest.fn().mockReturnValue(true),
             maySendEvent: jest.fn().mockReturnValue(true),
             members: {},
+            getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Shared),
             getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
             on: jest.fn(),
             off: jest.fn(),

@@ -493,8 +493,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         if (allSystemsReady) {
             logSpan.info("No toast needed");
             await this.setDeviceState("ok", logSpan);
-
-            this.checkKeyBackupStatus();
         } else {
             // make sure our keys are finished downloading
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
@@ -548,9 +546,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
                     keyBackupDownloadIsOk,
                 });
                 await this.setDeviceState("key_storage_out_of_sync", logSpan);
-            }
-            if (this.dismissedThisDeviceToast) {
-                this.checkKeyBackupStatus();
             }
         }
 
@@ -732,16 +727,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
             recoveryState: recoveryState,
         });
     }
-
-    /**
-     * Check if key backup is enabled, and if not, raise an `Action.ReportKeyBackupNotEnabled` event (which will
-     * trigger an auto-rageshake).
-     */
-    private checkKeyBackupStatus = async (): Promise<void> => {
-        if (!(await this.isKeyBackupUploadActive(logger))) {
-            dis.dispatch({ action: Action.ReportKeyBackupNotEnabled });
-        }
-    };
 
     /**
      * Is key backup enabled? Use a cached answer if we have one.

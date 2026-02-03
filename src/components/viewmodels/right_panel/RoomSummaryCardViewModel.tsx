@@ -5,7 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useRef, useState } from "react";
-import { EventType, type JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, type HistoryVisibility, type JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -49,6 +49,10 @@ export interface RoomSummaryCardState {
      * The join rule of the room, used to display the correct badge and icon
      */
     roomJoinRule: JoinRule;
+    /**
+     * The history visibility of the room, used to display the correct badge.
+     */
+    historyVisibility: HistoryVisibility;
     /**
      * if it is a video room, it should not display export chat, polls, files, extensions
      */
@@ -158,8 +162,9 @@ export function useRoomSummaryCardViewModel(
     const e2eStatus = roomContext.e2eStatus;
     const isVideoRoom = calcIsVideoRoom(room);
 
-    const { roomJoinRule } = useRoomState(room, (state) => ({
+    const { historyVisibility, roomJoinRule } = useRoomState(room, (state) => ({
         roomJoinRule: state.getJoinRule(),
+        historyVisibility: state.getHistoryVisibility(),
     }));
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const pinCount = usePinnedEvents(room).length;
@@ -254,6 +259,7 @@ export function useRoomSummaryCardViewModel(
         isRoomEncrypted,
         roomJoinRule,
         e2eStatus,
+        historyVisibility,
         isVideoRoom,
         alias,
         isFavorite,
