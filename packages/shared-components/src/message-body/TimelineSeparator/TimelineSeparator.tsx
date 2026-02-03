@@ -33,7 +33,7 @@ export interface TimelineSeparatorProps {
 const TimelineSeparator: React.FC<TimelineSeparatorProps> = ({ label, children }) => {
     // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
     return (
-        <div
+        <Flex
             className={classNames("mx_TimelineSeparator", styles.timelineSeparator)}
             role="separator"
             aria-label={label}
