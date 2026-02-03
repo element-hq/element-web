@@ -24,7 +24,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import { type ActionPayload } from "../dispatcher/payloads";
 import SettingsStore from "../settings/SettingsStore";
-import { Action } from "../dispatcher/actions";
 
 // Minimum interval of 1 minute between reports
 const RAGESHAKE_INTERVAL = 60000;
@@ -66,12 +65,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         return AutoRageshakeStore.internalInstance;
     }
 
-    protected async onAction(payload: ActionPayload): Promise<void> {
-        switch (payload.action) {
-            case Action.ReportKeyBackupNotEnabled:
-                this.onReportKeyBackupNotEnabled();
-        }
-    }
+    protected async onAction(_payload: ActionPayload): Promise<void> {}
 
     protected async onReady(): Promise<void> {
         if (!SettingsStore.getValue("automaticDecryptionErrorReporting")) return;
@@ -186,16 +180,6 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                 `Not sending sender-side autorageshake for event ${messageContent["event_id"]}/session ${messageContent["session_id"]}: last rageshake was too recent`,
             );
         }
-    }
-
-    private async onReportKeyBackupNotEnabled(): Promise<void> {
-        if (!SettingsStore.getValue("automaticKeyBackNotEnabledReporting")) return;
-
-        await sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
-            userText: `Auto-reporting key backup not enabled`,
-            sendLogs: true,
-            labels: ["web", Action.ReportKeyBackupNotEnabled],
-        });
     }
 }
 
