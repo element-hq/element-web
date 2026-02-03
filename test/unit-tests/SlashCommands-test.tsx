@@ -11,7 +11,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 import { act, waitFor } from "jest-matrix-react";
 
-import { type Command, Commands, getCommand } from "../../src/SlashCommands";
+import { type Command, Commands, getCommand } from "../../src/slash-commands/SlashCommands";
 import { createTestClient } from "../test-utils";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import { SdkContextClass } from "../../src/contexts/SDKContext";

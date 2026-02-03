@@ -11,7 +11,7 @@ import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import RoomUpgradeWarningDialog, {
     type IFinishedOpts,
 } from "../../../src/components/views/dialogs/RoomUpgradeWarningDialog";
-import { type Command, Commands } from "../../../src/SlashCommands";
+import { type Command, Commands } from "../../../src/slash-commands/SlashCommands";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { createTestClient } from "../../test-utils";
 import { parseUpgradeRoomArgs } from "../../../src/slash-commands/upgraderoom/parseUpgradeRoomArgs";
