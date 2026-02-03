@@ -96,7 +96,7 @@ test.describe("Composer", () => {
             test.use({ viewport: { width: 1280, height: 360 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
-                // Mask the background of the screenshoot to avoid failing the test just because some
+                // Mask the background of the screenshot to avoid failing the test just because some
                 // other component have changed its rendering.
                 await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker-small.png", {
                     css: `
