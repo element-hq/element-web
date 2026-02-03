@@ -74,9 +74,7 @@ describe("BlockInvitesConfigController", () => {
                 const controller = SETTINGS.blockInvites.controller!;
                 await controller.beforeChange(SettingLevel.DEVICE, null, false);
                 expect(cli.setAccountData).toHaveBeenCalledTimes(1);
-                expect(cli.setAccountData).toHaveBeenCalledWith("m.invite_permission_config", {
-                    default_action: "allow",
-                });
+                expect(cli.setAccountData).toHaveBeenCalledWith("m.invite_permission_config", {});
             });
         });
     });

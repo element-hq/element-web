@@ -35,8 +35,11 @@ export default class BlockInvitesConfigController extends ServerSupportUnstableF
         if (!this.client) {
             return false;
         }
-        const newDefault = newValue ? "block" : "allow";
-        await this.client.setAccountData(INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE, { default_action: newDefault });
+
+        await this.client.setAccountData(
+            INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE,
+            newValue ? { default_action: "block" } : {},
+        );
         return true;
     }
 }
