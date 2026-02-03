@@ -3364,12 +3364,7 @@
         "creation_summary_dm": "%(creator)s criou esta conversa.",
         "creation_summary_room": "%(creator)s criou e configurou esta sala.",
         "decryption_failure": {
-            "blocked": "O remetente bloqueou você de receber esta mensagem porque seu dispositivo não foi verificado",
-            "historical_event_no_key_backup": "Mensagens históricas não estão disponíveis neste dispositivo",
-            "historical_event_unverified_device": "Você precisa verificar este dispositivo para acessar as mensagens históricas",
-            "historical_event_user_not_joined": "Você não tem acesso a esta mensagem",
             "sender_identity_previously_verified": "A identidade verificada do remetente foi alterada",
-            "sender_unsigned_device": "Enviado de um dispositivo inseguro.",
             "unable_to_decrypt": "Não foi possível descriptografar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

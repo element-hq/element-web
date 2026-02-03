@@ -3367,12 +3367,7 @@
         "creation_summary_dm": "%(creator)s hozta létre ezt az üzenetet.",
         "creation_summary_room": "%(creator)s elkészítette és beállította a szobát.",
         "decryption_failure": {
-            "blocked": "A feladó megakadályozta, hogy megkapja ezt az üzenetet",
-            "historical_event_no_key_backup": "A korábbi üzenetek nem állnak rendelkezésre ezen a készüléken",
-            "historical_event_unverified_device": "Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez",
-            "historical_event_user_not_joined": "Nincs hozzáférése ehhez az üzenethez",
             "sender_identity_previously_verified": "A feladó ellenőrzött személyazonossága megváltozott",
-            "sender_unsigned_device": "Nem biztonságos eszközről küldve.",
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
