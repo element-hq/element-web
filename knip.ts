@@ -29,6 +29,7 @@ export default {
             ],
         },
     },
+    ignoreBinaries: ["test:storybook", "test:unit"],
     ignoreDependencies: [
         // Required for `action-validator`
         "@action-validator/*",
@@ -49,7 +50,6 @@ export default {
         // Embedded into webapp
         "@element-hq/element-call-embedded",
         // Transitive dep of jest
-        "@jest/globals",
         "vitest-environment-jest-fixed-jsdom",
 
         // We import this in some tests, transitive dep of @playwright/test
