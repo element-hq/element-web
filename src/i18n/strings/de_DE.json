@@ -1508,7 +1508,6 @@
         "ask_to_join": "Beitrittsanfragen erlauben",
         "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
         "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
-        "automatic_debug_logs_key_backup": "Sende automatisch Protokolle zur Fehlerkorrektur, wenn die Schlüsselsicherung nicht funktioniert",
         "beta_description": "Was passiert als nächstes in %(brand)s? Das Labor ist deine erste Anlaufstelle, um Funktionen früh zu erhalten, zu testen und mitzugestalten, bevor sie tatsächlich veröffentlicht werden.",
         "beta_feature": "Dies ist eine Betafunktion",
         "beta_feedback_leave_button": "Du kannst die Beta in den Einstellungen deaktivieren.",

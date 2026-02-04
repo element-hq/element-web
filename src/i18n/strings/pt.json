@@ -1394,7 +1394,6 @@
         "ask_to_join": "Permitir pedir para participar",
         "automatic_debug_logs": "Envia automaticamente registos de depuração em qualquer erro",
         "automatic_debug_logs_decryption": "Envia automaticamente registos de depuração em caso de erros de desencriptação",
-        "automatic_debug_logs_key_backup": "Envia automaticamente registos de depuração quando a cópia de segurança das chaves não está a funcionar",
         "beta_description": "O que vais fazer a seguir em %(brand)s? Os laboratórios são a melhor forma de obteres informações antecipadas, testares novas funcionalidades e ajudares a moldá-las antes do seu lançamento efetivo.",
         "beta_feature": "Esta é uma funcionalidade beta",
         "beta_feedback_leave_button": "Para sair da versão beta, visita as tuas definições.",

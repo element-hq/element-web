@@ -37,6 +37,8 @@ test.describe("Room list", () => {
     });
 
     test.describe("Room list", () => {
+        test.slow();
+
         test.beforeEach(async ({ page, app, user }) => {
             for (let i = 0; i < 30; i++) {
                 await app.client.createRoom({ name: `room${i}` });

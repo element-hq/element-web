@@ -1275,7 +1275,6 @@
     "labs": {
         "automatic_debug_logs": "Mandar automáticamente los registros de depuración cuando ocurra cualquier error",
         "automatic_debug_logs_decryption": "Enviar los registros de depuración automáticamente de fallos al descifrar",
-        "automatic_debug_logs_key_backup": "Enviar automáticamente los registros de depuración cuando la clave de respaldo no funcione",
         "beta_description": "¿Qué novedades se esperan en %(brand)s? La sección de experimentos es la mejor manera de ver las cosas antes de que se publiquen, probar nuevas funcionalidades y ayudar a mejorarlas antes de su lanzamiento.",
         "beta_feature": "Esta funcionalidad está en beta",
         "beta_feedback_leave_button": "Para salir de la beta, ve a tus ajustes.",

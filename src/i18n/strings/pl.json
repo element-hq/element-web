@@ -1487,7 +1487,6 @@
         "ask_to_join": "Włącz prośby o dołączenie",
         "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu",
         "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
-        "automatic_debug_logs_key_backup": "Automatycznie wysyłaj logi debugowania gdy kopia zapasowa kluczy nie działa",
         "beta_description": "Co następne dla %(brand)s? Laboratoria to najlepsze miejsce do przetestowania nowych funkcji i możliwość pomocy w testowaniu, zanim dotrą one do szerszego grona użytkowników.",
         "beta_feature": "To jest funkcja beta",
         "beta_feedback_leave_button": "Aby wyjść z bety, odwiedź swoje ustawienia.",

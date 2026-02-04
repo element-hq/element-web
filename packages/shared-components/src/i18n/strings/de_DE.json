@@ -28,6 +28,11 @@
         "context_menu": {
             "title": "Chatoptionen"
         },
+        "history_visibility_badge": {
+            "private": "Neue Mitglieder sehen keinen historischen Nachrichtenverlauf",
+            "shared": "Neue Mitglieder sehen den historischen Nachrichtenverlauf",
+            "world_readable": "Jeder kann vergangene Nachrichten lesen"
+        },
         "status_bar": {
             "delete_all": "Alle löschen",
             "exceeded_resource_limit_title": "Deine Nachricht konnte nicht versendet werden, da dein Homeserver ein Ressourcenlimit überschritten hat.",
