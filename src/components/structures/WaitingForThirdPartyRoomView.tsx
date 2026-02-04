@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { type RefObject } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomHeader from "../views/rooms/RoomHeader/RoomHeader.tsx";
 import ScrollPanel from "./ScrollPanel";
-import EventTileBubble from "../views/messages/EventTileBubble";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { UnwrappedEventTile } from "../views/rooms/EventTile";
 import { _t } from "../../languageHandler";
@@ -45,7 +45,7 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                         <ScrollPanel className="mx_RoomView_messagePanel">
                             <EventTileBubble
                                 icon={<LockSolidIcon />}
-                                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                                className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
                                 title={_t("room|waiting_for_join_title", { brand })}
                                 subtitle={_t("room|waiting_for_join_subtitle", { brand })}
                             />

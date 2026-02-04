@@ -1161,7 +1161,6 @@
         "ask_to_join": "启用 “需要验证加入请求”",
         "automatic_debug_logs": "遇到任何错误自动发送调试日志",
         "automatic_debug_logs_decryption": "自动发送有关解密错误的debug日志",
-        "automatic_debug_logs_key_backup": "当密钥备份无法运作时自动发送debug日志",
         "beta_description": "%(brand)s的下一步是什么？实验室是早期获得东西、测试新功能和在它们发布前帮助塑造的最好方式。",
         "beta_feature": "这是beta功能",
         "beta_feedback_leave_button": "要离开beta，请访问你的设置。",

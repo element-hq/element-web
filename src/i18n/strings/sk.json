@@ -1524,7 +1524,6 @@
         "ask_to_join": "Umožniť požiadať o pripojenie",
         "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
         "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
-        "automatic_debug_logs_key_backup": "Automaticky odosielať záznamy o ladení, ak zálohovanie kľúčov nefunguje",
         "beta_description": "Čo vás čaká v aplikácii %(brand)s? Laboratóriá sú najlepším spôsobom, ako získať funkcie v predstihu, otestovať nové funkcie a pomôcť ich vytvoriť ešte pred ich skutočným spustením.",
         "beta_feature": "Toto je funkcia vo verzii beta",
         "beta_feedback_leave_button": "Ak chcete opustiť beta verziu, navštívte svoje nastavenia.",
@@ -3436,12 +3435,7 @@
         "creation_summary_dm": "%(creator)s vytvoril/a túto priamu správu.",
         "creation_summary_room": "%(creator)s vytvoril a nastavil miestnosť.",
         "decryption_failure": {
-            "blocked": "Odosielateľ vám zablokoval prijímanie tejto správy, pretože vaše zariadenie nie je overené",
-            "historical_event_no_key_backup": "Staré správy nie sú na tomto zariadení k dispozícii",
-            "historical_event_unverified_device": "Musíte overiť toto zariadenie pre prístup k starším správam",
-            "historical_event_user_not_joined": "K tejto správe nemáte prístup",
             "sender_identity_previously_verified": "Overená totožnosť odosielateľa sa zmenila",
-            "sender_unsigned_device": "Odoslané z nezabezpečeného zariadenia.",
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

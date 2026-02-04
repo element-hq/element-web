@@ -1500,7 +1500,6 @@
         "ask_to_join": "A kérést igénylő csatlakozás engedélyezése",
         "automatic_debug_logs": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
         "automatic_debug_logs_decryption": "Hibakeresési naplók automatikus küldése titkosítás-visszafejtési hiba esetén",
-        "automatic_debug_logs_key_backup": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
         "beta_description": "Mi várható a(z) %(brand)s fejlesztésében? A labor a legjobb hely az új dolgok kipróbálásához, visszajelzés adásához és a funkciók éles indulás előtti kialakításában történő segítséghez.",
         "beta_feature": "Ez egy beta állapotú funkció",
         "beta_feedback_leave_button": "A beállításokban tudja elhagyni a bétát.",
@@ -3367,12 +3366,7 @@
         "creation_summary_dm": "%(creator)s hozta létre ezt az üzenetet.",
         "creation_summary_room": "%(creator)s elkészítette és beállította a szobát.",
         "decryption_failure": {
-            "blocked": "A feladó megakadályozta, hogy megkapja ezt az üzenetet",
-            "historical_event_no_key_backup": "A korábbi üzenetek nem állnak rendelkezésre ezen a készüléken",
-            "historical_event_unverified_device": "Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez",
-            "historical_event_user_not_joined": "Nincs hozzáférése ehhez az üzenethez",
             "sender_identity_previously_verified": "A feladó ellenőrzött személyazonossága megváltozott",
-            "sender_unsigned_device": "Nem biztonságos eszközről küldve.",
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

@@ -5,11 +5,15 @@
     "action": {
         "delete": "Löschen",
         "dismiss": "Ausblenden",
+        "edit": "Bearbeiten",
         "explore_rooms": "Chats erkunden",
         "invite": "Einladen",
+        "new_room": "Neue Gruppe",
+        "new_video_room": "Neuer Videochat",
         "open_menu": "Menü öffnen",
         "pause": "Pausieren",
         "play": "Abspielen",
+        "remove": "Entfernen",
         "retry": "Erneut versuchen",
         "search": "Suchen",
         "start_chat": "Neuer Chat"
@@ -23,6 +27,11 @@
     "room": {
         "context_menu": {
             "title": "Chatoptionen"
+        },
+        "history_visibility_badge": {
+            "private": "Neue Mitglieder sehen keinen historischen Nachrichtenverlauf",
+            "shared": "Neue Mitglieder sehen den historischen Nachrichtenverlauf",
+            "world_readable": "Jeder kann vergangene Nachrichten lesen"
         },
         "status_bar": {
             "delete_all": "Alle löschen",
@@ -38,14 +47,18 @@
         }
     },
     "room_list": {
+        "appearance": "Darstellung",
         "open_space_menu": "Menü für Spaces öffnen",
         "room_options": "Chatoptionen",
+        "show_message_previews": "Nachrichtenvorschau anzeigen",
         "sort": "Sortieren",
         "sort_type": {
             "activity": "Aktivität",
-            "atoz": "A–Z"
+            "atoz": "A–Z",
+            "unread_first": "Ungelesen zuerst"
         },
         "space_menu": {
+            "home": "Space Home",
             "space_settings": "Space Einstellungen"
         }
     },
@@ -69,10 +82,29 @@
         "n_minutes_ago": "vor %(num)s Minuten"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "Der Absender hat den Empfang dieser Nachricht blockiert, da dein Gerät nicht verifiziert ist.",
+            "historical_event_no_key_backup": "Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar",
+            "historical_event_unverified_device": "Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren",
+            "historical_event_user_not_joined": "Du hast keinen Zugriff auf diese Nachricht",
+            "sender_identity_previously_verified": "Die verifizierte Identität des Absenders wurde zurückgesetzt",
+            "sender_unsigned_device": "Von einem unsicheren Gerät verschickt.",
+            "unable_to_decrypt": "Nachricht kann nicht entschlüsselt werden"
+        },
         "m.audio": {
             "audio_player": "Audio-Player",
             "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
             "unnamed_audio": "Unbenannte Audiodatei"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Nach links schieben",
+            "move_right": "Nach rechts schieben",
+            "remove": "Für alle entfernen",
+            "revoke": "Berechtigungen widerrufen",
+            "screenshot": "Bildschirmfoto",
+            "start_audio_stream": "Audiostream starten"
         }
     }
 }

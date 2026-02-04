@@ -1451,7 +1451,6 @@
         "ask_to_join": "Aktivera fråga om att gå med",
         "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
         "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
-        "automatic_debug_logs_key_backup": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
         "beta_description": "Vad händer härnäst med %(brand)s? Experiment är det bästa sättet att få saker tidigt, pröva nya funktioner, och hjälpa till att forma dem innan de egentligen släpps.",
         "beta_feature": "Det här är en betafunktion",
         "beta_feedback_leave_button": "För att lämna betan, besök dina inställningar.",
@@ -3296,12 +3295,7 @@
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
         "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
         "decryption_failure": {
-            "blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet eftersom din enhet inte är verifierad",
-            "historical_event_no_key_backup": "Historiska meddelanden är inte tillgängliga på den här enheten",
-            "historical_event_unverified_device": "Du måste verifiera den här enheten för att få åtkomst till historiska meddelanden",
-            "historical_event_user_not_joined": "Du har inte tillgång till det här meddelandet",
             "sender_identity_previously_verified": "Avsändarens verifierade identitet har ändrats",
-            "sender_unsigned_device": "Skickat från en osäker enhet.",
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

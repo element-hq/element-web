@@ -5,13 +5,50 @@
     "action": {
         "delete": "Видалити",
         "dismiss": "Відхилити",
+        "edit": "Змінити",
         "explore_rooms": "Каталог кімнат",
+        "invite": "Запросити",
+        "new_conversation": "Нова розмова",
+        "new_room": "Нова кімната",
+        "new_video_room": "Нова відеокімната",
+        "open_menu": "Відкрити меню",
         "pause": "Призупинити",
         "play": "Відтворити",
-        "search": "Пошук"
+        "remove": "Вилучити",
+        "retry": "Повторити спробу",
+        "search": "Пошук",
+        "start_chat": "Розпочати бесіду"
+    },
+    "common": {
+        "preferences": "Налаштування"
     },
     "left_panel": {
         "open_dial_pad": "Відкрити номеронабирач"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Параметри кімнати"
+        },
+        "status_bar": {
+            "delete_all": "Видалити все",
+            "server_connectivity_lost_title": "Втрачено зв'язок з сервером."
+        }
+    },
+    "room_list": {
+        "appearance": "Вигляд",
+        "open_space_menu": "Відкрити меню простору",
+        "room_options": "Параметри кімнати",
+        "show_message_previews": "Показати попередній перегляд повідомлень",
+        "sort": "Сортувати",
+        "sort_type": {
+            "activity": "Діяльність",
+            "atoz": "А-Я",
+            "unread_first": "Спочатку непрочитані"
+        },
+        "space_menu": {
+            "home": "Домівка простору",
+            "space_settings": "Налаштування простору"
+        }
     },
     "time": {
         "about_day_ago": "близько доби тому",
@@ -34,6 +71,15 @@
             "audio_player": "Звуковий програвач",
             "error_downloading_audio": "Помилка завантаження аудіо",
             "unnamed_audio": "Аудіо без назви"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Перемістити вліво",
+            "move_right": "Перемістити вправо",
+            "remove": "Вилучити для всіх",
+            "revoke": "Відкликати дозволи",
+            "screenshot": "Зробити знімок"
         }
     }
 }

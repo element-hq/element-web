@@ -1228,7 +1228,6 @@
         "ask_to_join": "Iespējot aicinājumus pievienoties",
         "automatic_debug_logs": "Automātiski nosūtīt atkļūdošanas žurnālus par jebkuru kļūdu",
         "automatic_debug_logs_decryption": "Automātiski nosūtīt atkļūdošanas žurnālus par atšifrēšanas kļūdām",
-        "automatic_debug_logs_key_backup": "Automātiski nosūtīt atkļūdošanas žurnālus, ja nedarbojas atslēgas dublēšana",
         "beta_description": "Kas gaidāms %(brand)s? Laboratorijas ir labākais veids, kā agri iegūt un izmēģināt jaunas iespējas un palīdzēt tās pilnveidot, pirms tās tiek izlaistas.",
         "beta_feature": "Šī ir beta funkcija",
         "beta_feedback_leave_button": "Lai izietu no beta versijas, atveriet iestatījumus.",
@@ -2774,9 +2773,6 @@
         },
         "creation_summary_dm": "%(creator)s uzsāka šo tiešo saraksti.",
         "creation_summary_room": "%(creator)s izveidoja un nokonfigurēja istabu.",
-        "decryption_failure": {
-            "historical_event_unverified_device": "Ir jāapliecina šī ierīce, lai piekļūtu senākām ziņām."
-        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Atšifrē",
         "download_action_downloading": "Lejupielādē",

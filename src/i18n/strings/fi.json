@@ -2820,7 +2820,6 @@
         "creation_summary_dm": "%(creator)s loi tämän yksityisviestin.",
         "creation_summary_room": "%(creator)s loi ja määritti huoneen.",
         "decryption_failure": {
-            "historical_event_user_not_joined": "Sinulla ei ole pääsyä tähän viestiin",
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

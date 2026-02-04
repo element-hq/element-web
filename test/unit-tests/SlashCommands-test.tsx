@@ -119,17 +119,6 @@ describe("SlashCommands", () => {
         });
     });
 
-    describe("/upgraderoom", () => {
-        beforeEach(() => {
-            command = findCommand("upgraderoom")!;
-            setCurrentRoom();
-        });
-
-        it("should be enabled by default", () => {
-            expect(command.isEnabled(client, roomId)).toBe(true);
-        });
-    });
-
     describe("/op", () => {
         beforeEach(() => {
             command = findCommand("op")!;
