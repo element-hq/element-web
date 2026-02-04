@@ -1,0 +1,100 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TimelineSeparator > Snapshot tests > renders the timeline separator in default state 1`] = `
+<div>
+  <div
+    aria-label="Label Separator"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    Timeline Separator
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparator > Snapshot tests > renders the timeline separator with HTML child 1`] = `
+<div>
+  <div
+    aria-label="Custom Label"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <h2
+      aria-hidden="true"
+      class="timelineSeparator"
+    >
+      Thursday
+    </h2>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparator > Snapshot tests > renders the timeline separator with date event 1`] = `
+<div>
+  <div
+    aria-label="Date Event Separator"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    Wednesday
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparator > Snapshot tests > renders the timeline separator with late event 1`] = `
+<div>
+  <div
+    aria-label="Late Event Separator"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    Fri, Jan 9, 2026
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`TimelineSeparator > Snapshot tests > renders the timeline separator without children 1`] = `
+<div>
+  <div
+    aria-label="Separator without children"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;

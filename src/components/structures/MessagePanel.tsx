@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
+import { TimelineSeparator } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
@@ -37,7 +38,6 @@ import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
 import ScrollPanel, { type IScrollState } from "./ScrollPanel";
 import DateSeparator from "../views/messages/DateSeparator";
-import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -56,6 +56,18 @@ import { getLateEventInfo } from "./grouper/LateEventGrouper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
+
+/**
+ * Indicates which separator (if any) should be rendered between timeline events.
+ */
+export const enum SeparatorKind {
+    /** No separator should be shown between the two events. */
+    None,
+    /** Insert a date separator (oriented by event date boundaries). */
+    Date,
+    /** Insert a late-event separator when events belong to different late groups. */
+    LateEvent,
+}
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
@@ -756,7 +768,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 });
                 ret.push(
                     <li key={ts1}>
-                        <TimelineSeparator key={ts1} label={text}>
+                        <TimelineSeparator key={ts1} label={text} className="mx_TimelineSeparator">
                             {text}
                         </TimelineSeparator>
                     </li>,
