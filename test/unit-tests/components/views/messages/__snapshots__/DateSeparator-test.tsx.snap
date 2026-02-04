@@ -4,9 +4,9 @@ exports[`DateSeparator renders invalid date separator correctly 1`] = `
 <DocumentFragment>
   <div
     aria-label="Invalid timestamp"
-    class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qrwge_8"
+    class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qfxjc_8"
     role="separator"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
@@ -32,9 +32,9 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
 <DocumentFragment>
   <div
     aria-label="today"
-    class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qrwge_8"
+    class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qfxjc_8"
     role="separator"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
@@ -60,9 +60,9 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
 <DocumentFragment>
   <div
     aria-label="Fri, Dec 17, 2021"
-    class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qrwge_8"
+    class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_qfxjc_8"
     role="separator"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <hr
       role="none"
