@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<RoomList /> > renders Default story 1`] = `
+exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
 <div>
   <div
     style="width: 300px;"
