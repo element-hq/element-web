@@ -182,8 +182,8 @@ importers:
         specifier: 4.3.2
         version: 4.3.2
       lodash:
-        specifier: ^4.17.21
-        version: 4.17.23
+        specifier: npm:lodash-es@^4.17.21
+        version: lodash-es@4.17.23
       maplibre-gl:
         specifier: ^5.0.0
         version: 5.17.0
@@ -696,8 +696,8 @@ importers:
         specifier: ^0.18.6
         version: 0.18.6
       lodash:
-        specifier: ^4.17.21
-        version: 4.17.23
+        specifier: npm:lodash-es@^4.17.21
+        version: lodash-es@4.17.23
       matrix-web-i18n:
         specifier: 3.6.0
         version: 3.6.0
