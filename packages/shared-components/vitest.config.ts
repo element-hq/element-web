@@ -17,6 +17,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { InlineConfig } from "vite";
 import { Reporter } from "vitest/reporters";
 import { env } from "process";
+import { BrowserContextOptions } from "playwright-core";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -60,6 +61,19 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
     }
 }
 
+const commonContextOptions: Omit<BrowserContextOptions, "ignoreHTTPSErrors" | "serviceWorkers"> = {
+    reducedMotion: "reduce",
+    // Force consistent font rendering
+    colorScheme: "light",
+    // Disable font smoothing for consistent rendering
+    deviceScaleFactor: 1,
+};
+
+const commonLaunchOptions = {
+    // Options to try to make font rendering more consistent
+    args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
+};
+
 export default defineConfig({
     test: {
         coverage: {
@@ -88,7 +102,10 @@ export default defineConfig({
                     browser: {
                         enabled: true,
                         headless: true,
-                        provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
+                        provider: playwright({
+                            contextOptions: commonContextOptions,
+                            launchOptions: commonLaunchOptions,
+                        }),
                         instances: [{ browser: "chromium" }],
                     },
                     setupFiles: [".storybook/vitest.setup.ts"],
@@ -102,7 +119,10 @@ export default defineConfig({
                     browser: {
                         enabled: true,
                         headless: true,
-                        provider: playwright({}),
+                        provider: playwright({
+                            contextOptions: commonContextOptions,
+                            launchOptions: commonLaunchOptions,
+                        }),
                         instances: [{ browser: "chromium" }],
                     },
                     setupFiles: ["src/test/setupTests.ts"],
