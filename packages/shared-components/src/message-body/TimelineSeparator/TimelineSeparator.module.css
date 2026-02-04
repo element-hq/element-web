@@ -9,7 +9,6 @@
     clear: both;
     margin: var(--cpd-space-1x) 0;
     font: var(--cpd-font-body-md-regular);
-    letter-spacing: var(--cpd-font-letter-spacing-body-md);
     color: var(--cpd-color-text-primary);
 }
 
