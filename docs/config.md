@@ -581,8 +581,6 @@ Currently, the following UI feature flags are supported:
   This should only be used if the room history visibility options are managed by the server.
 - `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
   timeline for recent messages. When false day dates will be used.
-- `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
-  to true.
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 - `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
 - `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
