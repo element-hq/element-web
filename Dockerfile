@@ -11,6 +11,7 @@ ARG JS_SDK_BRANCH="master"
 WORKDIR /src
 
 COPY --exclude=docker . /src
+RUN corepack enable
 RUN /src/scripts/docker-link-repos.sh
 RUN pnpm --network-timeout=200000 install
 RUN /src/scripts/docker-package.sh
