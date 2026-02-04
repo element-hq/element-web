@@ -95,14 +95,14 @@ jobs:
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
             - name: Login to Docker Hub
-              uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+              uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
               if: github.event_name != 'pull_request'
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+              uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
               if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
@@ -138,7 +138,7 @@ jobs:
                       services/web-repositories/secret/data/oci.element.io password | OCI_PASSWORD ;
 
             - name: Login to oci.element.io Registry
-              uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+              uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
               if: github.event_name != 'pull_request'
               with:
                   registry: oci-push.vpn.infra.element.io
