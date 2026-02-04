@@ -5,8 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { EventType } from "matrix-js-sdk/src/matrix";
+
 import { type SettingLevel } from "../SettingLevel.ts";
-import { INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE } from "../../@types/invite-rules.ts";
 import { _td } from "../../languageHandler.tsx";
 import ServerSupportUnstableFeatureController from "./ServerSupportUnstableFeatureController.ts";
 import { defaultWatchManager, type SettingKey } from "../Settings.tsx";
@@ -27,7 +28,7 @@ export default class BlockInvitesConfigController extends ServerSupportUnstableF
     }
 
     public getValueOverride(_level: SettingLevel): boolean {
-        const accountData = this.client?.getAccountData(INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE)?.getContent();
+        const accountData = this.client?.getAccountData(EventType.InvitePermissionConfig)?.getContent();
         return accountData?.default_action == "block";
     }
 
@@ -36,10 +37,7 @@ export default class BlockInvitesConfigController extends ServerSupportUnstableF
             return false;
         }
 
-        await this.client.setAccountData(
-            INVITE_PERMISSION_CONFIG_ACCOUNT_DATA_TYPE,
-            newValue ? { default_action: "block" } : {},
-        );
+        await this.client.setAccountData(EventType.InvitePermissionConfig, newValue ? { default_action: "block" } : {});
         return true;
     }
 }
