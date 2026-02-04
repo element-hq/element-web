@@ -35,16 +35,16 @@
         "package.json"
     ],
     "scripts": {
-        "i18n": "matrix-gen-i18n src && yarn i18n:sort && yarn i18n:lint",
+        "i18n": "matrix-gen-i18n src && pnpm i18n:sort && pnpm i18n:lint",
         "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "test:unit": "vitest --project=unit",
         "test:storybook": "vitest --project=storybook",
         "test:storybook:update": "playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules",
-        "prepare": "patch-package && vite build",
+        "prepare": "vite build",
         "storybook": "storybook dev -p 6007",
         "build-storybook": "storybook build",
-        "lint": "yarn lint:types && yarn lint:js",
+        "lint": "pnpm lint:types && pnpm lint:js",
         "lint:js": "eslint --max-warnings 0 src && prettier --check .",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
@@ -99,7 +99,7 @@
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-storybook": "^10.0.7",
         "eslint-plugin-unicorn": "^56.0.0",
-        "patch-package": "^8.0.1",
+        "expect": "^30.2.0",
         "prettier": "^3.6.2",
         "storybook": "^10.0.7",
         "storybook-addon-vis": "^3.1.2",
@@ -114,7 +114,7 @@
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+    "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5"
     }
