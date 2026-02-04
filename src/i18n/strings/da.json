@@ -1295,7 +1295,6 @@
         "ask_to_join": "Aktivér spørg om at deltage",
         "automatic_debug_logs": "Send automatisk fejlfindingslogfiler ved enhver fejl",
         "automatic_debug_logs_decryption": "Send automatisk fejlfindingslogfiler ved dekrypteringsfejl",
-        "automatic_debug_logs_key_backup": "Send automatisk fejlfindingslogfiler, når nøglebackup ikke fungerer",
         "beta_description": "Hvad er det næste skridt for %(brand)s? Labs er den bedste måde at få adgang til tingene tidligt, afprøve nye funktioner og være med til at forme dem, inden de faktisk lanceres.",
         "beta_feature": "Dette er en betafunktion",
         "beta_feedback_leave_button": "For at forlade betaversionen skal du gå til dine indstillinger.",
@@ -2890,9 +2889,6 @@
         },
         "creation_summary_dm": "%(creator)s oprettede denne samtale.",
         "creation_summary_room": "%(creator)s oprettede og konfigurerede rummet.",
-        "decryption_failure": {
-            "historical_event_user_not_joined": "Du har ikke adgang til denne besked"
-        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Downloader",

@@ -5,13 +5,63 @@
     "action": {
         "delete": "Kustuta",
         "dismiss": "Loobu",
+        "edit": "Muuda",
         "explore_rooms": "Tutvu jututubadega",
+        "invite": "Kutsu",
+        "new_conversation": "Uus vestlus",
+        "new_room": "Uus jututuba",
+        "new_video_room": "Uus videotuba",
+        "open_menu": "Ava menüü",
         "pause": "Peata",
         "play": "Esita",
-        "search": "Otsing"
+        "remove": "Eemalda",
+        "retry": "Proovi uuesti",
+        "search": "Otsing",
+        "start_chat": "Alusta vestlust"
+    },
+    "common": {
+        "preferences": "Eelistused"
     },
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Jututoa eelistused"
+        },
+        "status_bar": {
+            "delete_all": "Kustuta kõik",
+            "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenuse haldajaga või peakasutajaga.",
+            "exceeded_resource_limit_title": "Kuna see koduserver on ületanud etteantud ressursside ülempiiri, siis sinu sõnum on saatmata.",
+            "failed_to_create_room_title": "Selle kasutajaga ei õnnestunud alustada vestlust",
+            "homeserver_blocked_title": "Kuna see koduserver on peakasutaja või haldaaja poolt blokeerinud, siis sinu sõnum on saatmata.",
+            "monthly_user_limit_reached_title": "Sinu sõnum on saatmata, kuna see koduserver on saavutanud oma igakuise aktiivsete kasutajate ülempiiri.",
+            "requires_consent_agreement_title": "Sa ei saa sõnumeid saata enne, kui oled meie kasutustingimustega tutvunud ja nendega nõustunud.",
+            "retry_all": "Proovi kõikidega uuesti",
+            "select_messages_to_retry": "Sa võid valida kas kõik või mõned sõnumid kas kustutamiseks või uuesti saatmiseks",
+            "server_connectivity_lost_description": "Saadetud sõnumid salvestatakse seniks, kuni võrguühendus on taastunud.",
+            "server_connectivity_lost_title": "Võrguühendus serveriga on katkenud.",
+            "some_messages_not_sent": "Mõned sinu sõnumid on saatmata"
+        }
+    },
+    "room_list": {
+        "appearance": "Välimus",
+        "open_space_menu": "Ava kogukonna menüü",
+        "room_options": "Jututoa valikud",
+        "show_message_previews": "Näita sõnumite eelvaateid",
+        "sort": "Järjesta",
+        "sort_type": {
+            "activity": "Aktiivsuse alusel",
+            "atoz": "Tähestiku järjekorras",
+            "unread_first": "Esmalt lugemata"
+        },
+        "space_menu": {
+            "home": "Kogukonna avaleht",
+            "space_settings": "Kogukonna seadistused"
+        }
+    },
+    "terms": {
+        "tac_button": "Vaata üle kasutustingimused"
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -30,10 +80,29 @@
         "n_minutes_ago": "%(num)s minutit tagasi"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "Kuna sinu seade on verifitseerimata, siis saatja on blokeerinud võimaluse, et sa saaksid selle sõnumi",
+            "historical_event_no_key_backup": "Varasemad sõnumid pole selles seadmes loetavad",
+            "historical_event_unverified_device": "Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima",
+            "historical_event_user_not_joined": "Sul pole ligipääsu antud sõnumile",
+            "sender_identity_previously_verified": "Saatja verifitseeritud võrguidentiteet on lähtestatud",
+            "sender_unsigned_device": "Saadetud ebaturvalisest seadmest.",
+            "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestunud"
+        },
         "m.audio": {
             "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "unnamed_audio": "Nimetu helifail"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Liigu vasakule",
+            "move_right": "Liigu paremale",
+            "remove": "Eemalda kõigilt",
+            "revoke": "Tühista õigused",
+            "screenshot": "Pildista",
+            "start_audio_stream": "Käivita audiovoog"
         }
     }
 }

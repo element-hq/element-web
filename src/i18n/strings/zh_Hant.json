@@ -1259,7 +1259,6 @@
         "ask_to_join": "啟用要求加入",
         "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌",
         "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",
-        "automatic_debug_logs_key_backup": "金鑰備份無法運作時，自動傳送除錯紀錄檔",
         "beta_description": "%(brand)s 的下一步是什麼？實驗室是提早取得資訊、測試新功能，並在實際釋出前協助塑造它們的最佳方式。",
         "beta_feature": "這是 Beta 測試功能",
         "beta_feedback_leave_button": "請到設定頁面離開 Beta 測試版。",

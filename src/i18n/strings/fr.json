@@ -1508,7 +1508,6 @@
         "ask_to_join": "Activer demander à venir",
         "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur",
         "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
-        "automatic_debug_logs_key_backup": "Envoyer automatiquement les journaux de débogage lorsque la sauvegarde des clés ne fonctionne pas",
         "beta_description": "Que va-t-il se passer dans %(brand)s ? La section expérimentale est la meilleure manière d’avoir des choses en avance, tester les nouvelles fonctionnalités et d’aider à les affiner avant leur lancement officiel.",
         "beta_feature": "Il s'agit d'une fonctionnalité bêta",
         "beta_feedback_leave_button": "Pour quitter la bêta, consultez les paramètres.",
@@ -3391,12 +3390,7 @@
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
         "decryption_failure": {
-            "blocked": "L'expéditeur vous a empêché de recevoir ce message car votre appareil n'est pas vérifié",
-            "historical_event_no_key_backup": "L'historique des messages n'est pas disponible sur cet appareil",
-            "historical_event_unverified_device": "Vous devez vérifier cet appareil pour accéder à l'historique des messages",
-            "historical_event_user_not_joined": "Vous n'avez pas accès à ce message",
             "sender_identity_previously_verified": "L'identité vérifiée de l'expéditeur a changé",
-            "sender_unsigned_device": "Envoyé depuis un appareil non sécurisé.",
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

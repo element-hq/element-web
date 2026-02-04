@@ -16,12 +16,10 @@
         "room_n_unread_invite": "Otevřít pozvánku do místnosti %(roomName)s.",
         "room_n_unread_messages": {
             "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zprávou.",
-            "few": "",
             "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami."
         },
         "room_n_unread_messages_mentions": {
             "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zmínkou.",
-            "few": "",
             "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami včetně zmínek."
         },
         "room_name": "Místnost %(name)s",
@@ -978,6 +976,7 @@
         "import_invalid_passphrase": "Kontrola ověření selhala: špatné heslo?",
         "key_storage_out_of_sync": "Vaše úložiště klíčů není synchronizováno.",
         "key_storage_out_of_sync_description": "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.",
+        "message_shared_by": "%(displayName)s (%(userId)s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",
@@ -1509,7 +1508,6 @@
         "ask_to_join": "Umožnit požádat o vstup",
         "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě",
         "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",
-        "automatic_debug_logs_key_backup": "Automaticky odeslat ladící protokoly, když zálohování klíčů nefunguje",
         "beta_description": "Co se chystá pro %(brand)s? Experimentální funkce jsou nejlepším způsobem, jak se dostat k novým věcem v raném stádiu, vyzkoušet nové funkce a pomoci je formovat ještě před jejich spuštěním.",
         "beta_feature": "Jedná se o funkci ve vývoji",
         "beta_feedback_leave_button": "Chcete-li opustit beta verzi, jděte do nastavení.",
@@ -2036,7 +2034,9 @@
                 "few": "%(count)s lidé žádají o vstup",
                 "other": "%(count)s lidí žádá o vstup"
             },
-            "room_is_public": "Tato místnost je veřejná"
+            "room_is_public": "Tato místnost je veřejná",
+            "shared_history_tooltip": "Noví členové vidí historii",
+            "world_readable_history_tooltip": "Každý může vidět historii"
         },
         "header_avatar_open_settings_label": "Otevřít nastavení místnosti",
         "header_face_pile_tooltip": "Lidé",
@@ -3400,12 +3400,7 @@
         "creation_summary_dm": "%(creator)s vytvořil(a) tuto přímou zprávu.",
         "creation_summary_room": "%(creator)s vytvořil(a) a nakonfiguroval(a) místnost.",
         "decryption_failure": {
-            "blocked": "Odesílatel vám zablokoval příjem této zprávy, protože vaše zařízení není ověřeno.",
-            "historical_event_no_key_backup": "Historické zprávy nejsou v tomto zařízení k dispozici",
-            "historical_event_unverified_device": "Pro přístup k historickým zprávám je třeba toto zařízení ověřit.",
-            "historical_event_user_not_joined": "K této zprávě nemáte přístup",
             "sender_identity_previously_verified": "Ověřená identita odesílatele se změnila",
-            "sender_unsigned_device": "Šifrováno zařízením, které nebylo ověřeno jeho majitelem.",
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",

@@ -21,7 +21,7 @@ import { TextualEventView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { type EventTileProps } from "../components/views/rooms/EventTile";
+import { type IEventTileType, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
@@ -61,7 +61,7 @@ export interface EventTileTypeProps extends Pick<
     | "isSeeingThroughMessageHiddenForModeration"
     | "inhibitInteraction"
 > {
-    ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
+    ref?: React.RefObject<IEventTileType | null>;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
