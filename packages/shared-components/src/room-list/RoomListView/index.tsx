@@ -8,5 +8,5 @@
 export { RoomListView } from "./RoomListView";
 export type { RoomListViewProps, RoomListViewModel, RoomListSnapshot, RoomListViewActions } from "./RoomListView";
 export { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
-export { RoomListEmptyState } from "./RoomListEmptyState";
-export type { RoomListEmptyStateProps } from "./RoomListEmptyState";
+export { RoomListEmptyStateView } from "./RoomListEmptyStateView";
+export type { RoomListEmptyStateViewProps } from "./RoomListEmptyStateView";

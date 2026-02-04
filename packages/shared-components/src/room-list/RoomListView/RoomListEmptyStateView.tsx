@@ -14,12 +14,12 @@ import { Flex } from "../../utils/Flex";
 import { _t } from "../../utils/i18n";
 import { useViewModel } from "../../viewmodel";
 import type { RoomListViewModel } from "./RoomListView";
-import styles from "./RoomListEmptyState.module.css";
+import styles from "./RoomListEmptyStateView.module.css";
 
 /**
- * Props for RoomListEmptyState component
+ * Props for RoomListEmptyStateView component
  */
-export interface RoomListEmptyStateProps {
+export interface RoomListEmptyStateViewProps {
     /** The view model containing all data and callbacks */
     vm: RoomListViewModel;
 }
@@ -28,7 +28,7 @@ export interface RoomListEmptyStateProps {
  * Empty state component for the room list.
  * Displays appropriate message and actions based on the active filter.
  */
-export const RoomListEmptyState: React.FC<RoomListEmptyStateProps> = ({ vm }): JSX.Element => {
+export const RoomListEmptyStateView: React.FC<RoomListEmptyStateViewProps> = ({ vm }): JSX.Element => {
     const snapshot = useViewModel(vm);
 
     // If there is no active filter, show the default empty state

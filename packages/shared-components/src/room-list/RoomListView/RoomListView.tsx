@@ -10,7 +10,7 @@ import React, { type JSX, type ReactNode } from "react";
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
-import { RoomListEmptyState } from "./RoomListEmptyState";
+import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { RoomList, type RoomListViewState } from "../RoomList";
 import { type RoomListItemSnapshot } from "../RoomListItem";
 
@@ -81,7 +81,7 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
     if (snapshot.isLoadingRooms) {
         listBody = <RoomListLoadingSkeleton />;
     } else if (snapshot.isRoomListEmpty) {
-        listBody = <RoomListEmptyState vm={vm} />;
+        listBody = <RoomListEmptyStateView vm={vm} />;
     } else {
         listBody = <RoomList vm={vm} renderAvatar={renderAvatar} onKeyDown={onKeyDown} />;
     }
