@@ -8,27 +8,27 @@
 import { type MatrixClient, type MatrixEvent, Room, RoomEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
-import { createTestClient, flushPromises } from "../../../../test-utils";
-import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
-import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
-import { NotificationStateEvents } from "../../../../../src/stores/notifications/NotificationState";
-import { type MessagePreview, MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
-import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
-import dispatcher from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { CallStore } from "../../../../../src/stores/CallStore";
-import type { Call } from "../../../../../src/models/Call";
-import { RoomListItemViewModel } from "../../../../../src/viewmodels/room-list/RoomListItemViewModel";
+import { createTestClient, flushPromises } from "../../test-utils";
+import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
+import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
+import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
+import { type MessagePreview, MessagePreviewStore } from "../../../src/stores/room-list/MessagePreviewStore";
+import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
+import SettingsStore from "../../../src/settings/SettingsStore";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { DefaultTagID } from "../../../src/stores/room-list/models";
+import dispatcher from "../../../src/dispatcher/dispatcher";
+import { Action } from "../../../src/dispatcher/actions";
+import { CallStore } from "../../../src/stores/CallStore";
+import type { Call } from "../../../src/models/Call";
+import { RoomListItemViewModel } from "../../../src/viewmodels/room-list/RoomListItemViewModel";
 
-jest.mock("../../../../../src/viewmodels/room-list/utils", () => ({
+jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
     hasAccessToNotificationMenu: jest.fn().mockReturnValue(true),
 }));
 
-jest.mock("../../../../../src/stores/CallStore", () => ({
+jest.mock("../../../src/stores/CallStore", () => ({
     __esModule: true,
     CallStore: {
         instance: {

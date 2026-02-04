@@ -38,7 +38,7 @@ jest.mock("../../../src/utils/space", () => ({
     showSpaceSettings: jest.fn(),
 }));
 
-jest.mock("../../../src/components/viewmodels/roomlist/utils", () => ({
+jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     createRoom: jest.fn(),
     hasCreateRoomRights: jest.fn(),
 }));

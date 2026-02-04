@@ -8,22 +8,22 @@
 import { mocked } from "jest-mock";
 
 import type { MatrixClient, Room, RoomState } from "matrix-js-sdk/src/matrix";
-import { createTestClient, mkStubRoom } from "../../../../test-utils";
-import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { showCreateNewRoom } from "../../../../../src/utils/space";
+import { createTestClient, mkStubRoom } from "../../test-utils";
+import { shouldShowComponent } from "../../../src/customisations/helpers/UIComponents";
+import defaultDispatcher from "../../../src/dispatcher/dispatcher";
+import { Action } from "../../../src/dispatcher/actions";
+import { showCreateNewRoom } from "../../../src/utils/space";
 import {
     hasCreateRoomRights,
     createRoom,
     hasAccessToNotificationMenu,
-} from "../../../../../src/viewmodels/room-list/utils";
+} from "../../../src/viewmodels/room-list/utils";
 
-jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
+jest.mock("../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
-jest.mock("../../../../../src/utils/space", () => ({
+jest.mock("../../../src/utils/space", () => ({
     showCreateNewRoom: jest.fn(),
 }));
 
