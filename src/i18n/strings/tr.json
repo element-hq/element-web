@@ -1392,7 +1392,6 @@
         "ask_to_join": "Katılma isteğini etkinleştir",
         "automatic_debug_logs": "Herhangi bir hatada otomatik olarak hata ayıklama günlükleri gönder",
         "automatic_debug_logs_decryption": "Şifre çözme hatalarında otomatik olarak hata ayıklama günlükleri gönder",
-        "automatic_debug_logs_key_backup": "Anahtar yedekleme çalışmadığında hata ayıklama günlüklerini otomatik olarak gönder",
         "beta_description": "%(brand)s için sırada ne var? Labsr, bir şeyleri erkenden elde etmenin, yeni özellikleri test etmenin ve piyasaya sürülmeden önce şekillendirmeye yardımcı olmanın en iyi yoludur.",
         "beta_feature": "Bu bir beta özelliğidir",
         "beta_feedback_leave_button": "Beta sürümünden çıkmak için ayarlarınızı ziyaret edin.",
