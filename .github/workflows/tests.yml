@@ -140,7 +140,7 @@ jobs:
                   path: |
                       packages/shared-components/node_modules/.cache
                       packages/shared-components/node_modules/.vite/vitest
-                  key: ${{ hashFiles('packages/shared-components/pnpm-lock.yaml') }}
+                  key: ${{ hashFiles('pnpm-lock.yaml') }}
 
             - name: Get installed Playwright version
               working-directory: packages/shared-components
