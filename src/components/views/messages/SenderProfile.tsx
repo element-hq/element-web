@@ -21,15 +21,17 @@ interface IProps {
 }
 
 export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps): JSX.Element {
+    const sender = mxEvent.getSender();
+
     const member = useRoomMemberProfile({
-        userId: mxEvent.getSender(),
+        userId: sender,
         member: mxEvent.sender,
     });
 
     const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
         () =>
             new DisambiguatedProfileViewModel({
-                fallbackName: mxEvent.getSender() ?? "",
+                fallbackName: sender ?? "",
                 onClick,
                 member,
                 colored: true,
@@ -40,14 +42,12 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
 
     useEffect(() => {
         disambiguatedProfileVM.setProps({
-            fallbackName: mxEvent.getSender() ?? "",
+            fallbackName: sender ?? "",
             onClick,
             member,
-            colored: true,
-            emphasizeDisplayName: true,
             withTooltip,
         });
-    }, [disambiguatedProfileVM, mxEvent, onClick, member, withTooltip]);
+    }, [disambiguatedProfileVM, sender, onClick, member, withTooltip]);
 
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
         <DisambiguatedProfileView vm={disambiguatedProfileVM} />
