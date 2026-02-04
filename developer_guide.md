@@ -28,8 +28,8 @@ First clone and build `matrix-js-sdk`:
 ```bash
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
-yarn link
-yarn install
+pnpm link
+pnpm install
 popd
 ```
 
@@ -46,9 +46,9 @@ modifying it. See the [configuration docs](docs/config.md) for details.
 Finally, build and start Element itself:
 
 ```bash
-yarn link matrix-js-sdk
-yarn install
-yarn start
+pnpm link matrix-js-sdk
+pnpm install
+pnpm start
 ```
 
 Wait a few seconds for the initial build to finish; you should see something like:
@@ -104,7 +104,7 @@ There are a number of application-level tests in the `tests` directory; these
 are designed to run with Jest and JSDOM. To run them
 
 ```
-yarn test
+pnpm test
 ```
 
 ### End-to-End tests

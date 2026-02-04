@@ -43,7 +43,7 @@ Follow the Playwright installation instructions:
 - **System dependencies:** <https://playwright.dev/docs/browsers#install-system-dependencies>
 
 ```sh
-yarn playwright install --with-deps
+pnpm playwright install --with-deps
 ```
 
 ### 2. Container Runtime
@@ -56,7 +56,7 @@ Element Web E2E tests require an instance running on `http://localhost:8080` (co
 
 You can either:
 
-- **Run manually:** `yarn start` in a separate terminal (not working for screenshot tests running in a docker environment).
+- **Run manually:** `pnpm start` in a separate terminal (not working for screenshot tests running in a docker environment).
 - **Auto-start:** Playwright will start the webserver automatically if it's not already running
 
 ## Running the Tests
@@ -68,19 +68,19 @@ Our main Playwright tests run against a full Element Web instance with Synapse/D
 **Run all E2E tests:**
 
 ```sh
-yarn run test:playwright
+pnpm run test:playwright
 ```
 
 **Run a specific test file:**
 
 ```sh
-yarn run test:playwright playwright/e2e/register/register.spec.ts
+pnpm run test:playwright playwright/e2e/register/register.spec.ts
 ```
 
 **Run tests interactively with Playwright UI:**
 
 ```sh
-yarn run test:playwright:open
+pnpm run test:playwright:open
 ```
 
 **Run screenshot tests only:**
@@ -89,7 +89,7 @@ yarn run test:playwright:open
 > This command run the playwright tests in a docker environment.
 
 ```sh
-yarn run test:playwright:screenshots
+pnpm run test:playwright:screenshots
 ```
 
 For more information about visual testing, see [Visual Testing](playwright#visual-testing).
@@ -387,7 +387,7 @@ This command runs only tests tagged with `@screenshot` in the Docker environment
 When you need to update screenshot baselines (e.g., after intentional UI changes):
 
 ```sh
-yarn run test:playwright:screenshots
+pnpm run test:playwright:screenshots
 ```
 
 **Important:** Always use this command to update screenshots rather than running tests locally with `--update-snapshots`.
