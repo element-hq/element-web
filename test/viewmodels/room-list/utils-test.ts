@@ -13,11 +13,7 @@ import { shouldShowComponent } from "../../../src/customisations/helpers/UICompo
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { showCreateNewRoom } from "../../../src/utils/space";
-import {
-    hasCreateRoomRights,
-    createRoom,
-    hasAccessToNotificationMenu,
-} from "../../../src/viewmodels/room-list/utils";
+import { hasCreateRoomRights, createRoom, hasAccessToNotificationMenu } from "../../../src/viewmodels/room-list/utils";
 
 jest.mock("../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
