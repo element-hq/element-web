@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomList, type RoomListViewState } from "./RoomList";
+import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
 import type { RoomListSnapshot, RoomListViewActions } from "../RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
 import type { FilterId } from "../RoomListPrimaryFilters";
@@ -40,7 +40,7 @@ const RoomListWrapper = ({
 
     return (
         <div style={{ height: "400px", border: "1px solid #ccc" }}>
-            <RoomList vm={vm} renderAvatar={renderAvatarProp} />
+            <VirtualizedRoomListView vm={vm} renderAvatar={renderAvatarProp} />
         </div>
     );
 };
@@ -54,7 +54,7 @@ const defaultRoomListState: RoomListViewState = {
 };
 
 const meta: Meta<RoomListStoryProps> = {
-    title: "Room List/RoomList",
+    title: "Room List/VirtualizedRoomListView",
     component: RoomListWrapper,
     tags: ["autodocs"],
     args: {

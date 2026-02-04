@@ -25,7 +25,7 @@ export * from "./room-list/RoomListSearchView";
 export * from "./room-list/RoomListView";
 export * from "./room-list/RoomListItem";
 export * from "./room-list/RoomListPrimaryFilters";
-export * from "./room-list/RoomList";
+export * from "./room-list/VirtualizedRoomListView";
 export * from "./utils/Box";
 export * from "./utils/Flex";
 export * from "./right-panel/WidgetContextMenu";

@@ -11,7 +11,7 @@ import { VirtuosoMockContext } from "react-virtuoso";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
 
-import * as stories from "./RoomList.stories";
+import * as stories from "./VirtualizedRoomListView.stories";
 
 const { Default } = composeStories(stories);
 
@@ -25,7 +25,7 @@ const renderWithMockContext = (component: React.ReactElement): ReturnType<typeof
     });
 };
 
-describe("<RoomList />", () => {
+describe("<VirtualizedRoomListView />", () => {
     it("renders Default story", () => {
         const { container } = renderWithMockContext(<Default />);
         expect(container).toMatchSnapshot();

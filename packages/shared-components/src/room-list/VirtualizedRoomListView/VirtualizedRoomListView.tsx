@@ -33,9 +33,9 @@ export interface RoomListViewState {
 }
 
 /**
- * Props for the RoomList component
+ * Props for the VirtualizedRoomListView component
  */
-export interface RoomListProps {
+export interface VirtualizedRoomListViewProps {
     /**
      * The view model containing all room list data and callbacks
      */
@@ -78,10 +78,10 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  *
  * @example
  * ```tsx
- * <RoomList vm={roomListViewModel} renderAvatar={(room) => <Avatar room={room} />} />
+ * <VirtualizedRoomListView vm={roomListViewModel} renderAvatar={(room) => <Avatar room={room} />} />
  * ```
  */
-export function RoomList({ vm, renderAvatar, onKeyDown }: RoomListProps): JSX.Element {
+export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: VirtualizedRoomListViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
     const { roomListState, roomIds } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;

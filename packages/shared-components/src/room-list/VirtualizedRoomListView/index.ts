@@ -5,5 +5,5 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { RoomList } from "./RoomList";
-export type { RoomListProps, RoomListViewState, FilterKey } from "./RoomList";
+export { VirtualizedRoomListView } from "./VirtualizedRoomListView";
+export type { VirtualizedRoomListViewProps, RoomListViewState, FilterKey } from "./VirtualizedRoomListView";
