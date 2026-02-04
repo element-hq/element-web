@@ -53,7 +53,7 @@ importers:
         specifier: 1.9.0
         version: 1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
       '@element-hq/web-shared-components':
-        specifier: link:packages/shared-components
+        specifier: workspace:*
         version: link:packages/shared-components
       '@fontsource/fira-code':
         specifier: ^5
@@ -585,7 +585,7 @@ importers:
         specifier: 8.4.46
         version: 8.4.46
       postcss-easings:
-        specifier: ^4.0.0
+        specifier: 4.0.0
         version: 4.0.0(postcss@8.4.46)
       postcss-hexrgba:
         specifier: 2.1.0
@@ -597,19 +597,19 @@ importers:
         specifier: 8.1.1
         version: 8.1.1(postcss@8.4.46)(typescript@5.9.3)(webpack@5.105.0)
       postcss-mixins:
-        specifier: ^12.0.0
-        version: 12.1.2(postcss@8.4.46)
+        specifier: 12.0.0
+        version: 12.0.0(postcss@8.4.46)
       postcss-nested:
-        specifier: ^7.0.0
+        specifier: 7.0.2
         version: 7.0.2(postcss@8.4.46)
       postcss-preset-env:
-        specifier: ^11.0.0
-        version: 11.1.2(postcss@8.4.46)
+        specifier: 11.1.1
+        version: 11.1.1(postcss@8.4.46)
       postcss-scss:
-        specifier: ^4.0.4
+        specifier: 4.0.9
         version: 4.0.9(postcss@8.4.46)
       postcss-simple-vars:
-        specifier: ^7.0.1
+        specifier: 7.0.1
         version: 7.0.1(postcss@8.4.46)
       prettier:
         specifier: 3.8.1
@@ -8180,8 +8180,8 @@ packages:
     peerDependencies:
       postcss: ^8.4.32
 
-  postcss-mixins@12.1.2:
-    resolution: {integrity: sha512-90pSxmZVfbX9e5xCv7tI5RV1mnjdf16y89CJKbf/hD7GyOz1FCxcYMl8ZYA8Hc56dbApTKKmU9HfvgfWdCxlwg==}
+  postcss-mixins@12.0.0:
+    resolution: {integrity: sha512-br7vXwoA5niiQAW3BLgd66xoGie/JJ1O4k7uLDbb+fbdYFXouxAjppIkBZDpPtSIzx63WeVXRGEYStSYa5kQmw==}
     engines: {node: ^20.0 || ^22.0 || >=24.0}
     peerDependencies:
       postcss: ^8.2.14
@@ -8305,8 +8305,8 @@ packages:
     peerDependencies:
       postcss: ^8.4
 
-  postcss-preset-env@11.1.2:
-    resolution: {integrity: sha512-rtRQeKP7xZgAAE4YSxjYyX62qpgn9n7BczxtpA0AP4u9JYn1wfUhsd3ZmV9mi8IlU111aF1TtJMqT/QhmtAgLA==}
+  postcss-preset-env@11.1.1:
+    resolution: {integrity: sha512-40TvWF5sqMxGdyiPfskRf4gLcCou3ymNTpSDYD/ZsOKQNzsG2lwhEjNWMGShKvA/p4veR+dRhTYfUfIQ/5gbfg==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       postcss: ^8.4
@@ -18473,7 +18473,7 @@ snapshots:
       postcss: 8.4.46
       postcss-selector-parser: 7.1.1
 
-  postcss-mixins@12.1.2(postcss@8.4.46):
+  postcss-mixins@12.0.0(postcss@8.4.46):
     dependencies:
       postcss: 8.4.46
       postcss-js: 4.1.0(postcss@8.4.46)
@@ -18583,7 +18583,7 @@ snapshots:
       postcss: 8.4.46
       postcss-value-parser: 4.2.0
 
-  postcss-preset-env@11.1.2(postcss@8.4.46):
+  postcss-preset-env@11.1.1(postcss@8.4.46):
     dependencies:
       '@csstools/postcss-alpha-function': 2.0.2(postcss@8.4.46)
       '@csstools/postcss-cascade-layers': 6.0.0(postcss@8.4.46)
