@@ -1524,7 +1524,6 @@
         "ask_to_join": "Umožniť požiadať o pripojenie",
         "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
         "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
-        "automatic_debug_logs_key_backup": "Automaticky odosielať záznamy o ladení, ak zálohovanie kľúčov nefunguje",
         "beta_description": "Čo vás čaká v aplikácii %(brand)s? Laboratóriá sú najlepším spôsobom, ako získať funkcie v predstihu, otestovať nové funkcie a pomôcť ich vytvoriť ešte pred ich skutočným spustením.",
         "beta_feature": "Toto je funkcia vo verzii beta",
         "beta_feedback_leave_button": "Ak chcete opustiť beta verziu, navštívte svoje nastavenia.",
