@@ -8,6 +8,7 @@
         "url": "https://github.com/element-hq/element-web"
     },
     "license": "SEE LICENSE IN README.md",
+    "type": "module",
     "files": [
         "lib",
         "res",
