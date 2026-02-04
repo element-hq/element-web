@@ -202,7 +202,6 @@
         "@types/jest": "30.0.0",
         "@types/jitsi-meet": "^2.0.2",
         "@types/jsrsasign": "^10.5.4",
-        "@types/katex": "^0.16.0",
         "@types/lodash": "^4.14.168",
         "@types/minimist": "^1.2.5",
         "@types/modernizr": "^3.5.3",
