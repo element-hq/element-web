@@ -217,8 +217,8 @@ class GuestModule:
         txn.execute(
             """
             CREATE TABLE IF NOT EXISTS guest_module_mas_users (
-                mas_user_id TEXT PRIMARY KEY,
-                user_id TEXT,
+                mas_user_id TEXT PRIMARY KEY NOT NULL,
+                user_id TEXT NOT NULL,
                 created_at_sec BIGINT NOT NULL
             )
             """,
