@@ -82,13 +82,12 @@ function checkBrowserFeatures(): boolean {
     for (const feature of featureList) {
         if (window.Modernizr[feature] === undefined) {
             logger.error(
-                "Looked for feature '%s' but Modernizr has no results for this. " + "Has it been configured correctly?",
-                feature,
+                `Looked for feature '${feature}' but Modernizr has no results for this. Has it been configured correctly?`,
             );
             return false;
         }
         if (window.Modernizr[feature] === false) {
-            logger.error("Browser missing feature: '%s'", feature);
+            logger.error(`Browser missing feature: '${feature}'`);
             // toggle flag rather than return early so we log all missing features rather than just the first.
             featureComplete = false;
         }
