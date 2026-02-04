@@ -1253,7 +1253,6 @@
         "ask_to_join": "Alefaso ny fangatahana hiditra",
         "automatic_debug_logs": "Alefaso ho azy ny log debug amin'ny lesoka rehetra",
         "automatic_debug_logs_decryption": "Alefaso ho azy ny diarin'ny debug momba ny lesoka decryption",
-        "automatic_debug_logs_key_backup": "Alefaso ho azy ny log debug rehefa tsy mandeha ny fanalahidiny vakorakitra",
         "beta_description": "Inona no manaraka%(brand)s ? Labs no fomba tsara indrindra hahazoana zavatra mialoha, hizaha toetra vaovao ary hanampy amin'ny famolavolana azy ireo alohany hanombohany.",
         "beta_feature": "Ity dia endri-javatra beta",
         "beta_feedback_leave_button": "Raha te hiala amin'ny beta dia tsidiho ny kiranao.",

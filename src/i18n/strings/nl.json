@@ -1104,7 +1104,6 @@
     "labs": {
         "automatic_debug_logs": "Automatisch foutenlogboek versturen bij een fout",
         "automatic_debug_logs_decryption": "Automatisch foutopsporingslogboeken versturen bij decoderingsfouten",
-        "automatic_debug_logs_key_backup": "Automatisch foutopsporingslogboeken versturen wanneer de sleutelback-up niet werkt",
         "beta_feature": "Dit is een bètafunctie",
         "beta_feedback_leave_button": "Om de beta te verlaten, ga naar je instellingen.",
         "beta_feedback_title": "%(featureName)s Bèta-feedback",

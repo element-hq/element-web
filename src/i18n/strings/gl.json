@@ -1091,7 +1091,6 @@
     "labs": {
         "automatic_debug_logs": "Enviar automáticamente rexistros de depuración para calquera fallo",
         "automatic_debug_logs_decryption": "Envía automáticamente rexistro de depuración se hai erros no cifrado",
-        "automatic_debug_logs_key_backup": "Enviar automáticamente rexistros de depuración cando a chave da copia de apoio non funcione",
         "beta_feature": "Esta é unha característica beta",
         "beta_feedback_leave_button": "Para saír da beta, vai aos axustes.",
         "beta_feedback_title": "Informe sobre %(featureName)s Beta",
