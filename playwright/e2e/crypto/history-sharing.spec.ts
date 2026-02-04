@@ -38,6 +38,14 @@ test.describe("History sharing", function () {
 
             // Create the room and send a message
             await createRoom(alicePage, "TestRoom", true);
+            
+            // The default history visibility for private rooms is "invited", 
+            // so we need to change it to "shared" to ensure Bob can see the message when he joins.
+            const roomId = await aliceElementApp.getCurrentRoomIdFromUrl();
+            await aliceElementApp.client.sendStateEvent(roomId, "m.room.history_visibility", {
+                history_visibility: "shared",
+            });
+            
             await sendMessageInCurrentRoom(alicePage, "A message from Alice");
 
             // Send the invite to Bob
@@ -100,6 +108,14 @@ test.describe("History sharing", function () {
         await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
         await bobPage.getByRole("option", { name: "TestRoom" }).click();
         await bobPage.getByRole("button", { name: "Accept" }).click();
+
+        // The room now defaults to "invited" history visibility, so we need to set it to "shared" first
+        await aliceElementApp.client.sendStateEvent(roomId, "m.room.history_visibility", {
+            history_visibility: "shared",
+        });
+        await expect(
+            bobPage.getByText("Alice made future room history visible to all room members."),
+        ).toBeVisible();
 
         // Bob sends a message with "shared" visibility
         await sendMessageInCurrentRoom(bobPage, "Message1: 'shared' visibility");
