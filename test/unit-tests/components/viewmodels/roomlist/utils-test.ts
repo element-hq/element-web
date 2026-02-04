@@ -10,14 +10,14 @@ import { mocked } from "jest-mock";
 import type { MatrixClient, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
+import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+import { showCreateNewRoom } from "../../../../../src/utils/space";
 import {
     hasCreateRoomRights,
     createRoom,
     hasAccessToNotificationMenu,
-} from "../../../../../src/components/viewmodels/roomlist/utils";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
-import { showCreateNewRoom } from "../../../../../src/utils/space";
+} from "../../../../../src/viewmodels/room-list/utils";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),

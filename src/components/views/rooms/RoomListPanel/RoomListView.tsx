@@ -8,12 +8,12 @@
 import React, { useCallback, type JSX, type ReactNode } from "react";
 import { RoomListView as SharedRoomListView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import { RoomListViewViewModel } from "../../../viewmodels/roomlist/RoomListViewViewModel";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
+import { RoomListViewViewModel } from "../../../../viewmodels/room-list/RoomListViewViewModel";
 
 /**
  * RoomListView component using shared components with proper MVVM pattern.

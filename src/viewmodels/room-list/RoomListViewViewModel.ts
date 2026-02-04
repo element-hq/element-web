@@ -14,17 +14,17 @@ import {
 } from "@element-hq/web-shared-components";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
-import { Action } from "../../../dispatcher/actions";
-import dispatcher from "../../../dispatcher/dispatcher";
-import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
-import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
-import RoomListStoreV3, { RoomListStoreV3Event, type RoomsResult } from "../../../stores/room-list-v3/RoomListStoreV3";
-import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { hasCreateRoomRights } from "./utils";
+import { Action } from "../../dispatcher/actions";
+import dispatcher from "../../dispatcher/dispatcher";
+import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import SpaceStore from "../../stores/spaces/SpaceStore";
+import RoomListStoreV3, { RoomListStoreV3Event, type RoomsResult } from "../../stores/room-list-v3/RoomListStoreV3";
+import { FilterKey } from "../../stores/room-list-v3/skip-list/filters";
+import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SdkContextClass } from "../../contexts/SDKContext";
+import { hasCreateRoomRights } from "./utils";
 
 interface RoomListViewViewModelProps {
     client: MatrixClient;

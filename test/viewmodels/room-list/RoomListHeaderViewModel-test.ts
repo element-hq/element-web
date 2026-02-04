@@ -23,8 +23,8 @@ import {
     showSpacePreferences,
     showSpaceSettings,
 } from "../../../src/utils/space";
-import { createRoom, hasCreateRoomRights } from "../../../src/components/viewmodels/roomlist/utils";
 import { createTestClient, mkSpace } from "../../test-utils";
+import { createRoom, hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
 
 jest.mock("../../../src/PosthogTrackers", () => ({
     trackInteraction: jest.fn(),

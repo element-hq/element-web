@@ -8,18 +8,18 @@
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
-import { RoomListViewViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewViewModel";
 import { createTestClient, flushPromises, mkStubRoom, stubClient } from "../../../../test-utils";
 import RoomListStoreV3, { RoomListStoreV3Event } from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { hasCreateRoomRights } from "../../../../../src/components/viewmodels/roomlist/utils";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { RoomListViewViewModel } from "../../../../../src/viewmodels/room-list/RoomListViewViewModel";
+import { hasCreateRoomRights } from "../../../../../src/viewmodels/room-list/utils";
 
-jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
+jest.mock("../../../../../src/viewmodels/room-list/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
     hasAccessToNotificationMenu: jest.fn().mockReturnValue(true),

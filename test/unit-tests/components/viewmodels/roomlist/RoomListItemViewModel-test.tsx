@@ -8,7 +8,6 @@
 import { type MatrixClient, type MatrixEvent, Room, RoomEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
-import { RoomListItemViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
 import { createTestClient, flushPromises } from "../../../../test-utils";
 import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
@@ -22,8 +21,9 @@ import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import type { Call } from "../../../../../src/models/Call";
+import { RoomListItemViewModel } from "../../../../../src/viewmodels/room-list/RoomListItemViewModel";
 
-jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
+jest.mock("../../../../../src/viewmodels/room-list/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
     hasAccessToNotificationMenu: jest.fn().mockReturnValue(true),
 }));

@@ -7,12 +7,12 @@
 
 import { type Room, KnownMembership, EventTimeline, EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { isKnockDenied } from "../../../utils/membership";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
-import { showCreateNewRoom } from "../../../utils/space";
-import dispatcher from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
+import { isKnockDenied } from "../../utils/membership";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
+import { showCreateNewRoom } from "../../utils/space";
+import dispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
 
 /**
  * Check if the user has access to the options menu.
