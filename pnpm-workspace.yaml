@@ -1,0 +1,4 @@
+nodeLinker: hoisted
+linkWorkspacePackages: true
+packages:
+    - "packages/*"

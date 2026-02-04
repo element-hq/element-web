@@ -29,30 +29,30 @@
         "UserFriendlyError"
     ],
     "scripts": {
-        "i18n": "matrix-gen-i18n src res && yarn i18n:sort && yarn i18n:lint",
-        "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json && yarn --cwd packages/shared-components i18n:sort",
-        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null && yarn --cwd packages/shared-components i18n:lint",
-        "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && yarn i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
+        "i18n": "matrix-gen-i18n src res && pnpm i18n:sort && pnpm i18n:lint",
+        "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json && pnpm --dir packages/shared-components i18n:sort",
+        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null && pnpm --dir packages/shared-components i18n:lint",
+        "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && pnpm i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
         "make-component": "node scripts/make-react-component.js",
         "rethemendex": "./res/css/rethemendex.sh",
         "clean": "rimraf lib webapp",
-        "build": "yarn clean && yarn build:genfiles && yarn build:bundle",
-        "build-stats": "yarn clean && yarn build:genfiles && yarn build:bundle-stats",
+        "build": "pnpm clean && pnpm build:genfiles && pnpm build:bundle",
+        "build-stats": "pnpm clean && pnpm build:genfiles && pnpm build:bundle-stats",
         "build:res": "node scripts/copy-res.ts",
-        "build:genfiles": "yarn build:res && yarn build:module_system",
+        "build:genfiles": "pnpm build:res && pnpm build:module_system",
         "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
         "build:bundle": "webpack --progress --mode production",
         "build:bundle-stats": "webpack --progress --mode production --json > webpack-stats.json",
         "build:module_system": "node module_system/scripts/install.ts",
         "dist": "./scripts/package.sh",
-        "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n modules,res \"yarn build:module_system\" \"yarn build:res\" && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
-        "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js --server-type https\"",
+        "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n modules,res \"pnpm build:module_system\" \"pnpm build:res\" && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"pnpm start:res\" \"pnpm start:js\"",
+        "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"pnpm start:res\" \"pnpm start:js --server-type https\"",
         "start:res": "node scripts/copy-res.ts -w",
         "start:js": "webpack serve --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
-        "lint": "yarn lint:types && yarn lint:js && yarn lint:style && yarn lint:workflows",
+        "lint": "pnpm lint:types && pnpm lint:js && pnpm lint:style && pnpm lint:workflows",
         "lint:js": "eslint --max-warnings 0 src test playwright module_system && prettier --check .",
         "lint:js-fix": "prettier --log-level=warn --write . && eslint --fix src test playwright module_system",
-        "lint:types": "yarn lint:types:src && yarn lint:types:module_system",
+        "lint:types": "pnpm lint:types:src && pnpm lint:types:module_system",
         "lint:types:src": "tsc --noEmit --jsx react && tsc --noEmit --jsx react -p playwright",
         "lint:types:module_system": "tsc --noEmit --project ./tsconfig.module_system.json",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
@@ -60,25 +60,11 @@
         "lint:knip": "knip",
         "test": "jest",
         "test:playwright": "playwright test",
-        "test:playwright:open": "yarn test:playwright --ui",
+        "test:playwright:open": "pnpm test:playwright --ui",
         "test:playwright:screenshots": "playwright-screenshots --project=Chrome",
-        "coverage": "yarn test --coverage",
+        "coverage": "pnpm test --coverage",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
-        "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js",
-        "install": "yarn --cwd packages/shared-components install --frozen-lockfile",
-        "postinstall": "patch-package"
-    },
-    "resolutions": {
-        "**/pretty-format/react-is": "19.2.4",
-        "@types/react": "19.2.10",
-        "@types/react-dom": "19.2.3",
-        "oidc-client-ts": "3.4.1",
-        "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001764",
-        "testcontainers": "^11.0.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^7.0.0",
-        "matrix-widget-api": "^1.16.1"
+        "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
@@ -180,6 +166,7 @@
         "@element-hq/element-call-embedded": "0.16.3",
         "@element-hq/element-web-playwright-common": "2.2.5",
         "@fetch-mock/jest": "^0.2.20",
+        "@jest/globals": "^30.2.0",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "1.57.0",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
@@ -205,7 +192,7 @@
         "@types/lodash": "^4.14.168",
         "@types/minimist": "^1.2.5",
         "@types/modernizr": "^3.5.3",
-        "@types/node": "18",
+        "@types/node": "22",
         "@types/pako": "^2.0.0",
         "@types/qrcode": "^1.3.5",
         "@types/react": "19.2.10",
@@ -261,7 +248,6 @@
         "mini-css-extract-plugin": "2.9.2",
         "minimist": "^1.2.6",
         "modernizr": "^3.12.0",
-        "patch-package": "^8.0.0",
         "postcss": "8.4.46",
         "postcss-easings": "^4.0.0",
         "postcss-hexrgba": "2.1.0",
@@ -295,6 +281,44 @@
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
     },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "matrix-js-sdk"
+        ],
+        "patchedDependencies": {
+            "@vector-im/matrix-wysiwyg": "patches/@vector-im__matrix-wysiwyg.patch",
+            "react-blurhash": "patches/react-blurhash.patch",
+            "linkify-html": "patches/linkify-html.patch",
+            "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
+            "@types/mdx": "patches/@types__mdx.patch",
+            "await-lock": "patches/await-lock.patch",
+            "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
+            "jsdom": "patches/jsdom.patch"
+        },
+        "peerDependencyRules": {
+            "allowedVersions": {
+                "react": "19",
+                "react-dom": "19",
+                "eslint": "8"
+            }
+        },
+        "allowedDeprecatedVersions": {
+            "eslint": "8",
+            "react-beautiful-dnd": "13"
+        },
+        "overrides": {
+            "pretty-format@30>react-is": "19.2.4",
+            "@types/react": "19.2.10",
+            "@types/react-dom": "19.2.3",
+            "oidc-client-ts": "3.4.1",
+            "jwt-decode": "4.0.0",
+            "caniuse-lite": "1.0.30001764",
+            "testcontainers": "^11.0.0",
+            "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
+            "wrap-ansi": "npm:wrap-ansi@^7.0.0",
+            "matrix-widget-api": "^1.16.1"
+        }
+    },
     "@casualbot/jest-sonar-reporter": {
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
@@ -303,5 +327,5 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264"
 }
