@@ -22,7 +22,7 @@ echo "Linking js-sdk"
 git clone --depth 1 --branch $JS_SDK_BRANCH "$JS_SDK_REPO" js-sdk
 cd js-sdk
 pnpm link
-pnpm --network-timeout=100000 install
+pnpm install
 cd ../
 
 echo "Setting up element-web with js-sdk package"
