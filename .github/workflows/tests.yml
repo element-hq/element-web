@@ -43,11 +43,12 @@ jobs:
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
-            - name: Yarn cache
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - name: pnpm cache
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   node-version: "lts/*"
-                  cache: "yarn"
+                  cache: "pnpm"
 
             - name: Install Deps
               run: "./scripts/layered.sh"
@@ -58,7 +59,7 @@ jobs:
               uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               with:
                   path: /tmp/jest_cache
-                  key: ${{ hashFiles('**/yarn.lock') }}
+                  key: ${{ hashFiles('**/pnpm-lock.yaml') }}
 
             - name: Get number of CPU cores
               id: cpu-cores
@@ -66,7 +67,7 @@ jobs:
 
             - name: Run tests
               run: |
-                  yarn test \
+                  pnpm test \
                       --coverage=${{ env.ENABLE_COVERAGE }} \
                       --ci \
                       --max-workers ${{ steps.cpu-cores.outputs.count }} \
@@ -122,15 +123,16 @@ jobs:
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
-            - name: Yarn cache
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - name: pnpm cache
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   node-version: "lts/*"
-                  cache: "yarn"
+                  cache: "pnpm"
 
             - name: Install Shared Component Deps
               working-directory: "packages/shared-components"
-              run: "yarn install"
+              run: "pnpm install"
 
             - name: Cache storybook & vitest
               uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
@@ -138,12 +140,12 @@ jobs:
                   path: |
                       packages/shared-components/node_modules/.cache
                       packages/shared-components/node_modules/.vite/vitest
-                  key: ${{ hashFiles('packages/shared-components/yarn.lock') }}
+                  key: ${{ hashFiles('packages/shared-components/pnpm-lock.yaml') }}
 
             - name: Get installed Playwright version
               working-directory: packages/shared-components
               id: playwright
-              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
               uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
@@ -155,11 +157,11 @@ jobs:
             - name: Install Playwright browsers
               working-directory: packages/shared-components
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: "yarn playwright install --with-deps --only-shell"
+              run: "pnpm playwright install --with-deps --only-shell"
 
             - name: Run tests
               working-directory: "packages/shared-components"
-              run: yarn test:unit --coverage=${{ env.ENABLE_COVERAGE }}
+              run: pnpm test:unit --coverage=${{ env.ENABLE_COVERAGE }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
