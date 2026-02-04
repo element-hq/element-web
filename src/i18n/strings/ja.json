@@ -1184,7 +1184,6 @@
     "labs": {
         "automatic_debug_logs": "エラーが生じた際に、自動的にデバッグログを送信",
         "automatic_debug_logs_decryption": "復号化エラーが生じた際に、自動的にデバッグログを送信",
-        "automatic_debug_logs_key_backup": "鍵のバックアップが機能していない際に、自動的にデバッグログを送信",
         "beta_description": "%(brand)sのラボでは、最新の機能をいち早く使用したり、テストしたりできるほか、機能が実際にリリースされる前の改善作業を支援することができます。",
         "beta_feature": "この機能はベータ版です",
         "beta_feedback_leave_button": "ベータ版の使用を終了するには、設定を開いてください。",

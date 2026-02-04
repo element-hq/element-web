@@ -1194,7 +1194,6 @@
     "labs": {
         "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
         "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
-        "automatic_debug_logs_key_backup": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon",
         "beta_description": "Ç’vjen më pas për %(brand)s? Labs janë mënyra më e mirë për t’i pasur gjërat që herët, për të testuar veçori të reja dhe për të ndihmuar t’u jepet formë para se të hidhen faktikisht në qarkullim.",
         "beta_feature": "Kjo është një veçori beta",
         "beta_feedback_leave_button": "Që të braktisni beta-n, vizitoni rregullimet tuaja.",
