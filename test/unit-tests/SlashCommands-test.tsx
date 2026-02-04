@@ -6,15 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 import { act, waitFor } from "jest-matrix-react";
 
-import { type Command, Commands, getCommand } from "../../src/slash-commands/SlashCommands";
-import { createTestClient } from "../test-utils";
-import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
-import { SdkContextClass } from "../../src/contexts/SDKContext";
 import Modal, { type ComponentType, type IHandle } from "../../src/Modal";
 import WidgetUtils from "../../src/utils/WidgetUtils";
 import { WidgetType } from "../../src/widgets/WidgetType";
@@ -22,61 +18,28 @@ import { warnSelfDemote } from "../../src/components/views/right_panel/UserInfo"
 import dispatcher from "../../src/dispatcher/dispatcher";
 import QuestionDialog from "../../src/components/views/dialogs/QuestionDialog";
 import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
+import { setUpCommandTest } from "./slash-commands/utils";
+import { type Command } from "../../src/slash-commands/command";
 
 jest.mock("../../src/components/views/right_panel/UserInfo");
 
 describe("SlashCommands", () => {
-    let client: MatrixClient;
     const roomId = "!room:example.com";
-    let room: Room;
-    const localRoomId = LOCAL_ROOM_ID_PREFIX + "test";
-    let localRoom: LocalRoom;
-    let command: Command;
-
-    const findCommand = (cmd: string): Command | undefined => {
-        return Commands.find((command: Command) => command.command === cmd);
-    };
-
-    const setCurrentRoom = (): void => {
-        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
-        mocked(client.getRoom).mockImplementation((rId: string): Room | null => {
-            if (rId === roomId) return room;
-            return null;
-        });
-    };
-
-    const setCurrentLocalRoom = (): void => {
-        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue(localRoomId);
-        mocked(client.getRoom).mockImplementation((rId: string): Room | null => {
-            if (rId === localRoomId) return localRoom;
-            return null;
-        });
-    };
-
-    beforeEach(() => {
-        jest.clearAllMocks();
-
-        client = createTestClient();
-
-        room = new Room(roomId, client, client.getSafeUserId());
-        localRoom = new LocalRoom(localRoomId, client, client.getSafeUserId());
-
-        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId");
-    });
 
     describe("/topic", () => {
         it("sets topic", async () => {
-            const command = getCommand(roomId, "/topic pizza");
-            expect(command.cmd).toBeDefined();
-            expect(command.args).toBeDefined();
-            await command.cmd!.run(client, "room-id", null, command.args);
+            const { client, command, args } = setUpCommandTest(roomId, "/topic pizza");
+            expect(args).toBeDefined();
+
+            command.run(client, "room-id", null, args);
+
             expect(client.setRoomTopic).toHaveBeenCalledWith("room-id", "pizza", undefined);
         });
 
         it("should show topic modal if no args passed", async () => {
             const spy = jest.spyOn(Modal, "createDialog");
-            const command = getCommand(roomId, "/topic")!;
-            await command.cmd!.run(client, roomId, null);
+            const { client, command } = setUpCommandTest(roomId, "/topic");
+            await command.run(client, roomId, null).promise;
             expect(spy).toHaveBeenCalled();
         });
     });
@@ -102,42 +65,37 @@ describe("SlashCommands", () => {
         ["converttodm"],
         ["converttoroom"],
     ])("/%s", (commandName: string) => {
-        beforeEach(() => {
-            command = findCommand(commandName)!;
-        });
-
         describe("isEnabled", () => {
             it("should return true for Room", () => {
-                setCurrentRoom();
+                const { client, command } = setUpCommandTest(roomId, `/${commandName}`);
                 expect(command.isEnabled(client, roomId)).toBe(true);
             });
 
             it("should return false for LocalRoom", () => {
-                setCurrentLocalRoom();
+                const { client, command } = setUpCommandTest(roomId, `/${commandName}`, true);
                 expect(command.isEnabled(client, roomId)).toBe(false);
             });
         });
     });
 
     describe("/op", () => {
-        beforeEach(() => {
-            command = findCommand("op")!;
-        });
-
         it("should return usage if no args", () => {
-            expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
+            const { client, command, args } = setUpCommandTest(roomId, "/op");
+            expect(command.run(client, roomId, null, args).error).toBe(command.getUsage());
         });
 
         it("should reject with usage if given an invalid power level value", () => {
-            expect(command.run(client, roomId, null, "@bob:server Admin").error).toBe(command.getUsage());
+            const { client, command, args } = setUpCommandTest(roomId, "/op @bob:server Admin");
+            expect(command.run(client, roomId, null, args).error).toBe(command.getUsage());
         });
 
         it("should reject with usage for invalid input", () => {
+            const { client, command } = setUpCommandTest(roomId, "/op");
             expect(command.run(client, roomId, null, " ").error).toBe(command.getUsage());
         });
 
         it("should warn about self demotion", async () => {
-            setCurrentRoom();
+            const { client, command, room } = setUpCommandTest(roomId, "/op");
             const member = new RoomMember(roomId, client.getSafeUserId());
             member.membership = KnownMembership.Join;
             member.powerLevel = 100;
@@ -147,7 +105,7 @@ describe("SlashCommands", () => {
         });
 
         it("should default to 50 if no powerlevel specified", async () => {
-            setCurrentRoom();
+            const { client, command, room } = setUpCommandTest(roomId, "/op");
             const member = new RoomMember(roomId, "@user:server");
             member.membership = KnownMembership.Join;
             room.getMember = () => member;
@@ -157,82 +115,107 @@ describe("SlashCommands", () => {
     });
 
     describe("/deop", () => {
-        beforeEach(() => {
-            command = findCommand("deop")!;
-        });
-
         it("should return usage if no args", () => {
+            const { client, command } = setUpCommandTest(roomId, "/deop");
             expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
         });
 
         it("should warn about self demotion", async () => {
-            setCurrentRoom();
+            const { client, command, room } = setUpCommandTest(roomId, "/deop");
             const member = new RoomMember(roomId, client.getSafeUserId());
             member.membership = KnownMembership.Join;
             member.powerLevel = 100;
             room.getMember = () => member;
-            command.run(client, roomId, null, client.getSafeUserId());
+            await command.run(client, roomId, null, client.getSafeUserId()).promise;
             expect(warnSelfDemote).toHaveBeenCalled();
         });
 
         it("should reject with usage for invalid input", () => {
+            const { client, command } = setUpCommandTest(roomId, "/deop");
             expect(command.run(client, roomId, null, " ").error).toBe(command.getUsage());
         });
     });
 
     describe("/part", () => {
-        it("should part room matching alias if found", async () => {
-            const room1 = new Room("room-id", client, client.getSafeUserId());
-            room1.getCanonicalAlias = jest.fn().mockReturnValue("#foo:bar");
-            const room2 = new Room("other-room", client, client.getSafeUserId());
-            room2.getCanonicalAlias = jest.fn().mockReturnValue("#baz:bar");
+        function setUp(): {
+            client: MatrixClient;
+            command: Command;
+            args?: string;
+            room1: Room;
+            room2: Room;
+        } {
+            const spy = jest.spyOn(Modal, "createDialog");
+            spy.mockReturnValue({ close: () => {} } as unknown as IHandle<ComponentType>);
+
+            const { client, command, args } = setUpCommandTest(roomId, "/part #foo:bar");
+            expect(args).toBeDefined();
+
+            const room1 = new Room("!room-id", client, client.getSafeUserId(), {
+                pendingEventOrdering: PendingEventOrdering.Detached,
+            });
+
+            const room2 = new Room("!other-room", client, client.getSafeUserId());
+
+            mocked(client.getRoom).mockImplementation((rId: string): Room | null => {
+                if (rId === room1.roomId) {
+                    return room1;
+                } else if (rId === room2.roomId) {
+                    return room2;
+                } else {
+                    return null;
+                }
+            });
             mocked(client.getRooms).mockReturnValue([room1, room2]);
 
-            const command = getCommand(room1.roomId, "/part #foo:bar");
-            expect(command.cmd).toBeDefined();
-            expect(command.args).toBeDefined();
-            await command.cmd!.run(client, room1.roomId, null, command.args);
+            return { client, command, args, room1, room2 };
+        }
+
+        it("should part room matching alias if found", async () => {
+            const { client, command, args, room1, room2 } = setUp();
+            room1.getCanonicalAlias = jest.fn().mockReturnValue("#foo:bar");
+            room2.getCanonicalAlias = jest.fn().mockReturnValue("#baz:bar");
+
+            await command.run(client, room1.roomId, null, args).promise;
+
             expect(client.leaveRoomChain).toHaveBeenCalledWith(room1.roomId, expect.anything());
         });
 
         it("should part room matching alt alias if found", async () => {
-            const room1 = new Room("room-id", client, client.getSafeUserId());
+            const { client, command, args, room1, room2 } = setUp();
             room1.getAltAliases = jest.fn().mockReturnValue(["#foo:bar"]);
-            const room2 = new Room("other-room", client, client.getSafeUserId());
             room2.getAltAliases = jest.fn().mockReturnValue(["#baz:bar"]);
-            mocked(client.getRooms).mockReturnValue([room1, room2]);
 
-            const command = getCommand(room1.roomId, "/part #foo:bar");
-            expect(command.cmd).toBeDefined();
-            expect(command.args).toBeDefined();
-            await command.cmd!.run(client, room1.roomId, null, command.args!);
+            await command.run(client, room1.roomId, null, args).promise;
+
             expect(client.leaveRoomChain).toHaveBeenCalledWith(room1.roomId, expect.anything());
         });
     });
 
     describe.each(["rainbow", "rainbowme"])("/%s", (commandName: string) => {
-        const command = findCommand(commandName)!;
-
         it("should return usage if no args", () => {
+            const { client, command } = setUpCommandTest(roomId, `/${commandName}`);
             expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
         });
 
-        it("should make things rainbowy", () => {
-            return expect(
+        it("should make things rainbowy", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/${commandName}`);
+
+            await expect(
                 command.run(client, roomId, null, "this is a test message").promise,
             ).resolves.toMatchSnapshot();
         });
     });
 
     describe.each(["shrug", "tableflip", "unflip", "lenny"])("/%s", (commandName: string) => {
-        const command = findCommand(commandName)!;
-
-        it("should match snapshot with no args", () => {
-            return expect(command.run(client, roomId, null).promise).resolves.toMatchSnapshot();
+        it("should match snapshot with no args", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/${commandName}`);
+            await expect(command.run(client, roomId, null).promise).resolves.toMatchSnapshot();
         });
 
-        it("should match snapshot with args", () => {
-            return expect(
+        it("should match snapshot with args", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/${commandName}`);
+
+            await expect(
                 command.run(client, roomId, null, "this is a test message").promise,
             ).resolves.toMatchSnapshot();
         });
@@ -240,7 +223,7 @@ describe("SlashCommands", () => {
 
     describe("/verify", () => {
         it("should return usage if no args", () => {
-            const command = findCommand("verify")!;
+            const { client, command } = setUpCommandTest(roomId, `/verify`);
             expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
         });
 
@@ -250,7 +233,7 @@ describe("SlashCommands", () => {
             spy.mockReturnValue({ finished: Promise.resolve([true]) } as unknown as IHandle<ComponentType>);
 
             // When we run the command
-            const command = findCommand("verify")!;
+            const { client, command } = setUpCommandTest(roomId, `/verify`);
             await act(() => command.run(client, roomId, null, "mydeviceid myfingerprint"));
 
             // Then the prompt is displayed
@@ -274,7 +257,7 @@ describe("SlashCommands", () => {
             spy.mockReturnValue({ finished: Promise.resolve([false]) } as unknown as IHandle<ComponentType>);
 
             // When we run the command
-            const command = findCommand("verify")!;
+            const { client, command } = setUpCommandTest(roomId, `/verify`);
             command.run(client, roomId, null, "mydeviceid myfingerprint");
 
             // Then the prompt is displayed
@@ -292,32 +275,37 @@ describe("SlashCommands", () => {
         it("should parse html iframe snippets", async () => {
             jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
             const spy = jest.spyOn(WidgetUtils, "setRoomWidget");
-            const command = findCommand("addwidget")!;
-            await command.run(client, roomId, null, '<iframe src="https://element.io"></iframe>');
-            expect(spy).toHaveBeenCalledWith(
-                client,
-                roomId,
-                expect.any(String),
-                WidgetType.CUSTOM,
-                "https://element.io",
-                "Custom",
-                {},
+
+            const { client, command } = setUpCommandTest(roomId, `/addwidget`);
+
+            command.run(client, roomId, null, '<iframe src="https://element.io"></iframe>');
+
+            await waitFor(() =>
+                expect(spy).toHaveBeenCalledWith(
+                    client,
+                    roomId,
+                    expect.any(String),
+                    WidgetType.CUSTOM,
+                    "https://element.io",
+                    "Custom",
+                    {},
+                ),
             );
         });
     });
 
     describe("/join", () => {
-        beforeEach(() => {
-            jest.spyOn(dispatcher, "dispatch");
-            command = findCommand(KnownMembership.Join)!;
-        });
-
         it("should return usage if no args", () => {
+            const { client, command } = setUpCommandTest(roomId, `/join`);
             expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
         });
 
-        it("should handle matrix.org permalinks", () => {
-            command.run(client, roomId, null, "https://matrix.to/#/!roomId:server/$eventId");
+        it("should handle matrix.org permalinks", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/join`);
+            jest.spyOn(dispatcher, "dispatch");
+
+            await command.run(client, roomId, null, "https://matrix.to/#/!roomId:server/$eventId").promise;
+
             expect(dispatcher.dispatch).toHaveBeenCalledWith(
                 expect.objectContaining({
                     action: "view_room",
@@ -328,8 +316,12 @@ describe("SlashCommands", () => {
             );
         });
 
-        it("should handle room aliases", () => {
-            command.run(client, roomId, null, "#test:server");
+        it("should handle room aliases", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/join`);
+            jest.spyOn(dispatcher, "dispatch");
+
+            await command.run(client, roomId, null, "#test:server").promise;
+
             expect(dispatcher.dispatch).toHaveBeenCalledWith(
                 expect.objectContaining({
                     action: "view_room",
@@ -338,8 +330,12 @@ describe("SlashCommands", () => {
             );
         });
 
-        it("should handle room aliases with no server component", () => {
-            command.run(client, roomId, null, "#test");
+        it("should handle room aliases with no server component", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/join`);
+            jest.spyOn(dispatcher, "dispatch");
+
+            await command.run(client, roomId, null, "#test").promise;
+
             expect(dispatcher.dispatch).toHaveBeenCalledWith(
                 expect.objectContaining({
                     action: "view_room",
@@ -348,8 +344,12 @@ describe("SlashCommands", () => {
             );
         });
 
-        it("should handle room IDs and via servers", () => {
-            command.run(client, roomId, null, "!foo:bar serv1.com serv2.com");
+        it("should handle room IDs and via servers", async () => {
+            const { client, command } = setUpCommandTest(roomId, `/join`);
+            jest.spyOn(dispatcher, "dispatch");
+
+            await command.run(client, roomId, null, "!foo:bar serv1.com serv2.com").promise;
+
             expect(dispatcher.dispatch).toHaveBeenCalledWith(
                 expect.objectContaining({
                     action: "view_room",

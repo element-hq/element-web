@@ -5,24 +5,18 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { mocked } from "jest-mock";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import RoomUpgradeWarningDialog, {
     type IFinishedOpts,
 } from "../../../src/components/views/dialogs/RoomUpgradeWarningDialog";
-import { type Command, Commands } from "../../../src/slash-commands/SlashCommands";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
-import { createTestClient } from "../../test-utils";
+import { type Command } from "../../../src/slash-commands/SlashCommands";
 import { parseUpgradeRoomArgs } from "../../../src/slash-commands/upgraderoom/parseUpgradeRoomArgs";
 import Modal from "../../../src/Modal";
+import { setUpCommandTest } from "./utils";
 
 describe("/upgraderoom", () => {
     const roomId = "!room:example.com";
-
-    function findCommand(cmd: string): Command | undefined {
-        return Commands.find((command: Command) => command.command === cmd);
-    }
 
     /**
      * Set up an upgraderoom test.
@@ -39,15 +33,7 @@ describe("/upgraderoom", () => {
     } {
         jest.clearAllMocks();
 
-        const command = findCommand("upgraderoom")!;
-        const client = createTestClient();
-
-        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId");
-        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
-        mocked(client.getRoom).mockImplementation((rId: string): Room | null => {
-            if (rId === roomId) return new Room(roomId, client, client.getSafeUserId());
-            return null;
-        });
+        const { command, client } = setUpCommandTest(roomId, "/upgraderoom");
 
         const createDialog = jest.spyOn(Modal, "createDialog");
         const upgradeRoom = jest.fn().mockResolvedValue({ replacement_room: "!newroom" });
