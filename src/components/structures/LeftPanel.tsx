@@ -10,6 +10,7 @@ import React, { type JSX } from "react";
 import { createRef } from "react";
 import classNames from "classnames";
 import { ExploreIcon, DialPadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Panel } from "react-resizable-panels";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
