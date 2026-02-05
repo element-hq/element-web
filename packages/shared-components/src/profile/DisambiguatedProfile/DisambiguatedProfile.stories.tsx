@@ -30,6 +30,7 @@ export default {
     argTypes: {
         displayName: { control: "text" },
         colorClass: { control: "text" },
+        className: { control: "text" },
         displayIdentifier: { control: "text" },
         title: { control: "text" },
         emphasizeDisplayName: { control: "boolean" },

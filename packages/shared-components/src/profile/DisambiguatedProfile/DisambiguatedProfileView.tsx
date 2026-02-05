@@ -25,6 +25,10 @@ export interface DisambiguatedProfileViewSnapshot {
      */
     colorClass?: string;
     /**
+     * The CSS class name.
+     */
+    className?: string;
+    /**
      * The formatted user identifier to display when disambiguation is needed.
      * Undefined if disambiguation is not required.
      */
@@ -74,7 +78,7 @@ interface DisambiguatedProfileViewProps {
  * ```
  */
 export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
-    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
+    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, className } = useViewModel(vm);
 
     const displayNameClasses = classNames(colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
@@ -93,7 +97,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
 
     return (
         <div
-            className={classNames(styles.disambiguatedProfile, "mx_DisambiguatedProfile")}
+            className={classNames(className, styles.disambiguatedProfile)}
             title={title}
             onClick={vm.onClick}
             onKeyDown={handleKeyDown}
@@ -104,9 +108,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
                 {displayName}
             </span>
             {displayIdentifier && (
-                <span className={classNames(styles.disambiguatedProfile_mxid, "mx_DisambiguatedProfile_mxid")}>
-                    {displayIdentifier}
-                </span>
+                <span className={classNames(className, styles.disambiguatedProfile_mxid)}>{displayIdentifier}</span>
             )}
         </div>
     );

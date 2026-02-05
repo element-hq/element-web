@@ -37,6 +37,7 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 colored: true,
                 emphasizeDisplayName: true,
                 withTooltip,
+                className: "mx_DisambiguatedProfile",
             }),
     );
 

@@ -27,6 +27,7 @@ describe("DisambiguatedProfileViewModel", () => {
         expect(vm.getSnapshot()).toEqual({
             displayName: "Alice",
             colorClass: "mx_Username_color3",
+            className: undefined,
             displayIdentifier: "@alice:example.org",
             title: "Alice (@alice:example.org)",
             emphasizeDisplayName: true,
@@ -42,9 +43,20 @@ describe("DisambiguatedProfileViewModel", () => {
         expect(vm.getSnapshot()).toMatchObject({
             displayName: "Fallback",
             colorClass: undefined,
+            className: undefined,
             displayIdentifier: undefined,
             title: undefined,
             emphasizeDisplayName: undefined,
         });
+    });
+
+    it("should pass through className prop", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member,
+            fallbackName: "Fallback",
+            className: "mx_DisambiguatedProfile",
+        });
+
+        expect(vm.getSnapshot().className).toBe("mx_DisambiguatedProfile");
     });
 });
