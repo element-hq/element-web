@@ -202,7 +202,7 @@ describe("Searching", () => {
                         } as any,
                         context: {
                             profile_info: {},
-                        },
+                        } as any,
                     },
                     {
                         rank: 3,
@@ -215,6 +215,7 @@ describe("Searching", () => {
                             content: { body: "test message 3", msgtype: "m.text" },
                             state_key: null,
                         } as any,
+                        context: undefined as any,
                     },
                 ],
                 highlights: ["test"],
