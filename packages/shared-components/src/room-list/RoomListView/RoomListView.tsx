@@ -12,7 +12,7 @@ import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type RoomListItemSnapshot } from "../RoomListItem";
+import { type Room } from "../RoomListItem";
 
 /**
  * Snapshot for the room list view
@@ -66,7 +66,7 @@ export interface RoomListViewProps {
     /** The view model containing all data and callbacks */
     vm: RoomListViewModel;
     /** Render function for room avatar */
-    renderAvatar: (roomItem: RoomListItemSnapshot) => ReactNode;
+    renderAvatar: (room: Room) => ReactNode;
     /** Optional callback for keyboard events on the room list */
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }

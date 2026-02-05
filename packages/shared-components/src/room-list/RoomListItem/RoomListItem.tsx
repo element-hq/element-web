@@ -18,6 +18,11 @@ import { useViewModel, type ViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
 
 /**
+ * Opaque type representing a Room object from the parent application
+ */
+export type Room = unknown;
+
+/**
  * Generate an accessible label for a room based on its notification state.
  */
 function getA11yLabel(roomName: string, notification: NotificationDecorationData): string {
@@ -42,7 +47,7 @@ export interface RoomListItemSnapshot {
     /** Unique identifier for the room (used for list keying) */
     id: string;
     /** The opaque Room object from the client (e.g., matrix-js-sdk Room) */
-    room: any;
+    room: Room;
     /** The name of the room */
     name: string;
     /** Whether the room name should be bolded (has unread/activity) */
@@ -118,7 +123,7 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     /** Total number of rooms in the list (for accessibility) */
     roomCount: number;
     /** Function to render the room avatar */
-    renderAvatar: (room: any) => ReactNode;
+    renderAvatar: (room: Room) => ReactNode;
 }
 
 /**

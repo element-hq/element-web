@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Room } from "../RoomListItem/RoomListItem";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { RoomListView, type RoomListSnapshot, type RoomListViewActions } from "./RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
@@ -20,7 +21,7 @@ import {
     largeListRoomIds,
 } from "../story-mocks";
 
-type RoomListViewProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: any) => React.ReactElement };
+type RoomListViewProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
 const mockFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite"];
 

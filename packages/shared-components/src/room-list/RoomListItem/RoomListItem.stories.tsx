@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Room } from "./RoomListItem";
 import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItem";
 import { useMockedViewModel } from "../../viewmodel";
 import { defaultSnapshot } from "./default-snapshot";
@@ -18,10 +19,10 @@ type RoomListItemProps = RoomListItemSnapshot &
     RoomListItemActions & {
         isSelected: boolean;
         isFocused: boolean;
-        onFocus: (room: any, e: React.FocusEvent) => void;
+        onFocus: (room: Room, e: React.FocusEvent) => void;
         roomIndex: number;
         roomCount: number;
-        renderAvatar: (room: any) => React.ReactElement;
+        renderAvatar: (room: Room) => React.ReactElement;
     };
 
 // Wrapper component that creates a mocked ViewModel

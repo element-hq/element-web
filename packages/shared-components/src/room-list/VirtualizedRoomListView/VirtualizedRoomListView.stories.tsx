@@ -9,13 +9,14 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Room } from "../RoomListItem/RoomListItem";
 import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
 import type { RoomListSnapshot, RoomListViewActions } from "../RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { renderAvatar, createGetRoomItemViewModel, mockRoomIds } from "../story-mocks";
 
-type RoomListStoryProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: any) => React.ReactElement };
+type RoomListStoryProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
 // Use first 10 room IDs for this story
 const storyRoomIds = mockRoomIds.slice(0, 10);

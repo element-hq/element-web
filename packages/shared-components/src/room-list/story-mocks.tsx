@@ -8,6 +8,7 @@
 import React from "react";
 import { fn } from "storybook/test";
 
+import type { Room } from "./RoomListItem/RoomListItem";
 import type { RoomListItemSnapshot } from "./RoomListItem";
 import { RoomNotifState } from "./RoomListItem/RoomNotifs";
 
@@ -38,8 +39,9 @@ export const mockAvatar = (name: string): React.ReactElement => (
 /**
  * Render avatar function for stories
  */
-export const renderAvatar = (room: any): React.ReactElement => {
-    return mockAvatar(room?.name || "Room");
+export const renderAvatar = (room: Room): React.ReactElement => {
+    // Cast to any to access properties - in real usage, the room object from the SDK will have these
+    return mockAvatar((room as any)?.name || "Room");
 };
 
 /**

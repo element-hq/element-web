@@ -9,6 +9,7 @@ import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "r
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
+import type { Room } from "../RoomListItem/RoomListItem";
 import { useViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
 import { VirtualizedList, type VirtualizedListContext } from "../../utils/VirtualizedList";
@@ -45,7 +46,7 @@ export interface VirtualizedRoomListViewProps {
      * Render function for room avatar
      * @param room - The opaque Room object from the client
      */
-    renderAvatar: (room: any) => ReactNode;
+    renderAvatar: (room: Room) => ReactNode;
 
     /**
      * Optional callback for keyboard key down events
