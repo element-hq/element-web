@@ -15,21 +15,34 @@ import {
 import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../DateUtils";
 
 export interface MessageTimestampViewModelProps {
+    /**
+     * Message timestamp in milliseconds since the Unix epoch.
+     */
     ts: number;
     /**
      * If specified will render both the sent-at and received-at timestamps in the tooltip
      */
     receivedTs?: number;
+    /**
+     * If set, use a 12-hour clock for formatted times.
+     */
     showTwelveHour?: boolean;
+    /**
+     * If set, include the full date in the displayed timestamp.
+     */
     showFullDate?: boolean;
+    /**
+     * If set, include seconds in the displayed timestamp.
+     */
     showSeconds?: boolean;
+    /**
+     * If set, display a relative timestamp (e.g. "5 minutes ago").
+     */
     showRelative?: boolean;
-
     /**
      * If set to true then no tooltip will be shown
      */
     inhibitTooltip?: boolean;
-
     /**
      * If specified, will be rendered as an anchor bearing the href, a `span` element will be used otherwise
      */
@@ -74,7 +87,7 @@ export class MessageTimestampViewModel
             receivedAt = formatFullDate(receivedDate, props.showTwelveHour);
         }
 
-        // Keep mx_MessageTimestamp to support the compatibility with existing timeline and the all the layout
+        // Keep mx_MessageTimestamp for compatibility with the existing timeline and layout.
         return {
             ts: timestamp,
             tsSentAt: sentAt,
