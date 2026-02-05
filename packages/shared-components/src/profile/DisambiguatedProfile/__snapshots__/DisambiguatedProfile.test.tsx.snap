@@ -3,7 +3,7 @@
 exports[`DisambiguatedProfileView > renders the default state 1`] = `
 <div>
   <div
-    class="disambiguatedProfile mx_DisambiguatedProfile"
+    class="disambiguatedProfile"
     role="button"
     tabindex="0"
   >
@@ -20,7 +20,7 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
 exports[`DisambiguatedProfileView > renders the full example 1`] = `
 <div>
   <div
-    class="disambiguatedProfile mx_DisambiguatedProfile"
+    class="disambiguatedProfile"
     role="button"
     tabindex="0"
     title="Eve (@eve:matrix.org)"
@@ -32,7 +32,7 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
       Eve
     </span>
     <span
-      class="disambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
+      class="disambiguatedProfile_mxid"
     >
       @eve:matrix.org
     </span>
@@ -43,7 +43,7 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
 exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 <div>
   <div
-    class="disambiguatedProfile mx_DisambiguatedProfile"
+    class="disambiguatedProfile"
     role="button"
     tabindex="0"
   >
@@ -54,7 +54,7 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
       Alice
     </span>
     <span
-      class="disambiguatedProfile_mxid mx_DisambiguatedProfile_mxid"
+      class="disambiguatedProfile_mxid"
     >
       @alice:example.org
     </span>
@@ -65,7 +65,7 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 exports[`DisambiguatedProfileView > renders with color class 1`] = `
 <div>
   <div
-    class="disambiguatedProfile mx_DisambiguatedProfile"
+    class="disambiguatedProfile"
     role="button"
     tabindex="0"
   >
@@ -82,7 +82,7 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
 exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 <div>
   <div
-    class="disambiguatedProfile mx_DisambiguatedProfile"
+    class="disambiguatedProfile"
     role="button"
     tabindex="0"
   >
@@ -99,7 +99,7 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
 <div>
   <div
-    class="disambiguatedProfile mx_DisambiguatedProfile"
+    class="disambiguatedProfile"
     role="button"
     tabindex="0"
     title="Diana (@diana:example.org)"
