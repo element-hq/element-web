@@ -39,6 +39,8 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 withTooltip,
                 className: "mx_DisambiguatedProfile",
             }),
+    );
+
     useEffect(() => {
         disambiguatedProfileVM.setProps({
             onClick,

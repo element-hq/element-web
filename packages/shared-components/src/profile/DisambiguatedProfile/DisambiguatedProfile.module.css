@@ -13,6 +13,7 @@
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
+        letter-spacing: var(--cpd-letter-spacing-body-md);
         margin-inline-end: 0;
         /* keeps the height in check, important for the bubble apperance */
         line-height: 1;
