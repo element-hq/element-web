@@ -5,10 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, {
+    type JSX,
+    type ReactNode,
+    type MouseEventHandler,
+    type KeyboardEventHandler,
+    type MouseEvent,
+} from "react";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
-//TODO: import { Icon as LateIcon } from "../../../res/img/sensor.svg";
+// TODO: import { Icon as LateIcon } from "../../../res/img/sensor.svg";
 import { ImageErrorIcon as LateIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import styles from "./MessageTimestampView.module.css";
@@ -26,7 +32,7 @@ export interface MessageTimestampViewSnapshot {
      */
     tsSentAt: string;
     /**
-     * * The localized received timestamp formatted as full date
+     * The localized received timestamp formatted as full date
      * If specified will render both the sent-at and received-at timestamps in the tooltip
      */
     tsReceivedAt?: string;
@@ -48,11 +54,11 @@ export interface MessageTimestampViewActions {
     /**
      * Optional onClick handler to attach to the DOM element
      */
-    onClick?: React.MouseEventHandler<HTMLElement>;
+    onClick?: MouseEventHandler<HTMLElement>;
     /**
      * Optional onContextMenu handler to attach to the DOM element
      */
-    onContextMenu?: React.MouseEventHandler<HTMLElement>;
+    onContextMenu?: MouseEventHandler<HTMLElement>;
 }
 
 /**
@@ -72,7 +78,7 @@ interface MessageTimestampViewProps {
  *
  * The view model provides the timestamp values and display options. The component
  * can render as a link when `href` is set, and can show both sent-at and received-at
- * times in the tooltip when `receivedTs` is provided.
+ * times in the tooltip when `tsReceivedAt` is provided.
  *
  * @example
  * ```tsx
@@ -84,11 +90,11 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
 
     const { ts, tsSentAt, tsReceivedAt, inhibitTooltip, extraClassNames, href } = useViewModel(vm);
 
-    const handleKeyDown: React.KeyboardEventHandler<HTMLElement> | undefined = vm.onClick
+    const handleKeyDown: KeyboardEventHandler<HTMLElement> | undefined = vm.onClick
         ? (event) => {
               if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLElement>);
+                  vm.onClick?.(event as unknown as MouseEvent<HTMLElement>);
               }
           }
         : undefined;

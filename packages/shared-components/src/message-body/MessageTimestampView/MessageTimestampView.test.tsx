@@ -104,4 +104,37 @@ describe("MessageTimestampView", () => {
         await user.pointer({ target, keys: "[MouseRight]" });
         expect(onContextMenu).toHaveBeenCalled();
     });
+
+    it("should show full date & time on hover", async () => {
+        const user = userEvent.setup();
+        const vm = new MessageTimestampViewModel({
+            ts: "08:09",
+            tsSentAt: "Fri, Dec 17, 2021, 08:09:00",
+        });
+
+        render(<MessageTimestampView vm={vm} />, {
+            wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
+        });
+
+        await user.hover(screen.getByRole("button"));
+        expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(`"Fri, Dec 17, 2021, 08:09:00"`);
+    });
+
+    it("should show sent & received time on hover if passed", async () => {
+        const user = userEvent.setup();
+        const vm = new MessageTimestampViewModel({
+            ts: "08:09",
+            tsSentAt: "Fri, Dec 17, 2021, 08:09:00",
+            tsReceivedAt: "Received at: Sat, Dec 18, 2021, 08:09:00",
+        });
+
+        render(<MessageTimestampView vm={vm} />, {
+            wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
+        });
+
+        await user.hover(screen.getByRole("button"));
+        expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(
+            `"Sent at: Fri, Dec 17, 2021, 08:09:00Received at: Received at: Sat, Dec 18, 2021, 08:09:00"`,
+        );
+    });
 });
