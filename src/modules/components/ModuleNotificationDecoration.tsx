@@ -5,11 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import React, { useMemo } from "react";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { NotificationDecoration } from "@element-hq/web-shared-components";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { useCall } from "../../hooks/useCall";
-import { NotificationDecoration } from "../../components/views/rooms/NotificationDecoration";
+import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
+import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 
 export interface ModuleNotificationDecorationProps {
     /**
@@ -25,5 +28,23 @@ export interface ModuleNotificationDecorationProps {
 export const ModuleNotificationDecoration: React.FC<ModuleNotificationDecorationProps> = ({ room }) => {
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     const call = useCall(room.roomId);
-    return <NotificationDecoration notificationState={notificationState} callType={call?.callType} />;
+
+    // Subscribe to notification state changes
+    const notificationData = useTypedEventEmitterState(notificationState, NotificationStateEvents.Update, () => ({
+        hasAnyNotificationOrActivity: notificationState.hasAnyNotificationOrActivity,
+        isUnsentMessage: notificationState.isUnsentMessage,
+        invited: notificationState.invited,
+        isMention: notificationState.isMention,
+        isActivityNotification: notificationState.isActivityNotification,
+        isNotification: notificationState.isNotification,
+        hasUnreadCount: notificationState.hasUnreadCount,
+        count: notificationState.count,
+        muted: notificationState.muted,
+    }));
+
+    // Convert CallType enum to string
+    const callType =
+        call?.callType === CallType.Video ? "video" : call?.callType === CallType.Voice ? "voice" : undefined;
+
+    return <NotificationDecoration {...notificationData} callType={callType} />;
 };
