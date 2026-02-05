@@ -107,6 +107,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
+            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
             {displayIdentifier && (
                 <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
                     {displayIdentifier}
