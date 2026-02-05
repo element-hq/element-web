@@ -71,12 +71,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <div
-                  class="_disambiguatedProfile_1u1d2_8 mx_DisambiguatedProfile"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_1lof0_8"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_1u1d2_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1lof0_14 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -212,12 +212,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <div
-                  class="_disambiguatedProfile_1u1d2_8 mx_DisambiguatedProfile"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_1lof0_8"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_1u1d2_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1lof0_14 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -356,12 +356,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_MessageTimestamp"
                 />
                 <div
-                  class="_disambiguatedProfile_1u1d2_8 mx_DisambiguatedProfile"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_1lof0_8"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_1u1d2_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1lof0_14 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
