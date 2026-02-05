@@ -1,5 +1,5 @@
 /*!
- * modernizr v3.13.0
+ * modernizr v3.13.1
  * Build https://modernizr.com/download?-cors-cryptography-cssanimations-cssfilters-displaytable-es5date-es5function-es5object-es5undefined-es6array-es6collections-es6string-fetch-flexbox-json-localstorage-objectfit-promises-resizeobserver-sandbox-svg-svgasimg-svgfilters-urlparser-urlsearchparams-webaudio-dontmin
  *
  * Copyright (c)
@@ -35,7 +35,7 @@
    * @access public
    */
   var ModernizrProto = {
-    _version: '3.13.0',
+    _version: '3.13.1',
 
     // Any settings that don't work as separate modules
     // can go in here as configuration.

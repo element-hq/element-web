@@ -41,7 +41,7 @@
         "build-stats": "yarn clean && yarn build:genfiles && yarn build:bundle-stats",
         "build:res": "node scripts/copy-res.ts",
         "build:genfiles": "yarn build:res && yarn build:module_system",
-        "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
+        "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js && mv src/vector/modernizr.js src/vector/modernizr.cjs",
         "build:bundle": "webpack --progress --mode production",
         "build:bundle-stats": "webpack --progress --mode production --json > webpack-stats.json",
         "build:module_system": "node module_system/scripts/install.ts",
