@@ -175,6 +175,31 @@ async function localSearch(
         throw new Error("Local search failed");
     }
 
+    // Filter out edit events (m.replace) from search result context
+    // Edit events in context would show as confusing "previous messages"
+    // when they're actually just edit history of the same message
+    if (localResult.results) {
+        // Helper to check if an event is an edit (m.replace) event
+        const isEditEvent = (ev: Record<string, unknown>): boolean => {
+            const content = ev.content as Record<string, unknown> | undefined;
+            const relatesTo = content?.["m.relates_to"] as Record<string, unknown> | undefined;
+            return relatesTo?.rel_type === "m.replace";
+        };
+
+        for (const searchResult of localResult.results) {
+            if (searchResult.context) {
+                searchResult.context.events_before = (searchResult.context.events_before || []).filter((ctxEvent) => {
+                    const ev = ctxEvent as unknown as Record<string, unknown>;
+                    return !isEditEvent(ev);
+                });
+                searchResult.context.events_after = (searchResult.context.events_after || []).filter((ctxEvent) => {
+                    const ev = ctxEvent as unknown as Record<string, unknown>;
+                    return !isEditEvent(ev);
+                });
+            }
+        }
+    }
+
     searchArgs.next_batch = localResult.next_batch;
 
     const result = {
