@@ -910,3 +910,17 @@ legend {
     -webkit-line-clamp: var(--mx-line-clamp, 1);
     overflow: hidden;
 }
+
+/* TODO: Review mx_MessageTimestamp usage to see if it can use a different class */
+/* This class is used extensively and are included here to avoid */
+/* breaking the app. */
+.mx_MessageTimestamp {
+    color: var(--cpd-color-text-secondary) !important; /* override anchor color */
+    font-size: $font-10px;
+    font-variant-numeric: tabular-nums;
+    display: block; /* enable the width setting below */
+    width: var(--MessageTimestamp-width);
+    white-space: nowrap;
+    user-select: none;
+    text-decoration: none;
+}

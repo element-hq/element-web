@@ -25,7 +25,7 @@ const MessageTimestampWrapper = ({ onClick, onContextMenu, ...rest }: MessageTim
 };
 
 export default {
-    title: "Message/MessageTimestamp",
+    title: "MessageBody/MessageTimestamp",
     component: MessageTimestampWrapper,
     tags: ["autodocs"],
     args: {
