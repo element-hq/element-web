@@ -8,6 +8,7 @@
         "url": "https://github.com/element-hq/element-web"
     },
     "license": "SEE LICENSE IN README.md",
+    "type": "module",
     "files": [
         "lib",
         "res",
@@ -126,7 +127,7 @@
         "linkify-react": "4.3.2",
         "linkify-string": "4.3.2",
         "linkifyjs": "4.3.2",
-        "lodash": "^4.17.21",
+        "lodash": "npm:lodash-es@^4.17.21",
         "maplibre-gl": "^5.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
