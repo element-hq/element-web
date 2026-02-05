@@ -167,5 +167,95 @@ describe("Searching", () => {
             const eventResult = mockSearchResults.results![0].result as unknown as Record<string, unknown>;
             expect("state_key" in eventResult).toBe(false);
         });
+
+        it("handles missing context fields and empty result sets", async () => {
+            const mockSearchResults: IResultRoomEvents = {
+                count: 3,
+                results: [
+                    {
+                        rank: 1,
+                        result: {
+                            event_id: "$event1",
+                            room_id: "!room:example.org",
+                            sender: "@user:example.org",
+                            type: "m.room.message",
+                            origin_server_ts: 1234567890,
+                            content: { body: "test message", msgtype: "m.text" },
+                            state_key: null,
+                        } as any,
+                        context: {
+                            events_before: [{ event_id: "$before1", state_key: "not-null" } as any],
+                            events_after: [{ event_id: "$after1", state_key: "not-null" } as any],
+                            profile_info: {},
+                        },
+                    },
+                    {
+                        rank: 2,
+                        result: {
+                            event_id: "$event2",
+                            room_id: "!room:example.org",
+                            sender: "@user:example.org",
+                            type: "m.room.message",
+                            origin_server_ts: 1234567891,
+                            content: { body: "test message 2", msgtype: "m.text" },
+                            state_key: null,
+                        } as any,
+                        context: {
+                            profile_info: {},
+                        },
+                    },
+                    {
+                        rank: 3,
+                        result: {
+                            event_id: "$event3",
+                            room_id: "!room:example.org",
+                            sender: "@user:example.org",
+                            type: "m.room.message",
+                            origin_server_ts: 1234567892,
+                            content: { body: "test message 3", msgtype: "m.text" },
+                            state_key: null,
+                        } as any,
+                    },
+                ],
+                highlights: ["test"],
+            };
+
+            const mockEventIndex = {
+                search: jest
+                    .fn()
+                    .mockResolvedValueOnce(mockSearchResults)
+                    .mockResolvedValueOnce({ count: 0, highlights: ["test"] } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+
+            jest.spyOn(mockClient, "getCrypto").mockReturnValue({
+                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            } as any);
+
+            const roomId = "!room:example.org";
+            await eventSearch(mockClient, "test", roomId);
+            await eventSearch(mockClient, "test", roomId);
+
+            const firstMainEvent = mockSearchResults.results![0].result as unknown as Record<string, unknown>;
+            expect(firstMainEvent.state_key).toBeUndefined();
+
+            const beforeEvent = mockSearchResults.results![0].context!.events_before![0] as unknown as Record<
+                string,
+                unknown
+            >;
+            expect(beforeEvent.state_key).toBe("not-null");
+
+            const afterEvent = mockSearchResults.results![0].context!.events_after![0] as unknown as Record<
+                string,
+                unknown
+            >;
+            expect(afterEvent.state_key).toBe("not-null");
+
+            const secondMainEvent = mockSearchResults.results![1].result as unknown as Record<string, unknown>;
+            expect(secondMainEvent.state_key).toBeUndefined();
+
+            const thirdMainEvent = mockSearchResults.results![2].result as unknown as Record<string, unknown>;
+            expect(thirdMainEvent.state_key).toBeUndefined();
+        });
     });
 });
