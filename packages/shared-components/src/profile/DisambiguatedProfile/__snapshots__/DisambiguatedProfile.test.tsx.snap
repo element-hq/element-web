@@ -32,7 +32,7 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
       Eve
     </span>
     <span
-      class="disambiguatedProfile_mxid"
+      class="mx_DisambiguatedProfile_mxid disambiguatedProfile_mxid"
     >
       @eve:matrix.org
     </span>
@@ -54,7 +54,7 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
       Alice
     </span>
     <span
-      class="disambiguatedProfile_mxid"
+      class="mx_DisambiguatedProfile_mxid disambiguatedProfile_mxid"
     >
       @alice:example.org
     </span>
