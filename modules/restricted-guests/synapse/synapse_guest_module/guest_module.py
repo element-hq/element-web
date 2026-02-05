@@ -7,11 +7,13 @@
 # Originally licensed under the Apache License, Version 2.0:
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
+import asyncio
 import logging
-from typing import Any, Dict, Literal, Tuple, Union
+from typing import Any, Dict, Literal, Optional, Tuple, Union
 
 from synapse.module_api import (
     NOT_SPAM,
+    LoggingTransaction,
     ModuleApi,
     ProfileInfo,
     UserProfile,
@@ -21,9 +23,10 @@ from synapse.module_api import (
 from synapse.module_api.errors import ConfigError
 from synapse.types import UserID
 
-from synapse_guest_module.config import GuestModuleConfig
+from synapse_guest_module.config import GuestModuleConfig, MasConfig
 from synapse_guest_module.guest_registration_servlet import GuestRegistrationServlet
 from synapse_guest_module.guest_user_reaper import GuestUserReaper
+from synapse_guest_module.mas_admin_client import MasAdminClient
 
 logger = logging.getLogger("synapse.contrib." + __name__)
 
@@ -32,8 +35,21 @@ class GuestModule:
     def __init__(self, config: GuestModuleConfig, api: ModuleApi):
         self._api = api
         self._config = config
+        self._mas_tables_ready: asyncio.Event | None = None
 
-        self.registration_servlet = GuestRegistrationServlet(config, api)
+        mas_admin_client = (
+            MasAdminClient(api, config.mas) if config.mas is not None else None
+        )
+        if config.mas is not None:
+            self._mas_tables_ready = asyncio.Event()
+            run_as_background_process(
+                "guest_module_mas_db_init",
+                self._init_mas_tables,
+                bg_start_span=False,
+            )
+        self.registration_servlet = GuestRegistrationServlet(
+            config, api, mas_admin_client, self._mas_tables_ready
+        )
         self._api.register_web_resource(
             "/_synapse/client/register_guest", self.registration_servlet
         )
@@ -48,7 +64,9 @@ class GuestModule:
         )
 
         # Start the user reaper
-        self.reaper = GuestUserReaper(api, config)
+        self.reaper = GuestUserReaper(
+            api, config, mas_admin_client, self._mas_tables_ready
+        )
         if config.enable_user_reaper:
             run_as_background_process(
                 "guest_module_reaper_bg_task",
@@ -81,11 +99,77 @@ class GuestModule:
                 "Config option 'user_expiration_seconds' must be a number"
             )
 
+        mas_config = config.get("mas")
+        mas: Optional[MasConfig] = None
+        if mas_config is not None:
+            if not isinstance(mas_config, dict):
+                raise ConfigError("Config option 'mas' must be an object")
+
+            admin_api_base_url = mas_config.get("admin_api_base_url")
+            if (
+                not isinstance(admin_api_base_url, str)
+                or len(admin_api_base_url.strip()) == 0
+            ):
+                raise ConfigError(
+                    "Config option 'mas.admin_api_base_url' is required and must be a string"
+                )
+
+            oauth_base_url = mas_config.get("oauth_base_url", admin_api_base_url)
+            if not isinstance(oauth_base_url, str) or len(oauth_base_url.strip()) == 0:
+                raise ConfigError("Config option 'mas.oauth_base_url' must be a string")
+
+            client_id = mas_config.get("client_id")
+            if not isinstance(client_id, str) or len(client_id.strip()) == 0:
+                raise ConfigError(
+                    "Config option 'mas.client_id' is required and must be a string"
+                )
+
+            client_secret = mas_config.get("client_secret")
+            if client_secret is not None:
+                if (
+                    not isinstance(client_secret, str)
+                    or len(client_secret.strip()) == 0
+                ):
+                    raise ConfigError(
+                        "Config option 'mas.client_secret' must be a string"
+                    )
+                client_secret = client_secret.strip()
+
+            client_secret_filepath = mas_config.get("client_secret_filepath")
+            if client_secret_filepath is not None:
+                if (
+                    not isinstance(client_secret_filepath, str)
+                    or len(client_secret_filepath.strip()) == 0
+                ):
+                    raise ConfigError(
+                        "Config option 'mas.client_secret_filepath' must be a string"
+                    )
+                client_secret_filepath = client_secret_filepath.strip()
+
+            if client_secret is None and client_secret_filepath is None:
+                raise ConfigError(
+                    "Config option 'mas.client_secret' or 'mas.client_secret_filepath' is required"
+                )
+
+            if client_secret is not None and client_secret_filepath is not None:
+                raise ConfigError(
+                    "Config option 'mas.client_secret' and 'mas.client_secret_filepath' are mutually exclusive"
+                )
+
+            mas = MasConfig(
+                admin_api_base_url.strip(),
+                oauth_base_url.strip(),
+                client_id.strip(),
+                client_secret,
+                client_secret_filepath,
+            )
+
         return GuestModuleConfig(
             user_id_prefix,
             display_name_suffix,
             enable_user_reaper,
             user_expiration_seconds,
+            mas,
         )
 
     async def profile_update(
@@ -113,6 +197,40 @@ class GuestModule:
                     new_profile_display_name.strip() + self._config.display_name_suffix
                 )
                 await self._api.set_displayname(user_id_1, guest_display_name)
+
+    async def _init_mas_tables(self) -> None:
+        if self._mas_tables_ready is None:
+            return
+
+        try:
+            await self._api.run_db_interaction(
+                "guest_module_create_mas_tables",
+                self._create_mas_tables,
+            )
+        except Exception as err:
+            logger.error("Failed to initialize MAS tables: %s", err)
+        finally:
+            self._mas_tables_ready.set()
+
+    @staticmethod
+    def _create_mas_tables(txn: LoggingTransaction) -> None:
+        txn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS guest_module_mas_users (
+                mas_user_id TEXT PRIMARY KEY NOT NULL,
+                user_id TEXT NOT NULL,
+                created_at_sec BIGINT NOT NULL
+            )
+            """,
+            (),
+        )
+        txn.execute(
+            """
+            CREATE INDEX IF NOT EXISTS guest_module_mas_users_created_at_sec
+            ON guest_module_mas_users (created_at_sec)
+            """,
+            (),
+        )
 
     async def callback_user_may_create_room(
         self,

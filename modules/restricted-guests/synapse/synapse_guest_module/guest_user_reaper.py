@@ -7,6 +7,7 @@
 # Originally licensed under the Apache License, Version 2.0:
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
+import asyncio
 import logging
 import time
 from typing import List
@@ -14,14 +15,23 @@ from typing import List
 from synapse.module_api import DatabasePool, LoggingTransaction, ModuleApi
 
 from synapse_guest_module.config import GuestModuleConfig
+from synapse_guest_module.mas_admin_client import MasAdminClient
 
 logger = logging.getLogger("synapse.contrib." + __name__)
 
 
 class GuestUserReaper:
-    def __init__(self, api: ModuleApi, config: GuestModuleConfig):
+    def __init__(
+        self,
+        api: ModuleApi,
+        config: GuestModuleConfig,
+        mas_admin_client: MasAdminClient | None = None,
+        mas_tables_ready: asyncio.Event | None = None,
+    ):
         self._api = api
         self._config = config
+        self._mas_admin_client = mas_admin_client
+        self._mas_tables_ready = mas_tables_ready
         self.reaper_user = f"{config.user_id_prefix}reaper"
 
     async def run(self) -> None:
@@ -43,6 +53,9 @@ class GuestUserReaper:
         """Deactivate all users that are older than the specified expiration
         interval. This uses the admin API to disable the user.
         """
+        if self._mas_admin_client is not None:
+            await self._deactivate_expired_mas_users()
+            return
 
         def get_expired_users(txn: LoggingTransaction) -> List[str]:
             sql = """
@@ -91,6 +104,61 @@ class GuestUserReaper:
                     )
                 except Exception as e:
                     logger.error('Failed to delete user "%s": %s', user_id, e)
+
+    async def _deactivate_expired_mas_users(self) -> None:
+        """Deactivate all MAS users that are older than the specified expiration
+        interval. This uses the MAS admin API to disable the user.
+        """
+
+        assert self._mas_admin_client is not None
+
+        if self._mas_tables_ready is not None:
+            await self._mas_tables_ready.wait()
+
+        def get_expired_users(txn: LoggingTransaction) -> List[str]:
+            expire_ts_seconds = int(time.time() - self._config.user_expiration_seconds)
+            txn.execute(
+                """
+                SELECT mas_user_id
+                FROM guest_module_mas_users
+                WHERE created_at_sec < ?
+                """,
+                (expire_ts_seconds,),
+            )
+            expired_users_rows = txn.fetchall()
+
+            return [row[0] for row in expired_users_rows]
+
+        expired_users: List[str] = await self._api.run_db_interaction(
+            "guest_module_get_expired_mas_users",
+            get_expired_users,
+        )
+
+        if len(expired_users) == 0:
+            return
+
+        logger.info("Deactivating %d expired MAS users", len(expired_users))
+
+        token = await self._mas_admin_client.request_admin_token()
+
+        for mas_user_id in expired_users:
+            try:
+                await self._mas_admin_client.deactivate_user(mas_user_id, token)
+                await self._remove_mas_user(mas_user_id)
+            except Exception as e:
+                logger.error('Failed to deactivate MAS user "%s": %s', mas_user_id, e)
+
+    async def _remove_mas_user(self, mas_user_id: str) -> None:
+        def delete_user(txn: LoggingTransaction) -> None:
+            txn.execute(
+                "DELETE FROM guest_module_mas_users WHERE mas_user_id = ?",
+                (mas_user_id,),
+            )
+
+        await self._api.run_db_interaction(
+            "guest_module_delete_mas_user",
+            delete_user,
+        )
 
     async def get_admin_token(self) -> str:
         """Create a new admin user in synapse so the module can call the admin

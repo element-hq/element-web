@@ -9,7 +9,7 @@
 
 import sqlite3
 from asyncio import Future
-from typing import Any, Awaitable, Callable, Tuple, TypeVar
+from typing import Any, Awaitable, Callable, Dict, Tuple, TypeVar
 from unittest.mock import Mock
 
 from synapse.http.client import SimpleHttpClient
@@ -89,7 +89,9 @@ async def register_user(localpart: str, admin: bool = False) -> str:
     return f"@{localpart}:matrix.local"
 
 
-def create_module() -> Tuple[GuestModule, Mock, SQLiteStore]:
+def create_module(
+    config_override: Dict[str, Any] | None = None,
+) -> Tuple[GuestModule, Mock, SQLiteStore]:
     store = SQLiteStore()
     _setup_db(store.conn)
 
@@ -111,19 +113,38 @@ def create_module() -> Tuple[GuestModule, Mock, SQLiteStore]:
     )
 
     # If necessary, give parse_config some configuration to parse.
-    config = GuestModule.parse_config(
-        {
-            "enable_user_reaper": False,
-        }
-    )
+    config_dict: Dict[str, Any] = {
+        "enable_user_reaper": False,
+    }
+    if config_override is not None:
+        config_dict.update(config_override)
+
+    config = GuestModule.parse_config(config_dict)
 
     module = GuestModule(config, module_api)
 
+    if getattr(module, "_mas_tables_ready", None) is not None:
+        module._mas_tables_ready.set()  # type: ignore[union-attr]
+
     return module, module_api, store
+
+
+def mas_config_override() -> Dict[str, Any]:
+    return {
+        "mas": {
+            "admin_api_base_url": "https://mas.example.org",
+            "oauth_base_url": "https://oauth.mas.example.org",
+            "client_id": "client-id",
+            "client_secret": "client-secret",
+        },
+    }
 
 
 def _setup_db(conn: sqlite3.Connection) -> None:
     conn.execute("CREATE TABLE access_tokens(user_id text, token text)")
     conn.execute(
         "CREATE TABLE users(name text, deactivated smallint, creation_ts bigint)"
+    )
+    conn.execute(
+        "CREATE TABLE guest_module_mas_users(mas_user_id text, user_id text, created_at_sec bigint)"
     )

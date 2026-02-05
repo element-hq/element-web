@@ -8,19 +8,32 @@
 # <http://www.apache.org/licenses/LICENSE-2.0>.
 
 import io
-from typing import cast
-from unittest.mock import ANY
+from typing import Tuple, cast
+from unittest.mock import ANY, Mock
 
 import aiounittest
+from parameterized import parameterized_class  # type: ignore[import-untyped]
 from twisted.web.server import Request
 from twisted.web.test.requesthelper import DummyRequest
 
-from tests import create_module, make_awaitable
+from synapse_guest_module import GuestModule
+from synapse_guest_module.mas_admin_client import MasAdminClient
+from tests import SQLiteStore, create_module, make_awaitable, mas_config_override
 
 
+@parameterized_class(
+    ("variant", "config_override"),
+    [
+        ("synapse", None),
+        ("mas", mas_config_override()),
+    ],
+)
 class GuestUserReaperTest(aiounittest.AsyncTestCase):
+    def create_module(self) -> Tuple[GuestModule, Mock, SQLiteStore]:
+        return create_module(self.config_override)
+
     async def test_async_render_POST_missing_displayname(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         request = cast(Request, DummyRequest([]))
         request.content = io.BytesIO(b"{}")
@@ -33,7 +46,7 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
         )
 
     async def test_async_render_POST_empty_displayname(self) -> None:
-        module, _, _ = create_module()
+        module, _, _ = self.create_module()
 
         request = cast(Request, DummyRequest([]))
         request.content = io.BytesIO(b'{"displayname":"  "}')
@@ -46,7 +59,7 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
         )
 
     async def test_async_render_POST_no_free_username(self) -> None:
-        module, module_api, _ = create_module()
+        module, module_api, _ = self.create_module()
 
         request = cast(Request, DummyRequest([]))
         request.content = io.BytesIO(b'{"displayname":"My Name"}')
@@ -63,24 +76,61 @@ class GuestUserReaperTest(aiounittest.AsyncTestCase):
         self.assertEqual(module_api.check_user_exists.call_count, 10)
 
     async def test_async_render_POST_success(self) -> None:
-        module, module_api, _ = create_module()
+        module, module_api, _ = self.create_module()
 
         request = cast(Request, DummyRequest([]))
         request.content = io.BytesIO(b'{"displayname":"My Name "}')
+
+        if self.config_override is not None:
+            module.registration_servlet._mas_admin_client._generate_device_id = (  # type: ignore[method-assign,union-attr]
+                lambda: "MASDEVICE123"
+            )
+
+            # `make_awaitable` is not needed here as both methods are already `AsyncMock`.
+            module_api.http_client.post_urlencoded_get_json.return_value = {
+                "access_token": "mas_admin_token"
+            }
+            module_api.http_client.post_json_get_json.side_effect = [
+                {"data": {"id": "mas-user-id"}},
+                {
+                    "data": {
+                        "id": "MASDEVICE123",
+                        "attributes": {"access_token": "mas_access_token"},
+                    }
+                },
+            ]
 
         status, response = await module.registration_servlet._async_render_POST(request)
 
         self.assertEqual(status, 201)
 
         self.assertRegex(response.pop("userId"), r"^@guest-[A-Za-z0-9]+:matrix.local$")
-        self.assertDictEqual(
-            response,
-            {
-                "accessToken": "syn_registered_token",
-                "deviceId": "DEVICEID",
-                "homeserverUrl": "https://matrix.local:1234/",
-                # "userId" was already checked by self.assertRegex and was removed from the object
-            },
-        )
+        if self.config_override is None:
+            self.assertDictEqual(
+                response,
+                {
+                    "accessToken": "syn_registered_token",
+                    "deviceId": "DEVICEID",
+                    "homeserverUrl": "https://matrix.local:1234/",
+                    # "userId" was already checked by self.assertRegex and was removed from the object
+                },
+            )
+            module_api.register_user.assert_called_with(ANY, "My Name (Guest)")
+        else:
+            self.assertDictEqual(
+                response,
+                {
+                    "accessToken": "mas_access_token",
+                    "deviceId": "MASDEVICE123",
+                    "homeserverUrl": "https://matrix.local:1234/",
+                    # "userId" was already checked by self.assertRegex and was removed from the object
+                },
+            )
 
-        module_api.register_user.assert_called_with(ANY, "My Name (Guest)")
+
+class MasAdminClientTest(aiounittest.AsyncTestCase):
+    async def test_generate_device_id_format(self) -> None:
+        device_id = MasAdminClient._generate_device_id()
+
+        self.assertGreaterEqual(len(device_id), 10)
+        self.assertRegex(device_id, r"^[A-Za-z0-9-]+$")
