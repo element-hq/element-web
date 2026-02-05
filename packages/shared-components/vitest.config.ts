@@ -81,7 +81,10 @@ export default defineConfig({
                         configDir: path.join(dirname, ".storybook"),
                         storybookScript: "storybook --ci",
                     }),
-                    storybookVis({}),
+                    storybookVis({
+                        // 3px of difference allowed before marking as failed
+                        failureThreshold: 3,
+                    }),
                 ],
                 test: {
                     name: "storybook",

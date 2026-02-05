@@ -1523,7 +1523,6 @@
         "ask_to_join": "Omogući traženje pridruživanja",
         "automatic_debug_logs": "Automatsko slanje zapisnika o svakoj pogrešci",
         "automatic_debug_logs_decryption": "Automatsko slanje zapisnika o otklanjanju pogrešaka dešifriranja",
-        "automatic_debug_logs_key_backup": "Automatsko slanje zapisnika o otklanjanju pogrešaka kada sigurnosna kopija ključa ne funkcionira",
         "beta_description": "Što je sljedeće za %(brand)s? Labs su najbolji način da među prvima isprobate novosti, testirate nove značajke i pomognete ih oblikovati prije nego što službeno postanu dostupne.",
         "beta_feature": "Ovo je beta značajka",
         "beta_feedback_leave_button": "Da biste napustili beta inačicu, idite na postavke.",

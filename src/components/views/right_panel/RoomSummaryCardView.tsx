@@ -39,7 +39,7 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
-import { Box, Flex } from "@element-hq/web-shared-components";
+import { Box, Flex, HistoryVisibilityBadge } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
@@ -165,34 +165,42 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                 {vm.alias}
             </Text>
 
-            <Flex as="section" justify="center" gap="var(--cpd-space-2x)" className="mx_RoomSummaryCard_badges">
+            <Flex
+                as="section"
+                justify="center"
+                gap="var(--cpd-space-2x)"
+                wrap="wrap"
+                className="mx_RoomSummaryCard_badges"
+            >
                 {!vm.isDirectMessage && vm.roomJoinRule === JoinRule.Public && (
                     <Badge kind="blue">
-                        <PublicIcon width="1em" color="var(--cpd-color-icon-info-primary)" />
+                        <PublicIcon width="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|public_room")}
                     </Badge>
                 )}
 
                 {vm.isRoomEncrypted && vm.e2eStatus !== E2EStatus.Warning && (
                     <Badge kind="green">
-                        <LockIcon width="1em" />
+                        <LockIcon width="1rem" />
                         {_t("common|encrypted")}
                     </Badge>
                 )}
 
                 {!vm.isRoomEncrypted && (
                     <Badge kind="blue">
-                        <LockOffIcon width="1em" color="var(--cpd-color-icon-info-primary)" />
+                        <LockOffIcon width="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|unencrypted")}
                     </Badge>
                 )}
 
                 {vm.e2eStatus === E2EStatus.Warning && (
                     <Badge kind="red">
-                        <ErrorSolidIcon width="1em" />
+                        <ErrorSolidIcon width="1rem" />
                         {_t("common|not_trusted")}
                     </Badge>
                 )}
+
+                <HistoryVisibilityBadge historyVisibility={vm.historyVisibility} />
             </Flex>
 
             <RoomTopic room={room} />

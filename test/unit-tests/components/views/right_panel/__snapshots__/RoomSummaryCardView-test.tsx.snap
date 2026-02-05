@@ -70,7 +70,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         />
         <section
           class="_flex_4dswl_9 mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
@@ -81,7 +81,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
-              width="1em"
+              width="1rem"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -99,7 +99,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
-              width="1em"
+              width="1rem"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -107,6 +107,27 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               />
             </svg>
             Not encrypted
+          </span>
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+            data-kind="blue"
+          >
+            <svg
+              color="var(--cpd-color-icon-info-primary)"
+              fill="currentColor"
+              height="1rem"
+              viewBox="0 0 24 24"
+              width="1rem"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+              />
+              <path
+                d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+              />
+            </svg>
+            New members see history
           </span>
         </section>
         <section
@@ -784,7 +805,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         />
         <section
           class="_flex_4dswl_9 mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
@@ -795,7 +816,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
-              width="1em"
+              width="1rem"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -813,7 +834,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
-              width="1em"
+              width="1rem"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -821,6 +842,27 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
               />
             </svg>
             Not encrypted
+          </span>
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+            data-kind="blue"
+          >
+            <svg
+              color="var(--cpd-color-icon-info-primary)"
+              fill="currentColor"
+              height="1rem"
+              viewBox="0 0 24 24"
+              width="1rem"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+              />
+              <path
+                d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+              />
+            </svg>
+            New members see history
           </span>
         </section>
         <section
@@ -1460,7 +1502,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         />
         <section
           class="_flex_4dswl_9 mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
@@ -1471,7 +1513,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
-              width="1em"
+              width="1rem"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -1489,7 +1531,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               fill="currentColor"
               height="1em"
               viewBox="0 0 24 24"
-              width="1em"
+              width="1rem"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -1497,6 +1539,27 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               />
             </svg>
             Not encrypted
+          </span>
+          <span
+            class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+            data-kind="blue"
+          >
+            <svg
+              color="var(--cpd-color-icon-info-primary)"
+              fill="currentColor"
+              height="1rem"
+              viewBox="0 0 24 24"
+              width="1rem"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+              />
+              <path
+                d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+              />
+            </svg>
+            New members see history
           </span>
         </section>
         <section

@@ -1500,7 +1500,6 @@
         "ask_to_join": "A kérést igénylő csatlakozás engedélyezése",
         "automatic_debug_logs": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
         "automatic_debug_logs_decryption": "Hibakeresési naplók automatikus küldése titkosítás-visszafejtési hiba esetén",
-        "automatic_debug_logs_key_backup": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
         "beta_description": "Mi várható a(z) %(brand)s fejlesztésében? A labor a legjobb hely az új dolgok kipróbálásához, visszajelzés adásához és a funkciók éles indulás előtti kialakításában történő segítséghez.",
         "beta_feature": "Ez egy beta állapotú funkció",
         "beta_feedback_leave_button": "A beállításokban tudja elhagyni a bétát.",

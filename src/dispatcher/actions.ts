@@ -230,12 +230,6 @@ export enum Action {
     PseudonymousAnalyticsReject = "pseudonymous_analytics_reject",
 
     /**
-     * Fires after crypto is setup if key backup is not enabled
-     * Used to trigger auto rageshakes when configured
-     */
-    ReportKeyBackupNotEnabled = "report_key_backup_not_enabled",
-
-    /**
      * Dispatched after leave room or space is finished
      */
     AfterLeaveRoom = "after_leave_room",

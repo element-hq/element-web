@@ -5,6 +5,7 @@
     "action": {
         "delete": "삭제",
         "dismiss": "버리기",
+        "edit": "편집",
         "explore_rooms": "방 검색",
         "invite": "초대",
         "new_conversation": "새로운 대화",
@@ -13,6 +14,7 @@
         "open_menu": "메뉴 열기",
         "pause": "일시중지",
         "play": "재생",
+        "remove": "제거",
         "retry": "재시도",
         "search": "찾기",
         "start_chat": "채팅 시작"
@@ -26,6 +28,11 @@
     "room": {
         "context_menu": {
             "title": "채팅방 옵션"
+        },
+        "history_visibility_badge": {
+            "private": "신규 회원은 이전 기록을 볼 수 없습니다.",
+            "shared": "신규 회원은 기록을 볼 수 있습니다.",
+            "world_readable": "누구나 히스토리를 볼 수 있습니다"
         },
         "status_bar": {
             "delete_all": "전체 삭제",
@@ -43,12 +50,15 @@
         }
     },
     "room_list": {
+        "appearance": "모양",
         "open_space_menu": "스페이스 메뉴 열기",
         "room_options": "채팅방 옵션",
+        "show_message_previews": "메시지 미리보기 표시",
         "sort": "정렬",
         "sort_type": {
             "activity": "활동내역",
-            "atoz": "A-Z"
+            "atoz": "A-Z",
+            "unread_first": "안읽은 글 우선"
         },
         "space_menu": {
             "home": "스페이스 홈",
@@ -75,10 +85,29 @@
         "n_minutes_ago": "%(num)s분 전"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "발신자가 귀하의 기기가 인증되지 않았기 때문에 이 메시지를 수신하지 못하도록 차단했습니다.",
+            "historical_event_no_key_backup": "이 기기에서는 이전 메시지를 볼 수 없습니다.",
+            "historical_event_unverified_device": "이전 메시지에 액세스하려면 이 장치를 인증해야 합니다.",
+            "historical_event_user_not_joined": "이 메시지에 액세스할 수 없습니다.",
+            "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
+            "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
+            "unable_to_decrypt": "메시지를 해독할 수 없습니다."
+        },
         "m.audio": {
             "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
             "unnamed_audio": "이름 없는 오디오"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "왼쪽으로 이동",
+            "move_right": "오른쪽으로 이동",
+            "remove": "모든 사람에게서 제거",
+            "revoke": "권한 취소",
+            "screenshot": "사진 촬영",
+            "start_audio_stream": "오디오 스트림 시작"
         }
     }
 }

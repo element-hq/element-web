@@ -1508,7 +1508,6 @@
         "ask_to_join": "Võta kasutusele liitumine kasutaja sooviavalduse alusel",
         "automatic_debug_logs": "Iga vea puhul saada silumislogid automaatselt arendajatele",
         "automatic_debug_logs_decryption": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
-        "automatic_debug_logs_key_backup": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele",
         "beta_description": "Mida %(brand)s tulevikus teha oskab? Arendusjärgus funktsionaalsuste loendist leiad võimalusi, mis varsti on kõigile saadaval, kuid sa saad neid juba katsetada ning ka mõjutada missuguseks nad lõplikukt kujunevad.",
         "beta_feature": "See on veel katsetamisjärgus funktsionaalsus",
         "beta_feedback_leave_button": "Beetaversiooni saad välja lülitada rakenduse seadistustest.",
