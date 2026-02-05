@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AvatarWithDetails renders a banner with an action 1`] = `
+exports[`AvatarWithDetails > renders a banner with an action 1`] = `
 <div>
   <div
     class="banner"
@@ -26,27 +26,36 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
-        encryption|pinned_identity_changed
+        Alice's (
+        <b>
+          @alice:example.com
+        </b>
+        ) identity was reset. 
+        <a
+          href="https://example.org"
+        >
+          Learn more
+        </a>
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="primary"
-        data-size="lg"
+        data-size="sm"
         role="button"
         tabindex="0"
       >
-        encryption|withdraw_verification_action
+        Withdraw verification
       </button>
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -59,7 +68,7 @@ exports[`AvatarWithDetails renders a banner with an action 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
+exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
 <div>
   <div
     class="banner"
@@ -72,18 +81,18 @@ exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
         src="https://picsum.photos/32/32"
       />
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -96,7 +105,7 @@ exports[`AvatarWithDetails renders a banner with an avatar iamge 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a critical banner 1`] = `
+exports[`AvatarWithDetails > renders a critical banner 1`] = `
 <div>
   <div
     class="banner"
@@ -118,18 +127,18 @@ exports[`AvatarWithDetails renders a critical banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -142,7 +151,7 @@ exports[`AvatarWithDetails renders a critical banner 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a default banner 1`] = `
+exports[`AvatarWithDetails > renders a default banner 1`] = `
 <div>
   <div
     class="banner"
@@ -168,18 +177,18 @@ exports[`AvatarWithDetails renders a default banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -192,7 +201,7 @@ exports[`AvatarWithDetails renders a default banner 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a info banner 1`] = `
+exports[`AvatarWithDetails > renders a info banner 1`] = `
 <div>
   <div
     class="banner"
@@ -219,18 +228,18 @@ exports[`AvatarWithDetails renders a info banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -243,7 +252,7 @@ exports[`AvatarWithDetails renders a info banner 1`] = `
 </div>
 `;
 
-exports[`AvatarWithDetails renders a success banner 1`] = `
+exports[`AvatarWithDetails > renders a success banner 1`] = `
 <div>
   <div
     class="banner"
@@ -265,18 +274,18 @@ exports[`AvatarWithDetails renders a success banner 1`] = `
         />
       </svg>
     </div>
-    <span
+    <div
       class="content"
     >
       <p>
         Hello! This is a status banner.
       </p>
-    </span>
+    </div>
     <div
       class="actions"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="sm"
         role="button"

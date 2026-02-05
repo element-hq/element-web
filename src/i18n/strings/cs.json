@@ -16,12 +16,10 @@
         "room_n_unread_invite": "Otevřít pozvánku do místnosti %(roomName)s.",
         "room_n_unread_messages": {
             "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zprávou.",
-            "few": "",
             "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami."
         },
         "room_n_unread_messages_mentions": {
             "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zmínkou.",
-            "few": "",
             "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami včetně zmínek."
         },
         "room_name": "Místnost %(name)s",
@@ -95,17 +93,13 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
-        "new_conversation": "Nová konverzace",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
         "no": "Ne",
         "ok": "OK",
         "open": "Otevřít",
-        "open_menu": "Otevřít nabídku",
-        "pause": "Pozastavit",
         "pin": "Připnout",
-        "play": "Přehrát",
         "proceed": "Pokračovat",
         "quote": "Citovat",
         "react": "Reagovat",
@@ -581,6 +575,7 @@
         "someone": "Někdo",
         "space": "Prostor",
         "spaces": "Prostory",
+        "state_encryption_enabled": "Experimentální šifrování stavu povoleno",
         "sticker": "Nálepka",
         "stickerpack": "Balíček s nálepkami",
         "success": "Úspěch",
@@ -688,6 +683,8 @@
         "join_rule_restricted_label": "Všichni v <SpaceName/> budou moci tuto místnost najít a připojit se k ní.",
         "name_validation_required": "Zadejte prosím název místnosti",
         "room_visibility_label": "Viditelnost místnosti",
+        "state_encrypted_warning": "Umožňuje experimentální podporu pro šifrování stavových událostí, která skrývá metadata, jako jsou názvy místností a témata, před serverem. Tato metadata budou také skryta před lidmi, kteří se k místnostem připojí později, a před lidmi, jejichž klienti nepodporují MSC4362.",
+        "state_encryption_label": "Šifrovat stavové události",
         "title_private_room": "Vytvořit neveřejnou místnost",
         "title_public_room": "Vytvořit veřejnou místnost",
         "title_video_room": "Vytvořit video místnost",
@@ -848,6 +845,7 @@
         "number_of_users": "Počet uživatelů",
         "only_joined_members": "Pouze připojení uživatelé",
         "original_event_source": "Původní zdroj události",
+        "restore_from_backup": "Obnovit ze zálohy",
         "room_encrypted": "Místnost je <strong>šifrovaná ✅</strong>",
         "room_id": "ID místnosti: %(roomId)s",
         "room_not_encrypted": "Místnost <strong>není šifrovaná 🚨</strong>",
@@ -957,6 +955,7 @@
         "bootstrap_title": "Příprava klíčů",
         "confirm_encryption_setup_body": "Kliknutím na tlačítko níže potvrďte nastavení šifrování.",
         "confirm_encryption_setup_title": "Potvrďte nastavení šifrování",
+        "continue_with_reset": "Pokračovat s resetováním",
         "cross_signing_room_normal": "Místnost je koncově šifrovaná",
         "cross_signing_room_verified": "V této místnosti jsou všichni ověřeni",
         "cross_signing_room_warning": "Někdo používá neznámou relaci",
@@ -972,10 +971,12 @@
         "event_shield_reason_unverified_identity": "Šifrováno neověřeným uživatelem.",
         "export_unsupported": "Váš prohlížeč nepodporuje požadovaná kryptografická rozšíření",
         "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
+        "identity_needs_reset_description": "Abyste si zajistili přístup k historii zpráv, musíte resetovat svou kryptografickou identitu.",
         "import_invalid_keyfile": "Neplatný soubor s klíčem %(brand)s",
         "import_invalid_passphrase": "Kontrola ověření selhala: špatné heslo?",
         "key_storage_out_of_sync": "Vaše úložiště klíčů není synchronizováno.",
         "key_storage_out_of_sync_description": "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.",
+        "message_shared_by": "%(displayName)s (%(userId)s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",
@@ -1507,7 +1508,6 @@
         "ask_to_join": "Umožnit požádat o vstup",
         "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě",
         "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",
-        "automatic_debug_logs_key_backup": "Automaticky odeslat ladící protokoly, když zálohování klíčů nefunguje",
         "beta_description": "Co se chystá pro %(brand)s? Experimentální funkce jsou nejlepším způsobem, jak se dostat k novým věcem v raném stádiu, vyzkoušet nové funkce a pomoci je formovat ještě před jejich spuštěním.",
         "beta_feature": "Jedná se o funkci ve vývoji",
         "beta_feedback_leave_button": "Chcete-li opustit beta verzi, jděte do nastavení.",
@@ -1524,6 +1524,8 @@
         "dynamic_room_predecessors": "Předchůdci dynamické místnosti",
         "dynamic_room_predecessors_description": "Povolit MSC3946 (podpora pozdních archivů místností)",
         "element_call_video_rooms": "Element Call video místnosti",
+        "encrypted_state_events": "Šifrované stavové události (MSC4362)",
+        "encrypted_state_events_description": "Umožňuje experimentální podporu pro šifrování stavových událostí, která skrývá metadata, jako jsou názvy místností a témata, před serverem. Tato metadata budou také skryta před lidmi, kteří se k místnostem připojí později, a před lidmi, jejichž klienti nepodporují MSC4362.",
         "exclude_insecure_devices": "Vyloučit nezabezpečená zařízení při odesílání/přijímání zpráv",
         "exclude_insecure_devices_description": "Pokud je tento režim povolen, šifrované zprávy nebudou sdíleny s neověřenými zařízeními a zprávy z neověřených zařízení se zobrazí jako chyba. Upozorňujeme, že pokud tento režim povolíte, může se stát, že nebudete moci komunikovat s uživateli, kteří svá zařízení neověřili.",
         "experimental_description": "Rádi experimentujete? Vyzkoušejte naše nejnovější nápady ve vývoji. Tyto funkce nejsou dokončeny; mohou být nestabilní, mohou se změnit nebo mohou být zcela vypuštěny. <a>Zjistěte více</a>.",
@@ -1765,6 +1767,7 @@
         "end_message": "Hlasování skončilo. Nejčastější odpověď: %(topAnswer)s",
         "end_message_no_votes": "Hlasování skončilo. Nikdo nehlasoval.",
         "end_title": "Ukončit hlasování",
+        "ended_poll_label": "Hlasování skončilo",
         "error_ending_description": "Omlouváme se, ale hlasování neskončilo. Zkuste to prosím znovu.",
         "error_ending_title": "Nepodařilo se ukončit hlasování",
         "error_voting_description": "Je nám líto, váš hlas nebyl zaregistrován. Zkuste to prosím znovu.",
@@ -1772,10 +1775,22 @@
         "failed_send_poll_description": "Omlouváme se, ale hlasování, které jste se pokusili vytvořit, nebylo zveřejněno.",
         "failed_send_poll_title": "Nepodařilo se zveřejnit hlasování",
         "notes": "Výsledky se zobrazí až po ukončení hlasování",
+        "option_label": "Volba %(number)s, %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "Volba %(number)s, %(answer)s, vítězná volba, %(count)s hlas",
+            "few": "Volba %(number)s, %(answer)s, vítězná volba, %(count)s hlasy",
+            "other": "Volba %(number)s, %(answer)s, vítězná volba, %(count)s hlasů"
+        },
+        "option_label_with_total": {
+            "one": "Volba %(number)s, %(answer)s, %(count)s hlas",
+            "few": "Volba %(number)s, %(answer)s, %(count)s hlasy",
+            "other": "Volba %(number)s, %(answer)s, %(count)s hlasů"
+        },
         "options_add_button": "Přidat volbu",
         "options_heading": "Vytvořit volby",
         "options_label": "Volba %(number)s",
         "options_placeholder": "Napište volbu",
+        "poll_label": "Hlasování",
         "topic_heading": "Jaká je vaše otázka nebo téma hlasování?",
         "topic_label": "Otázka nebo téma",
         "topic_placeholder": "Napište něco…",
@@ -1981,7 +1996,6 @@
         "dm_invite_title": "Chcete si povídat s %(user)s?",
         "drop_file_prompt": "Přetažením sem nahrajete",
         "edit_topic": "Upravit téma",
-        "error_3pid_invite_email_lookup": "Nelze najít uživatele podle e-mailu",
         "error_cancel_knock_title": "Nepodařilo se zrušit",
         "error_join_403": "Pro vstup do této místnosti potřebujete pozvánku.",
         "error_join_404_1": "Pokusili jste se připojit pomocí ID místnosti, aniž byste zadali seznam serverů, přes které se chcete připojit. ID místnosti jsou interní identifikátory a nelze je použít k připojení k místnosti bez dalších informací.",
@@ -2013,12 +2027,16 @@
         "forget_room": "Zapomenout na tuto místnost",
         "forget_space": "Zapomenout tento prostor",
         "header": {
+            "join_video_call": "Připojit se k videohovoru",
+            "join_voice_call": "Připojit se k hlasovému hovoru",
             "n_people_asking_to_join": {
                 "one": "Žádá o vstup",
                 "few": "%(count)s lidé žádají o vstup",
                 "other": "%(count)s lidí žádá o vstup"
             },
-            "room_is_public": "Tato místnost je veřejná"
+            "room_is_public": "Tato místnost je veřejná",
+            "shared_history_tooltip": "Noví členové vidí historii",
+            "world_readable_history_tooltip": "Každý může vidět historii"
         },
         "header_avatar_open_settings_label": "Otevřít nastavení místnosti",
         "header_face_pile_tooltip": "Lidé",
@@ -2114,18 +2132,6 @@
             },
             "this_room_button": "Vyhledávat v této místnosti"
         },
-        "status_bar": {
-            "delete_all": "Smazat všechny",
-            "exceeded_resource_limit": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl limitu svých zdrojů. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
-            "homeserver_blocked": "Vaše zpráva nebyla odeslána, protože tento domovský server byl zablokován jeho správcem. Pokud chcete pokračovat v používání služby, <a>kontaktujte správce služby</a>.",
-            "monthly_user_limit_reached": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl svého měsíčního limitu pro aktivní uživatele. Pro další využívání služby prosím kontaktujte jejího <a>správce</a>.",
-            "requires_consent_agreement": "Dokud si nepřečtete a neodsouhlasíte <consentLink>naše smluvní podmínky</consentLink>, nebudete moci posílat žádné zprávy.",
-            "retry_all": "Zkusit všechny znovu",
-            "select_messages_to_retry": "Můžete vybrat všechny nebo jednotlivé zprávy, které chcete zkusit poslat znovu nebo odstranit",
-            "server_connectivity_lost_description": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví.",
-            "server_connectivity_lost_title": "Spojení se serverem bylo přerušeno.",
-            "some_messages_not_sent": "Některé z vašich zpráv nebyly odeslány"
-        },
         "unknown_status_code_for_timeline_jump": "neznámý kód stavu",
         "unread_notifications_predecessor": {
             "other": "Máte %(count)s nepřečtených oznámení v předchozí verzi této místnosti.",
@@ -2201,56 +2207,25 @@
             "mark_unread": "Označit jako nepřečtené"
         },
         "notification_options": "Možnosti oznámení",
-        "open_space_menu": "Otevřít nabídku prostoru",
         "primary_filters": "Filtry seznamu místností",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
         },
-        "release_announcement": {
-            "done": "Hotovo",
-            "filter": {
-                "description": "Filtrujte své chaty jediným kliknutím. Rozbalením zobrazíte další filtry.",
-                "title": "Nové rychlé filtry"
-            },
-            "intro": {
-                "description": "Seznam chatů byl aktualizován, aby byl přehlednější a jednodušší na používání.",
-                "title": "Chaty mají nový vzhled!"
-            },
-            "next": "Další",
-            "settings": {
-                "description": "Chcete-li zobrazit nebo skrýt náhledy zpráv, přejděte do Všechna nastavení > Předvolby > Seznam místností",
-                "title": "Některá nastavení byla přesunuta"
-            },
-            "sort": {
-                "description": "Změňte pořadí svých chatů z nejnovějších na A-Z",
-                "title": "Seřaďte si chaty"
-            }
-        },
         "room": {
             "more_options": "Více možností",
             "open_room": "Otevřít místnost %(roomName)s"
         },
-        "room_options": "Možnosti místnosti",
         "show_less": "Zobrazit méně",
         "show_n_more": {
             "other": "Zobrazit %(count)s dalších",
             "one": "Zobrazit %(count)s další"
         },
         "show_previews": "Zobrazovat náhledy zpráv",
-        "sort": "Řadit",
         "sort_by": "Řadit dle",
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A–Z",
-        "sort_type": {
-            "activity": "Aktivita",
-            "atoz": "A–Z"
-        },
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
-        "space_menu": {
-            "home": "Domov prostoru",
-            "space_settings": "Nastavení prostoru"
-        },
         "space_menu_label": "Nabídka pro %(spaceName)s",
         "sublist_options": "Možnosti seznamu",
         "suggested_rooms_heading": "Doporučené místnosti"
@@ -2339,6 +2314,8 @@
             "no_aliases_space": "Tento prostor nemá žádné místní adresy",
             "other_section": "Další možnosti",
             "publish_toggle": "Zapsat tuto místnost do veřejného adresáře místností na %(domain)s?",
+            "publish_warn_invite_only": "Nemůžete zveřejnit místnost, která je pouze pro zvané.",
+            "publish_warn_no_canonical_permission": "Pro zveřejnění této místnosti musíte mít oprávnění k nastavení hlavní adresy.",
             "published_aliases_description": "Chcete-li adresu zveřejnit, je třeba ji nejprve nastavit jako místní adresu.",
             "published_aliases_explainer_room": "Zveřejněné adresy může použít kdokoli na jakémkoli serveru, aby se připojil k vaší místnosti.",
             "published_aliases_explainer_space": "Zveřejněné adresy může použít kdokoli na jakémkoli serveru, aby se připojil k vašemu prostoru.",
@@ -2433,12 +2410,11 @@
             "error_join_rule_change_title": "Nepodařilo se aktualizovat pravidla pro připojení",
             "error_join_rule_change_unknown": "Neznámá chyba",
             "guest_access_warning": "Lidé s podporovanými klienty se budou moci do místnosti připojit, aniž by měli registrovaný účet.",
-            "history_visibility_invited": "Pouze členové (od chvíle jejich pozvání)",
-            "history_visibility_joined": "Pouze členové (od chvíle jejich vstupu)",
+            "history_visibility_invited": "Členové od pozvání",
             "history_visibility_legend": "Kdo může číst historii?",
-            "history_visibility_shared": "Pouze členové (od chvíle vybrání této volby)",
-            "history_visibility_warning": "Viditelnost stávající historie se nezmění.",
-            "history_visibility_world_readable": "Kdokoliv",
+            "history_visibility_shared": "Členové (úplná historie)",
+            "history_visibility_warning": "Změny neovlivní starší zprávy, pouze nové. <a>Další informace</a>",
+            "history_visibility_world_readable": "Kdokoli (historie je veřejná)",
             "join_rule_description": "Rozhodněte, kdo se může připojit k místnosti %(roomName)s.",
             "join_rule_invite": "Soukromý (pouze pro pozvané)",
             "join_rule_invite_description": "Připojit se mohou pouze pozvané osoby.",
@@ -2494,10 +2470,12 @@
             "error_failed_save": "Nepodařilo se aktualizovat viditelnost tohoto prostoru",
             "error_update_guest_access": "Nepodařilo se aktualizovat přístup hosta do tohoto prostoru",
             "error_update_history_visibility": "Nepodařilo se aktualizovat viditelnost historie tohoto prostoru",
-            "guest_access_explainer": "Hosté se mohou připojit k prostoru, aniž by měli účet.",
+            "guest_access_disabled": "Nemáte oprávnění měnit přístup hostů.",
+            "guest_access_explainer": "Hosté se mohou připojit k prostoru, aniž by měli účet. To může být užitečné pro veřejné prostory.",
             "guest_access_label": "Povolit přístup hostům",
             "history_visibility_anyone_space": "Nahlédnout do prostoru",
             "history_visibility_anyone_space_description": "Umožněte lidem prohlédnout si váš prostor ještě předtím, než se připojí.",
+            "history_visibility_anyone_space_disabled": "Nemáte oprávnění měnit viditelnost historie.",
             "history_visibility_anyone_space_recommendation": "Doporučeno pro veřejné prostory.",
             "title": "Viditelnost"
         },
@@ -2892,10 +2870,6 @@
             "rule_suppress_notices": "Zprávy poslané robotem",
             "rule_tombstone": "Při aktualizaci místnosti",
             "show_message_desktop_notification": "Zobrazit text zprávy v oznámení na ploše",
-            "sounds_release_announcement": {
-                "description": "Zvuky oznámení a vyzvánění hovorů byly aktualizovány – nyní jsou jasnější, rychlejší a méně rušivé",
-                "title": "Aktualizovali jsme vaše zvuky"
-            },
             "voip": "Hlasové a video hovory"
         },
         "preferences": {
@@ -2955,6 +2929,7 @@
             "message_search_indexing": "Aktuálně se indexuje: %(currentRoom)s",
             "message_search_indexing_idle": "Aktuálně neindexujeme žádné zprávy.",
             "message_search_intro": "%(brand)s si bezpečně uchovává šifrované zprávy lokálně, aby v nich mohl vyhledávat:",
+            "message_search_pending_rooms": "Místnosti čekající na indexaci: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s z %(totalRooms)s",
             "message_search_section": "Vyhledávání ve zprávách",
             "message_search_sleep_time": "Jak rychle se mají zprávy stahovat.",
@@ -3398,24 +3373,10 @@
         "no_rooms_with_unread_threads": "Zatím nemáte místnosti s nepřečtenými vlákny."
     },
     "time": {
-        "about_day_ago": "před jedním dnem",
-        "about_hour_ago": "asi před hodinou",
-        "about_minute_ago": "před minutou",
         "date_at_time": "%(date)s v %(time)s",
-        "few_seconds_ago": "před pár vteřinami",
         "hours_minutes_seconds_left": "zbývá %(hours)sh %(minutes)sm %(seconds)ss",
-        "in_about_day": "asi za den",
-        "in_about_hour": "asi za hodinu",
-        "in_about_minute": "asi za minutu",
-        "in_few_seconds": "za pár vteřin",
-        "in_n_days": "za %(num)s dní",
-        "in_n_hours": "za %(num)s hodin",
-        "in_n_minutes": "za %(num)s minut",
         "left": "%(timeRemaining)s zbývá",
         "minutes_seconds_left": "zbývá %(minutes)sm %(seconds)ss",
-        "n_days_ago": "před %(num)s dny",
-        "n_hours_ago": "před %(num)s hodinami",
-        "n_minutes_ago": "před %(num)s minutami",
         "seconds_left": "Zbývá %(seconds)ss",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3439,12 +3400,7 @@
         "creation_summary_dm": "%(creator)s vytvořil(a) tuto přímou zprávu.",
         "creation_summary_room": "%(creator)s vytvořil(a) a nakonfiguroval(a) místnost.",
         "decryption_failure": {
-            "blocked": "Odesílatel vám zablokoval příjem této zprávy, protože vaše zařízení není ověřeno.",
-            "historical_event_no_key_backup": "Historické zprávy nejsou v tomto zařízení k dispozici",
-            "historical_event_unverified_device": "Pro přístup k historickým zprávám je třeba toto zařízení ověřit.",
-            "historical_event_user_not_joined": "K této zprávě nemáte přístup",
             "sender_identity_previously_verified": "Ověřená identita odesílatele se změnila",
-            "sender_unsigned_device": "Šifrováno zařízením, které nebylo ověřeno jeho majitelem.",
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3470,11 +3426,9 @@
             "unable_to_find": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít."
         },
         "m.audio": {
-            "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
             "error_processing_audio": "Došlo k chybě při zpracovávání hlasové zprávy",
-            "error_processing_voice_message": "Chyba při zpracování hlasové zprávy",
-            "unnamed_audio": "Nepojmenovaný audio soubor"
+            "error_processing_voice_message": "Chyba při zpracování hlasové zprávy"
         },
         "m.beacon_info": {
             "view_live_location": "Zobrazit polohu živě"
@@ -3569,6 +3523,7 @@
             "enabled_dm": "Zprávy jsou zde koncově šifrovány. Ověřte %(displayName)s v jeho profilu - klepněte na jeho profilový obrázek.",
             "enabled_local": "Zprávy v této místnosti budou koncově šifrovány.",
             "parameters_changed": "Byly změněny některé parametry šifrování.",
+            "state_enabled": "Zprávy a události v této místnosti jsou koncově šifrovány. Když se lidé připojí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
             "unsupported": "Šifrování používané v této místnosti není podporované."
         },
         "m.room.guest_access": {
@@ -4048,7 +4003,6 @@
         "hide_sidebar_button": "Skrýt postranní panel",
         "input_devices": "Vstupní zařízení",
         "jitsi_call": "Jitsi konference",
-        "join_button_tooltip_call_full": "Omlouváme se — tento hovor je v současné době plný",
         "legacy_call": "Zastaralý způsob hovoru",
         "maximise": "Vyplnit obrazovku",
         "maximise_call": "Maximalizovat hovor",
@@ -4108,6 +4062,7 @@
         "video_call_using": "Videohovor pomocí:",
         "voice_call": "Hlasový hovor",
         "voice_call_incoming": "Příchozí hlasový hovor",
+        "voice_call_using": "Hlasový hovor pomocí:",
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",

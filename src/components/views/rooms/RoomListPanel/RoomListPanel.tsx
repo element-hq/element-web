@@ -6,18 +6,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useCallback } from "react";
-import { Flex } from "@element-hq/web-shared-components";
+import { Flex, RoomListHeaderView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
-import { RoomListHeaderView } from "./RoomListHeaderView";
 import { RoomListView } from "./RoomListView";
 import { _t } from "../../../../languageHandler";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 import { type IState as IRovingTabIndexState } from "../../../../accessibility/RovingTabIndex";
+import { RoomListHeaderViewModel } from "../../../../viewmodels/room-list/RoomListHeaderViewModel";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import SpaceStore from "../../../../stores/spaces/SpaceStore";
 
 type RoomListPanelProps = {
     /**
@@ -58,6 +60,11 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
         [focusedElement],
     );
 
+    const matrixClient = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(
+        () => new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance }),
+    );
+
     return (
         <Flex
             as="nav"
@@ -70,7 +77,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
             onKeyDown={onKeyDown}
         >
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
-            <RoomListHeaderView />
+            <RoomListHeaderView vm={vm} />
             <RoomListView />
         </Flex>
     );

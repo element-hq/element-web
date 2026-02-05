@@ -8,6 +8,8 @@
 import { type Page } from "@playwright/test";
 
 import { expect, test } from "../../../element-web-test";
+import { type Bot } from "../../../pages/bot";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 
 test.describe("Room list", () => {
     test.use({
@@ -35,6 +37,8 @@ test.describe("Room list", () => {
     });
 
     test.describe("Room list", () => {
+        test.slow();
+
         test.beforeEach(async ({ page, app, user }) => {
             for (let i = 0; i < 30; i++) {
                 await app.client.createRoom({ name: `room${i}` });
@@ -119,23 +123,23 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
-            await expect(roomItem.getByTestId("notification-decoration")).not.toBeVisible();
+            // Not hovered, the room decoration should be the muted icon
+            await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
 
             // Put focus on the room list
             await roomListView.getByRole("option", { name: "Open room room28" }).click();
 
-            // Scroll to the end of the room list
-            await app.scrollListToBottom(roomListView);
-
-            // The room decoration should have the muted icon
+            // During hover the room decoration should still be the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
 
             await roomItem.hover();
+
             // On hover, the room should show the muted icon
             await expect(roomItem).toMatchScreenshot("room-list-item-hover-silent.png");
 
             roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
             await roomItemMenu.click();
+
             // The Mute room option should be selected
             await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
             await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");
@@ -392,13 +396,8 @@ test.describe("Room list", () => {
             await expect(room).toMatchScreenshot("room-list-item-mention.png");
         });
 
-        test("should render a message preview", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
-            await app.settings.openUserSettings("Preferences");
-            await page.getByRole("switch", { name: "Show message previews" }).click();
-            await app.closeDialog();
-
+        async function checkMessagePreview(page: Page, app: ElementAppPage, bot: Bot) {
             const roomListView = getRoomList(page);
-
             const roomId = await app.client.createRoom({ name: "activity" });
 
             // focus the user menu to avoid to have hover decoration
@@ -411,7 +410,30 @@ test.describe("Room list", () => {
             const room = roomListView.getByRole("option", { name: "activity" });
             await expect(room.getByText("I am a robot. Beep.")).toBeVisible();
             await expect(room).toMatchScreenshot("room-list-item-message-preview.png");
-        });
+        }
+
+        test(
+            "should render a message preview when enable in settings",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                await app.settings.openUserSettings("Preferences");
+                await page.getByRole("switch", { name: "Show message previews" }).click();
+                await app.closeDialog();
+
+                await checkMessagePreview(page, app, bot);
+            },
+        );
+
+        test(
+            "should render a message preview when enabled in header",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                await page.getByRole("button", { name: "Room Options" }).click();
+                await page.getByRole("menuitemcheckbox", { name: "Show message previews" }).click();
+
+                await checkMessagePreview(page, app, bot);
+            },
+        );
 
         test("should render an activity decoration", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
             const roomListView = getRoomList(page);

@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_QuickSettingsButton {
-    border-radius: 8px;
+    /* !important override compound */
+    border-radius: 8px !important;
     margin: 12px auto 12px;
 
     svg {
@@ -57,7 +58,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         & .mx_QuickSettingsButton_label {
-            color: $secondary-content;
+            /* !important override compound  */
+            color: $secondary-content !important;
         }
     }
 }

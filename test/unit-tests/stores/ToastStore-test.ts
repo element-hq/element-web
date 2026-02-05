@@ -71,7 +71,6 @@ describe("ToastStore", () => {
 
             store.dismissToast("whatever");
 
-            expect(store.getCountSeen()).toEqual(0);
             expect(emitSpy).not.toHaveBeenCalled();
         });
 
@@ -85,43 +84,13 @@ describe("ToastStore", () => {
 
             store.dismissToast(toastA.key);
 
-            expect(store.getCountSeen()).toEqual(0);
             expect(emitSpy).toHaveBeenCalledWith("update");
             expect(store.getToasts()).toEqual([toastB]);
-        });
-
-        it("increments countSeen when toast has bottom priority", () => {
-            const store = new ToastStore();
-            const toastA = makeToast(1, "a");
-            const toastB = makeToast(3, "b");
-            const toastC = makeToast(99, "c");
-            store.addOrReplaceToast(toastA);
-            store.addOrReplaceToast(toastC);
-            store.addOrReplaceToast(toastB);
-            const emitSpy = jest.spyOn(store, "emit");
-
-            store.dismissToast(toastC.key);
-
-            expect(store.getCountSeen()).toEqual(1);
-            expect(emitSpy).toHaveBeenCalledWith("update");
-        });
-
-        it("resets countSeen when no toasts remain", () => {
-            const store = new ToastStore();
-            const toastA = makeToast(1, "a");
-            const toastB = makeToast(3, "b");
-            store.addOrReplaceToast(toastA);
-            store.addOrReplaceToast(toastB);
-
-            store.dismissToast(toastB.key);
-            expect(store.getCountSeen()).toEqual(1);
-            store.dismissToast(toastA.key);
-            expect(store.getCountSeen()).toEqual(0);
         });
     });
 
     describe("reset()", () => {
-        it("clears countseen and toasts", () => {
+        it("clears toasts", () => {
             const store = new ToastStore();
             const toastA = makeToast(1, "a");
             const toastB = makeToast(3, "b");
@@ -131,7 +100,6 @@ describe("ToastStore", () => {
             store.dismissToast(toastB.key);
 
             store.reset();
-            expect(store.getCountSeen()).toEqual(0);
             expect(store.getToasts()).toEqual([]);
         });
     });

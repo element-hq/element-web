@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { BackspaceSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
@@ -24,7 +25,9 @@ export default class DialPadBackspaceButton extends React.PureComponent<IProps> 
                     className="mx_DialPadBackspaceButton"
                     onClick={this.props.onBackspacePress}
                     aria-label={_t("keyboard|backspace")}
-                />
+                >
+                    <BackspaceSolidIcon />
+                </AccessibleButton>
             </div>
         );
     }

@@ -699,6 +699,10 @@ async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessi
  * Also stops the old MatrixClient and clears old credentials/etc out of
  * storage before starting the new client.
  *
+ * This function does not work for OIDC login.
+ * Storage is cleared early in the process so the required data is lost.
+ * You must use {@link attemptDelegatedAuthLogin} followed by {@link restoreSessionFromStorage} for OIDC login.
+ *
  * @param {IMatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
@@ -751,39 +755,38 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
  * When we have a authenticated via OIDC-native flow and have a refresh token
  * try to create a token refresher.
  * @param credentials from current session
- * @returns Promise that resolves to a TokenRefresher, or undefined
+ * @param clientId OIDC client ID
+ * @throws If credentials.refreshToken or credentials.deviceId is falsy, or if no token issuer is stored
+ * @returns Promise that resolves to a TokenRefresher
  */
-async function createOidcTokenRefresher(credentials: IMatrixClientCreds): Promise<OidcTokenRefresher | undefined> {
+async function createOidcTokenRefresher(
+    credentials: IMatrixClientCreds,
+    clientId: string,
+): Promise<OidcTokenRefresher> {
     if (!credentials.refreshToken) {
-        return;
+        throw new Error("A refresh token must be supplied in order to create an OIDC token refresher.");
     }
     // stored token issuer indicates we authenticated via OIDC-native flow
     const tokenIssuer = getStoredOidcTokenIssuer();
     if (!tokenIssuer) {
-        return;
+        throw new Error("Cannot create an OIDC token refresher as no stored OIDC token issuer was found.");
     }
-    try {
-        const clientId = getStoredOidcClientId();
-        const idTokenClaims = getStoredOidcIdTokenClaims();
-        const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
-        const deviceId = credentials.deviceId;
-        if (!deviceId) {
-            throw new Error("Expected deviceId in user credentials.");
-        }
-        const tokenRefresher = new TokenRefresher(
-            tokenIssuer,
-            clientId,
-            redirectUri,
-            deviceId,
-            idTokenClaims!,
-            credentials.userId,
-        );
-        // wait for the OIDC client to initialise
-        await tokenRefresher.oidcClientReady;
-        return tokenRefresher;
-    } catch (error) {
-        logger.error("Failed to initialise OIDC token refresher", error);
+
+    const idTokenClaims = getStoredOidcIdTokenClaims();
+    const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
+    const deviceId = credentials.deviceId;
+    if (!deviceId) {
+        throw new Error("Expected deviceId in user credentials.");
     }
+    const tokenRefresher = new TokenRefresher(
+        tokenIssuer,
+        clientId,
+        redirectUri,
+        deviceId,
+        idTokenClaims!,
+        credentials.userId,
+    );
+    return tokenRefresher;
 }
 
 /**
@@ -835,7 +838,17 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    const tokenRefresher = await createOidcTokenRefresher(credentials);
+    let storedClientid;
+    try {
+        storedClientid = getStoredOidcClientId();
+    } catch {}
+
+    let tokenRefresher;
+    if (credentials.refreshToken && storedClientid) {
+        tokenRefresher = await createOidcTokenRefresher(credentials, storedClientid);
+    } else {
+        logger.debug("No refresh token was supplied: access token will not be refreshed");
+    }
 
     // check the session lock just before creating the new client
     checkSessionLock();

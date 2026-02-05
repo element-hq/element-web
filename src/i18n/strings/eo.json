@@ -68,9 +68,7 @@
         "no": "Ne",
         "ok": "Bone",
         "open": "Malfermi",
-        "pause": "Paŭzigi",
         "pin": "Pinglo",
-        "play": "Ludi",
         "quote": "Citaĵo",
         "react": "Reagi",
         "refresh": "Aktualigi",
@@ -1292,17 +1290,6 @@
         "not_found_title_name": "%(roomName)s ne ekzistas.",
         "peek_join_prompt": "Vi antaŭrigardas ĉambron %(roomName)s. Ĉu vi volas aliĝi?",
         "rejoin_button": "Re-aliĝi",
-        "status_bar": {
-            "delete_all": "Forigi ĉiujn",
-            "exceeded_resource_limit": "Via mesaĝo ne sendiĝis, ĉar tiu ĉi hejmservilo atingis rimedan limon. Bonvolu <a>kontakti vian administranton de servo</a> por plue uzadi la servon.",
-            "monthly_user_limit_reached": "Via mesaĝo ne sendiĝis, ĉar tiu ĉi hejmservilo atingis sian monatan limon de aktivaj uzantoj. Bonvolu <a>kontakti vian administranton de servo</a> por plue uzadi la servon.",
-            "requires_consent_agreement": "Vi ne povas sendi mesaĝojn ĝis vi tralegos kaj konsentos <consentLink>niajn uzokondiĉojn</consentLink>.",
-            "retry_all": "Reprovi ĉiujn",
-            "select_messages_to_retry": "Vi povas elekti ĉiujn aŭ unuopajn mesaĝojn, por reprovi aŭ forigi",
-            "server_connectivity_lost_description": "Senditaj mesaĝoj konserviĝos ĝis via konekto refunkcios.",
-            "server_connectivity_lost_title": "Konekto al la servilo perdiĝis.",
-            "some_messages_not_sent": "Kelkaj viaj mesaĝoj ne sendiĝis"
-        },
         "unread_notifications_predecessor": {
             "other": "Vi havas %(count)s nelegitajn sciigojn en antaŭa versio de ĉi tiu ĉambro.",
             "one": "Vi havas %(count)s nelegitan sciigon en antaŭa versio de ĉi tiu ĉambro."
@@ -1490,7 +1477,6 @@
             "error_join_rule_change_unknown": "Nekonata malsukceso",
             "guest_access_warning": "Personoj kun subtenataj klientoj povos aliĝi al la ĉambro sen registrita konto.",
             "history_visibility_invited": "Nur ĉambranoj (ekde la invito)",
-            "history_visibility_joined": "Nur ĉambranoj (ekde la aliĝo)",
             "history_visibility_legend": "Kiu povas legi la historion?",
             "history_visibility_shared": "Nur ĉambranoj (ekde ĉi tiu elekto)",
             "history_visibility_warning": "Ŝanĝoj al legebleco de historio nur efektiviĝos por osaj mesaĝoj de ĉi tiu ĉambro. La videbleco de jama historio ne ŝanĝiĝos.",
@@ -2035,23 +2021,9 @@
         "light_high_contrast": "Malpeza alta kontrasto"
     },
     "time": {
-        "about_day_ago": "antaŭ ĉirkaŭ tago",
-        "about_hour_ago": "antaŭ ĉirkaŭ horo",
-        "about_minute_ago": "antaŭ ĉirkaŭ minuto",
         "date_at_time": "%(date)s je %(time)s",
-        "few_seconds_ago": "antaŭ kelkaj sekundoj",
         "hours_minutes_seconds_left": "%(hours)sh. %(minutes)sm. %(seconds)ss. restas",
-        "in_about_day": "ĉirkaŭ tagon de nun",
-        "in_about_hour": "ĉirkaŭ horon de nun",
-        "in_about_minute": "ĉirkaŭ minuton de nun",
-        "in_few_seconds": "kelkajn sekundojn de nun",
-        "in_n_days": "%(num)s tagojn de nun",
-        "in_n_hours": "%(num)s horojn de nun",
-        "in_n_minutes": "%(num)s minutojn de nun",
         "minutes_seconds_left": "%(minutes)sm. %(seconds)ss. restas",
-        "n_days_ago": "antaŭ %(num)s tagoj",
-        "n_hours_ago": "antaŭ %(num)s horoj",
-        "n_minutes_ago": "antaŭ %(num)s minutoj",
         "seconds_left": "%(seconds)s sekundoj restas",
         "short_days": "%(value)st.",
         "short_days_hours_minutes_seconds": "%(days)st. %(hours)sh. %(minutes)sm. %(seconds)ss.",
@@ -2089,8 +2061,7 @@
         "m.audio": {
             "error_downloading_audio": "Eraris elŝuto de sondosiero",
             "error_processing_audio": "Eraris traktado de sonmesaĝo",
-            "error_processing_voice_message": "Eraris traktado de voĉmesaĝo",
-            "unnamed_audio": "Sennoma sondosiero"
+            "error_processing_voice_message": "Eraris traktado de voĉmesaĝo"
         },
         "m.call": {
             "video_call_started": "Videovoko komenciĝis en %(roomName)s.",

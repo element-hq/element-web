@@ -93,17 +93,13 @@
         "maximise": "Maximiser",
         "mention": "Mentionner",
         "minimise": "Minimiser",
-        "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
         "no": "Non",
         "ok": "OK",
         "open": "Ouvrir",
-        "open_menu": "Ouvrir le menu",
-        "pause": "Pause",
         "pin": "Épingler",
-        "play": "Lecture",
         "proceed": "Appliquer",
         "quote": "Citer",
         "react": "Réagir",
@@ -579,6 +575,7 @@
         "someone": "Quelqu’un",
         "space": "Espace",
         "spaces": "Espaces",
+        "state_encryption_enabled": "Chiffrement expérimental de l'état activé",
         "sticker": "Autocollant",
         "stickerpack": "Jeu d’autocollants",
         "success": "Succès",
@@ -686,6 +683,8 @@
         "join_rule_restricted_label": "Tout le monde dans <SpaceName/> pourra trouver et rejoindre ce salon.",
         "name_validation_required": "Veuillez renseigner un nom pour le salon",
         "room_visibility_label": "Visibilité du salon",
+        "state_encrypted_warning": "Active la prise en charge expérimentale du chiffrement des événements d'état, masquant ainsi les métadonnées telles que les noms des salons et les sujets de discussion auprès du serveur. Ces métadonnées seront également masquées pour les personnes rejoignant les salons ultérieurement, ainsi que pour les applications ne prennant pas en charge MSC4362.",
+        "state_encryption_label": "Événements d'état du chiffrement",
         "title_private_room": "Créer un salon privé",
         "title_public_room": "Créer un salon public",
         "title_video_room": "Créer un salon visio",
@@ -846,6 +845,7 @@
         "number_of_users": "Nombre d’utilisateurs",
         "only_joined_members": "Seuls les utilisateurs membres",
         "original_event_source": "Évènement source original",
+        "restore_from_backup": "Restaurer depuis la sauvegarde",
         "room_encrypted": "Le salon est <strong>chiffré ✅</strong>",
         "room_id": "Identifiant du salon : %(roomId)s",
         "room_not_encrypted": "Le salon <strong>n’est pas chiffré 🚨</strong>",
@@ -955,6 +955,7 @@
         "bootstrap_title": "Configuration des clés",
         "confirm_encryption_setup_body": "Cliquez sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
         "confirm_encryption_setup_title": "Confirmer la configuration du chiffrement",
+        "continue_with_reset": "Continuer avec la réinitialisation",
         "cross_signing_room_normal": "Ce salon est chiffré de bout en bout",
         "cross_signing_room_verified": "Tout le monde dans ce salon est vérifié",
         "cross_signing_room_warning": "Quelqu’un utilise une session inconnue",
@@ -970,10 +971,12 @@
         "event_shield_reason_unverified_identity": "Chiffré par un utilisateur non vérifié.",
         "export_unsupported": "Votre navigateur ne prend pas en charge les extensions cryptographiques nécessaires",
         "forgot_recovery_key": "Clé de récupération oubliée ?",
+        "identity_needs_reset_description": "Vous devez réinitialiser votre identité cryptographique pour garantir l'accès à votre historique de messages.",
         "import_invalid_keyfile": "Fichier de clé %(brand)s non valide",
         "import_invalid_passphrase": "Erreur d’authentification : mot de passe incorrect ?",
         "key_storage_out_of_sync": "Le stockage de vos clés n'est pas synchronisé.",
         "key_storage_out_of_sync_description": "Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages.",
+        "message_shared_by": "%(displayName)s(%(userId)s ) a partagé ce message car vous n'étiez pas dans le salon lors de son envoi.",
         "messages_not_secure": {
             "cause_1": "Votre serveur d’accueil",
             "cause_2": "Le serveur d’accueil auquel l’utilisateur que vous vérifiez est connecté",
@@ -1505,7 +1508,6 @@
         "ask_to_join": "Activer demander à venir",
         "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur",
         "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
-        "automatic_debug_logs_key_backup": "Envoyer automatiquement les journaux de débogage lorsque la sauvegarde des clés ne fonctionne pas",
         "beta_description": "Que va-t-il se passer dans %(brand)s ? La section expérimentale est la meilleure manière d’avoir des choses en avance, tester les nouvelles fonctionnalités et d’aider à les affiner avant leur lancement officiel.",
         "beta_feature": "Il s'agit d'une fonctionnalité bêta",
         "beta_feedback_leave_button": "Pour quitter la bêta, consultez les paramètres.",
@@ -1522,6 +1524,8 @@
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
         "dynamic_room_predecessors_description": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
         "element_call_video_rooms": "Salons vidéo Element Call",
+        "encrypted_state_events": "Événements d'état chiffrés (MSC4362)",
+        "encrypted_state_events_description": "Active la prise en charge expérimentale du chiffrement des événements d'état, masquant ainsi les métadonnées telles que les noms des salons et les sujets de discussion auprès du serveur. Ces métadonnées seront également masquées pour les personnes rejoignant les salons ultérieurement, ainsi que pour les applications ne prennant pas en charge MSC4362.",
         "exclude_insecure_devices": "Exclure les appareils non sécurisés lors de l'envoi/de la réception de messages",
         "exclude_insecure_devices_description": "Lorsque ce mode est activé, les messages chiffrés ne seront pas partagés avec des appareils non vérifiés et les messages provenant d'appareils non vérifiés seront affichés comme une erreur. Notez que si vous activez ce mode, il se peut que vous ne puissiez pas communiquer avec les utilisateurs qui n'ont pas vérifié leurs appareils.",
         "experimental_description": "Envie d’expériences ? Essayez nos dernières idées en développement. Ces fonctionnalités ne sont pas terminées ; elles peuvent changer, être instables, ou être complètement abandonnées. <a>En savoir plus</a>.",
@@ -1988,7 +1992,6 @@
         "dm_invite_title": "Voulez-vous discuter avec %(user)s ?",
         "drop_file_prompt": "Glisser le fichier ici pour l’envoyer",
         "edit_topic": "Modifier le sujet",
-        "error_3pid_invite_email_lookup": "Impossible de trouver un utilisateur avec son courriel",
         "error_cancel_knock_title": "Erreur lors de l’annulation",
         "error_join_403": "Vous avez besoin d’une invitation pour accéder à ce salon.",
         "error_join_404_1": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires.",
@@ -2020,6 +2023,8 @@
         "forget_room": "Oublier ce salon",
         "forget_space": "Oublier cet espace",
         "header": {
+            "join_video_call": "Rejoindre l'appel vidéo",
+            "join_voice_call": "Rejoindre l'appel vocal",
             "n_people_asking_to_join": {
                 "one": "Demander à rejoindre",
                 "other": "%(count)s personnes demandant à se joindre"
@@ -2119,18 +2124,6 @@
             },
             "this_room_button": "Rechercher dans ce salon"
         },
-        "status_bar": {
-            "delete_all": "Tout supprimer",
-            "exceeded_resource_limit": "Votre message n’a pas été envoyé car ce serveur d’accueil a dépassé une de ses limites de ressources. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-            "homeserver_blocked": "Votre message n’a pas été envoyé car ce serveur d’accueil a été bloqué par son administrateur. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-            "monthly_user_limit_reached": "Votre message n’a pas été envoyé car le serveur d’accueil a atteint sa limite mensuelle d’utilisateurs. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
-            "requires_consent_agreement": "Vous ne pouvez voir aucun message tant que vous ne lisez et n’acceptez pas nos <consentLink>conditions générales</consentLink>.",
-            "retry_all": "Tout renvoyer",
-            "select_messages_to_retry": "Vous pouvez choisir de renvoyer ou supprimer tous les messages ou seulement certains",
-            "server_connectivity_lost_description": "Les messages envoyés seront stockés jusqu’à ce que votre connexion revienne.",
-            "server_connectivity_lost_title": "La connexion au serveur a été perdue.",
-            "some_messages_not_sent": "Certains de vos messages n’ont pas été envoyés"
-        },
         "unknown_status_code_for_timeline_jump": "code de statut inconnu",
         "unread_notifications_predecessor": {
             "other": "Vous avez %(count)s notifications non lues dans une version précédente de ce salon.",
@@ -2205,56 +2198,25 @@
             "mark_unread": "Marquer comme non lu"
         },
         "notification_options": "Paramètres de notifications",
-        "open_space_menu": "Ouvrir le menu de l’espace",
         "primary_filters": "Filtre de la liste des salons",
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
         },
-        "release_announcement": {
-            "done": "Terminé",
-            "filter": {
-                "description": "Filtrez vos discussions en un clic. Développez pour afficher plus de filtres.",
-                "title": "Nouveaux filtres"
-            },
-            "intro": {
-                "description": "La liste des discussions a été mise à jour pour être plus claire et plus facile à utiliser.",
-                "title": "Les discussions ont une nouvelle apparence !"
-            },
-            "next": "Suivant",
-            "settings": {
-                "description": "Pour afficher ou cacher les aperçus des messages, aller dans Tous les paramètres > Préférences > Liste de salons",
-                "title": "Certains paramètres ont été déplacés"
-            },
-            "sort": {
-                "description": "Modifiez l'ordre de vos discussions par ordre chronologique ou par alphabétique",
-                "title": "Triez vos discussions"
-            }
-        },
         "room": {
             "more_options": "Plus d’options",
             "open_room": "Ouvrir salon %(roomName)s"
         },
-        "room_options": "Options du salon",
         "show_less": "En voir moins",
         "show_n_more": {
             "other": "En afficher %(count)s de plus",
             "one": "En afficher %(count)s de plus"
         },
         "show_previews": "Afficher un aperçu des messages",
-        "sort": "Trier",
         "sort_by": "Trier par",
         "sort_by_activity": "Activité",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Activité",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Afficher les salons non lus en premier",
-        "space_menu": {
-            "home": "Accueil de l’espace",
-            "space_settings": "Paramètres de l'espace"
-        },
         "space_menu_label": "Menu %(spaceName)s",
         "sublist_options": "Options de liste",
         "suggested_rooms_heading": "Salons recommandés"
@@ -2440,11 +2402,10 @@
             "error_join_rule_change_unknown": "Erreur inconnue",
             "guest_access_warning": "Les personnes utilisant un client pris en charge pourront rejoindre le salon sans compte.",
             "history_visibility_invited": "Seulement les membres (depuis leur invitation)",
-            "history_visibility_joined": "Seulement les membres (depuis leur arrivée)",
             "history_visibility_legend": "Qui peut lire l’historique ?",
-            "history_visibility_shared": "Seulement les membres (depuis la sélection de cette option)",
-            "history_visibility_warning": "La visibilité de l’historique existant ne sera pas modifiée.",
-            "history_visibility_world_readable": "N’importe qui",
+            "history_visibility_shared": "Membres (historique complet)",
+            "history_visibility_warning": "Les changements n'affecteront pas les messages passés, juste les nouveaux. <a>En savoir plus</a>",
+            "history_visibility_world_readable": "Tout le monde (l'historique est public)",
             "join_rule_description": "Choisir qui peut rejoindre %(roomName)s.",
             "join_rule_invite": "Privé (sur invitation)",
             "join_rule_invite_description": "Seules les personnes invitées peuvent venir.",
@@ -2900,10 +2861,6 @@
             "rule_suppress_notices": "Messages envoyés par des robots",
             "rule_tombstone": "Quand les salons sont mis à niveau",
             "show_message_desktop_notification": "Afficher le message dans les notifications de bureau",
-            "sounds_release_announcement": {
-                "description": "Votre ping de notification et votre sonnerie d'appel ont été mis à jour : plus clairs, plus rapides et moins perturbateurs",
-                "title": "Nous avons rafraîchi vos sons"
-            },
             "voip": "Appels audio et vidéo"
         },
         "preferences": {
@@ -3406,24 +3363,10 @@
         "no_rooms_with_unread_threads": "Vous n'avez pas encore de salons contenant des fils de discussion non lus."
     },
     "time": {
-        "about_day_ago": "il y a environ un jour",
-        "about_hour_ago": "il y a environ une heure",
-        "about_minute_ago": "il y a environ une minute",
         "date_at_time": "%(date)s à %(time)s",
-        "few_seconds_ago": "il y a quelques secondes",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-        "in_about_day": "dans un jour environ",
-        "in_about_hour": "dans une heure environ",
-        "in_about_minute": "dans une minute environ",
-        "in_few_seconds": "dans quelques secondes",
-        "in_n_days": "dans %(num)s jours",
-        "in_n_hours": "dans %(num)s heures",
-        "in_n_minutes": "dans %(num)s minutes",
         "left": "%(timeRemaining)s restant",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
-        "n_days_ago": "il y a %(num)s jours",
-        "n_hours_ago": "il y a %(num)s heures",
-        "n_minutes_ago": "il y a %(num)s minutes",
         "seconds_left": "%(seconds)s secondes restantes",
         "short_days": "%(value)sj",
         "short_days_hours_minutes_seconds": "%(days)sj %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3447,12 +3390,7 @@
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
         "decryption_failure": {
-            "blocked": "L'expéditeur vous a empêché de recevoir ce message car votre appareil n'est pas vérifié",
-            "historical_event_no_key_backup": "L'historique des messages n'est pas disponible sur cet appareil",
-            "historical_event_unverified_device": "Vous devez vérifier cet appareil pour accéder à l'historique des messages",
-            "historical_event_user_not_joined": "Vous n'avez pas accès à ce message",
             "sender_identity_previously_verified": "L'identité vérifiée de l'expéditeur a changé",
-            "sender_unsigned_device": "Envoyé depuis un appareil non sécurisé.",
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3478,11 +3416,9 @@
             "unable_to_find": "Un instant donné du fil de discussion n’a pu être chargé car il n’a pas pu être trouvé."
         },
         "m.audio": {
-            "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "error_processing_audio": "Erreur lors du traitement du message audio",
-            "error_processing_voice_message": "Erreur lors du traitement du message vocal",
-            "unnamed_audio": "Audio sans nom"
+            "error_processing_voice_message": "Erreur lors du traitement du message vocal"
         },
         "m.beacon_info": {
             "view_live_location": "Voir la position en direct"
@@ -3577,6 +3513,7 @@
             "enabled_dm": "Les messages ici sont chiffrés de bout en bout. Vérifiez %(displayName)s dans son profil - cliquez sur son image de profil.",
             "enabled_local": "Les messages de cette conversation seront chiffrés de bout en bout.",
             "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
+            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier dans leur profil en cliquant sur leur photo de profil.",
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
         },
         "m.room.guest_access": {
@@ -4056,7 +3993,6 @@
         "hide_sidebar_button": "Masquer la barre latérale",
         "input_devices": "Périphériques d’entrée",
         "jitsi_call": "Conférence Jitsi",
-        "join_button_tooltip_call_full": "Désolé — Cet appel est actuellement complet",
         "legacy_call": "Appel vidéo",
         "maximise": "Remplir l’écran",
         "maximise_call": "Plein écran",

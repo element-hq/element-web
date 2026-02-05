@@ -43,23 +43,17 @@ Please see LICENSE files in the repository root for full details.
 
         .mx_PollCreateDialog_removeOption {
             margin-left: 12px;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
+            padding: var(--cpd-space-0-5x);
             border-radius: 50%;
             background-color: $quinary-content;
             cursor: pointer;
-            position: relative;
 
-            &::before {
-                content: "";
-                mask: url("@vector-im/compound-design-tokens/icons/close.svg");
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: 16px;
+            svg {
                 width: inherit;
                 height: inherit;
-                position: absolute;
-                background-color: $secondary-content;
+                color: $secondary-content;
             }
         }
     }

@@ -18,7 +18,6 @@ import React, {
     type ReactNode,
     useEffect,
 } from "react";
-import classNames from "classnames";
 import {
     RoomType,
     HistoryVisibility,
@@ -28,6 +27,7 @@ import {
     type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { LockSolidIcon, PublicIcon, ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
@@ -47,6 +47,7 @@ import { Filter } from "../dialogs/spotlight/Filter";
 import { type OpenSpotlightPayload } from "../../../dispatcher/payloads/OpenSpotlightPayload.ts";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { UIFeature } from "../../../settings/UIFeature.ts";
+import SpacePillButton from "../../structures/SpacePillButton.tsx";
 
 export const createSpace = async (
     client: MatrixClient,
@@ -84,20 +85,6 @@ export const createSpace = async (
         inlineErrors: true,
         ...otherOpts,
     });
-};
-
-const SpaceCreateMenuType: React.FC<{
-    title: string;
-    description: string;
-    className: string;
-    onClick(): void;
-}> = ({ title, description, className, onClick }) => {
-    return (
-        <AccessibleButton className={classNames("mx_SpaceCreateMenuType", className)} onClick={onClick}>
-            {title}
-            <div>{description}</div>
-        </AccessibleButton>
-    );
 };
 
 const spaceNameValidator = withValidation({
@@ -285,16 +272,16 @@ const SpaceCreateMenu: React.FC<{
                 <h2>{_t("create_space|label")}</h2>
                 <p>{_t("create_space|explainer")}</p>
 
-                <SpaceCreateMenuType
+                <SpacePillButton
+                    icon={<PublicIcon />}
                     title={_t("common|public")}
                     description={_t("create_space|public_description")}
-                    className="mx_SpaceCreateMenuType_public"
                     onClick={() => setVisibility(Visibility.Public)}
                 />
-                <SpaceCreateMenuType
+                <SpacePillButton
+                    icon={<LockSolidIcon />}
                     title={_t("common|private")}
                     description={_t("create_space|private_description")}
-                    className="mx_SpaceCreateMenuType_private"
                     onClick={() => setVisibility(Visibility.Private)}
                 />
 
@@ -313,7 +300,9 @@ const SpaceCreateMenu: React.FC<{
                         className="mx_SpaceCreateMenu_back"
                         onClick={() => setVisibility(null)}
                         title={_t("action|go_back")}
-                    />
+                    >
+                        <ChevronLeftIcon />
+                    </AccessibleButton>
                 )}
 
                 <h2>

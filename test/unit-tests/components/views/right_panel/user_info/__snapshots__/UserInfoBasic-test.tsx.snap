@@ -39,17 +39,29 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
           >
             Power level
           </label>
+          <svg
+            class="mx_Field_select_chevron"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
         </div>
       </div>
     </div>
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      class="_item_lqfwq_8 _interactive_lqfwq_26"
       data-kind="primary"
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -61,13 +73,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Send message
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -80,13 +92,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
       </svg>
     </button>
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      class="_item_lqfwq_8 _interactive_lqfwq_26"
       data-kind="primary"
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -98,13 +110,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Invite
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -117,14 +129,14 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
       </svg>
     </button>
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26 _disabled_dyt4i_118"
+      class="_item_lqfwq_8 _interactive_lqfwq_26 _disabled_lqfwq_118"
       data-kind="primary"
       disabled=""
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -136,13 +148,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Jump to read receipt
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -155,13 +167,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
       </svg>
     </button>
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      class="_item_lqfwq_8 _interactive_lqfwq_26"
       data-kind="primary"
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -173,13 +185,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Share profile
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -192,13 +204,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
       </svg>
     </button>
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      class="_item_lqfwq_8 _interactive_lqfwq_26"
       data-kind="primary"
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -210,13 +222,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Mention
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -233,13 +245,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
     class="mx_UserInfo_container"
   >
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      class="_item_lqfwq_8 _interactive_lqfwq_26"
       data-kind="critical"
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -251,13 +263,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Deactivate user
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -274,13 +286,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
     class="mx_UserInfo_container"
   >
     <button
-      class="_item_dyt4i_8 _interactive_dyt4i_26"
+      class="_item_lqfwq_8 _interactive_lqfwq_26"
       data-kind="critical"
       role="button"
     >
       <svg
         aria-hidden="true"
-        class="_icon_dyt4i_50"
+        class="_icon_lqfwq_50"
         fill="currentColor"
         height="24"
         viewBox="0 0 24 24"
@@ -292,13 +304,13 @@ exports[`<UserInfoBasic /> should display the defaut values 1`] = `
         />
       </svg>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
       >
         Ignore
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_dyt4i_59"
+        class="_nav-hint_lqfwq_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"

@@ -61,7 +61,7 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
                     aria-label={_t("action|delete")}
                     className="mx_Dialog_nonDialogButton"
                 >
-                    <CloseIcon color="var(--cpd-color-icon-tertiary)" />
+                    <CloseIcon />
                 </IconButton>
             )}
         </Flex>

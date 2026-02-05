@@ -175,7 +175,7 @@ const AvatarSetting: React.FC<IProps> = ({
              * to the menu component, hence the empty onClick.
              */
             onClick={() => {}}
-            className="mx_AvatarSetting_avatarPlaceholder mx_AvatarSetting_avatarDisplay"
+            className="mx_AvatarSetting_avatarDisplay"
             disabled={disabled}
         >
             <BaseAvatar

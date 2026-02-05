@@ -25,22 +25,14 @@ Please see LICENSE files in the repository root for full details.
             line-height: $font-24px;
             display: inline-block;
 
-            &:not(.mx_AccessibleButton_kind_primary_outline)::before {
-                content: "";
+            svg {
                 display: inline-block;
-                background-color: $button-fg-color;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                mask-size: 20px;
+                color: $button-fg-color;
                 width: 20px;
                 height: 20px;
                 margin-right: 5px;
                 vertical-align: text-bottom;
             }
-        }
-
-        .mx_NewRoomIntro_inviteButton::before {
-            mask-image: url("$(res)/img/element-icons/room/invite.svg");
         }
     }
 

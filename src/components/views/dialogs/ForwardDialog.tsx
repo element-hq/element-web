@@ -23,6 +23,7 @@ import {
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -58,6 +59,10 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { OverflowTileView } from "../rooms/OverflowTileView";
 import { attachMentions } from "../../../utils/messages";
+import { CommandPartCreator } from "../../../editor/parts";
+import SettingsStore from "../../../settings/SettingsStore";
+import { parseEvent } from "../../../editor/deserialize";
+import EditorModel from "../../../editor/model";
 
 const AVATAR_SIZE = 30;
 
@@ -123,12 +128,12 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
         className = "mx_ForwardList_sending";
         disabled = true;
         title = _t("forward|sending");
-        icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
+        icon = <CircleIcon aria-label={title} />;
     } else if (sendState === SendState.Sent) {
         className = "mx_ForwardList_sent";
         disabled = true;
         title = _t("forward|sent");
-        icon = <div className="mx_ForwardList_sendIcon" aria-label={title} />;
+        icon = <CheckCircleIcon aria-label={title} />;
     } else {
         className = "mx_ForwardList_sendFailed";
         disabled = true;
@@ -184,13 +189,13 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
  * 1. Strip all relations.
  * 2. Convert location events into a static pin-drop location share,
  *    and remove description from self-location shares.
- * 3. Pass through attachMentions() to strip mentions (as no EditorModel is present to recalculate from).
+ * 3. Parse the event back into an EditorModel and recalculate mentions.
  *
  * @param event - The MatrixEvent to transform.
- * @param userId - Current user MXID (passed through to attachMentions()).
+ * @param cli - The MatrixClient (used for recalculation of mentions).
  * @returns The transformed event type and content.
  */
-const transformEvent = (event: MatrixEvent, userId: string): { type: string; content: IContent } => {
+const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; content: IContent } => {
     const {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
@@ -225,12 +230,17 @@ const transformEvent = (event: MatrixEvent, userId: string): { type: string; con
         };
     }
 
-    // Mentions can leak information about the context of the original message,
-    // so pass through attachMentions() to recalculate mentions.
-    // Currently, this strips all mentions (forces an empty m.mentions),
-    // as there is no EditorModel to parse pills from.
-    // Future improvements could actually recalculate mentions based on the message body.
-    attachMentions(userId, content, null, undefined);
+    // Mentions can leak information about the context of the original message, so:
+    // 1. Parse the event's message body back into an EditorModel, then
+    // 2. Pass through attachMentions() to recalculate mentions.
+    const room = cli.getRoom(event.getRoomId())!;
+    const partCreator = new CommandPartCreator(room, cli);
+    const parts = parseEvent(event, partCreator, {
+        shouldEscape: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
+    });
+    const model = new EditorModel(parts, partCreator); // Temporary EditorModel to pass through
+    const userId = cli.getSafeUserId();
+    attachMentions(userId, content, model, undefined);
 
     return { type, content };
 };
@@ -242,7 +252,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
-    const { type, content } = transformEvent(event, userId);
+    const { type, content } = transformEvent(event, cli);
 
     // For the message preview we fake the sender as ourselves
     const mockEvent = new MatrixEvent({

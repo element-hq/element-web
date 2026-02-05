@@ -21,7 +21,7 @@ import { TextualEventView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { type EventTileProps } from "../components/views/rooms/EventTile";
+import { type IEventTileType, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
@@ -46,23 +46,22 @@ import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventVie
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
-export interface EventTileTypeProps
-    extends Pick<
-        EventTileProps,
-        | "mxEvent"
-        | "highlights"
-        | "highlightLink"
-        | "showUrlPreview"
-        | "forExport"
-        | "getRelationsForEvent"
-        | "editState"
-        | "replacingEventId"
-        | "permalinkCreator"
-        | "callEventGrouper"
-        | "isSeeingThroughMessageHiddenForModeration"
-        | "inhibitInteraction"
-    > {
-    ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
+export interface EventTileTypeProps extends Pick<
+    EventTileProps,
+    | "mxEvent"
+    | "highlights"
+    | "highlightLink"
+    | "showUrlPreview"
+    | "forExport"
+    | "getRelationsForEvent"
+    | "editState"
+    | "replacingEventId"
+    | "permalinkCreator"
+    | "callEventGrouper"
+    | "isSeeingThroughMessageHiddenForModeration"
+    | "inhibitInteraction"
+> {
+    ref?: React.RefObject<IEventTileType | null>;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;

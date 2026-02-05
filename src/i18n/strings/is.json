@@ -79,9 +79,7 @@
         "no": "Nei",
         "ok": "Í lagi",
         "open": "Opna",
-        "pause": "Bið",
         "pin": "Pinni",
-        "play": "Spila",
         "quote": "Tilvitnun",
         "react": "Bregðast við",
         "refresh": "Endurlesa",
@@ -1054,7 +1052,6 @@
     "labs": {
         "automatic_debug_logs": "Senda atvikaskrár sjálfkrafa við allar villur",
         "automatic_debug_logs_decryption": "Senda atvikaskrár sjálfkrafa við afkóðunarvillur",
-        "automatic_debug_logs_key_backup": "Senda atvikaskrár sjálfkrafa þegar öryggisafrit dulritunarlykla virkar ekki",
         "beta_description": "Hvað er væntanlegt í %(brand)s? Að taka þátt í tilraunum gefur færi á að sjá nýja hluti fyrr, prófa nýja eiginleika og vera með í að móta þá áður en þeir fara í almenna notkun.",
         "beta_feature": "Þetta er beta-prófunareiginleiki",
         "beta_feedback_leave_button": "Til að hætta í beta-prófunarútgáfunni, skaltu fara í stillingarnar þínar.",
@@ -1461,15 +1458,6 @@
         "peek_join_prompt": "Þú ert að forskoða %(roomName)s. Viltu taka þátt í henni?",
         "read_topic": "Smelltu til að lesa umfjöllunarefni",
         "rejoin_button": "Taka þátt aftur",
-        "status_bar": {
-            "delete_all": "Eyða öllu",
-            "exceeded_resource_limit": "Skilaboðin þín voru ekki send vegna þess að þessi heimaþjónn er kominn fram yfir takmörk á notuðum tilföngum. Hafðu <a>samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þjónustuna.",
-            "monthly_user_limit_reached": "Skilaboðin þín voru ekki send vegna þess að þessi heimaþjónn er kominn fram yfir takmörk á mánaðarlega virkum notendum. Hafðu <a>samband við kerfisstjóra þjónustunnar þinnar</a> til að halda áfram að nota þjónustuna.",
-            "requires_consent_agreement": "Þú getur ekki sent nein skilaboð fyrr en þú hefur farið yfir og samþykkir <consentLink>skilmála okkar</consentLink>.",
-            "retry_all": "Prófa aftur allt",
-            "server_connectivity_lost_title": "Tenging við vefþjón hefur rofnað.",
-            "some_messages_not_sent": "Sum skilaboðin þín hafa ekki verið send"
-        },
         "upgrade_error_description": "Athugaðu vandlega hvort netþjónninn styðji ekki valda útgáfu spjallrása og reyndu aftur.",
         "upgrade_error_title": "Villa við að uppfæra spjallrás",
         "upgrade_warning_bar_admins": "Aðeins stjórnendur spjallrásar munu sjá þessa aðvörun",
@@ -1652,7 +1640,6 @@
             "error_join_rule_change_title": "Mistókst að uppfæra reglur fyrir þátttöku",
             "error_join_rule_change_unknown": "Óþekkt bilun",
             "history_visibility_invited": "Einungis meðlimir (síðan þeim var boðið)",
-            "history_visibility_joined": "Einungis meðlimir (síðan þeir skráðu sig)",
             "history_visibility_legend": "Hver getur lesið ferilskráningu?",
             "history_visibility_shared": "Einungis meðlimir (síðan þessi kostur var valinn)",
             "history_visibility_world_readable": "Hver sem er",
@@ -2301,24 +2288,10 @@
         "show_thread_filter": "Sýna:"
     },
     "time": {
-        "about_day_ago": "fyrir um degi síðan",
-        "about_hour_ago": "fyrir um klukkustund síðan",
-        "about_minute_ago": "fyrir um það bil mínútu síðan",
         "date_at_time": "%(date)s kl. %(time)s",
-        "few_seconds_ago": "fyrir örfáum sekúndum síðan",
         "hours_minutes_seconds_left": "%(hours)sk %(minutes)sm %(seconds)ss eftir",
-        "in_about_day": "eftir um það bil einn dag",
-        "in_about_hour": "eftir um það bil klukkustund",
-        "in_about_minute": "eftir um það bil mínútu",
-        "in_few_seconds": "eftir nokkrar sekúndur",
-        "in_n_days": "eftir %(num)s daga",
-        "in_n_hours": "eftir %(num)s klukkustundir",
-        "in_n_minutes": "eftir %(num)s mínútur",
         "left": "%(timeRemaining)s eftir",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss eftir",
-        "n_days_ago": "fyrir %(num)s dögum síðan",
-        "n_hours_ago": "fyrir %(num)s klukkustundum síðan",
-        "n_minutes_ago": "fyrir %(num)s mínútum síðan",
         "seconds_left": "%(seconds)ssek eftir",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sk %(minutes)sm %(seconds)ss",
         "short_hours": "%(value)sklst",
@@ -2357,8 +2330,7 @@
         "m.audio": {
             "error_downloading_audio": "Villa við að sækja hljóð",
             "error_processing_audio": "Villa við meðhöndlun hljóðskilaboða",
-            "error_processing_voice_message": "Villa við meðhöndlun talskilaboða",
-            "unnamed_audio": "Nafnlaust hljóð"
+            "error_processing_voice_message": "Villa við meðhöndlun talskilaboða"
         },
         "m.beacon_info": {
             "view_live_location": "Skoða staðsetningu í rauntíma"
@@ -2847,7 +2819,6 @@
         "hangup": "Leggja á",
         "hide_sidebar_button": "Fela hliðarspjald",
         "input_devices": "Inntakstæki",
-        "join_button_tooltip_call_full": "Því miður - þetta símtal er fullt í augnablikinu",
         "maximise": "Fylla skjá",
         "misconfigured_server": "Símtal mistókst vegna vanstillingar netþjóns",
         "misconfigured_server_description": "Spurðu kerfisstjóra (<code>%(homeserverDomain)s</code>) heimaþjónsins þíns um að setja upp TURN-þjón til að tryggja að símtöl virki eðlilega.",

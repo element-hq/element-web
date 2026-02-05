@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Page } from "@playwright/test";
+
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { UIFeature } from "../../../src/settings/UIFeature";
 import { test, expect } from "../../element-web-test";
@@ -33,7 +35,10 @@ test.describe("Create Room", () => {
             axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
             await expect(axe).toHaveNoViolations();
             // Snapshot it
-            await expect(dialog).toMatchScreenshot("create-room.png");
+            // Mask topic to avoid flakiness with top border
+            await expect(dialog).toMatchScreenshot("create-room.png", {
+                mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+            });
 
             // Submit
             await dialog.getByRole("button", { name: "Create room" }).click();
@@ -72,7 +77,10 @@ test.describe("Create Room", () => {
         // Fill room address
         await dialog.getByRole("textbox", { name: "Room address" }).fill("test-create-room-video");
         // Snapshot it
-        await expect(dialog).toMatchScreenshot("create-video-room.png");
+        // Mask topic to avoid flakiness with top border
+        await expect(dialog).toMatchScreenshot("create-video-room.png", {
+            mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+        });
 
         // Submit
         await dialog.getByRole("button", { name: "Create video room" }).click();
@@ -100,7 +108,10 @@ test.describe("Create Room", () => {
             axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
             await expect(axe).toHaveNoViolations();
             // Snapshot it
-            await expect(dialog).toMatchScreenshot("create-room-no-public.png");
+            // Mask topic to avoid flakiness with top border
+            await expect(dialog).toMatchScreenshot("create-room-no-public.png", {
+                mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+            });
 
             // Submit
             await dialog.getByRole("button", { name: "Create room" }).click();
@@ -110,4 +121,107 @@ test.describe("Create Room", () => {
             await expect(header).toContainText(name);
         });
     });
+
+    test.describe("when the encrypted state labs flag is turned off", () => {
+        test.use({ labsFlags: [] });
+
+        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user }) => {
+            // When we start to create a room
+            await page.getByRole("button", { name: "New conversation", exact: true }).click();
+            await page.getByRole("menuitem", { name: "New room" }).click();
+            await page.getByRole("textbox", { name: "Name" }).fill(name);
+
+            // Then there is no Encrypt state events button
+            await expect(page.getByRole("checkbox", { name: "Encrypt state events" })).not.toBeVisible();
+
+            // And when we create the room
+            await page.getByRole("button", { name: "Create room" }).click();
+
+            // Then we created a normal encrypted room, without encrypted state
+            await expect(page.getByText("Encryption enabled")).toBeVisible();
+            await expect(page.getByText("State encryption enabled")).not.toBeVisible();
+
+            // And the room name state event is not encrypted
+            await viewSourceOnRoomNameEvent(page);
+            await expect(page.getByText("Original event source")).toBeVisible();
+            await expect(page.getByText("Decrypted event source")).not.toBeVisible();
+        });
+    });
+
+    test.describe("when the encrypted state labs flag is turned on", () => {
+        test.use({ labsFlags: ["feature_msc4362_encrypted_state_events"] });
+
+        test(
+            "creates a room with encrypted state if we check the box",
+            { tag: "@screenshot" },
+            async ({ page, user: _user }) => {
+                // Given we check the Encrypted State checkbox
+                await page.getByRole("button", { name: "New conversation", exact: true }).click();
+                await page.getByRole("menuitem", { name: "New room" }).click();
+                await expect(page.getByRole("switch", { name: "Enable end-to-end encryption" })).toBeChecked();
+                await page.getByRole("switch", { name: "Encrypt state events" }).click();
+                await expect(page.getByRole("switch", { name: "Encrypt state events" })).toBeChecked();
+
+                // When we create a room
+                await page.getByRole("textbox", { name: "Name" }).fill(name);
+                await page.getByRole("button", { name: "Create room" }).click();
+
+                // Then we created an encrypted state room
+                await expect(page.getByText("State encryption enabled")).toBeVisible();
+
+                // And it has the correct name
+                await expect(page.getByTestId("timeline").getByRole("heading", { name })).toBeVisible();
+
+                // And the room name state event is encrypted
+                await viewSourceOnRoomNameEvent(page);
+                await expect(page.getByText("Decrypted event source")).toBeVisible();
+            },
+        );
+
+        test(
+            "creates a room without encrypted state if we don't check the box",
+            { tag: "@screenshot" },
+            async ({ page, user: _user }) => {
+                // Given we did not check the Encrypted State checkbox
+                await page.getByRole("button", { name: "New conversation", exact: true }).click();
+                await page.getByRole("menuitem", { name: "New room" }).click();
+                await expect(page.getByRole("switch", { name: "Enable end-to-end encryption" })).toBeChecked();
+
+                // And it is off by default
+                await expect(page.getByRole("switch", { name: "Encrypt state events" })).not.toBeChecked();
+
+                // When we create a room
+                await page.getByRole("textbox", { name: "Name" }).fill(name);
+                await page.getByRole("button", { name: "Create room" }).click();
+
+                // Then we created a normal encrypted room, without encrypted state
+                await expect(page.getByText("Encryption enabled")).toBeVisible();
+                await expect(page.getByText("State encryption enabled")).not.toBeVisible();
+
+                // And it has the correct name
+                await expect(page.getByTestId("timeline").getByRole("heading", { name })).toBeVisible();
+
+                // And the room name state event is not encrypted
+                await viewSourceOnRoomNameEvent(page);
+                await expect(page.getByText("Original event source")).toBeVisible();
+                await expect(page.getByText("Decrypted event source")).not.toBeVisible();
+            },
+        );
+    });
 });
+
+async function viewSourceOnRoomNameEvent(page: Page) {
+    await page
+        .getByRole("listitem")
+        .filter({ hasText: "created and configured the room" })
+        .getByRole("button", { name: "expand" })
+        .click();
+
+    await page
+        .getByRole("listitem")
+        .filter({ hasText: "changed the room name to" })
+        .getByRole("button", { name: "Options" })
+        .click();
+
+    await page.getByRole("menuitem", { name: "View source" }).click();
+}

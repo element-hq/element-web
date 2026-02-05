@@ -37,7 +37,7 @@ exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 
         style="width: 128px; height: 128px;"
       >
         <svg
-          class="mx_E2EIcon_verified"
+          color="var(--cpd-color-icon-success-primary)"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -75,7 +75,19 @@ exports[`VerificationRequestDialog After scanning QR, shows confirmation dialog 
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"
@@ -119,7 +131,19 @@ exports[`VerificationRequestDialog After we started verification here, says we a
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"
@@ -171,13 +195,24 @@ exports[`VerificationRequestDialog Initially, asks how you would like to verify 
             <div
               class="mx_Spinner"
             >
-              <div
+              <svg
                 aria-label="Loading…"
-                class="mx_Spinner_icon"
+                class="_icon_11k6c_18"
                 data-testid="spinner"
+                fill="currentColor"
+                height="1em"
                 role="progressbar"
                 style="width: 32px; height: 32px;"
-              />
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                  fill-rule="evenodd"
+                />
+              </svg>
             </div>
           </div>
         </div>
@@ -212,7 +247,19 @@ exports[`VerificationRequestDialog Initially, asks how you would like to verify 
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"
@@ -266,7 +313,19 @@ exports[`VerificationRequestDialog Shows a failure message if verification was c
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"
@@ -313,7 +372,7 @@ exports[`VerificationRequestDialog Shows a successful message if verification fi
         style="width: 128px; height: 128px;"
       >
         <svg
-          class="mx_E2EIcon_verified"
+          color="var(--cpd-color-icon-success-primary)"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -340,7 +399,19 @@ exports[`VerificationRequestDialog Shows a successful message if verification fi
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"
@@ -385,41 +456,38 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
           Confirm that the emojis below match those shown on your other device.
         </p>
         <div
-          class="mx_VerificationShowSas_emojiSas"
+          class="_container_1lqqy_8 mx_VerificationShowSas_emojiSas"
         >
           <div
-            class="mx_VerificationShowSas_emojiSas_block"
+            class="_segment_1lqqy_15"
           >
             <div
               aria-hidden="true"
-              class="mx_VerificationShowSas_emojiSas_emoji"
+              class="_emoji_1lqqy_23"
             >
               🐶
             </div>
             <div
-              class="mx_VerificationShowSas_emojiSas_label"
+              class="_label_1lqqy_29"
             >
               Dog
             </div>
           </div>
           <div
-            class="mx_VerificationShowSas_emojiSas_block"
+            class="_segment_1lqqy_15"
           >
             <div
               aria-hidden="true"
-              class="mx_VerificationShowSas_emojiSas_emoji"
+              class="_emoji_1lqqy_23"
             >
               🐱
             </div>
             <div
-              class="mx_VerificationShowSas_emojiSas_label"
+              class="_label_1lqqy_29"
             >
               Cat
             </div>
           </div>
-          <div
-            class="mx_VerificationShowSas_emojiSas_break"
-          />
         </div>
         <p />
         <div
@@ -447,7 +515,19 @@ exports[`VerificationRequestDialog When other device accepted emoji, displays em
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
       tabindex="0"
-    />
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
   </div>
   <div
     data-focus-guard="true"

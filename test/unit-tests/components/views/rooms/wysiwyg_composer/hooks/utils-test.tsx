@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 import { type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
+import fetchMock from "@fetch-mock/jest";
 
 import { TimelineRenderingType } from "../../../../../../../src/contexts/RoomContext";
 import { mkStubRoom, stubClient } from "../../../../../../test-utils";
@@ -27,7 +28,6 @@ const mockRoomState = {
 
 const sendContentListToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
 const sendContentToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentToRoom");
-const fetchSpy = jest.spyOn(window, "fetch");
 const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 
 describe("handleClipboardEvent", () => {
@@ -183,13 +183,12 @@ describe("handleClipboardEvent", () => {
         const mockEventRelation = {} as unknown as IEventRelation;
         handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient, mockEventRelation);
 
-        expect(fetchSpy).toHaveBeenCalledTimes(1);
-        expect(fetchSpy).toHaveBeenCalledWith("blob:");
+        expect(fetchMock).toHaveFetchedTimes(1, "blob:");
     });
 
     it("calls error handler when fetch fails", async () => {
         const mockErrorMessage = "fetch failed";
-        fetchSpy.mockRejectedValueOnce(mockErrorMessage);
+        fetchMock.getOnce("blob:", { throws: new Error(mockErrorMessage) });
         const originalEvent = createMockClipboardEvent({
             type: "paste",
             clipboardData: {
@@ -214,12 +213,11 @@ describe("handleClipboardEvent", () => {
     });
 
     it("calls sendContentToRoom when parsing is successful", async () => {
-        fetchSpy.mockResolvedValueOnce({
-            url: "test/file",
+        fetchMock.get("test/file", {
             blob: () => {
                 return Promise.resolve({ type: "image/jpeg" } as Blob);
             },
-        } as Response);
+        });
 
         const originalEvent = createMockClipboardEvent({
             type: "paste",
@@ -251,12 +249,11 @@ describe("handleClipboardEvent", () => {
     });
 
     it("calls error handler when parsing is not successful", async () => {
-        fetchSpy.mockResolvedValueOnce({
-            url: "test/file",
+        fetchMock.get("test/file", {
             blob: () => {
                 return Promise.resolve({ type: "image/jpeg" } as Blob);
             },
-        } as Response);
+        });
         const mockErrorMessage = "sendContentToRoom failed";
         sendContentToRoomSpy.mockRejectedValueOnce(mockErrorMessage);
 

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
@@ -18,7 +18,6 @@ import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
 import Login from "../../../../../src/components/structures/auth/Login";
 import type BasePlatform from "../../../../../src/BasePlatform";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
 import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
 
@@ -55,8 +54,6 @@ describe("Login", function () {
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
         });
-        fetchMock.resetBehavior();
-        fetchMock.resetHistory();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             unstable_features: {},
             versions: ["v1.1"],
@@ -67,7 +64,6 @@ describe("Login", function () {
     });
 
     afterEach(function () {
-        fetchMock.restore();
         SdkConfig.reset(); // we touch the config, so clean up
         unmockPlatformPeg();
     });
@@ -327,7 +323,7 @@ describe("Login", function () {
     });
 
     it("should display an error when homeserver fails liveliness check", async () => {
-        fetchMock.resetBehavior();
+        fetchMock.removeRoutes();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             status: 0,
         });
@@ -339,7 +335,7 @@ describe("Login", function () {
     });
 
     it("should reset liveliness error when server config changes", async () => {
-        fetchMock.resetBehavior();
+        fetchMock.removeRoutes();
         // matrix.org is not alive
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             status: 400,
@@ -376,21 +372,6 @@ describe("Login", function () {
             jest.spyOn(logger, "error").mockRestore();
         });
 
-        it("should not attempt registration when oidc native flow setting is disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-
-            getComponent(hsUrl, isUrl, delegatedAuth);
-
-            await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-
-            // didn't try to register
-            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registration_endpoint);
-            // continued with normal setup
-            expect(mockClient.loginFlows).toHaveBeenCalled();
-            // normal password login rendered
-            expect(screen.getByLabelText("Username")).toBeInTheDocument();
-        });
-
         it("should attempt to register oidc client", async () => {
             // dont mock, spy so we can check config values were correctly passed
             jest.spyOn(registerClientUtils, "getOidcClientId");
@@ -400,7 +381,7 @@ describe("Login", function () {
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // tried to register
-            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registration_endpoint, expect.any(Object));
+            expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             // called with values from config
             expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(delegatedAuth, oidcStaticClientsConfig);
         });
@@ -412,7 +393,7 @@ describe("Login", function () {
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // tried to register
-            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registration_endpoint, expect.any(Object));
+            expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             expect(logger.error).toHaveBeenCalledWith(new Error(OidcError.DynamicRegistrationFailed));
 
             // continued with normal setup
@@ -431,39 +412,6 @@ describe("Login", function () {
             // did not continue with matrix login
             expect(mockClient.loginFlows).not.toHaveBeenCalled();
             expect(screen.getByText("Continue")).toBeInTheDocument();
-        });
-
-        /**
-         * Oidc-aware flows still work while the oidc-native feature flag is disabled
-         */
-        it("should show oidc-aware flow for oidc-enabled homeserver when oidc native flow setting is disabled", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-            mockClient.loginFlows.mockResolvedValue({
-                flows: [
-                    {
-                        type: "m.login.sso",
-                        [DELEGATED_OIDC_COMPATIBILITY.name]: true,
-                    },
-                    {
-                        type: "m.login.password",
-                    },
-                ],
-            });
-
-            const { container } = getComponent(hsUrl, isUrl, delegatedAuth);
-
-            await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-
-            // didn't try to register
-            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registration_endpoint);
-            // continued with normal setup
-            expect(mockClient.loginFlows).toHaveBeenCalled();
-            // oidc-aware 'continue' button displayed
-            const ssoButtons = container.querySelectorAll(".mx_SSOButton");
-            expect(ssoButtons.length).toBe(1);
-            expect(ssoButtons[0].textContent).toBe("Continue");
-            // no password form visible
-            expect(container.querySelector("form")).toBeFalsy();
         });
     });
 });

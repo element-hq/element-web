@@ -8,14 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { Glass } from "@vector-im/compound-web";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStore";
+import { Phase, SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
 import SetupEncryptionBody from "./SetupEncryptionBody";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import CompleteSecurityBody from "../../views/auth/CompleteSecurityBody";
 import AuthPage from "../../views/auth/AuthPage";
 import SdkConfig from "../../../SdkConfig";
+import E2EIcon from "../../views/rooms/E2EIcon.tsx";
+import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 
 interface IProps {
     onFinished: () => void;
@@ -67,13 +70,13 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
         } else if (phase === Phase.Intro) {
             // We don't specify an icon nor title since `SetupEncryptionBody` provides its own
         } else if (phase === Phase.Done) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
+            icon = <E2EIcon className="mx_CompleteSecurity_headerIcon" status={E2EStatus.Verified} hideTooltip />;
             title = _t("encryption|verification|after_new_login|device_verified");
         } else if (phase === Phase.ConfirmSkip) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
+            icon = <E2EIcon className="mx_CompleteSecurity_headerIcon" status={E2EStatus.Warning} hideTooltip />;
             title = _t("common|are_you_sure");
         } else if (phase === Phase.Busy) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
+            icon = <E2EIcon className="mx_CompleteSecurity_headerIcon" status={E2EStatus.Warning} hideTooltip />;
             title = _t("encryption|verification|after_new_login|verify_this_device");
         } else if (phase === Phase.Finished) {
             // SetupEncryptionBody will take care of calling onFinished, we don't need to do anything
@@ -90,7 +93,9 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
                     onClick={this.onSkipClick}
                     className="mx_CompleteSecurity_skip"
                     aria-label={_t("encryption|verification|after_new_login|skip_verification")}
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
             );
         }
 

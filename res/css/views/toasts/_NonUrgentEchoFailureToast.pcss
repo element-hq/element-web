@@ -7,15 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_NonUrgentEchoFailureToast {
-    .mx_NonUrgentEchoFailureToast_icon {
+    svg {
         display: inline-block;
         width: $font-18px;
         height: $font-18px;
-        mask-position: center;
-        mask-size: contain;
-        mask-repeat: no-repeat;
-        background-color: #fff; /* we know that non-urgent toasts are always styled the same */
-        mask-image: url("@vector-im/compound-design-tokens/icons/offline.svg");
+        color: #fff; /* we know that non-urgent toasts are always styled the same */
         margin-right: 8px;
     }
 

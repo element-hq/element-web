@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type FC } from "react";
 import { type Room, JoinRule, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { LockSolidIcon, VideoCallSolidIcon, PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -39,16 +40,16 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
 
     const isVideoRoom = calcIsVideoRoom(room);
 
-    let iconClass: string;
+    let icon: JSX.Element;
     let roomType: string;
     if (isVideoRoom) {
-        iconClass = "mx_RoomInfoLine_video";
+        icon = <VideoCallSolidIcon />;
         roomType = _t("common|video_room");
     } else if (joinRule === JoinRule.Public) {
-        iconClass = "mx_RoomInfoLine_public";
+        icon = <PublicIcon />;
         roomType = room.isSpaceRoom() ? _t("common|public_space") : _t("common|public_room");
     } else {
-        iconClass = "mx_RoomInfoLine_private";
+        icon = <LockSolidIcon />;
         roomType = room.isSpaceRoom() ? _t("common|private_space") : _t("common|private_room");
     }
 
@@ -75,7 +76,8 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     }
 
     return (
-        <div className={`mx_RoomInfoLine ${iconClass}`}>
+        <div className="mx_RoomInfoLine">
+            {icon}
             {roomType}
             {members}
         </div>

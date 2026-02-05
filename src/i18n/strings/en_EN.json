@@ -93,17 +93,13 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
-        "new_conversation": "New conversation",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
         "no": "No",
         "ok": "OK",
         "open": "Open",
-        "open_menu": "Open menu",
-        "pause": "Pause",
         "pin": "Pin",
-        "play": "Play",
         "proceed": "Proceed",
         "quote": "Quote",
         "react": "React",
@@ -579,6 +575,7 @@
         "someone": "Someone",
         "space": "Space",
         "spaces": "Spaces",
+        "state_encryption_enabled": "Experimental state encryption enabled",
         "sticker": "Sticker",
         "stickerpack": "Stickerpack",
         "success": "Success",
@@ -686,6 +683,8 @@
         "join_rule_restricted_label": "Everyone in <SpaceName/> will be able to find and join this room.",
         "name_validation_required": "Please enter a name for the room",
         "room_visibility_label": "Room visibility",
+        "state_encrypted_warning": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
+        "state_encryption_label": "Encrypt state events",
         "title_private_room": "Create a private room",
         "title_public_room": "Create a public room",
         "title_video_room": "Create a video room",
@@ -846,6 +845,7 @@
         "number_of_users": "Number of users",
         "only_joined_members": "Only joined users",
         "original_event_source": "Original event source",
+        "restore_from_backup": "Restore from backup",
         "room_encrypted": "Room is <strong>encrypted ✅</strong>",
         "room_id": "Room ID: %(roomId)s",
         "room_not_encrypted": "Room is <strong>not encrypted 🚨</strong>",
@@ -955,6 +955,7 @@
         "bootstrap_title": "Setting up keys",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
+        "continue_with_reset": "Continue with reset",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
         "cross_signing_room_verified": "Everyone in this room is verified",
         "cross_signing_room_warning": "Someone is using an unknown session",
@@ -970,10 +971,12 @@
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "forgot_recovery_key": "Forgot recovery key?",
+        "identity_needs_reset_description": "You have to reset your cryptographic identity in order to ensure access to your message history",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
         "key_storage_out_of_sync_description": "Confirm your recovery key to maintain access to your key storage and message history.",
+        "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -1505,7 +1508,6 @@
         "ask_to_join": "Enable ask to join",
         "automatic_debug_logs": "Automatically send debug logs on any error",
         "automatic_debug_logs_decryption": "Automatically send debug logs on decryption errors",
-        "automatic_debug_logs_key_backup": "Automatically send debug logs when key backup is not functioning",
         "beta_description": "What's next for %(brand)s? Labs are the best way to get things early, test out new features and help shape them before they actually launch.",
         "beta_feature": "This is a beta feature",
         "beta_feedback_leave_button": "To leave the beta, visit your settings.",
@@ -1522,6 +1524,8 @@
         "dynamic_room_predecessors": "Dynamic room predecessors",
         "dynamic_room_predecessors_description": "Enable MSC3946 (to support late-arriving room archives)",
         "element_call_video_rooms": "Element Call video rooms",
+        "encrypted_state_events": "Encrypted state events (MSC4362)",
+        "encrypted_state_events_description": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
         "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
         "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
         "experimental_description": "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
@@ -1989,7 +1993,6 @@
         "dm_invite_title": "Do you want to chat with %(user)s?",
         "drop_file_prompt": "Drop file here to upload",
         "edit_topic": "Edit topic",
-        "error_3pid_invite_email_lookup": "Unable to find user by email",
         "error_cancel_knock_title": "Failed to cancel",
         "error_join_403": "You need an invite to access this room.",
         "error_join_404_1": "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
@@ -2021,11 +2024,15 @@
         "forget_room": "Forget this room",
         "forget_space": "Forget this space",
         "header": {
+            "join_video_call": "Join video call",
+            "join_voice_call": "Join voice call",
             "n_people_asking_to_join": {
                 "one": "Asking to join",
                 "other": "%(count)s people asking to join"
             },
-            "room_is_public": "This room is public"
+            "room_is_public": "This room is public",
+            "shared_history_tooltip": "New members see history",
+            "world_readable_history_tooltip": "Anyone can see history"
         },
         "header_avatar_open_settings_label": "Open room settings",
         "header_face_pile_tooltip": "People",
@@ -2120,19 +2127,6 @@
             },
             "this_room_button": "Search this room"
         },
-        "status_bar": {
-            "delete_all": "Delete all",
-            "exceeded_resource_limit": "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.",
-            "history_visible": "Messages you send will be shared with new members invited to this room. <a>Learn more</a>",
-            "homeserver_blocked": "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.",
-            "monthly_user_limit_reached": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.",
-            "requires_consent_agreement": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
-            "retry_all": "Retry all",
-            "select_messages_to_retry": "You can select all or individual messages to retry or delete",
-            "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
-            "server_connectivity_lost_title": "Connectivity to the server has been lost.",
-            "some_messages_not_sent": "Some of your messages have not been sent"
-        },
         "unknown_status_code_for_timeline_jump": "unknown status code",
         "unread_notifications_predecessor": {
             "one": "You have %(count)s unread notification in a prior version of this room.",
@@ -2207,56 +2201,25 @@
             "mark_unread": "Mark as unread"
         },
         "notification_options": "Notification options",
-        "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
-        "release_announcement": {
-            "done": "Done",
-            "filter": {
-                "description": "Filter your chats with a single click. Expand to view more filters.",
-                "title": "New quick filters"
-            },
-            "intro": {
-                "description": "The chats list has been updated to be more clear and simple to use.",
-                "title": "Chats has a new look!"
-            },
-            "next": "Next",
-            "settings": {
-                "description": "To show or hide message previews, go to All settings > Preferences > Room list",
-                "title": "Some settings have moved"
-            },
-            "sort": {
-                "description": "Change the ordering of your chats from most recent to A-Z",
-                "title": "Sort your chats"
-            }
-        },
         "room": {
             "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
-        "room_options": "Room Options",
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
             "other": "Show %(count)s more"
         },
         "show_previews": "Show previews of messages",
-        "sort": "Sort",
         "sort_by": "Sort by",
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
-        "sort_type": {
-            "activity": "Activity",
-            "atoz": "A-Z"
-        },
         "sort_unread_first": "Show rooms with unread messages first",
-        "space_menu": {
-            "home": "Space home",
-            "space_settings": "Space Settings"
-        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
         "suggested_rooms_heading": "Suggested Rooms"
@@ -2441,12 +2404,11 @@
             "error_join_rule_change_title": "Failed to update the join rules",
             "error_join_rule_change_unknown": "Unknown failure",
             "guest_access_warning": "People with supported clients will be able to join the room without having a registered account.",
-            "history_visibility_invited": "Members only (since they were invited)",
-            "history_visibility_joined": "Members only (since they joined)",
+            "history_visibility_invited": "Members since invited",
             "history_visibility_legend": "Who can read history?",
-            "history_visibility_shared": "Members only (since the point in time of selecting this option)",
-            "history_visibility_warning": "The visibility of existing history will not be changed.",
-            "history_visibility_world_readable": "Anyone",
+            "history_visibility_shared": "Members (full history)",
+            "history_visibility_warning": "Changes won't affect past messages, only new ones. <a>Learn more</a>",
+            "history_visibility_world_readable": "Anyone (history is public)",
             "join_rule_description": "Decide who can join %(roomName)s.",
             "join_rule_invite": "Private (invite only)",
             "join_rule_invite_description": "Only invited people can join.",
@@ -2902,10 +2864,6 @@
             "rule_suppress_notices": "Messages sent by bot",
             "rule_tombstone": "When rooms are upgraded",
             "show_message_desktop_notification": "Show message in desktop notification",
-            "sounds_release_announcement": {
-                "description": "Your notification ping and call ringer have been updated—clearer, quicker, and less disruptive",
-                "title": "We’ve refreshed your sounds"
-            },
             "voip": "Audio and Video calls"
         },
         "preferences": {
@@ -3408,24 +3366,10 @@
         "no_rooms_with_unread_threads": "You don't have rooms with unread threads yet."
     },
     "time": {
-        "about_day_ago": "about a day ago",
-        "about_hour_ago": "about an hour ago",
-        "about_minute_ago": "about a minute ago",
         "date_at_time": "%(date)s at %(time)s",
-        "few_seconds_ago": "a few seconds ago",
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
-        "in_about_day": "about a day from now",
-        "in_about_hour": "about an hour from now",
-        "in_about_minute": "about a minute from now",
-        "in_few_seconds": "a few seconds from now",
-        "in_n_days": "%(num)s days from now",
-        "in_n_hours": "%(num)s hours from now",
-        "in_n_minutes": "%(num)s minutes from now",
         "left": "%(timeRemaining)s left",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss left",
-        "n_days_ago": "%(num)s days ago",
-        "n_hours_ago": "%(num)s hours ago",
-        "n_minutes_ago": "%(num)s minutes ago",
         "seconds_left": "%(seconds)ss left",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
@@ -3449,12 +3393,7 @@
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
         "decryption_failure": {
-            "blocked": "The sender has blocked you from receiving this message because your device is unverified",
-            "historical_event_no_key_backup": "Historical messages are not available on this device",
-            "historical_event_unverified_device": "You need to verify this device for access to historical messages",
-            "historical_event_user_not_joined": "You don't have access to this message",
             "sender_identity_previously_verified": "Sender's verified identity was reset",
-            "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3480,11 +3419,9 @@
             "unable_to_find": "Tried to load a specific point in this room's timeline, but was unable to find it."
         },
         "m.audio": {
-            "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "error_processing_audio": "Error processing audio message",
-            "error_processing_voice_message": "Error processing voice message",
-            "unnamed_audio": "Unnamed audio"
+            "error_processing_voice_message": "Error processing voice message"
         },
         "m.beacon_info": {
             "view_live_location": "View live location"
@@ -3579,6 +3516,7 @@
             "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
             "enabled_local": "Messages in this chat will be end-to-end encrypted.",
             "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
         },
         "m.room.guest_access": {
@@ -4058,7 +3996,6 @@
         "hide_sidebar_button": "Hide sidebar",
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
-        "join_button_tooltip_call_full": "Sorry — this call is currently full",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",

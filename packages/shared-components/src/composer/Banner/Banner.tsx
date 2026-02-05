@@ -12,6 +12,7 @@ import React, {
     type ReactNode,
     type PropsWithChildren,
     useMemo,
+    type HTMLAttributes,
 } from "react";
 import { Button } from "@vector-im/compound-web";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
@@ -31,8 +32,6 @@ interface BannerProps {
      * The banner avatar.
      */
     avatar?: React.ReactNode;
-
-    className?: string;
 
     /**
      * Actions presented to the user in the right-hand side of the banner alongside the dismiss button.
@@ -60,26 +59,26 @@ export function Banner({
     actions,
     onClose,
     ...props
-}: PropsWithChildren<BannerProps>): ReactElement {
+}: PropsWithChildren<BannerProps & HTMLAttributes<HTMLDivElement>>): ReactElement {
     const classes = classNames(styles.banner, className);
 
-    const icon = useMemo(() => {
+    const icon = useMemo((): ReactElement => {
         switch (type) {
             case "critical":
-                return <ErrorIcon fontSize={24} {...props} />;
+                return <ErrorIcon fontSize={24} />;
             case "info":
-                return <InfoIcon fontSize={24} {...props} />;
+                return <InfoIcon fontSize={24} />;
             case "success":
-                return <CheckCircleIcon fontSize={24} {...props} />;
+                return <CheckCircleIcon fontSize={24} />;
             default:
-                return <InfoIcon fontSize={24} {...props} />;
+                return <InfoIcon fontSize={24} />;
         }
-    }, [type, props]);
+    }, [type]);
 
     return (
         <div {...props} className={classes} data-type={type}>
             <div className={styles.icon}>{avatar ?? icon}</div>
-            <span className={styles.content}>{children}</span>
+            <div className={styles.content}>{children}</div>
             <div className={styles.actions}>
                 {actions}
                 {onClose && (

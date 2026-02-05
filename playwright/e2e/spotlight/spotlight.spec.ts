@@ -345,10 +345,10 @@ test.describe("Spotlight", () => {
         await expect(resultLocator).toHaveCount(1);
         await expect(resultLocator.first()).toContainText(bot2.credentials.displayName);
 
-        await expect(spotlight.dialog.locator(".mx_SpotlightDialog_startGroupChat")).toContainText(
+        await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_startGroupChat")).toContainText(
             "Start a group chat",
         );
-        await spotlight.dialog.locator(".mx_SpotlightDialog_startGroupChat").click();
+        await spotlight.dialog.locator("#mx_SpotlightDialog_button_startGroupChat").click();
         await expect(page.getByRole("dialog")).toContainText("Direct Messages");
     });
 

@@ -7,16 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type Ref, useCallback, useContext, useMemo, type JSX } from "react";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { ConnectionState, type ElementCall } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
-import {
-    useCall,
-    useConnectionState,
-    useJoinCallButtonDisabledTooltip,
-    useParticipatingMembers,
-} from "../../../hooks/useCall";
+import { useCall, useConnectionState, useParticipatingMembers } from "../../../hooks/useCall";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
@@ -102,7 +98,6 @@ interface ActiveLoadedCallEventProps {
 const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProps): JSX.Element => {
     const connectionState = useConnectionState(call);
     const participatingMembers = useParticipatingMembers(call);
-    const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     const connect = useCallback(
         (ev: ButtonEvent) => {
@@ -146,7 +141,6 @@ const ActiveLoadedCallEvent = ({ mxEvent, call, ref }: ActiveLoadedCallEventProp
             participatingMembers={participatingMembers}
             buttonText={buttonText}
             buttonKind={buttonKind}
-            buttonDisabledTooltip={joinCallButtonDisabledTooltip ?? undefined}
             onButtonClick={onButtonClick}
         />
     );
@@ -173,7 +167,10 @@ export const CallEvent = ({ mxEvent, ref }: CallEventProps): JSX.Element => {
             <div className="mx_CallEvent_wrapper" ref={ref}>
                 <div className="mx_CallEvent mx_CallEvent_inactive">
                     <div className="mx_CallEvent_columns">
-                        <span className="mx_CallEvent_title">{_t("timeline|m.call|video_call_ended")}</span>
+                        <span className="mx_CallEvent_title">
+                            <VideoCallSolidIcon />
+                            {_t("timeline|m.call|video_call_ended")}
+                        </span>
                         <CallDuration delta={latestEvent.getTs() - mxEvent.getTs()} />
                     </div>
                 </div>

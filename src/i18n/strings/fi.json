@@ -88,10 +88,7 @@
         "no": "Ei",
         "ok": "OK",
         "open": "Avaa",
-        "open_menu": "Avaa valikko",
-        "pause": "Keskeytä",
         "pin": "Kiinnitä",
-        "play": "Toista",
         "proceed": "Jatka",
         "quote": "Lainaa",
         "react": "Reagoi",
@@ -1738,17 +1735,6 @@
             },
             "this_room_button": "Etsi tästä huoneesta"
         },
-        "status_bar": {
-            "delete_all": "Poista kaikki",
-            "exceeded_resource_limit": "Viestiäsi ei lähetetty, koska tämä kotipalvelin on ylittänyt resurssirajan. <a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttämistä.",
-            "monthly_user_limit_reached": "Viestiäsi ei lähetetty, koska tämä kotipalvelin on saavuttanut kuukausittaisten aktiivisten käyttäjien rajan. <a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttämistä.",
-            "requires_consent_agreement": "Et voi lähettää viestejä ennen kuin luet ja hyväksyt <consentLink>käyttöehtomme</consentLink>.",
-            "retry_all": "Yritä kaikkia uudelleen",
-            "select_messages_to_retry": "Voit valita kaikki tai yksittäisiä viestejä yritettäväksi uudelleen tai poistettavaksi",
-            "server_connectivity_lost_description": "Lähetetyt viestit tallennetaan kunnes yhteys on taas muodostettu.",
-            "server_connectivity_lost_title": "Yhteys palvelimeen menetettiin.",
-            "some_messages_not_sent": "Osaa viesteistäsi ei ole lähetetty"
-        },
         "unknown_status_code_for_timeline_jump": "tuntematon tilakoodi",
         "unread_notifications_predecessor": {
             "other": "Sinulla on %(count)s lukematonta ilmoitusta huoneen edellisessä versiossa.",
@@ -1804,7 +1790,6 @@
             "mark_unread": "Merkitse lukemattomaksi"
         },
         "notification_options": "Ilmoitusasetukset",
-        "open_space_menu": "Avaa avaruusvalikko",
         "redacting_messages_status": {
             "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
             "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
@@ -1821,13 +1806,7 @@
         "sort_by": "Lajittelutapa",
         "sort_by_activity": "Aktiivisuus",
         "sort_by_alphabet": "A-Ö",
-        "sort_type": {
-            "atoz": "A-Ö"
-        },
         "sort_unread_first": "Näytä ensimmäisenä huoneet, joissa on lukemattomia viestejä",
-        "space_menu": {
-            "space_settings": "Avaruuden asetukset"
-        },
         "space_menu_label": "%(spaceName)s-valikko",
         "sublist_options": "Lajittele",
         "suggested_rooms_heading": "Ehdotetut huoneet"
@@ -1999,7 +1978,6 @@
             "error_join_rule_change_unknown": "Tuntematon virhe",
             "guest_access_warning": "Käyttäjät, joilla on tuettu asiakasohjelma, voivat liittyä huoneeseen ilman rekisteröityä käyttäjätiliä.",
             "history_visibility_invited": "Vain jäsenet (kutsumisestaan lähtien)",
-            "history_visibility_joined": "Vain jäsenet (liittymisestään lähtien)",
             "history_visibility_legend": "Ketkä voivat lukea historiaa?",
             "history_visibility_shared": "Vain jäsenet (tämän valinnan tekemisestä lähtien)",
             "history_visibility_warning": "Muutokset historian lukuoikeuksiin pätevät vain tuleviin viesteihin tässä huoneessa. Nykyisen historian näkyvyys ei muutu.",
@@ -2816,24 +2794,10 @@
         "show_thread_filter": "Näytä:"
     },
     "time": {
-        "about_day_ago": "noin päivä sitten",
-        "about_hour_ago": "noin tunti sitten",
-        "about_minute_ago": "noin minuutti sitten",
         "date_at_time": "%(date)s klo %(time)s",
-        "few_seconds_ago": "muutama sekunti sitten",
         "hours_minutes_seconds_left": "%(hours)s h %(minutes)s m %(seconds)s s jäljellä",
-        "in_about_day": "noin päivä sitten",
-        "in_about_hour": "noin tunti sitten",
-        "in_about_minute": "noin minuutti sitten",
-        "in_few_seconds": "muutama sekunti sitten",
-        "in_n_days": "%(num)s päivää sitten",
-        "in_n_hours": "%(num)s tuntia sitten",
-        "in_n_minutes": "%(num)s minuuttia sitten",
         "left": "%(timeRemaining)s jäljellä",
         "minutes_seconds_left": "%(minutes)s min %(seconds)s s jäljellä",
-        "n_days_ago": "%(num)s päivää sitten",
-        "n_hours_ago": "%(num)s tuntia sitten",
-        "n_minutes_ago": "%(num)s minuuttia sitten",
         "seconds_left": "%(seconds)s s jäljellä",
         "short_days": "%(value)s vrk",
         "short_days_hours_minutes_seconds": "%(days)s pv %(hours)s t %(minutes)s min %(seconds)s s",
@@ -2856,7 +2820,6 @@
         "creation_summary_dm": "%(creator)s loi tämän yksityisviestin.",
         "creation_summary_room": "%(creator)s loi ja määritti huoneen.",
         "decryption_failure": {
-            "historical_event_user_not_joined": "Sinulla ei ole pääsyä tähän viestiin",
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -2882,8 +2845,7 @@
         "m.audio": {
             "error_downloading_audio": "Virhe ääntä ladattaessa",
             "error_processing_audio": "Virhe ääniviestiä käsiteltäessä",
-            "error_processing_voice_message": "Virhe ääniviestin käsittelyssä",
-            "unnamed_audio": "Nimetön ääni"
+            "error_processing_voice_message": "Virhe ääniviestin käsittelyssä"
         },
         "m.call": {
             "video_call_ended": "Videopuhelu päättyi",
@@ -3407,7 +3369,6 @@
         "hide_sidebar_button": "Piilota sivupalkki",
         "input_devices": "Sisääntulolaitteet",
         "jitsi_call": "Jitsi-konferenssi",
-        "join_button_tooltip_call_full": "Pahoittelut — tämä puhelu on täynnä",
         "maximise_call": "Suurenna puhelu",
         "metaspace_video_rooms": {
             "conference_room_section": "Konferenssit"

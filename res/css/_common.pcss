@@ -9,8 +9,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
-@import url("@vector-im/compound-web/dist/style.css");
 @import "./_font-sizes.pcss";
 @import "./_animations.pcss";
 @import "./_spacing.pcss";
@@ -24,6 +22,7 @@ Please see LICENSE files in the repository root for full details.
     --buttons-dialog-gap-row: $spacing-8;
     --buttons-dialog-gap-column: $spacing-8;
     --MBody-border-radius: 8px;
+    --EventTileBubble_margin-block: 10px;
 
     /* Expected z-indexes for dialogs:
         4000 - Default wrapper index
@@ -85,8 +84,9 @@ html {
 }
 
 body {
-    font: var(--cpd-font-body-md-regular);
-    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    /* !important because compound overrides these font settings for body */
+    font: var(--cpd-font-body-md-regular) !important;
+    letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
     /**
      * We want to apply Inter Dynamic metrics (https://rsms.me/inter/dynmetrics/)
      * We need to tweak the `letter-spacing` property and doing so, disables by
@@ -97,7 +97,7 @@ body {
     font-feature-settings:
         "kern" 1,
         "liga" 1,
-        "calt" 1;
+        "calt" 1 !important;
 
     background-color: $background;
     color: $primary-content;
@@ -497,10 +497,9 @@ legend {
 }
 
 @define-mixin customisedCancelButton {
-    cursor: pointer;
-    position: relative;
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
+    padding: var(--cpd-space-1x);
     border-radius: 14px;
     background-color: var(--cpd-color-bg-subtle-secondary);
 
@@ -508,18 +507,10 @@ legend {
         background-color: var(--cpd-color-bg-subtle-primary);
     }
 
-    &::before {
-        content: "";
-        width: 28px;
-        height: 28px;
-        left: 0;
-        top: 0;
-        position: absolute;
-        mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 20px;
-        background-color: var(--cpd-color-icon-secondary);
+    svg {
+        width: inherit;
+        height: inherit;
+        color: var(--cpd-color-icon-secondary);
     }
 }
 
@@ -859,18 +850,16 @@ legend {
     line-height: $font-24px;
     margin-right: 0;
 
-    span {
-        display: flex;
-        align-items: center;
+    display: flex;
+    align-items: center;
 
-        &::before {
-            content: "";
-            display: inline-block;
-            background-color: $button-fg-color;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            margin-right: 8px;
-        }
+    svg {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        color: $button-fg-color;
+        margin-right: 8px;
+        vertical-align: middle;
     }
 }
 
@@ -883,15 +872,11 @@ legend {
 }
 
 @define-mixin ThreadSummaryIcon {
-    content: "";
     display: inline-block;
-    mask-image: url("@vector-im/compound-design-tokens/icons/threads.svg");
-    mask-position: center;
-    mask-repeat: no-repeat;
-    mask-size: contain;
     height: 18px;
-    min-width: 18px;
-    background-color: $icon-button-color !important;
+    width: 18px;
+    flex-shrink: 0;
+    color: $icon-button-color;
 }
 
 @define-mixin composerButtonHighLight {

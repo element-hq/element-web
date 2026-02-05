@@ -7,8 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, Fragment, useState, type ReactNode } from "react";
-import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import React, { Fragment, type JSX, type ReactNode, useState } from "react";
+import {
+    NotificationsOffSolidIcon,
+    OverflowHorizontalIcon,
+    NotificationsSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { ContextMenuTooltipButton } from "../../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";
@@ -21,23 +25,18 @@ import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { contextMenuBelow } from "../../rooms/RoomTile";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
-import { Icon as NotificationsIcon } from "../../../../../res/img/element-icons/notifications.svg";
-import { Icon as NotificationsDefaultIcon } from "../../../../../res/img/element-icons/roomlist/notifications-default.svg";
-import { Icon as NotificationsDmIcon } from "../../../../../res/img/element-icons/roomlist/notifications-dm.svg";
-import { Icon as NotificationsOffIcon } from "../../../../../res/img/element-icons/roomlist/notifications-off.svg";
 
 interface Props {
     room: Room;
 }
 
 export function getNotificationIcon(state: RoomNotifState): ReactNode {
-    const icons: Record<RoomNotifState, JSX.Element> = {
-        [RoomNotifState.AllMessages]: <NotificationsIcon />,
-        [RoomNotifState.AllMessagesLoud]: <NotificationsDefaultIcon />,
-        [RoomNotifState.MentionsOnly]: <NotificationsDmIcon />,
-        [RoomNotifState.Mute]: <NotificationsOffIcon />,
-    };
-    return icons[state];
+    switch (state) {
+        case RoomNotifState.Mute:
+            return <NotificationsOffSolidIcon />;
+        default:
+            return <NotificationsSolidIcon />;
+    }
 }
 
 export function RoomResultContextMenus({ room }: Props): JSX.Element {

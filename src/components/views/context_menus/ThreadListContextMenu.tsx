@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { LinkIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LinkIcon, OverflowHorizontalIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import dis from "../../../dispatcher/dispatcher";
@@ -21,7 +21,6 @@ import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOpti
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { Icon as ViewInRoomIcon } from "../../../../res/img/element-icons/view-in-room.svg";
 
 export interface ThreadListContextMenuProps {
     mxEvent: MatrixEvent;
@@ -90,7 +89,9 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                 isExpanded={menuDisplayed}
                 ref={button}
                 data-testid="threadlist-dropdown-button"
-            />
+            >
+                <OverflowHorizontalIcon />
+            </ContextMenuTooltipButton>
             {menuDisplayed && (
                 <IconizedContextMenu
                     onFinished={closeThreadOptions}
@@ -104,7 +105,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                             <IconizedContextMenuOption
                                 onClick={(e) => viewInRoom(e)}
                                 label={_t("timeline|mab|view_in_room")}
-                                icon={<ViewInRoomIcon />}
+                                icon={<VisibilityOnIcon />}
                             />
                         )}
                         {permalinkCreator && (

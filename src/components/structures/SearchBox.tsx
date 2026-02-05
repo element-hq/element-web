@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type HTMLProps } from "react";
 import { throttle } from "lodash";
 import classNames from "classnames";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
@@ -124,7 +125,9 @@ export default class SearchBox extends React.Component<IProps, IState> {
                     onClick={() => {
                         this.clearSearch("button");
                     }}
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
             ) : undefined;
 
         // show a shorter placeholder when blurred, if requested

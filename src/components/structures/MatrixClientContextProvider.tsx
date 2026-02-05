@@ -11,9 +11,9 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { LocalDeviceVerificationStateContext } from "../../contexts/LocalDeviceVerificationStateContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
-import { LocalDeviceVerificationStateContext } from "../../contexts/LocalDeviceVerificationStateContext";
 
 /**
  * A React hook whose value is whether the local device has been "verified".

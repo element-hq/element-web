@@ -40,13 +40,24 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <div
                     class="mx_Spinner"
                   >
-                    <div
+                    <svg
                       aria-label="Loading…"
-                      class="mx_Spinner_icon"
+                      class="_icon_11k6c_18"
                       data-testid="spinner"
+                      fill="currentColor"
+                      height="1em"
                       role="progressbar"
                       style="width: 32px; height: 32px;"
-                    />
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
                   </div>
                   <div
                     class="mx_PreferencesUserSettingsTab_section_hint"
@@ -1457,15 +1468,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1qhtc_10"
+                        class="_container_1ug7n_10"
                       >
                         <input
-                          class="_input_1qhtc_18"
+                          class="_input_1ug7n_18"
                           id="mx_media_previews_off"
                           type="radio"
                         />
                         <div
-                          class="_ui_1qhtc_19"
+                          class="_ui_1ug7n_19"
                         />
                       </div>
                     </div>
@@ -1487,15 +1498,15 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1qhtc_10"
+                        class="_container_1ug7n_10"
                       >
                         <input
-                          class="_input_1qhtc_18"
+                          class="_input_1ug7n_18"
                           id="mx_media_previews_private"
                           type="radio"
                         />
                         <div
-                          class="_ui_1qhtc_19"
+                          class="_ui_1ug7n_19"
                         />
                       </div>
                     </div>
@@ -1517,16 +1528,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_inline-field-control_19upo_44"
                     >
                       <div
-                        class="_container_1qhtc_10"
+                        class="_container_1ug7n_10"
                       >
                         <input
                           checked=""
-                          class="_input_1qhtc_18"
+                          class="_input_1ug7n_18"
                           id="mx_media_previews_on"
                           type="radio"
                         />
                         <div
-                          class="_ui_1qhtc_19"
+                          class="_ui_1ug7n_19"
                         />
                       </div>
                     </div>

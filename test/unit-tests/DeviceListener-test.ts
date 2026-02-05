@@ -31,12 +31,10 @@ import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
 import * as BulkUnverifiedSessionsToast from "../../src/toasts/BulkUnverifiedSessionsToast";
 import { isSecretStorageBeingAccessed } from "../../src/SecurityManager";
-import dis from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
-import { UIFeature } from "../../src/settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
 
@@ -57,7 +55,6 @@ jest.mock("../../src/utils/device/snoozeBulkUnverifiedDeviceReminder", () => ({
 
 const userId = "@user:server";
 const deviceId = "my-device-id";
-const mockDispatcher = mocked(dis);
 const flushPromises = async () => await new Promise(process.nextTick);
 
 const readySecretStorageStatus: SecretStorageStatus = {
@@ -341,9 +338,7 @@ describe("DeviceListener", () => {
                 await createAndStart();
 
                 expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
-                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                    SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
-                );
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("verify_this_session");
             });
 
             describe("when current device is verified", () => {
@@ -380,9 +375,23 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
+                });
+
+                it("shows an identity reset toast when one of the cross-signing secrets is missing locally and in 4S", async () => {
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: false,
+                        privateKeysCachedLocally: {
+                            masterKey: false,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("identity_needs_reset");
                 });
 
                 it("shows an out-of-sync toast when the backup key is missing locally", async () => {
@@ -392,9 +401,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
 
                 it("does not show an out-of-sync toast when the backup key is missing locally but backup is purposely disabled", async () => {
@@ -426,9 +433,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
 
                     // Then, when we receive the secret, it should be hidden.
                     mockCrypto!.getCrossSigningStatus.mockResolvedValue({
@@ -454,9 +459,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.SET_UP_RECOVERY,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("set_up_recovery");
                 });
 
                 it("shows an out-of-sync toast when one of the secrets is missing from 4S", async () => {
@@ -470,9 +473,7 @@ describe("DeviceListener", () => {
 
                     await createAndStart();
 
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("key_storage_out_of_sync");
                 });
             });
         });
@@ -492,27 +493,6 @@ describe("DeviceListener", () => {
                 await flushPromises();
 
                 expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
-            });
-
-            it("dispatches keybackup event when key backup is not enabled", async () => {
-                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-
-                // current device is verified
-                mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
-                    new DeviceVerificationStatus({
-                        trustCrossSignedDevices: true,
-                        crossSigningVerified: true,
-                    }),
-                );
-
-                mockCrypto.getActiveSessionBackupVersion.mockResolvedValue(null);
-                mockClient.getAccountDataFromServer.mockImplementation((eventType) =>
-                    eventType === BACKUP_DISABLED_ACCOUNT_DATA_KEY ? ({ disabled: true } as any) : null,
-                );
-                await createAndStart();
-                expect(mockDispatcher.dispatch).toHaveBeenCalledWith({
-                    action: Action.ReportKeyBackupNotEnabled,
-                });
             });
 
             it("does not check key backup status again after check is complete", async () => {
@@ -573,9 +553,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is displayed
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.TURN_ON_KEY_STORAGE,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("shows the 'Turn on key storage' toast if we turned on key storage", async () => {
@@ -591,9 +569,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is displayed
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.TURN_ON_KEY_STORAGE,
-                    );
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("does not show the 'Turn on key storage' toast if we turned off key storage", async () => {
@@ -606,9 +582,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.TURN_ON_KEY_STORAGE,
-                    );
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
             });
 
@@ -626,9 +600,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.TURN_ON_KEY_STORAGE,
-                    );
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("does not show the 'Turn on key storage' toast if we turned on key storage", async () => {
@@ -643,9 +615,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.TURN_ON_KEY_STORAGE,
-                    );
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
 
                 it("does not show the 'Turn on key storage' toast if we turned off key storage", async () => {
@@ -661,9 +631,7 @@ describe("DeviceListener", () => {
                     await createAndStart();
 
                     // Then the toast is not displayed
-                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.TURN_ON_KEY_STORAGE,
-                    );
+                    expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("turn_on_key_storage");
                 });
             });
         });
@@ -684,10 +652,8 @@ describe("DeviceListener", () => {
                 // all devices verified by default
                 mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === UIFeature.BulkUnverifiedSessionsReminder,
-                );
             });
+
             describe("bulk unverified sessions toasts", () => {
                 it("hides toast when cross signing is not ready", async () => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
@@ -700,24 +666,6 @@ describe("DeviceListener", () => {
                     await createAndStart();
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                     expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
-                });
-
-                it("hides toast when feature is disabled", async () => {
-                    // BulkUnverifiedSessionsReminder set to false
-                    jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                    // currentDevice, device2 are verified, device3 is unverified
-                    // ie if reminder was enabled it should be shown
-                    mockCrypto!.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                        switch (deviceId) {
-                            case currentDevice.deviceId:
-                            case device2.deviceId:
-                                return deviceTrustVerified;
-                            default:
-                                return deviceTrustUnverified;
-                        }
-                    });
-                    await createAndStart();
-                    expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                 });
 
                 it("hides toast when current device is unverified", async () => {
@@ -1206,25 +1154,21 @@ describe("DeviceListener", () => {
 
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(SetupEncryptionToast.Kind.SET_UP_RECOVERY);
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("set_up_recovery");
             });
 
             it("does not show the 'set up recovery' toast if secret storage is set up", async () => {
                 mockCrypto!.getSecretStorageStatus.mockResolvedValue(readySecretStorageStatus);
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
-                );
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
             });
 
             it("does not show the 'set up recovery' toast if user has no encrypted rooms", async () => {
                 jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
-                );
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
             });
 
             it("does not show the 'set up recovery' toast if the user has chosen to disable key storage", async () => {
@@ -1236,9 +1180,7 @@ describe("DeviceListener", () => {
                 });
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
-                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
-                );
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith("set_up_recovery");
             });
         });
     });

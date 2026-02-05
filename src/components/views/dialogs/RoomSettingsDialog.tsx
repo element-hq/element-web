@@ -10,6 +10,17 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { RoomEvent, type Room, RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    AdminIcon,
+    GroupIcon,
+    LockIcon,
+    PollsIcon,
+    SettingsIcon,
+    VoiceCallIcon,
+    NotificationsIcon,
+    AdvancedSettingsIcon,
+    TreeIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -129,7 +140,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.General,
                 _td("common|general"),
-                "mx_RoomSettingsDialog_settingsIcon",
+                <SettingsIcon />,
                 <GeneralRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsGeneral",
             ),
@@ -139,7 +150,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.People,
                     _td("common|people"),
-                    "mx_RoomSettingsDialog_peopleIcon",
+                    <GroupIcon />,
                     <PeopleRoomSettingsTab room={this.state.room} />,
                 ),
             );
@@ -149,7 +160,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.Voip,
                     _td("settings|voip|title"),
-                    "mx_RoomSettingsDialog_voiceIcon",
+                    <VoiceCallIcon />,
                     <VoipRoomSettingsTab room={this.state.room} />,
                 ),
             );
@@ -158,7 +169,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.Security,
                 _td("room_settings|security|title"),
-                "mx_RoomSettingsDialog_securityIcon",
+                <LockIcon />,
                 <SecurityRoomSettingsTab room={this.state.room} closeSettingsFn={() => this.props.onFinished(true)} />,
                 "RoomSettingsSecurityPrivacy",
             ),
@@ -167,7 +178,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.Roles,
                 _td("room_settings|permissions|title"),
-                "mx_RoomSettingsDialog_rolesIcon",
+                <AdminIcon />,
                 <RolesRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsRolesPermissions",
             ),
@@ -176,13 +187,11 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.Notifications,
                 _td("notifications|enable_prompt_toast_title"),
-                "mx_RoomSettingsDialog_notificationsIcon",
-                (
-                    <NotificationSettingsTab
-                        roomId={this.state.room.roomId}
-                        closeSettingsFn={() => this.props.onFinished(true)}
-                    />
-                ),
+                <NotificationsIcon />,
+                <NotificationSettingsTab
+                    roomId={this.state.room.roomId}
+                    closeSettingsFn={() => this.props.onFinished(true)}
+                />,
                 "RoomSettingsNotifications",
             ),
         );
@@ -192,7 +201,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.Bridges,
                     _td("room_settings|bridges|title"),
-                    "mx_RoomSettingsDialog_bridgesIcon",
+                    <TreeIcon />,
                     <BridgeSettingsTab room={this.state.room} />,
                     "RoomSettingsBridges",
                 ),
@@ -203,7 +212,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             new Tab(
                 RoomSettingsTab.PollHistory,
                 _td("right_panel|polls_button"),
-                "mx_RoomSettingsDialog_pollsIcon",
+                <PollsIcon />,
                 <PollHistoryTab room={this.state.room} onFinished={() => this.props.onFinished(true)} />,
             ),
         );
@@ -213,13 +222,11 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 new Tab(
                     RoomSettingsTab.Advanced,
                     _td("common|advanced"),
-                    "mx_RoomSettingsDialog_warningIcon",
-                    (
-                        <AdvancedRoomSettingsTab
-                            room={this.state.room}
-                            closeSettingsFn={() => this.props.onFinished(true)}
-                        />
-                    ),
+                    <AdvancedSettingsIcon />,
+                    <AdvancedRoomSettingsTab
+                        room={this.state.room}
+                        closeSettingsFn={() => this.props.onFinished(true)}
+                    />,
                     "RoomSettingsAdvanced",
                 ),
             );

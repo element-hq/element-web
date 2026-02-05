@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useEffect, useRef, useState } from "react";
+import { ChatSolidIcon, BugIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import QuestionDialog from "./QuestionDialog";
 import { _t } from "../../../languageHandler";
@@ -44,6 +45,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     const onFinished = (sendFeedback: boolean): void => {
         if (hasFeedback && sendFeedback) {
             const label = props.feature ? `${props.feature}-feedback` : "feedback";
+            // TODO: Handle rejection.
             submitFeedback(label, comment, canContact);
 
             Modal.createDialog(InfoDialog, {
@@ -58,6 +60,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     if (hasFeedback) {
         feedbackSection = (
             <div className="mx_FeedbackDialog_section mx_FeedbackDialog_rateApp">
+                <ChatSolidIcon />
                 <h3>{_t("feedback|comment_label")}</h3>
 
                 <p>{_t("feedback|platform_username")}</p>
@@ -111,7 +114,8 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
             title={_t("common|feedback")}
             description={
                 <React.Fragment>
-                    <div className="mx_FeedbackDialog_section mx_FeedbackDialog_reportBug">
+                    <div className="mx_FeedbackDialog_section">
+                        <BugIcon />
                         <h3>{_t("common|report_a_bug")}</h3>
                         <p>
                             {_t(

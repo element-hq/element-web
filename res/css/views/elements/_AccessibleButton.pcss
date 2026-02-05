@@ -37,6 +37,7 @@ Please see LICENSE files in the repository root for full details.
         font: var(--cpd-font-body-md-semibold);
         border: none; /* override default <button /> styles */
         word-break: keep-all; /* prevent button text in Chinese/Japanese/Korean (CJK) from being collapsed */
+        box-sizing: border-box;
 
         &.mx_AccessibleButton_kind_primary_sm,
         &.mx_AccessibleButton_kind_danger_sm,
@@ -47,33 +48,19 @@ Please see LICENSE files in the repository root for full details.
         &.mx_AccessibleButton_kind_primary_sm {
             color: var(--cpd-color-text-on-solid-primary);
             background-color: var(--cpd-color-bg-action-primary-rest);
+            border: 1px solid var(--cpd-color-bg-action-primary-rest);
         }
 
         &.mx_AccessibleButton_kind_danger_sm {
             color: var(--cpd-color-text-on-solid-primary);
             background-color: var(--cpd-color-bg-critical-primary);
+            border: 1px solid var(--cpd-color-bg-critical-primary);
         }
 
         &.mx_AccessibleButton_kind_link_sm {
             color: var(--cpd-color-text-primary);
             text-decoration: underline;
             font-weight: var(--cpd-font-weight-semibold);
-        }
-
-        &.mx_AccessibleButton_kind_confirm_sm {
-            background-color: var(--cpd-color-bg-action-primary-rest);
-
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
-            }
-        }
-
-        &.mx_AccessibleButton_kind_cancel_sm {
-            background-color: var(--cpd-color-bg-critical-primary);
-
-            &::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
-            }
         }
 
         &.mx_AccessibleButton_kind_icon,
@@ -111,13 +98,10 @@ Please see LICENSE files in the repository root for full details.
         text-decoration: underline;
     }
 
-    &.mx_AccessibleButton_kind_secondary_content {
-        color: $secondary-content;
-    }
-
     &.mx_AccessibleButton_kind_danger {
         color: var(--cpd-color-text-on-solid-primary);
         background-color: var(--cpd-color-bg-critical-primary);
+        border: 1px solid var(--cpd-color-bg-critical-primary);
 
         &.mx_AccessibleButton_disabled {
             color: var(--cpd-color-text-on-solid-primary);
@@ -171,26 +155,5 @@ Please see LICENSE files in the repository root for full details.
     &.mx_AccessibleButton_kind_danger_inline,
     &.mx_AccessibleButton_kind_content_inline {
         display: inline;
-    }
-
-    &.mx_AccessibleButton_kind_confirm_sm,
-    &.mx_AccessibleButton_kind_cancel_sm {
-        padding: 0px;
-        width: 16px;
-        height: 16px;
-        border-radius: 100%;
-        position: relative;
-        display: block;
-
-        &::before {
-            content: "";
-            display: block;
-            position: absolute;
-            inset: 0;
-            background-color: #ffffff;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: 80%;
-        }
     }
 }

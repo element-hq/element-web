@@ -290,7 +290,7 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
     // on the bot side, wait for the emojis, confirm they match, and return them
     const emojis = await handleSasVerification(verifier);
 
-    const emojiBlocks = page.locator(".mx_VerificationShowSas_emojiSas_block");
+    const emojiBlocks = page.locator(".mx_VerificationShowSas_emojiSas > div");
     await expect(emojiBlocks).toHaveCount(emojis.length);
 
     // then, check that our application shows an emoji panel with the same emojis.

@@ -47,20 +47,14 @@ Please see LICENSE files in the repository root for full details.
     text-overflow: ellipsis;
 }
 
-/* Can't add pseudo-elements to a select directly, so we use its parent. */
-.mx_Field_select::before {
-    content: "";
+.mx_Field_select_chevron {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     right: 4px;
     width: 18px;
     height: 18px;
-    mask: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: contain;
-    background-color: $primary-content;
+    color: $primary-content;
     z-index: 1;
     pointer-events: none;
 }

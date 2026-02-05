@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved, within } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import encrypt from "matrix-encrypt-attachment";
 import { mocked } from "jest-mock";
 import fs from "fs";
@@ -121,7 +121,7 @@ describe("<MImageBody/>", () => {
             withClientContextRenderOptions(cli),
         );
 
-        expect(fetchMock).toHaveBeenCalledWith(url);
+        expect(fetchMock).toHaveFetched(url);
 
         await screen.findByText("Error downloading image");
     });
@@ -167,7 +167,7 @@ describe("<MImageBody/>", () => {
 
             expect(screen.getByText("Show image")).toBeInTheDocument();
 
-            expect(fetchMock).not.toHaveFetched(url);
+            expect(fetchMock).toHaveFetchedTimes(0, url);
         });
 
         it("should render hidden image placeholder", async () => {
@@ -246,13 +246,9 @@ describe("<MImageBody/>", () => {
 
         mocked(global.URL.createObjectURL).mockReturnValue("blob:generated-thumb");
 
-        fetchMock.getOnce(
-            "https://server/_matrix/media/v3/download/server/image",
-            {
-                body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
-            },
-            { sendAsJson: false },
-        );
+        fetchMock.getOnce("https://server/_matrix/media/v3/download/server/image", {
+            body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
+        });
 
         const event = new MatrixEvent({
             room_id: "!room:server",

@@ -78,9 +78,7 @@
         "next": "Pasuesja",
         "no": "Jo",
         "open": "Hape",
-        "pause": "Ndalesë",
         "pin": "Fiksoje",
-        "play": "Luaje",
         "quote": "Citim",
         "react": "Reagoni",
         "refresh": "Rifreskoje",
@@ -1196,7 +1194,6 @@
     "labs": {
         "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
         "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
-        "automatic_debug_logs_key_backup": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon",
         "beta_description": "Ç’vjen më pas për %(brand)s? Labs janë mënyra më e mirë për t’i pasur gjërat që herët, për të testuar veçori të reja dhe për të ndihmuar t’u jepet formë para se të hidhen faktikisht në qarkullim.",
         "beta_feature": "Kjo është një veçori beta",
         "beta_feedback_leave_button": "Që të braktisni beta-n, vizitoni rregullimet tuaja.",
@@ -1688,18 +1685,6 @@
             "all_rooms_button": "Kërko në krejt dhomat",
             "this_room_button": "Kërko në këtë dhomë"
         },
-        "status_bar": {
-            "delete_all": "Fshiji krejt",
-            "exceeded_resource_limit": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home ka tejkaluar kufirin e një burimi. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-            "homeserver_blocked": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home është bllokuar nga përgjegjësi i tij. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-            "monthly_user_limit_reached": "Mesazhi juaj s’u dërgua, ngaqë ky shërbyes Home ka mbërritur në Kufirin Mujor të Përdoruesve Aktivë. Ju lutemi, që të vazhdoni ta përdorni këtë shërbim, <a>lidhuni me përgjegjësin e shërbimit tuaj</a>.",
-            "requires_consent_agreement": "S’mund të dërgoni ndonjë mesazh, përpara se të shqyrtoni dhe pajtoheni me <consentLink>termat dhe kushtet tona</consentLink>.",
-            "retry_all": "Riprovoji krejt",
-            "select_messages_to_retry": "Për riprovim ose fshirje mund të përzgjidhni krejt mesazhet, ose të tillë individualë",
-            "server_connectivity_lost_description": "Mesazhet e dërguar do të depozitohen deri sa lidhja juaj të jetë rikthyer.",
-            "server_connectivity_lost_title": "Humbi lidhja me shërbyesin.",
-            "some_messages_not_sent": "Disa nga mesazhet tuaj s’janë dërguar"
-        },
         "unknown_status_code_for_timeline_jump": "kod i panjohur gjendjeje",
         "unread_notifications_predecessor": {
             "other": "Keni %(count)s njoftime të palexuar në një version të mëparshëm të kësaj dhome.",
@@ -1918,7 +1903,6 @@
             "error_join_rule_change_unknown": "Dështim i panjohur",
             "guest_access_warning": "Persona me klientë të mbuluar do të jenë në gjendje të hyjnë te dhoma pa pasur ndonjë llogari të regjistruar.",
             "history_visibility_invited": "Vetëm anëtarë (që kur qenë ftuar)",
-            "history_visibility_joined": "Vetëm anëtarë (që kur janë bërë pjesë)",
             "history_visibility_legend": "Kush mund të lexojë historikun?",
             "history_visibility_shared": "Vetëm anëtarët (që nga çasti i përzgjedhjes së kësaj mundësie)",
             "history_visibility_warning": "Ndryshime se cilët mund të lexojnë historikun do të vlejnë vetëm për mesazhe të ardhshëm në këtë dhomë. Dukshmëria e historikut ekzistues nuk do të ndryshohet.",
@@ -2651,24 +2635,10 @@
         "show_thread_filter": "Shfaq:"
     },
     "time": {
-        "about_day_ago": "rreth një ditë më parë",
-        "about_hour_ago": "rreth një orë më parë",
-        "about_minute_ago": "rreth një minutë më parë",
         "date_at_time": "%(date)s më %(time)s",
-        "few_seconds_ago": "pak sekonda më parë",
         "hours_minutes_seconds_left": "Edhe %(hours)sh %(minutes)sm %(seconds)ss",
-        "in_about_day": "rreth një ditë nga tani",
-        "in_about_hour": "rreth një orë nga tani",
-        "in_about_minute": "rreth një minutë nga tani",
-        "in_few_seconds": "pak sekonda nga tani",
-        "in_n_days": "%(num)s ditë nga tani",
-        "in_n_hours": "%(num)s orë nga tani",
-        "in_n_minutes": "%(num)s minuta nga tani",
         "left": "Edhe %(timeRemaining)s",
         "minutes_seconds_left": "Edhe %(minutes)sm %(seconds)ss",
-        "n_days_ago": "%(num)s ditë më parë",
-        "n_hours_ago": "%(num)s orë më parë",
-        "n_minutes_ago": "%(num)s minuta më parë",
         "seconds_left": "Edhe %(seconds)ss"
     },
     "timeline": {
@@ -2704,8 +2674,7 @@
         "m.audio": {
             "error_downloading_audio": "Gabim në shkarkim audioje",
             "error_processing_audio": "Gabim në përpunim mesazhi audio",
-            "error_processing_voice_message": "Gabim në përpunimin e mesazhit zanor",
-            "unnamed_audio": "Audio pa emër"
+            "error_processing_voice_message": "Gabim në përpunimin e mesazhit zanor"
         },
         "m.beacon_info": {
             "view_live_location": "Shihni vendndodhje aty për aty"
@@ -3235,7 +3204,6 @@
         "hangup": "Mbylle Thirrjen",
         "hide_sidebar_button": "Fshihe anështyllën",
         "input_devices": "Pajisje input-i",
-        "join_button_tooltip_call_full": "Na ndjeni — aktualisht kjo thirrje është plot",
         "maximise": "Mbushe ekranin",
         "misconfigured_server": "Thirrja dështoi për shkak shërbyesi të keqformësuar",
         "misconfigured_server_description": "Që thirrjet të funksionojnë pa probleme, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home (<code>%(homeserverDomain)s</code>) të formësojë një shërbyes TURN.",

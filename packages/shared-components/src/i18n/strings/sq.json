@@ -1,0 +1,35 @@
+{
+    "action": {
+        "delete": "Fshije",
+        "dismiss": "Mos e merr parasysh",
+        "explore_rooms": "Eksploroni dhoma",
+        "pause": "Ndalesë",
+        "play": "Luaje",
+        "search": "Kërkoni"
+    },
+    "left_panel": {
+        "open_dial_pad": "Hap butona numrash"
+    },
+    "time": {
+        "about_day_ago": "rreth një ditë më parë",
+        "about_hour_ago": "rreth një orë më parë",
+        "about_minute_ago": "rreth një minutë më parë",
+        "few_seconds_ago": "pak sekonda më parë",
+        "in_about_day": "rreth një ditë nga tani",
+        "in_about_hour": "rreth një orë nga tani",
+        "in_about_minute": "rreth një minutë nga tani",
+        "in_few_seconds": "pak sekonda nga tani",
+        "in_n_days": "%(num)s ditë nga tani",
+        "in_n_hours": "%(num)s orë nga tani",
+        "in_n_minutes": "%(num)s minuta nga tani",
+        "n_days_ago": "%(num)s ditë më parë",
+        "n_hours_ago": "%(num)s orë më parë",
+        "n_minutes_ago": "%(num)s minuta më parë"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Gabim në shkarkim audioje",
+            "unnamed_audio": "Audio pa emër"
+        }
+    }
+}

@@ -48,10 +48,8 @@ const setupMainMenu = async (client: MatrixClient, testSpace: Room): Promise<Ren
 
     const wrapper = render(<RoomListHeader />);
 
-    expect(wrapper.container.textContent).toBe("Test Space");
-    act(() => {
-        wrapper.container.querySelector<HTMLElement>('[aria-label="Test Space menu"]')?.click();
-    });
+    expect(wrapper.getByText("Test Space")).toBeInTheDocument();
+    wrapper.getByLabelText("Test Space menu").click();
 
     return wrapper;
 };
@@ -64,9 +62,9 @@ const setupPlusMenu = async (client: MatrixClient, testSpace: Room): Promise<Ren
 
     const wrapper = render(<RoomListHeader />);
 
-    expect(wrapper.container.textContent).toBe("Test Space");
+    expect(wrapper.getByText("Test Space")).toBeInTheDocument();
     act(() => {
-        wrapper.container.querySelector<HTMLElement>('[aria-label="Add"]')?.click();
+        wrapper.getByLabelText("Add")?.click();
     });
 
     return wrapper;
@@ -81,7 +79,7 @@ const checkMenuLabels = (items: NodeListOf<Element>, labelArray: Array<string>) 
     expect(items).toHaveLength(labelArray.length);
 
     const checkLabel = (item: Element, label: string) => {
-        expect(item.querySelector(".mx_IconizedContextMenu_label")?.textContent).toBe(label);
+        expect(item.querySelector(".mx_IconizedContextMenu_label")).toHaveTextContent(label);
     };
 
     labelArray.forEach((label, index) => {
@@ -116,13 +114,13 @@ describe("RoomListHeader", () => {
 
         const { container } = render(<RoomListHeader />);
 
-        expect(container.textContent).toBe("Home");
+        expect(container).toHaveTextContent("Home");
         fireEvent.click(screen.getByLabelText("Home options"));
 
         const menu = screen.getByRole("menu");
         const items = menu.querySelectorAll(".mx_IconizedContextMenu_item");
         expect(items).toHaveLength(1);
-        expect(items[0].textContent).toBe("Show all rooms");
+        expect(items[0]).toHaveTextContent("Show all rooms");
     });
 
     it("renders a main menu for spaces", async () => {

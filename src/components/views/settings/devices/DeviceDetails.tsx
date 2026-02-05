@@ -32,7 +32,8 @@ interface Props {
     supportsMSC3881?: boolean;
     className?: string;
     isCurrentDevice?: boolean;
-    delegatedAuthAccountUrl?: string;
+    accountManagementEndpoint?: string;
+    accountManagementActionsSupported?: string[];
 }
 
 interface MetadataTable {
@@ -69,7 +70,8 @@ const DeviceDetails: React.FC<Props> = ({
     supportsMSC3881,
     className,
     isCurrentDevice,
-    delegatedAuthAccountUrl,
+    accountManagementEndpoint,
+    accountManagementActionsSupported,
 }) => {
     const metadata: MetadataTable[] = [
         {
@@ -124,7 +126,7 @@ const DeviceDetails: React.FC<Props> = ({
                     isCurrentDevice={isCurrentDevice}
                 />
             </section>
-            {!delegatedAuthAccountUrl && (
+            {!accountManagementEndpoint && (
                 <section className="mx_DeviceDetails_section">
                     <p className="mx_DeviceDetails_sectionHeading">{_t("settings|sessions|details_heading")}</p>
                     {metadata.map(({ heading, values, id }, index) => (
@@ -175,12 +177,16 @@ const DeviceDetails: React.FC<Props> = ({
                 </section>
             )}
             <section className="mx_DeviceDetails_section">
-                {delegatedAuthAccountUrl && !isCurrentDevice ? (
+                {accountManagementEndpoint && !isCurrentDevice ? (
                     <AccessibleButton
                         element="a"
                         onClick={null}
                         kind="link_inline"
-                        href={getManageDeviceUrl(delegatedAuthAccountUrl, device.device_id)}
+                        href={getManageDeviceUrl(
+                            accountManagementEndpoint,
+                            accountManagementActionsSupported,
+                            device.device_id,
+                        )}
                         target="_blank"
                         data-testid="device-detail-sign-out-cta"
                     >
@@ -195,7 +201,7 @@ const DeviceDetails: React.FC<Props> = ({
                     >
                         <span className="mx_DeviceDetails_signOutButtonContent">
                             {_t("settings|sessions|sign_out")}
-                            {isSigningOut && <Spinner w={16} h={16} />}
+                            {isSigningOut && <Spinner size={16} />}
                         </span>
                     </AccessibleButton>
                 )}

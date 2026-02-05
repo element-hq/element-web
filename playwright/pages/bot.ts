@@ -13,8 +13,12 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { Logger } from "matrix-js-sdk/src/logger";
 import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
-import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import type { CryptoCallbacks, GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import { bootstrapCrossSigningForClient, Client } from "./client";
+
+export interface CredentialsOptionalAccessToken extends Omit<Credentials, "accessToken"> {
+    accessToken?: string;
+}
 
 export interface CreateBotOpts {
     /**
@@ -58,7 +62,7 @@ const defaultCreateBotOptions = {
 type ExtendedMatrixClient = MatrixClient & { __playwright_recovery_key: GeneratedSecretStorageKey };
 
 export class Bot extends Client {
-    public credentials?: Credentials;
+    public credentials?: CredentialsOptionalAccessToken;
     private handlePromise: Promise<JSHandle<ExtendedMatrixClient>>;
 
     constructor(
@@ -70,7 +74,16 @@ export class Bot extends Client {
         this.opts = Object.assign({}, defaultCreateBotOptions, opts);
     }
 
-    public setCredentials(credentials: Credentials): void {
+    /**
+     * Set the credentials used by the bot.
+     *
+     * If `credentials.accessToken` is unset, then `buildClient` will log in a
+     * new session.  Note that `getCredentials` will return the credentials
+     * passed to this function, rather than the updated credentials from the new
+     * login.  In particular, the `accessToken` and `deviceId` will not be
+     * updated.
+     */
+    public setCredentials(credentials: CredentialsOptionalAccessToken): void {
         if (this.credentials) throw new Error("Bot has already started");
         this.credentials = credentials;
     }
@@ -80,7 +93,7 @@ export class Bot extends Client {
         return client.evaluate((cli) => cli.__playwright_recovery_key);
     }
 
-    private async getCredentials(): Promise<Credentials> {
+    private async getCredentials(): Promise<CredentialsOptionalAccessToken> {
         if (this.credentials) return this.credentials;
         // We want to pad the uniqueId but not the prefix
         const username =
@@ -128,22 +141,12 @@ export class Bot extends Client {
 
                 const logger = getLogger(`bot ${credentials.userId}`);
 
-                const keys = {};
-
-                const getCrossSigningKey = (type: string) => {
-                    return keys[type];
-                };
-
-                const saveCrossSigningKeys = (k: Record<string, Uint8Array>) => {
-                    Object.assign(keys, k);
-                };
-
                 // Store the cached secret storage key and return it when `getSecretStorageKey` is called
-                let cachedKey: { keyId: string; key: Uint8Array };
+                let cachedKey: { keyId: string; key: Uint8Array<ArrayBuffer> };
                 const cacheSecretStorageKey = (
                     keyId: string,
                     keyInfo: SecretStorageKeyDescription,
-                    key: Uint8Array,
+                    key: Uint8Array<ArrayBuffer>,
                 ) => {
                     cachedKey = {
                         keyId,
@@ -152,14 +155,36 @@ export class Bot extends Client {
                 };
 
                 const getSecretStorageKey = () =>
-                    Promise.resolve<[string, Uint8Array]>([cachedKey.keyId, cachedKey.key]);
+                    Promise.resolve<[string, Uint8Array<ArrayBuffer>]>([cachedKey.keyId, cachedKey.key]);
 
-                const cryptoCallbacks = {
-                    getCrossSigningKey,
-                    saveCrossSigningKeys,
+                const cryptoCallbacks: CryptoCallbacks = {
                     cacheSecretStorageKey,
                     getSecretStorageKey,
                 };
+
+                if (!("accessToken" in credentials)) {
+                    const loginCli = new window.matrixcs.MatrixClient({
+                        baseUrl,
+                        store: new window.matrixcs.MemoryStore(),
+                        scheduler: new window.matrixcs.MatrixScheduler(),
+                        cryptoStore: new window.matrixcs.MemoryCryptoStore(),
+                        cryptoCallbacks,
+                        logger,
+                    });
+
+                    const loginResponse = await loginCli.loginRequest({
+                        type: "m.login.password",
+                        identifier: {
+                            type: "m.id.user",
+                            user: credentials.userId,
+                        },
+                        password: credentials.password,
+                    });
+
+                    credentials.accessToken = loginResponse.access_token;
+                    credentials.userId = loginResponse.user_id;
+                    credentials.deviceId = loginResponse.device_id;
+                }
 
                 const cli = new window.matrixcs.MatrixClient({
                     baseUrl,

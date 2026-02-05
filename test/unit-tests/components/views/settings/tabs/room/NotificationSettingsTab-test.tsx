@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, type RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen, within } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
@@ -19,7 +19,7 @@ import { type RoomEchoChamber } from "../../../../../../../src/stores/local-echo
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 
-describe("NotificatinSettingsTab", () => {
+describe("NotificationSettingsTab", () => {
     const roomId = "!room:example.com";
     let cli: MatrixClient;
     let roomProps: RoomEchoChamber;
@@ -45,9 +45,7 @@ describe("NotificatinSettingsTab", () => {
         const tab = renderTab();
 
         // settings link of mentions_only volume
-        const settingsLink = tab.container.querySelector(
-            "label.mx_NotificationSettingsTab_mentionsKeywordsEntry div.mx_AccessibleButton",
-        );
+        const settingsLink = within(tab.getByText("@mentions & keywords")).getByRole("button", { name: "settings" });
         if (!settingsLink) throw new Error("settings link does not exist.");
 
         await userEvent.click(settingsLink);

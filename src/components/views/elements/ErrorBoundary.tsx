@@ -12,10 +12,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PlatformPeg from "../../../PlatformPeg";
-import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-import BugReportDialog from "../dialogs/BugReportDialog";
 import AccessibleButton from "./AccessibleButton";
+import { BugReportDialogButton } from "./BugReportDialogButton";
 
 interface Props {
     children: ReactNode;
@@ -60,13 +59,6 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
             });
     };
 
-    private onBugReport = (): void => {
-        Modal.createDialog(BugReportDialog, {
-            label: "react-soft-crash",
-            error: this.state.error,
-        });
-    };
-
     public render(): ReactNode {
         if (this.state.error) {
             const newIssueUrl = SdkConfig.get().feedback.new_issue_url;
@@ -95,9 +87,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
                             &nbsp;
                             {_t("bug_reporting|description")}
                         </p>
-                        <AccessibleButton onClick={this.onBugReport} kind="primary">
-                            {_t("bug_reporting|submit_debug_logs")}
-                        </AccessibleButton>
+                        <BugReportDialogButton error={this.state.error} label="react-soft-crash" />
                     </React.Fragment>
                 );
             }

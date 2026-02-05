@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useMemo } from "react";
+import React, { type JSX, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
-import { AudioPlayerView } from "@element-hq/web-shared-components";
+import { AudioPlayerView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { type Playback } from "../../../audio/Playback";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -132,13 +132,10 @@ interface AudioPlayerProps {
  * AudioPlayer component that initializes the AudioPlayerViewModel and renders the AudioPlayerView.
  */
 function AudioPlayer({ playback, mediaName }: AudioPlayerProps): JSX.Element {
-    const vm = useMemo(() => new AudioPlayerViewModel({ playback, mediaName }), [playback, mediaName]);
-
+    const vm = useCreateAutoDisposedViewModel(() => new AudioPlayerViewModel({ playback, mediaName }));
     useEffect(() => {
-        return () => {
-            vm.dispose();
-        };
-    }, [vm]);
+        vm.setProps({ playback, mediaName });
+    }, [playback, mediaName, vm]);
 
     return <AudioPlayerView vm={vm} />;
 }

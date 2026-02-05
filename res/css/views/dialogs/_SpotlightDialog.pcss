@@ -13,11 +13,12 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_Dialog {
-        width: fit-content;
-        border-radius: 8px;
+        /* !important because it's overriding compound  */
+        width: fit-content !important;
+        border-radius: 8px !important;
+        height: 60% !important;
         overflow-y: initial;
         position: relative;
-        height: 60%;
         padding: 0;
         contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
 
@@ -78,12 +79,8 @@ Please see LICENSE files in the repository root for full details.
             position: relative;
             padding: $spacing-4 $spacing-8 $spacing-4 37px;
 
-            &::before {
-                background-color: $secondary-content;
-                content: "";
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
+            > svg {
+                color: $secondary-content;
                 width: 18px;
                 height: 18px;
                 position: absolute;
@@ -92,23 +89,11 @@ Please see LICENSE files in the repository root for full details.
                 transform: translateY(-50%);
             }
 
-            &.mx_SpotlightDialog_filterPeople::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
-            }
-
-            &.mx_SpotlightDialog_filterPublicRooms::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
-            }
-
-            &.mx_SpotlightDialog_filterPublicSpaces::before {
-                mask-image: url("$(res)/img/element-icons/spaces.svg");
-            }
-
             .mx_SpotlightDialog_filter--close {
-                position: relative;
                 display: inline-block;
-                width: 16px;
-                height: 16px;
+                width: 14px;
+                height: 14px;
+                padding: 1px;
                 background: $system;
                 border-radius: 8px;
                 margin-left: $spacing-8;
@@ -116,17 +101,10 @@ Please see LICENSE files in the repository root for full details.
                 line-height: 16px;
                 color: $secondary-content;
 
-                &::before {
-                    background-color: $secondary-content;
-                    content: "";
-                    mask-repeat: no-repeat;
-                    mask-position: center;
-                    mask-size: 14px;
+                svg {
+                    color: $secondary-content;
                     width: inherit;
                     height: inherit;
-                    position: absolute;
-                    left: 0;
-                    mask-image: url("@vector-im/compound-design-tokens/icons/close.svg");
                 }
             }
         }
@@ -385,45 +363,24 @@ Please see LICENSE files in the repository root for full details.
                 margin: 0;
                 padding: 3px $spacing-8 3px $spacing-28;
 
-                &::before {
-                    content: "";
+                svg {
                     display: block;
                     position: absolute;
-                    mask-repeat: no-repeat;
-                    mask-position: center;
-                    mask-size: contain;
                     left: $spacing-8;
                     width: 16px;
                     height: 16px;
-                    background: var(--cpd-color-icon-primary);
+                    color: var(--cpd-color-icon-primary);
                 }
             }
         }
 
-        .mx_SpotlightDialog_inviteLink .mx_AccessibleButton::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/link.svg");
-        }
-
-        .mx_SpotlightDialog_createRoom .mx_AccessibleButton::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
-        }
-
         .mx_SpotlightDialog_otherSearches {
-            .mx_SpotlightDialog_startChat,
-            .mx_SpotlightDialog_joinRoomAlias,
-            .mx_SpotlightDialog_explorePublicRooms,
-            .mx_SpotlightDialog_explorePublicSpaces,
-            .mx_SpotlightDialog_startGroupChat,
-            .mx_SpotlightDialog_searchMessages {
+            .mx_SpotlightDialog_option {
                 padding-left: $spacing-32;
                 position: relative;
 
-                &::before {
-                    background-color: $secondary-content;
-                    content: "";
-                    mask-repeat: no-repeat;
-                    mask-position: center;
-                    mask-size: contain;
+                svg {
+                    color: $secondary-content;
                     width: 24px;
                     height: 24px;
                     position: absolute;
@@ -431,30 +388,6 @@ Please see LICENSE files in the repository root for full details.
                     top: 50%;
                     transform: translateY(-50%);
                 }
-            }
-
-            .mx_SpotlightDialog_startChat::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
-            }
-
-            .mx_SpotlightDialog_joinRoomAlias::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
-            }
-
-            .mx_SpotlightDialog_explorePublicRooms::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
-            }
-
-            .mx_SpotlightDialog_explorePublicSpaces::before {
-                mask-image: url("$(res)/img/element-icons/spaces.svg");
-            }
-
-            .mx_SpotlightDialog_startGroupChat::before {
-                mask-image: url("@vector-im/compound-design-tokens/icons/group.svg");
-            }
-
-            .mx_SpotlightDialog_searchMessages::before {
-                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
             }
 
             .mx_SpotlightDialog_otherSearches_messageSearchText {
@@ -495,27 +428,10 @@ Please see LICENSE files in the repository root for full details.
             display: none;
         }
 
-        .mx_SpotlightDialog_metaspaceResult {
-            background-color: $secondary-content;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-
-            &.mx_SpotlightDialog_metaspaceResult_home-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/home-solid.svg");
-            }
-
-            &.mx_SpotlightDialog_metaspaceResult_favourites-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/favourite-solid.svg");
-            }
-
-            &.mx_SpotlightDialog_metaspaceResult_people-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
-            }
-
-            &.mx_SpotlightDialog_metaspaceResult_orphans-space {
-                mask-image: url("@vector-im/compound-design-tokens/icons/room.svg");
-            }
+        .mx_SpotlightDialog_metaspaceResult svg {
+            color: $secondary-content;
+            width: inherit;
+            height: inherit;
         }
     }
 }

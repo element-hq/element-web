@@ -193,8 +193,10 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
                 await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_MemberTileView");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_MemberTileView");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
 
             it("by power level", async () => {
@@ -203,8 +205,10 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
                 await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_EntityTile");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_EntityTile");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
 
             it("by last active timestamp", async () => {
@@ -231,8 +235,10 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
                 await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_EntityTile");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_EntityTile");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
 
             it("by name", async () => {
@@ -249,8 +255,10 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
                 await reRender();
 
-                const tiles = root.container.querySelectorAll(".mx_EntityTile");
-                expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                await waitFor(() => {
+                    const tiles = root.container.querySelectorAll(".mx_EntityTile");
+                    expectOrderedByPresenceAndPowerLevel(memberListRoom, tiles, enablePresence);
+                });
             });
         });
     });

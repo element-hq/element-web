@@ -20,7 +20,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       </div>
       <button
         aria-labelledby="_r_7c_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -108,7 +108,22 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                  />
+                  <path
+                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                  />
+                </svg>
+              </div>
             </div>
           </p>
         </div>
@@ -129,13 +144,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         class="mx_UserInfo_container"
       >
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -147,13 +162,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Send message
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -166,14 +181,14 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           </svg>
         </button>
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26 _disabled_dyt4i_118"
+          class="_item_lqfwq_8 _interactive_lqfwq_26 _disabled_lqfwq_118"
           data-kind="primary"
           disabled=""
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -185,13 +200,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Jump to read receipt
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -204,13 +219,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           </svg>
         </button>
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -222,13 +237,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Share profile
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -245,13 +260,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         class="mx_UserInfo_container"
       >
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="critical"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -263,13 +278,13 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Ignore
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -307,7 +322,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
       </div>
       <button
         aria-labelledby="_r_7m_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -395,7 +410,22 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
                 tabindex="0"
-              />
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"
+                  />
+                  <path
+                    d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
+                  />
+                </svg>
+              </div>
             </div>
           </p>
         </div>
@@ -416,13 +446,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         class="mx_UserInfo_container"
       >
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -434,13 +464,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Send message
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -453,14 +483,14 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
           </svg>
         </button>
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26 _disabled_dyt4i_118"
+          class="_item_lqfwq_8 _interactive_lqfwq_26 _disabled_lqfwq_118"
           data-kind="primary"
           disabled=""
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -472,13 +502,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Jump to read receipt
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -491,13 +521,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
           </svg>
         </button>
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="primary"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -509,13 +539,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Share profile
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -532,13 +562,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         class="mx_UserInfo_container"
       >
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="critical"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -550,13 +580,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Deactivate user
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"
@@ -573,13 +603,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         class="mx_UserInfo_container"
       >
         <button
-          class="_item_dyt4i_8 _interactive_dyt4i_26"
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
           data-kind="critical"
           role="button"
         >
           <svg
             aria-hidden="true"
-            class="_icon_dyt4i_50"
+            class="_icon_lqfwq_50"
             fill="currentColor"
             height="24"
             viewBox="0 0 24 24"
@@ -591,13 +621,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             />
           </svg>
           <span
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
           >
             Ignore
           </span>
           <svg
             aria-hidden="true"
-            class="_nav-hint_dyt4i_59"
+            class="_nav-hint_lqfwq_59"
             fill="currentColor"
             height="24"
             viewBox="8 0 8 24"

@@ -10,11 +10,6 @@ Please see LICENSE files in the repository root for full details.
     height: 100px;
     overflow: visible;
 
-    /* Unset flex on the thread list, but not the thread view */
-    &:not(.mx_ThreadView) .mx_BaseCard_header .mx_BaseCard_header_title {
-        flex: unset;
-    }
-
     .mx_ThreadPanelHeader {
         height: 60px;
         display: flex;
@@ -47,16 +42,12 @@ Please see LICENSE files in the repository root for full details.
                 background: $quinary-content;
             }
 
-            &::before {
+            svg {
                 margin-left: 2px;
-                content: "";
-                width: 20px;
                 height: 20px;
-                background: currentColor;
-                mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-                mask-size: 100%;
-                mask-repeat: no-repeat;
-                float: right;
+                width: 20px;
+                display: inline-block;
+                vertical-align: bottom;
             }
         }
     }
@@ -181,25 +172,24 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &[aria-checked="true"] {
-            :first-child {
+            span:first-child {
                 margin-left: -20px;
             }
 
-            :first-child::before {
-                content: "";
+            svg {
                 width: 12px;
                 height: 12px;
                 margin-right: 8px;
-                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
-                mask-size: 100%;
-                mask-repeat: no-repeat;
-                background-color: $primary-content;
+                color: $primary-content;
                 display: inline-block;
                 vertical-align: middle;
+                position: absolute;
+                top: 14px;
+                left: 10px;
             }
         }
 
-        :last-child {
+        span:last-child {
             color: $secondary-content;
         }
     }

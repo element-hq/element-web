@@ -26,13 +26,16 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
             aria-haspopup="true"
             aria-label="Options"
             class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
+            data-state="closed"
+            id="radix-_r_0_"
             role="button"
             tabindex="0"
+            type="button"
           />
         </div>
         <button
-          aria-labelledby="_r_0_"
-          class="_icon-button_1pz9o_8"
+          aria-labelledby="_r_2_"
+          class="_icon-button_1215g_8"
           data-kind="secondary"
           data-testid="base-card-close-button"
           role="button"
@@ -173,8 +176,11 @@ exports[`AppTile for a pinned widget should render 1`] = `
           aria-haspopup="true"
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          data-state="closed"
+          id="radix-_r_1k_"
           role="button"
           tabindex="0"
+          type="button"
         >
           <svg
             class="mx_Icon mx_Icon_12"
@@ -286,8 +292,11 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           aria-haspopup="true"
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          data-state="closed"
+          id="radix-_r_30_"
           role="button"
           tabindex="0"
+          type="button"
         >
           <svg
             class="mx_Icon mx_Icon_12"
@@ -340,8 +349,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="_r_2f_"
-                aria-labelledby="_r_2e_"
+                aria-describedby="_r_33_"
+                aria-labelledby="_r_32_"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg
@@ -478,8 +487,11 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 aria-haspopup="true"
                 aria-label="Options"
                 class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                data-state="closed"
+                id="radix-_r_10_"
                 role="button"
                 tabindex="0"
+                type="button"
               >
                 <svg
                   class="mx_Icon mx_Icon_12"
@@ -511,13 +523,24 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                   Loading…
                 </div>
                  
-                <div
+                <svg
                   aria-label="Loading…"
-                  class="mx_Spinner_icon"
+                  class="_icon_11k6c_18"
                   data-testid="spinner"
+                  fill="currentColor"
+                  height="1em"
                   role="progressbar"
                   style="width: 32px; height: 32px;"
-                />
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                    fill-rule="evenodd"
+                  />
+                </svg>
               </div>
             </div>
           </div>

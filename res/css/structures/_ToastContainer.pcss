@@ -38,50 +38,26 @@ Please see LICENSE files in the repository root for full details.
         grid-template-columns: 22px 1fr;
         column-gap: 8px;
         row-gap: 4px;
+        align-items: center;
         padding: var(--cpd-space-3x);
 
         &.mx_Toast_hasIcon {
-            &::before,
-            &::after {
-                content: "";
+            svg {
                 width: 22px;
                 height: 22px;
                 grid-column: 1;
-                grid-row: 1;
-                mask-size: 100%;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                background-size: 100%;
-                background-repeat: no-repeat;
             }
 
-            &.mx_Toast_icon_verification::after {
-                mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
-                background-color: $primary-content;
-            }
-
-            &.mx_Toast_icon_verification_warning {
-                /* white infill for the hollow svg mask */
-                &::before {
-                    background-color: #ffffff;
-                    mask-image: url("@vector-im/compound-design-tokens/icons/lock-solid.svg");
-                    mask-size: 80%;
-                }
-
-                &::after {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/error-solid.svg");
-                    background-color: $e2e-warning-color;
-                }
-            }
-
-            &.mx_Toast_icon_key_storage::after {
-                mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
-                background-color: $primary-content;
-            }
-
-            .mx_Toast_title,
-            .mx_Toast_body {
+            .mx_Toast_title {
                 grid-column: 2;
+            }
+
+            .mx_Toast_body {
+                grid-column: 2 / 4;
+            }
+
+            .mx_Toast_closebutton {
+                grid-column: 3;
             }
         }
         &:not(.mx_Toast_hasIcon) {
@@ -109,13 +85,6 @@ Please see LICENSE files in the repository root for full details.
                 font: var(--cpd-font-body-lg-semibold);
                 display: inline;
                 width: auto;
-            }
-
-            .mx_Toast_title_countIndicator {
-                font-size: $font-12px;
-                line-height: $font-22px;
-                color: $secondary-content;
-                margin-inline-start: auto; /* on the end side of the div */
             }
         }
 

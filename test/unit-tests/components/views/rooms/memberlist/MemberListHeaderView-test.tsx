@@ -71,7 +71,7 @@ describe("MemberListHeaderView", () => {
             memberListRoom.currentState.members[newMember.userId] = newMember;
         }
         await reRender();
-        expect(screen.queryByPlaceholderText("Search room members")).toBeVisible();
+        await waitFor(() => expect(screen.queryByPlaceholderText("Search room members")).toBeVisible());
     });
 
     describe("Invite button functionality", () => {
@@ -84,7 +84,9 @@ describe("MemberListHeaderView", () => {
             jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(false);
             await reRender();
-            expect(screen.getByRole("button", { name: "Invite" })).toHaveAttribute("aria-disabled", "true");
+            await waitFor(() =>
+                expect(screen.getByRole("button", { name: "Invite" })).toHaveAttribute("aria-disabled", "true"),
+            );
         });
 
         it("Renders enabled invite button when current user is a member and has rights to invite", async () => {
@@ -92,7 +94,9 @@ describe("MemberListHeaderView", () => {
             jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
             await reRender();
-            expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true");
+            await waitFor(() =>
+                expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true"),
+            );
         });
 
         it("Opens room inviter on button click", async () => {
@@ -101,6 +105,7 @@ describe("MemberListHeaderView", () => {
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
             await reRender();
 
+            await waitFor(() => expect(screen.getByRole("button", { name: "Invite" })).not.toBeDisabled());
             fireEvent.click(screen.getByRole("button", { name: "Invite" }));
             expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                 action: "view_invite",

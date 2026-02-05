@@ -15,10 +15,11 @@ import {
     RoomViewLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Button } from "@vector-im/compound-web";
+import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { _t, UserFriendlyError } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import InviteReason from "../elements/InviteReason";
@@ -29,7 +30,6 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
-import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 import Field from "../elements/Field";
 import { ModuleApi } from "../../../modules/Api.ts";
 
@@ -112,7 +112,8 @@ interface IProps {
 interface IState {
     busy: boolean;
     accountEmails?: string[];
-    invitedEmailMxid?: string;
+    // The email address that was invited. undefined === not yet loaded, null === no associated email
+    invitedEmailMxid?: string | null;
     threePidFetchError?: MatrixError;
     reason?: string;
 }
@@ -165,10 +166,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                     this.props.invitedEmail,
                     identityAccessToken!,
                 );
-                if (!("mxid" in result)) {
-                    throw new UserFriendlyError("room|error_3pid_invite_email_lookup");
-                }
-                this.setState({ invitedEmailMxid: result.mxid });
+                this.setState({ invitedEmailMxid: result.mxid ?? null });
             } catch (err) {
                 this.setState({ threePidFetchError: err as MatrixError });
             }
@@ -212,7 +210,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
         }
 
         if (this.props.inviterName) {
-            if (this.props.invitedEmail) {
+            if (this.props.invitedEmail !== undefined) {
                 if (this.state.threePidFetchError) {
                     return MessageCase.OtherThreePIDError;
                 } else if (this.state.accountEmails && !this.state.accountEmails.includes(this.props.invitedEmail)) {
@@ -371,7 +369,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
                 if (this.props.previewLoading) {
                     footer = (
                         <div>
-                            <Spinner w={20} h={20} />
+                            <Spinner size={20} />
                             {_t("room|loading_preview")}
                         </div>
                     );
