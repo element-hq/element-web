@@ -108,7 +108,9 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
                 {displayName}
             </span>
             {displayIdentifier && (
-                <span className={classNames(className, styles.disambiguatedProfile_mxid)}>{displayIdentifier}</span>
+                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                    {displayIdentifier}
+                </span>
             )}
         </div>
     );
