@@ -121,7 +121,7 @@ export default defineConfig({
                         headless: true,
                         provider: playwright({
                             // These tests don't actually take screenshots (at least at time of writing)
-						    // but let's pass these options everywhere for consistency
+                            // but let's pass these options everywhere for consistency
                             contextOptions: commonContextOptions,
                             launchOptions: commonLaunchOptions,
                         }),
