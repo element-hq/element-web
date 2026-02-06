@@ -12,16 +12,6 @@
             "one": "1 ungelesene Erwähnung."
         },
         "recent_rooms": "Zuletzt besuchte Chats",
-        "room_messsage_not_sent": "Öffne den Chat „%(roomName)s” mit einer ungesendeten Nachricht.",
-        "room_n_unread_invite": "Offene Einladung zum Chat %(roomName)s",
-        "room_n_unread_messages": {
-            "one": "Chat %(roomName)s öffnen mit 1 ungelesenen Nachricht.",
-            "other": "Chat %(roomName)s öffnen mit %(count)s ungelesene Nachrichten."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Öffne den den Chat %(roomName)s mit 1 ungelesenen Erwähnung.",
-            "other": "Öffne den Chat %(roomName)s mit %(count)s ungelesenen Nachrichten einschließlich Erwähnungen."
-        },
         "room_name": "Chat %(name)s",
         "room_status_bar": "Chat-Statusleiste",
         "seek_bar_label": "Audio-Suchleiste",
@@ -1717,7 +1707,6 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
-        "default_settings": "Standardeinstellungen verwenden",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1736,8 +1725,7 @@
         "mentions_and_keywords_description": "Nur bei Erwähnungen und Schlüsselwörtern benachrichtigen, die du in den <a>Einstellungen</a> konfigurieren kannst",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
-        "mute_description": "Du wirst keine Benachrichtigungen erhalten",
-        "mute_room": "Chat stummschalten"
+        "mute_description": "Du wirst keine Benachrichtigungen erhalten"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -2153,37 +2141,9 @@
         "add_space_label": "Space hinzufügen",
         "breadcrumbs_empty": "Keine kürzlich besuchten Chats",
         "breadcrumbs_label": "Kürzlich besuchte Chats",
-        "collapse_filters": "Filterliste einklappen",
-        "empty": {
-            "no_chats": "Noch keine Chats",
-            "no_chats_description": "Leg los, indem du jemandem eine Nachricht schickst oder einen Chat erstellst",
-            "no_chats_description_no_room_rights": "Leg los, indem du jemandem eine Nachricht schickst",
-            "no_favourites": "Du hast noch keine Chats als Favorit markiert",
-            "no_favourites_description": "In den Chat Einstellungen kannst du einen Chat als Favorit markieren",
-            "no_invites": "Du hast keine ungelesenen Einladungen",
-            "no_lowpriority": "Du hast keine Chats mit niedriger Priorität.",
-            "no_mentions": "Du hast keine ungelesenen Erwähnungen",
-            "no_people": "Du hast noch keine Direktnachrichten",
-            "no_people_description": "Wähle Filter ab, um Chats zu sehen.",
-            "no_rooms": "Du bist noch in keinem Chat",
-            "no_rooms_description": "Wähle Filter ab, um Chats zu sehen.",
-            "no_unread": "Glückwunsch! Du hast keine ungelesenen Nachrichten.",
-            "show_activity": "Alle Aktivitäten ansehen",
-            "show_chats": "Alle Chats anzeigen"
-        },
-        "expand_filters": "Filterliste ausklappen",
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an den Chat",
         "failed_remove_tag": "Entfernen des Chat-Tags %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
-        "filters": {
-            "favourite": "Favoriten",
-            "invites": "Einladungen",
-            "low_priority": "Niedrige Priorität",
-            "mentions": "Erwähnungen",
-            "people": "Personen",
-            "rooms": "Gruppen",
-            "unread": "Ungelesen"
-        },
         "home_menu_label": "Startseiteneinstellungen",
         "join_public_room_label": "Öffentlichem Chat beitreten",
         "joining_rooms_status": {
@@ -2192,22 +2152,12 @@
         },
         "list_title": "Chatliste",
         "more_options": {
-            "copy_link": "Chatlink kopieren",
-            "favourited": "Favorisiert",
-            "leave_room": "Chat verlassen",
-            "low_priority": "Niedrige Priorität",
-            "mark_read": "Als gelesen markieren",
-            "mark_unread": "Als ungelesen markieren"
+            "leave_room": "Chat verlassen"
         },
         "notification_options": "Benachrichtigungsoptionen",
-        "primary_filters": "Filter für die Chatliste",
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Chat",
             "other": "Entferne Nachrichten in %(count)s Chats"
-        },
-        "room": {
-            "more_options": "Weitere Optionen",
-            "open_room": "Öffne Chat %(roomName)s"
         },
         "show_less": "Weniger anzeigen",
         "show_n_more": {

@@ -12,8 +12,6 @@
             "other": "%(count)s ulæste beskeder, herunder omtaler."
         },
         "recent_rooms": "Nylige rum",
-        "room_messsage_not_sent": "Åbent rum %(roomName)s med en usendt besked.",
-        "room_n_unread_invite": "Invitation til det åbne rum %(roomName)s.",
         "room_name": "Rum %(name)s",
         "room_status_bar": "Statusbjælke for rum",
         "seek_bar_label": "Progressionsmarkør for lydafspiller",
@@ -1844,15 +1842,9 @@
         "add_space_label": "Tilføj gruppe",
         "breadcrumbs_empty": "Ingen nyligt besøgte rum",
         "breadcrumbs_label": "Nyligt besøgte rum",
-        "empty": {
-            "no_rooms": "Du er ikke i noget rum endnu"
-        },
         "failed_add_tag": "Kunne ikke tilføje tag(s): %(tagName)s til gruppen",
         "failed_remove_tag": "Kunne ikke fjerne tag(s): %(tagName)s fra gruppen",
         "failed_set_dm_tag": "Kunne ikke indstille tagget til direkte beskeder",
-        "filters": {
-            "people": "Brugere"
-        },
         "home_menu_label": "Hjemmeindstillinger",
         "join_public_room_label": "Deltag i offentligt rum",
         "joining_rooms_status": {

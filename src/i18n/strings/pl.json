@@ -12,18 +12,6 @@
             "one": "1 nieprzeczytana wzmianka."
         },
         "recent_rooms": "Ostatnie pokoje",
-        "room_messsage_not_sent": "Otwórz pokój %(roomName)s z niewysłaną wiadomością.room",
-        "room_n_unread_invite": "Otwórz zaproszenie pokoju %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wiadomością.",
-            "few": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami.",
-            "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wzmianką.",
-            "few": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wzmiankami.",
-            "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wzmiankami."
-        },
         "room_name": "Pokój %(name)s",
         "room_status_bar": "Pasek stanu pokoju",
         "seek_bar_label": "Pasek wyszukiwania audio",
@@ -1695,7 +1683,6 @@
         "class_global": "Globalne",
         "class_other": "Inne",
         "default": "Domyślne",
-        "default_settings": "Ustawienia domyślne",
         "email_pusher_app_display_name": "Powiadomienia e-mail",
         "enable_prompt_toast_description": "Włącz powiadomienia na pulpicie",
         "enable_prompt_toast_title": "Powiadomienia",
@@ -1714,8 +1701,7 @@
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko z wzmiankami i słowami kluczowymi zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
         "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
-        "mute_description": "Nie otrzymasz żadnych powiadomień",
-        "mute_room": "Wycisz pokój"
+        "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s prosi o weryfikację"
@@ -2119,37 +2105,9 @@
         "add_space_label": "Dodaj przestrzeń",
         "breadcrumbs_empty": "Brak ostatnio odwiedzonych pokojów",
         "breadcrumbs_label": "Ostatnio odwiedzane pokoje",
-        "collapse_filters": "Zwiń listę filtrów",
-        "empty": {
-            "no_chats": "Nie ma jeszcze czatów",
-            "no_chats_description": "Zacznij od wysłania wiadomości lub utworzenia pokoju",
-            "no_chats_description_no_room_rights": "Wyślij komuś wiadomość, aby rozpocząć.",
-            "no_favourites": "Nie masz jeszcze ulubionego czatu",
-            "no_favourites_description": "Dodaj czat do ulubionych w ustawieniach czatu",
-            "no_invites": "Nie masz żadnych nieprzeczytanych zaproszeń",
-            "no_lowpriority": "Nie masz pokoi o niskim priorytecie",
-            "no_mentions": "Nie masz żadnych nieprzeczytanych wzmianek",
-            "no_people": "Nie prowadzisz jeszcze z nikim czatów prywatnych",
-            "no_people_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
-            "no_rooms": "Nie jesteś jeszcze w żadnym pokoju",
-            "no_rooms_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
-            "no_unread": "Brawo! Nie masz żadnych nieprzeczytanych wiadomości",
-            "show_activity": "Wyświetl całą aktywność",
-            "show_chats": "Pokaż wszystkie czaty"
-        },
-        "expand_filters": "Rozwiń listę filtrów",
         "failed_add_tag": "Nie można dodać tagu %(tagName)s do pokoju",
         "failed_remove_tag": "Nie udało się usunąć tagu %(tagName)s z pokoju",
         "failed_set_dm_tag": "Nie udało się ustawić tagu wiadomości prywatnych",
-        "filters": {
-            "favourite": "Ulubione",
-            "invites": "Zaproszenia",
-            "low_priority": "Niski priorytet",
-            "mentions": "Wzmianki",
-            "people": "Osoby",
-            "rooms": "Pokoje",
-            "unread": "Nieprzeczytane"
-        },
         "home_menu_label": "Opcje głównej",
         "join_public_room_label": "Dołącz do publicznego pokoju",
         "joining_rooms_status": {
@@ -2158,22 +2116,12 @@
         },
         "list_title": "Lista pokojów",
         "more_options": {
-            "copy_link": "Kopiuj link do pokoju",
-            "favourited": "Ulubione",
-            "leave_room": "Opuść pokój",
-            "low_priority": "Niski priorytet",
-            "mark_read": "Oznacz jako przeczytane",
-            "mark_unread": "Oznacz jako nieprzeczytane"
+            "leave_room": "Opuść pokój"
         },
         "notification_options": "Opcje powiadomień",
-        "primary_filters": "Filtry listy pomieszczeń",
         "redacting_messages_status": {
             "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
             "other": "Aktualnie usuwanie wiadomości z %(count)s pokoi"
-        },
-        "room": {
-            "more_options": "Więcej opcji",
-            "open_room": "Otwórz pokój %(roomName)s"
         },
         "show_less": "Pokaż mniej",
         "show_n_more": {
