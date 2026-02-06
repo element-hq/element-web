@@ -1052,7 +1052,6 @@
     "labs": {
         "automatic_debug_logs": "Senda atvikaskrár sjálfkrafa við allar villur",
         "automatic_debug_logs_decryption": "Senda atvikaskrár sjálfkrafa við afkóðunarvillur",
-        "automatic_debug_logs_key_backup": "Senda atvikaskrár sjálfkrafa þegar öryggisafrit dulritunarlykla virkar ekki",
         "beta_description": "Hvað er væntanlegt í %(brand)s? Að taka þátt í tilraunum gefur færi á að sjá nýja hluti fyrr, prófa nýja eiginleika og vera með í að móta þá áður en þeir fara í almenna notkun.",
         "beta_feature": "Þetta er beta-prófunareiginleiki",
         "beta_feedback_leave_button": "Til að hætta í beta-prófunarútgáfunni, skaltu fara í stillingarnar þínar.",

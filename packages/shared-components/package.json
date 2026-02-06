@@ -64,7 +64,7 @@
         "@element-hq/element-web-playwright-common": "2.2.5",
         "@fetch-mock/vitest": "^0.2.18",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
-        "@playwright/test": "1.57.0",
+        "@playwright/test": "1.58.1",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
         "@storybook/addon-docs": "^10.0.7",
