@@ -94,6 +94,9 @@ export default defineConfig({
                     storybookTest({
                         configDir: path.join(dirname, ".storybook"),
                         storybookScript: "storybook --ci",
+                        tags: {
+                            exclude: ["skip-test"],
+                        },
                     }),
                     storybookVis({
                         // 3px of difference allowed before marking as failed
