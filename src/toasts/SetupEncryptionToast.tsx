@@ -11,6 +11,7 @@ import React from "react";
 import { KeyIcon, ErrorSolidIcon, SettingsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { type ComponentType } from "react";
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
@@ -143,6 +144,7 @@ const getDescription = (state: DeviceStateForToast): string => {
  * @param state The state of the device
  */
 export const showToast = (state: DeviceStateForToast): void => {
+    const myLogger = logger.getChild(`SetupEncryptionToast[${state}]:`);
     if (
         ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
             kind: state as any,
@@ -161,6 +163,7 @@ export const showToast = (state: DeviceStateForToast): void => {
                     interactionType: "Pointer",
                     name: state === "set_up_recovery" ? "ToastSetUpRecoveryClick" : "ToastTurnOnKeyStorageClick",
                 });
+                myLogger.debug("Primary button clicked: opening encryption settings dialog");
                 // Open the user settings dialog to the encryption tab
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
@@ -170,9 +173,11 @@ export const showToast = (state: DeviceStateForToast): void => {
                 break;
             }
             case "verify_this_session":
+                myLogger.debug("Primary button clicked: opening SetupEncryptionDialog");
                 Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
                 break;
             case "key_storage_out_of_sync": {
+                myLogger.debug("Primary button clicked: starting recovery process");
                 const modal = Modal.createDialog(
                     Spinner,
                     undefined,
@@ -214,6 +219,7 @@ export const showToast = (state: DeviceStateForToast): void => {
                 break;
             }
             case "identity_needs_reset": {
+                myLogger.debug("Primary button clicked: opening encryption settings dialog");
                 // Open the user settings dialog to reset identity
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
@@ -236,6 +242,7 @@ export const showToast = (state: DeviceStateForToast): void => {
                     interactionType: "Pointer",
                     name: "ToastSetUpRecoveryDismiss",
                 });
+                myLogger.debug("Secondary button clicked: disabling recovery");
                 // Record that the user doesn't want to set up recovery
                 const deviceListener = DeviceListener.sharedInstance();
                 await deviceListener.recordRecoveryDisabled();
@@ -246,14 +253,14 @@ export const showToast = (state: DeviceStateForToast): void => {
                 // Open the user settings dialog to the encryption tab and start the flow to reset encryption or change the recovery key
                 const deviceListener = DeviceListener.sharedInstance();
                 const needsCrossSigningReset = await deviceListener.keyStorageOutOfSyncNeedsCrossSigningReset(true);
+                const props = {
+                    initialEncryptionState: needsCrossSigningReset ? "reset_identity_forgot" : "change_recovery_key",
+                };
+                myLogger.debug(`Secondary button clicked: opening encryption settings dialog with props`, props);
                 const payload: OpenToTabPayload = {
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.Encryption,
-                    props: {
-                        initialEncryptionState: needsCrossSigningReset
-                            ? "reset_identity_forgot"
-                            : "change_recovery_key",
-                    },
+                    props,
                 };
                 defaultDispatcher.dispatch(payload);
                 break;
@@ -272,6 +279,7 @@ export const showToast = (state: DeviceStateForToast): void => {
                 );
                 const [dismissed] = await modal.finished;
                 if (dismissed) {
+                    myLogger.debug("Secondary button clicked and confirmed: recording key storage disabled");
                     const deviceListener = DeviceListener.sharedInstance();
                     await deviceListener.recordKeyBackupDisabled();
                     deviceListener.dismissEncryptionSetup();
@@ -279,6 +287,7 @@ export const showToast = (state: DeviceStateForToast): void => {
                 break;
             }
             default:
+                myLogger.debug("Secondary button clicked: dismissing");
                 DeviceListener.sharedInstance().dismissEncryptionSetup();
         }
     };
@@ -292,20 +301,24 @@ export const showToast = (state: DeviceStateForToast): void => {
      */
     const onAccessSecretStorageFailed = async (error: Error): Promise<void> => {
         if (error instanceof AccessCancelledError) {
+            myLogger.debug("AccessSecretStorage failed: user cancelled");
             // The user cancelled the dialog - just allow it to close
         } else {
             // A real error happened - jump to the reset identity or change
             // recovery tab
             const needsCrossSigningReset =
                 await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset(true);
+            const props = {
+                initialEncryptionState: needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key",
+            };
+            myLogger.debug(
+                `AccessSecretStorage failed: ${error}. Opening encryption settings dialog with props: `,
+                props,
+            );
             const payload: OpenToTabPayload = {
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Encryption,
-                props: {
-                    initialEncryptionState: needsCrossSigningReset
-                        ? "reset_identity_sync_failed"
-                        : "change_recovery_key",
-                },
+                props,
             };
             defaultDispatcher.dispatch(payload);
         }

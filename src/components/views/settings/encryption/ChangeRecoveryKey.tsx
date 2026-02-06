@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type MouseEventHandler, useState } from "react";
+import React, { type JSX, type MouseEventHandler, useCallback, useState } from "react";
 import {
     Breadcrumb,
     Button,
@@ -20,6 +20,7 @@ import {
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
@@ -78,6 +79,11 @@ export function ChangeRecoveryKey({
     // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
     const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_change_flow" : "inform_user");
 
+    const onCancelClickWrapper = useCallback(() => {
+        logger.debug("ChangeRecoveryKey: user cancelled");
+        onCancelClick();
+    }, [onCancelClick]);
+
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
     // Waiting for the recovery key to be generated
@@ -90,7 +96,7 @@ export function ChangeRecoveryKey({
             content = (
                 <InformationPanel
                     onContinueClick={() => setState("save_key_setup_flow")}
-                    onCancelClick={onCancelClick}
+                    onCancelClick={onCancelClickWrapper}
                 />
             );
             break;
@@ -108,7 +114,7 @@ export function ChangeRecoveryKey({
                                 : "confirm_key_setup_flow",
                         )
                     }
-                    onCancelClick={onCancelClick}
+                    onCancelClick={onCancelClickWrapper}
                 />
             );
             break;
@@ -119,7 +125,7 @@ export function ChangeRecoveryKey({
                 <KeyForm
                     // encodedPrivateKey is always defined, the optional typing is incorrect
                     recoveryKey={recoveryKey.encodedPrivateKey!}
-                    onCancelClick={onCancelClick}
+                    onCancelClick={onCancelClickWrapper}
                     onSubmit={async () => {
                         const crypto = matrixClient.getCrypto();
                         if (!crypto) return onFinish();
@@ -132,6 +138,9 @@ export function ChangeRecoveryKey({
                             // keyStorageOutOfSyncNeedsBackupReset won't be able to check
                             // the backup state.
                             const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true);
+                            logger.debug(
+                                `ChangeRecoveryKey: user confirmed recovery key; now doing change. needsBackupReset: ${needsBackupReset}`,
+                            );
                             await deviceListener.whilePaused(async () => {
                                 // We need to enable the cache to avoid to prompt the user to enter the new key
                                 // when we will try to access the secret storage during the bootstrap
@@ -177,9 +186,9 @@ export function ChangeRecoveryKey({
         <>
             <Breadcrumb
                 backLabel={_t("action|back")}
-                onBackClick={onCancelClick}
+                onBackClick={onCancelClickWrapper}
                 pages={pages}
-                onPageClick={onCancelClick}
+                onPageClick={onCancelClickWrapper}
             />
             <EncryptionCard
                 Icon={KeyIcon}
