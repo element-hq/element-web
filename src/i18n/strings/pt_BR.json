@@ -12,16 +12,6 @@
             "one": "1 menção não lida."
         },
         "recent_rooms": "Salas recentes",
-        "room_messsage_not_sent": "Abra a sala %(roomName)s com uma mensagem não enviada.",
-        "room_n_unread_invite": "Abra o convite da sala %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Sala aberta %(roomName)s com 1 mensagem não lida.",
-            "other": "Sala aberta %(roomName)s com mensagens %(count)s não lidas."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Sala aberta %(roomName)s com 1 menção não lida.",
-            "other": "Sala aberta %(roomName)s com mensagens %(count)s não lidas, incluindo menções."
-        },
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de status da sala",
         "seek_bar_label": "Barra de busca de áudio",
@@ -1708,7 +1698,6 @@
         "class_global": "Global",
         "class_other": "Outros",
         "default": "Padrão",
-        "default_settings": "Corresponder às configurações padrão",
         "email_pusher_app_display_name": "Notificações por e-mail",
         "enable_prompt_toast_description": "Ativar notificações na área de trabalho",
         "enable_prompt_toast_title": "Notificações",
@@ -1727,8 +1716,7 @@
         "mentions_and_keywords_description": "Receba notificações apenas com menções e palavras-chave conforme definido em suas <a>configurações</a>",
         "mentions_keywords": "Menções e palavras-chave!",
         "message_didnt_send": "A mensagem não foi enviada. Clique para mais informações.",
-        "mute_description": "Você não receberá nenhuma notificação",
-        "mute_room": "Silenciar sala"
+        "mute_description": "Você não receberá nenhuma notificação"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s está solicitando confirmação"
@@ -2129,37 +2117,9 @@
         "add_space_label": "Adicionar espaço",
         "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
-        "collapse_filters": "Recolher lista de filtros",
-        "empty": {
-            "no_chats": "Ainda não há conversas.",
-            "no_chats_description": "Comece enviando uma mensagem para alguém ou criando uma sala",
-            "no_chats_description_no_room_rights": "Comece enviando uma mensagem para alguém",
-            "no_favourites": "Você ainda não tem o bate-papo favorito",
-            "no_favourites_description": "Você pode adicionar um bate-papo aos seus favoritos nas configurações de bate-papo",
-            "no_invites": "Você não tem nenhum convite não lido",
-            "no_lowpriority": "Você não tem nenhuma sala de baixa prioridade",
-            "no_mentions": "Você não tem nenhuma menção não lida",
-            "no_people": "Você ainda não tem conversas diretas com ninguém",
-            "no_people_description": "Você pode desmarcar os filtros para ver suas outras conversas",
-            "no_rooms": "Você não está em nenhuma sala ainda",
-            "no_rooms_description": "Você pode desmarcar os filtros para ver suas outras conversas.",
-            "no_unread": "Parabéns! Você não tem nenhuma mensagem não lida",
-            "show_activity": "Ver todas as atividades",
-            "show_chats": "Mostrar todas as conversas"
-        },
-        "expand_filters": "Expandir lista de filtros",
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_set_dm_tag": "Falha ao definir a marca de mensagem direta",
-        "filters": {
-            "favourite": "Favoritos",
-            "invites": "Convites",
-            "low_priority": "Baixa prioridade",
-            "mentions": "Menções",
-            "people": "Pessoas",
-            "rooms": "Salas",
-            "unread": "Não lido"
-        },
         "home_menu_label": "Opções do Início",
         "join_public_room_label": "Entrar na sala pública",
         "joining_rooms_status": {
@@ -2168,22 +2128,12 @@
         },
         "list_title": "Lista de salas",
         "more_options": {
-            "copy_link": "Copiar link da sala",
-            "favourited": "Favoritado",
-            "leave_room": "Sair da sala",
-            "low_priority": "Baixa prioridade",
-            "mark_read": "Marcar como lido",
-            "mark_unread": "Marcar como não lido"
+            "leave_room": "Sair da sala"
         },
         "notification_options": "Alterar notificações",
-        "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens em %(count)s sala",
             "other": "Atualmente removendo mensagens em %(count)s salas"
-        },
-        "room": {
-            "more_options": "Mais opções",
-            "open_room": "Abrir sala %(roomName)s"
         },
         "show_less": "Mostrar menos",
         "show_n_more": {
