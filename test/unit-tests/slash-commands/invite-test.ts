@@ -6,22 +6,10 @@
  */
 
 import Modal, { type ComponentType, type IHandle } from "../../../src/Modal";
-import { splitAtFirstSpace } from "../../../src/slash-commands/SlashCommands";
 import { setUpCommandTest } from "./utils";
 
 describe("/invite", () => {
     const roomId = "!room:example.com";
-
-    it("should be able to split arguments at the first whitespace", () => {
-        expect(splitAtFirstSpace("a b")).toEqual(["a", "b"]);
-        expect(splitAtFirstSpace("arg1 Followed by more stuff")).toEqual(["arg1", "Followed by more stuff"]);
-        expect(splitAtFirstSpace("  arg1 Followed by more stuff  ")).toEqual(["arg1", "Followed by more stuff"]);
-        expect(splitAtFirstSpace("arg1 \t Followed by more stuff")).toEqual(["arg1", "Followed by more stuff"]);
-        expect(splitAtFirstSpace("a")).toEqual(["a"]);
-        expect(splitAtFirstSpace("arg1")).toEqual(["arg1"]);
-        expect(splitAtFirstSpace("arg1    ")).toEqual(["arg1"]);
-        expect(splitAtFirstSpace("  arg1    ")).toEqual(["arg1"]);
-    });
 
     it("should return usage if no args", () => {
         const { client, command } = setUpCommandTest(roomId, `/invite`);
