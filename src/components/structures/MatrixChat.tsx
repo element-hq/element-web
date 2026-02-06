@@ -1793,8 +1793,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const crypto = cli.getCrypto();
         if (crypto) {
-            const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
-            crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
+            crypto.globalBlacklistUnverifiedDevices = SettingsStore.getValueAt(
+                SettingLevel.DEVICE,
+                "blacklistUnverifiedDevices",
+            );
+            SettingsStore.watchSetting(
+                "blacklistUnverifiedDevices",
+                null,
+                (_settingName, _roomId, _atLevel, blacklistEnabled: boolean) => {
+                    crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
+                },
+            );
         }
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
