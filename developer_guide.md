@@ -28,7 +28,6 @@ First clone and build `matrix-js-sdk`:
 ```bash
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
-pnpm link
 pnpm install
 popd
 ```
@@ -43,10 +42,15 @@ cd element-web
 Configure the app by copying `config.sample.json` to `config.json` and
 modifying it. See the [configuration docs](docs/config.md) for details.
 
+Set up your local development link by creating a `.link-config` file with contents like:
+
+```
+matrix-js-sdk=/path/to/matrix-js-sdk
+```
+
 Finally, build and start Element itself:
 
 ```bash
-pnpm link matrix-js-sdk
 pnpm install
 pnpm start
 ```

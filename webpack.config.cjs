@@ -204,7 +204,7 @@ module.exports = (env, argv) => {
             alias: {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
-                // using `pnpm link` / `yalc`.
+                // using linked dependencies.
                 "react": path.resolve(__dirname, "node_modules/react"),
                 "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 
