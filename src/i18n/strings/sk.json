@@ -14,18 +14,6 @@
             "other": "%(count)s neprečítaných správ vrátane zmienok."
         },
         "recent_rooms": "Nedávne miestnosti",
-        "room_messsage_not_sent": "Otvoriť miestnosť %(roomName)s s neodoslanou správou.",
-        "room_n_unread_invite": "Otvoriť pozvánku miestnosti %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Otvoriť miestnosť %(roomName)s s 1 neprečítanou správou.",
-            "few": "Otvoriť miestnosť %(roomName)s s %(count)s neprečítanými správami.",
-            "other": "Otvoriť miestnosť %(roomName)s s %(count)s neprečítanými správami."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Otvoriť miestnosť %(roomName)s s 1 neprečítanou zmienkou.",
-            "few": "Otvoriť miestnosť %(roomName)s s %(count)s neprečítanými správami vrátane zmienok.",
-            "other": "Otvoriť miestnosť %(roomName)s s %(count)s neprečítanými správami vrátane zmienok."
-        },
         "room_name": "Miestnosť %(name)s",
         "room_status_bar": "Stavový riadok miestnosti",
         "seek_bar_label": "Panel vyhľadávania zvuku",
@@ -1734,7 +1722,6 @@
         "class_global": "Celosystémové",
         "class_other": "Ďalšie",
         "default": "Predvolené",
-        "default_settings": "Zhoda s predvolenými nastaveniami",
         "email_pusher_app_display_name": "Emailové oznámenia",
         "enable_prompt_toast_description": "Povoliť oznámenia na ploche",
         "enable_prompt_toast_title": "Oznámenia",
@@ -1753,8 +1740,7 @@
         "mentions_and_keywords_description": "Dostávajte upozornenia len na zmienky a kľúčové slová nastavené vo vašich <a>nastaveniach</a>",
         "mentions_keywords": "Zmienky a kľúčové slová",
         "message_didnt_send": "Správa sa neodoslala. Kliknite pre informácie.",
-        "mute_description": "Nebudete dostávať žiadne oznámenia",
-        "mute_room": "Stlmiť miestnosť"
+        "mute_description": "Nebudete dostávať žiadne oznámenia"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s žiada o overenie"
@@ -2184,37 +2170,9 @@
         "add_space_label": "Pridať priestor",
         "breadcrumbs_empty": "Žiadne nedávno navštívené miestnosti",
         "breadcrumbs_label": "Nedávno navštívené miestnosti",
-        "collapse_filters": "Zbaliť zoznam filtrov",
-        "empty": {
-            "no_chats": "Zatiaľ žiadne konverzácie",
-            "no_chats_description": "Začnite tým, že niekomu napíšete správu alebo vytvoríte miestnosť",
-            "no_chats_description_no_room_rights": "Začnite tým, že niekomu napíšete správu",
-            "no_favourites": "Zatiaľ nemáte obľúbenú konverzáciu",
-            "no_favourites_description": "V nastaveniach konverzácií môžete pridať konverzáciu medzi obľúbené",
-            "no_invites": "Nemáte žiadne neprečítané pozvánky",
-            "no_lowpriority": "Nemáte žiadne miestnosti s nízkou prioritou",
-            "no_mentions": "Nemáte žiadne neprečítané zmienky",
-            "no_people": "Zatiaľ s nikým nemáte priame konverzácie",
-            "no_people_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
-            "no_rooms": "Zatiaľ ešte nie ste v žiadnej miestnosti",
-            "no_rooms_description": "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie",
-            "no_unread": "Gratulujeme! Nemáte žiadne neprečítané správy",
-            "show_activity": "Zobraziť všetku aktivitu",
-            "show_chats": "Zobraziť všetky konverzácie"
-        },
-        "expand_filters": "Rozbaliť zoznam filtrov",
         "failed_add_tag": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
         "failed_remove_tag": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
         "failed_set_dm_tag": "Nepodarilo sa nastaviť značku priamej správy",
-        "filters": {
-            "favourite": "Obľúbené",
-            "invites": "Pozvánky",
-            "low_priority": "Nízka priorita",
-            "mentions": "Zmienky",
-            "people": "Ľudia",
-            "rooms": "Miestnosti",
-            "unread": "Neprečítané"
-        },
         "home_menu_label": "Možnosti domovskej obrazovky",
         "join_public_room_label": "Pripojiť sa k verejnej miestnosti",
         "joining_rooms_status": {
@@ -2224,23 +2182,13 @@
         },
         "list_title": "Zoznam miestností",
         "more_options": {
-            "copy_link": "Kopírovať odkaz na miestnosť",
-            "favourited": "Obľúbené",
-            "leave_room": "Opustiť miestnosť",
-            "low_priority": "Nízka priorita",
-            "mark_read": "Označiť ako prečítané",
-            "mark_unread": "Označiť ako neprečítané"
+            "leave_room": "Opustiť miestnosť"
         },
         "notification_options": "Možnosti oznámenia",
-        "primary_filters": "Filtre zoznamu miestností",
         "redacting_messages_status": {
             "one": "V súčasnosti sa odstraňujú správy v %(count)s miestnosti",
             "few": "V súčasnosti sa odstraňujú správy v %(count)s miestnostiach",
             "other": "V súčasnosti sa odstraňujú správy v %(count)s miestnostiach"
-        },
-        "room": {
-            "more_options": "Viac možností",
-            "open_room": "Otvoriť miestnosť %(roomName)s"
         },
         "show_less": "Zobraziť menej",
         "show_n_more": {
