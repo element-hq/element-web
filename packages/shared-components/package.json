@@ -39,7 +39,7 @@
         "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "test:unit": "vitest --project=unit",
-        "test:storybook": "yarn build:doc && vitest --project=storybook",
+        "test:storybook": "pnpm build:doc && vitest --project=storybook",
         "test:storybook:update": "playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules",
         "prepare": "vite build",
         "storybook": "storybook dev -p 6007",

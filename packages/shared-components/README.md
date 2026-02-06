@@ -298,7 +298,7 @@ export const Docs = {
 
 1. Write TsDoc in your utility function
 2. Export the function from `src/index.ts`
-3. Run `yarn build:doc` to generate TypeDoc markdown
+3. Run `pnpm build:doc` to generate TypeDoc markdown
 4. Create a `.stories.tsx` file importing the generated markdown
 5. The documentation appears automatically in Storybook
 

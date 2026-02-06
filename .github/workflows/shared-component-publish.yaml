@@ -29,12 +29,12 @@ jobs:
 
             # Need to setup element web too as it needs the translations
             - name: 🛠️ Setup EW
-              run: pnpm install --pure-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: 🛠️ Setup
               # When running `install` it also calls the `prepare` step which generates
               # a build
-              run: pnpm --dir packages/shared-components install --pure-lockfile
+              run: pnpm --dir packages/shared-components install --frozen-lockfile
 
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
