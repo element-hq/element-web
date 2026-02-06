@@ -909,12 +909,21 @@ Commands.forEach((cmd) => {
     });
 });
 
+/**
+ * If the supplied input starts with "/<command>", returns an object with these
+ * properties:
+ *
+ * cmd - the string following the / up to some whitespace
+ * args - the string (if any) after first whitespace
+ *
+ * If not, returns {}
+ */
 export function parseCommandString(input: string): { cmd?: string; args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for IRC-style commands
-    input = input.trimEnd();
+    input = input.trim();
     if (!input.startsWith("/")) return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?:\s+((.|\n)*))?$/);
     let cmd: string;
     let args: string | undefined;
     if (bits) {

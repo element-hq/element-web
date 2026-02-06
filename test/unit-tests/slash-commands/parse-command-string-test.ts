@@ -13,10 +13,10 @@ describe("parseCommandString", () => {
         expect(parseCommandString("/cmd And more stuff")).toEqual({ cmd: "cmd", args: "And more stuff" });
         expect(parseCommandString("/cmd And more stuff")).toEqual({ cmd: "cmd", args: "And more stuff" });
         expect(parseCommandString("/cmd And more\nstuff")).toEqual({ cmd: "cmd", args: "And more\nstuff" });
-        //expect(parseCommandString("/cmd \t\n And more stuff")).toEqual({ cmd: "cmd", args: "And more stuff" });
+        expect(parseCommandString("/cmd \t\n And more stuff")).toEqual({ cmd: "cmd", args: "And more stuff" });
         expect(parseCommandString("/a")).toEqual({ cmd: "a" });
         expect(parseCommandString("/cmd")).toEqual({ cmd: "cmd" });
         expect(parseCommandString("/cmd    ")).toEqual({ cmd: "cmd" });
-        //expect(parseCommandString("  /cmd    ")).toEqual({ cmd: "cmd" });
+        expect(parseCommandString("  /cmd    ")).toEqual({ cmd: "cmd" });
     });
 });
