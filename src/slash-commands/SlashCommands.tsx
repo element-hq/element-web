@@ -60,6 +60,7 @@ import { Command } from "./command";
 import { goto, join } from "./join";
 import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import upgraderoom from "./upgraderoom/upgraderoom";
+import { emoticon } from "./emoticon";
 
 export { CommandCategories, Command };
 
@@ -73,58 +74,10 @@ export const Commands = [
         },
         category: CommandCategories.messages,
     }),
-    new Command({
-        command: "shrug",
-        args: "<message>",
-        description: _td("slash_command|shrug"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "¯\\_(ツ)_/¯";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
-    new Command({
-        command: "tableflip",
-        args: "<message>",
-        description: _td("slash_command|tableflip"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "(╯°□°）╯︵ ┻━┻";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
-    new Command({
-        command: "unflip",
-        args: "<message>",
-        description: _td("slash_command|unflip"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "┬──┬ ノ( ゜-゜ノ)";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
-    new Command({
-        command: "lenny",
-        args: "<message>",
-        description: _td("slash_command|lenny"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "( ͡° ͜ʖ ͡°)";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
+    emoticon("shrug", _td("slash_command|shrug"), "¯\\_(ツ)_/¯"),
+    emoticon("tableflip", _td("slash_command|tableflip"), "(╯°□°）╯︵ ┻━┻"),
+    emoticon("unflip", _td("slash_command|unflip"), "┬──┬ ノ( ゜-゜ノ)"),
+    emoticon("lenny", _td("slash_command|lenny"), "( ͡° ͜ʖ ͡°)"),
     new Command({
         command: "plain",
         args: "<message>",
