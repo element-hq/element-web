@@ -65,10 +65,10 @@ interface IProps {
     width?: number; // width of the image src in pixels
     height?: number; // height of the image src in pixels
     fileSize?: number; // size of the image src in bytes
-    onPrev?(): void;
-    onNext?(): void;
-    hasPrev?: boolean;
-    hasNext?: boolean;
+    onPrev?(): void; // navigate to the previous image, if available
+    onNext?(): void; // navigate to the next image, if available
+    /*hasPrev?: boolean;
+    hasNext?: boolean;*/
 
     // the event (if any) that the Image is displaying. Used for event-specific stuff like
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
@@ -389,13 +389,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         if (tag === "input" || tag === "textarea" || (target as any)?.isContentEditable) return;
 
         // Navigate images with arrow keys
-        if (ev.key === "ArrowLeft" && this.props.onPrev && this.props.hasPrev) {
+        if (ev.key === "ArrowLeft" && this.props.onPrev) {
             ev.preventDefault();
             ev.stopPropagation();
             this.props.onPrev();
             return;
         }
-        if (ev.key === "ArrowRight" && this.props.onNext && this.props.hasNext) {
+        if (ev.key === "ArrowRight" && this.props.onNext) {
             ev.preventDefault();
             ev.stopPropagation();
             this.props.onNext();
@@ -707,7 +707,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                     onMouseUp={this.onEndMoving}
                     onMouseLeave={this.onEndMoving}
                 >
-                    {this.props.hasPrev && this.props.onPrev && (
+                    {this.props.onPrev && (
                         <AccessibleButton
                             className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_prev"
                             title={_t("action|back")}
@@ -717,7 +717,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                             <ChevronLeftIcon />
                         </AccessibleButton>
                     )}
-                    {this.props.hasNext && this.props.onNext && (
+                    {this.props.onNext && (
                         <AccessibleButton
                             className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_next"
                             title={_t("action|next")}

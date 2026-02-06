@@ -145,14 +145,7 @@ describe("<ImageView />", () => {
         const onNext = jest.fn();
 
         const { container } = render(
-            <ImageView
-                src="https://example.com/image.png"
-                onFinished={jest.fn()}
-                hasPrev={true}
-                hasNext={true}
-                onPrev={onPrev}
-                onNext={onNext}
-            />,
+            <ImageView src="https://example.com/image.png" onFinished={jest.fn()} onPrev={onPrev} onNext={onNext} />,
         );
 
         const prevBtn = container.querySelector(".mx_ImageView_nav_prev") as HTMLElement;
@@ -176,10 +169,8 @@ describe("<ImageView />", () => {
             <ImageView
                 src="https://example.com/image.png"
                 onFinished={jest.fn()}
-                hasPrev={true}
-                hasNext={false}
                 onPrev={onPrev}
-                onNext={onNext}
+                onNext={undefined} // no "next" available initially
             />,
         );
 
@@ -196,10 +187,8 @@ describe("<ImageView />", () => {
             <ImageView
                 src="https://example.com/image.png"
                 onFinished={jest.fn()}
-                hasPrev={true}
-                hasNext={true}
                 onPrev={onPrev}
-                onNext={onNext}
+                onNext={onNext} // now "next" is available
             />,
         );
 
@@ -249,5 +238,41 @@ describe("<ImageView />", () => {
         expect(setStateSpy).toHaveBeenCalled();
 
         setStateSpy.mockRestore();
+    });
+
+    it("zooms in and out via toolbar buttons after image load", async () => {
+        const { container, getByRole } = render(
+            <ImageView src="https://example.com/image.png" onFinished={jest.fn()} />,
+        );
+
+        const wrapper = container.querySelector(".mx_ImageView_image_wrapper") as HTMLDivElement;
+        const img = container.querySelector("img.mx_ImageView_image") as HTMLImageElement;
+
+        expect(wrapper).toBeTruthy();
+        expect(img).toBeTruthy();
+
+        Object.defineProperty(wrapper, "clientWidth", { value: 800, configurable: true });
+        Object.defineProperty(wrapper, "clientHeight", { value: 600, configurable: true });
+
+        Object.defineProperty(img, "naturalWidth", { value: 1600, configurable: true });
+        Object.defineProperty(img, "naturalHeight", { value: 1200, configurable: true });
+
+        fireEvent.load(img);
+
+        const zoomIn = getByRole("button", { name: "Zoom in" });
+        const zoomOut = getByRole("button", { name: "Zoom out" });
+
+        const initialTransform = img.style.transform;
+        expect(initialTransform).toContain("scale(");
+
+        fireEvent.click(zoomIn);
+        const afterZoomIn = img.style.transform;
+        expect(afterZoomIn).toContain("scale(");
+        expect(afterZoomIn).not.toEqual(initialTransform);
+
+        fireEvent.click(zoomOut);
+        const afterZoomOut = img.style.transform;
+        expect(afterZoomOut).toContain("scale(");
+        expect(afterZoomOut).not.toEqual(afterZoomIn);
     });
 });

@@ -1,5 +1,5 @@
 /*
-Copyright 2026
+Copyright 2026 Johannes Camp jcamp@gmx.de
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -22,8 +22,8 @@ jest.mock("../../../../../src/components/views/elements/ImageView", () => {
             <div>
                 <div data-testid="name">{props.name}</div>
                 <div data-testid="src">{props.src}</div>
-                <div data-testid="hasPrev">{String(Boolean(props.hasPrev))}</div>
-                <div data-testid="hasNext">{String(Boolean(props.hasNext))}</div>
+                <div data-testid="hasPrev">{String(Boolean(props.onPrev))}</div>
+                <div data-testid="hasNext">{String(Boolean(props.onNext))}</div>
 
                 <button onClick={() => props.onPrev?.()}>prev</button>
                 <button onClick={() => props.onNext?.()}>next</button>

@@ -1,5 +1,5 @@
 /*
-Copyright 2026
+Copyright 2026 Johannes Camp jcamp@gmx.de
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -14,6 +14,7 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { isMimeTypeAllowed } from "../../../utils/blobs";
 
 type Props = Readonly<{
     initialEvent: MatrixEvent;
@@ -32,8 +33,18 @@ type Props = Readonly<{
 function isImageEvent(ev: MatrixEvent): boolean {
     if (!ev || ev.isRedacted()) return false;
     if (ev.getType() !== EventType.RoomMessage) return false;
+
     const c = ev.getContent<ImageContent>();
     return c?.msgtype === MsgType.Image;
+
+    // We use the security fallback from MImageBody: some events claim to be images but must be rendered as files.
+    // Encrypted events use file, if the mimetype is not allowed and no safe thumbnail, MImageBody
+    // falls back to MFileBody, so we should not include them in image navigation.
+    const isEncrypted = Boolean((c as any)?.file);
+    const mimetype = c.info?.mimetype ?? "";
+    const hasThumbnail = Boolean(c.info?.thumbnail_info);
+
+    if (isEncrypted && !isMimeTypeAllowed(mimetype) && !hasThumbnail) return false;
 }
 
 function eventToName(ev: MatrixEvent): string {
@@ -149,12 +160,27 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
     const paginateBackwards = useCallback(async (): Promise<boolean> => {
         if (!timeline || isPaginating || !canPaginateBackwards) return false;
-
         setIsPaginating(true);
         try {
+            const before = (timeline.getEvents?.() as MatrixEvent[] | undefined) ?? [];
+            const beforeLen = before.length;
+            const beforeOldestId = before[0]?.getId() ?? null;
+
             const ok = await client.paginateEventTimeline(timeline, { backwards: true, limit: 50 });
-            setCanPaginateBackwards(Boolean(ok));
-            return Boolean(ok);
+
+            const after = (timeline.getEvents?.() as MatrixEvent[] | undefined) ?? [];
+            const afterLen = after.length;
+            const afterOldestId = after[0]?.getId() ?? null;
+
+            // Progress if we got more events OR the oldest event changed (window shifted)
+            const progressed =
+                afterLen > beforeLen ||
+                (beforeOldestId !== null && afterOldestId !== null && afterOldestId !== beforeOldestId);
+
+            const canContinue = ok === true && progressed;
+
+            setCanPaginateBackwards(canContinue);
+            return canContinue;
         } finally {
             setIsPaginating(false);
         }
@@ -202,6 +228,12 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
             const refreshed = computeImageEventsFromTimeline(timeline, props.initialEvent);
             const newIndex = refreshed.findIndex((e) => e.getId() === curId);
 
+            // If the currently-viewed event has fallen out of the timeline window, don't
+            // replace images. Try paginating more / let the user retry.
+            if (newIndex === -1) {
+                continue; // try another page
+            }
+
             setImages(refreshed);
 
             if (newIndex > 0) {
@@ -213,6 +245,9 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
             // else newIndex === 0: still no earlier image, paginate again
         }
 
+        if (!canPaginateBackwards) {
+            setAtStartOfRoomImages(true);
+        }
         // We paginated a few pages but didn't find an earlier image yet.
         // Leave state unchanged; another click can paginate further if needed.
     }, [
@@ -240,7 +275,6 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
     useEffect(() => {
         let cancelled = false;
-        const controller = new AbortController();
 
         // Destroy previous helper
         helperRef.current?.destroy();
@@ -249,8 +283,15 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
         (async () => {
             try {
+                const content = currentEvent.getContent<ImageContent>();
+                const mimetype = content?.info?.mimetype ?? "";
+                const isEncrypted = Boolean((content as any)?.file);
+
+                // If the event is encrypted and the mimetype is not allowed, prefer the thumbnail URL first.
                 const resolved =
-                    (await helper.sourceUrl.value) ?? (await helper.thumbnailUrl.value) ?? props.initialSrc;
+                    isEncrypted && !isMimeTypeAllowed(mimetype)
+                        ? ((await helper.thumbnailUrl.value) ?? (await helper.sourceUrl.value) ?? props.initialSrc)
+                        : ((await helper.sourceUrl.value) ?? (await helper.thumbnailUrl.value) ?? props.initialSrc);
 
                 if (!cancelled) {
                     setSrc(resolved);
@@ -264,7 +305,6 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
         return () => {
             cancelled = true;
-            controller.abort();
             helper.destroy();
             if (helperRef.current === helper) helperRef.current = null;
         };
@@ -284,10 +324,8 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
                 helperRef.current = null;
                 props.onFinished();
             }}
-            hasPrev={hasPrev}
-            hasNext={hasNext}
-            onPrev={onPrev}
-            onNext={onNext}
+            onPrev={hasPrev ? onPrev : undefined}
+            onNext={hasNext ? onNext : undefined}
         />
     );
 }
