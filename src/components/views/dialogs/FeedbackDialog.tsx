@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useEffect, useRef, useState } from "react";
-import { ChatSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ChatSolidIcon, BugIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import QuestionDialog from "./QuestionDialog";
 import { _t } from "../../../languageHandler";
@@ -20,7 +20,6 @@ import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import ExternalLink from "../elements/ExternalLink";
-import { Icon as BugIcon } from "../../../../res/img/feather-customised/bug.svg";
 
 interface IProps {
     feature?: string;
@@ -46,6 +45,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     const onFinished = (sendFeedback: boolean): void => {
         if (hasFeedback && sendFeedback) {
             const label = props.feature ? `${props.feature}-feedback` : "feedback";
+            // TODO: Handle rejection.
             submitFeedback(label, comment, canContact);
 
             Modal.createDialog(InfoDialog, {

@@ -12,7 +12,7 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 import { ErrorSolidIcon, ShieldIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 
@@ -38,9 +38,9 @@ interface Props {
 }
 
 const icons: Record<E2EStatus, JSX.Element> = {
-    [E2EStatus.Warning]: <ErrorSolidIcon className="mx_E2EIcon_warning" />,
-    [E2EStatus.Normal]: <LockSolidIcon className="mx_E2EIcon_normal" />,
-    [E2EStatus.Verified]: <ShieldIcon className="mx_E2EIcon_verified" />,
+    [E2EStatus.Warning]: <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />,
+    [E2EStatus.Normal]: <LockSolidIcon color="var(--cpd-color-icon-tertiary)" />,
+    [E2EStatus.Verified]: <ShieldIcon color="var(--cpd-color-icon-success-primary)" />,
 };
 
 const E2EIcon: React.FC<Props> = ({ isUser, status, className, size, onClick, hideTooltip, tooltipPlacement }) => {

@@ -138,17 +138,16 @@ Please see LICENSE files in the repository root for full details.
                 .mx_FacePile {
                     display: inline-block;
                     cursor: pointer;
+                    /* For enhanced visibility under contrast control */
+                    outline: 1px solid transparent;
                 }
 
                 .mx_SpaceRoomView_landing_inviteButton,
                 .mx_SpaceRoomView_landing_settingsButton {
                     position: relative;
 
-                    &::before {
+                    svg {
                         position: absolute;
-                        content: "";
-                        mask-position: center;
-                        mask-repeat: no-repeat;
                     }
                 }
 
@@ -156,13 +155,11 @@ Please see LICENSE files in the repository root for full details.
                     padding: 4px 18px 4px 40px;
                     height: min-content;
 
-                    &::before {
+                    svg {
                         left: 8px;
                         height: 16px;
                         width: 16px;
-                        background: var(--cpd-color-icon-on-solid-primary);
-                        mask-size: 16px;
-                        mask-image: url("@vector-im/compound-design-tokens/icons/user-add.svg");
+                        color: var(--cpd-color-icon-on-solid-primary);
                     }
                 }
 
@@ -170,14 +167,12 @@ Please see LICENSE files in the repository root for full details.
                     width: 24px;
                     height: 24px;
 
-                    &::before {
+                    svg {
                         left: 0;
                         top: 0;
                         height: 24px;
                         width: 24px;
-                        background: $tertiary-content;
-                        mask-size: contain;
-                        mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
+                        color: $tertiary-content;
                     }
                 }
             }
@@ -207,33 +202,21 @@ Please see LICENSE files in the repository root for full details.
                 display: inline-block;
                 padding-left: 32px;
                 line-height: 24px; /* to center icons */
+                color: var(--cpd-color-text-primary);
+                font-weight: var(--cpd-font-weight-semibold);
+                text-decoration: underline;
 
-                &::before {
-                    content: "";
+                svg {
                     position: absolute;
                     height: 24px;
                     width: 24px;
                     top: 0;
                     left: 0;
-                    background-color: $secondary-content;
-                    mask-repeat: no-repeat;
-                    mask-position: center;
-                    mask-size: contain;
+                    color: var(--cpd-color-icon-primary);
                 }
 
                 & + .mx_AccessibleButton {
                     margin-left: 32px;
-                }
-            }
-
-            .mx_SpaceRoomView_inviteTeammates_inviteDialogButton {
-                color: var(--cpd-color-text-primary);
-                font-weight: var(--cpd-font-weight-semibold);
-                text-decoration: underline;
-
-                &::before {
-                    mask-image: url("@vector-im/compound-design-tokens/icons/user-add.svg");
-                    background-color: var(--cpd-color-icon-primary);
                 }
             }
         }

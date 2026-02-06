@@ -8,10 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { getNameForEventRoom, userLabelForEventRoom } from "../../../utils/KeyVerificationStateObserver";
-import EventTileBubble from "./EventTileBubble";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 interface Props {
@@ -73,12 +74,12 @@ const MKeyVerificationRequest: React.FC<Props> = ({ mxEvent, timestamp }) => {
 
     return (
         <EventTileBubble
-            className="mx_cryptoEvent mx_cryptoEvent_icon"
+            icon={<LockSolidIcon />}
+            className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
             title={title}
             subtitle={subtitle}
-            timestamp={timestamp}
         >
-            <></>
+            {timestamp}
         </EventTileBubble>
     );
 };

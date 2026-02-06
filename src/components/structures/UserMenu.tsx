@@ -15,6 +15,8 @@ import {
     QrCodeIcon,
     SettingsSolidIcon,
     LeaveIcon,
+    NotificationsSolidIcon,
+    ThemeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -50,8 +52,6 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
-import { Icon as DarkLightModeSvg } from "../../../res/img/element-icons/roomlist/dark-light-mode.svg";
-import { Icon as NotificationsIcon } from "../../../res/img/element-icons/notifications.svg";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -337,7 +337,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 {homeButton}
                 {linkNewDeviceButton}
                 <IconizedContextMenuOption
-                    icon={<NotificationsIcon />}
+                    icon={<NotificationsSolidIcon />}
                     label={_t("notifications|enable_prompt_toast_title")}
                     onClick={(e) => this.onSettingsOpen(e, UserTab.Notifications)}
                 />
@@ -407,7 +407,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 : _t("user_menu|switch_theme_dark")
                         }
                     >
-                        <DarkLightModeSvg width="16px" height="16px" />
+                        <ThemeIcon width="16px" height="16px" />
                     </RovingAccessibleButton>
                 </div>
                 {topSection}

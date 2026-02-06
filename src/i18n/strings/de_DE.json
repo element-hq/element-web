@@ -12,16 +12,6 @@
             "one": "1 ungelesene Erwähnung."
         },
         "recent_rooms": "Zuletzt besuchte Chats",
-        "room_messsage_not_sent": "Öffne den Chat „%(roomName)s” mit einer ungesendeten Nachricht.",
-        "room_n_unread_invite": "Offene Einladung zum Chat %(roomName)s",
-        "room_n_unread_messages": {
-            "one": "Chat %(roomName)s öffnen mit 1 ungelesenen Nachricht.",
-            "other": "Chat %(roomName)s öffnen mit %(count)s ungelesene Nachrichten."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Öffne den den Chat %(roomName)s mit 1 ungelesenen Erwähnung.",
-            "other": "Öffne den Chat %(roomName)s mit %(count)s ungelesenen Nachrichten einschließlich Erwähnungen."
-        },
         "room_name": "Chat %(name)s",
         "room_status_bar": "Chat-Statusleiste",
         "seek_bar_label": "Audio-Suchleiste",
@@ -99,10 +89,7 @@
         "no": "Nein",
         "ok": "Ok",
         "open": "Öffnen",
-        "open_menu": "Menu öffnen",
-        "pause": "Pausieren",
         "pin": "Anheften",
-        "play": "Abspielen",
         "proceed": "Fortfahren",
         "quote": "Zitieren",
         "react": "Reagieren",
@@ -578,6 +565,7 @@
         "someone": "Jemand",
         "space": "Space",
         "spaces": "Spaces",
+        "state_encryption_enabled": "Experimentelle State-Encryption aktiviert",
         "sticker": "Sticker",
         "stickerpack": "Sticker-Paket",
         "success": "Erfolg",
@@ -603,6 +591,7 @@
         "video": "Video",
         "video_room": "Videochat",
         "view_message": "Nachricht anzeigen",
+        "voice": "Sprachanruf",
         "warning": "Warnung"
     },
     "composer": {
@@ -684,6 +673,8 @@
         "join_rule_restricted_label": "Mitglieder von <SpaceName/> können diesen Chat finden und ihm beitreten.",
         "name_validation_required": "Bitte gib einen Namen für den Chat ein",
         "room_visibility_label": "Chat Sichtbarkeit",
+        "state_encrypted_warning": "Aktiviert die experimentelle Unterstützung für die Verschlüsselung von State-Events, wodurch Metadaten wie Raumnamen und -themen vor dem Server verborgen werden. Diese Metadaten werden auch vor neuen Mitgliedern von Gruppen verborgen, die der Gruppe erst später beitreten. Außerdem werden die Daten vor Nutzern verborgen, deren Apps MSC4362 nicht unterstützen.",
+        "state_encryption_label": "State-Events verschlüsseln",
         "title_private_room": "Erstelle einen privaten Chat",
         "title_public_room": "Erstelle einen öffentlichen Chat",
         "title_video_room": "Videochat erstellen",
@@ -844,6 +835,7 @@
         "number_of_users": "Benutzeranzahl",
         "only_joined_members": "Nur Mitglieder",
         "original_event_source": "Ursprüngliche Rohdaten",
+        "restore_from_backup": "Von Sicherung wiederherstellen",
         "room_encrypted": "Chat ist <strong>verschlüsselt ✅</strong>",
         "room_id": "Chat-ID: %(roomId)s",
         "room_not_encrypted": "Chat ist <strong>nicht verschlüsselt 🚨</strong>",
@@ -953,6 +945,7 @@
         "bootstrap_title": "Schlüssel werden eingerichtet",
         "confirm_encryption_setup_body": "Klick die Schaltfläche unten um die Einstellungen der Verschlüsselung zu bestätigen.",
         "confirm_encryption_setup_title": "Bestätige die Einrichtung der Verschlüsselung",
+        "continue_with_reset": "Mit dem Zurücksetzen fortfahren",
         "cross_signing_room_normal": "Dieser Chat ist Ende-zu-Ende verschlüsselt",
         "cross_signing_room_verified": "Alle in diesem Chat sind verifiziert",
         "cross_signing_room_warning": "Jemand verwendet eine unbekannte Sitzung",
@@ -968,10 +961,12 @@
         "event_shield_reason_unverified_identity": "Durch einen nicht verifizierten Benutzer verschlüsselt.",
         "export_unsupported": "Dein Browser unterstützt die benötigten Verschlüsselungserweiterungen nicht",
         "forgot_recovery_key": "Wiederherstellungsschlüssel vergessen?",
+        "identity_needs_reset_description": "Du musst deine kryptografische Identität zurücksetzen, um den Zugriff auf deinen Nachrichtenverlauf sicherzustellen.",
         "import_invalid_keyfile": "Keine gültige %(brand)s-Schlüsseldatei",
         "import_invalid_passphrase": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
         "key_storage_out_of_sync": "Ihr Schlüsselspeicher ist nicht synchronisiert.",
         "key_storage_out_of_sync_description": "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin Zugriff auf den Schlüsselspeicher und den Nachrichtenverlauf zu haben.",
+        "message_shared_by": "Diese Nachricht wurde von %(displayName)s(%(userId)s ) weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.",
         "messages_not_secure": {
             "cause_1": "Dein Heim-Server",
             "cause_2": "Der Heim-Server der Person, die du verifizierst",
@@ -1061,9 +1056,9 @@
             "qr_or_sas": "%(qrCode)s oder %(emojiCompare)s",
             "qr_prompt": "Lese diesen eindeutigen Code ein",
             "qr_reciprocate_check_again_device": "Schau nochmal auf deinem anderen Gerät nach, um die Verifizierung abzuschließen.",
-            "qr_reciprocate_no": "Nein, ich sehe kein grünes Schild",
-            "qr_reciprocate_same_shield_user": "Fast geschafft! Wird bei %(displayName)s das gleiche Schild angezeigt?",
-            "qr_reciprocate_yes": "Ja, ich sehe ein grünes Schild",
+            "qr_reciprocate_no": "Nein, ich sehe keinen grünen Sicherheitsstatus",
+            "qr_reciprocate_same_shield_user": "Fast geschafft! Wird bei %(displayName)s der gleiche Sicherheitsstatus angezeigt?",
+            "qr_reciprocate_yes": "Ja, ich sehe einen grünen Sicherheitsstatus",
             "request_toast_accept_user": "Benutzer verifizieren",
             "request_toast_decline_counter": "Ignoriere (%(counter)s)",
             "request_toast_detail": "%(deviceId)s von %(ip)s",
@@ -1089,7 +1084,7 @@
             "use_recovery_key": "Wiederherstellungsschlüssel verwenden",
             "verification_dialog_title_choose": "Wähle aus, wie du dich verifizieren willst",
             "verification_dialog_title_compare_emojis": "Emojis vergleichen",
-            "verification_dialog_title_confirm_green_shield": "Vergewissern dich, dass auf dem anderen Gerät ein grünes Schild angezeigt wird.",
+            "verification_dialog_title_confirm_green_shield": "Vergewissere dich, dass auf dem anderen Gerät ein grüner Sicherheitsstatus angezeigt wird.",
             "verification_dialog_title_device": "Anderes Gerät verifizieren",
             "verification_dialog_title_failed": "Verifizierung fehlgeschlagen",
             "verification_dialog_title_start_on_other_device": "Starte die Verifizierung auf dem anderen Gerät",
@@ -1503,7 +1498,6 @@
         "ask_to_join": "Beitrittsanfragen erlauben",
         "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
         "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
-        "automatic_debug_logs_key_backup": "Sende automatisch Protokolle zur Fehlerkorrektur, wenn die Schlüsselsicherung nicht funktioniert",
         "beta_description": "Was passiert als nächstes in %(brand)s? Das Labor ist deine erste Anlaufstelle, um Funktionen früh zu erhalten, zu testen und mitzugestalten, bevor sie tatsächlich veröffentlicht werden.",
         "beta_feature": "Dies ist eine Betafunktion",
         "beta_feedback_leave_button": "Du kannst die Beta in den Einstellungen deaktivieren.",
@@ -1520,6 +1514,8 @@
         "dynamic_room_predecessors": "Veränderbare Chat Vorgänger",
         "dynamic_room_predecessors_description": "MSC3946 aktivieren (zur Verknüpfung von Chat Archiven nach der Chat Erstellung)",
         "element_call_video_rooms": "Element Call-Videochats",
+        "encrypted_state_events": "Verschlüsselte State-Events (MSC4362)",
+        "encrypted_state_events_description": "Aktiviert die experimentelle Unterstützung für die Verschlüsselung von State-Events, wodurch Metadaten wie Raumnamen und -themen vor dem Server verborgen werden. Diese Metadaten werden auch vor neuen Mitgliedern von Gruppen verborgen, die der Gruppe erst später beitreten. Außerdem werden die Daten vor Nutzern verborgen, deren Apps MSC4362 nicht unterstützen.",
         "exclude_insecure_devices": "Unsichere Geräte ausschließen beim senden/empfangen von Nachrichten",
         "exclude_insecure_devices_description": "Bei Aktivierung dieser Einstellung werden verschlüsselte Nachrichten nicht mehr mit unverifizierten Geräten geteilt und Nachrichten von unverifizierten Geräten werden als Fehler angezeigt. Beachte, dass es bei Aktivierung dieser Einstellung nicht mehr möglich ist, mit Nutzern zu kommunizieren, die keine verifizierten Geräte haben.",
         "experimental_description": "Experimentierfreudig? Probiere unsere neuesten, sich in Entwicklung befindlichen Ideen aus. Diese Funktionen sind nicht final; Sie könnten instabil sein, sich verändern oder sogar ganz entfernt werden. <a>Erfahre mehr</a>.",
@@ -1711,7 +1707,6 @@
         "class_global": "Global",
         "class_other": "Sonstiges",
         "default": "Standard",
-        "default_settings": "Standardeinstellungen verwenden",
         "email_pusher_app_display_name": "E-Mail-Benachrichtigungen",
         "enable_prompt_toast_description": "Aktiviere Desktopbenachrichtigungen",
         "enable_prompt_toast_title": "Benachrichtigungen",
@@ -1730,8 +1725,7 @@
         "mentions_and_keywords_description": "Nur bei Erwähnungen und Schlüsselwörtern benachrichtigen, die du in den <a>Einstellungen</a> konfigurieren kannst",
         "mentions_keywords": "Erwähnungen und Schlüsselwörter",
         "message_didnt_send": "Nachricht nicht gesendet. Klicke für Details.",
-        "mute_description": "Du wirst keine Benachrichtigungen erhalten",
-        "mute_room": "Chat stummschalten"
+        "mute_description": "Du wirst keine Benachrichtigungen erhalten"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
@@ -1760,6 +1754,7 @@
         "end_message": "Umfrage beendet. Beliebteste Antwort: %(topAnswer)s",
         "end_message_no_votes": "Umfrage beendet. Es wurden keine Stimmen abgegeben.",
         "end_title": "Umfrage beenden",
+        "ended_poll_label": "Umfrage beendet",
         "error_ending_description": "Die Umfrage konnte nicht beendet werden. Bitte versuche es erneut.",
         "error_ending_title": "Beenden der Umfrage fehlgeschlagen",
         "error_voting_description": "Wir konnten deine Stimme leider nicht erfassen. Versuche es bitte erneut.",
@@ -1767,10 +1762,20 @@
         "failed_send_poll_description": "Leider wurde die Umfrage nicht gesendet.",
         "failed_send_poll_title": "Absenden der Umfrage fehlgeschlagen",
         "notes": "Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest",
+        "option_label": "Option %(number)s, %(answer)s",
+        "option_label_winning_with_total": {
+            "one": "Option %(number)s, %(answer)s, meistgewählt, %(count)s Stimme",
+            "other": "Option %(number)s, %(answer)s, meistgewählt, %(count)s Stimmen"
+        },
+        "option_label_with_total": {
+            "one": "Option %(number)s, %(answer)s, %(count)s Stimme",
+            "other": "Option %(number)s, %(answer)s, %(count)s Stimmen"
+        },
         "options_add_button": "Antwortmöglichkeit hinzufügen",
         "options_heading": "Antwortmöglichkeiten erstellen",
         "options_label": "Antwortmöglichkeit %(number)s",
         "options_placeholder": "Antwortmöglichkeit verfassen",
+        "poll_label": "Umfrage",
         "topic_heading": "Was ist die Frage oder das Thema deiner Umfrage?",
         "topic_label": "Frage oder Thema",
         "topic_placeholder": "Schreibe etwas …",
@@ -1975,7 +1980,6 @@
         "dm_invite_title": "Möchtest du mit %(user)s schreiben?",
         "drop_file_prompt": "Datei hier loslassen zum hochladen",
         "edit_topic": "Thema bearbeiten",
-        "error_3pid_invite_email_lookup": "Kann Benutzer nicht via E-Mail-Adresse finden",
         "error_cancel_knock_title": "Abbrechen gescheitert",
         "error_join_403": "Du kannst diesem Chat nur auf Einladung beitreten.",
         "error_join_404_1": "Du hast versucht einen Chat via Chat-ID, aber ohne Angabe von Servern zu betreten. Chat-IDs sind interne Kennungen und können nicht ohne weitere Informationen zum Beitritt von Chats genutzt werden.",
@@ -2007,11 +2011,15 @@
         "forget_room": "Diesen Chat entfernen",
         "forget_space": "Diesen Space vergessen",
         "header": {
+            "join_video_call": "An Videoanruf teilnehmen",
+            "join_voice_call": "An Sprachanruf teilnehmen",
             "n_people_asking_to_join": {
                 "one": "Möchte beitreten",
                 "other": "%(count)s Personen möchten beitreten"
             },
-            "room_is_public": "Dieser Chat ist öffentlich"
+            "room_is_public": "Dieser Chat ist öffentlich",
+            "shared_history_tooltip": "Neue Mitglieder sehen vergangene Nachrichten",
+            "world_readable_history_tooltip": "Jeder kann vergangene Nachrichten lesen"
         },
         "header_avatar_open_settings_label": "Chateinstellungen öffnen",
         "header_face_pile_tooltip": "Personen",
@@ -2106,18 +2114,6 @@
             },
             "this_room_button": "Diesen Chat durchsuchen"
         },
-        "status_bar": {
-            "delete_all": "Alle löschen",
-            "exceeded_resource_limit": "Deine Nachricht wurde nicht gesendet, weil dieser Heim-Server ein Ressourcen-Limit erreicht hat. Bitte <a>kontaktiere deine Systemadministration</a>, um diesen Dienst weiterzunutzen.",
-            "homeserver_blocked": "Deine Nachricht wurde nicht gesendet, weil dieser Heim-Server von dessen Administration gesperrt wurde. Bitte <a>kontaktiere deine Dienstadministration</a>, um den Dienst weiterzunutzen.",
-            "monthly_user_limit_reached": "Deine Nachricht wurde nicht gesendet, weil dieser Heim-Server sein Limit an monatlich aktiven Benutzern erreicht hat. Bitte <a>kontaktiere deine Systemadministration</a>, um diesen Dienst weiterzunutzen.",
-            "requires_consent_agreement": "Du kannst keine Nachrichten senden bis du <consentLink>unsere Geschäftsbedingungen</consentLink> gelesen und akzeptiert hast.",
-            "retry_all": "Alle erneut senden",
-            "select_messages_to_retry": "Du kannst einzelne oder alle Nachrichten erneut senden oder löschen",
-            "server_connectivity_lost_description": "Nachrichten werden gespeichert und gesendet, wenn die Internetverbindung wiederhergestellt ist.",
-            "server_connectivity_lost_title": "Verbindung zum Server wurde unterbrochen.",
-            "some_messages_not_sent": "Einige Nachrichten konnten nicht gesendet werden"
-        },
         "unknown_status_code_for_timeline_jump": "unbekannter Statuscode",
         "unread_notifications_predecessor": {
             "one": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Chats.",
@@ -2145,37 +2141,9 @@
         "add_space_label": "Space hinzufügen",
         "breadcrumbs_empty": "Keine kürzlich besuchten Chats",
         "breadcrumbs_label": "Kürzlich besuchte Chats",
-        "collapse_filters": "Filterliste einklappen",
-        "empty": {
-            "no_chats": "Noch keine Chats",
-            "no_chats_description": "Leg los, indem du jemandem eine Nachricht schickst oder einen Chat erstellst",
-            "no_chats_description_no_room_rights": "Leg los, indem du jemandem eine Nachricht schickst",
-            "no_favourites": "Du hast noch keine Chats als Favorit markiert",
-            "no_favourites_description": "In den Chat Einstellungen kannst du einen Chat als Favorit markieren",
-            "no_invites": "Du hast keine ungelesenen Einladungen",
-            "no_lowpriority": "Du hast keine Chats mit niedriger Priorität.",
-            "no_mentions": "Du hast keine ungelesenen Erwähnungen",
-            "no_people": "Du hast noch keine Direktnachrichten",
-            "no_people_description": "Wähle Filter ab, um Chats zu sehen.",
-            "no_rooms": "Du bist noch in keinem Chat",
-            "no_rooms_description": "Wähle Filter ab, um Chats zu sehen.",
-            "no_unread": "Glückwunsch! Du hast keine ungelesenen Nachrichten.",
-            "show_activity": "Alle Aktivitäten ansehen",
-            "show_chats": "Alle Chats anzeigen"
-        },
-        "expand_filters": "Filterliste ausklappen",
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an den Chat",
         "failed_remove_tag": "Entfernen des Chat-Tags %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
-        "filters": {
-            "favourite": "Favoriten",
-            "invites": "Einladungen",
-            "low_priority": "Niedrige Priorität",
-            "mentions": "Erwähnungen",
-            "people": "Personen",
-            "rooms": "Gruppen",
-            "unread": "Ungelesen"
-        },
         "home_menu_label": "Startseiteneinstellungen",
         "join_public_room_label": "Öffentlichem Chat beitreten",
         "joining_rooms_status": {
@@ -2184,44 +2152,23 @@
         },
         "list_title": "Chatliste",
         "more_options": {
-            "copy_link": "Chatlink kopieren",
-            "favourited": "Favorisiert",
-            "leave_room": "Chat verlassen",
-            "low_priority": "Niedrige Priorität",
-            "mark_read": "Als gelesen markieren",
-            "mark_unread": "Als ungelesen markieren"
+            "leave_room": "Chat verlassen"
         },
         "notification_options": "Benachrichtigungsoptionen",
-        "open_space_menu": "Öffne Menü für Spaces",
-        "primary_filters": "Filter für die Chatliste",
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Chat",
             "other": "Entferne Nachrichten in %(count)s Chats"
         },
-        "room": {
-            "more_options": "Weitere Optionen",
-            "open_room": "Öffne Chat %(roomName)s"
-        },
-        "room_options": "Chatroomoptionen",
         "show_less": "Weniger anzeigen",
         "show_n_more": {
             "other": "%(count)s weitere anzeigen",
             "one": "%(count)s weitere anzeigen"
         },
         "show_previews": "Nachrichtenvorschau anzeigen",
-        "sort": "Sortieren",
         "sort_by": "Sortieren nach",
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
-        "sort_type": {
-            "activity": "Aktivität",
-            "atoz": "A–Z"
-        },
         "sort_unread_first": "Zeige Chats mit ungelesenen Nachrichten zuerst",
-        "space_menu": {
-            "home": "Space-Übersicht",
-            "space_settings": "Space Einstellungen"
-        },
         "space_menu_label": "%(spaceName)s-Menü",
         "sublist_options": "Optionen anzeigen",
         "suggested_rooms_heading": "Vorgeschlagene Chats"
@@ -2310,6 +2257,8 @@
             "no_aliases_space": "Dieser Space hat keine lokale Adresse",
             "other_section": "Sonstiges",
             "publish_toggle": "Diesen Chat im Chat-Verzeichnis von %(domain)s veröffentlichen?",
+            "publish_warn_invite_only": "Du kannst keine Gruppe veröffentlichen, die nur auf Einladung betreten werden kann.",
+            "publish_warn_no_canonical_permission": "Du musst die Berechtigung haben, die Hauptadresse einzustellen, um diese Gruppe zu veröffentlichen.",
             "published_aliases_description": "Damit du die Adresse veröffentlichen kannst, musst du sie zuerst als lokale Adresse hinzufügen.",
             "published_aliases_explainer_room": "Veröffentlichte Adressen erlauben jedem, dem Chat zu beizutreten.",
             "published_aliases_explainer_space": "Veröffentlichte Adressen erlauben jedem, den Space zu betreten.",
@@ -2405,11 +2354,10 @@
             "error_join_rule_change_unknown": "Unbekannter Fehler",
             "guest_access_warning": "Personen mit unterstützter Anwendung werden diesem Chat ohne registriertes Konto beitreten können.",
             "history_visibility_invited": "Mitglieder (ab Einladung)",
-            "history_visibility_joined": "Mitglieder (ab Betreten)",
             "history_visibility_legend": "Wer kann den bisherigen Verlauf lesen?",
-            "history_visibility_shared": "Mitglieder",
-            "history_visibility_warning": "Die Sichtbarkeit des existierenden Nachrichtenverlaufs bleibt unverändert.",
-            "history_visibility_world_readable": "Alle",
+            "history_visibility_shared": "Mitglieder (vollständiger Nachrichtenverlauf)",
+            "history_visibility_warning": "Die Sichtbarkeit des existierenden Nachrichtenverlaufs bleibt unverändert. <a>Mehr Informationen</a>",
+            "history_visibility_world_readable": "Alle (Nachrichtenverlauf ist öffentlich)",
             "join_rule_description": "Entscheide, wer %(roomName)s betreten kann.",
             "join_rule_invite": "Privat (Betreten mit Einladung)",
             "join_rule_invite_description": "Nur Eingeladene können betreten.",
@@ -2465,10 +2413,12 @@
             "error_failed_save": "Sichtbarkeit des Space konnte nicht geändert werden",
             "error_update_guest_access": "Gastzutritt zum Space konnte nicht geändert werden",
             "error_update_history_visibility": "Verlaufssichtbarkeit des Space konnte nicht geändert werden",
-            "guest_access_explainer": "Gäste ohne Konto können den Space betreten.",
+            "guest_access_disabled": "Du hast keine Berechtigung, den Gastzugang zu konfigurieren.",
+            "guest_access_explainer": "Gäste ohne Konto können den Space betreten. Das ist nützlich für öffentliche Spaces.",
             "guest_access_label": "Gastzutritt",
             "history_visibility_anyone_space": "Space-Vorschau erlauben",
             "history_visibility_anyone_space_description": "Personen können den Space vor dem Betreten erkunden.",
+            "history_visibility_anyone_space_disabled": "Du hast keine Berechtigung, die Sichtbarkeit des Nachrichtenverlaufs zu konfigurieren.",
             "history_visibility_anyone_space_recommendation": "Empfohlen für öffentliche Spaces.",
             "title": "Sichtbarkeit"
         },
@@ -2922,6 +2872,7 @@
             "message_search_indexing": "Indiziere: %(currentRoom)s",
             "message_search_indexing_idle": "Derzeit werden keine Nachrichten für Chats indiziert.",
             "message_search_intro": "%(brand)s verwendet einen sicheren Zwischenspeicher für verschlüsselte Nachrichten, damit sie in den Suchergebnissen angezeigt werden:",
+            "message_search_pending_rooms": "Anzahl Chats, die indexiert werden müssen: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s von %(totalRooms)s",
             "message_search_section": "Nachrichtensuche",
             "message_search_sleep_time": "Wie schnell Nachrichten heruntergeladen werden sollen.",
@@ -3364,24 +3315,10 @@
         "no_rooms_with_unread_threads": "Es gibt keine Chats mit ungelesenen Threads."
     },
     "time": {
-        "about_day_ago": "vor etwa einem Tag",
-        "about_hour_ago": "vor etwa einer Stunde",
-        "about_minute_ago": "vor etwa einer Minute",
         "date_at_time": "%(date)s um %(time)s",
-        "few_seconds_ago": "vor ein paar Sekunden",
         "hours_minutes_seconds_left": "%(hours)s h %(minutes)s m %(seconds)s s verbleibend",
-        "in_about_day": "in etwa einem Tag",
-        "in_about_hour": "in etwa einer Stunde",
-        "in_about_minute": "in etwa einer Minute",
-        "in_few_seconds": "in ein paar Sekunden",
-        "in_n_days": "in %(num)s Tagen",
-        "in_n_hours": "in %(num)s Stunden",
-        "in_n_minutes": "In etwa %(num)s Minuten",
         "left": "%(timeRemaining)s übrig",
         "minutes_seconds_left": "%(minutes)s m %(seconds)s s verbleibend",
-        "n_days_ago": "vor %(num)s Tagen",
-        "n_hours_ago": "vor %(num)s Stunden",
-        "n_minutes_ago": "vor %(num)s Minuten",
         "seconds_left": "%(seconds)s verbleibend",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)s d %(hours)s h %(minutes)s m %(seconds)s s",
@@ -3405,12 +3342,7 @@
         "creation_summary_dm": "%(creator)s hat diese Direktnachricht erstellt.",
         "creation_summary_room": "%(creator)s hat den Chat erstellt und konfiguriert.",
         "decryption_failure": {
-            "blocked": "Der Absender hat den Empfang dieser Nachricht blockiert, da Ihr Gerät nicht verifiziert ist.",
-            "historical_event_no_key_backup": "Der historische Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar.",
-            "historical_event_unverified_device": "Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren",
-            "historical_event_user_not_joined": "Du hast keinen Zugriff auf diese Nachricht",
             "sender_identity_previously_verified": "Die verifizierte Identität des Absenders wurde zurückgesetzt",
-            "sender_unsigned_device": "Von einem unsicheren Gerät verschickt.",
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3436,11 +3368,9 @@
             "unable_to_find": "Der Sprung an eine bestimmte Stelle im Nachrichtenverlauf dieses Chats ist gescheitert. Die Stelle konnte nicht gefunden werden."
         },
         "m.audio": {
-            "audio_player": "Audio-Player",
             "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
             "error_processing_audio": "Fehler beim Verarbeiten der Audionachricht",
-            "error_processing_voice_message": "Fehler beim Verarbeiten der Sprachnachricht",
-            "unnamed_audio": "Unbenannte Audiodatei"
+            "error_processing_voice_message": "Fehler beim Verarbeiten der Sprachnachricht"
         },
         "m.beacon_info": {
             "view_live_location": "Echtzeit-Standort anzeigen"
@@ -3535,6 +3465,7 @@
             "enabled_dm": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s in deren Profil – klicke auf deren Profilbild.",
             "enabled_local": "Nachrichten in dieser Unterhaltung werden Ende-zu-Ende-verschlüsselt.",
             "parameters_changed": "Einige Verschlüsselungsoptionen wurden geändert.",
+            "state_enabled": "Nachrichten und State-Events sind in diesem Chat Ende-zu-Ende verschlüsselt. Du kannst neue Mitglieder, die dem Chat beitreten, auf ihrem Profil verifizieren. Dies erreichst du durch Klick auf das Profilbild.",
             "unsupported": "Die von diesem Chat verwendete Verschlüsselung wird nicht unterstützt."
         },
         "m.room.guest_access": {
@@ -4014,7 +3945,6 @@
         "hide_sidebar_button": "Seitenleiste verbergen",
         "input_devices": "Eingabegeräte",
         "jitsi_call": "Jitsi-Konferenz",
-        "join_button_tooltip_call_full": "Entschuldigung — dieser Anruf ist aktuell besetzt",
         "legacy_call": "Legacy-Anruf",
         "maximise": "Bildschirm füllen",
         "maximise_call": "Anruf maximieren",
@@ -4074,6 +4004,7 @@
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
         "voice_call_incoming": "Eingehender Anruf",
+        "voice_call_using": "Sprachanruf mit:",
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",

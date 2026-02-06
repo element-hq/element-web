@@ -189,6 +189,17 @@ describe("SetupEncryptionToast", () => {
                 props: { initialEncryptionState: "change_recovery_key" },
             });
         });
+
+        it("should dismiss the toast when the close button is clicked", async () => {
+            jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
+
+            act(() => showToast("key_storage_out_of_sync"));
+
+            const user = userEvent.setup();
+            await user.click(await screen.findByRole("button", { name: "Close" }));
+
+            expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
+        });
     });
 
     describe("Turn on key storage", () => {

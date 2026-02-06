@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PillInput renders only the input without children 1`] = `
+exports[`PillInput > renders only the input without children 1`] = `
 <div>
   <div
     class="flex pillInput"
@@ -16,7 +16,7 @@ exports[`PillInput renders only the input without children 1`] = `
 </div>
 `;
 
-exports[`PillInput renders the pill input 1`] = `
+exports[`PillInput > renders the pill input 1`] = `
 <div>
   <div
     class="flex pillInput"

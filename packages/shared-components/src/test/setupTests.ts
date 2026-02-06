@@ -5,18 +5,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/vitest";
+import { cleanup } from "@test-utils";
+import { afterEach } from "vitest";
 
 import { setLanguage } from "../../src/utils/i18n";
-import en from "../../../../src/i18n/strings/en_EN.json";
+import en from "../i18n/strings/en_EN.json";
 
-export function setupLanguageMock(): void {
+function setupLanguageMock(): void {
     fetchMock
-        .get("/i18n/languages.json", {
+        .get("end:/i18n/languages.json", {
             en: "en_EN.json",
         })
         .get("end:en_EN.json", en);
 }
 setupLanguageMock();
+fetchMock.mockGlobal();
 
 setLanguage("en");
+
+afterEach(() => {
+    cleanup();
+});

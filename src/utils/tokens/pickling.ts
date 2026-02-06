@@ -48,7 +48,7 @@ export interface EncryptedPickleKey {
  * @param {string} deviceId The device ID which owns the pickle key.
  * @return {Uint8Array} The additional data as a Uint8Array.
  */
-export function getPickleAdditionalData(userId: string, deviceId: string): Uint8Array {
+export function getPickleAdditionalData(userId: string, deviceId: string): Uint8Array<ArrayBuffer> {
     const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
     for (let i = 0; i < userId.length; i++) {
         additionalData[i] = userId.charCodeAt(i);
@@ -70,7 +70,7 @@ export function getPickleAdditionalData(userId: string, deviceId: string): Uint8
  * @returns Data object ready for storing in indexeddb.
  */
 export async function encryptPickleKey(
-    pickleKey: Uint8Array,
+    pickleKey: Uint8Array<ArrayBuffer>,
     userId: string,
     deviceId: string,
 ): Promise<EncryptedPickleKey | undefined> {

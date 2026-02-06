@@ -31,12 +31,10 @@ import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
 import * as BulkUnverifiedSessionsToast from "../../src/toasts/BulkUnverifiedSessionsToast";
 import { isSecretStorageBeingAccessed } from "../../src/SecurityManager";
-import dis from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
-import { UIFeature } from "../../src/settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
 
@@ -57,7 +55,6 @@ jest.mock("../../src/utils/device/snoozeBulkUnverifiedDeviceReminder", () => ({
 
 const userId = "@user:server";
 const deviceId = "my-device-id";
-const mockDispatcher = mocked(dis);
 const flushPromises = async () => await new Promise(process.nextTick);
 
 const readySecretStorageStatus: SecretStorageStatus = {
@@ -498,27 +495,6 @@ describe("DeviceListener", () => {
                 expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
             });
 
-            it("dispatches keybackup event when key backup is not enabled", async () => {
-                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-
-                // current device is verified
-                mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
-                    new DeviceVerificationStatus({
-                        trustCrossSignedDevices: true,
-                        crossSigningVerified: true,
-                    }),
-                );
-
-                mockCrypto.getActiveSessionBackupVersion.mockResolvedValue(null);
-                mockClient.getAccountDataFromServer.mockImplementation((eventType) =>
-                    eventType === BACKUP_DISABLED_ACCOUNT_DATA_KEY ? ({ disabled: true } as any) : null,
-                );
-                await createAndStart();
-                expect(mockDispatcher.dispatch).toHaveBeenCalledWith({
-                    action: Action.ReportKeyBackupNotEnabled,
-                });
-            });
-
             it("does not check key backup status again after check is complete", async () => {
                 mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
                 const instance = await createAndStart();
@@ -676,10 +652,8 @@ describe("DeviceListener", () => {
                 // all devices verified by default
                 mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === UIFeature.BulkUnverifiedSessionsReminder,
-                );
             });
+
             describe("bulk unverified sessions toasts", () => {
                 it("hides toast when cross signing is not ready", async () => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
@@ -692,24 +666,6 @@ describe("DeviceListener", () => {
                     await createAndStart();
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                     expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
-                });
-
-                it("hides toast when feature is disabled", async () => {
-                    // BulkUnverifiedSessionsReminder set to false
-                    jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                    // currentDevice, device2 are verified, device3 is unverified
-                    // ie if reminder was enabled it should be shown
-                    mockCrypto!.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                        switch (deviceId) {
-                            case currentDevice.deviceId:
-                            case device2.deviceId:
-                                return deviceTrustVerified;
-                            default:
-                                return deviceTrustUnverified;
-                        }
-                    });
-                    await createAndStart();
-                    expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                 });
 
                 it("hides toast when current device is unverified", async () => {

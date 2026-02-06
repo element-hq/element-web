@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventTimeline } from "matrix-js-sdk/src/matrix";
+import { VisibilityOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
-import EventTileBubble from "../messages/EventTileBubble";
 import { _t } from "../../../languageHandler";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
@@ -28,7 +29,8 @@ const HistoryTile: React.FC = () => {
 
     return (
         <EventTileBubble
-            className="mx_HistoryTile"
+            icon={<VisibilityOffIcon />}
+            className="mx_EventTileBubble mx_HistoryTile"
             title={_t("timeline|historical_messages_unavailable")}
             subtitle={subtitle}
         />

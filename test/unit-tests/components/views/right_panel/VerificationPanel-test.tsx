@@ -105,7 +105,7 @@ describe("<VerificationPanel />", () => {
         });
 
         it("should show some emojis once keys are exchanged", () => {
-            const { container } = renderComponent({
+            const { getAllByText } = renderComponent({
                 request: mockRequest,
                 phase: Phase.Started,
             });
@@ -117,11 +117,8 @@ describe("<VerificationPanel />", () => {
                 mockVerifier.emit(VerifierEvent.ShowSas, sasEvent);
             });
 
-            const emojis = container.getElementsByClassName("mx_VerificationShowSas_emojiSas_block");
-            expect(emojis.length).toEqual(7);
-            for (const emoji of emojis) {
-                expect(emoji).toHaveTextContent("🦄Unicorn");
-            }
+            expect(getAllByText("🦄")).toHaveLength(7);
+            expect(getAllByText("Unicorn")).toHaveLength(7);
         });
 
         describe("'Verify own device' flow", () => {

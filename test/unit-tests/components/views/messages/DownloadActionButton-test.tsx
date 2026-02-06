@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
@@ -37,7 +37,6 @@ describe("DownloadActionButton", () => {
 
     beforeEach(() => {
         jest.restoreAllMocks();
-        fetchMockJest.restore();
     });
 
     afterEach(() => {
@@ -51,7 +50,7 @@ describe("DownloadActionButton", () => {
             (mxc) => `https://matrix.org/_matrix/media/r0/download/${mxc.slice(6)}`,
         );
 
-        fetchMockJest.getOnce("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", {
+        fetchMock.getOnce("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", {
             status: 404,
             body: { errcode: "M_NOT_FOUND", error: "Not found" },
         });
@@ -78,7 +77,7 @@ describe("DownloadActionButton", () => {
 
         const user = userEvent.setup();
 
-        fetchMockJest.getOnce("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", "TESTFILE");
+        fetchMock.getOnce("https://matrix.org/_matrix/media/r0/download/matrix.org/1234", "TESTFILE");
 
         const event = new MatrixEvent({
             room_id: "!room:id",
@@ -106,7 +105,7 @@ describe("DownloadActionButton", () => {
 
         stubClient();
 
-        fetchMockJest.getOnce("http://this.is.a.url/matrix.org/1234", "TESTFILE");
+        fetchMock.getOnce("http://this.is.a.url/matrix.org/1234", "TESTFILE");
 
         const mediaEventHelper = new MediaEventHelper(plainEvent);
 
@@ -127,7 +126,7 @@ describe("DownloadActionButton", () => {
 
         stubClient();
 
-        fetchMockJest.getOnce("http://this.is.a.url/matrix.org/1234", "UFTUGJMF");
+        fetchMock.getOnce("http://this.is.a.url/matrix.org/1234", "UFTUGJMF");
 
         const e2eEvent = new MatrixEvent({
             room_id: "!room:id",

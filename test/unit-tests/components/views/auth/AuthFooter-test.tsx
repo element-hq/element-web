@@ -10,13 +10,8 @@ import React from "react";
 import { render } from "jest-matrix-react";
 
 import AuthFooter from "../../../../../src/components/views/auth/AuthFooter";
-import { setupLanguageMock } from "../../../../setup/setupLanguage";
 
 describe("<AuthFooter />", () => {
-    beforeEach(() => {
-        setupLanguageMock();
-    });
-
     it("should match snapshot", () => {
         const { asFragment } = render(<AuthFooter />);
         expect(asFragment()).toMatchSnapshot();

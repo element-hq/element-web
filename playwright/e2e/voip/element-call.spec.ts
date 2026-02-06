@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { readFile } from "node:fs/promises";
-import { type Page } from "playwright-core";
+import { type Page } from "@playwright/test";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -74,13 +74,29 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
         },
         "m.relates_to": {
             event_id: resp.event_id,
-            rel_type: "org.matrix.msc4075.rtc.notification.parent",
+            rel_type: "m.reference",
         },
         "m.call.intent": intent,
         "notification_type": notification,
         "sender_ts": 1758611895996,
     });
 }
+
+test.use({
+    synapseConfig: {
+        experimental_features: {
+            msc4143_enabled: true,
+        },
+        matrix_rtc: {
+            transports: [
+                {
+                    type: "livekit",
+                    livekit_service_url: "https://example.org/can-be-anything",
+                },
+            ],
+        },
+    },
+});
 
 test.describe("Element Call", () => {
     test.use({
@@ -647,6 +663,10 @@ test.describe("Element Call", () => {
 
             // For this test we want to display the chat area alongside the widget
             await page.getByRole("button", { name: "Chat" }).click();
+            // Wait for the right panel to show the timeline.
+            await expect(
+                page.locator(".mx_RightPanel .mx_TimelineCard").getByText("Alice created and configured the room."),
+            ).toBeVisible();
 
             await page
                 .locator('iframe[title="Element Call"]')
@@ -654,7 +674,12 @@ test.describe("Element Call", () => {
                 .getByRole("button", { name: "Send Room Message" })
                 .click();
 
-            const messageSent = await page.getByText("I sent this once!!").count();
+            const timelineLocator = page.locator(".mx_RightPanel .mx_TimelineCard");
+            // First wait for the message to appear in the timeline then
+            // check the count. This improves test stability as we know the message has been sent.
+            await expect(timelineLocator.getByText("I sent this once!!")).toBeVisible();
+
+            const messageSent = await timelineLocator.getByText("I sent this once!!").count();
 
             expect(messageSent).toBe(1);
         });

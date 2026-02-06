@@ -12,9 +12,9 @@ import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CheckIcon, ErrorIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
@@ -241,6 +241,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 </span>
 
                 <AccessibleButton className="mx_AddExistingToSpaceDialog_retryButton" onClick={addRooms}>
+                    <RestartIcon />
                     {_t("action|retry")}
                 </AccessibleButton>
             </>
@@ -424,6 +425,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
                             <div key={space.roomId} className={classes}>
                                 <RoomAvatar room={space} size="24px" />
                                 {space.name || getDisplayAliasForRoom(space) || space.roomId}
+                                {space === value ? <CheckIcon /> : null}
                             </div>
                         );
                     }) as NonEmptyArray<ReactElement & { key: string }>

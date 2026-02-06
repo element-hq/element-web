@@ -9,7 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { act } from "react";
 import { render, type RenderResult, waitFor } from "jest-matrix-react";
-import { VirtuosoMockContext } from "react-virtuoso";
+// Import VirtuosoMockContext from shared-components to ensure context compatibility
+// with the ListView component which also imports from shared-components
+import { VirtuosoMockContext } from "@element-hq/web-shared-components";
 import {
     Room,
     type MatrixClient,
@@ -163,6 +165,5 @@ function createReRenderFunction(client: MatrixClient, memberListRoom: Room): Ren
                 getRoomId: () => memberListRoom.roomId,
             });
         });
-        await new Promise((r) => setTimeout(r, 1000));
     };
 }

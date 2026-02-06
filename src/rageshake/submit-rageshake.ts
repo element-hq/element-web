@@ -20,6 +20,8 @@ import * as rageshake from "./rageshake";
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 import { getServerVersionFromFederationApi } from "../components/views/dialogs/devtools/ServerInfo";
+import type * as Tar from "tar-js";
+import { BugReportEndpointURLLocal } from "../IConfigOptions";
 
 interface IOpts {
     labels?: string[];
@@ -232,10 +234,6 @@ async function collectRecoveryInfo(client: MatrixClient, cryptoApi: CryptoApi, b
  * Collects labels to add to the report.
  */
 export function collectLabels(client: MatrixClient | null, opts: IOpts, body: FormData): void {
-    if (client?.getCrypto()?.getVersion()?.startsWith(`Rust SDK`)) {
-        body.append("label", "A-Element-R");
-    }
-
     if (opts.labels) {
         for (const label of opts.labels) {
             body.append("label", label);
@@ -346,7 +344,7 @@ async function collectLogs(
  *         the server does not respond with an expected body format.
  */
 export default async function sendBugReport(bugReportEndpoint?: string, opts: IOpts = {}): Promise<string> {
-    if (!bugReportEndpoint) {
+    if (!bugReportEndpoint || bugReportEndpoint === BugReportEndpointURLLocal) {
         throw new Error("No bug report endpoint has been set.");
     }
 
@@ -358,20 +356,12 @@ export default async function sendBugReport(bugReportEndpoint?: string, opts: IO
 }
 
 /**
- * Downloads the files from a bug report. This is the same as sendBugReport,
- * but instead causes the browser to download the files locally.
+ * Loads a bug report into a tarball.
  *
- * @param {object} opts optional dictionary of options
- *
- * @param {string} opts.userText Any additional user input.
- *
- * @param {boolean} opts.sendLogs True to send logs
- *
- * @param {function(string)} opts.progressCallback Callback to call with progress updates
- *
- * @return {Promise} Resolved when the bug report is downloaded (or started).
+ * @param opts optional dictionary of options
+ * @return Resolves with a Tarball object.
  */
-export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
+export async function loadBugReport(opts: IOpts = {}): Promise<Tar> {
     const Tar = (await import("tar-js")).default;
     const progressCallback = opts.progressCallback || ((): void => {});
     const body = await collectBugReport(opts, false);
@@ -395,7 +385,18 @@ export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
         }
     }
     tape.append("issue.txt", metadata);
+    return tape;
+}
 
+/**
+ * Downloads the files from a bug report. This is the same as sendBugReport,
+ * but instead causes the browser to download the files locally.
+ *
+ * @param opts optional dictionary of options
+ * @return Resolved when the bug report is downloaded (or started).
+ */
+export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
+    const tape = await loadBugReport(opts);
     // We have to create a new anchor to download if we want a filename. Otherwise we could
     // just use window.open.
     const dl = document.createElement("a");
@@ -421,6 +422,10 @@ export async function submitFeedback(
     canContact = false,
     extraData: Record<string, any> = {},
 ): Promise<void> {
+    const bugReportEndpointUrl = SdkConfig.get().bug_report_endpoint_url;
+    if (!bugReportEndpointUrl || bugReportEndpointUrl === BugReportEndpointURLLocal) {
+        throw new Error("Bug report URL is not set or local");
+    }
     let version: string | undefined;
     try {
         version = await PlatformPeg.get()?.getAppVersion();
@@ -440,11 +445,7 @@ export async function submitFeedback(
         body.append(k, JSON.stringify(extraData[k]));
     }
 
-    const bugReportEndpointUrl = SdkConfig.get().bug_report_endpoint_url;
-
-    if (bugReportEndpointUrl) {
-        await submitReport(bugReportEndpointUrl, body, () => {});
-    }
+    await submitReport(bugReportEndpointUrl, body, () => {});
 }
 
 /**

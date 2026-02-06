@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
+import React, { createRef, useContext, useEffect, type JSX, type Ref, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
@@ -35,13 +35,15 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
+import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
+import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
@@ -83,6 +85,9 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
+import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -112,7 +117,7 @@ export interface IEventTileOps {
     unhideWidget(): void;
 }
 
-export interface IEventTileType extends React.Component {
+export interface IEventTileType extends React.Component<HTMLDivElement> {
     getEventTileOps?(): IEventTileOps;
     getMediaHelper(): MediaEventHelper | undefined;
 }
@@ -174,7 +179,7 @@ export interface EventTileProps {
 
     // the status of this event - ie, mxEvent.status. Denormalised to here so
     // that we can tell when it changes.
-    eventSendStatus?: string;
+    eventSendStatus?: EventStatus;
 
     forExport?: boolean;
 
@@ -495,6 +500,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return (
             <div className="mx_ThreadPanel_replies">
+                <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{this.state.thread.length}</span>
                 <ThreadMessagePreview thread={this.state.thread} />
             </div>
@@ -512,12 +518,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             if (this.props.highlightLink) {
                 return (
                     <a className="mx_ThreadSummary_icon" href={this.props.highlightLink}>
+                        <ThreadsIcon />
                         {_t("timeline|thread_info_basic")}
                     </a>
                 );
             }
 
-            return <p className="mx_ThreadSummary_icon">{_t("timeline|thread_info_basic")}</p>;
+            return (
+                <p className="mx_ThreadSummary_icon">
+                    <ThreadsIcon />
+                    {_t("timeline|thread_info_basic")}
+                </p>
+            );
         }
     }
 
@@ -731,6 +743,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     return null;
                 default:
                     return <E2ePadlockDecryptionFailure />;
+            }
+        }
+
+        if (this.state.shieldReason === EventShieldReason.AUTHENTICITY_NOT_GUARANTEED) {
+            // This may happen if the message was forwarded to us by another user, in which case we can show a better message
+            const forwarder = this.props.mxEvent.getKeyForwardingUser();
+            if (forwarder) {
+                return <E2eMessageSharedIcon keyForwardingUserId={forwarder} roomId={ev.getRoomId()!} />;
             }
         }
 
@@ -1186,7 +1206,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let msgOption: JSX.Element | undefined;
         if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-            msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+            msgOption = <SentReceipt messageState={this.props.eventSendStatus} />;
         } else if (this.props.showReadReceipts) {
             msgOption = (
                 <ReadReceiptGroup
@@ -1355,7 +1375,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 {this.props.mxEvent.isRedacted() ? (
                                     <RedactedBody mxEvent={this.props.mxEvent} />
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBody mxEvent={this.props.mxEvent} />
+                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
                                 ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
@@ -1507,77 +1527,36 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
 };
 export default SafeEventTile;
 
-function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} {...props} />;
+function E2ePadlockUnencrypted(): JSX.Element {
+    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} />;
 }
 
-function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return (
-        <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} {...props} />
-    );
-}
-
-enum E2ePadlockIcon {
-    /** grey shield */
-    Normal = "normal",
-
-    /** red shield with (!) */
-    Warning = "warning",
-
-    /** key in grey circle */
-    DecryptionFailure = "decryption_failure",
-}
-
-interface IE2ePadlockProps {
-    icon: E2ePadlockIcon;
-    title: string;
-}
-
-class E2ePadlock extends React.Component<IE2ePadlockProps> {
-    public constructor(props: IE2ePadlockProps) {
-        super(props);
-
-        this.state = {
-            hover: false,
-        };
-    }
-
-    public render(): ReactNode {
-        const classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
-        // We specify isTriggerInteractive=true and make the div interactive manually as a workaround for
-        // https://github.com/element-hq/compound/issues/294
-        return (
-            <Tooltip label={this.props.title} isTriggerInteractive={true}>
-                <div className={classes} tabIndex={0} aria-label={_t("timeline|e2e_state")} />
-            </Tooltip>
-        );
-    }
+function E2ePadlockDecryptionFailure(): JSX.Element {
+    return <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} />;
 }
 
 interface ISentReceiptProps {
-    messageState: EventStatus | null;
+    messageState: EventStatus | undefined;
 }
 
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     const isSent = !messageState || messageState === "sent";
     const isFailed = messageState === "not_sent";
-    const receiptClasses = classNames({
-        mx_EventTile_receiptSent: isSent,
-        mx_EventTile_receiptSending: !isSent && !isFailed,
-    });
 
-    let nonCssBadge: JSX.Element | undefined;
-    if (isFailed) {
-        nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-    }
-
-    let label = _t("timeline|send_state_sending");
+    let icon: JSX.Element | undefined;
+    let label: string | undefined;
     if (messageState === "encrypting") {
+        icon = <CircleIcon />;
         label = _t("timeline|send_state_encrypting");
     } else if (isSent) {
+        icon = <CheckCircleIcon />;
         label = _t("timeline|send_state_sent");
     } else if (isFailed) {
+        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
         label = _t("timeline|send_state_failed");
+    } else {
+        icon = <CircleIcon />;
+        label = _t("timeline|send_state_sending");
     }
 
     return (
@@ -1585,12 +1564,30 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             <div className="mx_ReadReceiptGroup">
                 <Tooltip label={label} placement="top-end">
                     <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">
-                            <span className={receiptClasses}>{nonCssBadge}</span>
-                        </span>
+                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
                     </div>
                 </Tooltip>
             </div>
         </div>
     );
+}
+
+/**
+ * Bridge decryption-failure events into the view model using current local verification state.
+ * This wrapper can be removed after EventTile has been changed to a function component.
+ */
+function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
+    const verificationState = useContext(LocalDeviceVerificationStateContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new DecryptionFailureBodyViewModel({
+                decryptionFailureCode: mxEvent.decryptionFailureReason,
+                verificationState,
+            }),
+    );
+    useEffect(() => {
+        vm.setVerificationState(verificationState);
+    }, [verificationState, vm]);
+
+    return <DecryptionFailureBodyView vm={vm} />;
 }

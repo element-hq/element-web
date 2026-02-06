@@ -1,0 +1,174 @@
+{
+    "a11y": {
+        "seek_bar_label": "Audio seek bar"
+    },
+    "action": {
+        "delete": "Delete",
+        "dismiss": "Dismiss",
+        "edit": "Edit",
+        "explore_rooms": "Explore rooms",
+        "invite": "Invite",
+        "new_conversation": "New conversation",
+        "new_room": "New room",
+        "new_video_room": "New video room",
+        "open_menu": "Open menu",
+        "pause": "Pause",
+        "play": "Play",
+        "remove": "Remove",
+        "retry": "Retry",
+        "search": "Search",
+        "start_chat": "Start chat"
+    },
+    "common": {
+        "preferences": "Preferences"
+    },
+    "left_panel": {
+        "open_dial_pad": "Open dial pad"
+    },
+    "notifications": {
+        "all_messages": "All messages",
+        "default_settings": "Match default settings",
+        "mentions_keywords": "Mentions and keywords",
+        "mute_room": "Mute room"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Room options"
+        },
+        "history_visibility_badge": {
+            "private": "New members don't see history",
+            "shared": "New members see history",
+            "world_readable": "Anyone can see history"
+        },
+        "status_bar": {
+            "delete_all": "Delete all",
+            "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
+            "exceeded_resource_limit_title": "Your message wasn't sent because this homeserver has exceeded a resource limit.",
+            "failed_to_create_room_title": "Could not start a chat with this user",
+            "homeserver_blocked_title": "Your message wasn't sent because this homeserver has been blocked by its administrator.",
+            "monthly_user_limit_reached_title": "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit.",
+            "requires_consent_agreement_title": "You can't send any messages until you review and agree to our terms and conditions.",
+            "retry_all": "Retry all",
+            "select_messages_to_retry": "You can select all or individual messages to retry or delete",
+            "server_connectivity_lost_description": "Sent messages will be stored until your connection has returned.",
+            "server_connectivity_lost_title": "Connectivity to the server has been lost.",
+            "some_messages_not_sent": "Some of your messages have not been sent"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Open room %(roomName)s",
+            "invitation": "Open room %(roomName)s invitation.",
+            "mention": {
+                "one": "Open room %(roomName)s with 1 unread mention.",
+                "other": "Open room %(roomName)s with %(count)s unread mentions."
+            },
+            "unread": {
+                "one": "Open room %(roomName)s with 1 unread message.",
+                "other": "Open room %(roomName)s with %(count)s unread messages."
+            },
+            "unsent_message": "Open room %(roomName)s with an unsent message."
+        },
+        "appearance": "Appearance",
+        "collapse_filters": "Collapse filter list",
+        "empty": {
+            "no_chats": "No chats yet",
+            "no_chats_description": "Get started by messaging someone or by creating a room",
+            "no_chats_description_no_room_rights": "Get started by messaging someone",
+            "no_favourites": "You don't have favourite chats yet",
+            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_invites": "You don't have any unread invites",
+            "no_lowpriority": "You don't have any low priority rooms",
+            "no_mentions": "You don't have any unread mentions",
+            "no_people": "You don’t have direct chats with anyone yet",
+            "no_people_description": "You can deselect filters in order to see your other chats",
+            "no_rooms": "You’re not in any room yet",
+            "no_rooms_description": "You can deselect filters in order to see your other chats",
+            "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
+            "show_chats": "Show all chats"
+        },
+        "expand_filters": "Expand filter list",
+        "filters": {
+            "favourite": "Favourites",
+            "invites": "Invites",
+            "low_priority": "Low priority",
+            "mentions": "Mentions",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unreads"
+        },
+        "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy room link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread"
+        },
+        "notification_options": "Notification options",
+        "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
+        "room": {
+            "more_options": "More Options"
+        },
+        "room_options": "Room Options",
+        "show_message_previews": "Show message previews",
+        "sort": "Sort",
+        "sort_type": {
+            "activity": "Activity",
+            "atoz": "A-Z",
+            "unread_first": "Unread first"
+        },
+        "space_menu": {
+            "home": "Space home",
+            "space_settings": "Space settings"
+        }
+    },
+    "terms": {
+        "tac_button": "Review terms and conditions"
+    },
+    "time": {
+        "about_day_ago": "about a day ago",
+        "about_hour_ago": "about an hour ago",
+        "about_minute_ago": "about a minute ago",
+        "few_seconds_ago": "a few seconds ago",
+        "in_about_day": "about a day from now",
+        "in_about_hour": "about an hour from now",
+        "in_about_minute": "about a minute from now",
+        "in_few_seconds": "a few seconds from now",
+        "in_n_days": "%(num)s days from now",
+        "in_n_hours": "%(num)s hours from now",
+        "in_n_minutes": "%(num)s minutes from now",
+        "n_days_ago": "%(num)s days ago",
+        "n_hours_ago": "%(num)s hours ago",
+        "n_minutes_ago": "%(num)s minutes ago"
+    },
+    "timeline": {
+        "decryption_failure": {
+            "blocked": "The sender has blocked you from receiving this message because your device is unverified",
+            "historical_event_no_key_backup": "Historical messages are not available on this device",
+            "historical_event_unverified_device": "You need to verify this device for access to historical messages",
+            "historical_event_user_not_joined": "You don't have access to this message",
+            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_unsigned_device": "Sent from an insecure device.",
+            "unable_to_decrypt": "Unable to decrypt message"
+        },
+        "m.audio": {
+            "audio_player": "Audio player",
+            "error_downloading_audio": "Error downloading audio",
+            "unnamed_audio": "Unnamed audio"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Move left",
+            "move_right": "Move right",
+            "remove": "Remove for everyone",
+            "revoke": "Revoke permissions",
+            "screenshot": "Take a picture",
+            "start_audio_stream": "Start audio stream"
+        }
+    }
+}

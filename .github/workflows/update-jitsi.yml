@@ -11,7 +11,7 @@ jobs:
         steps:
             - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   cache: "yarn"
                   node-version: "lts/*"
@@ -23,7 +23,7 @@ jobs:
               run: "yarn update:jitsi"
 
             - name: Create Pull Request
-              uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+              uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   branch: actions/jitsi-update

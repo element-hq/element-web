@@ -12,16 +12,6 @@
             "one": "1 oläst omnämnande."
         },
         "recent_rooms": "Nyliga rum",
-        "room_messsage_not_sent": "Öppna rummet %(roomName)s med ett osänt meddelande.",
-        "room_n_unread_invite": "Öppna inbjudan till rummet %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Öppna rummet %(roomName)s med 1 oläst meddelande.",
-            "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Öppna rummet %(roomName)s med 1 oläst omnämnande.",
-            "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden inklusive omnämnanden."
-        },
         "room_name": "Rum %(name)s",
         "room_status_bar": "Rumsstatusfält",
         "seek_bar_label": "Förloppsfält för ljud",
@@ -99,10 +89,7 @@
         "no": "Nej",
         "ok": "OK",
         "open": "Öppna",
-        "open_menu": "Öppna menyn",
-        "pause": "Pausa",
         "pin": "Häftstift",
-        "play": "Spela",
         "proceed": "Fortsätt",
         "quote": "Citera",
         "react": "Reagera",
@@ -1454,7 +1441,6 @@
         "ask_to_join": "Aktivera fråga om att gå med",
         "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
         "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
-        "automatic_debug_logs_key_backup": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
         "beta_description": "Vad händer härnäst med %(brand)s? Experiment är det bästa sättet att få saker tidigt, pröva nya funktioner, och hjälpa till att forma dem innan de egentligen släpps.",
         "beta_feature": "Det här är en betafunktion",
         "beta_feedback_leave_button": "För att lämna betan, besök dina inställningar.",
@@ -1662,7 +1648,6 @@
         "class_global": "Globalt",
         "class_other": "Annat",
         "default": "Standard",
-        "default_settings": "Matcha standardinställningar",
         "email_pusher_app_display_name": "E-postaviseringar",
         "enable_prompt_toast_description": "Aktivera skrivbordsaviseringar",
         "enable_prompt_toast_title": "Aviseringar",
@@ -1681,8 +1666,7 @@
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
         "mentions_keywords": "Omnämnanden & nyckelord",
         "message_didnt_send": "Meddelande skickades inte. Klicka för info.",
-        "mute_description": "Du får inga aviseringar",
-        "mute_room": "Tysta rum"
+        "mute_description": "Du får inga aviseringar"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s begär verifiering"
@@ -1926,7 +1910,6 @@
         "dm_invite_title": "Vill du chatta med %(user)s?",
         "drop_file_prompt": "Släpp en fil här för att ladda upp",
         "edit_topic": "Redigera ämne",
-        "error_3pid_invite_email_lookup": "Kan inte hitta användaren via e-post",
         "error_cancel_knock_title": "Misslyckades att avbryta",
         "error_join_403": "Du behöver en inbjudan för att komma åt det här rummet.",
         "error_join_404_1": "Du försökte gå med med ett rums-ID utan att tillhandahålla en lista över servrar att gå med via. Rums-ID:n är interna identifierare och kan inte användas för att gå med i ett rum utan ytterligare information.",
@@ -2053,18 +2036,6 @@
             },
             "this_room_button": "Sök i det här rummet"
         },
-        "status_bar": {
-            "delete_all": "Radera alla",
-            "exceeded_resource_limit": "Ditt meddelande skickades inte eftersom hemservern har överskridit en av sina resursgränser. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
-            "homeserver_blocked": "Ditt meddelande skickades inte eftersom att den här hemservern har blockerats av sin administratör. Vänligen <a>kontakta din tjänsteadministratör</a> för att fortsätta använda tjänsten.",
-            "monthly_user_limit_reached": "Ditt meddelande skickades inte eftersom hemservern har nått sin månatliga gräns för användaraktivitet. Vänligen <a>kontakta din serviceadministratör</a> för att fortsätta använda tjänsten.",
-            "requires_consent_agreement": "Du kan inte skicka några meddelanden innan du granskar och godkänner <consentLink>våra villkor</consentLink>.",
-            "retry_all": "Försök alla igen",
-            "select_messages_to_retry": "Du kan välja alla eller individuella meddelanden att försöka igen eller radera",
-            "server_connectivity_lost_description": "Skickade meddelanden kommer att lagras tills anslutningen är tillbaka.",
-            "server_connectivity_lost_title": "Anslutning till servern har brutits.",
-            "some_messages_not_sent": "Vissa av dina meddelanden har inte skickats"
-        },
         "unknown_status_code_for_timeline_jump": "okänd statuskod",
         "unread_notifications_predecessor": {
             "other": "Du har %(count)s olästa aviseringar i en tidigare version av det här rummet.",
@@ -2092,37 +2063,9 @@
         "add_space_label": "Lägg till utrymme",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
-        "collapse_filters": "Kollapsa filterlista",
-        "empty": {
-            "no_chats": "Inga chattar än",
-            "no_chats_description": "Kom igång genom att skicka meddelanden till någon eller genom att skapa ett rum",
-            "no_chats_description_no_room_rights": "Kom igång genom att skicka meddelanden till någon",
-            "no_favourites": "Du har ingen favoritchatt än",
-            "no_favourites_description": "Du kan lägga till en chatt till dina favoriter i chattinställningarna",
-            "no_invites": "Du har inga olästa inbjudningar",
-            "no_lowpriority": "Du har inga lågprioriterade rum.",
-            "no_mentions": "Du har inga olästa omnämnanden",
-            "no_people": "Du har inte direktchattar med någon ännu",
-            "no_people_description": "Du kan avmarkera filter för att se dina andra chattar",
-            "no_rooms": "Du är inte i något rum än",
-            "no_rooms_description": "Du kan avmarkera filter för att se dina andra chattar",
-            "no_unread": "Grattis! Du har inga olästa meddelanden",
-            "show_activity": "Visa all aktivitet",
-            "show_chats": "Visa alla chattar"
-        },
-        "expand_filters": "Expandera filterlista",
         "failed_add_tag": "Misslyckades att lägga till etiketten %(tagName)s till rummet",
         "failed_remove_tag": "Misslyckades att radera etiketten %(tagName)s från rummet",
         "failed_set_dm_tag": "Misslyckades att sätta direktmeddelandetagg",
-        "filters": {
-            "favourite": "Favoriter",
-            "invites": "Inbjudningar",
-            "low_priority": "Låg prioritet",
-            "mentions": "Omnämnanden",
-            "people": "Personer",
-            "rooms": "Rum",
-            "unread": "Olästa"
-        },
         "home_menu_label": "Hemalternativ",
         "join_public_room_label": "Gå med i offentligt rum",
         "joining_rooms_status": {
@@ -2131,44 +2074,23 @@
         },
         "list_title": "Rumslista",
         "more_options": {
-            "copy_link": "Kopiera rumslänk",
-            "favourited": "Favoritmarkerad",
-            "leave_room": "Lämna rum",
-            "low_priority": "Låg prioritet",
-            "mark_read": "Markera som läst",
-            "mark_unread": "Markera som oläst"
+            "leave_room": "Lämna rum"
         },
         "notification_options": "Aviseringsinställningar",
-        "open_space_menu": "Öppna utrymmesmenyn",
-        "primary_filters": "Filter för rumslista",
         "redacting_messages_status": {
             "one": "Tar just nu bort meddelanden i %(count)s rum",
             "other": "Tar just nu bort meddelanden i %(count)s rum"
         },
-        "room": {
-            "more_options": "Fler alternativ",
-            "open_room": "Öppet rummet %(roomName)s"
-        },
-        "room_options": "Rumsalternativ",
         "show_less": "Visa mindre",
         "show_n_more": {
             "other": "Visa %(count)s till",
             "one": "Visa %(count)s till"
         },
         "show_previews": "Visa förhandsgranskningar av meddelanden",
-        "sort": "Sortera",
         "sort_by": "Sortera efter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Ö",
-        "sort_type": {
-            "activity": "Aktivitet",
-            "atoz": "A-Ö"
-        },
         "sort_unread_first": "Visa rum med olästa meddelanden först",
-        "space_menu": {
-            "home": "Utrymmeshem",
-            "space_settings": "Utrymmesinställningar"
-        },
         "space_menu_label": "%(spaceName)s-alternativ",
         "sublist_options": "Listalternativ",
         "suggested_rooms_heading": "Föreslagna rum"
@@ -2348,7 +2270,6 @@
             "error_join_rule_change_unknown": "Okänt fel",
             "guest_access_warning": "Personer med stödda klienter kommer kunna gå med i rummet utan ett registrerat konto.",
             "history_visibility_invited": "Endast medlemmar (från när de blev inbjudna)",
-            "history_visibility_joined": "Endast medlemmar (från när de gick med)",
             "history_visibility_legend": "Vilka kan läsa historik?",
             "history_visibility_shared": "Endast medlemmar (från tidpunkten för när denna inställning valdes)",
             "history_visibility_warning": "Ändringar av vem som kan läsa historiken gäller endast för framtida meddelanden i detta rum. Synligheten för befintlig historik kommer att vara oförändrad.",
@@ -3297,24 +3218,10 @@
         "no_rooms_with_unread_threads": "Du har inga rum med olästa trådar än."
     },
     "time": {
-        "about_day_ago": "cirka en dag sedan",
-        "about_hour_ago": "cirka en timme sedan",
-        "about_minute_ago": "cirka en minut sedan",
         "date_at_time": "%(date)s vid %(time)s",
-        "few_seconds_ago": "några sekunder sedan",
         "hours_minutes_seconds_left": "%(hours)st %(minutes)sm %(seconds)ss kvar",
-        "in_about_day": "om cirka en dag",
-        "in_about_hour": "om cirka en timme",
-        "in_about_minute": "om cirka en minut",
-        "in_few_seconds": "om några sekunder",
-        "in_n_days": "om %(num)s dagar",
-        "in_n_hours": "om %(num)s timmar",
-        "in_n_minutes": "om %(num)s minuter",
         "left": "%(timeRemaining)s kvar",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss kvar",
-        "n_days_ago": "%(num)s dagar sedan",
-        "n_hours_ago": "%(num)s timmar sedan",
-        "n_minutes_ago": "%(num)s minuter sedan",
         "seconds_left": "%(seconds)ss kvar",
         "short_days": "%(value)sd",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
@@ -3338,12 +3245,7 @@
         "creation_summary_dm": "%(creator)s skapade den här DM:en.",
         "creation_summary_room": "%(creator)s skapade och konfigurerade rummet.",
         "decryption_failure": {
-            "blocked": "Avsändaren har blockerat dig från att ta emot det här meddelandet eftersom din enhet inte är verifierad",
-            "historical_event_no_key_backup": "Historiska meddelanden är inte tillgängliga på den här enheten",
-            "historical_event_unverified_device": "Du måste verifiera den här enheten för att få åtkomst till historiska meddelanden",
-            "historical_event_user_not_joined": "Du har inte tillgång till det här meddelandet",
             "sender_identity_previously_verified": "Avsändarens verifierade identitet har ändrats",
-            "sender_unsigned_device": "Skickat från en osäker enhet.",
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3369,11 +3271,9 @@
             "unable_to_find": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den."
         },
         "m.audio": {
-            "audio_player": "Ljudspelare",
             "error_downloading_audio": "Fel vid nedladdning av ljud",
             "error_processing_audio": "Fel vid hantering av ljudmeddelande",
-            "error_processing_voice_message": "Fel vid hantering av röstmeddelande",
-            "unnamed_audio": "Namnlöst ljud"
+            "error_processing_voice_message": "Fel vid hantering av röstmeddelande"
         },
         "m.beacon_info": {
             "view_live_location": "Se realtidsposition"
@@ -3946,7 +3846,6 @@
         "hide_sidebar_button": "Göm sidopanel",
         "input_devices": "Ingångsenheter",
         "jitsi_call": "Jitsi-gruppsamtal",
-        "join_button_tooltip_call_full": "Tyvärr - det här samtalet är för närvarande fullt",
         "legacy_call": "Standardsamtal",
         "maximise": "Fyll skärmen",
         "maximise_call": "Maximera samtal",

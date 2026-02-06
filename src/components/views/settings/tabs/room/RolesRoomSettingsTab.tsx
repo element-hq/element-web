@@ -12,7 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get, set } from "lodash";
 import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
-import { _t, _td, type TranslationKey } from "../../../../../languageHandler";
+import { _t, _td } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
@@ -27,6 +27,7 @@ import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { PowerLevelSelector } from "../../PowerLevelSelector";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
 import { PolicyServerConfig } from "../../PolicyServerConfig.tsx";
+import { objectClone } from "../../../../../utils/objects.ts";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -225,12 +226,9 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         let plContent = plEvent?.getContent<RoomPowerLevelsEventContent>() ?? {};
 
-        // Clone the power levels just in case
-        plContent = Object.assign({}, plContent);
-
-        // powerLevelKey should be a user ID
-        if (!plContent["users"]) plContent["users"] = {};
-        plContent["users"][powerLevelKey] = value;
+        // Clone the power levels so we can modify it without clobbering the js-sdk
+        plContent = objectClone({ users: {}, ...plContent });
+        plContent["users"]![powerLevelKey] = value;
 
         try {
             await client.sendStateEvent(this.props.room.roomId, EventType.RoomPowerLevels, plContent);

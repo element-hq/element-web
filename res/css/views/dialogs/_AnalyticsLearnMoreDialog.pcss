@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_AnalyticsLearnMoreDialog {
     max-width: 500px;
     .mx_AnalyticsLearnMore_image_holder {
-        background-image: url("$(res)/img/element-shiny.svg");
+        background-image: url("/res/img/element-shiny.svg");
         background-repeat: no-repeat;
         background-position: center top;
         height: 112px;
@@ -42,18 +42,13 @@ Please see LICENSE files in the repository root for full details.
         vertical-align: middle;
         position: relative;
 
-        &::before {
-            content: "";
+        svg {
             position: absolute;
             width: 26px;
             height: 26px;
             left: 0;
             top: 0;
-            background-color: #0dbd8b;
-            mask-image: url("@vector-im/compound-design-tokens/icons/check-circle.svg");
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: contain;
+            color: #0dbd8b;
         }
     }
 }

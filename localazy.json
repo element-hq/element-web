@@ -18,6 +18,18 @@
                 "file": "element-web.json",
                 "excludes": ["src/i18n/strings/en_EN.json"],
                 "lang": "${autodetectLang}"
+            },
+            {
+                "pattern": "packages/shared-components/src/i18n/strings/en_EN.json",
+                "file": "shared-components.json",
+                "lang": "inherited"
+            },
+            {
+                "group": "existing",
+                "pattern": "packages/shared-components/src/i18n/strings/*.json",
+                "file": "shared-components.json",
+                "excludes": ["packages/shared-components/src/i18n/strings/en_EN.json"],
+                "lang": "${autodetectLang}"
             }
         ]
     },
@@ -27,6 +39,10 @@
             {
                 "conditions": "equals: ${file}, element-web.json",
                 "output": "src/i18n/strings/${langLsrUnderscore}.json"
+            },
+            {
+                "conditions": "equals: ${file}, shared-components.json",
+                "output": "packages/shared-components/src/i18n/strings/${langLsrUnderscore}.json"
             }
         ],
         "includeSourceLang": "${includeSourceLang|false}",

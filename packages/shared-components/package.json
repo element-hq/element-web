@@ -1,23 +1,24 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "0.0.0-test.12",
+    "version": "0.0.2",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
     },
+    "type": "module",
     "exports": {
         ".": {
             "require": {
                 "style": "./dist/element-web-shared-components.css",
                 "types": "./dist/element-web-shared-components.d.ts",
-                "default": "./dist/element-web-shared-components.umd.js"
+                "default": "./dist/element-web-shared-components.umd.cjs"
             },
             "import": {
                 "style": "./dist/element-web-shared-components.css",
                 "types": "./dist/element-web-shared-components.d.ts",
-                "default": "./dist/element-web-shared-components.mjs"
+                "default": "./dist/element-web-shared-components.js"
             }
         },
         "./dist/element-web-shared-components.css": {
@@ -34,65 +35,92 @@
         "package.json"
     ],
     "scripts": {
-        "test": "jest",
-        "prepare": "patch-package && yarn --cwd ../.. build:res && node scripts/gatherTranslationKeys.ts && vite build",
+        "i18n": "matrix-gen-i18n src && yarn i18n:sort && yarn i18n:lint",
+        "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
+        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
+        "test:unit": "vitest --project=unit",
+        "test:storybook": "yarn build:doc && vitest --project=storybook",
+        "test:storybook:update": "playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules",
+        "prepare": "patch-package && vite build",
         "storybook": "storybook dev -p 6007",
-        "build-storybook": "storybook build",
+        "build:storybook": "yarn build:doc && storybook build && node scripts/storybook-build-i18n.ts",
+        "build:doc": "typedoc",
         "lint": "yarn lint:types && yarn lint:js",
         "lint:js": "eslint --max-warnings 0 src && prettier --check .",
-        "lint:types": "tsc --noEmit --jsx react",
-        "test:storybook": "test-storybook --url http://localhost:6007/",
-        "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" \"yarn storybook --no-open\" \"wait-on tcp:6007 && yarn test-storybook --url http://localhost:6007/ --ci --maxWorkers=2\"",
-        "test:storybook:update": "playwright-screenshots --entrypoint /work/scripts/storybook-screenshot-update.sh --with-node-modules"
-    },
-    "resolutions": {
-        "playwright": "1.57.0"
+        "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "dependencies": {
         "@element-hq/element-web-module-api": "^1.8.0",
-        "@vector-im/compound-design-tokens": "^6.3.0",
+        "@matrix-org/spec": "^1.7.0",
+        "@vector-im/compound-design-tokens": "^6.4.3",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
         "lodash": "^4.17.21",
-        "matrix-web-i18n": "^3.4.0",
-        "patch-package": "^8.0.1",
+        "matrix-web-i18n": "3.6.0",
         "react-merge-refs": "^3.0.2",
+        "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "^2.0.0",
-        "@playwright/test": "1.57.0",
+        "@element-hq/element-web-playwright-common": "2.2.5",
+        "@fetch-mock/vitest": "^0.2.18",
+        "@matrix-org/react-sdk-module-api": "^2.5.0",
+        "@playwright/test": "1.58.1",
         "@storybook/addon-a11y": "^10.0.7",
         "@storybook/addon-designs": "^11.0.1",
         "@storybook/addon-docs": "^10.0.7",
+        "@storybook/addon-vitest": "^10.1.11",
         "@storybook/icons": "^2.0.0",
         "@storybook/react-vite": "^10.0.7",
-        "@storybook/test-runner": "^0.24.1",
+        "@stylistic/eslint-plugin": "^5.7.0",
         "@testing-library/dom": "^10.4.1",
-        "@testing-library/react": "^16.3.0",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.2",
+        "@testing-library/user-event": "^14.6.1",
         "@types/counterpart": "^0.18.4",
-        "@types/jest-image-snapshot": "^6.4.0",
         "@types/lodash": "^4.17.20",
         "@types/react": "^19.2.2",
-        "concurrently": "^9.2.1",
+        "@types/react-dom": "^19.2.3",
+        "@typescript-eslint/eslint-plugin": "^8.53.1",
+        "@typescript-eslint/parser": "^8.53.1",
+        "@vector-im/compound-web": "^8.3.6",
+        "@vitejs/plugin-react": "^5.1.2",
+        "@vitest/browser-playwright": "^4.0.17",
+        "@vitest/coverage-v8": "^4.0.17",
+        "@vitest/ui": "^4.0.17",
         "eslint": "8",
+        "eslint-config-google": "^0.14.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-deprecate": "^0.8.7",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
         "eslint-plugin-matrix-org": "^3.0.0",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-compiler": "^19.1.0-rc.2",
+        "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-storybook": "^10.0.7",
-        "jest": "^30.2.0",
-        "jest-image-snapshot": "^6.5.1",
+        "eslint-plugin-unicorn": "^56.0.0",
+        "expect": "^30.2.0",
         "patch-package": "^8.0.1",
         "prettier": "^3.6.2",
         "storybook": "^10.0.7",
+        "storybook-addon-vis": "^3.1.2",
+        "typedoc": "^0.28.16",
+        "typedoc-plugin-markdown": "^4.9.0",
+        "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "^5.9.3",
-        "vite": "^7.1.9",
+        "vite": "^7.3.1",
         "vite-plugin-dts": "^4.5.4",
-        "vite-plugin-node-polyfills": "^0.24.0"
+        "vite-plugin-node-polyfills": "^0.25.0",
+        "vitest": "^4.0.18",
+        "vitest-browser-react": "^2.0.2",
+        "vitest-sonar-reporter": "^3.0.0"
     },
     "engines": {
         "node": ">=20.0.0"
     },
     "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
     "peerDependencies": {
-        "@vector-im/compound-web": "^8.2.5"
+        "@vector-im/compound-web": "^8.3.5"
     }
 }

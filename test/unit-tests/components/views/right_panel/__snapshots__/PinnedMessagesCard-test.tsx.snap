@@ -20,7 +20,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
       </div>
       <button
         aria-labelledby="_r_f_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -102,7 +102,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
       </div>
       <button
         aria-labelledby="_r_l_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -170,7 +170,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1pz9o_8"
+                class="_icon-button_1215g_8"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-_r_11_"
@@ -251,7 +251,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1pz9o_8"
+                class="_icon-button_1215g_8"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-_r_19_"
@@ -296,7 +296,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_187yx_8"
+          class="_button_13vu4_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -330,7 +330,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
       </div>
       <button
         aria-labelledby="_r_10f_"
-        class="_icon-button_1pz9o_8"
+        class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
         role="button"
@@ -398,7 +398,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1pz9o_8"
+                class="_icon-button_1215g_8"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-_r_10r_"
@@ -479,7 +479,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_1pz9o_8"
+                class="_icon-button_1215g_8"
                 data-kind="primary"
                 data-state="closed"
                 id="radix-_r_113_"

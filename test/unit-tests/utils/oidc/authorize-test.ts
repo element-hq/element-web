@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
 import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
 import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
@@ -58,9 +58,7 @@ describe("OIDC authorization", () => {
                 subtle: webCrypto.subtle,
             },
         });
-    });
 
-    beforeAll(() => {
         fetchMock.get(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`, delegatedAuthConfig);
     });
 

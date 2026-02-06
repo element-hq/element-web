@@ -18,10 +18,11 @@ import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icon
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
-import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { HistoryVisibility, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Flex, Box } from "@element-hq/web-shared-components";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
@@ -55,6 +56,7 @@ import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
 import { LocalRoom } from "../../../../models/LocalRoom.ts";
+import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 
 function RoomHeaderButtons({
     room,
@@ -389,6 +391,40 @@ function RoomHeaderButtons({
     );
 }
 
+/** Create an icon to warn the user about shared history visibility, in encrypted rooms.
+ *
+ * Note that we use the same icon as in the room summary card and elsewhere, to aid user recognition.
+ */
+function historyVisibilityIcon(historyVisibility: HistoryVisibility): JSX.Element | null {
+    if (historyVisibility === HistoryVisibility.Shared) {
+        return (
+            <Tooltip label={_t("room|header|shared_history_tooltip")} placement="right">
+                <HistoryIcon
+                    width="16px"
+                    height="16px"
+                    className="mx_RoomHeader_icon"
+                    color="var(--cpd-color-icon-info-primary)"
+                    aria-label={_t("room|header|shared_history_tooltip")}
+                />
+            </Tooltip>
+        );
+    } else if (historyVisibility === HistoryVisibility.WorldReadable) {
+        return (
+            <Tooltip label={_t("room|header|world_readable_history_tooltip")} placement="right">
+                <UserProfileSolidIcon
+                    width="16px"
+                    height="16px"
+                    className="mx_RoomHeader_icon"
+                    color="var(--cpd-color-icon-info-primary)"
+                    aria-label={_t("room|header|world_readable_history_tooltip")}
+                />
+            </Tooltip>
+        );
+    } else {
+        return null;
+    }
+}
+
 export default function RoomHeader({
     room,
     additionalButtons,
@@ -401,8 +437,11 @@ export default function RoomHeader({
     const client = useMatrixClientContext();
     const roomName = useRoomName(room);
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
+    const historyVisibility = useRoomState(room, (state) => state.getHistoryVisibility());
+    const historySharingEnabled = useFeatureEnabled("feature_share_history_on_invite");
     const dmMember = useDmMember(room);
     const isDirectMessage = !!dmMember;
+    const isRoomEncrypted = useIsEncrypted(client, room);
     const e2eStatus = useEncryptionStatus(client, room);
     const askToJoinEnabled = useFeatureEnabled("feature_ask_to_join");
     const onAvatarClick = (): void => {
@@ -484,6 +523,8 @@ export default function RoomHeader({
                                         />
                                     </Tooltip>
                                 )}
+
+                                {isRoomEncrypted && historySharingEnabled && historyVisibilityIcon(historyVisibility)}
                             </Text>
                         </Box>
                     </button>

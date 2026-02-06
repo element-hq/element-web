@@ -44,6 +44,7 @@ import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-t
 import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
 import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
+import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
@@ -769,7 +770,7 @@ export class ElementCall extends Call {
         }
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
-        if (rageshakeSubmitUrl) {
+        if (rageshakeSubmitUrl && rageshakeSubmitUrl !== BugReportEndpointURLLocal) {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 

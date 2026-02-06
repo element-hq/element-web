@@ -7,7 +7,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -161,7 +161,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _destructive_187yx_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -170,7 +170,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
         Continue
       </button>
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"
@@ -190,7 +190,7 @@ exports[`<ResetIdentityPanel /> should display the 'sync failed' variant correct
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -344,7 +344,7 @@ exports[`<ResetIdentityPanel /> should display the 'sync failed' variant correct
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _destructive_187yx_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -353,7 +353,7 @@ exports[`<ResetIdentityPanel /> should display the 'sync failed' variant correct
         Continue
       </button>
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"
@@ -373,7 +373,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -530,7 +530,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _destructive_187yx_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -539,7 +539,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
         Continue
       </button>
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"
@@ -559,7 +559,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -716,7 +716,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
     >
       <button
         aria-disabled="true"
-        class="_button_187yx_8 _destructive_187yx_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"

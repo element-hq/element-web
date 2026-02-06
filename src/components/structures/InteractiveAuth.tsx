@@ -117,6 +117,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 AuthType.UnstableRegistrationToken,
                 AuthType.Sso,
                 AuthType.SsoUnstable,
+                AuthType.OAuth,
                 CustomAuthType.MasCrossSigningReset,
             ],
         });

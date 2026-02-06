@@ -14,6 +14,9 @@ import {
     UserAddSolidIcon,
     SearchIcon,
     UserAddIcon,
+    VideoCallSolidIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -57,7 +60,6 @@ import IconizedContextMenu, {
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
-import { Icon as HashVideoIcon } from "../../../../res/img/element-icons/roomlist/hash-video.svg";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
@@ -131,7 +133,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
     const pendingActions = usePendingActions();
 
-    const canShowMainMenu = activeSpace || spaceKey === MetaSpace.Home;
+    const canShowMainMenu = !!activeSpace || spaceKey === MetaSpace.Home;
 
     useEffect(() => {
         if (mainMenuDisplayed && !canShowMainMenu) {
@@ -213,7 +215,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
-                            icon={<HashVideoIcon />}
+                            icon={<VideoCallSolidIcon />}
                             label={_t("action|new_video_room")}
                             onClick={(e) => {
                                 e.preventDefault();
@@ -319,7 +321,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
                             label={_t("action|new_video_room")}
-                            icon={<HashVideoIcon />}
+                            icon={<VideoCallSolidIcon />}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -392,7 +394,11 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             onClick: openMainMenu,
             isExpanded: mainMenuDisplayed,
             className: "mx_LegacyRoomListHeader_contextMenuButton",
-            children: title,
+            children: (
+                <>
+                    {title} {mainMenuDisplayed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </>
+            ),
         };
 
         if (!!activeSpace) {
@@ -422,7 +428,9 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     isExpanded={plusMenuDisplayed}
                     className="mx_LegacyRoomListHeader_plusButton"
                     title={_t("action|add")}
-                />
+                >
+                    <PlusIcon />
+                </ContextMenuTooltipButton>
             )}
 
             {contextMenu}

@@ -19,6 +19,7 @@ import {
     mockClientMethodsUser,
     mockIntlDateTimeFormat,
     setupRoomWithPollEvents,
+    unmockIntlDateTimeFormat,
 } from "../../../../../test-utils";
 
 describe("<PollListItemEnded />", () => {
@@ -52,14 +53,14 @@ describe("<PollListItemEnded />", () => {
     const getComponent = (props: { event: MatrixEvent; poll: Poll }) =>
         render(<PollListItemEnded {...props} onClick={jest.fn()} />);
 
-    beforeEach(() => {
+    beforeAll(() => {
         // mock default locale to en-GB and set timezone
         // so these tests run the same everywhere
         mockIntlDateTimeFormat();
     });
 
-    afterEach(() => {
-        jest.resetAllMocks();
+    afterAll(() => {
+        unmockIntlDateTimeFormat();
     });
 
     it("renders a poll with no responses", async () => {

@@ -13,6 +13,7 @@ import FocusLock from "react-focus-lock";
 import classNames from "classnames";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { I18nContext } from "@element-hq/web-shared-components";
+import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -134,7 +135,9 @@ export default class BaseDialog extends React.Component<IProps> {
                     title={_t("action|close")}
                     aria-label={_t("dialog_close_label")}
                     placement="bottom"
-                />
+                >
+                    <CloseIcon />
+                </AccessibleButton>
             );
         }
 

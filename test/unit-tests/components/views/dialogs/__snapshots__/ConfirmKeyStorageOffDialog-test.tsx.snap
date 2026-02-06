@@ -59,7 +59,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -68,7 +68,7 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
         Go to Settings
       </button>
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="secondary"
         data-size="lg"
         role="button"

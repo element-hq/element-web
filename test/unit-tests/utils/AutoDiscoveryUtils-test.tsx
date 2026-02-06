@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { AutoDiscovery, AutoDiscoveryAction, type ClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import fetchMock from "fetch-mock-jest";
+import fetchMock from "@fetch-mock/jest";
 
 import AutoDiscoveryUtils from "../../../src/utils/AutoDiscoveryUtils";
 import { mockOpenIdConfiguration } from "../../test-utils/oidc";
@@ -152,7 +152,7 @@ describe("AutoDiscoveryUtils", () => {
             };
             await expect(() =>
                 AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult),
-            ).rejects.toThrow("Invalid URL: banana");
+            ).rejects.toThrow("Invalid URL");
         });
 
         it("uses hs url hostname when serverName is falsy in args and config", async () => {

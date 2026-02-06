@@ -100,23 +100,19 @@ Please see LICENSE files in the repository root for full details.
             height: 24px;
             border-radius: 8px;
 
-            &::before {
-                content: "";
+            svg {
                 width: 16px;
                 height: 16px;
                 position: absolute;
                 top: 4px;
                 left: 4px;
-                mask-position: center;
-                mask-size: contain;
-                mask-repeat: no-repeat;
-                background: var(--cpd-color-icon-secondary);
+                color: var(--cpd-color-icon-secondary);
             }
         }
 
-        .mx_RoomSublist_auxButton:hover,
-        .mx_RoomSublist_menuButton:hover {
-            background: $panel-actions;
+        .mx_RoomSublist_auxButton:hover svg,
+        .mx_RoomSublist_menuButton:hover svg {
+            color: $panel-actions;
         }
 
         /* Hide the menu button by default */
@@ -124,14 +120,6 @@ Please see LICENSE files in the repository root for full details.
             visibility: hidden;
             width: 0;
             margin: 0;
-        }
-
-        .mx_RoomSublist_auxButton::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
-        }
-
-        .mx_RoomSublist_menuButton::before {
-            mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
         }
 
         .mx_RoomSublist_headerText {
@@ -151,20 +139,11 @@ Please see LICENSE files in the repository root for full details.
                 height: 14px;
                 margin-right: 6px;
 
-                &::before {
-                    content: "";
+                svg {
                     width: 18px;
                     height: 18px;
                     position: absolute;
-                    mask-position: center;
-                    mask-size: contain;
-                    mask-repeat: no-repeat;
-                    background-color: var(--cpd-color-icon-secondary);
-                    mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-                }
-
-                &.mx_RoomSublist_collapseBtn_collapsed::before {
-                    transform: rotate(-90deg);
+                    color: var(--cpd-color-icon-secondary);
                 }
             }
         }
@@ -267,20 +246,8 @@ Please see LICENSE files in the repository root for full details.
             height: 18px;
             margin-left: 12px;
             margin-right: 16px;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background: $tertiary-content;
+            color: $tertiary-content;
             left: -1px; /* adjust for image position */
-        }
-
-        .mx_RoomSublist_showMoreButtonChevron,
-        .mx_RoomSublist_showLessButtonChevron {
-            mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
-        }
-
-        .mx_RoomSublist_showLessButtonChevron {
-            transform: rotate(180deg);
         }
     }
 
@@ -320,7 +287,7 @@ Please see LICENSE files in the repository root for full details.
                 background-color: $panel-actions;
                 margin-top: 8px;
 
-                &::before {
+                svg {
                     top: 8px;
                     left: 8px;
                 }
@@ -359,7 +326,7 @@ Please see LICENSE files in the repository root for full details.
                 /* to occlude the sublist title */
                 background-color: $roomlist-bg-color;
 
-                &::before {
+                svg {
                     top: 0;
                     left: 0;
                 }
@@ -412,7 +379,7 @@ Please see LICENSE files in the repository root for full details.
         position: absolute;
         mask-repeat: repeat-y;
         mask-size: auto 48px;
-        mask-image: url("$(res)/img/element-icons/roomlist/skeleton-ui.svg");
+        mask-image: url("/res/img/element-icons/roomlist/skeleton-ui.svg");
     }
 }
 

@@ -7,7 +7,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
   >
     <button
       aria-label="Back"
-      class="_icon-button_1pz9o_8"
+      class="_icon-button_1215g_8"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -134,7 +134,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_187yx_8 _destructive_187yx_107"
+        class="_button_13vu4_8 _destructive_13vu4_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -143,7 +143,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
         Delete key storage
       </button>
       <button
-        class="_button_187yx_8"
+        class="_button_13vu4_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"

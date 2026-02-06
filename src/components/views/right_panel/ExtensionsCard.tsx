@@ -10,15 +10,17 @@ import React, { type JSX, useEffect, useMemo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
-import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
-import ExtensionsIcon from "@vector-im/compound-design-tokens/assets/web/icons/extensions";
+import {
+    PlusIcon,
+    ExtensionsIcon,
+    OverflowHorizontalIcon,
+    PinSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import { _t } from "../../../languageHandler";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
-import UIStore from "../../../stores/UIStore";
+import { useContextMenu } from "../../structures/ContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IApp } from "../../../stores/WidgetStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -29,6 +31,7 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
+import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
 
 interface Props {
     room: Room;
@@ -65,21 +68,6 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
           };
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    let contextMenu;
-    if (menuDisplayed) {
-        const rect = handle.current?.getBoundingClientRect();
-        const rightMargin = rect?.right ?? 0;
-        const topMargin = rect?.top ?? 0;
-        contextMenu = (
-            <WidgetContextMenu
-                chevronFace={ChevronFace.None}
-                right={UIStore.instance.windowWidth - rightMargin}
-                bottom={UIStore.instance.windowHeight - topMargin}
-                onFinished={closeMenu}
-                app={app}
-            />
-        );
-    }
 
     const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, Container.Top);
 
@@ -104,7 +92,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     });
 
     return (
-        <div className={classes} ref={handle}>
+        <div className={classes}>
             <AccessibleButton
                 className="mx_ExtensionsCard_icon_app"
                 onClick={onOpenWidgetClick}
@@ -119,11 +107,20 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             </AccessibleButton>
 
             {canModifyWidget && (
-                <ContextMenuTooltipButton
-                    className="mx_ExtensionsCard_app_options"
-                    isExpanded={menuDisplayed}
-                    onClick={openMenu}
-                    title={_t("common|options")}
+                <WidgetContextMenu
+                    app={app}
+                    onFinished={closeMenu}
+                    menuDisplayed={menuDisplayed}
+                    trigger={
+                        <AccessibleButton
+                            ref={handle}
+                            className="mx_ExtensionsCard_app_options"
+                            onClick={openMenu}
+                            title={_t("common|options")}
+                        >
+                            <OverflowHorizontalIcon />
+                        </AccessibleButton>
+                    }
                 />
             )}
 
@@ -132,9 +129,9 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                 onClick={togglePin}
                 title={pinTitle}
                 disabled={cannotPin}
-            />
-
-            {contextMenu}
+            >
+                <PinSolidIcon />
+            </AccessibleButton>
         </div>
     );
 };

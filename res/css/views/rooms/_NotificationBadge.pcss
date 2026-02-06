@@ -19,6 +19,8 @@ Please see LICENSE files in the repository root for full details.
 
     &.mx_NotificationBadge_visible {
         background-color: $roomtile-default-badge-bg-color;
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
 
         /* Create a flexbox to order the count a bit easier */
         display: flex;
@@ -55,8 +57,7 @@ Please see LICENSE files in the repository root for full details.
             background-color: var(--cpd-color-icon-critical-primary);
         }
 
-        &.mx_NotificationBadge_knocked {
-            mask-image: url("@vector-im/compound-design-tokens/icons/ask-to-join.svg");
+        & > svg {
             width: 16px;
             height: 16px;
         }

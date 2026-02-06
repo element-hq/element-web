@@ -15,7 +15,7 @@ $res: ../../../res;
     font-family: "Nunito";
     font-style: normal;
     font-weight: 400;
-    src: url("$(res)/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
+    src: url("/res/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
 }
 
 $dark-fg: #edf3ff;
@@ -89,25 +89,18 @@ html {
     cursor: pointer;
 }
 
-.icon {
+.joinConferencePrompt svg {
     $icon-size: 42px;
-    margin-top: -$icon-size; /* to visually center the form */
+    /* to visually center the form */
+    margin: -$icon-size auto 0;
 
-    &::before {
-        content: "";
-        background-size: contain;
-        background-color: $dark-fg;
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-image: url("@vector-im/compound-design-tokens/icons/video-call-solid.svg");
-        mask-size: $icon-size;
-        display: block;
-        width: $icon-size;
-        height: $icon-size;
-        margin: 0 auto; /* center */
-    }
+    color: $dark-fg;
+    mask-size: $icon-size;
+    display: block;
+    width: $icon-size;
+    height: $icon-size;
 }
 
-body.theme-light .icon::before {
-    background-color: $light-fg;
+body.theme-light .joinConferencePrompt svg {
+    color: $light-fg;
 }

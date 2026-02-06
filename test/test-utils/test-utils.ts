@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { mocked, type MockedObject } from "jest-mock";
 import {
-    type EventTimeline,
     MatrixEvent,
     type Room,
     type User,
@@ -17,7 +16,7 @@ import {
     type IEvent,
     type RoomMember,
     type MatrixClient,
-    RoomState,
+    type EventTimeline,
     EventType,
     type IEventRelation,
     type IUnsigned,
@@ -30,8 +29,10 @@ import {
     JoinRule,
     type OidcClientConfig,
     type GroupCall,
-    HistoryVisibility,
+    type EventStatus,
     type ICreateRoomOpts,
+    RoomState,
+    HistoryVisibility,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
@@ -207,6 +208,7 @@ export function createTestClient(): MatrixClient {
             });
         }),
         getAccountDataFromServer: jest.fn(),
+
         mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         setAccountData: jest.fn(),
         deleteAccountData: jest.fn(),
@@ -302,6 +304,7 @@ export function createTestClient(): MatrixClient {
                 room_id: roomId,
             });
         }),
+        resendEvent: jest.fn().mockResolvedValue({}),
 
         _unstable_sendDelayedEvent: jest.fn(),
         _unstable_sendDelayedStateEvent: jest.fn(),
@@ -310,7 +313,7 @@ export function createTestClient(): MatrixClient {
         _unstable_sendScheduledDelayedEvent: jest.fn(),
         _unstable_sendStickyEvent: jest.fn(),
         _unstable_sendStickyDelayedEvent: jest.fn(),
-
+        _unstable_getRTCTransports: jest.fn(),
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
         joinRoom: jest.fn(),
@@ -401,6 +404,7 @@ type MakeEventProps = MakeEventPassThruProps & {
     // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
+    status?: EventStatus;
 };
 
 export const mkRoomCreateEvent = (userId: string, roomId: string, content?: IContent): MatrixEvent => {
@@ -480,6 +484,9 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
             getAvatarUrl: () => {},
             getMxcAvatarUrl: () => {},
         } as unknown as RoomMember;
+    }
+    if (opts.status !== undefined) {
+        mxEvent.status = opts.status;
     }
     return mxEvent;
 }
@@ -651,6 +658,9 @@ export function mkStubRoom(
         getEvents: (): MatrixEvent[] => [],
         getState: (): RoomState | undefined => state,
     } as unknown as EventTimeline;
+
+    const eventEmitter = new EventEmitter();
+
     return {
         canInvite: jest.fn().mockReturnValue(false),
         client,
@@ -658,13 +668,13 @@ export function mkStubRoom(
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
         currentState: {
             getStateEvents: jest.fn((_type, key) => (key === undefined ? [] : null)),
-            getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Joined),
             getMember: jest.fn(),
             mayClientSendStateEvent: jest.fn().mockReturnValue(true),
             maySendStateEvent: jest.fn().mockReturnValue(true),
             maySendRedactionForEvent: jest.fn().mockReturnValue(true),
             maySendEvent: jest.fn().mockReturnValue(true),
             members: {},
+            getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Shared),
             getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
             on: jest.fn(),
             off: jest.fn(),
@@ -679,7 +689,6 @@ export function mkStubRoom(
         getCanonicalAlias: jest.fn(),
         getDMInviter: jest.fn(),
         getEventReadUpTo: jest.fn(() => null),
-        getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Joined),
         getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(1),
         getJoinRule: jest.fn().mockReturnValue("invite"),
         getJoinedMemberCount: jest.fn().mockReturnValue(1),
@@ -701,7 +710,7 @@ export function mkStubRoom(
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getMxcAvatarUrl: () => "mxc://avatar.url/room.png",
         getMyMembership: jest.fn().mockReturnValue(KnownMembership.Join),
-        getPendingEvents: () => [] as MatrixEvent[],
+        getPendingEvents: jest.fn().mockReturnValue([]),
         getReceiptsForEvent: jest.fn().mockReturnValue([]),
         getRecommendedVersion: jest.fn().mockReturnValue(Promise.resolve("")),
         getThreads: jest.fn().mockReturnValue([]),
@@ -721,9 +730,11 @@ export function mkStubRoom(
         myUserId: client?.getUserId(),
         name,
         normalizedName: normalize(name || ""),
-        off: jest.fn(),
-        on: jest.fn(),
-        removeListener: jest.fn(),
+        on: eventEmitter.on.bind(eventEmitter),
+        once: eventEmitter.once.bind(eventEmitter),
+        off: eventEmitter.off.bind(eventEmitter),
+        removeListener: eventEmitter.removeListener.bind(eventEmitter),
+        emit: eventEmitter.emit.bind(eventEmitter),
         roomId,
         setBlacklistUnverifiedDevices: jest.fn(),
         setUnreadNotificationCount: jest.fn(),

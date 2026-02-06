@@ -16,6 +16,7 @@ import React, {
     type ReactNode,
     type RefObject,
     type JSX,
+    useEffect,
 } from "react";
 import classNames from "classnames";
 import {
@@ -45,7 +46,7 @@ import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
-import { RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { RoomStatusBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -92,7 +93,6 @@ import { type IOpts } from "../../createRoom";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import UploadBar from "./UploadBar";
-import RoomStatusBar from "./RoomStatusBar";
 import MessageComposer from "../views/rooms/MessageComposer";
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
@@ -112,10 +112,8 @@ import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { createRoomFromLocalRoom } from "../../utils/direct-messages";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import EncryptionEvent from "../views/messages/EncryptionEvent";
-import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
-import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import { LargeLoader } from "./LargeLoader";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
@@ -137,6 +135,7 @@ import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInv
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
+import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -317,33 +316,11 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         encryptionTile = <EncryptionEvent mxEvent={encryptionEvent} />;
     }
 
-    const onRetryClicked = (): void => {
-        // eslint-disable-next-line react-compiler/react-compiler
-        room.state = LocalRoomState.NEW;
-        defaultDispatcher.dispatch({
-            action: "local_room_event",
-            roomId: room.roomId,
-        });
-    };
-
     let statusBar: ReactElement | null = null;
     let composer: ReactElement | null = null;
 
     if (room.isError) {
-        const buttons = (
-            <AccessibleButton onClick={onRetryClicked}>
-                <RestartIcon />
-                {_t("action|retry")}
-            </AccessibleButton>
-        );
-
-        statusBar = (
-            <RoomStatusBarUnsentMessages
-                title={_t("room|status_bar|some_messages_not_sent")}
-                notificationState={StaticNotificationState.RED_EXCLAMATION}
-                buttons={buttons}
-            />
-        );
+        statusBar = <RoomStatusBarWrappedView room={room} />;
     } else {
         composer = (
             <MessageComposer
@@ -399,6 +376,33 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
             </ErrorBoundary>
         </div>
     );
+}
+/**
+ * Wrap a RoomStatusBarView and ViewModel into one component, for usage with legacy React components.
+ */
+function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatusBarViewModel>[0]): ReactElement {
+    const vm = useCreateAutoDisposedViewModel(() => new RoomStatusBarViewModel(props));
+    useEffect(() => {
+        // Note: We need to tell the parent component whether the viewmodel expects to render anything
+        // (see onStatusBarVisible). This is ugly, but works.
+        if ("onVisible" in props) {
+            // Initial setup
+            if (vm.getSnapshot().state !== null) {
+                props.onVisible();
+            } else {
+                props.onHidden?.();
+            }
+            vm.subscribe(() => {
+                if (vm.getSnapshot().state !== null) {
+                    props.onVisible?.();
+                } else {
+                    props.onHidden?.();
+                }
+            });
+        }
+    }, [vm, props]);
+
+    return <RoomStatusBarView vm={vm} />;
 }
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
@@ -764,6 +768,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             newState.timelineRenderingType = TimelineRenderingType.Room;
             this.state.search?.abortController?.abort();
             newState.search = undefined;
+        }
+
+        if (
+            room &&
+            this.getMainSplitContentType(room) !== MainSplitContentType.Timeline &&
+            newState.initialEventId !== this.state.initialEventId
+        ) {
+            // Ensure the right panel timeline is open to show the linked event
+            this.context.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }, true, room.roomId);
         }
 
         this.setState(newState as IRoomState);
@@ -1678,14 +1691,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     }
 
-    private onInviteClick = (): void => {
-        // open the room inviter
-        defaultDispatcher.dispatch({
-            action: "view_invite",
-            roomId: this.getRoomId(),
-        });
-    };
-
     private onJoinButtonClicked = (): void => {
         // If the user is a ROU, allow them to transition to a PWLU
         if (this.context.client?.isGuest()) {
@@ -2392,10 +2397,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } else if (!this.state.search) {
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = (
-                <RoomStatusBar
+                <RoomStatusBarWrappedView
                     room={this.state.room}
-                    isPeeking={myMembership !== KnownMembership.Join}
-                    onInviteClick={this.onInviteClick}
                     onVisible={this.onStatusBarVisible}
                     onHidden={this.onStatusBarHidden}
                 />

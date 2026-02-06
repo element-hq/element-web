@@ -56,4 +56,35 @@ test.describe("Appearance user settings tab", () => {
         // Assert that the font-family value was removed
         await expect(page.locator("body")).toHaveCSS("font-family", '""');
     });
+
+    test(
+        "should keep same font and emoji when switching theme",
+        { tag: "@screenshot" },
+        async ({ page, app, user, util }) => {
+            const roomId = await util.createAndDisplayRoom();
+            await app.client.sendMessage(roomId, { body: "Message with 🦡", msgtype: "m.text" });
+
+            await app.settings.openUserSettings("Appearance");
+            const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
+            await tab.getByRole("button", { name: "Show advanced" }).click();
+            await tab.getByRole("switch", { name: "Use bundled emoji font" }).click();
+            await tab.getByRole("switch", { name: "Use a system font" }).click();
+
+            await app.closeDialog();
+            await expect(page).toMatchScreenshot("window-before-switch.png", {
+                mask: [page.locator(".mx_MessageTimestamp")],
+            });
+
+            // Switch to dark theme
+            await app.settings.openUserSettings("Appearance");
+            await util.getMatchSystemThemeSwitch().click();
+            await util.getDarkTheme().click();
+
+            await app.closeDialog();
+            // Font and emoji should remain the same after theme switch
+            await expect(page).toMatchScreenshot("window-after-switch.png", {
+                mask: [page.locator(".mx_MessageTimestamp")],
+            });
+        },
+    );
 });
