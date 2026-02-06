@@ -919,19 +919,13 @@ Commands.forEach((cmd) => {
  * If not, returns {}
  */
 export function parseCommandString(input: string): { cmd?: string; args?: string } {
-    // trim any trailing whitespace, as it can confuse the parser for IRC-style commands
-    input = input.trim();
-    if (!input.startsWith("/")) return {}; // not a command
-
-    const bits = input.match(/^(\S+?)(?:\s+((.|\n)*))?$/);
-    let cmd: string;
-    let args: string | undefined;
-    if (bits) {
-        cmd = bits[1].substring(1).toLowerCase();
-        args = bits[2];
-    } else {
-        cmd = input;
+    const trimmedInput = input.trimStart();
+    if (trimmedInput.charAt(0) !== "/") {
+        return {};
     }
+
+    const withoutSlash = trimmedInput.slice(1);
+    const [cmd, args] = splitAtFirstSpace(withoutSlash);
 
     return { cmd, args };
 }
