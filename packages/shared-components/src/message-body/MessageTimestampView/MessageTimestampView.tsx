@@ -5,17 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, {
-    type JSX,
-    type ReactNode,
-    type MouseEventHandler,
-    type KeyboardEventHandler,
-    type MouseEvent,
-} from "react";
+import React, { type JSX, type MouseEventHandler, type KeyboardEvent, type MouseEvent } from "react";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
-// TODO: import { Icon as LateIcon } from "../../../res/img/sensor.svg";
-import { ImageErrorIcon as LateIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import styles from "./MessageTimestampView.module.css";
 import { type ViewModel } from "../../viewmodel/ViewModel";
@@ -90,24 +82,22 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
 
     const { ts, tsSentAt, tsReceivedAt, inhibitTooltip, extraClassNames, href } = useViewModel(vm);
 
-    const handleKeyDown: KeyboardEventHandler<HTMLElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as MouseEvent<HTMLElement>);
-              }
-          }
-        : undefined;
+    const onKeyDown = (event: KeyboardEvent<HTMLElement>): void => {
+        if (vm.onClick) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                vm.onClick?.(event as unknown as MouseEvent<HTMLElement>);
+            }
+        }
+    };
 
     let label = tsSentAt;
     let caption: string | undefined;
-    let icon: ReactNode | undefined;
     if (tsReceivedAt && tsReceivedAt?.length > 0) {
         label = _t("timeline|message_timestamp_sent_at", { dateTime: label });
         caption = _t("timeline|message_timestamp_received_at", {
             dateTime: tsReceivedAt,
         });
-        icon = <LateIcon className={styles.icon} width="16" height="16" />;
     }
 
     let content;
@@ -116,12 +106,12 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
             <a
                 href={href}
                 onClick={vm.onClick}
+                onKeyDown={onKeyDown}
                 onContextMenu={vm.onContextMenu}
                 className={classNames(extraClassNames, styles.content)}
                 role="button"
                 aria-live="off"
             >
-                {icon}
                 {ts}
             </a>
         );
@@ -129,7 +119,7 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
         content = (
             <span
                 onClick={vm.onClick}
-                onKeyDown={handleKeyDown}
+                onKeyDown={onKeyDown}
                 onContextMenu={vm.onContextMenu}
                 className={classNames(extraClassNames, styles.content)}
                 aria-hidden={vm.onClick || !inhibitTooltip ? false : true}
@@ -137,7 +127,6 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
                 aria-live="off"
                 tabIndex={vm.onClick || !inhibitTooltip ? 0 : undefined}
             >
-                {icon}
                 {ts}
             </span>
         );

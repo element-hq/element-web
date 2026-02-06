@@ -15,11 +15,3 @@
     user-select: none;
     text-decoration: none;
 }
-
-.icon {
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    color: inherit;
-}

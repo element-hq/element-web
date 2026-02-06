@@ -84,6 +84,7 @@ import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
+import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
@@ -1601,5 +1602,14 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
 
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
-    return <MessageTimestampView vm={vm} />;
+
+    return (
+        <>
+            {/* Render icon as described in, https://github.com/matrix-org/matrix-react-sdk/pull/11760 */}
+            {props.receivedTs ? (
+                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
+            ) : undefined}
+            <MessageTimestampView vm={vm} />
+        </>
+    );
 }
