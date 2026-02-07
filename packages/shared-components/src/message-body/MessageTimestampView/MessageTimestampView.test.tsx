@@ -28,27 +28,27 @@ describe("MessageTimestampView", () => {
         vi.clearAllMocks();
     });
 
-    it("renders the message timestamp in default state", () => {
+    it("renders the message timestamp in default state", async () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the message timestamp with received timestamp", () => {
+    it("renders the message timestamp with received timestamp", async () => {
         const { container } = render(<HasTsReceivedAt />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the message timestamp with extra class names", () => {
+    it("renders the message timestamp with extra class names", async () => {
         const { container } = render(<HasInhibitTooltip />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the message timestamp with inhibit tooltip", () => {
+    it("renders the message timestamp with inhibit tooltip", async () => {
         const { container } = render(<HasExtraClassNames />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the message timestamp with href", () => {
+    it("renders the message timestamp with href", async () => {
         const { container } = render(<HasHref />);
         expect(container).toMatchSnapshot();
     });
@@ -76,7 +76,7 @@ describe("MessageTimestampView", () => {
             wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
         });
 
-        const target = screen.getByRole("button");
+        const target = screen.getByRole("link");
 
         await user.click(target);
         expect(onClick).toHaveBeenCalled();
@@ -96,7 +96,7 @@ describe("MessageTimestampView", () => {
             wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
         });
 
-        const target = screen.getByRole("button", { hidden: true });
+        const target = screen.getByRole("link", { hidden: true });
 
         await user.click(target);
         expect(onClick).toHaveBeenCalled();
@@ -116,7 +116,7 @@ describe("MessageTimestampView", () => {
             wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
         });
 
-        await user.hover(screen.getByRole("button"));
+        await user.hover(screen.getByRole("link"));
         expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(`"Fri, Dec 17, 2021, 08:09:00"`);
     });
 
@@ -132,7 +132,7 @@ describe("MessageTimestampView", () => {
             wrapper: ({ children }) => <I18nContext.Provider value={new I18nApi()}>{children}</I18nContext.Provider>,
         });
 
-        await user.hover(screen.getByRole("button"));
+        await user.hover(screen.getByRole("link"));
         expect((await screen.findByRole("tooltip")).textContent).toMatchInlineSnapshot(
             `"Sent at: Fri, Dec 17, 2021, 08:09:00Received at: Received at: Sat, Dec 18, 2021, 08:09:00"`,
         );

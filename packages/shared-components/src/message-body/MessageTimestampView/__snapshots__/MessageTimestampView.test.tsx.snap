@@ -6,7 +6,7 @@ exports[`MessageTimestampView > renders the message timestamp in default state 1
     aria-hidden="false"
     aria-live="off"
     class="extra_class content"
-    role="button"
+    role="link"
     tabindex="0"
   >
     04:58
@@ -20,7 +20,7 @@ exports[`MessageTimestampView > renders the message timestamp with extra class n
     aria-hidden="false"
     aria-live="off"
     class="extra_class content"
-    role="button"
+    role="link"
     tabindex="0"
   >
     04:58
@@ -34,7 +34,6 @@ exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
     aria-live="off"
     class="extra_class content"
     href="~"
-    role="button"
   >
     04:58
   </a>
@@ -47,7 +46,7 @@ exports[`MessageTimestampView > renders the message timestamp with inhibit toolt
     aria-hidden="false"
     aria-live="off"
     class="extra_class_1 extra_class_2 content"
-    role="button"
+    role="link"
     tabindex="0"
   >
     04:58
@@ -61,7 +60,7 @@ exports[`MessageTimestampView > renders the message timestamp with received time
     aria-hidden="false"
     aria-live="off"
     class="extra_class content"
-    role="button"
+    role="link"
     tabindex="0"
   >
     04:58
