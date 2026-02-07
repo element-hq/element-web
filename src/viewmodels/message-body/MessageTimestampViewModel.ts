@@ -64,6 +64,9 @@ export class MessageTimestampViewModel
     extends BaseViewModel<MessageTimestampViewSnapshotInterface, MessageTimestampViewModelProps>
     implements MessageTimestampViewModelInterface
 {
+    public onClick?: MouseEventHandler<HTMLElement>;
+    public onContextMenu?: MouseEventHandler<HTMLElement>;
+
     private static readonly computeSnapshot = (
         props: MessageTimestampViewModelProps,
     ): MessageTimestampViewSnapshotInterface => {
@@ -100,5 +103,7 @@ export class MessageTimestampViewModel
 
     public constructor(props: MessageTimestampViewModelProps) {
         super(props, MessageTimestampViewModel.computeSnapshot(props));
+        this.onClick = props.onClick;
+        this.onContextMenu = props.onContextMenu;
     }
 }
