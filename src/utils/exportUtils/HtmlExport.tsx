@@ -13,6 +13,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { I18nContext } from "@element-hq/web-shared-components";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -31,6 +32,7 @@ import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
+import { ModuleApi } from "../../modules/Api.ts";
 
 import exportJS from "!!raw-loader!./exportJS";
 
@@ -267,33 +269,35 @@ export default class HTMLExporter extends Exporter {
     public getEventTile(mxEv: MatrixEvent, continuation: boolean, ref?: () => void): JSX.Element {
         return (
             <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
-                <MatrixClientContext.Provider value={this.room.client}>
-                    <SDKContext.Provider value={SdkContextClass.instance}>
-                        <TooltipProvider>
-                            <EventTile
-                                mxEvent={mxEv}
-                                continuation={continuation}
-                                isRedacted={mxEv.isRedacted()}
-                                replacingEventId={mxEv.replacingEventId()}
-                                forExport={true}
-                                alwaysShowTimestamps={true}
-                                showUrlPreview={false}
-                                checkUnmounting={() => false}
-                                isTwelveHour={false}
-                                last={false}
-                                lastInSection={false}
-                                permalinkCreator={this.permalinkCreator}
-                                lastSuccessful={false}
-                                isSelectedEvent={false}
-                                showReactions={true}
-                                layout={Layout.Group}
-                                showReadReceipts={false}
-                                getRelationsForEvent={this.getRelationsForEvent}
-                                ref={ref}
-                            />
-                        </TooltipProvider>
-                    </SDKContext.Provider>
-                </MatrixClientContext.Provider>
+                <I18nContext.Provider value={ModuleApi.instance.i18n}>
+                    <MatrixClientContext.Provider value={this.room.client}>
+                        <SDKContext.Provider value={SdkContextClass.instance}>
+                            <TooltipProvider>
+                                <EventTile
+                                    mxEvent={mxEv}
+                                    continuation={continuation}
+                                    isRedacted={mxEv.isRedacted()}
+                                    replacingEventId={mxEv.replacingEventId()}
+                                    forExport={true}
+                                    alwaysShowTimestamps={true}
+                                    showUrlPreview={false}
+                                    checkUnmounting={() => false}
+                                    isTwelveHour={false}
+                                    last={false}
+                                    lastInSection={false}
+                                    permalinkCreator={this.permalinkCreator}
+                                    lastSuccessful={false}
+                                    isSelectedEvent={false}
+                                    showReactions={true}
+                                    layout={Layout.Group}
+                                    showReadReceipts={false}
+                                    getRelationsForEvent={this.getRelationsForEvent}
+                                    ref={ref}
+                                />
+                            </TooltipProvider>
+                        </SDKContext.Provider>
+                    </MatrixClientContext.Provider>
+                </I18nContext.Provider>
             </div>
         );
     }
