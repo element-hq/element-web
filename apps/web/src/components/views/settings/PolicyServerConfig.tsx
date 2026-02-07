@@ -60,15 +60,22 @@ export const PolicyServerConfig: React.FC<PolicyServerConfigProps> = ({ room }) 
 
         try {
             if (serverName.trim().length > 0) {
+                // We force HTTPS on non-localhost environments
+                let hostname = serverName.trim();
+                let urlBase = `https://${hostname}`;
+                if (hostname.startsWith("http://localhost:")) {
+                    urlBase = serverName.trim();
+                    hostname = hostname.substring("http://".length);
+                }
                 const res = await (
-                    await fetch(`https://${serverName.trim()}/.well-known/matrix/org.matrix.msc4284.policy_server`)
+                    await fetch(`${urlBase}/.well-known/matrix/org.matrix.msc4284.policy_server`)
                 ).json();
                 if (!!res["public_key"] && typeof res["public_key"] === "string") {
                     await client.sendStateEvent(
                         room.roomId,
                         EventType.RoomPolicy,
                         {
-                            via: serverName,
+                            via: hostname,
                             public_key: res["public_key"],
                         },
                         "",
