@@ -12,7 +12,6 @@
             "one": "Yksi lukematon maininta."
         },
         "recent_rooms": "Viimeisimmät huoneet",
-        "room_n_unread_invite": "Avaa huoneen %(roomName)s kutsu.",
         "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
@@ -1414,8 +1413,7 @@
         "mentions_and_keywords_description": "Vastaanota ilmoitukset maininnoista ja asiasanoista <a>asetuksissa</a> määrittämälläsi tavalla",
         "mentions_keywords": "Maininnat ja avainsanat",
         "message_didnt_send": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
-        "mute_description": "Et saa ilmoituksia",
-        "mute_room": "Mykistä huone"
+        "mute_description": "Et saa ilmoituksia"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s pyytää varmennusta"
@@ -1760,22 +1758,8 @@
         "add_space_label": "Lisää avaruus",
         "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
         "breadcrumbs_label": "Hiljattain vieraillut huoneet",
-        "empty": {
-            "no_chats": "Ei keskusteluja vielä",
-            "no_chats_description": "Aloita lähettämällä viestejä jollekin henkilölle tai luomalla huone",
-            "no_chats_description_no_room_rights": "Aloita lähettämällä viesti jollekin",
-            "no_favourites": "Sinulla ei ole vielä suosikkikeskustelua",
-            "no_rooms": "Et ole vielä missään huoneessa",
-            "no_unread": "Onnittelut! Sinulla ei ole lukemattomia viestejä",
-            "show_chats": "Näytä kaikki keskustelut"
-        },
         "failed_add_tag": "Tagin %(tagName)s lisääminen huoneeseen epäonnistui",
         "failed_remove_tag": "Tagin %(tagName)s poistaminen huoneesta epäonnistui",
-        "filters": {
-            "favourite": "Suosikit",
-            "people": "Ihmiset",
-            "rooms": "Huoneet"
-        },
         "home_menu_label": "Etusivun valinnat",
         "join_public_room_label": "Liity julkiseen huoneeseen",
         "joining_rooms_status": {
@@ -1784,18 +1768,12 @@
         },
         "list_title": "Huoneluettelo",
         "more_options": {
-            "copy_link": "Kopioi huoneen linkki",
-            "leave_room": "Poistu huoneesta",
-            "mark_read": "Merkitse luetuksi",
-            "mark_unread": "Merkitse lukemattomaksi"
+            "leave_room": "Poistu huoneesta"
         },
         "notification_options": "Ilmoitusasetukset",
         "redacting_messages_status": {
             "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
             "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
-        },
-        "room": {
-            "open_room": "Avoin huone %(roomName)s"
         },
         "show_less": "Näytä vähemmän",
         "show_n_more": {

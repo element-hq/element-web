@@ -10,14 +10,6 @@
             "other": "읽지 않은 메시지 %(count)s개 (멘션 포함)."
         },
         "recent_rooms": "최근 방",
-        "room_messsage_not_sent": "%(roomName)s에 미발송 메시지가 있는 방을 엽니다.",
-        "room_n_unread_invite": "공개 방 %(roomName)s에 초대 되었습니다.",
-        "room_n_unread_messages": {
-            "other": "읽지 않은 메시지 %(count)s개가 있는 채팅방 %(roomName)s 열기"
-        },
-        "room_n_unread_messages_mentions": {
-            "other": "멘션을 포함해 읽지 않은 메시지 %(count)s개가 있는 채팅방 %(roomName)s 열기"
-        },
         "room_name": "%(name)s 방",
         "room_status_bar": "방 상태 표시줄",
         "seek_bar_label": "오디오 탐색 바",
@@ -1700,7 +1692,6 @@
         "class_global": "글로벌",
         "class_other": "기타",
         "default": "기본",
-        "default_settings": "기본 설정과 일치",
         "email_pusher_app_display_name": "이메일 알림",
         "enable_prompt_toast_description": "데스크톱 알림 활성화",
         "enable_prompt_toast_title": "알림",
@@ -1719,8 +1710,7 @@
         "mentions_and_keywords_description": "<a>설정</a>에서 지정한 멘션과 키워드인 경우에만 알림을 받습니다",
         "mentions_keywords": "멘션 및 키워드",
         "message_didnt_send": "메시지가 전송되지 않았습니다. 자세한 내용은 클릭하세요.",
-        "mute_description": "어떤 알람도 받지 않습니다",
-        "mute_room": "채팅방 음소거"
+        "mute_description": "어떤 알람도 받지 않습니다"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s님이 인증을 요청하고 있습니다"
@@ -2113,37 +2103,9 @@
         "add_space_label": "스페이스 추가하기",
         "breadcrumbs_empty": "최근에 방문하지 않은 방 목록",
         "breadcrumbs_label": "최근 방문한 방 목록",
-        "collapse_filters": "필터 목록 접기",
-        "empty": {
-            "no_chats": "아직 채팅이 없습니다.",
-            "no_chats_description": "누군가에게 메시지를 보내거나 채팅방을 생성하여 시작하세요",
-            "no_chats_description_no_room_rights": "누군가에게 메시지를 보내서 시작하세요",
-            "no_favourites": "아직 즐겨찾는 채팅이 없습니다.",
-            "no_favourites_description": "채팅 설정에서 채팅을 즐겨찾기에 추가할 수 있습니다",
-            "no_invites": "읽지 않은 초대장이 없습니다",
-            "no_lowpriority": "우선순위가 낮은 채팅방이 없습니다.",
-            "no_mentions": "읽지 않은 멘션이 없습니다.",
-            "no_people": "아직 누구와도 직접 채팅을 하지 않았습니다",
-            "no_people_description": "다른 채팅을 보려면 필터 선택을 해제하세요.",
-            "no_rooms": "아직 어떤 채팅방에도 있지 않습니다",
-            "no_rooms_description": "다른 채팅을 보려면 필터 선택을 해제하세요.",
-            "no_unread": "축하합니다! 읽지 않은 메시지가 없습니다.",
-            "show_activity": "모든 활동 보기",
-            "show_chats": "모든 채팅 보기"
-        },
-        "expand_filters": "필터 목록 확장",
         "failed_add_tag": "방에 %(tagName)s 태그 추가에 실패함",
         "failed_remove_tag": "방에 %(tagName)s 태그 제거에 실패함",
         "failed_set_dm_tag": "다이렉트 메시지 태그 설정에 실패했습니다",
-        "filters": {
-            "favourite": "즐겨찾기",
-            "invites": "초대",
-            "low_priority": "낮은 우선순위",
-            "mentions": "멘션",
-            "people": "사람",
-            "rooms": "채팅방",
-            "unread": "읽지 않은 항목"
-        },
         "home_menu_label": "홈 옵션",
         "join_public_room_label": "공개 방 참가하기",
         "joining_rooms_status": {
@@ -2151,21 +2113,11 @@
         },
         "list_title": "채팅방 목록",
         "more_options": {
-            "copy_link": "채팅방 링크 복사",
-            "favourited": "즐겨찾기 됨",
-            "leave_room": "채팅방 떠나기",
-            "low_priority": "낮은 우선순위",
-            "mark_read": "읽음으로 표시",
-            "mark_unread": "읽지 않음으로 표시"
+            "leave_room": "채팅방 떠나기"
         },
         "notification_options": "알림 옵션",
-        "primary_filters": "채팅방 목록 필터",
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
-        },
-        "room": {
-            "more_options": "옵션 더보기",
-            "open_room": "채팅방 %(roomName)s 열기"
         },
         "show_less": "간단히 표시",
         "show_n_more": {

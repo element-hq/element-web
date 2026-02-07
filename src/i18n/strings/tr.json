@@ -2005,12 +2005,6 @@
         "failed_add_tag": "%(tagName)s etiketi odaya eklenemedi",
         "failed_remove_tag": "Odadan %(tagName)s etiketi kaldırılamadı",
         "failed_set_dm_tag": "Doğrudan mesaj etiketi ayarlanamadı",
-        "filters": {
-            "favourite": "Favoriler",
-            "people": "Kişiler",
-            "rooms": "Odalar",
-            "unread": "Okunmamış"
-        },
         "home_menu_label": "Ana sayfa seçenekleri",
         "join_public_room_label": "Herkese açık odaya katıl",
         "joining_rooms_status": {
@@ -2019,13 +2013,9 @@
         },
         "list_title": "Oda listesi",
         "notification_options": "Bildirim ayarları",
-        "primary_filters": "Oda listesi filtreleri",
         "redacting_messages_status": {
             "one": "Şu anda %(count)s odadaki mesajlar kaldırılıyor",
             "other": "Şu anda %(count)s odadaki mesajlar kaldırılıyor"
-        },
-        "room": {
-            "open_room": "Açık oda %(roomName)s"
         },
         "show_less": "Daha az göster",
         "show_n_more": {
