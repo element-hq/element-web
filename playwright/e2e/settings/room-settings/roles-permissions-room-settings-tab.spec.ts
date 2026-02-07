@@ -62,7 +62,7 @@ test.describe("Roles & Permissions room settings tab", () => {
         await expect(section).not.toHaveText("Policy server");
     });
 
-    test("should be able to set policy server with labs flag enabled", async ({ app, page, room }) => {
+    test("should be able to set policy server with labs flag enabled", async ({ app, page }) => {
         // Back out of the room settings dialog from beforeEach and enable the labs flag
         await app.settings.closeDialog();
         const labs = await app.settings.openUserSettings("Labs");
