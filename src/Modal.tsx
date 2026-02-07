@@ -12,7 +12,6 @@ import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
-import { I18nApi, I18nContext } from "@element-hq/web-shared-components";
 
 import defaultDispatcher from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
@@ -22,7 +21,6 @@ import { filterBoolean } from "./utils/arrays.ts";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
-const FALLBACK_I18N = new I18nApi();
 
 // Type which accepts a React Component which looks like a Modal (accepts an onFinished prop)
 export type ComponentType =
@@ -436,23 +434,20 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         if (this.staticModal) {
             const classes = classNames("mx_Dialog_wrapper mx_Dialog_staticWrapper", this.staticModal.className);
 
-            const i18n = window.mxModuleApi?.i18n ?? FALLBACK_I18N;
             const staticDialog = (
                 <StrictMode>
-                    <I18nContext.Provider value={i18n}>
-                        <TooltipProvider>
-                            <div className={classes}>
-                                <Glass className="mx_Dialog_border">
-                                    <div className="mx_Dialog">{this.staticModal.elem}</div>
-                                </Glass>
-                                <div
-                                    data-testid="dialog-background"
-                                    className="mx_Dialog_background mx_Dialog_staticBackground"
-                                    onClick={this.onBackgroundClick}
-                                />
-                            </div>
-                        </TooltipProvider>
-                    </I18nContext.Provider>
+                    <TooltipProvider>
+                        <div className={classes}>
+                            <Glass className="mx_Dialog_border">
+                                <div className="mx_Dialog">{this.staticModal.elem}</div>
+                            </Glass>
+                            <div
+                                data-testid="dialog-background"
+                                className="mx_Dialog_background mx_Dialog_staticBackground"
+                                onClick={this.onBackgroundClick}
+                            />
+                        </div>
+                    </TooltipProvider>
                 </StrictMode>
             );
 
@@ -468,23 +463,20 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 mx_Dialog_wrapperWithStaticUnder: this.staticModal,
             });
 
-            const i18n = window.mxModuleApi?.i18n ?? FALLBACK_I18N;
             const dialog = (
                 <StrictMode>
-                    <I18nContext.Provider value={i18n}>
-                        <TooltipProvider>
-                            <div className={classes}>
-                                <Glass className="mx_Dialog_border">
-                                    <div className="mx_Dialog">{modal.elem}</div>
-                                </Glass>
-                                <div
-                                    data-testid="dialog-background"
-                                    className="mx_Dialog_background"
-                                    onClick={this.onBackgroundClick}
-                                />
-                            </div>
-                        </TooltipProvider>
-                    </I18nContext.Provider>
+                    <TooltipProvider>
+                        <div className={classes}>
+                            <Glass className="mx_Dialog_border">
+                                <div className="mx_Dialog">{modal.elem}</div>
+                            </Glass>
+                            <div
+                                data-testid="dialog-background"
+                                className="mx_Dialog_background"
+                                onClick={this.onBackgroundClick}
+                            />
+                        </div>
+                    </TooltipProvider>
                 </StrictMode>
             );
 
