@@ -59,6 +59,7 @@ import { BackgroundAudio } from "./audio/BackgroundAudio";
  */
 
 const MAX_PENDING_ENCRYPTED = 20;
+const NOTIFICATION_DELAY_MS = 10000;
 
 /*
 Override both the content body and the TextForEvent handler for specific msgtypes, in notifications.
@@ -91,6 +92,7 @@ interface EmittedEvents {
 
 class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
+    private delayedNotificationsByRoom: Record<string, ReturnType<typeof setTimeout>[]> = {};
 
     // A list of event IDs that we've received but need to wait until
     // they're decrypted until we decide whether to notify for them
@@ -435,12 +437,21 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             // as good but it's something.
             const plaf = PlatformPeg.get();
             if (!plaf) return;
+            this.clearDelayedNotifications(room);
             if (this.notifsByRoom[room.roomId] === undefined) return;
             for (const notif of this.notifsByRoom[room.roomId]) {
                 plaf.clearNotification(notif);
             }
             delete this.notifsByRoom[room.roomId];
         }
+    };
+
+    private clearDelayedNotifications = (room: Room): void => {
+        if (this.delayedNotificationsByRoom[room.roomId] === undefined) return;
+        for (const timeout of this.delayedNotificationsByRoom[room.roomId]) {
+            clearTimeout(timeout);
+        }
+        delete this.delayedNotificationsByRoom[room.roomId];
     };
 
     // XXX: exported for tests
@@ -470,12 +481,30 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
                 return;
             }
 
-            if (this.isEnabled()) {
-                this.displayPopupNotification(ev, room);
-            }
-            if (actions.tweaks.sound && this.isAudioEnabled()) {
-                PlatformPeg.get()?.loudNotification(ev, room);
-                this.playAudioNotification(ev, room);
+            const doNotification = () => {
+                if (this.isEnabled()) {
+                    this.displayPopupNotification(ev, room);
+                }
+                if (actions.tweaks.sound && this.isAudioEnabled()) {
+                    PlatformPeg.get()?.loudNotification(ev, room);
+                    this.playAudioNotification(ev, room);
+                }
+                this.clearDelayedNotifications(room);
+            };
+
+            // We now have 2 options:
+            // * If we're the active client the user is interacting with, but perhaps minimized, doNotification right away
+            // * But we could be one of the other (many) clients, so give the user an opportunity to get notified on the main one,
+            //   only if onRoomReceipt doesn't come (user didn't see it at the supposedly active client) notify.
+            if (UserActivity.sharedInstance().userActiveRecently()) {
+                // we're probably just minimized, but the user is here.
+                doNotification();
+            } else {
+                if (this.delayedNotificationsByRoom[roomId] === undefined)
+                    this.delayedNotificationsByRoom[roomId] = [];
+                this.delayedNotificationsByRoom[roomId].push(
+                    setTimeout(doNotification, NOTIFICATION_DELAY_MS)
+                );
             }
         }
     }
