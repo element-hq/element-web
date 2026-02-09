@@ -14,7 +14,12 @@ build_image() {
   echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
 
   # Check the playwright version
-  PW_VERSION=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name | split("@") | last')
+  PM=$(cat package.json | jq -r '.packageManager')
+  if [[ $PM == "pnpm@"* ]]; then
+    PW_VERSION=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')
+  else
+    PW_VERSION=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name | split("@") | last')
+  fi
   echo "with Playwright version $PW_VERSION"
 
   # Build image
