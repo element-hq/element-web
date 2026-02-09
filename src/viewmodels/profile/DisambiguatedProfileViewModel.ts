@@ -137,18 +137,28 @@ export class DisambiguatedProfileViewModel
     }
 
     /**
-     * Sets the snapshot and emits an update to subscribers.
-     */
-    private readonly setSnapshot = (): void => {
-        this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
-    };
-
-    /**
      * Updates the properties of the view model and recomputes the snapshot.
      * @param newProps - Partial properties to update
      */
     public setProps(newProps: Partial<DisambiguatedProfileViewModelProps>): void {
-        this.props = { ...this.props, ...newProps };
-        this.setSnapshot();
+        const nextProps = { ...this.props, ...newProps };
+        const onClickChanged = this.props.onClick !== nextProps.onClick;
+        // Current call sites only update these snapshot-driving props after construction.
+        const snapshotPropsChanged =
+            this.props.member !== nextProps.member ||
+            this.props.fallbackName !== nextProps.fallbackName ||
+            this.props.withTooltip !== nextProps.withTooltip;
+
+        if (!onClickChanged && !snapshotPropsChanged) return;
+
+        this.props = nextProps;
+
+        if (onClickChanged) {
+            this.onClick = nextProps.onClick;
+        }
+
+        if (snapshotPropsChanged) {
+            this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(nextProps));
+        }
     }
 }
