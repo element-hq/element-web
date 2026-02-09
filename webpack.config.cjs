@@ -413,7 +413,7 @@ module.exports = (env, argv) => {
                     type: "javascript/auto",
                     use: [
                         {
-                            loader: path.resolve("./recorder-worklet-loader.js"),
+                            loader: path.resolve("./recorder-worklet-loader.cjs"),
                         },
                         {
                             loader: "babel-loader",

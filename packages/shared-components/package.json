@@ -55,7 +55,7 @@
         "@vector-im/compound-design-tokens": "^6.4.3",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
-        "lodash": "^4.17.21",
+        "lodash": "npm:lodash-es@^4.17.21",
         "matrix-web-i18n": "3.6.0",
         "react-merge-refs": "^3.0.2",
         "react-virtuoso": "^4.14.0",
