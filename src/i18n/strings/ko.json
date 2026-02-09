@@ -458,7 +458,7 @@
         "and_n_others": {
             "other": "외 %(count)s명..."
         },
-        "appearance": "모습",
+        "appearance": "화면 설정",
         "application": "애플리케이션",
         "are_you_sure": "확신합니까?",
         "attachment": "첨부 파일",
