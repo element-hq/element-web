@@ -113,7 +113,7 @@ export default class DeviceListenerThisDevice {
 
         this.client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.removeListener(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
-        // TODO: why not this?: this.client.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChanged);
+        this.client.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChanged);
         this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
         this.client.removeListener(ClientEvent.Sync, this.onSync);
         this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
