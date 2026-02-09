@@ -1602,6 +1602,9 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
 
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+    useEffect(() => {
+        vm.setProps(props);
+    }, [vm, props]);
 
     return (
         <>

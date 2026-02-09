@@ -13,6 +13,7 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../DateUtils";
+import { objectHasDiff } from "../../utils/objects";
 
 export interface MessageTimestampViewModelProps {
     /**
@@ -105,5 +106,20 @@ export class MessageTimestampViewModel
         super(props, MessageTimestampViewModel.computeSnapshot(props));
         this.onClick = props.onClick;
         this.onContextMenu = props.onContextMenu;
+    }
+
+    /**
+     * Updates the properties of the view model and recomputes the snapshot
+     * if any of the properties have changed
+     * @param newProps - Partial properties to update
+     */
+    public setProps(newProps: Partial<MessageTimestampViewModelProps>): void {
+        const nextProps = { ...this.props, ...newProps };
+        if (!objectHasDiff(this.props, nextProps)) return;
+
+        this.props = nextProps;
+        this.onClick = this.props.onClick;
+        this.onContextMenu = this.props.onContextMenu;
+        this.snapshot.set(MessageTimestampViewModel.computeSnapshot(this.props));
     }
 }

@@ -642,5 +642,8 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
 
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+    useEffect(() => {
+        vm.setProps(props);
+    }, [vm, props]);
     return <MessageTimestampView vm={vm} />;
 }
