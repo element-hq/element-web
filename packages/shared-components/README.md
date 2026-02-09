@@ -1,5 +1,7 @@
 # @element-hq/web-shared-components
 
+[Online storybook](https://shared-components-storybook.element.dev)
+
 Shared React components library for Element Web, Aurora, Element
 modules... This package provides opinionated UI components built on top of the
 [Compound Design System](https://compound.element.io) and [Compound
