@@ -112,6 +112,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const LongContent: Story = {
+    args: {
+        name: "Loooooooooooooooooooooooooooooooooooooong name",
+        messagePreview: "Loooooooooooooooooooooooooooooooooooooong preview",
+    },
+};
+
 export const Selected: Story = {
     args: {
         isSelected: true,
