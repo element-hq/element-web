@@ -25,17 +25,9 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import dis from "./dispatcher/dispatcher";
 import {
-    hideToast as hideBulkUnverifiedSessionsToast,
-    showToast as showBulkUnverifiedSessionsToast,
-} from "./toasts/BulkUnverifiedSessionsToast";
-import {
     hideToast as hideSetupEncryptionToast,
     showToast as showSetupEncryptionToast,
 } from "./toasts/SetupEncryptionToast";
-import {
-    hideToast as hideUnverifiedSessionsToast,
-    showToast as showUnverifiedSessionsToast,
-} from "./toasts/UnverifiedSessionToast";
 import { isSecretStorageBeingAccessed } from "./SecurityManager";
 import { type ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
@@ -43,9 +35,8 @@ import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
 import SettingsStore, { type CallbackFn } from "./settings/SettingsStore";
-import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
-import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 import { asyncSomeParallel } from "./utils/arrays.ts";
+import DeviceListenerOtherDevices from "./device-listener/DeviceListenerOtherDevices.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -106,20 +97,16 @@ type EventHandlerMap = {
 
 export default class DeviceListener extends TypedEventEmitter<DeviceListenerEvents, EventHandlerMap> {
     private dispatcherRef?: string;
-    // device IDs for which the user has dismissed the verify toast ('Later')
-    private dismissed = new Set<string>();
+
+    /** All the information about whether other devices are verified. */
+    public otherDevices?: DeviceListenerOtherDevices;
+
     // has the user dismissed any of the various nag toasts to setup encryption on this device?
     private dismissedThisDeviceToast = false;
     /** Cache of the info about the current key backup on the server. */
     private keyBackupInfo: KeyBackupInfo | null = null;
     /** When `keyBackupInfo` was last updated */
     private keyBackupFetchedAt: number | null = null;
-    // We keep a list of our own device IDs so we can batch ones that were already
-    // there the last time the app launched into a single toast, but display new
-    // ones in their own toasts.
-    private ourDeviceIdsAtStart: Set<string> | null = null;
-    // The set of device IDs we're currently displaying toasts for
-    private displayingToastsForDeviceIds = new Set<string>();
     private running = false;
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.
     private client?: MatrixClient;
@@ -138,8 +125,10 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
 
     public start(matrixClient: MatrixClient): void {
         this.running = true;
+
+        this.otherDevices = new DeviceListenerOtherDevices(this, matrixClient);
+
         this.client = matrixClient;
-        this.client.on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
         this.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.on(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
         this.client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChanged);
@@ -147,6 +136,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         this.client.on(ClientEvent.Sync, this.onSync);
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
         this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
+
         this.shouldRecordClientInformation = SettingsStore.getValue("deviceClientInformationOptIn");
         // only configurable in config, so we don't need to watch the value
         this.deviceClientInformationSettingWatcherRef = SettingsStore.watchSetting(
@@ -162,7 +152,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     public stop(): void {
         this.running = false;
         if (this.client) {
-            this.client.removeListener(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
             this.client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
             this.client.removeListener(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
             this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
@@ -173,13 +162,11 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
         dis.unregister(this.dispatcherRef);
         this.dispatcherRef = undefined;
-        this.dismissed.clear();
+        this.otherDevices?.stop();
         this.dismissedThisDeviceToast = false;
         this.keyBackupInfo = null;
         this.keyBackupFetchedAt = null;
         this.cachedKeyBackupUploadActive = undefined;
-        this.ourDeviceIdsAtStart = null;
-        this.displayingToastsForDeviceIds = new Set();
         this.client = undefined;
     }
 
@@ -209,11 +196,8 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
      */
     public async dismissUnverifiedSessions(deviceIds: Iterable<string>): Promise<void> {
         logger.debug("Dismissing unverified sessions: " + Array.from(deviceIds).join(","));
-        for (const d of deviceIds) {
-            this.dismissed.add(d);
-        }
 
-        this.recheck();
+        this.otherDevices?.dismissUnverifiedSessions(deviceIds);
     }
 
     public dismissEncryptionSetup(): void {
@@ -294,35 +278,6 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
             return shouldHaveBackup && !backupKeyCached && !backupKeyStored;
         }
     }
-
-    private async ensureDeviceIdsAtStartPopulated(): Promise<void> {
-        if (this.ourDeviceIdsAtStart === null) {
-            this.ourDeviceIdsAtStart = await this.getDeviceIds();
-        }
-    }
-
-    /** Get the device list for the current user
-     *
-     * @returns the set of device IDs
-     */
-    private async getDeviceIds(): Promise<Set<string>> {
-        const cli = this.client;
-        if (!cli) return new Set();
-        return await getUserDeviceIds(cli, cli.getSafeUserId());
-    }
-
-    private onDevicesUpdated = async (users: string[], initialFetch?: boolean): Promise<void> => {
-        if (!this.client) return;
-        // If we didn't know about *any* devices before (ie. it's fresh login),
-        // then they are all pre-existing devices, so ignore this and set the
-        // devicesAtStart list to the devices that we see after the fetch.
-        if (initialFetch) return;
-
-        const myUserId = this.client.getSafeUserId();
-        if (users.includes(myUserId)) await this.ensureDeviceIdsAtStartPopulated();
-
-        this.recheck();
-    };
 
     private onUserTrustStatusChanged = (userId: string): void => {
         if (!this.client) return;
@@ -419,7 +374,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         return await asyncSomeParallel(cli.getRooms(), ({ roomId }) => cryptoApi.isEncryptionEnabledInRoom(roomId));
     }
 
-    private recheck(): void {
+    public recheck(): void {
         this.doRecheck().catch((e) => {
             if (e instanceof ClientStoppedError) {
                 // the client was stopped while recheck() was running. Nothing left to do.
@@ -546,64 +501,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
             }
         }
 
-        // This needs to be done after awaiting on getUserDeviceInfo() above, so
-        // we make sure we get the devices after the fetch is done.
-        await this.ensureDeviceIdsAtStartPopulated();
-
-        // Unverified devices that were there last time the app ran
-        // (technically could just be a boolean: we don't actually
-        // need to remember the device IDs, but for the sake of
-        // symmetry...).
-        const oldUnverifiedDeviceIds = new Set<string>();
-        // Unverified devices that have appeared since then
-        const newUnverifiedDeviceIds = new Set<string>();
-
-        // as long as cross-signing isn't ready,
-        // you can't see or dismiss any device toasts
-        if (crossSigningReady) {
-            const devices = await this.getDeviceIds();
-            for (const deviceId of devices) {
-                if (deviceId === cli.deviceId) continue;
-
-                const deviceTrust = await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), deviceId);
-                if (!deviceTrust?.crossSigningVerified && !this.dismissed.has(deviceId)) {
-                    if (this.ourDeviceIdsAtStart?.has(deviceId)) {
-                        oldUnverifiedDeviceIds.add(deviceId);
-                    } else {
-                        newUnverifiedDeviceIds.add(deviceId);
-                    }
-                }
-            }
-        }
-
-        logSpan.debug("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(","));
-        logSpan.debug("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(","));
-        logSpan.debug("Currently showing toasts for: " + Array.from(this.displayingToastsForDeviceIds).join(","));
-
-        const isBulkUnverifiedSessionsReminderSnoozed = isBulkUnverifiedDeviceReminderSnoozed();
-
-        // Display or hide the batch toast for old unverified sessions
-        // don't show the toast if the current device is unverified
-        if (oldUnverifiedDeviceIds.size > 0 && isCurrentDeviceTrusted && !isBulkUnverifiedSessionsReminderSnoozed) {
-            showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
-        } else {
-            hideBulkUnverifiedSessionsToast();
-        }
-
-        // Show toasts for new unverified devices if they aren't already there
-        for (const deviceId of newUnverifiedDeviceIds) {
-            showUnverifiedSessionsToast(deviceId);
-        }
-
-        // ...and hide any we don't need any more
-        for (const deviceId of this.displayingToastsForDeviceIds) {
-            if (!newUnverifiedDeviceIds.has(deviceId)) {
-                logSpan.debug("Hiding unverified session toast for " + deviceId);
-                hideUnverifiedSessionsToast(deviceId);
-            }
-        }
-
-        this.displayingToastsForDeviceIds = newUnverifiedDeviceIds;
+        await this.otherDevices?.recheck(logSpan);
     }
 
     /**
