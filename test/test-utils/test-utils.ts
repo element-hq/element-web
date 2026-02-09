@@ -351,6 +351,10 @@ export function createTestClient(): MatrixClient {
         },
         search: jest.fn().mockResolvedValue({}),
         processRoomEventsSearch: jest.fn().mockResolvedValue({ highlights: [], results: [] }),
+        invite: jest.fn(),
+        kick: jest.fn(),
+        ban: jest.fn(),
+        sendTextMessage: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

@@ -19,7 +19,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
 import * as ConfirmRedactDialog from "../../../../../../../src/components/views/dialogs/ConfirmRedactDialog";
-import * as SlashCommands from "../../../../../../../src/SlashCommands";
+import * as SlashCommands from "../../../../../../../src/slash-commands/SlashCommands";
 import * as Commands from "../../../../../../../src/editor/commands";
 import * as Reply from "../../../../../../../src/utils/Reply";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
