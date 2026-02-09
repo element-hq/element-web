@@ -235,6 +235,32 @@ describe("EventContentBodyViewModel", () => {
         expect(vm.getSnapshot().children).toBe("updated-text");
     });
 
+    it("does not emit updates when setProps values are unchanged", () => {
+        const replacer = jest.fn();
+        mockedCombineRenderers.mockReturnValue(() => replacer);
+        mockedBodyToNode.mockReturnValue({
+            strippedBody: "Initial",
+            formattedBody: undefined,
+            emojiBodyElements: undefined,
+            className: "mx_EventTile_body",
+        });
+        mockedApplyReplacerOnString.mockReturnValue("initial-text");
+
+        const vm = new EventContentBodyViewModel(defaultProps());
+        const previousSnapshot = vm.getSnapshot();
+        const subscriber = jest.fn();
+
+        vm.subscribe(subscriber);
+        vm.setProps({
+            content: defaultContent,
+            as: "span",
+            linkify: false,
+        });
+
+        expect(subscriber).not.toHaveBeenCalled();
+        expect(vm.getSnapshot()).toBe(previousSnapshot);
+    });
+
     it("includes renderers based on options and platform capabilities", () => {
         const replacer = jest.fn();
         mockedCombineRenderers.mockReturnValue(() => replacer);

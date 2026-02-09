@@ -105,18 +105,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             this.EventContentBodyViewModel.setProps({
                 as: willHaveWrapper ? "span" : "div",
-                includeDir: false,
                 mxEvent: mxEvent,
                 content: content,
                 stripReply: stripReply,
-                linkify: true,
                 highlights: this.props.highlights,
-                ref: this.contentRef,
-                renderTooltipsForAmbiguousLinks: true,
-                renderKeywordPills: true,
-                renderMentionPills: true,
-                renderCodeBlocks: true,
-                renderSpoilers: true,
                 enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
                 shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
             });

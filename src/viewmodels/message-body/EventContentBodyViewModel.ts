@@ -206,15 +206,18 @@ export class EventContentBodyViewModel
         super(props, EventContentBodyViewModel.computeSnapshot(props));
     }
 
-    private readonly setSnapshot = (): void => {
-        this.snapshot.set(EventContentBodyViewModel.computeSnapshot(this.props));
-    };
-
     /**
      * Updates the ViewModel's props and recomputes the snapshot.
      */
     public setProps(newProps: Partial<EventContentBodyViewModelProps>): void {
-        this.props = { ...this.props, ...newProps };
-        this.setSnapshot();
+        const nextProps = { ...this.props, ...newProps };
+        const hasChanges = (Object.keys(newProps) as Array<keyof EventContentBodyViewModelProps>).some(
+            (key) => this.props[key] !== nextProps[key],
+        );
+
+        if (!hasChanges) return;
+
+        this.props = nextProps;
+        this.snapshot.set(EventContentBodyViewModel.computeSnapshot(this.props));
     }
 }
