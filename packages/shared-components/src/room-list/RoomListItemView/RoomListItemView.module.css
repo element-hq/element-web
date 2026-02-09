@@ -21,6 +21,7 @@
     margin-bottom: var(--cpd-space-2x);
 
     font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
     color: var(--cpd-color-text-secondary);
 
     /* Hide the menu by default */
@@ -75,14 +76,7 @@
     min-width: 0;
 }
 
-.roomName {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.messagePreview {
-    font: var(--cpd-font-body-sm-regular);
+.ellipsis {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

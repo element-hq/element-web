@@ -7,6 +7,7 @@
 
 import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react";
 import classNames from "classnames";
+import { Text } from "@vector-im/compound-web";
 
 import { Flex } from "../../utils/Flex";
 import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
@@ -178,14 +179,14 @@ export const RoomListItemView = memo(function RoomListItemView({
                 {renderAvatar(item.room)}
                 <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <div className={styles.text}>
+                    <div className={styles.ellipsis}>
                         <div className={styles.roomName} title={item.name} data-testid="room-name">
                             {item.name}
                         </div>
                         {item.messagePreview && (
-                            <div className={styles.messagePreview} title={item.messagePreview}>
+                            <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
                                 {item.messagePreview}
-                            </div>
+                            </Text>
                         )}
                     </div>
                     {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
