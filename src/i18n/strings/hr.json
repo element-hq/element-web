@@ -14,18 +14,6 @@
             "other": "%(count)s nepročitanih poruka, uključujući spominjanja."
         },
         "recent_rooms": "Nedavne sobe",
-        "room_messsage_not_sent": "Otvori sobu %(roomName)s s porukom koja nije poslana.",
-        "room_n_unread_invite": "Otvorite pozivnicu za sobu %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Otvori sobu %(roomName)s s 1 nepročitanom porukom.",
-            "few": "Otvori sobu %(roomName)s s %(count)s nepročitane poruke.",
-            "other": "Otvori sobu %(roomName)s s %(count)s nepročitanih poruka."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Otvori sobu %(roomName)s s 1 nepročitanim spominjanjem.",
-            "few": "Otvori sobu %(roomName)s s %(count)s nepročitane poruke, uključujući spominjanja.",
-            "other": "Otvori sobu %(roomName)s s %(count)s nepročitanih poruka, uključujući spominjanja."
-        },
         "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
@@ -1523,7 +1511,6 @@
         "ask_to_join": "Omogući traženje pridruživanja",
         "automatic_debug_logs": "Automatsko slanje zapisnika o svakoj pogrešci",
         "automatic_debug_logs_decryption": "Automatsko slanje zapisnika o otklanjanju pogrešaka dešifriranja",
-        "automatic_debug_logs_key_backup": "Automatsko slanje zapisnika o otklanjanju pogrešaka kada sigurnosna kopija ključa ne funkcionira",
         "beta_description": "Što je sljedeće za %(brand)s? Labs su najbolji način da među prvima isprobate novosti, testirate nove značajke i pomognete ih oblikovati prije nego što službeno postanu dostupne.",
         "beta_feature": "Ovo je beta značajka",
         "beta_feedback_leave_button": "Da biste napustili beta inačicu, idite na postavke.",
@@ -1734,7 +1721,6 @@
         "class_global": "Globalno",
         "class_other": "Ostalo",
         "default": "Zadano",
-        "default_settings": "Uskladi zadane postavke",
         "email_pusher_app_display_name": "Obavijesti e-poštom",
         "enable_prompt_toast_description": "Omogući obavijesti na radnoj površini",
         "enable_prompt_toast_title": "Obavijesti",
@@ -1753,8 +1739,7 @@
         "mentions_and_keywords_description": "Primajte obavijesti samo o spominjanjima i ključnim riječima kako je postavljeno u vašim <a>postavkama</a>",
         "mentions_keywords": "Spominjanja i ključne riječi",
         "message_didnt_send": "Poruka nije poslana. Kliknite za informacije.",
-        "mute_description": "Nećete primati nikakve obavijesti",
-        "mute_room": "Utišaj sobu"
+        "mute_description": "Nećete primati nikakve obavijesti"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s traži potvrdu"
@@ -2184,37 +2169,9 @@
         "add_space_label": "Dodaj prostor",
         "breadcrumbs_empty": "Nema nedavno posjećenih soba",
         "breadcrumbs_label": "Nedavno posjećene sobe",
-        "collapse_filters": "Sažmi popis filtara",
-        "empty": {
-            "no_chats": "Još nema razgovora",
-            "no_chats_description": "Započnite tako da nekome pošaljete poruku ili izradite sobu",
-            "no_chats_description_no_room_rights": "Započnite tako da nekome pošaljete poruku",
-            "no_favourites": "Još nemate omiljenih razgovora",
-            "no_favourites_description": "Razgovor možete dodati u favorite u postavkama razgovora",
-            "no_invites": "Nemate nepročitanih pozivnica",
-            "no_lowpriority": "Nemate sobe niskog prioriteta",
-            "no_mentions": "Nemate nepročitanih spominjanja",
-            "no_people": "Još nemate izravne razgovore ni s kim",
-            "no_people_description": "Možete poništiti odabir filtara kako biste vidjeli ostale razgovore",
-            "no_rooms": "Niste još ni u jednoj sobi",
-            "no_rooms_description": "Možete poništiti odabir filtera kako biste vidjeli ostale razgovore",
-            "no_unread": "Čestitamo! Nemate nepročitanih poruka",
-            "show_activity": "Prikaži sve aktivnosti",
-            "show_chats": "Prikaži sve razgovore"
-        },
-        "expand_filters": "Proširi popis filtara",
         "failed_add_tag": "Nije uspjelo dodavanje oznake %(tagName)s na sobu",
         "failed_remove_tag": "Nije uspjelo uklanjanje oznake %(tagName)s sa sobe",
         "failed_set_dm_tag": "Nije uspjelo postavljanje oznake za izravnu poruku",
-        "filters": {
-            "favourite": "Favoriti",
-            "invites": "Pozivnice",
-            "low_priority": "Niski prioritet",
-            "mentions": "Spominjanja",
-            "people": "Osobe",
-            "rooms": "Sobe",
-            "unread": "Nepročitano"
-        },
         "home_menu_label": "Mogućnosti početne stranice",
         "join_public_room_label": "Pridruži se javnoj sobi",
         "joining_rooms_status": {
@@ -2224,23 +2181,13 @@
         },
         "list_title": "Popis soba",
         "more_options": {
-            "copy_link": "Kopiraj poveznicu na sobu",
-            "favourited": "Označeno kao favorit",
-            "leave_room": "Napusti sobu",
-            "low_priority": "Niski prioritet",
-            "mark_read": "Označi kao pročitano",
-            "mark_unread": "Označi kao nepročitano"
+            "leave_room": "Napusti sobu"
         },
         "notification_options": "Mogućnosti obavijesti",
-        "primary_filters": "Filtri popisa soba",
         "redacting_messages_status": {
             "one": "Trenutačno se uklanjaju poruke u %(count)s sobi",
             "few": "Trenutačno se uklanjaju poruke u %(count)s sobe",
             "other": "Trenutačno se uklanjaju poruke u %(count)s soba"
-        },
-        "room": {
-            "more_options": "Više mogućnosti",
-            "open_room": "Otvori sobu %(roomName)s"
         },
         "show_less": "Prikaži manje",
         "show_n_more": {

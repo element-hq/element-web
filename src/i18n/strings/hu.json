@@ -12,16 +12,6 @@
             "1 olvasatlan megemlítés.": "one"
         },
         "recent_rooms": "Legutóbbi szobák",
-        "room_messsage_not_sent": "A(z) %(roomName)s szoba megnyitása nem beállított üzenettel.",
-        "room_n_unread_invite": "A(z) %(roomName)s szoba meghívásának megnyitása.",
-        "room_n_unread_messages": {
-            "A(z) %(roomName)s szoba megnyitása 1 olvasatlan üzenettel.": "one",
-            "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel.": "other"
-        },
-        "room_n_unread_messages_mentions": {
-            "A(z) %(roomName)s szoba megnyitása 1 olvasatlan megemlítéssel.": "one",
-            "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan megemlítéssel.": "other"
-        },
         "room_name": "Szoba: %(name)s",
         "room_status_bar": "Szoba állapotsora",
         "seek_bar_label": "Hang keresősávja",
@@ -1500,7 +1490,6 @@
         "ask_to_join": "A kérést igénylő csatlakozás engedélyezése",
         "automatic_debug_logs": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
         "automatic_debug_logs_decryption": "Hibakeresési naplók automatikus küldése titkosítás-visszafejtési hiba esetén",
-        "automatic_debug_logs_key_backup": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
         "beta_description": "Mi várható a(z) %(brand)s fejlesztésében? A labor a legjobb hely az új dolgok kipróbálásához, visszajelzés adásához és a funkciók éles indulás előtti kialakításában történő segítséghez.",
         "beta_feature": "Ez egy beta állapotú funkció",
         "beta_feedback_leave_button": "A beállításokban tudja elhagyni a bétát.",
@@ -1709,7 +1698,6 @@
         "class_global": "Globális",
         "class_other": "Egyéb",
         "default": "Alapértelmezett",
-        "default_settings": "Megegyezik az alapértelmezett beállításokkal",
         "email_pusher_app_display_name": "E-mail értesítések",
         "enable_prompt_toast_description": "Asztali értesítések engedélyezése",
         "enable_prompt_toast_title": "Értesítések",
@@ -1728,8 +1716,7 @@
         "mentions_and_keywords_description": "Értesítések fogadása csak megemlítéseknél és kulcsszavaknál, a <a>beállításokban</a> megadottak szerint",
         "mentions_keywords": "Megemlítések és kulcsszavak",
         "message_didnt_send": "Az üzenet nincs elküldve. Kattintson az információkért.",
-        "mute_description": "Nem kap semmilyen értesítést",
-        "mute_room": "Szoba némítása"
+        "mute_description": "Nem kap semmilyen értesítést"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s ellenőrzést kér"
@@ -2138,37 +2125,9 @@
         "add_space_label": "Tér hozzáadása",
         "breadcrumbs_empty": "Nincsenek nemrégiben meglátogatott szobák",
         "breadcrumbs_label": "Nemrég meglátogatott szobák",
-        "collapse_filters": "Szűrőlista összecsukása",
-        "empty": {
-            "no_chats": "Még nincsenek csevegések",
-            "no_chats_description": "Kezdje azzal, hogy üzenetet küld valakinek, vagy létrehoz egy szobát",
-            "no_chats_description_no_room_rights": "Kezdje azzal, hogy üzenetet küld valakinek",
-            "no_favourites": "Még nincs kedvenc csevegése",
-            "no_favourites_description": "A csevegési beállításokban adhat hozzá csevegést a kedvencekhez",
-            "no_invites": "Nincs olvasatlan meghívója",
-            "no_lowpriority": "Nincs alacsony prioritású szobája",
-            "no_mentions": "Nincs olvasatlan említése",
-            "no_people": "Még nincs közvetlen csevegése senkivel",
-            "no_people_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
-            "no_rooms": "Még nincs egy szobában sem",
-            "no_rooms_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
-            "no_unread": "Gratulálunk! Nincsenek olvasatlan üzenetei.",
-            "show_activity": "Összes tevékenység megtekintése",
-            "show_chats": "Összes csevegés megjelenítése"
-        },
-        "expand_filters": "Szűrőlista kibontása",
         "failed_add_tag": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
         "failed_remove_tag": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
         "failed_set_dm_tag": "Nem sikerült a közvetlen beszélgetés címkét beállítani",
-        "filters": {
-            "favourite": "Kedvencek",
-            "invites": "Meghívók",
-            "low_priority": "Alacsony prioritás",
-            "mentions": "Említések",
-            "people": "Emberek",
-            "rooms": "Szobák",
-            "unread": "Olvasatlan"
-        },
         "home_menu_label": "Kezdőlap beállítások",
         "join_public_room_label": "Belépés nyilvános szobába",
         "joining_rooms_status": {
@@ -2176,21 +2135,11 @@
         },
         "list_title": "Szobalista",
         "more_options": {
-            "copy_link": "Szoba hivatkozásának másolása",
-            "favourited": "Kedvencnek jelölve",
-            "leave_room": "Szoba elhagyása",
-            "low_priority": "Alacsony prioritás",
-            "mark_read": "Megjelölés olvasottként",
-            "mark_unread": "Megjelölés olvasatlanként"
+            "leave_room": "Szoba elhagyása"
         },
         "notification_options": "Értesítési beállítások",
-        "primary_filters": "Szobalistaszűrők",
         "redacting_messages_status": {
             "Üzenet törlése %(count)s szobából": "other"
-        },
-        "room": {
-            "more_options": "További lehetőségek",
-            "open_room": "A(z) %(roomName)s szoba megnyitása"
         },
         "show_less": "Kevesebb megjelenítése",
         "show_n_more": {

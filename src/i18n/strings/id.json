@@ -12,14 +12,6 @@
             "other": "%(count)s pesan yang belum dibaca termasuk sebutan."
         },
         "recent_rooms": "Ruangan terkini",
-        "room_messsage_not_sent": "Buka ruangan %(roomName)s dengan pesan yang belum diatur.",
-        "room_n_unread_invite": "Buka undangan ruangan %(roomName)s.",
-        "room_n_unread_messages": {
-            "other": "Buka ruangan %(roomName)s dengan %(count)s pesan yang belum dibaca."
-        },
-        "room_n_unread_messages_mentions": {
-            "other": "Buka ruangan %(roomName)s dengan %(count)s pesan yang belum dibaca termasuk sebutan."
-        },
         "room_name": "Ruangan %(name)s",
         "room_status_bar": "Bilah status ruangan",
         "seek_bar_label": "Bilah pencarian audio",
@@ -1505,7 +1497,6 @@
         "ask_to_join": "Aktifkan bertanya untuk bergabung",
         "automatic_debug_logs": "Kirim catatan pengawakutu secara otomatis saat ada kesalahan",
         "automatic_debug_logs_decryption": "Kirim catatan pengawakutu secara otomatis ketika terjadi kesalahan pendekripsian",
-        "automatic_debug_logs_key_backup": "Kirim catatan pengawakutu secara otomatis ketika pencadangan kunci tidak berfungsi",
         "beta_description": "Apa berikutnya untuk %(brand)s? Fitur Uji Coba merupakan cara yang terbaik untuk mendapatkan hal-hal baru lebih awal, mencoba fitur baru dan membantu memperbaikinya sebelum diluncurkan.",
         "beta_feature": "Ini adalah fitur beta",
         "beta_feedback_leave_button": "Untuk keluar dari beta, pergi ke pengaturan Anda.",
@@ -1714,7 +1705,6 @@
         "class_global": "Global",
         "class_other": "Lainnya",
         "default": "Bawaan",
-        "default_settings": "Cocokkan pengaturan bawaan",
         "email_pusher_app_display_name": "Notifikasi Surel",
         "enable_prompt_toast_description": "Aktifkan notifikasi desktop",
         "enable_prompt_toast_title": "Notifikasi",
@@ -1733,8 +1723,7 @@
         "mentions_and_keywords_description": "Dapatkan notifikasi hanya dengan sebutan dan kata kunci yang diatur di <a>pengaturan</a> Anda",
         "mentions_keywords": "Sebutan dan kata kunci",
         "message_didnt_send": "Pesan tidak terkirim. Klik untuk informasi.",
-        "mute_description": "Anda tidak akan mendapatkan notifikasi apa pun",
-        "mute_room": "Bisukan ruangan"
+        "mute_description": "Anda tidak akan mendapatkan notifikasi apa pun"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s meminta verifikasi"
@@ -2141,37 +2130,9 @@
         "add_space_label": "Tambahkan space",
         "breadcrumbs_empty": "Tidak ada ruangan yang baru saja dilihat",
         "breadcrumbs_label": "Ruangan yang baru saja dilihat",
-        "collapse_filters": "Tutup daftar filter",
-        "empty": {
-            "no_chats": "Belum ada obrolan",
-            "no_chats_description": "Mulailah dengan mengirim pesan kepada seseorang atau dengan membuat ruangan",
-            "no_chats_description_no_room_rights": "Mulailah dengan mengirim pesan kepada seseorang",
-            "no_favourites": "Anda belum memiliki obrolan favorit",
-            "no_favourites_description": "Anda dapat menambahkan obrolan ke favorit Anda di pengaturan obrolan",
-            "no_invites": "Anda tidak memiliki undangan yang belum dibaca",
-            "no_lowpriority": "Anda tidak memiliki ruangan dengan prioritas rendah",
-            "no_mentions": "Anda tidak memiliki sebutan yang belum dibaca",
-            "no_people": "Anda belum memiliki obrolan langsung dengan siapa pun",
-            "no_people_description": "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain",
-            "no_rooms": "Anda belum berada di ruangan mana pun",
-            "no_rooms_description": "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain",
-            "no_unread": "Selamat! Anda tidak memiliki pesan yang belum dibaca",
-            "show_activity": "Lihat semua aktivitas",
-            "show_chats": "Tampilkan semua obrolan"
-        },
-        "expand_filters": "Buka daftar filter",
         "failed_add_tag": "Gagal menambahkan tag %(tagName)s ke ruangan",
         "failed_remove_tag": "Gagal menghapus tanda %(tagName)s dari ruangan",
         "failed_set_dm_tag": "Gagal menetapkan tanda pesan langsung",
-        "filters": {
-            "favourite": "Favorit",
-            "invites": "Undangan",
-            "low_priority": "Prioritas rendah",
-            "mentions": "Sebutan",
-            "people": "Orang",
-            "rooms": "Ruangan",
-            "unread": "Belum dibaca"
-        },
         "home_menu_label": "Opsi Beranda",
         "join_public_room_label": "Bergabung dengan ruangan publik",
         "joining_rooms_status": {
@@ -2180,22 +2141,12 @@
         },
         "list_title": "Daftar ruangan",
         "more_options": {
-            "copy_link": "Salin tautan ruangan",
-            "favourited": "Difavorit",
-            "leave_room": "Tinggalkan ruangan",
-            "low_priority": "Prioritas rendah",
-            "mark_read": "Tandai sebagai dibaca",
-            "mark_unread": "Tandai sebagai belum dibaca"
+            "leave_room": "Tinggalkan ruangan"
         },
         "notification_options": "Opsi notifikasi",
-        "primary_filters": "Filter daftar ruangan",
         "redacting_messages_status": {
             "one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
             "other": "Saat ini menghapus pesan-pesan di %(count)s ruangan"
-        },
-        "room": {
-            "more_options": "Opsi Lainnya",
-            "open_room": "Buka ruangan %(roomName)s"
         },
         "show_less": "Tampilkan lebih sedikit",
         "show_n_more": {

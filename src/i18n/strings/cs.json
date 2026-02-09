@@ -12,18 +12,6 @@
             "one": "Nepřečtená zmínka."
         },
         "recent_rooms": "Nedávné místnosti",
-        "room_messsage_not_sent": "Otevřít místnost %(roomName)s s nenastavenou zprávou.",
-        "room_n_unread_invite": "Otevřít pozvánku do místnosti %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zprávou.",
-            "few": "",
-            "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zmínkou.",
-            "few": "",
-            "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami včetně zmínek."
-        },
         "room_name": "Místnost %(name)s",
         "room_status_bar": "Stavový řádek místnosti",
         "seek_bar_label": "Panel posunu zvuku",
@@ -978,6 +966,7 @@
         "import_invalid_passphrase": "Kontrola ověření selhala: špatné heslo?",
         "key_storage_out_of_sync": "Vaše úložiště klíčů není synchronizováno.",
         "key_storage_out_of_sync_description": "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.",
+        "message_shared_by": "%(displayName)s (%(userId)s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",
@@ -1509,7 +1498,6 @@
         "ask_to_join": "Umožnit požádat o vstup",
         "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě",
         "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",
-        "automatic_debug_logs_key_backup": "Automaticky odeslat ladící protokoly, když zálohování klíčů nefunguje",
         "beta_description": "Co se chystá pro %(brand)s? Experimentální funkce jsou nejlepším způsobem, jak se dostat k novým věcem v raném stádiu, vyzkoušet nové funkce a pomoci je formovat ještě před jejich spuštěním.",
         "beta_feature": "Jedná se o funkci ve vývoji",
         "beta_feedback_leave_button": "Chcete-li opustit beta verzi, jděte do nastavení.",
@@ -1720,7 +1708,6 @@
         "class_global": "Globální",
         "class_other": "Další možnosti",
         "default": "Výchozí",
-        "default_settings": "Shoda výchozího nastavení",
         "email_pusher_app_display_name": "E-mailová oznámení",
         "enable_prompt_toast_description": "Povolit oznámení na ploše",
         "enable_prompt_toast_title": "Oznámení",
@@ -1739,8 +1726,7 @@
         "mentions_and_keywords_description": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
         "mentions_keywords": "Zmínky a klíčová slova",
         "message_didnt_send": "Zpráva se neodeslala. Klikněte pro informace.",
-        "mute_description": "Nebudete dostávat žádná oznámení",
-        "mute_room": "Ztlumit místnost"
+        "mute_description": "Nebudete dostávat žádná oznámení"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s žádá o ověření"
@@ -2036,7 +2022,9 @@
                 "few": "%(count)s lidé žádají o vstup",
                 "other": "%(count)s lidí žádá o vstup"
             },
-            "room_is_public": "Tato místnost je veřejná"
+            "room_is_public": "Tato místnost je veřejná",
+            "shared_history_tooltip": "Noví členové vidí historii",
+            "world_readable_history_tooltip": "Každý může vidět historii"
         },
         "header_avatar_open_settings_label": "Otevřít nastavení místnosti",
         "header_face_pile_tooltip": "Lidé",
@@ -2160,37 +2148,9 @@
         "add_space_label": "Přidat prostor",
         "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
         "breadcrumbs_label": "Nedávno navštívené místnosti",
-        "collapse_filters": "Sbalit seznam filtrů",
-        "empty": {
-            "no_chats": "Zatím žádné chaty",
-            "no_chats_description": "Začněte tím, že někomu pošlete zprávu nebo vytvoříte místnost",
-            "no_chats_description_no_room_rights": "Začněte tím, že někomu pošlete zprávu",
-            "no_favourites": "Zatím nemáte oblíbený chat",
-            "no_favourites_description": "Chat si můžete přidat do oblíbených v nastavení chatu",
-            "no_invites": "Nemáte žádné nepřečtené pozvánky",
-            "no_lowpriority": "Nemáte žádné místnosti s nízkou prioritou",
-            "no_mentions": "Nemáte žádné nepřečtené zmínky",
-            "no_people": "Zatím s nikým nemáte přímé chaty",
-            "no_people_description": "Můžete zrušit výběr filtrů, abyste viděli ostatní chaty",
-            "no_rooms": "Ještě nejste v žádné místnosti",
-            "no_rooms_description": "Můžete zrušit výběr filtrů, abyste viděli své další chaty",
-            "no_unread": "Gratulujeme! Nemáte žádné nepřečtené zprávy",
-            "show_activity": "Zobrazit veškerou aktivitu",
-            "show_chats": "Zobrazit všechny chaty"
-        },
-        "expand_filters": "Rozbalit seznam filtrů",
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
-        "filters": {
-            "favourite": "Oblíbené",
-            "invites": "Pozvánky",
-            "low_priority": "Nízká priorita",
-            "mentions": "Zmínky",
-            "people": "Lidé",
-            "rooms": "Místnosti",
-            "unread": "Nepřečtené"
-        },
         "home_menu_label": "Možnosti domovské obrazovky",
         "join_public_room_label": "Připojit se k veřejné místnosti",
         "joining_rooms_status": {
@@ -2199,22 +2159,12 @@
         },
         "list_title": "Seznam místností",
         "more_options": {
-            "copy_link": "Kopírovat odkaz na místnost",
-            "favourited": "Oblíbené",
-            "leave_room": "Opustit místnost",
-            "low_priority": "Nízká priorita",
-            "mark_read": "Označit jako přečtené",
-            "mark_unread": "Označit jako nepřečtené"
+            "leave_room": "Opustit místnost"
         },
         "notification_options": "Možnosti oznámení",
-        "primary_filters": "Filtry seznamu místností",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
-        },
-        "room": {
-            "more_options": "Více možností",
-            "open_room": "Otevřít místnost %(roomName)s"
         },
         "show_less": "Zobrazit méně",
         "show_n_more": {

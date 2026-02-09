@@ -6,11 +6,32 @@
         "delete": "Slett",
         "dismiss": "Avvis",
         "explore_rooms": "Se alle rom",
+        "pause": "Sett på pause",
         "play": "Spill av",
+        "retry": "Prøv på nytt",
         "search": "Søk"
     },
     "left_panel": {
         "open_dial_pad": "Åpne nummerpanelet"
+    },
+    "room": {
+        "status_bar": {
+            "delete_all": "Slett alle",
+            "exceeded_resource_limit_description": "Kontakt tjenesteadministratoren din for å fortsette å bruke tjenesten.",
+            "exceeded_resource_limit_title": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har overskredet en ressursgrense.",
+            "failed_to_create_room_title": "Kunne ikke starte en chat med denne brukeren",
+            "homeserver_blocked_title": "Meldingen din ble ikke sendt fordi denne hjemmeserveren er blokkert av dens administrator.",
+            "monthly_user_limit_reached_title": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har nådd sin månedlige grense for aktive brukere.",
+            "requires_consent_agreement_title": "Du kan ikke sende noen meldinger før du har lest og godtatt våre vilkår og betingelser.",
+            "retry_all": "Prøv alle på nytt",
+            "select_messages_to_retry": "Du kan velge alle eller individuelle meldinger for å prøve på nytt eller slette",
+            "server_connectivity_lost_description": "Sendte meldinger vil bli lagret til tilkoblingen er tilbake.",
+            "server_connectivity_lost_title": "Tilkoblingen til tjeneren er nede.",
+            "some_messages_not_sent": "Noen av meldingene dine er ikke sendt"
+        }
+    },
+    "terms": {
+        "tac_button": "Gå gjennom betingelser og vilkår"
     },
     "time": {
         "about_day_ago": "cirka 1 dag siden",

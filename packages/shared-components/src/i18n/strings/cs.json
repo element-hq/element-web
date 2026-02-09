@@ -5,13 +5,68 @@
     "action": {
         "delete": "Smazat",
         "dismiss": "Zavřít",
+        "edit": "Upravit",
         "explore_rooms": "Procházet místnosti",
+        "invite": "Pozvat",
+        "new_conversation": "Nová konverzace",
+        "new_room": "Nová místnost",
+        "new_video_room": "Nová video místnost",
+        "open_menu": "Otevřít nabídku",
         "pause": "Pozastavit",
         "play": "Přehrát",
-        "search": "Hledání"
+        "remove": "Odstranit",
+        "retry": "Zkusit znovu",
+        "search": "Hledání",
+        "start_chat": "Zahájit konverzaci"
+    },
+    "common": {
+        "preferences": "Předvolby"
     },
     "left_panel": {
         "open_dial_pad": "Otevřít číselník"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Možnosti místnosti"
+        },
+        "history_visibility_badge": {
+            "private": "Noví členové nevidí historii",
+            "shared": "Noví členové vidí historii",
+            "world_readable": "Každý může vidět historii"
+        },
+        "status_bar": {
+            "delete_all": "Smazat vše",
+            "exceeded_resource_limit_description": "Chcete-li službu nadále používat, obraťte se na správce služby.",
+            "exceeded_resource_limit_title": "Vaše zpráva nebyla odeslána, protože tento domovský server překročil limit zdrojů.",
+            "failed_to_create_room_title": "S tímto uživatelem se nepodařilo zahájit chat.",
+            "homeserver_blocked_title": "Vaše zpráva nebyla odeslána, protože tento domovský server byl zablokován jeho správcem.",
+            "monthly_user_limit_reached_title": "Vaše zpráva nebyla odeslána, protože tento domovský server dosáhl svého měsíčního limitu aktivních uživatelů.",
+            "requires_consent_agreement_title": "Nemůžete odesílat žádné zprávy, dokud si nepřečtete a nesouhlasíte s našimi obchodními podmínkami.",
+            "retry_all": "Zkusit vše znovu",
+            "select_messages_to_retry": "Můžete vybrat všechny nebo jednotlivé zprávy, které chcete znovu odeslat nebo smazat.",
+            "server_connectivity_lost_description": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví.",
+            "server_connectivity_lost_title": "Připojení k serveru bylo ztraceno.",
+            "some_messages_not_sent": "Některé z vašich zpráv nebyly odeslány"
+        }
+    },
+    "room_list": {
+        "appearance": "Vzhled",
+        "open_space_menu": "Otevřít nabídku prostoru",
+        "room_options": "Možnosti místnosti",
+        "show_message_previews": "Zobrazit náhledy zpráv",
+        "sort": "Řadit",
+        "sort_type": {
+            "activity": "Aktivita",
+            "atoz": "A-Z",
+            "unread_first": "Nepřečtené jako první"
+        },
+        "space_menu": {
+            "home": "Domov prostoru",
+            "space_settings": "Nastavení prostoru"
+        }
+    },
+    "terms": {
+        "tac_button": "Přečíst smluvní podmínky"
     },
     "time": {
         "about_day_ago": "před jedním dnem",
@@ -30,10 +85,29 @@
         "n_minutes_ago": "před %(num)s minutami"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "Odesílatel vám zablokoval příjem této zprávy, protože vaše zařízení není ověřeno",
+            "historical_event_no_key_backup": "Historické zprávy nejsou na tomto zařízení k dispozici",
+            "historical_event_unverified_device": "Pro přístup k historickým zprávám musíte toto zařízení ověřit",
+            "historical_event_user_not_joined": "Nemáte přístup k této zprávě",
+            "sender_identity_previously_verified": "Ověřená identita odesílatele se změnila",
+            "sender_unsigned_device": "Odesláno z nezabezpečeného zařízení.",
+            "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu"
+        },
         "m.audio": {
             "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
             "unnamed_audio": "Nepojmenovaný audio soubor"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Posunout doleva",
+            "move_right": "Posunout doprava",
+            "remove": "Odstranit pro všechny",
+            "revoke": "Odvolat oprávnění",
+            "screenshot": "Vyfotit",
+            "start_audio_stream": "Zahájit audio přenos"
         }
     }
 }

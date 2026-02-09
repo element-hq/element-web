@@ -12,16 +12,6 @@
             "one": "1 oläst omnämnande."
         },
         "recent_rooms": "Nyliga rum",
-        "room_messsage_not_sent": "Öppna rummet %(roomName)s med ett osänt meddelande.",
-        "room_n_unread_invite": "Öppna inbjudan till rummet %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Öppna rummet %(roomName)s med 1 oläst meddelande.",
-            "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Öppna rummet %(roomName)s med 1 oläst omnämnande.",
-            "other": "Öppna rummet %(roomName)s med %(count)s olästa meddelanden inklusive omnämnanden."
-        },
         "room_name": "Rum %(name)s",
         "room_status_bar": "Rumsstatusfält",
         "seek_bar_label": "Förloppsfält för ljud",
@@ -1451,7 +1441,6 @@
         "ask_to_join": "Aktivera fråga om att gå med",
         "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
         "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
-        "automatic_debug_logs_key_backup": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
         "beta_description": "Vad händer härnäst med %(brand)s? Experiment är det bästa sättet att få saker tidigt, pröva nya funktioner, och hjälpa till att forma dem innan de egentligen släpps.",
         "beta_feature": "Det här är en betafunktion",
         "beta_feedback_leave_button": "För att lämna betan, besök dina inställningar.",
@@ -1659,7 +1648,6 @@
         "class_global": "Globalt",
         "class_other": "Annat",
         "default": "Standard",
-        "default_settings": "Matcha standardinställningar",
         "email_pusher_app_display_name": "E-postaviseringar",
         "enable_prompt_toast_description": "Aktivera skrivbordsaviseringar",
         "enable_prompt_toast_title": "Aviseringar",
@@ -1678,8 +1666,7 @@
         "mentions_and_keywords_description": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
         "mentions_keywords": "Omnämnanden & nyckelord",
         "message_didnt_send": "Meddelande skickades inte. Klicka för info.",
-        "mute_description": "Du får inga aviseringar",
-        "mute_room": "Tysta rum"
+        "mute_description": "Du får inga aviseringar"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s begär verifiering"
@@ -2076,37 +2063,9 @@
         "add_space_label": "Lägg till utrymme",
         "breadcrumbs_empty": "Inga nyligen besökta rum",
         "breadcrumbs_label": "Nyligen besökta rum",
-        "collapse_filters": "Kollapsa filterlista",
-        "empty": {
-            "no_chats": "Inga chattar än",
-            "no_chats_description": "Kom igång genom att skicka meddelanden till någon eller genom att skapa ett rum",
-            "no_chats_description_no_room_rights": "Kom igång genom att skicka meddelanden till någon",
-            "no_favourites": "Du har ingen favoritchatt än",
-            "no_favourites_description": "Du kan lägga till en chatt till dina favoriter i chattinställningarna",
-            "no_invites": "Du har inga olästa inbjudningar",
-            "no_lowpriority": "Du har inga lågprioriterade rum.",
-            "no_mentions": "Du har inga olästa omnämnanden",
-            "no_people": "Du har inte direktchattar med någon ännu",
-            "no_people_description": "Du kan avmarkera filter för att se dina andra chattar",
-            "no_rooms": "Du är inte i något rum än",
-            "no_rooms_description": "Du kan avmarkera filter för att se dina andra chattar",
-            "no_unread": "Grattis! Du har inga olästa meddelanden",
-            "show_activity": "Visa all aktivitet",
-            "show_chats": "Visa alla chattar"
-        },
-        "expand_filters": "Expandera filterlista",
         "failed_add_tag": "Misslyckades att lägga till etiketten %(tagName)s till rummet",
         "failed_remove_tag": "Misslyckades att radera etiketten %(tagName)s från rummet",
         "failed_set_dm_tag": "Misslyckades att sätta direktmeddelandetagg",
-        "filters": {
-            "favourite": "Favoriter",
-            "invites": "Inbjudningar",
-            "low_priority": "Låg prioritet",
-            "mentions": "Omnämnanden",
-            "people": "Personer",
-            "rooms": "Rum",
-            "unread": "Olästa"
-        },
         "home_menu_label": "Hemalternativ",
         "join_public_room_label": "Gå med i offentligt rum",
         "joining_rooms_status": {
@@ -2115,22 +2074,12 @@
         },
         "list_title": "Rumslista",
         "more_options": {
-            "copy_link": "Kopiera rumslänk",
-            "favourited": "Favoritmarkerad",
-            "leave_room": "Lämna rum",
-            "low_priority": "Låg prioritet",
-            "mark_read": "Markera som läst",
-            "mark_unread": "Markera som oläst"
+            "leave_room": "Lämna rum"
         },
         "notification_options": "Aviseringsinställningar",
-        "primary_filters": "Filter för rumslista",
         "redacting_messages_status": {
             "one": "Tar just nu bort meddelanden i %(count)s rum",
             "other": "Tar just nu bort meddelanden i %(count)s rum"
-        },
-        "room": {
-            "more_options": "Fler alternativ",
-            "open_room": "Öppet rummet %(roomName)s"
         },
         "show_less": "Visa mindre",
         "show_n_more": {

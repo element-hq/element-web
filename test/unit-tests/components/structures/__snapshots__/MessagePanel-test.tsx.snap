@@ -39,8 +39,9 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
         >
           <div
             aria-label="Thu, Jan 1, 1970"
-            class="mx_TimelineSeparator"
+            class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_yq5ye_8"
             role="separator"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <hr
               role="none"
@@ -61,7 +62,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
           </div>
         </li>
         <div
-          class="mx_EventTileBubble mx_HistoryTile"
+          class="_container_sq5fu_8 mx_EventTileBubble mx_HistoryTile"
         >
           <svg
             fill="currentColor"
@@ -75,7 +76,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
             />
           </svg>
           <div
-            class="mx_EventTileBubble_title"
+            class="_title_sq5fu_34"
           >
             You can't see earlier messages
           </div>

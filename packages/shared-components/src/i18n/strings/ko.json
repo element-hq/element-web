@@ -5,6 +5,7 @@
     "action": {
         "delete": "삭제",
         "dismiss": "버리기",
+        "edit": "편집",
         "explore_rooms": "방 검색",
         "invite": "초대",
         "new_conversation": "새로운 대화",
@@ -13,6 +14,7 @@
         "open_menu": "메뉴 열기",
         "pause": "일시중지",
         "play": "재생",
+        "remove": "제거",
         "retry": "재시도",
         "search": "찾기",
         "start_chat": "채팅 시작"
@@ -23,9 +25,20 @@
     "left_panel": {
         "open_dial_pad": "다이얼 패드 열기"
     },
+    "notifications": {
+        "all_messages": "모든 메시지",
+        "default_settings": "기본 설정 따르기",
+        "mentions_keywords": "멘션 및 키워드",
+        "mute_room": "방 알림 끄기"
+    },
     "room": {
         "context_menu": {
             "title": "채팅방 옵션"
+        },
+        "history_visibility_badge": {
+            "private": "신규 회원은 이전 기록을 볼 수 없습니다.",
+            "shared": "신규 회원은 기록을 볼 수 있습니다.",
+            "world_readable": "누구나 히스토리를 볼 수 있습니다"
         },
         "status_bar": {
             "delete_all": "전체 삭제",
@@ -43,12 +56,68 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "%(roomName)s 방 열기",
+            "invitation": "%(roomName)s 방 초대장 확인하기",
+            "mention": {
+                "other": "읽지 않은 언급 %(count)s개가 있는 %(roomName)s 방 열기"
+            },
+            "unread": {
+                "other": "읽지 않은 메세지 %(count)s개가 있는 %(roomName)s 방 열기"
+            },
+            "unsent_message": "전송되지 않은 메시지가 있는 %(roomName)s 방 열기"
+        },
+        "appearance": "모양",
+        "collapse_filters": "필터 목록 접기",
+        "empty": {
+            "no_chats": "아직 채팅이 없습니다.",
+            "no_chats_description": "메시지를 보내거나 방을 만들어 활동을 시작해 보세요.",
+            "no_chats_description_no_room_rights": "메시지를 보내 대화를 시작해 보세요.",
+            "no_favourites": "아직 즐겨찾는 채팅방이 없습니다.",
+            "no_favourites_description": "채팅 설정에서 대화를 즐겨찾기에 추가할 수 있습니다.",
+            "no_invites": "읽지 않은 초대장이 없습니다",
+            "no_lowpriority": "우선순위가 낮은 방이 없습니다.",
+            "no_mentions": "읽지 않은 멘션이 없습니다.",
+            "no_people": "아직 대화 중인 상대가 없습니다.",
+            "no_people_description": "다른 채팅을 확인하려면 적용된 필터를 해제해 주세요.",
+            "no_rooms": "아직 참여 중인 방이 없습니다.",
+            "no_rooms_description": "다른 채팅을 확인하려면 적용된 필터를 해제해 주세요.",
+            "no_unread": "축하합니다! 읽지 않은 메시지가 모두 확인되었습니다.",
+            "show_activity": "모든 활동 보기",
+            "show_chats": "모든 채팅 보기"
+        },
+        "expand_filters": "필터 목록 펼치기",
+        "filters": {
+            "favourite": "즐겨찾기",
+            "invites": "초대",
+            "low_priority": "우선순위 낮음",
+            "mentions": "멘션",
+            "people": "사람",
+            "rooms": "채팅방",
+            "unread": "안 읽음"
+        },
+        "list_title": "채팅방 목록",
+        "more_options": {
+            "copy_link": "방 링크 복사",
+            "favourited": "즐겨찾기",
+            "leave_room": "방 떠나기",
+            "low_priority": "우선순위 낮음",
+            "mark_read": "읽음으로 표시",
+            "mark_unread": "읽지 않음으로 표시"
+        },
+        "notification_options": "알림 옵션",
         "open_space_menu": "스페이스 메뉴 열기",
+        "primary_filters": "채팅방 목록 필터",
+        "room": {
+            "more_options": "옵션 더보기"
+        },
         "room_options": "채팅방 옵션",
+        "show_message_previews": "메시지 미리보기 표시",
         "sort": "정렬",
         "sort_type": {
             "activity": "활동내역",
-            "atoz": "A-Z"
+            "atoz": "A-Z",
+            "unread_first": "안읽은 글 우선"
         },
         "space_menu": {
             "home": "스페이스 홈",
@@ -75,10 +144,29 @@
         "n_minutes_ago": "%(num)s분 전"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "발신자가 귀하의 기기가 인증되지 않았기 때문에 이 메시지를 수신하지 못하도록 차단했습니다.",
+            "historical_event_no_key_backup": "이 기기에서는 이전 메시지를 볼 수 없습니다.",
+            "historical_event_unverified_device": "이전 메시지에 액세스하려면 이 장치를 인증해야 합니다.",
+            "historical_event_user_not_joined": "이 메시지에 액세스할 수 없습니다.",
+            "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
+            "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
+            "unable_to_decrypt": "메시지를 해독할 수 없습니다."
+        },
         "m.audio": {
             "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
             "unnamed_audio": "이름 없는 오디오"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "왼쪽으로 이동",
+            "move_right": "오른쪽으로 이동",
+            "remove": "모든 사람에게서 제거",
+            "revoke": "권한 취소",
+            "screenshot": "사진 촬영",
+            "start_audio_stream": "오디오 스트림 시작"
         }
     }
 }

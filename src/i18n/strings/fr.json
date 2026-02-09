@@ -12,16 +12,6 @@
             "one": "1 mention non lue."
         },
         "recent_rooms": "Salons récents",
-        "room_messsage_not_sent": "Ouvrir le salon %(roomName)s avec un message non envoyé.",
-        "room_n_unread_invite": "Ouvrir l'invitation du salon %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Ouvrir salon %(roomName)s avec 1 message non lu.",
-            "other": "Ouvrir salon %(roomName)s avec %(count)s messages non lus."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Ouvrir salon %(roomName)s avec 1 mention non lue.",
-            "other": "Ouvrir salon %(roomName)s avec %(count)s messages non lus comprenant des mentions."
-        },
         "room_name": "Salon %(name)s",
         "room_status_bar": "Barre de statut du salon",
         "seek_bar_label": "Barre de recherche audio",
@@ -1508,7 +1498,6 @@
         "ask_to_join": "Activer demander à venir",
         "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur",
         "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
-        "automatic_debug_logs_key_backup": "Envoyer automatiquement les journaux de débogage lorsque la sauvegarde des clés ne fonctionne pas",
         "beta_description": "Que va-t-il se passer dans %(brand)s ? La section expérimentale est la meilleure manière d’avoir des choses en avance, tester les nouvelles fonctionnalités et d’aider à les affiner avant leur lancement officiel.",
         "beta_feature": "Il s'agit d'une fonctionnalité bêta",
         "beta_feedback_leave_button": "Pour quitter la bêta, consultez les paramètres.",
@@ -1718,7 +1707,6 @@
         "class_global": "Global",
         "class_other": "Autre",
         "default": "Par défaut",
-        "default_settings": "Correspondre aux paramètres par défaut",
         "email_pusher_app_display_name": "Notifications par courriel",
         "enable_prompt_toast_description": "Activer les notifications sur le bureau",
         "enable_prompt_toast_title": "Notifications",
@@ -1737,8 +1725,7 @@
         "mentions_and_keywords_description": "Recevoir des notifications uniquement pour les mentions et mot-clés comme défini dans vos <a>paramètres</a>",
         "mentions_keywords": "Mentions et mots-clés",
         "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
-        "mute_description": "Vous n’aurez aucune notification",
-        "mute_room": "Rendre le salon muet"
+        "mute_description": "Vous n’aurez aucune notification"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s demande une vérification"
@@ -2152,37 +2139,9 @@
         "add_space_label": "Ajouter un espace",
         "breadcrumbs_empty": "Aucun salon visité récemment",
         "breadcrumbs_label": "Salons visités récemment",
-        "collapse_filters": "Réduire la liste des filtres",
-        "empty": {
-            "no_chats": "Pas encore de discussions",
-            "no_chats_description": "Commencez par envoyer un message à quelqu'un ou en créant un salon",
-            "no_chats_description_no_room_rights": "Commencez par envoyer un message à quelqu'un",
-            "no_favourites": "Vous n'avez pas encore de discussion favorite",
-            "no_favourites_description": "Vous pouvez ajouter une discussion à vos favoris dans les paramètres de discussion",
-            "no_invites": "Vous n'avez aucune invitation non lue",
-            "no_lowpriority": "Vous n'avez aucun salon avec une priorité basse",
-            "no_mentions": "Vous n'avez aucune mention non lue",
-            "no_people": "Vous n'avez encore de discussions",
-            "no_people_description": "Veuillez désélectionner des filtres pour voir vos discussions",
-            "no_rooms": "Vous n’êtes membre d’aucun salon",
-            "no_rooms_description": "Veuillez désélectionner des filtres pour voir vos discussions",
-            "no_unread": "Félicitations ! Vous n'avez aucun message non lu",
-            "show_activity": "Voir toutes les activités",
-            "show_chats": "Afficher toutes les discussions"
-        },
-        "expand_filters": "Développer la liste des filtres",
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
-        "filters": {
-            "favourite": "Favoris",
-            "invites": "Invitations",
-            "low_priority": "Priorité basse",
-            "mentions": "Mentions",
-            "people": "Personnes",
-            "rooms": "Salons",
-            "unread": "Non-lus"
-        },
         "home_menu_label": "Options de l’accueil",
         "join_public_room_label": "Rejoindre le salon public",
         "joining_rooms_status": {
@@ -2191,22 +2150,12 @@
         },
         "list_title": "Liste de salons",
         "more_options": {
-            "copy_link": "Copier le lien du salon",
-            "favourited": "Favorisé",
-            "leave_room": "Quitter le salon",
-            "low_priority": "Priorité basse",
-            "mark_read": "Marquer comme lu",
-            "mark_unread": "Marquer comme non lu"
+            "leave_room": "Quitter le salon"
         },
         "notification_options": "Paramètres de notifications",
-        "primary_filters": "Filtre de la liste des salons",
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
-        },
-        "room": {
-            "more_options": "Plus d’options",
-            "open_room": "Ouvrir salon %(roomName)s"
         },
         "show_less": "En voir moins",
         "show_n_more": {

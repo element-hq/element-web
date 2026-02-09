@@ -14,18 +14,6 @@
             "%(count)s crybwylliad heb eu darllen": "other"
         },
         "recent_rooms": "Ystafelloedd diweddar",
-        "room_messsage_not_sent": "Agor ystafell %(roomName)s gyda neges heb ei gosod.",
-        "room_n_unread_invite": "Agor gwahoddiad i ystafell %(roomName)s.",
-        "room_n_unread_messages": {
-            "Ystafell agored%(roomName)s gyda %(count)s negeseuon heb eu darllen.": "zero",
-            "Ystafell agored %(roomName)s gydag 1 neges heb ei darllen.": "one",
-            "Ystafell agored%(roomName)s gyda %(count)s neges heb eu darllen.": "other"
-        },
-        "room_n_unread_messages_mentions": {
-            "Ystafell agored %(roomName)s gyda %(count)s negeseuon heb eu darllen gan gynnwys crybwylliadau.": "zero",
-            "Ystafell agored %(roomName)s gydag 1 crybwylliad heb ei ddarllen.": "one",
-            "Ystafell agored %(roomName)s gyda %(count)s neges heb eu darllen gan gynnwys crybwylliadau.": "other"
-        },
         "room_name": "Ystafell %(matere)s",
         "room_status_bar": "Bar statws ystafell",
         "seek_bar_label": "Bar chwilio sain",
@@ -1521,7 +1509,6 @@
         "ask_to_join": "Galluogi gofyn i ymuno",
         "automatic_debug_logs": "Anfon logiau dadfygio yn awtomatig ar unrhyw wall",
         "automatic_debug_logs_decryption": "Anfon logiau dadgryptio yn awtomatig ar wallau dadgryptio",
-        "automatic_debug_logs_key_backup": "Anfon logiau dadfygio yn awtomatig pan nad yw copi wrth gefn allweddol yn gweithio",
         "beta_description": "Beth sydd nesaf i %(brand)s? Labs yw'r ffordd orau o gael pethau'n gynnar, profi nodweddion newydd a helpu i'w siapio cyn iddynt gael eu lansio.",
         "beta_feature": "Mae hon yn nodwedd beta",
         "beta_feedback_leave_button": "I adael y beta, ewch i'ch gosodiadau.",
@@ -1731,7 +1718,6 @@
         "class_global": "Eang",
         "class_other": "Arall",
         "default": "Rhagosodedig",
-        "default_settings": "Cydweddu'r gosodiadau rhagosodedig",
         "email_pusher_app_display_name": "Hysbysiadau E-bost",
         "enable_prompt_toast_description": "Galluogi hysbysiadau bwrdd gwaith",
         "enable_prompt_toast_title": "Hysbysiadau",
@@ -1750,8 +1736,7 @@
         "mentions_and_keywords_description": "Dim ond gyda chyfeiriadau ac allweddeiriau fel y'u gosodwyd yn eich <a>gosodiadau</a> y cewch eich hysbysu",
         "mentions_keywords": "Crybwylliadau ac allweddeiriau",
         "message_didnt_send": "Heb anfon y neges. Cliciwch am wybodaeth.",
-        "mute_description": "Fyddwch chi ddim yn cael unrhyw hysbysiadau",
-        "mute_room": "Tewi'r ystafell"
+        "mute_description": "Fyddwch chi ddim yn cael unrhyw hysbysiadau"
     },
     "notifier": {
         "m.key.verification.request": "Mae %(matere)s yn gofyn am ddilysiad"
@@ -2164,37 +2149,9 @@
         "add_space_label": "Ychwanegu gofod",
         "breadcrumbs_empty": "Dim ystafelloedd yr ymwelwyd â nhw yn ddiweddar",
         "breadcrumbs_label": "Ymwelwyd ag ystafelloedd yn ddiweddar",
-        "collapse_filters": "Cwympo rhestr hidlo",
-        "empty": {
-            "no_chats": "Dim sgyrsiau eto",
-            "no_chats_description": "Dechreuwch drwy anfon neges at rywun neu drwy greu ystafell",
-            "no_chats_description_no_room_rights": "Dechreuwch trwy anfon neges at rywun",
-            "no_favourites": "Nid oes gennych hoff sgwrs eto",
-            "no_favourites_description": "Gallwch ychwanegu sgwrs at eich ffefrynnau yn y gosodiadau sgwrsio",
-            "no_invites": "Does gennych chi ddim gwahoddiadau heb eu darllen",
-            "no_lowpriority": "Nid oes gennych unrhyw ystafelloedd blaenoriaeth isel",
-            "no_mentions": "Does gennych chi ddim crybwylliadau heb eu darllen",
-            "no_people": "Nid oes gennych chi sgyrsiau uniongyrchol gydag unrhyw un eto",
-            "no_people_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
-            "no_rooms": "Nid ydych mewn unrhyw ystafell eto",
-            "no_rooms_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
-            "no_unread": "Llongyfarchiadau! Nid oes gennych unrhyw negeseuon heb eu darllen",
-            "show_activity": "Gweld yr holl weithgarwch",
-            "show_chats": "Dangos pob sgwrs"
-        },
-        "expand_filters": "Ehangu rhestr hidlo",
         "failed_add_tag": "Wedi methu ag ychwanegu tag %(tagName)s i'r ystafell",
         "failed_remove_tag": "Wedi methu â thynnu'r tag %(tagName)s o'r ystafell",
         "failed_set_dm_tag": "Wedi methu gosod tag neges uniongyrchol",
-        "filters": {
-            "favourite": "Ffefrynnau",
-            "invites": "Gwahoddiadau",
-            "low_priority": "Blaenoriaeth isel",
-            "mentions": "Crybwylliadau",
-            "people": "Pobl",
-            "rooms": "Ystafelloedd",
-            "unread": "Heb eu darllen"
-        },
         "home_menu_label": "Dewisiadau cartref",
         "join_public_room_label": "Ymuno â'r ystafell gyhoeddus",
         "joining_rooms_status": {
@@ -2202,21 +2159,11 @@
         },
         "list_title": "Rhestr ystafelloedd",
         "more_options": {
-            "copy_link": "Copïo dolen ystafell",
-            "favourited": "Ffafrio",
-            "leave_room": "Gadael yr ystafell",
-            "low_priority": "Blaenoriaeth isel",
-            "mark_read": "Marcio fel wedi'i ddarllen",
-            "mark_unread": "Marcio fel heb ei ddarllen"
+            "leave_room": "Gadael yr ystafell"
         },
         "notification_options": "Dewisiadau hysbysu",
-        "primary_filters": "Hidlau rhestr ystafelloedd",
         "redacting_messages_status": {
             "Yn tynnu negeseuon mewn %(count)s ystafell": "other"
-        },
-        "room": {
-            "more_options": "Rhagor o Ddewisiadau",
-            "open_room": "Agor ystafell %(roomName)s"
         },
         "show_less": "Dangos llai",
         "show_n_more": {
