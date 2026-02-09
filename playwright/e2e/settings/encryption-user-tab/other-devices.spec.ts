@@ -127,7 +127,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
         // Perform verification.
         await verifyApp("alice", aliceElementApp, "bob", bobElementApp);
 
-        // Alice sends a message, which Bob should not be able to decrypt
+        // Alice sends a message, which Bob should be able to decrypt
         await sendMessageInCurrentRoom(alicePage, "Decryptable");
         await expect(bobPage.getByText("Decryptable")).toBeVisible();
     });
