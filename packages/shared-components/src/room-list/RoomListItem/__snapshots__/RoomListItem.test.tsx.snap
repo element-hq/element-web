@@ -1,0 +1,1236 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<RoomListItemView /> > renders Bold story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room Team Updates"
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView bold"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="Team Updates"
+            >
+              Team Updates
+            </div>
+            <div
+              class="messagePreview"
+              title="Alice: Hey everyone!"
+            >
+              Alice: Hey everyone!
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_12_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_10_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_19_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_17_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders Default story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General"
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+            <div
+              class="messagePreview"
+              title="Alice: Hey everyone!"
+            >
+              Alice: Hey everyone!
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_2_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_0_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_9_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_7_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders Invitation story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room Secret Project invitation."
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="Secret Project"
+            >
+              Secret Project
+            </div>
+            <div
+              class="messagePreview"
+              title="Bob invited you"
+            >
+              Bob invited you
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_2i_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_2g_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_2p_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_2n_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          >
+            <div
+              class="flex"
+              data-testid="notification-decoration"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <svg
+                fill="var(--cpd-color-icon-accent-primary)"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 5.111a1 1 0 0 0 .514.874l7 3.89a1 1 0 0 0 .972 0l7-3.89a1 1 0 1 0-.972-1.748L12 11.856 5.486 8.237A1 1 0 0 0 4 9.111"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General"
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_3i_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_3g_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_3p_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_3n_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders Selected story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General"
+        aria-posinset="1"
+        aria-selected="true"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView selected mx_RoomListItemView_selected"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+            <div
+              class="messagePreview"
+              title="Alice: Hey everyone!"
+            >
+              Alice: Hey everyone!
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_i_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_g_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_p_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_n_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General with an unsent message."
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+            <div
+              class="messagePreview"
+              title="Failed to send message"
+            >
+              Failed to send message
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_32_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_30_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_39_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_37_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          >
+            <div
+              class="flex"
+              data-testid="notification-decoration"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <svg
+                fill="var(--cpd-color-icon-critical-primary)"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General"
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+            <div
+              class="messagePreview"
+              title="Alice: Hey everyone!"
+            >
+              Alice: Hey everyone!
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_42_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_40_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_49_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_47_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders WithMention story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General with 1 unread mention."
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView bold"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+            <div
+              class="messagePreview"
+              title="Alice: Hey everyone!"
+            >
+              Alice: Hey everyone!
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_22_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_20_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_29_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_27_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          >
+            <div
+              class="flex"
+              data-testid="notification-decoration"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <svg
+                fill="var(--cpd-color-icon-accent-primary)"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 4a8 8 0 1 0 0 16 1 1 0 1 1 0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v1.5a3.5 3.5 0 0 1-6.396 1.966A5 5 0 1 1 17 12v1.5a1.5 1.5 0 0 0 3 0V12a8 8 0 0 0-8-8m3 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0"
+                />
+              </svg>
+              <span
+                class="_unread-counter_1147r_8"
+              >
+                1
+              </span>
+            </div>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      aria-label="Room list"
+      role="listbox"
+    >
+      <button
+        aria-haspopup="menu"
+        aria-label="Open room General with 3 unread messages."
+        aria-posinset="1"
+        aria-selected="false"
+        aria-setsize="10"
+        class="flex roomListItem mx_RoomListItemView bold"
+        data-state="closed"
+        role="option"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          aria-label="General avatar"
+          role="img"
+          style="width: 32px; height: 32px; border-radius: 50%; background-color: rgb(11, 127, 103); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;"
+        >
+          GE
+        </div>
+        <div
+          class="flex content"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="text"
+          >
+            <div
+              class="roomName"
+              data-testid="room-name"
+              title="General"
+            >
+              General
+            </div>
+            <div
+              class="messagePreview"
+              title="Alice: Hey everyone!"
+            >
+              Alice: Hey everyone!
+            </div>
+          </div>
+          <div
+            class="flex hoverMenu"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="More Options"
+              aria-labelledby="_r_1i_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_1g_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+                  />
+                </svg>
+              </div>
+            </button>
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-label="Notification options"
+              aria-labelledby="_r_1p_"
+              class="_icon-button_1215g_8"
+              data-kind="primary"
+              data-state="closed"
+              id="radix-_r_1n_"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="_indicator-icon_147l5_17"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            class="notificationDecoration"
+          >
+            <div
+              class="flex"
+              data-testid="notification-decoration"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+            >
+              <span
+                class="_unread-counter_1147r_8"
+              >
+                3
+              </span>
+            </div>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;

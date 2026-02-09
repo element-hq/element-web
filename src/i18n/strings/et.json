@@ -12,16 +12,6 @@
             "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
         },
         "recent_rooms": "Hiljuti kasutatud jututoad",
-        "room_messsage_not_sent": "Ava „%(roomName)s“ jututuba saatmata sõnumiga.",
-        "room_n_unread_invite": "Ava %(roomName)s jututoa kutse.",
-        "room_n_unread_messages": {
-            "one": "Ava %(roomName)s jututuba 1 lugemata sõnumiga.",
-            "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Ava %(roomName)s jututuba 1 lugemata mainimisega.",
-            "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga, mille hulgas on ka mainimisi."
-        },
         "room_name": "Jututuba %(name)s",
         "room_status_bar": "Jututoa olekuriba",
         "seek_bar_label": "Heli kerimisriba",
@@ -1717,7 +1707,6 @@
         "class_global": "Üldised",
         "class_other": "Muud",
         "default": "Tavaline",
-        "default_settings": "Sobita vaikimisi seadistustega",
         "email_pusher_app_display_name": "E-posti teel saadetavad teavitused",
         "enable_prompt_toast_description": "Võta kasutusele töölauakeskkonna teavitused",
         "enable_prompt_toast_title": "Teavitused",
@@ -1736,8 +1725,7 @@
         "mentions_and_keywords_description": "Soovin teavitusi sellisena mainimiste ja võtmesõnade puhul, nagu ma neid olen <a>seadistanud</a>",
         "mentions_keywords": "Mainimised ja märksõnad",
         "message_didnt_send": "Sõnum jäi saatmata. Lisateabe saamiseks klõpsi.",
-        "mute_description": "Sa ei saa üldse teavitusi",
-        "mute_room": "Summuta jututuba"
+        "mute_description": "Sa ei saa üldse teavitusi"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s soovib verifitseerimist"
@@ -2153,37 +2141,9 @@
         "add_space_label": "Lisa kogukond",
         "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
         "breadcrumbs_label": "Hiljuti külastatud jututoad",
-        "collapse_filters": "Ahenda filtriloendit",
-        "empty": {
-            "no_chats": "Vestlusi veel ei leidu",
-            "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
-            "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
-            "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
-            "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
-            "no_invites": "Sul pole lugemata kutseid",
-            "no_lowpriority": "Sul pole ühtegi vähetähtsat jututuba",
-            "no_mentions": "Sul pole lugemata mainimisi",
-            "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
-            "no_people_description": "Kõikide muude vestluste nägemiseks eemalda otsingufiltrid",
-            "no_rooms": "Sa veel ei osale mitte üheski jututoas",
-            "no_rooms_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
-            "no_unread": "Õnnitlused! Sul pole ühtegi lugemata sõnumit",
-            "show_activity": "Vaata kõiki tegevusi",
-            "show_chats": "Näita kõiki vestlusi"
-        },
-        "expand_filters": "Laienda filtriloendit",
         "failed_add_tag": "Sildi %(tagName)s lisamine jututoale ebaõnnestus",
         "failed_remove_tag": "Sildi %(tagName)s eemaldamine jututoast ebaõnnestus",
         "failed_set_dm_tag": "Otsevestluse sildi seadmine ei õnnestunud",
-        "filters": {
-            "favourite": "Lemmikud",
-            "invites": "Kutsed",
-            "low_priority": "Vähetähtis",
-            "mentions": "Mainimised",
-            "people": "Inimesed",
-            "rooms": "Jututoad",
-            "unread": "Lugemata"
-        },
         "home_menu_label": "Avalehe valikud",
         "join_public_room_label": "Liitu avaliku jututoaga",
         "joining_rooms_status": {
@@ -2192,22 +2152,12 @@
         },
         "list_title": "Jututubade loend",
         "more_options": {
-            "copy_link": "Kopeeri jututoa link",
-            "favourited": "Määratud lemmikuks",
-            "leave_room": "Lahku jututoast",
-            "low_priority": "Vähetähtis",
-            "mark_read": "Märgi loetuks",
-            "mark_unread": "Märgi mitteloetuks"
+            "leave_room": "Lahku jututoast"
         },
         "notification_options": "Teavituste eelistused",
-        "primary_filters": "Jututubade loendi filtrid",
         "redacting_messages_status": {
             "other": "Kustutame sõnumeid %(count)s jututoas",
             "one": "Kustutame sõnumeid %(count)s jututoas"
-        },
-        "room": {
-            "more_options": "Täiendavad seadistused",
-            "open_room": "Ava jututuba: %(roomName)s"
         },
         "show_less": "Näita vähem",
         "show_n_more": {

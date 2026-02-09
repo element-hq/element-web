@@ -255,6 +255,53 @@ export default {
 
 The Figma design will appear in the "Design" tab in Storybook.
 
+#### Non-UI Utility Stories
+
+For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
+
+`src/utils/humanize.stories.tsx`
+
+```tsx
+import React from "react";
+import { Markdown } from "@storybook/addon-docs/blocks";
+
+import type { Meta } from "@storybook/react-vite";
+import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
+
+const meta = {
+    title: "utils/humanize",
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <h1>humanize</h1>
+                    <Markdown>{humanizeTimeDoc}</Markdown>
+                </>
+            ),
+        },
+    },
+    tags: ["autodocs", "skip-test"],
+} satisfies Meta;
+
+export default meta;
+
+// Docs-only story - renders nothing but triggers autodocs
+export const Docs = {
+    render: () => null,
+};
+```
+
+> [!NOTE]
+> Be sure to include the `skip-test` tag in your utility stories to prevent them from running as visual tests.
+
+**Workflow:**
+
+1. Write TsDoc in your utility function
+2. Export the function from `src/index.ts`
+3. Run `yarn build:doc` to generate TypeDoc markdown
+4. Create a `.stories.tsx` file importing the generated markdown
+5. The documentation appears automatically in Storybook
+
 ### Tests
 
 Two types of tests are available: unit tests and visual regression tests.
@@ -288,7 +335,7 @@ Screenshots are located in `packages/shared-components/__vis__/`.
 
 ### Translations
 
-First see our [translation guide](../../docs/translation.md) and [translation dev guide](../../docs/translation-dev.md).
+First see our [translation guide](../../docs/translating.md) and [translation dev guide](../../docs/translating-dev.md).
 To generate translation strings for this package, run:
 
 ```bash
