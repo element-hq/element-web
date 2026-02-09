@@ -16,6 +16,8 @@ import type {
     CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
     CustomRoomPreviewBarRenderFunction,
+    MessageProfileRenderFunction,
+    UserInfoRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -42,7 +44,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      * @param mxEvent
      * @returns An event object, or `null` if the event was not a message event.
      */
-    private static getModuleMatrixEvent(mxEvent: MatrixEvent): ModuleMatrixEvent | null {
+    public static getModuleMatrixEvent(mxEvent: MatrixEvent): ModuleMatrixEvent | null {
         const eventId = mxEvent.getId();
         const roomId = mxEvent.getRoomId();
         const sender = mxEvent.sender;
@@ -138,6 +140,8 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     }
 
     private _roomPreviewBarRenderer?: CustomRoomPreviewBarRenderFunction;
+    private _userInfoRenderer?: UserInfoRenderFunction;
+    private _messageProfileRenderer?: MessageProfileRenderFunction;
 
     /**
      * Get the custom room preview bar renderer, if any has been registered.
@@ -152,5 +156,26 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void {
         this._roomPreviewBarRenderer = renderer;
+    }
+
+    /**
+     * Get the custom user info renderer, if any has been registered.
+     */
+    public get messageProfileRenderer(): MessageProfileRenderFunction | undefined {
+        return this._messageProfileRenderer;
+    }
+
+    public registerMessageProfile(renderer: MessageProfileRenderFunction): void {
+        this._messageProfileRenderer = renderer;
+    }
+    /**
+     * Get the custom user info renderer, if any has been registered.
+     */
+    public get userInfoRenderer(): UserInfoRenderFunction | undefined {
+        return this._userInfoRenderer;
+    }
+
+    public registerUserInfo(renderer: UserInfoRenderFunction): void {
+        this._userInfoRenderer = renderer;
     }
 }
