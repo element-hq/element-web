@@ -13,7 +13,7 @@ import { stubClient } from "../../../../test-utils";
 import { Command } from "../../../../../src/slash-commands/command";
 import { CommandCategories } from "../../../../../src/slash-commands/interface";
 import { _t, _td } from "../../../../../src/languageHandler";
-import * as SlashCommands from "../../../../../src/SlashCommands";
+import * as SlashCommands from "../../../../../src/slash-commands/SlashCommands";
 
 describe("SlashCommandHelpDialog", () => {
     const roomId = "!room:server";
