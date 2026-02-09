@@ -25,6 +25,12 @@
     "left_panel": {
         "open_dial_pad": "다이얼 패드 열기"
     },
+    "notifications": {
+        "all_messages": "모든 메시지",
+        "default_settings": "기본 설정 따르기",
+        "mentions_keywords": "멘션 및 키워드",
+        "mute_room": "방 알림 끄기"
+    },
     "room": {
         "context_menu": {
             "title": "채팅방 옵션"
@@ -50,8 +56,61 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "%(roomName)s 방 열기",
+            "invitation": "%(roomName)s 방 초대장 확인하기",
+            "mention": {
+                "other": "읽지 않은 언급 %(count)s개가 있는 %(roomName)s 방 열기"
+            },
+            "unread": {
+                "other": "읽지 않은 메세지 %(count)s개가 있는 %(roomName)s 방 열기"
+            },
+            "unsent_message": "전송되지 않은 메시지가 있는 %(roomName)s 방 열기"
+        },
         "appearance": "모양",
+        "collapse_filters": "필터 목록 접기",
+        "empty": {
+            "no_chats": "아직 채팅이 없습니다.",
+            "no_chats_description": "메시지를 보내거나 방을 만들어 활동을 시작해 보세요.",
+            "no_chats_description_no_room_rights": "메시지를 보내 대화를 시작해 보세요.",
+            "no_favourites": "아직 즐겨찾는 채팅방이 없습니다.",
+            "no_favourites_description": "채팅 설정에서 대화를 즐겨찾기에 추가할 수 있습니다.",
+            "no_invites": "읽지 않은 초대장이 없습니다",
+            "no_lowpriority": "우선순위가 낮은 방이 없습니다.",
+            "no_mentions": "읽지 않은 멘션이 없습니다.",
+            "no_people": "아직 대화 중인 상대가 없습니다.",
+            "no_people_description": "다른 채팅을 확인하려면 적용된 필터를 해제해 주세요.",
+            "no_rooms": "아직 참여 중인 방이 없습니다.",
+            "no_rooms_description": "다른 채팅을 확인하려면 적용된 필터를 해제해 주세요.",
+            "no_unread": "축하합니다! 읽지 않은 메시지가 모두 확인되었습니다.",
+            "show_activity": "모든 활동 보기",
+            "show_chats": "모든 채팅 보기"
+        },
+        "expand_filters": "필터 목록 펼치기",
+        "filters": {
+            "favourite": "즐겨찾기",
+            "invites": "초대",
+            "low_priority": "우선순위 낮음",
+            "mentions": "멘션",
+            "people": "사람",
+            "rooms": "채팅방",
+            "unread": "안 읽음"
+        },
+        "list_title": "채팅방 목록",
+        "more_options": {
+            "copy_link": "방 링크 복사",
+            "favourited": "즐겨찾기",
+            "leave_room": "방 떠나기",
+            "low_priority": "우선순위 낮음",
+            "mark_read": "읽음으로 표시",
+            "mark_unread": "읽지 않음으로 표시"
+        },
+        "notification_options": "알림 옵션",
         "open_space_menu": "스페이스 메뉴 열기",
+        "primary_filters": "채팅방 목록 필터",
+        "room": {
+            "more_options": "옵션 더보기"
+        },
         "room_options": "채팅방 옵션",
         "show_message_previews": "메시지 미리보기 표시",
         "sort": "정렬",

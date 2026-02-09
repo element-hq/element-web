@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 import {
     MatrixAuthenticationServiceContainer as BaseMatrixAuthenticationServiceContainer,
     type StartedPostgreSqlContainer,
-} from "@element-hq/element-web-playwright-common/lib/testcontainers";
+} from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
-const TAG = "main@sha256:2eec80f8348ed1f78414cc9258399b9329b53e6e9e2e634da484568996c1da8f";
+const TAG = "main@sha256:294e209b8e3c9dd0347e2baf01c34da9c6b0f27324ebccc5fbd6e221d08d16c3";
 
 /**
  * MatrixAuthenticationServiceContainer which freezes the docker digest to

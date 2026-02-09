@@ -14,7 +14,7 @@ import {
     StartedSynapseContainer,
     type HomeserverContainer,
     type StartedMatrixAuthenticationServiceContainer,
-} from "@element-hq/element-web-playwright-common/lib/testcontainers";
+} from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 const DEFAULT_CONFIG = {
     version: 2,
