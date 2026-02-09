@@ -13,7 +13,7 @@ import { NotificationDecoration, type NotificationDecorationData } from "./Notif
 import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
 import { type RoomNotifState } from "./RoomNotifs";
-import styles from "./RoomListItem.module.css";
+import styles from "./RoomListItemView.module.css";
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
 
