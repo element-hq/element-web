@@ -78,7 +78,7 @@ export default class DeviceListenerOtherDevices {
      *
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
-    public async dismissUnverifiedSessions(deviceIds: Iterable<string>): Promise<void> {
+    public dismissUnverifiedSessions(deviceIds: Iterable<string>): void {
         for (const d of deviceIds) {
             this.dismissed.add(d);
         }

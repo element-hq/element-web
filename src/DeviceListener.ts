@@ -194,7 +194,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
      *
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
-    public async dismissUnverifiedSessions(deviceIds: Iterable<string>): Promise<void> {
+    public dismissUnverifiedSessions(deviceIds: Iterable<string>): void {
         logger.debug("Dismissing unverified sessions: " + Array.from(deviceIds).join(","));
 
         this.otherDevices?.dismissUnverifiedSessions(deviceIds);
