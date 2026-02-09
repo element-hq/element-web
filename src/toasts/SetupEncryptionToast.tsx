@@ -14,7 +14,7 @@ import { type Interaction as InteractionEvent } from "@matrix-org/analytics-even
 
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
-import DeviceListener, { type DeviceState } from "../DeviceListener";
+import DeviceListener from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";
@@ -30,6 +30,7 @@ import ConfirmKeyStorageOffDialog from "../components/views/dialogs/ConfirmKeySt
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { resetKeyBackupAndWait } from "../utils/crypto/resetKeyBackup";
 import { PosthogAnalytics } from "../PosthogAnalytics";
+import type DeviceState from "../device-listener/DeviceState";
 
 const TOAST_KEY = "setupencryption";
 
