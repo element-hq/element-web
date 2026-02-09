@@ -98,7 +98,7 @@ export class MessageTimestampViewModel
             tsReceivedAt: receivedAt,
             inhibitTooltip: props.inhibitTooltip,
             href: props.href,
-            extraClassNames: ["mx_MessageTimestamp"],
+            className: "mx_MessageTimestamp",
         };
     };
 

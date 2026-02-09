@@ -911,9 +911,9 @@ legend {
     overflow: hidden;
 }
 
-/* TODO: Review mx_MessageTimestamp usage to see if it can use a different class */
-/* This class is used extensively and are included here to avoid */
-/* breaking the app. */
+/* This class is used extensively in element-web and are included here for compatibility with the existing timeline and layout.
+/* TODO: Review mx_MessageTimestamp usage after finishing migration of timeline tiles to shared components. */
+/* https://github.com/element-hq/element-web/issues/31651 */
 .mx_MessageTimestamp {
     color: var(--cpd-color-text-secondary) !important; /* override anchor color */
     font-size: $font-10px;

@@ -33,10 +33,8 @@ export default {
         tsSentAt: "Thu, 17 Nov 2022, 4:58:32 pm",
         tsReceivedAt: "",
         inhibitTooltip: false,
-        extraClassNames: ["extra_class"],
+        className: "",
         href: "",
-        onClick: () => console.log("Clicked message timestamp"),
-        onContextMenu: () => console.log("Context menu on message timestamp"),
     },
 } as Meta<typeof MessageTimestampWrapper>;
 
@@ -51,7 +49,7 @@ HasTsReceivedAt.args = {
 
 export const HasExtraClassNames = Template.bind({});
 HasExtraClassNames.args = {
-    extraClassNames: ["extra_class_1", "extra_class_2"],
+    className: "extra_class_1 extra_class_2",
 };
 
 export const HasInhibitTooltip = Template.bind({});
@@ -62,4 +60,10 @@ HasInhibitTooltip.args = {
 export const HasHref = Template.bind({});
 HasHref.args = {
     href: "~",
+};
+
+export const HasActions = Template.bind({});
+HasActions.args = {
+    onClick: () => console.log("Clicked message timestamp"),
+    onContextMenu: () => console.log("Context menu on message timestamp"),
 };

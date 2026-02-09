@@ -5,7 +5,20 @@ exports[`MessageTimestampView > renders the message timestamp in default state 1
   <span
     aria-hidden="false"
     aria-live="off"
-    class="extra_class content"
+    class="content"
+    tabindex="0"
+  >
+    04:58
+  </span>
+</div>
+`;
+
+exports[`MessageTimestampView > renders the message timestamp with actions 1`] = `
+<div>
+  <span
+    aria-hidden="false"
+    aria-live="off"
+    class="content"
     role="link"
     tabindex="0"
   >
@@ -19,8 +32,7 @@ exports[`MessageTimestampView > renders the message timestamp with extra class n
   <span
     aria-hidden="false"
     aria-live="off"
-    class="extra_class content"
-    role="link"
+    class="extra_class_1 extra_class_2 content"
     tabindex="0"
   >
     04:58
@@ -32,7 +44,7 @@ exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
 <div>
   <a
     aria-live="off"
-    class="extra_class content"
+    class="content"
     href="~"
   >
     04:58
@@ -43,11 +55,9 @@ exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
 exports[`MessageTimestampView > renders the message timestamp with inhibit tooltip 1`] = `
 <div>
   <span
-    aria-hidden="false"
+    aria-hidden="true"
     aria-live="off"
-    class="extra_class_1 extra_class_2 content"
-    role="link"
-    tabindex="0"
+    class="content"
   >
     04:58
   </span>
@@ -59,8 +69,7 @@ exports[`MessageTimestampView > renders the message timestamp with received time
   <span
     aria-hidden="false"
     aria-live="off"
-    class="extra_class content"
-    role="link"
+    class="content"
     tabindex="0"
   >
     04:58

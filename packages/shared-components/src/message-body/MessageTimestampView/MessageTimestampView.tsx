@@ -33,9 +33,9 @@ export interface MessageTimestampViewSnapshot {
      */
     inhibitTooltip?: boolean;
     /**
-     * Extra CSS classes to apply to the component
+     * Extra class name to apply to the component
      */
-    extraClassNames?: string[];
+    className?: string;
     /**
      * If specified, will be rendered as an anchor bearing the href, a `span` element will be used otherwise
      */
@@ -80,7 +80,7 @@ interface MessageTimestampViewProps {
 export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
 
-    const { ts, tsSentAt, tsReceivedAt, inhibitTooltip, extraClassNames, href } = useViewModel(vm);
+    const { ts, tsSentAt, tsReceivedAt, inhibitTooltip, className, href } = useViewModel(vm);
 
     const onKeyDown = (event: KeyboardEvent<HTMLElement>): void => {
         if (vm.onClick) {
@@ -108,7 +108,7 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
                 onClick={vm.onClick}
                 onKeyDown={onKeyDown}
                 onContextMenu={vm.onContextMenu}
-                className={classNames(extraClassNames, styles.content)}
+                className={classNames(className, styles.content)}
                 aria-live="off"
             >
                 {ts}
@@ -120,8 +120,8 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
                 onClick={vm.onClick}
                 onKeyDown={onKeyDown}
                 onContextMenu={vm.onContextMenu}
-                className={classNames(extraClassNames, styles.content)}
-                aria-hidden={vm.onClick || !inhibitTooltip ? false : true}
+                className={classNames(className, styles.content)}
+                aria-hidden={!(vm.onClick || !inhibitTooltip)}
                 role={vm.onClick ? "link" : undefined}
                 aria-live="off"
                 tabIndex={vm.onClick || !inhibitTooltip ? 0 : undefined}
