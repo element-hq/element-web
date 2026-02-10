@@ -640,10 +640,22 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
     );
 };
 
+/**
+ * Wraps MessageTimestampView with a view model synced to the provided props.
+ * This wrapper can be removed after ImageView has been changed to a function component.
+ */
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
     useEffect(() => {
-        vm.setProps(props);
+        vm.setTimestamp(props.ts);
+        vm.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+            showFullDate: props.showFullDate,
+            showSeconds: props.showSeconds,
+        });
+        vm.setTooltipInhibited(props.inhibitTooltip);
+        vm.setHref(props.href);
+        vm.setHandlers({ onClick: props.onClick });
     }, [vm, props]);
     return <MessageTimestampView vm={vm} />;
 }

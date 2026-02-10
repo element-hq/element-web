@@ -102,18 +102,7 @@ export class MessageTimestampViewModel
         };
     };
 
-    public constructor(props: MessageTimestampViewModelProps) {
-        super(props, MessageTimestampViewModel.computeSnapshot(props));
-        this.onClick = props.onClick;
-        this.onContextMenu = props.onContextMenu;
-    }
-
-    /**
-     * Updates the properties of the view model and recomputes the snapshot
-     * if any of the properties have changed
-     * @param newProps - Partial properties to update
-     */
-    public setProps(newProps: Partial<MessageTimestampViewModelProps>): void {
+    private updateProps(newProps: Partial<MessageTimestampViewModelProps>): void {
         const nextProps = { ...this.props, ...newProps };
         if (!objectHasDiff(this.props, nextProps)) return;
 
@@ -121,5 +110,64 @@ export class MessageTimestampViewModel
         this.onClick = this.props.onClick;
         this.onContextMenu = this.props.onContextMenu;
         this.snapshot.set(MessageTimestampViewModel.computeSnapshot(this.props));
+    }
+
+    /**
+     * Create a timestamp view model with initial props and snapshot.
+     */
+    public constructor(props: MessageTimestampViewModelProps) {
+        super(props, MessageTimestampViewModel.computeSnapshot(props));
+        this.onClick = props.onClick;
+        this.onContextMenu = props.onContextMenu;
+    }
+
+    /**
+     * Update the base timestamp (milliseconds since Unix epoch).
+     */
+    public setTimestamp(ts: number): void {
+        this.updateProps({ ts });
+    }
+
+    /**
+     * Update the optional received timestamp (milliseconds since Unix epoch).
+     */
+    public setReceivedTimestamp(receivedTs?: number): void {
+        this.updateProps({ receivedTs });
+    }
+
+    /**
+     * Update display formatting options for the rendered timestamp.
+     */
+    public setDisplayOptions(options: {
+        showTwelveHour?: boolean;
+        showFullDate?: boolean;
+        showSeconds?: boolean;
+        showRelative?: boolean;
+    }): void {
+        this.updateProps(options);
+    }
+
+    /**
+     * Enable or disable the tooltip rendering.
+     */
+    public setTooltipInhibited(inhibitTooltip?: boolean): void {
+        this.updateProps({ inhibitTooltip });
+    }
+
+    /**
+     * Update the optional href for link rendering.
+     */
+    public setHref(href?: string): void {
+        this.updateProps({ href });
+    }
+
+    /**
+     * Update click and context-menu handlers for the rendered element.
+     */
+    public setHandlers(handlers: {
+        onClick?: MouseEventHandler<HTMLElement>;
+        onContextMenu?: MouseEventHandler<HTMLElement>;
+    }): void {
+        this.updateProps(handlers);
     }
 }

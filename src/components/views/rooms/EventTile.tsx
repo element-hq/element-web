@@ -1600,10 +1600,21 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
     return <DecryptionFailureBodyView vm={vm} />;
 }
 
+/**
+ * Wraps MessageTimestampView with a view model synced to the provided props.
+ * This wrapper can be removed after EventTile has been changed to a function component.
+ */
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
     useEffect(() => {
-        vm.setProps(props);
+        vm.setTimestamp(props.ts);
+        vm.setReceivedTimestamp(props.receivedTs);
+        vm.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+            showRelative: props.showRelative,
+        });
+        vm.setHref(props.href);
+        vm.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
     }, [vm, props]);
 
     return (
