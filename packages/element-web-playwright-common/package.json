@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
-    "version": "2.2.5",
+    "version": "2.2.6",
     "license": "SEE LICENSE IN README.md",
     "repository": {
         "type": "git",
