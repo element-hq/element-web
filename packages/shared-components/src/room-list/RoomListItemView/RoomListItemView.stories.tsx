@@ -102,7 +102,7 @@ const meta = {
     parameters: {
         design: {
             type: "figma",
-            url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=101-13062",
+            url: "https://www.figma.com/design/rTaQE2nIUSLav4Tg3nozq7/Compound-Web-Components?node-id=10800-21153&t=gFDc2D7TMEffSSCo-0",
         },
     },
 } satisfies Meta<typeof RoomListItemWrapper>;
