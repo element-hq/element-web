@@ -141,22 +141,19 @@ export class DisambiguatedProfileViewModel
 
         this.props.member = member;
 
-        const snapshot = { ...this.getSnapshot() };
-
         // Compute display name
         const displayName = member?.rawDisplayName || this.props.fallbackName;
-        snapshot.displayName = displayName;
         const mxid = member?.userId;
 
         // Compute color class if coloring is enabled
-        snapshot.colorClass = undefined;
+        let colorClass: string | undefined;
         if (this.props.colored && mxid) {
-            snapshot.colorClass = getUserNameColorClass(mxid);
+            colorClass = getUserNameColorClass(mxid);
         }
 
         // Compute display identifier for disambiguation
-        snapshot.displayIdentifier = undefined;
-        snapshot.title = undefined;
+        let displayIdentifier: string | undefined;
+        let title: string | undefined;
 
         if (mxid) {
             const identifier =
@@ -167,19 +164,19 @@ export class DisambiguatedProfileViewModel
 
             // Only show identifier if disambiguation is needed
             if (member?.disambiguate) {
-                snapshot.displayIdentifier = identifier;
+                displayIdentifier = identifier;
             }
 
             // Compute tooltip title if enabled
             if (this.props.withTooltip) {
-                snapshot.title = _t("timeline|disambiguated_profile", {
+                title = _t("timeline|disambiguated_profile", {
                     displayName,
                     matrixId: identifier,
                 });
             }
         }
 
-        this.snapshot.set(snapshot);
+        this.snapshot.merge({ displayName, colorClass, displayIdentifier, title });
     }
 
     public setFallbackName(fallbackName: string): void {
@@ -187,10 +184,8 @@ export class DisambiguatedProfileViewModel
 
         this.props.fallbackName = fallbackName;
 
-        const snapshot = { ...this.getSnapshot() };
-
-        snapshot.displayName = this.props.member?.rawDisplayName || fallbackName;
-        snapshot.title = undefined;
+        const displayName = this.props.member?.rawDisplayName || fallbackName;
+        let title: string | undefined;
 
         if (this.props.withTooltip) {
             const mxid = this.props.member?.userId;
@@ -201,14 +196,14 @@ export class DisambiguatedProfileViewModel
                         roomId: this.props.member?.roomId,
                     }) ?? mxid;
 
-                snapshot.title = _t("timeline|disambiguated_profile", {
-                    displayName: snapshot.displayName,
+                title = _t("timeline|disambiguated_profile", {
+                    displayName,
                     matrixId: identifier,
                 });
             }
         }
 
-        this.snapshot.set(snapshot);
+        this.snapshot.merge({ displayName, title });
     }
 
     public setWithTooltip(withTooltip?: boolean): void {
@@ -218,7 +213,7 @@ export class DisambiguatedProfileViewModel
 
         const snapshot = { ...this.getSnapshot() };
 
-        snapshot.title = undefined;
+        let title: string | undefined;
         if (withTooltip) {
             const mxid = this.props.member?.userId;
             if (mxid) {
@@ -228,14 +223,14 @@ export class DisambiguatedProfileViewModel
                         roomId: this.props.member?.roomId,
                     }) ?? mxid;
 
-                snapshot.title = _t("timeline|disambiguated_profile", {
+                title = _t("timeline|disambiguated_profile", {
                     displayName: snapshot.displayName,
                     matrixId: identifier,
                 });
             }
         }
 
-        this.snapshot.set(snapshot);
+        this.snapshot.merge({ title });
     }
 
     public setOnClick(onClick?: DisambiguatedProfileViewActions["onClick"]): void {
