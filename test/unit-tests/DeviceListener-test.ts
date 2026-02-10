@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
-import DeviceListener from "../../src/DeviceListener";
+import DeviceListener from "../../src/device-listener/DeviceListener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";

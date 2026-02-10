@@ -14,7 +14,7 @@ import { type Interaction as InteractionEvent } from "@matrix-org/analytics-even
 
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
-import DeviceListener from "../DeviceListener";
+import DeviceListener from "../device-listener/DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import ToastStore, { type IToast } from "../stores/ToastStore";

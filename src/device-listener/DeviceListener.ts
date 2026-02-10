@@ -12,17 +12,17 @@ import { logger as baseLogger, LogSpan } from "matrix-js-sdk/src/logger";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
-import { PosthogAnalytics } from "./PosthogAnalytics";
-import dis from "./dispatcher/dispatcher";
-import { type ActionPayload } from "./dispatcher/payloads";
-import { Action } from "./dispatcher/actions";
-import SdkConfig from "./SdkConfig";
-import PlatformPeg from "./PlatformPeg";
-import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
-import SettingsStore, { type CallbackFn } from "./settings/SettingsStore";
-import DeviceListenerOtherDevices from "./device-listener/DeviceListenerOtherDevices.ts";
-import DeviceListenerCurrentDevice from "./device-listener/DeviceListenerCurrentDevice.ts";
-import type DeviceState from "./device-listener/DeviceState.ts";
+import { PosthogAnalytics } from "../PosthogAnalytics";
+import dis from "../dispatcher/dispatcher";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { Action } from "../dispatcher/actions";
+import SdkConfig from "../SdkConfig";
+import PlatformPeg from "../PlatformPeg";
+import { recordClientInformation, removeClientInformation } from "../utils/device/clientInformation";
+import SettingsStore, { type CallbackFn } from "../settings/SettingsStore";
+import DeviceListenerOtherDevices from "./DeviceListenerOtherDevices.ts";
+import DeviceListenerCurrentDevice from "./DeviceListenerCurrentDevice.ts";
+import type DeviceState from "./DeviceState.ts";
 
 const logger = baseLogger.getChild("DeviceListener:");
 

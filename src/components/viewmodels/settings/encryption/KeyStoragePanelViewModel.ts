@@ -10,7 +10,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import DeviceListener from "../../../../DeviceListener";
+import DeviceListener from "../../../../device-listener/DeviceListener";
 import { useEventEmitterAsyncState } from "../../../../hooks/useEventEmitter";
 import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../device-listener/DeviceListenerCurrentDevice";

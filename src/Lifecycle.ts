@@ -41,7 +41,7 @@ import { SettingLevel } from "./settings/SettingLevel";
 import ToastStore from "./stores/ToastStore";
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { Mjolnir } from "./mjolnir/Mjolnir";
-import DeviceListener from "./DeviceListener";
+import DeviceListener from "./device-listener/DeviceListener";
 import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";

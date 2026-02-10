@@ -18,9 +18,9 @@ import {
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 
-import type DeviceListener from "../DeviceListener";
+import type DeviceListener from "../device-listener/DeviceListener";
 import type DeviceState from "./DeviceState";
-import { DeviceListenerEvents } from "../DeviceListener";
+import { DeviceListenerEvents } from "../device-listener/DeviceListener";
 import {
     hideToast as hideSetupEncryptionToast,
     showToast as showSetupEncryptionToast,

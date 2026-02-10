@@ -13,7 +13,7 @@ import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";
 import { SettingsSubheader } from "../SettingsSubheader";
 import { AccessCancelledError, accessSecretStorage } from "../../../../SecurityManager";
-import DeviceListener from "../../../../DeviceListener";
+import DeviceListener from "../../../../device-listener/DeviceListener";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
