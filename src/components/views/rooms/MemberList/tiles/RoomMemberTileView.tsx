@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
 import { type RoomMember } from "../../../../../models/rooms/RoomMember";
@@ -56,6 +56,10 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
                 className: "mx_DisambiguatedProfile",
             }),
     );
+    useEffect(() => {
+        disambiguatedProfileVM.setMember(member);
+        disambiguatedProfileVM.setFallbackName(name);
+    }, [disambiguatedProfileVM, member, name]);
     const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} />;
 
     const presenceState = member.presenceState;

@@ -81,6 +81,10 @@ export class DisambiguatedProfileViewModel
 {
     public onClick?: DisambiguatedProfileViewActions["onClick"];
 
+    private readonly updateSnapshot = (): void => {
+        this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
+    };
+
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
@@ -136,29 +140,53 @@ export class DisambiguatedProfileViewModel
         this.onClick = props.onClick;
     }
 
-    /**
-     * Updates the properties of the view model and recomputes the snapshot.
-     * @param newProps - Partial properties to update
-     */
-    public setProps(newProps: Partial<DisambiguatedProfileViewModelProps>): void {
-        const nextProps = { ...this.props, ...newProps };
-        const onClickChanged = this.props.onClick !== nextProps.onClick;
-        // Current call sites only update these snapshot-driving props after construction.
-        const snapshotPropsChanged =
-            this.props.member !== nextProps.member ||
-            this.props.fallbackName !== nextProps.fallbackName ||
-            this.props.withTooltip !== nextProps.withTooltip;
+    public setMember(member?: MemberInfo | null): void {
+        if (this.props.member === member) return;
 
-        if (!onClickChanged && !snapshotPropsChanged) return;
-
-        this.props = nextProps;
-
-        if (onClickChanged) {
-            this.onClick = nextProps.onClick;
-        }
-
-        if (snapshotPropsChanged) {
-            this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(nextProps));
-        }
+        this.props.member = member;
+        this.updateSnapshot();
     }
+
+    public setFallbackName(fallbackName: string): void {
+        if (this.props.fallbackName === fallbackName) return;
+
+        this.props.fallbackName = fallbackName;
+        this.updateSnapshot();
+    }
+
+    public setColored(colored?: boolean): void {
+        if (this.props.colored === colored) return;
+
+        this.props.colored = colored;
+        this.updateSnapshot();
+    }
+
+    public setEmphasizeDisplayName(emphasizeDisplayName?: boolean): void {
+        if (this.props.emphasizeDisplayName === emphasizeDisplayName) return;
+
+        this.props.emphasizeDisplayName = emphasizeDisplayName;
+        this.updateSnapshot();
+    }
+
+    public setWithTooltip(withTooltip?: boolean): void {
+        if (this.props.withTooltip === withTooltip) return;
+
+        this.props.withTooltip = withTooltip;
+        this.updateSnapshot();
+    }
+
+    public setClassName(className?: string): void {
+        if (this.props.className === className) return;
+
+        this.props.className = className;
+        this.updateSnapshot();
+    }
+
+    public setOnClick(onClick?: DisambiguatedProfileViewActions["onClick"]): void {
+        if (this.props.onClick === onClick) return;
+
+        this.props.onClick = onClick;
+        this.onClick = onClick;
+    }
+
 }

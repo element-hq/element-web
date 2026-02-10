@@ -70,7 +70,7 @@ describe("DisambiguatedProfileViewModel", () => {
         const onClick = jest.fn();
 
         vm.subscribe(subscriber);
-        vm.setProps({ onClick });
+        vm.setOnClick(onClick);
 
         expect(subscriber).not.toHaveBeenCalled();
         expect(vm.getSnapshot()).toBe(prevSnapshot);
@@ -85,7 +85,7 @@ describe("DisambiguatedProfileViewModel", () => {
         const subscriber = jest.fn();
 
         vm.subscribe(subscriber);
-        vm.setProps({ fallbackName: "Updated" });
+        vm.setFallbackName("Updated");
 
         expect(subscriber).toHaveBeenCalledTimes(1);
         expect(vm.getSnapshot().displayName).toBe("Updated");
@@ -100,9 +100,24 @@ describe("DisambiguatedProfileViewModel", () => {
         const subscriber = jest.fn();
 
         vm.subscribe(subscriber);
-        vm.setProps({ withTooltip: true });
+        vm.setWithTooltip(true);
 
         expect(subscriber).toHaveBeenCalledTimes(1);
         expect(vm.getSnapshot().title).toBe("Alice (@alice:example.org)");
+    });
+
+    it("should emit snapshot update when className changes via setClassName", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member,
+            fallbackName: "Fallback",
+            className: "mx_DisambiguatedProfile",
+        });
+        const subscriber = jest.fn();
+
+        vm.subscribe(subscriber);
+        vm.setClassName("mx_DisambiguatedProfile_changed");
+
+        expect(subscriber).toHaveBeenCalledTimes(1);
+        expect(vm.getSnapshot().className).toBe("mx_DisambiguatedProfile_changed");
     });
 });
