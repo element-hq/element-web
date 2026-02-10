@@ -39,6 +39,7 @@ export {
 } from "./ImageStego";
 export { rsEncode, rsDecode, rsHasErrors } from "./ReedSolomon";
 export { crc32 } from "./crc32";
+export { serializeEnvelopeV1, deserializeEnvelopeV1, type EnvelopeV1 } from "./EnvelopeV1";
 export { StegoDetector, getStegoDetector, type StegoDetection, type StegoDetectionCallback } from "./StegoDetector";
 export {
     EphemeralManager,
