@@ -10,7 +10,6 @@
     font-size: var(--cpd-font-size-body-xs);
     font-variant-numeric: tabular-nums;
     display: block; /* enable the width setting below */
-    width: var(--MessageTimestamp-width, 46px); /* 8 + 30 (avatar) + 8 */
     white-space: nowrap;
     user-select: none;
     text-decoration: none;
