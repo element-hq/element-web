@@ -31,12 +31,20 @@ import {
 import { rsDecode, rsEncode } from "./ReedSolomon";
 import {
     DEFAULT_STEGO_CONFIG,
+    STEGO_PROTOCOL_VERSION,
+    StegoDecodeErrorCode,
     StegoStrategy,
     type StegoConfig,
+    type StegoDecodeError,
     type StegoDecodeResult,
     type StegoEncodeOptions,
     type StegoMessage,
 } from "./types";
+
+/** Result type that carries either a successful decode or a structured error. */
+export type DecodeOutcome =
+    | { ok: true; payload: Uint8Array; header: StegoDecodeResult }
+    | { ok: false; error: StegoDecodeError };
 
 /**
  * The main steganography codec.
@@ -51,8 +59,12 @@ import {
  * // message.carrier is an emoji string like "🐶🎩🌸..."
  *
  * // Decode: stego carrier → encrypted → plaintext
- * const result = await codec.decode(carrier);
- * const plaintext = await matrixDecrypt(result.payload);
+ * const result = await codec.decodeDiagnostic(carrier);
+ * if (result.ok) {
+ *     const plaintext = await matrixDecrypt(result.payload);
+ * } else {
+ *     showError(result.error.message);
+ * }
  * ```
  */
 export class StegoCodec {
@@ -161,18 +173,47 @@ export class StegoCodec {
      * @returns Decode result with payload and metadata, or null if not a stego message.
      */
     public async decode(carrier: string): Promise<{ payload: Uint8Array; header: StegoDecodeResult } | null> {
+        const result = await this.decodeDiagnostic(carrier);
+        if (result.ok) {
+            return { payload: result.payload, header: result.header };
+        }
+        // Preserve backward compatibility: NotStegoContent returns null
+        if (result.error.code === StegoDecodeErrorCode.NotStegoContent) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Decode with full diagnostic error reporting.
+     *
+     * Unlike `decode()`, this method never returns bare null — it always
+     * returns a structured result explaining what happened.
+     *
+     * @param carrier - The steganographic carrier (emoji string or image data URL).
+     * @returns DecodeOutcome with either the decoded payload or a diagnostic error.
+     */
+    public async decodeDiagnostic(carrier: string): Promise<DecodeOutcome> {
         // Try emoji decode first
         if (this.looksLikeEmojiStego(carrier)) {
-            return this.decodeEmojiCarrier(carrier);
+            return this.decodeEmojiCarrierDiagnostic(carrier);
         }
 
         // Try image decode
         if (carrier.startsWith("data:image/png")) {
-            return this.decodeImageCarrier(carrier);
+            return this.decodeImageCarrierDiagnostic(carrier);
         }
 
         // Unknown carrier type
-        return null;
+        return {
+            ok: false,
+            error: {
+                code: StegoDecodeErrorCode.NotStegoContent,
+                message: "This message does not contain hidden content",
+                rsAttempted: false,
+                rsCorrected: false,
+            },
+        };
     }
 
     /**
@@ -191,69 +232,217 @@ export class StegoCodec {
     }
 
     /**
-     * Decode an emoji carrier string.
+     * Decode an emoji carrier string (backward-compatible wrapper).
      */
     private decodeEmojiCarrier(carrier: string): { payload: Uint8Array; header: StegoDecodeResult } | null {
+        const result = this.decodeEmojiCarrierDiagnostic(carrier);
+        return result.ok ? { payload: result.payload, header: result.header } : null;
+    }
+
+    /**
+     * Decode an emoji carrier string with full diagnostics.
+     */
+    private decodeEmojiCarrierDiagnostic(carrier: string): DecodeOutcome {
         const result = decodeEmoji(carrier);
-        if (!result) return null;
+        if (!result) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.MalformedHeader,
+                    message: "The hidden message header is damaged or the emoji sequence is invalid",
+                    rsAttempted: false,
+                    rsCorrected: false,
+                },
+            };
+        }
 
         const { header, payload } = result;
 
+        // Check protocol version
+        if (header.version > STEGO_PROTOCOL_VERSION) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.UnsupportedVersion,
+                    message: `Protocol version ${header.version} is not supported (max: ${STEGO_PROTOCOL_VERSION})`,
+                    rsAttempted: false,
+                    rsCorrected: false,
+                    partialHeader: header,
+                },
+            };
+        }
+
+        // Check expiry before spending time on RS decode
+        const expired = header.expiresAt > 0 && Date.now() > header.expiresAt;
+        if (expired) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.Expired,
+                    message: "This hidden message has expired",
+                    rsAttempted: false,
+                    rsCorrected: false,
+                    partialHeader: header,
+                },
+            };
+        }
+
         // Try Reed-Solomon decoding
         let decodedPayload = payload;
-        let rsApplied = false;
+        let rsAttempted = false;
+        let rsCorrected = false;
 
         if (
             header.strategy === StegoStrategy.Emoji ||
             header.strategy === StegoStrategy.EmojiString
         ) {
+            rsAttempted = true;
             const rsDecoded = rsDecode(payload, this.config.reedSolomonSymbols);
             if (rsDecoded) {
+                // Check if RS actually corrected anything by comparing lengths
+                rsCorrected = rsDecoded.length !== payload.length;
                 decodedPayload = rsDecoded;
-                rsApplied = true;
+            } else {
+                // RS decode failed — payload is too corrupted
+                return {
+                    ok: false,
+                    error: {
+                        code: StegoDecodeErrorCode.UncorrectableCorruption,
+                        message: "The hidden message is too damaged to recover — error correction failed",
+                        rsAttempted: true,
+                        rsCorrected: false,
+                        partialHeader: header,
+                    },
+                };
             }
-            // If RS decode fails, use raw payload (might still be valid if no RS was applied)
         }
 
-        const expired = header.expiresAt > 0 && Date.now() > header.expiresAt;
         const actualChecksum = crc32(decodedPayload);
-        const checksumValid = rsApplied ? true : actualChecksum === header.checksum;
+        const checksumValid = rsAttempted ? true : actualChecksum === header.checksum;
+
+        if (!checksumValid) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.ChecksumMismatch,
+                    message: "The hidden message was corrupted during transport (checksum mismatch)",
+                    rsAttempted,
+                    rsCorrected,
+                    partialHeader: header,
+                },
+            };
+        }
 
         return {
+            ok: true,
             payload: decodedPayload,
             header: {
                 plaintext: "", // Caller must decrypt
                 header,
                 checksumValid,
-                expired,
+                expired: false,
             },
         };
     }
 
     /**
-     * Decode an image carrier.
+     * Decode an image carrier with full diagnostics.
      */
-    private async decodeImageCarrier(
-        carrier: string,
-    ): Promise<{ payload: Uint8Array; header: StegoDecodeResult } | null> {
-        const imageData = await dataUrlToImageData(carrier);
+    private async decodeImageCarrierDiagnostic(carrier: string): Promise<DecodeOutcome> {
+        let imageData: ImageData;
+        try {
+            imageData = await dataUrlToImageData(carrier);
+        } catch {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.ImageDecodeFailed,
+                    message: "Could not load the image data for stego decoding",
+                    rsAttempted: false,
+                    rsCorrected: false,
+                },
+            };
+        }
+
         const result = decodeImage(imageData);
-        if (!result) return null;
+        if (!result) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.ImageDecodeFailed,
+                    message: "Could not extract hidden data from the image",
+                    rsAttempted: false,
+                    rsCorrected: false,
+                },
+            };
+        }
 
         const { header, payload } = result;
+
+        // Check protocol version
+        if (header.version > STEGO_PROTOCOL_VERSION) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.UnsupportedVersion,
+                    message: `Protocol version ${header.version} is not supported (max: ${STEGO_PROTOCOL_VERSION})`,
+                    rsAttempted: false,
+                    rsCorrected: false,
+                    partialHeader: header,
+                },
+            };
+        }
+
         const expired = header.expiresAt > 0 && Date.now() > header.expiresAt;
+        if (expired) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.Expired,
+                    message: "This hidden message has expired",
+                    rsAttempted: false,
+                    rsCorrected: false,
+                    partialHeader: header,
+                },
+            };
+        }
+
         const actualChecksum = crc32(payload);
         const checksumValid = actualChecksum === header.checksum;
 
+        if (!checksumValid) {
+            return {
+                ok: false,
+                error: {
+                    code: StegoDecodeErrorCode.ChecksumMismatch,
+                    message: "The hidden image message was corrupted during transport",
+                    rsAttempted: false,
+                    rsCorrected: false,
+                    partialHeader: header,
+                },
+            };
+        }
+
         return {
+            ok: true,
             payload,
             header: {
                 plaintext: "",
                 header,
-                checksumValid,
-                expired,
+                checksumValid: true,
+                expired: false,
             },
         };
+    }
+
+    /**
+     * Decode an image carrier (backward-compatible wrapper).
+     */
+    private async decodeImageCarrier(
+        carrier: string,
+    ): Promise<{ payload: Uint8Array; header: StegoDecodeResult } | null> {
+        const result = await this.decodeImageCarrierDiagnostic(carrier);
+        return result.ok ? { payload: result.payload, header: result.header } : null;
     }
 }
 

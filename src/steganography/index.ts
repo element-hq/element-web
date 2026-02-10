@@ -28,7 +28,7 @@ Please see LICENSE files in the repository root for full details.
  *   5. Message auto-deletes after 72 hours
  */
 
-export { StegoCodec, getDefaultCodec } from "./StegoCodec";
+export { StegoCodec, getDefaultCodec, type DecodeOutcome } from "./StegoCodec";
 export { encodeEmoji, decodeEmoji, hasStegoMarker, looksLikeStegoEmoji, segmentEmojis } from "./EmojiStego";
 export {
     encodeImage,
@@ -39,6 +39,14 @@ export {
 } from "./ImageStego";
 export { rsEncode, rsDecode, rsHasErrors } from "./ReedSolomon";
 export { crc32 } from "./crc32";
+export {
+    validateEmoji,
+    validateEmojiPool,
+    validateUtf8RoundTrip,
+    validateBijection,
+    type EmojiValidationResult,
+    type EmojiPoolValidationReport,
+} from "./EmojiValidator";
 export { serializeEnvelopeV1, deserializeEnvelopeV1, type EnvelopeV1 } from "./EnvelopeV1";
 export { StegoDetector, getStegoDetector, type StegoDetection, type StegoDetectionCallback } from "./StegoDetector";
 export {
@@ -60,4 +68,7 @@ export {
     type StegoDecodeResult,
     type StegoEncodeOptions,
     type StegoConfig,
+    StegoDecodeErrorCode,
+    DECODE_ERROR_MESSAGES,
+    type StegoDecodeError,
 } from "./types";

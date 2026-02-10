@@ -61,6 +61,8 @@ export class EphemeralManager {
     private checkInterval: ReturnType<typeof setInterval> | null = null;
     private client: MatrixClient | null = null;
     private options: Required<EphemeralManagerOptions>;
+    private saveTimer: ReturnType<typeof setTimeout> | null = null;
+    private savePending = false;
 
     public constructor(options: EphemeralManagerOptions = {}) {
         this.options = {
@@ -94,7 +96,12 @@ export class EphemeralManager {
             clearInterval(this.checkInterval);
             this.checkInterval = null;
         }
-        this.saveToStorage();
+        // Flush any pending debounced writes immediately on stop
+        if (this.saveTimer) {
+            clearTimeout(this.saveTimer);
+            this.saveTimer = null;
+        }
+        this.flushToStorage();
         this.client = null;
     }
 
@@ -217,9 +224,27 @@ export class EphemeralManager {
     }
 
     /**
-     * Persist tracked records to localStorage.
+     * Schedule a debounced persist of tracked records to localStorage.
+     * Batches rapid successive writes (e.g. tracking multiple messages at once)
+     * into a single localStorage write after a short delay.
      */
     private saveToStorage(): void {
+        this.savePending = true;
+        if (this.saveTimer) return; // Already scheduled
+
+        this.saveTimer = setTimeout(() => {
+            this.saveTimer = null;
+            if (this.savePending) {
+                this.savePending = false;
+                this.flushToStorage();
+            }
+        }, 500);
+    }
+
+    /**
+     * Immediately persist tracked records to localStorage.
+     */
+    private flushToStorage(): void {
         try {
             const data = JSON.stringify([...this.records.entries()]);
             localStorage.setItem(STORAGE_PREFIX + "records", data);

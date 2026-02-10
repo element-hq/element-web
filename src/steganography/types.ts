@@ -63,6 +63,55 @@ export interface StegoDecodeResult {
     expired: boolean;
 }
 
+/** Detailed error codes for decode failures. */
+export enum StegoDecodeErrorCode {
+    /** The carrier is not a recognized stego format. */
+    NotStegoContent = "not_stego_content",
+    /** The carrier has a valid stego marker but the header is malformed. */
+    MalformedHeader = "malformed_header",
+    /** The payload data is truncated or shorter than the header declares. */
+    TruncatedPayload = "truncated_payload",
+    /** CRC-32 checksum mismatch and Reed-Solomon could not recover the data. */
+    ChecksumMismatch = "checksum_mismatch",
+    /** Reed-Solomon detected uncorrectable corruption. */
+    UncorrectableCorruption = "uncorrectable_corruption",
+    /** The message has expired past its expiry timestamp. */
+    Expired = "expired",
+    /** The carrier looked like an image but could not be decoded. */
+    ImageDecodeFailed = "image_decode_failed",
+    /** An unknown emoji was encountered during decoding. */
+    UnknownEmoji = "unknown_emoji",
+    /** The protocol version is unsupported. */
+    UnsupportedVersion = "unsupported_version",
+}
+
+/** Structured decode error with diagnostic information. */
+export interface StegoDecodeError {
+    /** Machine-readable error code. */
+    code: StegoDecodeErrorCode;
+    /** Human-readable error message. */
+    message: string;
+    /** Whether Reed-Solomon recovery was attempted. */
+    rsAttempted: boolean;
+    /** Whether Reed-Solomon corrected some errors (partial recovery). */
+    rsCorrected: boolean;
+    /** The partially decoded header, if available. */
+    partialHeader?: StegoHeader;
+}
+
+/** User-facing error descriptions for each error code. */
+export const DECODE_ERROR_MESSAGES: Record<StegoDecodeErrorCode, string> = {
+    [StegoDecodeErrorCode.NotStegoContent]: "This message does not contain hidden content",
+    [StegoDecodeErrorCode.MalformedHeader]: "The hidden message header is damaged",
+    [StegoDecodeErrorCode.TruncatedPayload]: "The hidden message is incomplete — part of the data is missing",
+    [StegoDecodeErrorCode.ChecksumMismatch]: "The hidden message was corrupted during transport",
+    [StegoDecodeErrorCode.UncorrectableCorruption]: "The hidden message is too damaged to recover",
+    [StegoDecodeErrorCode.Expired]: "This hidden message has expired",
+    [StegoDecodeErrorCode.ImageDecodeFailed]: "Could not extract hidden data from the image",
+    [StegoDecodeErrorCode.UnknownEmoji]: "The message contains unrecognized characters — it may have been modified",
+    [StegoDecodeErrorCode.UnsupportedVersion]: "This message uses a newer protocol version — update your app",
+};
+
 /** Options for encoding a message. */
 export interface StegoEncodeOptions {
     /** Force a specific strategy instead of auto-selecting. */

@@ -62,12 +62,19 @@ function polyMul(p: Uint8Array, q: Uint8Array): Uint8Array {
     return result;
 }
 
+/** Cache of generator polynomials keyed by nsym. */
+const generatorCache = new Map<number, Uint8Array>();
+
 /** Build the generator polynomial for `nsym` error correction symbols. */
 function buildGenerator(nsym: number): Uint8Array {
+    const cached = generatorCache.get(nsym);
+    if (cached) return cached;
+
     let g = new Uint8Array([1]);
     for (let i = 0; i < nsym; i++) {
         g = polyMul(g, new Uint8Array([1, EXP_TABLE[i]]));
     }
+    generatorCache.set(nsym, g);
     return g;
 }
 

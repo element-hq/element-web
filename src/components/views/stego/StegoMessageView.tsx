@@ -12,8 +12,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect, useMemo, useState, type JSX } from "react";
 
-import { StegoCodec } from "../../../steganography/StegoCodec";
-import { StegoStrategy } from "../../../steganography/types";
+import { StegoCodec, type DecodeOutcome } from "../../../steganography/StegoCodec";
+import { StegoDecodeErrorCode, StegoStrategy, DECODE_ERROR_MESSAGES } from "../../../steganography/types";
 import { getEphemeralManager } from "../../../steganography/ephemeral/EphemeralManager";
 
 /** Props for StegoMessageView. */
@@ -43,6 +43,23 @@ function formatRemainingTime(ms: number): string {
     return `${minutes}m remaining`;
 }
 
+/** Map error codes to appropriate icons. */
+function errorIcon(code: StegoDecodeErrorCode): string {
+    switch (code) {
+        case StegoDecodeErrorCode.Expired:
+            return "\u{1F4A8}"; // dash
+        case StegoDecodeErrorCode.ChecksumMismatch:
+        case StegoDecodeErrorCode.UncorrectableCorruption:
+            return "\u{1F6AB}"; // no entry
+        case StegoDecodeErrorCode.UnsupportedVersion:
+            return "\u{2B06}"; // up arrow
+        case StegoDecodeErrorCode.ImageDecodeFailed:
+            return "\u{1F5BC}"; // framed picture
+        default:
+            return "\u{26A0}"; // warning
+    }
+}
+
 /**
  * Renders a decoded steganographic message with:
  *   - Decrypted plaintext
@@ -60,6 +77,7 @@ export const StegoMessageView: React.FC<StegoMessageViewProps> = ({
     const [plaintext, setPlaintext] = useState<string | null>(null);
     const [decoding, setDecoding] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [errorCode, setErrorCode] = useState<StegoDecodeErrorCode | null>(null);
     const [expired, setExpired] = useState(false);
     const [remainingTime, setRemainingTime] = useState<number>(0);
     const [strategy, setStrategy] = useState<StegoStrategy | null>(null);
@@ -81,22 +99,21 @@ export const StegoMessageView: React.FC<StegoMessageViewProps> = ({
 
         async function decode(): Promise<void> {
             try {
-                const result = await codec.decode(carrier);
+                const result: DecodeOutcome = await codec.decodeDiagnostic(carrier);
                 if (cancelled) return;
 
-                if (!result) {
-                    setError("Could not decode stego message");
+                if (!result.ok) {
+                    if (result.error.code === StegoDecodeErrorCode.Expired) {
+                        setExpired(true);
+                    } else {
+                        setErrorCode(result.error.code);
+                        setError(result.error.message);
+                    }
                     setDecoding(false);
                     return;
                 }
 
                 const { payload, header } = result;
-
-                if (header.expired) {
-                    setExpired(true);
-                    setDecoding(false);
-                    return;
-                }
 
                 setStrategy(header.header.strategy);
 
@@ -181,12 +198,26 @@ export const StegoMessageView: React.FC<StegoMessageViewProps> = ({
         );
     }
 
-    // Error state
+    // Error state — with specific diagnostic info
     if (error) {
+        const icon = errorCode ? errorIcon(errorCode) : "\u{26A0}";
         return (
-            <div className="mx_StegoMessage mx_StegoMessage--error">
-                <span className="mx_StegoMessage_icon">{"\u{26A0}"}</span>
-                <span className="mx_StegoMessage_text">Failed to decode: {error}</span>
+            <div className="mx_StegoMessage mx_StegoMessage--error" data-error-code={errorCode}>
+                <span className="mx_StegoMessage_icon">{icon}</span>
+                <span className="mx_StegoMessage_text">{error}</span>
+                {errorCode === StegoDecodeErrorCode.UnsupportedVersion && (
+                    <span className="mx_StegoMessage_hint">Try updating your app to decode this message.</span>
+                )}
+                {errorCode === StegoDecodeErrorCode.UncorrectableCorruption && (
+                    <span className="mx_StegoMessage_hint">
+                        The message may have been modified in transit. Ask the sender to resend.
+                    </span>
+                )}
+                {errorCode === StegoDecodeErrorCode.ChecksumMismatch && (
+                    <span className="mx_StegoMessage_hint">
+                        The message data was altered. Ask the sender to resend.
+                    </span>
+                )}
             </div>
         );
     }
