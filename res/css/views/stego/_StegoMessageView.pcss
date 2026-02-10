@@ -1,0 +1,130 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_StegoMessage {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: var(--cpd-font-size-body-md);
+    max-width: 400px;
+    position: relative;
+}
+
+.mx_StegoMessage--loading {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: var(--cpd-color-bg-subtle-primary);
+    color: var(--cpd-color-text-secondary);
+
+    .mx_StegoMessage_icon {
+        font-size: 16px;
+        animation: mx_StegoMessage_pulse 1.5s ease-in-out infinite;
+    }
+}
+
+.mx_StegoMessage--error {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: var(--cpd-color-bg-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
+}
+
+.mx_StegoMessage--expired {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: var(--cpd-color-bg-subtle-secondary);
+    color: var(--cpd-color-text-disabled);
+    font-style: italic;
+}
+
+.mx_StegoMessage--hidden {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--cpd-color-bg-subtle-primary), var(--cpd-color-bg-subtle-secondary));
+    border: 1px dashed var(--cpd-color-border-interactive-secondary);
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: linear-gradient(
+            135deg,
+            var(--cpd-color-bg-action-secondary-hovered),
+            var(--cpd-color-bg-subtle-secondary)
+        );
+    }
+
+    .mx_StegoMessage_text {
+        color: var(--cpd-color-text-secondary);
+    }
+
+    .mx_StegoMessage_timer {
+        margin-left: auto;
+        font-size: var(--cpd-font-size-body-xs);
+        color: var(--cpd-color-text-placeholder);
+    }
+}
+
+.mx_StegoMessage--revealed {
+    background: var(--cpd-color-bg-subtle-primary);
+    border-left: 3px solid var(--cpd-color-border-interactive-primary);
+
+    &.mx_StegoMessage--self {
+        border-left-color: var(--cpd-color-border-success-subtle);
+    }
+}
+
+.mx_StegoMessage_header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--cpd-font-size-body-xs);
+}
+
+.mx_StegoMessage_badge {
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--cpd-color-bg-action-primary-rest);
+    color: var(--cpd-color-text-on-solid-primary);
+    font-size: var(--cpd-font-size-body-xs);
+    font-weight: var(--cpd-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mx_StegoMessage_timer {
+    margin-left: auto;
+    font-size: var(--cpd-font-size-body-xs);
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_StegoMessage_content {
+    margin-top: 4px;
+    line-height: 1.5;
+    color: var(--cpd-color-text-primary);
+    word-break: break-word;
+}
+
+.mx_StegoMessage_icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+@keyframes mx_StegoMessage_pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
