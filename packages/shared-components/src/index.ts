@@ -28,7 +28,7 @@ export * from "./rich-list/RichList";
 export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
 export * from "./room-list/RoomListView";
-export * from "./room-list/RoomListItem";
+export * from "./room-list/RoomListItemView";
 export * from "./room-list/RoomListPrimaryFilters";
 export * from "./room-list/VirtualizedRoomListView";
 export * from "./utils/Box";
