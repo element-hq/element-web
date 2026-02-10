@@ -734,7 +734,7 @@ describe("DeviceListener", () => {
                         new Set<string>([device3.deviceId]),
                     );
 
-                    await instance.dismissUnverifiedSessions([device3.deviceId]);
+                    await instance.otherDevices?.dismissUnverifiedSessions([device3.deviceId]);
                     await flushPromises();
 
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();

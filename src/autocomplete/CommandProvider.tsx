@@ -17,7 +17,7 @@ import AutocompleteProvider from "./AutocompleteProvider";
 import QueryMatcher from "./QueryMatcher";
 import { TextualCompletion } from "./Components";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
-import { type Command, Commands, CommandMap } from "../SlashCommands";
+import { type Command, Commands, CommandMap } from "../slash-commands/SlashCommands";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 

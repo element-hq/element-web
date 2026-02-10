@@ -21,45 +21,46 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type RoomMemberEventContent } from "matrix-js-sdk/src/types";
 
-import dis from "./dispatcher/dispatcher";
-import { _t, _td, UserFriendlyError } from "./languageHandler";
-import Modal from "./Modal";
-import MultiInviter from "./utils/MultiInviter";
-import { Linkify, topicToHtml } from "./HtmlUtils";
-import QuestionDialog from "./components/views/dialogs/QuestionDialog";
-import WidgetUtils from "./utils/WidgetUtils";
-import { textToHtmlRainbow } from "./utils/colour";
-import { AddressType, getAddressType } from "./UserAddress";
-import { abbreviateUrl } from "./utils/UrlUtils";
-import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "./utils/IdentityServerUtils";
-import { WidgetType } from "./widgets/WidgetType";
-import { Jitsi } from "./widgets/Jitsi";
-import BugReportDialog from "./components/views/dialogs/BugReportDialog";
-import { ensureDMExists } from "./createRoom";
-import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
-import { Action } from "./dispatcher/actions";
-import SdkConfig from "./SdkConfig";
-import SettingsStore from "./settings/SettingsStore";
-import { UIComponent, UIFeature } from "./settings/UIFeature";
-import { CHAT_EFFECTS } from "./effects";
-import LegacyCallHandler from "./LegacyCallHandler";
-import { guessAndSetDMRoom } from "./Rooms";
-import DevtoolsDialog from "./components/views/dialogs/DevtoolsDialog";
-import InfoDialog from "./components/views/dialogs/InfoDialog";
-import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
-import { shouldShowComponent } from "./customisations/helpers/UIComponents";
-import { TimelineRenderingType } from "./contexts/RoomContext";
-import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
-import { leaveRoomBehaviour } from "./utils/leave-behaviour";
-import { MatrixClientPeg } from "./MatrixClientPeg";
-import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./slash-commands/utils";
-import { deop, op } from "./slash-commands/op";
-import { CommandCategories } from "./slash-commands/interface";
-import { Command } from "./slash-commands/command";
-import { goto, join } from "./slash-commands/join";
-import { manuallyVerifyDevice } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
-import upgraderoom from "./slash-commands/upgraderoom/upgraderoom";
+import dis from "../dispatcher/dispatcher";
+import { _t, _td, UserFriendlyError } from "../languageHandler";
+import Modal from "../Modal";
+import MultiInviter from "../utils/MultiInviter";
+import { Linkify, topicToHtml } from "../HtmlUtils";
+import QuestionDialog from "../components/views/dialogs/QuestionDialog";
+import WidgetUtils from "../utils/WidgetUtils";
+import { textToHtmlRainbow } from "../utils/colour";
+import { AddressType, getAddressType } from "../UserAddress";
+import { abbreviateUrl } from "../utils/UrlUtils";
+import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../utils/IdentityServerUtils";
+import { WidgetType } from "../widgets/WidgetType";
+import { Jitsi } from "../widgets/Jitsi";
+import BugReportDialog from "../components/views/dialogs/BugReportDialog";
+import { ensureDMExists } from "../createRoom";
+import { type ViewUserPayload } from "../dispatcher/payloads/ViewUserPayload";
+import { Action } from "../dispatcher/actions";
+import SdkConfig from "../SdkConfig";
+import SettingsStore from "../settings/SettingsStore";
+import { UIComponent, UIFeature } from "../settings/UIFeature";
+import { CHAT_EFFECTS } from "../effects";
+import LegacyCallHandler from "../LegacyCallHandler";
+import { guessAndSetDMRoom } from "../Rooms";
+import DevtoolsDialog from "../components/views/dialogs/DevtoolsDialog";
+import InfoDialog from "../components/views/dialogs/InfoDialog";
+import SlashCommandHelpDialog from "../components/views/dialogs/SlashCommandHelpDialog";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { htmlSerializeFromMdIfNeeded } from "../editor/serialize";
+import { leaveRoomBehaviour } from "../utils/leave-behaviour";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./utils";
+import { deop, op } from "./op";
+import { CommandCategories } from "./interface";
+import { Command } from "./command";
+import { goto, join } from "./join";
+import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKeyVerificationDialog";
+import upgraderoom from "./upgraderoom/upgraderoom";
+import { emoticon } from "./emoticon";
 
 export { CommandCategories, Command };
 
@@ -73,58 +74,10 @@ export const Commands = [
         },
         category: CommandCategories.messages,
     }),
-    new Command({
-        command: "shrug",
-        args: "<message>",
-        description: _td("slash_command|shrug"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "¯\\_(ツ)_/¯";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
-    new Command({
-        command: "tableflip",
-        args: "<message>",
-        description: _td("slash_command|tableflip"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "(╯°□°）╯︵ ┻━┻";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
-    new Command({
-        command: "unflip",
-        args: "<message>",
-        description: _td("slash_command|unflip"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "┬──┬ ノ( ゜-゜ノ)";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
-    new Command({
-        command: "lenny",
-        args: "<message>",
-        description: _td("slash_command|lenny"),
-        runFn: function (cli, roomId, threadId, args) {
-            let message = "( ͡° ͜ʖ ͡°)";
-            if (args) {
-                message = message + " " + args;
-            }
-            return successSync(ContentHelpers.makeTextMessage(message));
-        },
-        category: CommandCategories.messages,
-    }),
+    emoticon("shrug", _td("slash_command|shrug"), "¯\\_(ツ)_/¯"),
+    emoticon("tableflip", _td("slash_command|tableflip"), "(╯°□°）╯︵ ┻━┻"),
+    emoticon("unflip", _td("slash_command|unflip"), "┬──┬ ノ( ゜-゜ノ)"),
+    emoticon("lenny", _td("slash_command|lenny"), "( ͡° ͜ʖ ͡°)"),
     new Command({
         command: "plain",
         args: "<message>",
@@ -348,7 +301,7 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli) && shouldShowComponent(UIComponent.InviteUsers),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
-                const [address, reason] = args.split(/\s+(.+)/);
+                const [address, reason] = splitAtFirstSpace(args);
                 if (address) {
                     // We use a MultiInviter to re-use the invite logic, even though
                     // we're only inviting one user.
@@ -460,9 +413,9 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
-                const matches = args.match(/^(\S+?)( +(.*))?$/);
-                if (matches) {
-                    return success(cli.kick(roomId, matches[1], matches[3]));
+                const [userId, reason] = splitAtFirstSpace(args);
+                if (userId) {
+                    return success(cli.kick(roomId, userId, reason));
                 }
             }
             return reject(this.getUsage());
@@ -477,9 +430,9 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
-                const matches = args.match(/^(\S+?)( +(.*))?$/);
-                if (matches) {
-                    return success(cli.ban(roomId, matches[1], matches[3]));
+                const [userId, reason] = splitAtFirstSpace(args);
+                if (userId) {
+                    return success(cli.ban(roomId, userId, reason));
                 }
             }
             return reject(this.getUsage());
@@ -784,9 +737,8 @@ export const Commands = [
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 // matches the first whitespace delimited group and then the rest of the string
-                const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
-                if (matches) {
-                    const [userId, msg] = matches.slice(1);
+                const [userId, msg] = splitAtFirstSpace(args);
+                if (userId !== "") {
                     if (userId && userId.startsWith("@") && userId.includes(":")) {
                         return success(
                             (async (): Promise<void> => {
@@ -910,20 +862,23 @@ Commands.forEach((cmd) => {
     });
 });
 
+/**
+ * If the supplied input starts with "/<command>", returns an object with these
+ * properties:
+ *
+ * cmd - the string following the / up to some whitespace
+ * args - the string (if any) after first whitespace
+ *
+ * If not, returns {}
+ */
 export function parseCommandString(input: string): { cmd?: string; args?: string } {
-    // trim any trailing whitespace, as it can confuse the parser for IRC-style commands
-    input = input.trimEnd();
-    if (!input.startsWith("/")) return {}; // not a command
-
-    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
-    let cmd: string;
-    let args: string | undefined;
-    if (bits) {
-        cmd = bits[1].substring(1).toLowerCase();
-        args = bits[2];
-    } else {
-        cmd = input;
+    const trimmedInput = input.trimStart();
+    if (trimmedInput.charAt(0) !== "/") {
+        return {};
     }
+
+    const withoutSlash = trimmedInput.slice(1);
+    const [cmd, args] = splitAtFirstSpace(withoutSlash);
 
     return { cmd, args };
 }
@@ -931,6 +886,26 @@ export function parseCommandString(input: string): { cmd?: string; args?: string
 interface ICmd {
     cmd?: Command;
     args?: string;
+}
+
+/**
+ * Split the supplied string into one or two strings separated by the first
+ * region of white space we can find.
+ */
+export function splitAtFirstSpace(args: string): [string, string?] {
+    const trimmedArgs = args.trim();
+    const i = trimmedArgs.search(/\s+/);
+    if (i === -1) {
+        return [trimmedArgs];
+    } else {
+        const first = trimmedArgs.slice(0, i);
+        const second = trimmedArgs.slice(i + 1).trimStart();
+        if (second === "") {
+            return [first];
+        } else {
+            return [first, second];
+        }
+    }
 }
 
 /**
