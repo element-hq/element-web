@@ -29,7 +29,7 @@ import { endEditing, cancelPreviousPendingEdit } from "./editing";
 import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
 import { isContentModified } from "./isContentModified";
-import { CommandCategories, getCommand } from "../../../../../SlashCommands";
+import { CommandCategories, getCommand } from "../../../../../slash-commands/SlashCommands";
 import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/commands";
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";

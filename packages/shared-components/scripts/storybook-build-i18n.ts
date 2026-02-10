@@ -55,12 +55,12 @@ function prepareLangFiles(): LangFileMap {
 function createHashFromFile(lang: string): [filename: string, json: string] {
     const translationsPath = `${I18N_BASE_PATH}${lang}.json`;
 
-    const json = JSON.stringify(fs.readFileSync(translationsPath).toString(), null, 4);
-    const jsonBuffer = Buffer.from(json);
+    const jsonStr = fs.readFileSync(translationsPath).toString();
+    const jsonBuffer = Buffer.from(jsonStr);
     const digest = createHash("sha256").update(jsonBuffer).digest("hex").slice(0, 7);
     const filename = `${lang}.${digest}.json`;
 
-    return [filename, json];
+    return [filename, jsonStr];
 }
 
 /**

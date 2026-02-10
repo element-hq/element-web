@@ -8,9 +8,7 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import type { Room } from "./RoomListItem/RoomListItem";
-import type { RoomListItemSnapshot } from "./RoomListItem";
-import { RoomNotifState } from "./RoomListItem/RoomNotifs";
+import { type Room, type RoomListItemSnapshot, RoomNotifState } from "./RoomListItemView";
 
 /**
  * Mock avatar component for stories
