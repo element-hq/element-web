@@ -141,7 +141,7 @@ export class DisambiguatedProfileViewModel
 
         this.props.member = member;
 
-        const snapshot = this.getSnapshot();
+        const snapshot = { ...this.getSnapshot() };
 
         // Compute display name
         const displayName = member?.rawDisplayName || this.props.fallbackName;
@@ -187,7 +187,7 @@ export class DisambiguatedProfileViewModel
 
         this.props.fallbackName = fallbackName;
 
-        const snapshot = this.getSnapshot();
+        const snapshot = { ...this.getSnapshot() };
 
         snapshot.displayName = this.props.member?.rawDisplayName || fallbackName;
         snapshot.title = undefined;
@@ -216,7 +216,7 @@ export class DisambiguatedProfileViewModel
 
         this.props.withTooltip = withTooltip;
 
-        const snapshot = this.getSnapshot();
+        const snapshot = { ...this.getSnapshot() };
 
         snapshot.title = undefined;
         if (withTooltip) {
