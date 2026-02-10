@@ -14,6 +14,10 @@ describe("DisambiguatedProfileViewModel", () => {
         rawDisplayName: "Alice",
         disambiguate: true,
     };
+    const nonDisambiguatedMember = {
+        ...member,
+        disambiguate: false,
+    };
 
     it("should return the snapshot from props", () => {
         const vm = new DisambiguatedProfileViewModel({
@@ -91,6 +95,19 @@ describe("DisambiguatedProfileViewModel", () => {
         expect(vm.getSnapshot().displayName).toBe("Updated");
     });
 
+    it("should not emit snapshot update when fallbackName is unchanged", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member: null,
+            fallbackName: "Fallback",
+        });
+        const subscriber = jest.fn();
+
+        vm.subscribe(subscriber);
+        vm.setFallbackName("Fallback");
+
+        expect(subscriber).not.toHaveBeenCalled();
+    });
+
     it("should emit snapshot update when withTooltip changes", () => {
         const vm = new DisambiguatedProfileViewModel({
             member,
@@ -106,6 +123,35 @@ describe("DisambiguatedProfileViewModel", () => {
         expect(vm.getSnapshot().title).toBe("Alice (@alice:example.org)");
     });
 
+    it("should compute tooltip title even when disambiguation is not needed", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member: nonDisambiguatedMember,
+            fallbackName: "Fallback",
+            withTooltip: false,
+        });
+        const subscriber = jest.fn();
+
+        vm.subscribe(subscriber);
+        vm.setWithTooltip(true);
+
+        expect(subscriber).toHaveBeenCalledTimes(1);
+        expect(vm.getSnapshot().title).toBe("Alice (@alice:example.org)");
+    });
+
+    it("should not emit snapshot update when withTooltip is unchanged", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member,
+            fallbackName: "Fallback",
+            withTooltip: true,
+        });
+        const subscriber = jest.fn();
+
+        vm.subscribe(subscriber);
+        vm.setWithTooltip(true);
+
+        expect(subscriber).not.toHaveBeenCalled();
+    });
+
     it("should emit snapshot update when member changes via setMember", () => {
         const vm = new DisambiguatedProfileViewModel({
             member: null,
@@ -118,5 +164,18 @@ describe("DisambiguatedProfileViewModel", () => {
 
         expect(subscriber).toHaveBeenCalledTimes(1);
         expect(vm.getSnapshot().displayName).toBe("Alice");
+    });
+
+    it("should not emit snapshot update when member is unchanged", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member,
+            fallbackName: "Fallback",
+        });
+        const subscriber = jest.fn();
+
+        vm.subscribe(subscriber);
+        vm.setMember(member);
+
+        expect(subscriber).not.toHaveBeenCalled();
     });
 });

@@ -145,6 +145,7 @@ export class DisambiguatedProfileViewModel
 
         // Compute display name
         const displayName = member?.rawDisplayName || this.props.fallbackName;
+        snapshot.displayName = displayName;
         const mxid = member?.userId;
 
         // Compute color class if coloring is enabled
@@ -191,11 +192,20 @@ export class DisambiguatedProfileViewModel
         snapshot.displayName = this.props.member?.rawDisplayName || fallbackName;
         snapshot.title = undefined;
 
-        if (snapshot.displayIdentifier && this.props.withTooltip) {
-            snapshot.title = _t("timeline|disambiguated_profile", {
-                displayName: snapshot.displayName,
-                matrixId: snapshot.displayIdentifier,
-            });
+        if (this.props.withTooltip) {
+            const mxid = this.props.member?.userId;
+            if (mxid) {
+                const identifier =
+                    UserIdentifier.getDisplayUserIdentifier?.(mxid, {
+                        withDisplayName: true,
+                        roomId: this.props.member?.roomId,
+                    }) ?? mxid;
+
+                snapshot.title = _t("timeline|disambiguated_profile", {
+                    displayName: snapshot.displayName,
+                    matrixId: identifier,
+                });
+            }
         }
 
         this.snapshot.set(snapshot);
@@ -209,11 +219,20 @@ export class DisambiguatedProfileViewModel
         const snapshot = this.getSnapshot();
 
         snapshot.title = undefined;
-        if (snapshot.displayIdentifier && withTooltip) {
-            snapshot.title = _t("timeline|disambiguated_profile", {
-                displayName: snapshot.displayName,
-                matrixId: snapshot.displayIdentifier,
-            });
+        if (withTooltip) {
+            const mxid = this.props.member?.userId;
+            if (mxid) {
+                const identifier =
+                    UserIdentifier.getDisplayUserIdentifier?.(mxid, {
+                        withDisplayName: true,
+                        roomId: this.props.member?.roomId,
+                    }) ?? mxid;
+
+                snapshot.title = _t("timeline|disambiguated_profile", {
+                    displayName: snapshot.displayName,
+                    matrixId: identifier,
+                });
+            }
         }
 
         this.snapshot.set(snapshot);
