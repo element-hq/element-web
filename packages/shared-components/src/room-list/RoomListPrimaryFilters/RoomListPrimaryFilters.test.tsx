@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { act } from "react";
-import { render, screen } from "@test-utils";
+import React from "react";
+import { act, render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect, vi, beforeEach } from "vitest";
