@@ -16,6 +16,7 @@ Please see LICENSE files in the repository root for full details.
 import fs from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const configPath = join(__dirname, "..", ".link-config");
@@ -43,6 +44,11 @@ try {
 
             console.log(`Linking ${dependency} to ${path}`);
             await fs.symlink(path, dependencyPath);
+
+            // pnpm install may have wiped out the `node_modules` dir so we have to restore it
+            execSync("pnpm i --ignore-scripts --frozen-lockfile", {
+                cwd: dependencyPath,
+            });
         } catch (e) {
             console.error(`Failed to link ${dependency}`, e);
         }
