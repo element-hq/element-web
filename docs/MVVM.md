@@ -102,7 +102,7 @@ interface Props {
 export class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implements FooViewModelInterface {
     public constructor(props: Props) {
         // Call super with initial snapshot
-        super(props, { title: props.title, description: coastlyDescriptionLoading() });
+        super(props, { title: props.title, description: costlyDescriptionLoading() });
     }
 
     public setTitle(title: string): void {
