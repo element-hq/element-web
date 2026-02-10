@@ -167,5 +167,4 @@ export class DisambiguatedProfileViewModel
         this.props.onClick = onClick;
         this.onClick = onClick;
     }
-
 }
