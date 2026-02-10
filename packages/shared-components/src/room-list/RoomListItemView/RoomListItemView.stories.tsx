@@ -9,8 +9,8 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "./RoomListItem";
-import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItem";
+import type { Room } from "./RoomListItemView";
+import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItemView";
 import { useMockedViewModel } from "../../viewmodel";
 import { defaultSnapshot } from "./default-snapshot";
 import { renderAvatar } from "../story-mocks";
@@ -69,7 +69,7 @@ const RoomListItemWrapper = ({
 };
 
 const meta = {
-    title: "Room List/RoomListItem",
+    title: "Room List/RoomListItemView",
     component: RoomListItemWrapper,
     tags: ["autodocs"],
     decorators: [

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type RoomListItemSnapshot } from "./RoomListItem";
+import { type RoomListItemSnapshot } from "./RoomListItemView";
 import { RoomNotifState } from "./RoomNotifs";
 
 export const mockRoom = { name: "General" };
