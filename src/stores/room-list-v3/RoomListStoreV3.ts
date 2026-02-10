@@ -161,6 +161,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.emit(LISTS_UPDATE_EVENT);
     }
 
+    protected async onNotReady(): Promise<any> {
+        this.roomSkipList = undefined;
+    }
+
     protected async onAction(payload: ActionPayload): Promise<void> {
         if (!this.matrixClient || !this.roomSkipList?.initialized) return;
 
