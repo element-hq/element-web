@@ -378,6 +378,20 @@ export class ElementWidgetDriver extends WidgetDriver {
         return { roomId, eventId: r.event_id };
     }
 
+    public async readStickyEvents(roomId: string): Promise<IRoomEvent[]> {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (!room) {
+            logger.warn(`[ElementWidgetDriver] readStickyEvents: room ${roomId} not found`);
+            return Promise.resolve([]);
+        }
+        const stickyEvents: IRoomEvent[] = [];
+        for (const ev of room._unstable_getStickyEvents()) {
+            stickyEvents.push(ev.getEffectiveEvent() as IRoomEvent);
+        }
+
+        return stickyEvents;
+    }
+
     private getSendDelayedEventOpts(delay: number | null, parentDelayId: string | null): SendDelayedEventRequestOpts {
         if (delay !== null) {
             return {
