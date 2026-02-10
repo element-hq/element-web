@@ -114,7 +114,7 @@ export class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implemen
 
     public reloadDescription(): void {
         // Simulate reloading the description by calling the costly function again and updating the snapshot.
-        this.snapshot.merge({ description: coastlyDescriptionLoading() });
+        this.snapshot.merge({ description: costlyDescriptionLoading() });
     }
 
     /**
