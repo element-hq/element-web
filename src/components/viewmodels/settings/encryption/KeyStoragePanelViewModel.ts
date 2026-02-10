@@ -13,7 +13,7 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import DeviceListener from "../../../../DeviceListener";
 import { useEventEmitterAsyncState } from "../../../../hooks/useEventEmitter";
 import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
-import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../device-listener/DeviceListenerThisDevice";
+import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../device-listener/DeviceListenerCurrentDevice";
 
 interface KeyStoragePanelState {
     /**

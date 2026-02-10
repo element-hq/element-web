@@ -46,7 +46,7 @@ export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
 /**
  * Handles all of DeviceListener's work that relates to the current device.
  */
-export default class DeviceListenerThisDevice {
+export default class DeviceListenerCurrentDevice {
     /**
      * The DeviceListener launching this instance.
      */

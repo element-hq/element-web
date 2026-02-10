@@ -37,7 +37,7 @@ import { SettingLevel } from "../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
-import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener/DeviceListenerThisDevice";
+import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener/DeviceListenerCurrentDevice";
 
 jest.mock("../../src/dispatcher/dispatcher", () => ({
     dispatch: jest.fn(),

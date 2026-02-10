@@ -21,7 +21,7 @@ import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
 import SettingsStore, { type CallbackFn } from "./settings/SettingsStore";
 import DeviceListenerOtherDevices from "./device-listener/DeviceListenerOtherDevices.ts";
-import DeviceListenerThisDevice from "./device-listener/DeviceListenerThisDevice.ts";
+import DeviceListenerCurrentDevice from "./device-listener/DeviceListenerCurrentDevice.ts";
 import type DeviceState from "./device-listener/DeviceState.ts";
 
 const logger = baseLogger.getChild("DeviceListener:");
@@ -49,7 +49,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     /** All the information about whether this device's encrypytion is OK. Only
      * set if `running` is true, otherwise undefined.
      */
-    public thisDevice?: DeviceListenerThisDevice;
+    public currentDevice?: DeviceListenerCurrentDevice;
 
     private running = false;
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.
@@ -70,7 +70,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         this.running = true;
 
         this.otherDevices = new DeviceListenerOtherDevices(this, matrixClient);
-        this.thisDevice = new DeviceListenerThisDevice(this, matrixClient, logger);
+        this.currentDevice = new DeviceListenerCurrentDevice(this, matrixClient, logger);
 
         this.client = matrixClient;
 
@@ -95,7 +95,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
 
         this.dispatcherRef = undefined;
         this.otherDevices?.stop();
-        this.thisDevice?.stop();
+        this.currentDevice?.stop();
         this.client = undefined;
     }
 
@@ -130,21 +130,21 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
     }
 
     public dismissEncryptionSetup(): void {
-        this.thisDevice?.dismissEncryptionSetup();
+        this.currentDevice?.dismissEncryptionSetup();
     }
 
     /**
      * Set the account data "m.org.matrix.custom.backup_disabled" to { "disabled": true }.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
-        await this.thisDevice?.recordKeyBackupDisabled();
+        await this.currentDevice?.recordKeyBackupDisabled();
     }
 
     /**
      * Set the account data to indicate that recovery is disabled
      */
     public async recordRecoveryDisabled(): Promise<void> {
-        await this.thisDevice?.recordRecoveryDisabled();
+        await this.currentDevice?.recordRecoveryDisabled();
     }
 
     /**
@@ -193,7 +193,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
      */
     public async keyStorageOutOfSyncNeedsBackupReset(forgotRecovery: boolean): Promise<boolean> {
         const crypto = this.client?.getCrypto();
-        const thisDevice = this.thisDevice;
+        const thisDevice = this.currentDevice;
         if (!(crypto && thisDevice)) {
             return false;
         }
@@ -245,7 +245,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
             return;
         }
 
-        await this.thisDevice?.recheck(logSpan);
+        await this.currentDevice?.recheck(logSpan);
         await this.otherDevices?.recheck(logSpan);
 
         await this.reportCryptoSessionStateToAnalytics(cli);
@@ -257,7 +257,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
      * self-verified device that is using key backup and recovery.
      */
     public getDeviceState(): DeviceState {
-        return this.thisDevice?.getDeviceState() ?? "ok";
+        return this.currentDevice?.getDeviceState() ?? "ok";
     }
 
     /**
@@ -271,7 +271,7 @@ export default class DeviceListener extends TypedEventEmitter<DeviceListenerEven
         const secretStorageStatus = await crypto.getSecretStorageStatus();
         const secretStorageReady = secretStorageStatus.ready;
         const crossSigningStatus = await crypto.getCrossSigningStatus();
-        const backupInfo = await this.thisDevice?.getKeyBackupInfo();
+        const backupInfo = await this.currentDevice?.getKeyBackupInfo();
         const is4SEnabled = secretStorageStatus.defaultKeyId != null;
         const deviceVerificationStatus = await crypto.getDeviceVerificationStatus(cli.getUserId()!, cli.getDeviceId()!);
 

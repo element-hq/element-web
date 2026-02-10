@@ -32,7 +32,7 @@ import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
 import DeviceListener from "../../../../DeviceListener";
 import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
-import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../device-listener/DeviceListenerThisDevice.ts";
+import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../device-listener/DeviceListenerCurrentDevice.ts";
 
 /**
  * The possible states of the component.
