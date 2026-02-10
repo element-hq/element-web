@@ -20,7 +20,7 @@ import {
 
 import { _t } from "../../utils/i18n";
 import { useViewModel, type ViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItem";
+import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemView";
 
 /**
  * View model type for room list item

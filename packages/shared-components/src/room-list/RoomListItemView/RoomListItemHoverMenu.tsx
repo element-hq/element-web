@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 import { Flex } from "../../utils/Flex";
 import { RoomListItemMoreOptionsMenu, type RoomItemViewModel } from "./RoomListItemMoreOptionsMenu";
 import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
-import styles from "./RoomListItem.module.css";
+import styles from "./RoomListItemView.module.css";
 
 /**
  * Props for RoomListItemHoverMenu component

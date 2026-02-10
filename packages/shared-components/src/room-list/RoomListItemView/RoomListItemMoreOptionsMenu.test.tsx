@@ -12,7 +12,7 @@ import { describe, it, expect, vi } from "vitest";
 
 import { RoomListItemMoreOptionsMenu } from "./RoomListItemMoreOptionsMenu";
 import { useMockedViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot } from "./RoomListItem";
+import type { RoomListItemSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
 
 describe("<RoomListItemMoreOptionsMenu />", () => {

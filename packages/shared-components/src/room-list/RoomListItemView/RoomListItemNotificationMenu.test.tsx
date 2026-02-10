@@ -13,7 +13,7 @@ import { describe, it, expect, vi } from "vitest";
 import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 import { RoomNotifState } from "./RoomNotifs";
 import { useMockedViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot } from "./RoomListItem";
+import type { RoomListItemSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
 
 describe("<RoomListItemNotificationMenu />", () => {
