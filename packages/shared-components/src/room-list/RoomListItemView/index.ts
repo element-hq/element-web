@@ -5,14 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { RoomListItemView } from "./RoomListItem";
+export { RoomListItemView } from "./RoomListItemView";
 export type {
     Room,
     RoomListItemSnapshot,
     RoomItemViewModel,
     RoomListItemActions,
     RoomListItemViewProps,
-} from "./RoomListItem";
+} from "./RoomListItemView";
 export { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 export type { RoomListItemNotificationMenuProps } from "./RoomListItemNotificationMenu";
 export { RoomListItemMoreOptionsMenu, MoreOptionContent } from "./RoomListItemMoreOptionsMenu";

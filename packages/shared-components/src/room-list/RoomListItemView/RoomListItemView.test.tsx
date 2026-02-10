@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
 
-import * as stories from "./RoomListItem.stories";
+import * as stories from "./RoomListItemView.stories";
 
 const {
     Default,
