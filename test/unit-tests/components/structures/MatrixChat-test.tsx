@@ -1839,4 +1839,39 @@ describe("<MatrixChat />", () => {
             );
         });
     });
+
+    describe("blacklistUnverifiedDevices settings", () => {
+        beforeEach(async () => {
+            mockPlatformPeg();
+            getComponent({});
+            // Force a client start manually to avoid needing to go through the login flow.
+            defaultDispatcher.dispatch({
+                action: Action.ClientStarted,
+            });
+            await flushPromises();
+        });
+
+        afterEach(() => {
+            SettingsStore.reset();
+        });
+
+        it("should ignore room-device-level blacklistUnverifiedDevices updates", async () => {
+            // Set the blacklist toggle at a room-specific level ...
+            await SettingsStore.setValue(
+                "blacklistUnverifiedDevices",
+                "!room:example.com",
+                SettingLevel.ROOM_DEVICE,
+                true,
+            );
+            // ... which SHOULD NOT affect the global blacklist property.
+            expect(mockClient.getCrypto()!.globalBlacklistUnverifiedDevices).toBeFalsy();
+        }, 10e3);
+
+        it("should update globalBlacklistUnverifiedDevices on device-level updates", async () => {
+            // Set the blacklist toggle at a device level ...
+            await SettingsStore.setValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE, true);
+            // shich SHOULD affect the global blacklist property.
+            expect(mockClient.getCrypto()!.globalBlacklistUnverifiedDevices).toBeTruthy();
+        }, 10e3);
+    });
 });
