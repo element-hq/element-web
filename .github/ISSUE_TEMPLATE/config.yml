@@ -3,3 +3,6 @@ contact_links:
     - name: Questions & support
       url: https://matrix.to/#/#element-web:matrix.org
       about: Please ask and answer questions here.
+    - name: Bug report for the Element flatpak app
+      url: https://github.com/flathub/im.riot.Riot/issues
+      about: Please file bugs with the Flatpak application on the respective repository.
