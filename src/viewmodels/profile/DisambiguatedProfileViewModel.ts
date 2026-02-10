@@ -154,31 +154,10 @@ export class DisambiguatedProfileViewModel
         this.updateSnapshot();
     }
 
-    public setColored(colored?: boolean): void {
-        if (this.props.colored === colored) return;
-
-        this.props.colored = colored;
-        this.updateSnapshot();
-    }
-
-    public setEmphasizeDisplayName(emphasizeDisplayName?: boolean): void {
-        if (this.props.emphasizeDisplayName === emphasizeDisplayName) return;
-
-        this.props.emphasizeDisplayName = emphasizeDisplayName;
-        this.updateSnapshot();
-    }
-
     public setWithTooltip(withTooltip?: boolean): void {
         if (this.props.withTooltip === withTooltip) return;
 
         this.props.withTooltip = withTooltip;
-        this.updateSnapshot();
-    }
-
-    public setClassName(className?: string): void {
-        if (this.props.className === className) return;
-
-        this.props.className = className;
         this.updateSnapshot();
     }
 

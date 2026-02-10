@@ -106,18 +106,17 @@ describe("DisambiguatedProfileViewModel", () => {
         expect(vm.getSnapshot().title).toBe("Alice (@alice:example.org)");
     });
 
-    it("should emit snapshot update when className changes via setClassName", () => {
+    it("should emit snapshot update when member changes via setMember", () => {
         const vm = new DisambiguatedProfileViewModel({
-            member,
+            member: null,
             fallbackName: "Fallback",
-            className: "mx_DisambiguatedProfile",
         });
         const subscriber = jest.fn();
 
         vm.subscribe(subscriber);
-        vm.setClassName("mx_DisambiguatedProfile_changed");
+        vm.setMember(member);
 
         expect(subscriber).toHaveBeenCalledTimes(1);
-        expect(vm.getSnapshot().className).toBe("mx_DisambiguatedProfile_changed");
+        expect(vm.getSnapshot().displayName).toBe("Alice");
     });
 });
