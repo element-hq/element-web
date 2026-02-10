@@ -1,0 +1,133 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_StegoShareSheet {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    max-width: 480px;
+}
+
+.mx_StegoShareSheet_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+        margin: 0;
+        font-size: var(--cpd-font-size-body-lg);
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+}
+
+.mx_StegoShareSheet_close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    color: var(--cpd-color-icon-secondary);
+
+    &:hover {
+        color: var(--cpd-color-icon-primary);
+    }
+}
+
+.mx_StegoShareSheet_preview {
+    padding: 16px;
+    border-radius: 8px;
+    background: var(--cpd-color-bg-subtle-primary);
+    text-align: center;
+}
+
+.mx_StegoShareSheet_previewImage {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+}
+
+.mx_StegoShareSheet_previewLabel {
+    margin: 0 0 8px;
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_StegoShareSheet_emojiContent {
+    font-size: 24px;
+    line-height: 1.4;
+    word-break: break-all;
+    padding: 8px;
+    background: var(--cpd-color-bg-canvas-default);
+    border-radius: 4px;
+}
+
+.mx_StegoShareSheet_info {
+    p {
+        margin: 0;
+        font-size: var(--cpd-font-size-body-sm);
+        color: var(--cpd-color-text-secondary);
+        line-height: 1.5;
+    }
+}
+
+.mx_StegoShareSheet_targets {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.mx_StegoShareSheet_target {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    background: var(--cpd-color-bg-canvas-default);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    min-width: 100px;
+
+    &:hover {
+        background: var(--cpd-color-bg-action-secondary-hovered);
+    }
+}
+
+.mx_StegoShareSheet_targetIcon {
+    font-size: 24px;
+}
+
+.mx_StegoShareSheet_targetName {
+    font-size: var(--cpd-font-size-body-xs);
+    color: var(--cpd-color-text-secondary);
+    white-space: nowrap;
+}
+
+.mx_StegoShareSheet_error {
+    padding: 8px;
+    border-radius: 4px;
+    background: var(--cpd-color-bg-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
+    font-size: var(--cpd-font-size-body-sm);
+}
+
+.mx_StegoShareSheet_footer {
+    border-top: 1px solid var(--cpd-color-border-interactive-secondary);
+    padding-top: 12px;
+}
+
+.mx_StegoShareSheet_footerNote {
+    margin: 0;
+    font-size: var(--cpd-font-size-body-xs);
+    color: var(--cpd-color-text-placeholder);
+    text-align: center;
+}

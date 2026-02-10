@@ -1,0 +1,177 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_StegoComposer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    background: var(--cpd-color-bg-subtle-primary);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+}
+
+.mx_StegoComposer_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+        margin: 0;
+        font-size: var(--cpd-font-size-body-md);
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+}
+
+.mx_StegoComposer_close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    color: var(--cpd-color-icon-secondary);
+
+    &:hover {
+        color: var(--cpd-color-icon-primary);
+    }
+}
+
+.mx_StegoComposer_body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mx_StegoComposer_input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    background: var(--cpd-color-bg-canvas-default);
+    color: var(--cpd-color-text-primary);
+    font-size: var(--cpd-font-size-body-md);
+    resize: vertical;
+    font-family: inherit;
+
+    &::placeholder {
+        color: var(--cpd-color-text-placeholder);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: var(--cpd-color-border-interactive-primary);
+    }
+}
+
+.mx_StegoComposer_options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mx_StegoComposer_option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--cpd-font-size-body-sm);
+
+    span {
+        white-space: nowrap;
+        color: var(--cpd-color-text-secondary);
+    }
+
+    select,
+    input[type="file"] {
+        flex: 1;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid var(--cpd-color-border-interactive-secondary);
+        background: var(--cpd-color-bg-canvas-default);
+        color: var(--cpd-color-text-primary);
+        font-size: var(--cpd-font-size-body-sm);
+    }
+}
+
+.mx_StegoComposer_checkbox {
+    input[type="checkbox"] {
+        flex: none;
+    }
+}
+
+.mx_StegoComposer_error {
+    padding: 8px;
+    border-radius: 4px;
+    background: var(--cpd-color-bg-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
+    font-size: var(--cpd-font-size-body-sm);
+}
+
+.mx_StegoComposer_preview {
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px dashed var(--cpd-color-border-interactive-secondary);
+
+    h4 {
+        margin: 0 0 8px;
+        font-size: var(--cpd-font-size-body-sm);
+        color: var(--cpd-color-text-secondary);
+    }
+}
+
+.mx_StegoComposer_previewEmoji {
+    word-break: break-all;
+    font-size: 20px;
+    line-height: 1.4;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.mx_StegoComposer_previewImage {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 4px;
+}
+
+.mx_StegoComposer_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.mx_StegoComposer_previewBtn,
+.mx_StegoComposer_sendBtn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: var(--cpd-font-size-body-md);
+    font-weight: var(--cpd-font-weight-semibold);
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.mx_StegoComposer_previewBtn {
+    background: var(--cpd-color-bg-subtle-secondary);
+    color: var(--cpd-color-text-primary);
+
+    &:hover:not(:disabled) {
+        background: var(--cpd-color-bg-action-secondary-hovered);
+    }
+}
+
+.mx_StegoComposer_sendBtn {
+    background: var(--cpd-color-bg-action-primary-rest);
+    color: var(--cpd-color-text-on-solid-primary);
+
+    &:hover:not(:disabled) {
+        background: var(--cpd-color-bg-action-primary-hovered);
+    }
+}
