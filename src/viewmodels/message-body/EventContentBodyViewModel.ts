@@ -160,6 +160,10 @@ export class EventContentBodyViewModel
     extends BaseViewModel<EventContentBodyViewSnapshot, EventContentBodyViewModelProps>
     implements EventContentBodyViewModelInterface
 {
+    private readonly updateSnapshot = (): void => {
+        this.snapshot.set(EventContentBodyViewModel.computeSnapshot(this.props));
+    };
+
     private static readonly computeSnapshot = (props: EventContentBodyViewModelProps): EventContentBodyViewSnapshot => {
         const {
             content,
@@ -206,18 +210,48 @@ export class EventContentBodyViewModel
         super(props, EventContentBodyViewModel.computeSnapshot(props));
     }
 
-    /**
-     * Updates the ViewModel's props and recomputes the snapshot.
-     */
-    public setProps(newProps: Partial<EventContentBodyViewModelProps>): void {
-        const nextProps = { ...this.props, ...newProps };
-        const hasChanges = (Object.keys(newProps) as Array<keyof EventContentBodyViewModelProps>).some(
-            (key) => this.props[key] !== nextProps[key],
-        );
+    public setEventContent(mxEvent: MatrixEvent | undefined, content: IContent): void {
+        const mxEventChanged = this.props.mxEvent !== mxEvent;
+        const contentChanged = this.props.content !== content;
+        if (!mxEventChanged && !contentChanged) return;
 
-        if (!hasChanges) return;
+        this.props.mxEvent = mxEvent;
+        this.props.content = content;
+        this.updateSnapshot();
+    }
 
-        this.props = nextProps;
-        this.snapshot.set(EventContentBodyViewModel.computeSnapshot(this.props));
+    public setStripReply(stripReply?: boolean): void {
+        if (this.props.stripReply === stripReply) return;
+
+        this.props.stripReply = stripReply;
+        this.updateSnapshot();
+    }
+
+    public setHighlights(highlights?: string[]): void {
+        if (this.props.highlights === highlights) return;
+
+        this.props.highlights = highlights;
+        this.updateSnapshot();
+    }
+
+    public setAs(as: "span" | "div"): void {
+        if (this.props.as === as) return;
+
+        this.props.as = as;
+        this.updateSnapshot();
+    }
+
+    public setEnableBigEmoji(enableBigEmoji?: boolean): void {
+        if (this.props.enableBigEmoji === enableBigEmoji) return;
+
+        this.props.enableBigEmoji = enableBigEmoji;
+        this.updateSnapshot();
+    }
+
+    public setShouldShowPillAvatar(shouldShowPillAvatar?: boolean): void {
+        if (this.props.shouldShowPillAvatar === shouldShowPillAvatar) return;
+
+        this.props.shouldShowPillAvatar = shouldShowPillAvatar;
+        this.updateSnapshot();
     }
 }

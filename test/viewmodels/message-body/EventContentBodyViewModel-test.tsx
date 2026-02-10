@@ -209,7 +209,7 @@ describe("EventContentBodyViewModel", () => {
         expect(vm.getSnapshot().dir).toBeUndefined();
     });
 
-    it("updates snapshot when setProps changes content", () => {
+    it("updates snapshot when setEventContent changes content", () => {
         const replacer = jest.fn();
         mockedCombineRenderers.mockReturnValue(() => replacer);
         mockedBodyToNode.mockReturnValue({
@@ -230,12 +230,12 @@ describe("EventContentBodyViewModel", () => {
             className: "mx_EventTile_body",
         });
 
-        vm.setProps({ content: { body: "Updated", msgtype: MsgType.Text } });
+        vm.setEventContent(undefined, { body: "Updated", msgtype: MsgType.Text });
 
         expect(vm.getSnapshot().children).toBe("updated-text");
     });
 
-    it("does not emit updates when setProps values are unchanged", () => {
+    it("does not emit updates when setter values are unchanged", () => {
         const replacer = jest.fn();
         mockedCombineRenderers.mockReturnValue(() => replacer);
         mockedBodyToNode.mockReturnValue({
@@ -251,11 +251,8 @@ describe("EventContentBodyViewModel", () => {
         const subscriber = jest.fn();
 
         vm.subscribe(subscriber);
-        vm.setProps({
-            content: defaultContent,
-            as: "span",
-            linkify: false,
-        });
+        vm.setEventContent(undefined, defaultContent);
+        vm.setAs("span");
 
         expect(subscriber).not.toHaveBeenCalled();
         expect(vm.getSnapshot()).toBe(previousSnapshot);

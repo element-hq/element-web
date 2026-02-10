@@ -89,12 +89,13 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
         // Update the ViewModel when relevant props change
-        if (
-            prevProps.mxEvent !== this.props.mxEvent ||
-            prevProps.highlights !== this.props.highlights ||
+        const mxEventChanged = prevProps.mxEvent !== this.props.mxEvent;
+        const highlightsChanged = prevProps.highlights !== this.props.highlights;
+        const wrapperChanged =
             prevProps.replacingEventId !== this.props.replacingEventId ||
-            prevProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration
-        ) {
+            prevProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration;
+
+        if (mxEventChanged || highlightsChanged || wrapperChanged) {
             const mxEvent = this.props.mxEvent;
             const content = mxEvent.getContent();
             const isEmote = content.msgtype === MsgType.Emote;
@@ -103,15 +104,19 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             // only strip reply if this is the original replying event, edits thereafter do not have the fallback
             const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
 
-            this.EventContentBodyViewModel.setProps({
-                as: willHaveWrapper ? "span" : "div",
-                mxEvent: mxEvent,
-                content: content,
-                stripReply: stripReply,
-                highlights: this.props.highlights,
-                enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
-                shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
-            });
+            this.EventContentBodyViewModel.setEventContent(mxEvent, content);
+            this.EventContentBodyViewModel.setStripReply(stripReply);
+
+            if (mxEventChanged || wrapperChanged) {
+                this.EventContentBodyViewModel.setAs(willHaveWrapper ? "span" : "div");
+            }
+
+            if (highlightsChanged) {
+                this.EventContentBodyViewModel.setHighlights(this.props.highlights);
+            }
+
+            this.EventContentBodyViewModel.setEnableBigEmoji(SettingsStore.getValue("TextualBody.enableBigEmoji"));
+            this.EventContentBodyViewModel.setShouldShowPillAvatar(SettingsStore.getValue("Pill.shouldShowPillAvatar"));
         }
 
         // Handle formatting updates
