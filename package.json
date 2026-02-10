@@ -68,6 +68,18 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js",
         "postinstall": "node scripts/pnpm-link.ts"
     },
+    "resolutions": {
+        "pretty-format@30>react-is": "19.2.4",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "oidc-client-ts": "3.4.1",
+        "jwt-decode": "4.0.0",
+        "caniuse-lite": "1.0.30001766",
+        "testcontainers": "^11.0.0",
+        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
+        "wrap-ansi": "npm:wrap-ansi@^7.0.0",
+        "matrix-widget-api": "^1.16.1"
+    },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
         "@element-hq/element-web-module-api": "1.9.0",
@@ -128,10 +140,10 @@
         "posthog-js": "1.336.4",
         "qrcode": "1.5.4",
         "re-resizable": "6.11.2",
-        "react": "^19.0.0",
+        "react": "catalog:",
         "react-beautiful-dnd": "^13.1.0",
         "react-blurhash": "^0.3.0",
-        "react-dom": "^19.0.0",
+        "react-dom": "catalog:",
         "react-focus-lock": "^2.5.1",
         "react-string-replace": "^2.0.0",
         "react-transition-group": "^4.4.1",
@@ -197,9 +209,9 @@
         "@types/node": "22",
         "@types/pako": "^2.0.0",
         "@types/qrcode": "^1.3.5",
-        "@types/react": "19.2.10",
+        "@types/react": "catalog:",
         "@types/react-beautiful-dnd": "^13.0.0",
-        "@types/react-dom": "19.2.3",
+        "@types/react-dom": "catalog:",
         "@types/react-transition-group": "^4.4.0",
         "@types/sanitize-html": "2.16.0",
         "@types/sdp-transform": "^2.4.10",
@@ -272,7 +284,7 @@
         "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^11.0.0",
-        "typescript": "5.9.3",
+        "typescript": "catalog:",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",
@@ -307,18 +319,6 @@
         "allowedDeprecatedVersions": {
             "eslint": "8",
             "react-beautiful-dnd": "13"
-        },
-        "overrides": {
-            "pretty-format@30>react-is": "19.2.4",
-            "@types/react": "19.2.10",
-            "@types/react-dom": "19.2.3",
-            "oidc-client-ts": "3.4.1",
-            "jwt-decode": "4.0.0",
-            "caniuse-lite": "1.0.30001766",
-            "testcontainers": "^11.0.0",
-            "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
-            "wrap-ansi": "npm:wrap-ansi@^7.0.0",
-            "matrix-widget-api": "^1.16.1"
         }
     },
     "@casualbot/jest-sonar-reporter": {
@@ -329,5 +329,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264"
+    "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
+    "private": true
 }
