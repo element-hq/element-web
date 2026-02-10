@@ -130,7 +130,7 @@ export default class DeviceListenerThisDevice {
     }
 
     /**
-     * Set the account data "m.org.matrix.custom.backup_disabled" to { "disabled": true }.
+     * Set the account data "m.org.matrix.custom.backup_disabled" to `{ "disabled": true }`.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
         await this.client.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
