@@ -1,3 +1,36 @@
+Changes in [1.12.10](https://github.com/element-hq/element-web/releases/tag/v1.12.10) (2026-02-10)
+==================================================================================================
+## ✨ Features
+
+* Support additional\_creators in /upgraderoom (MSC4289) ([#31934](https://github.com/element-hq/element-web/pull/31934)). Contributed by @andybalaam.
+* Update room header icon for world\_readable rooms ([#31915](https://github.com/element-hq/element-web/pull/31915)). Contributed by @richvdh.
+* Show an icon in the room header for shared history ([#31879](https://github.com/element-hq/element-web/pull/31879)). Contributed by @richvdh.
+* Remove "history may be shared" banner. ([#31881](https://github.com/element-hq/element-web/pull/31881)). Contributed by @kaylendog.
+* Allow dismissing 'Key storage out of sync' temporarily ([#31455](https://github.com/element-hq/element-web/pull/31455)). Contributed by @andybalaam.
+* Add `resolutions` entry for `matrix-widget-api` to package.json ([#31851](https://github.com/element-hq/element-web/pull/31851)). Contributed by @toger5.
+* Improve visibility under contrast control mode ([#31847](https://github.com/element-hq/element-web/pull/31847)). Contributed by @t3chguy.
+* Unread Sorting - Add option for sorting in `OptionsMenuView` ([#31754](https://github.com/element-hq/element-web/pull/31754)). Contributed by @MidhunSureshR.
+* Unread sorting - Implement sorter and use it in the room list store ([#31723](https://github.com/element-hq/element-web/pull/31723)). Contributed by @MidhunSureshR.
+* Allow Element Call widgets to receive sticky events ([#31843](https://github.com/element-hq/element-web/pull/31843)). Contributed by @robintown.
+* Improve icon rendering accessibility ([#31791](https://github.com/element-hq/element-web/pull/31791)). Contributed by @t3chguy.
+* Add message preview toggle to room list header option ([#31821](https://github.com/element-hq/element-web/pull/31821)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix room list not being cleared ([#32438](https://github.com/element-hq/element-web/pull/32438)). Contributed by @RiotRobot.
+* Fix failure to update room info panel on joinrule change ([#31938](https://github.com/element-hq/element-web/pull/31938)). Contributed by @richvdh.
+* Throttle space notification state calculation ([#31922](https://github.com/element-hq/element-web/pull/31922)). Contributed by @dbkr.
+* Fix emoji verification responsive layout ([#31899](https://github.com/element-hq/element-web/pull/31899)). Contributed by @t3chguy.
+* Add patch for linkify to fix doctype handling ([#31900](https://github.com/element-hq/element-web/pull/31900)). Contributed by @dbkr.
+* Fix rooms with no messages appearing at the top of the room list ([#31798](https://github.com/element-hq/element-web/pull/31798)). Contributed by @MidhunSureshR.
+* Fix room list menu flashes when menu is closed ([#31868](https://github.com/element-hq/element-web/pull/31868)). Contributed by @florianduros.
+* Message preview toggle is inverted in room list header ([#31865](https://github.com/element-hq/element-web/pull/31865)). Contributed by @florianduros.
+* Fix duplicate toasts appearing for the same call if two events appear. ([#31693](https://github.com/element-hq/element-web/pull/31693)). Contributed by @Half-Shot.
+* Fix ability to send rageshake during session restore failure ([#31848](https://github.com/element-hq/element-web/pull/31848)). Contributed by @t3chguy.
+* Fix mis-alignment of `Threads` right panel title ([#31849](https://github.com/element-hq/element-web/pull/31849)). Contributed by @t3chguy.
+* Unset buttons does not include color inherit ([#31801](https://github.com/element-hq/element-web/pull/31801)). Contributed by @Philldomd.
+
+
 Changes in [1.12.9](https://github.com/element-hq/element-web/releases/tag/v1.12.9) (2026-01-27)
 ================================================================================================
 ## ✨ Features

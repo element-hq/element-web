@@ -44,15 +44,13 @@ jobs:
         steps:
             - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975
-                  cache: ${{ runner.os != 'Windows' && 'yarn' || '' }}
+                  cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
                   node-version: "lts/*"
-
-            # Workaround for yarn install timeouts, especially on Windows
-            - run: yarn config set network-timeout 300000
 
             - name: Fetch layered build
               run: ./scripts/layered.sh
@@ -63,7 +61,7 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) yarn build
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

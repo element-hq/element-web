@@ -1,7 +1,7 @@
-diff --git a/node_modules/react-blurhash/dist/index.d.ts b/node_modules/react-blurhash/dist/index.d.ts
-index 3adbd0a..32e8c13 100644
---- a/node_modules/react-blurhash/dist/index.d.ts
-+++ b/node_modules/react-blurhash/dist/index.d.ts
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 3adbd0a4561d9114277241af6994111f97e17cbf..32e8c13a574d860d589c2c8232795b8fc1e3195f 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
 @@ -19,7 +19,7 @@ declare class Blurhash extends React.PureComponent<Props$1> {
          resolutionY: number;
      };
