@@ -6,7 +6,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex_190os_17 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -27,7 +27,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex_2shmn_17"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -90,7 +90,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex_190os_17 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -111,7 +111,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex_2shmn_17"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -213,12 +213,12 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </div>
       <div
         aria-labelledby="_r_ti_"
-        class="_banner_48r66_20"
+        class="_banner_9xfw1_39"
         data-type="critical"
         role="status"
       >
         <div
-          class="_icon_48r66_63"
+          class="_icon_9xfw1_125"
         >
           <svg
             fill="currentColor"
@@ -234,20 +234,20 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </svg>
         </div>
         <div
-          class="_content_48r66_51"
+          class="_content_9xfw1_101"
         >
           <p
-            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_mqidv_1"
+            class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_1mdlx_1"
             id="_r_ti_"
           >
             Could not start a chat with this user
           </p>
         </div>
         <div
-          class="_actions_48r66_83"
+          class="_actions_9xfw1_165"
         >
           <button
-            class="_button_13vu4_8 _container_mqidv_1 _has-icon_13vu4_60"
+            class="_button_13vu4_8 _container_1mdlx_1 _has-icon_13vu4_60"
             data-kind="secondary"
             data-size="sm"
             role="button"
@@ -280,7 +280,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex_190os_17 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -301,7 +301,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex_2shmn_17"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -658,7 +658,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="_flex_4dswl_9 mx_RoomHeader light-panel"
+      class="_flex_190os_17 mx_RoomHeader light-panel"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <span
@@ -679,7 +679,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         tabindex="0"
       >
         <div
-          class="mx_RoomHeader_info _box-flex_1odfs_9"
+          class="mx_RoomHeader_info _box-flex_2shmn_17"
           style="--mx-box-flex: 1;"
         >
           <div
@@ -1098,7 +1098,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex_190os_17 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -1120,7 +1120,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex_2shmn_17"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -1637,7 +1637,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex_190os_17 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -1659,7 +1659,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex_2shmn_17"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -2112,7 +2112,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex_190os_17 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -2134,7 +2134,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex_2shmn_17"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -2587,7 +2587,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex_190os_17 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -2609,7 +2609,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex_2shmn_17"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -2801,7 +2801,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex_190os_17 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -2823,7 +2823,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex_2shmn_17"
               style="--mx-box-flex: 1;"
             >
               <div
@@ -3316,7 +3316,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
         data-layout="group"
       >
         <header
-          class="_flex_4dswl_9 mx_RoomHeader light-panel"
+          class="_flex_190os_17 mx_RoomHeader light-panel"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
@@ -3338,7 +3338,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             tabindex="0"
           >
             <div
-              class="mx_RoomHeader_info _box-flex_1odfs_9"
+              class="mx_RoomHeader_info _box-flex_2shmn_17"
               style="--mx-box-flex: 1;"
             >
               <div

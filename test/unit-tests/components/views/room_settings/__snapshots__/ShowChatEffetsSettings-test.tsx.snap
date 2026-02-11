@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`ChatEffectsSettings should display the correct preview when the chat effects setting is disabled 1`] = `
+<DocumentFragment>
+  <form
+    class="_root_19upo_16"
+  >
+    <fieldset
+      class="mx_SettingsFieldset"
+    >
+      <legend
+        class="mx_SettingsFieldset_legend"
+      >
+        Chat Effects
+      </legend>
+      <div
+        class="mx_SettingsFieldset_description"
+      >
+        <div
+          class="mx_SettingsSubsection_text"
+        >
+          <p>
+            Show animations when receiving for e.g. confetti or fireworks in this room.
+          </p>
+          <p>
+            <span>
+              You have 
+            </span>
+          </p>
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+            role="button"
+            tabindex="0"
+          >
+            disabled
+          </div>
+           chat effects by default.
+          <p />
+        </div>
+      </div>
+      <div
+        class="mx_SettingsFieldset_content"
+      >
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                disabled=""
+                id="mx_SettingsFlag_vY7Q4uEh9K38"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="mx_SettingsFlag_vY7Q4uEh9K38"
+            >
+              Enable chat effects by default for participants in this room
+            </label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</DocumentFragment>
+`;
+
+exports[`ChatEffectsSettings should display the correct preview when the chat effects setting is enabled 1`] = `
+<DocumentFragment>
+  <form
+    class="_root_19upo_16"
+  >
+    <fieldset
+      class="mx_SettingsFieldset"
+    >
+      <legend
+        class="mx_SettingsFieldset_legend"
+      >
+        Chat Effects
+      </legend>
+      <div
+        class="mx_SettingsFieldset_description"
+      >
+        <div
+          class="mx_SettingsSubsection_text"
+        >
+          <p>
+            Show animations when receiving for e.g. confetti or fireworks in this room.
+          </p>
+          <p>
+            <span>
+              You have 
+            </span>
+          </p>
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+            role="button"
+            tabindex="0"
+          >
+            enabled
+          </div>
+           chat effects by default.
+          <p />
+        </div>
+      </div>
+      <div
+        class="mx_SettingsFieldset_content"
+      >
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                checked=""
+                class="_input_udcm8_24"
+                disabled=""
+                id="mx_SettingsFlag_vY7Q4uEh9K38"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="mx_SettingsFlag_vY7Q4uEh9K38"
+            >
+              Enable chat effects by default for participants in this room
+            </label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</DocumentFragment>
+`;

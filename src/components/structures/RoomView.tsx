@@ -139,7 +139,7 @@ import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
-let debuglog = function (msg: string): void {};
+let debuglog = function (msg: string): void { };
 
 const BROWSER_SUPPORTS_SANDBOX = "sandbox" in document.createElement("iframe");
 
@@ -266,6 +266,7 @@ export interface IRoomState {
     showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
+    showChatEffects?: boolean;
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     hasPinnedWidgets?: boolean;
@@ -493,6 +494,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             promptAskToJoin: false,
             viewRoomOpts: { buttons: [] },
             isRoomEncrypted: null,
+            showChatEffects: SettingsStore.getValue("showChatEffects", this.props.roomId),
         };
     }
 
@@ -997,6 +999,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
+            SettingsStore.watchSetting("showChatEffects", null, this.onShowChatEffectsChange),
             SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
                 this.setState({ msc3946ProcessDynamicPredecessor: value as boolean }),
             ),
@@ -1528,6 +1531,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState(({ isRoomEncrypted }) => ({
             showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
         }));
+
+    }
+    private updateShowChatEffects({ roomId }: Room): void {
+        this.setState(() => ({
+            showChatEffects: SettingsStore.getValue("showChatEffects", roomId),
+        }));
     }
 
     private getPreviewUrlVisibility({ roomId }: Room, isRoomEncrypted: boolean | null): boolean {
@@ -1593,6 +1602,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onUrlPreviewsEnabledChange = (): void => {
         if (this.state.room) {
             this.updatePreviewUrlVisibility(this.state.room);
+        }
+    };
+
+    private onShowChatEffectsChange = (): void => {
+        if (this.state.room) {
+            this.updateShowChatEffects(this.state.room);
         }
     };
 
@@ -2641,7 +2656,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mx_RoomView_immersive: mainSplitContentType !== MainSplitContentType.Timeline,
         });
 
-        const showChatEffects = SettingsStore.getValue("showChatEffects");
+        const showChatEffects = this.state.showChatEffects;
 
         let mainSplitBody: JSX.Element | undefined;
         let mainSplitContentClassName: string | undefined;
