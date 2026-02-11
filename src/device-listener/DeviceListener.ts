@@ -20,9 +20,7 @@ import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "../utils/device/clientInformation";
 import SettingsStore, { type CallbackFn } from "../settings/SettingsStore";
-import DeviceListenerOtherDevices from "./DeviceListenerOtherDevices.ts";
-import DeviceListenerCurrentDevice from "./DeviceListenerCurrentDevice.ts";
-import type DeviceState from "./DeviceState.ts";
+import { DeviceListenerOtherDevices, DeviceListenerCurrentDevice, type DeviceState } from ".";
 
 const logger = baseLogger.getChild("DeviceListener:");
 
@@ -37,7 +35,7 @@ type EventHandlerMap = {
     [DeviceListenerEvents.DeviceState]: (state: DeviceState) => void;
 };
 
-export default class DeviceListener extends TypedEventEmitter<DeviceListenerEvents, EventHandlerMap> {
+export class DeviceListener extends TypedEventEmitter<DeviceListenerEvents, EventHandlerMap> {
     private dispatcherRef?: string;
 
     /**

@@ -30,9 +30,8 @@ import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydra
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
-import DeviceListener from "../../../../device-listener/DeviceListener";
+import { DeviceListener, RECOVERY_ACCOUNT_DATA_KEY } from "../../../../device-listener";
 import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
-import { RECOVERY_ACCOUNT_DATA_KEY } from "../../../../device-listener/DeviceListenerCurrentDevice.ts";
 
 /**
  * The possible states of the component.

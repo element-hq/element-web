@@ -18,9 +18,7 @@ import {
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 
-import type DeviceListener from "../device-listener/DeviceListener";
-import type DeviceState from "./DeviceState";
-import { DeviceListenerEvents } from "../device-listener/DeviceListener";
+import { type DeviceListener, type DeviceState, DeviceListenerEvents } from ".";
 import {
     hideToast as hideSetupEncryptionToast,
     showToast as showSetupEncryptionToast,
@@ -46,7 +44,7 @@ export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
 /**
  * Handles all of DeviceListener's work that relates to the current device.
  */
-export default class DeviceListenerCurrentDevice {
+export class DeviceListenerCurrentDevice {
     /**
      * The DeviceListener launching this instance.
      */

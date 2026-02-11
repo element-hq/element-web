@@ -24,9 +24,8 @@ import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync"
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
-import DeviceListener, { DeviceListenerEvents } from "../../../../../device-listener/DeviceListener";
+import { DeviceListener, DeviceListenerEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
-import type DeviceState from "../../../../../device-listener/DeviceState";
 
 /**
  * The state in the encryption settings tab.

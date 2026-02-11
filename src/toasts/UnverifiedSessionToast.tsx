@@ -12,7 +12,7 @@ import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/ico
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import DeviceListener from "../device-listener/DeviceListener";
+import { DeviceListener } from "../device-listener";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { Action } from "../dispatcher/actions";

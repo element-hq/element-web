@@ -13,7 +13,7 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { RecoveryPanelOutOfSync } from "../../../../../../src/components/views/settings/encryption/RecoveryPanelOutOfSync";
 import { AccessCancelledError, accessSecretStorage } from "../../../../../../src/SecurityManager";
-import DeviceListener from "../../../../../../src/device-listener/DeviceListener";
+import { DeviceListener } from "../../../../../../src/device-listener";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 
 jest.mock("../../../../../../src/SecurityManager", () => {
