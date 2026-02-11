@@ -34,6 +34,10 @@ const STICKERPICKER_Z_INDEX = 3500;
 // Key to store the widget's AppTile under in PersistedElement
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
+// Minimum size in pixels sticker picker is allowed to be
+const PICKER_MIN_SIZE = 250;
+const PICKER_DEFAULT_SIZE = 300;
+
 interface IProps {
     room: Room;
     threadId?: string | null;
@@ -46,6 +50,8 @@ interface IState {
     imError: string | null;
     stickerpickerWidget: UserWidget | null;
     widgetId: string | null;
+    popoverWidth: number;
+    popoverHeight: number;
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
@@ -59,8 +65,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
     private prevSentVisibility?: boolean;
 
-    private popoverWidth = 300;
-    private popoverHeight = 300;
     // This is loaded by _acquireScalarClient on an as-needed basis.
     private scalarClient: ScalarAuthClient | null = null;
 
@@ -70,8 +74,16 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             imError: null,
             stickerpickerWidget: null,
             widgetId: null,
+            popoverWidth: PICKER_DEFAULT_SIZE,
+            popoverHeight: PICKER_DEFAULT_SIZE,
         };
     }
+
+    // fields used during resize drag
+    private resizeStartX?: number;
+    private resizeStartY?: number;
+    private resizeStartWidth?: number;
+    private resizeStartHeight?: number;
 
     private async acquireScalarClient(): Promise<void | undefined | null | ScalarAuthClient> {
         if (this.scalarClient) return Promise.resolve(this.scalarClient);
@@ -132,6 +144,20 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         MatrixClientPeg.safeGet().on(ClientEvent.AccountData, this.updateWidget);
 
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+
+
+        let pickerWidth = parseInt(window.localStorage.getItem("mx_stickerpicker_width")!, 10);
+        let pickerHeight = parseInt(window.localStorage.getItem("mx_stickerpicker_height")!, 10);
+        // If the user has not set a size, or if the size is less than the minimum width,
+        // set a default size.
+        if (isNaN(pickerWidth) || pickerWidth < PICKER_MIN_SIZE) {
+            pickerWidth = PICKER_DEFAULT_SIZE;
+        }
+        if (isNaN(pickerHeight) || pickerHeight < PICKER_MIN_SIZE) {
+            pickerHeight = PICKER_DEFAULT_SIZE;
+        }
+        this.setState({ popoverWidth: pickerWidth, popoverHeight: pickerHeight });
+
         // Initialise widget state from current account data
         this.updateWidget();
     }
@@ -141,6 +167,11 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         if (client) client.removeListener(ClientEvent.AccountData, this.updateWidget);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         window.removeEventListener("resize", this.onResize);
+        // clean up any possible document-level resize listeners
+        document.removeEventListener("mousemove", this.onResizeHandleMouseMove as any);
+        document.removeEventListener("mouseup", this.onResizeHandleMouseUp as any);
+        document.removeEventListener("touchmove", this.onResizeHandleTouchMove as any);
+        document.removeEventListener("touchend", this.onResizeHandleTouchEnd as any);
         dis.unregister(this.dispatcherRef);
     }
 
@@ -271,8 +302,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                         className="mx_Stickers_content"
                         style={{
                             border: "none",
-                            height: this.popoverHeight,
-                            width: this.popoverWidth,
+                            height: this.state.popoverHeight,
+                            width: this.state.popoverWidth,
                         }}
                     >
                         <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
@@ -295,6 +326,11 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                                 userWidget={true}
                                 showLayoutButtons={false}
                             />
+                            <div
+                                className="mx_Stickers_resizeHandle"
+                                onMouseDown={this.onResizeHandleMouseDown}
+                                onTouchStart={this.onResizeHandleTouchStart}
+                            />
                         </PersistedElement>
                     </div>
                 </div>
@@ -313,6 +349,65 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         if (this.props.isStickerPickerOpen) {
             this.props.setStickerPickerOpen(false);
         }
+    };
+
+    private handleResizeStart = (x: number, y: number): void => {
+        this.resizeStartX = x;
+        this.resizeStartY = y;
+        this.resizeStartWidth = this.state.popoverWidth;
+        this.resizeStartHeight = this.state.popoverHeight;
+    }
+    private handleResizeMove = (x: number, y: number): void => {
+        if (this.resizeStartX === undefined || this.resizeStartY === undefined) return;
+        const dx = this.resizeStartX - x;
+        const dy = this.resizeStartY - y;
+        const newW = Math.max(PICKER_MIN_SIZE, (this.resizeStartWidth || PICKER_DEFAULT_SIZE) + dx);
+        const newH = Math.max(PICKER_MIN_SIZE, (this.resizeStartHeight || PICKER_DEFAULT_SIZE) + dy);
+        this.setState({ popoverWidth: newW, popoverHeight: newH });
+    }
+    private handleResizeEnd = (): void => {
+        this.resizeStartX = undefined;
+        this.resizeStartY = undefined;
+
+        window.localStorage.setItem("mx_stickerpicker_width", this.state.popoverWidth.toString());
+        window.localStorage.setItem("mx_stickerpicker_height", this.state.popoverHeight.toString());
+    }
+
+    private onResizeHandleMouseDown = (ev: React.MouseEvent): void => {
+        ev.preventDefault();
+        this.handleResizeStart(ev.clientX, ev.clientY);
+        document.addEventListener("mousemove", this.onResizeHandleMouseMove as any);
+        document.addEventListener("mouseup", this.onResizeHandleMouseUp as any);
+    };
+
+    private onResizeHandleTouchStart = (ev: React.TouchEvent): void => {
+        ev.preventDefault();
+        const t = ev.touches[0];
+        this.handleResizeStart(t.clientX, t.clientY)
+        document.addEventListener("touchmove", this.onResizeHandleTouchMove as any, { passive: false } as any);
+        document.addEventListener("touchend", this.onResizeHandleTouchEnd as any);
+    };
+
+    private onResizeHandleMouseMove = (ev: MouseEvent): void => {
+        this.handleResizeMove(ev.clientX, ev.clientY);
+    };
+
+    private onResizeHandleTouchMove = (ev: TouchEvent): void => {
+        ev.preventDefault();
+        const t = ev.touches[0];
+        this.handleResizeMove(t.clientX, t.clientY);
+    };
+
+    private onResizeHandleMouseUp = (): void => {
+        document.removeEventListener("mousemove", this.onResizeHandleMouseMove as any);
+        document.removeEventListener("mouseup", this.onResizeHandleMouseUp as any);
+        this.handleResizeEnd();
+    };
+
+    private onResizeHandleTouchEnd = (): void => {
+        document.removeEventListener("touchmove", this.onResizeHandleTouchMove as any);
+        document.removeEventListener("touchend", this.onResizeHandleTouchEnd as any);
+        this.handleResizeEnd();
     };
 
     /**
@@ -340,8 +435,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         return (
             <ContextMenu
                 chevronFace={ChevronFace.Bottom}
-                menuWidth={this.popoverWidth}
-                menuHeight={this.popoverHeight}
+                menuWidth={this.state.popoverWidth}
+                menuHeight={this.state.popoverHeight}
                 onFinished={this.onFinished}
                 menuPaddingTop={0}
                 menuPaddingLeft={0}
