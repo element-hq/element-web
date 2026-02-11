@@ -24,7 +24,7 @@ import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync"
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
-import { DeviceListener, DeviceListenerEvents, type DeviceState } from "../../../../../device-listener";
+import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
 /**
@@ -64,8 +64,8 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
     const [state, setState] = useState<State>(initialState);
 
     const deviceState = useTypedEventEmitterState(
-        DeviceListener.sharedInstance(),
-        DeviceListenerEvents.DeviceState,
+        DeviceListener.sharedInstance().currentDevice,
+        CurrentDeviceEvents.DeviceStateChanged,
         (state?: DeviceState): DeviceState => {
             return state ?? DeviceListener.sharedInstance().getDeviceState();
         },
