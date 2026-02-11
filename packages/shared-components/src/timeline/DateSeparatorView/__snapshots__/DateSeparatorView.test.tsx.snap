@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DateSeparatorView > renders default story 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading"
+      >
+        Today
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparatorView > renders with extra class names 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex extra_class_1 extra_class_2 timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading"
+      >
+        Today
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
