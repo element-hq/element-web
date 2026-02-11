@@ -1,0 +1,48 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019, 2020 , 2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomProfileSettings {
+    border-bottom: 1px solid $quinary-content;
+
+    .mx_RoomProfileSettings_profile {
+        display: flex;
+
+        .mx_RoomProfileSettings_profile_controls {
+            flex-grow: 1;
+            margin-inline-end: 54px;
+
+            .mx_Field {
+                margin-top: $spacing-8;
+            }
+
+            .mx_RoomProfileSettings_profile_controls_topic {
+                margin-top: $spacing-8;
+
+                & > textarea {
+                    font-family: inherit;
+                    resize: vertical;
+                }
+
+                &.mx_RoomProfileSettings_profile_controls_topic--room textarea {
+                    min-height: 4em;
+                }
+            }
+
+            .mx_RoomProfileSettings_profile_controls_userId {
+                margin-inline-end: $spacing-20;
+            }
+        }
+    }
+
+    .mx_RoomProfileSettings_buttons {
+        display: flex;
+        gap: var(--cpd-space-4x);
+        margin-top: 10px; /* 18px is already accounted for by the <p> above the buttons */
+        margin-bottom: $spacing-28;
+    }
+}

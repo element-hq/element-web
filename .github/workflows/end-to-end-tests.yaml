@@ -67,18 +67,19 @@ jobs:
               run: scripts/layered.sh
 
             - name: Copy config
+              working-directory: apps/element-web
               run: cp element.io/develop/config.json config.json
 
             - name: Build
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm --dir apps/element-web build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: webapp
-                  path: webapp
+                  path: apps/element-web/webapp
                   retention-days: 1
 
             - name: Calculate runner variables
@@ -122,6 +123,9 @@ jobs:
                       project: Dendrite
                     - runAllTests: false
                       project: Pinecone
+        defaults:
+            run:
+                working-directory: apps/element-web
         steps:
             - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
@@ -132,7 +136,7 @@ jobs:
               uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
               with:
                   name: webapp
-                  path: webapp
+                  path: apps/element-web/webapp
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -177,7 +181,7 @@ jobs:
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
-                  path: blob-report
+                  path: apps/element-web/blob-report
                   retention-days: 1
 
     downstream-modules:

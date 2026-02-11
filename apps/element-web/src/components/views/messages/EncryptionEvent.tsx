@@ -1,0 +1,98 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { type JSX, type ReactNode } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ErrorSolidIcon, LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
+
+import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
+import { _t } from "../../../languageHandler";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { objectHasDiff } from "../../../utils/objects";
+import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../utils/crypto";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
+
+interface IProps {
+    mxEvent: MatrixEvent;
+    timestamp?: JSX.Element;
+    ref?: React.RefObject<HTMLDivElement>;
+}
+
+const EncryptionEvent = ({ mxEvent, timestamp, ref }: IProps): ReactNode => {
+    const cli = useMatrixClientContext();
+    const roomId = mxEvent.getRoomId()!;
+    const isRoomEncrypted = useIsEncrypted(cli, cli.getRoom(roomId) || undefined);
+
+    const prevContent = mxEvent.getPrevContent() as RoomEncryptionEventContent;
+    const content = mxEvent.getContent<RoomEncryptionEventContent>();
+
+    // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
+    if (!objectHasDiff(prevContent, content)) return null; // nop
+
+    if (content.algorithm === MEGOLM_ENCRYPTION_ALGORITHM && isRoomEncrypted) {
+        let subtitle: string;
+        const dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
+        const room = cli?.getRoom(roomId);
+
+        const stateEncrypted = content["io.element.msc4362.encrypt_state_events"] && cli.enableEncryptedStateEvents;
+
+        if (prevContent.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
+            subtitle = _t("timeline|m.room.encryption|parameters_changed");
+        } else if (dmPartner) {
+            const displayName = room?.getMember(dmPartner)?.rawDisplayName || dmPartner;
+            subtitle = _t("timeline|m.room.encryption|enabled_dm", { displayName });
+        } else if (room && isLocalRoom(room)) {
+            subtitle = _t("timeline|m.room.encryption|enabled_local");
+        } else if (stateEncrypted) {
+            subtitle = _t("timeline|m.room.encryption|state_enabled");
+        } else {
+            subtitle = _t("timeline|m.room.encryption|enabled");
+        }
+
+        return (
+            <EventTileBubble
+                icon={<LockSolidIcon />}
+                className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
+                title={stateEncrypted ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled")}
+                subtitle={subtitle}
+            >
+                {timestamp}
+            </EventTileBubble>
+        );
+    }
+
+    if (isRoomEncrypted) {
+        return (
+            <EventTileBubble
+                icon={<LockSolidIcon />}
+                className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
+                title={_t("common|encryption_enabled")}
+                subtitle={_t("timeline|m.room.encryption|disable_attempt")}
+            >
+                {timestamp}
+            </EventTileBubble>
+        );
+    }
+
+    return (
+        <EventTileBubble
+            icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
+            className="mx_EventTileBubble mx_cryptoEvent"
+            title={_t("timeline|m.room.encryption|disabled")}
+            subtitle={_t("timeline|m.room.encryption|unsupported")}
+            ref={ref}
+        >
+            {timestamp}
+        </EventTileBubble>
+    );
+};
+
+export default EncryptionEvent;

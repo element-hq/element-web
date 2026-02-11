@@ -1,0 +1,27 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LeftPanelLiveShareWarning {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: $spacing-4;
+    text-align: center;
+
+    background-color: $accent;
+    color: #fff;
+    font-size: $font-10px;
+
+    /* panel backdrops overlay the whole sidepanel */
+    /* go above to get hover for title */
+    z-index: 1;
+}
+
+.mx_LeftPanelLiveShareWarning__error {
+    background-color: $alert;
+}

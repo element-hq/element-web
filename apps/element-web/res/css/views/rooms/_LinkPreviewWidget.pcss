@@ -1,0 +1,69 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LinkPreviewWidget {
+    margin: $spacing-16 0 $spacing-16 auto;
+    display: flex;
+    column-gap: $spacing-4;
+    border-inline-start: 2px solid $preview-widget-bar-color;
+    border-radius: 2px;
+    color: $info-plinth-fg-color;
+
+    .mx_MatrixChat_useCompactLayout & {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    /* Exclude mx_LinkPreviewGroup_hide from wrapping */
+    .mx_LinkPreviewWidget_wrapImageCaption {
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: $spacing-8;
+        flex: 1;
+
+        .mx_LinkPreviewWidget_image,
+        .mx_LinkPreviewWidget_caption {
+            margin-inline-start: $spacing-16;
+            min-width: 0; /* Prevent blowout */
+        }
+
+        .mx_LinkPreviewWidget_image {
+            flex: 0 0 100px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .mx_LinkPreviewWidget_caption {
+            flex: 1;
+            overflow: hidden; /* cause it to wrap rather than clip */
+        }
+
+        .mx_LinkPreviewWidget_title,
+        .mx_LinkPreviewWidget_description {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            white-space: normal;
+        }
+
+        .mx_LinkPreviewWidget_title {
+            font-weight: bold;
+            -webkit-line-clamp: 2;
+
+            .mx_LinkPreviewWidget_siteName {
+                font-weight: normal;
+            }
+        }
+
+        .mx_LinkPreviewWidget_description {
+            margin-top: $spacing-8;
+            word-wrap: break-word;
+            -webkit-line-clamp: 3;
+        }
+    }
+}

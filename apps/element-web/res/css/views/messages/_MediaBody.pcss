@@ -1,0 +1,22 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* A "media body" is any file upload looking thing, apart from images and videos (they */
+/* have unique styles). */
+
+.mx_MediaBody {
+    background-color: $panels;
+    border-radius: 12px;
+    max-width: 243px; /* use max-width instead of width so it fits within right panels */
+
+    color: $secondary-content;
+    font: var(--cpd-font-body-md-regular);
+    line-height: $font-24px;
+
+    padding: 6px 12px;
+}

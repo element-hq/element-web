@@ -1,0 +1,848 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020-2022 The Matrix.org Foundation C.I.C.
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, {
+    type JSX,
+    type ContextType,
+    createRef,
+    type CSSProperties,
+    type RefObject,
+    type ReactNode,
+} from "react";
+import classNames from "classnames";
+import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-widget-api";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/src/logger";
+import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
+import {
+    OverflowHorizontalIcon,
+    MinusIcon,
+    ExpandIcon,
+    CollapseIcon,
+    PopOutIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
+import { I18nContext } from "@element-hq/web-shared-components";
+
+import AccessibleButton from "./AccessibleButton";
+import { _t } from "../../../languageHandler";
+import AppPermission from "./AppPermission";
+import AppWarning from "./AppWarning";
+import Spinner from "./Spinner";
+import dis from "../../../dispatcher/dispatcher";
+import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import SettingsStore from "../../../settings/SettingsStore";
+import { ContextMenuButton } from "../../structures/ContextMenu";
+import PersistedElement, { getPersistKey } from "./PersistedElement";
+import { WidgetType } from "../../../widgets/WidgetType";
+import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
+import WidgetAvatar from "../avatars/WidgetAvatar";
+import LegacyCallHandler from "../../../LegacyCallHandler";
+import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
+import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import WidgetUtils from "../../../utils/WidgetUtils";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import { Action } from "../../../dispatcher/actions";
+import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
+import { SdkContextClass } from "../../../contexts/SDKContext";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { parseUrl } from "../../../utils/UrlUtils";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
+import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
+
+// Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
+// because that would allow the iframe to programmatically remove the sandbox attribute, but
+// this would only be for content hosted on the same origin as the element client: anything
+// hosted on the same origin as the client will get the same access as if you clicked
+// a link to it.
+const sandboxFlags =
+    "allow-forms allow-popups allow-popups-to-escape-sandbox " +
+    "allow-same-origin allow-scripts allow-presentation allow-downloads";
+
+// Additional iframe feature permissions
+// (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
+const iframeFeatures =
+    "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; clipboard-read;";
+
+interface IProps {
+    app: IWidget | IApp;
+    // If room is not specified then it is an account level widget
+    // which bypasses permission prompts as it was added explicitly by that user
+    room?: Room;
+    threadId?: string | null;
+    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer container.
+    // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
+    fullWidth?: boolean;
+    // Optional. If set, renders a smaller view of the widget
+    miniMode?: boolean;
+    // UserId of the current user
+    userId: string;
+    // UserId of the entity that added / modified the widget
+    creatorUserId: string;
+    waitForIframeLoad: boolean;
+    showMenubar?: boolean;
+    // Optional onEditClickHandler (overrides default behaviour)
+    onEditClick?: () => void;
+    // Optional onDeleteClickHandler (overrides default behaviour)
+    onDeleteClick?: () => void;
+    // Optionally hide the tile title
+    showTitle?: boolean;
+    // Optionally handle minimise button pointer events (default false)
+    handleMinimisePointerEvents?: boolean;
+    // Optionally hide the popout widget icon
+    showPopout?: boolean;
+    // Is this an instance of a user widget
+    userWidget: boolean;
+    // sets the pointer-events property on the iframe
+    pointerEvents?: CSSProperties["pointerEvents"];
+    widgetPageTitle?: string;
+    showLayoutButtons?: boolean;
+    // Handle to manually notify the PersistedElement that it needs to move
+    movePersistedElement?: RefObject<(() => void) | null>;
+    // An element to render after the iframe as an overlay
+    overlay?: ReactNode;
+    // If defined this async method will be called when the widget requests to become sticky.
+    // It will only become sticky once the returned promise resolves.
+    // This is useful because: Widget B is sticky. Making widget A sticky will kill widget B immediately.
+    // This promise allows to do Widget B related cleanup before Widget A becomes sticky. (e.g. hangup a Voip call)
+    stickyPromise?: () => Promise<void>;
+}
+
+interface IState {
+    initialising: boolean; // True while we are mangling the widget URL
+    // True while the iframe content is loading
+    loading: boolean;
+    // Assume that widget has permission to load if we are the user who
+    // added it to the room, or if explicitly granted by the user
+    hasPermissionToLoad: boolean;
+    // Wait for user profile load to display correct name
+    isUserProfileReady: boolean;
+    error: Error | null;
+    menuDisplayed: boolean;
+    requiresClient: boolean;
+}
+
+export default class AppTile extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    declare public context: ContextType<typeof MatrixClientContext>;
+
+    public static defaultProps: Partial<IProps> = {
+        waitForIframeLoad: true,
+        showMenubar: true,
+        showTitle: true,
+        showPopout: true,
+        handleMinimisePointerEvents: false,
+        userWidget: false,
+        miniMode: false,
+        threadId: null,
+        showLayoutButtons: true,
+    };
+
+    private readonly widget: ElementWidget;
+    private contextMenuButton = createRef<any>();
+    private iframeParent: HTMLElement | null = null; // parent div of the iframe
+    private allowedWidgetsWatchRef?: string;
+    private persistKey: string;
+    private messaging?: WidgetMessaging;
+    private dispatcherRef?: string;
+    private unmounted = false;
+
+    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
+        super(props, context);
+
+        // The key used for PersistedElement
+        this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
+
+        this.widget = new ElementWidget(props.app);
+        this.messaging = WidgetMessagingStore.instance.getMessaging(this.widget, props.room?.roomId);
+        if (this.messaging === undefined) {
+            try {
+                this.messaging = new WidgetMessaging(this.widget, props);
+                WidgetMessagingStore.instance.storeMessaging(this.widget, props.room?.roomId, this.messaging);
+            } catch (e) {
+                logger.error("Failed to construct widget", e);
+            }
+        }
+
+        this.state = this.getNewState(props);
+    }
+
+    private watchUserReady = (): void => {
+        if (OwnProfileStore.instance.isProfileInfoFetched) {
+            return;
+        }
+        OwnProfileStore.instance.once(UPDATE_EVENT, this.onUserReady);
+    };
+
+    private onUserReady = (): void => {
+        this.setState({ isUserProfileReady: true });
+    };
+
+    // This is a function to make the impact of calling SettingsStore slightly less
+    private hasPermissionToLoad = (props: IProps): boolean => {
+        if (this.usingLocalWidget()) return true;
+        if (!props.room) return true; // user widgets always have permissions
+        const opts: ApprovalOpts = { approved: undefined };
+        ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(this.props.app));
+        if (opts.approved) return true;
+
+        const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
+        const allowed =
+            isAppWidget(props.app) &&
+            props.app.eventId !== undefined &&
+            (currentlyAllowedWidgets[props.app.eventId] ?? false);
+        return allowed || props.userId === props.creatorUserId;
+    };
+
+    private onUserLeftRoom(): void {
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(
+            this.props.app.id,
+            isAppWidget(this.props.app) ? this.props.app.roomId : null,
+        );
+        if (isActiveWidget) {
+            // We just left the room that the active widget was from.
+            if (this.props.room && SdkContextClass.instance.roomViewStore.getRoomId() !== this.props.room.roomId) {
+                // If we are not actively looking at the room then destroy this widget entirely.
+                this.endWidgetActions();
+            } else if (WidgetType.JITSI.matches(this.props.app.type)) {
+                // If this was a Jitsi then reload to end call.
+                this.reload();
+            } else {
+                // Otherwise just cancel its persistence.
+                ActiveWidgetStore.instance.destroyPersistentWidget(
+                    this.props.app.id,
+                    isAppWidget(this.props.app) ? this.props.app.roomId : null,
+                );
+            }
+        }
+    }
+
+    private onMyMembership = (room: Room, membership: string): void => {
+        if (
+            (membership === KnownMembership.Leave || membership === KnownMembership.Ban) &&
+            room.roomId === this.props.room?.roomId
+        ) {
+            this.onUserLeftRoom();
+        }
+    };
+
+    private determineInitialRequiresClientState(): boolean {
+        try {
+            const widget = new ElementWidget(this.props.app);
+            const messaging = WidgetMessagingStore.instance.getMessaging(widget, this.props.room?.roomId);
+            if (messaging?.widgetApi) {
+                // Load value from existing API to prevent resetting the requiresClient value on layout changes.
+                return messaging.widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient);
+            }
+        } catch {
+            // fallback to true
+        }
+
+        // requiresClient is initially set to true. This avoids the broken state of the popout
+        // button being visible (for an instance) and then disappearing when the widget is loaded.
+        // requiresClient <-> hide the popout button
+        return true;
+    }
+
+    /**
+     * Set initial component state when the App wUrl (widget URL) is being updated.
+     * Component props *must* be passed (rather than relying on this.props).
+     * @param  {Object} newProps The new properties of the component
+     * @return {Object} Updated component state to be set with setState
+     */
+    private getNewState(newProps: IProps): IState {
+        return {
+            initialising: true, // True while we are mangling the widget URL
+            // Don't show loading at all if the widget is ready once the IFrame is loaded (waitForIframeLoad = true).
+            // We only need the loading screen if the widget sends a contentLoaded event (waitForIframeLoad = false).
+            loading: !this.props.waitForIframeLoad && !PersistedElement.isMounted(this.persistKey),
+            // Assume that widget has permission to load if we are the user who
+            // added it to the room, or if explicitly granted by the user
+            hasPermissionToLoad: this.hasPermissionToLoad(newProps),
+            isUserProfileReady: OwnProfileStore.instance.isProfileInfoFetched,
+            error: null,
+            menuDisplayed: false,
+            requiresClient: this.determineInitialRequiresClientState(),
+        };
+    }
+
+    private onAllowedWidgetsChange = (): void => {
+        const hasPermissionToLoad = this.hasPermissionToLoad(this.props);
+
+        if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
+            // Force the widget to be non-persistent (able to be deleted/forgotten)
+            ActiveWidgetStore.instance.destroyPersistentWidget(
+                this.props.app.id,
+                isAppWidget(this.props.app) ? this.props.app.roomId : null,
+            );
+            PersistedElement.destroyElement(this.persistKey);
+            this.messaging?.stop();
+        }
+
+        this.setState({ hasPermissionToLoad });
+    };
+
+    private isMixedContent(): boolean {
+        const parentContentProtocol = window.location.protocol;
+        const u = parseUrl(this.props.app.url);
+        const childContentProtocol = u.protocol;
+        if (parentContentProtocol === "https:" && childContentProtocol !== "https:") {
+            logger.warn(
+                "Refusing to load mixed-content app:",
+                parentContentProtocol,
+                childContentProtocol,
+                window.location,
+                this.props.app.url,
+            );
+            return true;
+        }
+        return false;
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
+
+        // Tiles in miniMode are floating, and therefore not docked
+        if (!this.props.miniMode) {
+            ActiveWidgetStore.instance.dockWidget(
+                this.props.app.id,
+                isAppWidget(this.props.app) ? this.props.app.roomId : null,
+            );
+        }
+
+        if (this.messaging) {
+            this.setupMessagingListeners();
+        }
+
+        // Only fetch IM token on mount if we're showing and have permission to load
+        if (this.messaging && this.state.hasPermissionToLoad) {
+            this.startWidget();
+        }
+        this.watchUserReady();
+
+        if (this.props.room) {
+            this.context.on(RoomEvent.MyMembership, this.onMyMembership);
+        }
+        this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
+        // Widget action listeners
+        this.dispatcherRef = dis.register(this.onAction);
+    }
+
+    public componentWillUnmount(): void {
+        this.unmounted = true;
+
+        if (!this.props.miniMode) {
+            ActiveWidgetStore.instance.undockWidget(
+                this.props.app.id,
+                isAppWidget(this.props.app) ? this.props.app.roomId : null,
+            );
+        }
+
+        // Only tear down the widget if no other component is keeping it alive,
+        // because we support moving widgets between containers, in which case
+        // another component will keep it loaded throughout the transition
+        if (
+            !ActiveWidgetStore.instance.isLive(
+                this.props.app.id,
+                isAppWidget(this.props.app) ? this.props.app.roomId : null,
+            )
+        ) {
+            this.endWidgetActions();
+        }
+
+        // Widget action listeners
+        dis.unregister(this.dispatcherRef);
+
+        if (this.props.room) {
+            this.context.off(RoomEvent.MyMembership, this.onMyMembership);
+        }
+
+        SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
+        OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
+    }
+
+    private setupMessagingListeners(): void {
+        this.messaging?.on(WidgetMessagingEvent.Start, this.onMessagingStart);
+        this.messaging?.on(WidgetMessagingEvent.Stop, this.onMessagingStop);
+    }
+
+    private stopMessagingListeners(): void {
+        this.messaging?.off(WidgetMessagingEvent.Start, this.onMessagingStart);
+        this.messaging?.off(WidgetMessagingEvent.Stop, this.onMessagingStop);
+    }
+
+    private readonly onMessagingStart = (widgetApi: ClientWidgetApi): void => {
+        widgetApi.on("ready", this.onWidgetReady);
+        widgetApi.on("error:preparing", this.updateRequiresClient);
+        // emits when the capabilities have been set up or changed
+        widgetApi.on("capabilitiesNotified", this.updateRequiresClient);
+    };
+
+    private readonly onMessagingStop = (widgetApi: ClientWidgetApi): void => {
+        widgetApi.off("ready", this.onWidgetReady);
+        widgetApi.off("error:preparing", this.updateRequiresClient);
+        widgetApi.off("capabilitiesNotified", this.updateRequiresClient);
+    };
+
+    private resetWidget(newProps: IProps): void {
+        this.messaging?.stop();
+        this.stopMessagingListeners();
+
+        try {
+            WidgetMessagingStore.instance.stopMessaging(this.widget, this.props.room?.roomId);
+            this.messaging = new WidgetMessaging(this.widget, newProps);
+            WidgetMessagingStore.instance.storeMessaging(this.widget, this.props.room?.roomId, this.messaging);
+            this.setupMessagingListeners();
+            this.startWidget();
+        } catch (e) {
+            logger.error("Failed to construct widget", e);
+            this.messaging = undefined;
+        }
+    }
+
+    private startWidget(): void {
+        this.messaging?.prepare().then(() => {
+            if (this.unmounted) return;
+            this.setState({ initialising: false });
+        });
+    }
+
+    /**
+     * A callback ref receiving the current parent div of the iframe. This is
+     * responsible for creating the iframe and starting or resetting
+     * communication with the widget.
+     */
+    private iframeParentRef = (element: HTMLElement | null): void => {
+        if (this.unmounted) return;
+        // Detach the existing iframe (if any) from the document so we know not
+        // to do anything further with it, like starting up the messaging
+        this.iframeParent?.querySelector("iframe")?.remove();
+        this.iframeParent = element;
+
+        if (this.iframeParent === null) {
+            // The component is trying to unmount the iframe. We could reach
+            // this path if the widget definition was updated, for example. The
+            // iframe parent will later be remounted and widget communications
+            // reopened after this.state.initializing resets to false.
+            this.resetWidget(this.props);
+        } else if (
+            this.messaging &&
+            // Check whether an iframe already exists (it totally could exist,
+            // seeing as it is a persisted element which might have hopped
+            // between React components)
+            this.iframeParent.querySelector("iframe") === null
+        ) {
+            // We create the iframe ourselves rather than leaving the job to React,
+            // because we need the lifetime of the messaging and the iframe to be
+            // the same; we don't want strict mode, for instance, to cause the
+            // messaging to restart (lose its state) without also killing the widget
+            const iframe = document.createElement("iframe");
+            iframe.title = WidgetUtils.getWidgetName(this.props.app);
+            iframe.allow = iframeFeatures;
+            iframe.src = this.messaging.embedUrl;
+            iframe.allowFullscreen = true;
+            iframe.sandbox = sandboxFlags;
+            this.iframeParent.appendChild(iframe);
+            // In order to start the widget messaging we need iframe.contentWindow
+            // to exist. Waiting until the next layout gives the browser a chance to
+            // initialize it.
+            requestAnimationFrame(() => {
+                // Handle the race condition (seen in strict mode) where the element is
+                // added and then removed from the DOM before we enter this callback
+                if (iframe.parentElement === null) return;
+                try {
+                    this.messaging?.start(iframe);
+                } catch (e) {
+                    logger.error("Failed to start widget", e);
+                }
+            });
+        }
+    };
+
+    public componentDidUpdate(prevProps: IProps): void {
+        if (prevProps.app.url !== this.props.app.url) {
+            this.getNewState(this.props);
+            if (this.state.hasPermissionToLoad) {
+                this.resetWidget(this.props);
+            }
+        }
+    }
+
+    /**
+     * Ends all widget interaction, such as cancelling calls and disabling webcams.
+     */
+    private endWidgetActions(): void {
+        if (WidgetType.JITSI.matches(this.props.app.type) && this.props.room) {
+            LegacyCallHandler.instance.hangupCallApp(this.props.room.roomId);
+        }
+
+        // Delete the widget from the persisted store for good measure.
+        // XXX: This removes persistent elements from the DOM entirely, which feels like
+        // a lot more than this function claims to be doing.
+        PersistedElement.destroyElement(this.persistKey);
+        ActiveWidgetStore.instance.destroyPersistentWidget(
+            this.props.app.id,
+            isAppWidget(this.props.app) ? this.props.app.roomId : null,
+        );
+
+        this.messaging?.stop({ forceDestroy: true });
+    }
+
+    private onWidgetReady = (): void => {
+        this.setState({ loading: false });
+    };
+
+    private updateRequiresClient = (): void => {
+        this.setState({
+            requiresClient: !!this.messaging?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
+        });
+    };
+
+    private onAction = (payload: ActionPayload): void => {
+        switch (payload.action) {
+            case "m.sticker":
+                if (
+                    payload.widgetId === this.props.app.id &&
+                    this.messaging?.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)
+                ) {
+                    dis.dispatch({
+                        action: "post_sticker_message",
+                        data: {
+                            ...payload.data,
+                            threadId: this.props.threadId,
+                        },
+                    });
+                    dis.dispatch({ action: "stickerpicker_close" });
+                } else {
+                    logger.warn("Ignoring sticker message. Invalid capability");
+                }
+                break;
+
+            case Action.AfterLeaveRoom:
+                if (payload.room_id === this.props.room?.roomId) {
+                    // call this before we get it echoed down /sync, so it doesn't hang around as long and look jarring
+                    this.onUserLeftRoom();
+                }
+                break;
+        }
+    };
+
+    private grantWidgetPermission = (): void => {
+        const roomId = this.props.room?.roomId;
+        const eventId = isAppWidget(this.props.app) ? this.props.app.eventId : undefined;
+        logger.info("Granting permission for widget to load: " + eventId);
+        const current = SettingsStore.getValue("allowedWidgets", roomId);
+        if (eventId !== undefined) current[eventId] = true;
+        const level = SettingsStore.firstSupportedLevel("allowedWidgets")!;
+        SettingsStore.setValue("allowedWidgets", roomId ?? null, level, current)
+            .then(() => {
+                this.setState({ hasPermissionToLoad: true });
+
+                // Fetch a token for the integration manager, now that we're allowed to
+                this.startWidget();
+            })
+            .catch((err) => {
+                logger.error(err);
+                // We don't really need to do anything about this - the user will just hit the button again.
+            });
+    };
+
+    private formatAppTileName(): string {
+        let appTileName = "No name";
+        if (this.props.app.name && this.props.app.name.trim()) {
+            appTileName = this.props.app.name.trim();
+        }
+        return appTileName;
+    }
+
+    /**
+     * Whether we're using a local version of the widget rather than loading the
+     * actual widget URL
+     * @returns {bool} true If using a local version of the widget
+     */
+    private usingLocalWidget(): boolean {
+        return WidgetType.JITSI.matches(this.props.app.type);
+    }
+
+    private getTileTitle(): JSX.Element {
+        const name = this.formatAppTileName();
+        const titleSpacer = <span>&nbsp;-&nbsp;</span>;
+        let title = "";
+        if (this.props.widgetPageTitle && this.props.widgetPageTitle !== this.formatAppTileName()) {
+            title = this.props.widgetPageTitle;
+        }
+
+        return (
+            <span>
+                <WidgetAvatar app={this.props.app} size="20px" />
+                <h1>{name}</h1>
+                <span>
+                    {title ? titleSpacer : ""}
+                    {title}
+                </span>
+            </span>
+        );
+    }
+
+    private reload(): void {
+        this.endWidgetActions();
+        // reset messaging
+        this.resetWidget(this.props);
+        this.iframeParent?.querySelector("iframe")?.remove();
+        // iframeParent will now be re-mounted, at which point startMessaging will be called
+    }
+
+    // TODO replace with full screen interactions
+    private onPopoutWidgetClick = (): void => {
+        // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
+        // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
+            this.reload();
+        }
+        // Using Object.assign workaround as the following opens in a new window instead of a new tab.
+        // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
+        Object.assign(document.createElement("a"), {
+            target: "_blank",
+            href: this.messaging?.popoutUrl,
+            rel: "noreferrer noopener",
+        }).click();
+    };
+
+    private onToggleMaximisedClick = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
+        const targetContainer = WidgetLayoutStore.instance.isInContainer(
+            this.props.room,
+            this.props.app,
+            Container.Center,
+        )
+            ? Container.Top
+            : Container.Center;
+        WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
+
+        if (targetContainer === Container.Top) this.closeChatCardIfNeeded();
+    };
+
+    private onMinimiseClicked = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
+        WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, Container.Right);
+        this.closeChatCardIfNeeded();
+    };
+
+    private closeChatCardIfNeeded = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
+        // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
+        if (RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline) {
+            RightPanelStore.instance.popCard(this.props.room.roomId);
+        }
+    };
+
+    private onContextMenuClick = (): void => {
+        this.setState({ menuDisplayed: true });
+    };
+
+    private closeContextMenu = (): void => {
+        this.setState({ menuDisplayed: false });
+    };
+
+    public render(): React.ReactNode {
+        let appTileBody: JSX.Element | undefined;
+
+        const appTileBodyClass = classNames({
+            "mx_AppTileBody": true,
+            "mx_AppTileBody--large": !this.props.miniMode,
+            "mx_AppTileBody--mini": this.props.miniMode,
+            "mx_AppTileBody--loading": this.state.loading,
+            // We don't want mx_AppTileBody (rounded corners) for call widgets
+            "mx_AppTileBody--call": this.props.app.type === WidgetType.CALL.preferred,
+        });
+        const appTileBodyStyles: CSSProperties = {};
+        if (this.props.pointerEvents) {
+            appTileBodyStyles.pointerEvents = this.props.pointerEvents;
+        }
+
+        const loadingElement = (
+            <div className="mx_AppTileBody_fadeInSpinner">
+                <Spinner message={_t("common|loading")} />
+            </div>
+        );
+
+        if (this.messaging === null) {
+            appTileBody = (
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
+                    <AppWarning errorMsg={_t("widget|error_loading")} />
+                </div>
+            );
+        } else if (!this.state.hasPermissionToLoad && this.props.room && this.messaging) {
+            // only possible for room widgets, can assert this.props.room here
+            const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
+            appTileBody = (
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
+                    <AppPermission
+                        roomId={this.props.room.roomId}
+                        creatorUserId={this.props.creatorUserId}
+                        url={this.messaging.embedUrl}
+                        isRoomEncrypted={isEncrypted}
+                        onPermissionGranted={this.grantWidgetPermission}
+                    />
+                </div>
+            );
+        } else if (this.state.initialising || !this.state.isUserProfileReady) {
+            appTileBody = (
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
+                    {loadingElement}
+                </div>
+            );
+        } else {
+            if (this.isMixedContent()) {
+                appTileBody = (
+                    <div className={appTileBodyClass} style={appTileBodyStyles}>
+                        <AppWarning errorMsg={_t("widget|error_mixed_content")} />
+                    </div>
+                );
+            } else if (this.messaging) {
+                appTileBody = (
+                    <>
+                        <div className={appTileBodyClass} style={appTileBodyStyles} ref={this.iframeParentRef}>
+                            {this.state.loading && loadingElement}
+                        </div>
+                        {this.props.overlay}
+                    </>
+                );
+
+                if (!this.props.userWidget) {
+                    // All room widgets can theoretically be allowed to remain on screen, so we
+                    // wrap them all in a PersistedElement from the get-go. If we wait, the iframe
+                    // will be re-mounted later, which means the widget has to start over, which is
+                    // bad.
+
+                    // Also wrap the PersistedElement in a div to fix the height, otherwise
+                    // AppTile's border is in the wrong place
+
+                    // For persisted apps in PiP we want the zIndex to be higher then for other persisted apps (100)
+                    // otherwise there are issues that the PiP view is drawn UNDER another widget (Persistent app) when dragged around.
+                    const zIndexAboveOtherPersistentElements = 101;
+
+                    appTileBody = (
+                        <div className="mx_AppTile_persistedWrapper">
+                            <PersistedElement
+                                zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9}
+                                persistKey={this.persistKey}
+                                moveRef={this.props.movePersistedElement}
+                            >
+                                {appTileBody}
+                            </PersistedElement>
+                        </div>
+                    );
+                }
+            }
+        }
+
+        let appTileClasses;
+        if (this.props.miniMode) {
+            appTileClasses = { mx_AppTile_mini: true };
+        } else if (this.props.fullWidth) {
+            appTileClasses = { mx_AppTileFullWidth: true };
+        } else {
+            appTileClasses = { mx_AppTile: true };
+        }
+        appTileClasses = classNames(appTileClasses);
+
+        const layoutButtons: ReactNode[] = [];
+        if (this.props.showLayoutButtons) {
+            const isMaximised =
+                this.props.room &&
+                WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center);
+
+            layoutButtons.push(
+                <AccessibleButton
+                    key="toggleMaximised"
+                    className="mx_AppTileMenuBar_widgets_button"
+                    title={isMaximised ? _t("widget|unmaximise") : _t("action|maximise")}
+                    onClick={this.onToggleMaximisedClick}
+                >
+                    {isMaximised ? (
+                        <CollapseIcon className="mx_Icon mx_Icon_12" />
+                    ) : (
+                        <ExpandIcon className="mx_Icon mx_Icon_12" />
+                    )}
+                </AccessibleButton>,
+            );
+
+            layoutButtons.push(
+                <AccessibleButton
+                    key="minimise"
+                    className="mx_AppTileMenuBar_widgets_button"
+                    title={_t("action|minimise")}
+                    onClick={this.onMinimiseClicked}
+                >
+                    <MinusIcon className="mx_Icon mx_Icon_16" />
+                </AccessibleButton>,
+            );
+        }
+
+        return (
+            <React.Fragment>
+                <div className={appTileClasses} id={this.props.app.id}>
+                    {this.props.showMenubar && (
+                        <div className="mx_AppTileMenuBar">
+                            <span
+                                className="mx_AppTileMenuBar_title"
+                                style={{ pointerEvents: this.props.handleMinimisePointerEvents ? "all" : "none" }}
+                            >
+                                {this.props.showTitle && this.getTileTitle()}
+                            </span>
+                            <span className="mx_AppTileMenuBar_widgets">
+                                {layoutButtons}
+                                {this.props.showPopout && !this.state.requiresClient && (
+                                    <AccessibleButton
+                                        className="mx_AppTileMenuBar_widgets_button"
+                                        title={_t("widget|popout")}
+                                        onClick={this.onPopoutWidgetClick}
+                                    >
+                                        <PopOutIcon className="mx_Icon mx_Icon_12" />
+                                    </AccessibleButton>
+                                )}
+                                <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                                    <WidgetContextMenu
+                                        trigger={
+                                            <ContextMenuButton
+                                                className="mx_AppTileMenuBar_widgets_button"
+                                                label={_t("common|options")}
+                                                isExpanded={this.state.menuDisplayed}
+                                                ref={this.contextMenuButton}
+                                                onClick={this.onContextMenuClick}
+                                            >
+                                                <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
+                                            </ContextMenuButton>
+                                        }
+                                        app={this.props.app}
+                                        onFinished={this.closeContextMenu}
+                                        showUnpin={!this.props.userWidget}
+                                        userWidget={this.props.userWidget}
+                                        onEditClick={this.props.onEditClick}
+                                        onDeleteClick={this.props.onDeleteClick}
+                                        menuDisplayed={this.state.menuDisplayed}
+                                    />
+                                </I18nContext.Provider>
+                            </span>
+                        </div>
+                    )}
+                    {appTileBody}
+                </div>
+            </React.Fragment>
+        );
+    }
+}

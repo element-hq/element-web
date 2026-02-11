@@ -1,0 +1,97 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Login_submit {
+    @mixin mx_DialogButton;
+    font-size: 15px;
+    font-weight: var(--cpd-font-weight-semibold);
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.mx_Login_submit:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.mx_Login_loader {
+    display: inline;
+    position: relative;
+    top: 2px;
+    left: 8px;
+}
+
+.mx_Login_loader .mx_Spinner {
+    display: inline;
+}
+
+.mx_Login_loader .mx_Spinner img {
+    width: 16px;
+    height: 16px;
+}
+
+.mx_Login_error {
+    color: $alert;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.mx_Login_error.mx_Login_serverError {
+    text-align: left;
+    font-weight: normal;
+}
+
+.mx_Login_error.mx_Login_serverError.mx_Login_serverErrorNonFatal {
+    color: #ff8d13; /* Only used here */
+}
+
+.mx_Login_type_container {
+    display: flex;
+    align-items: center;
+    color: $authpage-primary-color;
+
+    .mx_Field {
+        margin: 0;
+    }
+}
+
+.mx_Login_type_label {
+    flex: 1;
+}
+
+.mx_Login_underlinedServerName {
+    width: max-content;
+    border-bottom: 1px dashed $accent;
+}
+
+div.mx_AccessibleButton_kind_link.mx_Login_forgot {
+    display: block;
+    margin-top: 24px;
+
+    &.mx_AccessibleButton_disabled {
+        cursor: not-allowed;
+    }
+}
+
+.mx_Login_spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 14px;
+}
+
+.mx_Login_fullWidthButton {
+    width: 100%;
+    margin-bottom: 16px;
+}

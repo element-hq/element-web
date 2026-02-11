@@ -1,0 +1,41 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MLocationBody {
+    max-width: 100%;
+
+    .mx_MLocationBody_map {
+        max-width: 100%;
+        width: 450px;
+        height: 300px;
+        z-index: 0; /* keeps the entire map under the message action bar */
+
+        border-radius: var(--MBody-border-radius);
+        cursor: pointer;
+    }
+}
+
+/* In the timeline, we fit the width of the container */
+.mx_EventTile_line .mx_MLocationBody .mx_MLocationBody_map {
+    max-width: 450px;
+    width: 100%;
+}
+
+.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MLocationBody .mx_MLocationBody_map {
+    max-width: 100%;
+    width: 450px;
+}
+
+.mx_DisambiguatedProfile ~ .mx_MLocationBody {
+    margin-top: 6px; /* See: https://github.com/matrix-org/matrix-react-sdk/pull/8442 */
+}
+
+.mx_ReplyTile .mx_MLocationBody {
+    /* Prevent clicking a location within a reply */
+    pointer-events: none;
+}

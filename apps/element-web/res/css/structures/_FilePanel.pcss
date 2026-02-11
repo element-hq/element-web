@@ -1,0 +1,77 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FilePanel {
+    order: 2;
+    flex: 1 1 0;
+    overflow-y: auto;
+    display: flex;
+
+    .mx_RoomView_messageListWrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_RoomView_MessageList {
+        width: 100%;
+        gap: var(--cpd-space-6x);
+    }
+
+    /* FIXME: rather than having EventTile's default CSS be for MessagePanel,
+   we should make EventTile a base CSS class and customise it specifically
+   for usage in {Message,File,Notification}Panel. */
+
+    /* Overrides for the attachment body tiles */
+    .mx_EventTile {
+        word-break: break-word;
+        padding-top: 0;
+
+        & + .mx_EventTile {
+            border-top: 1px solid var(--cpd-color-gray-400);
+            padding-top: var(--cpd-space-6x);
+        }
+
+        .mx_EventTile_line {
+            padding-inline-start: 0;
+        }
+
+        .mx_MFileBody_download {
+            margin-top: var(--cpd-space-4x);
+        }
+
+        /* anchor link as wrapper */
+        .mx_EventTile_senderDetailsLink {
+            text-decoration: none;
+            margin-bottom: var(--cpd-space-1x);
+            display: block;
+
+            .mx_EventTile_senderDetails {
+                display: flex;
+                margin-top: -2px;
+                gap: var(--cpd-space-2x);
+                align-items: center;
+
+                .mx_DisambiguatedProfile {
+                    color: $event-timestamp-color; /* for ellipsis. Color of displayName and mxid is inherited */
+                }
+
+                .mx_MessageTimestamp {
+                    margin-left: auto;
+                    font: var(--cpd-font-body-xs-regular);
+                    color: var(--cpd-color-text-secondary);
+                }
+            }
+        }
+    }
+
+    .mx_EventTile_line {
+        margin-inline-end: 0;
+        padding-inline-start: 0;
+    }
+}

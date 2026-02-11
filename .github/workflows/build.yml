@@ -56,16 +56,17 @@ jobs:
               run: ./scripts/layered.sh
 
             - name: Copy config
+              working-directory: apps/element-web
               run: cp element.io/develop/config.json config.json
 
             - name: Build
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm --dir apps/element-web build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: webapp-${{ matrix.image }}
-                  path: webapp
+                  path: apps/element-web/webapp
                   retention-days: 1

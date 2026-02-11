@@ -1,0 +1,40 @@
+/*
+Copyright 2023, 2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SettingsSection {
+    --SettingsTab_section-margin-bottom-preferences-labs: 30px;
+    --SettingsTab_heading_nth_child-margin-top: 30px;
+    --SettingsTab_tooltip-max-width: 20px; /* So it fits in the space provided by the page */
+
+    color: $primary-content;
+
+    a {
+        color: $links;
+    }
+
+    &.mx_SettingsSection_newUi {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-6x);
+        align-items: start;
+    }
+
+    .mx_SettingsSection_header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-3x);
+        color: var(--cpd-color-text-secondary);
+    }
+}
+
+.mx_SettingsSection_subSections {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: $spacing-32;
+
+    padding: $spacing-16 0;
+}

@@ -1,0 +1,107 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomSettingsDialog_BridgeList {
+    padding: 0;
+
+    li {
+        list-style-type: none;
+
+        &.mx_RoomSettingsDialog_BridgeList_listItem {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $spacing-8;
+            padding: 5px;
+            margin-bottom: $spacing-8;
+
+            /* border-style around each bridge list item */
+            border-width: 1px 1px;
+            border-color: $primary-hairline-color;
+            border-style: solid;
+            border-radius: 5px;
+
+            .mx_RoomSettingsDialog_column_icon {
+                .mx_RoomSettingsDialog_protocolIcon,
+                .mx_RoomSettingsDialog_protocolIcon span,
+                .mx_RoomSettingsDialog_noProtocolIcon {
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    border: 1px solid $input-darker-bg-color;
+                }
+
+                .mx_RoomSettingsDialog_noProtocolIcon,
+                .mx_RoomSettingsDialog_protocolIcon img {
+                    border-radius: 5px;
+                }
+
+                .mx_RoomSettingsDialog_noProtocolIcon {
+                    width: 48px;
+                    height: 48px;
+                    background: $input-darker-bg-color;
+                }
+
+                .mx_RoomSettingsDialog_protocolIcon {
+                    img {
+                        border-width: 1px 1px;
+                        border-color: $primary-hairline-color;
+                    }
+
+                    span {
+                        /* Correct letter placement */
+                        left: auto;
+                    }
+                }
+            }
+
+            .mx_RoomSettingsDialog_column_data {
+                display: inline-block;
+                width: 85%;
+
+                .mx_RoomSettingsDialog_column_data_details,
+                .mx_RoomSettingsDialog_column_data_metadata,
+                .mx_RoomSettingsDialog_column_data_metadata li,
+                .mx_RoomSettingsDialog_column_data_protocolName {
+                    margin-bottom: 0;
+                }
+
+                .mx_RoomSettingsDialog_column_data_details,
+                .mx_RoomSettingsDialog_column_data_metadata {
+                    margin-top: $spacing-4;
+                }
+
+                .mx_RoomSettingsDialog_column_data_metadata li {
+                    margin-top: $spacing-8;
+                }
+
+                .mx_RoomSettingsDialog_column_data_protocolName {
+                    margin-top: 0;
+                    font-size: 16pt;
+                    color: $primary-content;
+                }
+
+                .mx_RoomSettingsDialog_workspace_channel_details {
+                    color: $primary-content;
+                    font-weight: var(--cpd-font-weight-semibold);
+
+                    .mx_RoomSettingsDialog_channel {
+                        margin-inline-start: 5px;
+                    }
+                }
+
+                .mx_RoomSettingsDialog_metadata {
+                    color: $muted-fg-color;
+                    margin-bottom: 0;
+                    overflow-y: visible;
+                    text-overflow: ellipsis;
+                    white-space: normal;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}

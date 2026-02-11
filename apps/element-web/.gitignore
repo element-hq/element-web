@@ -1,0 +1,12 @@
+/webapp
+/.npmrc
+/*.log
+/config.json
+/config.json.*
+/config.local*.json
+/webpack-stats.json
+/coverage
+# Auto-generated file
+/src/modules.js
+/build_config.yaml
+/book

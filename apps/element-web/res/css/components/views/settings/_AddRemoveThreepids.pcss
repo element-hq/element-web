@@ -1,0 +1,41 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2024 The Matrix.org Foundation C.I.C.
+Copyright 2019 New Vector Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * These used to live in General User Settings. These components are horribly duplicative
+ * but share the same styles. For now I'm putting them here so I can renamed the general
+ * tab sensibly and before I can refactor these components.
+ */
+
+.mx_AddRemoveThreepids_existing {
+    display: flex;
+    align-items: center;
+}
+
+.mx_AddRemoveThreepids_existing_address,
+.mx_AddRemoveThreepids_existing_promptText {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.mx_AddRemoveThreepids_existing_button {
+    margin-left: 5px;
+}
+
+.mx_EmailAddressesPhoneNumbers_verify {
+    display: flex;
+}
+
+.mx_EmailAddressesPhoneNumbers_existing_button {
+    justify-content: right;
+}
+
+.mx_EmailAddressesPhoneNumbers_verify_instructions {
+    flex: 1;
+}

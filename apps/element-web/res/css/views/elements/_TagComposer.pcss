@@ -1,0 +1,75 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_TagComposer {
+    .mx_TagComposer_input {
+        display: flex;
+        flex-direction: row;
+
+        .mx_AccessibleButton {
+            min-width: 70px;
+            padding: 0 8px; /* override from button styles */
+            align-self: stretch; /* override default settingstab style */
+        }
+
+        .mx_Field,
+        .mx_Field input,
+        .mx_AccessibleButton {
+            /* So they look related to each other by feeling the same */
+            border-radius: 8px;
+        }
+    }
+
+    .mx_TagComposer_tags {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 12px; /* this plus 12px from the tags makes 24px from the input */
+    }
+
+    .mx_Tag {
+        margin-right: 12px;
+        margin-top: 12px;
+    }
+}
+
+.mx_Tag {
+    font-size: $font-15px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+
+    color: $primary-content;
+    background: $quinary-content;
+
+    > svg:first-child {
+        width: 1em;
+        color: $secondary-content;
+        transform: scale(1.25);
+        transform-origin: center;
+    }
+
+    .mx_Tag_delete {
+        border-radius: 50%;
+        text-align: center;
+        width: 1.066666em; /* 16px; */
+        height: 1.066666em;
+        line-height: 1em;
+        color: $secondary-content;
+        background: $system;
+        position: relative;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}

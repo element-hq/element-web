@@ -1,0 +1,47 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_PinnedMessagesCard {
+    --unpin-height: 76px;
+
+    .mx_PinnedMessagesCard_wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: var(--cpd-space-4x);
+        gap: var(--cpd-space-6x);
+        overflow-y: auto;
+
+        .mx_PinnedMessagesCard_Separator {
+            min-height: 1px;
+            /* Override default compound value */
+            margin-block: 0;
+        }
+    }
+
+    .mx_PinnedMessagesCard_wrapper_unpin_all {
+        /* Remove the unpin all button height and the top and bottom padding  */
+        height: calc(100% - var(--unpin-height) - calc(var(--cpd-space-4x) * 2));
+    }
+
+    .mx_PinnedMessagesCard_unpin {
+        /* Make it float at the bottom of the unpin panel */
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: var(--unpin-height);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 24px 0 rgb(27, 29, 34, 0.1);
+        background: var(--cpd-color-bg-canvas-default);
+    }
+
+    .mx_EventTile_body {
+        word-break: break-word;
+    }
+}

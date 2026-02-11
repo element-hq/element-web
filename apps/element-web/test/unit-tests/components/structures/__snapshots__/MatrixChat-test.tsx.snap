@@ -1,0 +1,564 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens after a session is restored 1`] = `
+<div>
+  <main
+    class="mx_SessionLockStolenView mx_SplashPage"
+  >
+    <h1>
+      Test is connected in another tab
+    </h1>
+    <h2>
+      Switch to the other tab to connect to Test. This tab can now be closed.
+    </h2>
+  </main>
+</div>
+`;
+
+exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens during crypto init 1`] = `
+<body
+  style="--emoji-font-family: Twemoji;"
+>
+  <div>
+    <main
+      class="mx_SessionLockStolenView mx_SplashPage"
+    >
+      <h1>
+        Test is connected in another tab
+      </h1>
+      <h2>
+        Switch to the other tab to connect to Test. This tab can now be closed.
+      </h2>
+    </main>
+  </div>
+</body>
+`;
+
+exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens while we are checking the sync store 1`] = `
+<div>
+  <main
+    class="mx_SessionLockStolenView mx_SplashPage"
+  >
+    <h1>
+      Test is connected in another tab
+    </h1>
+    <h2>
+      Switch to the other tab to connect to Test. This tab can now be closed.
+    </h2>
+  </main>
+</div>
+`;
+
+exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens while we were waiting for the lock ourselves 1`] = `
+<div>
+  <main
+    class="mx_SessionLockStolenView mx_SplashPage"
+  >
+    <h1>
+      Test is connected in another tab
+    </h1>
+    <h2>
+      Switch to the other tab to connect to Test. This tab can now be closed.
+    </h2>
+  </main>
+</div>
+`;
+
+exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during startup 1`] = `
+<div>
+  <div
+    class="mx_ConfirmSessionLockTheftView"
+  >
+    <div
+      class="mx_ConfirmSessionLockTheftView_body"
+    >
+      <p>
+        Test is open in another window. Click "Continue" to use Test here and disconnect the other window.
+      </p>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during startup 2`] = `
+<div>
+  <div
+    class="mx_MatrixChat_splash"
+  >
+    <div
+      class="mx_Spinner"
+    >
+      <svg
+        aria-label="Loading…"
+        class="_icon_11k6c_18"
+        data-testid="spinner"
+        fill="currentColor"
+        height="1em"
+        role="progressbar"
+        style="width: 32px; height: 32px;"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during startup 3`] = `
+<div>
+  <div
+    class="mx_AuthPage"
+  >
+    <div
+      class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
+      style="position: relative;"
+    >
+      <div
+        class="mx_AuthPage_modalBlur"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
+      />
+      <main
+        aria-live="polite"
+        class="mx_AuthPage_modalContent"
+        style="display: flex; z-index: 1; border-radius: inherit;"
+        tabindex="-1"
+      >
+        <div
+          class="mx_Welcome"
+          data-testid="mx_welcome_screen"
+        >
+          <div
+            class="mx_WelcomePage mx_WelcomePage_loggedIn"
+          >
+            <div
+              class="mx_WelcomePage_body"
+            >
+              <h1>
+                Hello
+              </h1>
+            </div>
+          </div>
+          <div
+            class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
+          >
+            <div
+              aria-describedby="mx_LanguageDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Language Dropdown"
+              aria-owns="mx_LanguageDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_LanguageDropdown_value"
+              >
+                <div>
+                  English
+                </div>
+              </div>
+              <svg
+                class="mx_Dropdown_arrow"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer
+      class="mx_AuthFooter"
+      role="contentinfo"
+    >
+      <a
+        href="https://element.io/blog"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Blog
+      </a>
+      <a
+        href="https://mastodon.matrix.org/@Element"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Mastodon
+      </a>
+      <a
+        href="https://github.com/element-hq/element-web"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        GitHub
+      </a>
+      <a
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Powered by Matrix
+      </a>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
+<div>
+  <div
+    class="mx_MatrixChat_splash"
+  >
+    <div
+      class="mx_Spinner"
+    >
+      <svg
+        aria-label="Loading…"
+        class="_icon_11k6c_18"
+        data-testid="spinner"
+        fill="currentColor"
+        height="1em"
+        role="progressbar"
+        style="width: 32px; height: 32px;"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logout page 1`] = `
+<div>
+  <div
+    class="mx_AuthPage"
+  >
+    <div
+      class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
+      style="position: relative;"
+    >
+      <div
+        class="mx_AuthPage_modalBlur"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
+      />
+      <main
+        aria-live="polite"
+        class="mx_AuthPage_modalContent"
+        style="display: flex; z-index: 1; border-radius: inherit;"
+        tabindex="-1"
+      >
+        <div
+          class="mx_AuthHeader"
+        >
+          <aside
+            class="mx_AuthHeaderLogo"
+          >
+            <img
+              alt="Element"
+              src="themes/element/img/logos/element-logo.svg"
+            />
+          </aside>
+          <div
+            class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
+          >
+            <div
+              aria-describedby="mx_LanguageDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Language Dropdown"
+              aria-owns="mx_LanguageDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_LanguageDropdown_value"
+              >
+                <div>
+                  English
+                </div>
+              </div>
+              <svg
+                class="mx_Dropdown_arrow"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_AuthBody"
+        >
+          <h1>
+            You're signed out
+          </h1>
+          <h2>
+            Sign in
+          </h2>
+          <div>
+            <form>
+              <p>
+                Enter your password to sign in and regain access to your account.
+              </p>
+              <div
+                class="mx_Field mx_Field_input"
+              >
+                <input
+                  id="mx_Field_1"
+                  label="Password"
+                  placeholder="Password"
+                  type="password"
+                  value=""
+                />
+                <label
+                  for="mx_Field_1"
+                >
+                  Password
+                </label>
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                role="button"
+                tabindex="0"
+              >
+                Sign in
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+                role="button"
+                tabindex="0"
+              >
+                Forgotten your password?
+              </div>
+            </form>
+          </div>
+          <h2>
+            Clear personal data
+          </h2>
+          <p>
+            Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.
+          </p>
+          <div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+              role="button"
+              tabindex="0"
+            >
+              Clear all data
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer
+      class="mx_AuthFooter"
+      role="contentinfo"
+    >
+      <a
+        href="https://element.io/blog"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Blog
+      </a>
+      <a
+        href="https://mastodon.matrix.org/@Element"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Mastodon
+      </a>
+      <a
+        href="https://github.com/element-hq/element-web"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        GitHub
+      </a>
+      <a
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Powered by Matrix
+      </a>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a room should launch a confirmation modal 1`] = `
+<div
+  aria-describedby="mx_Dialog_content"
+  aria-labelledby="mx_BaseDialog_title"
+  class="mx_QuestionDialog mx_Dialog_fixedWidth"
+  data-focus-lock-disabled="false"
+  role="dialog"
+  tabindex="-1"
+>
+  <div
+    class="mx_Dialog_header"
+  >
+    <h1
+      class="mx_Heading_h3 mx_Dialog_title"
+      id="mx_BaseDialog_title"
+    >
+      Leave room
+    </h1>
+  </div>
+  <div
+    class="mx_Dialog_content"
+    id="mx_Dialog_content"
+  >
+    <span>
+      Are you sure you want to leave the room '!room:server.org'?
+    </span>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <span
+      class="mx_Dialog_buttons_row"
+    >
+      <button
+        data-testid="dialog-cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="mx_Dialog_primary"
+        data-testid="dialog-primary-button"
+        type="button"
+      >
+        Leave
+      </button>
+    </span>
+  </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a space should launch a confirmation modal 1`] = `
+<div
+  aria-describedby="mx_Dialog_content"
+  aria-labelledby="mx_BaseDialog_title"
+  class="mx_QuestionDialog mx_Dialog_fixedWidth"
+  data-focus-lock-disabled="false"
+  role="dialog"
+  tabindex="-1"
+>
+  <div
+    class="mx_Dialog_header"
+  >
+    <h1
+      class="mx_Heading_h3 mx_Dialog_title"
+      id="mx_BaseDialog_title"
+    >
+      Leave space
+    </h1>
+  </div>
+  <div
+    class="mx_Dialog_content"
+    id="mx_Dialog_content"
+  >
+    <span>
+      Are you sure you want to leave the space '!spaceRoom:server.org'?
+    </span>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <span
+      class="mx_Dialog_buttons_row"
+    >
+      <button
+        data-testid="dialog-cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="mx_Dialog_primary"
+        data-testid="dialog-primary-button"
+        type="button"
+      >
+        Leave
+      </button>
+    </span>
+  </div>
+  <div
+    aria-label="Close dialog"
+    class="mx_AccessibleButton mx_Dialog_cancelButton"
+    role="button"
+    tabindex="0"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+      />
+    </svg>
+  </div>
+</div>
+`;

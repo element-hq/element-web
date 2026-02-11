@@ -1,0 +1,235 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UserInfo.mx_BaseCard {
+    /* UserInfo has a circular image at the top so it fits between the back & close buttons */
+    padding-top: 0;
+    overflow-y: auto;
+    font-size: var(--cpd-font-size-body-sm);
+
+    .mx_UserInfo_container {
+        padding: var(--cpd-space-2x) 0 var(--cpd-space-4x);
+        margin: 0 var(--cpd-space-4x);
+
+        & + .mx_UserInfo_container {
+            border-top: 1px solid $separator;
+        }
+    }
+
+    .mx_UserInfo_memberDetailsContainer {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: $spacing-8;
+    }
+
+    .mx_RoomTile_titleContainer {
+        width: 154px;
+    }
+
+    .mx_RoomTile_badge {
+        display: none;
+    }
+
+    .mx_RoomTile_title {
+        width: 160px;
+    }
+
+    .mx_UserInfo_avatar {
+        margin: var(--cpd-space-12x) var(--cpd-space-4x) 0 var(--cpd-space-4x);
+
+        .mx_UserInfo_avatar_transition {
+            max-width: 120px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+            transition: 0.5s;
+
+            .mx_BaseAvatar {
+                /* Override the calculated font-size so that the letter isn't tiny */
+                font-size: 4rem;
+            }
+
+            .mx_BaseAvatar,
+            .mx_BaseAvatar img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    h2 {
+        text-transform: uppercase;
+        color: $tertiary-content;
+        font: var(--cpd-font-body-md-semibold);
+        font-weight: var(--cpd-font-weight-semibold);
+        margin: $spacing-4 0;
+    }
+
+    p {
+        margin: 5px 0;
+    }
+
+    .mx_UserInfo_header {
+        margin-bottom: var(--cpd-space-8x);
+        padding-bottom: 0;
+    }
+
+    .mx_UserInfo_profile {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-1x);
+
+        h1 {
+            margin: 0;
+            font-size: $font-20px;
+            line-height: $font-25px;
+        }
+
+        .mx_UserInfo_profile_name {
+            min-height: 30px;
+
+            /* limit to 2 lines, show an ellipsis if it overflows */
+            /* this looks webkit specific but is supported by Firefox 68+ */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+
+            overflow: hidden;
+            word-break: break-all;
+            text-overflow: ellipsis;
+        }
+
+        .mx_UserInfo_profile_mxid {
+            color: var(--cpd-color-text-secondary);
+            height: 28px;
+        }
+
+        .mx_UserInfo_profileStatus {
+            height: 20px;
+        }
+
+        .mx_UserInfo_timezone {
+            height: 20px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /** Overrides for the copy to clipboard button **/
+        .mx_CopyableText {
+            align-items: center;
+        }
+
+        .mx_CopyableText_copyButton {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: unset;
+            padding-left: var(--cpd-space-2x);
+        }
+
+        .mx_CopyableText_copyButton::before {
+            width: 20px;
+            height: 20px;
+            background-color: var(--cpd-color-icon-secondary-alpha);
+        }
+    }
+
+    .mx_UserInfo_timezone {
+        margin: var(--cpd-space-1x) 0;
+    }
+
+    .mx_PresenceLabel {
+        font: var(--cpd-font-body-sm-regular);
+        opacity: 1;
+    }
+
+    .mx_UserInfo_verification {
+        margin-top: var(--cpd-space-4x);
+        height: 36px;
+
+        .mx_UserInfo_verified_badge {
+            min-width: 68px;
+            height: 20px;
+
+            .mx_UserInfo_verified_icon {
+                flex-shrink: 0;
+            }
+
+            .mx_UserInfo_verified_label {
+                margin: 0;
+            }
+        }
+
+        .mx_UserInfo_verification_unavailable {
+            color: var(--cpd-color-text-secondary);
+        }
+    }
+
+    .mx_UserInfo_memberDetails {
+        .mx_UserInfo_profileField {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: 6px 0;
+
+            .mx_UserInfo_roleDescription {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /* try to make it the same height as the dropdown */
+                margin: 11px 0 12px 0;
+            }
+
+            .mx_Field {
+                margin: 0;
+            }
+        }
+    }
+
+    .mx_UserInfo_field {
+        line-height: $font-16px;
+    }
+
+    .mx_UserInfo_statusMessage {
+        $statusNumberOfLines: 3;
+
+        font: var(--cpd-font-body-sm-regular);
+        font-size: $font-11px;
+        line-height: 1rem;
+        opacity: 0.5;
+        overflow: hidden;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        max-height: calc(1rem * $statusNumberOfLines);
+        -webkit-line-clamp: $statusNumberOfLines;
+        -webkit-box-orient: vertical;
+    }
+
+    .mx_AutoHideScrollbar {
+        flex: 1 1 0;
+    }
+
+    &.mx_UserInfo_smallAvatar {
+        .mx_UserInfo_avatar {
+            .mx_UserInfo_avatar_transition {
+                max-width: 72px;
+                margin: 0 auto;
+            }
+
+            .mx_BaseAvatar {
+                /* Override the calculated font-size so that the letter isn't tiny */
+                font-size: 2rem;
+            }
+        }
+    }
+}

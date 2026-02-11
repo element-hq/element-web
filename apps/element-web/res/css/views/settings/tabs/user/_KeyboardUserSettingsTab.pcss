@@ -1,0 +1,32 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_KeyboardShortcut_shortcutList {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    gap: $spacing-4;
+}
+
+.mx_KeyboardShortcut_shortcutRow,
+.mx_KeyboardShortcut {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mx_KeyboardShortcut_shortcutRow {
+    column-gap: $spacing-8;
+}
+
+.mx_KeyboardShortcut {
+    flex-wrap: nowrap;
+    column-gap: $spacing-4;
+}

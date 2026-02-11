@@ -1,0 +1,49 @@
+/*
+Copyright 2024,2025 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_WidgetCapabilitiesPromptDialog {
+    .text-muted {
+        font-size: $font-12px;
+    }
+
+    .mx_Dialog_content {
+        margin-bottom: 16px;
+    }
+
+    .mx_WidgetCapabilitiesPromptDialog_cap {
+        margin-top: 20px;
+        font-size: $font-15px;
+        line-height: $font-15px;
+    }
+
+    .mx_Dialog_buttons {
+        margin-top: 40px; /* double normal */
+    }
+
+    .mx_SettingsFlag {
+        line-height: calc($font-14px + 7px + 7px); /* 7px top & bottom padding */
+        color: $muted-fg-color;
+        font-size: $font-12px;
+
+        .mx_ToggleSwitch {
+            /* downsize the switch + ball */
+            width: $font-32px;
+            height: $font-15px;
+
+            &.mx_ToggleSwitch_on > .mx_ToggleSwitch_ball {
+                left: calc(100% - $font-15px);
+            }
+
+            .mx_ToggleSwitch_ball {
+                width: $font-15px;
+                height: $font-15px;
+                border-radius: $font-15px;
+            }
+        }
+    }
+}

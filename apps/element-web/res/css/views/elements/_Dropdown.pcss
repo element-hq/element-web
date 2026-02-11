@@ -1,0 +1,126 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2017 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Dropdown {
+    position: relative;
+    color: $primary-content;
+}
+
+.mx_Dropdown_disabled {
+    opacity: 0.3;
+}
+
+.mx_Dropdown_input {
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    font: var(--cpd-font-body-sm-regular);
+    user-select: none;
+}
+
+.mx_Dropdown_input.mx_AccessibleButton_disabled {
+    cursor: not-allowed;
+}
+
+.mx_Dropdown_input:focus {
+    border-color: $accent-alt;
+}
+
+/* Disable dropdown highlight on focus */
+.mx_Dropdown_input.mx_AccessibleButton:focus {
+    filter: none;
+}
+
+svg.mx_Dropdown_arrow {
+    width: 18px;
+    height: 18px;
+    margin-right: 3px;
+    color: $primary-content;
+}
+
+.mx_Dropdown_option {
+    height: 35px;
+    line-height: $font-35px;
+    /* Overwrites the default padding for any li elements */
+    padding: 0 8px;
+}
+
+.mx_Dropdown_input > .mx_Dropdown_option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.mx_Dropdown_option div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_Dropdown_option img,
+.mx_Dropdown_option .mx_Dropdown_option_emoji {
+    margin: 5px;
+    width: 16px;
+    vertical-align: middle;
+}
+
+.mx_Dropdown_option_emoji {
+    font-size: $font-16px;
+    line-height: $font-16px;
+}
+
+input.mx_Dropdown_option,
+input.mx_Dropdown_option:focus {
+    font-weight: normal;
+    border: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    /* XXX: hack to prevent text box being too big and pushing */
+    /* its parent out / overlapping the dropdown arrow. Only really */
+    /* works in the Country dropdown. */
+    width: 60%;
+}
+
+.mx_Dropdown_menu {
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 100%;
+    z-index: 2;
+    margin: 0;
+    padding: 0px;
+    border-radius: 4px;
+    border: 1px solid $accent-alt;
+    background-color: $background;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.mx_Dropdown_menu .mx_Dropdown_option {
+    height: auto;
+    min-height: 35px;
+}
+
+ul.mx_Dropdown_menu li.mx_Dropdown_option {
+    list-style: none;
+}
+
+.mx_Dropdown_menu .mx_Dropdown_option_highlight {
+    background-color: $focus-bg-color;
+}
+
+.mx_Dropdown_searchPrompt {
+    font-weight: normal;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}

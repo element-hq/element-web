@@ -1,0 +1,581 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Spaces to show
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_1_"
+                        checked=""
+                        class="_input_153f2_18"
+                        disabled=""
+                        id="checkbox_vY7Q4uEh9K"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_vY7Q4uEh9K"
+                    >
+                      <svg
+                        class="mx_SidebarUserSettingsTab_icon"
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0"
+                        />
+                      </svg>
+                      Home
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_1_"
+                    >
+                      Home is useful for getting an overview of everything.
+                    </span>
+                  </div>
+                </div>
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_5_"
+                        class="_input_153f2_18"
+                        data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                        id="checkbox_38QgU2Pomx"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_38QgU2Pomx"
+                    >
+                      Show all rooms
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_5_"
+                    >
+                      Show all your rooms in Home, even if they're in a space.
+                    </span>
+                  </div>
+                </div>
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_9_"
+                        class="_input_153f2_18"
+                        id="checkbox_wKpa6hpi3Y"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_wKpa6hpi3Y"
+                    >
+                      Rooms outside of a space
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_9_"
+                    >
+                      Group all your rooms that aren't part of a space in one place.
+                    </span>
+                  </div>
+                </div>
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_d_"
+                        class="_input_153f2_18"
+                        id="checkbox_EetmBG4yVC"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_EetmBG4yVC"
+                    >
+                      <svg
+                        class="mx_SidebarUserSettingsTab_icon"
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+                        />
+                      </svg>
+                      Video rooms and conferences
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_d_"
+                    >
+                      Group all private video rooms and conferences. In conferences you can invite people outside of matrix.
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa url 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Spaces to show
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_h_"
+                        checked=""
+                        class="_input_153f2_18"
+                        disabled=""
+                        id="checkbox_vY7Q4uEh9K"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_vY7Q4uEh9K"
+                    >
+                      <svg
+                        class="mx_SidebarUserSettingsTab_icon"
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0"
+                        />
+                      </svg>
+                      Home
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_h_"
+                    >
+                      Home is useful for getting an overview of everything.
+                    </span>
+                  </div>
+                </div>
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_l_"
+                        class="_input_153f2_18"
+                        data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                        id="checkbox_38QgU2Pomx"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_38QgU2Pomx"
+                    >
+                      Show all rooms
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_l_"
+                    >
+                      Show all your rooms in Home, even if they're in a space.
+                    </span>
+                  </div>
+                </div>
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_p_"
+                        class="_input_153f2_18"
+                        id="checkbox_wKpa6hpi3Y"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_wKpa6hpi3Y"
+                    >
+                      Rooms outside of a space
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_p_"
+                    >
+                      Group all your rooms that aren't part of a space in one place.
+                    </span>
+                  </div>
+                </div>
+              </form>
+              <form
+                class="_root_19upo_16"
+              >
+                <div
+                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_153f2_10"
+                    >
+                      <input
+                        aria-describedby="_r_t_"
+                        class="_input_153f2_18"
+                        id="checkbox_EetmBG4yVC"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_153f2_19"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="checkbox_EetmBG4yVC"
+                    >
+                      <svg
+                        class="mx_SidebarUserSettingsTab_icon"
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+                        />
+                      </svg>
+                      Video rooms and conferences
+                    </label>
+                    <span
+                      class="_message_19upo_85 _help-message_19upo_91"
+                      id="_r_t_"
+                    >
+                      Group all private video rooms and conferences.
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

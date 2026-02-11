@@ -1,0 +1,77 @@
+/*
+Copyright 2018-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ShareDialog {
+    /* Value from figma design */
+    width: 416px;
+
+    .mx_Dialog_header {
+        text-align: center;
+        margin-bottom: var(--cpd-space-6x);
+        /* Override dialog header padding to able to center it */
+        padding-inline-end: 0;
+    }
+
+    .mx_ShareDialog_content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-6x);
+        align-items: center;
+
+        .mx_ShareDialog_top {
+            display: flex;
+            flex-direction: column;
+            gap: var(--cpd-space-4x);
+            align-items: center;
+            width: 100%;
+
+            span {
+                text-align: center;
+                font: var(--cpd-font-body-sm-semibold);
+                color: var(--cpd-color-text-secondary);
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                width: 100%;
+            }
+        }
+
+        label {
+            display: inline-flex;
+            gap: var(--cpd-space-3x);
+            justify-content: center;
+            align-items: center;
+            font: var(--cpd-font-body-md-medium);
+        }
+
+        button {
+            width: 100%;
+        }
+
+        .mx_ShareDialog_social {
+            display: flex;
+            gap: var(--cpd-space-3x);
+            justify-content: center;
+
+            a {
+                width: 48px;
+                height: 48px;
+                border-radius: 99px;
+                box-sizing: border-box;
+                border: 1px solid var(--cpd-color-border-interactive-secondary);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+    }
+}

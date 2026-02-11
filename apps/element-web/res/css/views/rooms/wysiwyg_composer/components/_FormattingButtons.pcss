@@ -1,0 +1,66 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FormattingButtons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+
+    .mx_FormattingButtons_Button {
+        --size: 28px;
+        cursor: pointer;
+        height: var(--size);
+        width: var(--size);
+        background-color: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+    }
+
+    .mx_FormattingButtons_Button_hover {
+        &:hover {
+            background: $panels;
+
+            .mx_FormattingButtons_Icon {
+                color: $secondary-content;
+            }
+        }
+    }
+
+    .mx_FormattingButtons_active {
+        background: $accent-300;
+
+        .mx_FormattingButtons_Icon {
+            color: $accent;
+        }
+    }
+
+    .mx_FormattingButtons_disabled {
+        .mx_FormattingButtons_Icon {
+            color: $quinary-content;
+        }
+    }
+
+    .mx_FormattingButtons_Icon {
+        --size: 16px;
+        height: var(--size);
+        width: var(--size);
+        color: $tertiary-content;
+    }
+}
+
+.mx_FormattingButtons_Tooltip_KeyboardShortcut {
+    kbd {
+        text-align: center;
+        display: inline-block;
+        text-transform: capitalize;
+        font-family: Inter, sans-serif;
+    }
+}

@@ -1,0 +1,34 @@
+<!--
+Copyright 2024 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+-->
+
+<!--
+A dummy OAuth2 authorization endpoint (see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint)
+
+Mostly, it just redirects back to the `redirect_uri` in the query params.
+-->
+
+<html lang="en">
+    <body>
+        <h1>Test OAuth page</h1>
+
+        <form id="auth_form">
+            <input type="hidden" id="state" name="state" />
+            <label for="code">Auth Code:</label>
+            <input type="text" id="code" name="code" value="valid_auth_code" />
+            <input type="submit" value="Submit" />
+        </form>
+
+        <script>
+            // process the query params, and set up the form
+            const urlParams = new URLSearchParams(window.location.search);
+            console.log("Test OAuth page: query params:", new Map(urlParams.entries()));
+            document.getElementById("auth_form").action = urlParams.get("redirect_uri");
+            document.getElementById("state").value = urlParams.get("state");
+        </script>
+    </body>
+</html>

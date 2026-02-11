@@ -1,0 +1,75 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LegacyRoomListHeader {
+    display: flex;
+    align-items: center;
+
+    .mx_LegacyRoomListHeader_contextLessTitle,
+    .mx_LegacyRoomListHeader_contextMenuButton {
+        font: var(--cpd-font-heading-sm-semibold);
+        font-weight: var(--cpd-font-weight-semibold);
+        padding: 1px 24px 1px 4px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-left: 8px;
+        margin-right: auto;
+        user-select: none;
+    }
+
+    .mx_LegacyRoomListHeader_contextMenuButton {
+        border-radius: 6px;
+
+        &:hover {
+            background-color: $quinary-content;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+            top: 3px;
+            right: 0;
+            position: absolute;
+            color: $tertiary-content;
+        }
+
+        &[aria-expanded="true"] {
+            background-color: $quinary-content;
+        }
+    }
+
+    .mx_LegacyRoomListHeader_plusButton {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        position: relative;
+        padding: 8px;
+        margin-left: 8px;
+        margin-right: 12px;
+        background-color: $panel-actions;
+        box-sizing: border-box;
+        flex-shrink: 0;
+
+        svg {
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            color: $secondary-content;
+        }
+
+        &:hover {
+            background-color: $tertiary-content;
+
+            svg {
+                color: $background;
+            }
+        }
+    }
+}

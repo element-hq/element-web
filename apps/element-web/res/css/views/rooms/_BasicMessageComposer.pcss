@@ -1,0 +1,103 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_BasicMessageComposer {
+    /* These are set in Javascript */
+    --avatar-letter: "";
+    --avatar-background: unset;
+    --avatar-color: unset;
+    --placeholder: "";
+
+    position: relative;
+
+    .mx_BasicMessageComposer_inputEmpty > :first-child::before {
+        content: var(--placeholder);
+        color: var(--cpd-color-text-secondary);
+        width: 0;
+        height: 0;
+        overflow: visible;
+        display: inline-block;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    @keyframes visualbell {
+        from {
+            background-color: $visual-bell-bg-color;
+        }
+        to {
+            background-color: $background;
+        }
+    }
+
+    &.mx_BasicMessageComposer_input_error {
+        animation: 0.2s visualbell;
+    }
+
+    .mx_BasicMessageComposer_input {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
+        overflow-x: hidden;
+
+        /* Force caret nodes to be selected in full so that they can be */
+        /* navigated through in a single keypress */
+        .caretNode {
+            user-select: all;
+        }
+
+        &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
+            span.mx_UserPill,
+            span.mx_RoomPill,
+            span.mx_SpacePill {
+                display: inline-flex;
+                align-items: center;
+                user-select: all;
+                position: relative;
+                cursor: unset; /* We don't want indicate clickability */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                &:hover {
+                    /* We don't want indicate clickability | To override the overriding of .markdown-body */
+                    background-color: $pill-bg-color !important;
+                }
+
+                /* avatar psuedo element */
+                &::before {
+                    display: inline-block;
+                    content: var(--avatar-letter);
+                    width: $font-16px;
+                    min-width: $font-16px; /* ensure the avatar is not compressed */
+                    height: $font-16px;
+                    margin-inline-end: 0.24rem;
+                    background: var(--avatar-background), $background;
+                    color: var(--avatar-color, $avatar-initial-color);
+                    background-repeat: no-repeat;
+                    background-size: $font-16px;
+                    border-radius: $font-16px;
+                    text-align: center;
+                    font-weight: normal;
+                    line-height: $font-16px;
+                    font-size: $font-10-4px;
+                }
+            }
+        }
+
+        &.mx_BasicMessageComposer_input_disabled {
+            /* Ignore all user input to avoid accidentally triggering the composer */
+            pointer-events: none;
+        }
+    }
+
+    .mx_BasicMessageComposer_AutoCompleteWrapper {
+        position: relative;
+        height: 0;
+    }
+}

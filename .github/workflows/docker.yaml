@@ -40,7 +40,7 @@ jobs:
               id: test-build
               uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
               with:
-                  context: .
+                  context: apps/element-web
                   load: true
 
             - name: Test the image

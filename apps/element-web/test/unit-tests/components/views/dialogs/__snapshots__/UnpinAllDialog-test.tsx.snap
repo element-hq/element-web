@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<UnpinAllDialog /> should render 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_UnpinAllDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title mx_UnpinAllDialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Unpin all messages?
+      </h1>
+    </div>
+    <span
+      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+    >
+      Make sure that you really want to remove all pinned messages. This action can’t be undone.
+    </span>
+    <div
+      class="mx_UnpinAllDialog_buttons"
+    >
+      <button
+        class="_button_13vu4_8 _destructive_13vu4_110"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </button>
+      <button
+        class="_button_13vu4_8"
+        data-kind="tertiary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </button>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

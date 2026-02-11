@@ -1,0 +1,243 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LoginWithQRSection p {
+    margin-top: 0;
+    margin-bottom: $spacing-16;
+}
+
+.mx_LoginWithQRSection {
+    .mx_AccessibleButton_kind_primary + p {
+        color: var(--cpd-color-text-secondary);
+        margin-top: var(--cpd-space-2x);
+    }
+}
+
+.mx_LoginWithQRSection .mx_AccessibleButton svg {
+    margin-right: $spacing-12;
+}
+
+.mx_AuthPage .mx_LoginWithQR {
+    .mx_AccessibleButton {
+        display: block !important;
+    }
+
+    .mx_AccessibleButton + .mx_AccessibleButton {
+        margin-top: $spacing-8;
+    }
+
+    font-size: $font-15px;
+}
+
+.mx_UserSettingsDialog .mx_LoginWithQR {
+    font: var(--cpd-font-body-md-regular);
+
+    h1 {
+        font-size: $font-24px;
+        margin-bottom: 0;
+    }
+
+    h2 {
+        margin-top: $spacing-24;
+    }
+
+    .mx_QRCode {
+        margin: $spacing-28 0;
+    }
+
+    .mx_LoginWithQR_qrWrapper {
+        display: flex;
+    }
+}
+
+.mx_LoginWithQR {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+
+    h1 > svg {
+        &.normal {
+            color: $secondary-content;
+        }
+        &.error {
+            color: $alert;
+        }
+        &.success {
+            color: $accent;
+        }
+        height: 1.3em;
+        margin-right: $spacing-8;
+        vertical-align: middle;
+    }
+
+    .mx_LoginWithQR_confirmationDigits {
+        text-align: center;
+        margin: $spacing-48 auto;
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-24px;
+        color: $primary-content;
+    }
+
+    .mx_LoginWithQR_confirmationAlert {
+        border: 1px solid $quaternary-content;
+        border-radius: $spacing-8;
+        padding: $spacing-8;
+        line-height: 1.5em;
+        display: flex;
+
+        svg {
+            height: 30px;
+        }
+    }
+
+    .mx_LoginWithQR_separator {
+        margin: 1em 0;
+    }
+
+    ol {
+        padding-inline-start: 0;
+        list-style: none; /* list markers do not support the outlined number styling we need */
+
+        li {
+            position: relative;
+            padding-left: var(--cpd-space-7x);
+            color: 1px solid $input-placeholder;
+            margin-bottom: var(--cpd-space-4x);
+            line-height: 20px;
+            text-align: initial;
+        }
+
+        /* Circled number list item marker */
+        li::before {
+            content: counter(list-item);
+            position: absolute;
+            left: 0;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 50%;
+            border: 1px solid $input-placeholder;
+            box-sizing: border-box;
+            text-align: center;
+        }
+    }
+
+    label[for="mx_LoginWithQR_checkCode"] {
+        margin-top: var(--cpd-space-6x);
+        color: var(--cpd-color-text-primary);
+        margin-bottom: var(--cpd-space-1x);
+    }
+
+    .mx_LoginWithQR_icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        padding: var(--cpd-space-3x);
+        gap: 10px;
+
+        background-color: var(--cpd-color-bg-subtle-secondary);
+        svg {
+            color: var(--cpd-color-icon-secondary);
+        }
+
+        &.mx_LoginWithQR_icon--success {
+            background-color: var(--cpd-color-bg-success-subtle);
+            svg {
+                color: var(--cpd-color-icon-success-primary);
+            }
+        }
+
+        &.mx_LoginWithQR_icon--critical {
+            background-color: var(--cpd-color-bg-critical-subtle);
+            svg {
+                color: var(--cpd-color-icon-critical-primary);
+            }
+        }
+    }
+
+    .mx_LoginWithQR_checkCode_input {
+        margin-bottom: var(--cpd-space-1x);
+        text-align: initial;
+
+        input {
+            /* Workaround for one of the input rules in _common.pcss being not specific enough */
+            padding: 0;
+            padding-inline-start: calc(40px / 2 - (1ch / 2));
+        }
+    }
+
+    .mx_LoginWithQR_heading {
+        display: flex;
+        gap: $spacing-12;
+        align-items: center;
+    }
+
+    .mx_LoginWithQR_BackButton {
+        height: $spacing-28;
+        border-radius: $spacing-28;
+        padding: $spacing-4;
+        box-sizing: border-box;
+        background-color: var(--cpd-color-bg-subtle-secondary);
+        svg {
+            height: 100%;
+        }
+    }
+
+    .mx_LoginWithQR_breadcrumbs {
+        font-size: $font-13px;
+        color: $secondary-content;
+    }
+
+    .mx_LoginWithQR_main {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        color: $primary-content;
+        text-align: center;
+
+        p {
+            color: $secondary-content;
+        }
+    }
+
+    &.mx_LoginWithQR_error .mx_LoginWithQR_main {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .mx_LoginWithQR_buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $spacing-16;
+        margin-top: var(--cpd-space-6x);
+
+        .mx_AccessibleButton {
+            width: 300px;
+            height: 48px;
+            box-sizing: border-box;
+        }
+    }
+
+    .mx_QRCode {
+        border-radius: $spacing-8;
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_LoginWithQR_spinner {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+}

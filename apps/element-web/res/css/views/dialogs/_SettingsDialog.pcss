@@ -1,0 +1,57 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* Not actually a component but things shared by settings components */
+.mx_UserSettingsDialog,
+.mx_RoomSettingsDialog,
+.mx_SpaceSettingsDialog,
+.mx_SpacePreferencesDialog {
+    width: 90vw;
+    max-width: 980px;
+    /* set the height too since tabbed view scrolls itself. */
+    height: 80vh;
+
+    .mx_TabbedView {
+        top: 90px;
+    }
+
+    .mx_TabbedView .mx_SettingsTab {
+        box-sizing: border-box;
+        min-width: 580px;
+        padding-right: 100px;
+        display: flex;
+        flex-direction: column;
+
+        /* Put some padding on the bottom to avoid the settings tab from */
+        /* colliding harshly with the dialog when scrolled down. */
+        padding-bottom: 100px;
+    }
+
+    .mx_SettingsDialog_tabLabelsAlert::after {
+        display: inline-block;
+        content: "";
+        width: 8px;
+        height: 8px;
+        background-color: var(--cpd-color-icon-critical-primary);
+        clip-path: circle(4px);
+        position: absolute;
+        right: var(--cpd-space-4x);
+    }
+}
+
+/* On narrow viewports, the tab labels are hidden, so we need to shift the indicator so it isn't over the tab icon. */
+@media (max-width: 1024px) {
+    .mx_UserSettingsDialog,
+    .mx_RoomSettingsDialog,
+    .mx_SpaceSettingsDialog,
+    .mx_SpacePreferencesDialog {
+        .mx_SettingsDialog_tabLabelsAlert::after {
+            right: var(--cpd-space-1x);
+            top: var(--cpd-space-1x);
+        }
+    }
+}

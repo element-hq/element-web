@@ -1,0 +1,35 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LegacyCallViewForRoom {
+    overflow: hidden;
+
+    .mx_LegacyCallViewForRoom_ResizeWrapper {
+        display: flex;
+
+        &:hover .mx_LegacyCallViewForRoom_ResizeHandle {
+            /* Need to use important to override element style attributes */
+            /* set by re-resizable */
+            width: 100% !important;
+
+            display: flex;
+            justify-content: center;
+
+            &::after {
+                content: "";
+                border-radius: 4px;
+
+                height: 4px;
+                width: 100%;
+                max-width: 64px;
+
+                background-color: $primary-content;
+            }
+        }
+    }
+}

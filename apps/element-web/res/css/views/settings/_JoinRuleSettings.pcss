@@ -1,0 +1,85 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_JoinRuleSettings_upgradeRequired {
+    margin-left: 16px;
+    padding: 4px 16px;
+    border: 1px solid $accent;
+    border-radius: 8px;
+    color: $accent;
+    font-size: $font-12px;
+    line-height: $font-15px;
+}
+
+.mx_JoinRuleSettings_spacesWithAccess {
+    > h4 {
+        color: $secondary-content;
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        text-transform: uppercase;
+    }
+
+    > span {
+        font: var(--cpd-font-body-md-medium);
+        line-height: 32px; /* matches height of avatar for v-align */
+        color: $secondary-content;
+        display: inline-block;
+
+        .mx_BaseAvatar {
+            margin-right: 8px;
+        }
+
+        & + span {
+            margin-left: 16px;
+        }
+    }
+}
+
+.mx_JoinRuleSettings_radioButton {
+    padding-top: 16px;
+
+    .mx_StyledRadioButton_content {
+        margin-left: 14px;
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $primary-content;
+        display: block;
+    }
+
+    &.mx_StyledRadioButton_disabled {
+        opacity: 0.5;
+    }
+
+    &.mx_StyledRadioButton_disabled + span {
+        opacity: 0.5;
+    }
+
+    & + span {
+        display: inline-block;
+        margin-left: 34px;
+        margin-bottom: 16px;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $secondary-content;
+
+        & + .mx_StyledRadioButton {
+            border-top: 1px solid $quinary-content;
+        }
+    }
+}
+
+.mx_JoinRuleSettings_labelledCheckbox {
+    font: var(--cpd-font-body-md-regular);
+    margin-top: var(--cpd-space-2x);
+}
+
+.mx_JoinRuleSettings_recommended {
+    color: $accent-1000;
+}

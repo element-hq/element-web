@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<SyntaxHighlight /> renders 1`] = `
+<div>
+  <pre
+    class="mx_SyntaxHighlight hljs language-javascript"
+  >
+    <code>
+      <span
+        class="hljs-variable language_"
+      >
+        console
+      </span>
+      .
+      <span
+        class="hljs-title function_"
+      >
+        log
+      </span>
+      (
+      <span
+        class="hljs-string"
+      >
+        "Hello, World!"
+      </span>
+      );
+    </code>
+  </pre>
+</div>
+`;

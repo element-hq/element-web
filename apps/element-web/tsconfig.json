@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "experimentalDecorators": false,
+        "emitDecoratorMetadata": false,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "useDefineForClassFields": true,
+        "module": "es2022",
+        "moduleResolution": "bundler",
+        "target": "es2022",
+        "noUnusedLocals": true,
+        "sourceMap": false,
+        "outDir": "./lib",
+        "declaration": true,
+        "jsx": "react",
+        "lib": ["es2022", "es2024.promise", "dom", "dom.iterable"],
+        "strict": true,
+        "paths": {
+            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
+            "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
+        }
+    },
+    "include": [
+        "../../node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "./src/**/*.ts",
+        "./src/**/*.tsx",
+        "./test/**/*.ts",
+        "./test/**/*.tsx",
+        "./scripts/*.ts",
+        "./declaration.d.ts"
+    ]
+}

@@ -1,0 +1,30 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LinkPreviewGroup {
+    .mx_LinkPreviewGroup_hide {
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+
+        svg {
+            flex: 0 0 40px;
+            visibility: hidden;
+        }
+    }
+
+    &:hover .mx_LinkPreviewGroup_hide svg,
+    .mx_LinkPreviewGroup_hide:focus-visible:focus svg {
+        visibility: visible;
+    }
+
+    > .mx_AccessibleButton {
+        color: $accent;
+        text-align: center;
+    }
+}

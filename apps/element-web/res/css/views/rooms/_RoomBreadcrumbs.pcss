@@ -1,0 +1,43 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomBreadcrumbs {
+    width: 100%;
+
+    /* Create a flexbox for the crumbs */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    .mx_RoomBreadcrumbs_crumb {
+        margin-right: 8px;
+        width: 32px;
+    }
+
+    /* These classes come from the CSSTransition component. There's many more classes we */
+    /* could care about, but this is all we worried about for now. The animation works by */
+    /* first triggering the enter state with the newest breadcrumb off screen (-40px) then */
+    /* sliding it into view. */
+    &.mx_RoomBreadcrumbs-enter {
+        transform: translateX(-40px); /* 32px for the avatar, 8px for the margin */
+    }
+    &.mx_RoomBreadcrumbs-enter-active {
+        transform: translateX(0);
+
+        /* Timing function is as-requested by design. */
+        /* NOTE: The transition time MUST match the value passed to CSSTransition! */
+        transition: transform 640ms cubic-bezier(0.66, 0.02, 0.36, 1);
+    }
+
+    .mx_RoomBreadcrumbs_placeholder {
+        font: var(--cpd-font-body-md-semibold);
+        line-height: 32px; /* specifically to match the height this is not scaled */
+        height: 32px;
+    }
+}

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`LocationPicker <LocationPicker /> for Live location share type updates selected duration 1`] = `
+<div
+  data-testid="live-duration-option-3600000"
+>
+  Share for 1h
+</div>
+`;

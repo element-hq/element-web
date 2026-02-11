@@ -1,0 +1,60 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ToggleSwitch {
+    --ToggleSwitch-min-width: $font-44px;
+
+    transition:
+        background-color 0.2s ease-out 0.1s,
+        border-color 0.2s ease-out 0.1s;
+
+    width: $font-44px;
+    height: $font-20px;
+    border-radius: 1.5rem;
+    padding: 2px;
+
+    background-color: var(--cpd-color-bg-canvas-disabled);
+    border: 1px solid var(--cpd-color-border-disabled);
+    cursor: not-allowed;
+
+    &.mx_ToggleSwitch_enabled {
+        cursor: pointer;
+        background-color: var(--cpd-color-bg-canvas-default);
+        border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-primary);
+
+        &.mx_ToggleSwitch_on {
+            background-color: var(--cpd-color-bg-accent-rest);
+            border-color: var(--cpd-color-bg-accent-rest);
+        }
+
+        > .mx_ToggleSwitch_ball {
+            background-color: var(--cpd-color-icon-secondary);
+        }
+    }
+
+    &.mx_ToggleSwitch_on {
+        background-color: var(--cpd-color-bg-action-primary-disabled);
+        border-color: var(--cpd-color-bg-action-primary-disabled);
+
+        > .mx_ToggleSwitch_ball {
+            left: calc(100% - $font-20px);
+            background-color: var(--cpd-color-icon-on-solid-primary);
+        }
+    }
+}
+
+.mx_ToggleSwitch_ball {
+    position: relative;
+    width: $font-20px;
+    height: $font-20px;
+    border-radius: $font-20px;
+    background-color: var(--cpd-color-bg-action-primary-disabled);
+    transition:
+        left 0.15s ease-out 0.1s,
+        background-color 0.15s ease-out 0.1s;
+    left: 0;
+}

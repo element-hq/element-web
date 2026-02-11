@@ -1,0 +1,74 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FilterDropdown {
+    .mx_Dropdown_menu {
+        margin-top: $spacing-4;
+        left: unset;
+        right: -$spacing-12;
+        width: 232px;
+        padding: $spacing-12;
+
+        border: 1px solid $quinary-content;
+        border-radius: 8px;
+        box-shadow: 0px 1px 3px rgb(23, 25, 28, 0.05);
+
+        background-color: $system;
+
+        .mx_Dropdown_option_highlight {
+            background-color: transparent;
+        }
+    }
+
+    .mx_Dropdown_input {
+        height: 24px;
+        background-color: transparent;
+        border-color: transparent;
+        color: $secondary-content;
+        border-radius: 4px;
+
+        &:focus,
+        &:hover {
+            background-color: $quinary-content;
+            border-color: $quinary-content;
+        }
+    }
+
+    .mx_Dropdown_arrow {
+        color: $secondary-content;
+    }
+}
+
+.mx_FilterDropdown_option {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    padding: $spacing-8 0 $spacing-8 $spacing-20;
+
+    font-size: $font-12px;
+    line-height: $font-15px;
+    color: $primary-content;
+}
+
+.mx_FilterDropdown_optionSelectedIcon {
+    height: 14px;
+    width: 14px;
+    position: absolute;
+    top: $spacing-8;
+    left: 0;
+}
+
+.mx_FilterDropdown_optionLabel {
+    font-weight: var(--cpd-font-weight-semibold);
+    display: block;
+}
+
+.mx_FilterDropdown_optionDescription {
+    color: $secondary-content;
+    margin-top: $spacing-4;
+}

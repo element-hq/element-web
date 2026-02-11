@@ -1,0 +1,77 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ThemeChoicePanel_ThemeSelectors {
+    display: flex;
+    flex-wrap: wrap;
+    /* Override form default style */
+    flex-direction: row !important;
+    gap: var(--cpd-space-4x) !important;
+
+    .mx_ThemeChoicePanel_themeSelector {
+        border: 1px solid var(--cpd-color-border-interactive-secondary);
+        border-radius: var(--cpd-space-1-5x);
+        padding: var(--cpd-space-3x) var(--cpd-space-5x) var(--cpd-space-3x) var(--cpd-space-3x);
+        gap: var(--cpd-space-2x);
+        background-color: var(--cpd-color-bg-canvas-default);
+
+        &.mx_ThemeChoicePanel_themeSelector_enabled {
+            border-color: var(--cpd-color-border-interactive-primary);
+        }
+
+        &.mx_ThemeChoicePanel_themeSelector_disabled {
+            border-color: var(--cpd-color-border-disabled);
+        }
+
+        .mx_ThemeChoicePanel_themeSelector_Label {
+            color: var(--cpd-color-text-primary);
+            font: var(--cpd-font-body-md-semibold);
+        }
+    }
+}
+
+.mx_ThemeChoicePanel_CustomTheme {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-4x);
+
+    .mx_ThemeChoicePanel_CustomTheme_EditInPlace input:focus {
+        /*
+         * When the input is focused, the border is growing
+         * We need to move it a bit to avoid the left border to be under the left panel
+         */
+        margin-left: var(--cpd-space-0-5x);
+    }
+
+    .mx_ThemeChoicePanel_CustomThemeList {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-4x);
+        /*
+         * Override the default padding/margin of the list
+         */
+        padding: 0;
+        margin: 0;
+
+        .mx_ThemeChoicePanel_CustomThemeList_theme {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--cpd-color-gray-200);
+            padding: var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-4x);
+
+            .mx_ThemeChoicePanel_CustomThemeList_name {
+                font: var(--cpd-font-body-sm-semibold);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}

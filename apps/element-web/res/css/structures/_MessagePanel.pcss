@@ -1,0 +1,29 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MessagePanel_myReadMarker {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    hr {
+        border-top: solid 1px $accent;
+        border-bottom: solid 1px $accent;
+        margin-top: 0;
+        position: relative;
+        top: -1px;
+        z-index: 1;
+        will-change: width;
+        transition:
+            width 400ms easeinsine 1s,
+            opacity 400ms easeinsine 1s;
+        width: 99%;
+        opacity: 1;
+    }
+}

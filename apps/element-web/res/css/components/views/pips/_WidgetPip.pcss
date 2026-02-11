@@ -1,0 +1,73 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+$width: 320px;
+$height: 220px;
+
+.mx_WidgetPip {
+    width: $width;
+    height: $height;
+}
+
+.mx_WidgetPip_overlay {
+    width: $width;
+    height: $height;
+    position: absolute;
+    top: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    color: $call-primary-content;
+    cursor: pointer;
+}
+
+.mx_WidgetPip_header,
+.mx_WidgetPip_footer {
+    position: absolute;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: opacity ease 0.15s;
+}
+
+.mx_WidgetPip_overlay:not(:hover) {
+    .mx_WidgetPip_header,
+    .mx_WidgetPip_footer {
+        opacity: 0;
+    }
+}
+
+.mx_WidgetPip_header {
+    top: 0;
+    padding: $spacing-12;
+    display: flex;
+    font-size: $font-12px;
+    font-weight: var(--cpd-font-weight-semibold);
+    background: linear-gradient(rgb(0, 0, 0, 0.9), rgb(0, 0, 0, 0));
+}
+
+.mx_WidgetPip_backButton {
+    height: $spacing-24;
+    display: flex;
+    align-items: center;
+    gap: $spacing-12;
+
+    > .mx_Icon {
+        color: $call-light-quaternary-content;
+        padding: 0;
+    }
+}
+
+.mx_WidgetPip_footer {
+    bottom: 0;
+    padding: $spacing-12 $spacing-8;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    background: linear-gradient(rgb(0, 0, 0, 0), rgb(0, 0, 0, 0.9));
+}

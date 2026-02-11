@@ -1,0 +1,32 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_StyledLiveBeaconIcon {
+    flex-grow: 0;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+
+    background-color: $location-live-color;
+    border-color: $location-live-color;
+    padding: 2px;
+    /* colors icon */
+    color: white;
+}
+
+.mx_StyledLiveBeaconIcon.mx_StyledLiveBeaconIcon_error {
+    background-color: $alert;
+    border-color: $alert;
+}
+
+.mx_StyledLiveBeaconIcon.mx_StyledLiveBeaconIcon_idle {
+    background-color: $quaternary-content;
+    border-color: $quaternary-content;
+}

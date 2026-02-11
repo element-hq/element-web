@@ -1,0 +1,41 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_AuthPage {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: $authpage-bg-color;
+    height: 100vh;
+    overflow: auto;
+}
+
+.mx_AuthPage_modal {
+    display: flex;
+    margin: 100px auto auto;
+    border-radius: var(--cpd-space-6x);
+    background-color: $authpage-modal-bg-color;
+
+    @media only screen and (max-height: 768px) {
+        margin-top: 50px;
+    }
+
+    @media only screen and (max-width: 480px) {
+        margin-top: 0;
+    }
+
+    &.mx_AuthPage_modal_withBlur {
+        /* Apply a blurred shadow around the modal */
+        box-shadow: 0 2px 4px 0 rgb(0, 0, 0, 0.33);
+
+        .mx_AuthPage_modalContent {
+            /* Make the modal's background semitransparent */
+            background-color: $authpage-modal-content-with-blur-bg-color;
+        }
+    }
+}

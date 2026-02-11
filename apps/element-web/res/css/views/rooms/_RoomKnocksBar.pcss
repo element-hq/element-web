@@ -1,0 +1,42 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 Nordeck IT + Consulting GmbH
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomKnocksBar {
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    display: flex;
+    padding: var(--cpd-space-2x) var(--cpd-space-4x);
+}
+
+.mx_RoomKnocksBar_content {
+    flex-grow: 1;
+    margin: 0 var(--cpd-space-3x);
+}
+
+.mx_RoomKnocksBar_paragraph {
+    color: $secondary-content;
+    font-size: var(--cpd-font-size-body-sm);
+    margin: 0;
+}
+
+.mx_RoomKnocksBar_link {
+    margin-left: var(--cpd-space-3x);
+}
+
+.mx_RoomKnocksBar_action,
+.mx_RoomKnocksBar_avatar {
+    align-self: center;
+    flex-shrink: 0;
+}
+
+.mx_RoomKnocksBar_action + .mx_RoomKnocksBar_action {
+    margin-left: var(--cpd-space-3x);
+}
+
+.mx_RoomKnocksBar_avatar + .mx_RoomKnocksBar_avatar {
+    margin-left: calc(var(--cpd-space-4x) * -1);
+}

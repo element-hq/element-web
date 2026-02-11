@@ -1,0 +1,32 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Waveform {
+    position: relative;
+    height: 30px; /* tallest bar can only be 30px */
+    top: 1px; /* because of our border trick (see below), we're off by 1px of aligntment */
+
+    display: flex;
+    align-items: center; /* so the bars grow from the middle */
+
+    overflow: hidden; /* this is cheaper than a `max-height: calc(100% - 4px)` in the bar's CSS. */
+
+    /* A bar is meant to be a 2x2 circle when at zero height, and otherwise a 2px wide line */
+    /* with rounded caps. */
+    .mx_Waveform_bar {
+        width: 0; /* 0px width means we'll end up using the border as our width */
+        border: 1px solid transparent; /* transparent means we'll use the background colour */
+        border-radius: 2px; /* rounded end caps, based on the border */
+        min-height: 0; /* like the width, we'll rely on the border to give us height */
+        max-height: 100%; /* this makes the `height: 42%` work on the element */
+        margin-left: 1px; /* we want 2px between each bar, so 1px on either side for balance */
+        margin-right: 1px;
+
+        /* background color is handled by the parent components */
+    }
+}

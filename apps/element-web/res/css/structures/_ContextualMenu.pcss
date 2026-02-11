@@ -1,0 +1,117 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ContextualMenu_wrapper {
+    position: fixed;
+    z-index: 5000;
+}
+
+.mx_ContextualMenu_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
+
+.mx_ContextualMenu {
+    border-radius: 12px;
+    box-shadow: 0px 4px 24px rgb(0, 0, 0, 0.1);
+    background-color: var(--cpd-color-bg-canvas-default);
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-secondary);
+    color: $primary-content;
+    position: absolute;
+    z-index: 5001;
+    width: max-content;
+}
+
+.mx_ContextualMenu_right {
+    right: 16px;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_right {
+    right: 8px;
+}
+
+.mx_ContextualMenu_chevron_right {
+    position: absolute;
+    right: -8px;
+    top: 0px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-left: 8px solid $menu-bg-color;
+    border-bottom: 8px solid transparent;
+}
+
+.mx_ContextualMenu_left {
+    left: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_left {
+    left: 8px;
+}
+
+.mx_ContextualMenu_chevron_left {
+    position: absolute;
+    left: -8px;
+    top: 0px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-right: 8px solid $menu-bg-color;
+    border-bottom: 8px solid transparent;
+}
+
+.mx_ContextualMenu_top {
+    top: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_top {
+    top: 8px;
+}
+
+.mx_ContextualMenu_chevron_top {
+    position: absolute;
+    left: 0px;
+    top: -8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid $menu-bg-color;
+    border-right: 8px solid transparent;
+}
+
+.mx_ContextualMenu_bottom {
+    bottom: 0;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_withChevron_bottom {
+    bottom: 8px;
+}
+
+.mx_ContextualMenu_chevron_bottom {
+    position: absolute;
+    left: 0px;
+    bottom: -8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-top: 8px solid $menu-bg-color;
+    border-right: 8px solid transparent;
+}
+
+.mx_ContextualMenu_rightAligned {
+    transform: translateX(-100%);
+}
+
+.mx_ContextualMenu_bottomAligned {
+    transform: translateY(-100%);
+}

@@ -1,0 +1,44 @@
+/*
+Copyright 2018-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomUpgradeWarningBar {
+    max-height: 235px;
+    background-color: $info-plinth-bg-color;
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow: scroll;
+}
+
+.mx_RoomUpgradeWarningBar_wrapped {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    -webkit-align-items: center;
+}
+
+.mx_RoomUpgradeWarningBar_header {
+    color: $alert;
+    font-weight: bold;
+}
+
+.mx_RoomUpgradeWarningBar_body {
+    color: $alert;
+}
+
+.mx_RoomUpgradeWarningBar_upgradelink {
+    color: $alert;
+    text-decoration: underline;
+}
+
+.mx_RoomUpgradeWarningBar_small {
+    color: $info-plinth-fg-color;
+    font-size: 70%;
+}

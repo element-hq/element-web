@@ -1,0 +1,66 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DeviceSecurityCard {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    box-sizing: border-box;
+
+    padding: $spacing-16;
+
+    border: 1px solid $quinary-content;
+    border-radius: 8px;
+}
+
+.mx_DeviceSecurityCard_icon {
+    flex: 0 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: $spacing-16;
+    border-radius: 8px;
+
+    height: 40px;
+    width: 40px;
+
+    color: var(--icon-color);
+    background-color: var(--background-color);
+
+    &.Verified {
+        --icon-color: $e2e-verified-color;
+        --background-color: $e2e-verified-color-light;
+    }
+
+    &.Unverified {
+        --icon-color: $e2e-warning-color;
+        --background-color: $e2e-warning-color-light;
+    }
+
+    &.Inactive {
+        --icon-color: $secondary-content;
+        --background-color: $panels;
+    }
+}
+
+.mx_DeviceSecurityCard_content {
+    flex: 1 1;
+}
+.mx_DeviceSecurityCard_heading {
+    margin: 0 0 $spacing-4 0;
+}
+.mx_DeviceSecurityCard_description {
+    margin: 0;
+    font: var(--cpd-font-body-sm-regular);
+    color: $secondary-content;
+}
+
+.mx_DeviceSecurityCard_actions {
+    margin-top: $spacing-16;
+}

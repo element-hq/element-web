@@ -1,0 +1,32 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2018 New Vector Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RestoreKeyBackupDialog_keyStatus {
+    height: 30px;
+}
+
+.mx_RestoreKeyBackupDialog_primaryContainer {
+    /* FIXME: plinth colour in new theme(s). background-color: $accent; */
+    padding: 20px;
+}
+
+.mx_RestoreKeyBackupDialog_passPhraseInput,
+.mx_RestoreKeyBackupDialog_recoveryKeyInput {
+    width: 300px;
+    border: 1px solid $accent;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.mx_RestoreKeyBackupDialog_content > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px; /* Empirically measured */
+}

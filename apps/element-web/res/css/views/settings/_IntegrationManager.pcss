@@ -1,0 +1,42 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_IntegrationManager {
+    .mx_Dialog_border {
+        box-sizing: border-box;
+        width: 60%;
+        height: 70%;
+        max-width: initial;
+        max-height: initial;
+    }
+
+    .mx_Dialog {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    iframe {
+        background-color: #fff;
+        border: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    h3 {
+        margin-block: $spacing-20;
+    }
+
+    .mx_IntegrationManager_loading,
+    .mx_IntegrationManager_error {
+        text-align: center;
+    }
+
+    .mx_IntegrationManager_error h3 {
+        color: $alert;
+    }
+}

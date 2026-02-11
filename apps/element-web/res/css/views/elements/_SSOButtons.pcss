@@ -1,0 +1,69 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SSOButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .mx_SSOButtons_row {
+        & + .mx_SSOButtons_row {
+            margin-top: 16px;
+        }
+    }
+
+    .mx_SSOButton {
+        position: relative;
+        width: 100%;
+        padding: 7px 32px;
+        text-align: center;
+        border-radius: 8px;
+        display: inline-block;
+        font: var(--cpd-font-body-md-semibold);
+        border: 1px solid $input-border-color;
+        color: $primary-content;
+
+        > img {
+            object-fit: contain;
+            position: absolute;
+            left: 8px;
+            top: 4px;
+        }
+    }
+
+    .mx_SSOButton:hover {
+        background-color: $panel-actions;
+    }
+
+    .mx_SSOButton_default {
+        color: $accent;
+        background-color: $button-secondary-bg-color;
+        border-color: $accent;
+    }
+    .mx_SSOButton_default.mx_SSOButton_primary {
+        color: $button-primary-fg-color;
+        background-color: $accent;
+    }
+
+    .mx_SSOButton_mini {
+        box-sizing: border-box;
+        width: 50px; /* 48px + 1px border on all sides */
+        height: 50px; /* 48px + 1px border on all sides */
+        min-width: 50px; /* prevent crushing by the flexbox */
+        padding: 12px;
+
+        > img {
+            left: 12px;
+            top: 12px;
+        }
+
+        & + .mx_SSOButton_mini {
+            margin-left: 16px;
+        }
+    }
+}

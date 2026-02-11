@@ -1,0 +1,31 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ShareLatestLocation_icon {
+    height: 13px;
+    width: 13px;
+    color: $secondary-content;
+}
+
+/* double class to be more specific than the general mx_CopyableText CSS rule */
+.mx_CopyableText.mx_ShareLatestLocation_copy {
+    /* override copyable text style to make compact */
+    .mx_CopyableText_copyButton {
+        height: 13px;
+        margin-left: $spacing-8 !important;
+        position: relative;
+        top: -1px;
+        width: 13px;
+
+        &::before {
+            background-color: $secondary-content;
+            height: 13px;
+            width: 13px;
+        }
+    }
+}

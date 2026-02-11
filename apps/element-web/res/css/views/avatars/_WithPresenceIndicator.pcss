@@ -1,0 +1,46 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_WithPresenceIndicator {
+    position: relative;
+    contain: content;
+    line-height: 0;
+
+    .mx_WithPresenceIndicator_icon {
+        position: absolute;
+        right: -2px;
+        bottom: -2px;
+    }
+
+    .mx_WithPresenceIndicator_icon::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        border: 2px solid var(--cpd-color-bg-canvas-default);
+        border-radius: 50%;
+    }
+
+    .mx_WithPresenceIndicator_icon_offline::before {
+        background-color: $presence-offline;
+    }
+
+    .mx_WithPresenceIndicator_icon_online::before {
+        background-color: $accent;
+    }
+
+    .mx_WithPresenceIndicator_icon_away::before {
+        background-color: $presence-away;
+    }
+
+    .mx_WithPresenceIndicator_icon_busy::before {
+        background-color: $presence-busy;
+    }
+}

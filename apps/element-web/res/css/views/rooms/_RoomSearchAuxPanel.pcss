@@ -1,0 +1,64 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomSearchAuxPanel {
+    /* use `min-height` rather than height, to allow room for the text to wrap if the window is narrow */
+    min-height: 84px;
+    display: flex;
+    align-items: center;
+    border-color: var(--cpd-color-bg-canvas-default);
+    border-style: solid;
+    border-width: 1px 0;
+    padding: var(--cpd-space-3x);
+    box-sizing: border-box;
+    gap: var(--cpd-space-2x);
+
+    .mx_RoomSearchAuxPanel_summary {
+        flex-grow: 1;
+        display: inherit; /* flex */
+        gap: var(--cpd-space-2x);
+        align-items: center;
+        overflow: hidden;
+
+        > svg {
+            padding: var(--cpd-space-2x);
+            border-radius: var(--cpd-space-2x);
+            background-color: var(--cpd-color-bg-subtle-secondary);
+            color: var(--cpd-color-icon-secondary);
+            flex-shrink: 0;
+        }
+
+        .mx_RoomSearchAuxPanel_summary_text {
+            display: flex;
+            flex-direction: column;
+            font-size: $font-15px;
+            line-height: $font-22px;
+            overflow: hidden;
+
+            span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .mx_SearchWarning {
+            display: contents;
+            font-size: $font-13px;
+            line-height: $font-20px;
+            color: var(--cpd-color-text-secondary);
+        }
+    }
+
+    .mx_RoomSearchAuxPanel_buttons {
+        display: inherit; /* flex */
+        gap: var(--cpd-space-6x);
+        align-items: center;
+        flex-shrink: 0;
+    }
+}

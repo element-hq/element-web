@@ -1,0 +1,29 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_PlayPauseButton {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    min-width: 32px; /* for when the button is used in a flexbox */
+    min-height: 32px; /* for when the button is used in a flexbox */
+    border-radius: 32px;
+    background-color: $system;
+    /* !important override compound icon button */
+    padding: var(--cpd-space-1-5x) !important;
+    box-sizing: border-box;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    &[disabled] svg {
+        opacity: 0.5;
+    }
+}

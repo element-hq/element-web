@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<FacePile /> renders with a tooltip 1`] = `
+<DocumentFragment>
+  <div
+    aria-labelledby="_r_0_"
+    class="mx_AccessibleButton mx_FacePile"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="_stacked-avatars_zysgz_109"
+    >
+      <span
+        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        data-color="4"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 36px;"
+      >
+        4
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

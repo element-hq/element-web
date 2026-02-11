@@ -1,0 +1,51 @@
+/*
+Copyright 2017-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_EditableItemList {
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+
+.mx_EditableItem {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.mx_EditableItem_delete {
+    @mixin customisedCancelButton;
+    order: 3;
+    vertical-align: middle;
+    width: 28px;
+    height: 28px;
+    background-color: $alert;
+    mask-size: 100%;
+}
+
+.mx_EditableItem_email {
+    vertical-align: middle;
+}
+
+.mx_EditableItem_promptText {
+    margin-right: 10px;
+    order: 2;
+}
+
+.mx_EditableItem_confirmBtn {
+    margin-right: 5px;
+}
+
+.mx_EditableItem_item {
+    flex: auto 1 0;
+    order: 1;
+    width: calc(100% - 28px); /* leave space for the remove button */
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.mx_EditableItemList_label {
+    margin-bottom: 5px;
+}
