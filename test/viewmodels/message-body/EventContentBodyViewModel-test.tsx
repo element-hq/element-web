@@ -6,7 +6,6 @@
  */
 
 import { MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
-import parse from "html-react-parser";
 import { type JSX } from "react";
 
 import {
@@ -16,7 +15,6 @@ import {
 import { stubClient, mkStubRoom, mkEvent } from "../../test-utils";
 import { bodyToNode } from "../../../src/HtmlUtils";
 import {
-    applyReplacerOnString,
     combineRenderers,
     mentionPillRenderer,
     keywordPillRenderer,
@@ -32,10 +30,7 @@ jest.mock("../../../src/HtmlUtils", () => ({
     bodyToNode: jest.fn(),
 }));
 
-jest.mock("html-react-parser", () => jest.fn());
-
 jest.mock("../../../src/renderer", () => ({
-    applyReplacerOnString: jest.fn(),
     combineRenderers: jest.fn(),
     mentionPillRenderer: jest.fn(),
     keywordPillRenderer: jest.fn(),
@@ -52,8 +47,6 @@ jest.mock("../../../src/PlatformPeg", () => ({
 }));
 
 const mockedBodyToNode = jest.mocked(bodyToNode);
-const mockedParse = jest.mocked(parse);
-const mockedApplyReplacerOnString = jest.mocked(applyReplacerOnString);
 const mockedCombineRenderers = jest.mocked(combineRenderers);
 const mockedPlatformPeg = jest.mocked(PlatformPeg);
 
@@ -72,8 +65,6 @@ describe("EventContentBodyViewModel", () => {
 
     beforeEach(() => {
         mockedBodyToNode.mockReset();
-        mockedParse.mockReset();
-        mockedApplyReplacerOnString.mockReset();
         mockedCombineRenderers.mockReset();
         mockedPlatformPeg.get.mockReset();
         mockedPlatformPeg.get.mockReturnValue(null);
@@ -88,7 +79,6 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValue("replaced-text");
 
         const vm = new EventContentBodyViewModel(
             defaultProps({
@@ -106,8 +96,8 @@ describe("EventContentBodyViewModel", () => {
             mediaIsVisible: false,
             linkify: true,
         });
-        expect(mockedApplyReplacerOnString).toHaveBeenCalledWith("Hello world", replacer);
-        expect(snapshot.children).toBe("replaced-text");
+        expect(snapshot.body).toBe("Hello world");
+        expect(snapshot.replacer).toBe(replacer);
         expect(snapshot.className).toContain("mx_EventTile_body");
     });
 
@@ -120,7 +110,6 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValue("emote-text");
 
         new EventContentBodyViewModel(
             defaultProps({
@@ -148,15 +137,14 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedParse.mockReturnValue("parsed-html");
 
         const vm = new EventContentBodyViewModel(defaultProps());
 
         const snapshot = vm.getSnapshot();
 
-        expect(mockedParse).toHaveBeenCalledWith("<b>Hello</b>", { replace: replacer });
-        expect(mockedApplyReplacerOnString).not.toHaveBeenCalled();
-        expect(snapshot.children).toBe("parsed-html");
+        expect(snapshot.formattedBody).toBe("<b>Hello</b>");
+        expect(snapshot.body).toBe("Hello world");
+        expect(snapshot.replacer).toBe(replacer);
     });
 
     it("uses emojiBodyElements when provided", () => {
@@ -169,12 +157,11 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: emojiElements,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValue("emoji-text");
 
         const vm = new EventContentBodyViewModel(defaultProps());
 
-        expect(mockedApplyReplacerOnString).toHaveBeenCalledWith(emojiElements, replacer);
-        expect(vm.getSnapshot().children).toBe("emoji-text");
+        expect(vm.getSnapshot().body).toBe(emojiElements);
+        expect(vm.getSnapshot().replacer).toBe(replacer);
     });
 
     it("sets dir to auto for div elements even when includeDir is false", () => {
@@ -186,7 +173,6 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValue("replaced-text");
 
         const vm = new EventContentBodyViewModel(defaultProps({ as: "div", includeDir: false }));
 
@@ -202,7 +188,6 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValue("replaced-text");
 
         const vm = new EventContentBodyViewModel(defaultProps({ as: "span", includeDir: false }));
 
@@ -218,10 +203,9 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValueOnce("initial-text").mockReturnValueOnce("updated-text");
 
         const vm = new EventContentBodyViewModel(defaultProps());
-        expect(vm.getSnapshot().children).toBe("initial-text");
+        expect(vm.getSnapshot().body).toBe("Initial");
 
         mockedBodyToNode.mockReturnValue({
             strippedBody: "Updated",
@@ -232,7 +216,7 @@ describe("EventContentBodyViewModel", () => {
 
         vm.setEventContent(undefined, { body: "Updated", msgtype: MsgType.Text });
 
-        expect(vm.getSnapshot().children).toBe("updated-text");
+        expect(vm.getSnapshot().body).toBe("Updated");
     });
 
     it("does not emit updates when setter values are unchanged", () => {
@@ -244,7 +228,6 @@ describe("EventContentBodyViewModel", () => {
             emojiBodyElements: undefined,
             className: "mx_EventTile_body",
         });
-        mockedApplyReplacerOnString.mockReturnValue("initial-text");
 
         const vm = new EventContentBodyViewModel(defaultProps());
         const previousSnapshot = vm.getSnapshot();

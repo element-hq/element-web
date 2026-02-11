@@ -36,58 +36,48 @@ const Template: StoryFn<typeof EventContentBodyWrapper> = (args) => <EventConten
 
 export const PlainText = Template.bind({});
 PlainText.args = {
-    children: "Hello, this is a plain text message.",
+    body: "Hello, this is a plain text message.",
     className: styles.EventTile_body,
 };
 
 export const BigEmoji = Template.bind({});
 BigEmoji.args = {
-    children: (
-        <>
-            <span className={styles.Emoji} title=":wave:">
-                👋
-            </span>
-            <span className={styles.Emoji} title=":smile:">
-                😊
-            </span>
-        </>
-    ),
+    body: [
+        <span key="wave" className={styles.Emoji} title=":wave:">
+            👋
+        </span>,
+        <span key="smile" className={styles.Emoji} title=":smile:">
+            😊
+        </span>,
+    ],
     className: `${styles.EventTile_body} ${styles.EventTile_bigEmoji}`,
 };
 
 export const HtmlContent = Template.bind({});
 HtmlContent.args = {
-    children: (
-        <p>
-            This is <strong>bold</strong> and <em>italic</em> text with a <a href="https://matrix.org">link</a>.
-        </p>
-    ),
+    body: "This is bold and italic text with a link.",
+    formattedBody:
+        "<p>This is <strong>bold</strong> and <em>italic</em> text with a <a href='https://matrix.org'>link</a>.</p>",
     className: `${styles.EventTile_body} ${styles.markdownBody}`,
 };
 
 export const CodeBlock = Template.bind({});
 CodeBlock.args = {
-    children: (
-        <pre>
-            <code>{`function hello() {\n  console.log("Hello, world!");\n}`}</code>
-        </pre>
-    ),
+    body: 'function hello() {\n  console.log("Hello, world!");\n}',
+    formattedBody: "<pre><code>function hello() {\n  console.log(\"Hello, world!\");\n}</code></pre>",
     className: `${styles.EventTile_body} ${styles.markdownBody}`,
 };
 
 export const AsSpan = Template.bind({});
 AsSpan.args = {
     as: "span",
-    children: "This is rendered as a span element.",
+    body: "This is rendered as a span element.",
     className: `${styles.EventTile_body}`,
 };
 
 export const WithHighlight = Template.bind({});
 WithHighlight.args = {
-    children: (
-        <>
-            Message with a <span className={styles.EventTile_searchHighlight}>highlighted</span> word.
-        </>
-    ),
+    body: "Message with a highlighted word.",
+    formattedBody: `Message with a <span class="${styles.EventTile_searchHighlight}">highlighted</span> word.`,
     className: styles.EventTile_body,
 };

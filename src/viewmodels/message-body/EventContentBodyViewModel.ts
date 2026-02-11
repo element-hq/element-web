@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Ref, type ReactNode } from "react";
+import { type Ref } from "react";
 import { type IContent, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -18,7 +18,6 @@ import {
 import { bodyToNode } from "../../HtmlUtils";
 import PlatformPeg from "../../PlatformPeg";
 import {
-    applyReplacerOnString,
     combineRenderers,
     type Replacer,
     type RendererMap,
@@ -160,9 +159,10 @@ export class EventContentBodyViewModel
     extends BaseViewModel<EventContentBodyViewSnapshot, EventContentBodyViewModelProps>
     implements EventContentBodyViewModelInterface
 {
-    private readonly updateSnapshot = (): void => {
-        this.snapshot.set(EventContentBodyViewModel.computeSnapshot(this.props));
-    };
+    private static readonly parseFormattedBody = (
+        formattedBody: string,
+        replacer?: Replacer,
+    ): ReturnType<typeof parse> => parse(formattedBody, replacer ? { replace: replacer } : undefined);
 
     private static readonly computeSnapshot = (props: EventContentBodyViewModelProps): EventContentBodyViewSnapshot => {
         const {
@@ -189,18 +189,11 @@ export class EventContentBodyViewModel
         // Force dir="auto" on divs
         const dir: "auto" | undefined = as === "div" || includeDir ? "auto" : undefined;
 
-        // Render the content
-        let children: ReactNode;
-        if (formattedBody) {
-            children = parse(formattedBody, {
-                replace: replacer,
-            });
-        } else {
-            children = applyReplacerOnString(emojiBodyElements || strippedBody, replacer);
-        }
-
         return {
-            children,
+            body: emojiBodyElements || strippedBody,
+            formattedBody,
+            replacer,
+            parseFormattedBody: EventContentBodyViewModel.parseFormattedBody,
             className,
             dir,
         };
@@ -217,41 +210,53 @@ export class EventContentBodyViewModel
 
         this.props.mxEvent = mxEvent;
         this.props.content = content;
-        this.updateSnapshot();
+        const { body, formattedBody, replacer, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+
+        this.snapshot.merge({ body, formattedBody, replacer, className });
     }
 
     public setStripReply(stripReply?: boolean): void {
         if (this.props.stripReply === stripReply) return;
 
         this.props.stripReply = stripReply;
-        this.updateSnapshot();
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+
+        this.snapshot.merge({ body, formattedBody, className });
     }
 
     public setHighlights(highlights?: string[]): void {
         if (this.props.highlights === highlights) return;
 
         this.props.highlights = highlights;
-        this.updateSnapshot();
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+
+        this.snapshot.merge({ body, formattedBody, className });
     }
 
     public setAs(as: "span" | "div"): void {
         if (this.props.as === as) return;
 
         this.props.as = as;
-        this.updateSnapshot();
+        const { dir } = EventContentBodyViewModel.computeSnapshot(this.props);
+
+        this.snapshot.merge({ dir });
     }
 
     public setEnableBigEmoji(enableBigEmoji?: boolean): void {
         if (this.props.enableBigEmoji === enableBigEmoji) return;
 
         this.props.enableBigEmoji = enableBigEmoji;
-        this.updateSnapshot();
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+
+        this.snapshot.merge({ body, formattedBody, className });
     }
 
     public setShouldShowPillAvatar(shouldShowPillAvatar?: boolean): void {
         if (this.props.shouldShowPillAvatar === shouldShowPillAvatar) return;
 
         this.props.shouldShowPillAvatar = shouldShowPillAvatar;
-        this.updateSnapshot();
+        const { replacer } = EventContentBodyViewModel.computeSnapshot(this.props);
+
+        this.snapshot.merge({ replacer });
     }
 }
