@@ -63,10 +63,7 @@ describe("DisambiguatedProfileView", () => {
     {
         public onClick?: DisambiguatedProfileViewActions["onClick"];
 
-        public constructor(
-            snapshot: DisambiguatedProfileViewSnapshot,
-            actions: DisambiguatedProfileViewActions = {},
-        ) {
+        public constructor(snapshot: DisambiguatedProfileViewSnapshot, actions: DisambiguatedProfileViewActions = {}) {
             super(snapshot);
             this.onClick = actions.onClick;
         }
