@@ -213,12 +213,12 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </div>
       <div
         aria-labelledby="_r_ti_"
-        class="_banner_48r66_20"
+        class="_banner_17clp_8"
         data-type="critical"
         role="status"
       >
         <div
-          class="_icon_48r66_63"
+          class="_icon_17clp_51"
         >
           <svg
             fill="currentColor"
@@ -234,7 +234,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </svg>
         </div>
         <div
-          class="_content_48r66_51"
+          class="_content_17clp_39"
         >
           <p
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_mqidv_1"
@@ -244,7 +244,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </p>
         </div>
         <div
-          class="_actions_48r66_83"
+          class="_actions_17clp_71"
         >
           <button
             class="_button_13vu4_8 _container_mqidv_1 _has-icon_13vu4_60"

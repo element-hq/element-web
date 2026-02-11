@@ -12,16 +12,6 @@
             "other": "%(count)s uleste meldinger inkludert der du nevnes."
         },
         "recent_rooms": "Nylige rom",
-        "room_messsage_not_sent": "Åpent rom %(roomName)s med en usendt melding.",
-        "room_n_unread_invite": "Invitasjon til det åpne rommet %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Åpne room %(roomName)s med 1 ulest message.",
-            "other": "Åpne room %(roomName)s med %(count)s uleste messages."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Åpne room %(roomName)s med 1 ulest omtale.",
-            "other": "Åpne room %(roomName)s med %(count)s uleste meldinger inkludert omtaler."
-        },
         "room_name": "Rom %(name)s",
         "room_status_bar": "Statuslinje for rommet",
         "seek_bar_label": "Søkelinje for lyd",
@@ -1711,7 +1701,6 @@
         "class_global": "Globalt",
         "class_other": "Andre",
         "default": "Standard",
-        "default_settings": "Match standardinnstillingene",
         "email_pusher_app_display_name": "E-postvarsler",
         "enable_prompt_toast_description": "Aktiver skrivebordsvarsler",
         "enable_prompt_toast_title": "Varsler",
@@ -1730,8 +1719,7 @@
         "mentions_and_keywords_description": "Bli varslet bare med omtaler og nøkkelord som konfigurert i <a> innstillingene dine </a>",
         "mentions_keywords": "Omtaler og nøkkelord",
         "message_didnt_send": "Meldingen ble ikke sendt. Klikk for informasjon.",
-        "mute_description": "Du vil ikke få noen varsler",
-        "mute_room": "Demp rommet"
+        "mute_description": "Du vil ikke få noen varsler"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s ber om verifisering"
@@ -2145,37 +2133,9 @@
         "add_space_label": "Legg til område",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
-        "collapse_filters": "Skjul filterlisten",
-        "empty": {
-            "no_chats": "Ingen chatter ennå",
-            "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
-            "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
-            "no_favourites": "Du har ikke favorittchat ennå",
-            "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
-            "no_invites": "Du har ingen uleste invitasjoner",
-            "no_lowpriority": "Du har ingen rom med lav prioritet",
-            "no_mentions": "Du har ingen uleste omtaler",
-            "no_people": "Du har ikke direkte chatter med noen ennå",
-            "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
-            "no_rooms": "Du er ikke med i noen rom ennå",
-            "no_rooms_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
-            "no_unread": "Gratulerer! Du har ingen uleste meldinger",
-            "show_activity": "Se alle aktiviteter",
-            "show_chats": "Vis alle chatter"
-        },
-        "expand_filters": "Utvid filterlisten",
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
-        "filters": {
-            "favourite": "Favoritter",
-            "invites": "Invitasjoner",
-            "low_priority": "Lav prioritet",
-            "mentions": "Omtaler",
-            "people": "Personer",
-            "rooms": "Rom",
-            "unread": "Uleste"
-        },
         "home_menu_label": "Hjem alternativer",
         "join_public_room_label": "Bli med i offentlig rom",
         "joining_rooms_status": {
@@ -2184,22 +2144,12 @@
         },
         "list_title": "Romliste",
         "more_options": {
-            "copy_link": "Kopier romlenke",
-            "favourited": "Favorittmerket",
-            "leave_room": "Forlat rommet",
-            "low_priority": "Lav prioritet",
-            "mark_read": "Marker som lest",
-            "mark_unread": "Marker som ulest"
+            "leave_room": "Forlat rommet"
         },
         "notification_options": "Varselsinnstillinger",
-        "primary_filters": "Filtre for romliste",
         "redacting_messages_status": {
             "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
             "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
-        },
-        "room": {
-            "more_options": "Flere alternativer",
-            "open_room": "Åpne rom %(roomName)s"
         },
         "show_less": "Vis mindre",
         "show_n_more": {

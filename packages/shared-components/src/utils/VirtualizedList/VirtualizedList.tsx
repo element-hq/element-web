@@ -1,9 +1,9 @@
 /*
-Copyright 2025 New Vector Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import React, { useRef, type JSX, useCallback, useEffect, useState, useMemo } from "react";
 import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
@@ -95,6 +95,19 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
      * @returns
      */
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+
+    /**
+     * Optional total count of items (for virtualization with partial data loading).
+     * If provided, this will be used instead of items.length for the total count.
+     */
+    totalCount?: number;
+
+    /**
+     * Optional callback when the visible range of items changes.
+     * Useful for loading data on-demand as the user scrolls.
+     * @param range - The new visible range with startIndex and endIndex
+     */
+    rangeChanged?: (range: ListRange) => void;
 }
 
 /**
@@ -113,7 +126,17 @@ export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
  */
 export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, getItemComponent, isItemFocusable, getItemKey, context, onKeyDown, ...virtuosoProps } = props;
+    const {
+        items,
+        getItemComponent,
+        isItemFocusable,
+        getItemKey,
+        context,
+        onKeyDown,
+        totalCount,
+        rangeChanged,
+        ...virtuosoProps
+    } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
@@ -324,6 +347,15 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
         [tabIndexKey, isFocused, props.context],
     );
 
+    // Combine internal range tracking with optional external callback
+    const handleRangeChanged = useCallback(
+        (range: ListRange) => {
+            setVisibleRange(range);
+            rangeChanged?.(range);
+        },
+        [rangeChanged],
+    );
+
     return (
         <Virtuoso
             // note that either the container of direct children must be focusable to be axe
@@ -334,10 +366,11 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
             scrollerRef={scrollerRef}
             onKeyDown={keyDownCallback}
             context={listContext}
-            rangeChanged={setVisibleRange}
+            rangeChanged={handleRangeChanged}
             // virtuoso errors internally if you pass undefined.
             overscan={props.overscan || 0}
             data={props.items}
+            totalCount={totalCount}
             onFocus={onFocus}
             onBlur={onBlur}
             itemContent={getItemComponentInternal}

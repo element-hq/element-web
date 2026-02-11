@@ -337,7 +337,7 @@ describe("ForwardDialog", () => {
         it("converts legacy location events to pin drop shares", async () => {
             const { container } = mountForwardDialog(legacyLocationEvent);
 
-            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+            await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
             sendToFirstRoom(container);
 
             // text and description from original event are removed
@@ -364,7 +364,7 @@ describe("ForwardDialog", () => {
         it("removes personal information from static self location shares", async () => {
             const { container } = mountForwardDialog(modernLocationEvent);
 
-            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+            await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
             sendToFirstRoom(container);
 
             const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent())!;
@@ -404,7 +404,7 @@ describe("ForwardDialog", () => {
             };
             const { container } = mountForwardDialog(beaconEvent);
 
-            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+            await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
 
             sendToFirstRoom(container);
 
@@ -414,7 +414,7 @@ describe("ForwardDialog", () => {
         it("forwards pin drop event", async () => {
             const { container } = mountForwardDialog(pinDropLocationEvent);
 
-            expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
+            await waitFor(() => expect(container.querySelector(".mx_MLocationBody")).toBeTruthy());
 
             sendToFirstRoom(container);
 

@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 84a2734a8989f43fd5368adbd4638b52560a11ab..cbda8398f3b4094b2d86152211811fe6c2342232 100644
+--- a/package.json
++++ b/package.json
+@@ -6,7 +6,8 @@
+   "exports": {
+     ".": {
+       "types": "./build/AwaitLock.d.ts",
+-      "import": "./build/AwaitLock.js"
++      "import": "./build/AwaitLock.js",
++      "require": "./build/AwaitLock.js"
+     }
+   },
+   "files": [

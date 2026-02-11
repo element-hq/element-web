@@ -30,6 +30,18 @@ module.exports = {
         "react/jsx-key": ["error"],
         "matrix-org/require-copyright-header": "error",
         "react-compiler/react-compiler": "error",
+        "no-restricted-imports": [
+            "error",
+            {
+                paths: [
+                    {
+                        name: "react",
+                        importNames: ["act"],
+                        message: "Please use @test-utils instead.",
+                    },
+                ],
+            },
+        ],
     },
     overrides: [
         {

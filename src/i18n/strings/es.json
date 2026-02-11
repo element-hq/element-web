@@ -12,8 +12,6 @@
             "one": "1 mención sin leer."
         },
         "recent_rooms": "Salas recientes",
-        "room_messsage_not_sent": "Abrir sala %(roomName)s con un mensaje no enviado.",
-        "room_n_unread_invite": "Abrir invitación de sala %(roomName)s.",
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado de la sala",
         "seek_bar_label": "Barra de búsqueda de audio",

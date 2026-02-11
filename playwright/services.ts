@@ -10,7 +10,7 @@ import {
     type Services as BaseServices,
     type WorkerOptions as BaseWorkerOptions,
 } from "@element-hq/element-web-playwright-common/lib/fixtures";
-import { type HomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
+import { type HomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 import { type OAuthServer } from "./plugins/oauth_server";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite";

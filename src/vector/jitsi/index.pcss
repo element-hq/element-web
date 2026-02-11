@@ -8,14 +8,12 @@ Please see LICENSE files in the repository root for full details.
 /* TODO: Match the user's theme: https://github.com/element-hq/element-web/issues/12794 */
 
 @import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css");
-/* Path to `res` dir in the source tree */
-$res: ../../../res;
 
 @font-face {
     font-family: "Nunito";
     font-style: normal;
     font-weight: 400;
-    src: url("$(res)/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
+    src: url("/res/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
 }
 
 $dark-fg: #edf3ff;

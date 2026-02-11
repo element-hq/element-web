@@ -1,0 +1,27 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.disambiguatedProfile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+
+    .disambiguatedProfile_displayName {
+        font: var(--cpd-font-body-md-semibold);
+        letter-spacing: var(--cpd-letter-spacing-body-md);
+        margin-inline-end: 0;
+        /* keeps the height in check, important for the bubble apperance */
+        line-height: 1;
+    }
+
+    .disambiguatedProfile_mxid {
+        color: var(--cpd-color-text-secondary);
+        font-size: var(--cpd-font-size-body-sm);
+        margin-inline-start: 5px;
+    }
+}
