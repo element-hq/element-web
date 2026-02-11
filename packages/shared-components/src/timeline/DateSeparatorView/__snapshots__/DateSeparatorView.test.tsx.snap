@@ -28,6 +28,34 @@ exports[`DateSeparatorView > renders default story 1`] = `
 </div>
 `;
 
+exports[`DateSeparatorView > renders long localized label story 1`] = `
+<div>
+  <div
+    aria-label="Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="dateHeading"
+      >
+        Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
 exports[`DateSeparatorView > renders with extra class names 1`] = `
 <div>
   <div
@@ -48,6 +76,34 @@ exports[`DateSeparatorView > renders with extra class names 1`] = `
       >
         Today
       </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparatorView > renders with jump-to-date menu story 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="dateContent"
+    >
+      <div
+        data-testid="jump-to-date-menu"
+        role="presentation"
+      >
+        Jump to date
+      </div>
     </div>
     <hr
       role="none"

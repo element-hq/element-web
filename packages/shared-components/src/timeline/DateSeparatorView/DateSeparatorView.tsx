@@ -14,11 +14,18 @@ import styles from "./DateSeparatorView.module.css";
 import { TimelineSeparator } from "../../message-body/TimelineSeparator";
 
 export interface DateSeparatorViewSnapshot {
+    /**
+     * Visible date label and the separator's accessible label.
+     */
     label: string;
     /**
-     * Extra CSS classes to apply to the component
+     * Extra CSS classes to apply to the component.
      */
     className?: string;
+    /**
+     * Optional custom header content (for example a jump-to-date menu trigger).
+     * When provided, this replaces the default heading content.
+     */
     jumpToDateMenu?: JSX.Element;
 }
 
@@ -35,27 +42,26 @@ interface DateSeparatorViewProps {
 }
 
 /**
- * A placeholder element for date separator
+ * Renders a timeline date separator.
+ * Uses `jumpToDateMenu` when present, otherwise renders the default date heading.
  *
  * @example
  * ```tsx
- * <DateSeparatorView vm={DateSeparatorViewModel} />
+ * <DateSeparatorView vm={vm} />
  * ```
  */
 export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
     const { label, className, jumpToDateMenu } = useViewModel(vm);
 
     const dateHeaderContent = (
-        <div className={styles.dateContent}>
-            <h2 className={styles.dateHeading} aria-hidden="true">
-                {label}
-            </h2>
-        </div>
+        <h2 className={styles.dateHeading} aria-hidden="true">
+            {label}
+        </h2>
     );
 
     return (
         <TimelineSeparator label={label} className={classNames(className)}>
-            {jumpToDateMenu || dateHeaderContent}
+            <div className={styles.dateContent}>{jumpToDateMenu || dateHeaderContent}</div>
         </TimelineSeparator>
     );
 }

@@ -36,3 +36,17 @@ export const HasExtraClassNames = Template.bind({});
 HasExtraClassNames.args = {
     className: "extra_class_1 extra_class_2",
 };
+
+export const WithJumpToDateMenu = Template.bind({});
+WithJumpToDateMenu.args = {
+    jumpToDateMenu: (
+        <div data-testid="jump-to-date-menu" role="presentation">
+            Jump to date
+        </div>
+    ),
+};
+
+export const LongLocalizedLabel = Template.bind({});
+LongLocalizedLabel.args = {
+    label: "Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time",
+};
