@@ -10,6 +10,7 @@ import {
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
+import { type MouseEvent } from "react";
 
 import { _t } from "../../languageHandler";
 import { getUserNameColorClass } from "../../utils/FormattingUtils";
@@ -79,8 +80,6 @@ export class DisambiguatedProfileViewModel
     extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewModelProps>
     implements DisambiguatedProfileViewModelInterface
 {
-    public onClick?: DisambiguatedProfileViewActions["onClick"];
-
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
@@ -133,42 +132,16 @@ export class DisambiguatedProfileViewModel
 
     public constructor(props: DisambiguatedProfileViewModelProps) {
         super(props, DisambiguatedProfileViewModel.computeSnapshot(props));
-        this.onClick = props.onClick;
     }
 
-    public setMember(member?: MemberInfo | null): void {
-        if (this.props.member === member) return;
-
+    public setMember(fallbackName: string, member?: MemberInfo | null): void {
         this.props.member = member;
-        const { displayName, colorClass, displayIdentifier, title } = DisambiguatedProfileViewModel.computeSnapshot(
-            this.props,
-        );
-
-        this.snapshot.merge({ displayName, colorClass, displayIdentifier, title });
-    }
-
-    public setFallbackName(fallbackName: string): void {
-        if (this.props.fallbackName === fallbackName) return;
-
         this.props.fallbackName = fallbackName;
-        const { displayName, title } = DisambiguatedProfileViewModel.computeSnapshot(this.props);
 
-        this.snapshot.merge({ displayName, title });
+        this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
-    public setWithTooltip(withTooltip?: boolean): void {
-        if (this.props.withTooltip === withTooltip) return;
-
-        this.props.withTooltip = withTooltip;
-        const { title } = DisambiguatedProfileViewModel.computeSnapshot(this.props);
-
-        this.snapshot.merge({ title });
-    }
-
-    public setOnClick(onClick?: DisambiguatedProfileViewActions["onClick"]): void {
-        if (this.props.onClick === onClick) return;
-
-        this.props.onClick = onClick;
-        this.onClick = onClick;
-    }
+    public onClick = (evt: MouseEvent<HTMLDivElement>): void => {
+        this.props.onClick?.(evt);
+    };
 }

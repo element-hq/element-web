@@ -42,11 +42,8 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
     );
 
     useEffect(() => {
-        disambiguatedProfileVM.setOnClick(onClick);
-        disambiguatedProfileVM.setMember(member);
-        disambiguatedProfileVM.setFallbackName(sender ?? "");
-        disambiguatedProfileVM.setWithTooltip(withTooltip);
-    }, [disambiguatedProfileVM, onClick, member, sender, withTooltip]);
+        disambiguatedProfileVM.setMember(sender ?? "", member);
+    }, [disambiguatedProfileVM, member, sender]);
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
         <DisambiguatedProfileView vm={disambiguatedProfileVM} />
     ) : (

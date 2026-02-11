@@ -57,8 +57,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             }),
     );
     useEffect(() => {
-        disambiguatedProfileVM.setMember(member);
-        disambiguatedProfileVM.setFallbackName(name);
+        disambiguatedProfileVM.setMember(name, member);
     }, [disambiguatedProfileVM, member, name]);
     const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} />;
 
