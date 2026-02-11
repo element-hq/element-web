@@ -1,13 +1,13 @@
-diff --git a/node_modules/@types/mdx/types.d.ts b/node_modules/@types/mdx/types.d.ts
-index 498bb69..4e89216 100644
---- a/node_modules/@types/mdx/types.d.ts
-+++ b/node_modules/@types/mdx/types.d.ts
+diff --git a/types.d.ts b/types.d.ts
+index 498bb694de2e6a62f14d3fe998dc538aff920fc6..ab288cdf8ca228fc8daaff2c5fb84ce665b40812 100644
+--- a/types.d.ts
++++ b/types.d.ts
 @@ -5,7 +5,7 @@
   */
  // @ts-ignore JSX runtimes may optionally define JSX.ElementType. The MDX types need to work regardless whether this is
  // defined or not.
 -type ElementType = any extends JSX.ElementType ? never : JSX.ElementType;
-+type ElementType = any extends JSX.ElementType ? never : React.JSX.ElementType;
++type ElementType = any extends React.JSX.ElementType ? never : React.JSX.ElementType;
  
  /**
   * This matches any function component types that ar part of `ElementType`.

@@ -26,19 +26,20 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
                   node-version: "lts/*"
 
             - name: Install dependencies
               working-directory: packages/shared-components
-              run: yarn install --frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Get installed Playwright version
               working-directory: packages/shared-components
               id: playwright
-              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
               uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
@@ -50,11 +51,11 @@ jobs:
             - name: Install Playwright browsers
               working-directory: packages/shared-components
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: "yarn playwright install --with-deps --only-shell"
+              run: "pnpm playwright install --with-deps --only-shell"
 
             - name: Run Visual tests
               working-directory: packages/shared-components
-              run: "yarn test:storybook --run"
+              run: "pnpm test:storybook --run"
 
             # Workaround for vis silently adding new baselines if they didn't exist
             # Can be removed once https://github.com/repobuddy/visual-testing/issues/516 is released
