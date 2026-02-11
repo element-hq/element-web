@@ -81,7 +81,7 @@ export class DisambiguatedProfileViewModel
 {
     public onClick?: DisambiguatedProfileViewActions["onClick"];
 
-    private static readonly computeInitialSnapshot = (
+    private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
         const { member, fallbackName, colored, emphasizeDisplayName, withTooltip, className } = props;
@@ -132,7 +132,7 @@ export class DisambiguatedProfileViewModel
     };
 
     public constructor(props: DisambiguatedProfileViewModelProps) {
-        super(props, DisambiguatedProfileViewModel.computeInitialSnapshot(props));
+        super(props, DisambiguatedProfileViewModel.computeSnapshot(props));
         this.onClick = props.onClick;
     }
 
@@ -140,8 +140,9 @@ export class DisambiguatedProfileViewModel
         if (this.props.member === member) return;
 
         this.props.member = member;
-        const { displayName, colorClass, displayIdentifier, title } =
-            DisambiguatedProfileViewModel.computeInitialSnapshot(this.props);
+        const { displayName, colorClass, displayIdentifier, title } = DisambiguatedProfileViewModel.computeSnapshot(
+            this.props,
+        );
 
         this.snapshot.merge({ displayName, colorClass, displayIdentifier, title });
     }
@@ -150,7 +151,7 @@ export class DisambiguatedProfileViewModel
         if (this.props.fallbackName === fallbackName) return;
 
         this.props.fallbackName = fallbackName;
-        const { displayName, title } = DisambiguatedProfileViewModel.computeInitialSnapshot(this.props);
+        const { displayName, title } = DisambiguatedProfileViewModel.computeSnapshot(this.props);
 
         this.snapshot.merge({ displayName, title });
     }
@@ -159,7 +160,7 @@ export class DisambiguatedProfileViewModel
         if (this.props.withTooltip === withTooltip) return;
 
         this.props.withTooltip = withTooltip;
-        const { title } = DisambiguatedProfileViewModel.computeInitialSnapshot(this.props);
+        const { title } = DisambiguatedProfileViewModel.computeSnapshot(this.props);
 
         this.snapshot.merge({ title });
     }
