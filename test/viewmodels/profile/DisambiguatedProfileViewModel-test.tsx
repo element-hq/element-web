@@ -75,7 +75,7 @@ describe("DisambiguatedProfileViewModel", () => {
         const subscriber = jest.fn();
 
         vm.subscribe(subscriber);
-        vm.onClick({} as never);
+        onClick({} as never);
 
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(subscriber).not.toHaveBeenCalled();
