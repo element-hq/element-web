@@ -1,7 +1,7 @@
-diff --git a/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts b/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts
-index 917a7fc..a2710c6 100644
---- a/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts
-+++ b/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts
+diff --git a/lib/ModuleApi.d.ts b/lib/ModuleApi.d.ts
+index 917a7fc073ea208ed8e45ccca994ae2ca0493bb8..a2710c6f99b1c6a9186232f3d1aa4d5e8a903062 100644
+--- a/lib/ModuleApi.d.ts
++++ b/lib/ModuleApi.d.ts
 @@ -37,7 +37,7 @@ export interface ModuleApi {
       * @returns Whether the user submitted the dialog or closed it, and the model returned by the
       * dialog component if submitted.
@@ -11,11 +11,11 @@ index 917a7fc..a2710c6 100644
          didOkOrSubmit: boolean;
          model: M;
      }>;
-diff --git a/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.d.ts b/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.d.ts
-index cb5f2e5..51daa51 100644
---- a/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.d.ts
-+++ b/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.d.ts
-@@ -66,23 +66,23 @@ export interface SetupEncryptionStoreProjection {
+diff --git a/lib/lifecycles/CryptoSetupExtensions.d.ts b/lib/lifecycles/CryptoSetupExtensions.d.ts
+index cb5f2e5224f36e4a258caf782d49bf925dd552b9..d3474c6847c0c65e953219bf6616c1d8a2c37b62 100644
+--- a/lib/lifecycles/CryptoSetupExtensions.d.ts
++++ b/lib/lifecycles/CryptoSetupExtensions.d.ts
+@@ -66,8 +66,8 @@ export interface SetupEncryptionStoreProjection {
  export interface ProvideCryptoSetupExtensions {
      examineLoginResponse(response: any, credentials: ExtendedMatrixClientCreds): void;
      persistCredentials(credentials: ExtendedMatrixClientCreds): void;
@@ -26,10 +26,7 @@ index cb5f2e5..51daa51 100644
      catchAccessSecretStorageError(e: Error): void;
      setupEncryptionNeeded: (args: CryptoSetupArgs) => boolean;
      /** @deprecated This callback is no longer used by matrix-react-sdk */
--    getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array) => void) => Promise<Uint8Array>) | null;
-+    getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array<ArrayBuffer>) => void) => Promise<Uint8Array<ArrayBuffer>>) | null;
-     SHOW_ENCRYPTION_SETUP_UI: boolean;
- }
+@@ -77,8 +77,8 @@ export interface ProvideCryptoSetupExtensions {
  export declare abstract class CryptoSetupExtensionsBase implements ProvideCryptoSetupExtensions {
      abstract examineLoginResponse(response: any, credentials: ExtendedMatrixClientCreds): void;
      abstract persistCredentials(credentials: ExtendedMatrixClientCreds): void;
@@ -40,12 +37,7 @@ index cb5f2e5..51daa51 100644
      abstract catchAccessSecretStorageError(e: Error): void;
      abstract setupEncryptionNeeded(args: CryptoSetupArgs): boolean;
      /** `getDehydrationKeyCallback` is no longer used; we provide an empty impl for type compatibility. */
--    getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array) => void) => Promise<Uint8Array>) | null;
-+    getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array<ArrayBuffer>) => void) => Promise<Uint8Array<ArrayBuffer>>) | null;
-     abstract SHOW_ENCRYPTION_SETUP_UI: boolean;
- }
- export interface CryptoSetupArgs {
-@@ -98,9 +98,9 @@ export declare class DefaultCryptoSetupExtensions extends CryptoSetupExtensionsB
+@@ -98,8 +98,8 @@ export declare class DefaultCryptoSetupExtensions extends CryptoSetupExtensionsB
      SHOW_ENCRYPTION_SETUP_UI: boolean;
      examineLoginResponse(response: any, credentials: ExtendedMatrixClientCreds): void;
      persistCredentials(credentials: ExtendedMatrixClientCreds): void;
@@ -55,13 +47,11 @@ index cb5f2e5..51daa51 100644
 +    createSecretStorageKey(): Uint8Array<ArrayBuffer> | null;
      catchAccessSecretStorageError(e: Error): void;
      setupEncryptionNeeded(args: CryptoSetupArgs): boolean;
--    getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array) => void) => Promise<Uint8Array>) | null;
-+    getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array<ArrayBuffer>) => void) => Promise<Uint8Array<ArrayBuffer>>) | null;
- }
-diff --git a/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.js b/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.js
-index 5d422ed..b823add 100644
---- a/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.js
-+++ b/node_modules/@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions.js
+     getDehydrationKeyCallback(): ((keyInfo: SecretStorageKeyDescription, checkFunc: (key: Uint8Array) => void) => Promise<Uint8Array>) | null;
+diff --git a/lib/lifecycles/CryptoSetupExtensions.js b/lib/lifecycles/CryptoSetupExtensions.js
+index 5d422ed500ac5846e713a8e8ecddb3be75357b60..011c19fafd06d1f203df1383360c52a45e387dcf 100644
+--- a/lib/lifecycles/CryptoSetupExtensions.js
++++ b/lib/lifecycles/CryptoSetupExtensions.js
 @@ -124,34 +124,28 @@ var DefaultCryptoSetupExtensions = /*#__PURE__*/function (_CryptoSetupExtension)
    (0, _createClass2["default"])(DefaultCryptoSetupExtensions, [{
      key: "examineLoginResponse",

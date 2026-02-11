@@ -94,7 +94,7 @@ const translateWithFallback = (text: string, options?: IVariables): { translated
     // Even the translation via FALLBACK_LOCALE failed; this can happen if
     //
     // 1. The string isn't in the translations dictionary, usually because you're in develop
-    // and haven't run yarn i18n
+    // and haven't run pnpm i18n
     // 2. Loading the translation resources over the network failed, which can happen due to
     // to network or if the client tried to load a translation that's been removed from the
     // server.
