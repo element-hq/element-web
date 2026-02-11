@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, type JSHandle, type Page } from "@playwright/test";
+import { type ICreateRoomOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type {
     CryptoEvent,
     EmojiMapping,
@@ -497,6 +497,51 @@ export const verify = async (app: ElementAppPage, bob: Bot) => {
     await roomInfo.getByRole("button", { name: "They match" }).click();
     await expect(roomInfo.getByText("You've successfully verified Bob!")).toBeVisible();
     await roomInfo.getByRole("button", { name: "Got it" }).click();
+};
+
+/**
+ * Verify two instances of the Element app by emoji.
+ * @param aliceElementApp
+ * @param bobElementApp
+ */
+export const verifyApp = async (
+    aliceDisplayName: string,
+    aliceElementApp: ElementAppPage,
+    bobDisplayName: string,
+    bobElementApp: ElementAppPage,
+) => {
+    // Alice opens room info and starts verification.
+    const aliceRoomInfo = aliceElementApp.page.locator(".mx_RightPanel");
+    if (await aliceRoomInfo.isHidden()) {
+        await aliceElementApp.toggleRoomInfoPanel();
+    }
+
+    await aliceElementApp.page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
+    await aliceRoomInfo.getByText("Bob").click();
+    await aliceRoomInfo.getByRole("button", { name: "Verify" }).click();
+    await aliceRoomInfo.getByRole("button", { name: "Start Verification" }).click();
+
+    // Navigate to the DM created by Alice and accept the invite
+    const oldRoomId = await bobElementApp.getCurrentRoomIdFromUrl();
+    await bobElementApp.viewRoomByName(aliceDisplayName);
+    await bobElementApp.page.getByRole("button", { name: "Start chatting" }).click();
+
+    // Bob accepts the verification request.
+    await bobElementApp.page.getByRole("button", { name: "Verify" }).click({ timeout: 5000 });
+
+    // This requires creating a DM, so can take a while. Give it a longer timeout.
+    await aliceRoomInfo.getByRole("button", { name: "Verify by emoji" }).click({ timeout: 30000 });
+    await bobElementApp.page.getByRole("button", { name: "Verify by emoji" }).click();
+
+    await aliceRoomInfo.getByRole("button", { name: "They match" }).click();
+    await bobElementApp.page.getByRole("button", { name: "They match" }).click();
+
+    // Assert the verification was successful.
+    await expect(aliceRoomInfo.getByText(`You've successfully verified ${bobDisplayName}!`)).toBeVisible();
+    await expect(bobElementApp.page.getByText(`You've successfully verified ${aliceDisplayName}!`)).toBeVisible();
+
+    // Navigate Bob back to the old room.
+    await bobElementApp.viewRoomById(oldRoomId);
 };
 
 /**
