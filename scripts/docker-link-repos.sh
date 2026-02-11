@@ -21,9 +21,9 @@ fi
 echo "Linking js-sdk"
 git clone --depth 1 --branch $JS_SDK_BRANCH "$JS_SDK_REPO" js-sdk
 cd js-sdk
-yarn link
-yarn --network-timeout=100000 install
+pnpm link
+pnpm install
 cd ../
 
 echo "Setting up element-web with js-sdk package"
-yarn link matrix-js-sdk
+pnpm link matrix-js-sdk

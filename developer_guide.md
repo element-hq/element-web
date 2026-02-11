@@ -28,8 +28,7 @@ First clone and build `matrix-js-sdk`:
 ```bash
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
-yarn link
-yarn install
+pnpm install
 popd
 ```
 
@@ -43,12 +42,17 @@ cd element-web
 Configure the app by copying `config.sample.json` to `config.json` and
 modifying it. See the [configuration docs](docs/config.md) for details.
 
+Set up your local development link by creating a `.link-config` file with contents like:
+
+```
+matrix-js-sdk=/path/to/matrix-js-sdk
+```
+
 Finally, build and start Element itself:
 
 ```bash
-yarn link matrix-js-sdk
-yarn install
-yarn start
+pnpm install
+pnpm start
 ```
 
 Wait a few seconds for the initial build to finish; you should see something like:
@@ -104,7 +108,7 @@ There are a number of application-level tests in the `tests` directory; these
 are designed to run with Jest and JSDOM. To run them
 
 ```
-yarn test
+pnpm test
 ```
 
 ### End-to-End tests

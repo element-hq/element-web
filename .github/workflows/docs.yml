@@ -33,17 +33,18 @@ jobs:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
-                  cache-dependency-path: element-web/yarn.lock
+                  cache: "pnpm"
+                  cache-dependency-path: element-web/pnpm-lock.yaml
                   node-version: "lts/*"
 
             - name: Generate automations docs
               working-directory: element-web
               run: |
-                  yarn install --frozen-lockfile
-                  yarn node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
+                  pnpm install --frozen-lockfile
+                  pnpm node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
