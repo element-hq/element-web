@@ -1,0 +1,27 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &.mx_WelcomePage_registrationDisabled {
+        .mx_ButtonCreateAccount {
+            display: none;
+        }
+    }
+}
+
+.mx_Welcome .mx_AuthBody_language {
+    width: 160px;
+    margin-bottom: 10px;
+}
+
+/* Invert image colours in dark mode. */
+.cpd-theme-dark .mx_WelcomePage_logo {
+    filter: invert(1);
+}

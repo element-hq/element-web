@@ -1,0 +1,70 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MatrixChat_splash {
+    position: relative;
+    height: 100%;
+}
+
+.mx_MatrixChat_wrapper {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+}
+
+.mx_MatrixToolbar {
+    order: 1;
+
+    height: 40px;
+}
+
+.mx_MatrixChat {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex: 1;
+    min-height: 0;
+}
+
+/* not the left panel, and not the resize handle, so the roomview and friends */
+.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle):not(.mx_LeftPanel_outerWrapper) {
+    background-color: $background;
+
+    flex: 1 1 0;
+    min-width: 0;
+
+    /* To fix https://github.com/vector-im/element-web/issues/3298 where Safari
+       needed height 100% all the way down to the HomePage. Height does not
+       have to be auto, empirically.
+    */
+    height: 100%;
+}
+
+.mx_MatrixChat > .mx_ResizeHandle--horizontal:hover {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        height: 64px; /* to match width of the ones on roomlist */
+        width: 4px;
+        border-radius: 4px;
+
+        content: " ";
+
+        background-color: $primary-content;
+        opacity: 0.8;
+    }
+}

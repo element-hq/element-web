@@ -1,0 +1,63 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DialPadContextMenu_dialPad .mx_DialPad {
+    row-gap: 16px;
+    column-gap: 32px;
+}
+
+.mx_DialPadContextMenuWrapper {
+    padding: 15px;
+}
+
+.mx_DialPadContextMenu_header {
+    border: none;
+    margin-top: 32px;
+    margin-left: 20px;
+    margin-right: 20px;
+
+    /* a separator between the input line and the dial buttons */
+    border-bottom: 1px solid $quaternary-content;
+    transition: border-bottom 0.25s;
+}
+
+.mx_DialPadContextMenu_cancel {
+    @mixin customisedCancelButton;
+    float: right;
+}
+
+.mx_DialPadContextMenu_header:focus-within {
+    border-bottom: 1px solid $accent;
+}
+
+.mx_DialPadContextMenu_title {
+    color: $muted-fg-color;
+    font-size: 12px;
+    font-weight: var(--cpd-font-weight-semibold);
+}
+
+.mx_DialPadContextMenu_dialled {
+    height: 1.5em;
+    font-size: 18px;
+    font-weight: var(--cpd-font-weight-semibold);
+    border: none;
+    margin: 0px;
+}
+.mx_DialPadContextMenu_dialled input {
+    font-size: 18px;
+    font-weight: var(--cpd-font-weight-semibold);
+    overflow: hidden;
+    max-width: 185px;
+    text-align: left;
+    padding: 8px 0px;
+    background-color: rgb(0, 0, 0, 0);
+}
+
+.mx_DialPadContextMenu_dialPad {
+    margin: 16px;
+}

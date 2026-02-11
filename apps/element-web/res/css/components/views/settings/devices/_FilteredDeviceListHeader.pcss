@@ -1,0 +1,33 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FilteredDeviceListHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    gap: $spacing-16;
+
+    width: 100%;
+    height: 48px;
+    padding: 0 $spacing-16;
+    margin-bottom: $spacing-32;
+
+    background-color: $panels;
+    border-radius: 8px;
+    color: $secondary-content;
+
+    /* Higher specificity selector to override the flex-start value */
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
+        align-self: center;
+    }
+}
+
+.mx_FilteredDeviceListHeader_label {
+    flex: 1 1 100%;
+}

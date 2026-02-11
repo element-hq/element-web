@@ -1,0 +1,50 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_EventTile_content.mx_ViewSourceEvent {
+    display: flex;
+    opacity: 0.6;
+    font-size: $font-12px;
+    width: 100%;
+    overflow-x: auto; /* Cancel overflow setting of .mx_EventTile_content */
+    line-height: normal; /* Align with avatar and E2E icon */
+
+    pre,
+    code {
+        flex: 1;
+    }
+
+    pre {
+        line-height: 1.2;
+        margin: 3.5px 0;
+    }
+
+    .mx_ViewSourceEvent_toggle {
+        --ViewSourceEvent_toggle-size: 16px;
+
+        visibility: hidden;
+        /* icon */
+        width: var(--ViewSourceEvent_toggle-size);
+        min-width: var(--ViewSourceEvent_toggle-size);
+
+        svg {
+            color: $accent;
+            width: var(--ViewSourceEvent_toggle-size);
+            height: var(--ViewSourceEvent_toggle-size);
+        }
+
+        .mx_EventTile:hover & {
+            visibility: visible;
+        }
+    }
+
+    &.mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle {
+        align-self: flex-end;
+        height: var(--ViewSourceEvent_toggle-size);
+    }
+}

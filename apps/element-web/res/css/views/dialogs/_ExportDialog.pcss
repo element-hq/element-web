@@ -1,0 +1,83 @@
+/*
+Copyright 2024,2025 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ExportDialog {
+    .mx_ExportDialog_subheading {
+        font-size: $font-16px;
+        display: block;
+        font-family: $font-family;
+        font-weight: var(--cpd-font-weight-semibold);
+        color: $primary-content;
+        margin-top: 18px;
+        margin-bottom: 12px;
+    }
+
+    &.mx_ExportDialog_Exporting {
+        .mx_ExportDialog_options {
+            pointer-events: none;
+        }
+
+        .mx_Field_select::before {
+            display: none;
+        }
+
+        .mx_StyledRadioButton input[type="radio"]:checked + div > div {
+            background: $info-plinth-fg-color;
+        }
+
+        .mx_StyledRadioButton input[type="radio"]:checked + div {
+            border-color: unset;
+        }
+
+        .mx_Field_valid.mx_Field label,
+        .mx_Field_valid.mx_Field:focus-within label {
+            color: unset;
+        }
+
+        .mx_Field_valid.mx_Field,
+        .mx_Field_valid.mx_Field:focus-within {
+            border-color: $input-border-color;
+        }
+    }
+
+    .mx_ExportDialog_progress {
+        .mx_Dialog_buttons {
+            margin-top: unset;
+            margin-left: 18px;
+        }
+
+        .mx_Spinner {
+            width: unset;
+            height: unset;
+            flex: unset;
+            margin-right: 10px;
+        }
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .mx_StyledRadioButton > .mx_StyledRadioButton_content {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .mx_Field {
+        width: 256px;
+    }
+
+    .mx_Field_postfix {
+        padding: 9px 10px;
+    }
+}
+
+.mx_ExportDialog_attachments-checkbox {
+    margin-top: $spacing-16;
+}

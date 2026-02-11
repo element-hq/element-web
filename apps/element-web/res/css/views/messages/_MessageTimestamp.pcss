@@ -1,0 +1,32 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+:root {
+    --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
+    --MessageTimestamp-max-width: 80px;
+    --MessageTimestamp-color: $event-timestamp-color;
+}
+
+.mx_MessageTimestamp {
+    color: var(--MessageTimestamp-color) !important; /* override anchor color */
+    font-size: $font-10px;
+    font-variant-numeric: tabular-nums;
+    display: block; /* enable the width setting below */
+    width: var(--MessageTimestamp-width);
+    white-space: nowrap;
+    user-select: none;
+    text-decoration: none;
+}
+
+.mx_MessageTimestamp_lateIcon {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    color: inherit;
+}

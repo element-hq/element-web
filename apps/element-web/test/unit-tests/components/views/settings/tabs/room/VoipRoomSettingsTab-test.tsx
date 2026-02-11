@@ -1,0 +1,135 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React from "react";
+import { fireEvent, render, type RenderResult, waitFor } from "jest-matrix-react";
+import { type MatrixClient, type Room, type MatrixEvent, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
+
+import { mkStubRoom, stubClient } from "../../../../../../test-utils";
+import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
+import { VoipRoomSettingsTab } from "../../../../../../../src/components/views/settings/tabs/room/VoipRoomSettingsTab";
+import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../../../src/call-types";
+
+describe("VoipRoomSettingsTab", () => {
+    const roomId = "!room:example.com";
+    let cli: MatrixClient;
+    let room: Room;
+
+    const renderTab = (): RenderResult => {
+        return render(<VoipRoomSettingsTab room={room} />);
+    };
+
+    beforeEach(() => {
+        stubClient();
+        cli = MatrixClientPeg.safeGet();
+        room = mkStubRoom(roomId, "test room", cli);
+
+        jest.spyOn(cli, "sendStateEvent");
+        jest.spyOn(cli, "getRoom").mockReturnValue(room);
+    });
+
+    describe("Element Call", () => {
+        const mockPowerLevels = (events: Record<string, number>): void => {
+            jest.spyOn(room.currentState, "getStateEvents").mockReturnValue({
+                getContent: () => ({
+                    events,
+                }),
+            } as unknown as MatrixEvent);
+        };
+
+        const getElementCallSwitch = (tab: RenderResult): HTMLElement => {
+            return tab.getByLabelText("Enable Element Call as an additional calling option in this room")!;
+        };
+
+        describe("correct state", () => {
+            it("shows enabled when call member power level is 0", () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
+
+                const tab = renderTab();
+
+                expect(getElementCallSwitch(tab)).toBeChecked();
+            });
+
+            it.each([1, 50, 100])("shows disabled when call member power level is 0", (level: number) => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: level });
+
+                const tab = renderTab();
+
+                expect(getElementCallSwitch(tab)).not.toBeChecked();
+            });
+        });
+
+        describe("enabling/disabling", () => {
+            describe("enabling Element calls", () => {
+                beforeEach(() => {
+                    mockPowerLevels({ [ElementCallMemberEventType.name]: 100 });
+                });
+
+                it("enables Element calls in public room", async () => {
+                    jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
+
+                    const tab = renderTab();
+
+                    fireEvent.click(getElementCallSwitch(tab));
+                    await waitFor(() =>
+                        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                            room.roomId,
+                            EventType.RoomPowerLevels,
+                            expect.objectContaining({
+                                events: {
+                                    [ElementCallEventType.name]: 50,
+                                    [ElementCallMemberEventType.name]: 0,
+                                },
+                            }),
+                        ),
+                    );
+                });
+
+                it("enables Element calls in private room", async () => {
+                    jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
+
+                    const tab = renderTab();
+
+                    fireEvent.click(getElementCallSwitch(tab));
+                    await waitFor(() =>
+                        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                            room.roomId,
+                            EventType.RoomPowerLevels,
+                            expect.objectContaining({
+                                events: {
+                                    [ElementCallEventType.name]: 0,
+                                    [ElementCallMemberEventType.name]: 0,
+                                },
+                            }),
+                        ),
+                    );
+                });
+            });
+
+            it("disables Element calls", async () => {
+                mockPowerLevels({ [ElementCallMemberEventType.name]: 0 });
+
+                const tab = renderTab();
+
+                fireEvent.click(getElementCallSwitch(tab));
+                await waitFor(() =>
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                        room.roomId,
+                        EventType.RoomPowerLevels,
+                        expect.objectContaining({
+                            events: {
+                                [ElementCallEventType.name]: 100,
+                                [ElementCallMemberEventType.name]: 100,
+                            },
+                        }),
+                    ),
+                );
+            });
+        });
+    });
+});

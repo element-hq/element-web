@@ -1,0 +1,90 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ShareType {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 60px $spacing-12 $spacing-32;
+
+    color: $primary-content;
+
+    .mx_ShareType_wrapper_options {
+        display: flex;
+        flex-direction: column;
+        row-gap: $spacing-12;
+        width: 100%;
+        margin-top: $spacing-12;
+
+        .mx_ShareType_option {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: $spacing-8 $spacing-20;
+            background: none;
+
+            border: 1px solid $quinary-content;
+            border-radius: 8px;
+
+            font-size: $font-15px;
+            font-family: inherit;
+            line-height: inherit;
+            color: $primary-content;
+
+            &:hover,
+            &:focus {
+                border-color: $accent;
+            }
+        }
+    }
+}
+
+.mx_ShareType_badge {
+    height: 60px;
+    width: 60px;
+    margin-bottom: $spacing-20;
+    background-color: $accent;
+    border-radius: 50%;
+    border: 14px solid $accent;
+    /* colors icon */
+    color: white;
+    box-sizing: border-box;
+}
+
+.mx_ShareType_heading {
+    padding-bottom: $spacing-32;
+    text-align: center;
+}
+
+.mx_ShareType_option-icon {
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+    margin-right: $spacing-12;
+    flex: 0 0 40px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+
+    /* Live is styled by StyledLiveBeaconIcon */
+
+    &.Own {
+        border-color: $accent;
+    }
+
+    &.Pin {
+        border-color: $accent;
+        background-color: $accent;
+        padding: 7px;
+        /* colors icon */
+        color: white;
+    }
+}

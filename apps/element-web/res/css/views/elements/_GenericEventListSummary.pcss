@@ -1,0 +1,133 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_GenericEventListSummary {
+    position: relative;
+
+    .mx_GenericEventListSummary_avatars {
+        margin-right: $spacing-8;
+    }
+
+    .mx_GenericEventListSummary_spacer {
+        border-bottom: 1px solid $primary-hairline-color;
+        margin-left: 63px;
+        line-height: $font-30px; /* TODO: Use a variable */
+
+        .mx_IRCLayout & {
+            line-height: var(--line-height);
+        }
+    }
+
+    .mx_GenericEventListSummary_toggle {
+        /* We reuse a title cased translation */
+        text-transform: lowercase;
+    }
+
+    &[data-layout="irc"],
+    &[data-layout="group"] {
+        .mx_GenericEventListSummary_toggle {
+            float: right;
+            margin-inline: 0 10px;
+        }
+    }
+
+    &[data-layout="group"] {
+        margin-top: $spacing-8;
+    }
+
+    &[data-layout="bubble"] {
+        --maxWidth: 70%;
+        display: flex;
+        margin-left: calc(var(--avatarSize) + var(--gutterSize));
+
+        .mx_GenericEventListSummary_toggle {
+            margin-block: 0;
+
+            &[aria-expanded="false"] {
+                order: 9; /* TODO: Remove */
+            }
+
+            &[aria-expanded="true"] {
+                margin-inline-start: auto; /* reduce clickable area */
+                margin-inline-end: var(--EventTile_bubble-margin-inline-end); /* as the parent has zero margin */
+            }
+        }
+
+        .mx_GenericEventListSummary_spacer {
+            display: none;
+        }
+
+        &[data-expanded="false"] {
+            align-items: center;
+            justify-content: space-between;
+            column-gap: 5px;
+        }
+
+        /* ideally we'd use display=contents here for the layout to all work regardless of the *ELS but */
+        /* that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse. */
+        &[data-expanded="true"] {
+            flex-direction: column;
+            margin: 0;
+        }
+
+        &::after {
+            content: "";
+            clear: both;
+        }
+
+        &:hover {
+            &::before {
+                background: transparent;
+            }
+        }
+    }
+
+    .mx_MatrixChat_useCompactLayout & {
+        font-size: $font-13px;
+        margin-top: $spacing-4;
+
+        .mx_EventTile_line {
+            line-height: 1.25;
+        }
+
+        .mx_GenericEventListSummary_spacer {
+            line-height: 1.375;
+        }
+
+        .mx_TextualEvent.mx_GenericEventListSummary_summary {
+            font: var(--cpd-font-body-sm-regular);
+        }
+    }
+
+    /* Make all state events one order smaller than the other events */
+    .mx_EventTile {
+        font: var(--cpd-font-body-sm-regular);
+        color: $secondary-content;
+    }
+}
+
+.mx_GenericEventListSummary_unstyledList {
+    list-style: none;
+    padding: 0;
+}
+
+.mx_TextualEvent.mx_GenericEventListSummary_summary {
+    font: var(--cpd-font-body-sm-regular);
+    display: inline-flex;
+    color: $secondary-content;
+}
+
+.mx_GenericEventListSummary_avatars {
+    display: inline-block;
+    line-height: $font-12px;
+
+    .mx_BaseAvatar {
+        margin-right: -4px;
+        cursor: pointer;
+    }
+}

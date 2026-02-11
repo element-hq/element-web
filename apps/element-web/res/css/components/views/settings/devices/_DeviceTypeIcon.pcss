@@ -1,0 +1,63 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DeviceTypeIcon {
+    flex: 0 0 auto;
+    position: relative;
+    margin-right: $spacing-8;
+    /* creates space for verification icon to overlap */
+    padding: 0 $spacing-8 $spacing-8 0;
+}
+
+.mx_DeviceTypeIcon_deviceIconWrapper {
+    --background-color: $panels;
+    --icon-color: $secondary-content;
+
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+
+    border: $spacing-8 solid var(--background-color);
+    border-radius: 50%;
+    color: var(--icon-color);
+    background-color: var(--background-color);
+}
+
+.mx_DeviceTypeIcon_selected .mx_DeviceTypeIcon_deviceIconWrapper {
+    --background-color: $primary-content;
+    --icon-color: $background;
+}
+
+.mx_DeviceTypeIcon_deviceIcon {
+    height: 24px;
+    width: 24px;
+}
+
+.mx_DeviceTypeIcon_verificationIcon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 24px;
+    width: 24px;
+    box-sizing: border-box;
+    padding: $spacing-4;
+
+    border: 1px solid $quinary-content;
+    border-radius: 50%;
+    background-color: $background;
+
+    color: var(--v-icon-color);
+
+    &.verified {
+        --v-icon-color: $e2e-verified-color;
+    }
+
+    &.unverified {
+        --v-icon-color: $e2e-warning-color;
+    }
+}

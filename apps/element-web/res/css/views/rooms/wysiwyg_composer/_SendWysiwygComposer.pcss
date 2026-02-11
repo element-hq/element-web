@@ -1,0 +1,78 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SendWysiwygComposer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font: var(--cpd-font-body-md-regular);
+    /* fixed line height to prevent emoji from being taller than text */
+    line-height: $font-18px;
+    justify-content: center;
+    margin-right: 13px;
+    gap: 8px;
+
+    .mx_FormattingButtons {
+        margin-left: 12px;
+    }
+
+    .mx_WysiwygComposer_Editor {
+        border: 1px solid;
+        border-color: $quinary-content;
+        padding: 6px 11px 6px 12px;
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+
+        .mx_E2EIcon {
+            margin: 0 0 7px 0;
+            width: 12px;
+            height: 12px;
+        }
+
+        &[data-is-expanded="true"] {
+            border-radius: 14px;
+
+            .mx_WysiwygComposer_Editor_container {
+                margin-top: 3px;
+                margin-bottom: 3px;
+            }
+        }
+
+        &[data-is-expanded="false"] {
+            border-radius: 40px;
+        }
+
+        .mx_WysiwygComposer_Editor_container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 22px;
+            margin-bottom: 2px;
+            /* don't grow wider than available space */
+            width: 0;
+
+            .mx_WysiwygComposer_Editor_content {
+                /* this will center the contenteditable */
+                /* in it's parent vertically */
+                /* while keeping the autocomplete at the top */
+                /* of the composer. The parent needs to be a flex container for this to work. */
+                margin: auto 0;
+                /* the line height is $font-22px (set in _Editor.pcss) and we want to display 16 lines */
+                max-height: calc(16 * $font-22px);
+                overflow-y: auto;
+            }
+        }
+    }
+}
+
+.mx_SendWysiwygComposer-focused {
+    .mx_WysiwygComposer_Editor {
+        border-color: $quaternary-content;
+    }
+}

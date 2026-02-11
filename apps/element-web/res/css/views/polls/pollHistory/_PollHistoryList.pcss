@@ -1,0 +1,65 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_PollHistoryList {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    max-height: 100%;
+}
+
+.mx_PollHistoryList_list {
+    overflow: auto;
+    list-style: none;
+    margin-block: 0;
+    padding-inline: 0;
+    flex: 1 1 0;
+    align-content: flex-start;
+    display: grid;
+    gap: $spacing-20;
+    padding-right: $spacing-64;
+    margin: $spacing-32 0;
+
+    &.mx_PollHistoryList_list_ENDED {
+        gap: $spacing-32;
+    }
+}
+
+.mx_PollHistoryList_noResults {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 $spacing-64;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    line-height: $font-24px;
+    color: $secondary-content;
+
+    .mx_PollHistoryList_loadMorePolls {
+        margin-top: $spacing-16;
+    }
+}
+
+.mx_PollHistoryList_loading {
+    color: $secondary-content;
+    text-align: center;
+
+    // center in all free space
+    // when there are no results
+    &.mx_PollHistoryList_noResultsYet {
+        margin: auto auto;
+    }
+}
+
+.mx_PollHistoryList_loadMorePolls {
+    width: max-content;
+}

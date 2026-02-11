@@ -1,0 +1,36 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RightPanel {
+    overflow-x: hidden;
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid $separator;
+    box-sizing: border-box;
+    height: 100%;
+    contain: strict;
+    background-color: var(--cpd-color-bg-canvas-default);
+
+    .mx_RoomView_MessageList {
+        padding: 14px 18px; /* top and bottom is 4px smaller to balance with the padding set above */
+    }
+}
+
+.mx_RightPanel .mx_MemberList,
+.mx_RightPanel .mx_MemberInfo {
+    order: 2;
+    flex: 1 1 0;
+}
+
+.mx_RightPanel .mx_RoomView_messagePanelSpinner {
+    order: 2;
+    margin: auto;
+}

@@ -1,0 +1,59 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SettingsFlag {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    width: 100%;
+
+    .mx_ToggleSwitch {
+        flex: 0 0 auto;
+    }
+
+    &.mx_SettingsFlag_toggleInFront {
+        .mx_ToggleSwitch {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .mx_SettingsFlag_label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+}
+
+.mx_SettingsFlag_label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    color: $primary-content;
+    padding-right: 10px;
+    padding-top: 4px;
+}
+
+.mx_SettingsFlag_microcopy {
+    margin-top: 4px;
+    font: var(--cpd-font-body-sm-regular);
+    color: $secondary-content;
+
+    /* Support code/pre elements in settings flag descriptions */
+    pre,
+    code {
+        font-family: $monospace-font-family !important;
+        background-color: $rte-code-bg-color;
+    }
+
+    .mx_SettingsTab_microcopy_warning::before {
+        content: "⚠️ ";
+    }
+}

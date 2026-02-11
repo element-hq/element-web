@@ -1,0 +1,217 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`] = `
+NodeList [
+  <li
+    aria-controls="mx_tabpanel_ROOM_GENERAL_TAB"
+    aria-selected="true"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
+    data-testid="settings-tab-ROOM_GENERAL_TAB"
+    role="tab"
+    tabindex="0"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0m-2 0a2 2 0 1 0-4 0 2 2 0 0 0 4 0"
+      />
+      <path
+        d="M11.312 2h1.376A2.31 2.31 0 0 1 15 4.312v.247l.002.003c.01.014.031.033.064.047.03.013.056.013.07.01h.002l.177-.177a2.31 2.31 0 0 1 3.27 0l.973.974a2.31 2.31 0 0 1 0 3.269l-.177.177v.003a.13.13 0 0 0 .01.07.15.15 0 0 0 .047.063l.003.002h.247A2.31 2.31 0 0 1 22 11.312v1.376A2.31 2.31 0 0 1 19.688 15h-.247l-.003.002a.15.15 0 0 0-.047.064.13.13 0 0 0-.01.07v.002l.177.177a2.31 2.31 0 0 1 0 3.27l-.974.973a2.31 2.31 0 0 1-3.269 0l-.177-.177h-.003a.13.13 0 0 0-.07.01.15.15 0 0 0-.063.047l-.002.003v.247A2.31 2.31 0 0 1 12.688 22h-1.376A2.31 2.31 0 0 1 9 19.688v-.247l-.002-.003a.15.15 0 0 0-.064-.047.13.13 0 0 0-.07-.01h-.002l-.177.177a2.31 2.31 0 0 1-3.27 0l-.973-.974a2.31 2.31 0 0 1 0-3.269l.177-.177v-.003a.14.14 0 0 0-.01-.07.15.15 0 0 0-.047-.063L4.559 15h-.247A2.31 2.31 0 0 1 2 12.688v-1.376A2.31 2.31 0 0 1 4.312 9h.247l.003-.002a.15.15 0 0 0 .047-.064.14.14 0 0 0 .01-.07v-.002l-.177-.177a2.31 2.31 0 0 1 0-3.27l.974-.973a2.31 2.31 0 0 1 3.269 0l.177.177h.003a.14.14 0 0 0 .07-.01.15.15 0 0 0 .063-.047L9 4.559v-.247A2.31 2.31 0 0 1 11.312 2M11 4.312v.257c0 .893-.59 1.593-1.299 1.887-.716.297-1.622.21-2.248-.418l-.182-.182a.31.31 0 0 0-.441 0l-.974.974a.31.31 0 0 0 0 .44l.182.183c.627.626.715 1.531.418 2.248C6.162 10.41 5.462 11 4.569 11h-.257a.31.31 0 0 0-.312.312v1.376c0 .172.14.312.312.312h.257c.893 0 1.593.59 1.887 1.299.297.716.21 1.622-.418 2.248l-.182.182a.31.31 0 0 0 0 .441l.974.973a.31.31 0 0 0 .44 0l.183-.181c.626-.627 1.532-.715 2.248-.418.709.294 1.299.994 1.299 1.887v.257c0 .172.14.312.312.312h1.376c.172 0 .312-.14.312-.312v-.257c0-.893.59-1.593 1.299-1.887.716-.297 1.622-.21 2.249.418l.181.181c.122.122.32.122.441 0l.973-.973a.31.31 0 0 0 0-.44l-.181-.183c-.627-.626-.715-1.532-.418-2.248.294-.709.994-1.299 1.887-1.299h.257c.172 0 .312-.14.312-.312v-1.376a.31.31 0 0 0-.312-.312h-.257c-.893 0-1.593-.59-1.887-1.299-.297-.717-.21-1.622.418-2.248l.181-.182a.31.31 0 0 0 0-.441l-.973-.974a.31.31 0 0 0-.44 0l-.183.182c-.626.627-1.532.715-2.248.418C13.59 6.162 13 5.462 13 4.569v-.257A.31.31 0 0 0 12.688 4h-1.376a.31.31 0 0 0-.312.312"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_GENERAL_TAB_label"
+    >
+      General
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_SECURITY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zm0-2h12V10H6zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_SECURITY_TAB_label"
+    >
+      Security & Privacy
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_ROLES_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clip-rule="evenodd"
+        d="m12 4.236-6 3V12c0 5.156 4.239 7.254 6 7.898 1.761-.644 6-2.742 6-7.898V7.236zm-.894-1.789a2 2 0 0 1 1.788 0l6 3A2 2 0 0 1 20 7.236V12c0 6.742-5.773 9.246-7.51 9.846-.32.111-.66.111-.98 0C9.774 21.246 4 18.743 4 12V7.236a2 2 0 0 1 1.106-1.789z"
+        fill-rule="evenodd"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_ROLES_TAB_label"
+    >
+      Roles & Permissions
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_NOTIFICATIONS_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_NOTIFICATIONS_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 3c7 0 7 7 7 7v6l1.293 1.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7m5 7.01v-.022l-.009-.146a7 7 0 0 0-.073-.607 6.6 6.6 0 0 0-.582-1.84c-.319-.638-.766-1.215-1.398-1.637C14.318 5.344 13.4 5 12 5s-2.317.344-2.937.758c-.633.422-1.08.999-1.4 1.636a6.6 6.6 0 0 0-.58 1.841A7 7 0 0 0 7 9.988v6.84L6.828 17h10.344L17 16.828zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_NOTIFICATIONS_TAB_label"
+    >
+      Notifications
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_ROOM_POLL_HISTORY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-ROOM_POLL_HISTORY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <svg
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M16 10q.424 0 .712-.287A.97.97 0 0 0 17 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 16 8h-3a.97.97 0 0 0-.713.287A.97.97 0 0 0 12 9q0 .424.287.713.288.287.713.287zm0 6q.424 0 .712-.287A.97.97 0 0 0 17 15a.97.97 0 0 0-.288-.713A.97.97 0 0 0 16 14h-3a.97.97 0 0 0-.713.287A.97.97 0 0 0 12 15q0 .424.287.713.288.287.713.287zm-7-5q.825 0 1.412-.588Q11 9.826 11 9t-.588-1.412A1.93 1.93 0 0 0 9 7q-.825 0-1.412.588A1.93 1.93 0 0 0 7 9q0 .825.588 1.412Q8.175 11 9 11m0 6q.825 0 1.412-.587Q11 15.825 11 15t-.588-1.412A1.93 1.93 0 0 0 9 13q-.825 0-1.412.588A1.93 1.93 0 0 0 7 15q0 .824.588 1.413Q8.175 17 9 17m-4 4q-.824 0-1.412-.587A1.93 1.93 0 0 1 3 19V5q0-.824.587-1.412A1.93 1.93 0 0 1 5 3h14q.824 0 1.413.587Q21 4.176 21 5v14q0 .824-.587 1.413A1.93 1.93 0 0 1 19 21zm0-2h14V5H5z"
+      />
+    </svg>
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_POLL_HISTORY_TAB_label"
+    >
+      Polls
+    </span>
+  </li>,
+]
+`;
+
+exports[`<RoomSettingsDialog /> poll history displays poll history when tab clicked 1`] = `
+<div
+  class="mx_SettingsTab"
+>
+  <div
+    class="mx_PollHistory_content"
+  >
+    <h2
+      class="mx_Heading_h2 mx_PollHistory_header"
+    >
+      Polls
+    </h2>
+    <div
+      class="mx_PollHistoryList"
+    >
+      <fieldset
+        class="mx_FilterTabGroup"
+      >
+        <label
+          data-testid="filter-tab-PollHistory_filter-ACTIVE"
+        >
+          <input
+            checked=""
+            name="PollHistory_filter"
+            type="radio"
+            value="ACTIVE"
+          />
+          <span>
+            Active polls
+          </span>
+        </label>
+        <label
+          data-testid="filter-tab-PollHistory_filter-ENDED"
+        >
+          <input
+            name="PollHistory_filter"
+            type="radio"
+            value="ENDED"
+          />
+          <span>
+            Past polls
+          </span>
+        </label>
+      </fieldset>
+      <div
+        class="mx_PollHistoryList_loading mx_PollHistoryList_noResultsYet"
+      >
+        <span
+          class="mx_InlineSpinner"
+        >
+          <svg
+            aria-label="Loading…"
+            class="_icon_11k6c_18"
+            data-testid="spinner"
+            fill="currentColor"
+            height="1em"
+            role="progressbar"
+            style="width: 20px; height: 20px;"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
+        Loading polls
+      </div>
+    </div>
+  </div>
+</div>
+`;

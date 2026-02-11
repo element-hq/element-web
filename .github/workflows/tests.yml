@@ -66,6 +66,7 @@ jobs:
               uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
 
             - name: Run tests
+              working-directory: apps/element-web
               run: |
                   pnpm test \
                       --coverage=${{ env.ENABLE_COVERAGE }} \
@@ -81,6 +82,7 @@ jobs:
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'
+              working-directory: apps/element-web
               run: mv coverage/lcov.info coverage/${{ steps.setupNode.outputs.node-version }}-${{ matrix.runner }}.lcov.info
 
             - name: Upload Artifact
@@ -89,8 +91,8 @@ jobs:
               with:
                   name: coverage-${{ matrix.runner }}
                   path: |
-                      coverage
-                      !coverage/lcov-report
+                      apps/element-web/coverage
+                      !apps/element-web/coverage/lcov-report
 
     complete:
         name: jest-tests

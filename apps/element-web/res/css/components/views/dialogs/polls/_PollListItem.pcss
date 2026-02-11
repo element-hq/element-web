@@ -1,0 +1,37 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_PollListItem {
+    width: 100%;
+}
+
+.mx_PollListItem_content {
+    width: 100%;
+    display: grid;
+    justify-content: left;
+    align-items: center;
+    gap: $spacing-8;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
+    cursor: pointer;
+
+    color: $primary-content;
+}
+
+.mx_PollListItem_icon {
+    height: 14px;
+    width: 14px;
+    color: $quaternary-content;
+    padding-left: $spacing-8;
+}
+
+.mx_PollListItem_question {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

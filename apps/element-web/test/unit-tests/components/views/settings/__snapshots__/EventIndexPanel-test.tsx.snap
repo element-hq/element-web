@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<EventIndexPanel /> when event index is initialised renders event index information 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Securely cache encrypted messages locally for them to appear in search results, using 0 Bytes to store messages from 0 rooms.
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Manage
+  </div>
+</div>
+`;
+
+exports[`<EventIndexPanel /> when event indexing is not supported renders link to download a desktop client 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      Element can't securely cache encrypted messages locally while running in a web browser. Use 
+      <a
+        class="mx_ExternalLink"
+        href="https://element.io/download"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Element Desktop
+        <svg
+          class="mx_ExternalLink_icon"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+          />
+          <path
+            d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+          />
+        </svg>
+      </a>
+       for encrypted messages to appear in search results.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<EventIndexPanel /> when event indexing is supported but not installed renders link to install seshat 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      Element is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom Element Desktop with 
+      <a
+        class="mx_ExternalLink"
+        href="https://github.com/vector-im/element-desktop/blob/develop/docs/native-node-modules.md#adding-seshat-for-search-in-e2e-encrypted-rooms"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        search components added
+        <svg
+          class="mx_ExternalLink_icon"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+          />
+          <path
+            d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+          />
+        </svg>
+      </a>
+      .
+    </span>
+  </div>
+</div>
+`;

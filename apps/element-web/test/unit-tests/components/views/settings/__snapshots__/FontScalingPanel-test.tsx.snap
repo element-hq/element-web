@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`FontScalingPanel renders the font scaling UI 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_FontScalingPanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Font size
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+    >
+      <div
+        class="mx_Field mx_Field_select mx_FontScalingPanel_Dropdown"
+      >
+        <select
+          id="mx_Field_1"
+          label="Font size"
+          placeholder="Font size"
+          type="text"
+        >
+          <option
+            value="-7"
+          >
+            9
+          </option>
+          <option
+            value="-6"
+          >
+            10
+          </option>
+          <option
+            value="-5"
+          >
+            11
+          </option>
+          <option
+            value="-4"
+          >
+            12
+          </option>
+          <option
+            value="-3"
+          >
+            13
+          </option>
+          <option
+            value="-2"
+          >
+            14
+          </option>
+          <option
+            value="-1"
+          >
+            15
+          </option>
+          <option
+            value="0"
+          >
+            16 (default)
+          </option>
+          <option
+            value="1"
+          >
+            17
+          </option>
+          <option
+            value="2"
+          >
+            18
+          </option>
+          <option
+            value="4"
+          >
+            20
+          </option>
+          <option
+            value="6"
+          >
+            22
+          </option>
+          <option
+            value="8"
+          >
+            24
+          </option>
+          <option
+            value="10"
+          >
+            26
+          </option>
+          <option
+            value="12"
+          >
+            28
+          </option>
+          <option
+            value="14"
+          >
+            30
+          </option>
+          <option
+            value="16"
+          >
+            32
+          </option>
+          <option
+            value="18"
+          >
+            34
+          </option>
+          <option
+            value="20"
+          >
+            36
+          </option>
+        </select>
+        <label
+          for="mx_Field_1"
+        >
+          Font size
+        </label>
+        <svg
+          class="mx_Field_select_chevron"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
+      >
+        <div
+          class="mx_Spinner"
+        >
+          <svg
+            aria-label="Loading…"
+            class="_icon_11k6c_18"
+            data-testid="spinner"
+            fill="currentColor"
+            height="1em"
+            role="progressbar"
+            style="width: 32px; height: 32px;"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

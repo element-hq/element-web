@@ -1,0 +1,43 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LoginSplashView_migrationProgress {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    .mx_ProgressBar {
+        height: 8px;
+        width: 600px;
+
+        @mixin ProgressBarBorderRadius 8px;
+    }
+}
+
+.mx_LoginSplashView_splashButtons {
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom: 30px;
+}
+
+.mx_LoginSplashView_syncError {
+    color: $accent-fg-color;
+    background-color: #df2a8b; /* Only used here */
+    border-radius: 5px;
+    display: table;
+    padding: 30px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}

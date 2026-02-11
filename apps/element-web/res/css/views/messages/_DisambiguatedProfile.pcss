@@ -1,0 +1,51 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DisambiguatedProfile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+
+    .mx_DisambiguatedProfile_displayName {
+        font: var(--cpd-font-body-md-semibold);
+        margin-inline-end: 0;
+        /* keeps the height in check, important for the bubble apperance */
+        line-height: 1;
+    }
+
+    .mx_DisambiguatedProfile_mxid {
+        color: $secondary-content;
+        font-size: var(--cpd-font-size-body-sm);
+        margin-inline-start: 5px;
+    }
+}
+
+/** Disambiguated profile needs to have a different layout in the member tile */
+.mx_MemberTileView .mx_DisambiguatedProfile {
+    display: flex;
+    flex-direction: column;
+
+    .mx_DisambiguatedProfile_mxid {
+        margin-inline-start: 0;
+        font: var(--cpd-font-body-sm-regular);
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    span:not(.mx_DisambiguatedProfile_mxid) {
+        /**
+        In a member tile, this span element is a flex child and so
+        we need the following for text overflow to work.
+        **/
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

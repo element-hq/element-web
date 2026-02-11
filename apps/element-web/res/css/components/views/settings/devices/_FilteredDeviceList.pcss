@@ -1,0 +1,49 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FilteredDeviceList {
+    .mx_Dropdown {
+        flex: 1 0 80px;
+    }
+}
+
+.mx_FilteredDeviceList_list {
+    list-style-type: none;
+    display: grid;
+    gap: $spacing-16;
+    margin: 0;
+    padding: 0 $spacing-16;
+}
+
+.mx_FilteredDeviceList_listItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_FilteredDeviceList_securityCard {
+    margin-bottom: $spacing-32;
+}
+
+.mx_FilteredDeviceList_noResults {
+    width: 100%;
+    text-align: center;
+    margin-bottom: $spacing-32;
+}
+
+.mx_FilteredDeviceList_headerButton {
+    flex-shrink: 0;
+    /* override inline button styling */
+    display: flex !important;
+    flex-direction: row;
+    gap: $spacing-8;
+}
+
+.mx_FilteredDeviceList_deviceDetails {
+    /* align with text of session tile */
+    margin-left: 88px;
+}

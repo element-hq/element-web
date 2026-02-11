@@ -1,0 +1,50 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_EditWysiwygComposer {
+    --EditWysiwygComposer-padding-inline: 3px;
+
+    display: flex;
+    flex-direction: column;
+    max-width: 100%; /* disable overflow */
+    width: auto;
+    gap: 8px;
+    padding: 8px var(--EditWysiwygComposer-padding-inline);
+
+    .mx_WysiwygComposer_Editor_content {
+        border-radius: 4px;
+        border: solid 1px $primary-hairline-color;
+        background-color: $background;
+        max-height: 200px;
+        padding: 3px 6px;
+
+        &:focus {
+            border-color: $accent-400;
+        }
+    }
+
+    .mx_EditWysiwygComposer_buttons {
+        display: flex;
+        flex-flow: row wrap-reverse; /* display "Save" over "Cancel" */
+        justify-content: flex-end;
+        gap: 5px;
+        margin-inline-start: auto;
+
+        .mx_AccessibleButton {
+            flex: 1;
+            box-sizing: border-box;
+            min-width: 100px; /* magic number to align the edge of the button with the input area */
+        }
+    }
+
+    .mx_FormattingButtons_Button {
+        &:first-child {
+            margin-left: 0px;
+        }
+    }
+}

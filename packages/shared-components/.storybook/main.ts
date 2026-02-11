@@ -9,11 +9,13 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import fs from "node:fs";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { mergeConfig } from "vite";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 // Get a list of available languages so the language selector can display them at runtime
-const languageFiles = fs.readdirSync("src/i18n/strings").map((f) => f.slice(0, -5));
+const languageFiles = fs.readdirSync(join(__dirname, "..", "src", "i18n", "strings")).map((f) => f.slice(0, -5));
 
 const languages: Record<string, string> = {};
 for (const lang of languageFiles) {

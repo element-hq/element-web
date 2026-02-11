@@ -1,0 +1,12 @@
+# Exclude a bunch of stuff which can make the build context a larger than it needs to be
+test/
+webapp/
+lib/
+node_modules/
+karma-reports/
+.idea/
+.tmp/
+config.json*
+# Exclude the playwright directory as much as we can as the snapshots are huge and we bind mount it in
+playwright/
+!playwright/docker-entrypoint.sh

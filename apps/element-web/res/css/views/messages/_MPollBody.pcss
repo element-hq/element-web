@@ -1,0 +1,65 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+$poll-max-width: 550px;
+
+.mx_MPollBody {
+    margin-top: var(--cpd-space-2x);
+    min-width: 0; /* Override fieldset default min-width: min-content */
+    width: 100%; /* Ensure fieldset takes full available width */
+    border: none; /* Remove default fieldset border */
+    padding: 0; /* Remove default fieldset padding */
+
+    legend {
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-top: 0;
+        margin-bottom: var(--cpd-space-2x);
+        letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-3x);
+
+        svg {
+            flex-shrink: 0;
+            color: var(--cpd-color-icon-primary);
+        }
+
+        .mx_MPollBody_edited {
+            color: $roomtopic-color;
+            font-size: $font-12px;
+            opacity: 0.6;
+        }
+    }
+
+    .mx_MPollBody_totalVotes {
+        display: flex;
+        flex-direction: inline;
+        justify-content: start;
+        color: $secondary-content;
+        font-size: $font-12px;
+
+        .mx_Spinner {
+            flex: 0;
+            margin-left: $spacing-8;
+        }
+    }
+}
+
+/* Prevent clicking a poll within a reply */
+.mx_ReplyTile .mx_MPollBody {
+    pointer-events: none;
+}
+
+.mx_MPollBody_allOptions {
+    display: grid;
+    gap: $spacing-16;
+    margin-bottom: $spacing-8;
+    max-width: $poll-max-width;
+}

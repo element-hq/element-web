@@ -1,0 +1,91 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_InteractiveTooltip_wrapper {
+    position: fixed;
+    z-index: 3999;
+}
+
+.mx_InteractiveTooltip {
+    border-radius: 8px;
+    background-color: $background;
+    color: $primary-content;
+    position: absolute;
+    z-index: 5001;
+    box-shadow:
+        0 24px 8px rgb(17 17 26 / 4%),
+        0 8px 32px rgb(17 17 26 / 4%);
+}
+
+.mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_top {
+    top: 10px; /* 8px chevron + 2px spacing */
+}
+
+.mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_left {
+    left: 10px; /* 8px chevron + 2px spacing */
+}
+
+.mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_right {
+    right: 10px; /* 8px chevron + 2px spacing */
+}
+
+.mx_InteractiveTooltip.mx_InteractiveTooltip_withChevron_bottom {
+    bottom: 10px; /* 8px chevron + 2px spacing */
+}
+
+.mx_InteractiveTooltip_chevron_top {
+    position: absolute;
+    left: calc(50% - 8px);
+    top: -8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid $background;
+    border-right: 8px solid transparent;
+}
+
+/* Adapted from https://codyhouse.co/blog/post/css-rounded-triangles-with-clip-path */
+/* by Sebastiano Guerriero (@guerriero_se) */
+@supports (clip-path: polygon(0% 0%, 100% 100%, 0% 100%)) {
+    .mx_InteractiveTooltip_chevron_top {
+        height: 16px;
+        width: 16px;
+        background-color: inherit;
+        border: none;
+        clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+        transform: rotate(135deg);
+        border-radius: 0 0 0 3px;
+        top: calc(-8px / 1.414); /* sqrt(2) because of rotation */
+    }
+}
+
+.mx_InteractiveTooltip_chevron_bottom {
+    position: absolute;
+    left: calc(50% - 8px);
+    bottom: -8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-top: 8px solid $background;
+    border-right: 8px solid transparent;
+}
+
+/* Adapted from https://codyhouse.co/blog/post/css-rounded-triangles-with-clip-path */
+/* by Sebastiano Guerriero (@guerriero_se) */
+@supports (clip-path: polygon(0% 0%, 100% 100%, 0% 100%)) {
+    .mx_InteractiveTooltip_chevron_bottom {
+        height: 16px;
+        width: 16px;
+        background-color: inherit;
+        border: none;
+        clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+        transform: rotate(-45deg);
+        border-radius: 0 0 0 3px;
+        bottom: calc(-8px / 1.414); /* sqrt(2) because of rotation */
+    }
+}

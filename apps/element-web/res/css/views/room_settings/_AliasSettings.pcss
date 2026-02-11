@@ -1,0 +1,20 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_AliasSettings_localAddresses {
+    cursor: pointer;
+    color: var(--cpd-color-text-primary);
+    font-weight: var(--cpd-font-weight-semibold);
+    text-decoration: underline;
+    list-style: none;
+    width: fit-content;
+
+    /* list-style doesn't do it for webkit */
+    &::-webkit-details-marker {
+        display: none;
+    }
+}

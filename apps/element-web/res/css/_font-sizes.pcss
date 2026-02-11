@@ -1,0 +1,53 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * SCSS variables defining a range of font sizes.
+ *
+ * These are defined in `rem` so that they scale with the `font-size` of the root element (which is adjustable via the
+ * "Font size" setting). They exist to make the job of converting designs (which tend to be based in pixels) into CSS
+ * easier.
+ */
+
+/*
+ * These variables are now *deprecated* and should not be used in new code; instead Compound typographic tokens
+ * should be used. Direct equivalents for these old font size tokens are listed below; where no equivalent exists,
+ * that suggests that the design is using a non-standard font size and should be updated.
+ *
+ * In fact, modern Figma designs should actually use a named Typography style such as "Web/font/heading/sm/semibold",
+ * translates directly to `font: var(--cpd-font-heading-sm-semibold)`.
+ */
+$font-1px: 0.0625rem;
+$font-8px: 0.5rem;
+$font-9px: 0.5625rem;
+$font-10px: 0.625rem;
+$font-10-4px: 0.6275rem;
+$font-11px: 0.6875rem; /* Compound equivalent: --cpd-font-size-body-xs */
+$font-12px: 0.75rem;
+$font-13px: 0.8125rem; /* Compound equivalent: --cpd-font-size-body-sm */
+$font-14px: 0.875rem;
+$font-15px: 0.9375rem; /* Compound equivalent: --cpd-font-size-body-md */
+$font-16px: 1rem;
+$font-17px: 1.0625rem; /* Compound equivalent: --cpd-font-size-body-lg */
+$font-18px: 1.125rem;
+$font-20px: 1.25rem; /* Compound equivalent: --cpd-font-size-heading-sm */
+$font-22px: 1.375rem;
+$font-23px: 1.4375rem;
+$font-24px: 1.5rem; /* Compound equivalent: --cpd-font-size-heading-md */
+$font-25px: 1.5625rem;
+$font-26px: 1.625rem;
+$font-28px: 1.75rem; /* Compound equivalent: --cpd-font-size-heading-lg */
+$font-29px: 1.8125rem;
+$font-30px: 1.875rem;
+$font-32px: 2rem; /* Compound equivalent: --cpd-font-size-heading-xl */
+$font-34px: 2.125rem;
+$font-35px: 2.1875rem;
+$font-39px: 2.4375rem;
+$font-42px: 2.625rem;
+$font-44px: 2.75rem;
+$font-48px: 3rem;

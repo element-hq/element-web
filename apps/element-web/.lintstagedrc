@@ -1,0 +1,6 @@
+{
+    "src/**/*.(ts|tsx)": ["eslint --fix"],
+    "scripts/**/*.(ts|tsx)": ["eslint --fix"],
+    "module_system/**/*.(ts|tsx)": ["eslint --fix"],
+    "*.pcss": ["stylelint --fix"]
+}

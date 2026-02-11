@@ -1,0 +1,33 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * To avoid visual glitching of two modals stacking briefly, we customise the
+ * terms dialog sizing when it will appear for the integration manager so that
+ * it gets the same basic size as the IM's own modal.
+ */
+.mx_TermsDialog_forIntegrationManager .mx_Dialog_border {
+    width: 60%;
+    height: 70%;
+    box-sizing: border-box;
+}
+
+.mx_TermsDialog_termsTableHeader {
+    font-weight: bold;
+    text-align: left;
+}
+
+.mx_TermsDialog_termsTable {
+    font-size: $font-12px;
+    width: 100%;
+}
+
+.mx_TermsDialog_service,
+.mx_TermsDialog_summary {
+    padding-right: 10px;
+}

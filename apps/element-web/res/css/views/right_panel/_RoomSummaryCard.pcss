@@ -1,0 +1,106 @@
+/*
+Copyright 2024, 2025 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomSummaryCard {
+    --cpd-separator-inset: var(--cpd-space-4x);
+    --cpd-separator-spacing: var(--cpd-space-4x);
+
+    .mx_RoomSummaryCard_container {
+        text-align: center;
+        margin: $spacing-20 var(--cpd-space-4x) 0;
+    }
+
+    .mx_RoomSummaryCard_roomName,
+    .mx_RoomSummaryCard_alias {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: pre-wrap;
+        overflow: hidden;
+    }
+
+    .mx_RoomSummaryCard_alias {
+        text-overflow: ellipsis;
+    }
+
+    .mx_RoomSummaryCard_topic {
+        padding: 0 12px;
+        color: var(--cpd-color-text-secondary);
+
+        .mx_RoomSummaryCard_topic_box {
+            width: 100%;
+        }
+
+        .mx_RoomSummaryCard_topic_container {
+            text-align: start;
+            display: flex;
+        }
+
+        .mx_RoomSummaryCard_topic_edit {
+            width: max-content;
+        }
+
+        p {
+            white-space: pre-wrap;
+            width: 100%;
+            min-width: 0;
+            margin: 0;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        .mx_RoomSummaryCard_topic_chevron {
+            transition: transform 0.3s;
+        }
+
+        &.mx_RoomSummaryCard_topic_collapsed {
+            p {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+            }
+
+            .mx_RoomSummaryCard_topic_chevron {
+                transform: rotate(-90deg);
+            }
+        }
+    }
+
+    .mx_AccessibleButton_kind_link {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        font-size: $font-13px;
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+}
+
+.mx_RoomSummaryCard_badges {
+    margin: var(--cpd-space-4x) 0;
+}
+
+.mx_RoomSummaryCard_search {
+    flex-grow: 1;
+    min-width: 0;
+
+    input[type="search"]::-webkit-search-cancel-button {
+        display: unset; /* override _common.pcss which inhibits this */
+    }
+}
+
+.mx_RoomSummaryCard_roomName {
+    margin: $spacing-12 0 $spacing-4;
+}
+
+.mx_RoomSummaryCard_bottomOptions {
+    margin: 0 0 var(--cpd-space-8x);
+}

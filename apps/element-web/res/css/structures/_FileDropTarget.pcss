@@ -1,0 +1,57 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+@keyframes mx_FileDropTarget_animation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.95;
+    }
+}
+
+.mx_FileDropTarget {
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+
+    font-size: $font-18px;
+    text-align: center;
+
+    pointer-events: none;
+
+    background-color: $background;
+    opacity: 0.95;
+
+    position: absolute;
+    z-index: 3000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    animation: mx_FileDropTarget_animation;
+    animation-duration: 0.5s;
+}
+
+@keyframes mx_FileDropTarget_image_animation {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.mx_FileDropTarget_image {
+    width: 32px;
+    animation: mx_FileDropTarget_image_animation;
+    animation-duration: 0.5s;
+    margin-bottom: 16px;
+}

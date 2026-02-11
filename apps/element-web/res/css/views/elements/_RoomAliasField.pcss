@@ -1,0 +1,49 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomAliasField {
+    /* if parent is a flex container, this allows the */
+    /* width to be as wide as needed, and not 100% */
+    flex: 0 1 auto;
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    max-width: 100%;
+
+    input {
+        width: 150px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    input::placeholder {
+        color: $info-plinth-fg-color;
+        font-weight: normal;
+    }
+
+    .mx_Field_prefix,
+    .mx_Field_postfix {
+        color: $info-plinth-fg-color;
+        border-left: none;
+        border-right: none;
+        font-weight: var(--cpd-font-weight-semibold);
+        padding: 9px 10px;
+        flex: 0 0 auto;
+    }
+
+    .mx_Field_postfix {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        /* this allows the domain name to show */
+        /* as long as it doesn't make the input shrink */
+        /* if it's too big, it shows an ellipsis */
+        /* 180: 28 for prefix, 152 for input */
+        max-width: calc(100% - 180px);
+    }
+}

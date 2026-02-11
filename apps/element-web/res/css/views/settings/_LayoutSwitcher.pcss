@@ -1,0 +1,90 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LayoutSwitcher_LayoutSelector {
+    display: flex;
+    flex-direction: column;
+    /**
+     * The settings form has a default gap of 10px
+     * We want to have a bigger gap between the layout options
+     */
+    gap: var(--cpd-space-4x) !important;
+
+    .mxLayoutSwitcher_LayoutSelector_LayoutRadio {
+        border: 1px solid var(--cpd-color-border-interactive-primary);
+        border-radius: var(--cpd-space-2x);
+
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline {
+            display: flex;
+            /*
+             * 10px
+             */
+            gap: calc(var(--cpd-space-2x) + var(--cpd-space-0-5x));
+            align-items: center;
+        }
+
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline,
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview {
+            margin: var(--cpd-space-3x);
+        }
+
+        /**
+         * Override the event tile style to make it fit in the selector
+         * Tweak also hover style and remove action bar
+         */
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview {
+            pointer-events: none;
+
+            .mx_EventTile {
+                margin: 0;
+
+                /**
+                 * Hide the message options and message action bar in the preview
+                 */
+                .mx_EventTile_msgOption,
+                .mx_MessageActionBar {
+                    display: none;
+                }
+
+                .mx_EventTile_content {
+                    margin-right: 0;
+                }
+
+                &[data-layout="group"] {
+                    margin-top: calc(var(--cpd-space-3x) * -1);
+                }
+
+                /**
+                 * Add margin to center the bubble
+                 */
+                &[data-layout="bubble"] {
+                    /**
+                     * Add the layout margin and the margin to vertically center the bubble
+                     */
+                    margin-top: var(--cpd-space-6x);
+                    margin-right: 34px;
+                    flex-shrink: 1;
+                }
+
+                &[data-layout="irc"] .mx_MessageTimestamp {
+                    display: none; /* hide the container used for spacing consistency */
+                }
+
+                .mx_EventTile_line {
+                    max-width: 100%;
+                }
+            }
+        }
+
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator {
+            border-top: 0;
+            border-bottom: 1px solid var(--cpd-color-border-interactive-secondary);
+        }
+    }
+}

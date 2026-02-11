@@ -1,0 +1,65 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_Dialog_dialPadWrapper .mx_Dialog {
+    padding: 0px;
+}
+
+.mx_DialPadModal {
+    width: 292px;
+    height: 370px;
+    padding: 16px 0px 0px 0px;
+}
+
+.mx_DialPadModal_header {
+    margin-top: 32px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+    /* a separator between the input line and the dial buttons */
+    border-bottom: 1px solid $quaternary-content;
+    transition: border-bottom 0.25s;
+}
+
+.mx_DialPadModal_header:focus-within {
+    border-bottom: 1px solid $accent;
+}
+
+.mx_DialPadModal_title {
+    color: $muted-fg-color;
+    font-size: 12px;
+    font-weight: var(--cpd-font-weight-semibold);
+}
+
+.mx_DialPadModal_cancel {
+    @mixin customisedCancelButton;
+    float: right;
+    margin-right: 16px;
+}
+
+.mx_DialPadModal_field {
+    border: none;
+    margin: 0px;
+    height: 30px;
+}
+
+.mx_DialPadModal_field .mx_Field_postfix {
+    /* Remove border separator between postfix and field content */
+    border-left: none;
+}
+
+.mx_DialPadModal_field input {
+    font-size: 18px;
+    font-weight: var(--cpd-font-weight-semibold);
+}
+
+.mx_DialPadModal_dialPad {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px;
+}

@@ -1,0 +1,35 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_AppPermission {
+    font-size: $font-12px;
+    width: 100%; /* make mx_AppPermission fill width of mx_AppTileBody so that scroll bar appears on the edge */
+    overflow-y: scroll;
+    .mx_AppPermission_bolder,
+    .mx_AppPermission_content_bolder {
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+    .mx_AppPermission_content {
+        margin-block: auto; /* place at the center */
+
+        > div {
+            margin-block: 12px;
+        }
+
+        .mx_TextWithTooltip_target--helpIcon {
+            display: inline-block;
+            height: $font-14px; /* align with characters on the same line */
+            vertical-align: middle;
+
+            .mx_Icon {
+                color: $accent;
+            }
+        }
+    }
+}

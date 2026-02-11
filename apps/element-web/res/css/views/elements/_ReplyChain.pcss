@@ -1,0 +1,52 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2018 Vector Creations Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ReplyChain {
+    margin: 0; /* Reset default blockquote margin */
+    padding-left: 10px;
+    border-left: 2px solid var(--username-color);
+    border-radius: 2px;
+
+    .mx_ReplyChain_show {
+        &.mx_AccessibleButton_kind_link_inline {
+            white-space: nowrap; /* Enforce 'In reply to' to be a single line */
+            color: $secondary-content;
+            transition: color ease 0.15s;
+            font-weight: var(--cpd-font-weight-regular);
+            text-decoration: inherit;
+
+            &:hover {
+                color: $primary-content;
+            }
+        }
+    }
+
+    &.mx_ReplyChain_color1 {
+        --username-color: $username-variant1-color;
+    }
+
+    &.mx_ReplyChain_color2 {
+        --username-color: $username-variant2-color;
+    }
+
+    &.mx_ReplyChain_color3 {
+        --username-color: $username-variant3-color;
+    }
+
+    &.mx_ReplyChain_color4 {
+        --username-color: $username-variant4-color;
+    }
+
+    &.mx_ReplyChain_color5 {
+        --username-color: $username-variant5-color;
+    }
+
+    &.mx_ReplyChain_color6 {
+        --username-color: $username-variant6-color;
+    }
+}

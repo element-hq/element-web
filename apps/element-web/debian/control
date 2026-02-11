@@ -1,0 +1,13 @@
+Source: element-web
+Maintainer: support@element.io
+Section: web
+Priority: optional
+Homepage: https://element.io/
+
+Package: element-web
+Architecture: all
+Recommends: httpd, element-io-archive-keyring
+Description:
+  Element: the future of secure communication
+  This package contains the web-based client that can be served through a web
+   server.

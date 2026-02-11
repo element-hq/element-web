@@ -1,0 +1,69 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MessageComposerFormatBar {
+    display: none;
+    width: calc(32px * 6);
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: $background;
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
+    user-select: none;
+    /* equal to z-index of mx_ReplyPreview and mx_RoomView_statusArea (1000) */
+    /* but as it appears after them in the DOM, will appear on top. */
+    z-index: 1000;
+
+    &.mx_MessageComposerFormatBar_shown {
+        display: block;
+    }
+
+    > * {
+        white-space: nowrap;
+        display: inline-block;
+        position: relative;
+        margin: 2px;
+    }
+
+    .mx_MessageComposerFormatBar_button {
+        width: 28px;
+        height: 28px;
+        box-sizing: border-box;
+        vertical-align: middle;
+        background: none;
+        border: none;
+        padding: 0;
+
+        svg {
+            width: inherit;
+            height: inherit;
+            box-sizing: border-box;
+            padding: var(--cpd-space-1x);
+            color: var(--cpd-color-icon-secondary);
+        }
+
+        &:hover {
+            background: var(--cpd-color-bg-subtle-secondary);
+            border-radius: 6px;
+            z-index: 1;
+
+            svg {
+                color: var(--cpd-color-icon-primary);
+            }
+        }
+    }
+}
+
+.mx_MessageComposerFormatBar_buttonTooltip {
+    white-space: nowrap;
+    font-size: $font-13px;
+    font-weight: var(--cpd-font-weight-semibold);
+    min-width: 54px;
+    text-align: center;
+}

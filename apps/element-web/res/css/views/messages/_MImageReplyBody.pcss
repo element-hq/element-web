@@ -1,0 +1,17 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 Tulir Asokan <tulir@maunium.net>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MImageReplyBody {
+    display: flex;
+    column-gap: $spacing-4;
+
+    .mx_MImageBody_thumbnail_container {
+        flex: 1;
+        min-width: 0; /* Prevent a blowout */
+    }
+}

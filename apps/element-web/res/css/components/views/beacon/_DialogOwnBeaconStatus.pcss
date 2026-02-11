@@ -1,0 +1,48 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DialogOwnBeaconStatus {
+    position: absolute;
+    bottom: $spacing-32;
+    width: 300px;
+    margin-left: -150px;
+    left: 50%;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: stretch;
+
+    background: $background;
+    border-radius: 8px;
+    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
+
+    padding: 0 $spacing-12;
+}
+
+.mx_DialogOwnBeaconStatus_avatarIcon {
+    flex: 0 0;
+    height: 32px;
+    width: 32px;
+    margin: $spacing-8 0 $spacing-8 0;
+}
+
+.mx_DialogOwnBeaconStatus_avatar {
+    flex: 0 0;
+    box-sizing: border-box;
+
+    border: 2px solid $location-live-color;
+    border-radius: 50%;
+    margin: $spacing-8 0 $spacing-8 0;
+}
+
+.mx_DialogOwnBeaconStatus_status {
+    flex: 1 1;
+    padding-right: 0;
+}

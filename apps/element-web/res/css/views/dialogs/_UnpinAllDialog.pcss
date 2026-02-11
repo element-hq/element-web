@@ -1,0 +1,30 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ * Copyright 2024 The Matrix.org Foundation C.I.C.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_UnpinAllDialog {
+    /* 396 is coming from figma and we remove the left and right paddings of the dialog */
+    width: calc(396px - (var(--cpd-space-10x) * 2));
+    padding-bottom: var(--cpd-space-2x);
+
+    .mx_UnpinAllDialog_title {
+        /* Override the default heading style */
+        font: var(--cpd-font-heading-sm-semibold) !important;
+        margin-bottom: var(--cpd-space-3x);
+    }
+
+    .mx_UnpinAllDialog_buttons {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-4x);
+        margin: var(--cpd-space-8x) var(--cpd-space-2x) 0 var(--cpd-space-2x);
+
+        button {
+            width: 100%;
+        }
+    }
+}

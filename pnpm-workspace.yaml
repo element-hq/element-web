@@ -2,6 +2,7 @@ nodeLinker: hoisted
 linkWorkspacePackages: true
 packages:
     - "packages/*"
+    - "apps/*"
 catalog:
     # typescript
     typescript: 5.9.3

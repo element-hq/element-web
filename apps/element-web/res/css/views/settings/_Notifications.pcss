@@ -1,0 +1,95 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UserNotifSettings_grid {
+    width: calc(100% + 12px); /* +12px to line up center of 'Noisy' column with toggle switches */
+    display: grid;
+    grid-template-columns: auto repeat(3, 62px);
+    place-items: center center;
+    gap: 8px;
+
+    /* Override StyledRadioButton default styles */
+    .mx_StyledRadioButton {
+        justify-content: center;
+
+        .mx_StyledRadioButton_content {
+            display: none;
+        }
+
+        .mx_StyledRadioButton_spacer {
+            display: none;
+        }
+    }
+
+    // left align section heading
+    .mx_SettingsSubsectionHeading {
+        justify-self: start;
+    }
+}
+
+.mx_UserNotifSettings_gridRowContainer {
+    display: contents;
+}
+
+.mx_UserNotifSettings_gridRow {
+    display: contents;
+}
+
+.mx_UserNotifSettings_gridRowLabel {
+    justify-self: start;
+    /* <legend> does not accept */
+    /* display: inline | inline-block */
+    /* force it inline using float */
+    float: left;
+}
+
+.mx_UserNotifSettings_gridColumnLabel {
+    color: $secondary-content;
+    font: var(--cpd-font-body-sm-semibold);
+}
+.mx_UserNotifSettings_gridRowError {
+    /* occupy full row */
+    grid-column: 1/-1;
+    justify-self: start;
+    padding-right: 30%;
+    /* collapse half of the grid-gap */
+    margin-top: -$spacing-4;
+}
+
+.mx_UserNotifSettings_floatingSection {
+    margin-top: 40px;
+
+    & > div:first-child {
+        /* section header */
+        font-size: $font-18px;
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+
+    > table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-top: 8px;
+
+        tr > td:first-child {
+            /* Just for a bit of spacing */
+            padding-right: 8px;
+        }
+    }
+}
+
+.mx_UserNotifSettings_clearNotifsButton {
+    margin-top: 8px;
+}
+
+.mx_TagComposer {
+    margin-top: 35px; /* lots of distance from the last line of the table */
+}
+
+.mx_AccessibleButton.mx_NotificationSound_browse {
+    margin-right: 10px;
+}

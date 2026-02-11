@@ -5,7 +5,7 @@ import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
 import cronstrue from "cronstrue";
-import _ from "lodash";
+import partition from "lodash-es/partition.js";
 
 const argv = parseArgs<{
     debug: boolean;
@@ -81,7 +81,7 @@ class Graph<T extends Node> {
     public removeNode(node: T): Edge<T>[] {
         if (!this.nodes.has(node.id)) return [];
         this.nodes.delete(node.id);
-        const [removedEdges, keptEdges] = _.partition(
+        const [removedEdges, keptEdges] = partition(
             this.edges,
             ([source, destination]) => source === node || destination === node,
         );
@@ -90,7 +90,13 @@ class Graph<T extends Node> {
     }
 
     public addEdge(source: T, destination: T, label?: string): void {
-        if (this.edges.some(([_source, _destination]) => _source === source && _destination === destination)) return;
+        if (
+            this.edges.some(
+                ([_source, _destination]) =>
+                    _source === source && _destination === destination,
+            )
+        )
+            return;
         this.edges.push([source, destination, label]);
     }
 
@@ -123,7 +129,9 @@ class Graph<T extends Node> {
         const neighbours = [root];
         this.edges.forEach(([source, destination]) => {
             if (source === root) {
-                neighbours.push(...this.componentsRecurse(destination, visited));
+                neighbours.push(
+                    ...this.componentsRecurse(destination, visited),
+                );
             } else if (destination === root) {
                 neighbours.push(...this.componentsRecurse(source, visited));
             }
@@ -242,8 +250,16 @@ const TRIGGERS: {
         name: "Manual",
         shape: "circle",
     }),
-    issues: (_, { project }) => ({ id: `on:issues/${project.name}`, name: `${project.name} Issues`, shape: "circle" }),
-    label: (_, { project }) => ({ id: "on:label", name: "on: Label", shape: "circle" }),
+    issues: (_, { project }) => ({
+        id: `on:issues/${project.name}`,
+        name: `${project.name} Issues`,
+        shape: "circle",
+    }),
+    label: (_, { project }) => ({
+        id: "on:label",
+        name: "on: Label",
+        shape: "circle",
+    }),
     release: (_, { project }) => ({
         id: `on:release/${project.name}`,
         name: `${project.name} Release`,
@@ -253,11 +269,19 @@ const TRIGGERS: {
         const nodes: Trigger[] = [];
         data.tags?.forEach((tag) => {
             const name = `Push ${project.name}<br>tag ${tag}`;
-            nodes.push({ id: `on:push/${project.name}/tag/${tag}`, name, shape: "circle" });
+            nodes.push({
+                id: `on:push/${project.name}/tag/${tag}`,
+                name,
+                shape: "circle",
+            });
         });
         data.branches?.forEach((branch) => {
             const name = `Push ${project.name}<br>${branch}`;
-            nodes.push({ id: `on:push/${project.name}/branch/${branch}`, name, shape: "circle" });
+            nodes.push({
+                id: `on:push/${project.name}/branch/${branch}`,
+                name,
+                shape: "circle",
+            });
         });
         return nodes;
     },
@@ -273,7 +297,10 @@ const TRIGGERS: {
         shape: "circle",
     }),
     // TODO should we be just dropping these?
-    workflow_run: (data) => data.workflows.map((parent) => workflows.get(parent)).filter(Boolean) as Workflow[],
+    workflow_run: (data) =>
+        data.workflows
+            .map((parent) => workflows.get(parent))
+            .filter(Boolean) as Workflow[],
 };
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -281,10 +308,16 @@ const triggers = new Map<string, Trigger>(); // keyed by trigger id
 const projects = new Map<string, Project>(); // keyed by project name
 const workflows = new Map<string, Workflow>(); // keyed by workflow name
 
-function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow): Trigger[] {
+function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(
+    key: K,
+    workflow: Workflow,
+): Trigger[] {
     if (!TRIGGERS[key]) return [];
 
-    if ((typeof argv.on === "string" || Array.isArray(argv.on)) && !toArray(argv.on).includes(key)) {
+    if (
+        (typeof argv.on === "string" || Array.isArray(argv.on)) &&
+        !toArray(argv.on).includes(key)
+    ) {
         return [];
     }
 
@@ -323,7 +356,10 @@ function cartesianProduct<T>(sets: T[][]): T[][] {
     );
 }
 
-function shallowCompare(obj1: Record<string, any>, obj2: Record<string, any>): boolean {
+function shallowCompare(
+    obj1: Record<string, any>,
+    obj2: Record<string, any>,
+): boolean {
     return (
         Object.keys(obj1).length === Object.keys(obj2).length &&
         Object.keys(obj1).every((key) => obj1[key] === obj2[key])
@@ -335,7 +371,10 @@ for (const projectPath of argv._) {
     const {
         name,
         repository: { url },
-    } = readJson<{ name: string; repository: { url: string } }>(projectPath, "package.json");
+    } = readJson<{ name: string; repository: { url: string } }>(
+        projectPath,
+        "package.json",
+    );
     const workflowsPath = path.join(projectPath, ".github", "workflows");
 
     const project: Project = {
@@ -345,7 +384,9 @@ for (const projectPath of argv._) {
         workflows: new Map(),
     };
 
-    for (const file of fs.readdirSync(workflowsPath).filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))) {
+    for (const file of fs
+        .readdirSync(workflowsPath)
+        .filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))) {
         const data = readYaml<WorkflowYaml>(workflowsPath, file);
         const name = data.name ?? file;
         const workflow: Workflow = {
@@ -401,7 +442,11 @@ class MermaidFlowchartPrinter {
         this.currentIndent += delta * MermaidFlowchartPrinter.INDENT;
     }
 
-    public constructor(direction: "TD" | "TB" | "BT" | "RL" | "LR", title?: string, markdown = false) {
+    public constructor(
+        direction: "TD" | "TB" | "BT" | "RL" | "LR",
+        title?: string,
+        markdown = false,
+    ) {
         this.markdown = markdown;
         if (this.markdown) {
             this.print("```mermaid");
@@ -470,7 +515,9 @@ class MermaidFlowchartPrinter {
         }
 
         if (node.link) {
-            this.print(`click ${id} href "${node.link}" "Click to open workflow"`);
+            this.print(
+                `click ${id} href "${node.link}" "Click to open workflow"`,
+            );
         }
     }
 
@@ -496,10 +543,17 @@ for (const workflow of workflows.values()) {
 
     graph.addNode(workflow);
     Object.keys(workflow.on).forEach((trigger) => {
-        const nodes = getTriggerNodes(trigger as keyof WorkflowYaml["on"], workflow);
+        const nodes = getTriggerNodes(
+            trigger as keyof WorkflowYaml["on"],
+            workflow,
+        );
         nodes.forEach((node) => {
             graph.addNode(node);
-            graph.addEdge(node, workflow, "project" in node ? "workflow_run" : undefined);
+            graph.addEdge(
+                node,
+                workflow,
+                "project" in node ? "workflow_run" : undefined,
+            );
         });
     });
 }
@@ -508,7 +562,9 @@ for (const workflow of workflows.values()) {
 graph.cull();
 
 // This is an awful hack to make the output graphs much better by allowing the splitting of certain nodes //
-const bifurcatedNodes = [triggers.get("on:workflow_dispatch")].filter(Boolean) as Node[];
+const bifurcatedNodes = [triggers.get("on:workflow_dispatch")].filter(
+    Boolean,
+) as Node[];
 const removedEdgeMap = new Map<Node, Edge<any>[]>();
 for (const node of bifurcatedNodes) {
     removedEdgeMap.set(node, graph.removeNode(node));
@@ -553,7 +609,11 @@ components.forEach((graph) => {
                 subgraph.addNode(job);
                 if (job.needs) {
                     toArray(job.needs).forEach((req) => {
-                        subgraph.addEdge(node.jobs.find((job) => job.jobId === req)!, job, "needs");
+                        subgraph.addEdge(
+                            node.jobs.find((job) => job.jobId === req)!,
+                            job,
+                            "needs",
+                        );
                     });
                 }
             }
@@ -573,14 +633,20 @@ components.forEach((graph) => {
                         Object.keys(job.strategy.matrix)
                             .filter(
                                 (key) =>
-                                    key !== "include" && key !== "exclude" && Array.isArray(job.strategy!.matrix[key]),
+                                    key !== "include" &&
+                                    key !== "exclude" &&
+                                    Array.isArray(job.strategy!.matrix[key]),
                             )
                             .map((matrixKey) => {
-                                return job.strategy!.matrix[matrixKey].map((value) => ({ [matrixKey]: value }));
+                                return job.strategy!.matrix[matrixKey].map(
+                                    (value) => ({ [matrixKey]: value }),
+                                );
                             }),
                     )
                         .map((variation) => Object.assign({}, ...variation))
-                        .filter((variation) => Object.keys(variation).length > 0);
+                        .filter(
+                            (variation) => Object.keys(variation).length > 0,
+                        );
 
                     if (job.strategy.matrix.include) {
                         variations.push(...job.strategy.matrix.include);
@@ -597,19 +663,28 @@ components.forEach((graph) => {
                         return;
                     }
 
-                    const jobName = job.name.replace(/\${{.+}}/g, "").replace(/(?:\(\)| )+/g, " ");
+                    const jobName = job.name
+                        .replace(/\${{.+}}/g, "")
+                        .replace(/(?:\(\)| )+/g, " ");
                     printer.subgraph(job.id, jobName, () => {
                         variations.forEach((variation, i) => {
                             let variationName = job.name;
                             if (variationName.includes("${{ matrix.")) {
                                 Object.keys(variation).map((key) => {
-                                    variationName = variationName.replace(`\${{ matrix.${key} }}`, variation[key]);
+                                    variationName = variationName.replace(
+                                        `\${{ matrix.${key} }}`,
+                                        variation[key],
+                                    );
                                 });
                             } else {
                                 variationName = `${variationName} (${Object.values(variation).join(", ")})`;
                             }
 
-                            printer.node({ ...job, id: `${job.id}-variation-${i}`, name: variationName });
+                            printer.node({
+                                ...job,
+                                id: `${job.id}-variation-${i}`,
+                                name: variationName,
+                            });
                         });
                     });
                 });
@@ -634,7 +709,13 @@ function debugGraph(name: string, graph: Graph<any>): void {
     console.log("```");
     console.log(`## ${name}`);
     console.log(new Map(graph.nodes));
-    console.log(graph.edges.map((edge) => ({ source: edge[0].id, destination: edge[1].id, text: edge[2] })));
+    console.log(
+        graph.edges.map((edge) => ({
+            source: edge[0].id,
+            destination: edge[1].id,
+            text: edge[2],
+        })),
+    );
     console.log("```");
     console.log("");
 }

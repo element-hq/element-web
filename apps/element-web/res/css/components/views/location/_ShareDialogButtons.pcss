@@ -1,0 +1,46 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ShareDialogButtons {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    top: 0;
+}
+
+.mx_ShareDialogButtons_button {
+    @mixin ButtonResetDefault;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background-color: $quinary-content;
+    opacity: 0.8;
+    text-align: center;
+    color: $secondary-content;
+    position: absolute;
+    top: $spacing-16;
+
+    &:hover,
+    &:focus {
+        opacity: 1;
+    }
+
+    &.left {
+        left: $spacing-16;
+    }
+
+    &.right {
+        right: $spacing-16;
+    }
+}
+
+.mx_ShareDialogButtons_button-icon {
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+}

@@ -1,0 +1,283 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`PowerLevelSelector should display only the current user 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    title
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_4"
+          label="@userId:matrix.org"
+          placeholder="@userId:matrix.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_4"
+        >
+          @userId:matrix.org
+        </label>
+        <svg
+          class="mx_Field_select_chevron"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+    </div>
+    <button
+      aria-disabled="true"
+      aria-label="Apply"
+      class="_button_13vu4_8 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
+      data-kind="primary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      Apply
+    </button>
+  </div>
+</fieldset>
+`;
+
+exports[`PowerLevelSelector should render 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    title
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_1"
+          label="@bob:server.org"
+          placeholder="@bob:server.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_1"
+        >
+          @bob:server.org
+        </label>
+        <svg
+          class="mx_Field_select_chevron"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_2"
+          label="@alice:server.org"
+          placeholder="@alice:server.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_2"
+        >
+          @alice:server.org
+        </label>
+        <svg
+          class="mx_Field_select_chevron"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      class="mx_PowerSelector"
+    >
+      <div
+        class="mx_Field mx_Field_select"
+      >
+        <select
+          data-testid="power-level-select-element"
+          id="mx_Field_3"
+          label="@userId:matrix.org"
+          placeholder="@userId:matrix.org"
+          type="text"
+        >
+          <option
+            data-testid="power-level-option-0"
+            value="0"
+          >
+            Default
+          </option>
+          <option
+            data-testid="power-level-option-50"
+            value="50"
+          >
+            Moderator
+          </option>
+          <option
+            data-testid="power-level-option-100"
+            value="100"
+          >
+            Admin
+          </option>
+          <option
+            data-testid="power-level-option-SELECT_VALUE_CUSTOM"
+            value="SELECT_VALUE_CUSTOM"
+          >
+            Custom level
+          </option>
+        </select>
+        <label
+          for="mx_Field_3"
+        >
+          @userId:matrix.org
+        </label>
+        <svg
+          class="mx_Field_select_chevron"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+    </div>
+    <button
+      aria-disabled="true"
+      aria-label="Apply"
+      class="_button_13vu4_8 mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"
+      data-kind="primary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      Apply
+    </button>
+  </div>
+</fieldset>
+`;

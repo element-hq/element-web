@@ -1,0 +1,63 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_BeaconViewDialog_wrapper .mx_Dialog {
+    padding: 0px;
+
+    /* Unset contain and position to allow the close button
+    to appear outside the dialog */
+    contain: unset;
+    position: unset;
+}
+
+.mx_BeaconViewDialog {
+    /* subtract 0.5px to prevent single-pixel margin due to rounding */
+    width: calc(80vw - 0.5px);
+    height: calc(80vh - 0.5px);
+    overflow: hidden;
+
+    /* sidebar is absolutely positioned inside */
+    position: relative;
+
+    .mx_Dialog_header {
+        margin: 0px;
+        padding: 0px;
+        position: unset;
+
+        .mx_Dialog_title {
+            display: none;
+        }
+
+        .mx_Dialog_cancelButton {
+            z-index: 4010;
+            position: fixed;
+            right: 5vw;
+            top: 5vh;
+            width: 20px;
+            height: 20px;
+            background-color: $dialog-close-external-color;
+        }
+    }
+}
+
+.mx_BeaconViewDialog_map {
+    width: 80vw;
+    height: 80vh;
+    border-radius: 8px;
+}
+
+.mx_BeaconViewDialog_mapFallbackMessage {
+    color: $secondary-content;
+    margin-bottom: $spacing-16;
+}
+
+.mx_BeaconViewDialog_viewListButton {
+    position: absolute;
+    top: $spacing-24;
+    left: $spacing-24;
+}

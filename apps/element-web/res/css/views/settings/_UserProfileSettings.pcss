@@ -1,0 +1,59 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019, 2020 , 2024 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UserProfileSettings {
+    border-bottom: 1px solid $quinary-content;
+
+    .mx_UserProfileSettings_profile {
+        display: flex;
+        margin-top: var(--cpd-space-6x);
+        gap: 16px;
+
+        .mx_UserProfileSettings_profile_displayName {
+            flex-grow: 1;
+            width: 100%;
+            gap: 0;
+        }
+    }
+
+    .mx_UserProfileSettings_profile_controls {
+        flex-grow: 1;
+    }
+
+    .mx_UserProfileSettings_profile_controls_userId {
+        width: 100%;
+        margin-top: var(--cpd-space-4x);
+        .mx_CopyableText {
+            margin-top: var(--cpd-space-1x);
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    .mx_UserProfileSettings_profile_controls_userId_label {
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .mx_UserProfileSettings_profile_buttons {
+        margin-top: var(--cpd-space-8x);
+        margin-bottom: var(--cpd-space-8x);
+    }
+
+    .mx_UserProfileSettings_accountmanageIcon {
+        margin-right: var(--cpd-space-2x);
+    }
+}
+
+@media (max-width: 768px) {
+    .mx_UserProfileSettings_profile {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+}

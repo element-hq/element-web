@@ -1,0 +1,28 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LegacyCallPreview {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-16;
+    left: 0;
+    position: fixed;
+    top: 0;
+    /* Display above any widget elements */
+    z-index: 102;
+
+    .mx_VideoFeed_remote.mx_VideoFeed_voice {
+        min-height: 150px;
+    }
+
+    .mx_VideoFeed_local {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+}

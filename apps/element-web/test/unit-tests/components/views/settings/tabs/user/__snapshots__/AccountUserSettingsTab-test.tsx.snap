@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses and phone numbers 1`] = `
+<div
+  class="mx_SettingsSubsection"
+  data-testid="mx_AccountEmailAddresses"
+>
+  <div
+    class="mx_SettingsSubsectionHeading"
+  >
+    <h3
+      class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+    >
+      Email addresses
+    </h3>
+  </div>
+  <div
+    class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+  >
+    <div
+      class="mx_AddRemoveThreepids_existing"
+    >
+      <span
+        class="mx_AddRemoveThreepids_existing_address"
+      >
+        test@test.io
+      </span>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+        role="button"
+        tabindex="0"
+      >
+        Remove
+      </div>
+    </div>
+    <form
+      autocomplete="off"
+      novalidate=""
+    >
+      <div
+        class="mx_Field mx_Field_input"
+      >
+        <input
+          autocomplete="email"
+          id="mx_Field_3"
+          label="Email Address"
+          placeholder="Email Address"
+          type="text"
+          value=""
+        />
+        <label
+          for="mx_Field_3"
+        >
+          Email Address
+        </label>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Add
+      </div>
+    </form>
+  </div>
+</div>
+`;
+
+exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses and phone numbers 2`] = `
+<div
+  class="mx_SettingsSubsection"
+  data-testid="mx_AccountPhoneNumbers"
+>
+  <div
+    class="mx_SettingsSubsectionHeading"
+  >
+    <h3
+      class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+    >
+      Phone numbers
+    </h3>
+  </div>
+  <div
+    class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+  >
+    <div
+      class="mx_AddRemoveThreepids_existing"
+    >
+      <span
+        class="mx_AddRemoveThreepids_existing_address"
+      >
+        123456789
+      </span>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+        role="button"
+        tabindex="0"
+      >
+        Remove
+      </div>
+    </div>
+    <form
+      autocomplete="off"
+      novalidate=""
+    >
+      <div
+        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft"
+      >
+        <span
+          class="mx_Field_prefix"
+        >
+          <div
+            class="mx_Dropdown mx_PhoneNumbers_country mx_CountryDropdown"
+          >
+            <div
+              aria-describedby="mx_CountryDropdown_value"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="Country Dropdown"
+              aria-owns="mx_CountryDropdown_input"
+              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_Dropdown_option"
+                id="mx_CountryDropdown_value"
+              >
+                <span
+                  class="mx_CountryDropdown_shortOption"
+                >
+                  <div
+                    class="mx_Dropdown_option_emoji"
+                  >
+                    🇺🇸
+                  </div>
+                  +1
+                </span>
+              </div>
+              <svg
+                class="mx_Dropdown_arrow"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                />
+              </svg>
+            </div>
+          </div>
+        </span>
+        <input
+          autocomplete="tel-national"
+          id="mx_Field_4"
+          label="Phone Number"
+          placeholder="Phone Number"
+          type="text"
+          value=""
+        />
+        <label
+          for="mx_Field_4"
+        >
+          Phone Number
+        </label>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Add
+      </div>
+    </form>
+  </div>
+</div>
+`;
+
+exports[`<AccountUserSettingsTab /> deactivate account should render section when account deactivation feature is enabled 1`] = `
+<div
+  class="mx_SettingsSection"
+>
+  <h2
+    class="mx_Heading_h3"
+  >
+    Deactivate Account
+  </h2>
+  <div
+    class="mx_SettingsSection_subSections"
+  >
+    <div
+      class="mx_SettingsSubsection"
+      data-testid="account-management-section"
+    >
+      <div
+        class="mx_SettingsSubsectionHeading"
+      >
+        <h3
+          class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+        >
+          Account management
+        </h3>
+      </div>
+      <div
+        class="mx_SettingsSubsection_description"
+      >
+        <div
+          class="mx_SettingsSubsection_text"
+        >
+          Deactivating your account is a permanent action — be careful!
+        </div>
+      </div>
+      <div
+        class="mx_SettingsSubsection_content"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+          role="button"
+          tabindex="0"
+        >
+          Deactivate Account
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

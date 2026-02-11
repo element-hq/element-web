@@ -1,0 +1,93 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* Note: this component expects to be contained within a flexbox */
+.mx_RoomSearch {
+    flex: 1;
+    min-width: 0;
+    border-radius: 8px;
+    background-color: $panel-actions;
+    /* keep border thickness consistent to prevent movement */
+    border: 1px solid transparent;
+    height: 28px;
+    padding: 1px;
+
+    /* Create a flexbox for the icons (easier to manage) */
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+
+    .mx_RoomSearch_icon {
+        width: 20px;
+        height: 20px;
+        color: $secondary-content;
+        margin-left: var(--cpd-space-2x);
+        flex-shrink: 0;
+    }
+
+    .mx_RoomSearch_spotlightTriggerText {
+        color: var(--cpd-color-text-secondary);
+        flex: 1;
+        min-width: 0;
+        /* the following rules are to match that of a real input field */
+        overflow: hidden;
+        margin: 9px;
+        font: var(--cpd-font-body-sm-semibold);
+    }
+
+    .mx_RoomSearch_shortcutPrompt {
+        border-radius: 6px;
+        background-color: $panel-actions;
+        padding: 2px 4px;
+        user-select: none;
+        font-size: $font-12px;
+        line-height: $font-15px;
+        font-family: inherit;
+        font-weight: var(--cpd-font-weight-semibold);
+        color: $light-fg-color;
+        margin-right: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &.mx_RoomSearch_minimized {
+        height: 32px;
+        min-height: 32px;
+        width: 32px;
+        box-sizing: border-box;
+
+        .mx_RoomSearch_icon {
+            margin: 0 auto;
+            padding: 1px;
+            align-self: center;
+        }
+
+        .mx_RoomSearch_shortcutPrompt {
+            display: none;
+        }
+    }
+
+    &:hover {
+        background-color: $tertiary-content;
+
+        .mx_RoomSearch_spotlightTriggerText {
+            color: $background;
+        }
+
+        .mx_RoomSearch_shortcutPrompt {
+            background-color: $background;
+            color: $secondary-content;
+        }
+
+        .mx_RoomSearch_icon {
+            color: $background;
+        }
+    }
+}

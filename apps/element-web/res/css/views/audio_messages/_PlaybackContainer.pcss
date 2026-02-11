@@ -1,0 +1,106 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* Dev note: there's no actual component called <PlaybackContainer />. These classes */
+/* are shared amongst multiple voice message components. */
+
+/* Container for live recording and playback controls */
+.mx_MediaBody.mx_VoiceMessagePrimaryContainer {
+    /* The waveform (right) has a 1px padding on it that we want to account for, otherwise */
+    /* inherit from mx_MediaBody */
+    padding-right: 11px;
+
+    /* Cheat at alignment a bit */
+    display: flex;
+    align-items: center;
+
+    contain: content;
+
+    .mx_Waveform,
+    .mx_RecordingPlayback_timelineLayoutMiddle {
+        min-width: 0; /* Prevent a blowout */
+    }
+
+    /* Waveforms are present in live recording only */
+    .mx_Waveform {
+        /* default, overridden in JS */
+        --barHeight: 1;
+        .mx_Waveform_bar {
+            background-color: $quaternary-content;
+            height: 100%;
+            transform: scaleY(max(0.05, var(--barHeight)));
+
+            &.mx_Waveform_bar_100pct {
+                /* Small animation to remove the mechanical feel of progress */
+                transition: background-color 250ms ease;
+                background-color: $secondary-content;
+            }
+        }
+    }
+
+    .mx_Clock {
+        width: $font-42px; /* we're not using a monospace font, so fake it */
+        min-width: $font-42px; /* force sensible layouts in awkward flexboxes (file panel, for example) */
+        padding-right: 6px; /* with the fixed width this ends up as a visual 8px most of the time, as intended. */
+        padding-left: 8px; /* isolate from recording circle / play control */
+    }
+
+    .mx_RecordingPlayback_timelineLayoutMiddle {
+        margin-left: 8px;
+        margin-right: 6px;
+        position: relative;
+        display: inline-block;
+        flex: 1;
+        height: 30px; /* same height as mx_Waveform, needed for automatic vertical centering */
+
+        .mx_Waveform {
+            left: 0;
+            top: 0;
+        }
+
+        .mx_SeekBar {
+            position: absolute;
+            left: 0;
+            height: 30px;
+            top: -2px; /* visually vertically centered */
+
+            /* Hide the hairline progress bar since we're at 100% height. Need to have distinct rules */
+            /* because CSS is weird. */
+            background: none;
+            &::before {
+                background: none;
+            }
+            &::-moz-range-progress {
+                background: none;
+            }
+
+            /* Make the thumb easier to see. Like the SeekBar original styles, these need to be */
+            /* distinct. We make it transparent so it doesn't show up on the UI, but also larger */
+            /* so it's easier to grab by mouse users in some browsers. Most browsers let the user */
+            /* move and drag the thumb regardless of hitting the thumb, however. */
+            &::-webkit-slider-thumb {
+                width: 10px;
+                height: 10px;
+                background-color: transparent;
+            }
+            &::-moz-range-thumb {
+                width: 10px;
+                height: 10px;
+                background-color: transparent;
+            }
+        }
+
+        /* For timeline-rendered playback, the clock is on the other side of the waveform. */
+        & + .mx_Clock {
+            text-align: right;
+
+            /* Take the padding off the clock because it's accounted for by the `timelineLayoutMiddle` */
+            padding: 0;
+        }
+    }
+}

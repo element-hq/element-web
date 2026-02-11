@@ -21,7 +21,8 @@ jobs:
               run: "pnpm install --frozen-lockfile"
 
             - name: Fetch Jitsi
-              run: "pnpm update:jitsi"
+              working-directory: apps/element-web
+              run: "pnpm run update:jitsi"
 
             - name: Create Pull Request
               uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8

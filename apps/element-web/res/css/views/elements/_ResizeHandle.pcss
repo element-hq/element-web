@@ -1,0 +1,32 @@
+/*
+Copyright 2018-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_ResizeHandle {
+    cursor: row-resize;
+    flex: 0 0 auto;
+    z-index: 100;
+
+    &.mx_ResizeHandle--horizontal {
+        margin: 0 -5px;
+        padding: 0 5px;
+        cursor: col-resize;
+
+        > div {
+            width: 1px;
+            height: 100%;
+        }
+    }
+
+    &.mx_ResizeHandle--vertical {
+        margin: -5px 0;
+        padding: 5px 0;
+
+        > div {
+            height: 1px;
+        }
+    }
+}

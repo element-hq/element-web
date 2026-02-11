@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properly renders Show: All threads 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_ThreadPanelHeader"
+  >
+    <button
+      aria-labelledby="_r_0_"
+      class="_icon-button_1215g_8"
+      data-kind="primary"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_147l5_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <div
+          height="20"
+          width="20"
+        />
+      </div>
+    </button>
+    <div
+      class="mx_ThreadPanel_vertical_separator"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="mx_AccessibleButton mx_ThreadPanel_dropdown"
+      role="button"
+      tabindex="0"
+    >
+      Show: All threads
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+        />
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly renders Show: My threads 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_ThreadPanelHeader"
+  >
+    <button
+      aria-labelledby="_r_6_"
+      class="_icon-button_1215g_8"
+      data-kind="primary"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_147l5_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <div
+          height="20"
+          width="20"
+        />
+      </div>
+    </button>
+    <div
+      class="mx_ThreadPanel_vertical_separator"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="mx_AccessibleButton mx_ThreadPanel_dropdown"
+      role="button"
+      tabindex="0"
+    >
+      Show: My threads
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+        />
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option selected in the context menu 1`] = `
+<div
+  aria-checked="true"
+  class="mx_AccessibleButton mx_ThreadPanel_Header_FilterOptionItem"
+  role="menuitemradio"
+  tabindex="0"
+>
+  <svg
+    fill="currentColor"
+    height="1em"
+    viewBox="0 0 24 24"
+    width="1em"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9.55 17.575q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L4.55 13q-.274-.274-.262-.713.012-.437.287-.712a.95.95 0 0 1 .7-.275q.425 0 .7.275L9.55 15.15l8.475-8.475q.274-.275.713-.275.437 0 .712.275.275.274.275.713 0 .437-.275.712l-9.2 9.2q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+    />
+  </svg>
+  <span>
+    All threads
+  </span>
+  <span>
+    Shows all threads from current room
+  </span>
+</div>
+`;

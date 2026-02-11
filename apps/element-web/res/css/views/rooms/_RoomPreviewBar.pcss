@@ -1,0 +1,169 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015-2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_RoomPreviewBar {
+    flex: 0 0 auto;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    display: flex;
+    -webkit-align-items: center;
+
+    h3 {
+        font-size: $font-18px;
+        font-weight: var(--cpd-font-weight-semibold);
+
+        &.mx_RoomPreviewBar_spinnerTitle {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 0;
+        }
+    }
+
+    h3,
+    .mx_RoomPreviewBar_message p {
+        /* break-word, with fallback to break-all, which is wider supported */
+        word-break: break-all;
+        word-break: break-word;
+    }
+
+    .mx_Spinner {
+        width: auto;
+        height: auto;
+        margin: 10px 10px 10px 0;
+        flex: 0 0 auto;
+    }
+
+    .mx_RoomPreviewBar_footer {
+        font-size: $font-12px;
+        line-height: $font-20px;
+
+        .mx_Spinner {
+            vertical-align: middle;
+            display: inline-block;
+        }
+    }
+}
+
+.mx_RoomPreviewBar_actions {
+    display: flex;
+}
+
+.mx_RoomPreviewBar_message {
+    display: flex;
+    align-items: stretch;
+
+    p {
+        overflow-wrap: break-word;
+    }
+}
+
+.mx_RoomPreviewBar_panel {
+    padding: 8px 8px 8px 20px;
+
+    flex-direction: row;
+
+    .mx_RoomPreviewBar_actions {
+        flex: 0 0 auto;
+        flex-direction: row;
+        padding: 3px 8px;
+
+        & > * {
+            margin-left: 12px;
+        }
+    }
+
+    .mx_RoomPreviewBar_message {
+        flex: 1 0 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+
+        & > * {
+            margin: 4px;
+        }
+    }
+}
+
+/* With maximised widgets, the panel fits in better when rounded */
+.mx_MainSplit_maximisedWidget .mx_RoomPreviewBar_panel {
+    margin: var(--container-gap-width);
+    margin-right: calc(var(--container-gap-width) / 2); /* Shared with right panel */
+    margin-top: 0; /* Already covered by apps drawer */
+    border-radius: 8px;
+}
+
+.mx_RoomPreviewBar_dialog {
+    margin: auto;
+    box-sizing: content;
+    width: 400px;
+    border-radius: 4px;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+
+    .mx_RoomPreviewBar_message {
+        flex-direction: column;
+
+        & > * {
+            margin: 5px 0 20px 0;
+        }
+    }
+
+    .mx_RoomPreviewBar_actions {
+        flex-direction: column;
+        .mx_AccessibleButton {
+            padding: 7px 50px; /* extra wide */
+        }
+
+        & > * {
+            margin-top: 12px;
+        }
+        .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
+            /* to account for the padding of the primary button which causes inconsistent look between */
+            /* subsequent secondary (text) buttons */
+            margin-bottom: 7px;
+        }
+    }
+}
+.mx_RoomPreviewBar_Invite {
+    max-height: 100vh;
+    overflow-y: auto;
+    justify-content: flex-start;
+}
+
+.mx_RoomPreviewBar_Invite h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: pre-wrap;
+    overflow: hidden;
+}
+
+.mx_RoomPreviewBar_inviter {
+    font-weight: var(--cpd-font-weight-semibold);
+}
+
+a.mx_RoomPreviewBar_inviter {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.mx_RoomPreviewBar_inviter_mxid {
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_RoomPreviewBar_icon {
+    margin-right: 8px;
+    vertical-align: text-top;
+}
+
+.mx_RoomPreviewBar_fullWidth {
+    width: 100%;
+}

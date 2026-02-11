@@ -1,0 +1,43 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SendMessageComposer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font: var(--cpd-font-body-md-regular);
+    /* fixed line height to prevent emoji from being taller than text */
+    line-height: $font-18px;
+    justify-content: center;
+    margin-right: 6px;
+    /* don't grow wider than available space */
+    min-width: 0;
+
+    .mx_BasicMessageComposer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        /* min-height at this level so the mx_BasicMessageComposer_input */
+        /* still stays vertically centered when less than 55px. */
+        /* We also set this to ensure the voice message recording widget */
+        /* doesn't cause a jump. */
+        min-height: 55px;
+
+        .mx_BasicMessageComposer_input {
+            padding: 3px 0;
+            /* this will center the contenteditable */
+            /* in it's parent vertically */
+            /* while keeping the autocomplete at the top */
+            /* of the composer. The parent needs to be a flex container for this to work. */
+            margin: auto 0;
+            /* max-height at this level so autocomplete doesn't get scrolled too */
+            max-height: 140px;
+            overflow-y: auto;
+        }
+    }
+}

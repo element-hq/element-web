@@ -1,0 +1,81 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MBeaconBody {
+    position: relative;
+    height: 220px;
+    max-width: 325px;
+    width: 100%;
+
+    border-radius: var(--MBody-border-radius);
+    overflow: hidden;
+}
+
+.mx_MBeaconBody.mx_MBeaconBody_withoutMap {
+    height: auto;
+
+    .mx_MBeaconBody_chin {
+        position: relative;
+        background-color: transparent;
+    }
+}
+
+.mx_MBeaconBody_withoutMapContent {
+    background-color: $panels;
+    border-radius: 4px;
+}
+
+.mx_MBeaconBody_withoutMapInfoLastUpdated {
+    /* 48px lines up with icon in BeaconStatus */
+    margin-top: -$spacing-8;
+    padding: 0 $spacing-8 $spacing-8 48px;
+
+    color: $tertiary-content;
+    font-size: $font-10px;
+}
+
+.mx_MBeaconBody_map {
+    height: 100%;
+    width: 100%;
+    z-index: 0; /* keeps the entire map under the message action bars */
+
+    cursor: pointer;
+}
+
+.mx_MBeaconBody_mapFallback,
+.mx_MBeaconBody_mapError {
+    /* pushes spinner/icon up */
+    /* to appear more centered with the footer */
+    padding-bottom: 50px !important;
+}
+
+.mx_MBeaconBody_mapErrorInteractive {
+    cursor: pointer;
+}
+
+.mx_MBeaconBody_mapFallback {
+    cursor: default;
+}
+
+.mx_MBeaconBody_chin {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--cpd-color-bg-canvas-default);
+    opacity: 0.85;
+}
+
+.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MBeaconBody {
+    max-width: 100%;
+    width: 450px;
+}
+
+.mx_ReplyTile .mx_MBeaconBody {
+    /* Prevent clicking a beacon within a reply */
+    pointer-events: none;
+}

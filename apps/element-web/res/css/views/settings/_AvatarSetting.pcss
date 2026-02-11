@@ -1,0 +1,69 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_AvatarSetting_avatar {
+    width: 90px;
+    min-width: 90px; /* so it doesn't get crushed by the flexbox in languages with longer words */
+    height: 90px;
+    margin-top: 8px;
+    position: relative;
+
+    &.mx_AvatarSetting_avatarDisplay:hover .mx_AvatarSetting_hover {
+        opacity: 1;
+    }
+
+    & > * {
+        box-sizing: border-box;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
+        margin-top: 8px;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_kind_link_sm {
+        width: 100%;
+    }
+
+    & > img {
+        display: block;
+        height: 90px;
+        width: inherit;
+        border-radius: 90px;
+        cursor: pointer;
+        object-fit: cover;
+    }
+
+    .mx_AvatarSetting_uploadButton {
+        width: 28px;
+        height: 28px;
+        border-radius: 32px;
+        border: 1px solid var(--cpd-color-bg-canvas-default);
+        background-color: var(--cpd-color-bg-canvas-default);
+
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        text-align: center;
+        cursor: pointer;
+
+        svg {
+            position: relative;
+            top: 3px;
+        }
+    }
+
+    .mx_AvatarSetting_uploadButton:hover,
+    .mx_AvatarSetting_uploadButton_active {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+}
+
+.mx_AvatarSetting_removeMenuItem svg,
+.mx_AvatarSetting_removeMenuItem span {
+    color: var(--cpd-color-text-critical-primary) !important;
+}

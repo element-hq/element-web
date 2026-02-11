@@ -1,0 +1,32 @@
+/*
+Copyright 2019-2024 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_MainSplit {
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+}
+
+.mx_MainSplit > .mx_RightPanel_ResizeWrapper {
+    &:hover .mx_ResizeHandle--horizontal::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-150%, -50%);
+
+        height: 64px; /* to match width of the ones on roomlist */
+        width: 4px;
+        border-radius: 4px;
+
+        content: "";
+
+        background-color: $primary-content;
+        opacity: 0.8;
+    }
+}

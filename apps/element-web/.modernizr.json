@@ -1,0 +1,37 @@
+{
+    "minify": false,
+    "enableClasses": false,
+    "feature-detects": [
+        "test/css/animations",
+        "test/css/displaytable",
+        "test/css/filters",
+        "test/css/flexbox",
+        "test/css/objectfit",
+
+        "test/es5/date",
+        "test/es5/function",
+        "test/es5/object",
+        "test/es5/undefined",
+
+        "test/es6/array",
+        "test/es6/collections",
+        "test/es6/promises",
+        "test/es6/string",
+
+        "test/svg",
+        "test/svg/asimg",
+        "test/svg/filters",
+
+        "test/url/parser",
+        "test/url/urlsearchparams",
+
+        "test/cors",
+        "test/crypto",
+        "test/iframe/sandbox",
+        "test/json",
+        "test/network/fetch",
+        "test/storage/localstorage",
+        "test/window/resizeobserver",
+        "test/audio/webaudio"
+    ]
+}

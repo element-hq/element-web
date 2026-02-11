@@ -1,0 +1,35 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_FontScalingPanel_preview {
+    --FontScalingPanel_preview-padding-block: 9px;
+
+    border: 1px solid $quinary-content;
+    border-radius: 10px;
+    padding: 0 $spacing-16 var(--FontScalingPanel_preview-padding-block) $spacing-16;
+    pointer-events: none;
+    display: flow-root;
+
+    &.mx_IRCLayout {
+        padding-top: 9px;
+    }
+
+    .mx_EventTile[data-layout="bubble"] {
+        margin-top: 30px;
+    }
+
+    .mx_EventTile_msgOption {
+        display: none;
+    }
+}
+
+.mx_FontScalingPanel_Dropdown {
+    width: 120px;
+    /* Override default mx_Field margin */
+    margin-bottom: var(--cpd-space-2x) !important;
+}

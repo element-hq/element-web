@@ -1,0 +1,61 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2017 Travis Ralston
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_PinnedEventTile {
+    display: flex;
+    gap: var(--cpd-space-4x);
+    align-items: flex-start;
+
+    .mx_PinnedEventTile_wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-1x);
+        /* Remove avatar width and space between the avatar and the wrapper */
+        /* We need it to make the location fit */
+        width: calc(100% - var(--cpd-space-4x) - 32px);
+        /* Prevent a long sender name to overflow the tile */
+        overflow: hidden;
+
+        .mx_PinnedEventTile_top {
+            display: flex;
+            gap: var(--cpd-space-1x);
+            justify-content: space-between;
+            align-items: center;
+
+            .mx_PinnedEventTile_sender {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                font: var(--cpd-font-body-md-semibold);
+            }
+        }
+
+        .mx_PinnedEventTile_thread {
+            display: flex;
+            gap: var(--cpd-space-2x);
+            font: var(--cpd-font-body-sm-regular);
+
+            svg {
+                width: 20px;
+                fill: var(--cpd-color-icon-tertiary);
+            }
+
+            span {
+                display: flex;
+                color: var(--cpd-color-text-secondary);
+            }
+
+            button {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
+    }
+}
