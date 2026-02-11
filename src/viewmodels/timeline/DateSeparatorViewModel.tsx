@@ -38,8 +38,17 @@ import { contextMenuBelow } from "../../components/views/rooms/RoomTile";
 import { SdkContextClass } from "../../contexts/SDKContext";
 
 export interface DateSeparatorViewModelProps {
+    /**
+     * Room ID used for jump-to-date navigation and room-switch guards.
+     */
     roomId: string;
+    /**
+     * Timestamp used to compute the date separator label and initial picker value.
+     */
     ts: number;
+    /**
+     * Export mode disables relative date labels and jump-to-date menu UI.
+     */
     forExport?: boolean;
 }
 
@@ -50,8 +59,20 @@ export class DateSeparatorViewModel
     extends BaseViewModel<DateSeparatorViewSnapshotInterface, DateSeparatorViewModelProps>
     implements DateSeparatorViewModelInterface
 {
+    /**
+     * Cached setting for UIFeature.TimelineEnableRelativeDates.
+     * Updated via SettingsStore watcher to keep labels in sync at runtime.
+     */
     private relativeDatesEnabled: boolean;
+    /**
+     * Cached setting for feature_jump_to_date.
+     * Controls whether the jump-to-date menu is exposed in the snapshot.
+     */
     private jumpToDateEnabled: boolean;
+    /**
+     * Anchor rectangle for the jump-to-date context menu.
+     * Undefined means the menu is closed.
+     */
     private contextMenuPosition?: DOMRect;
 
     public constructor(props: DateSeparatorViewModelProps) {
@@ -61,7 +82,7 @@ export class DateSeparatorViewModel
         super(props, {
             label: DateSeparatorViewModel.computeLabel(props, relativeDatesEnabled),
             className: "mx_TimelineSeparator",
-            jumpToDateMenu: undefined,
+            customContent: undefined,
         });
 
         this.relativeDatesEnabled = relativeDatesEnabled;
@@ -95,7 +116,7 @@ export class DateSeparatorViewModel
         return {
             label,
             className: "mx_TimelineSeparator",
-            jumpToDateMenu:
+            customContent:
                 this.jumpToDateEnabled && !this.props.forExport ? this.renderJumpToDateMenu(label) : undefined,
         };
     }
@@ -331,16 +352,13 @@ export class DateSeparatorViewModel
 
         return (
             <ContextMenuTooltipButton
-                className="mx_DateSeparator_jumpToDateMenu mx_DateSeparator_dateContent"
                 data-testid="jump-to-date-separator-button"
                 onClick={this.onContextMenuOpenClick}
                 isExpanded={Boolean(this.contextMenuPosition)}
                 title={_t("room|jump_to_date")}
             >
-                <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
-                    {label}
-                </h2>
-                <ChevronDownIcon className="mx_DateSeparator_chevron" />
+                <h2 aria-hidden="true">{label}</h2>
+                <ChevronDownIcon />
                 {contextMenu}
             </ContextMenuTooltipButton>
         );

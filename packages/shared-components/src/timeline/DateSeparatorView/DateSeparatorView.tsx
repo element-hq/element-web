@@ -26,7 +26,7 @@ export interface DateSeparatorViewSnapshot {
      * Optional custom header content (for example a jump-to-date menu trigger).
      * When provided, this replaces the default heading content.
      */
-    jumpToDateMenu?: JSX.Element;
+    customContent?: JSX.Element;
 }
 
 /**
@@ -51,17 +51,17 @@ interface DateSeparatorViewProps {
  * ```
  */
 export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
-    const { label, className, jumpToDateMenu } = useViewModel(vm);
+    const { label, className, customContent } = useViewModel(vm);
 
     const dateHeaderContent = (
-        <h2 className={styles.dateHeading} aria-hidden="true">
-            {label}
-        </h2>
+        <div>
+            <h2 aria-hidden="true">{label}</h2>
+        </div>
     );
 
     return (
-        <TimelineSeparator label={label} className={classNames(className)}>
-            <div className={styles.dateContent}>{jumpToDateMenu || dateHeaderContent}</div>
+        <TimelineSeparator label={label} className={classNames(className, styles.separator)}>
+            {customContent || dateHeaderContent}
         </TimelineSeparator>
     );
 }

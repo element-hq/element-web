@@ -13,6 +13,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { DateSeparatorView } from "@element-hq/web-shared-components";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -23,7 +24,6 @@ import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import { _t } from "../../languageHandler";
 import * as Avatar from "../../Avatar";
 import EventTile from "../../components/views/rooms/EventTile";
-import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import { type ExportType, type IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -31,6 +31,7 @@ import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
+import { DateSeparatorViewModel } from "../../viewmodels/timeline/DateSeparatorViewModel";
 
 import exportJS from "!!raw-loader!./exportJS";
 
@@ -251,12 +252,21 @@ export default class HTMLExporter extends Exporter {
 
     protected getDateSeparator(event: MatrixEvent): string {
         const ts = event.getTs();
-        const dateSeparator = (
-            <li key={ts}>
-                <DateSeparator forExport={true} key={ts} roomId={event.getRoomId()!} ts={ts} />
-            </li>
-        );
-        return renderToStaticMarkup(dateSeparator);
+        const dateSeparatorViewModel = new DateSeparatorViewModel({
+            roomId: event.getRoomId()!,
+            ts,
+            forExport: true,
+        });
+        try {
+            const dateSeparator = (
+                <li key={ts}>
+                    <DateSeparatorView vm={dateSeparatorViewModel} />
+                </li>
+            );
+            return renderToStaticMarkup(dateSeparator);
+        } finally {
+            dateSeparatorViewModel.dispose();
+        }
     }
 
     protected needsDateSeparator(event: MatrixEvent, prevEvent: MatrixEvent | null): boolean {

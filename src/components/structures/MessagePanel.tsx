@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
-import { TimelineSeparator } from "@element-hq/web-shared-components";
+import { DateSeparatorView, TimelineSeparator, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
@@ -37,7 +37,6 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
 import ScrollPanel, { type IScrollState } from "./ScrollPanel";
-import DateSeparator from "../views/messages/DateSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -53,9 +52,18 @@ import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
+import { DateSeparatorViewModel } from "../../viewmodels/timeline/DateSeparatorViewModel";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
+
+/**
+ * Creates and auto-disposes the DateSeparatorViewModel for message panel rendering.
+ */
+function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    return <DateSeparatorView vm={vm} />;
+}
 
 /**
  * Indicates which separator (if any) should be rendered between timeline events.
@@ -757,9 +765,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const wantsSeparator = this.wantsSeparator(prevEvent, mxEv);
         if (!isGrouped && this.props.room) {
             if (wantsSeparator === SeparatorKind.Date) {
+                const separatorRoomId = this.props.room.roomId;
                 ret.push(
-                    <li key={ts1}>
-                        <DateSeparator key={ts1} roomId={this.props.room.roomId} ts={ts1} />
+                    <li key={`${separatorRoomId}-${ts1}`}>
+                        <DateSeparatorWrapper key={`${separatorRoomId}-${ts1}`} roomId={separatorRoomId} ts={ts1} />
                     </li>,
                 );
             } else if (wantsSeparator === SeparatorKind.LateEvent) {

@@ -7,13 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import DateSeparator from "../messages/DateSeparator";
 import EventTile from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
 import { wantsDateSeparator } from "../../../DateUtils";
@@ -21,6 +21,7 @@ import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper
 import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
 
 interface IProps {
     // a list of strings to be highlighted in the results
@@ -32,6 +33,14 @@ interface IProps {
     // indexes of the matching events (not contextual ones)
     ourEventsIndexes: number[];
     permalinkCreator?: RoomPermalinkCreator;
+}
+
+/**
+ * Creates and auto-disposes the DateSeparatorViewModel for search result rendering.
+ */
+function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    return <DateSeparatorView vm={vm} />;
 }
 
 export default class SearchResultTile extends React.Component<IProps> {
@@ -57,7 +66,8 @@ export default class SearchResultTile extends React.Component<IProps> {
         const eventId = resultEvent.getId();
 
         const ts1 = resultEvent.getTs();
-        const ret = [<DateSeparator key={ts1 + "-search"} roomId={resultEvent.getRoomId()!} ts={ts1} />];
+        const separatorRoomId = resultEvent.getRoomId()!;
+        const ret = [<DateSeparatorWrapper key={`${separatorRoomId}-${ts1}-search`} roomId={separatorRoomId} ts={ts1} />];
         const layout = SettingsStore.getValue("layout");
         const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");

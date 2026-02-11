@@ -37,11 +37,11 @@ HasExtraClassNames.args = {
     className: "extra_class_1 extra_class_2",
 };
 
-export const WithJumpToDateMenu = Template.bind({});
-WithJumpToDateMenu.args = {
-    jumpToDateMenu: (
-        <div data-testid="jump-to-date-menu" role="presentation">
-            Jump to date
+export const WithCustomContent = Template.bind({});
+WithCustomContent.args = {
+    customContent: (
+        <div data-testid="custom-content" role="presentation">
+            Custom content
         </div>
     ),
 };
