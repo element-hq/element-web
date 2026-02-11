@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import { Button } from "@vector-im/compound-web";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";
@@ -78,6 +79,9 @@ export function RecoveryPanelOutOfSync({
                         // the backup state.
                         const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(false);
 
+                        logger.debug(
+                            `RecoveryPanelOutOfSync: user clicked 'Enter recovery key'. needsBackupReset: ${needsBackupReset}`,
+                        );
                         try {
                             // pause the device listener because we could be making lots
                             // of changes, and don't want toasts to pop up and disappear
