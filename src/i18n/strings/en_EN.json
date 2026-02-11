@@ -2317,7 +2317,6 @@
             "m.room.pinned_events": "Manage pinned events",
             "m.room.power_levels": "Change permissions",
             "m.room.redaction": "Remove messages sent by me",
-            "m.room.server_acl": "Change server ACLs",
             "m.room.tombstone": "Upgrade the room",
             "m.room.topic": "Change topic",
             "m.room.topic_space": "Change description",
@@ -3531,11 +3530,6 @@
             "changed": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 All servers are banned from participating! This room can no longer be used.",
-            "changed": "%(senderDisplayName)s changed the server ACLs for this room.",
-            "set": "%(senderDisplayName)s set the server ACLs for this room."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.",
             "sent": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room."
@@ -3743,14 +3737,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sleft and rejoined",
                 "other": "%(severalUsers)sleft and rejoined %(count)s times"
-            },
-            "server_acls": {
-                "one": "%(oneUser)schanged the server ACLs",
-                "other": "%(oneUser)schanged the server ACLs %(count)s times"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)schanged the server ACLs",
-                "other": "%(severalUsers)schanged the server ACLs %(count)s times"
             },
             "unbanned": {
                 "one": "was unbanned",
