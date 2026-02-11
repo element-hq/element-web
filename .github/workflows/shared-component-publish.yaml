@@ -31,11 +31,6 @@ jobs:
             - name: 🛠️ Setup EW
               run: pnpm install --frozen-lockfile
 
-            - name: 🛠️ Setup
-              # When running `install` it also calls the `prepare` step which generates
-              # a build
-              run: pnpm --dir packages/shared-components install --frozen-lockfile
-
             - name: 🚀 Publish to npm
               working-directory: packages/shared-components
               run: npm publish --access public --provenance
