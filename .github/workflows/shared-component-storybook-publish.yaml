@@ -39,4 +39,5 @@ jobs:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
                   workingDirectory: "packages/shared-components"
+                  packageManager: "pnpm"
                   command: pages deploy storybook-static --project-name=shared-components-storybook
