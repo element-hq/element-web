@@ -8,6 +8,7 @@
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { createEvent, fireEvent } from "@testing-library/dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@test-utils";
 
@@ -56,14 +57,28 @@ describe("DisambiguatedProfileView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    const onClick = vi.fn();
-
     class DisambiguatedProfileViewModel
         extends MockViewModel<DisambiguatedProfileViewSnapshot>
         implements DisambiguatedProfileViewActions
     {
-        public onClick = onClick;
+        public onClick?: DisambiguatedProfileViewActions["onClick"];
+
+        public constructor(
+            snapshot: DisambiguatedProfileViewSnapshot,
+            actions: DisambiguatedProfileViewActions = {},
+        ) {
+            super(snapshot);
+            this.onClick = actions.onClick;
+        }
     }
+
+    const getProfileContainer = (displayName: string): HTMLDivElement => {
+        const profileContainer = screen.getByText(displayName).closest("div");
+        if (!profileContainer) {
+            throw new Error("Expected profile container to exist");
+        }
+        return profileContainer;
+    };
 
     it("should display the display name", () => {
         const vm = new DisambiguatedProfileViewModel({
@@ -85,14 +100,82 @@ describe("DisambiguatedProfileView", () => {
     });
 
     it("should call onClick when clicked", async () => {
+        const onClick = vi.fn();
         const user = userEvent.setup();
-        const vm = new DisambiguatedProfileViewModel({
-            displayName: "Clickable User",
-        });
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Clickable User",
+            },
+            { onClick },
+        );
 
         render(<DisambiguatedProfileView vm={vm} />);
         await user.click(screen.getByText("Clickable User"));
         expect(onClick).toHaveBeenCalled();
+    });
+
+    it("should set button semantics when onClick is provided", () => {
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Keyboard User",
+            },
+            { onClick: vi.fn() },
+        );
+
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileContainer("Keyboard User");
+        expect(profileContainer).toHaveAttribute("role", "button");
+        expect(profileContainer).toHaveAttribute("tabIndex", "0");
+    });
+
+    it("should call onClick on keyboard activation keys", () => {
+        const onClick = vi.fn();
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Keyboard User",
+            },
+            { onClick },
+        );
+
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileContainer("Keyboard User");
+
+        const enterEvent = createEvent.keyDown(profileContainer, { key: "Enter" });
+        fireEvent(profileContainer, enterEvent);
+
+        const spaceEvent = createEvent.keyDown(profileContainer, { key: " " });
+        fireEvent(profileContainer, spaceEvent);
+
+        expect(enterEvent.defaultPrevented).toBe(true);
+        expect(spaceEvent.defaultPrevented).toBe(true);
+        expect(onClick).toHaveBeenCalledTimes(2);
+    });
+
+    it("should not call onClick for non-activation keys", () => {
+        const onClick = vi.fn();
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Keyboard User",
+            },
+            { onClick },
+        );
+
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileContainer("Keyboard User");
+
+        fireEvent.keyDown(profileContainer, { key: "Escape" });
+        expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it("should not set button semantics when onClick is not provided", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            displayName: "Static User",
+        });
+
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileContainer("Static User");
+        expect(profileContainer).not.toHaveAttribute("role");
+        expect(profileContainer).not.toHaveAttribute("tabIndex");
     });
 
     it("should display tooltip title when provided", () => {
