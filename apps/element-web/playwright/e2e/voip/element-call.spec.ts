@@ -19,7 +19,7 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 // The fake call app does *just* enough to convince Element Web that a call is ongoing
 // and functions like PiP work. It does not actually do anything though, to limit the
 // surface we test.
-const widgetApi = readFile("node_modules/matrix-widget-api/dist/api.min.js", "utf-8");
+const widgetApi = readFile(require.resolve("matrix-widget-api/dist/api.min.js"), "utf-8");
 const fakeCallClient = readFile("playwright/sample-files/fake-element-call.html", "utf-8");
 
 function assertCommonCallParameters(
