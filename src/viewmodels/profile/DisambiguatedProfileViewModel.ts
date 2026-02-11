@@ -80,6 +80,10 @@ export class DisambiguatedProfileViewModel
     extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewModelProps>
     implements DisambiguatedProfileViewModelInterface
 {
+    private readonly handleClick = (evt: MouseEvent<HTMLDivElement>): void => {
+        this.props.onClick?.(evt);
+    };
+
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
@@ -141,7 +145,7 @@ export class DisambiguatedProfileViewModel
         this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
-    public onClick = (evt: MouseEvent<HTMLDivElement>): void => {
-        this.props.onClick?.(evt);
-    };
+    public get onClick(): DisambiguatedProfileViewActions["onClick"] {
+        return this.props.onClick ? this.handleClick : undefined;
+    }
 }
