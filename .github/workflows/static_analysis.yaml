@@ -36,9 +36,6 @@ jobs:
             - name: Typecheck
               run: "pnpm run lint:types"
 
-            - name: Install Shared Component Dependencies
-              run: "pnpm --dir packages/shared-components install"
-
             - name: Typecheck Shared Components
               run: "pnpm --dir packages/shared-components run lint:types"
 
@@ -99,9 +96,6 @@ jobs:
 
             - name: Run Linter
               run: "pnpm run lint:js"
-
-            - name: Install Shared Component Deps
-              run: "pnpm --dir packages/shared-components install --frozen-lockfile"
 
             - name: Run Linter
               run: "pnpm --dir packages/shared-components run lint:js"
