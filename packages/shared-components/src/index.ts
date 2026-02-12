@@ -23,6 +23,7 @@ export * from "./message-body/TimelineSeparator/";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
+export * from "./profile/DisambiguatedProfile";
 export * from "./room/HistoryVisibilityBadge";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";

@@ -8,11 +8,11 @@ else
     version=`git describe --dirty --tags || echo unknown`
 fi
 
-yarn clean
-VERSION=$version yarn build
+pnpm clean
+VERSION=$version pnpm build
 
 # include the sample config in the tarball. Arguably this should be done by
-# `yarn build`, but it's just too painful.
+# `pnpm build`, but it's just too painful.
 cp config.sample.json webapp/
 
 mkdir -p dist

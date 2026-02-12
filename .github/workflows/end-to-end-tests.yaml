@@ -54,9 +54,10 @@ jobs:
               with:
                   repository: element-hq/element-web
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
                   node-version: "lts/*"
 
             - name: Fetch layered build
@@ -71,7 +72,7 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) yarn build
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
@@ -133,18 +134,19 @@ jobs:
                   name: webapp
                   path: webapp
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
-                  cache-dependency-path: yarn.lock
+                  cache: "pnpm"
+                  cache-dependency-path: pnpm-lock.yaml
                   node-version: "lts/*"
 
             - name: Install dependencies
-              run: yarn install --frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Get installed Playwright version
               id: playwright
-              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
               uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
@@ -155,17 +157,17 @@ jobs:
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: yarn playwright install --with-deps --no-shell
+              run: pnpm playwright install --with-deps --no-shell
 
             - name: Install system dependencies for WebKit
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
-              run: yarn playwright install-deps webkit
+              run: pnpm playwright install-deps webkit
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
               run: |
-                  yarn playwright test \
+                  pnpm playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
@@ -200,15 +202,17 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+              if: inputs.skip != true
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               if: inputs.skip != true
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
                   node-version: "lts/*"
 
             - name: Install dependencies
               if: inputs.skip != true
-              run: yarn install --frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
@@ -220,7 +224,7 @@ jobs:
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
+              run: pnpm playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}

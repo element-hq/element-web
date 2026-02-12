@@ -11,8 +11,9 @@ ARG JS_SDK_BRANCH="master"
 WORKDIR /src
 
 COPY --exclude=docker . /src
+RUN corepack enable
 RUN /src/scripts/docker-link-repos.sh
-RUN yarn --network-timeout=200000 install
+RUN pnpm install
 RUN /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image

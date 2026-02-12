@@ -1,7 +1,7 @@
-diff --git a/node_modules/linkify-html/dist/linkify-html.mjs b/node_modules/linkify-html/dist/linkify-html.mjs
-index 63b1fe5..f61e3b7 100644
---- a/node_modules/linkify-html/dist/linkify-html.mjs
-+++ b/node_modules/linkify-html/dist/linkify-html.mjs
+diff --git a/dist/linkify-html.mjs b/dist/linkify-html.mjs
+index 63b1fe5019a58d73986974fc621701db33a4ac11..f61e3b7118ed6adc93da88ca9ecf2dce486989fd 100644
+--- a/dist/linkify-html.mjs
++++ b/dist/linkify-html.mjs
 @@ -201,6 +201,8 @@ var EventedTokenizer = /** @class */function () {
            this.consume();
            if (this.delegate.endDoctype) this.delegate.endDoctype();

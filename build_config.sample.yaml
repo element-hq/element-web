@@ -16,7 +16,7 @@
 # The modules to install. See ./docs/modules.md for more information on
 # what modules are.
 #
-# The values of this are provided to `yarn add` for inclusion.
+# The values of this are provided to `pnpm add` for inclusion.
 modules:
     # An example of pulling a module from NPM
     - "@vector-im/element-web-ilag-module@^0.0.1"

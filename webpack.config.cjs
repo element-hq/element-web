@@ -91,11 +91,11 @@ const moduleReplacementPlugins = [
 module.exports = (env, argv) => {
     // Establish settings based on the environment and args.
     //
-    // argv.mode is always set to "production" by yarn build
+    // argv.mode is always set to "production" by pnpm build
     //      (called to build prod, nightly and develop.element.io)
-    // arg.mode is set to "development" by yarn start
+    // arg.mode is set to "development" by pnpm start
     //      (called by developers, runs the continuous reload script)
-    // process.env.CI_PACKAGE is set when yarn build is called from scripts/ci_package.sh
+    // process.env.CI_PACKAGE is set when pnpm build is called from scripts/ci_package.sh
     //      (called to build nightly and develop.element.io)
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== "production";
@@ -204,7 +204,7 @@ module.exports = (env, argv) => {
             alias: {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
-                // using `npm link` / `yarn link`.
+                // using linked dependencies.
                 "react": path.resolve(__dirname, "node_modules/react"),
                 "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 
@@ -281,7 +281,7 @@ module.exports = (env, argv) => {
 
                         // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute
-                        // path, these could be anywhere thanks to yarn link. We must also not
+                        // path, these could be anywhere thanks to linking. We must also not
                         // include node modules inside these modules, so we add 'src'.
                         if (f.startsWith(jsSdkSrcDir)) return true;
 
