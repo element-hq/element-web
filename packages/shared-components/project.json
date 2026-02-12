@@ -1,0 +1,18 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "cache": true,
+            "command": "vite build",
+            "inputs": ["{projectRoot}/src/**/*"],
+            "outputs": ["{projectRoot}/dist"],
+            "options": { "cwd": "packages/shared-components" }
+        },
+        "start": {
+            "command": "vite build --watch",
+            "options": { "cwd": "packages/shared-components" },
+            "continuous": true
+        }
+    }
+}

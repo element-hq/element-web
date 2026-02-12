@@ -1,0 +1,9 @@
+{
+    "$schema": "./node_modules/nx/schemas/nx-schema.json",
+    "defaultBase": "develop",
+    "targetDefaults": {
+        "build": {
+            "dependsOn": ["^build", "prebuild:*"]
+        }
+    }
+}
