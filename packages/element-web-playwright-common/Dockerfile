@@ -6,6 +6,10 @@ WORKDIR /work
 # fonts-dejavu is needed for the same RTL rendering as on CI
 RUN apt-get update && apt-get -y install docker.io fonts-dejavu
 
+# Set up corepack
+RUN corepack enable
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
