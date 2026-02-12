@@ -56,6 +56,7 @@ RUN_ARGS=(
 )
 
 DEFAULT_ARGS=(--grep @screenshot)
+LINK_MODULES=true
 
 # Some arguments to customise behaviour so the same script / image can be
 # re-used for other screenshot generation.
@@ -70,6 +71,11 @@ while [[ $# -gt 0 ]]; do
       # podman doesn't support `volume-nocopy`
       if [ -z "$docker_is_podman" ]; then mount_param+=",volume-nocopy"; fi
       RUN_ARGS+=(--mount "${mount_param}" -e YARN_INSTALL=true)
+      shift
+      ;;
+    # Disables the automatic detection & linking of node_modules which can clash with developer tooling e.g. pnpm-link
+    --no-link-modules)
+      LINK_MODULES=false
       shift
       ;;
     # Sets a different entrypoint (in which case the default arguments to the script will be ignored)
@@ -87,16 +93,17 @@ done
 
 build_image
 
-# Ensure we pass all symlinked node_modules to the container
-pushd node_modules > /dev/null
-SYMLINKS=$(find . -maxdepth 2 -type l -not -path "./.bin/*")
-popd > /dev/null
-for LINK in $SYMLINKS; do
-  TARGET=$(readlink -f "node_modules/$LINK") || true
-  if [ -d "$TARGET" ]; then
-     if [ -n "$docker_is_podman" ]; then
-        echo -e "\033[31m" >&2
-        cat <<'EOF' >&2
+if [[ $LINK_MODULES == true ]]; then
+  # Ensure we pass all symlinked node_modules to the container
+  pushd node_modules > /dev/null
+  SYMLINKS=$(find . -maxdepth 2 -type l -not -path "./.bin/*")
+  popd > /dev/null
+  for LINK in $SYMLINKS; do
+    TARGET=$(readlink -f "node_modules/$LINK") || true
+    if [ -d "$TARGET" ]; then
+       if [ -n "$docker_is_podman" ]; then
+          echo -e "\033[31m" >&2
+          cat <<'EOF' >&2
 WARNING: `node_modules` contains symlinks, and the support for this in
 `playwright-screenshots.sh` is broken under podman due to
 https://github.com/containers/podman/issues/25947.
@@ -104,12 +111,13 @@ https://github.com/containers/podman/issues/25947.
 If you get errors such as 'Error: crun: creating `<path>`', then retry this
 having `yarn unlink`ed the relevant node modules.
 EOF
-      echo -e "\033[0m" >&2
+        echo -e "\033[0m" >&2
+      fi
+      echo "mounting linked package ${LINK:2} in container"
+      RUN_ARGS+=( "-v" "$TARGET:/work/node_modules/${LINK:2}" )
     fi
-    echo "mounting linked package ${LINK:2} in container"
-    RUN_ARGS+=( "-v" "$TARGET:/work/node_modules/${LINK:2}" )
-  fi
-done
+  done
+fi
 
 # Our Playwright fixtures use Testcontainers [1], which uses a docker image
 # called Ryuk [2], which will clean up any dangling containers/networks/etc
