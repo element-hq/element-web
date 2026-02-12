@@ -1,0 +1,66 @@
+{
+    "$schema": "./node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "implicitDependencies": ["@element-hq/web-shared-components"],
+    "targets": {
+        "clean": {
+            "command": "rimraf webapp",
+            "outputs": ["{projectRoot}/webapp/"]
+        },
+        "prebuild:i18n": {
+            "cache": true,
+            "command": "node scripts/copy-res.ts",
+            "dependsOn": ["clean"],
+            "inputs": ["{projectRoot}/src/i18n/strings/*.json"],
+            "outputs": ["{projectRoot}/webapp/i18n/"]
+        },
+        "prebuild:module_system": {
+            "cache": true,
+            "command": "node module_system/scripts/install.ts",
+            "inputs": ["{projectRoot}/build_config.yaml"],
+            "outputs": ["{projectRoot}/src/modules.js", "{projectRoot}/package.json", "{workspaceRoot}/pnpm-lock.yaml"]
+        },
+        "prebuild:rethemendex": {
+            "cache": true,
+            "executor": "nx:run-script",
+            "options": {
+                "script": "rethemendex"
+            },
+            "inputs": ["{projectRoot}/res/css/**/*"],
+            "outputs": ["{projectRoot}/res/css/_components.pcss"]
+        },
+        "build": {
+            "command": "webpack-cli --progress --mode production {args}",
+            "outputs": ["{projectRoot}/webapp"]
+        },
+        "start:i18n": {
+            "command": "node scripts/copy-res.ts -w",
+            "dependsOn": ["clean"],
+            "continuous": true
+        },
+        "start": {
+            "command": "webpack-dev-server --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
+            "dependsOn": ["prebuild:*", "start:i18n", "^start"],
+            "continuous": true
+        },
+        "lint:types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    "tsc --noEmit --project ./tsconfig.module_system.json",
+                    "tsc --noEmit",
+                    "tsc --noEmit -p playwright"
+                ],
+                "parallel": false
+            },
+            "dependsOn": ["^build"]
+        },
+        "test:unit": {
+            "executor": "@nx/jest:jest",
+            "options": {
+                "jestConfig": "jest.config.ts"
+            },
+            "dependsOn": ["^build"]
+        }
+    }
+}
