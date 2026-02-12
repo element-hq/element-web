@@ -15,6 +15,7 @@ import {
     ReceiptType,
     type IMarkedUnreadEvent,
     type EmptyObject,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { type IndicatorIcon } from "@vector-im/compound-web";
 
@@ -34,7 +35,13 @@ export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
 /**
  * Stable identifier for the marked_unread event
  */
-export const MARKED_UNREAD_TYPE_STABLE = "m.marked_unread";
+export const MARKED_UNREAD_TYPE_STABLE = EventType.MarkedUnread;
+
+declare module "matrix-js-sdk/src/types" {
+    interface RoomAccountDataEvents {
+        [MARKED_UNREAD_TYPE_UNSTABLE]: { [eventId: string]: boolean };
+    }
+}
 
 export const deviceNotificationSettingsKeys: SettingKey[] = [
     "notificationsEnabled",
@@ -157,7 +164,7 @@ export async function setMarkedUnreadState(room: Room, client: MatrixClient, unr
     const currentState = getMarkedUnreadState(room);
 
     if (Boolean(currentState) !== unread) {
-        await client.setRoomAccountData(room.roomId, MARKED_UNREAD_TYPE_STABLE, { unread });
+        await client.setRoomAccountData(room.roomId, EventType.MarkedUnread, { unread });
     }
 }
 
