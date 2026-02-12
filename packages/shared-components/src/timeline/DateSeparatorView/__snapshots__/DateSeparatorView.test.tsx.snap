@@ -50,30 +50,6 @@ exports[`DateSeparatorView > renders long localized label story 1`] = `
 </div>
 `;
 
-exports[`DateSeparatorView > renders with custom content story 1`] = `
-<div>
-  <div
-    aria-label="Today"
-    class="flex separator timelineSeparator"
-    role="separator"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
-  >
-    <hr
-      role="none"
-    />
-    <div
-      data-testid="custom-content"
-      role="presentation"
-    >
-      Custom content
-    </div>
-    <hr
-      role="none"
-    />
-  </div>
-</div>
-`;
-
 exports[`DateSeparatorView > renders with extra class names 1`] = `
 <div>
   <div
@@ -91,6 +67,30 @@ exports[`DateSeparatorView > renders with extra class names 1`] = `
       >
         Today
       </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparatorView > renders with header content story 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex separator timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      data-testid="header-content"
+      role="presentation"
+    >
+      Header content
     </div>
     <hr
       role="none"

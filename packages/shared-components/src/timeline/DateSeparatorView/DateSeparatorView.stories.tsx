@@ -37,11 +37,11 @@ HasExtraClassNames.args = {
     className: "extra_class_1 extra_class_2",
 };
 
-export const WithCustomContent = Template.bind({});
-WithCustomContent.args = {
-    customContent: (
-        <div data-testid="custom-content" role="presentation">
-            Custom content
+export const WithHeaderContent = Template.bind({});
+WithHeaderContent.args = {
+    headerContent: (
+        <div data-testid="header-content" role="presentation">
+            Header content
         </div>
     ),
 };

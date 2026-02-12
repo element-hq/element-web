@@ -16,7 +16,7 @@ import { MockViewModel } from "../../viewmodel";
 import * as stories from "./DateSeparatorView.stories";
 import { type ViewModel } from "../../viewmodel/ViewModel";
 
-const { Default, HasExtraClassNames, WithCustomContent, LongLocalizedLabel } = composeStories(stories);
+const { Default, HasExtraClassNames, WithHeaderContent, LongLocalizedLabel } = composeStories(stories);
 
 class MutableDateSeparatorViewModel implements ViewModel<DateSeparatorViewSnapshot> {
     private listeners = new Set<() => void>();
@@ -63,10 +63,10 @@ describe("DateSeparatorView", () => {
         expect(container.firstElementChild).toHaveClass("extra_class_2");
     });
 
-    it("renders with custom content story", () => {
-        const { container } = render(<WithCustomContent />);
+    it("renders with header content story", () => {
+        const { container } = render(<WithHeaderContent />);
         expect(container).toMatchSnapshot();
-        expect(screen.getByTestId("custom-content")).toBeInTheDocument();
+        expect(screen.getByTestId("header-content")).toBeInTheDocument();
     });
 
     it("renders long localized label story", () => {
@@ -80,7 +80,7 @@ describe("DateSeparatorView", () => {
     it("renders custom menu button instead of default heading", () => {
         const { queryByRole, getByTestId } = customRender({
             label: "Today",
-            customContent: <button data-testid="custom-jump-menu">Jump</button>,
+            headerContent: <button data-testid="custom-jump-menu">Jump</button>,
         });
 
         expect(getByTestId("custom-jump-menu")).toBeInTheDocument();

@@ -24,9 +24,9 @@ export interface DateSeparatorViewSnapshot {
     className?: string;
     /**
      * Optional custom header content (for example a jump-to-date menu trigger).
-     * When provided, this replaces the default heading content.
+     * When provided, this replaces the default content.
      */
-    customContent?: JSX.Element;
+    headerContent?: JSX.Element;
 }
 
 /**
@@ -51,7 +51,7 @@ interface DateSeparatorViewProps {
  * ```
  */
 export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
-    const { label, className, customContent } = useViewModel(vm);
+    const { label, className, headerContent } = useViewModel(vm);
 
     const dateHeaderContent = (
         <div>
@@ -61,7 +61,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
 
     return (
         <TimelineSeparator label={label} className={classNames(className, styles.separator)}>
-            {customContent || dateHeaderContent}
+            {headerContent || dateHeaderContent}
         </TimelineSeparator>
     );
 }

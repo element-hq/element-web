@@ -62,14 +62,16 @@ describe("DateSeparatorViewModel", () => {
 
     const hasTestId = (node: React.ReactNode, testId: string): boolean => {
         if (!React.isValidElement<{ children?: React.ReactNode }>(node)) return false;
-        const props = node.props as { children?: React.ReactNode; "data-testid"?: string };
+        const props = node.props as { "children"?: React.ReactNode; "data-testid"?: string };
         if (props["data-testid"] === testId) return true;
 
         const children = React.Children.toArray(props.children);
         return children.some((child) => hasTestId(child, testId));
     };
 
-    const createViewModel = (props: Partial<typeof defaultProps> & { forExport?: boolean } = {}): DateSeparatorViewModel => {
+    const createViewModel = (
+        props: Partial<typeof defaultProps> & { forExport?: boolean } = {},
+    ): DateSeparatorViewModel => {
         return new DateSeparatorViewModel({ ...defaultProps, ...props });
     };
 
@@ -142,7 +144,7 @@ describe("DateSeparatorViewModel", () => {
         });
         const vm = createViewModel();
 
-        expect(vm.getSnapshot().jumpToDateMenu).toBeDefined();
+        expect(vm.getSnapshot().headerContent).toBeDefined();
     });
 
     it("dispatches ViewRoom when pickDate resolves in active room", async () => {
@@ -312,7 +314,9 @@ describe("DateSeparatorViewModel", () => {
 
                 expect(Modal.createDialog).toHaveBeenCalled();
                 const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
-                expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(true);
+                expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(
+                    true,
+                );
             });
 
             it("shows error dialog without submit debug logs option when networking error occurs", async () => {
@@ -325,7 +329,9 @@ describe("DateSeparatorViewModel", () => {
 
                 expect(Modal.createDialog).toHaveBeenCalled();
                 const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
-                expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(false);
+                expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(
+                    false,
+                );
             });
         });
     });
