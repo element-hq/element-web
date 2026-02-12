@@ -249,7 +249,7 @@ Together, the options might look like this in your config:
 Note that `index.html` also has an og:image meta tag that is set to an image hosted on element.io. This is the image used if
 links to your copy of Element appear in some websites like Facebook, and indeed Element itself. This has to be static in the HTML
 and an absolute URL (and HTTP rather than HTTPS), so it's not possible for this to be an option in config.json. If you'd like to
-change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`. Alternatively, you can edit
+change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" pnpm build`. Alternatively, you can edit
 the `og:image` meta tag in `index.html` directly each time you download a new version of Element.
 
 ## SSO setup

@@ -29,6 +29,7 @@ export default {
             ],
         },
     },
+    ignoreBinaries: ["test:storybook", "test:unit", "build:storybook"],
     ignoreDependencies: [
         // Required for `action-validator`
         "@action-validator/*",
@@ -49,7 +50,6 @@ export default {
         // Embedded into webapp
         "@element-hq/element-call-embedded",
         // Transitive dep of jest
-        "@jest/globals",
         "vitest-environment-jest-fixed-jsdom",
 
         // We import this in some tests, transitive dep of @playwright/test
@@ -63,4 +63,7 @@ export default {
         "@types/sdp-transform",
     ],
     ignoreExportsUsedInFile: true,
+    nx: {
+        config: ["nx.json", "project.json", "{apps,packages,modules}/**/project.json", "package.json"],
+    },
 } satisfies KnipConfig;

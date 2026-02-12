@@ -29,6 +29,11 @@
         "context_menu": {
             "title": "Jututoa eelistused"
         },
+        "history_visibility_badge": {
+            "private": "Uued liikmed ei näe ajalugu",
+            "shared": "Uued liikmed näevad ajalugu",
+            "world_readable": "Kõik võivad ajalugu näha"
+        },
         "status_bar": {
             "delete_all": "Kustuta kõik",
             "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenuse haldajaga või peakasutajaga.",

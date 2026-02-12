@@ -213,7 +213,7 @@ const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; 
         // beacon pulses get transformed into static locations on forward
         M_BEACON.matches(event.getType())
     ) {
-        const timestamp = M_TIMESTAMP.findIn<number>(content);
+        const timestamp = M_TIMESTAMP.findIn<number>(content as ILocationContent);
         const geoUri = locationEventGeoUri(event);
         return {
             type,

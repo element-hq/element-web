@@ -36,7 +36,7 @@ import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandPartCreator, type Part, type PartCreator, type SerializedPart } from "../../../editor/parts";
 import { findEditableEvent } from "../../../utils/EventUtils";
 import SendHistoryManager from "../../../SendHistoryManager";
-import { CommandCategories } from "../../../SlashCommands";
+import { CommandCategories } from "../../../slash-commands/SlashCommands";
 import ContentMessages from "../../../ContentMessages";
 import { withMatrixClientHOC, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";

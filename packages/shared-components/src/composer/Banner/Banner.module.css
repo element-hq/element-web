@@ -5,18 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-:root {
-    --cpd-color-gradient-critical-linear: linear-gradient(
-        180deg,
-        var(--cpd-color-alpha-red-500) 0%,
-        var(--cpd-color-alpha-red-400) 20%,
-        var(--cpd-color-alpha-red-300) 40%,
-        var(--cpd-color-alpha-red-200) 60%,
-        var(--cpd-color-alpha-red-100) 80%,
-        var(--cpd-color-transparent) 100%
-    );
-}
-
 .banner {
     container-type: inline-size;
     container-name: banner;

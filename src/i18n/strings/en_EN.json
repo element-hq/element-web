@@ -12,16 +12,6 @@
             "other": "%(count)s unread messages including mentions."
         },
         "recent_rooms": "Recent rooms",
-        "room_messsage_not_sent": "Open room %(roomName)s with an unsent message.",
-        "room_n_unread_invite": "Open room %(roomName)s invitation.",
-        "room_n_unread_messages": {
-            "one": "Open room %(roomName)s with 1 unread message.",
-            "other": "Open room %(roomName)s with %(count)s unread messages."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Open room %(roomName)s with 1 unread mention.",
-            "other": "Open room %(roomName)s with %(count)s unread messages including mentions."
-        },
         "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
         "seek_bar_label": "Audio seek bar",
@@ -1717,7 +1707,6 @@
         "class_global": "Global",
         "class_other": "Other",
         "default": "Default",
-        "default_settings": "Match default settings",
         "email_pusher_app_display_name": "Email Notifications",
         "enable_prompt_toast_description": "Enable desktop notifications",
         "enable_prompt_toast_title": "Notifications",
@@ -1736,8 +1725,7 @@
         "mentions_and_keywords_description": "Get notified only with mentions and keywords as set up in your <a>settings</a>",
         "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
-        "mute_description": "You won't get any notifications",
-        "mute_room": "Mute room"
+        "mute_description": "You won't get any notifications"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s is requesting verification"
@@ -2154,37 +2142,9 @@
         "add_space_label": "Add space",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
-        "collapse_filters": "Collapse filter list",
-        "empty": {
-            "no_chats": "No chats yet",
-            "no_chats_description": "Get started by messaging someone or by creating a room",
-            "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chats yet",
-            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
-            "no_invites": "You don't have any unread invites",
-            "no_lowpriority": "You don't have any low priority rooms",
-            "no_mentions": "You don't have any unread mentions",
-            "no_people": "You don’t have direct chats with anyone yet",
-            "no_people_description": "You can deselect filters in order to see your other chats",
-            "no_rooms": "You’re not in any room yet",
-            "no_rooms_description": "You can deselect filters in order to see your other chats",
-            "no_unread": "Congrats! You don’t have any unread messages",
-            "show_activity": "See all activity",
-            "show_chats": "Show all chats"
-        },
-        "expand_filters": "Expand filter list",
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
-        "filters": {
-            "favourite": "Favourites",
-            "invites": "Invites",
-            "low_priority": "Low priority",
-            "mentions": "Mentions",
-            "people": "People",
-            "rooms": "Rooms",
-            "unread": "Unreads"
-        },
         "home_menu_label": "Home options",
         "join_public_room_label": "Join public room",
         "joining_rooms_status": {
@@ -2193,22 +2153,12 @@
         },
         "list_title": "Room list",
         "more_options": {
-            "copy_link": "Copy room link",
-            "favourited": "Favourited",
-            "leave_room": "Leave room",
-            "low_priority": "Low priority",
-            "mark_read": "Mark as read",
-            "mark_unread": "Mark as unread"
+            "leave_room": "Leave room"
         },
         "notification_options": "Notification options",
-        "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
-        },
-        "room": {
-            "more_options": "More Options",
-            "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
         "show_n_more": {
@@ -3087,11 +3037,13 @@
             "connection_section": "Connection",
             "dialog_title": "<strong>Settings:</strong> Voice & Video",
             "echo_cancellation": "Echo cancellation",
+            "echo_cancellation_description": "Removes echo from your microphone input during calls. This setting also applies to Element Call.",
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
             "mirror_local_feed": "Mirror local video feed",
             "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
             "noise_suppression": "Noise suppression",
+            "noise_suppression_description": "Reduces background noise in your microphone input during calls. This setting also applies to Element Call.",
             "request_permissions": "Request media permissions",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
@@ -3581,11 +3533,6 @@
             "changed": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 All servers are banned from participating! This room can no longer be used.",
-            "changed": "%(senderDisplayName)s changed the server ACLs for this room.",
-            "set": "%(senderDisplayName)s set the server ACLs for this room."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.",
             "sent": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room."
@@ -3793,14 +3740,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sleft and rejoined",
                 "other": "%(severalUsers)sleft and rejoined %(count)s times"
-            },
-            "server_acls": {
-                "one": "%(oneUser)schanged the server ACLs",
-                "other": "%(oneUser)schanged the server ACLs %(count)s times"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)schanged the server ACLs",
-                "other": "%(severalUsers)schanged the server ACLs %(count)s times"
             },
             "unbanned": {
                 "one": "was unbanned",

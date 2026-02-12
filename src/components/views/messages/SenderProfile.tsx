@@ -7,10 +7,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
-import DisambiguatedProfile from "./DisambiguatedProfile";
+import { DisambiguatedProfileViewModel } from "../../../viewmodels/profile/DisambiguatedProfileViewModel";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps {
@@ -20,20 +21,31 @@ interface IProps {
 }
 
 export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps): JSX.Element {
+    const sender = mxEvent.getSender();
+
     const member = useRoomMemberProfile({
-        userId: mxEvent.getSender(),
+        userId: sender,
         member: mxEvent.sender,
     });
 
+    const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
+        () =>
+            new DisambiguatedProfileViewModel({
+                fallbackName: sender ?? "",
+                onClick,
+                member,
+                colored: true,
+                emphasizeDisplayName: true,
+                withTooltip,
+                className: "mx_DisambiguatedProfile",
+            }),
+    );
+
+    useEffect(() => {
+        disambiguatedProfileVM.setMember(sender ?? "", member);
+    }, [disambiguatedProfileVM, member, sender]);
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
-        <DisambiguatedProfile
-            fallbackName={mxEvent.getSender() ?? ""}
-            onClick={onClick}
-            member={member}
-            colored={true}
-            emphasizeDisplayName={true}
-            withTooltip={withTooltip}
-        />
+        <DisambiguatedProfileView vm={disambiguatedProfileVM} />
     ) : (
         <></>
     );

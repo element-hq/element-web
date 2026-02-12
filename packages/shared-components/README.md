@@ -1,5 +1,7 @@
 # @element-hq/web-shared-components
 
+[Online storybook](https://shared-components-storybook.element.dev)
+
 Shared React components library for Element Web, Aurora, Element
 modules... This package provides opinionated UI components built on top of the
 [Compound Design System](https://compound.element.io) and [Compound
@@ -14,8 +16,8 @@ When adding this library to a new project, as well as installing
 dependency:
 
 ```bash
-yarn add @element-hq/web-shared-components
-yarn add @vector-im/compound-web
+pnpm add @element-hq/web-shared-components
+pnpm add @vector-im/compound-web
 ```
 
 (This avoids problems where we end up with different versions of compound-web in the
@@ -97,22 +99,22 @@ function MyApp() {
 ### Prerequisites
 
 - Node.js >= 20.0.0
-- Yarn 1.22.22+
+- pnpm => 10
 
 ### Setup
 
 ```bash
 # Install dependencies
-yarn install
+pnpm install
 
 # Build the library
-yarn prepare
+pnpm prepare
 ```
 
 ### Running Storybook
 
 ```bash
-yarn storybook
+pnpm storybook
 ```
 
 ### Write components
@@ -255,6 +257,53 @@ export default {
 
 The Figma design will appear in the "Design" tab in Storybook.
 
+#### Non-UI Utility Stories
+
+For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
+
+`src/utils/humanize.stories.tsx`
+
+```tsx
+import React from "react";
+import { Markdown } from "@storybook/addon-docs/blocks";
+
+import type { Meta } from "@storybook/react-vite";
+import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
+
+const meta = {
+    title: "utils/humanize",
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <h1>humanize</h1>
+                    <Markdown>{humanizeTimeDoc}</Markdown>
+                </>
+            ),
+        },
+    },
+    tags: ["autodocs", "skip-test"],
+} satisfies Meta;
+
+export default meta;
+
+// Docs-only story - renders nothing but triggers autodocs
+export const Docs = {
+    render: () => null,
+};
+```
+
+> [!NOTE]
+> Be sure to include the `skip-test` tag in your utility stories to prevent them from running as visual tests.
+
+**Workflow:**
+
+1. Write TsDoc in your utility function
+2. Export the function from `src/index.ts`
+3. Run `pnpm build:doc` to generate TypeDoc markdown
+4. Create a `.stories.tsx` file importing the generated markdown
+5. The documentation appears automatically in Storybook
+
 ### Tests
 
 Two types of tests are available: unit tests and visual regression tests.
@@ -265,7 +314,7 @@ These tests cover the logic of the components and utilities. Built with Vitest
 and React Testing Library.
 
 ```bash
-yarn test:unit
+pnpm test:unit
 ```
 
 ### Visual Regression Tests
@@ -274,7 +323,7 @@ These tests ensure the UI components render correctly.
 Built with Storybook and run under vitest using playwright.
 
 ```bash
-yarn test:storybook:update
+pnpm test:storybook:update
 ```
 
 Each story will be rendered and a screenshot will be taken and compared to the
@@ -288,11 +337,11 @@ Screenshots are located in `packages/shared-components/__vis__/`.
 
 ### Translations
 
-First see our [translation guide](../../docs/translation.md) and [translation dev guide](../../docs/translation-dev.md).
+First see our [translation guide](../../docs/translating.md) and [translation dev guide](../../docs/translating-dev.md).
 To generate translation strings for this package, run:
 
 ```bash
-yarn i18n
+pnpm i18n
 ```
 
 ## Publish a new version

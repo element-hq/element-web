@@ -4,7 +4,7 @@
 /node_modules
 /webapp
 /*.log
-yarn.lock
+pnpm-lock.yaml
 electron/dist
 electron/pub
 **/.idea
@@ -21,7 +21,7 @@ electron/pub
 /build_config.yaml
 # Raises an error because it contains a template var breaking the script tag
 src/vector/index.html
-src/vector/modernizr.js
+src/vector/modernizr.cjs
 /docs/lib
 /book
 /debian/tmp

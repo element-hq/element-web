@@ -1,0 +1,25 @@
+nodeLinker: hoisted
+linkWorkspacePackages: true
+packages:
+    - "."
+    - "packages/*"
+catalogMode: prefer
+cleanupUnusedCatalogs: true
+catalog:
+    # typescript
+    typescript: 5.9.3
+    # react
+    react: ^19.0.0
+    react-dom: ^19.0.0
+    "@types/react": ^19.2.10
+    "@types/react-dom": ^19.2.3
+    # playwright
+    "@element-hq/element-web-playwright-common": 2.2.7
+    "@playwright/test": 1.58.1
+    # Module API
+    "@element-hq/element-web-module-api": 1.9.0
+    # Compound
+    "@vector-im/compound-design-tokens": 6.9.0
+    "@vector-im/compound-web": 8.3.6
+    # i18n
+    matrix-web-i18n: 3.6.0

@@ -16,6 +16,12 @@ import {
 import { type SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
+declare module "matrix-js-sdk/src/types" {
+    interface RoomAccountDataEvents {
+        [MEDIA_PREVIEW_ACCOUNT_DATA_TYPE]: MediaPreviewConfig;
+    }
+}
+
 /**
  * Handles media preview settings provided by MSC4278.
  * This uses both account-level and room-level account data.

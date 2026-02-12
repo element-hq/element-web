@@ -123,11 +123,12 @@ test.describe("Room list", () => {
             // It should make the room muted
             await page.getByRole("menuitem", { name: "Mute room" }).click();
 
-            // Not hovered, the room decoration should be the muted icon
-            await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
-
             // Put focus on the room list
             await roomListView.getByRole("option", { name: "Open room room28" }).click();
+            await roomItem.scrollIntoViewIfNeeded();
+
+            // Not hovered, the room decoration should be the muted icon
+            await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
 
             // During hover the room decoration should still be the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();

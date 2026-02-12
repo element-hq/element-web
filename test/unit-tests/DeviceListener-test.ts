@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
-import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/DeviceListener";
+import DeviceListener from "../../src/DeviceListener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
@@ -37,6 +37,7 @@ import { SettingLevel } from "../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
+import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener/DeviceListenerCurrentDevice";
 
 jest.mock("../../src/dispatcher/dispatcher", () => ({
     dispatch: jest.fn(),
@@ -734,7 +735,7 @@ describe("DeviceListener", () => {
                         new Set<string>([device3.deviceId]),
                     );
 
-                    await instance.dismissUnverifiedSessions([device3.deviceId]);
+                    await instance.otherDevices?.dismissUnverifiedSessions([device3.deviceId]);
                     await flushPromises();
 
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
