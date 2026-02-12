@@ -22,7 +22,10 @@
         },
         "prebuild:rethemendex": {
             "cache": true,
-            "command": "./res/css/rethemendex.sh",
+            "executor": "nx:run-script",
+            "options": {
+                "script": "rethemendex"
+            },
             "inputs": ["{projectRoot}/res/css/**/*"],
             "outputs": ["{projectRoot}/res/css/_components.pcss"]
         },
