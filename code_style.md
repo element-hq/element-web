@@ -459,6 +459,19 @@ Inheriting all the rules of TypeScript, the following additionally apply:
         });
     });
     ```
+3. When you need to test a feature that relies on SettingsStore values, be sure to tighly scope your mock:
+   ```typescript
+   // BAD - Obscures other settings, not clear which setting is required for test.
+   jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+   // GOOD - Passes through other settings to SettingsStore, clear which settings are in use.
+   const realGetValue = SettingsStore.getValue;
+   jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, ...params) => {
+       if (settingName === "feature_cool_stuff") {
+           return true;
+       }
+       realGetValue(settingName, ...params);
+   });
+   ```
 
 ## Comments
 
