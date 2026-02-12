@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
-import { type DOMNode, Element, type HTMLReactParserOptions, Text } from "html-react-parser";
+import { type JSX } from "react";
+import { type DOMNode, Element, type HTMLReactParserOptions, type Text } from "html-react-parser";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
 /**
@@ -43,26 +43,6 @@ export const hasParentMatching = (node: Element, matcher: (node: ParentNode | nu
  * A replacer function that can be used with html-react-parser
  */
 export type Replacer = HTMLReactParserOptions["replace"];
-
-/**
- * Passes through any non-string inputs verbatim, as such they should only be used for emoji bodies
- */
-export function applyReplacerOnString(
-    input: string | JSX.Element[],
-    replacer: Replacer,
-): JSX.Element | JSX.Element[] | string {
-    if (!replacer) return input;
-
-    const arr = Array.isArray(input) ? input : [input];
-    return arr.map((input, index): JSX.Element => {
-        if (typeof input === "string") {
-            return (
-                <React.Fragment key={index}>{(replacer(new Text(input), 0) as JSX.Element) || input}</React.Fragment>
-            );
-        }
-        return input;
-    });
-}
 
 interface Parameters {
     isHtml: boolean;
