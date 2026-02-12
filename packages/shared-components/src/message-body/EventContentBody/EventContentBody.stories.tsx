@@ -64,7 +64,7 @@ HtmlContent.args = {
 export const CodeBlock = Template.bind({});
 CodeBlock.args = {
     body: 'function hello() {\n  console.log("Hello, world!");\n}',
-    formattedBody: "<pre><code>function hello() {\n  console.log(\"Hello, world!\");\n}</code></pre>",
+    formattedBody: '<pre><code>function hello() {\n  console.log("Hello, world!");\n}</code></pre>',
     className: `${styles.EventTile_body} ${styles.markdownBody}`,
 };
 

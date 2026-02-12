@@ -78,9 +78,7 @@ export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyV
         parseFormattedBody ??
         ((formatted: string, inputReplacer?: Replacer) =>
             parse(formatted, inputReplacer ? { replace: inputReplacer } : undefined));
-    const children = formattedBody
-        ? parseBody(formattedBody, replacer)
-        : applyReplacerOnString(body, replacer);
+    const children = formattedBody ? parseBody(formattedBody, replacer) : applyReplacerOnString(body, replacer);
 
     return (
         <As ref={ref as any} className={className} dir={dir}>
