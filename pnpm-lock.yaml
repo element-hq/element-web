@@ -10,8 +10,8 @@ catalogs:
       specifier: 1.9.0
       version: 1.9.0
     '@element-hq/element-web-playwright-common':
-      specifier: 2.2.6
-      version: 2.2.6
+      specifier: 2.2.7
+      version: 2.2.7
     '@playwright/test':
       specifier: 1.58.1
       version: 1.58.1
@@ -222,7 +222,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/872ec6755e7f3e80b03d815ef13ac42b37dae818
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/327d2fa7c8dca5c881969ca0a4ce279c36389750
       matrix-widget-api:
         specifier: ^1.16.1
         version: 1.17.0
@@ -361,7 +361,7 @@ importers:
         version: 0.16.3
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
-        version: 2.2.6(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)
+        version: 2.2.7(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)
       '@fetch-mock/jest':
         specifier: ^0.2.20
         version: 0.2.20(@jest/globals@30.2.0)(jest@30.2.0(@types/node@22.19.8)(babel-plugin-macros@3.1.0))
@@ -746,7 +746,7 @@ importers:
     devDependencies:
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
-        version: 2.2.6(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)
+        version: 2.2.7(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)
       '@fetch-mock/vitest':
         specifier: ^0.2.18
         version: 0.2.18(vitest@4.0.18)
@@ -1996,8 +1996,8 @@ packages:
       matrix-web-i18n:
         optional: true
 
-  '@element-hq/element-web-playwright-common@2.2.6':
-    resolution: {integrity: sha512-Rd+bjnV1ZX1r6qWB5ebcluBepqgUWlYvxaqaaSOnMdGoXkkA6j0i4ctQDN7frP58p5/njo4xejPfd2H3Runfyw==}
+  '@element-hq/element-web-playwright-common@2.2.7':
+    resolution: {integrity: sha512-YMvhIHKqjwlaHe6bo7wCIer7nIc2cRqXAYjKVrGmHiKSeBP+E+qw5LuOSM20u7+0SHyRnC/IR3/Up63O81Qhyw==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -7676,8 +7676,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/872ec6755e7f3e80b03d815ef13ac42b37dae818:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/872ec6755e7f3e80b03d815ef13ac42b37dae818}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/327d2fa7c8dca5c881969ca0a4ce279c36389750:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/327d2fa7c8dca5c881969ca0a4ce279c36389750}
     version: 40.2.0
     engines: {node: '>=22.0.0'}
 
@@ -11831,7 +11831,7 @@ snapshots:
       '@matrix-org/react-sdk-module-api': 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4)
       matrix-web-i18n: 3.6.0
 
-  '@element-hq/element-web-playwright-common@2.2.6(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)':
+  '@element-hq/element-web-playwright-common@2.2.7(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)':
     dependencies:
       '@axe-core/playwright': 4.11.1(playwright-core@1.58.1)
       '@element-hq/element-web-module-api': 1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
@@ -18434,7 +18434,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/872ec6755e7f3e80b03d815ef13ac42b37dae818:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/327d2fa7c8dca5c881969ca0a4ce279c36389750:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 17.1.0

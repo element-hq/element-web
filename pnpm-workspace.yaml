@@ -14,7 +14,7 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@element-hq/element-web-playwright-common": 2.2.6
+    "@element-hq/element-web-playwright-common": 2.2.7
     "@playwright/test": 1.58.1
     # Module API
     "@element-hq/element-web-module-api": 1.9.0
