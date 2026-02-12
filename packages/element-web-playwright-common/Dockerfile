@@ -10,6 +10,9 @@ RUN apt-get update && apt-get -y install docker.io fonts-dejavu
 RUN corepack enable
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
+# Add environment variable so consumers can skip developer-centric scripts
+ENV PLAYWRIGHT_COMMON_DOCKER=1
+
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
