@@ -24,7 +24,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor, getByRole } from "jest-matrix-react";
+import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor, findByRole } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -663,12 +663,9 @@ describe("RoomView", () => {
                 }),
             );
             // Open the chat in the right panel
-            await act(async () => {
-                stores.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline });
-                await flushPromises();
-            });
+            act(() => stores.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }));
             // Chat should be visible in the right panel
-            getByRole(screen.getByRole("complementary"), "heading", { name: "Chat" });
+            await findByRole(await screen.findByRole("complementary"), "heading", { name: "Chat" });
 
             // Close the call
             await act(() =>
@@ -683,11 +680,8 @@ describe("RoomView", () => {
             // Right panel should be gone
             expect(screen.queryByRole("complementary")).toBe(null);
             // Opening the right panel again should just show the room summary
-            await act(async () => {
-                stores.rightPanelStore.show(room.roomId);
-                await flushPromises();
-            });
-            getByRole(screen.getByRole("complementary"), "heading", { name: room.roomId });
+            act(() => stores.rightPanelStore.show(room.roomId));
+            await findByRole(await screen.findByRole("complementary"), "heading", { name: room.roomId });
         });
 
         it("hides the right panel chat when returning to a room that previously showed a call", async () => {
@@ -706,12 +700,9 @@ describe("RoomView", () => {
                 }),
             );
             // Open the chat in the right panel
-            await act(async () => {
-                stores.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline });
-                await flushPromises();
-            });
+            act(() => stores.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }));
             // Chat should be visible in the right panel
-            getByRole(screen.getByRole("complementary"), "heading", { name: "Chat" });
+            await findByRole(await screen.findByRole("complementary"), "heading", { name: "Chat" });
 
             // Navigate away to another room
             await act(() =>
