@@ -121,7 +121,6 @@ export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>
                 onKeyDown={onKeyDown}
                 onContextMenu={vm.onContextMenu}
                 className={classNames(className, styles.content)}
-                aria-hidden={!(vm.onClick || !inhibitTooltip)}
                 role={vm.onClick ? "link" : undefined}
                 aria-live="off"
                 tabIndex={vm.onClick || !inhibitTooltip ? 0 : undefined}

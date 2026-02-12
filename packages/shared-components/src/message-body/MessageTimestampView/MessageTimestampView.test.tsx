@@ -209,7 +209,6 @@ describe("MessageTimestampView", () => {
         renderWithI18n(<MessageTimestampView vm={vm} />);
 
         const target = screen.getByText("07:08");
-        expect(target).toHaveAttribute("aria-hidden", "true");
         expect(target).not.toHaveAttribute("role");
         expect(target).not.toHaveAttribute("tabindex");
         expect(screen.queryByRole("tooltip")).toBeNull();
@@ -225,7 +224,6 @@ describe("MessageTimestampView", () => {
         renderWithI18n(<MessageTimestampView vm={vm} />);
 
         const target = screen.getByRole("link");
-        expect(target).toHaveAttribute("aria-hidden", "false");
         expect(target).toHaveAttribute("tabindex", "0");
         expect(screen.queryByRole("tooltip")).toBeNull();
     });
@@ -240,7 +238,6 @@ describe("MessageTimestampView", () => {
         renderWithI18n(<MessageTimestampView vm={vm} />);
 
         const target = screen.getByText("03:04");
-        expect(target).toHaveAttribute("aria-hidden", "false");
         expect(target).toHaveAttribute("tabindex", "0");
         expect(target).not.toHaveAttribute("role");
 

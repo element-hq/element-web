@@ -6,6 +6,7 @@
  */
 
 import React, { type ReactNode } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import {
@@ -41,20 +42,35 @@ export default {
 const Template: StoryFn<typeof MessageTimestampWrapper> = (args) => <MessageTimestampWrapper {...args} />;
 
 export const Default = Template.bind({});
+Default.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByText("04:58"));
+    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
+};
 
 export const HasTsReceivedAt = Template.bind({});
 HasTsReceivedAt.args = {
     tsReceivedAt: "Thu, 17 Nov 2022, 4:58:33 pm",
 };
-
-export const HasExtraClassNames = Template.bind({});
-HasExtraClassNames.args = {
-    className: "extra_class_1 extra_class_2",
+HasTsReceivedAt.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByText("04:58"));
+    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
 };
 
 export const HasInhibitTooltip = Template.bind({});
 HasInhibitTooltip.args = {
     inhibitTooltip: true,
+};
+HasInhibitTooltip.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByText("04:58"));
+    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
+};
+
+export const HasExtraClassNames = Template.bind({});
+HasExtraClassNames.args = {
+    className: "extra_class_1 extra_class_2",
 };
 
 export const HasHref = Template.bind({});
