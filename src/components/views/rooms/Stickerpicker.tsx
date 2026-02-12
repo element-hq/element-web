@@ -327,6 +327,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                             />
                             <div
                                 className="mx_Stickers_resizeHandle"
+                                data-testId="Stickers_resizeHandle"
                                 onMouseDown={this.onResizeHandleMouseDown}
                                 onTouchStart={this.onResizeHandleTouchStart}
                             />
