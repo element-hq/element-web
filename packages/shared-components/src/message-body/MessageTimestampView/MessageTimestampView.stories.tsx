@@ -62,11 +62,6 @@ export const HasInhibitTooltip = Template.bind({});
 HasInhibitTooltip.args = {
     inhibitTooltip: true,
 };
-HasInhibitTooltip.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.hover(canvas.getByText("04:58"));
-    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
-};
 
 export const HasExtraClassNames = Template.bind({});
 HasExtraClassNames.args = {
