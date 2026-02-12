@@ -13,7 +13,7 @@ set -e
 # because we have which must be built for the right architecture (and some environments use a VM
 # to run docker containers, meaning that things inside a container use a different architecture than
 # those on the host).
-pnpm install
+pnpm install --frozen-lockfile
 
 # Now run the screenshot update, we set CI=1 to inform vis to update the real baselines
-CI=1 /work/node_modules/.bin/vitest --run --update --project=storybook "$@"
+CI=1 pnpm --dir packages/shared-components test:storybook --run --update
