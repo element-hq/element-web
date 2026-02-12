@@ -24,7 +24,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
+import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor, findByRole } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -640,6 +640,90 @@ describe("RoomView", () => {
 
             expect(stores.rightPanelStore.isOpen).toEqual(true);
             expect(stores.rightPanelStore.currentCard.phase).toEqual(RightPanelPhases.Timeline);
+        });
+    });
+
+    describe("group calls", () => {
+        beforeEach(async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        });
+
+        it("hides the right panel chat when closing a call", async () => {
+            await mountRoomView();
+
+            // Open the call
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: stores.roomViewStore.getRoomId()!,
+                    event_id: "$eventId",
+                    metricsTrigger: undefined,
+                    view_call: true,
+                }),
+            );
+            // Open the chat in the right panel
+            act(() => stores.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }));
+            // Chat should be visible in the right panel
+            await findByRole(await screen.findByRole("complementary"), "heading", { name: "Chat" });
+
+            // Close the call
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: stores.roomViewStore.getRoomId()!,
+                    event_id: "$eventId",
+                    metricsTrigger: undefined,
+                    view_call: false,
+                }),
+            );
+            // Right panel should be gone
+            expect(screen.queryByRole("complementary")).toBe(null);
+            // Opening the right panel again should just show the room summary
+            act(() => stores.rightPanelStore.show(room.roomId));
+            await findByRole(await screen.findByRole("complementary"), "heading", { name: room.roomId });
+        });
+
+        it("hides the right panel chat when returning to a room that previously showed a call", async () => {
+            const room2 = new Room(`!roomswitchtest:example.org`, cli, "@alice:example.org");
+            rooms.set(room2.roomId, room2);
+            await mountRoomView();
+
+            // Open the call
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    event_id: "$eventId",
+                    metricsTrigger: undefined,
+                    view_call: true,
+                }),
+            );
+            // Open the chat in the right panel
+            act(() => stores.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }));
+            // Chat should be visible in the right panel
+            await findByRole(await screen.findByRole("complementary"), "heading", { name: "Chat" });
+
+            // Navigate away to another room
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: room2.roomId,
+                    event_id: "$eventId",
+                    metricsTrigger: undefined,
+                }),
+            );
+            // Navigate back to the original room
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    event_id: "$eventId",
+                    metricsTrigger: undefined,
+                }),
+            );
+            // Right panel should be gone
+            expect(screen.queryByRole("complementary")).toBe(null);
         });
     });
 
