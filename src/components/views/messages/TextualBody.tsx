@@ -93,7 +93,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const highlightsChanged = prevProps.highlights !== this.props.highlights;
         const wrapperChanged =
             prevProps.replacingEventId !== this.props.replacingEventId ||
-            prevProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration;
+            prevProps.isSeeingThroughMessageHiddenForModeration !==
+                this.props.isSeeingThroughMessageHiddenForModeration;
 
         if (mxEventChanged || highlightsChanged || wrapperChanged) {
             const mxEvent = this.props.mxEvent;
