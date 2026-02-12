@@ -170,6 +170,7 @@
         "@element-hq/element-web-playwright-common": "2.2.6",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",
+        "@nx/jest": "^22.5.0",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "1.58.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
