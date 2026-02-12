@@ -35,7 +35,7 @@
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null && pnpm --dir packages/shared-components i18n:lint",
         "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && pnpm i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
         "make-component": "node scripts/make-react-component.js",
-        "rethemendex": "./res/css/rethemendex.sh",
+        "rethemendex": "sh ./res/css/rethemendex.sh",
         "build": "nx build element-web",
         "build-stats": "nx build-stats element-web --args=\"--json=webpack-stats.json\"",
         "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js && mv src/vector/modernizr.js src/vector/modernizr.cjs",
