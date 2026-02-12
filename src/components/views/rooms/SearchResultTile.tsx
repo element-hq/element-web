@@ -67,7 +67,9 @@ export default class SearchResultTile extends React.Component<IProps> {
 
         const ts1 = resultEvent.getTs();
         const separatorRoomId = resultEvent.getRoomId()!;
-        const ret = [<DateSeparatorWrapper key={`${separatorRoomId}-${ts1}-search`} roomId={separatorRoomId} ts={ts1} />];
+        const ret = [
+            <DateSeparatorWrapper key={`${separatorRoomId}-${ts1}-search`} roomId={separatorRoomId} ts={ts1} />,
+        ];
         const layout = SettingsStore.getValue("layout");
         const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");

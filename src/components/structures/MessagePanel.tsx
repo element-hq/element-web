@@ -18,7 +18,11 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
-import { DateSeparatorView, TimelineSeparator, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    DateSeparatorView,
+    TimelineSeparator,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { formatDate, wantsDateSeparator } from "../../DateUtils";
