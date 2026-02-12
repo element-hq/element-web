@@ -10,9 +10,14 @@ on:
 permissions: {}
 
 jobs:
-    doc:
+    build:
+        name: Build storybook
+        uses: ./.github/workflows/shared-component-storybook-build.yml
+
+    publish:
         name: Publish storybook
         runs-on: ubuntu-latest
+        needs: build
         environment: SharedComponents
         steps:
             - name: 🧮 Checkout code
