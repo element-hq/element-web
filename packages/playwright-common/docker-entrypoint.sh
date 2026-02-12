@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npx playwright run-server --port 3000 --host 0.0.0.0
+npx playwright run-server --port "$PORT" --host 0.0.0.0

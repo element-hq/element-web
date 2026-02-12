@@ -6,32 +6,31 @@ set -e
 SCRIPT_PATH=$(readlink -f "$0")
 SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 
-IMAGE_NAME="element-web-playwright-common"
-
-echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
+IMAGE_NAME="element-web-playwright-server"
+WS_PORT=3000
 
 # Check the playwright version
-PM=$(cat package.json | jq -r '.packageManager')
-if [[ $PM == "pnpm@"* ]]; then
-    PW_VERSION=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')
-else
-    PW_VERSION=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name | split("@") | last')
-fi
-echo "with Playwright version $PW_VERSION"
+PW_VERSION=$(npm exec --silent -- playwright --version | gcut -d" " -f2)
+echo "Building $IMAGE_NAME:$PW_VERSION image in $SCRIPT_DIR"
 
-# Build image
-docker build -t "$IMAGE_NAME:$PW_VERSION" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
+# Build the image
+docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
 
+# Start the playwright-server in docker
+CONTAINER=$(docker run --network=host --rm -d -e PORT="$WS_PORT" "$IMAGE_NAME")
+# Set up an exit trap to clean up the docker container
 clean_up() {
     ARG=$?
+    echo "Stopping playwright-server"
     docker stop "$CONTAINER" > /dev/null
     exit $ARG
 }
-CONTAINER=$(docker run --network=host --rm -d "$IMAGE_NAME:$PW_VERSION")
 trap clean_up EXIT
 
+# Wait for playwright-server to be ready
 echo "Waiting for playwright-server"
-pnpm wait-on tcp:3000
+pnpm wait-on "tcp:$WS_PORT"
 
+# Run the test we were given, setting PW_TEST_CONNECT_WS_ENDPOINT accordingly
 echo "Running '$@'"
-PW_TEST_CONNECT_WS_ENDPOINT="http://localhost:3000" "$@"
+PW_TEST_CONNECT_WS_ENDPOINT="http://localhost:$WS_PORT" "$@"
