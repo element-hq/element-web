@@ -145,7 +145,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
 
-
         let pickerWidth = parseInt(window.localStorage.getItem("mx_stickerpicker_width")!, 10);
         let pickerHeight = parseInt(window.localStorage.getItem("mx_stickerpicker_height")!, 10);
         // If the user has not set a size, or if the size is less than the minimum width,
@@ -356,7 +355,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.resizeStartY = y;
         this.resizeStartWidth = this.state.popoverWidth;
         this.resizeStartHeight = this.state.popoverHeight;
-    }
+    };
     private handleResizeMove = (x: number, y: number): void => {
         if (this.resizeStartX === undefined || this.resizeStartY === undefined) return;
         const dx = this.resizeStartX - x;
@@ -364,14 +363,14 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         const newW = Math.max(PICKER_MIN_SIZE, (this.resizeStartWidth || PICKER_DEFAULT_SIZE) + dx);
         const newH = Math.max(PICKER_MIN_SIZE, (this.resizeStartHeight || PICKER_DEFAULT_SIZE) + dy);
         this.setState({ popoverWidth: newW, popoverHeight: newH });
-    }
+    };
     private handleResizeEnd = (): void => {
         this.resizeStartX = undefined;
         this.resizeStartY = undefined;
 
         window.localStorage.setItem("mx_stickerpicker_width", this.state.popoverWidth.toString());
         window.localStorage.setItem("mx_stickerpicker_height", this.state.popoverHeight.toString());
-    }
+    };
 
     private onResizeHandleMouseDown = (ev: React.MouseEvent): void => {
         ev.preventDefault();
@@ -383,7 +382,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     private onResizeHandleTouchStart = (ev: React.TouchEvent): void => {
         ev.preventDefault();
         const t = ev.touches[0];
-        this.handleResizeStart(t.clientX, t.clientY)
+        this.handleResizeStart(t.clientX, t.clientY);
         document.addEventListener("touchmove", this.onResizeHandleTouchMove as any, { passive: false } as any);
         document.addEventListener("touchend", this.onResizeHandleTouchEnd as any);
     };
