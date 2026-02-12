@@ -27,66 +27,105 @@ This is anywhere your data or business logic comes from. If your view model is a
 1. Located in [`shared-components`](https://github.com/element-hq/element-web/tree/develop/packages/shared-components). Develop it in storybook!
 2. Views are simple react components (eg: `FooView`) with very little state and logic.
 3. Views must call `useViewModel` hook with the corresponding view model passed in as argument. This allows the view to re-render when something has changed in the view model. This entire mechanism is powered by [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore).
-4. Views should define the interface of the view model they expect:
-
-    ```tsx
-    // Snapshot is the data that your view-model provides which is rendered by the view.
-    interface FooViewSnapshot {
-        value: string;
-    }
-
-    // To call function on the view model
-    interface FooViewActions {
-        doSomething: () => void;
-    }
-
-    // ViewModel is an object (usually a class) that implements both the interfaces listed above.
-    // https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
-    type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
-
-    interface FooViewProps {
-        // Ideally the view only depends on the view model i.e you don't expect any other props here.
-        vm: FooViewModel;
-    }
-
-    function FooView({ vm }: FooViewProps) {
-        const { value } = useViewModel(vm);
-        return (
-            <button type="button" onClick={() => vm.doSomething()}>
-                {value}
-            </button>
-        );
-    }
-    ```
-
+4. Views should define the interface of the view model (see example below).
 5. Multiple views can share the same view model if necessary.
-6. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/audio/AudioPlayerView/AudioPlayerView.tsx)
+
+**Example of view implementation**
+
+```tsx
+// Snapshot is the data that your view-model provides which is rendered by the view.
+export interface FooViewSnapshot {
+    title: string;
+    description: string;
+}
+
+// To call function on the view model
+interface FooViewActions {
+    setTitle: (title: string) => void;
+    reloadDescription: () => void;
+}
+
+// ViewModel is an object (usually a class) that implements both the interfaces listed above.
+// https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
+export type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
+
+interface FooViewProps {
+    // Ideally the view only depends on the view model i.e you don't expect any other props here.
+    vm: FooViewModel;
+}
+
+export function FooView({ vm }: FooViewProps): JSX.Element {
+    // useViewModel is a hook that subscribes to the view model and returns the snapshot. It also ensures that the component re-renders when the snapshot changes.
+    const { title, description } = useViewModel(vm);
+    return (
+        <section>
+            <h1>{title}</h1>
+            {/* Bind setTitle action */}
+            <button type="button" onClick={() => vm.setTitle("new title!")}>
+                Set title
+            </button>
+            <p>{description}</p>
+            {/* Bind reloadDescription action  */}
+            <button type="button" onClick={() => vm.reloadDescription()}>
+                Reload description
+            </button>
+        </section>
+    );
+}
+```
 
 #### View Model
 
 1. A View model is a class extending [`BaseViewModel`](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/base/BaseViewModel.ts).
 2. Implements the interface defined in the view (e.g `FooViewModel` in the example above).
-3. View models define a snapshot type that defines the data the view will consume. The snapshot is immutable and can only be changed by calling `this.snapshot.set(...)` in the view model. This will trigger a re-render in the view.
+3. View models define a snapshot type that defines the data the view will consume. The snapshot is immutable and can only be changed by calling `this.snapshot.set(...)` or `this.snapshot.merge(...)` in the view model. This will trigger a re-render in the view.
+4. Call [`this.snapshot.merge(...)`](https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/viewmodel/Snapshot.ts#L32) to only update part of the snapshot.
+5. Avoid recomputing the entire snapshot when you only need to update a single field. For performance reasons, only recompute the fields that have actually changed. For example, if only `title` has changed, call `this.snapshot.merge({ title: newTitle })` rather than rebuilding the full snapshot object with all fields recomputed.
+6. View models can have props which are passed in the constructor. Props are usually used to pass in dependencies (eg: stores, sdk, etc) that the view model needs to do its work. They can also be used to pass in initial values for the snapshot.
 
-    ```ts
-    interface Props {
-        propsValue: string;
+**Example of a view model implementation**
+
+```ts
+import { type FooViewSnapshot, type FooViewModel as FooViewModelInterface } from "./FooView";
+
+// Props are the arguments passed to the view model constructor. They are usually used to pass in dependencies (eg: stores, sdk, etc) that the view model needs to do its work. They can also be used to pass in initial values for the snapshot.
+interface Props {
+    title: string;
+}
+
+/**
+ * This is an example view model that implements the FooViewModelInterface.
+ * It extends the BaseViewModel class which provides common functionality for view models, such as managing subscriptions and snapshots.
+ * The view model is responsible for managing the state of the view and providing actions that can be called from the view.
+ * In this example, we have a title and description in the snapshot, and actions to set the title and reload the description.
+ */
+export class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implements FooViewModelInterface {
+    public constructor(props: Props) {
+        // Call super with initial snapshot
+        super(props, { title: props.title, description: costlyDescriptionLoading() });
     }
 
-    class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implements FooViewModel {
-        constructor(props: Props) {
-            // Call super with initial snapshot
-            super(props, { value: "initial" });
-        }
-
-        public doSomething() {
-            // Call this.snapshot.set to update the snapshot
-            this.snapshot.set({ value: "changed" });
-        }
+    public setTitle(title: string): void {
+        // We only update the title in the snapshot, description remains unchanged.
+        // Calling `this.snapshot.merge` will trigger the view to re-render with the new snapshot value.
+        // If we had called `this.snapshot.set`, we would have needed to provide the full snapshot value, including the description.
+        this.snapshot.merge({ title });
     }
-    ```
 
-4. A full example is available [here](https://github.com/element-hq/element-web/blob/develop/src/viewmodels/audio/AudioPlayerViewModel.ts)
+    public reloadDescription(): void {
+        // Simulate reloading the description by calling the costly function again and updating the snapshot.
+        this.snapshot.merge({ description: costlyDescriptionLoading() });
+    }
+
+    /**
+     * This is an example of how to access props in the view model. Props are passed in the constructor and can be accessed through `this.props`.
+     */
+    public printProps(): void {
+        // Access props through `this.props`
+        console.log("Current props:", this.props);
+    }
+}
+```
 
 ### `useViewModel` hook
 

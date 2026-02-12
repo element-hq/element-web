@@ -16,8 +16,8 @@ When adding this library to a new project, as well as installing
 dependency:
 
 ```bash
-yarn add @element-hq/web-shared-components
-yarn add @vector-im/compound-web
+pnpm add @element-hq/web-shared-components
+pnpm add @vector-im/compound-web
 ```
 
 (This avoids problems where we end up with different versions of compound-web in the
@@ -99,22 +99,22 @@ function MyApp() {
 ### Prerequisites
 
 - Node.js >= 20.0.0
-- Yarn 1.22.22+
+- pnpm => 10
 
 ### Setup
 
 ```bash
 # Install dependencies
-yarn install
+pnpm install
 
 # Build the library
-yarn prepare
+pnpm prepare
 ```
 
 ### Running Storybook
 
 ```bash
-yarn storybook
+pnpm storybook
 ```
 
 ### Write components
@@ -300,7 +300,7 @@ export const Docs = {
 
 1. Write TsDoc in your utility function
 2. Export the function from `src/index.ts`
-3. Run `yarn build:doc` to generate TypeDoc markdown
+3. Run `pnpm build:doc` to generate TypeDoc markdown
 4. Create a `.stories.tsx` file importing the generated markdown
 5. The documentation appears automatically in Storybook
 
@@ -314,7 +314,7 @@ These tests cover the logic of the components and utilities. Built with Vitest
 and React Testing Library.
 
 ```bash
-yarn test:unit
+pnpm test:unit
 ```
 
 ### Visual Regression Tests
@@ -323,7 +323,7 @@ These tests ensure the UI components render correctly.
 Built with Storybook and run under vitest using playwright.
 
 ```bash
-yarn test:storybook:update
+pnpm test:storybook:update
 ```
 
 Each story will be rendered and a screenshot will be taken and compared to the
@@ -341,7 +341,7 @@ First see our [translation guide](../../docs/translating.md) and [translation de
 To generate translation strings for this package, run:
 
 ```bash
-yarn i18n
+pnpm i18n
 ```
 
 ## Publish a new version

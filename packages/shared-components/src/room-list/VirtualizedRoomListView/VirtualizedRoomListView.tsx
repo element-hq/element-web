@@ -9,11 +9,10 @@ import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "r
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import type { Room } from "../RoomListItem/RoomListItem";
+import { RoomListItemView, type Room } from "../RoomListItemView";
 import { useViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
 import { VirtualizedList, type VirtualizedListContext } from "../../utils/VirtualizedList";
-import { RoomListItemView } from "../RoomListItem";
 import type { RoomListViewModel } from "../RoomListView";
 
 /**
