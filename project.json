@@ -27,7 +27,7 @@
             "outputs": ["{projectRoot}/res/css/_components.pcss"]
         },
         "build": {
-            "command": "webpack --progress --mode production {args}",
+            "command": "webpack-cli --progress --mode production {args}",
             "outputs": ["{projectRoot}/webapp"]
         },
         "start:i18n": {
@@ -36,7 +36,7 @@
             "continuous": true
         },
         "start": {
-            "command": "webpack serve --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
+            "command": "webpack-dev-server --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
             "dependsOn": ["prebuild:*", "start:i18n", "^start"],
             "continuous": true
         }
