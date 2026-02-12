@@ -60,6 +60,8 @@ jobs:
                 welcome_to_element
                 devtools|settings|elementCallUrl
                 labs|sliding_sync_description
+                settings|voip|noise_suppression_description
+                settings|voip|echo_cancellation_description
 
     i18n_lint_shared_components:
         name: "i18n Check (Shared Components)"
