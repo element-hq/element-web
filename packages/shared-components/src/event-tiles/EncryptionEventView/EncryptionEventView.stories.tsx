@@ -8,7 +8,7 @@
 import React, { type JSX } from "react";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import { EncryptionEventView, EncryptionState, type EncryptionEventViewSnapshot } from "./EncryptionEventView";
+import { EncryptionEventView, EncryptionEventState, type EncryptionEventViewSnapshot } from "./EncryptionEventView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 
 type EncryptionEventProps = EncryptionEventViewSnapshot;
@@ -25,14 +25,14 @@ export default {
     tags: ["autodocs"],
     argTypes: {
         state: {
-            options: Object.entries(EncryptionState)
+            options: Object.entries(EncryptionEventState)
                 .filter(([key, value]) => key === value)
                 .map(([key]) => key),
             control: { type: "select" },
         },
     },
     args: {
-        state: EncryptionState.ENABLED,
+        state: EncryptionEventState.ENABLED,
         simplified: false,
         userName: "Alice",
         className: "",
@@ -42,3 +42,41 @@ export default {
 const Template: StoryFn<typeof EncryptionEventViewWrapper> = (args) => <EncryptionEventViewWrapper {...args} />;
 
 export const Default = Template.bind({});
+
+export const StateEncryptionEnabled = Template.bind({});
+StateEncryptionEnabled.args = {
+    state: EncryptionEventState.ENABLED,
+    simplified: true,
+};
+
+export const ParametersChanged = Template.bind({});
+ParametersChanged.args = {
+    state: EncryptionEventState.CHANGED,
+};
+
+export const DisableAttempt = Template.bind({});
+DisableAttempt.args = {
+    state: EncryptionEventState.DISABLE_ATTEMPT,
+};
+
+export const EnabledDirectMessage = Template.bind({});
+EnabledDirectMessage.args = {
+    state: EncryptionEventState.ENABLED_DM,
+    userName: "Alice",
+};
+
+export const EnabledLocalRoom = Template.bind({});
+EnabledLocalRoom.args = {
+    state: EncryptionEventState.ENABLED_LOCAL,
+};
+
+export const Unsupported = Template.bind({});
+Unsupported.args = {
+    state: EncryptionEventState.UNSUPPORTED,
+};
+
+export const WithTimestamp = Template.bind({});
+WithTimestamp.args = {
+    state: EncryptionEventState.ENABLED,
+    timestamp: <span>14:56</span>,
+};

@@ -1,9 +1,9 @@
 /*
-Copyright 2026 New Vector Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import classNames from "classnames";
 import React, { type JSX } from "react";
@@ -14,35 +14,46 @@ import styles from "./EncryptionEventView.module.css";
 import { useI18n } from "../../utils/i18nContext";
 import { EventTileBubble } from "../EventTileBubble";
 
-export enum EncryptionState {
+export enum EncryptionEventState {
+    /** Encryption settings changed while encryption stayed enabled. */
     CHANGED = "CHANGED",
+    /** Someone attempted to disable encryption in an encrypted room. */
     DISABLE_ATTEMPT = "DISABLE_ATTEMPT",
+    /** Encryption was enabled in a regular room. */
     ENABLED = "ENABLED",
+    /** Encryption was enabled in a DM room. */
     ENABLED_DM = "ENABLED_DM",
+    /** Encryption was enabled in a local room. */
     ENABLED_LOCAL = "ENABLED_LOCAL",
+    /** Encryption is unavailable/unsupported for this event context. */
     UNSUPPORTED = "UNSUPPORTED",
 }
 
 export type EncryptionEventViewSnapshot = {
-    state: EncryptionState;
+    /** Which encryption event variant to render. */
+    state: EncryptionEventState;
+    /** Whether state-event encryption messaging should be shown. */
     simplified?: boolean;
+    /** Display name for DM partner, used by ENABLED_DM subtitle text. */
     userName?: string;
+    /** Optional CSS classes passed through to EventTileBubble. */
     className?: string;
+    /** Optional timestamp element rendered in the EventTileBubble footer slot. */
     timestamp?: JSX.Element;
 };
 
 /**
- * The view model for the component.
+ * ViewModel contract consumed by {@link EncryptionEventView}.
  */
 export type EncryptionEventViewModel = ViewModel<EncryptionEventViewSnapshot>;
 
 export interface EncryptionEventViewProps {
     /**
-     * The view model for the component.
+     * ViewModel providing the current encryption event snapshot.
      */
     vm: ViewModel<EncryptionEventViewSnapshot>;
     /**
-     * React ref to attach to any React components returned
+     * Ref forwarded to the root `EventTileBubble` DOM element.
      */
     ref?: React.RefObject<any>;
 }
@@ -56,24 +67,24 @@ export function EncryptionEventView({ vm, ref }: Readonly<EncryptionEventViewPro
     let subtitle = "";
 
     switch (state) {
-        case EncryptionState.CHANGED:
+        case EncryptionEventState.CHANGED:
             subtitle = _t("timeline|m.room.encryption|parameters_changed");
             break;
-        case EncryptionState.DISABLE_ATTEMPT:
+        case EncryptionEventState.DISABLE_ATTEMPT:
             subtitle = _t("timeline|m.room.encryption|disable_attempt");
             break;
-        case EncryptionState.ENABLED:
+        case EncryptionEventState.ENABLED:
             subtitle = simplified
                 ? _t("timeline|m.room.encryption|state_enabled")
                 : _t("timeline|m.room.encryption|enabled");
             break;
-        case EncryptionState.ENABLED_DM:
+        case EncryptionEventState.ENABLED_DM:
             subtitle = _t("timeline|m.room.encryption|enabled_dm", { displayName: userName });
             break;
-        case EncryptionState.ENABLED_LOCAL:
+        case EncryptionEventState.ENABLED_LOCAL:
             subtitle = _t("timeline|m.room.encryption|enabled_local");
             break;
-        case EncryptionState.UNSUPPORTED:
+        case EncryptionEventState.UNSUPPORTED:
         default:
             icon = <ErrorSolidIcon className={styles.error} />;
             title = _t("timeline|m.room.encryption|disabled");
