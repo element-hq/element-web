@@ -31,13 +31,15 @@ In this example, perhaps ``general-2`` was created after ``gaming``, so instead 
 
 I had tried to add the ability to add custom emotes to spaces in the same way Discord lets you add custom emoji (though I will note, generally the word "emoji" specifically means the unicode characters, it's more standard to call these custom icons "emotes", which is why I used that word here) to servers. In testing other Matrix clients, I noticed that some of them did allow custom emotes, so I tried to get it to use a similar message structure, with a content tag like:
 
-```"content": {
+```
+"content": {
     "body": ":ture:",
     "format": "org.matrix.custom.html",
     "formatted_body": "<img data-mx-emoticon=\"\" src=\"mxc://matrix.org/rzFAHmpREWSZCRyQPNsdIIcO\" alt=\":ture:\" title=\":ture:\" height=\"32\" vertical-align=\"middle\" />",
     "m.mentions": {},
     "msgtype": "m.text"
-},```
+},
+```
 
 A guy on a train told me a couple weeks ago that I should try using Claude Code for coding so to experiment with that I used Claude Opus 4.6 to write much of the code for the Custom Emotes functionality, and to search for stuff for the other parts of this. I say this as a disclaimer because it certainly made some questionable decisions about file structure, and isn't ideal for production level code but this fork *is* intended to be bespoke, so I'll leave it for now to clean up later. Maybe I'll regret that, idk, blame the train guy.
 
