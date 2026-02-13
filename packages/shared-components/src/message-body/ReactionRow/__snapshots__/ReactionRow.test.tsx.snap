@@ -1,0 +1,49 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ReactionRowView > renders nothing when hidden 1`] = `<div />`;
+
+exports[`ReactionRowView > renders the default state 1`] = `
+<div>
+  <div
+    aria-label="Reactions"
+    class="mx_ReactionsRow"
+    role="toolbar"
+  >
+    <button>
+      👍 3
+    </button>
+    <button>
+      🎉 2
+    </button>
+    <button>
+      +
+    </button>
+  </div>
+</div>
+`;
+
+exports[`ReactionRowView > renders with show-all visible 1`] = `
+<div>
+  <div
+    aria-label="Reactions"
+    class="mx_ReactionsRow"
+    role="toolbar"
+  >
+    <button>
+      👍 3
+    </button>
+    <button>
+      🎉 2
+    </button>
+    <button
+      class="mx_ReactionsRow_showAll mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+      type="button"
+    >
+      Show all
+    </button>
+    <button>
+      +
+    </button>
+  </div>
+</div>
+`;
