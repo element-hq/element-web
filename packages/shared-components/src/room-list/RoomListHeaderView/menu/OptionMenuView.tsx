@@ -56,6 +56,11 @@ export function OptionMenuView({ vm }: OptionMenuViewProps): JSX.Element {
         >
             <MenuTitle title={_t("room_list|sort")} className={styles.title} />
             <RadioMenuItem
+                label={_t("room_list|sort_type|space_order")}
+                checked={activeSortOption === "space-order"}
+                onSelect={() => vm.sort("space-order")}
+            />
+            <RadioMenuItem
                 label={_t("room_list|sort_type|activity")}
                 checked={activeSortOption === "recent"}
                 onSelect={() => vm.sort("recent")}

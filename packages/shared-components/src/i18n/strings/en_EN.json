@@ -117,6 +117,7 @@
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
+            "space_order": "Space Order",
             "activity": "Activity",
             "atoz": "A-Z",
             "unread_first": "Unread first"

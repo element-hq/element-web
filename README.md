@@ -7,6 +7,24 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
 
+# Blackjack Element
+
+In this branch (room_order), I changed the default what in which rooms are ordered within spaces to be based on a number code placed in square brackets in the room's topic. This works for enabling users to set the order to whatever they want, though I am aware that other Matrix clients have drag and drop room ordering, which I may want to investigate to understand how they did that and where they were storing the room ordering information. Ideally, the space owner would be able to determine how the rooms are ordered and it should appear the same for everyone who joins, like how it does on Discord. In order to get this continuity of user experience, I also made it so "Rooms" is the default option selected for what to view rather than "People" or "Unreads", as those options do not exist in Discord and it creates confusion for new users. This causes issues when looking at Home, or trying to read your DMs though, so I will need to look into how to make those work differently.
+
+To order rooms, put numbers in brackets like in the example table below:
+
+| Order | Room Name | Room Topic |
+|-------|-----------|------------|
+| 1 | ``rules`` | [-1] Guidelines for the space |
+| 2 | ``general`` | [0] For general discussion of anything |
+| 3 | ``general-2`` | [0.5] Alternate general chat created after the first |
+| 4 | ``gaming`` | [1] Video games |
+| 5 | ``other`` | Other stuff |
+
+In this example, perhaps ``general-2`` was created after ``gaming``, so instead of changing the number in ``gaming``'s topic, a "[0.5]" was put at the start of ``general-2``'s topic to put it between ``general`` and ``gaming``. This could be necessary if you have maybe a dozen channels and it would be too much work to change the codes for all of them. Because ``other``'s topic doesn't have a number code, it gets sorted to the end of the list.
+
+The remaining text in this README.md is from the original Element repository:
+
 # Element
 
 Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix

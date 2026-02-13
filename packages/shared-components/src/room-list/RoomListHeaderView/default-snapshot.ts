@@ -15,6 +15,6 @@ export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     canCreateVideoRoom: true,
     canInviteInSpace: true,
     canAccessSpaceSettings: true,
-    activeSortOption: "recent",
+    activeSortOption: "space-order",
     isMessagePreviewEnabled: true,
 };
