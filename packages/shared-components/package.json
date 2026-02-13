@@ -40,7 +40,7 @@
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "test:unit": "vitest --project=unit",
         "test:storybook": "pnpm build:doc && vitest --project=storybook",
-        "test:storybook:update": "CI=1 pnpm playwright-screenshots pnpm vitest --run --update --project=storybook",
+        "test:storybook:update": "CI=1 playwright-screenshots-experimental pnpm vitest --run --update --project=storybook",
         "build": "nx build",
         "prepack": "pnpm run build",
         "storybook": "storybook dev -p 6007",
