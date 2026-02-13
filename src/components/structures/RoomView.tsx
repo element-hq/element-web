@@ -647,13 +647,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         };
 
         if (
-            this.state.mainSplitContentType !== MainSplitContentType.Timeline &&
             newState.mainSplitContentType === MainSplitContentType.Timeline &&
             this.context.rightPanelStore.isOpen &&
             this.context.rightPanelStore.currentCard.phase === RightPanelPhases.Timeline &&
             this.context.rightPanelStore.roomPhaseHistory.some((card) => card.phase === RightPanelPhases.Timeline)
         ) {
-            // We're returning to the main timeline, so hide the right panel timeline
+            // The main split shows the main timeline, so hide the right panel timeline
             this.context.rightPanelStore.setCard({ phase: RightPanelPhases.RoomSummary });
             this.context.rightPanelStore.togglePanel(this.state.roomId ?? null);
             newState.showRightPanel = false;
