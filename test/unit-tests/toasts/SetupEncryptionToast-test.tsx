@@ -17,7 +17,7 @@ import * as SecurityManager from "../../../src/SecurityManager";
 import ToastContainer from "../../../src/components/structures/ToastContainer";
 import { showToast } from "../../../src/toasts/SetupEncryptionToast";
 import dis from "../../../src/dispatcher/dispatcher";
-import DeviceListener from "../../../src/DeviceListener";
+import { DeviceListener } from "../../../src/device-listener";
 import Modal from "../../../src/Modal";
 import ConfirmKeyStorageOffDialog from "../../../src/components/views/dialogs/ConfirmKeyStorageOffDialog";
 import SetupEncryptionDialog from "../../../src/components/views/dialogs/security/SetupEncryptionDialog";
