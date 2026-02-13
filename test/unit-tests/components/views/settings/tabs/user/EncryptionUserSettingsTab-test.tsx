@@ -19,7 +19,7 @@ import {
 } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
 import Modal from "../../../../../../../src/Modal";
-import DeviceListener from "../../../../../../../src/DeviceListener";
+import { DeviceListener } from "../../../../../../../src/device-listener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;

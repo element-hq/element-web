@@ -15,7 +15,7 @@ import type { logger } from "matrix-js-sdk/src/logger";
 import type ContentMessages from "../ContentMessages";
 import { type IMatrixClientPeg } from "../MatrixClientPeg";
 import type ToastStore from "../stores/ToastStore";
-import type DeviceListener from "../DeviceListener";
+import { type DeviceListener } from "../device-listener";
 import { type RoomListStore } from "../stores/room-list/Interface";
 import { type PlatformPeg } from "../PlatformPeg";
 import type RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
