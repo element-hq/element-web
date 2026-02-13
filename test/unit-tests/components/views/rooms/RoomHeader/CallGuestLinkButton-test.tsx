@@ -33,7 +33,7 @@ describe("<CallGuestLinkButton />", () => {
     const targetUnencrypted =
         "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&viaServers=example.org";
     const targetEncrypted =
-        "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&perParticipantE2EE=true&viaServers=example.org";
+        "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&viaServers=example.org";
     const expectedShareDialogProps = {
         target: targetEncrypted,
         customTitle: "Conference invite link",
@@ -183,8 +183,6 @@ describe("<CallGuestLinkButton />", () => {
         getComponent(room);
         const modalSpy = jest.spyOn(Modal, "createDialog");
         fireEvent.click(getByLabelText(document.body, _t("voip|get_call_link")));
-        // const target =
-        //     "https://guest_spa_url.com/room/#/!room:server.org?roomId=%21room%3Aserver.org&perParticipantE2EE=true&viaServers=example.org";
         expect(modalSpy).toHaveBeenCalled();
         const arg0 = modalSpy.mock.calls[0][0];
         const arg1 = modalSpy.mock.calls[0][1] as any;

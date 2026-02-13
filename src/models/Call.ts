@@ -755,7 +755,6 @@ export class ElementCall extends Call {
         // Parameters can be found in https://github.com/element-hq/element-call/blob/livekit/src/UrlParams.ts.
         const params = new URLSearchParams({
             // Template variables are used, so that this can be configured using the widget data.
-            perParticipantE2EE: "$perParticipantE2EE",
             userId: client.getUserId()!,
             deviceId: client.getDeviceId()!,
             roomId: roomId,
@@ -874,25 +873,13 @@ export class ElementCall extends Call {
         overwriteData: IWidgetData,
         voiceOnly?: boolean,
     ): IWidgetData {
-        let perParticipantE2EE = false;
-        if (
-            client.getRoom(roomId)?.hasEncryptionStateEvent() &&
-            !SettingsStore.getValue("feature_disable_call_per_sender_encryption")
-        )
-            perParticipantE2EE = true;
-
         const intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
 
         return {
             ...currentData,
             ...overwriteData,
             intent,
-            perParticipantE2EE,
         };
-    }
-
-    private onCallEncryptionSettingsChange(): void {
-        this.widget.data = ElementCall.getWidgetData(this.client, this.roomId, this.widget.data ?? {}, {});
     }
 
     private constructor(
@@ -904,11 +891,6 @@ export class ElementCall extends Call {
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);
-        SettingsStore.watchSetting(
-            "feature_disable_call_per_sender_encryption",
-            null,
-            this.onCallEncryptionSettingsChange.bind(this),
-        );
         this.updateParticipants();
     }
 
