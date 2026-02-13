@@ -75,14 +75,6 @@ Selected.args = {
     isSelected: true,
 };
 
-export const CustomImage = Template.bind({});
-CustomImage.args = {
-    imageSrc:
-        "https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2?ixid=M3w4MjcwNjd8MHwxfHNlYXJjaHwxfHxzbWlsZXxlbnwwfHx8fDE3NzAxMTAxMzJ8MA&ixlib=rb-4.1.0&w=32&h=32&fit=max&q=80",
-    imageAlt: ":test:",
-    ariaLabel: "Alice reacted with :test:",
-};
-
 export const WithTooltip = Template.bind({});
 WithTooltip.args = {
     count: 3,

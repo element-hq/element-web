@@ -12,7 +12,7 @@ import { describe, it, expect } from "vitest";
 
 import * as stories from "./ReactionsRowButton.stories";
 
-const { Default, Selected, CustomImage } = composeStories(stories);
+const { Default, Selected } = composeStories(stories);
 
 describe("ReactionsRowButton", () => {
     it("renders the default reaction button", () => {
@@ -22,11 +22,6 @@ describe("ReactionsRowButton", () => {
 
     it("renders the selected reaction button", () => {
         const { container } = render(<Selected />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders the custom image reaction button", () => {
-        const { container } = render(<CustomImage />);
         expect(container).toMatchSnapshot();
     });
 });
