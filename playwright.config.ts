@@ -25,10 +25,12 @@ const chromeProject: Project<PlaywrightTestOptions, WorkerOptions & PlaywrightWo
     launchOptions: {
         args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
     },
-    connectOptions: {
-        wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
-        exposeNetwork: "<loopback>",
-    },
+    connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
+        ? {
+              wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
+              exposeNetwork: "<loopback>",
+          }
+        : undefined,
 };
 
 export default defineConfig<{}, WorkerOptions>({
