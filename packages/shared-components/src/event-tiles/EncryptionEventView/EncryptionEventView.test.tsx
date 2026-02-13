@@ -26,12 +26,17 @@ const {
 } = composeStories(stories);
 
 describe("EncryptionEventView", () => {
-    const renderView = (state: EncryptionEventState, simplified?: boolean, userName?: string): void => {
+    const renderView = (
+        state: EncryptionEventState,
+        simplified?: boolean,
+        userName?: string,
+        className?: string,
+    ): void => {
         const vm = new MockViewModel({
             state,
             simplified,
             userName,
-            className: "mx_EventTileBubble mx_cryptoEvent",
+            className,
         });
         render(<EncryptionEventView vm={vm} />);
     };
@@ -135,5 +140,11 @@ describe("EncryptionEventView", () => {
                 "Messages here are end-to-end encrypted. Verify Alice in their profile - tap on their profile picture.",
             ),
         ).toBeInTheDocument();
+    });
+
+    it("renders additional class name on the event tile bubble", () => {
+        renderView(EncryptionEventState.ENABLED, false, undefined, "custom-class");
+
+        expect(screen.getByText("Encryption enabled").parentElement).toHaveClass("custom-class");
     });
 });
