@@ -7,6 +7,22 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
 
+# Blackjack Element
+
+In this branch (custom_emotes), I had tried to add the ability to add custom emotes to spaces in the same way Discord lets you add custom emoji (though I will note, generally the word "emoji" specifically means the unicode characters, it's more standard to call these custom icons "emotes", which is why I used that word here) to servers. In testing other Matrix clients, I noticed that some of them did allow custom emotes, so I tried to get it to use a similar message structure, with a content tag like:
+
+```"content": {
+    "body": ":ture:",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "<img data-mx-emoticon=\"\" src=\"mxc://matrix.org/rzFAHmpREWSZCRyQPNsdIIcO\" alt=\":ture:\" title=\":ture:\" height=\"32\" vertical-align=\"middle\" />",
+    "m.mentions": {},
+    "msgtype": "m.text"
+},```
+
+Much of the code was writted using Claude Opus 4.6, which certainly made some questionable decisions about file structure, and isn't ideal for production level code but this fork *is* intended to be bespoke.
+
+The remaining text in this README.md is from the original Element repository:
+
 # Element
 
 Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix

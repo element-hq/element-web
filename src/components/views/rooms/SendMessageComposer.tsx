@@ -60,6 +60,7 @@ import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
+import { applyCustomEmotesToContent, getCustomEmotesForRoom } from "../../../utils/space-emotes";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -413,6 +414,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     this.props.relation,
                 );
             }
+            // Replace custom emote shortcodes with HTML img tags
+            const customEmotes = getCustomEmotesForRoom(this.props.mxClient, roomId);
+            applyCustomEmotesToContent(content, customEmotes);
+
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
