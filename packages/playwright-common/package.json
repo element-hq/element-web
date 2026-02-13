@@ -1,0 +1,21 @@
+{
+    "name": "@element-hq/element-web-playwright-common-local",
+    "type": "module",
+    "version": "3.0.0",
+    "license": "SEE LICENSE IN README.md",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/element-hq/element-web.git",
+        "directory": "packages/playwright-common"
+    },
+    "author": "element-hq",
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "bin": {
+        "playwright-screenshots": "playwright-screenshots.sh"
+    },
+    "devDependencies": {
+        "wait-on": "^9.0.4"
+    }
+}
