@@ -3,7 +3,6 @@ linkWorkspacePackages: true
 packages:
     - "."
     - "packages/*"
-catalogMode: prefer
 cleanupUnusedCatalogs: true
 catalog:
     # typescript
