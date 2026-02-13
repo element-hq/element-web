@@ -277,10 +277,6 @@ module.exports = (env, argv) => {
                         // our own source needs babel-ing
                         if (f.startsWith(path.resolve(__dirname, "src"))) return true;
 
-                        // We import the typescript source directly from shared-components
-                        // to avoid having to build as we dev, so include them too.
-                        if (f.startsWith(path.resolve(__dirname, "packages", "shared-components"))) return true;
-
                         // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute
                         // path, these could be anywhere thanks to linking. We must also not
