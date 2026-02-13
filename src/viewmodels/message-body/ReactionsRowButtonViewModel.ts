@@ -60,7 +60,9 @@ export class ReactionsRowButtonViewModel
 {
     public readonly tooltipVm: ReactionsRowButtonTooltipViewModel;
 
-    private static readonly computeSnapshot = (props: ReactionsRowButtonViewModelProps): ReactionsRowButtonViewSnapshot => {
+    private static readonly computeSnapshot = (
+        props: ReactionsRowButtonViewModelProps,
+    ): ReactionsRowButtonViewSnapshot => {
         const {
             client,
             mxEvent,

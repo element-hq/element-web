@@ -86,6 +86,7 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
 
     return (
         <ReactionsRowButtonTooltipView vm={vm.tooltipVm}>
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             <div
                 className={classes}
                 role="button"

@@ -29,5 +29,4 @@ describe("ReactionsRowButton", () => {
         const { container } = render(<CustomImage />);
         expect(container).toMatchSnapshot();
     });
-
 });
