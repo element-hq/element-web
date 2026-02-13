@@ -6,10 +6,12 @@
  */
 
 import React, { type JSX } from "react";
-import type { Meta, StoryFn } from "@storybook/react-vite";
 import { fn } from "storybook/test";
+import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
+import type { Meta, StoryFn } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel";
+import styles from "./ReactionRow.module.css";
 import {
     ReactionRowView,
     type ReactionRowViewActions,
@@ -43,17 +45,34 @@ const Template: StoryFn<typeof ReactionRowViewWrapper> = (args) => <ReactionRowV
 export const Default = Template.bind({});
 Default.args = {
     isVisible: true,
-    items: [<button key="1">👍 3</button>, <button key="2">🎉 2</button>],
+    items: [
+        <button key="1" className={styles.reactionButton} type="button">
+            <span className={styles.reactionButtonContent}>👍</span>
+            <span>3</span>
+        </button>,
+        <button key="2" className={styles.reactionButton} type="button">
+            <span className={styles.reactionButtonContent}>🎉</span>
+            <span>2</span>
+        </button>,
+    ],
     showAllVisible: false,
     showAllLabel: "Show all",
     toolbarAriaLabel: "Reactions",
-    addReactionButton: <button>+</button>,
+    addReactionButton: (
+        <button className={styles.addReactionButton} aria-label="Add reaction" type="button">
+            <ReactionAddIcon />
+        </button>
+    ),
 };
 
-export const WithShowAll = Template.bind({});
-WithShowAll.args = {
+export const ActiveAddReactionButton = Template.bind({});
+ActiveAddReactionButton.args = {
     ...Default.args,
-    showAllVisible: true,
+    addReactionButton: (
+        <button className={`${styles.addReactionButton} ${styles.addReactionButtonActive}`} aria-label="Add reaction" type="button">
+            <ReactionAddIcon />
+        </button>
+    ),
 };
 
 export const Hidden = Template.bind({});

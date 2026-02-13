@@ -19,7 +19,7 @@ import {
     type ReactionRowViewSnapshot,
 } from "./ReactionRowView";
 
-const { Default, WithShowAll, Hidden } = composeStories(stories);
+const { Default, ActiveAddReactionButton, Hidden } = composeStories(stories);
 
 describe("ReactionRowView", () => {
     it("renders the default state", () => {
@@ -27,8 +27,8 @@ describe("ReactionRowView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders with show-all visible", () => {
-        const { container } = render(<WithShowAll />);
+    it("renders with active add-reaction button", () => {
+        const { container } = render(<ActiveAddReactionButton />);
         expect(container).toMatchSnapshot();
     });
 

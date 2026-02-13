@@ -9,10 +9,72 @@
     color: var(--cpd-color-text-primary);
 }
 
+.reactionButton {
+    align-items: center;
+    background-color: var(--cpd-color-gray-200);
+    border: 1px solid var(--cpd-color-gray-400);
+    border-radius: 10px;
+    display: inline-flex;
+    line-height: 20px;
+    padding: 1px 6px;
+}
+
+.reactionButtonContent {
+    padding-right: 4px;
+}
+
+.addReactionButton,
+.reactionRow :global(.mx_ReactionsRow_addReactionButton) {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    display: inline-flex;
+    font-size: 20px;
+    justify-content: center;
+    line-height: 0;
+    visibility: hidden;
+    width: 20px;
+    height: 20px;
+    padding: var(--cpd-space-1x);
+    vertical-align: middle;
+    margin-left: var(--cpd-space-1x);
+    margin-right: var(--cpd-space-1x);
+}
+
+.addReactionButton svg,
+.reactionRow :global(.mx_ReactionsRow_addReactionButton) svg {
+    display: block;
+    height: 1em;
+    width: 1em;
+    color: var(--cpd-color-icon-secondary);
+}
+
+.addReactionButtonActive,
+.reactionRow :global(.mx_ReactionsRow_addReactionButton.mx_ReactionsRow_addReactionButton_active) {
+    visibility: visible;
+}
+
+.reactionRow:hover .addReactionButton,
+:global(.mx_EventTile:hover) .reactionRow :global(.mx_ReactionsRow_addReactionButton) {
+    visibility: visible;
+}
+
+.addReactionButton:hover svg,
+.addReactionButtonActive svg,
+.reactionRow :global(.mx_ReactionsRow_addReactionButton:hover) svg,
+.reactionRow :global(.mx_ReactionsRow_addReactionButton.mx_ReactionsRow_addReactionButton_active) svg {
+    color: var(--cpd-color-icon-primary);
+}
+
 .showAllButton {
+    background: transparent;
+    border: 0;
     color: var(--cpd-color-text-secondary);
     margin-inline-start: var(--cpd-space-1x);
+    padding: 0;
     vertical-align: middle;
+    font: var(--cpd-font-body-xs-regular);
+    line-height: 20px;
 }
 
 .showAllButton:hover {
