@@ -263,7 +263,6 @@ describe("ReactionsRowButton", () => {
         });
 
         const props: ReactionsRowButtonViewModelProps = {
-            client: mockClient,
             ...createProps({
                 "m.relates_to": {
                     event_id: "$user1:example.com",
