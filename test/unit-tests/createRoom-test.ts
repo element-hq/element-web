@@ -11,6 +11,7 @@ import { mocked, type Mocked } from "jest-mock";
 import {
     type MatrixClient,
     type Device,
+    HistoryVisibility,
     Preset,
     RoomType,
     JoinRule,
@@ -368,6 +369,20 @@ describe("createRoom", () => {
             expect.objectContaining({
                 initial_state: expect.arrayContaining([
                     { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+                ]),
+            }),
+        );
+    });
+
+    it("should respect an explicit history visibility override", async () => {
+        await createRoom(client, {
+            createOpts: { preset: Preset.PrivateChat },
+            historyVisibility: HistoryVisibility.Shared,
+        });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    { type: "m.room.history_visibility", content: { history_visibility: "shared" } },
                 ]),
             }),
         );
