@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 15 15.000001"
+   width="15"
+   height="15"
+   version="1.1"
+   id="svg81"
+   sodipodi:docname="threads_1.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview83"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="25.709702"
+     inkscape:cx="6.4567064"
+     inkscape:cy="12.777277"
+     inkscape:window-width="1920"
+     inkscape:window-height="1042"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g79"
+     width="15px" />
+  <desc
+     id="desc2">threads_0.DXF - scale = 1.0, origin = (0.0, 0.0), method = manual</desc>
+  <defs
+     id="defs17">
+    <marker
+       id="DistanceX"
+       orient="auto"
+       refX="0"
+       refY="0"
+       style="overflow:visible">
+      <path
+         d="M 3,-3 -3,3 M 0,-5 V 5"
+         style="stroke:none;stroke-width:0.5"
+         id="path4" />
+    </marker>
+    <pattern
+       id="Hatch"
+       patternUnits="userSpaceOnUse"
+       width="8"
+       height="8"
+       x="0"
+       y="0">
+      <path
+         d="M8 4 l-4,4"
+         stroke="#000000"
+         stroke-width="0.25"
+         linecap="square"
+         id="path7" />
+      <path
+         d="M6 2 l-4,4"
+         stroke="#000000"
+         stroke-width="0.25"
+         linecap="square"
+         id="path9" />
+      <path
+         d="M4 0 l-4,4"
+         stroke="#000000"
+         stroke-width="0.25"
+         linecap="square"
+         id="path11" />
+    </pattern>
+    <symbol
+       id="*Model_Space" />
+    <symbol
+       id="*Paper_Space" />
+    <symbol
+       id="*Paper_Space0" />
+    <inkscape:path-effect
+       effect="fill_between_many"
+       method="originald"
+       linkedpaths="#path27,0,1|#path29,0,1|#path31,0,1|#path25,0,1|#path23,0,1|#path21,0,1|#path39,0,1|#path19,0,1|#path37,0,1|#path35,0,1"
+       id="path-effect910"
+       is_visible="true"
+       lpeversion="0"
+       join="true"
+       close="true"
+       autoreverse="true"
+       applied="false" />
+    <inkscape:path-effect
+       effect="fill_between_many"
+       method="originald"
+       linkedpaths="#path47,0,1|#path41,0,1|#path43,0,1|#path45,0,1"
+       id="path-effect914"
+       is_visible="true"
+       lpeversion="0"
+       join="true"
+       close="true"
+       autoreverse="true"
+       applied="false" />
+    <inkscape:path-effect
+       effect="fill_between_many"
+       method="originald"
+       linkedpaths="#path49,0,1|#path55,0,1|#path51,0,1|#path53,0,1"
+       id="path-effect982"
+       is_visible="true"
+       lpeversion="0"
+       join="true"
+       close="true"
+       autoreverse="true"
+       applied="false" />
+    <inkscape:path-effect
+       effect="fill_between_many"
+       method="originald"
+       linkedpaths="#path57,0,1|#path59,0,1|#path61,0,1|#path63,0,1|#path65,0,1|#path67,0,1|#path77,0,1|#path69,0,1|#path71,0,1|#path73,0,1|#path75,0,1"
+       id="path-effect986"
+       is_visible="true"
+       lpeversion="0"
+       join="true"
+       close="true"
+       autoreverse="true"
+       applied="false" />
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="0"
+     id="g79">
+    <path
+       inkscape:original-d="M 7.5,-1115.0197"
+       inkscape:path-effect="#path-effect910"
+       d="m 8.386157,1.80335 a 0.491339,0.491339 0 0 0 -0.694857,0 l -0.173715,0.177 a 0.491339,0.491339 0 0 0 0,0.6915 l 0.195462,0.1985 -0.567648,0.56 a 0.491339,0.491339 0 0 0 0.048842,0.7423 l 4.835309,3.6977 a 0.491339,0.491339 0 0 0 0.646017,-0.0407 l 0.521143,-0.5193 a 0.491339,0.491339 0 0 0 1e-6,-0.6965 L 8.386157,1.80035 Z"
+       id="path912" />
+    <path
+       inkscape:original-d="M 7.5,-1115.0197"
+       inkscape:path-effect="#path-effect914"
+       d="m 6.38946,4.79035 4.22021,3.23 a 0.49260708,0.49260708 0 0 1 -0.597175,0.7836 L 5.79229,5.57035 a 0.491339,0.491339 0 0 1 0.59717,-0.7762 z"
+       id="path916" />
+    <path
+       inkscape:original-d="M 7.5,-1115.0197"
+       inkscape:path-effect="#path-effect982"
+       d="m 4.987505,6.19615 a 0.491339,0.491339 0 0 0 -0.597174,0.7804 l 4.220209,3.2338 A 0.49312392,0.49312392 0 0 0 9.207714,9.42545 L 4.98751,6.20035 Z"
+       id="path984" />
+    <path
+       inkscape:original-d="M 7.5,-1115.0197"
+       inkscape:path-effect="#path-effect986"
+       d="m 6.613843,13.19675 a 0.491339,0.491339 0 0 0 0.694857,0 l 0.173715,-0.1764 a 0.491339,0.491339 0 0 0 0,-0.6922 l -0.195462,-0.1978 0.567648,-0.57 A 0.491339,0.491339 0 0 0 7.805759,10.82745 L 2.97045,7.13035 A 0.491339,0.491339 0 0 0 2.324433,7.17045 L 1.80329,7.69035 a 0.491339,0.491339 0 0 0 -1e-6,0.6958 l 4.810554,4.8142 z"
+       id="path988" />
+  </g>
+</svg>
