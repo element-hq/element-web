@@ -734,6 +734,9 @@ importers:
       counterpart:
         specifier: ^0.18.6
         version: 0.18.6
+      html-react-parser:
+        specifier: ^5.2.2
+        version: 5.2.16(@types/react@19.2.10)(react@19.2.4)
       lodash:
         specifier: npm:lodash-es@^4.17.21
         version: lodash-es@4.17.23
@@ -867,9 +870,6 @@ importers:
       expect:
         specifier: ^30.2.0
         version: 30.2.0
-      html-react-parser:
-        specifier: ^5.2.2
-        version: 5.2.16(@types/react@19.2.10)(react@19.2.4)
       prettier:
         specifier: ^3.6.2
         version: 3.8.1
