@@ -145,7 +145,11 @@ export default defineConfig({
         ],
     },
     optimizeDeps: {
-        include: ["vite-plugin-node-polyfills/shims/buffer", "vite-plugin-node-polyfills/shims/process"],
+        include: [
+            "vite-plugin-node-polyfills/shims/buffer",
+            "vite-plugin-node-polyfills/shims/process",
+            "html-react-parser",
+        ],
     },
     resolve: {
         alias: {
