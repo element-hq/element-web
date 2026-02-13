@@ -391,9 +391,7 @@ describe("ReactionsRowButton", () => {
             content: { body: "test2" },
         });
 
-        expect(() =>
-            rerender(<ReactionsRowButtonHost {...props} mxEvent={newMxEvent} />),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} mxEvent={newMxEvent} />)).not.toThrow();
     });
 
     it("updates ViewModel when only content changes", () => {
@@ -439,9 +437,7 @@ describe("ReactionsRowButton", () => {
             }),
         ];
 
-        expect(() =>
-            rerender(<ReactionsRowButtonHost {...props} reactionEvents={newReactionEvents} />),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} reactionEvents={newReactionEvents} />)).not.toThrow();
     });
 
     it("updates ViewModel when only customReactionImagesEnabled changes", () => {
@@ -456,9 +452,7 @@ describe("ReactionsRowButton", () => {
         const { rerender } = render(<ReactionsRowButtonHost {...props} />);
 
         // Only change customReactionImagesEnabled
-        expect(() =>
-            rerender(<ReactionsRowButtonHost {...props} customReactionImagesEnabled={false} />),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} customReactionImagesEnabled={false} />)).not.toThrow();
     });
 
     it("does not update ViewModel when props stay the same", () => {
