@@ -44,8 +44,8 @@
         "build": "vite build",
         "prepack": "pnpm run build",
         "storybook": "storybook dev -p 6007",
-        "build:storybook": "pnpm build:doc && storybook build && node scripts/storybook-build-i18n.ts",
-        "build:doc": "typedoc",
+        "build:storybook": "nx run @element-hq/web-shared-components:storybook",
+        "build:doc": "nx run @element-hq/web-shared-components:typedoc",
         "lint": "pnpm lint:types && pnpm lint:js",
         "lint:js": "eslint --max-warnings 0 src && prettier --check .",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
