@@ -6,7 +6,7 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "useDefineForClassFields": true,
-        "module": "es2022",
+        "module": "preserve",
         "moduleResolution": "bundler",
         "target": "es2022",
         "noUnusedLocals": true,
@@ -28,6 +28,7 @@
         "./test/**/*.ts",
         "./test/**/*.tsx",
         "./scripts/*.ts",
-        "./@types/*.d.ts"
+        "./@types/*.d.ts",
+        "./webpack.config.ts"
     ]
 }
