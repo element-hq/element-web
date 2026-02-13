@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 const dotenv = require("dotenv");
 const path = require("path");
+const fs = require("node:fs");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -44,7 +45,8 @@ let fileOverrides = {
     /* {[file: string]: string} */
 };
 try {
-    fileOverrides = require("./customisations.json");
+    const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
+    fileOverrides = JSON.parse(customisationsFile);
 
     // stringify the output so it appears in logs correctly, as large files can sometimes get
     // represented as `<Object>` which is less than helpful.
