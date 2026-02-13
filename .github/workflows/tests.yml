@@ -25,6 +25,7 @@ env:
     ENABLE_COVERAGE: ${{ github.event_name != 'merge_group' && inputs.disable_coverage != 'true' }}
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
+    NX_DEFAULT_OUTPUT_STYLE: static
 
 permissions: {}
 

@@ -39,7 +39,7 @@ e.g. in config.json:
                     "faces": [
                         {
                             "font-family": "Inter",
-                            "src": [{"url": "/fonts/Inter.ttf", "format": "ttf"}]
+                            "src": [{"url": "/fonts/Inter.ttf", "format": "truetype"}]
                         }
                     ],
                     "general": "Inter, sans",

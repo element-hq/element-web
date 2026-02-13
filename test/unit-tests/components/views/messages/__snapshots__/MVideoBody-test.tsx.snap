@@ -13,6 +13,7 @@ exports[`MVideoBody does not crash when given portrait dimensions 1`] = `
         class="mx_MVideoBody"
         controls=""
         controlslist="nodownload"
+        crossorigin="anonymous"
         poster="data:image/png;base64,00"
         preload="none"
       />
@@ -37,6 +38,7 @@ exports[`MVideoBody should show poster for encrypted media before downloading it
         class="mx_MVideoBody"
         controls=""
         controlslist="nodownload"
+        crossorigin="anonymous"
         poster="https://server/_matrix/media/v3/download/server/encrypted-poster"
         preload="none"
         title="alt for a test video"
@@ -62,6 +64,7 @@ exports[`MVideoBody with video previews/thumbnails disabled should download vide
         class="mx_MVideoBody"
         controls=""
         controlslist="nodownload"
+        crossorigin="anonymous"
         poster="https://server/_matrix/media/v3/download/server/encrypted-poster"
         preload="none"
         title="alt for a test video"
