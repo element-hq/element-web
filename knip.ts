@@ -63,4 +63,7 @@ export default {
         "@types/sdp-transform",
     ],
     ignoreExportsUsedInFile: true,
+    nx: {
+        config: ["nx.json", "project.json", "{apps,packages,modules}/**/project.json", "package.json"],
+    },
 } satisfies KnipConfig;

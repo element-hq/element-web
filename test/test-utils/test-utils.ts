@@ -186,6 +186,7 @@ export function createTestClient(): MatrixClient {
         peekInRoom: jest.fn().mockResolvedValue(mkStubRoom(undefined, undefined, undefined)),
         stopPeeking: jest.fn(),
 
+        getEventTimeline: jest.fn().mockResolvedValue([]),
         paginateEventTimeline: jest.fn().mockResolvedValue(undefined),
         sendReadReceipt: jest.fn().mockResolvedValue(undefined),
         getRoomIdForAlias: jest.fn().mockResolvedValue(undefined),
