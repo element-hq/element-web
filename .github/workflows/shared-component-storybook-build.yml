@@ -1,6 +1,7 @@
 name: Build shared component storybook
 on:
     merge_group: {}
+    pull_request: {}
     workflow_call: {}
 
 permissions: {}
@@ -27,3 +28,9 @@ jobs:
             - name: 📖 Build Storybook
               working-directory: packages/shared-components
               run: pnpm build:storybook
+
+            - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              with:
+                  name: shared-components-storybook
+                  path: packages/shared-components/storybook-static
+                  retention-days: 1
