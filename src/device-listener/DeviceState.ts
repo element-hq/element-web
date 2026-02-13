@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 /**
  * The state of the device and the user's account.
  */
-type DeviceState =
+export type DeviceState =
     /**
      * The device is in a good state.
      */
@@ -35,5 +35,3 @@ type DeviceState =
      * The user's identity needs resetting, due to missing keys.
      */
     | "identity_needs_reset";
-
-export default DeviceState;
