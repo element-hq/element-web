@@ -5,24 +5,49 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-/* eslint-disable quote-props */
+import dotenv from "dotenv";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import webpack from "webpack";
+import "webpack-dev-server"; // for types
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import TerserPlugin from "terser-webpack-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import HtmlWebpackInjectPreload from "@principalstudio/html-webpack-inject-preload";
+import CopyWebpackPlugin from "copy-webpack-plugin";
+import VersionFilePlugin from "webpack-version-file-plugin";
+import { RetryChunkLoadPlugin } from "webpack-retry-chunk-load-plugin";
+import postcssSimpleVars from "postcss-simple-vars";
+import postcssHexrgba from "postcss-hexrgba";
+import postcssPresetEnv from "postcss-preset-env";
+import postcssImport from "postcss-import";
+import postcssMixins from "postcss-mixins";
+import postcssNested from "postcss-nested";
+import postcssEasings from "postcss-easings";
 
-const dotenv = require("dotenv");
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const VersionFilePlugin = require("webpack-version-file-plugin");
-const { RetryChunkLoadPlugin } = require("webpack-retry-chunk-load-plugin");
+import pkgJson from "./package.json" with { type: "json" };
+import componentsJson from "./components.json" with { type: "json" };
+import type { sentryWebpackPlugin as sentryWebpackPluginType } from "@sentry/webpack-plugin/webpack5";
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
 // CSP_EXTRA_SOURCE: specifies a URL which should be appended to each CSP directive which uses 'self',
 //   this can be helpful if your deployment has redirects for old bundles, such as develop.element.io.
+
+let sentryWebpackPlugin: typeof sentryWebpackPluginType | undefined;
+// This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
+// so we import it conditionally.
+if (process.env.SENTRY_DSN) {
+    try {
+        ({ sentryWebpackPlugin } = await import("@sentry/webpack-plugin/webpack5"));
+    } catch (e) {
+        console.warn("Failed to load sentry plugin", e);
+    }
+}
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
@@ -44,7 +69,8 @@ let fileOverrides = {
     /* {[file: string]: string} */
 };
 try {
-    fileOverrides = require("./customisations.json");
+    const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
+    fileOverrides = JSON.parse(customisationsFile);
 
     // stringify the output so it appears in logs correctly, as large files can sometimes get
     // represented as `<Object>` which is less than helpful.
@@ -58,11 +84,17 @@ try {
         console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(""); // blank line
     });
-} catch (e) {
+} catch {
     // ignore - not important
 }
 
-function parseOverridesToReplacements(overrides) {
+// Get the root of a node_modules dependency the name of its import
+function getPackageRoot(dep: string, target = "package.json"): string {
+    const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
+    return path.dirname(targetPath.startsWith("file://") ? targetPath.slice(7) : targetPath);
+}
+
+function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
     return Object.entries(overrides).map(([oldPath, newPath]) => {
         return new webpack.NormalModuleReplacementPlugin(
             // because the input is effectively defined by the person running the build, we don't
@@ -82,13 +114,13 @@ function parseOverridesToReplacements(overrides) {
 }
 
 const moduleReplacementPlugins = [
-    ...parseOverridesToReplacements(require("./components.json")),
+    ...parseOverridesToReplacements(componentsJson),
 
     // Allow customisations to override the default components too
     ...parseOverridesToReplacements(fileOverrides),
 ];
 
-module.exports = (env, argv) => {
+export default (env: string, argv: Record<string, any>): webpack.Configuration => {
     // Establish settings based on the environment and args.
     //
     // argv.mode is always set to "production" by pnpm build
@@ -103,13 +135,13 @@ module.exports = (env, argv) => {
 
     let VERSION = process.env.VERSION;
     if (!VERSION) {
-        VERSION = require("./package.json").version;
+        VERSION = pkgJson.version;
         if (devMode) {
             VERSION += "-dev";
         }
     }
 
-    const development = {};
+    const development: Pick<webpack.Configuration, "devtool"> = {};
     if (devMode) {
         // Embedded source maps for dev builds, can't use eval-source-map due to CSP
         development["devtool"] = "inline-source-map";
@@ -123,7 +155,7 @@ module.exports = (env, argv) => {
     // Resolve the directories for the js-sdk for later use. We resolve these early, so we
     // don't have to call them over and over. We also resolve to the package.json instead of the src
     // directory, so we don't have to rely on an index.js or similar file existing.
-    const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), "..", "src");
+    const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
     return {
         ...development,
@@ -205,25 +237,22 @@ module.exports = (env, argv) => {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
                 // using linked dependencies.
-                "react": path.resolve(__dirname, "node_modules/react"),
-                "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+                "react": getPackageRoot("react"),
+                "react-dom": getPackageRoot("react-dom"),
 
                 // Same goes for js/react-sdk - we don't need two copies.
-                "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
-                "@matrix-org/react-sdk-module-api": path.resolve(
-                    __dirname,
-                    "node_modules/@matrix-org/react-sdk-module-api",
-                ),
+                "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
+                "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
-                "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
-                "oidc-client-ts": path.resolve(__dirname, "node_modules/oidc-client-ts"),
+                "matrix-widget-api": getPackageRoot("matrix-widget-api"),
+                "oidc-client-ts": getPackageRoot("oidc-client-ts"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
 
                 // Make shared-components imports resolve to EW deps
-                "counterpart": path.resolve(__dirname, "node_modules/counterpart"),
-                "@vector-im/compound-web": path.resolve(__dirname, "node_modules/@vector-im/compound-web"),
+                "counterpart": getPackageRoot("counterpart"),
+                "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
             },
             fallback: {
                 // Mock out the NodeFS module: The opus decoder imports this wrongly.
@@ -233,9 +262,9 @@ module.exports = (env, argv) => {
                 "crypto": false,
 
                 // Polyfill needed by counterpart
-                "util": require.resolve("util/"),
+                "util": import.meta.resolve("util/"),
                 // Polyfill needed by sentry
-                "process/browser": require.resolve("process/browser"),
+                "process/browser": import.meta.resolve("process/browser"),
             },
 
             // Enable the custom "wasm-esm" export condition [1] to indicate to
@@ -266,18 +295,14 @@ module.exports = (env, argv) => {
             rules: [
                 {
                     test: /\.js$/,
-                    enforce: "pre",
+                    enforce: "pre" as const,
                     use: ["source-map-loader"],
                 },
                 {
                     test: /\.(ts|js)x?$/,
-                    include: (f) => {
+                    include: (f: string) => {
                         // our own source needs babel-ing
                         if (f.startsWith(path.resolve(__dirname, "src"))) return true;
-
-                        // We import the typescript source directly from shared-components
-                        // to avoid having to build as we dev, so include them too.
-                        if (f.startsWith(path.resolve(__dirname, "packages", "shared-components"))) return true;
 
                         // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute
@@ -340,12 +365,12 @@ module.exports = (env, argv) => {
                                         // at the top of this webpack config help group the SCSS and
                                         // plain CSS together for the bundler.
 
-                                        require("postcss-simple-vars")(),
-                                        require("postcss-hexrgba")(),
+                                        postcssSimpleVars(),
+                                        postcssHexrgba(),
 
                                         // It's important that this plugin is last otherwise we end
                                         // up with broken CSS.
-                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                        postcssPresetEnv({ stage: 3, browsers: "last 2 versions" }),
                                     ],
                                     "parser": "postcss-scss",
                                     "local-plugins": true,
@@ -374,16 +399,16 @@ module.exports = (env, argv) => {
                                 postcssOptions: () => ({
                                     "plugins": [
                                         // Note that we use slightly different plugins for PostCSS.
-                                        require("postcss-import")(),
-                                        require("postcss-mixins")(),
-                                        require("postcss-simple-vars")(),
-                                        require("postcss-nested")(),
-                                        require("postcss-easings")(),
-                                        require("postcss-hexrgba")(),
+                                        postcssImport(),
+                                        postcssMixins(),
+                                        postcssSimpleVars(),
+                                        postcssNested(),
+                                        postcssEasings(),
+                                        postcssHexrgba(),
 
                                         // It's important that this plugin is last otherwise we end
                                         // up with broken CSS.
-                                        require("postcss-preset-env")({ stage: 3, browsers: "last 2 versions" }),
+                                        postcssPresetEnv({ stage: 3, browsers: "last 2 versions" }),
                                     ],
                                     "parser": "postcss-scss",
                                     "local-plugins": true,
@@ -509,7 +534,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function (url: string, resourcePath: string) {
                                     const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(outputPath);
                                 },
@@ -521,7 +546,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function (url: string, resourcePath: string) {
                                     const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(outputPath);
                                 },
@@ -539,7 +564,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function (url: string, resourcePath: string) {
                                     // CSS image usages end up in the `bundles/[hash]` output
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
@@ -563,7 +588,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function (url: string, resourcePath: string) {
                                     // CSS image usages end up in the `bundles/[hash]` output
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
@@ -579,7 +604,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function (url: string, resourcePath: string) {
                                     const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(outputPath);
                                 },
@@ -655,23 +680,23 @@ module.exports = (env, argv) => {
             }),
 
             new HtmlWebpackInjectPreload({
-                files: [{ match: /.*Inter.*\.woff2$/ }],
+                files: [{ match: /.*Inter.*\.woff2$/, attributes: {} }],
             }),
 
             // Upload to sentry if sentry env is present
-            // This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
-            // so we require it conditionally.
-            process.env.SENTRY_DSN &&
-                require("@sentry/webpack-plugin").sentryWebpackPlugin({
-                    release: process.env.VERSION,
-                    sourcemaps: {
-                        paths: "./webapp/bundles/**",
-                    },
-                    errorHandler: (err) => {
-                        console.warn("Sentry CLI Plugin: " + err.message);
-                        console.log(`::warning title=Sentry error::${err.message}`);
-                    },
-                }),
+            sentryWebpackPlugin?.({
+                release: {
+                    name: VERSION,
+                    inject: false,
+                },
+                sourcemaps: {
+                    assets: "./webapp/bundles/**",
+                },
+                errorHandler: (err) => {
+                    console.warn("Sentry CLI Plugin: " + err.message);
+                    console.log(`::warning title=Sentry error::${err.message}`);
+                },
+            }),
 
             new CopyWebpackPlugin({
                 patterns: [
@@ -690,7 +715,7 @@ module.exports = (env, argv) => {
                     // Element Call embedded widget
                     {
                         from: "**",
-                        context: path.resolve(__dirname, "node_modules/@element-hq/element-call-embedded/dist"),
+                        context: path.join(getPackageRoot("@element-hq/element-call-embedded"), "dist"),
                         to: path.join(__dirname, "webapp", "widgets", "element-call"),
                     },
                     // Mobile guide assets
@@ -784,11 +809,11 @@ module.exports = (env, argv) => {
  * Merge assets found via CSS and imports into a single tree, while also preserving
  * directories under e.g. `res` or similar.
  *
- * @param {string} url The adjusted name of the file, such as `warning.1234567.svg`.
- * @param {string} resourcePath The absolute path to the source file with unmodified name.
- * @return {string} The returned paths will look like `img/warning.1234567.svg`.
+ * @param url The adjusted name of the file, such as `warning.1234567.svg`.
+ * @param resourcePath The absolute path to the source file with unmodified name.
+ * @return The returned paths will look like `img/warning.1234567.svg`.
  */
-function getAssetOutputPath(url, resourcePath) {
+function getAssetOutputPath(url: string, resourcePath: string): string {
     const isKaTeX = resourcePath.includes("KaTeX");
     const isFontSource = resourcePath.includes("@fontsource");
     const mobileGuideAssetsPath = path.join("mobile_guide", "assets");
@@ -818,7 +843,7 @@ function getAssetOutputPath(url, resourcePath) {
      */
     const compoundImportsPrefix = /@vector-im(?:\\|\/)compound-(.*?)(?:\\|\/)/;
     const compoundMatch = outputDir.match(compoundImportsPrefix);
-    if (compoundMatch) {
+    if (compoundMatch?.index !== undefined) {
         outputDir = outputDir.substring(compoundMatch.index + compoundMatch[0].length);
     }
 
@@ -843,9 +868,9 @@ function getAssetOutputPath(url, resourcePath) {
  * Convert path to public path format, which always uses forward slashes, since it will
  * be placed directly into things like CSS files.
  *
- * @param {string} path Some path to a file.
- * @returns {string} converted path
+ * @param path Some path to a file.
+ * @returns converted path
  */
-function toPublicPath(path) {
+function toPublicPath(path: string): string {
     return path.replace(/\\/g, "/");
 }

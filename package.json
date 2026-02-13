@@ -181,6 +181,7 @@
         "@types/modernizr": "^3.5.3",
         "@types/node": "22",
         "@types/pako": "^2.0.0",
+        "@types/postcss-import": "^14.0.3",
         "@types/qrcode": "^1.3.5",
         "@types/react": "catalog:",
         "@types/react-beautiful-dnd": "^13.0.0",
@@ -284,7 +285,8 @@
             "@types/mdx": "patches/@types__mdx.patch",
             "await-lock": "patches/await-lock.patch",
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
-            "jsdom": "patches/jsdom.patch"
+            "jsdom": "patches/jsdom.patch",
+            "rollup": "patches/rollup.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
