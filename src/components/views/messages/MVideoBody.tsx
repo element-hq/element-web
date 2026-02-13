@@ -329,7 +329,7 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
                         // The video uses a cross-origin request.
                         // Firefox explicitly bypasses services workers for crossorigin
                         // video elements without crossorigin attribute.
-                        crossorigin="anonymous"
+                        crossOrigin="anonymous"
                         preload={preload}
                         muted={autoplay}
                         autoPlay={autoplay}
