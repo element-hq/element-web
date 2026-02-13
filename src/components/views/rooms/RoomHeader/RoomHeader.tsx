@@ -12,7 +12,7 @@ import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/co
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
+import ThreadsIcon from "./ThreadsIcon.tsx";
 import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
 import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-solid";
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
