@@ -40,7 +40,7 @@
         "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
         "test:unit": "vitest --project=unit",
         "test:storybook": "pnpm build:doc && vitest --project=storybook",
-        "test:storybook:update": "cd ../.. && playwright-screenshots --entrypoint /work/packages/shared-components/scripts/storybook-screenshot-update.sh --with-node-modules --no-link-modules",
+        "test:storybook:update": "CI=1 pnpm playwright-screenshots pnpm vitest --run --update --project=storybook",
         "build": "vite build",
         "prepack": "pnpm run build",
         "storybook": "storybook dev -p 6007",
@@ -63,7 +63,7 @@
         "temporal-polyfill": "^0.3.0"
     },
     "devDependencies": {
-        "@element-hq/element-web-playwright-common": "catalog:",
+        "@element-hq/element-web-playwright-common-local": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@playwright/test": "catalog:",
