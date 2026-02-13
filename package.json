@@ -284,7 +284,8 @@
             "@types/mdx": "patches/@types__mdx.patch",
             "await-lock": "patches/await-lock.patch",
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
-            "jsdom": "patches/jsdom.patch"
+            "jsdom": "patches/jsdom.patch",
+            "rollup": "patches/rollup.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
