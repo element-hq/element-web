@@ -20,6 +20,7 @@ import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
 import Category, { type CategoryKey, type ICategory } from "./Category";
+import CustomEmoteCategory, { type CustomEmote } from "./CustomEmoteCategory";
 import { filterBoolean } from "../../../utils/arrays";
 import {
     type IAction as RovingAction,
@@ -29,6 +30,9 @@ import {
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
 import { type ButtonEvent } from "../elements/AccessibleButton";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { getCustomEmotesForRoom } from "../../../utils/space-emotes";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 export const CATEGORY_HEADER_HEIGHT = 20;
 export const EMOJI_HEIGHT = 35;
@@ -41,11 +45,13 @@ interface IProps {
     onChoose(unicode: string): boolean;
     onFinished(): void;
     isEmojiDisabled?: (unicode: string) => boolean;
+    roomId?: string;
 }
 
 interface IState {
     filter: string;
     previewEmoji?: IEmoji;
+    previewCustomEmote?: CustomEmote;
     scrollTop: number;
     // initial estimation of height, dialog is hardcoded to 450px height.
     // should be enough to never have blank rows of emojis as
@@ -56,14 +62,19 @@ interface IState {
 }
 
 class EmojiPicker extends React.Component<IProps, IState> {
+    public static override contextType = MatrixClientContext;
+    public declare context: React.ContextType<typeof MatrixClientContext>;
+
     private readonly recentlyUsed: IEmoji[];
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
+    private customEmotes: CustomEmote[] = [];
+    private filteredCustomEmotes: CustomEmote[] = [];
 
     private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context?: React.ContextType<typeof MatrixClientContext>) {
+        super(props, context);
 
         this.state = {
             filter: "",
@@ -72,17 +83,30 @@ class EmojiPicker extends React.Component<IProps, IState> {
             showHighlight: false,
         };
 
+        // Load custom emotes from parent spaces
+        if (this.context && props.roomId) {
+            const emoteMap = getCustomEmotesForRoom(this.context, props.roomId);
+            this.customEmotes = Array.from(emoteMap.entries()).map(([shortcode, info]) => ({
+                shortcode,
+                url: info.url,
+            }));
+            this.filteredCustomEmotes = this.customEmotes;
+        }
+
         // Convert recent emoji characters to emoji data, removing unknowns and duplicates
         this.recentlyUsed = Array.from(new Set(filterBoolean(recent.get().map(getEmojiFromUnicode))));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
+            custom: [], // placeholder — custom emotes use separate rendering
             ...DATA_BY_CATEGORY,
         };
 
         const hasRecentlyUsed = this.recentlyUsed.length > 0;
+        const hasCustomEmotes = this.customEmotes.length > 0;
 
         const categoryConfig: Pick<ICategory, "id" | "name" | "emoji">[] = [
             { id: "recent", name: _t("emoji|category_frequently_used"), emoji: "🕒" },
+            { id: "custom", name: _t("emoji|category_custom"), emoji: "📦" },
             { id: "people", name: _t("emoji|category_smileys_people"), emoji: "😀" },
             { id: "nature", name: _t("emoji|category_animals_nature"), emoji: "🐕" },
             { id: "foods", name: _t("emoji|category_food_drink"), emoji: "🍎" },
@@ -101,6 +125,8 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 isEnabled = hasRecentlyUsed;
                 isVisible = hasRecentlyUsed;
                 firstVisible = hasRecentlyUsed;
+            } else if (config.id === "custom") {
+                isEnabled = hasCustomEmotes;
             } else if (config.id === "people") {
                 isVisible = true;
                 firstVisible = !hasRecentlyUsed;
@@ -280,7 +306,24 @@ class EmojiPicker extends React.Component<IProps, IState> {
             this.setState({ showHighlight: false });
         }
 
+        // Filter custom emotes by shortcode
+        if (lcFilter !== "") {
+            this.filteredCustomEmotes = this.customEmotes.filter((emote) =>
+                emote.shortcode.toLowerCase().includes(lcFilter),
+            );
+        } else {
+            this.filteredCustomEmotes = this.customEmotes;
+        }
+
         for (const cat of this.categories) {
+            if (cat.id === "custom") {
+                cat.enabled = this.filteredCustomEmotes.length > 0;
+                if (cat.ref.current) {
+                    cat.ref.current.disabled = !cat.enabled;
+                }
+                continue;
+            }
+
             let emojis: IEmoji[];
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
             if (lcFilter.includes(this.state.filter)) {
@@ -372,6 +415,26 @@ class EmojiPicker extends React.Component<IProps, IState> {
         }
     };
 
+    private onClickCustomEmote = (ev: ButtonEvent, shortcode: string): void => {
+        this.props.onChoose(`:${shortcode}:`);
+        if ((ev as React.KeyboardEvent).key === Key.ENTER) {
+            this.props.onFinished();
+        }
+    };
+
+    private onHoverCustomEmote = (shortcode: string, url: string): void => {
+        this.setState({
+            previewEmoji: undefined,
+            previewCustomEmote: { shortcode, url },
+        });
+    };
+
+    private onHoverCustomEmoteEnd = (): void => {
+        this.setState({
+            previewCustomEmote: undefined,
+        });
+    };
+
     private static categoryHeightForEmojiCount(count: number): number {
         if (count === 0) {
             return 0;
@@ -407,6 +470,27 @@ class EmojiPicker extends React.Component<IProps, IState> {
                                 onScroll={this.onScroll}
                             >
                                 {this.categories.map((category) => {
+                                    if (category.id === "custom") {
+                                        const emotes = this.filteredCustomEmotes;
+                                        const categoryElement = (
+                                            <CustomEmoteCategory
+                                                key={category.id}
+                                                id={category.id}
+                                                name={category.name}
+                                                heightBefore={heightBefore}
+                                                viewportHeight={this.state.viewportHeight}
+                                                scrollTop={this.state.scrollTop}
+                                                emotes={emotes}
+                                                onClick={this.onClickCustomEmote}
+                                                onMouseEnter={this.onHoverCustomEmote}
+                                                onMouseLeave={this.onHoverCustomEmoteEnd}
+                                            />
+                                        );
+                                        const height = EmojiPicker.categoryHeightForEmojiCount(emotes.length);
+                                        heightBefore += height;
+                                        return categoryElement;
+                                    }
+
                                     const emojis = this.memoizedDataByCategory[category.id];
                                     const categoryElement = (
                                         <Category
@@ -431,6 +515,25 @@ class EmojiPicker extends React.Component<IProps, IState> {
                             </AutoHideScrollbar>
                             {this.state.previewEmoji ? (
                                 <Preview emoji={this.state.previewEmoji} />
+                            ) : this.state.previewCustomEmote ? (
+                                <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
+                                    <div className="mx_EmojiPicker_preview_emoji">
+                                        <img
+                                            src={mediaFromMxc(this.state.previewCustomEmote.url).getSquareThumbnailHttp(24) ?? undefined}
+                                            alt={`:${this.state.previewCustomEmote.shortcode}:`}
+                                            width={24}
+                                            height={24}
+                                        />
+                                    </div>
+                                    <div className="mx_EmojiPicker_preview_text">
+                                        <div className="mx_EmojiPicker_name mx_EmojiPicker_preview_name">
+                                            {this.state.previewCustomEmote.shortcode}
+                                        </div>
+                                        <div className="mx_EmojiPicker_shortcode">
+                                            {this.state.previewCustomEmote.shortcode}
+                                        </div>
+                                    </div>
+                                </div>
                             ) : (
                                 <QuickReactions
                                     onClick={this.onClickEmoji}

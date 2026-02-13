@@ -451,6 +451,16 @@
         "spaceinvaders_description": "Sends the given message with a space themed effect",
         "spaceinvaders_message": "sends space invaders"
     },
+    "custom_emotes": {
+        "tab_title": "Custom Emotes",
+        "title": "Custom Emotes",
+        "description": "Add custom emotes for this space. Members can use these emotes in rooms within this space.",
+        "emote_list": "Emotes",
+        "no_emotes": "No custom emotes yet.",
+        "add_emote": "Add Emote",
+        "uploading": "Uploading...",
+        "click_to_rename": "Click to rename"
+    },
     "common": {
         "access_token": "Access Token",
         "accessibility": "Accessibility",
@@ -917,6 +927,7 @@
         "categories": "Categories",
         "category_activities": "Activities",
         "category_animals_nature": "Animals & Nature",
+        "category_custom": "Custom Emotes",
         "category_flags": "Flags",
         "category_food_drink": "Food & Drink",
         "category_frequently_used": "Frequently Used",

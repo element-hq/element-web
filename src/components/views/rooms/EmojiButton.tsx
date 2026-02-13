@@ -15,6 +15,7 @@ import ContextMenu, { aboveLeftOf, type MenuProps, useContextMenu } from "../../
 import EmojiPicker from "../emojipicker/EmojiPicker";
 import { CollapsibleButton } from "./CollapsibleButton";
 import { OverflowMenuContext } from "./MessageComposerButtons";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
@@ -24,6 +25,7 @@ interface IEmojiButtonProps {
 
 export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonProps): JSX.Element {
     const overflowMenuCloser = useContext(OverflowMenuContext);
+    const { room } = useScopedRoomContext("room");
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu: React.ReactElement | null = null;
@@ -36,7 +38,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
 
         contextMenu = (
             <ContextMenu {...position} onFinished={onFinished} managed={false} focusLock>
-                <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
+                <EmojiPicker onChoose={addEmoji} onFinished={onFinished} roomId={room?.roomId} />
             </ContextMenu>
         );
     }

@@ -11,6 +11,7 @@ import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import {
     AdminIcon,
     AdvancedSettingsIcon,
+    ReactionIcon,
     SettingsSolidIcon,
     VisibilityOnIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -20,6 +21,7 @@ import BaseDialog from "./BaseDialog";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import TabbedView, { Tab } from "../../structures/TabbedView";
+import SpaceSettingsEmotesTab from "../spaces/SpaceSettingsEmotesTab";
 import SpaceSettingsGeneralTab from "../spaces/SpaceSettingsGeneralTab";
 import SpaceSettingsVisibilityTab from "../spaces/SpaceSettingsVisibilityTab";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -33,6 +35,7 @@ export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",
     Visibility = "SPACE_VISIBILITY_TAB",
     Roles = "SPACE_ROLES_TAB",
+    CustomEmotes = "SPACE_CUSTOM_EMOTES_TAB",
     Advanced = "SPACE_ADVANCED_TAB",
 }
 
@@ -68,6 +71,12 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 _td("room_settings|permissions|title"),
                 <AdminIcon />,
                 <RolesRoomSettingsTab room={space} />,
+            ),
+            new Tab(
+                SpaceSettingsTab.CustomEmotes,
+                _td("custom_emotes|tab_title"),
+                <ReactionIcon />,
+                <SpaceSettingsEmotesTab matrixClient={cli} space={space} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(

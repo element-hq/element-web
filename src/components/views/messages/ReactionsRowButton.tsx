@@ -19,6 +19,7 @@ import { ReactionsRowButtonTooltipViewModel } from "../../../viewmodels/message-
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
+import { getCustomEmotesForRoom } from "../../../utils/space-emotes";
 
 export interface IProps {
     // The event we're displaying reactions for
@@ -142,6 +143,30 @@ export default class ReactionsRowButton extends React.PureComponent<IProps> {
                         height="16"
                     />
                 );
+            }
+        } else {
+            // Check if this is a custom emote shortcode like :name:
+            const shortcodeMatch = content.match(/^:([a-zA-Z0-9_-]+):$/);
+            if (shortcodeMatch) {
+                const shortcode = shortcodeMatch[1];
+                const roomId = mxEvent.getRoomId();
+                const emotes = getCustomEmotesForRoom(this.context, roomId ?? undefined);
+                const emote = emotes.get(shortcode);
+                if (emote) {
+                    const imageSrc = mediaFromMxc(emote.url).getSquareThumbnailHttp(16);
+                    if (imageSrc) {
+                        reactionContent = (
+                            <img
+                                className="mx_ReactionsRowButton_content"
+                                alt={content}
+                                title={content}
+                                src={imageSrc}
+                                width="16"
+                                height="16"
+                            />
+                        );
+                    }
+                }
             }
         }
 

@@ -1,0 +1,75 @@
+.mx_SpaceSettingsEmotesTab_description {
+    color: $secondary-content;
+    font: var(--cpd-font-body-md-regular);
+    margin-bottom: 16px;
+}
+
+.mx_SpaceSettingsEmotesTab_emoteList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.mx_SpaceSettingsEmotesTab_emoteRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    background: $panels;
+}
+
+.mx_SpaceSettingsEmotesTab_emoteImage {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.mx_SpaceSettingsEmotesTab_shortcode {
+    flex: 1;
+    font: var(--cpd-font-body-md-regular);
+}
+
+.mx_SpaceSettingsEmotesTab_shortcode_editing {
+    display: inline-flex;
+    align-items: center;
+}
+
+.mx_SpaceSettingsEmotesTab_shortcode_editable {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 4px;
+
+    &:hover {
+        background: $quinary-content;
+    }
+}
+
+.mx_SpaceSettingsEmotesTab_shortcodeEditInput {
+    font: var(--cpd-font-body-md-regular);
+    border: 1px solid $quinary-content;
+    border-radius: 4px;
+    padding: 2px 4px;
+    outline: none;
+
+    &:focus {
+        border-color: $accent;
+    }
+}
+
+.mx_SpaceSettingsEmotesTab_deleteButton {
+    flex-shrink: 0;
+}
+
+.mx_SpaceSettingsEmotesTab_noEmotes {
+    color: $tertiary-content;
+    font: var(--cpd-font-body-md-regular);
+    padding: 16px 0;
+}
+
+.mx_SpaceSettingsEmotesTab_fileInput {
+    display: none;
+}
+

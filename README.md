@@ -9,7 +9,11 @@
 
 # Blackjack Element
 
-In this branch (room_order), I changed the default what in which rooms are ordered within spaces to be based on a number code placed in square brackets in the room's topic. This works for enabling users to set the order to whatever they want, though I am aware that other Matrix clients have drag and drop room ordering, which I may want to investigate to understand how they did that and where they were storing the room ordering information. Ideally, the space owner would be able to determine how the rooms are ordered and it should appear the same for everyone who joins, like how it does on Discord. In order to get this continuity of user experience, I also made it so "Rooms" is the default option selected for what to view rather than "People" or "Unreads", as those options do not exist in Discord and it creates confusion for new users. This causes issues when looking at Home, or trying to read your DMs though, so I will need to look into how to make those work differently.
+## Changes:
+
+### Room Ordering:
+
+I changed the default what in which rooms are ordered within spaces to be based on a number code placed in square brackets in the room's topic. This works for enabling users to set the order to whatever they want, though I am aware that other Matrix clients have drag and drop room ordering, which I may want to investigate to understand how they did that and where they were storing the room ordering information. Ideally, the space owner would be able to determine how the rooms are ordered and it should appear the same for everyone who joins, like how it does on Discord. In order to get this continuity of user experience, I also made it so "Rooms" is the default option selected for what to view rather than "People" or "Unreads", as those options do not exist in Discord and it creates confusion for new users. This causes issues when looking at Home, or trying to read your DMs though, so I will need to look into how to make those work differently.
 
 To order rooms, put numbers in brackets like in the example table below:
 
@@ -22,6 +26,24 @@ To order rooms, put numbers in brackets like in the example table below:
 | 5 | ``other`` | Other stuff |
 
 In this example, perhaps ``general-2`` was created after ``gaming``, so instead of changing the number in ``gaming``'s topic, a "[0.5]" was put at the start of ``general-2``'s topic to put it between ``general`` and ``gaming``. This could be necessary if you have maybe a dozen channels and it would be too much work to change the codes for all of them. Because ``other``'s topic doesn't have a number code, it gets sorted to the end of the list.
+
+### Custom Emotes:
+
+I had tried to add the ability to add custom emotes to spaces in the same way Discord lets you add custom emoji (though I will note, generally the word "emoji" specifically means the unicode characters, it's more standard to call these custom icons "emotes", which is why I used that word here) to servers. In testing other Matrix clients, I noticed that some of them did allow custom emotes, so I tried to get it to use a similar message structure, with a content tag like:
+
+```"content": {
+    "body": ":ture:",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "<img data-mx-emoticon=\"\" src=\"mxc://matrix.org/rzFAHmpREWSZCRyQPNsdIIcO\" alt=\":ture:\" title=\":ture:\" height=\"32\" vertical-align=\"middle\" />",
+    "m.mentions": {},
+    "msgtype": "m.text"
+},```
+
+A guy on a train told me a couple weeks ago that I should try using Claude Code for coding so to experiment with that I used Claude Opus 4.6 to write much of the code for the Custom Emotes functionality, and to search for stuff for the other parts of this. I say this as a disclaimer because it certainly made some questionable decisions about file structure, and isn't ideal for production level code but this fork *is* intended to be bespoke, so I'll leave it for now to clean up later. Maybe I'll regret that, idk, blame the train guy.
+
+### Threads Button:
+
+When I was testing Element with a friend, we did a video call and I noticed that it was confusing to find my way back to the chat to send regular messages, which I had to do by clicking the "Chats" button at the top. However, the "Threads" button had an extremely similar design to the "Chats" button, and I found that this made navigating it quite unintuitive. So, I changed the "Threads" button to look more like the one Discord uses.
 
 The remaining text in this README.md is from the original Element repository:
 
