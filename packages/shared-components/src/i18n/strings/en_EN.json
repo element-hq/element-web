@@ -20,7 +20,9 @@
         "start_chat": "Start chat"
     },
     "common": {
-        "preferences": "Preferences"
+        "encryption_enabled": "Encryption enabled",
+        "preferences": "Preferences",
+        "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad"
@@ -159,6 +161,16 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignored attempt to disable encryption",
+            "disabled": "Encryption not enabled",
+            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
+            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
+            "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "unsupported": "The encryption used by this room isn't supported."
         }
     },
     "widget": {
