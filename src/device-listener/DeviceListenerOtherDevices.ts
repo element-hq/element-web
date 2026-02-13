@@ -11,7 +11,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type LogSpan } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import type DeviceListener from "../DeviceListener";
+import { type DeviceListener } from ".";
 import { getUserDeviceIds } from "../utils/crypto/deviceInfo";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../utils/device/snoozeBulkUnverifiedDeviceReminder";
 import {
@@ -23,7 +23,7 @@ import {
     showToast as showUnverifiedSessionToast,
 } from "../toasts/UnverifiedSessionToast";
 
-export default class DeviceListenerOtherDevices {
+export class DeviceListenerOtherDevices {
     /**
      * The DeviceListener launching this instance.
      */
