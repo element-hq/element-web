@@ -36,7 +36,7 @@ import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../ut
 import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
 import { Action } from "../../dispatcher/actions";
 import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
-
+import { SpaceOrderSorter } from "./skip-list/sorters/SpaceOrderSorter";
 /**
  * These are the filters passed to the room skip list.
  */
@@ -334,6 +334,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private getSorterFromSortingAlgorithm(algorithm: SortingAlgorithm, myUserId: string): Sorter {
         switch (algorithm) {
+            case SortingAlgorithm.SpaceOrder:
+                return new SpaceOrderSorter();
             case SortingAlgorithm.Alphabetic:
                 return new AlphabeticSorter();
             case SortingAlgorithm.Recency:

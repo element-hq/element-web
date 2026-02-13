@@ -31,6 +31,7 @@ export interface Sorter {
  * All the available sorting algorithms.
  */
 export const enum SortingAlgorithm {
+    SpaceOrder = "SpaceOrder",
     Unread = "Unread",
     Recency = "Recency",
     Alphabetic = "Alphabetic",

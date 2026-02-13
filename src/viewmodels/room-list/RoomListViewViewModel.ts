@@ -31,9 +31,9 @@ interface RoomListViewViewModelProps {
 }
 
 const filterKeyToIdMap: Map<FilterKey, FilterId> = new Map([
+    [FilterKey.RoomsFilter, "rooms"],
     [FilterKey.UnreadFilter, "unread"],
     [FilterKey.PeopleFilter, "people"],
-    [FilterKey.RoomsFilter, "rooms"],
     [FilterKey.FavouriteFilter, "favourite"],
     [FilterKey.MentionsFilter, "mentions"],
     [FilterKey.InvitesFilter, "invites"],
@@ -45,7 +45,7 @@ export class RoomListViewViewModel
     implements RoomListViewActions
 {
     // State tracking
-    private activeFilter: FilterKey | undefined = undefined;
+    private activeFilter: FilterKey | undefined = FilterKey.RoomsFilter;
     private roomsResult: RoomsResult;
     private lastActiveRoomIndex: number | undefined = undefined;
 
@@ -56,21 +56,22 @@ export class RoomListViewViewModel
     public constructor(props: RoomListViewViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;
 
-        // Get initial rooms
-        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
+        // Get initial rooms with RoomsFilter active by default
+        const defaultFilter = FilterKey.RoomsFilter;
+        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace([defaultFilter]);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
         const filterIds = [...filterKeyToIdMap.values()];
 
         super(props, {
-            // Initial view state - start with empty, will populate in async init
+            // Initial view state - start with RoomsFilter active
             isLoadingRooms: RoomListStoreV3.instance.isLoadingRooms,
             isRoomListEmpty: roomsResult.rooms.length === 0,
             filterIds,
-            activeFilterId: undefined,
+            activeFilterId: filterKeyToIdMap.get(defaultFilter),
             roomListState: {
                 activeRoomIndex: undefined,
                 spaceId: roomsResult.spaceId,
-                filterKeys: undefined,
+                filterKeys: [String(defaultFilter)],
             },
             roomIds: roomsResult.rooms.map((room) => room.roomId),
             canCreateRoom,
