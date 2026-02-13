@@ -69,7 +69,14 @@ interface ReactionsRowButtonViewProps {
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
     const { content, count, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
     const ariaDisabled = isDisabled ? true : undefined;
-    const disabled = isDisabled ? true : undefined;
+    const onKeyDown = isDisabled
+        ? undefined
+        : (event: React.KeyboardEvent<HTMLDivElement>): void => {
+              if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  vm.onClick();
+              }
+          };
 
     const classes = classNames("mx_AccessibleButton", "mx_ReactionsRowButton", {
         mx_ReactionsRowButton_selected: isSelected,
@@ -86,15 +93,14 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
 
     return (
         <ReactionsRowButtonTooltipView vm={vm.tooltipVm}>
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             <div
                 className={classes}
                 role="button"
                 tabIndex={0}
                 aria-label={ariaLabel}
                 aria-disabled={ariaDisabled}
-                disabled={disabled}
                 onClick={isDisabled ? undefined : vm.onClick}
+                onKeyDown={onKeyDown}
             >
                 {reactionContent}
                 <span className="mx_ReactionsRowButton_count" aria-hidden="true">
