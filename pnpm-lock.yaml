@@ -861,6 +861,9 @@ importers:
       expect:
         specifier: ^30.2.0
         version: 30.2.0
+      html-react-parser:
+        specifier: ^5.2.2
+        version: 5.2.16(@types/react@19.2.10)(react@19.2.4)
       prettier:
         specifier: ^3.6.2
         version: 3.8.1
