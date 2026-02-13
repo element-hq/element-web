@@ -19,6 +19,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     brand: "Element",
     help_url: "https://element.io/help",
     help_encryption_url: "https://element.io/help#encryption",
+    help_key_storage_url: "https://element.io/help#encryption5",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
     uisi_autorageshake_app: "element-auto-uisi",

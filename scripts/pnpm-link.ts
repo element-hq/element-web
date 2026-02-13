@@ -23,6 +23,8 @@ const configPath = join(__dirname, "..", ".link-config");
 const nodeModulesPath = join(__dirname, "..", "node_modules");
 
 try {
+    if (process.env.PLAYWRIGHT_COMMON_DOCKER) process.exit(0); // Skip in docker env
+
     const configFile = await fs.readFile(configPath, "utf-8");
     for (const line of configFile.trim().split("\n")) {
         const [dependency, path] = line.split("=");

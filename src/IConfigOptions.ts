@@ -160,6 +160,7 @@ export interface IConfigOptions {
     terms_and_conditions_links?: { url: string; text: string }[];
     help_url: string;
     help_encryption_url: string;
+    help_key_storage_url: string;
 
     latex_maths_delims?: {
         inline?: {

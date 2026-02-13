@@ -8,7 +8,7 @@ else
     version=`git describe --dirty --tags || echo unknown`
 fi
 
-pnpm clean
+pnpm nx clean
 VERSION=$version pnpm build
 
 # include the sample config in the tarball. Arguably this should be done by
