@@ -27,9 +27,48 @@ jest.mock("../../../../../src/customisations/Media", () => ({
 
 jest.mock("@element-hq/web-shared-components", () => {
     const actual = jest.requireActual("@element-hq/web-shared-components");
+    const { useViewModel } = actual;
     return {
         ...actual,
-        ReactionsRowButtonTooltipView: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+        ReactionsRowButtonView: ({ vm }: { vm: any }) => {
+            const { content, count, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
+            const className = [
+                "mx_AccessibleButton",
+                "mx_ReactionsRowButton",
+                isSelected ? "mx_ReactionsRowButton_selected" : "",
+                isDisabled ? "mx_AccessibleButton_disabled" : "",
+            ]
+                .filter(Boolean)
+                .join(" ");
+
+            return (
+                <div
+                    className={className}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={ariaLabel}
+                    aria-disabled={isDisabled ? true : undefined}
+                    onClick={isDisabled ? undefined : vm.onClick}
+                >
+                    {imageSrc ? (
+                        <img
+                            className="mx_ReactionsRowButton_content"
+                            alt={imageAlt ?? ""}
+                            src={imageSrc}
+                            width="16"
+                            height="16"
+                        />
+                    ) : (
+                        <span className="mx_ReactionsRowButton_content" aria-hidden="true">
+                            {content ?? ""}
+                        </span>
+                    )}
+                    <span className="mx_ReactionsRowButton_count" aria-hidden="true">
+                        {count}
+                    </span>
+                </div>
+            );
+        },
     };
 });
 
@@ -334,8 +373,8 @@ describe("ReactionsRowButton", () => {
     });
 
     it("falls back to text when mxc URL cannot be converted to HTTP", () => {
-        // Make mediaFromMxc return null srcHttp to simulate failed conversion
-        mockMediaFromMxc.mockReturnValueOnce({
+        // Keep returning null across constructor + setProps recomputations
+        mockMediaFromMxc.mockReturnValue({
             srcHttp: null,
         } as unknown as Media);
 
@@ -464,19 +503,9 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender } = render(<ReactionsRowButtonHost {...props} />);
 
         // Rerender with same props - setProps should not be called
-        expect(() =>
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ReactionsRowButton {...props} />
-                </MatrixClientContext.Provider>,
-            ),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} />)).not.toThrow();
     });
 });
