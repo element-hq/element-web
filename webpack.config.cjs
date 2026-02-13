@@ -64,6 +64,11 @@ try {
     // ignore - not important
 }
 
+// Get the root of a node_modules dependency the name of its import
+function getPackageRoot(dep, target = "package.json") {
+    return path.dirname(require.resolve(`${dep}${target ? "/" + target : ""}`));
+}
+
 function parseOverridesToReplacements(overrides) {
     return Object.entries(overrides).map(([oldPath, newPath]) => {
         return new webpack.NormalModuleReplacementPlugin(
@@ -125,7 +130,7 @@ module.exports = (env, argv) => {
     // Resolve the directories for the js-sdk for later use. We resolve these early, so we
     // don't have to call them over and over. We also resolve to the package.json instead of the src
     // directory, so we don't have to rely on an index.js or similar file existing.
-    const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), "..", "src");
+    const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
 
     return {
         ...development,
@@ -207,25 +212,22 @@ module.exports = (env, argv) => {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
                 // using linked dependencies.
-                "react": path.resolve(__dirname, "node_modules/react"),
-                "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+                "react": getPackageRoot("react"),
+                "react-dom": getPackageRoot("react-dom"),
 
                 // Same goes for js/react-sdk - we don't need two copies.
-                "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
-                "@matrix-org/react-sdk-module-api": path.resolve(
-                    __dirname,
-                    "node_modules/@matrix-org/react-sdk-module-api",
-                ),
+                "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
+                "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
-                "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
-                "oidc-client-ts": path.resolve(__dirname, "node_modules/oidc-client-ts"),
+                "matrix-widget-api": getPackageRoot("matrix-widget-api"),
+                "oidc-client-ts": getPackageRoot("oidc-client-ts"),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, "webapp"),
 
                 // Make shared-components imports resolve to EW deps
-                "counterpart": path.resolve(__dirname, "node_modules/counterpart"),
-                "@vector-im/compound-web": path.resolve(__dirname, "node_modules/@vector-im/compound-web"),
+                "counterpart": getPackageRoot("counterpart"),
+                "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
             },
             fallback: {
                 // Mock out the NodeFS module: The opus decoder imports this wrongly.
@@ -688,7 +690,7 @@ module.exports = (env, argv) => {
                     // Element Call embedded widget
                     {
                         from: "**",
-                        context: path.resolve(__dirname, "node_modules/@element-hq/element-call-embedded/dist"),
+                        context: path.join(getPackageRoot("@element-hq/element-call-embedded"), "dist"),
                         to: path.join(__dirname, "webapp", "widgets", "element-call"),
                     },
                     // Mobile guide assets
