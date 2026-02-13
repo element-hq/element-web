@@ -101,6 +101,8 @@ export default defineConfig({
                     storybookVis({
                         // 3px of difference allowed before marking as failed
                         failureThreshold: 3,
+                        // When running in CI=1 mode, set the platform to `linux` as that is the platform where the browser-in-docker is running
+                        snapshotRootDir: ({ ci, platform }) => `__vis__/${ci ? "linux" : platform}`,
                     }),
                 ],
                 test: {
@@ -110,7 +112,16 @@ export default defineConfig({
                         headless: true,
                         provider: playwright({
                             contextOptions: commonContextOptions,
-                            launchOptions: commonLaunchOptions,
+                            launchOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT ? undefined : commonLaunchOptions,
+                            connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
+                                ? {
+                                      wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
+                                      exposeNetwork: "<loopback>",
+                                      headers: {
+                                          "x-playwright-launch-options": JSON.stringify(commonLaunchOptions),
+                                      },
+                                  }
+                                : undefined,
                         }),
                         instances: [{ browser: "chromium" }],
                     },
