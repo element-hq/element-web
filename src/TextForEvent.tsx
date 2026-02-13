@@ -345,35 +345,6 @@ function textForGuestAccessEvent(ev: MatrixEvent): (() => string) | null {
     }
 }
 
-function textForServerACLEvent(ev: MatrixEvent): (() => string) | null {
-    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    const prevContent = ev.getPrevContent();
-    const current = ev.getContent();
-    const prev = {
-        deny: Array.isArray(prevContent.deny) ? prevContent.deny : [],
-        allow: Array.isArray(prevContent.allow) ? prevContent.allow : [],
-        allow_ip_literals: prevContent.allow_ip_literals !== false,
-    };
-
-    let getText: () => string;
-    if (prev.deny.length === 0 && prev.allow.length === 0) {
-        getText = () => _t("timeline|m.room.server_acl|set", { senderDisplayName });
-    } else {
-        getText = () => _t("timeline|m.room.server_acl|changed", { senderDisplayName });
-    }
-
-    if (!Array.isArray(current.allow)) {
-        current.allow = [];
-    }
-
-    // If we know for sure everyone is banned, mark the room as obliterated
-    if (current.allow.length === 0) {
-        return () => getText() + " " + _t("timeline|m.room.server_acl|all_servers_banned");
-    }
-
-    return getText;
-}
-
 function textForMessageEvent(ev: MatrixEvent, client: MatrixClient): (() => string) | null {
     if (isLocationEvent(ev)) {
         return textForLocationEvent(ev);
@@ -909,7 +880,6 @@ const stateHandlers: IHandlers = {
     [EventType.RoomHistoryVisibility]: textForHistoryVisibilityEvent,
     [EventType.RoomPowerLevels]: textForPowerEvent,
     [EventType.RoomPinnedEvents]: textForPinnedEvent,
-    [EventType.RoomServerAcl]: textForServerACLEvent,
     [EventType.RoomTombstone]: textForTombstoneEvent,
     [EventType.RoomJoinRules]: textForJoinRulesEvent,
     [EventType.RoomGuestAccess]: textForGuestAccessEvent,

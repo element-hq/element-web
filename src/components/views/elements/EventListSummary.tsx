@@ -64,7 +64,6 @@ enum TransitionType {
     ChangedName = "changed_name",
     ChangedAvatar = "changed_avatar",
     NoChange = "no_change",
-    ServerAcl = "server_acl",
     ChangedPins = "pinned_messages",
     MessageRemoved = "message_removed",
     HiddenEvent = "hidden_event",
@@ -441,12 +440,6 @@ export default class EventListSummary extends React.Component<Props, State> {
                         ? _t("timeline|summary|no_change_multiple", { severalUsers: "", count })
                         : _t("timeline|summary|no_change", { oneUser: "", count });
                 break;
-            case TransitionType.ServerAcl:
-                res =
-                    userCount > 1
-                        ? _t("timeline|summary|server_acls_multiple", { severalUsers: "", count })
-                        : _t("timeline|summary|server_acls", { oneUser: "", count });
-                break;
             case TransitionType.ChangedPins:
                 res =
                     userCount > 1
@@ -514,9 +507,6 @@ export default class EventListSummary extends React.Component<Props, State> {
                     return TransitionType.InviteWithdrawal;
                 }
                 return TransitionType.Invited;
-
-            case EventType.RoomServerAcl:
-                return TransitionType.ServerAcl;
 
             case EventType.RoomPinnedEvents:
                 return TransitionType.ChangedPins;
