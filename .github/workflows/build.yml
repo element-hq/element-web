@@ -12,6 +12,7 @@ concurrency:
 env:
     # This must be set for fetchdep.sh to get the right branch
     PR_NUMBER: ${{ github.event.pull_request.number }}
+    NX_DEFAULT_OUTPUT_STYLE: static
 permissions: {} # No permissions required
 jobs:
     build:

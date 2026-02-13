@@ -9,7 +9,27 @@
 
 # Blackjack Element
 
-In this branch (custom_emotes), I had tried to add the ability to add custom emotes to spaces in the same way Discord lets you add custom emoji (though I will note, generally the word "emoji" specifically means the unicode characters, it's more standard to call these custom icons "emotes", which is why I used that word here) to servers. In testing other Matrix clients, I noticed that some of them did allow custom emotes, so I tried to get it to use a similar message structure, with a content tag like:
+## Changes:
+
+### Room Ordering:
+
+I changed the default what in which rooms are ordered within spaces to be based on a number code placed in square brackets in the room's topic. This works for enabling users to set the order to whatever they want, though I am aware that other Matrix clients have drag and drop room ordering, which I may want to investigate to understand how they did that and where they were storing the room ordering information. Ideally, the space owner would be able to determine how the rooms are ordered and it should appear the same for everyone who joins, like how it does on Discord. In order to get this continuity of user experience, I also made it so "Rooms" is the default option selected for what to view rather than "People" or "Unreads", as those options do not exist in Discord and it creates confusion for new users. This causes issues when looking at Home, or trying to read your DMs though, so I will need to look into how to make those work differently.
+
+To order rooms, put numbers in brackets like in the example table below:
+
+| Order | Room Name | Room Topic |
+|-------|-----------|------------|
+| 1 | ``rules`` | [-1] Guidelines for the space |
+| 2 | ``general`` | [0] For general discussion of anything |
+| 3 | ``general-2`` | [0.5] Alternate general chat created after the first |
+| 4 | ``gaming`` | [1] Video games |
+| 5 | ``other`` | Other stuff |
+
+In this example, perhaps ``general-2`` was created after ``gaming``, so instead of changing the number in ``gaming``'s topic, a "[0.5]" was put at the start of ``general-2``'s topic to put it between ``general`` and ``gaming``. This could be necessary if you have maybe a dozen channels and it would be too much work to change the codes for all of them. Because ``other``'s topic doesn't have a number code, it gets sorted to the end of the list.
+
+### Custom Emotes:
+
+I had tried to add the ability to add custom emotes to spaces in the same way Discord lets you add custom emoji (though I will note, generally the word "emoji" specifically means the unicode characters, it's more standard to call these custom icons "emotes", which is why I used that word here) to servers. In testing other Matrix clients, I noticed that some of them did allow custom emotes, so I tried to get it to use a similar message structure, with a content tag like:
 
 ```"content": {
     "body": ":ture:",
@@ -19,7 +39,11 @@ In this branch (custom_emotes), I had tried to add the ability to add custom emo
     "msgtype": "m.text"
 },```
 
-Much of the code was writted using Claude Opus 4.6, which certainly made some questionable decisions about file structure, and isn't ideal for production level code but this fork *is* intended to be bespoke.
+A guy on a train told me a couple weeks ago that I should try using Claude Code for coding so to experiment with that I used Claude Opus 4.6 to write much of the code for the Custom Emotes functionality, and to search for stuff for the other parts of this. I say this as a disclaimer because it certainly made some questionable decisions about file structure, and isn't ideal for production level code but this fork *is* intended to be bespoke, so I'll leave it for now to clean up later. Maybe I'll regret that, idk, blame the train guy.
+
+### Threads Button:
+
+When I was testing Element with a friend, we did a video call and I noticed that it was confusing to find my way back to the chat to send regular messages, which I had to do by clicking the "Chats" button at the top. However, the "Threads" button had an extremely similar design to the "Chats" button, and I found that this made navigating it quite unintuitive. So, I changed the "Threads" button to look more like the one Discord uses.
 
 The remaining text in this README.md is from the original Element repository:
 
@@ -241,3 +265,6 @@ This software is multi licensed by New Vector Ltd (Element). It can be used eith
 
 (3) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to).
 Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.
+
+Please contact [licensing@element.io](mailto:licensing@element.io) to purchase
+an Element commercial license for this software.

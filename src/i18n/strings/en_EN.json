@@ -3048,11 +3048,13 @@
             "connection_section": "Connection",
             "dialog_title": "<strong>Settings:</strong> Voice & Video",
             "echo_cancellation": "Echo cancellation",
+            "echo_cancellation_description": "Removes echo from your microphone input during calls. This setting also applies to Element Call.",
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
             "mirror_local_feed": "Mirror local video feed",
             "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
             "noise_suppression": "Noise suppression",
+            "noise_suppression_description": "Reduces background noise in your microphone input during calls. This setting also applies to Element Call.",
             "request_permissions": "Request media permissions",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
@@ -3542,11 +3544,6 @@
             "changed": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 All servers are banned from participating! This room can no longer be used.",
-            "changed": "%(senderDisplayName)s changed the server ACLs for this room.",
-            "set": "%(senderDisplayName)s set the server ACLs for this room."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.",
             "sent": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room."
@@ -3754,14 +3751,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sleft and rejoined",
                 "other": "%(severalUsers)sleft and rejoined %(count)s times"
-            },
-            "server_acls": {
-                "one": "%(oneUser)schanged the server ACLs",
-                "other": "%(oneUser)schanged the server ACLs %(count)s times"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)schanged the server ACLs",
-                "other": "%(severalUsers)schanged the server ACLs %(count)s times"
             },
             "unbanned": {
                 "one": "was unbanned",

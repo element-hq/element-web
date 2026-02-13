@@ -172,6 +172,9 @@ export class RoomListHeaderViewModel
     public sort = (option: SortOption): void => {
         let sortingAlgorithm: SortingAlgorithm;
         switch (option) {
+            case "space-order":
+                sortingAlgorithm = SortingAlgorithm.SpaceOrder;
+                break;
             case "alphabetical":
                 sortingAlgorithm = SortingAlgorithm.Alphabetic;
                 break;
@@ -206,6 +209,9 @@ function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixCli
 
     let activeSortOption: SortOption;
     switch (sortingAlgorithm) {
+        case SortingAlgorithm.SpaceOrder:
+            activeSortOption = "space-order";
+            break;
         case SortingAlgorithm.Alphabetic:
             activeSortOption = "alphabetical";
             break;

@@ -43,3 +43,8 @@ storybook-static
 *.tsbuildinfo
 
 /.link-config
+
+.nx/cache
+.nx/workspace-data
+
+.pnpm-store

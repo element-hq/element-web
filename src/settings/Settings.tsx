@@ -1218,7 +1218,7 @@ export const SETTINGS: Settings = {
     },
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],
-        default: SortingAlgorithm.Recency,
+        default: SortingAlgorithm.SpaceOrder,
     },
     "RoomList.showMessagePreview": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

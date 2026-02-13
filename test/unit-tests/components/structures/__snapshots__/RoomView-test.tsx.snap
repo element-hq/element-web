@@ -212,7 +212,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
       </div>
       <div
-        aria-labelledby="_r_ti_"
+        aria-labelledby="_r_1c3_"
         class="_banner_17clp_8"
         data-type="critical"
         role="status"
@@ -238,7 +238,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         >
           <p
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 _container_mqidv_1"
-            id="_r_ti_"
+            id="_r_1c3_"
           >
             Could not start a chat with this user
           </p>
@@ -417,7 +417,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_qm_"
+                aria-labelledby="_r_197_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
