@@ -4,12 +4,15 @@
 
 .mx_Stickers_content_container {
     overflow: hidden;
-    height: 300px;
+    /* PersistentElement proxy div is 0 height otherwise */
+    div {
+        height: 100%;
+    }
 }
 
 #mx_persistedElement_stickerPicker {
     .mx_AppTileFullWidth {
-        height: unset;
+        height: 100%;
         box-sizing: border-box;
         border-left: none;
         border-right: none;
@@ -18,11 +21,6 @@
 
     .mx_AppTileMenuBar {
         padding: 0;
-    }
-
-    iframe {
-        /* Sticker picker depends on the fixed height previously used for all tiles */
-        height: 283px; /* height of the popout minus the AppTile menu bar */
     }
 }
 
@@ -43,4 +41,13 @@
     display: inline;
     cursor: pointer;
     color: $accent;
+}
+
+.mx_Stickers_resizeHandle {
+    position: absolute;
+    left: -8px;
+    top: -8px;
+    width: 16px;
+    height: 16px;
+    cursor: se-resize;
 }
