@@ -28,6 +28,6 @@
         "./test/**/*.ts",
         "./test/**/*.tsx",
         "./scripts/*.ts",
-        "./declaration.d.ts"
+        "./@types/*.d.ts"
     ]
 }
