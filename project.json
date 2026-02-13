@@ -30,7 +30,7 @@
             "outputs": ["{projectRoot}/res/css/_components.pcss"]
         },
         "build": {
-            "command": "webpack-cli --progress --mode production {args}",
+            "command": "webpack-cli --progress --mode production",
             "outputs": ["{projectRoot}/webapp"]
         },
         "start:i18n": {

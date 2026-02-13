@@ -41,7 +41,7 @@
         "test:unit": "vitest --project=unit",
         "test:storybook": "pnpm build:doc && vitest --project=storybook",
         "test:storybook:update": "CI=1 playwright-screenshots-experimental pnpm vitest --run --update --project=storybook",
-        "build": "vite build",
+        "build": "nx build",
         "prepack": "pnpm run build",
         "storybook": "storybook dev -p 6007",
         "build:storybook": "pnpm build:doc && storybook build && node scripts/storybook-build-i18n.ts",
