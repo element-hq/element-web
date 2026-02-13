@@ -1648,6 +1648,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return;
             }
 
+            // Re-apply theme now that account data (including custom_themes) is loaded, otherwise we might end up with the wrong theme applied if the user has custom themes enabled
+            setTheme();
+
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
