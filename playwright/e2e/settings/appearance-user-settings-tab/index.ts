@@ -36,6 +36,9 @@ class Helpers {
         name: "Custom theme",
         isDark: false,
         colors: {},
+        compound: {
+            "--cpd-color-bg-canvas-default": "tomato",
+        },
     };
 
     constructor(
@@ -48,6 +51,13 @@ class Helpers {
      */
     openAppearanceTab() {
         return this.app.settings.openUserSettings("Appearance");
+    }
+
+    /**
+     * Close the appearance tab
+     */
+    closeAppearanceTab() {
+        return this.app.settings.closeDialog();
     }
 
     /**
