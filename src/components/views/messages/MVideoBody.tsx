@@ -326,6 +326,10 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
                         // Disable downloading as it doesn't work with e2ee video,
                         // users should use the dedicated Download button in the Message Action Bar
                         controlsList="nodownload"
+                        // The video uses a cross-origin request.
+                        // Firefox explicitly bypasses services workers for crossorigin
+                        // video elements without crossorigin attribute.
+                        crossOrigin="anonymous"
                         preload={preload}
                         muted={autoplay}
                         autoPlay={autoplay}

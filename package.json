@@ -34,7 +34,7 @@
         "test": "nx test:unit element-web",
         "test:playwright": "playwright test",
         "test:playwright:open": "pnpm test:playwright --ui",
-        "test:playwright:screenshots": "playwright-screenshots --project=Chrome",
+        "test:playwright:screenshots": "playwright-screenshots-experimental pnpm playwright test --update-snapshots --project=Chrome --grep @screenshot",
         "coverage": "pnpm test --coverage",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
         "postinstall": "node scripts/pnpm-link.ts"
@@ -150,6 +150,7 @@
         "@casualbot/jest-sonar-reporter": "2.5.0",
         "@element-hq/element-call-embedded": "0.16.3",
         "@element-hq/element-web-playwright-common": "catalog:",
+        "@element-hq/element-web-playwright-common-local": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",
         "@nx/jest": "^22.5.0",

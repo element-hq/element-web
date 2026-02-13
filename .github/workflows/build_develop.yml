@@ -9,6 +9,8 @@ on:
 concurrency:
     group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
     cancel-in-progress: true
+env:
+    NX_DEFAULT_OUTPUT_STYLE: static
 permissions: {}
 jobs:
     build:
