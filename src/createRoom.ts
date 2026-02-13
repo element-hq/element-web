@@ -16,7 +16,7 @@ import {
     RoomCreateTypeField,
     RoomType,
     type ICreateRoomOpts,
-    type HistoryVisibility,
+    HistoryVisibility,
     JoinRule,
     Preset,
     RestrictedAllowType,
@@ -294,11 +294,24 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         }
     }
 
-    if (opts.historyVisibility) {
+    // Set history visibility to "invited" for DMs and non-public rooms unless explicitly overridden
+    // This ensures that room history is only visible to invited members by default
+    let historyVisibility = opts.historyVisibility;
+    if (!historyVisibility) {
+        // Determine if the room will be public based on the join rule or preset
+        const isPublicRoom = opts.joinRule === JoinRule.Public || createOpts.preset === Preset.PublicChat;
+
+        // For DMs and non-public rooms, set history visibility to "invited"
+        if (opts.dmUserId || !isPublicRoom) {
+            historyVisibility = HistoryVisibility.Invited;
+        }
+    }
+
+    if (historyVisibility) {
         createOpts.initial_state.push({
             type: EventType.RoomHistoryVisibility,
             content: {
-                history_visibility: opts.historyVisibility,
+                history_visibility: historyVisibility,
             },
         });
     }

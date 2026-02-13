@@ -11,6 +11,7 @@ import { mocked, type Mocked } from "jest-mock";
 import {
     type MatrixClient,
     type Device,
+    HistoryVisibility,
     Preset,
     RoomType,
     JoinRule,
@@ -58,7 +59,10 @@ describe("createRoom", () => {
         expect(client.createRoom).toHaveBeenCalledWith({
             preset: "private_chat",
             visibility: "private",
-            initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            initial_state: [
+                { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+            ],
         });
     });
 
@@ -77,6 +81,7 @@ describe("createRoom", () => {
                         algorithm: "m.megolm.v1.aes-sha2",
                     },
                 },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
         });
     });
@@ -104,6 +109,7 @@ describe("createRoom", () => {
                         "io.element.msc4362.encrypt_state_events": true,
                     },
                 },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
         });
@@ -146,6 +152,7 @@ describe("createRoom", () => {
                         "io.element.msc4362.encrypt_state_events": true,
                     },
                 },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
         });
@@ -178,6 +185,7 @@ describe("createRoom", () => {
                         "io.element.msc4362.encrypt_state_events": true,
                     },
                 },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
         });
@@ -218,6 +226,7 @@ describe("createRoom", () => {
             initial_state: [
                 { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
                 { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
+                { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
         });
     });
@@ -350,6 +359,31 @@ describe("createRoom", () => {
         expect(client.createRoom).toHaveBeenCalledWith(
             expect.not.objectContaining({
                 invite: expect.any(Array),
+            }),
+        );
+    });
+
+    it("should set history visibility to invited for DMs", async () => {
+        await createRoom(client, { dmUserId: "@bob:example.org" });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
+                ]),
+            }),
+        );
+    });
+
+    it("should respect an explicit history visibility override", async () => {
+        await createRoom(client, {
+            createOpts: { preset: Preset.PrivateChat },
+            historyVisibility: HistoryVisibility.Shared,
+        });
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    { type: "m.room.history_visibility", content: { history_visibility: "shared" } },
+                ]),
             }),
         );
     });
