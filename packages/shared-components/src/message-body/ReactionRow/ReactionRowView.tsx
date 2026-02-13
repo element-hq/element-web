@@ -6,8 +6,10 @@
  */
 
 import React, { type JSX, type ReactNode } from "react";
+import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
+import styles from "./ReactionRow.module.css";
 
 export interface ReactionRowViewSnapshot {
     /**
@@ -57,12 +59,18 @@ export function ReactionRowView({ vm }: Readonly<ReactionRowViewProps>): JSX.Ele
     }
 
     return (
-        <div className="mx_ReactionsRow" role="toolbar" aria-label={toolbarAriaLabel}>
+        <div className={classNames("mx_ReactionsRow", styles.reactionRow)} role="toolbar" aria-label={toolbarAriaLabel}>
             {items}
             {showAllVisible && (
                 <button
                     type="button"
-                    className="mx_ReactionsRow_showAll mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+                    className={classNames(
+                        "mx_ReactionsRow_showAll",
+                        "mx_AccessibleButton",
+                        "mx_AccessibleButton_hasKind",
+                        "mx_AccessibleButton_kind_link_inline",
+                        styles.showAllButton,
+                    )}
                     onClick={vm.onShowAllClick}
                 >
                     {showAllLabel}

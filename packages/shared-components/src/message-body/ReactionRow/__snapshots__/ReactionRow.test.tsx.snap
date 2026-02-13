@@ -6,7 +6,7 @@ exports[`ReactionRowView > renders the default state 1`] = `
 <div>
   <div
     aria-label="Reactions"
-    class="mx_ReactionsRow"
+    class="mx_ReactionsRow reactionRow"
     role="toolbar"
   >
     <button>
@@ -26,7 +26,7 @@ exports[`ReactionRowView > renders with show-all visible 1`] = `
 <div>
   <div
     aria-label="Reactions"
-    class="mx_ReactionsRow"
+    class="mx_ReactionsRow reactionRow"
     role="toolbar"
   >
     <button>
@@ -36,7 +36,7 @@ exports[`ReactionRowView > renders with show-all visible 1`] = `
       🎉 2
     </button>
     <button
-      class="mx_ReactionsRow_showAll mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+      class="mx_ReactionsRow_showAll mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline showAllButton"
       type="button"
     >
       Show all
