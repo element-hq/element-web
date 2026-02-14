@@ -20,6 +20,29 @@ import { stubClient } from "../../../../test-utils";
 
 jest.mock("../../../../../src/utils/FileDownloader");
 
+jest.mock("../../../../../src/accessibility/KeyboardShortcuts", () => ({
+    KeyBindingAction: {
+        Escape: "escape",
+        Save: "save",
+    },
+}));
+
+jest.mock("../../../../../src/KeyBindingsManager", () => ({
+    getKeyBindingsManager: () => ({
+        getAccessibilityAction: (ev: any) => {
+            // Preserve existing Ctrl+S behavior
+            if (ev?.ctrlKey && (ev?.key === "s" || ev?.code === "KeyS")) return "save";
+            // For other keys, don't map to an accessibility action
+            return undefined;
+        },
+    }),
+}));
+
+jest.mock("../../../../../src/components/views/avatars/MemberAvatar", () => ({
+    __esModule: true,
+    default: () => <div data-testid="member-avatar" />,
+}));
+
 describe("<ImageView />", () => {
     beforeEach(() => {
         jest.resetAllMocks();
@@ -115,5 +138,141 @@ describe("<ImageView />", () => {
                 }),
             ),
         );
+    });
+
+    it("renders prev/next buttons and calls callbacks on click", () => {
+        const onPrev = jest.fn();
+        const onNext = jest.fn();
+
+        const { container } = render(
+            <ImageView src="https://example.com/image.png" onFinished={jest.fn()} onPrev={onPrev} onNext={onNext} />,
+        );
+
+        const prevBtn = container.querySelector(".mx_ImageView_nav_prev") as HTMLElement;
+        const nextBtn = container.querySelector(".mx_ImageView_nav_next") as HTMLElement;
+
+        expect(prevBtn).toBeTruthy();
+        expect(nextBtn).toBeTruthy();
+
+        fireEvent.click(nextBtn);
+        expect(onNext).toHaveBeenCalledTimes(1);
+
+        fireEvent.click(prevBtn);
+        expect(onPrev).toHaveBeenCalledTimes(1);
+    });
+
+    it("navigates with ArrowLeft/ArrowRight keys when hasPrev/hasNext", () => {
+        const onPrev = jest.fn();
+        const onNext = jest.fn();
+
+        const { container, rerender } = render(
+            <ImageView
+                src="https://example.com/image.png"
+                onFinished={jest.fn()}
+                onPrev={onPrev}
+                onNext={undefined} // no "next" available initially
+            />,
+        );
+
+        const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
+        expect(dialog).toBeTruthy();
+
+        fireEvent.keyDown(dialog, { key: "ArrowLeft" });
+        expect(onPrev).toHaveBeenCalledTimes(1);
+
+        fireEvent.keyDown(dialog, { key: "ArrowRight" });
+        expect(onNext).toHaveBeenCalledTimes(0);
+
+        rerender(
+            <ImageView
+                src="https://example.com/image.png"
+                onFinished={jest.fn()}
+                onPrev={onPrev}
+                onNext={onNext} // now "next" is available
+            />,
+        );
+
+        fireEvent.keyDown(dialog, { key: "ArrowRight" });
+        expect(onNext).toHaveBeenCalledTimes(1);
+    });
+
+    it("resets interaction state when navigating to a different mxEvent", () => {
+        const setStateSpy = jest.spyOn(ImageView.prototype as any, "setState");
+
+        // Provide thumbnailInfo so the translation calculation path is exercised too
+        const thumb = { positionX: 10, positionY: 10, width: 20, height: 20 };
+
+        const evA = new MatrixEvent({
+            event_id: "$a",
+            type: "m.room.message",
+            content: { msgtype: "m.image", body: "a.png", url: "mxc://test.dummy/a" },
+            origin_server_ts: 0,
+            room_id: "!room:server",
+        });
+        const evB = new MatrixEvent({
+            event_id: "$b",
+            type: "m.room.message",
+            content: { msgtype: "m.image", body: "b.png", url: "mxc://test.dummy/b" },
+            origin_server_ts: 0,
+            room_id: "!room:server",
+        });
+
+        const { rerender } = render(
+            <ImageView
+                src="https://example.com/image.png"
+                onFinished={jest.fn()}
+                mxEvent={evA}
+                thumbnailInfo={thumb}
+            />,
+        );
+
+        rerender(
+            <ImageView
+                src="https://example.com/image.png"
+                onFinished={jest.fn()}
+                mxEvent={evB}
+                thumbnailInfo={thumb}
+            />,
+        );
+
+        expect(setStateSpy).toHaveBeenCalled();
+
+        setStateSpy.mockRestore();
+    });
+
+    it("zooms in and out via toolbar buttons after image load", async () => {
+        const { container, getByRole } = render(
+            <ImageView src="https://example.com/image.png" onFinished={jest.fn()} />,
+        );
+
+        const wrapper = container.querySelector(".mx_ImageView_image_wrapper") as HTMLDivElement;
+        const img = container.querySelector("img.mx_ImageView_image") as HTMLImageElement;
+
+        expect(wrapper).toBeTruthy();
+        expect(img).toBeTruthy();
+
+        Object.defineProperty(wrapper, "clientWidth", { value: 800, configurable: true });
+        Object.defineProperty(wrapper, "clientHeight", { value: 600, configurable: true });
+
+        Object.defineProperty(img, "naturalWidth", { value: 1600, configurable: true });
+        Object.defineProperty(img, "naturalHeight", { value: 1200, configurable: true });
+
+        fireEvent.load(img);
+
+        const zoomIn = getByRole("button", { name: "Zoom in" });
+        const zoomOut = getByRole("button", { name: "Zoom out" });
+
+        const initialTransform = img.style.transform;
+        expect(initialTransform).toContain("scale(");
+
+        fireEvent.click(zoomIn);
+        const afterZoomIn = img.style.transform;
+        expect(afterZoomIn).toContain("scale(");
+        expect(afterZoomIn).not.toEqual(initialTransform);
+
+        fireEvent.click(zoomOut);
+        const afterZoomOut = img.style.transform;
+        expect(afterZoomOut).toContain("scale(");
+        expect(afterZoomOut).not.toEqual(afterZoomIn);
     });
 });

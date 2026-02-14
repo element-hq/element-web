@@ -19,6 +19,8 @@ import {
     RotateRightIcon,
     ZoomInIcon,
     ZoomOutIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -37,7 +39,7 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { presentableTextForFile } from "../../../utils/FileUtils";
-import AccessibleButton from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
 
 // Max scale to keep gaps around the image
@@ -63,6 +65,10 @@ interface IProps {
     width?: number; // width of the image src in pixels
     height?: number; // height of the image src in pixels
     fileSize?: number; // size of the image src in bytes
+    onPrev?(): void; // navigate to the previous image, if available
+    onNext?(): void; // navigate to the next image, if available
+    /*hasPrev?: boolean;
+    hasNext?: boolean;*/
 
     // the event (if any) that the Image is displaying. Used for event-specific stuff like
     // redactions, senders, timestamps etc.  Other descriptors are taken from the explicit
@@ -135,6 +141,14 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private animatingLoading = false;
     private imageIsLoaded = false;
+    private didAnimateFromThumbnail = false;
+    private lastThumbnailSignature: string | null = null;
+
+    private getThumbnailSignature(): string | null {
+        const t = this.props.thumbnailInfo;
+        if (!t) return null;
+        return `${t.positionX},${t.positionY},${t.width},${t.height}`;
+    }
 
     public componentDidMount(): void {
         // We have to use addEventListener() because the listener
@@ -144,6 +158,57 @@ export default class ImageView extends React.Component<IProps, IState> {
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current?.addEventListener("load", this.imageLoaded);
+
+        // Capture initial thumbnail signature (if any)
+        this.lastThumbnailSignature = this.getThumbnailSignature();
+    }
+
+    public componentDidUpdate(prevProps: IProps): void {
+        const prevEventId = prevProps.mxEvent?.getId() ?? null;
+        const nextEventId = this.props.mxEvent?.getId() ?? null;
+
+        // Only reset interaction state when the event changes through navigation,
+        // not when the src changes for the same event.
+        const navigatedToDifferentEvent = prevEventId !== nextEventId;
+
+        if (navigatedToDifferentEvent) {
+            this.imageIsLoaded = false;
+            this.animatingLoading = false;
+
+            // Allow thumbnail animation again for the new initial event if it has thumbnailInfo.
+            this.didAnimateFromThumbnail = false;
+
+            // Reset the thumbnail signature baseline for the new event.
+            this.lastThumbnailSignature = this.getThumbnailSignature();
+
+            // Reset panning/zoom/rotation so the new image doesn't inherit the previous state.
+            // Use the constructor-style initial translation if we have thumbnailInfo; otherwise 0.
+            const { thumbnailInfo } = this.props;
+            let translationX = 0;
+            let translationY = 0;
+
+            if (thumbnailInfo) {
+                translationX = thumbnailInfo.positionX + thumbnailInfo.width / 2 - UIStore.instance.windowWidth / 2;
+                translationY =
+                    thumbnailInfo.positionY +
+                    thumbnailInfo.height / 2 -
+                    UIStore.instance.windowHeight / 2 -
+                    getPanelHeight() / 2;
+            }
+
+            this.setState({
+                translationX,
+                translationY,
+                zoom: 0,
+                rotation: 0,
+            });
+        }
+
+        // If thumbnailInfo changes, refresh our signature
+        const newSig = this.getThumbnailSignature();
+        if (newSig !== this.lastThumbnailSignature) {
+            this.lastThumbnailSignature = newSig;
+        }
     }
 
     public componentWillUnmount(): void {
@@ -157,22 +222,39 @@ export default class ImageView extends React.Component<IProps, IState> {
         // First, we calculate the zoom, so that the image has the same size as
         // the thumbnail
         const { thumbnailInfo } = this.props;
-        if (thumbnailInfo?.width) {
+        const sig = this.getThumbnailSignature();
+        const canAnimateFromThumb =
+            !!thumbnailInfo?.width &&
+            !this.didAnimateFromThumbnail &&
+            // if signature exists, ensure we only animate for the "current" one
+            (sig === null || sig === this.lastThumbnailSignature);
+
+        if (canAnimateFromThumb) {
+            // Start at thumbnail zoom
+            this.didAnimateFromThumbnail = true;
+
             this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
+
+            // Once the zoom is set, we the image is considered loaded and we can
+            // start animating it into the center of the screen
+            this.imageIsLoaded = true;
+            this.animatingLoading = true;
+            this.setZoomAndRotation();
+            this.setState({
+                translationX: 0,
+                translationY: 0,
+            });
+
+            // Once the position is set, there is no need to animate anymore
+            this.animatingLoading = false;
+            return;
         }
-
-        // Once the zoom is set, we the image is considered loaded and we can
-        // start animating it into the center of the screen
+        // Navigating between images without doing the thumbnail animation.
         this.imageIsLoaded = true;
-        this.animatingLoading = true;
-        this.setZoomAndRotation();
-        this.setState({
-            translationX: 0,
-            translationY: 0,
-        });
-
-        // Once the position is set, there is no need to animate anymore
         this.animatingLoading = false;
+
+        // Ensure minZoom/maxZoom are correct for this image and current wrapper size
+        this.setZoomAndRotation();
     };
 
     private recalculateZoom = (): void => {
@@ -301,6 +383,24 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        // Don't steal keys from text inputs, etc
+        const target = ev.target as HTMLElement | null;
+        const tag = target?.tagName?.toLowerCase();
+        if (tag === "input" || tag === "textarea" || (target as any)?.isContentEditable) return;
+
+        // Navigate images with arrow keys
+        if (ev.key === "ArrowLeft" && this.props.onPrev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this.props.onPrev();
+            return;
+        }
+        if (ev.key === "ArrowRight" && this.props.onNext) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this.props.onNext();
+            return;
+        }
         switch (action) {
             case KeyBindingAction.Escape:
                 ev.stopPropagation();
@@ -407,6 +507,20 @@ export default class ImageView extends React.Component<IProps, IState> {
             this.initY = 0;
         }
         this.setState({ moving: false });
+    };
+
+    private readonly stopPropagation = (e: ButtonEvent): void => {
+        e.stopPropagation();
+    };
+
+    private readonly onPrevClick = (e: ButtonEvent): void => {
+        e.stopPropagation();
+        this.props.onPrev?.();
+    };
+
+    private readonly onNextClick = (e: ButtonEvent): void => {
+        e.stopPropagation();
+        this.props.onNext?.();
     };
 
     private renderContextMenu(): JSX.Element {
@@ -593,6 +707,26 @@ export default class ImageView extends React.Component<IProps, IState> {
                     onMouseUp={this.onEndMoving}
                     onMouseLeave={this.onEndMoving}
                 >
+                    {this.props.onPrev && (
+                        <AccessibleButton
+                            className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_prev"
+                            title={_t("action|back")}
+                            onMouseDown={this.stopPropagation}
+                            onClick={this.onPrevClick}
+                        >
+                            <ChevronLeftIcon />
+                        </AccessibleButton>
+                    )}
+                    {this.props.onNext && (
+                        <AccessibleButton
+                            className="mx_ImageView_button mx_ImageView_nav mx_ImageView_nav_next"
+                            title={_t("action|next")}
+                            onMouseDown={this.stopPropagation}
+                            onClick={this.onNextClick}
+                        >
+                            <ChevronRightIcon />
+                        </AccessibleButton>
+                    )}
                     <img
                         src={this.props.src}
                         style={style}
