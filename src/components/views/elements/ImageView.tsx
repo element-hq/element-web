@@ -20,13 +20,13 @@ import {
     ZoomInIcon,
     ZoomOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, MessageTimestampView } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveLeftOf } from "../../structures/ContextMenu";
-import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -39,6 +39,10 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import AccessibleButton from "./AccessibleButton";
 import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
+import {
+    MessageTimestampViewModel,
+    type MessageTimestampViewModelProps,
+} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -465,7 +469,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             const senderName = mxEvent.sender?.name ?? mxEvent.getSender();
             const sender = <div className="mx_ImageView_info_sender">{senderName}</div>;
             const messageTimestamp = (
-                <MessageTimestamp
+                <MessageTimestampWrapper
                     href={permalink}
                     onClick={this.onPermalinkClicked}
                     showFullDate={true}
@@ -635,3 +639,23 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
         </AccessibleButton>
     );
 };
+
+/**
+ * Wraps MessageTimestampView with a view model synced to the provided props.
+ * This wrapper can be removed after ImageView has been changed to a function component.
+ */
+function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+    useEffect(() => {
+        vm.setTimestamp(props.ts);
+        vm.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+            showFullDate: props.showFullDate,
+            showSeconds: props.showSeconds,
+        });
+        vm.setTooltipInhibited(props.inhibitTooltip);
+        vm.setHref(props.href);
+        vm.setHandlers({ onClick: props.onClick });
+    }, [vm, props]);
+    return <MessageTimestampView vm={vm} />;
+}

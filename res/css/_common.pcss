@@ -23,6 +23,7 @@ Please see LICENSE files in the repository root for full details.
     --buttons-dialog-gap-column: $spacing-8;
     --MBody-border-radius: 8px;
     --EventTileBubble_margin-block: 10px;
+    --MessageTimestamp-width: 46px; /* 8 + 30 (avatar) + 8 */
 
     /* Expected z-indexes for dialogs:
         4000 - Default wrapper index
@@ -907,4 +908,18 @@ legend {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: var(--mx-line-clamp, 1);
     overflow: hidden;
+}
+
+/* This class is used extensively in element-web and are included here for compatibility with the existing timeline and layout.
+/* TODO: Review mx_MessageTimestamp usage after finishing migration of timeline tiles to shared components. */
+/* https://github.com/element-hq/element-web/issues/31651 */
+.mx_MessageTimestamp {
+    color: var(--cpd-color-text-secondary) !important; /* override anchor color */
+    font-size: $font-10px;
+    font-variant-numeric: tabular-nums;
+    display: block; /* enable the width setting below */
+    width: var(--MessageTimestamp-width);
+    white-space: nowrap;
+    user-select: none;
+    text-decoration: none;
 }

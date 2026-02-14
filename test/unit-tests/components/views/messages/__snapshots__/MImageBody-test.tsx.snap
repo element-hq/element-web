@@ -93,7 +93,7 @@ exports[`<MImageBody/> should open ImageView using thumbnail for encrypted svg 1
         </div>
         <a
           aria-live="off"
-          class="mx_MessageTimestamp"
+          class="mx_MessageTimestamp _content_rkudu_8"
           href="https://matrix.to/#/!room:server/undefined"
         >
           Thu, Jan 15, 1970, 06:56
