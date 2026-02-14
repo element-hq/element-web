@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ReactElement } from "react";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -39,6 +39,7 @@ import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
 import { ElementCallEventType } from "./call-types.ts";
+import Spoiler from "./components/views/elements/Spoiler.tsx";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -107,7 +108,7 @@ function textForMemberEvent(
     client: MatrixClient,
     allowJSX: boolean,
     showHiddenEvents?: boolean,
-): (() => string) | null {
+): (() => string | ReactElement) | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender?.name || getRoomMemberDisplayname(client, ev);
     const targetName = ev.target?.name || getRoomMemberDisplayname(client, ev, ev.getStateKey());
@@ -133,10 +134,25 @@ function textForMemberEvent(
             }
         }
         case KnownMembership.Ban:
-            return () =>
-                reason
-                    ? _t("timeline|m.room.member|ban_reason", { senderName, targetName, reason })
-                    : _t("timeline|m.room.member|ban", { senderName, targetName });
+            return () => {
+                const text = reason
+                    ? _t("timeline|m.room.member|ban_reason", { senderName, targetName: "<<TARGET>>", reason })
+                    : _t("timeline|m.room.member|ban", { senderName, targetName: "<<TARGET>>" });
+                const targetI = text.indexOf("<<TARGET>>");
+                if (targetI >= 0) {
+                    const start = text.slice(0, targetI);
+                    const end = text.slice(targetI + "<<TARGET>>".length);
+                    return (
+                        <>
+                            {start}
+                            <Spoiler>{targetName}</Spoiler>
+                            {end}
+                        </>
+                    );
+                } else {
+                    return text;
+                }
+            };
         case KnownMembership.Join:
             if (prevContent && prevContent.membership === KnownMembership.Join) {
                 const modDisplayname = getModification(prevContent.displayname, content.displayname);

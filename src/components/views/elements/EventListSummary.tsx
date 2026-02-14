@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, type ReactNode } from "react";
+import React, { type ReactElement, type ComponentProps, type ReactNode } from "react";
 import { EventType, type MatrixEvent, MatrixEventEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
@@ -25,6 +25,7 @@ import AccessibleButton from "./AccessibleButton";
 import RoomContext from "../../../contexts/RoomContext";
 import { arrayHasDiff } from "../../../utils/arrays.ts";
 import { objectHasDiff } from "../../../utils/objects.ts";
+import Spoiler from "./Spoiler.tsx";
 
 const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
@@ -222,7 +223,15 @@ export default class EventListSummary extends React.Component<Props, State> {
     ): ReactNode {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
-            const nameList = this.renderNameList(userNames);
+            let spoileredUserNames: ReactElement[];
+
+            if (containsBanned(transitions)) {
+                spoileredUserNames = userNames.map((u) => <Spoiler key={u}>{u}</Spoiler>);
+            } else {
+                spoileredUserNames = userNames.map((u) => <>{u}</>);
+            }
+
+            const nameList = this.renderNameList(spoileredUserNames);
 
             const splitTransitions = transitions.split(SEP) as TransitionType[];
 
@@ -234,7 +243,11 @@ export default class EventListSummary extends React.Component<Props, State> {
             const coalescedTransitions = EventListSummary.coalesceRepeatedTransitions(canonicalTransitions);
 
             const descs = coalescedTransitions.map((t) => {
-                return EventListSummary.getDescriptionForTransition(t.transitionType, userNames.length, t.repeats);
+                return EventListSummary.getDescriptionForTransition(
+                    t.transitionType,
+                    spoileredUserNames.length,
+                    t.repeats,
+                );
             });
 
             const desc = formatList(descs);
@@ -255,7 +268,7 @@ export default class EventListSummary extends React.Component<Props, State> {
      * more items in `users` than `this.props.summaryLength`, which is the number of names
      * included before "and [n] others".
      */
-    private renderNameList(users: string[]): string {
+    private renderNameList(users: ReactElement[]): ReactElement {
         return formatList(users, this.props.summaryLength);
     }
 
@@ -617,4 +630,12 @@ export default class EventListSummary extends React.Component<Props, State> {
             />
         );
     }
+}
+
+/**
+ * Returns true if the provided list comma-separated list of transitions
+ * contains an item "banned".
+ */
+function containsBanned(transitions: string): boolean {
+    return transitions.startsWith(TransitionType.Banned) || transitions.indexOf(`,${TransitionType.Banned}`) !== -1;
 }
