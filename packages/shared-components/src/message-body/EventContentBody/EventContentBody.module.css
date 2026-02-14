@@ -1,0 +1,89 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.EventTile_body {
+    overflow-y: hidden;
+    text-align: start;
+}
+
+.EventTile_bigEmoji {
+    font-size: 48px;
+    line-height: 57px;
+
+    .Emoji {
+        font-size: inherit !important;
+    }
+}
+
+.markdownBody {
+    font: var(--cpd-font-body-md-regular) !important;
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    font-family: inherit !important;
+    white-space: normal !important;
+    line-height: inherit !important;
+    background-color: inherit;
+    color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
+    flex: 1;
+
+    pre,
+    code {
+        font-family:
+            "Fira Code", "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace, "Noto Color Emoji" !important;
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+
+    code:not(pre *) {
+        background-color: var(--cpd-color-bg-subtle-primary);
+        border: 1px solid var(--cpd-color-gray-400);
+        border-radius: 4px;
+        /* The horizontal padding is added by github-markdown-css .markdown-body */
+        padding: 2px 0;
+        /* Avoid inline code blocks to be sticked when on multiple lines */
+        line-height: 1.375rem;
+        /* Avoid the border to be glued to the other words */
+        margin-right: 2px;
+    }
+
+    code {
+        white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+    }
+
+    pre {
+        /* have to use overlay rather than auto otherwise Linux and Windows */
+        /* Chrome gets very confused about vertical spacing: */
+        /* https://github.com/vector-im/vector-web/issues/754 */
+        overflow-x: overlay;
+        overflow-y: visible;
+
+        &::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        border: 1px solid var(--cpd-color-gray-400);
+
+        code {
+            white-space: pre; /* we want code blocks to be scrollable and not wrap */
+
+            > * {
+                display: inline;
+            }
+        }
+    }
+}
+
+.EventTile_searchHighlight {
+    background-color: var(--cpd-color-text-action-accent);
+    color: var(--cpd-color-text-on-solid-primary);
+    border-radius: 5px;
+    padding-inline: 2px;
+    cursor: pointer;
+
+    a {
+        background-color: var(--cpd-color-text-action-accent);
+        color: var(--cpd-color-text-on-solid-primary);
+    }
+}

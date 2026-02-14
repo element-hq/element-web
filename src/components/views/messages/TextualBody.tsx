@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
+import { EventContentBodyView } from "@element-hq/web-shared-components";
 
-import EventContentBody from "./EventContentBody.tsx";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
@@ -44,10 +45,41 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
+    private EventContentBodyViewModel: EventContentBodyViewModel;
+
     public state = {
         links: [],
         widgetHidden: false,
     };
+
+    public constructor(props: IBodyProps) {
+        super(props);
+        const mxEvent = props.mxEvent;
+        const content = mxEvent.getContent();
+        const isEmote = content.msgtype === MsgType.Emote;
+        const willHaveWrapper =
+            !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
+        // only strip reply if this is the original replying event, edits thereafter do not have the fallback
+        const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
+        this.EventContentBodyViewModel = new EventContentBodyViewModel({
+            as: willHaveWrapper ? "span" : "div",
+            includeDir: false,
+            mxEvent: mxEvent,
+            content: content,
+            stripReply: stripReply,
+            linkify: true,
+            highlights: props.highlights,
+            ref: this.contentRef,
+            renderTooltipsForAmbiguousLinks: true,
+            renderKeywordPills: true,
+            renderMentionPills: true,
+            renderCodeBlocks: true,
+            renderSpoilers: true,
+            enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
+            shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+        });
+    }
 
     public componentDidMount(): void {
         if (!this.props.editState) {
@@ -55,11 +87,40 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    private applyFormatting(): void {
-        this.calculateUrlPreview();
-    }
-
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
+        // Update the ViewModel when relevant props change
+        const mxEventChanged = prevProps.mxEvent !== this.props.mxEvent;
+        const highlightsChanged = prevProps.highlights !== this.props.highlights;
+        const wrapperChanged =
+            prevProps.replacingEventId !== this.props.replacingEventId ||
+            prevProps.isSeeingThroughMessageHiddenForModeration !==
+                this.props.isSeeingThroughMessageHiddenForModeration;
+
+        if (mxEventChanged || highlightsChanged || wrapperChanged) {
+            const mxEvent = this.props.mxEvent;
+            const content = mxEvent.getContent();
+            const isEmote = content.msgtype === MsgType.Emote;
+            const willHaveWrapper =
+                !!this.props.replacingEventId || !!this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
+            // only strip reply if this is the original replying event, edits thereafter do not have the fallback
+            const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
+            this.EventContentBodyViewModel.setEventContent(mxEvent, content);
+            this.EventContentBodyViewModel.setStripReply(stripReply);
+
+            if (mxEventChanged || wrapperChanged) {
+                this.EventContentBodyViewModel.setAs(willHaveWrapper ? "span" : "div");
+            }
+
+            if (highlightsChanged) {
+                this.EventContentBodyViewModel.setHighlights(this.props.highlights);
+            }
+
+            this.EventContentBodyViewModel.setEnableBigEmoji(SettingsStore.getValue("TextualBody.enableBigEmoji"));
+            this.EventContentBodyViewModel.setShouldShowPillAvatar(SettingsStore.getValue("Pill.shouldShowPillAvatar"));
+        }
+
+        // Handle formatting updates
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
@@ -68,6 +129,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 this.applyFormatting();
             }
         }
+    }
+
+    public componentWillUnmount(): void {
+        this.EventContentBodyViewModel.dispose();
+    }
+
+    private applyFormatting(): void {
+        this.calculateUrlPreview();
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {
@@ -311,6 +380,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />
             );
         }
+
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
         const isNotice = content.msgtype === MsgType.Notice;
@@ -321,23 +391,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
-        // only strip reply if this is the original replying event, edits thereafter do not have the fallback
-        const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
         let body = (
-            <EventContentBody
+            <EventContentBodyView
+                vm={this.EventContentBodyViewModel}
                 as={willHaveWrapper ? "span" : "div"}
-                includeDir={false}
-                mxEvent={mxEvent}
-                content={content}
-                stripReply={stripReply}
-                linkify
-                highlights={this.props.highlights}
                 ref={this.contentRef}
-                renderTooltipsForAmbiguousLinks
-                renderKeywordPills
-                renderMentionPills
-                renderCodeBlocks
-                renderSpoilers
             />
         );
 

@@ -9,8 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { EventContentBodyView } from "@element-hq/web-shared-components";
 
-import EventContentBody from "./EventContentBody.tsx";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
@@ -45,17 +46,43 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
+    private EventContentBodyViewModel: EventContentBodyViewModel;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         const cli = this.context;
         const userId = cli.getSafeUserId();
-        const event = this.props.mxEvent;
+        const event = props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
         event.localRedactionEvent()?.on(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
         const canRedact = room?.currentState.maySendRedactionForEvent(event, userId) ?? false;
         this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
+
+        const mxEventContent = getReplacedContent(event);
+        this.EventContentBodyViewModel = new EventContentBodyViewModel({
+            as: "span",
+            mxEvent: event,
+            content: mxEventContent,
+            highlights: [],
+            stripReply: true,
+            renderTooltipsForAmbiguousLinks: true,
+            renderMentionPills: true,
+            renderCodeBlocks: true,
+            renderSpoilers: true,
+            linkify: true,
+            enableBigEmoji: SettingsStore.getValue("TextualBody.enableBigEmoji"),
+            shouldShowPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+        });
+    }
+
+    public componentDidUpdate(prevProps: IProps): void {
+        if (prevProps.mxEvent !== this.props.mxEvent) {
+            const mxEventContent = getReplacedContent(this.props.mxEvent);
+            this.EventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
+            this.EventContentBodyViewModel.setEnableBigEmoji(SettingsStore.getValue("TextualBody.enableBigEmoji"));
+            this.EventContentBodyViewModel.setShouldShowPillAvatar(SettingsStore.getValue("Pill.shouldShowPillAvatar"));
+        }
     }
 
     private onAssociatedStatusChanged = (): void => {
@@ -92,6 +119,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     public componentWillUnmount(): void {
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
+        this.EventContentBodyViewModel.dispose();
     }
 
     private renderActionBar(): React.ReactNode {
@@ -133,20 +161,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = (
-                    <EventContentBody
-                        as="span"
-                        mxEvent={mxEvent}
-                        content={content}
-                        highlights={[]}
-                        stripReply
-                        renderTooltipsForAmbiguousLinks
-                        renderMentionPills
-                        renderCodeBlocks
-                        renderSpoilers
-                        linkify
-                    />
-                );
+                contentElements = <EventContentBodyView vm={this.EventContentBodyViewModel} as="span" />;
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
