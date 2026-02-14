@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { useEffect, type JSX } from "react";
 import { EventType, type IContent, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render } from "jest-matrix-react";
+import { ReactionsRowButtonView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { getMockClientWithEventEmitter } from "../../../../test-utils";
-import ReactionsRowButton, { type IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
+import {
+    ReactionsRowButtonViewModel,
+    type ReactionsRowButtonViewModelProps,
+} from "../../../../../src/viewmodels/message-body/ReactionsRowButtonViewModel";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { type Media, mediaFromMxc } from "../../../../../src/customisations/Media";
 
@@ -24,13 +27,62 @@ jest.mock("../../../../../src/customisations/Media", () => ({
 
 jest.mock("@element-hq/web-shared-components", () => {
     const actual = jest.requireActual("@element-hq/web-shared-components");
+    const { useViewModel } = actual;
     return {
         ...actual,
-        ReactionsRowButtonTooltipView: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+        ReactionsRowButtonView: ({ vm }: { vm: any }) => {
+            const { content, count, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
+            const className = [
+                "mx_AccessibleButton",
+                "mx_ReactionsRowButton",
+                isSelected ? "mx_ReactionsRowButton_selected" : "",
+                isDisabled ? "mx_AccessibleButton_disabled" : "",
+            ]
+                .filter(Boolean)
+                .join(" ");
+
+            return (
+                <div
+                    className={className}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={ariaLabel}
+                    aria-disabled={isDisabled ? true : undefined}
+                    onClick={isDisabled ? undefined : vm.onClick}
+                >
+                    {imageSrc ? (
+                        <img
+                            className="mx_ReactionsRowButton_content"
+                            alt={imageAlt ?? ""}
+                            src={imageSrc}
+                            width="16"
+                            height="16"
+                        />
+                    ) : (
+                        <span className="mx_ReactionsRowButton_content" aria-hidden="true">
+                            {content ?? ""}
+                        </span>
+                    )}
+                    <span className="mx_ReactionsRowButton_count" aria-hidden="true">
+                        {count}
+                    </span>
+                </div>
+            );
+        },
     };
 });
 
 const mockMediaFromMxc = mediaFromMxc as jest.MockedFunction<typeof mediaFromMxc>;
+
+const ReactionsRowButtonHost = (props: ReactionsRowButtonViewModelProps): JSX.Element => {
+    const vm = useCreateAutoDisposedViewModel(() => new ReactionsRowButtonViewModel(props));
+
+    useEffect(() => {
+        vm.setProps(props);
+    }, [props, vm]);
+
+    return <ReactionsRowButtonView vm={vm} />;
+};
 
 describe("ReactionsRowButton", () => {
     const userId = "@alice:server";
@@ -42,7 +94,8 @@ describe("ReactionsRowButton", () => {
     });
     const room = new Room(roomId, mockClient, userId);
 
-    const createProps = (relationContent: IContent): IProps => ({
+    const createProps = (relationContent: IContent): ReactionsRowButtonViewModelProps => ({
+        client: mockClient,
         mxEvent: new MatrixEvent({
             room_id: roomId,
             event_id: "$test:example.com",
@@ -85,11 +138,7 @@ describe("ReactionsRowButton", () => {
                 rel_type: "m.annotation",
             },
         });
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
         expect(root.asFragment()).toMatchSnapshot();
 
         // Try hover and make sure that the ReactionsRowButtonTooltip works
@@ -114,11 +163,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
         expect(root.asFragment()).toMatchSnapshot();
 
         // Try hover and make sure that the ReactionsRowButtonTooltip works
@@ -137,11 +182,7 @@ describe("ReactionsRowButton", () => {
 
         const props = createProps({});
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
 
         expect(root.asFragment()).toMatchSnapshot();
     });
@@ -155,11 +196,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender, container } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender, container } = render(<ReactionsRowButtonHost {...props} />);
 
         // Create new props with different values
         const newMxEvent = new MatrixEvent({
@@ -182,7 +219,7 @@ describe("ReactionsRowButton", () => {
             }),
         ];
 
-        const updatedProps: IProps = {
+        const updatedProps: ReactionsRowButtonViewModelProps = {
             ...props,
             mxEvent: newMxEvent,
             content: "👎",
@@ -190,11 +227,7 @@ describe("ReactionsRowButton", () => {
             customReactionImagesEnabled: false,
         };
 
-        rerender(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...updatedProps} />
-            </MatrixClientContext.Provider>,
-        );
+        rerender(<ReactionsRowButtonHost {...updatedProps} />);
 
         // The component should have updated - verify by checking the rendered content
         expect(container.querySelector(".mx_ReactionsRowButton_content")?.textContent).toBe("👎");
@@ -209,11 +242,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { unmount } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { unmount } = render(<ReactionsRowButtonHost {...props} />);
 
         // Unmount should not throw
         expect(() => unmount()).not.toThrow();
@@ -233,7 +262,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const props: IProps = {
+        const props: ReactionsRowButtonViewModelProps = {
             ...createProps({
                 "m.relates_to": {
                     event_id: "$user1:example.com",
@@ -244,11 +273,7 @@ describe("ReactionsRowButton", () => {
             myReactionEvent,
         };
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
 
         const button = root.getByRole("button");
         fireEvent.click(button);
@@ -265,11 +290,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
 
         const button = root.getByRole("button");
         fireEvent.click(button);
@@ -285,7 +306,8 @@ describe("ReactionsRowButton", () => {
     });
 
     it("uses reactors as label when content is empty", () => {
-        const props: IProps = {
+        const props: ReactionsRowButtonViewModelProps = {
+            client: mockClient,
             mxEvent: new MatrixEvent({
                 room_id: roomId,
                 event_id: "$test:example.com",
@@ -308,11 +330,7 @@ describe("ReactionsRowButton", () => {
             customReactionImagesEnabled: true,
         };
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
 
         // The button should still render
         const button = root.getByRole("button");
@@ -320,7 +338,8 @@ describe("ReactionsRowButton", () => {
     });
 
     it("renders custom image reaction with fallback label when no shortcode", () => {
-        const props: IProps = {
+        const props: ReactionsRowButtonViewModelProps = {
+            client: mockClient,
             mxEvent: new MatrixEvent({
                 room_id: roomId,
                 event_id: "$test:example.com",
@@ -344,11 +363,7 @@ describe("ReactionsRowButton", () => {
             customReactionImagesEnabled: true,
         };
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
 
         // Should render an image element for custom reaction
         const img = root.container.querySelector("img.mx_ReactionsRowButton_content");
@@ -357,12 +372,13 @@ describe("ReactionsRowButton", () => {
     });
 
     it("falls back to text when mxc URL cannot be converted to HTTP", () => {
-        // Make mediaFromMxc return null srcHttp to simulate failed conversion
-        mockMediaFromMxc.mockReturnValueOnce({
+        // Keep returning null across constructor + setProps recomputations
+        mockMediaFromMxc.mockReturnValue({
             srcHttp: null,
         } as unknown as Media);
 
-        const props: IProps = {
+        const props: ReactionsRowButtonViewModelProps = {
+            client: mockClient,
             mxEvent: new MatrixEvent({
                 room_id: roomId,
                 event_id: "$test:example.com",
@@ -386,11 +402,7 @@ describe("ReactionsRowButton", () => {
             customReactionImagesEnabled: true,
         };
 
-        const root = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const root = render(<ReactionsRowButtonHost {...props} />);
 
         // Should render span (not img) when imageSrc is null
         const span = root.container.querySelector("span.mx_ReactionsRowButton_content");
@@ -408,11 +420,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender } = render(<ReactionsRowButtonHost {...props} />);
 
         // Only change mxEvent
         const newMxEvent = new MatrixEvent({
@@ -421,13 +429,7 @@ describe("ReactionsRowButton", () => {
             content: { body: "test2" },
         });
 
-        expect(() =>
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ReactionsRowButton {...props} mxEvent={newMxEvent} />
-                </MatrixClientContext.Provider>,
-            ),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} mxEvent={newMxEvent} />)).not.toThrow();
     });
 
     it("updates ViewModel when only content changes", () => {
@@ -439,18 +441,10 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender, container } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender, container } = render(<ReactionsRowButtonHost {...props} />);
 
         // Only change content
-        rerender(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} content="👎" />
-            </MatrixClientContext.Provider>,
-        );
+        rerender(<ReactionsRowButtonHost {...props} content="👎" />);
 
         expect(container.querySelector(".mx_ReactionsRowButton_content")?.textContent).toBe("👎");
     });
@@ -464,11 +458,7 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender } = render(<ReactionsRowButtonHost {...props} />);
 
         // Only change reactionEvents
         const newReactionEvents = [
@@ -485,13 +475,7 @@ describe("ReactionsRowButton", () => {
             }),
         ];
 
-        expect(() =>
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ReactionsRowButton {...props} reactionEvents={newReactionEvents} />
-                </MatrixClientContext.Provider>,
-            ),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} reactionEvents={newReactionEvents} />)).not.toThrow();
     });
 
     it("updates ViewModel when only customReactionImagesEnabled changes", () => {
@@ -503,20 +487,10 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender } = render(<ReactionsRowButtonHost {...props} />);
 
         // Only change customReactionImagesEnabled
-        expect(() =>
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ReactionsRowButton {...props} customReactionImagesEnabled={false} />
-                </MatrixClientContext.Provider>,
-            ),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} customReactionImagesEnabled={false} />)).not.toThrow();
     });
 
     it("does not update ViewModel when props stay the same", () => {
@@ -528,19 +502,9 @@ describe("ReactionsRowButton", () => {
             },
         });
 
-        const { rerender } = render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <ReactionsRowButton {...props} />
-            </MatrixClientContext.Provider>,
-        );
+        const { rerender } = render(<ReactionsRowButtonHost {...props} />);
 
         // Rerender with same props - setProps should not be called
-        expect(() =>
-            rerender(
-                <MatrixClientContext.Provider value={mockClient}>
-                    <ReactionsRowButton {...props} />
-                </MatrixClientContext.Provider>,
-            ),
-        ).not.toThrow();
+        expect(() => rerender(<ReactionsRowButtonHost {...props} />)).not.toThrow();
     });
 });
