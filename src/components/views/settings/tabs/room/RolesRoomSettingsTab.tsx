@@ -26,6 +26,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { PowerLevelSelector } from "../../PowerLevelSelector";
 import { ElementCallEventType, ElementCallMemberEventType } from "../../../../../call-types";
+import { PolicyServerConfig } from "../../PolicyServerConfig.tsx";
 import { objectClone } from "../../../../../utils/objects.ts";
 
 interface IEventShowOpts {
@@ -59,6 +60,9 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
     // MSC3401: Native Group VoIP signaling
     [ElementCallEventType.name]: { isState: true, hideForSpace: true },
     [ElementCallMemberEventType.name]: { isState: true, hideForSpace: true },
+
+    // MSC4284: Policy servers
+    [EventType.RoomPolicy]: { isState: true, hideForSpace: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
@@ -281,6 +285,13 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             plEventsToLabels[ElementCallMemberEventType.name] = _td("room_settings|permissions|m.call.member");
         }
 
+        // MSC4284: Policy servers
+        let policyServerSection: JSX.Element | undefined;
+        if (SettingsStore.getValue("feature_msc4284_setup")) {
+            plEventsToLabels[EventType.RoomPolicy] = _td("room_settings|permissions|m.room.policy");
+            policyServerSection = <PolicyServerConfig room={this.props.room} />;
+        }
+
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
                 desc: _t("room_settings|permissions|users_default"),
@@ -452,6 +463,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         return (
             <SettingsTab>
                 <SettingsSection heading={_t("room_settings|permissions|title")}>
+                    {policyServerSection}
                     {privilegedUsersSection}
                     {canChangeLevels && <AddPrivilegedUsers room={room} defaultUserLevel={defaultUserLevel} />}
                     {mutedUsersSection}

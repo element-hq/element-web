@@ -15,6 +15,13 @@ dropped. Ask in the room if you are unclear about any details here.**
 A new version of the "Report" dialog that lets users send abuse reports directly to room moderators,
 if the room supports it.
 
+## Enable options to set up Policy Servers in rooms (`feature_msc4284_setup`)
+
+Allows configuring a room's policy server ([MSC4284](https://github.com/matrix-org/matrix-spec-proposals/pull/4284)).
+
+Users can see the current configuration from the 'Roles & Permissions' tab of room settings. If the user has permission
+to change the policy server, they can also do that there.
+
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).

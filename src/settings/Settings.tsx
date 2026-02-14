@@ -208,6 +208,7 @@ export interface Settings {
     [Features.NotificationSettings2]: IFeature;
     [Features.ReleaseAnnouncement]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
+    "feature_msc4284_setup": IFeature;
     "feature_report_to_moderators": IFeature;
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
@@ -443,6 +444,14 @@ export const SETTINGS: Settings = {
         // Requires a reload since this setting is cached in EventUtils
         controller: new ReloadOnChangeController(),
         displayName: _td("labs|msc3531_hide_messages_pending_moderation"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_msc4284_setup": {
+        isFeature: true,
+        labsGroup: LabGroup.Moderation,
+        displayName: _td("labs|msc4284_setup"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
