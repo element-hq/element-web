@@ -6,8 +6,13 @@
  */
 
 .header {
-    flex: 0 0 60px;
-    padding: 0 var(--cpd-space-3x);
+    min-height: 60px;
+    padding: 0 var(--cpd-space-4x) 0 var(--cpd-space-3x);
+}
+
+.container {
+    flex: 1;
+    padding-bottom: var(--cpd-space-3x);
 }
 
 .title {

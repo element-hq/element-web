@@ -12,7 +12,7 @@ exports[`<ComposeMenuView /> > should match snapshot 1`] = `
     data-state="closed"
     id="radix-_r_0_"
     role="button"
-    style="--cpd-icon-button-size: 36px; padding: 6px;"
+    style="--cpd-icon-button-size: 28px; padding: 4px;"
     tabindex="0"
     type="button"
   >

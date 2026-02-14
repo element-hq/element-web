@@ -51,6 +51,7 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
             trigger={
                 <IconButton
                     size="24px"
+                    style={{ padding: "2px" }}
                     tooltip={_t("room_list|notification_options")}
                     aria-label={_t("room_list|notification_options")}
                 >

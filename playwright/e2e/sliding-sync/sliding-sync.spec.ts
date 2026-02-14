@@ -71,7 +71,9 @@ test.describe("Sliding Sync", () => {
     });
 
     // Load the user fixture for all tests
-    test.beforeEach(({ user }) => {});
+    test.beforeEach(async ({ app, user }) => {
+        await app.closeNotificationToast();
+    });
 
     test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
         page,
