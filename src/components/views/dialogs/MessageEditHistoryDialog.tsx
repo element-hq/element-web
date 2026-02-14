@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type MatrixEvent, EventType, RelationType, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -18,7 +19,7 @@ import BaseDialog from "./BaseDialog";
 import ScrollPanel from "../../structures/ScrollPanel";
 import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
-import DateSeparator from "../messages/DateSeparator";
+import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -32,6 +33,14 @@ interface IState {
     nextBatch: string | null;
     isLoading: boolean;
     isTwelveHour: boolean;
+}
+
+/**
+ * Creates and auto-disposes the DateSeparatorViewModel for edit history rendering.
+ */
+function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    return <DateSeparatorView vm={vm} />;
 }
 
 export default class MessageEditHistoryDialog extends React.PureComponent<IProps, IState> {
@@ -119,9 +128,11 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const baseEventId = this.props.mxEvent.getId();
         allEvents.forEach((e, i) => {
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate() || undefined, e.getDate() || undefined)) {
+                const separatorRoomId = e.getRoomId()!;
+                const separatorTs = e.getTs();
                 nodes.push(
-                    <li key={e.getTs() + "~"}>
-                        <DateSeparator roomId={e.getRoomId()!} ts={e.getTs()} />
+                    <li key={`${separatorRoomId}-${separatorTs}~`}>
+                        <DateSeparatorWrapper roomId={separatorRoomId} ts={separatorTs} />
                     </li>,
                 );
             }

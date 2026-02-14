@@ -9,19 +9,28 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { BaseGrouper } from "./BaseGrouper";
 import { SeparatorKind, type WrappedEvent } from "../MessagePanel";
 import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
-import DateSeparator from "../../views/messages/DateSeparator";
 import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
+import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
 // the first non-state event, beacon_info event or membership event which is not regarding the sender of the `m.room.create` event
+
+/**
+ * Creates and auto-disposes the DateSeparatorViewModel for creation-group rendering.
+ */
+function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
+    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    return <DateSeparatorView vm={vm} />;
+}
 
 export class CreationGrouper extends BaseGrouper {
     public static canStartGroup = function (_panel: MessagePanel, { event }: WrappedEvent): boolean {
@@ -86,10 +95,11 @@ export class CreationGrouper extends BaseGrouper {
         const lastShownEvent = this.lastShownEvent;
 
         if (panel.wantsSeparator(this.prevEvent, createEvent.event) === SeparatorKind.Date) {
+            const separatorRoomId = createEvent.event.getRoomId()!;
             const ts = createEvent.event.getTs();
             ret.push(
-                <li key={ts + "~"}>
-                    <DateSeparator roomId={createEvent.event.getRoomId()!} ts={ts} />
+                <li key={`${separatorRoomId}-${ts}~`}>
+                    <DateSeparatorWrapper roomId={separatorRoomId} ts={ts} />
                 </li>,
             );
         }

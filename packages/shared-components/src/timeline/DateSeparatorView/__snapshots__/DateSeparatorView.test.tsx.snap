@@ -1,0 +1,100 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DateSeparatorView > renders default story 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex separator timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div>
+      <h2
+        aria-hidden="true"
+      >
+        Today
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparatorView > renders long localized label story 1`] = `
+<div>
+  <div
+    aria-label="Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time"
+    class="flex separator timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div>
+      <h2
+        aria-hidden="true"
+      >
+        Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparatorView > renders with extra class names 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex extra_class_1 extra_class_2 separator timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div>
+      <h2
+        aria-hidden="true"
+      >
+        Today
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;
+
+exports[`DateSeparatorView > renders with header content story 1`] = `
+<div>
+  <div
+    aria-label="Today"
+    class="flex separator timelineSeparator"
+    role="separator"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      data-testid="header-content"
+      role="presentation"
+    >
+      Header content
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</div>
+`;

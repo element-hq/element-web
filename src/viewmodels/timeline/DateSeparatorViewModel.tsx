@@ -1,112 +1,140 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2015-2021 The Matrix.org Foundation C.I.C.
-Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-import React, { type JSX } from "react";
-import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
-import { capitalize } from "lodash";
+import {
+    BaseViewModel,
+    type DateSeparatorViewSnapshot as DateSeparatorViewSnapshotInterface,
+    type DateSeparatorViewModel as DateSeparatorViewModelInterface,
+} from "@element-hq/web-shared-components";
 import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { TimelineSeparator } from "@element-hq/web-shared-components";
+import { capitalize } from "lodash";
+import React from "react";
+import { Direction, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, getUserLanguage } from "../../../languageHandler";
-import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import dispatcher from "../../../dispatcher/dispatcher";
-import { Action } from "../../../dispatcher/actions";
-import SettingsStore from "../../../settings/SettingsStore";
-import { UIFeature } from "../../../settings/UIFeature";
-import Modal from "../../../Modal";
-import ErrorDialog from "../dialogs/ErrorDialog";
-import BugReportDialog from "../dialogs/BugReportDialog";
-import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
-import { contextMenuBelow } from "../rooms/RoomTile";
-import { ContextMenuTooltipButton } from "../../structures/ContextMenu";
+import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../DateUtils";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import dispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { _t, getUserLanguage } from "../../languageHandler";
+import Modal from "../../Modal";
+import SettingsStore from "../../settings/SettingsStore";
+import { UIFeature } from "../../settings/UIFeature";
+import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import BugReportDialog from "../../components/views/dialogs/BugReportDialog";
+import AccessibleButton, { type ButtonEvent } from "../../components/views/elements/AccessibleButton";
+import { ContextMenuTooltipButton } from "../../components/structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
-} from "../context_menus/IconizedContextMenu";
-import JumpToDatePicker from "./JumpToDatePicker";
-import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import RoomContext from "../../../contexts/RoomContext";
+} from "../../components/views/context_menus/IconizedContextMenu";
+import JumpToDatePicker from "../../components/views/messages/JumpToDatePicker";
+import { contextMenuBelow } from "../../components/views/rooms/RoomTile";
+import { SdkContextClass } from "../../contexts/SDKContext";
 
-interface IProps {
+export interface DateSeparatorViewModelProps {
+    /**
+     * Room ID used for jump-to-date navigation and room-switch guards.
+     */
     roomId: string;
+    /**
+     * Timestamp used to compute the date separator label and initial picker value.
+     */
     ts: number;
+    /**
+     * Export mode disables relative date labels and jump-to-date menu UI.
+     */
     forExport?: boolean;
 }
 
-interface IState {
-    contextMenuPosition?: DOMRect;
-    jumpToDateEnabled: boolean;
-}
-
 /**
- * Timeline separator component to render within a MessagePanel bearing the date of the ts given
- *
- * Has additional jump to date functionality when labs flag is enabled
+ * ViewModel for the date separator, providing the current state of the component.
  */
-export default class DateSeparator extends React.Component<IProps, IState> {
-    public static contextType = RoomContext;
-    declare public context: React.ContextType<typeof RoomContext>;
-    private settingWatcherRef?: string;
+export class DateSeparatorViewModel
+    extends BaseViewModel<DateSeparatorViewSnapshotInterface, DateSeparatorViewModelProps>
+    implements DateSeparatorViewModelInterface
+{
+    /**
+     * Cached setting for UIFeature.TimelineEnableRelativeDates.
+     * Updated via SettingsStore watcher to keep labels in sync at runtime.
+     */
+    private relativeDatesEnabled: boolean;
+    /**
+     * Cached setting for feature_jump_to_date.
+     * Controls whether the jump-to-date menu is exposed in the snapshot.
+     */
+    private jumpToDateEnabled: boolean;
+    /**
+     * Anchor rectangle for the jump-to-date context menu.
+     * Undefined means the menu is closed.
+     */
+    private contextMenuPosition?: DOMRect;
 
-    public constructor(props: IProps) {
-        super(props);
-        this.state = {
-            jumpToDateEnabled: SettingsStore.getValue("feature_jump_to_date"),
+    public constructor(props: DateSeparatorViewModelProps) {
+        const relativeDatesEnabled = SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
+        const jumpToDateEnabled = SettingsStore.getValue("feature_jump_to_date");
+
+        super(props, {
+            label: DateSeparatorViewModel.computeLabel(props, relativeDatesEnabled),
+            className: "mx_TimelineSeparator",
+            headerContent: undefined,
+        });
+
+        this.relativeDatesEnabled = relativeDatesEnabled;
+        this.jumpToDateEnabled = jumpToDateEnabled;
+        this.updateSnapshot();
+
+        // Keep label behaviour in sync with runtime setting updates.
+        const jumpToDateWatcherRef = SettingsStore.watchSetting(
+            "feature_jump_to_date",
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                this.jumpToDateEnabled = newVal;
+                this.updateSnapshot();
+            },
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(jumpToDateWatcherRef));
+
+        const relativeDatesWatcherRef = SettingsStore.watchSetting(
+            UIFeature.TimelineEnableRelativeDates,
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                this.relativeDatesEnabled = newVal;
+                this.updateSnapshot();
+            },
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(relativeDatesWatcherRef));
+    }
+
+    private computeSnapshot(): DateSeparatorViewSnapshotInterface {
+        const label = DateSeparatorViewModel.computeLabel(this.props, this.relativeDatesEnabled);
+        return {
+            label,
+            className: "mx_TimelineSeparator",
+            headerContent:
+                this.jumpToDateEnabled && !this.props.forExport ? this.renderJumpToDateMenu(label) : undefined,
         };
     }
 
-    public componentDidMount(): void {
-        // We're using a watcher so the date headers in the timeline are updated
-        // when the lab setting is toggled.
-        this.settingWatcherRef = SettingsStore.watchSetting(
-            "feature_jump_to_date",
-            null,
-            (settingName, roomId, level, newValAtLevel, newVal) => {
-                this.setState({ jumpToDateEnabled: newVal });
-            },
-        );
+    private updateSnapshot(): void {
+        this.snapshot.set(this.computeSnapshot());
     }
 
-    public componentWillUnmount(): void {
-        SettingsStore.unwatchSetting(this.settingWatcherRef);
-    }
-
-    private onContextMenuOpenClick = (e: ButtonEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        const target = e.target as HTMLButtonElement;
-        this.setState({ contextMenuPosition: target.getBoundingClientRect() });
-    };
-
-    private onContextMenuCloseClick = (): void => {
-        this.closeMenu();
-    };
-
-    private closeMenu = (): void => {
-        this.setState({
-            contextMenuPosition: undefined,
-        });
-    };
-
-    private get relativeTimeFormat(): Intl.RelativeTimeFormat {
+    private static get relativeTimeFormat(): Intl.RelativeTimeFormat {
         return new Intl.RelativeTimeFormat(getUserLanguage(), { style: "long", numeric: "auto" });
     }
 
-    private getLabel(): string {
+    private static computeLabel(props: DateSeparatorViewModelProps, relativeDatesEnabled: boolean): string {
         try {
-            const date = new Date(this.props.ts);
-            const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
+            const date = new Date(props.ts);
 
-            // During the time the archive is being viewed, a specific day might not make sense, so we return the full date
-            if (this.props.forExport || disableRelativeTimestamps) return formatFullDateNoTime(date);
+            // During export, relative dates are ambiguous and should not be used.
+            if (props.forExport || !relativeDatesEnabled) return formatFullDateNoTime(date);
 
             const today = new Date();
             const yesterday = new Date();
@@ -114,11 +142,11 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             yesterday.setDate(today.getDate() - 1);
 
             if (date.toDateString() === today.toDateString()) {
-                return this.relativeTimeFormat.format(0, "day"); // Today
+                return this.relativeTimeFormat.format(0, "day");
             } else if (date.toDateString() === yesterday.toDateString()) {
-                return this.relativeTimeFormat.format(-1, "day"); // Yesterday
+                return this.relativeTimeFormat.format(-1, "day");
             } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-                return days[date.getDay()]; // Sunday-Saturday
+                return days[date.getDay()];
             } else {
                 return formatFullDateNoTime(date);
             }
@@ -127,7 +155,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         }
     }
 
-    private pickDate = async (inputTimestamp: number | string | Date): Promise<void> => {
+    public pickDate = async (inputTimestamp: number | string | Date): Promise<void> => {
         const unixTimestamp = new Date(inputTimestamp).getTime();
         const roomIdForJumpRequest = this.props.roomId;
 
@@ -146,7 +174,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // Only try to navigate to the room if the user is still viewing the same
             // room. We don't want to jump someone back to a room after a slow request
             // if they've already navigated away to another room.
-            const currentRoomId = this.context.roomViewStore.getRoomId();
+            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 dispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
@@ -172,10 +200,11 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // don't want to worry someone about an error in a room they no longer care
             // about after a slow request if they've already navigated away to another
             // room.
-            const currentRoomId = this.context.roomViewStore.getRoomId();
+            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
-                let submitDebugLogsContent: JSX.Element = <></>;
+                let submitDebugLogsContent: React.ReactElement = <></>;
+
                 if (err instanceof ConnectionError) {
                     friendlyErrorMessage = _t("room|error_jump_to_date_connection");
                 } else if (err instanceof MatrixError) {
@@ -200,10 +229,10 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                                 {},
                                 {
                                     debugLogsLink: (sub) => (
+                                        // This is by default a `<div>` which we
+                                        // can't nest within a `<p>` here so update
+                                        // this to a be a inline anchor element.
                                         <AccessibleButton
-                                            // This is by default a `<div>` which we
-                                            // can't nest within a `<p>` here so update
-                                            // this to a be a inline anchor element.
                                             element="a"
                                             kind="link"
                                             onClick={() => this.onBugReport(err instanceof Error ? err : undefined)}
@@ -235,62 +264,81 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         }
     };
 
-    private onBugReport = (err?: Error): void => {
+    public onBugReport = (err?: Error): void => {
         Modal.createDialog(BugReportDialog, {
             error: err,
             initialText: "Error occured while using jump to date #jump-to-date",
         });
     };
 
-    private onLastWeekClicked = (): void => {
+    public pickLastWeek = (): Promise<void> => {
         const date = new Date();
         date.setDate(date.getDate() - 7);
-        this.pickDate(date);
+        void this.pickDate(date);
         this.closeMenu();
+        return Promise.resolve();
     };
 
-    private onLastMonthClicked = (): void => {
+    public pickLastMonth = (): Promise<void> => {
         const date = new Date();
-        // Month numbers are 0 - 11 and `setMonth` handles the negative rollover
+        // Month numbers are 0-11 and setMonth handles rollover.
         date.setMonth(date.getMonth() - 1, 1);
-        this.pickDate(date);
+        void this.pickDate(date);
         this.closeMenu();
+        return Promise.resolve();
     };
 
-    private onTheBeginningClicked = (): void => {
-        const date = new Date(0);
-        this.pickDate(date);
+    public pickTheBeginning = (): Promise<void> => {
+        void this.pickDate(new Date(0));
         this.closeMenu();
+        return Promise.resolve();
     };
 
     private onDatePicked = (dateString: string): void => {
-        this.pickDate(dateString);
+        void this.pickDate(dateString);
         this.closeMenu();
     };
 
-    private renderJumpToDateMenu(): React.ReactElement {
-        let contextMenu: JSX.Element | undefined;
-        if (this.state.contextMenuPosition) {
-            const relativeTimeFormat = this.relativeTimeFormat;
+    private onContextMenuOpenClick = (e: ButtonEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        const target = e.target as HTMLButtonElement;
+        this.contextMenuPosition = target.getBoundingClientRect();
+        this.updateSnapshot();
+    };
+
+    private onContextMenuCloseClick = (): void => {
+        this.closeMenu();
+    };
+
+    private closeMenu = (): void => {
+        this.contextMenuPosition = undefined;
+        this.updateSnapshot();
+    };
+
+    private renderJumpToDateMenu(label: string): React.ReactElement {
+        let contextMenu: React.ReactElement | undefined;
+        if (this.contextMenuPosition) {
+            const relativeTimeFormat = DateSeparatorViewModel.relativeTimeFormat;
             contextMenu = (
                 <IconizedContextMenu
-                    {...contextMenuBelow(this.state.contextMenuPosition)}
+                    {...contextMenuBelow(this.contextMenuPosition)}
                     onFinished={this.onContextMenuCloseClick}
                 >
                     <IconizedContextMenuOptionList first>
                         <IconizedContextMenuOption
                             label={capitalize(relativeTimeFormat.format(-1, "week"))}
-                            onClick={this.onLastWeekClicked}
+                            onClick={this.pickLastWeek}
                             data-testid="jump-to-date-last-week"
                         />
                         <IconizedContextMenuOption
                             label={capitalize(relativeTimeFormat.format(-1, "month"))}
-                            onClick={this.onLastMonthClicked}
+                            onClick={this.pickLastMonth}
                             data-testid="jump-to-date-last-month"
                         />
                         <IconizedContextMenuOption
                             label={_t("room|jump_to_date_beginning")}
-                            onClick={this.onTheBeginningClicked}
+                            onClick={this.pickTheBeginning}
                             data-testid="jump-to-date-beginning"
                         />
                     </IconizedContextMenuOptionList>
@@ -304,41 +352,15 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
         return (
             <ContextMenuTooltipButton
-                className="mx_DateSeparator_jumpToDateMenu mx_DateSeparator_dateContent"
                 data-testid="jump-to-date-separator-button"
                 onClick={this.onContextMenuOpenClick}
-                isExpanded={!!this.state.contextMenuPosition}
+                isExpanded={Boolean(this.contextMenuPosition)}
                 title={_t("room|jump_to_date")}
             >
-                <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
-                    {this.getLabel()}
-                </h2>
-                <ChevronDownIcon className="mx_DateSeparator_chevron" />
+                <h2 aria-hidden="true">{label}</h2>
+                <ChevronDownIcon />
                 {contextMenu}
             </ContextMenuTooltipButton>
-        );
-    }
-
-    public render(): React.ReactNode {
-        const label = this.getLabel();
-
-        let dateHeaderContent: JSX.Element;
-        if (this.state.jumpToDateEnabled && !this.props.forExport) {
-            dateHeaderContent = this.renderJumpToDateMenu();
-        } else {
-            dateHeaderContent = (
-                <div className="mx_DateSeparator_dateContent">
-                    <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
-                        {label}
-                    </h2>
-                </div>
-            );
-        }
-
-        return (
-            <TimelineSeparator label={label} className="mx_TimelineSeparator">
-                {dateHeaderContent}
-            </TimelineSeparator>
         );
     }
 }
