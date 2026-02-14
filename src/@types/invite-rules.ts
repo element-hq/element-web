@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export const INVITE_RULES_ACCOUNT_DATA_TYPE = "org.matrix.msc4155.invite_permission_config";
-export const MSC4380_INVITE_RULES_ACCOUNT_DATA_TYPE = "org.matrix.msc4380.invite_permission_config";
 
 export interface InviteConfigAccountData {
     allowed_users?: string[];

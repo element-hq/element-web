@@ -34,7 +34,7 @@ describe("BlockInvitesConfigController", () => {
         beforeEach(async () => {
             cli = stubClient();
             cli.doesServerSupportUnstableFeature = jest.fn(async (feature) => {
-                return feature == "org.matrix.msc4380";
+                return feature == "org.matrix.msc4380.stable";
             });
             MatrixClientBackedController.matrixClient = cli;
         });
@@ -65,7 +65,7 @@ describe("BlockInvitesConfigController", () => {
                 const controller = SETTINGS.blockInvites.controller!;
                 await controller.beforeChange(SettingLevel.DEVICE, null, true);
                 expect(cli.setAccountData).toHaveBeenCalledTimes(1);
-                expect(cli.setAccountData).toHaveBeenCalledWith("org.matrix.msc4380.invite_permission_config", {
+                expect(cli.setAccountData).toHaveBeenCalledWith("m.invite_permission_config", {
                     default_action: "block",
                 });
             });
@@ -74,9 +74,7 @@ describe("BlockInvitesConfigController", () => {
                 const controller = SETTINGS.blockInvites.controller!;
                 await controller.beforeChange(SettingLevel.DEVICE, null, false);
                 expect(cli.setAccountData).toHaveBeenCalledTimes(1);
-                expect(cli.setAccountData).toHaveBeenCalledWith("org.matrix.msc4380.invite_permission_config", {
-                    default_action: "allow",
-                });
+                expect(cli.setAccountData).toHaveBeenCalledWith("m.invite_permission_config", {});
             });
         });
     });
@@ -84,13 +82,13 @@ describe("BlockInvitesConfigController", () => {
 
 /**
  * Add a mock implementation for {@link MatrixClient.getAccountData} which will return the given data
- * in respomsnse to any request for `org.matrix.msc4380.invite_permission_config`.
+ * in response to any request for `m.invite_permission_config`.
  */
 function mockAccountData(cli: MatrixClient, mockAccountData: object) {
     mocked(cli.getAccountData).mockImplementation((eventType) => {
-        if (eventType == "org.matrix.msc4380.invite_permission_config") {
+        if (eventType == "m.invite_permission_config") {
             return new MatrixEvent({
-                type: "org.matrix.msc4380.invite_permission_config",
+                type: "m.invite_permission_config",
                 content: mockAccountData,
             });
         } else {
