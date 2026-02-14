@@ -34,6 +34,7 @@
         "clear": "Clear",
         "click": "Click",
         "click_to_copy": "Click to copy",
+        "click_to_rename": "Click to rename",
         "close": "Close",
         "collapse": "Collapse",
         "complete": "Complete",
@@ -451,16 +452,6 @@
         "spaceinvaders_description": "Sends the given message with a space themed effect",
         "spaceinvaders_message": "sends space invaders"
     },
-    "custom_emotes": {
-        "tab_title": "Custom Emotes",
-        "title": "Custom Emotes",
-        "description": "Add custom emotes for this space. Members can use these emotes in rooms within this space.",
-        "emote_list": "Emotes",
-        "no_emotes": "No custom emotes yet.",
-        "add_emote": "Add Emote",
-        "uploading": "Uploading...",
-        "click_to_rename": "Click to rename"
-    },
     "common": {
         "access_token": "Access Token",
         "accessibility": "Accessibility",
@@ -748,6 +739,18 @@
         "default_cover_photo": "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
         "twemoji": "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>."
+    },
+    "custom_emotes": {
+        "add_emote": "Add Emote",
+        "description": "Add custom emotes for this space. Members can use these emotes in rooms within this space.",
+        "emote_list": "Emotes",
+        "no_emotes": "No custom emotes yet.",
+        "pull_from_rooms": "Pull Emotes from Rooms",
+        "pulling": "Pulling...",
+        "room_description": "Add custom emotes for this room. To add emotes to all rooms in a space, go to the space settings.",
+        "tab_title": "Custom Emotes",
+        "title": "Custom Emotes",
+        "uploading": "Uploading..."
     },
     "decline_invitation_dialog": {
         "confirm": "Are you sure you want to decline the invitation to join \"%(roomName)s\"?",

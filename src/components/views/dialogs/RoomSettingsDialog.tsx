@@ -15,6 +15,7 @@ import {
     GroupIcon,
     LockIcon,
     PollsIcon,
+    ReactionIcon,
     SettingsIcon,
     VoiceCallIcon,
     NotificationsIcon,
@@ -42,6 +43,7 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
+import EmotesRoomSettingsTab from "../settings/tabs/room/EmotesRoomSettingsTab";
 
 export const enum RoomSettingsTab {
     General = "ROOM_GENERAL_TAB",
@@ -52,6 +54,7 @@ export const enum RoomSettingsTab {
     Notifications = "ROOM_NOTIFICATIONS_TAB",
     Bridges = "ROOM_BRIDGES_TAB",
     Advanced = "ROOM_ADVANCED_TAB",
+    CustomEmotes = "ROOM_CUSTOM_EMOTES_TAB",
     PollHistory = "ROOM_POLL_HISTORY_TAB",
 }
 
@@ -193,6 +196,15 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                     closeSettingsFn={() => this.props.onFinished(true)}
                 />,
                 "RoomSettingsNotifications",
+            ),
+        );
+
+        tabs.push(
+            new Tab(
+                RoomSettingsTab.CustomEmotes,
+                _td("custom_emotes|tab_title"),
+                <ReactionIcon />,
+                <EmotesRoomSettingsTab room={this.state.room} />,
             ),
         );
 

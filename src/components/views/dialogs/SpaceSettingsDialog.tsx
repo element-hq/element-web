@@ -21,7 +21,7 @@ import BaseDialog from "./BaseDialog";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import TabbedView, { Tab } from "../../structures/TabbedView";
-import SpaceSettingsEmotesTab from "../spaces/SpaceSettingsEmotesTab";
+import EmotesRoomSettingsTab from "../settings/tabs/room/EmotesRoomSettingsTab";
 import SpaceSettingsGeneralTab from "../spaces/SpaceSettingsGeneralTab";
 import SpaceSettingsVisibilityTab from "../spaces/SpaceSettingsVisibilityTab";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -76,7 +76,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 SpaceSettingsTab.CustomEmotes,
                 _td("custom_emotes|tab_title"),
                 <ReactionIcon />,
-                <SpaceSettingsEmotesTab matrixClient={cli} space={space} />,
+                <EmotesRoomSettingsTab room={space} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(

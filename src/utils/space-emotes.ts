@@ -32,6 +32,18 @@ export function getCustomEmotesForRoom(client: MatrixClient, roomId: string | un
         }
     }
 
+    // Also get the emotes for the room itself, so you can use emotes from FluffyChat, etc.
+    const roomRoom = client.getRoom(roomId);
+    const event = roomRoom.currentState.getStateEvents(EMOTE_EVENT_TYPE, "");
+    const images = event?.getContent()?.images;
+    if (images && typeof images === "object") {
+        for (const [shortcode, info] of Object.entries(images)) {
+            if (info && typeof info === "object" && "url" in info && typeof (info as any).url === "string") {
+                emotes.set(shortcode, { url: (info as any).url });
+            }
+        }
+    }
+
     return emotes;
 }
 
