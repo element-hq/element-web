@@ -5,6 +5,8 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}
+env:
+    NX_DEFAULT_OUTPUT_STYLE: static
 
 jobs:
     docker:
