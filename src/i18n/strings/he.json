@@ -2073,11 +2073,6 @@
             "changed": "%(senderName)s שינה את רמת ההרשאה של %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s מ%(fromPowerLevel)s ל%(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 כל השרתים חסומים מהשתתפות! החדר הזה אינו בשימוש יותר.",
-            "changed": "%(senderDisplayName)s שינה את הגדרות של השרת עבור חדר זה.",
-            "set": "%(senderDisplayName)s הגדיר את רשימת הכניסה של השרת עבור חדר זה."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s דחה את ההזמנה של %(targetDisplayName)s להצטרף אל החדר.",
             "sent": "%(senderName)s שלח הזמנה ל%(targetDisplayName)s להצטרף אל החדר."

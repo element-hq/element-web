@@ -3530,11 +3530,6 @@
             "changed": "%(senderName)s hat das Berechtigungslevel von %(powerLevelDiffText)s geändert.",
             "user_from_to": "%(userId)s von %(fromPowerLevel)s zu %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Alle Server sind für eine Teilnahme gesperrt! Dieser Chat kann nicht mehr genutzt werden.",
-            "changed": "%(senderDisplayName)s hat die Server-ACLs für diesen Chat geändert.",
-            "set": "%(senderDisplayName)s hat die Server-ACLs für diesen Chat gesetzt."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s hat die Einladung für %(targetDisplayName)s zurückgezogen.",
             "sent": "%(senderName)s hat %(targetDisplayName)s in diesen Chat eingeladen."
@@ -3742,14 +3737,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)s haben den Chat verlassen und sind ihm wieder beigetreten",
                 "other": "%(severalUsers)s haben den Chat %(count)s-mal verlassen und sind ihm wieder beigetreten"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s hat die Server-ACLs geändert",
-                "other": "%(oneUser)s hat die Server-ACLs %(count)s Mal geändert"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s haben die Server-ACLs geändert",
-                "other": "%(severalUsers)s haben die Server-ACLs %(count)s Mal geändert"
             },
             "unbanned": {
                 "one": "wurde entsperrt",
