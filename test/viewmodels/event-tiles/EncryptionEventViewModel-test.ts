@@ -7,7 +7,7 @@
 
 import { waitFor } from "@testing-library/dom";
 import { mocked } from "jest-mock";
-import { type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { RoomStateEvent, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { EncryptionEventState } from "@element-hq/web-shared-components";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
@@ -21,10 +21,13 @@ describe("EncryptionEventViewModel", () => {
     const algorithm = "m.megolm.v1.aes-sha2";
     let client: MatrixClient;
     let event: MatrixEvent;
+    let room: Room;
 
     beforeEach(() => {
         jest.clearAllMocks();
         client = stubClient();
+        room = client.getRoom(roomId)!;
+        mocked(client.getRoom).mockReturnValue(room);
         event = mkEvent({
             event: true,
             room: roomId,
@@ -40,41 +43,42 @@ describe("EncryptionEventViewModel", () => {
         } as unknown as DMRoomMap);
     });
 
-    const createVm = (): EncryptionEventViewModel =>
+    const setRoomEncrypted = (encrypted: boolean): void => {
+        const crypto = client.getCrypto()!;
+        mocked(crypto.isEncryptionEnabledInRoom).mockResolvedValue(encrypted);
+    };
+
+    const createVm = (props: Partial<ConstructorParameters<typeof EncryptionEventViewModel>[0]> = {}): EncryptionEventViewModel =>
         new EncryptionEventViewModel({
             mxEvent: event,
+            cli: client,
+            ...props,
         });
 
     it("sets ENABLED for encrypted room", async () => {
-        const room = client.getRoom(roomId)!;
-        mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-        mocked(client.getRoom).mockReturnValue(room);
+        setRoomEncrypted(true);
 
         const vm = createVm();
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
         expect(vm.getSnapshot()).toMatchObject({
             state: EncryptionEventState.ENABLED,
-            className: "mx_EventTileBubble mx_cryptoEvent",
-            simplified: false,
+            className: "mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon",
+            encryptedStateEvents: false,
         });
     });
 
-    it("sets ENABLED with simplified=true for encrypted state events", async () => {
-        const room = client.getRoom(roomId)!;
-        mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-        mocked(client.getRoom).mockReturnValue(room);
+    it("sets ENABLED with encryptedStateEvents=true for encrypted state events", async () => {
+        setRoomEncrypted(true);
         client.enableEncryptedStateEvents = true;
         (event.getContent() as RoomEncryptionEventContent)["io.element.msc4362.encrypt_state_events"] = true;
 
         const vm = createVm();
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
-        expect(vm.getSnapshot().simplified).toBe(true);
+        expect(vm.getSnapshot().encryptedStateEvents).toBe(true);
     });
 
     it("sets CHANGED when previous algorithm is already megolm", async () => {
-        const room = client.getRoom(roomId)!;
-        mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-        mocked(client.getRoom).mockReturnValue(room);
+        setRoomEncrypted(true);
         event = mkEvent({
             event: true,
             room: roomId,
@@ -92,9 +96,7 @@ describe("EncryptionEventViewModel", () => {
     });
 
     it("sets DISABLE_ATTEMPT for unknown algorithm in encrypted room", async () => {
-        const room = client.getRoom(roomId)!;
-        mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-        mocked(client.getRoom).mockReturnValue(room);
+        setRoomEncrypted(true);
         event = mkEvent({
             event: true,
             room: roomId,
@@ -109,20 +111,31 @@ describe("EncryptionEventViewModel", () => {
     });
 
     it("sets UNSUPPORTED for unencrypted room", async () => {
-        const room = client.getRoom(roomId)!;
-        mocked(room.hasEncryptionStateEvent).mockReturnValue(false);
-        mocked(client.getRoom).mockReturnValue(room);
+        setRoomEncrypted(false);
 
         const vm = createVm();
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.UNSUPPORTED));
-        expect(vm.getSnapshot().state).toBe(EncryptionEventState.UNSUPPORTED);
         expect(vm.getSnapshot().className).toBe("mx_EventTileBubble mx_cryptoEvent");
+    });
+
+    it("sets ENABLED_DM with partner display name", async () => {
+        setRoomEncrypted(true);
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: jest.fn().mockReturnValue("@alice:example.com"),
+        } as unknown as DMRoomMap);
+        mocked(room.getMember).mockReturnValue({
+            rawDisplayName: "Alice",
+        } as unknown as ReturnType<typeof room.getMember>);
+
+        const vm = createVm();
+        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED_DM));
+        expect(vm.getSnapshot().userName).toBe("Alice");
     });
 
     it("sets ENABLED_LOCAL for encrypted local room", async () => {
         const localRoomId = "local+123";
         const localRoom = new LocalRoom(localRoomId, client, client.getUserId()!);
-        jest.spyOn(localRoom, "hasEncryptionStateEvent").mockReturnValue(true);
+        jest.spyOn(localRoom, "isEncryptionEnabled").mockReturnValue(true);
         mocked(client.getRoom).mockReturnValue(localRoom);
         event = mkEvent({
             event: true,
@@ -138,28 +151,24 @@ describe("EncryptionEventViewModel", () => {
 
         const vm = createVm();
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED_LOCAL));
-        expect(localRoom.hasEncryptionStateEvent).toHaveBeenCalled();
+        expect(localRoom.isEncryptionEnabled).toHaveBeenCalled();
     });
 
-    it("does not emit snapshot updates when content has no diff", async () => {
-        const room = client.getRoom(roomId)!;
-        mocked(room.hasEncryptionStateEvent).mockReturnValue(true);
-        mocked(client.getRoom).mockReturnValue(room);
-        event = mkEvent({
-            event: true,
-            room: roomId,
-            user: client.getUserId()!,
-            type: "m.room.encryption",
-            content: { algorithm },
-            prev_content: { algorithm },
-        });
-
+    it("recomputes snapshot on RoomStateEvent.Update", async () => {
+        setRoomEncrypted(false);
         const vm = createVm();
-        const cb = jest.fn();
-        vm.subscribe(cb);
+        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.UNSUPPORTED));
 
-        event.emit(MatrixEventEvent.SentinelUpdated);
+        setRoomEncrypted(true);
+        room.emit(RoomStateEvent.Update, room.currentState);
 
-        expect(cb).not.toHaveBeenCalled();
+        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
+    });
+
+    it("falls back to MatrixClientPeg client when cli is not provided", async () => {
+        setRoomEncrypted(true);
+        const vm = createVm({ cli: undefined });
+
+        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
     });
 });

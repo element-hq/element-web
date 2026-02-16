@@ -17,7 +17,8 @@ import {
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { TextualEventView } from "@element-hq/web-shared-components";
+import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
+import { EncryptionEventView, TextualEventView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
@@ -26,7 +27,6 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
-import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
 import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
@@ -37,11 +37,13 @@ import { WidgetType } from "../widgets/WidgetType";
 import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
+import { objectHasDiff } from "../utils/objects";
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
+import { EncryptionEventViewModel } from "../viewmodels/event-tiles/EncryptionEventViewModel";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
 import { ElementCallEventType } from "../call-types";
 
@@ -80,6 +82,15 @@ export const TextualEventFactory: Factory = (ref, props) => {
     const vm = new TextualEventViewModel(props);
     return <TextualEventView vm={vm} />;
 };
+const EncryptionEventFactory: Factory = (ref, props) => {
+    const prevContent = props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
+    const content = props.mxEvent.getContent<RoomEncryptionEventContent>();
+    // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
+    if (!objectHasDiff(prevContent, content)) return <></>;
+
+    const vm = new EncryptionEventViewModel({ ...props, ref });
+    return <EncryptionEventView vm={vm} ref={ref} />;
+};
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
 
@@ -99,7 +110,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
 ]);
 
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
-    [EventType.RoomEncryption, (ref, props) => <EncryptionEvent ref={ref} {...props} />],
+    [EventType.RoomEncryption, EncryptionEventFactory],
     [EventType.RoomCanonicalAlias, TextualEventFactory],
     [EventType.RoomCreate, RoomCreateEventFactory],
     [EventType.RoomMember, TextualEventFactory],

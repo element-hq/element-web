@@ -33,7 +33,7 @@ export type EncryptionEventViewSnapshot = {
     /** Which encryption event variant to render. */
     state: EncryptionEventState;
     /** Whether state-event encryption messaging should be shown. */
-    simplified?: boolean;
+    encryptedStateEvents?: boolean;
     /** Display name for DM partner, used by ENABLED_DM subtitle text. */
     userName?: string;
     /** Optional CSS classes passed through to EventTileBubble. */
@@ -53,17 +53,17 @@ export interface EncryptionEventViewProps {
      */
     vm: ViewModel<EncryptionEventViewSnapshot>;
     /**
-     * Ref forwarded to the root `EventTileBubble` DOM element.
+     * Ref forwarded to the root DOM element.
      */
-    ref?: React.RefObject<any>;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
 export function EncryptionEventView({ vm, ref }: Readonly<EncryptionEventViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { state, simplified, userName, className, timestamp } = useViewModel(vm);
+    const { state, encryptedStateEvents, userName, className, timestamp } = useViewModel(vm);
 
     let icon = <LockSolidIcon />;
-    let title = simplified ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled");
+    let title = encryptedStateEvents ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled");
     let subtitle = "";
 
     switch (state) {
@@ -71,10 +71,11 @@ export function EncryptionEventView({ vm, ref }: Readonly<EncryptionEventViewPro
             subtitle = _t("timeline|m.room.encryption|parameters_changed");
             break;
         case EncryptionEventState.DISABLE_ATTEMPT:
+            title = _t("common|encryption_enabled");
             subtitle = _t("timeline|m.room.encryption|disable_attempt");
             break;
         case EncryptionEventState.ENABLED:
-            subtitle = simplified
+            subtitle = encryptedStateEvents
                 ? _t("timeline|m.room.encryption|state_enabled")
                 : _t("timeline|m.room.encryption|enabled");
             break;

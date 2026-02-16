@@ -28,13 +28,13 @@ const {
 describe("EncryptionEventView", () => {
     const renderView = (
         state: EncryptionEventState,
-        simplified?: boolean,
+        encryptedStateEvents?: boolean,
         userName?: string,
         className?: string,
     ): void => {
         const vm = new MockViewModel({
             state,
-            simplified,
+            encryptedStateEvents,
             userName,
             className,
         });

@@ -33,7 +33,7 @@ export default {
     },
     args: {
         state: EncryptionEventState.ENABLED,
-        simplified: false,
+        encryptedStateEvents: false,
         userName: "Alice",
         className: "",
     },
@@ -46,7 +46,7 @@ export const Default = Template.bind({});
 export const StateEncryptionEnabled = Template.bind({});
 StateEncryptionEnabled.args = {
     state: EncryptionEventState.ENABLED,
-    simplified: true,
+    encryptedStateEvents: true,
 };
 
 export const ParametersChanged = Template.bind({});

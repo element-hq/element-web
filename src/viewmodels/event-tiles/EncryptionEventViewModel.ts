@@ -6,7 +6,7 @@
  */
 
 import { type JSX } from "react";
-import { MatrixEventEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { RoomStateEvent, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     EncryptionEventState,
@@ -19,11 +19,17 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../utils/crypto";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { objectHasDiff } from "../../utils/objects";
+import { isRoomEncrypted as isRoomEncryptedForRoom } from "../../hooks/useIsEncrypted";
 
 export interface EncryptionEventViewModelProps {
+    /** Encryption state event to derive tile state from. */
     mxEvent: MatrixEvent;
+    /** Optional caller-provided client. Falls back to MatrixClientPeg when omitted. */
+    cli?: MatrixClient;
+    /** Optional timestamp element rendered in the tile footer slot. */
     timestamp?: JSX.Element;
+    /** Optional ref forwarded by wrapper/factory for compatibility with legacy APIs. */
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
 export class EncryptionEventViewModel
@@ -33,34 +39,37 @@ export class EncryptionEventViewModel
     public constructor(props: EncryptionEventViewModelProps) {
         super(props, { state: EncryptionEventState.UNSUPPORTED, timestamp: props.timestamp });
 
-        this.setEncryptionFromEvent();
-        this.disposables.trackListener(
-            this.props.mxEvent,
-            MatrixEventEvent.SentinelUpdated,
-            this.setEncryptionFromEvent,
-        );
+        // Prefer an injected client from the caller, but keep peg fallback for legacy callsites.
+        this.props.cli = this.props.cli ?? MatrixClientPeg.safeGet();
+
+        void this.setEncryptionFromEvent();
+
+        const roomId = this.props.mxEvent.getRoomId()!;
+        const room = this.props.cli.getRoom(roomId);
+        if (room) {
+            // Recompute when room state changes (including encryption state updates).
+            this.disposables.trackListener(room, RoomStateEvent.Update, () => void this.setEncryptionFromEvent());
+        }
     }
 
-    private setEncryptionFromEvent = (): void => {
+    private setEncryptionFromEvent = async (): Promise<void> => {
+        const cli = this.props.cli;
+        const roomId = this.props.mxEvent.getRoomId()!;
+        const room = cli?.getRoom(roomId) ?? null;
+        const isRoomLocal = isLocalRoom(room);
+        const crypto = cli?.getCrypto();
+        const isRoomEncrypted = Boolean(room && crypto && (await isRoomEncryptedForRoom(room, crypto)));
+
         const prevContent = this.props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
         const content = this.props.mxEvent.getContent<RoomEncryptionEventContent>();
 
-        // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
-        if (!objectHasDiff(prevContent, content)) return; // nop
-
-        const cli = MatrixClientPeg.safeGet();
-        const roomId = this.props.mxEvent.getRoomId();
-        const room = roomId ? cli?.getRoom(roomId) : null;
-        const isRoomLocal = isLocalRoom(room);
-        const isRoomEncrypted = Boolean(room?.hasEncryptionStateEvent());
-
-        // Keep mx_EventTileBubble and mx_cryptoEvent to support compatibility with existing timeline layout.
+        // Keep legacy class names for compatibility with existing timeline layout and styling.
         const newSnapshot: EncryptionEventViewSnapshotInterface = {
             state: EncryptionEventState.UNSUPPORTED,
-            simplified: undefined,
+            encryptedStateEvents: undefined,
             userName: undefined,
             timestamp: this.props.timestamp,
-            className: "mx_EventTileBubble mx_cryptoEvent",
+            className: "mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon",
         };
 
         if (isRoomEncrypted && content.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
@@ -70,7 +79,7 @@ export class EncryptionEventViewModel
             );
 
             newSnapshot.state = EncryptionEventState.ENABLED;
-            newSnapshot.simplified = stateEncrypted;
+            newSnapshot.encryptedStateEvents = stateEncrypted;
 
             if (prevContent.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
                 newSnapshot.state = EncryptionEventState.CHANGED;
@@ -82,6 +91,9 @@ export class EncryptionEventViewModel
             }
         } else if (isRoomEncrypted) {
             newSnapshot.state = EncryptionEventState.DISABLE_ATTEMPT;
+        } else {
+            // Unsupported branch matches legacy EncryptionEvent class usage (no icon class).
+            newSnapshot.className = "mx_EventTileBubble mx_cryptoEvent";
         }
 
         this.snapshot.merge(newSnapshot);
