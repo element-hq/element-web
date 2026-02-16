@@ -214,6 +214,7 @@ test.describe("Message rendering", () => {
 
 test.describe("Message url previews", () => {
     test.use({
+        displayName: "Alice",
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
