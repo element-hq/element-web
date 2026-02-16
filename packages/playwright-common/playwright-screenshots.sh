@@ -10,7 +10,7 @@ IMAGE_NAME="element-web-playwright-server"
 WS_PORT=3000
 
 # Check the playwright version
-PW_VERSION=$(npm exec --silent -- playwright --version | gcut -d" " -f2)
+PW_VERSION=$(npm exec --silent -- playwright --version | awk '{print $2}')
 echo "Building $IMAGE_NAME:$PW_VERSION image in $SCRIPT_DIR"
 
 # Build the image
