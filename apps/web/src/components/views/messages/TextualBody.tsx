@@ -16,7 +16,7 @@ import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
-import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
+import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { Action } from "../../../dispatcher/actions";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
@@ -28,50 +28,45 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
+import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreviewViewModel.ts";
+import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 
-interface IState {
-    // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
-    links: string[];
-
-    // track whether the preview widget is hidden
-    widgetHidden: boolean;
-}
-
-export default class TextualBody extends React.Component<IBodyProps, IState> {
+export default class TextualBody extends React.Component<IBodyProps> {
     private readonly contentRef = createRef<HTMLDivElement>();
+    private readonly urlPreviewVMRef = createRef<UrlPreviewViewModel>();
 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
-    public state = {
-        links: [],
-        widgetHidden: false,
-    };
-
     public componentDidMount(): void {
         if (!this.props.editState) {
-            this.applyFormatting();
+            this.urlPreviewVMRef.current?.recomputeSnapshot();
         }
     }
 
-    private applyFormatting(): void {
-        this.calculateUrlPreview();
-    }
-
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
+        if (!this.urlPreviewVMRef.current || prevProps.mxEvent !== this.props.mxEvent) {
+            this.urlPreviewVMRef.current?.dispose();
+            const urlPreviewVM = new UrlPreviewViewModel({
+                client: MatrixClientPeg.safeGet(),
+                eventRef: this.contentRef,
+                eventSendTime: this.props.mxEvent.getTs(),
+                eventId: this.props.mxEvent.getId(),
+            });
+            this.urlPreviewVMRef.current = urlPreviewVM;
+        }
+
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
             const urlPreviewChanged = prevProps.showUrlPreview !== this.props.showUrlPreview;
             if (messageWasEdited || stoppedEditing || urlPreviewChanged) {
-                this.applyFormatting();
+                this.urlPreviewVMRef.current?.recomputeSnapshot();
             }
         }
     }
 
-    public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {
-        //console.info("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
-
+    public shouldComponentUpdate(nextProps: Readonly<IBodyProps>): boolean {
         // exploit that events are immutable :)
         return (
             nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
@@ -80,93 +75,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             nextProps.highlightLink !== this.props.highlightLink ||
             nextProps.showUrlPreview !== this.props.showUrlPreview ||
             nextProps.editState !== this.props.editState ||
-            nextState.links !== this.state.links ||
-            nextState.widgetHidden !== this.state.widgetHidden ||
             nextProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration
         );
     }
-
-    private calculateUrlPreview(): void {
-        //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
-
-        if (this.props.showUrlPreview && this.contentRef.current) {
-            // pass only the first child which is the event tile otherwise this recurses on edited events
-            let links = this.findLinks([this.contentRef.current]);
-            if (links.length) {
-                // de-duplicate the links using a set here maintains the order
-                links = Array.from(new Set(links));
-                this.setState({ links });
-
-                // lazy-load the hidden state of the preview widget from localstorage
-                if (window.localStorage) {
-                    const hidden = !!window.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
-                    this.setState({ widgetHidden: hidden });
-                }
-            } else if (this.state.links.length) {
-                this.setState({ links: [] });
-            }
-        }
-    }
-
-    private findLinks(nodes: ArrayLike<Element>): string[] {
-        let links: string[] = [];
-
-        for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href")) {
-                if (this.isLinkPreviewable(node)) {
-                    links.push(node.getAttribute("href")!);
-                }
-            } else if (node.tagName === "PRE" || node.tagName === "CODE" || node.tagName === "BLOCKQUOTE") {
-                continue;
-            } else if (node.children && node.children.length) {
-                links = links.concat(this.findLinks(node.children));
-            }
-        }
-        return links;
-    }
-
-    private isLinkPreviewable(node: Element): boolean {
-        // don't try to preview relative links
-        const href = node.getAttribute("href") ?? "";
-        if (!href.startsWith("http://") && !href.startsWith("https://")) {
-            return false;
-        }
-
-        const url = node.getAttribute("href");
-        const host = url?.match(/^https?:\/\/(.*?)(\/|$)/)?.[1];
-
-        // never preview permalinks (if anything we should give a smart
-        // preview of the room/user they point to: nobody needs to be reminded
-        // what the matrix.to site looks like).
-        if (!host || isPermalinkHost(host)) return false;
-
-        // as a random heuristic to avoid highlighting things like "foo.pl"
-        // we require the linked text to either include a / (either from http://
-        // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
-        // link, in which case we check the target text differs from the link value.
-        // TODO: make this configurable?
-        if (node.textContent?.includes("/")) {
-            return true;
-        }
-
-        if (node.textContent?.toLowerCase().trim().startsWith(host.toLowerCase())) {
-            // it's a "foo.pl" style link
-            return false;
-        } else {
-            // it's a [foo bar](http://foo.com) style link
-            return true;
-        }
-    }
-
-    private onCancelClick = (): void => {
-        this.setState({ widgetHidden: true });
-        // FIXME: persist this somewhere smarter than local storage
-        if (global.localStorage) {
-            global.localStorage.setItem("hide_preview_" + this.props.mxEvent.getId(), "1");
-        }
-        this.forceUpdate();
-    };
 
     private onEmoteSenderClick = (): void => {
         const mxEvent = this.props.mxEvent;
@@ -202,14 +113,11 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     public getEventTileOps = (): IEventTileOps => ({
         isWidgetHidden: () => {
-            return this.state.widgetHidden;
+            return this.urlPreviewVMRef.current?.getSnapshot().hidden ?? false;
         },
 
         unhideWidget: () => {
-            this.setState({ widgetHidden: false });
-            if (global.localStorage) {
-                global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
-            }
+            this.urlPreviewVMRef.current?.onShowClick();
         },
     });
 
@@ -370,16 +278,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             );
         }
 
-        let widgets;
-        if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            widgets = (
-                <LinkPreviewGroup
-                    links={this.state.links}
-                    mxEvent={this.props.mxEvent}
-                    onCancelClick={this.onCancelClick}
-                />
-            );
-        }
+        const urlPreviewWidget = this.urlPreviewVMRef.current && (
+            <LinkPreviewGroup vm={this.urlPreviewVMRef.current} mxEvent={mxEvent} />
+        );
 
         if (isEmote) {
             return (
@@ -395,7 +296,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     </span>
                     &nbsp;
                     {body}
-                    {widgets}
+                    {urlPreviewWidget}
                 </div>
             );
         }
@@ -403,7 +304,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             return (
                 <div id={this.props.id} className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                     {body}
-                    {widgets}
+                    {urlPreviewWidget}
                 </div>
             );
         }
@@ -411,14 +312,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             return (
                 <div id={this.props.id} className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
                     {body}
-                    {widgets}
+                    {urlPreviewWidget}
                 </div>
             );
         }
         return (
             <div id={this.props.id} className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                 {body}
-                {widgets}
+                {urlPreviewWidget}
             </div>
         );
     }
