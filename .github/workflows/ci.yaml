@@ -21,6 +21,7 @@ permissions: {} # No permissions required
 jobs:
     lint:
         strategy:
+            fail-fast: false
             matrix:
                 include:
                     - name: Typescript Syntax Check
@@ -69,6 +70,7 @@ jobs:
 
     i18n:
         strategy:
+            fail-fast: false
             matrix:
                 include:
                     - name: Element Web
