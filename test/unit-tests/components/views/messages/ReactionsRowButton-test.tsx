@@ -78,8 +78,22 @@ const ReactionsRowButtonHost = (props: ReactionsRowButtonViewModelProps): JSX.El
     const vm = useCreateAutoDisposedViewModel(() => new ReactionsRowButtonViewModel(props));
 
     useEffect(() => {
-        vm.setProps(props);
-    }, [props, vm]);
+        vm.setContext(props.client, props.mxEvent);
+        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
+        vm.setCount(props.count);
+        vm.setMyReactionEvent(props.myReactionEvent);
+        vm.setDisabled(props.disabled);
+    }, [
+        props.client,
+        props.mxEvent,
+        props.content,
+        props.reactionEvents,
+        props.customReactionImagesEnabled,
+        props.count,
+        props.myReactionEvent,
+        props.disabled,
+        vm,
+    ]);
 
     return <ReactionsRowButtonView vm={vm} />;
 };
@@ -187,7 +201,7 @@ describe("ReactionsRowButton", () => {
         expect(root.asFragment()).toMatchSnapshot();
     });
 
-    it("calls setProps on ViewModel when props change", () => {
+    it("updates ViewModel when props change", () => {
         const props = createProps({
             "m.relates_to": {
                 event_id: "$user1:example.com",

@@ -132,18 +132,8 @@ export class ReactionsRowButtonViewModel
         this.disposables.track(this.tooltipVm);
     }
 
-    public setProps(newProps: Partial<ReactionsRowButtonViewModelProps>): void {
-        this.props = { ...this.props, ...newProps };
-        const nextSnapshot = ReactionsRowButtonViewModel.computeSnapshot(this.props);
+    private setSnapshotIfChanged(nextSnapshot: ReactionsRowButtonViewSnapshot): void {
         const currentSnapshot = this.snapshot.current;
-
-        this.tooltipVm.setProps({
-            client: this.props.client,
-            mxEvent: this.props.mxEvent,
-            content: this.props.content,
-            reactionEvents: this.props.reactionEvents,
-            customReactionImagesEnabled: this.props.customReactionImagesEnabled,
-        });
 
         if (
             nextSnapshot.content === currentSnapshot.content &&
@@ -158,6 +148,54 @@ export class ReactionsRowButtonViewModel
         }
 
         this.snapshot.set(nextSnapshot);
+    }
+
+    public setContext(client: MatrixClient | null, mxEvent: MatrixEvent): void {
+        if (this.props.client === client && this.props.mxEvent === mxEvent) {
+            return;
+        }
+        this.props = { ...this.props, client, mxEvent };
+
+        this.tooltipVm.setContext(client, mxEvent);
+        this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
+    }
+
+    public setReactionData(content: string, reactionEvents: MatrixEvent[], customReactionImagesEnabled?: boolean): void {
+        if (
+            this.props.content === content &&
+            this.props.reactionEvents === reactionEvents &&
+            this.props.customReactionImagesEnabled === customReactionImagesEnabled
+        ) {
+            return;
+        }
+        this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
+
+        this.tooltipVm.setReactionData(content, reactionEvents, customReactionImagesEnabled);
+        this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
+    }
+
+    public setCount(count: number): void {
+        if (this.props.count === count) {
+            return;
+        }
+        this.props = { ...this.props, count };
+        this.snapshot.merge({ count });
+    }
+
+    public setMyReactionEvent(myReactionEvent?: MatrixEvent): void {
+        if (this.props.myReactionEvent === myReactionEvent) {
+            return;
+        }
+        this.props = { ...this.props, myReactionEvent };
+        this.snapshot.merge({ isSelected: !!myReactionEvent });
+    }
+
+    public setDisabled(disabled?: boolean): void {
+        if (this.props.disabled === disabled) {
+            return;
+        }
+        this.props = { ...this.props, disabled };
+        this.snapshot.merge({ isDisabled: disabled });
     }
 
     public onClick = (): void => {

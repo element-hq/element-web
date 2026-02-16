@@ -98,27 +98,24 @@ const ReactionsRowButtonItem: React.FC<ReactionsRowButtonItemProps> = (props) =>
     );
 
     useEffect(() => {
-        vm.setProps({
-            client: props.client,
-            mxEvent: props.mxEvent,
-            content: props.content,
-            count: props.count,
-            reactionEvents: props.reactionEvents,
-            myReactionEvent: props.myReactionEvent,
-            disabled: props.disabled,
-            customReactionImagesEnabled: props.customReactionImagesEnabled,
-        });
-    }, [
-        props.client,
-        props.mxEvent,
-        props.content,
-        props.count,
-        props.reactionEvents,
-        props.myReactionEvent,
-        props.disabled,
-        props.customReactionImagesEnabled,
-        vm,
-    ]);
+        vm.setContext(props.client, props.mxEvent);
+    }, [props.client, props.mxEvent, vm]);
+
+    useEffect(() => {
+        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
+    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
+
+    useEffect(() => {
+        vm.setCount(props.count);
+    }, [props.count, vm]);
+
+    useEffect(() => {
+        vm.setMyReactionEvent(props.myReactionEvent);
+    }, [props.myReactionEvent, vm]);
+
+    useEffect(() => {
+        vm.setDisabled(props.disabled);
+    }, [props.disabled, vm]);
 
     return <ReactionsRowButtonView vm={vm} />;
 };

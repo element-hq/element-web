@@ -148,7 +148,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
         expect(vm.getSnapshot().caption).toBeUndefined();
     });
 
-    it("should update snapshot and notify subscribers when setProps is called", () => {
+    it("should update snapshot and notify subscribers when reaction data changes", () => {
         const aliceReaction = createReactionEvent("@alice:example.org");
         const bobReaction = createReactionEvent("@bob:example.org");
 
@@ -163,7 +163,7 @@ describe("ReactionsRowButtonTooltipViewModel", () => {
         const subscriber = jest.fn();
         vm.subscribe(subscriber);
 
-        vm.setProps({ reactionEvents: [aliceReaction, bobReaction] });
+        vm.setReactionData("👍", [aliceReaction, bobReaction], false);
 
         expect(subscriber).toHaveBeenCalled();
         expect(vm.getSnapshot().formattedSenders).toContain("Alice");
