@@ -1,0 +1,73 @@
+name: CD # Continuous Delivery
+on:
+    push:
+        branches: [develop, t3chguy/playwright-server-cd]
+concurrency: ${{ github.workflow }}-${{ github.ref_name }}
+
+permissions: {}
+
+jobs:
+    docker:
+        name: Docker Bake
+        runs-on: ubuntu-24.04
+        permissions:
+            id-token: write # needed for signing the images with GitHub OIDC Token
+            packages: write # needed for publishing packages to GHCR
+        steps:
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              with:
+                  fetch-depth: 0 # needed for docker-package to be able to calculate the version
+
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+              with:
+                  install: true
+
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+              with:
+                  node-version-file: package.json
+                  cache: "pnpm"
+
+            - name: Install Deps
+              run: "pnpm install --frozen-lockfile"
+
+            - name: Calculate variables
+              run: |
+                  echo "PLAYWRIGHT_VERSION=$(pnpm --silent exec -- playwright --version | awk '{print $2}')" >> $GITHUB_ENV
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build and push
+              id: bake
+              uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
+              with:
+                  push: true
+                  provenance: true
+                  sbom: true
+                  source: .
+                  files: |
+                      ./docker-bake.hcl
+
+            - name: Transform bake output
+              id: output
+              run: |
+                  echo 'digests<<EOF' >> $GITHUB_OUTPUT
+                  echo '${{ steps.bake.outputs.metadata }}' | jq -r 'with_entries(select(.value | (type == "object" and has("containerimage.digest")))) | map(. as $parent | (.["image.name"] | split(",") | map(. + "@" + $parent.["containerimage.digest"]))) | flatten | .[]' >> $GITHUB_OUTPUT
+                  echo 'EOF' >> $GITHUB_OUTPUT
+
+            - name: Sign the images with GitHub OIDC token
+              run: cosign sign --yes $DIGESTS
+              env:
+                  DIGESTS: ${{ steps.output.outputs.digests }}
