@@ -45,24 +45,29 @@ export default class TextualBody extends React.Component<IBodyProps> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
-        if (!this.urlPreviewVMRef.current || prevProps.mxEvent !== this.props.mxEvent) {
-            this.urlPreviewVMRef.current?.dispose();
-            const urlPreviewVM = new UrlPreviewViewModel({
-                client: MatrixClientPeg.safeGet(),
-                eventRef: this.contentRef,
-                eventSendTime: this.props.mxEvent.getTs(),
-                eventId: this.props.mxEvent.getId(),
-            });
-            this.urlPreviewVMRef.current = urlPreviewVM;
-        }
-
-        if (!this.props.editState) {
-            const stoppedEditing = prevProps.editState && !this.props.editState;
-            const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-            const urlPreviewChanged = prevProps.showUrlPreview !== this.props.showUrlPreview;
-            if (messageWasEdited || stoppedEditing || urlPreviewChanged) {
-                this.urlPreviewVMRef.current?.recomputeSnapshot();
+        if (this.props.showUrlPreview) {
+            // If the VM doesn't exist or the event has changed, create a new VM.
+            if (!this.urlPreviewVMRef.current || prevProps.mxEvent !== this.props.mxEvent) {
+                this.urlPreviewVMRef.current?.dispose();
+                const urlPreviewVM = new UrlPreviewViewModel({
+                    client: MatrixClientPeg.safeGet(),
+                    eventRef: this.contentRef,
+                    eventSendTime: this.props.mxEvent.getTs(),
+                    eventId: this.props.mxEvent.getId(),
+                });
+                this.urlPreviewVMRef.current = urlPreviewVM;
+            } else if (!this.props.editState) {
+                const stoppedEditing = prevProps.editState && !this.props.editState;
+                const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
+                if (messageWasEdited || stoppedEditing) {
+                    this.urlPreviewVMRef.current?.recomputeSnapshot();
+                }
             }
+        } else if (this.urlPreviewVMRef.current) {
+            // If the parent component doesn't want us to show URL previews then
+            // just dispose of the VM.
+            this.urlPreviewVMRef.current.dispose();
+            this.urlPreviewVMRef.current = null;
         }
     }
 
