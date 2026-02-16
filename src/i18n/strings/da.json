@@ -3061,11 +3061,6 @@
             "changed": "%(senderName)s ændrede rettighedsniveau af %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s fra %(fromPowerLevel)s til %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Alle servere er udelukket fra at deltage! Dette rum kan ikke længere bruges.",
-            "changed": "%(senderDisplayName)s ændrede server-ACL'erne for dette rum.",
-            "set": "%(senderDisplayName)s indstillede serverens ACL'er for dette rum."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s tilbagetrak invitationen til %(targetDisplayName)s om at deltage i rummet.",
             "sent": "%(senderName)s inviterede %(targetDisplayName)s til rummet."
@@ -3265,14 +3260,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sforlod og sluttede sig til igen",
                 "other": "%(severalUsers)sforlod og gentilsluttede sig %(count)s gange"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s har ændret serverens ACL'er",
-                "other": "%(oneUser)s har ændret serveres ACL'er %(count)s gange"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sændrede serverens ACL'er",
-                "other": "%(severalUsers)sændrede serverens ACL'er %(count)s gange"
             },
             "unbanned": {
                 "one": "fik fjernet sin spærring",

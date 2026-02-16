@@ -11,3 +11,8 @@ src/modules.js
 # Test result files
 /playwright/test-results/
 /playwright/html-report/
+
+# Shared components generated files
+/packages/shared-components/dist/
+/packages/shared-components/src/i18n/i18nKeys.d.ts
+/packages/shared-components/typedoc/

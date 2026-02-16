@@ -2701,11 +2701,6 @@
             "changed": "%(senderName)s更改了%(powerLevelDiffText)s的权力级别。",
             "user_from_to": "%(userId)s 从 %(fromPowerLevel)s 变为 %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 所有服务器都已禁止参与！此房间不再可用。",
-            "changed": "%(senderDisplayName)s 为此房间更改了服务器 ACL。",
-            "set": "%(senderDisplayName)s 为此房间设置了服务器 ACL。"
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s 撤销了对 %(targetDisplayName)s 加入房间的邀请。",
             "sent": "%(senderName)s 向 %(targetDisplayName)s 发了加入房间的邀请。"
@@ -2896,14 +2891,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s离开并重新加入了%(count)s次",
                 "one": "%(severalUsers)s离开并重新加入了"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s 已更改服务器访问控制列表",
-                "other": "%(oneUser)s 已更改服务器访问控制列表 %(count)s 次"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s 已更改服务器访问控制列表",
-                "other": "%(severalUsers)s 已更改服务器的访问控制列表 %(count)s 此"
             },
             "unbanned": {
                 "other": "被解封 %(count)s 次",

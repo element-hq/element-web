@@ -2198,11 +2198,6 @@
             "changed": "%(senderName)s ŝanĝis la povnivelon de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s al %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Ĉiuj serviloj estas forbaritaj de partoprenado! La ĉambro ne plu povas esti uzata.",
-            "changed": "%(senderDisplayName)s ŝanĝis la servilblokajn listojn por ĉi tiu ĉambro.",
-            "set": "%(senderDisplayName)s agordis la servilblokajn listojn por ĉi tiu ĉambro."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s nuligis inviton en la ĉambron por %(targetDisplayName)s.",
             "sent": "%(senderName)s sendis ĉambran inviton al %(targetDisplayName)s."
@@ -2347,14 +2342,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s%(count)s-foje foriris kaj re-aliĝis",
                 "one": "%(severalUsers)s foriris kaj re-aliĝis"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s ŝanĝis la servilblokajn listojn",
-                "other": "%(oneUser)s ŝanĝis la servilblokajn listojn %(count)s-foje"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s ŝanĝis la servilblokajn listojn",
-                "other": "%(severalUsers)s ŝanĝis la servilblokajn listojn %(count)s-foje"
             },
             "unbanned": {
                 "other": "%(count)s-foje malforbariĝis",

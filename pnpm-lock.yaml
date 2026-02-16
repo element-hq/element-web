@@ -362,6 +362,9 @@ importers:
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
         version: 2.2.7(@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.1)(playwright-core@1.58.1)
+      '@element-hq/element-web-playwright-common-local':
+        specifier: workspace:*
+        version: link:packages/playwright-common
       '@fetch-mock/jest':
         specifier: ^0.2.20
         version: 0.2.20(@jest/globals@30.2.0)(jest@30.2.0(@types/node@22.19.8)(babel-plugin-macros@3.1.0))

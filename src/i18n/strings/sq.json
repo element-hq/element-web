@@ -2829,11 +2829,6 @@
             "changed": "%(senderName)s ndryshoi shkallën e pushtetit të %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s nga %(fromPowerLevel)s në %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Janë dëbuar nga pjesëmarrja krejt shërbyesit! Kjo dhomë s’mund të përdoret më.",
-            "changed": "%(senderDisplayName)s ndryshoi ACL-ra shërbyesi për këtë dhomë.",
-            "set": "%(senderDisplayName)s caktoi ACL-ra shërbyesi për këtë dhomë."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s shfuqizoi ftesën për %(targetDisplayName)s që të marrë pjesë në dhomë.",
             "sent": "%(senderName)s dërgoi një ftesë për %(targetDisplayName)s që të marrë pjesë në dhomë."
@@ -3026,14 +3021,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sdolën dhe rihynë",
                 "other": "%(severalUsers)sdolën dhe rihynë %(count)s herë"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sndryshoi ACL-ra shërbyesi",
-                "other": "%(oneUser)sndryshoi ACL-ra shërbyesi %(count)s herë"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sndryshuan ACL-ra shërbyesi",
-                "other": "%(severalUsers)sndryshuan ACL-ra shërbyesi %(count)s herë"
             },
             "unbanned": {
                 "other": "i është hequr dëbimi %(count)s herë",

@@ -1910,11 +1910,6 @@
             "changed": "%(senderName)s سطح قدرت %(powerLevelDiffText)s تغییر داد.",
             "user_from_to": "%(userId)s از %(fromPowerLevel)s به %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 شرکت همه سرورها ممنوع است! دیگر نمی توان از این اتاق استفاده کرد.",
-            "changed": "%(senderDisplayName)s ACL های سرور را برای این اتاق تغییر داد.",
-            "set": "%(senderDisplayName)s ACL های سرور را برای این اتاق تنظیم کرده است."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s دعوت نامه %(targetDisplayName)s را برای پیوستن به اتاق باطل کرد.",
             "sent": "%(senderName)s %(targetDisplayName)s را به اتاق دعوت کرد."
