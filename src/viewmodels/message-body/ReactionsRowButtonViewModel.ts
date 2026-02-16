@@ -160,7 +160,11 @@ export class ReactionsRowButtonViewModel
         this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
     }
 
-    public setReactionData(content: string, reactionEvents: MatrixEvent[], customReactionImagesEnabled?: boolean): void {
+    public setReactionData(
+        content: string,
+        reactionEvents: MatrixEvent[],
+        customReactionImagesEnabled?: boolean,
+    ): void {
         if (
             this.props.content === content &&
             this.props.reactionEvents === reactionEvents &&

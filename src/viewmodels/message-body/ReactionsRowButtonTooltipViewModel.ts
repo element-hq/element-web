@@ -92,7 +92,13 @@ export class ReactionsRowButtonTooltipViewModel
         super(props, ReactionsRowButtonTooltipViewModel.computeSnapshot(props));
     }
 
-    private setSnapshotIfChanged(nextSnapshot: ReactionsRowButtonTooltipViewSnapshot): void {
+    /**
+     * Updates the properties of the view model and recomputes the snapshot.
+     * @param newProps - Partial properties to update
+     */
+    public setProps(newProps: Partial<ReactionsRowButtonTooltipViewModelProps>): void {
+        this.props = { ...this.props, ...newProps };
+        const nextSnapshot = ReactionsRowButtonTooltipViewModel.computeSnapshot(this.props);
         const currentSnapshot = this.snapshot.current;
 
         if (
@@ -103,25 +109,5 @@ export class ReactionsRowButtonTooltipViewModel
         }
 
         this.snapshot.set(nextSnapshot);
-    }
-
-    public setContext(client: MatrixClient | null, mxEvent: MatrixEvent): void {
-        if (this.props.client === client && this.props.mxEvent === mxEvent) {
-            return;
-        }
-        this.props = { ...this.props, client, mxEvent };
-        this.setSnapshotIfChanged(ReactionsRowButtonTooltipViewModel.computeSnapshot(this.props));
-    }
-
-    public setReactionData(content: string, reactionEvents: MatrixEvent[], customReactionImagesEnabled?: boolean): void {
-        if (
-            this.props.content === content &&
-            this.props.reactionEvents === reactionEvents &&
-            this.props.customReactionImagesEnabled === customReactionImagesEnabled
-        ) {
-            return;
-        }
-        this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
-        this.setSnapshotIfChanged(ReactionsRowButtonTooltipViewModel.computeSnapshot(this.props));
     }
 }
