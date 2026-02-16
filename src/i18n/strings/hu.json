@@ -3503,11 +3503,6 @@
             "changed": "%(senderName)s megváltoztatta a hozzáférési szintet: %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s: %(fromPowerLevel)s -> %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Minden kiszolgáló ki van tiltva! Ezt a szobát nem lehet többet használni.",
-            "changed": "%(senderDisplayName)s megváltoztatta a kiszolgálójogosultságokat a szobában.",
-            "set": "%(senderDisplayName)s beállította a kiszolgálójogosultságokat a szobában."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s visszavonta %(targetDisplayName)s a szobába való belépéséhez szükséges meghívóját.",
             "sent": "%(senderName)s meghívót küldött %(targetDisplayName)s számára, hogy lépjen be a szobába."
@@ -3714,14 +3709,6 @@
             "rejoined_multiple": {
                 "%(severalUsers)s %(count)s alkalommal távozott és újra csatlakozott": "other",
                 "%(severalUsers)s távozott és újra csatlakozott": "one"
-            },
-            "server_acls": {
-                "%(oneUser)s megváltoztatta a kiszolgáló ACL-jeit": "one",
-                "%(oneUser)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-jeit": "other"
-            },
-            "server_acls_multiple": {
-                "%(severalUsers)s megváltoztatta a kiszolgáló ACL-jeit": "one",
-                "%(severalUsers)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-jeit": "other"
             },
             "unbanned": {
                 "%(count)s alkalommal lett visszaengedve": "other",

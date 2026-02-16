@@ -2776,11 +2776,6 @@
             "changed": "%(senderName)s đã đổi mức quyền của %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s đổi từ %(fromPowerLevel)s thành %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Tất cả máy chủ bị cấm không được tham gia! Phòng này không thể được sử dụng nữa.",
-            "changed": "%(senderDisplayName)s đã thay đổi danh sách truy cập máy chủ cho phòng này.",
-            "set": "%(senderDisplayName)s đặt danh sách truy cập máy chủ cho phòng này."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s đã thu hồi lời mời %(targetDisplayName)s tham gia phòng.",
             "sent": "%(senderName)s đã mời %(targetDisplayName)s tham gia phòng."
@@ -2967,14 +2962,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)s đã rời khỏi và tham gia lại",
                 "other": "%(severalUsers)s đã rời khỏi và tham gia lại %(count)s lần"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s đã thay đổi ACLs máy chủ",
-                "other": "%(oneUser)s đã thay đổi ACLs máy chủ %(count)s lần"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s đã thay đổi ACLs máy chủ",
-                "other": "%(severalUsers)s đã thay đổi ACLs máy chủ %(count)s lần"
             },
             "unbanned": {
                 "one": "đã được hủy cấm",

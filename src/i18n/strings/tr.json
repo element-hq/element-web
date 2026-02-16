@@ -3334,11 +3334,6 @@
             "changed": "%(senderName)s %(powerLevelDiffText)s'nin güç düzeyini değiştirdi.",
             "user_from_to": "%(userId)s %(fromPowerLevel)s den %(toPowerLevel)s ' ye"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Tüm sunucuların katılımı yasaklanmıştır! Bu oda artık kullanılamaz.",
-            "changed": "%(senderDisplayName)s bu oda için sunucu ACL'lerini değiştirdi.",
-            "set": "%(senderDisplayName)s bu oda için sunucu ACL'lerini ayarladı."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s, %(targetDisplayName)s'nin odaya katılması için daveti iptal etti.",
             "sent": "%(senderName)s %(targetDisplayName)s' a odaya katılması için bir davet gönderdi."
@@ -3541,14 +3536,6 @@
             },
             "rejoined_multiple": {
                 "one": "%(severalUsers)s ayrıldı ve yeniden katıldı"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s sunucu ACL'lerini değiştirdi",
-                "other": "%(oneUser)s sunucu ACL'lerini %(count)s kez değiştirdi"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s sunucu ACL'lerini değiştirdi",
-                "other": "%(severalUsers)s sunucu ACL'lerini %(count)s kez değiştirdi"
             },
             "unbanned": {
                 "other": "%(count)s kez yasak kaldırıldı",
