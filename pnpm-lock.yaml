@@ -716,6 +716,9 @@ importers:
 
   packages/playwright-common:
     devDependencies:
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.58.1
       wait-on:
         specifier: ^9.0.4
         version: 9.0.4
