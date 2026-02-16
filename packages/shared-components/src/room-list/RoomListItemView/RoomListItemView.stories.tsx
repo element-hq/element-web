@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -217,4 +217,18 @@ export const WithoutHoverMenu: Story = {
     args: {
         showMoreOptionsMenu: false,
     },
+};
+
+export const WithLargeFont: Story = {
+    args: {
+        isSelected: true,
+    },
+    decorators: [
+        (Story) => {
+            useEffect(() => {
+                document.documentElement.style.setProperty("font-size", "36px");
+            }, []);
+            return <Story />;
+        },
+    ],
 };
