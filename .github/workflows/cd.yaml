@@ -1,7 +1,7 @@
 name: CD # Continuous Delivery
 on:
     push:
-        branches: [develop, t3chguy/playwright-server-cd]
+        branches: [develop]
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}
