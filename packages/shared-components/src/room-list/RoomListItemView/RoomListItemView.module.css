@@ -76,7 +76,8 @@
     min-width: 0;
 }
 
-.ellipsis {
+.ellipsis,
+.roomName {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
