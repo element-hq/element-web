@@ -132,7 +132,7 @@ export class ReactionsRowButtonViewModel
         this.disposables.track(this.tooltipVm);
     }
 
-    private setSnapshotIfChanged(nextSnapshot: ReactionsRowButtonViewSnapshot): void {
+    private setSnapshot(nextSnapshot: ReactionsRowButtonViewSnapshot): void {
         const currentSnapshot = this.snapshot.current;
 
         if (
@@ -157,7 +157,7 @@ export class ReactionsRowButtonViewModel
         this.props = { ...this.props, client, mxEvent };
 
         this.tooltipVm.setProps({ client, mxEvent });
-        this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
+        this.setSnapshot(ReactionsRowButtonViewModel.computeSnapshot(this.props));
     }
 
     public setReactionData(
@@ -175,7 +175,7 @@ export class ReactionsRowButtonViewModel
         this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
 
         this.tooltipVm.setProps({ content, reactionEvents, customReactionImagesEnabled });
-        this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
+        this.setSnapshot(ReactionsRowButtonViewModel.computeSnapshot(this.props));
     }
 
     public setCount(count: number): void {
