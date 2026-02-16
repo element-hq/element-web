@@ -15,21 +15,18 @@ import {
 } from "@element-hq/web-shared-components";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../utils/crypto";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { isRoomEncrypted as isRoomEncryptedForRoom } from "../../hooks/useIsEncrypted";
 
 export interface EncryptionEventViewModelProps {
+    /** Caller-provided client. */
+    cli: MatrixClient;
     /** Encryption state event to derive tile state from. */
     mxEvent: MatrixEvent;
-    /** Optional caller-provided client. Falls back to MatrixClientPeg when omitted. */
-    cli?: MatrixClient;
     /** Optional timestamp element rendered in the tile footer slot. */
     timestamp?: JSX.Element;
-    /** Optional ref forwarded by wrapper/factory for compatibility with legacy APIs. */
-    ref?: React.RefObject<HTMLDivElement>;
 }
 
 export class EncryptionEventViewModel
@@ -38,10 +35,6 @@ export class EncryptionEventViewModel
 {
     public constructor(props: EncryptionEventViewModelProps) {
         super(props, { state: EncryptionEventState.UNSUPPORTED, timestamp: props.timestamp });
-
-        // Prefer an injected client from the caller, but keep peg fallback for legacy callsites.
-        this.props.cli = this.props.cli ?? MatrixClientPeg.safeGet();
-
         void this.setEncryptionFromEvent();
 
         const roomId = this.props.mxEvent.getRoomId()!;

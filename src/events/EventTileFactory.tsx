@@ -17,8 +17,11 @@ import {
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
-import { EncryptionEventView, TextualEventView } from "@element-hq/web-shared-components";
+import {
+    EncryptionEventView,
+    TextualEventView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
@@ -32,12 +35,12 @@ import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import MKeyVerificationRequest from "../components/views/messages/MKeyVerificationRequest";
 import { WidgetType } from "../widgets/WidgetType";
 import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
-import { objectHasDiff } from "../utils/objects";
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
@@ -82,14 +85,13 @@ export const TextualEventFactory: Factory = (ref, props) => {
     const vm = new TextualEventViewModel(props);
     return <TextualEventView vm={vm} />;
 };
-const EncryptionEventFactory: Factory = (ref, props) => {
-    const prevContent = props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
-    const content = props.mxEvent.getContent<RoomEncryptionEventContent>();
-    // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
-    if (!objectHasDiff(prevContent, content)) return <></>;
-
-    const vm = new EncryptionEventViewModel({ ...props, ref });
+function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new EncryptionEventViewModel({ mxEvent, cli }));
     return <EncryptionEventView vm={vm} ref={ref} />;
+}
+const EncryptionEventFactory: Factory = (ref, props) => {
+    return <EncryptionEventWrappedView ref={ref} {...props} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;

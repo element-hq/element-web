@@ -48,7 +48,9 @@ describe("EncryptionEventViewModel", () => {
         mocked(crypto.isEncryptionEnabledInRoom).mockResolvedValue(encrypted);
     };
 
-    const createVm = (props: Partial<ConstructorParameters<typeof EncryptionEventViewModel>[0]> = {}): EncryptionEventViewModel =>
+    const createVm = (
+        props: Partial<ConstructorParameters<typeof EncryptionEventViewModel>[0]> = {},
+    ): EncryptionEventViewModel =>
         new EncryptionEventViewModel({
             mxEvent: event,
             cli: client,
@@ -161,13 +163,6 @@ describe("EncryptionEventViewModel", () => {
 
         setRoomEncrypted(true);
         room.emit(RoomStateEvent.Update, room.currentState);
-
-        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
-    });
-
-    it("falls back to MatrixClientPeg client when cli is not provided", async () => {
-        setRoomEncrypted(true);
-        const vm = createVm({ cli: undefined });
 
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
     });

@@ -39,7 +39,7 @@ import {
     THREAD_RELATION_TYPE,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
@@ -414,19 +414,8 @@ function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatus
  * Wrap an EncryptionEventView and ViewModel into one component, for usage with legacy React components.
  */
 function EncryptionEventWrappedView({ mxEvent }: { mxEvent: MatrixEvent }): ReactElement | null {
-    const prevContent = mxEvent.getPrevContent() as RoomEncryptionEventContent;
-    const content = mxEvent.getContent<RoomEncryptionEventContent>();
-
-    // if no change happened then skip rendering this, a shallow check is enough as all known fields are top-level.
-    if (!objectHasDiff(prevContent, content)) return null;
-
-    return <EncryptionEventWrappedViewInner mxEvent={mxEvent} />;
-}
-
-function EncryptionEventWrappedViewInner({ mxEvent }: { mxEvent: MatrixEvent }): ReactElement {
     const cli = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(() => new EncryptionEventViewModel({ mxEvent, cli }));
-
     return <EncryptionEventView vm={vm} />;
 }
 
