@@ -45,6 +45,8 @@ export default class TextualBody extends React.Component<IBodyProps> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
+        // TODO: This is crap crap crap, we should delegate this sort of logic to the
+        // VM and have it figure this out.
         if (this.props.showUrlPreview) {
             // If the VM doesn't exist or the event has changed, create a new VM.
             if (!this.urlPreviewVMRef.current || prevProps.mxEvent !== this.props.mxEvent) {
