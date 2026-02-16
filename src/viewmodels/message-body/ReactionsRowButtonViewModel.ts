@@ -156,7 +156,7 @@ export class ReactionsRowButtonViewModel
         }
         this.props = { ...this.props, client, mxEvent };
 
-        this.tooltipVm.setContext(client, mxEvent);
+        this.tooltipVm.setProps({ client, mxEvent });
         this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
     }
 
@@ -174,7 +174,7 @@ export class ReactionsRowButtonViewModel
         }
         this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
 
-        this.tooltipVm.setReactionData(content, reactionEvents, customReactionImagesEnabled);
+        this.tooltipVm.setProps({ content, reactionEvents, customReactionImagesEnabled });
         this.setSnapshotIfChanged(ReactionsRowButtonViewModel.computeSnapshot(this.props));
     }
 
