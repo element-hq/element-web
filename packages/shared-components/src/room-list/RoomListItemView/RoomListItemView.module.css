@@ -15,7 +15,7 @@
     /* Needed to position the selected marker */
     position: relative;
     cursor: pointer;
-    height: 44px;
+    min-height: 44px;
     width: 100%;
     /* Gap between items, accounted for in ROOM_LIST_ITEM_HEIGHT */
     margin-bottom: var(--cpd-space-2x);
@@ -60,7 +60,6 @@
 
 .container {
     flex: 1;
-    height: 100%;
     margin: 0 var(--cpd-space-3x);
     padding: 0 var(--cpd-space-2x);
     border-radius: 8px;

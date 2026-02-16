@@ -163,7 +163,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                 mx_RoomListItemView_selected: isSelected,
             })}
             gap="var(--cpd-space-3x)"
-            align="center"
+            align="stretch"
             type="button"
             role="option"
             aria-posinset={roomIndex + 1}
