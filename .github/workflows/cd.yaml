@@ -57,7 +57,7 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - run: nx affected -t docker:build
+            - run: pnpm nx affected -t docker:build
               env:
                   INPUT_PUSH: true
 
