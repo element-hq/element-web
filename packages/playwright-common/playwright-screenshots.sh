@@ -15,7 +15,7 @@ function build_image() {
 WS_PORT=3000
 
 # Check the playwright version
-PW_VERSION=$(npm exec --silent -- playwright --version | awk '{print $2}')
+PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
 IMAGE_NAME="ghcr.io/element-web/playwright-server:$PW_VERSION"
 
 # Pull the image, failing that build the image

@@ -13,10 +13,22 @@ jobs:
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
+            # Needed for nx-set-shas
+            contents: read
+            actions: read
         steps:
             - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
               with:
-                  fetch-depth: 0 # needed for docker-package to be able to calculate the version
+                  # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+                  fetch-depth: 0
+                  # reduce the size of the checkout with tree filtering,
+                  # see https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/
+                  filter: tree:0
+
+            - name: Prepare nx
+              uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4
+              with:
+                  main-branch-name: develop
 
             - name: Install Cosign
               uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
@@ -38,10 +50,6 @@ jobs:
             - name: Install Deps
               run: "pnpm install --frozen-lockfile"
 
-            - name: Calculate variables
-              run: |
-                  echo "PLAYWRIGHT_VERSION=$(pnpm --silent exec -- playwright --version | awk '{print $2}')" >> $GITHUB_ENV
-
             - name: Login to GitHub Container Registry
               uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
               with:
@@ -49,25 +57,18 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build and push
-              id: bake
-              uses: docker/bake-action@5be5f02ff8819ecd3092ea6b2e6261c31774f2b4 # v6
-              with:
-                  push: true
-                  provenance: true
-                  sbom: true
-                  source: .
-                  files: |
-                      ./docker-bake.hcl
-
-            - name: Transform bake output
-              id: output
-              run: |
-                  echo 'digests<<EOF' >> $GITHUB_OUTPUT
-                  echo '${{ steps.bake.outputs.metadata }}' | jq -r 'with_entries(select(.value | (type == "object" and has("containerimage.digest")))) | map(. as $parent | (.["image.name"] | split(",") | map(. + "@" + $parent.["containerimage.digest"]))) | flatten | .[]' >> $GITHUB_OUTPUT
-                  echo 'EOF' >> $GITHUB_OUTPUT
+            - run: nx affected -t docker:build
+              env:
+                  INPUT_PUSH: true
 
             - name: Sign the images with GitHub OIDC token
-              run: cosign sign --yes $DIGESTS
               env:
-                  DIGESTS: ${{ steps.output.outputs.digests }}
+                  PATTERN: "^ghcr.io/element-hq/element-web*"
+              run: |
+                  docker image ls --digests --format '{{.Repository}}@{{.Digest}}' | grep "$PATTERN" | while read -r TARGET; do
+                    # Check if digest is valid (not <none>)
+                    if [[ "$TARGET" != *"@<none>"* ]]; then
+                      echo "Signing $TARGET..."
+                      cosign sign --yes "$TARGET"
+                    fi
+                  done
