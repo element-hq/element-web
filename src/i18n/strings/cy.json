@@ -971,6 +971,7 @@
         "import_invalid_passphrase": "Methodd y gwiriad dilysu: cyfrinair anghywir?",
         "key_storage_out_of_sync": "Nid yw eich storfa allweddi wedi'i gydweddu.",
         "key_storage_out_of_sync_description": "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.",
+        "message_shared_by": "Rhannodd %(displayName)s (%(userId)s) y neges hon gan nad oeddech chi yn yr ystafell pan gafodd ei hanfon.",
         "messages_not_secure": {
             "cause_1": "Eich gweinydd cartref",
             "cause_2": "Y gweinydd cartref y mae'r defnyddiwr rydych chi'n ei wirio wedi'i gysylltu ag ef",
@@ -2027,7 +2028,9 @@
                 "Yn gofyn i ymuno": "one",
                 "%(count)s person yn gofyn i ymuno": "other"
             },
-            "room_is_public": "Mae'r ystafell hon yn gyhoeddus"
+            "room_is_public": "Mae'r ystafell hon yn gyhoeddus",
+            "shared_history_tooltip": "Mae aelodau newydd yn gweld hanes",
+            "world_readable_history_tooltip": "Gall unrhyw un weld hanes"
         },
         "header_avatar_open_settings_label": "Agor gosodiadau ystafell",
         "header_face_pile_tooltip": "Pobl",
@@ -3037,11 +3040,13 @@
             "connection_section": "Cysylltiad",
             "dialog_title": "<strong>Gosodiadau:</strong> Llais a Fideo",
             "echo_cancellation": "Diddymu adlais",
+            "echo_cancellation_description": "Yn tynnu atseinio o fewnbwn eich meicroffon yn ystod galwadau. Mae'r gosodiad hwn hefyd yn berthnasol i Element Call.",
             "enable_fallback_ice_server": "Caniatáu gweinydd cymorth galwadau wrth gefn (%(server)s)",
             "enable_fallback_ice_server_description": "Dim ond os nad yw eich gweinydd cartref yn cynnig un y mae'n berthnasol. Byddai eich cyfeiriad IP yn cael ei rannu yn ystod galwad.",
             "mirror_local_feed": "Drychu'r ffrwd fideo lleol",
             "missing_permissions_prompt": "Caniatâd cyfryngau ar goll, cliciwch y botwm isod i ofyn.",
             "noise_suppression": "Lleihau sain",
+            "noise_suppression_description": "Yn lleihau sŵn cefndir yn eich mewnbwn meicroffon yn ystod galwadau. Mae'r gosodiad hwn hefyd yn berthnasol i Element Call.",
             "request_permissions": "Gofyn am ganiatâd cyfryngau",
             "title": "Llais a Fideo",
             "video_input_empty": "Dim camerau gwe wedi'u canfod",
@@ -3528,11 +3533,6 @@
             "changed": "Mae %(senderName)s wedi newid lefel pŵer %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s o %(fromPowerLevel)s i %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Mae pob gweinydd wedi'i wahardd rhag cymryd rhan! Nid oes modd defnyddio'r ystafell hon mwyach.",
-            "changed": "Newidiodd %(senderDisplayName)s y gweinydd ACLs ar gyfer yr ystafell hon.",
-            "set": "Gosododd %(senderDisplayName)s y gweinydd ACLs ar gyfer yr ystafell hon."
-        },
         "m.room.third_party_invite": {
             "revoked": "Dirymodd %(senderName)s y gwahoddiad i %(targetDisplayName)s ymuno â'r ystafell.",
             "sent": "Anfonodd %(senderName)s wahoddiad at %(targetDisplayName)s i ymuno â'r ystafell."
@@ -3747,14 +3747,6 @@
             "rejoined_multiple": {
                 "Ymunodd a gadawodd %(severalUsers)s": "one",
                 "Ymunodd a gadawodd %(severalUsers)s %(count)s gwaith": "other"
-            },
-            "server_acls": {
-                "Mae %(oneUser)s wedi newid ACLs y gweinydd %(count)s gwaith": "other",
-                "Mae %(oneUser)s wedi newid ACLs y gweinydd": "one"
-            },
-            "server_acls_multiple": {
-                "Mae %(severalUsers)s wedi newid ACLs y gweinydd %(count)s gwaith": "other",
-                "Mae %(severalUsers)s wedi newid ACLs y gweinydd": "one"
             },
             "unbanned": {
                 "wedi'u dadwahardd %(count)s gwaith": "other",
