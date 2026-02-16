@@ -2975,11 +2975,6 @@
             "changed": "%(senderName)s muutti %(powerLevelDiffText)s:n oikeustasoa.",
             "user_from_to": "%(userId)s tasolta %(fromPowerLevel)s tasolle %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "Kaikki palvelimet ovat saaneet porttikiellon huoneeseen! Tätä huonetta ei voi enää käyttää.",
-            "changed": "%(senderDisplayName)s muutti tämän huoneen palvelinten pääsynvalvontalistaa.",
-            "set": "%(senderDisplayName)s loi tämän huoneen palvelinten pääsynvalvontalistan."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s kumosi henkilön %(targetDisplayName)s kutsun liittyä tähän huoneeseen.",
             "sent": "%(senderName)s kutsui käyttäjän %(targetDisplayName)s liittymään huoneeseen."

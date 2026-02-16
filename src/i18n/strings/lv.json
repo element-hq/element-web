@@ -2953,11 +2953,6 @@
             "changed": "%(senderName)s nomainīja jaudas līmeni %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s no %(fromPowerLevel)s uz %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Visiem serveriem ir liegta pieeja dalībai! Šī istaba vairs nevar tikt izmantota.",
-            "changed": "%(senderDisplayName)s nomainīja servera ACL piekļuves šai istabai.",
-            "set": "%(senderDisplayName)s iestatīja servera ACL piekļuves šai istabai."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s atsauca uzaicinājumu %(targetDisplayName)s pievienoties istabai.",
             "sent": "%(senderName)s nosūtīja uzaicinājumu %(targetDisplayName)s pievienoties istabai."
@@ -3189,16 +3184,6 @@
                 "zero": "%(severalUsers)s pameta un atkal pievienojās %(count)s reižu",
                 "one": "%(severalUsers)s pameta un atkal pievienojās",
                 "other": "%(severalUsers)s pameta un atkal pievienojās %(count)s reizes"
-            },
-            "server_acls": {
-                "zero": "%(oneUser)s nomainīja servera ACL %(count)s reižu",
-                "one": "%(oneUser)s nomainīja servera ACL",
-                "other": "%(oneUser)s nomainīja servera ACL %(count)s reizes"
-            },
-            "server_acls_multiple": {
-                "zero": "%(severalUsers)s nomainīja servera ACL %(count)s reižu",
-                "one": "%(severalUsers)s nomainīja servera ACL",
-                "other": "%(severalUsers)s nomainīja servera ACL %(count)s reizes"
             },
             "unbanned": {
                 "zero": "tika atcelts liegums %(count)s reižu",

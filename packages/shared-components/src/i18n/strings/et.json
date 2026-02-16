@@ -25,6 +25,12 @@
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik"
     },
+    "notifications": {
+        "all_messages": "Kõik sõnumid",
+        "default_settings": "Sobita vaikimisi seadistustega",
+        "mentions_keywords": "Mainimised ja märksõnad",
+        "mute_room": "Summuta jututuba"
+    },
     "room": {
         "context_menu": {
             "title": "Jututoa eelistused"
@@ -50,8 +56,63 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "Ava jututuba: %(roomName)s",
+            "invitation": "Ava %(roomName)s jututoa kutse.",
+            "mention": {
+                "one": "Ava %(roomName)s jututuba ühe lugemata mainimisega.",
+                "other": "Ava %(roomName)s jututuba %(count)s lugemata mainimisega."
+            },
+            "unread": {
+                "one": "Ava %(roomName)s jututuba ühe lugemata sõnumiga.",
+                "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga."
+            },
+            "unsent_message": "Ava „%(roomName)s“ jututuba saatmata sõnumiga."
+        },
         "appearance": "Välimus",
+        "collapse_filters": "Ahenda filtriloendit",
+        "empty": {
+            "no_chats": "Vestlusi veel ei leidu",
+            "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
+            "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
+            "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
+            "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
+            "no_invites": "Sul pole lugemata kutseid",
+            "no_lowpriority": "Sul pole ühtegi vähetähtsat jututuba",
+            "no_mentions": "Sul pole lugemata mainimisi",
+            "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
+            "no_people_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
+            "no_rooms": "Sa veel ei osale mitte üheski jututoas",
+            "no_rooms_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
+            "no_unread": "Õnnitlused! Sul pole ühtegi lugemata sõnumit",
+            "show_activity": "Vaata kõiki tegevusi",
+            "show_chats": "Näita kõiki vestlusi"
+        },
+        "expand_filters": "Laienda filtriloendit",
+        "filters": {
+            "favourite": "Lemmikud",
+            "invites": "Kutsed",
+            "low_priority": "Vähetähtis",
+            "mentions": "Mainimised",
+            "people": "Osalejad",
+            "rooms": "Jututoad",
+            "unread": "Lugemata"
+        },
+        "list_title": "Jututubade loend",
+        "more_options": {
+            "copy_link": "Kopeeri jututoa link",
+            "favourited": "Märgitud lemmikuks",
+            "leave_room": "Lahku jututoast",
+            "low_priority": "Vähetähtis",
+            "mark_read": "Märgi loetuks",
+            "mark_unread": "Märgi mitteloetuks"
+        },
+        "notification_options": "Teavituste eelistused",
         "open_space_menu": "Ava kogukonna menüü",
+        "primary_filters": "Jututubade loendi filtrid",
+        "room": {
+            "more_options": "Täiendavad seadistused"
+        },
         "room_options": "Jututoa valikud",
         "show_message_previews": "Näita sõnumite eelvaateid",
         "sort": "Järjesta",

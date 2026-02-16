@@ -3026,11 +3026,6 @@
             "changed": "%(senderName)s ha modificato il livello di poteri di %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s da %(fromPowerLevel)s a %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Tutti i server sono banditi dalla partecipazione! Questa stanza non può più essere usata.",
-            "changed": "%(senderDisplayName)s ha cambiato le ACL del server per questa stanza.",
-            "set": "%(senderDisplayName)s ha impostato le ACL del server per questa stanza."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s ha revocato l'invito a %(targetDisplayName)s di unirsi alla stanza.",
             "sent": "%(senderName)s ha mandato un invito a %(targetDisplayName)s per unirsi alla stanza."
@@ -3235,14 +3230,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)ssono usciti e rientrati %(count)s volte",
                 "one": "%(severalUsers)ssono usciti e rientrati"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sha cambiato le ACL del server",
-                "other": "%(oneUser)sha cambiato le ACL del server %(count)s volte"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)shanno cambiato le ACL del server",
-                "other": "%(severalUsers)shanno cambiato le ACL del server %(count)s volte"
             },
             "unbanned": {
                 "other": "è stato riammesso %(count)s volte",
