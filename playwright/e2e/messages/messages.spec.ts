@@ -9,8 +9,11 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { type Locator, type Page } from "@playwright/test";
+import { readFileSync } from "node:fs";
 
 import { test, expect } from "../../element-web-test";
+
+const MEDIA_FILE = readFileSync("playwright/sample-files/riot.png");
 
 async function waitForMessageSentStatus(msgTile: Locator): Promise<void> {
     await expect(msgTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
@@ -206,5 +209,50 @@ test.describe("Message rendering", () => {
                 );
             });
         });
+    });
+});
+
+test.describe("Message url previews", () => {
+    test.use({
+        displayName: "Alice",
+        room: async ({ user, app }, use) => {
+            const roomId = await app.client.createRoom({ name: "Test room" });
+            await use({ roomId });
+        },
+    });
+    test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room }) => {
+        // TODO: This should be changed to _matrix/client/v1/media/preview_url when the matrix-js-sdk is updated.
+        await page.route("**/_matrix/media/v3/preview_url**", (route, request) => {
+            const requestedPage = new URL(request.url()).searchParams.get("url");
+            expect(requestedPage).toEqual("https://example.org/");
+            return route.fulfill({
+                json: {
+                    "og:title": "A simple site",
+                },
+            });
+        });
+        await page.goto(`#/room/${room.roomId}`);
+        const msgTile = await sendMessage(page, "https://example.org");
+        await expect(msgTile.getByRole("link", { name: "A simple site" })).toBeVisible();
+        await expect(msgTile).toMatchScreenshot("preview-basic.png", screenshotOptions(page));
+    });
+    test("should render a preview with a thumbnail", { tag: "@screenshot" }, async ({ page, user, bot, app, room }) => {
+        const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
+        // TODO: This should be changed to _matrix/client/v1/media/preview_url when the matrix-js-sdk is updated.
+        await page.route("**/_matrix/media/v3/preview_url**", (route, request) => {
+            const requestedPage = new URL(request.url()).searchParams.get("url");
+            expect(requestedPage).toEqual("https://example.org/");
+            return route.fulfill({
+                json: {
+                    "og:title": "A simple site",
+                    "og:description": "And with a brief description",
+                    "og:image": mxc,
+                },
+            });
+        });
+        await page.goto(`#/room/${room.roomId}`);
+        const msgTile = await sendMessage(page, "https://example.org");
+        await expect(msgTile.getByRole("link", { name: "A simple site" })).toBeVisible();
+        await expect(msgTile).toMatchScreenshot("preview-with-thumb.png", screenshotOptions(page));
     });
 });
