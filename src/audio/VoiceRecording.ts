@@ -103,11 +103,13 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
     private async makeRecorder(): Promise<void> {
         try {
+            const isLinux = navigator.userAgent.toLowerCase().includes("linux");
+
             this.recorderStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     channelCount: CHANNELS,
                     deviceId: MediaDeviceHandler.getAudioInput(),
-                    autoGainControl: false,
+                    autoGainControl: isLinux ? false : { ideal: MediaDeviceHandler.getAudioAutoGainControl() }, // Disable on Linux,
                     echoCancellation: { ideal: MediaDeviceHandler.getAudioEchoCancellation() },
                     noiseSuppression: { ideal: MediaDeviceHandler.getAudioNoiseSuppression() },
                 },
