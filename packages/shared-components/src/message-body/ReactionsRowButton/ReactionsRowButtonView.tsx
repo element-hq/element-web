@@ -85,9 +85,9 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
     });
 
     const reactionContent = imageSrc ? (
-        <img className={className} alt={imageAlt ?? ""} src={imageSrc} width="16" height="16" />
+        <img className={classNames(className)} alt={imageAlt ?? ""} src={imageSrc} width="16" height="16" />
     ) : (
-        <span className={className} aria-hidden="true">
+        <span className={classNames(className)} aria-hidden="true">
             {content ?? ""}
         </span>
     );
@@ -104,7 +104,7 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
                 onClick={isDisabled ? undefined : vm.onClick}
             >
                 {reactionContent}
-                <span className={className} aria-hidden="true">
+                <span className={classNames(className)} aria-hidden="true">
                     {count}
                 </span>
             </button>
