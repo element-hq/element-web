@@ -10,10 +10,12 @@ import { PureComponent, type SyntheticEvent } from "react";
 import { type WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
+import { type RoomListSortingAlgorithmChanged } from "@matrix-org/analytics-events/types/typescript/RoomListSortingAlgorithmChanged";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
 import { PosthogAnalytics } from "./PosthogAnalytics";
+import { SortingAlgorithm } from "./stores/room-list-v3/skip-list/sorters";
 
 export type ScreenName = ScreenEvent["$current_url"];
 export type InteractionName = InteractionEvent["name"];
@@ -37,6 +39,12 @@ const loggedInPageTypeMap: Record<PageType | string, ScreenName> = {
     [PageType.RoomView]: "Room",
     [PageType.UserView]: "User",
 };
+
+const SortingAlgorithmMap: Record<SortingAlgorithm, RoomListSortingAlgorithmChanged["newAlgorithm"]> = {
+    [SortingAlgorithm.Recency]: "Activity",
+    [SortingAlgorithm.Unread]: "Unread",
+    [SortingAlgorithm.Alphabetic]: "Alphabetic"
+}
 
 export default class PosthogTrackers {
     private static internalInstance: PosthogTrackers;
@@ -110,6 +118,19 @@ export default class PosthogTrackers {
             eventName: "PinUnpinAction",
             kind,
             from,
+        });
+    }
+
+    /**
+     * Track when the user chooses a different sorting algorithm for the room-list.
+     * @param oldAlgorithm - The old algorithm.
+     * @param newAlgorithm - The new algorithm.
+     */
+    public static trackRoomListSortingAlgorithmChange(oldAlgorithm: SortingAlgorithm, newAlgorithm: SortingAlgorithm): void {
+        PosthogAnalytics.instance.trackEvent<RoomListSortingAlgorithmChanged>({
+            eventName: "RoomListSortingAlgorithmChanged",
+            oldAlgorithm: SortingAlgorithmMap[oldAlgorithm],
+            newAlgorithm: SortingAlgorithmMap[newAlgorithm],
         });
     }
 }
