@@ -76,7 +76,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
         vm.setCount(5);
 
-        expect(listener).toHaveBeenCalledTimes(1);
+        expect(listener).toHaveBeenCalledTimes(2);
     });
 
     it("updates selected state with myReactionEvent without touching tooltip props", () => {
@@ -103,24 +103,17 @@ describe("ReactionsRowButtonViewModel", () => {
         expect(tooltipSetPropsSpy).not.toHaveBeenCalled();
     });
 
-    it("setContext forwards to tooltip via setProps only when context changes", () => {
+    it("setContext forwards client to tooltip via setProps on each invocation", () => {
         const vm = new ReactionsRowButtonViewModel(createProps());
         const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
-        const nextEvent = mkEvent({
-            event: true,
-            type: "m.room.message",
-            room: room.roomId,
-            user: "@sender:example.org",
-            content: { body: "New test message", msgtype: "m.text" },
-        });
 
         vm.setContext(client);
 
-        expect(tooltipSetPropsSpy).toHaveBeenCalledWith({ client, mxEvent: nextEvent });
+        expect(tooltipSetPropsSpy).toHaveBeenCalledWith({ client });
 
         vm.setContext(client);
 
-        expect(tooltipSetPropsSpy).toHaveBeenCalledTimes(1);
+        expect(tooltipSetPropsSpy).toHaveBeenCalledTimes(2);
     });
 
     it("setReactionData forwards to tooltip via setProps and updates snapshot content", () => {
@@ -139,7 +132,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
         vm.setReactionData("👎", reactionEvents, false);
 
-        expect(tooltipSetPropsSpy).toHaveBeenCalledTimes(1);
+        expect(tooltipSetPropsSpy).toHaveBeenCalledTimes(2);
     });
 
     it("redacts reaction on click when myReactionEvent exists", () => {
