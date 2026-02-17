@@ -3579,11 +3579,6 @@
             "changed": "%(senderName)s promijenio/la je razinu ovlasti za %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s s %(fromPowerLevel)s na %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Svim je poslužiteljima zabranjeno sudjelovanje! Ovom se sobom više ne može koristiti.",
-            "changed": "%(senderDisplayName)s promijenio/la je popise kontrole pristupa poslužitelja za ovu sobu.",
-            "set": "%(senderDisplayName)s postavio/la je popise kontrole pristupa poslužitelja za ovu sobu."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s povukao/la je pozivnicu za pridruživanje sobi korisniku %(targetDisplayName)s.",
             "sent": "%(senderName)s poslao/la je pozivnicu za pridruživanje sobi korisniku %(targetDisplayName)s."
@@ -3822,16 +3817,6 @@
                 "one": "%(severalUsers)s je otišao i ponovno se pridružio",
                 "few": "%(severalUsers)s su otišla i ponovno se pridružila %(count)s puta",
                 "other": "%(severalUsers)s je otišlo i ponovno se pridružilo %(count)s puta"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s je promijenio ACL-ove poslužitelja",
-                "few": "%(oneUser)s je promijenio ACL-ove poslužitelja %(count)s puta",
-                "other": "%(oneUser)s je promijenio ACL-ove poslužitelja %(count)s puta"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s su promijenili ACL-ove poslužitelja",
-                "few": "%(severalUsers)s su promijenili ACL-ove poslužitelja %(count)s puta",
-                "other": "%(severalUsers)s su promijenili ACL-ove poslužitelja %(count)s puta"
             },
             "unbanned": {
                 "one": "je povučena zabrana",

@@ -3538,11 +3538,6 @@
             "changed": "%(senderName)s změnil(a) úroveň oprávnění o %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s z %(fromPowerLevel)s na %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 K místnosti nemá přístup žádný server! Místnost už nemůže být používána.",
-            "changed": "%(senderDisplayName)s změnil(a) seznam přístupů serveru pro tuto místnost.",
-            "set": "%(senderDisplayName)s nastavil seznam přístupů serveru pro tuto místnost."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s zrušil(a) pozvání do této místnosti pro uživatele %(targetDisplayName)s.",
             "sent": "%(senderName)s pozval(a) uživatele %(targetDisplayName)s ke vstupu do místnosti."
@@ -3750,14 +3745,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s %(count)s krát opustili a znovu vstoupili",
                 "one": "%(severalUsers)sopustili a znovu vstoupili"
-            },
-            "server_acls": {
-                "one": "%(oneUser)szměnil(a) ACL serveru",
-                "other": "%(oneUser)szměnil(a) %(count)s krát ACL serveru"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)szměnili ACL serveru",
-                "other": "%(severalUsers)szměnili %(count)s krát ACL serveru"
             },
             "unbanned": {
                 "other": "měl(a) %(count)s krát zrušeno vykázání",
