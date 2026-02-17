@@ -107,7 +107,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 audio: {
                     channelCount: CHANNELS,
                     deviceId: MediaDeviceHandler.getAudioInput(),
-                    autoGainControl: { ideal: MediaDeviceHandler.getAudioAutoGainControl() },
+                    autoGainControl: false,
                     echoCancellation: { ideal: MediaDeviceHandler.getAudioEchoCancellation() },
                     noiseSuppression: { ideal: MediaDeviceHandler.getAudioNoiseSuppression() },
                 },
