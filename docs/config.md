@@ -276,8 +276,6 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
 
 ## Native OIDC
 
-Native OIDC support is currently in labs and is subject to change.
-
 Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
 Issuer must have a trailing forward slash. As an example:
 
