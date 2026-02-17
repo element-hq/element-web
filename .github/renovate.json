@@ -6,7 +6,8 @@
         {
             "customType": "regex",
             "datasourceTemplate": "docker",
-            "managerFilePatterns": ["playwright\\/testcontainers\\/.+\\.ts$"],
+            "description": "Update testcontainers docker digests",
+            "managerFilePatterns": ["**/testcontainers/*.ts"],
             "matchStrings": ["\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
         }
     ]
