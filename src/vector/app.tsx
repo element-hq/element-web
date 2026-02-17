@@ -21,7 +21,7 @@ import type { QueryDict } from "matrix-js-sdk/src/utils";
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../Lifecycle";
-import SdkConfig, { parseSsoRedirectOptions } from "../SdkConfig";
+import SdkConfig from "../SdkConfig";
 import { type IConfigOptions } from "../IConfigOptions";
 import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
@@ -83,7 +83,7 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
     const isReturningFromSso = !!params.loginToken;
-    const ssoRedirects = parseSsoRedirectOptions(config);
+    const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
     const isWelcomeOrLanding =
