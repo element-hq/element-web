@@ -76,7 +76,7 @@
         "@babel/preset-env": "^7.18.10",
         "@babel/preset-typescript": "^7.18.6",
         "@electron/asar": "4.0.1",
-        "@playwright/test": "1.58.1",
+        "@playwright/test": "1.58.2",
         "@stylistic/eslint-plugin": "^5.0.0",
         "@types/auto-launch": "^5.0.1",
         "@types/counterpart": "^0.18.1",
