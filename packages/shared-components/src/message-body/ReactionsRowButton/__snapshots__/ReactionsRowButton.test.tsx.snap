@@ -2,48 +2,44 @@
 
 exports[`ReactionsRowButton > renders the default reaction button 1`] = `
 <div>
-  <div
+  <button
     aria-label="Alice and Bob reacted with 👍"
-    class="mx_AccessibleButton mx_ReactionsRowButton"
-    role="button"
+    class=""
     tabindex="0"
+    type="button"
   >
     <span
       aria-hidden="true"
-      class="mx_ReactionsRowButton_content"
     >
       👍
     </span>
     <span
       aria-hidden="true"
-      class="mx_ReactionsRowButton_count"
     >
       2
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`ReactionsRowButton > renders the selected reaction button 1`] = `
 <div>
-  <div
+  <button
     aria-label="Alice and Bob reacted with 👍"
-    class="mx_AccessibleButton mx_ReactionsRowButton mx_ReactionsRowButton_selected"
-    role="button"
+    class="mx_ReactionsRowButton_selected"
     tabindex="0"
+    type="button"
   >
     <span
       aria-hidden="true"
-      class="mx_ReactionsRowButton_content"
     >
       👍
     </span>
     <span
       aria-hidden="true"
-      class="mx_ReactionsRowButton_count"
     >
       2
     </span>
-  </div>
+  </button>
 </div>
 `;

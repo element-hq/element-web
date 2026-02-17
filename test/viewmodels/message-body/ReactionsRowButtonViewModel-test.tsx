@@ -114,11 +114,11 @@ describe("ReactionsRowButtonViewModel", () => {
             content: { body: "New test message", msgtype: "m.text" },
         });
 
-        vm.setContext(client, nextEvent);
+        vm.setContext(client);
 
         expect(tooltipSetPropsSpy).toHaveBeenCalledWith({ client, mxEvent: nextEvent });
 
-        vm.setContext(client, nextEvent);
+        vm.setContext(client);
 
         expect(tooltipSetPropsSpy).toHaveBeenCalledTimes(1);
     });
