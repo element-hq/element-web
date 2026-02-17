@@ -3519,11 +3519,6 @@
             "changed": "%(senderName)s telah mengubah tingkat kekuatan dari %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s dari %(fromPowerLevel)s ke %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Semua server telah dicekal untuk berpartisipasi! Ruangan ini tidak dapat digunakan lagi.",
-            "changed": "%(senderDisplayName)s mengubah ACL server untuk ruangan ini.",
-            "set": "%(senderDisplayName)s mengatur ACL server untuk ruangan ini."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s menghapus undangan untuk %(targetDisplayName)s untuk bergabung dengan ruangan ini.",
             "sent": "%(senderName)s mengirim sebuah undangan ke %(targetDisplayName)s untuk bergabung dengan ruangan ini."
@@ -3731,14 +3726,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)skeluar dan bergabung kembali",
                 "other": "%(severalUsers)skeluar dan bergabung kembali %(count)s kali"
-            },
-            "server_acls": {
-                "one": "%(oneUser)smengubah ACL server",
-                "other": "%(oneUser)smengubah ACL server %(count)s kali"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)smengubah ACL server",
-                "other": "%(severalUsers)smengubah ACL server %(count)s kali"
             },
             "unbanned": {
                 "one": "dihilangkan cekalannya",

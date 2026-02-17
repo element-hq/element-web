@@ -2764,11 +2764,6 @@
             "changed": "%(senderName)sが%(powerLevelDiffText)s",
             "user_from_to": "%(userId)sの権限レベルを%(fromPowerLevel)sから%(toPowerLevel)sに変更しました。"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉全てのサーバーの参加がブロックされています！このルームは使用できなくなりました。",
-            "changed": "%(senderDisplayName)sがこのルームのサーバーアクセス制御リストを変更しました。",
-            "set": "%(senderDisplayName)sがこのルームのサーバーアクセス制御リストを設定しました。"
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)sが%(targetDisplayName)sへのルームの招待を取り消しました。",
             "sent": "%(senderName)sが%(targetDisplayName)sをこのルームに招待しました。"
@@ -2962,14 +2957,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)sが%(count)s回退出し再参加しました",
                 "one": "%(severalUsers)sが退出し再参加しました"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sがサーバーのアクセス制御リストを変更しました",
-                "other": "%(oneUser)sがサーバーのアクセス制御リストを%(count)s回変更しました"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sがサーバーのアクセス制御リストを変更しました",
-                "other": "%(severalUsers)sがサーバーのアクセス制御リストを%(count)s回変更しました"
             },
             "unbanned": {
                 "other": "が%(count)s回ブロック解除されました",

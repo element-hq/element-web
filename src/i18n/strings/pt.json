@@ -3344,11 +3344,6 @@
             "changed": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s para %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Todos os servidores foram banidos de participar! Esta sala ficou inutilizável.",
-            "changed": "%(senderDisplayName)s mudou a lista de controlo de acessos de servidores desta sala.",
-            "set": "%(senderDisplayName)s definir a lista de controlo de acessos de servidores para esta sala."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s revocou o convite a %(targetDisplayName)s para se juntar à sala.",
             "sent": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala."
@@ -3555,14 +3550,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)s aderiram e saíram",
                 "other": "%(severalUsers)s aderiram e saíram %(count)s vezes"
-            },
-            "server_acls": {
-                "one": "%(oneUser)salterou as ACLs do servidor",
-                "other": "%(oneUser)salterou as ACLs do servidor %(count)s vezes"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)salterou as ACLs do servidor",
-                "other": "%(severalUsers)salterou as ACLs do servidor %(count)s vezes"
             },
             "unbanned": {
                 "one": "foi não banido",
