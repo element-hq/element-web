@@ -23,7 +23,7 @@ export interface ReactionsRowButtonViewModelProps {
     /**
      * The Matrix client instance.
      */
-    client: MatrixClient | null;
+    client: MatrixClient;
     /**
      * The event we're displaying reactions for.
      */
@@ -156,7 +156,7 @@ export class ReactionsRowButtonViewModel
         this.snapshot.set(nextSnapshot);
     }
 
-    public setContext(client: MatrixClient | null): void {
+    public setContext(client: MatrixClient): void {
         if (!client) return;
         this.props = { ...this.props, client };
 

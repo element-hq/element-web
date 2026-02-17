@@ -72,7 +72,7 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
 };
 
 interface ReactionsRowButtonItemProps {
-    client: MatrixClient | null;
+    client: MatrixClient;
     mxEvent: MatrixEvent;
     content: string;
     count: number;
@@ -218,8 +218,9 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     public render(): React.ReactNode {
         const { mxEvent, reactions } = this.props;
         const { myReactions, showAll } = this.state;
+        const client = this.context.room?.client;
 
-        if (!reactions || !isContentActionable(mxEvent)) {
+        if (!client || !reactions || !isContentActionable(mxEvent)) {
             return null;
         }
         const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
@@ -244,7 +245,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 return (
                     <ReactionsRowButtonItem
                         key={content}
-                        client={this.context.room?.client ?? null}
+                        client={client}
                         content={content}
                         count={deduplicatedEvents.length}
                         mxEvent={mxEvent}
