@@ -6,9 +6,10 @@
         {
             "customType": "regex",
             "datasourceTemplate": "docker",
+            "versioningTemplate": "loose",
             "description": "Update testcontainers docker digests",
             "managerFilePatterns": ["**/testcontainers/*.ts"],
-            "matchStrings": ["\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
+            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
         }
     ]
 }
