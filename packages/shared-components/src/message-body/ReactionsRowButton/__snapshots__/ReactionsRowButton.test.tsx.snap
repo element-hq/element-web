@@ -10,11 +10,13 @@ exports[`ReactionsRowButton > renders the default reaction button 1`] = `
   >
     <span
       aria-hidden="true"
+      class=""
     >
       👍
     </span>
     <span
       aria-hidden="true"
+      class=""
     >
       2
     </span>
@@ -32,11 +34,13 @@ exports[`ReactionsRowButton > renders the selected reaction button 1`] = `
   >
     <span
       aria-hidden="true"
+      class=""
     >
       👍
     </span>
     <span
       aria-hidden="true"
+      class=""
     >
       2
     </span>
