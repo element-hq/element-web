@@ -38,6 +38,9 @@ jobs:
             matrix:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2]
+        env:
+            # This conflicts with the jest reporter as GHA doesn't support nested log grouping
+            NX_SKIP_LOG_GROUPING: true
         steps:
             - name: Checkout code
               uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
