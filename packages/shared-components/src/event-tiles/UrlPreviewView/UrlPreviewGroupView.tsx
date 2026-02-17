@@ -20,12 +20,11 @@ export interface UrlPreviewGroupViewSnapshot {
     totalPreviewCount: number;
     previewsLimited: boolean;
     overPreviewLimit: boolean;
+    compactLayout: boolean;
 }
 
 export interface UrlPreviewGroupViewProps {
     vm: ViewModel<UrlPreviewGroupViewSnapshot> & UrlPreviewGroupViewActions;
-    // TODO: Move to VM
-    mediaVisible: boolean;
 }
 
 export interface UrlPreviewGroupViewActions {
@@ -42,10 +41,9 @@ export interface UrlPreviewGroupViewActions {
  * <UrlPreviewGroupView icon={<Icon />} title="Room created" />
  * ```
  */
-export function UrlPreviewGroupView({ vm, mediaVisible }: UrlPreviewGroupViewProps): JSX.Element | null {
+export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
-    console.log(vm);
-    const { previews, hidden, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(vm);
+    const { previews, hidden, totalPreviewCount, previewsLimited, overPreviewLimit, compactLayout } = useViewModel(vm);
     if (hidden) {
         return null;
     }
@@ -53,7 +51,7 @@ export function UrlPreviewGroupView({ vm, mediaVisible }: UrlPreviewGroupViewPro
     let toggleButton: JSX.Element | undefined;
     if (overPreviewLimit) {
         toggleButton = (
-            <Button kind="tertiary" onClick={() => vm.onTogglePreviewLimit()}>
+            <Button kind="tertiary" size="sm" onClick={() => vm.onTogglePreviewLimit()}>
                 {previewsLimited
                     ? _t("timeline|url_preview|show_n_more", { count: totalPreviewCount - previews.length })
                     : _t("action|collapse")}
@@ -65,8 +63,8 @@ export function UrlPreviewGroupView({ vm, mediaVisible }: UrlPreviewGroupViewPro
         <div className={styles.container}>
             {previews.map((preview, i) => (
                 <LinkPreview
-                    mediaVisible={mediaVisible}
                     key={preview.link}
+                    compactLayout={compactLayout}
                     onHideClick={i == 0 ? vm.onHideClick : undefined}
                     onImageClick={() => vm.onImageClick(preview)}
                     {...preview}

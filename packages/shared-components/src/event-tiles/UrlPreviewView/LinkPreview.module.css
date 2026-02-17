@@ -16,8 +16,7 @@
     column-gap: var(--cpd-space-1x);
     border-inline-start: 2px solid var(--cpd-color-bg-subtle-primary);
     border-radius: 2px;
-    color: $info-plinth-fg-color;
-
+    color: var(--cpd-color-gray-900);
     &.compactLayout & {
         margin-top: 6px;
         margin-bottom: 6px;

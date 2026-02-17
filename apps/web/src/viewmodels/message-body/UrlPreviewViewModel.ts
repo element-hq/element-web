@@ -11,24 +11,22 @@ import {
     type UrlPreviewGroupViewActions,
     type UrlPreviewViewSnapshotPreview,
 } from "@element-hq/web-shared-components";
-// import { decode } from "html-entities";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import type { RefObject } from "react";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import { linkifyAndSanitizeHtml } from "../../Linkify";
 import PlatformPeg from "../../PlatformPeg";
 import { thumbHeight } from "../../ImageUtils";
+import SettingsStore from "../../settings/SettingsStore";
 
 const logger = rootLogger.getChild("UrlPreviewViewModel");
 
 export interface UrlPreviewViewModelProps {
     client: MatrixClient;
-    eventSendTime: number;
-    eventRef: RefObject<HTMLDivElement | null>;
-    eventId?: string;
+    mxEvent: MatrixEvent;
+    mediaVisible: boolean;
     onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
 }
 
@@ -51,6 +49,9 @@ function getNumberFromOpenGraph(value: number | string | undefined): number | un
 function getTitleFromOpenGraph(response: IPreviewUrlResponse, link: string): string {
     if (typeof response["og:title"] === "string" && response["og:title"]) {
         return response["og:title"].trim();
+    }
+    if (typeof response["og:site_name"] === "string" && response["og:site_name"]) {
+        return response["og:site_name"].trim();
     }
     if (typeof response["og:description"] === "string" && response["og:description"]) {
         return response["og:description"].trim();
@@ -119,44 +120,46 @@ export class UrlPreviewViewModel
         return [...links];
     }
 
-    private async fetchPreview(link: string, ts: number): Promise<UrlPreviewViewSnapshotPreview | null> {
+    private async fetchPreview(link: string): Promise<UrlPreviewViewSnapshotPreview | null> {
         const cached = this.previewCache.get(link);
         if (cached) {
             return cached;
         }
         try {
-            const preview = await this.client.getUrlPreview(link, ts);
-            const hasTitle = preview["og:title"] && typeof preview?.["og:title"] === "string";
-            const hasDescription = preview["og:description"] && typeof preview?.["og:description"] === "string";
+            const preview = await this.client.getUrlPreview(link, this.eventSendTime);
+            const title = getTitleFromOpenGraph(preview, link);
             const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
-            // Ensure at least one of the rendered fields is truthy
-            if (!hasTitle || !hasDescription || !hasImage) {
+            // Ensure we have something relevant to render.
+            // The title must not just be the link, or we must have an image.
+            if (title === link || !hasImage) {
                 return null;
             }
 
             const media =
                 typeof preview["og:image"] === "string" ? mediaFromMxc(preview["og:image"], this.client) : undefined;
-            const title = getTitleFromOpenGraph(preview, link);
             const needsTooltip = link !== title && PlatformPeg.get()?.needsUrlTooltips();
 
             // TODO: Magic numbers
             const imageMaxHeight = 100;
             const declaredHeight = getNumberFromOpenGraph(preview["og:image:height"]);
             const width = Math.min(getNumberFromOpenGraph(preview["og:image:width"]) || 101, 100);
+            // TODO: This is wrong.
             const height = thumbHeight(width, declaredHeight, imageMaxHeight, imageMaxHeight) ?? imageMaxHeight;
 
             const result = {
                 link,
                 title,
+                siteName: typeof preview["og:site_name"] === "string" ? preview["og:site_name"] : undefined,
                 showTooltipOnLink: needsTooltip,
+                // Don't show a description if it's the same as the title.
                 description:
-                    typeof preview["og:description"] === "string"
+                    typeof preview["og:description"] === "string" && title !== preview["og:description"]
                         ? linkifyAndSanitizeHtml(preview["og:description"])
                         : undefined,
                 image: media
                     ? {
                           // TODO: Check nulls
-                          imageThumb: media.getThumbnailHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale")!,
+                          imageThumb: media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale")!,
                           imageFull: media.srcHttp!,
                           width,
                           height,
@@ -165,7 +168,11 @@ export class UrlPreviewViewModel
                     : undefined,
             } satisfies UrlPreviewViewSnapshotPreview;
             this.previewCache.set(link, result);
-            return result;
+            return {
+                ...result,
+                // We still want to cache the media in case it's enabled, but exclude from the snapshot.
+                image: this.mediaVisible ? result.image : undefined,
+            };
         } catch (error) {
             if (error instanceof MatrixError && error.httpStatus === 404) {
                 // Quieten 404 Not found errors, not all URLs can have a preview generated
@@ -177,84 +184,82 @@ export class UrlPreviewViewModel
         return null;
     }
 
-    private readonly client: MatrixClient;
-    private readonly eventRef: RefObject<HTMLDivElement | null>;
     private eventSendTime: number;
-    private showUrlPreview: boolean;
-    private readonly storageKey: string;
     private limitPreviews = true;
+    private mediaVisible: boolean;
+    private readonly client: MatrixClient;
+    private readonly storageKey: string;
+    private readonly useCompactLayoutSettingWatcher: string;
+    private links: Array<string> = [];
+
     private previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
     private readonly onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
 
     public constructor(props: UrlPreviewViewModelProps) {
+        const storageKey = `hide_preview_${props.mxEvent.getId()}`;
+        const showUrlPreview = window.localStorage.getItem(storageKey) !== "1";
         super(props, {
             previews: [],
-            hidden: false,
+            hidden: !showUrlPreview,
             totalPreviewCount: 0,
             previewsLimited: true,
             overPreviewLimit: false,
+            compactLayout: SettingsStore.getValue("useCompactLayout"),
         });
+        this.storageKey = storageKey;
         this.client = props.client;
-        this.eventRef = props.eventRef;
-        this.eventSendTime = props.eventSendTime;
-        this.storageKey = props.eventId ?? `hide_preview_${props.eventId}`;
-        this.showUrlPreview = window.localStorage.getItem(this.storageKey) !== "1";
+        this.eventSendTime = props.mxEvent.getTs();
         this.onImageClicked = props.onImageClicked;
-        void this.computeSnapshot();
+        this.mediaVisible = props.mediaVisible;
+        this.useCompactLayoutSettingWatcher = SettingsStore.watchSetting(
+            "useCompactLayout",
+            null,
+            (_setting, _roomid, _level, compactLayout) => {
+                this.snapshot.merge({
+                    compactLayout,
+                });
+            },
+        );
+    }
+
+    public dispose(): void {
+        super.dispose();
+        SettingsStore.unwatchSetting(this.useCompactLayoutSettingWatcher);
     }
 
     private async computeSnapshot(): Promise<void> {
-        if (!this.showUrlPreview) {
-            this.snapshot.set({
-                previews: [],
-                hidden: true,
-                totalPreviewCount: 0,
-                previewsLimited: this.limitPreviews,
-                overPreviewLimit: false,
-            });
-            return;
-        }
-        if (!this.eventRef.current) {
-            // Event hasn't rendered...yet
-            this.snapshot.set({
-                previews: [],
-                hidden: false,
-                totalPreviewCount: 0,
-                previewsLimited: this.limitPreviews,
-                overPreviewLimit: false,
-            });
-            return;
-        }
-
-        const links = UrlPreviewViewModel.findLinks([this.eventRef.current]);
         const previews = await Promise.all(
-            links
+            this.links
                 .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetchPreview(link, this.eventSendTime)),
+                .map((link) => this.fetchPreview(link)),
         );
-        this.snapshot.set({
+        this.snapshot.merge({
             previews: previews.filter((m) => !!m),
-            totalPreviewCount: links.length,
-            hidden: false,
+            totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
-            overPreviewLimit: links.length > MAX_PREVIEWS_WHEN_LIMITED,
+            overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
         });
     }
 
-    public recomputeSnapshot(): void {
-        void this.computeSnapshot();
+    public updateEventElement(eventElement: HTMLDivElement): void {
+        this.links = UrlPreviewViewModel.findLinks([eventElement]);
+        if (!this.snapshot.current.hidden) {
+            void this.computeSnapshot();
+        }
     }
 
     public readonly onShowClick = (): void => {
-        this.showUrlPreview = true;
-        void this.computeSnapshot();
+        this.snapshot.merge({
+            hidden: false,
+        });
         // FIXME: persist this somewhere smarter than local storage
         global.localStorage?.removeItem(this.storageKey);
     };
 
     public readonly onHideClick = (): void => {
-        this.showUrlPreview = false;
-        void this.computeSnapshot();
+        this.snapshot.merge({
+            hidden: true,
+        });
         // FIXME: persist this somewhere smarter than local storage
         global.localStorage?.setItem(this.storageKey, "1");
     };

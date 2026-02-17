@@ -16,10 +16,9 @@ import {
 } from "./UrlPreviewGroupView";
 import { useMockedViewModel } from "../../viewmodel";
 
-type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions & { mediaVisible: boolean };
+type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
 const UrlPreviewGroupViewWrapper = ({
-    mediaVisible,
     onHideClick,
     onImageClick,
     onTogglePreviewLimit,
@@ -30,7 +29,7 @@ const UrlPreviewGroupViewWrapper = ({
         onImageClick,
         onTogglePreviewLimit,
     });
-    return <UrlPreviewGroupView vm={vm} mediaVisible />;
+    return <UrlPreviewGroupView vm={vm} />;
 };
 
 export default {
@@ -48,7 +47,6 @@ const Template: StoryFn<typeof UrlPreviewGroupViewWrapper> = (args) => <UrlPrevi
 
 export const Default = Template.bind({});
 Default.args = {
-    mediaVisible: true,
     previews: [
         {
             title: "A simple title",
@@ -64,7 +62,6 @@ Default.args = {
 
 export const MultiplePreviews = Template.bind({});
 MultiplePreviews.args = {
-    mediaVisible: true,
     previews: [
         {
             title: "One",

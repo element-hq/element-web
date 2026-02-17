@@ -25,7 +25,6 @@ const Template: StoryFn<typeof LinkPreview> = (args) => <LinkPreview {...args} /
 
 export const Default = Template.bind({});
 Default.args = {
-    mediaVisible: true,
     title: "A simple title",
     description: "A simple description",
     link: "https://matrix.org",
@@ -38,14 +37,12 @@ Default.args = {
 
 export const Title = Template.bind({});
 Title.args = {
-    mediaVisible: true,
     title: "A simple title",
     link: "https://matrix.org",
 };
 
 export const TitleAndDescription = Template.bind({});
 TitleAndDescription.args = {
-    mediaVisible: true,
     title: "A simple title",
     description: "With a good ol description",
     link: "https://matrix.org",
@@ -53,7 +50,6 @@ TitleAndDescription.args = {
 
 export const WithTooltip = Template.bind({});
 WithTooltip.args = {
-    mediaVisible: true,
     title: "A simple title",
     description: "With a good ol description",
     showTooltipOnLink: true,
@@ -62,7 +58,6 @@ WithTooltip.args = {
 
 export const WithCompactLayout = Template.bind({});
 WithCompactLayout.args = {
-    mediaVisible: true,
     compactLayout: true,
     title: "A simple title",
     description: "A simple description",

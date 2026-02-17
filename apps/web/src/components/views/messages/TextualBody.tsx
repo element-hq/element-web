@@ -6,10 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
-import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-import type { UrlPreviewViewSnapshotPreview } from "@element-hq/web-shared-components";
-
+import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCallback } from "react";
+import { MsgType } from "matrix-js-sdk/src/matrix";
+import {
+    UrlPreviewGroupView,
+    type UrlPreviewViewSnapshotPreview,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 import EventContentBody from "./EventContentBody.tsx";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
@@ -31,99 +34,13 @@ import { type IEventTileOps } from "../rooms/EventTile";
 import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreviewViewModel.ts";
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
+import ImageView from "../elements/ImageView.tsx";
 
-/**
- * Wrapper component for LinkPreviewGroup. Can be removed when TextualBody is ported to a
- * functional component.
- */
-function LinkPreviewGroupWrapper({
-    vm,
-    mxEvent,
-}: {
-    vm: UrlPreviewViewModel;
-    mxEvent: MatrixEvent;
-}): React.ReactElement {
-    const [mediaVisible] = useMediaVisible(mxEvent);
-
-    return <LinkPreviewGroup mediaVisible={mediaVisible} vm={vm} />;
-}
-
-export default class TextualBody extends React.Component<IBodyProps> {
+class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewModel: UrlPreviewViewModel }> {
     private readonly contentRef = createRef<HTMLDivElement>();
-    private readonly urlPreviewVMRef = createRef<UrlPreviewViewModel>();
 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
-
-    public componentDidMount(): void {
-        if (!this.props.editState) {
-            this.urlPreviewVMRef.current?.recomputeSnapshot();
-        }
-    }
-
-    public readonly onUrlPreviewImageClicked = (preview: UrlPreviewViewSnapshotPreview): void => {
-        /*    private onImageClick = (ev: React.MouseEvent): void => {
-                const p = this.props.preview;
-                if (ev.button != 0 || ev.metaKey) return;
-                ev.preventDefault();
-
-                if (!p.image?.imageFull) {
-                    return;
-                }
-
-                const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
-                    src: p.image.imageFull,
-                    width: p.image.width,
-                    height: p.image.height,
-                    name: p.title,
-                    fileSize: p.image.size,
-                    link: p.link,
-                };
-
-                if (this.image.current) {
-                    const clientRect = this.image.current.getBoundingClientRect();
-
-                    params.thumbnailInfo = {
-                        width: clientRect.width,
-                        height: clientRect.height,
-                        positionX: clientRect.x,
-                        positionY: clientRect.y,
-                    };
-                }
-
-                Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
-            }; */
-    };
-
-    public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
-        // TODO: This is crap crap crap, we should delegate this sort of logic to the
-        // VM and have it figure this out.
-        if (this.props.showUrlPreview) {
-            // If the VM doesn't exist or the event has changed, create a new VM.
-            if (!this.urlPreviewVMRef.current || prevProps.mxEvent !== this.props.mxEvent) {
-                this.urlPreviewVMRef.current?.dispose();
-                const urlPreviewVM = new UrlPreviewViewModel({
-                    client: MatrixClientPeg.safeGet(),
-                    eventRef: this.contentRef,
-                    eventSendTime: this.props.mxEvent.getTs(),
-                    eventId: this.props.mxEvent.getId(),
-                    onImageClicked: this.onUrlPreviewImageClicked.bind(this),
-                });
-                this.urlPreviewVMRef.current = urlPreviewVM;
-            } else if (!this.props.editState) {
-                const stoppedEditing = prevProps.editState && !this.props.editState;
-                const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-                if (messageWasEdited || stoppedEditing) {
-                    this.urlPreviewVMRef.current?.recomputeSnapshot();
-                }
-            }
-        } else if (this.urlPreviewVMRef.current) {
-            // If the parent component doesn't want us to show URL previews then
-            // just dispose of the VM.
-            this.urlPreviewVMRef.current.dispose();
-            this.urlPreviewVMRef.current = null;
-        }
-    }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>): boolean {
         // exploit that events are immutable :)
@@ -132,7 +49,6 @@ export default class TextualBody extends React.Component<IBodyProps> {
             nextProps.highlights !== this.props.highlights ||
             nextProps.replacingEventId !== this.props.replacingEventId ||
             nextProps.highlightLink !== this.props.highlightLink ||
-            nextProps.showUrlPreview !== this.props.showUrlPreview ||
             nextProps.editState !== this.props.editState ||
             nextProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration
         );
@@ -172,11 +88,11 @@ export default class TextualBody extends React.Component<IBodyProps> {
 
     public getEventTileOps = (): IEventTileOps => ({
         isWidgetHidden: () => {
-            return this.urlPreviewVMRef.current?.getSnapshot().hidden ?? false;
+            return this.props.urlPreviewViewModel.getSnapshot().hidden ?? false;
         },
 
         unhideWidget: () => {
-            this.urlPreviewVMRef.current?.onShowClick();
+            this.props.urlPreviewViewModel.onShowClick();
         },
     });
 
@@ -268,6 +184,21 @@ export default class TextualBody extends React.Component<IBodyProps> {
         return <span className="mx_EventTile_pendingModeration">{`(${text})`}</span>;
     }
 
+    public componentDidMount(): void {
+        console.log("url componentDidMount", this.props.mxEvent.getId());
+        if (this.contentRef.current) {
+            this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
+        }
+    }
+
+    public componentDidUpdate(): void {
+        console.log("url componentDidUpdate", this.props.mxEvent.getId());
+        if (this.contentRef.current && !this.props.editState) {
+            console.log("Updating url preview");
+            this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
+        }
+    }
+
     public render(): React.ReactNode {
         if (this.props.editState) {
             const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
@@ -337,9 +268,7 @@ export default class TextualBody extends React.Component<IBodyProps> {
             );
         }
 
-        const urlPreviewWidget = this.urlPreviewVMRef.current && (
-            <LinkPreviewGroupWrapper vm={this.urlPreviewVMRef.current} mxEvent={mxEvent} />
-        );
+        const urlPreviewWidget = <UrlPreviewGroupView vm={this.props.urlPreviewViewModel} />;
 
         if (isEmote) {
             return (
@@ -382,4 +311,44 @@ export default class TextualBody extends React.Component<IBodyProps> {
             </div>
         );
     }
+}
+
+export default function TextualBody(props: IBodyProps): React.ReactElement {
+    const [mediaVisible] = useMediaVisible(props.mxEvent);
+
+    /**
+     * TODO: Ignore while editing.
+     const stoppedEditing = prevProps.editState && !this.props.editState;
+     const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
+     if (messageWasEdited || stoppedEditing) {
+         this.urlPreviewVMRef.current?.recomputeSnapshot();
+     }
+     */
+
+    const onUrlPreviewImageClicked = useCallback((preview: UrlPreviewViewSnapshotPreview): void => {
+        if (!preview.image?.imageFull) {
+            // Should never get this far, but doesn't hurt to check.
+            return;
+        }
+        const params = {
+            src: preview.image.imageFull,
+            width: preview.image.width,
+            height: preview.image.height,
+            name: preview.title,
+            fileSize: preview.image.fileSize,
+            link: preview.link,
+        };
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+    }, []);
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new UrlPreviewViewModel({
+                client: MatrixClientPeg.safeGet(),
+                mxEvent: props.mxEvent,
+                mediaVisible: mediaVisible,
+                onImageClicked: onUrlPreviewImageClicked,
+            }),
+    );
+    return <InnerTextualBody urlPreviewViewModel={vm} {...props} />;
 }

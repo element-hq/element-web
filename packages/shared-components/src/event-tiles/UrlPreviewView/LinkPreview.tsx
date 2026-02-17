@@ -19,28 +19,22 @@ export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-interface LinkPreviewAdditionalProps {
-    mediaVisible: boolean;
+export interface LinkPreviewAdditionalProps {
     compactLayout?: boolean;
 }
 
 export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewActions & LinkPreviewAdditionalProps;
 
-export function LinkPreview({
-    onHideClick,
-    onImageClick,
-    mediaVisible,
-    compactLayout,
-    ...preview
-}: LinkPreviewProps): JSX.Element {
+export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const hideButton = onHideClick && (
         <IconButton
             className="mx_LinkPreviewGroup_hide"
+            size="20px"
             onClick={() => onHideClick()}
             aria-label={_t("timeline|url_preview|close")}
         >
-            <CloseIcon width="20px" height="20px" />
+            <CloseIcon />
         </IconButton>
     );
 
@@ -59,10 +53,9 @@ export function LinkPreview({
 
     let img: JSX.Element | undefined;
     // Don't render a button to show the image, just hide it outright
-    if (preview.image?.imageThumb && mediaVisible) {
-        // Image width and height sanitized in the view model.
+    if (preview.image?.imageThumb) {
         img = (
-            <div className={styles.mx_LinkPreviewWidget_image} style={{ height: preview.image.height }}>
+            <div className={styles.mx_LinkPreviewWidget_image}>
                 <img
                     className={styles.thumbnail}
                     src={preview.image.imageThumb}
