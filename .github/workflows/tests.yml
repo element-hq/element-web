@@ -25,7 +25,7 @@ env:
     ENABLE_COVERAGE: ${{ github.event_name != 'merge_group' && inputs.disable_coverage != 'true' }}
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
-    NX_DEFAULT_OUTPUT_STYLE: static
+    NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
 permissions: {}
 
@@ -38,9 +38,6 @@ jobs:
             matrix:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2]
-        env:
-            # This conflicts with the jest reporter as GHA doesn't support nested log grouping
-            NX_SKIP_LOG_GROUPING: true
         steps:
             - name: Checkout code
               uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
