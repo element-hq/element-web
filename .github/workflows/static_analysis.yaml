@@ -26,7 +26,7 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@3673fd3abbf8dfae1de849c6cd3e69e24ed7a766
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@abf186831e2acb3e98fca13a0711a3fa1364d2b1
         permissions:
             pull-requests: read
         with:
