@@ -14,7 +14,7 @@ Please see LICENSE files in the repository root for full details.
 import "matrix-js-sdk/src/browser-index";
 import React, { type ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { createClient, AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import type { QueryDict } from "matrix-js-sdk/src/utils";
@@ -34,6 +34,8 @@ import { ModuleApi } from "../modules/Api";
 import { RoomView } from "../components/structures/RoomView";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
+import Login from "../Login.ts";
+import { startOidcLogin } from "../utils/oidc/authorize.ts";
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
@@ -58,12 +60,31 @@ function onTokenLoginCompleted(): void {
 
 async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
     logger.log("Bypassing app load to redirect to SSO");
-    const tempCli = createClient({
-        baseUrl: config.hsUrl,
-        idBaseUrl: config.isUrl,
-    });
-    PlatformPeg.get()!.startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
-    return true;
+
+    try {
+        const login = new Login(config.hsUrl, config.isUrl, null, {
+            delegatedAuthentication: config.delegatedAuthentication,
+        });
+        const flows = await login.getFlows();
+
+        const nativeOidcFlow = flows.find((flow) => "clientId" in flow);
+        if (nativeOidcFlow && config.delegatedAuthentication) {
+            await startOidcLogin(config.delegatedAuthentication, nativeOidcFlow.clientId, config.hsUrl, config.isUrl);
+            return true;
+        }
+
+        const flow = flows.find((flow) => flow.type === "m.login.sso" || flow.type === "m.login.cas");
+        PlatformPeg.get()!.startSingleSignOn(
+            login.createTemporaryClient(),
+            flow?.type === "m.login.cas" ? "cas" : "sso",
+            `/${getScreenFromLocation(window.location).screen}`,
+        );
+        return true;
+    } catch (e) {
+        console.error("Error encountered during sso redirect", e);
+    }
+
+    return false;
 }
 
 export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
@@ -92,7 +113,7 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
-    const isReturningFromSso = !!params.loginToken;
+    const isReturningFromSso = !!params.loginToken || (!!params.code && !!params.state);
     const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
