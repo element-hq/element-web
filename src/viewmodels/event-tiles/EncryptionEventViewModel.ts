@@ -18,7 +18,8 @@ import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../utils/crypto";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { isRoomEncrypted as isRoomEncryptedForRoom } from "../../hooks/useIsEncrypted";
+import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
+import { objectHasDiff } from "../../utils/objects";
 
 export interface EncryptionEventViewModelProps {
     /** Caller-provided client. */
@@ -34,7 +35,10 @@ export class EncryptionEventViewModel
     implements EncryptionEventViewModelInterface
 {
     public constructor(props: EncryptionEventViewModelProps) {
-        super(props, EncryptionEventViewModel.calculateSnapshot(props, false));
+        super(
+            props,
+            EncryptionEventViewModel.calculateSnapshot(props, EncryptionEventViewModel.getInitialIsEncrypted(props)),
+        );
         void this.refreshSnapshotFromEvent();
 
         const roomId = this.props.mxEvent.getRoomId()!;
@@ -46,27 +50,34 @@ export class EncryptionEventViewModel
     }
 
     private refreshSnapshotFromEvent = async (): Promise<void> => {
-        const cli = this.props.cli;
         const roomId = this.props.mxEvent.getRoomId()!;
-        const room = cli.getRoom(roomId);
-        const crypto = cli.getCrypto();
-        const isRoomEncrypted = Boolean(room && crypto && (await isRoomEncryptedForRoom(room, crypto)));
+        const room = this.props.cli.getRoom(roomId);
+        const crypto = this.props.cli.getCrypto();
+        const isEncrypted = Boolean(room && crypto && (await isRoomEncrypted(room, crypto)));
+        const nextSnapshot = EncryptionEventViewModel.calculateSnapshot(this.props, isEncrypted);
 
-        this.snapshot.merge(EncryptionEventViewModel.calculateSnapshot(this.props, isRoomEncrypted));
+        if (objectHasDiff(this.snapshot.current, nextSnapshot)) {
+            this.snapshot.set(nextSnapshot);
+        }
     };
+
+    private static getInitialIsEncrypted(props: EncryptionEventViewModelProps): boolean {
+        const roomId = props.mxEvent.getRoomId()!;
+        const room = props.cli.getRoom(roomId);
+        if (!room) return false;
+
+        if (isLocalRoom(room)) {
+            const localRoom = room as { isEncryptionEnabled?: () => boolean };
+            return Boolean(localRoom.isEncryptionEnabled?.());
+        }
+
+        return room.hasEncryptionStateEvent();
+    }
 
     private static calculateSnapshot(
         props: EncryptionEventViewModelProps,
-        isRoomEncrypted: boolean,
+        isEncrypted: boolean,
     ): EncryptionEventViewSnapshotInterface {
-        const cli = props.cli;
-        const roomId = props.mxEvent.getRoomId()!;
-        const room = cli.getRoom(roomId);
-        const isRoomLocal = isLocalRoom(room);
-
-        const prevContent = props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
-        const content = props.mxEvent.getContent<RoomEncryptionEventContent>();
-
         // Keep legacy class names for compatibility with existing timeline layout and styling.
         const newSnapshot: EncryptionEventViewSnapshotInterface = {
             state: EncryptionEventState.CHANGED,
@@ -76,10 +87,15 @@ export class EncryptionEventViewModel
             className: "mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon",
         };
 
-        if (isRoomEncrypted && content.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
+        const content = props.mxEvent.getContent<RoomEncryptionEventContent>();
+        if (isEncrypted && content.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
+            const roomId = props.mxEvent.getRoomId()!;
+            const room = props.cli.getRoom(roomId);
+            const isRoomLocal = isLocalRoom(room);
+            const prevContent = props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
             const dmPartner = roomId ? DMRoomMap.shared().getUserIdForRoomId(roomId) : undefined;
             const stateEncrypted = Boolean(
-                content["io.element.msc4362.encrypt_state_events"] && cli.enableEncryptedStateEvents,
+                content["io.element.msc4362.encrypt_state_events"] && props.cli.enableEncryptedStateEvents,
             );
 
             newSnapshot.state = EncryptionEventState.ENABLED;
@@ -93,7 +109,7 @@ export class EncryptionEventViewModel
             } else if (isRoomLocal) {
                 newSnapshot.state = EncryptionEventState.ENABLED_LOCAL;
             }
-        } else if (isRoomEncrypted) {
+        } else if (isEncrypted) {
             newSnapshot.state = EncryptionEventState.DISABLE_ATTEMPT;
         } else {
             newSnapshot.state = EncryptionEventState.UNSUPPORTED;

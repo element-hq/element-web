@@ -69,6 +69,14 @@ describe("EncryptionEventViewModel", () => {
         });
     });
 
+    it("uses synchronous room encryption state for the initial snapshot", () => {
+        jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
+        setRoomEncrypted(false);
+
+        const vm = createVm();
+        expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED);
+    });
+
     it("sets ENABLED with encryptedStateEvents=true for encrypted state events", async () => {
         setRoomEncrypted(true);
         client.enableEncryptedStateEvents = true;
@@ -165,5 +173,20 @@ describe("EncryptionEventViewModel", () => {
         room.emit(RoomStateEvent.Update, room.currentState);
 
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
+    });
+
+    it("does not emit updates when snapshot is unchanged", async () => {
+        setRoomEncrypted(true);
+        const vm = createVm();
+        await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
+
+        const listener = jest.fn();
+        const unsubscribe = vm.subscribe(listener);
+
+        room.emit(RoomStateEvent.Update, room.currentState);
+
+        await waitFor(() => expect(mocked(client.getCrypto()!.isEncryptionEnabledInRoom)).toHaveBeenCalledTimes(2));
+        expect(listener).not.toHaveBeenCalled();
+        unsubscribe();
     });
 });
