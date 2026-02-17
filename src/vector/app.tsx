@@ -56,6 +56,16 @@ function onTokenLoginCompleted(): void {
     window.history.replaceState(null, "", url.href);
 }
 
+async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
+    logger.log("Bypassing app load to redirect to SSO");
+    const tempCli = createClient({
+        baseUrl: config.hsUrl,
+        idBaseUrl: config.isUrl,
+    });
+    PlatformPeg.get()!.startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
+    return true;
+}
+
 export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
     // XXX: This lives here because certain components import so many things that importing it in a sensible place (eg.
     // the builtins module or init.tsx) causes a circular dependency.
@@ -96,18 +106,15 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     if (!autoRedirect && ssoRedirects.on_login_page && isLoginPage) {
         autoRedirect = true;
     }
-    if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
-        logger.log("Bypassing app load to redirect to SSO");
-        const tempCli = createClient({
-            baseUrl: config.validated_server_config!.hsUrl,
-            idBaseUrl: config.validated_server_config!.isUrl,
-        });
-        PlatformPeg.get()!.startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
+    if (!hasPossibleToken && !isReturningFromSso && autoRedirect && config.validated_server_config) {
+        const redirecting = await redirectToSso(config.validated_server_config);
 
         // We return here because startSingleSignOn() will asynchronously redirect us. We don't
         // care to wait for it, and don't want to show any UI while we wait (not even half a welcome
         // page). As such, just don't even bother loading the MatrixChat component.
-        return <React.Fragment />;
+        if (redirecting) {
+            return <React.Fragment />;
+        }
     }
 
     const defaultDeviceName =
