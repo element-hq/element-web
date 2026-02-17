@@ -98,8 +98,8 @@ const ReactionsRowButtonItem: React.FC<ReactionsRowButtonItemProps> = (props) =>
     );
 
     useEffect(() => {
-        vm.setContext(props.client, props.mxEvent);
-    }, [props.client, props.mxEvent, vm]);
+        vm.setContext(props.client);
+    }, [props.client, vm]);
 
     useEffect(() => {
         vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);

@@ -156,7 +156,8 @@ export class ReactionsRowButtonViewModel
         this.snapshot.set(nextSnapshot);
     }
 
-    public setContext(client: MatrixClient): void {
+    public setContext(client: MatrixClient | null): void {
+        if (!client) return;
         this.props = { ...this.props, client };
 
         this.tooltipVm.setProps({ client });
