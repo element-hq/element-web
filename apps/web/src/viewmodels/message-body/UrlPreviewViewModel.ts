@@ -5,14 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { BaseViewModel } from "@element-hq/web-shared-components";
-import { decode } from "html-entities";
+import {
+    BaseViewModel,
+    type UrlPreviewGroupViewSnapshot,
+    type UrlPreviewGroupViewActions,
+    type UrlPreviewViewSnapshotPreview,
+} from "@element-hq/web-shared-components";
+// import { decode } from "html-entities";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import type { RefObject } from "react";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
+import { linkifyAndSanitizeHtml } from "../../Linkify";
+import PlatformPeg from "../../PlatformPeg";
+import { thumbHeight } from "../../ImageUtils";
 
 const logger = rootLogger.getChild("UrlPreviewViewModel");
 
@@ -21,28 +29,7 @@ export interface UrlPreviewViewModelProps {
     eventSendTime: number;
     eventRef: RefObject<HTMLDivElement | null>;
     eventId?: string;
-}
-
-export interface UrlPreviewViewSnapshotInterfacePreview {
-    link: string;
-    title: string;
-    siteName?: string;
-    description?: string;
-    image?: {
-        imageThumb: string;
-        imageFull: string;
-        size?: number;
-        width?: number;
-        height?: number;
-    };
-}
-
-interface UrlPreviewViewSnapshotInterface {
-    previews: Array<UrlPreviewViewSnapshotInterfacePreview>;
-    hidden: boolean;
-    totalPreviewCount: number;
-    previewsLimited: boolean;
-    overPreviewLimit: boolean;
+    onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
@@ -74,7 +61,10 @@ function getTitleFromOpenGraph(response: IPreviewUrlResponse, link: string): str
 /**
  * ViewModel for fetching and rendering room previews.
  */
-export class UrlPreviewViewModel extends BaseViewModel<UrlPreviewViewSnapshotInterface, UrlPreviewViewModelProps> {
+export class UrlPreviewViewModel
+    extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewViewModelProps>
+    implements UrlPreviewGroupViewActions
+{
     private static isLinkPreviewable(node: Element): boolean {
         // don't try to preview relative links
         const href = node.getAttribute("href");
@@ -129,7 +119,7 @@ export class UrlPreviewViewModel extends BaseViewModel<UrlPreviewViewSnapshotInt
         return [...links];
     }
 
-    private async fetchPreview(link: string, ts: number): Promise<UrlPreviewViewSnapshotInterfacePreview | null> {
+    private async fetchPreview(link: string, ts: number): Promise<UrlPreviewViewSnapshotPreview | null> {
         const cached = this.previewCache.get(link);
         if (cached) {
             return cached;
@@ -143,24 +133,37 @@ export class UrlPreviewViewModel extends BaseViewModel<UrlPreviewViewSnapshotInt
             if (!hasTitle || !hasDescription || !hasImage) {
                 return null;
             }
+
             const media =
                 typeof preview["og:image"] === "string" ? mediaFromMxc(preview["og:image"], this.client) : undefined;
+            const title = getTitleFromOpenGraph(preview, link);
+            const needsTooltip = link !== title && PlatformPeg.get()?.needsUrlTooltips();
+
+            // TODO: Magic numbers
+            const imageMaxHeight = 100;
+            const declaredHeight = getNumberFromOpenGraph(preview["og:image:height"]);
+            const width = Math.min(getNumberFromOpenGraph(preview["og:image:width"]) || 101, 100);
+            const height = thumbHeight(width, declaredHeight, imageMaxHeight, imageMaxHeight) ?? imageMaxHeight;
+
             const result = {
                 link,
-                title: getTitleFromOpenGraph(preview, link),
+                title,
+                showTooltipOnLink: needsTooltip,
                 description:
-                    typeof preview["og:description"] === "string" ? decode(preview["og:description"]) : undefined,
+                    typeof preview["og:description"] === "string"
+                        ? linkifyAndSanitizeHtml(preview["og:description"])
+                        : undefined,
                 image: media
                     ? {
                           // TODO: Check nulls
                           imageThumb: media.getThumbnailHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale")!,
                           imageFull: media.srcHttp!,
-                          width: getNumberFromOpenGraph(preview["og:image:width"]),
-                          height: getNumberFromOpenGraph(preview["og:image:height"]),
-                          size: getNumberFromOpenGraph(preview["matrix:image:size"]),
+                          width,
+                          height,
+                          fileSize: getNumberFromOpenGraph(preview["matrix:image:size"]),
                       }
                     : undefined,
-            };
+            } satisfies UrlPreviewViewSnapshotPreview;
             this.previewCache.set(link, result);
             return result;
         } catch (error) {
@@ -180,7 +183,8 @@ export class UrlPreviewViewModel extends BaseViewModel<UrlPreviewViewSnapshotInt
     private showUrlPreview: boolean;
     private readonly storageKey: string;
     private limitPreviews = true;
-    private previewCache = new Map<string, UrlPreviewViewSnapshotInterfacePreview>();
+    private previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
+    private readonly onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
 
     public constructor(props: UrlPreviewViewModelProps) {
         super(props, {
@@ -195,6 +199,7 @@ export class UrlPreviewViewModel extends BaseViewModel<UrlPreviewViewSnapshotInt
         this.eventSendTime = props.eventSendTime;
         this.storageKey = props.eventId ?? `hide_preview_${props.eventId}`;
         this.showUrlPreview = window.localStorage.getItem(this.storageKey) !== "1";
+        this.onImageClicked = props.onImageClicked;
         void this.computeSnapshot();
     }
 
@@ -240,22 +245,27 @@ export class UrlPreviewViewModel extends BaseViewModel<UrlPreviewViewSnapshotInt
         void this.computeSnapshot();
     }
 
-    public onShowClick(): void {
+    public readonly onShowClick = (): void => {
         this.showUrlPreview = true;
         void this.computeSnapshot();
         // FIXME: persist this somewhere smarter than local storage
         global.localStorage?.removeItem(this.storageKey);
-    }
+    };
 
-    public onHideClick(): void {
+    public readonly onHideClick = (): void => {
         this.showUrlPreview = false;
         void this.computeSnapshot();
         // FIXME: persist this somewhere smarter than local storage
         global.localStorage?.setItem(this.storageKey, "1");
-    }
+    };
 
-    public onTogglePreviewLimit(): void {
+    public readonly onTogglePreviewLimit = (): void => {
         this.limitPreviews = !this.limitPreviews;
         void this.computeSnapshot();
-    }
+    };
+
+    public readonly onImageClick = (preview: UrlPreviewViewSnapshotPreview): void => {
+        // Render a lightbox.
+        this.onImageClicked(preview);
+    };
 }

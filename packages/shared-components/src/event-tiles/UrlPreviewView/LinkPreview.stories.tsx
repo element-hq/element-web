@@ -1,0 +1,75 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React from "react";
+import { fn } from "storybook/test";
+import type { Meta, StoryFn } from "@storybook/react-vite";
+
+import { LinkPreview } from "./LinkPreview";
+
+export default {
+    title: "Event/UrlPreviewView",
+    component: LinkPreview,
+    tags: ["autodocs"],
+    args: {
+        onHideClick: fn(),
+        onImageClick: fn(),
+    },
+} as Meta<typeof LinkPreview>;
+
+const Template: StoryFn<typeof LinkPreview> = (args) => <LinkPreview {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+    mediaVisible: true,
+    title: "A simple title",
+    description: "A simple description",
+    link: "https://matrix.org",
+    siteName: "Site name",
+    image: {
+        imageThumb: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+        imageFull: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+    },
+};
+
+export const Title = Template.bind({});
+Title.args = {
+    mediaVisible: true,
+    title: "A simple title",
+    link: "https://matrix.org",
+};
+
+export const TitleAndDescription = Template.bind({});
+TitleAndDescription.args = {
+    mediaVisible: true,
+    title: "A simple title",
+    description: "With a good ol description",
+    link: "https://matrix.org",
+};
+
+export const WithTooltip = Template.bind({});
+WithTooltip.args = {
+    mediaVisible: true,
+    title: "A simple title",
+    description: "With a good ol description",
+    showTooltipOnLink: true,
+    link: "https://matrix.org",
+};
+
+export const WithCompactLayout = Template.bind({});
+WithCompactLayout.args = {
+    mediaVisible: true,
+    compactLayout: true,
+    title: "A simple title",
+    description: "A simple description",
+    link: "https://matrix.org",
+    siteName: "Site name",
+    image: {
+        imageThumb: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+        imageFull: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+    },
+};

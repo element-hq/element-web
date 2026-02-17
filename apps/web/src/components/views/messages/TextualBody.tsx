@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import type { UrlPreviewViewSnapshotPreview } from "@element-hq/web-shared-components";
 
 import EventContentBody from "./EventContentBody.tsx";
 import { formatDate } from "../../../DateUtils";
@@ -21,7 +22,6 @@ import { Action } from "../../../dispatcher/actions";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from "../rooms/EditMessageComposer";
-import LinkPreviewGroup from "../rooms/LinkPreviewGroup";
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -30,6 +30,23 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
 import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreviewViewModel.ts";
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
+import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
+
+/**
+ * Wrapper component for LinkPreviewGroup. Can be removed when TextualBody is ported to a
+ * functional component.
+ */
+function LinkPreviewGroupWrapper({
+    vm,
+    mxEvent,
+}: {
+    vm: UrlPreviewViewModel;
+    mxEvent: MatrixEvent;
+}): React.ReactElement {
+    const [mediaVisible] = useMediaVisible(mxEvent);
+
+    return <LinkPreviewGroup mediaVisible={mediaVisible} vm={vm} />;
+}
 
 export default class TextualBody extends React.Component<IBodyProps> {
     private readonly contentRef = createRef<HTMLDivElement>();
@@ -44,6 +61,40 @@ export default class TextualBody extends React.Component<IBodyProps> {
         }
     }
 
+    public readonly onUrlPreviewImageClicked = (preview: UrlPreviewViewSnapshotPreview): void => {
+        /*    private onImageClick = (ev: React.MouseEvent): void => {
+                const p = this.props.preview;
+                if (ev.button != 0 || ev.metaKey) return;
+                ev.preventDefault();
+
+                if (!p.image?.imageFull) {
+                    return;
+                }
+
+                const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
+                    src: p.image.imageFull,
+                    width: p.image.width,
+                    height: p.image.height,
+                    name: p.title,
+                    fileSize: p.image.size,
+                    link: p.link,
+                };
+
+                if (this.image.current) {
+                    const clientRect = this.image.current.getBoundingClientRect();
+
+                    params.thumbnailInfo = {
+                        width: clientRect.width,
+                        height: clientRect.height,
+                        positionX: clientRect.x,
+                        positionY: clientRect.y,
+                    };
+                }
+
+                Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+            }; */
+    };
+
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
         // TODO: This is crap crap crap, we should delegate this sort of logic to the
         // VM and have it figure this out.
@@ -56,6 +107,7 @@ export default class TextualBody extends React.Component<IBodyProps> {
                     eventRef: this.contentRef,
                     eventSendTime: this.props.mxEvent.getTs(),
                     eventId: this.props.mxEvent.getId(),
+                    onImageClicked: this.onUrlPreviewImageClicked.bind(this),
                 });
                 this.urlPreviewVMRef.current = urlPreviewVM;
             } else if (!this.props.editState) {
@@ -286,7 +338,7 @@ export default class TextualBody extends React.Component<IBodyProps> {
         }
 
         const urlPreviewWidget = this.urlPreviewVMRef.current && (
-            <LinkPreviewGroup vm={this.urlPreviewVMRef.current} mxEvent={mxEvent} />
+            <LinkPreviewGroupWrapper vm={this.urlPreviewVMRef.current} mxEvent={mxEvent} />
         );
 
         if (isEmote) {
