@@ -106,6 +106,10 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     if (!autoRedirect && ssoRedirects.on_login_page && isLoginPage) {
         autoRedirect = true;
     }
+
+    // getInitialScreenAfterLogin has a side effect to write to sessionStorage, perform it before auto-redirect
+    const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
+
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect && config.validated_server_config) {
         const redirecting = await redirectToSso(config.validated_server_config);
 
@@ -119,8 +123,6 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
 
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
-
-    const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
 
     const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
     ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
