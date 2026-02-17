@@ -10,23 +10,29 @@ import React from "react";
 import { render, screen } from "@test-utils";
 import { describe, expect, it } from "vitest";
 
-import * as stories from "./SenderProfile.stories";
+import * as stories from "./SenderProfileView.stories";
 
 const { Default, Hidden, WithDisambiguation } = composeStories(stories);
 
 describe("SenderProfileView", () => {
     it("renders default sender profile", () => {
-        render(<Default />);
+        const { container } = render(<Default />);
+
         expect(screen.getByText("Alice")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 
     it("does not render when hidden", () => {
-        render(<Hidden />);
+        const { container } = render(<Hidden />);
+
         expect(screen.queryByText("Alice")).not.toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 
     it("renders disambiguated identifier", () => {
-        render(<WithDisambiguation />);
+        const { container } = render(<WithDisambiguation />);
+
         expect(screen.getByText("@alice:example.org")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 });

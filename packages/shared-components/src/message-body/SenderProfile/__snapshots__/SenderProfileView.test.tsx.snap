@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SenderProfileView > does not render when hidden 1`] = `<div />`;
+
+exports[`SenderProfileView > renders default sender profile 1`] = `
+<div>
+  <div
+    class="senderProfile mx_DisambiguatedProfile"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="senderProfile_displayName mx_DisambiguatedProfile_displayName"
+      dir="auto"
+    >
+      Alice
+    </span>
+  </div>
+</div>
+`;
+
+exports[`SenderProfileView > renders disambiguated identifier 1`] = `
+<div>
+  <div
+    class="senderProfile mx_DisambiguatedProfile"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="senderProfile_displayName mx_DisambiguatedProfile_displayName"
+      dir="auto"
+    >
+      Alice
+    </span>
+    <span
+      class="mx_DisambiguatedProfile_mxid senderProfile_mxid"
+    >
+      @alice:example.org
+    </span>
+  </div>
+</div>
+`;
