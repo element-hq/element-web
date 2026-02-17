@@ -2480,11 +2480,6 @@
             "changed": "%(senderName)s breytti völdum %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s úr %(fromPowerLevel)s í %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Öllum netþjónum er núna bannað að taka þátt! Þessa spjallrás er ekki lengur hægt að nota.",
-            "changed": "%(senderDisplayName)s breytti ACL á netþjóni fyrir þessa spjallrás.",
-            "set": "%(senderDisplayName)s stillti ACL á netþjóni fyrir þessa spjallrás."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s afturkallaði boð til %(targetDisplayName)s um þátttöku í spjallrásinni.",
             "sent": "%(senderName)s sendi boð til %(targetDisplayName)s um þátttöku í spjallrásinni."

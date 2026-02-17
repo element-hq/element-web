@@ -447,10 +447,3 @@ export TMPDIR=/tmp/colima
 # or
 export TMPDIR=$HOME/tmp
 ```
-
-**macOS users:**
-
-Docker Desktop and Colima are both well-supported on macOS.
-
-> [!CAUTION]
-> Do not set `DOCKER_HOST` when running tests. Element Web uses [element-web-playwright-common](https://github.com/element-hq/element-modules/tree/main/packages/element-web-playwright-common), and setting `DOCKER_HOST` causes issues with testcontainers when running in the container VM.

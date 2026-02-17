@@ -5,5 +5,8 @@
         "build": {
             "dependsOn": ["^build", "prebuild:*"]
         }
+    },
+    "namedInputs": {
+        "src": ["{projectRoot}/src/**/*"]
     }
 }

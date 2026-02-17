@@ -3009,11 +3009,6 @@
             "changed": "%(senderName)snanova ny ahavon'ny herin'ny%(powerLevelDiffText)s .",
             "user_from_to": "%(userId)snanomboka amin'ny%(fromPowerLevel)s ny%(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Voarara tsy handray anjara ny mpizara rehetra! Tsy azo ampiasaina intsony ity efitrano ity.",
-            "changed": "%(senderDisplayName)snanova ny ACL mpizara hoan'ity efitrano ity.",
-            "set": "%(senderDisplayName)sfarito ny ACL mpizara ho an'ity efitrano ity."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)snanafoana ny fanasana ho%(targetDisplayName)s hiditra ao amin'ny efitrano.",
             "sent": "%(senderName)smandefasa fanasana ho%(targetDisplayName)s hanatevin-daharana ny efitrano."
@@ -3215,14 +3210,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sniala ary nitambatra indray",
                 "other": "%(severalUsers)sniala ary nitambatra indray%(count)s fotoana"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sniova ny mpizara ACL",
-                "other": "%(oneUser)sniova ny mpizara ACL%(count)s fotoana"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sniova ny mpizara ACL",
-                "other": "%(severalUsers)sniova ny mpizara ACL%(count)s fotoana"
             },
             "unbanned": {
                 "one": "tsy voarara",

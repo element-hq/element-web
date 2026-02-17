@@ -2596,11 +2596,6 @@
             "changed": "%(senderName)s heeft het machtsniveau van %(powerLevelDiffText)s gewijzigd.",
             "user_from_to": "%(userId)s van %(fromPowerLevel)s naar %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Alle servers zijn verbannen van deelname! Deze kamer kan niet langer gebruikt worden.",
-            "changed": "%(senderDisplayName)s veranderde de server ACL's voor deze kamer.",
-            "set": "%(senderDisplayName)s stelde de server ACL's voor deze kamer in."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s heeft de uitnodiging aan %(targetDisplayName)s toe te treden tot deze kamer ingetrokken.",
             "sent": "%(senderName)s heeft %(targetDisplayName)s in deze kamer uitgenodigd."
@@ -2791,14 +2786,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s zijn vertrokken en %(count)s keer weer toegetreden",
                 "one": "%(severalUsers)s zijn vertrokken en weer toegetreden"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s veranderde de server ACLs",
-                "other": "%(oneUser)s veranderde de server ACLs %(count)s keer"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s veranderden de server ACLs",
-                "other": "%(severalUsers)s veranderden de server ACLs %(count)s keer"
             },
             "unbanned": {
                 "other": "is %(count)s keer ontbannen",

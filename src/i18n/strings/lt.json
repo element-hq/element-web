@@ -1932,11 +1932,6 @@
             "changed": "%(senderName)s pakeitė %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s galios lygį iš %(fromPowerLevel)s į %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Visiems serveriams uždrausta dalyvauti! Šis kambarys nebegali būti naudojamas.",
-            "changed": "%(senderDisplayName)s pakeitė serverio prieigos kontrolės sąrašus šiam kambariui.",
-            "set": "%(senderDisplayName)s nustatė serverio prieigos kontrolės sąrašus šiam kambariui."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s atšaukė pakvietimą %(targetDisplayName)s prisijungti prie kambario.",
             "sent": "%(senderName)s išsiuntė pakvietimą %(targetDisplayName)s prisijungti prie kambario."
