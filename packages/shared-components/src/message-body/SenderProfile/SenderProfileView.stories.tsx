@@ -10,11 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel";
-import {
-    SenderProfileView,
-    type SenderProfileViewActions,
-    type SenderProfileViewSnapshot,
-} from "./SenderProfileView";
+import { SenderProfileView, type SenderProfileViewActions, type SenderProfileViewSnapshot } from "./SenderProfileView";
 
 type SenderProfileProps = SenderProfileViewSnapshot & SenderProfileViewActions;
 
