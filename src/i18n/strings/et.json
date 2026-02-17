@@ -3530,11 +3530,6 @@
             "changed": "%(senderName)s muutis õiguseid: %(powerLevelDiffText)s.",
             "user_from_to": "kasutaja „%(userId)s“ õigused muutusid: %(fromPowerLevel)s → %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Kõikidel serveritel on keeld seda jututuba teenindada! Seega seda jututuba ei saa enam kasutada.",
-            "changed": "%(senderDisplayName)s muutis seda jututuba teenindavate koduserverite loendit.",
-            "set": "%(senderDisplayName)s seadistas seda jututuba teenindavate koduserverite loendi."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s võttis %(targetDisplayName)s'lt tagasi jututoaga liitumise kutse.",
             "sent": "%(senderName)s saatis %(targetDisplayName)s'le kutse jututoaga liitumiseks."
@@ -3742,14 +3737,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s lahkusid ja liitusid uuesti %(count)s korda",
                 "one": "%(severalUsers)s lahkusid ja liitusid uuesti"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s kasutaja muutis serveri pääsuloendit",
-                "other": "%(oneUser)s kasutaja muutis serveri pääsuloendit %(count)s korda"
-            },
-            "server_acls_multiple": {
-                "other": "%(severalUsers)s kasutajat muutsid serveri pääsuloendit %(count)s korda",
-                "one": "%(severalUsers)s kasutajat muutsid serveri pääsuloendit"
             },
             "unbanned": {
                 "other": "taastati ligipääs %(count)s korda",

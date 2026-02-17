@@ -3466,11 +3466,6 @@
             "changed": "%(senderName)s님이 %(powerLevelDiffText)s의 권한 등급을 바꿨습니다.",
             "user_from_to": "%(userId)s를 %(fromPowerLevel)s에서 %(toPowerLevel)s로"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 모든 서버의 참여가 금지되었습니다! 이 채팅방은 더 이상 사용할 수 없습니다.",
-            "changed": "%(senderDisplayName)s님이 이 채팅방의 서버 ACL을 변경했습니다",
-            "set": "%(senderDisplayName)s님이 이 채팅방의 서버 ACL을 설정했습니다"
-        },
         "m.room.third_party_invite": {
             "revoked": "방에 들어오라고 %(senderName)s님이 %(targetDisplayName)s님에게 보낸 초대를 취소했습니다.",
             "sent": "방에 들어오라고 %(senderName)s님이 %(targetDisplayName)s님에게 초대를 보냈습니다."
@@ -3647,12 +3642,6 @@
             },
             "rejoined_multiple": {
                 "other": "%(severalUsers)s님이 나갔다가 %(count)s번 다시 참여했습니다."
-            },
-            "server_acls": {
-                "other": "%(oneUser)s님이 서버 ACL을 %(count)s회 변경했습니다."
-            },
-            "server_acls_multiple": {
-                "other": "%(severalUsers)s님이 서버 ACL을 %(count)s회 변경했습니다"
             },
             "unbanned": {
                 "other": "님의 출입 금지가 %(count)s번 해제되었습니다"

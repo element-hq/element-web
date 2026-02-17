@@ -88,6 +88,27 @@ test.describe("Appearance user settings tab", () => {
                     await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-removed.png");
                 },
             );
+
+            test(
+                "should keep custom theme when reloading the page",
+                { tag: "@screenshot" },
+                async ({ page, app, user, util }) => {
+                    await util.addCustomTheme();
+                    await util.getCustomTheme().click();
+                    await util.closeAppearanceTab();
+
+                    await expect(page).toMatchScreenshot("window-custom-theme.png");
+
+                    await page.reload();
+
+                    await util.openAppearanceTab();
+                    // Assert that the custom theme is still selected after reloading the page
+                    await expect(util.getCustomTheme()).toBeChecked();
+
+                    await util.closeAppearanceTab();
+                    await expect(page).toMatchScreenshot("window-custom-theme.png");
+                },
+            );
         });
     });
 });

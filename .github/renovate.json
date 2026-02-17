@@ -1,5 +1,15 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>matrix-org/renovate-config-element-web"],
-    "postUpdateOptions": ["pnpmDedupe"]
+    "postUpdateOptions": ["pnpmDedupe"],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "versioningTemplate": "loose",
+            "description": "Update testcontainers docker digests",
+            "managerFilePatterns": ["**/testcontainers/*.ts"],
+            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
+        }
+    ]
 }

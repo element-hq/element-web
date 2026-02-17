@@ -1,0 +1,14 @@
+diff --git a/dist/rollup.d.ts b/dist/rollup.d.ts
+index 799df4a69cc0d7ac26c3357c8c2bd3f68365d609..67a6e48c65324f62a6724732f90ad0a776fa7ef5 100644
+--- a/dist/rollup.d.ts
++++ b/dist/rollup.d.ts
+@@ -160,6 +160,9 @@ export interface MinimalPluginContext {
+ 	warn: LoggingFunction;
+ }
+ 
++// Temporary until https://github.com/getsentry/sentry-javascript-bundler-plugins/pull/870 is released
++export type AcornNode = unknown;
++
+ export interface EmittedAsset {
+ 	fileName?: string | undefined;
+ 	name?: string | undefined;

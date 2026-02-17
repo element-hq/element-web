@@ -3022,11 +3022,6 @@
             "changed": "%(senderName)s 變更了 %(powerLevelDiffText)s 權限等級。",
             "user_from_to": "%(userId)s 從 %(fromPowerLevel)s 變為 %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 所有伺服器都已被封鎖！ 這間聊天室無法使用。",
-            "changed": "%(senderDisplayName)s 已為此聊天室更改伺服器的存取控制列表。",
-            "set": "%(senderDisplayName)s 已為此聊天室設置伺服器的存取控制列表。"
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s 撤銷了對 %(targetDisplayName)s 加入此聊天室的邀請。",
             "sent": "%(senderName)s 向 %(targetDisplayName)s 傳送了加入聊天室的邀請。"
@@ -3227,14 +3222,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s 離開並重新加入了 %(count)s 次",
                 "one": "%(severalUsers)s 離開並重新加入了"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s 變更了伺服器 ACL",
-                "other": "%(oneUser)s 變更了伺服器 ACL %(count)s 次"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s 變更了伺服器 ACL",
-                "other": "%(severalUsers)s 變更了伺服器 ACL %(count)s 次"
             },
             "unbanned": {
                 "other": "被取消阻擋了 %(count)s 次",

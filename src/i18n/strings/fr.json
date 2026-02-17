@@ -2017,7 +2017,9 @@
                 "one": "Demander à rejoindre",
                 "other": "%(count)s personnes demandant à se joindre"
             },
-            "room_is_public": "Ce salon est public"
+            "room_is_public": "Ce salon est public",
+            "shared_history_tooltip": "Les nouveaux membres voient l'historique",
+            "world_readable_history_tooltip": "Tout le monde voit l'historique"
         },
         "header_avatar_open_settings_label": "Ouvrir les paramètres du salon",
         "header_face_pile_tooltip": "Personnes",
@@ -3034,11 +3036,13 @@
             "connection_section": "Connexion",
             "dialog_title": "<strong>Paramètres : </strong> Audio et vidéo",
             "echo_cancellation": "Annulation d’écho",
+            "echo_cancellation_description": "Supprime l'écho de votre microphone pendant les appels. Ce paramètre s'applique également à Element Call.",
             "enable_fallback_ice_server": "Autoriser le serveur de secours d’assistance d’appel (%(server)s)",
             "enable_fallback_ice_server_description": "Concerne seulement les serveurs d’accueil qui n’en proposent pas. Votre adresse IP pourrait être diffusée pendant un appel.",
             "mirror_local_feed": "Inverser horizontalement la vidéo locale (effet miroir)",
             "missing_permissions_prompt": "Permissions multimédia manquantes, cliquez sur le bouton ci-dessous pour la demander.",
             "noise_suppression": "Suppression du bruit",
+            "noise_suppression_description": "Réduit le bruit de fond dans votre microphone pendant les appels. Ce paramètre s'applique également à Element Call.",
             "request_permissions": "Demander les permissions multimédia",
             "title": "Audio et vidéo",
             "video_input_empty": "Aucune caméra détectée",
@@ -3528,11 +3532,6 @@
             "changed": "%(senderName)s a changé le rang de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s à %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Tous les serveurs ont été bannis ! Ce salon ne peut plus être utilisé.",
-            "changed": "%(senderDisplayName)s a changé les paramètres d’accès du serveur pour ce salon.",
-            "set": "%(senderDisplayName)s a défini les paramètres d’accès du serveur pour ce salon."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s a révoqué l’invitation de %(targetDisplayName)s à rejoindre le salon.",
             "sent": "%(senderName)s a invité %(targetDisplayName)s à rejoindre le salon."
@@ -3740,14 +3739,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s sont partis et revenus %(count)s fois",
                 "one": "%(severalUsers)s sont partis et revenus"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s a changé les listes de contrôle d’accès (ACLs) du serveur",
-                "other": "%(oneUser)s a changé les liste de contrôle d’accès (ACLs) %(count)s fois"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s ont changé les listes de contrôle d’accès (ACLs) du serveur",
-                "other": "%(severalUsers)s ont changé les liste de contrôle d’accès (ACLs) %(count)s fois"
             },
             "unbanned": {
                 "other": "a vu son bannissement révoqué %(count)s fois",
