@@ -118,7 +118,7 @@ export default class Login {
                 );
                 return [oidcFlow];
             } catch (error) {
-                logger.error(error);
+                logger.error("Failed to get oidc native flow", error);
             }
         }
 
