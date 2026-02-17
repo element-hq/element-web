@@ -37,6 +37,10 @@ export interface ReactionsRowButtonViewModelProps {
      */
     count: number;
     /**
+     * The CSS class name.
+     */
+    className?: string;
+    /**
      * A list of Matrix reaction events for this key.
      */
     reactionEvents: MatrixEvent[];
@@ -68,6 +72,7 @@ export class ReactionsRowButtonViewModel
             mxEvent,
             content,
             count,
+            className,
             reactionEvents,
             myReactionEvent,
             disabled,
@@ -112,9 +117,10 @@ export class ReactionsRowButtonViewModel
         return {
             content,
             count,
+            className,
             ariaLabel,
             isSelected: !!myReactionEvent,
-            isDisabled: disabled,
+            isDisabled: !!disabled,
             imageSrc,
             imageAlt,
         };
@@ -150,13 +156,10 @@ export class ReactionsRowButtonViewModel
         this.snapshot.set(nextSnapshot);
     }
 
-    public setContext(client: MatrixClient | null, mxEvent: MatrixEvent): void {
-        if (this.props.client === client && this.props.mxEvent === mxEvent) {
-            return;
-        }
-        this.props = { ...this.props, client, mxEvent };
+    public setContext(client: MatrixClient): void {
+        this.props = { ...this.props, client };
 
-        this.tooltipVm.setProps({ client, mxEvent });
+        this.tooltipVm.setProps({ client });
         this.setSnapshot(ReactionsRowButtonViewModel.computeSnapshot(this.props));
     }
 
@@ -165,13 +168,6 @@ export class ReactionsRowButtonViewModel
         reactionEvents: MatrixEvent[],
         customReactionImagesEnabled?: boolean,
     ): void {
-        if (
-            this.props.content === content &&
-            this.props.reactionEvents === reactionEvents &&
-            this.props.customReactionImagesEnabled === customReactionImagesEnabled
-        ) {
-            return;
-        }
         this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
 
         this.tooltipVm.setProps({ content, reactionEvents, customReactionImagesEnabled });
@@ -179,27 +175,18 @@ export class ReactionsRowButtonViewModel
     }
 
     public setCount(count: number): void {
-        if (this.props.count === count) {
-            return;
-        }
         this.props = { ...this.props, count };
         this.snapshot.merge({ count });
     }
 
     public setMyReactionEvent(myReactionEvent?: MatrixEvent): void {
-        if (this.props.myReactionEvent === myReactionEvent) {
-            return;
-        }
         this.props = { ...this.props, myReactionEvent };
         this.snapshot.merge({ isSelected: !!myReactionEvent });
     }
 
     public setDisabled(disabled?: boolean): void {
-        if (this.props.disabled === disabled) {
-            return;
-        }
         this.props = { ...this.props, disabled };
-        this.snapshot.merge({ isDisabled: disabled });
+        this.snapshot.merge({ isDisabled: !!disabled });
     }
 
     public onClick = (): void => {

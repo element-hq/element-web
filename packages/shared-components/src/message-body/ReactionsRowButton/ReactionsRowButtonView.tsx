@@ -22,6 +22,10 @@ export interface ReactionsRowButtonViewSnapshot {
      */
     count: number;
     /**
+     * The CSS class name.
+     */
+    className?: string;
+    /**
      * The aria-label for the button.
      */
     ariaLabel?: string;
@@ -49,13 +53,18 @@ export interface ReactionsRowButtonViewActions {
      * Called when the user activates the reaction button.
      */
     onClick: () => void;
+}
+
+export interface ReactionsRowButtonViewModels {
     /**
      * View model for the tooltip wrapper.
      */
     tooltipVm: ReactionsRowButtonTooltipViewModel;
 }
 
-export type ReactionsRowButtonViewModel = ViewModel<ReactionsRowButtonViewSnapshot> & ReactionsRowButtonViewActions;
+export type ReactionsRowButtonViewModel = ViewModel<ReactionsRowButtonViewSnapshot> &
+    ReactionsRowButtonViewActions &
+    ReactionsRowButtonViewModels;
 
 interface ReactionsRowButtonViewProps {
     /**
@@ -68,46 +77,37 @@ interface ReactionsRowButtonViewProps {
  * Renders the reaction button in a reactions row.
  */
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
-    const { content, count, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
+    const { content, count, className, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
     const ariaDisabled = isDisabled ? true : undefined;
-    const onKeyDown = isDisabled
-        ? undefined
-        : (event: React.KeyboardEvent<HTMLDivElement>): void => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick();
-              }
-          };
-
-    const classes = classNames("mx_AccessibleButton", "mx_ReactionsRowButton", {
+    const classes = classNames(className, {
         mx_ReactionsRowButton_selected: isSelected,
         mx_AccessibleButton_disabled: isDisabled,
     });
 
     const reactionContent = imageSrc ? (
-        <img className="mx_ReactionsRowButton_content" alt={imageAlt ?? ""} src={imageSrc} width="16" height="16" />
+        <img className={className} alt={imageAlt ?? ""} src={imageSrc} width="16" height="16" />
     ) : (
-        <span className="mx_ReactionsRowButton_content" aria-hidden="true">
+        <span className={className} aria-hidden="true">
             {content ?? ""}
         </span>
     );
 
     return (
         <ReactionsRowButtonTooltipView vm={vm.tooltipVm}>
-            <div
+            <button
+                type="button"
                 className={classes}
-                role="button"
                 tabIndex={0}
                 aria-label={ariaLabel}
                 aria-disabled={ariaDisabled}
+                disabled={isDisabled}
                 onClick={isDisabled ? undefined : vm.onClick}
-                onKeyDown={onKeyDown}
             >
                 {reactionContent}
-                <span className="mx_ReactionsRowButton_count" aria-hidden="true">
+                <span className={className} aria-hidden="true">
                     {count}
                 </span>
-            </div>
+            </button>
         </ReactionsRowButtonTooltipView>
     );
 }
