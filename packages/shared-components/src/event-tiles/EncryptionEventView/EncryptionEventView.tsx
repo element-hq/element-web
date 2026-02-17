@@ -5,7 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import classNames from "classnames";
 import React, { type JSX } from "react";
 import { LockSolidIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -94,7 +93,7 @@ export function EncryptionEventView({ vm, ref }: Readonly<EncryptionEventViewPro
     }
 
     return (
-        <EventTileBubble icon={icon} className={classNames(className)} title={title} subtitle={subtitle} ref={ref}>
+        <EventTileBubble icon={icon} className={className} title={title} subtitle={subtitle} ref={ref}>
             {timestamp}
         </EventTileBubble>
     );
