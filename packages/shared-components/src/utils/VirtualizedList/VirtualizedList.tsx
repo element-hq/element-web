@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
 import React, { useRef, type JSX, useCallback, useEffect, useState, useMemo } from "react";
-import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
+import { type VirtuosoHandle, type ListRange, type VirtuosoProps, GroupedVirtuoso } from "react-virtuoso";
 
 /**
  * Keyboard key codes
@@ -50,7 +51,9 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
      * The array of items to display in the virtualized list.
      * Each item will be passed to getItemComponent for rendering.
      */
-    items: Item[];
+    //items: Item[];
+
+    groups: { group: string; items: Item[] }[];
 
     /**
      * Function that renders each list item as a JSX element.
@@ -62,10 +65,13 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
      */
     getItemComponent: (
         index: number,
+        groupIndex: number,
         item: Item,
         context: VirtualizedListContext<Context>,
         onFocus: (item: Item, e: React.FocusEvent) => void,
     ) => JSX.Element;
+
+    getGroupComponent: (groupIndex: number, context: VirtualizedListContext<Context>) => JSX.Element;
 
     /**
      * Optional additional context data to pass to each rendered item.
@@ -108,6 +114,8 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
      * @param range - The new visible range with startIndex and endIndex
      */
     rangeChanged?: (range: ListRange) => void;
+
+    dragOverlay?: React.ReactNode;
 }
 
 /**
@@ -127,24 +135,33 @@ export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
 export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const {
-        items,
+        //       items,
+        groups,
         getItemComponent,
+        getGroupComponent,
         isItemFocusable,
         getItemKey,
         context,
         onKeyDown,
         totalCount,
         rangeChanged,
+        dragOverlay,
         ...virtuosoProps
     } = props;
+
+    const groupCounts = useMemo(() => groups.map((group) => group.items.length), [groups]);
+
+    console.log("groups", groups);
+    console.log("groups counts", groupCounts);
+
+    const items = useMemo(() => groups.flatMap((group) => group.items), [groups]);
+
     /** Reference to the Virtuoso component for programmatic scrolling */
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
     /** Key of the item that should have tabIndex == 0 */
-    const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
-        props.items[0] ? getItemKey(props.items[0]) : undefined,
-    );
+    const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(items[0] ? getItemKey(items[0]) : undefined);
     /** Range of currently visible items in the viewport */
     const [visibleRange, setVisibleRange] = useState<ListRange | undefined>(undefined);
     /** Map from item keys to their indices in the items array */
@@ -300,8 +317,9 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
     );
 
     const getItemComponentInternal = useCallback(
-        (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>
-            getItemComponent(index, item, context, onFocusForGetItemComponent),
+        (index: number, groupIndex: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element => {
+            return getItemComponent(index, groupIndex, item, context, onFocusForGetItemComponent);
+        },
         [getItemComponent, onFocusForGetItemComponent],
     );
 
@@ -356,25 +374,44 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
         [rangeChanged],
     );
 
+    // const mergedScrollerRef = useMergeRefs([scrollerRef, droppableRef]);
+
     return (
-        <Virtuoso
-            // note that either the container of direct children must be focusable to be axe
-            // compliant, so we leave tabIndex as the default so the container can be focused
-            // (virtuoso wraps the children inside another couple of elements so setting it
-            // on those doesn't seem to work, unfortunately)
-            ref={virtuosoHandleRef}
-            scrollerRef={scrollerRef}
-            onKeyDown={keyDownCallback}
-            context={listContext}
-            rangeChanged={handleRangeChanged}
-            // virtuoso errors internally if you pass undefined.
-            overscan={props.overscan || 0}
-            data={props.items}
-            totalCount={totalCount}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            itemContent={getItemComponentInternal}
-            {...virtuosoProps}
-        />
+        <DragDropProvider
+            onDragOver={(event) => {
+                const { source, target } = event.operation;
+                console.log(`${source?.id} is over ${target?.id}`);
+            }}
+            onDragEnd={(event) => {
+                if (event.canceled) return;
+
+                const { target, source } = event.operation;
+                console.log(`${source?.id} was dropped on ${target?.id}`);
+            }}
+        >
+            {dragOverlay !== undefined && <DragOverlay dropAnimation={null}>{dragOverlay}</DragOverlay>}
+            <GroupedVirtuoso
+                style={{ height: "100%" }}
+                // note that either the container of direct children must be focusable to be axe
+                // compliant, so we leave tabIndex as the default so the container can be focused
+                // (virtuoso wraps the children inside another couple of elements so setting it
+                // on those doesn't seem to work, unfortunately)
+                ref={virtuosoHandleRef}
+                scrollerRef={scrollerRef}
+                // scrollerRef={mergedScrollerRef}
+                onKeyDown={keyDownCallback}
+                context={listContext}
+                rangeChanged={handleRangeChanged}
+                // virtuoso errors internally if you pass undefined.
+                overscan={props.overscan || 0}
+                groupCounts={groupCounts}
+                data={items}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                itemContent={getItemComponentInternal}
+                groupContent={getGroupComponent}
+                {...virtuosoProps}
+            />
+        </DragDropProvider>
     );
 }
