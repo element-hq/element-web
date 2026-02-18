@@ -108,7 +108,7 @@
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.336.4",
+        "posthog-js": "1.347.2",
         "qrcode": "1.5.4",
         "re-resizable": "6.11.2",
         "react": "catalog:",
@@ -235,7 +235,7 @@
         "mini-css-extract-plugin": "2.10.0",
         "minimist": "^1.2.6",
         "modernizr": "^3.12.0",
-        "nx": "22.5.0",
+        "nx": "22.5.1",
         "postcss": "8.5.6",
         "postcss-easings": "4.0.0",
         "postcss-hexrgba": "2.1.0",
@@ -308,6 +308,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
+    "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
     "private": true
 }
