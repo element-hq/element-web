@@ -42,7 +42,7 @@ jobs:
 
     i18n_lint_ew:
         name: "i18n Check (Element Web)"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@3673fd3abbf8dfae1de849c6cd3e69e24ed7a766
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@abf186831e2acb3e98fca13a0711a3fa1364d2b1
         permissions:
             pull-requests: read
         with:
@@ -63,7 +63,7 @@ jobs:
 
     i18n_lint_shared_components:
         name: "i18n Check (Shared Components)"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@3673fd3abbf8dfae1de849c6cd3e69e24ed7a766
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@abf186831e2acb3e98fca13a0711a3fa1364d2b1
         permissions:
             pull-requests: read
         with:

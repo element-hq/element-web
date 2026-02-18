@@ -12,6 +12,7 @@ import React, { type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Button } from "@vector-im/compound-web";
 
 import { _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -417,9 +418,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             </StyledCheckbox>
                         </div>
                         {this.state.errorText && <ErrorMessage message={this.state.errorText} />}
-                        <button type="submit" className="mx_Login_submit">
+                        <Button type="submit" className="mx_Login_submit" size="sm">
                             {submitButtonChild}
-                        </button>
+                        </Button>
                     </fieldset>
                 </form>
             </>
@@ -432,12 +433,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 <CheckIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
                 <h1>{_t("auth|reset_password|reset_successful")}</h1>
                 {this.state.logoutDevices ? <p>{_t("auth|reset_password|devices_logout_success")}</p> : null}
-                <input
-                    className="mx_Login_submit"
-                    type="button"
-                    onClick={this.props.onComplete}
-                    value={_t("auth|reset_password|return_to_login")}
-                />
+                <Button className="mx_Login_submit" size="sm" type="button" onClick={this.props.onComplete}>
+                    {_t("auth|reset_password|return_to_login")}
+                </Button>
             </>
         );
     }
