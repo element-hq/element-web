@@ -116,7 +116,7 @@
         "matrix-seshat": "^4.0.1"
     },
     "resolutions": {
-        "atomically": "2.1.0",
+        "atomically": "2.1.1",
         "@types/node": "18.19.130",
         "config-file-ts": "0.2.8-rc1",
         "node-abi": "4.26.0",
