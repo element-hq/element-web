@@ -1269,7 +1269,7 @@ describe("<MatrixChat />", () => {
             fireEvent.change(screen.getByLabelText("Password"), { target: { value: password } });
 
             // sign in button is an input
-            fireEvent.click(screen.getByDisplayValue("Sign in"));
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
         };
 
         beforeEach(() => {
