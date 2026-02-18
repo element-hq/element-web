@@ -100,8 +100,8 @@ importers:
         specifier: ^12.0.0
         version: 12.1.1
       '@matrix-org/analytics-events':
-        specifier: ^0.31.0
-        version: 0.31.0
+        specifier: ^0.32.0
+        version: 0.32.0
       '@matrix-org/emojibase-bindings':
         specifier: ^1.5.0
         version: 1.5.0
@@ -2642,8 +2642,8 @@ packages:
   '@maplibre/vt-pbf@4.2.1':
     resolution: {integrity: sha512-IxZBGq/+9cqf2qdWlFuQ+ZfoMhWpxDUGQZ/poPHOJBvwMUT1GuxLo6HgYTou+xxtsOsjfbcjI8PZaPCtmt97rA==}
 
-  '@matrix-org/analytics-events@0.31.0':
-    resolution: {integrity: sha512-rZrtHt6X1cnleWPPSp56fngYBiq2Db1jQt+bATEUlDwwiMCrG3D5ojYqOQ03MlgySLIZLBAAam//bZAqiGWOwQ==}
+  '@matrix-org/analytics-events@0.32.0':
+    resolution: {integrity: sha512-Z5hl4wJdIvskFCOzHAh/7tQKlyvJ/5/JdvfTTySuJ/v47VmkCGvkdDD6ODT9+15psj3O8Cc2Ofgh2KqDJjd6kg==}
 
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
@@ -12612,7 +12612,7 @@ snapshots:
       pbf: 4.0.1
       supercluster: 8.0.1
 
-  '@matrix-org/analytics-events@0.31.0': {}
+  '@matrix-org/analytics-events@0.32.0': {}
 
   '@matrix-org/emojibase-bindings@1.5.0':
     dependencies:

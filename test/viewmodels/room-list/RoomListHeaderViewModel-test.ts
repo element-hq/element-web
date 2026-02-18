@@ -25,6 +25,7 @@ import {
 } from "../../../src/utils/space";
 import { createTestClient, mkSpace } from "../../test-utils";
 import { createRoom, hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
+import PosthogTrackers from "../../../src/PosthogTrackers";
 
 jest.mock("../../../src/PosthogTrackers", () => ({
     trackInteraction: jest.fn(),
@@ -276,8 +277,23 @@ describe("RoomListHeaderViewModel", () => {
             const resortSpy = jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(jest.fn());
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             vm.sort(option);
-
             expect(resortSpy).toHaveBeenCalledWith(expectedAlgorithm);
+        });
+
+        it("should track analytics on resort", () => {
+            jest.spyOn(RoomListStoreV3.instance, "activeSortAlgorithm", "get").mockReturnValue(
+                SortingAlgorithm.Alphabetic,
+            );
+            PosthogTrackers.trackRoomListSortingAlgorithmChange = jest.fn();
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(jest.fn());
+            vm.sort("unread-first");
+
+            expect(PosthogTrackers.trackRoomListSortingAlgorithmChange).toHaveBeenCalledWith(
+                SortingAlgorithm.Alphabetic,
+                SortingAlgorithm.Unread,
+            );
         });
 
         it("should toggle message preview from enabled to disabled", () => {

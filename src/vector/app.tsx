@@ -14,14 +14,14 @@ Please see LICENSE files in the repository root for full details.
 import "matrix-js-sdk/src/browser-index";
 import React, { type ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { createClient, AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import type { QueryDict } from "matrix-js-sdk/src/utils";
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../Lifecycle";
-import SdkConfig, { parseSsoRedirectOptions } from "../SdkConfig";
+import SdkConfig from "../SdkConfig";
 import { type IConfigOptions } from "../IConfigOptions";
 import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
@@ -34,6 +34,8 @@ import { ModuleApi } from "../modules/Api";
 import { RoomView } from "../components/structures/RoomView";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
+import Login from "../Login.ts";
+import { startOidcLogin } from "../utils/oidc/authorize.ts";
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
@@ -54,6 +56,35 @@ function onTokenLoginCompleted(): void {
 
     logger.log(`Redirecting to ${url.href} to drop delegated authentication params from queryparams`);
     window.history.replaceState(null, "", url.href);
+}
+
+async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
+    logger.log("Bypassing app load to redirect to SSO");
+
+    try {
+        const login = new Login(config.hsUrl, config.isUrl, null, {
+            delegatedAuthentication: config.delegatedAuthentication,
+        });
+        const flows = await login.getFlows();
+
+        const nativeOidcFlow = flows.find((flow) => "clientId" in flow);
+        if (nativeOidcFlow && config.delegatedAuthentication) {
+            await startOidcLogin(config.delegatedAuthentication, nativeOidcFlow.clientId, config.hsUrl, config.isUrl);
+            return true;
+        }
+
+        const flow = flows.find((flow) => flow.type === "m.login.sso" || flow.type === "m.login.cas");
+        PlatformPeg.get()!.startSingleSignOn(
+            login.createTemporaryClient(),
+            flow?.type === "m.login.cas" ? "cas" : "sso",
+            `/${getScreenFromLocation(window.location).screen}`,
+        );
+        return true;
+    } catch (e) {
+        console.error("Error encountered during sso redirect", e);
+    }
+
+    return false;
 }
 
 export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
@@ -82,8 +113,8 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
-    const isReturningFromSso = !!params.loginToken;
-    const ssoRedirects = parseSsoRedirectOptions(config);
+    const isReturningFromSso = !!params.loginToken || (!!params.code && !!params.state);
+    const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
     const isWelcomeOrLanding =
@@ -96,24 +127,23 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     if (!autoRedirect && ssoRedirects.on_login_page && isLoginPage) {
         autoRedirect = true;
     }
-    if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
-        logger.log("Bypassing app load to redirect to SSO");
-        const tempCli = createClient({
-            baseUrl: config.validated_server_config!.hsUrl,
-            idBaseUrl: config.validated_server_config!.isUrl,
-        });
-        PlatformPeg.get()!.startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
+
+    // getInitialScreenAfterLogin has a side effect to write to sessionStorage, perform it before auto-redirect
+    const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
+
+    if (!hasPossibleToken && !isReturningFromSso && autoRedirect && config.validated_server_config) {
+        const redirecting = await redirectToSso(config.validated_server_config);
 
         // We return here because startSingleSignOn() will asynchronously redirect us. We don't
         // care to wait for it, and don't want to show any UI while we wait (not even half a welcome
         // page). As such, just don't even bother loading the MatrixChat component.
-        return <React.Fragment />;
+        if (redirecting) {
+            return <React.Fragment />;
+        }
     }
 
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
-
-    const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
 
     const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
     ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
