@@ -7,8 +7,10 @@
 
 import React, { memo } from "react";
 import { type JSX } from "react";
+import classNames from "classnames";
 
 import { type VirtualizedListContext } from "./virtualized-list";
+import styles from "./story-mock.module.css";
 
 export interface SimpleItemComponent {
     id: string;
@@ -33,15 +35,37 @@ export const SimpleItemComponent = memo(function SimpleItemComponent({
     context,
     onFocus,
 }: SimpleItemComponentProps<VirtualizedListContext<undefined>>): JSX.Element {
+    const selected = context.tabIndexKey === item.id;
+
     return (
-        <div
+        <button
+            type="button"
             key={item.id}
-            style={{ padding: "12px 16px", borderBottom: "1px solid #e0e0e0" }}
-            tabIndex={context.tabIndexKey === item.id ? 0 : -1}
+            className={classNames(styles.item, { [styles.itemSelected]: selected })}
+            tabIndex={selected ? 0 : -1}
             onFocus={(e) => onFocus(item, e)}
         >
             {item.label}
-        </div>
+        </button>
     );
 });
 
+export const GroupHeaderComponent = memo(function GroupHeaderComponent({
+    groupIndex,
+}: {
+    groupIndex: number;
+}): JSX.Element {
+    return (
+        <div
+            key={`group-${groupIndex}`}
+            style={{
+                padding: "8px",
+                backgroundColor: "#00ADAD",
+                border: "1px solid white",
+                fontWeight: "bold",
+            }}
+        >
+            Group {groupIndex + 1}
+        </div>
+    );
+});
