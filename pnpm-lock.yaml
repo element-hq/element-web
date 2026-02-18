@@ -730,6 +730,9 @@ importers:
 
   packages/shared-components:
     dependencies:
+      '@dnd-kit/react':
+        specifier: ^0.3.0
+        version: 0.3.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@element-hq/element-web-module-api':
         specifier: 'catalog:'
         version: 1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
@@ -778,7 +781,7 @@ importers:
         version: 10.2.5(storybook@10.2.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
       '@storybook/addon-designs':
         specifier: ^11.0.1
-        version: 11.1.1(@storybook/addon-docs@10.2.5(@types/react@19.2.10)(esbuild@0.27.2)(rollup@4.57.1(patch_hash=603340e49399c6044e41a3998891667387d5ec1acbd38d4e5862f2ba3ef58de8))(storybook@10.2.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(webpack@5.105.0(esbuild@0.27.2)(webpack-cli@6.0.1(webpack-bundle-analyzer@5.2.0)(webpack-dev-server@5.2.3)(webpack@5.105.0))))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
+        version: 11.1.1(@storybook/addon-docs@10.2.5(@types/react@19.2.10)(esbuild@0.27.2)(rollup@4.57.1(patch_hash=603340e49399c6044e41a3998891667387d5ec1acbd38d4e5862f2ba3ef58de8))(storybook@10.2.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(webpack@5.105.0(esbuild@0.27.2)(webpack-cli@6.0.1)))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
       '@storybook/addon-docs':
         specifier: ^10.0.7
         version: 10.2.5(@types/react@19.2.10)(esbuild@0.27.2)(rollup@4.57.1(patch_hash=603340e49399c6044e41a3998891667387d5ec1acbd38d4e5862f2ba3ef58de8))(storybook@10.2.5(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(webpack@5.105.0(esbuild@0.27.2)(webpack-cli@6.0.1(webpack-bundle-analyzer@5.2.0)(webpack-dev-server@5.2.3)(webpack@5.105.0)))
@@ -1995,6 +1998,27 @@ packages:
     resolution: {integrity: sha512-4B4OijXeVNOPZlYA2oEwWOTkzyltLao+xbotHQeqN++Rv27Y6s818+n2Qkp8q+Fxhn0t/5lA5X1Mxktud8eayQ==}
     engines: {node: '>=14.17.0'}
 
+  '@dnd-kit/abstract@0.3.0':
+    resolution: {integrity: sha512-bHBwR8GGGwaZ/I6cjY8EUrFLEZgCcfanVjDaGcll48rLzwtzcYwMAflTdJe/9EMeQHA3cMkjLI2fbGqAgkrYOQ==}
+
+  '@dnd-kit/collision@0.3.0':
+    resolution: {integrity: sha512-CU8nkX9BwBlWfE9MOStwtHwNQzzw9oDaTUxt7o323SvxobnkT2DGDnrIZWsDfAoR/tmsP5muWC69Vij3K3fsMw==}
+
+  '@dnd-kit/dom@0.3.0':
+    resolution: {integrity: sha512-6ZuR1eliC0RjaOfSbWwTq6io6jaKi3sOiukeJdLBGSZWD/kIeCbCO897dhWRfwtj1WD+V56Uq2i58/2ImBEicQ==}
+
+  '@dnd-kit/geometry@0.3.0':
+    resolution: {integrity: sha512-3cnhDaX6ornsuz1HmLrS8JxJCCUcK/pmeGpylrlEhlnUG/3IgwNDTTuRx5MxN8GQBXUkOtDmAq7CMWKK7v6n9A==}
+
+  '@dnd-kit/react@0.3.0':
+    resolution: {integrity: sha512-vxG1gpacBFAkZj3jbRMj2+zBMu76eSwaVw42jvljgksLX744865+T8a+XkGLdcnfhat7BTXFVm+atYk8+bcE8g==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+
+  '@dnd-kit/state@0.3.0':
+    resolution: {integrity: sha512-IXiEVsBIEMaBLr1JB7fLRBPOkjYSwvKXBAur3VjaDF5z2qg/dUMADsu0V7meQfTFU4JGbV19Lwi73H21a2qNpg==}
+
   '@element-hq/element-call-embedded@0.16.3':
     resolution: {integrity: sha512-OViKJonDaDNVBUW9WdV9mk78/Ruh34C7XsEgt3O8D9z+64C39elbIgllHSoH5S12IRlv9RYrrV37FZLo6QWsDQ==}
 
@@ -3024,6 +3048,9 @@ packages:
 
   '@posthog/types@1.336.4':
     resolution: {integrity: sha512-BY3cq/8segbXEvHbEXx9SWmaKJEM0AGgsOgMFH2yy13AV+rUHsGcp4Z5LDI5pU25DURN9EAZvzcoVyYy/Iokmw==}
+
+  '@preact/signals-core@1.13.0':
+    resolution: {integrity: sha512-slT6XeTCAbdql61GVLlGU4x7XHI7kCZV5Um5uhE4zLX4ApgiiXc0UYFvVOKq06xcovzp7p+61l68oPi563ARKg==}
 
   '@principalstudio/html-webpack-inject-preload@1.2.7':
     resolution: {integrity: sha512-KJKkiKG63ugBjf8U0e9jUcI9CLPTFIsxXplEDE0oi3mPpxd90X9SJovo3W2l7yh/ARKIYXhQq8fSXUN7M29TzQ==}
@@ -11878,6 +11905,45 @@ snapshots:
 
   '@discoveryjs/json-ext@0.6.3': {}
 
+  '@dnd-kit/abstract@0.3.0':
+    dependencies:
+      '@dnd-kit/geometry': 0.3.0
+      '@dnd-kit/state': 0.3.0
+      tslib: 2.8.1
+
+  '@dnd-kit/collision@0.3.0':
+    dependencies:
+      '@dnd-kit/abstract': 0.3.0
+      '@dnd-kit/geometry': 0.3.0
+      tslib: 2.8.1
+
+  '@dnd-kit/dom@0.3.0':
+    dependencies:
+      '@dnd-kit/abstract': 0.3.0
+      '@dnd-kit/collision': 0.3.0
+      '@dnd-kit/geometry': 0.3.0
+      '@dnd-kit/state': 0.3.0
+      tslib: 2.8.1
+
+  '@dnd-kit/geometry@0.3.0':
+    dependencies:
+      '@dnd-kit/state': 0.3.0
+      tslib: 2.8.1
+
+  '@dnd-kit/react@0.3.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@dnd-kit/abstract': 0.3.0
+      '@dnd-kit/dom': 0.3.0
+      '@dnd-kit/state': 0.3.0
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      tslib: 2.8.1
+
+  '@dnd-kit/state@0.3.0':
+    dependencies:
+      '@preact/signals-core': 1.13.0
+      tslib: 2.8.1
+
   '@element-hq/element-call-embedded@0.16.3': {}
 
   '@element-hq/element-web-module-api@1.9.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)':
@@ -13080,6 +13146,8 @@ snapshots:
       cross-spawn: 7.0.6
 
   '@posthog/types@1.336.4': {}
+
+  '@preact/signals-core@1.13.0': {}
 
   '@principalstudio/html-webpack-inject-preload@1.2.7(html-webpack-plugin@5.6.6(webpack@5.105.0))(webpack@5.105.0)':
     dependencies:

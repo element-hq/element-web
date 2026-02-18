@@ -8,6 +8,8 @@
 import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react";
 import classNames from "classnames";
 import { Text } from "@vector-im/compound-web";
+import { useDraggable } from "@dnd-kit/react";
+import { useMergeRefs } from "react-merge-refs";
 
 import { Flex } from "../../utils/Flex";
 import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
@@ -141,14 +143,25 @@ export const RoomListItemView = memo(function RoomListItemView({
     renderAvatar,
     ...props
 }: RoomListItemViewProps): JSX.Element {
-    const ref = useRef<HTMLButtonElement>(null);
     const item = useViewModel(vm);
 
+    const ref = useRef<HTMLButtonElement>(null);
     useEffect(() => {
         if (isFocused) {
             ref.current?.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
         }
     }, [isFocused]);
+
+    const {
+        ref: draggableRef,
+        handleRef,
+        isDragging,
+    } = useDraggable({
+        id: item.id,
+        feedback: "clone",
+    });
+
+    const mergedRef = useMergeRefs([draggableRef, ref]);
 
     // Generate a11y label from notification state and room name
     const a11yLabel = getA11yLabel(item.name, item.notification);
@@ -156,10 +169,11 @@ export const RoomListItemView = memo(function RoomListItemView({
     const content = (
         <Flex
             as="button"
-            ref={ref}
+            ref={mergedRef}
             className={classNames(styles.roomListItem, "mx_RoomListItemView", {
                 [styles.selected]: isSelected,
                 [styles.bold]: item.isBold,
+                [styles.isDragging]: isDragging,
                 mx_RoomListItemView_selected: isSelected,
             })}
             gap="var(--cpd-space-3x)"
@@ -175,7 +189,7 @@ export const RoomListItemView = memo(function RoomListItemView({
             tabIndex={isFocused ? 0 : -1}
             {...props}
         >
-            <Flex className={styles.container} gap="var(--cpd-space-3x)" align="center">
+            <Flex ref={handleRef} className={styles.container} gap="var(--cpd-space-3x)" align="center">
                 {renderAvatar(item.room)}
                 <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}

@@ -58,6 +58,14 @@
     }
 }
 
+.isDragging {
+    color: var(--cpd-color-text-primary);
+
+    .container {
+        background-color: var(--cpd-color-bg-action-tertiary-hovered);
+    }
+}
+
 .container {
     flex: 1;
     height: 100%;

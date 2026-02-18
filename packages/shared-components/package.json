@@ -51,6 +51,7 @@
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "dependencies": {
+        "@dnd-kit/react": "^0.3.0",
         "@element-hq/element-web-module-api": "catalog:",
         "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "catalog:",
