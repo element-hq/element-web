@@ -80,9 +80,7 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
     const { content, count, className, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
     const ariaDisabled = isDisabled ? true : undefined;
     const classes = classNames(className, styles.reactionsRowButton, {
-        mx_ReactionsRowButton_selected: isSelected,
         [styles.reactionsRowButtonSelected]: isSelected,
-        mx_AccessibleButton_disabled: isDisabled,
         [styles.reactionsRowButtonDisabled]: isDisabled,
     });
 
