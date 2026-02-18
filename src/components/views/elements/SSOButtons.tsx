@@ -110,18 +110,15 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 
-    const brandPart = brandClass ? { [brandClass]: brandClass } : undefined;
-    const classes = classNames(
-        "mx_SSOButton",
-        {
-            mx_SSOButton_mini: iconOnly,
-        },
-        brandPart,
-    );
-
     const commonProps: Partial<ComponentProps<typeof Button>> = {
         iconOnly,
-        className: classes,
+        className: classNames(
+            "mx_SSOButton",
+            {
+                mx_SSOButton_mini: iconOnly,
+            },
+            brandClass,
+        ),
         onClick,
         kind: "secondary",
         disabled,
