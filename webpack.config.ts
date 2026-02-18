@@ -91,7 +91,7 @@ try {
 // Get the root of a node_modules dependency the name of its import
 function getPackageRoot(dep: string, target = "package.json"): string {
     const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
-    return path.dirname(targetPath.startsWith("file://") ? targetPath.slice(7) : targetPath);
+    return path.dirname(fileURLToPath(targetPath));
 }
 
 function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
