@@ -3489,11 +3489,6 @@
             "changed": "%(senderName)s zmienił poziom uprawnień %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s z %(fromPowerLevel)s na %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Wszystkie serwery zostały wykluczone z uczestnictwa! Ten pokój nie może być już używany.",
-            "changed": "%(senderDisplayName)s zmienił ACLe serwera dla pokoju.",
-            "set": "%(senderDisplayName)s ustawił ACLe serwera dla pokoju."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s odwołał zaproszenie dla %(targetDisplayName)s, aby dołączył do pokoju.",
             "sent": "%(senderName)s wysłał zaproszenie do %(targetDisplayName)s do dołączenia do pokoju."
@@ -3706,14 +3701,6 @@
                 "one": "%(severalUsers)s wyszło i dołączyło ponownie",
                 "few": "%(severalUsers)s wyszło i dołączyło ponownie %(count)s razy",
                 "many": "%(severalUsers)s wyszło i dołączyło ponownie %(count)s razy"
-            },
-            "server_acls": {
-                "one": "%(oneUser)szmienił ACL serwera",
-                "other": "%(oneUser)szmienił ACL serwera %(count)s razy"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)szmieniło ACL serwera",
-                "other": "%(severalUsers)szmieniło ACL serwera %(count)s razy"
             },
             "unbanned": {
                 "one": "został odbanowany",

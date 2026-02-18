@@ -3520,11 +3520,6 @@
             "changed": "%(senderName)s endret effektnivået på %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s gikk fra %(fromPowerLevel)s til %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Alle servere er utestengt fra å delta! Dette rommet kan ikke lenger brukes.",
-            "changed": "%(senderDisplayName)s endret serverens tilgangskontrollister (ACL) for dette rommet.",
-            "set": "%(senderDisplayName)s har satt serverens tilgangskontrollister (ACL) for dette rommet."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s trakk tilbake invitasjonen dette rommet for %(targetDisplayName)s.",
             "sent": "%(senderName)s sendte en invitasjon til %(targetDisplayName)s om å bli med i rommet."
@@ -3729,14 +3724,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sforlot og ble med igjen",
                 "other": "%(severalUsers)sforlot og ble med igjen%(count)s ganger"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sendret serverens ACLer",
-                "other": "%(oneUser)sendret serverens ACLer %(count)s ganger"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sendret serverens ACLer",
-                "other": "%(severalUsers)sendret serverens ACLer %(count)s ganger"
             },
             "unbanned": {
                 "one": "fikk opphevet forbudet",

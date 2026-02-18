@@ -6,123 +6,128 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
     aria-label="Room options"
     class="flex header"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: end; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      class="flex container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-        title="Rooms"
+      <div
+        class="flex title"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
-        Rooms
-      </h1>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Open space menu"
-        class="_icon-button_1215g_8 button"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_0_"
-        role="button"
-        style="--cpd-icon-button-size: 24px; padding: 2px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+        <h1
+          class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+          title="Rooms"
         >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
-        </div>
-      </button>
-    </div>
-    <div
-      class="flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-    >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="_r_4_"
-        class="_icon-button_1215g_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_2_"
-        role="button"
-        style="--cpd-icon-button-size: 28px; padding: 4px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+          Rooms
+        </h1>
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Open space menu"
+          class="_icon-button_1215g_8 button"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_0_"
+          role="button"
+          style="--cpd-icon-button-size: 24px; padding: 2px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-labelledby="_r_b_"
-        class="_icon-button_1215g_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_9_"
-        role="button"
-        style="--cpd-icon-button-size: 36px; padding: 6px;"
-        tabindex="0"
-        type="button"
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="_r_4_"
+          class="_icon-button_1215g_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_2_"
+          role="button"
+          style="--cpd-icon-button-size: 28px; padding: 4px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-labelledby="_r_b_"
+          class="_icon-button_1215g_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_9_"
+          role="button"
+          style="--cpd-icon-button-size: 28px; padding: 4px;"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </div>
@@ -134,118 +139,123 @@ exports[`RoomListHeaderView > renders without compose menu 1`] = `
     aria-label="Room options"
     class="flex header"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: end; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      class="flex container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-        title="Rooms"
+      <div
+        class="flex title"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
-        Rooms
-      </h1>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Open space menu"
-        class="_icon-button_1215g_8 button"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_i_"
-        role="button"
-        style="--cpd-icon-button-size: 24px; padding: 2px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+        <h1
+          class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+          title="Rooms"
         >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-            />
-          </svg>
-        </div>
-      </button>
-    </div>
-    <div
-      class="flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-    >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="_r_m_"
-        class="_icon-button_1215g_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_k_"
-        role="button"
-        style="--cpd-icon-button-size: 28px; padding: 4px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+          Rooms
+        </h1>
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Open space menu"
+          class="_icon-button_1215g_8 button"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_i_"
+          role="button"
+          style="--cpd-icon-button-size: 24px; padding: 2px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-labelledby="_r_r_"
-        class="_icon-button_1215g_8"
-        data-kind="primary"
-        role="button"
-        style="--cpd-icon-button-size: 32px;"
-        tabindex="0"
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="_r_m_"
+          class="_icon-button_1215g_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_k_"
+          role="button"
+          style="--cpd-icon-button-size: 28px; padding: 4px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            aria-hidden="true"
-            color="var(--cpd-color-icon-secondary)"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-labelledby="_r_r_"
+          class="_icon-button_1215g_8"
+          data-kind="primary"
+          role="button"
+          style="--cpd-icon-button-size: 28px; padding: 4px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-hidden="true"
+              color="var(--cpd-color-icon-secondary)"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </div>
@@ -257,92 +267,97 @@ exports[`RoomListHeaderView > renders without space menu 1`] = `
     aria-label="Room options"
     class="flex header"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: end; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+      class="flex container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
-      <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-        title="Rooms"
+      <div
+        class="flex title"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
-        Rooms
-      </h1>
-    </div>
-    <div
-      class="flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-    >
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-label="Room Options"
-        aria-labelledby="_r_14_"
-        class="_icon-button_1215g_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_12_"
-        role="button"
-        style="--cpd-icon-button-size: 28px; padding: 4px;"
-        tabindex="0"
-        type="button"
-      >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+        <h1
+          class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+          title="Rooms"
         >
-          <svg
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-            />
-          </svg>
-        </div>
-      </button>
-      <button
-        aria-disabled="false"
-        aria-expanded="false"
-        aria-haspopup="menu"
-        aria-labelledby="_r_1b_"
-        class="_icon-button_1215g_8"
-        data-kind="primary"
-        data-state="closed"
-        id="radix-_r_19_"
-        role="button"
-        style="--cpd-icon-button-size: 36px; padding: 6px;"
-        tabindex="0"
-        type="button"
+          Rooms
+        </h1>
+      </div>
+      <div
+        class="flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
-        <div
-          class="_indicator-icon_147l5_17"
-          style="--cpd-icon-button-size: 100%;"
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-label="Room Options"
+          aria-labelledby="_r_14_"
+          class="_icon-button_1215g_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_12_"
+          role="button"
+          style="--cpd-icon-button-size: 28px; padding: 4px;"
+          tabindex="0"
+          type="button"
         >
-          <svg
-            aria-hidden="true"
-            fill="currentColor"
-            height="1em"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
           >
-            <path
-              clip-rule="evenodd"
-              d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-            />
-          </svg>
-        </div>
-      </button>
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
+              />
+            </svg>
+          </div>
+        </button>
+        <button
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-haspopup="menu"
+          aria-labelledby="_r_1b_"
+          class="_icon-button_1215g_8"
+          data-kind="primary"
+          data-state="closed"
+          id="radix-_r_19_"
+          role="button"
+          style="--cpd-icon-button-size: 28px; padding: 4px;"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="_indicator-icon_147l5_17"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+                fill-rule="evenodd"
+              />
+              <path
+                d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 </div>

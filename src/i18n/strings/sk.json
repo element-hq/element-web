@@ -3572,11 +3572,6 @@
             "changed": "%(senderName)s zmenil úroveň oprávnenia pre %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s z %(fromPowerLevel)s na %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Všetky servery majú zákaz účasti! Túto miestnosť už nie je možné používať.",
-            "changed": "%(senderDisplayName)s zmenil ACL servera pre túto miestnosť.",
-            "set": "%(senderDisplayName)s nastavil ACL servera pre túto miestnosť."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s odvolal pozvanie vstúpiť do miestnosti pre %(targetDisplayName)s.",
             "sent": "%(senderName)s pozval %(targetDisplayName)s vstúpiť do miestnosti."
@@ -3815,16 +3810,6 @@
                 "one": "%(severalUsers)sopustili a znovu vstúpili",
                 "few": "%(severalUsers)s%(count)s-krát odišli a znovu vstúpili",
                 "other": "%(severalUsers)s%(count)s-krát odišli a znovu vstúpili"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s zmenil ACL servera",
-                "few": "%(oneUser)szmenil ACL servera %(count)s-krát",
-                "other": "%(oneUser)szmenil ACL servera %(count)s-krát"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s zmenilo ACL servera",
-                "few": "%(severalUsers)szmenilo ACL servera %(count)s-krát",
-                "other": "%(severalUsers)szmenilo ACL servera %(count)s-krát"
             },
             "unbanned": {
                 "other": "mal %(count)s krát povolený vstup",

@@ -5,16 +5,41 @@
     "action": {
         "delete": "Dileu",
         "dismiss": "Gwrthod",
+        "edit": "Golygu",
         "explore_rooms": "Archwilio Ystafelloedd",
+        "invite": "Gwahodd",
+        "new_conversation": "Sgwrs newydd",
+        "new_room": "Ystafell newydd",
+        "new_video_room": "Ystafell fideo newydd",
+        "open_menu": "Agor dewislen",
         "pause": "Oedi",
         "play": "Chwarae",
+        "remove": "Tynnu",
         "retry": "Ceisio eto",
-        "search": "Chwilio"
+        "search": "Chwilio",
+        "start_chat": "Dechrau sgwrs"
+    },
+    "common": {
+        "preferences": "Dewisiadau"
     },
     "left_panel": {
         "open_dial_pad": "Agor y pad deialu"
     },
+    "notifications": {
+        "all_messages": "Pob neges",
+        "default_settings": "Cydweddu'r gosodiadau rhagosodedig",
+        "mentions_keywords": "Crybwylliadau ac allweddeiriau",
+        "mute_room": "Ystafell ddistaw"
+    },
     "room": {
+        "context_menu": {
+            "title": "Dewisiadau ystafell"
+        },
+        "history_visibility_badge": {
+            "private": "Dyw aelodau newydd ddim yn gweld hanes",
+            "shared": "Mae aelodau newydd yn gweld hanes",
+            "world_readable": "Gall unrhyw un weld hanes"
+        },
         "status_bar": {
             "delete_all": "Dileu'r cyfan",
             "exceeded_resource_limit_description": "Cysylltwch â gweinyddwr eich gwasanaeth i barhau i ddefnyddio'r gwasanaeth.",
@@ -28,6 +53,69 @@
             "server_connectivity_lost_description": "Bydd negeseuon sy'n cael eu hanfon yn cael eu cadw nes bod eich cysylltiad wedi dychwelyd.",
             "server_connectivity_lost_title": "Mae'r cysylltiad â'r gweinydd wedi'i golli.",
             "some_messages_not_sent": "Dyw rhai o'ch negeseuon heb eu hanfon"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Agor ystafell %(roomName)s",
+            "invitation": "Agor gwahoddiad i ystafell %(roomName)s.",
+            "unsent_message": "Agor ystafell %(roomName)s gyda neges heb ei hanfon."
+        },
+        "appearance": "Gwedd",
+        "collapse_filters": "Cau rhestr hidlo",
+        "empty": {
+            "no_chats": "Dim sgyrsiau eto",
+            "no_chats_description": "Dechreuwch drwy anfon neges at rywun neu drwy greu ystafell",
+            "no_chats_description_no_room_rights": "Dechreuwch drwy anfon neges at rywun",
+            "no_favourites": "Does gennych chi ddim hoff sgyrsiau eto",
+            "no_favourites_description": "Gallwch ychwanegu sgwrs at eich ffefrynnau yn y gosodiadau sgwrsio",
+            "no_invites": "Does gennych chi ddim gwahoddiadau heb eu darllen",
+            "no_lowpriority": "Does gennych chi ddim ystafelloedd blaenoriaeth isel",
+            "no_mentions": "Does gennych chi ddim crybwylliadau heb eu darllen",
+            "no_people": "Does gennych chi ddim sgyrsiau uniongyrchol gydag unrhyw un eto",
+            "no_people_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
+            "no_rooms": "Dydych chi ddim mewn unrhyw ystafell eto",
+            "no_rooms_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
+            "no_unread": "Llongyfarchiadau! Does gennych chi ddim negeseuon heb eu darllen",
+            "show_activity": "Gweld yr holl weithgarwch",
+            "show_chats": "Dangos pob sgwrs"
+        },
+        "expand_filters": "Ehangu rhestr hidlo",
+        "filters": {
+            "favourite": "Ffefrynnau",
+            "invites": "Gwahoddiadau",
+            "low_priority": "Blaenoriaeth isel",
+            "mentions": "Crybwylliadau",
+            "people": "Pobl",
+            "rooms": "Ystafelloedd",
+            "unread": "Heb eu darllen"
+        },
+        "list_title": "Rhestr ystafelloedd",
+        "more_options": {
+            "copy_link": "Copïo dolen yr ystafell",
+            "favourited": "Ffafriwyd",
+            "leave_room": "Gadael yr ystafell",
+            "low_priority": "Blaenoriaeth isel",
+            "mark_read": "Marcio fel wedi'i ddarllen",
+            "mark_unread": "Marcio fel heb ei ddarllen"
+        },
+        "notification_options": "Dewisiadau hysbysu",
+        "open_space_menu": "Agor dewislen gofod",
+        "primary_filters": "Hidlau rhestr ystafelloedd",
+        "room": {
+            "more_options": "Rhagor o Ddewisiadau"
+        },
+        "room_options": "Dewisiadau Ystafelloedd",
+        "show_message_previews": "Dangos rhagolygon negeseuon",
+        "sort": "Trefnu",
+        "sort_type": {
+            "activity": "Gweithgaredd",
+            "atoz": "A-Z",
+            "unread_first": "Heb ei ddarllen yn gyntaf"
+        },
+        "space_menu": {
+            "home": "Cartref gofod",
+            "space_settings": "Gosodiadau gofod"
         }
     },
     "terms": {
@@ -50,10 +138,29 @@
         "n_minutes_ago": "%(num)s munud yn ôl"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "Mae'r anfonwr wedi eich rhwystro rhag derbyn y neges hon oherwydd nad yw eich dyfais wedi'i gwirio",
+            "historical_event_no_key_backup": "Nid yw negeseuon hanesyddol ar gael ar y ddyfais hon",
+            "historical_event_unverified_device": "Mae angen i chi wirio'r ddyfais hon i gael mynediad at negeseuon hanesyddol",
+            "historical_event_user_not_joined": "Does gennych chi ddim mynediad i'r neges hon",
+            "sender_identity_previously_verified": "Ailosodwyd hunaniaeth ddilys yr anfonwr",
+            "sender_unsigned_device": "Wedi'i anfon o ddyfais anniogel.",
+            "unable_to_decrypt": "Methu dadgryptio'r neges"
+        },
         "m.audio": {
             "audio_player": "Chwaraewr sain",
             "error_downloading_audio": "Gwall wrth llwytho i lawrsain",
             "unnamed_audio": "Sain dienw"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Symud i'r chwith",
+            "move_right": "Symud i'r dde",
+            "remove": "Dileu i bawb",
+            "revoke": "Diddymu caniatâd",
+            "screenshot": "Cymryd llun",
+            "start_audio_stream": "Dechrau ffrydio sain"
         }
     }
 }

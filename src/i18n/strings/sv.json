@@ -3432,11 +3432,6 @@
             "changed": "%(senderName)s ändrade behörighetsnivå för %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s från %(fromPowerLevel)s till %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Alla servrar har bannats från att delta! Det här rummet kan inte längre användas.",
-            "changed": "%(senderDisplayName)s ändrade server-ACL:erna för det här rummet.",
-            "set": "%(senderDisplayName)s ställde in server-ACL:er för det här rummet."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s återkallade inbjudan för %(targetDisplayName)s att gå med i rummet.",
             "sent": "%(senderName)s bjöd in %(targetDisplayName)s att gå med i rummet."
@@ -3644,14 +3639,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)slämnade och gick med igen %(count)s gånger",
                 "one": "%(severalUsers)slämnade och gick med igen"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sändrade server-ACL:erna",
-                "other": "%(oneUser)sändrade server-ACL:erna %(count)s gånger"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sändrade server-ACL:erna",
-                "other": "%(severalUsers)sändrade server-ACL:erna %(count)s gånger"
             },
             "unbanned": {
                 "other": "blev avbannad %(count)s gånger",

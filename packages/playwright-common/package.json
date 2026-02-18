@@ -13,7 +13,7 @@
         "node": ">=20.0.0"
     },
     "bin": {
-        "playwright-screenshots": "playwright-screenshots.sh"
+        "playwright-screenshots-experimental": "playwright-screenshots.sh"
     },
     "devDependencies": {
         "wait-on": "^9.0.4"
