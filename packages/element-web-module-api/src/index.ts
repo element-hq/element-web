@@ -22,4 +22,5 @@ export type * from "./api/navigation";
 export type * from "./api/builtins";
 export type * from "./api/stores";
 export type * from "./api/client";
+export type * from "./api/widget-lifecycle";
 export * from "./api/watchable";
