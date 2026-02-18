@@ -394,7 +394,10 @@ describe("Login", function () {
 
             // tried to register
             expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
-            expect(logger.error).toHaveBeenCalledWith(new Error(OidcError.DynamicRegistrationFailed));
+            expect(logger.error).toHaveBeenCalledWith(
+                "Failed to get oidc native flow",
+                new Error(OidcError.DynamicRegistrationFailed),
+            );
 
             // continued with normal setup
             expect(mockClient.loginFlows).toHaveBeenCalled();
