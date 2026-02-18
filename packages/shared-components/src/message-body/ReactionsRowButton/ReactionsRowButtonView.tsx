@@ -108,7 +108,6 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
                 tabIndex={0}
                 aria-label={ariaLabel}
                 aria-disabled={ariaDisabled}
-                disabled={isDisabled}
                 onClick={isDisabled ? undefined : vm.onClick}
             >
                 {reactionContent}
