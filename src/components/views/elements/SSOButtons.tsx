@@ -98,27 +98,11 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         PlatformPeg.get()?.startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id, action);
     };
 
-    let icon: JSX.Element | undefined;
-    let brandClass: string | undefined;
-    const brandIcon = idp?.brand ? getIcon(idp.brand) : null;
-    if (idp?.brand && brandIcon) {
-        const brandName = idp.brand.split(".").pop();
-        brandClass = `mx_SSOButton_brand_${brandName}`;
-        icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
-    } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
-        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24) ?? undefined;
-        icon = <img src={src} height="24" width="24" alt={idp.name} />;
-    }
-
-    const commonProps: Partial<ComponentProps<typeof Button>> = {
+    const commonProps: Partial<ComponentProps<typeof Button>> & Record<`data-${string}`, string> = {
         iconOnly,
-        className: classNames(
-            "mx_SSOButton",
-            {
-                mx_SSOButton_mini: iconOnly,
-            },
-            brandClass,
-        ),
+        className: classNames("mx_SSOButton", {
+            mx_SSOButton_mini: iconOnly,
+        }),
         onClick,
         kind: "secondary",
         disabled,
@@ -126,6 +110,17 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
 
     if (iconOnly || primary) {
         commonProps.kind = "primary";
+    }
+
+    let icon: JSX.Element | undefined;
+    const brandIcon = idp?.brand ? getIcon(idp.brand) : null;
+    if (idp?.brand && brandIcon) {
+        const brandName = idp.brand.split(".").pop();
+        icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
+        commonProps["data-testid"] = `idp-${idp.id}`;
+    } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
+        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24) ?? undefined;
+        icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 
     // TODO fallback icon
