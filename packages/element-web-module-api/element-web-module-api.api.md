@@ -441,11 +441,7 @@ export type WidgetDescriptor = {
     type: string;
     origin: string;
     roomId?: string;
-    kind: WidgetKind;
 };
-
-// @alpha
-export type WidgetKind = "room" | "account" | "modal";
 
 // @alpha
 export interface WidgetLifecycleApi {

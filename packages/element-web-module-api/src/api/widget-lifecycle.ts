@@ -1,15 +1,9 @@
 /*
-Copyright 2026 New Vector Ltd.
+Copyright 2026 Element Creations Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-
-/**
- * The scope of a widget: room-scoped, user-scoped (account), or an ephemeral modal overlay.
- * @alpha Subject to change.
- */
-export type WidgetKind = "room" | "account" | "modal";
 
 /**
  * A description of a widget passed to approver callbacks.
@@ -29,8 +23,6 @@ export type WidgetDescriptor = {
     origin: string;
     /** The room ID the widget belongs to, if it is a room widget. */
     roomId?: string;
-    /** The scope of the widget. */
-    kind: WidgetKind;
 };
 
 /**
