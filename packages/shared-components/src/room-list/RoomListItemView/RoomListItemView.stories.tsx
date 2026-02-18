@@ -232,3 +232,16 @@ export const WithLargeFont: Story = {
         },
     ],
 };
+
+export const WithZoom: Story = {
+    args: {
+        isSelected: true,
+    },
+    decorators: [
+        (Story, context) => (
+            <div style={{ zoom: 2 }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
