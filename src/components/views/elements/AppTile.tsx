@@ -18,7 +18,7 @@ import React, {
     type ReactNode,
 } from "react";
 import classNames from "classnames";
-import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-widget-api";
+import { type IWidget, MatrixCapabilities, type ClientWidgetApi, WidgetKind as MatrixWidgetKind } from "matrix-widget-api";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -58,6 +58,8 @@ import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidget
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { ModuleApi } from "../../../modules/Api";
+import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
 import { parseUrl } from "../../../utils/UrlUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
@@ -295,6 +297,19 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.setState({ hasPermissionToLoad });
     };
 
+    private checkPreloadApproval(): void {
+        const kind = this.props.room ? MatrixWidgetKind.Room : MatrixWidgetKind.Account;
+        const descriptor = toWidgetDescriptor(this.widget, kind, this.props.room?.roomId);
+        ModuleApi.instance.widgetLifecycle.preapprovePreload(descriptor).then((approved) => {
+            if (approved && !this.unmounted) {
+                this.setState({ hasPermissionToLoad: true });
+                this.startWidget();
+            }
+        }).catch((err) => {
+            logger.error("New API preload approval check failed", err);
+        });
+    }
+
     private isMixedContent(): boolean {
         const parentContentProtocol = window.location.protocol;
         const u = parseUrl(this.props.app.url);
@@ -330,6 +345,9 @@ export default class AppTile extends React.Component<IProps, IState> {
         // Only fetch IM token on mount if we're showing and have permission to load
         if (this.messaging && this.state.hasPermissionToLoad) {
             this.startWidget();
+        } else if (!this.state.hasPermissionToLoad && this.props.room) {
+            // Check the module API for preload approval (async)
+            this.checkPreloadApproval();
         }
         this.watchUserReady();
 
