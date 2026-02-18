@@ -281,15 +281,20 @@ describe("RoomListHeaderViewModel", () => {
         });
 
         it("should track analytics on resort", () => {
-            jest.spyOn(RoomListStoreV3.instance, "activeSortAlgorithm", "get").mockReturnValue(SortingAlgorithm.Alphabetic);
+            jest.spyOn(RoomListStoreV3.instance, "activeSortAlgorithm", "get").mockReturnValue(
+                SortingAlgorithm.Alphabetic,
+            );
             PosthogTrackers.trackRoomListSortingAlgorithmChange = jest.fn();
 
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(jest.fn());
             vm.sort("unread-first");
 
-            expect(PosthogTrackers.trackRoomListSortingAlgorithmChange).toHaveBeenCalledWith(SortingAlgorithm.Alphabetic, SortingAlgorithm.Unread);
-        })
+            expect(PosthogTrackers.trackRoomListSortingAlgorithmChange).toHaveBeenCalledWith(
+                SortingAlgorithm.Alphabetic,
+                SortingAlgorithm.Unread,
+            );
+        });
 
         it("should toggle message preview from enabled to disabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {

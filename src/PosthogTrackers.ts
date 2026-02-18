@@ -43,8 +43,8 @@ const loggedInPageTypeMap: Record<PageType | string, ScreenName> = {
 const SortingAlgorithmMap: Record<SortingAlgorithm, RoomListSortingAlgorithmChanged["newAlgorithm"]> = {
     [SortingAlgorithm.Recency]: "Activity",
     [SortingAlgorithm.Unread]: "Unread",
-    [SortingAlgorithm.Alphabetic]: "Alphabetic"
-}
+    [SortingAlgorithm.Alphabetic]: "Alphabetic",
+};
 
 export default class PosthogTrackers {
     private static internalInstance: PosthogTrackers;
@@ -126,7 +126,10 @@ export default class PosthogTrackers {
      * @param oldAlgorithm - The old algorithm.
      * @param newAlgorithm - The new algorithm.
      */
-    public static trackRoomListSortingAlgorithmChange(oldAlgorithm: SortingAlgorithm, newAlgorithm: SortingAlgorithm): void {
+    public static trackRoomListSortingAlgorithmChange(
+        oldAlgorithm: SortingAlgorithm,
+        newAlgorithm: SortingAlgorithm,
+    ): void {
         PosthogAnalytics.instance.trackEvent<RoomListSortingAlgorithmChanged>({
             eventName: "RoomListSortingAlgorithmChanged",
             oldAlgorithm: SortingAlgorithmMap[oldAlgorithm],
