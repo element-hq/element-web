@@ -23,6 +23,7 @@ import {
 import React, { type JSX, Fragment, type ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";
@@ -546,9 +547,10 @@ export default class Registration extends React.Component<IProps, IState> {
             );
         } else if (this.state.matrixClient && this.state.oidcNativeFlow) {
             return (
-                <AccessibleButton
+                <Button
                     className="mx_Login_fullWidthButton"
                     kind="primary"
+                    size="sm"
                     onClick={async () => {
                         await startOidcLogin(
                             this.props.serverConfig.delegatedAuthentication!,
@@ -560,7 +562,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     }}
                 >
                     {_t("action|continue")}
-                </AccessibleButton>
+                </Button>
             );
         } else if (this.state.matrixClient && this.state.flows.length) {
             let ssoSection: JSX.Element | undefined;
