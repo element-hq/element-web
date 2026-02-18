@@ -103,7 +103,6 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
     private async makeRecorder(): Promise<void> {
         try {
-
             this.recorderStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     channelCount: CHANNELS,
