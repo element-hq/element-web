@@ -7,7 +7,10 @@
 
 .reactionsRowButton {
     display: inline-flex;
+    appearance: none;
+    font: inherit;
     line-height: 20px;
+    margin: 0;
     padding: 1px 6px;
     border: 1px solid var(--cpd-color-gray-400);
     border-radius: 10px;
@@ -17,8 +20,8 @@
 }
 
 .reactionsRowButtonSelected {
-    background-color: var(--cpd-color-bg-accent-rest);
-    border-color: var(--cpd-color-bg-accent-rest);
+    background-color: var(--cpd-color-green-300);
+    border-color: var(--cpd-color-green-800);
 }
 
 .reactionsRowButtonDisabled {
