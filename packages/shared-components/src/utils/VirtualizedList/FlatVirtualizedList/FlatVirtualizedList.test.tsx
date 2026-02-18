@@ -10,7 +10,7 @@ import { render, screen, fireEvent, waitFor, act } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { VirtualizedList, type IVirtualizedListProps } from "./VirtualizedList";
+import { FlatVirtualizedList, type FlatVirtualizedListProps } from "./FlatVirtualizedList";
 
 const expectTabIndex = (element: Element, expected: string): void => {
     expect(element.getAttribute("tabindex")).toBe(expected);
@@ -29,7 +29,7 @@ interface TestItem {
 const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
-describe("VirtualizedList", () => {
+describe("FlatVirtualizedList", () => {
     const mockGetItemComponent = vi.fn();
     const mockIsItemFocusable = vi.fn();
 
@@ -40,7 +40,7 @@ describe("VirtualizedList", () => {
         { id: "3", name: "Item 3" },
     ];
 
-    const defaultProps: IVirtualizedListProps<TestItemWithSeparator, any> = {
+    const defaultProps: FlatVirtualizedListProps<TestItemWithSeparator, any> = {
         items: defaultItems,
         getItemComponent: mockGetItemComponent,
         isItemFocusable: mockIsItemFocusable,
@@ -48,14 +48,16 @@ describe("VirtualizedList", () => {
     };
 
     const getListComponent = (
-        props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {},
+        props: Partial<FlatVirtualizedListProps<TestItemWithSeparator, any>> = {},
     ): React.JSX.Element => {
         const mergedProps = { ...defaultProps, ...props };
-        return <VirtualizedList {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />;
+        return (
+            <FlatVirtualizedList {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />
+        );
     };
 
     const renderListWithHeight = (
-        props: Partial<IVirtualizedListProps<TestItemWithSeparator, any>> = {},
+        props: Partial<FlatVirtualizedListProps<TestItemWithSeparator, any>> = {},
     ): ReturnType<typeof render> => {
         const mergedProps = { ...defaultProps, ...props };
         return render(getListComponent(mergedProps), {
