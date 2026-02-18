@@ -7,7 +7,7 @@
 
 .reactionsRowButton {
     display: inline-flex;
-    font: var(--cpd-font-body-md-semibold);
+    font: inherit;
     line-height: var(--cpd-font-size-heading-sm);
     padding: 1px 6px;
     border: 1px solid var(--cpd-color-gray-400);
