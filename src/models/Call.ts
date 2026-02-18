@@ -788,6 +788,12 @@ export class ElementCall extends Call {
             // the default is true, so only set if false
             params.append("noiseSuppression", "false");
         }
+        // add autoGainControl as a respected parameter for element calls
+        const autoGainControl = SettingsStore.getValue("webrtc_audio_autoGainControl");
+        if (!autoGainControl) {
+            // the default is true, so only set if false
+            params.append("autoGainControl", "false");
+        }
 
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
