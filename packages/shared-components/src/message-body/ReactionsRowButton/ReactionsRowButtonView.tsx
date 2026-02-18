@@ -5,12 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type JSX } from "react";
-import React from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import { ReactionsRowButtonTooltipView, type ReactionsRowButtonTooltipViewModel } from "../ReactionsRowButtonTooltip";
+import styles from "./ReactionsRowButton.module.css";
 
 export interface ReactionsRowButtonViewSnapshot {
     /**
@@ -79,15 +79,23 @@ interface ReactionsRowButtonViewProps {
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
     const { content, count, className, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
     const ariaDisabled = isDisabled ? true : undefined;
-    const classes = classNames(className, {
+    const classes = classNames(className, styles.reactionsRowButton, {
         mx_ReactionsRowButton_selected: isSelected,
+        [styles.reactionsRowButtonSelected]: isSelected,
         mx_AccessibleButton_disabled: isDisabled,
+        [styles.reactionsRowButtonDisabled]: isDisabled,
     });
 
     const reactionContent = imageSrc ? (
-        <img className={classNames(className)} alt={imageAlt ?? ""} src={imageSrc} width="16" height="16" />
+        <img
+            className={classNames(className, styles.reactionsRowButtonContent)}
+            alt={imageAlt ?? ""}
+            src={imageSrc}
+            width="16"
+            height="16"
+        />
     ) : (
-        <span className={classNames(className)} aria-hidden="true">
+        <span className={classNames(className, styles.reactionsRowButtonContent)} aria-hidden="true">
             {content ?? ""}
         </span>
     );
@@ -104,7 +112,7 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
                 onClick={isDisabled ? undefined : vm.onClick}
             >
                 {reactionContent}
-                <span className={classNames(className)} aria-hidden="true">
+                <span className={classNames(className, styles.reactionsRowButtonCount)} aria-hidden="true">
                     {count}
                 </span>
             </button>
