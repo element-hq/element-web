@@ -7,8 +7,3 @@
 
 export { FlatVirtualizedList } from "./FlatVirtualizedList";
 export type { FlatVirtualizedListProps } from "./FlatVirtualizedList";
-export type { VirtualizedListContext, ScrollIntoViewOnChange } from "./virtualized-list";
-
-// Re-export VirtuosoMockContext for testing purposes
-// Tests should import this from shared-components to ensure context compatibility
-export { VirtuosoMockContext } from "react-virtuoso";
