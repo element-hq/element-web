@@ -55,6 +55,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly navigation: NavigationApi;
     readonly rootNode: HTMLElement;
     readonly stores: StoresApi;
+    // @alpha
+    readonly widgetLifecycle: WidgetLifecycleApi;
 }
 
 // @alpha
@@ -63,6 +65,9 @@ export interface BuiltinsApi {
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
     renderRoomView(roomId: string, props?: RoomViewProps): React.ReactNode;
 }
+
+// @alpha
+export type CapabilitiesApprover = (widget: WidgetDescriptor, requestedCapabilities: Set<string>) => Set<string> | Promise<Set<string> | undefined> | undefined;
 
 // @alpha @deprecated (undocumented)
 export interface ChatExportCustomisations<ExportFormat, ExportType> {
@@ -179,6 +184,9 @@ export interface I18nApi {
     register(translations: Partial<Translations>): void;
     translate(key: keyof Translations, variables?: Variables): string;
 }
+
+// @alpha
+export type IdentityApprover = (widget: WidgetDescriptor) => boolean | Promise<boolean> | undefined;
 
 // @alpha @deprecated (undocumented)
 export type LegacyCustomisations<T extends object> = (customisations: T) => void;
@@ -325,6 +333,9 @@ export type OriginalMessageComponentProps = {
     showUrlPreview?: boolean;
 };
 
+// @alpha
+export type PreloadApprover = (widget: WidgetDescriptor) => boolean | Promise<boolean> | undefined;
+
 // @public
 export interface Profile {
     displayName?: string;
@@ -420,6 +431,27 @@ export class Watchable<T> {
     set value(value: T);
     // (undocumented)
     watch(listener: (value: T) => void): void;
+}
+
+// @alpha
+export type WidgetDescriptor = {
+    id: string;
+    templateUrl: string;
+    creatorUserId: string;
+    type: string;
+    origin: string;
+    roomId?: string;
+    kind: WidgetKind;
+};
+
+// @alpha
+export type WidgetKind = "room" | "account" | "modal";
+
+// @alpha
+export interface WidgetLifecycleApi {
+    registerCapabilitiesApprover(approver: CapabilitiesApprover): void;
+    registerIdentityApprover(approver: IdentityApprover): void;
+    registerPreloadApprover(approver: PreloadApprover): void;
 }
 
 // @alpha @deprecated (undocumented)
