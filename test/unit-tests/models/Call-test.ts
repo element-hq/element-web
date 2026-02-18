@@ -665,6 +665,50 @@ describe("ElementCall", () => {
 
                 SettingsStore.getValue = originalGetValue;
             });
+
+            it("passes auto gain control settings through widget URL if needed", async () => {
+                const originalGetValue = SettingsStore.getValue;
+                SettingsStore.getValue = (
+                    name: SettingKey,
+                    roomId: string | null = null,
+                    excludeDefault = false,
+                ): any => {
+                    switch (name) {
+                        case "webrtc_audio_autoGainControl":
+                            return false;
+                    }
+                };
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("autoGainControl")).toBe("false");
+
+                SettingsStore.getValue = originalGetValue;
+            });
+
+            it("does not pass auto gain control settings through widget URL if not needed", async () => {
+                const originalGetValue = SettingsStore.getValue;
+                SettingsStore.getValue = (
+                    name: SettingKey,
+                    roomId: string | null = null,
+                    excludeDefault = false,
+                ): any => {
+                    switch (name) {
+                        case "webrtc_audio_autoGainControl":
+                            return true;
+                    }
+                };
+                ElementCall.create(room);
+                const call = Call.get(room);
+                if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+                const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+                expect(urlParams.get("autoGainControl")).toBeNull();
+
+                SettingsStore.getValue = originalGetValue;
+            });
         });
 
         it("passes ICE fallback preference through widget URL", async () => {
