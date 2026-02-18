@@ -91,7 +91,7 @@ try {
 // Get the root of a node_modules dependency the name of its import
 function getPackageRoot(dep: string, target = "package.json"): string {
     const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
-    return path.dirname(targetPath.startsWith("file://") ? targetPath.slice(7) : targetPath);
+    return path.dirname(fileURLToPath(targetPath));
 }
 
 function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
@@ -260,8 +260,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "net": false,
                 "tls": false,
                 "crypto": false,
-                "async_hooks": false,
-                "stream": false,
 
                 // Polyfill needed by counterpart
                 "util": import.meta.resolve("util/"),
