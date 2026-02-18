@@ -29,6 +29,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
@@ -72,7 +73,7 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
 };
 
 interface ReactionsRowButtonItemProps {
-    client: MatrixClient;
+    client?: MatrixClient;
     mxEvent: MatrixEvent;
     content: string;
     count: number;
@@ -83,10 +84,13 @@ interface ReactionsRowButtonItemProps {
 }
 
 const ReactionsRowButtonItem: React.FC<ReactionsRowButtonItemProps> = (props) => {
+    const matrixClient = useMatrixClientContext();
+    const client = props.client ?? matrixClient;
+
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new ReactionsRowButtonViewModel({
-                client: props.client,
+                client,
                 mxEvent: props.mxEvent,
                 content: props.content,
                 count: props.count,
@@ -98,8 +102,8 @@ const ReactionsRowButtonItem: React.FC<ReactionsRowButtonItemProps> = (props) =>
     );
 
     useEffect(() => {
-        vm.setContext(props.client);
-    }, [props.client, vm]);
+        vm.setContext(client);
+    }, [client, vm]);
 
     useEffect(() => {
         vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
@@ -220,7 +224,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         const { myReactions, showAll } = this.state;
         const client = this.context.room?.client;
 
-        if (!client || !reactions || !isContentActionable(mxEvent)) {
+        if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
         const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
