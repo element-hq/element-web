@@ -255,7 +255,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         // Try the new module API first, then fall back to legacy paths
         let approved: Set<string> | undefined;
         approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
-            toWidgetDescriptor(this.forWidget, this.forWidgetKind, this.inRoomId),
+            toWidgetDescriptor(this.forWidget, this.inRoomId),
             requested,
         );
         if (!approved) {
@@ -659,7 +659,7 @@ export class ElementWidgetDriver extends WidgetDriver {
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
         // Try the new module API first, then fall back to legacy path
         const newApiApproved = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
-            toWidgetDescriptor(this.forWidget, this.forWidgetKind, this.inRoomId),
+            toWidgetDescriptor(this.forWidget, this.inRoomId),
         );
         if (newApiApproved) {
             return observer.update({

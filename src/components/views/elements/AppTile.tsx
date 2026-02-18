@@ -18,7 +18,7 @@ import React, {
     type ReactNode,
 } from "react";
 import classNames from "classnames";
-import { type IWidget, MatrixCapabilities, type ClientWidgetApi, WidgetKind as MatrixWidgetKind } from "matrix-widget-api";
+import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-widget-api";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -298,8 +298,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private checkPreloadApproval(): void {
-        const kind = this.props.room ? MatrixWidgetKind.Room : MatrixWidgetKind.Account;
-        const descriptor = toWidgetDescriptor(this.widget, kind, this.props.room?.roomId);
+        const descriptor = toWidgetDescriptor(this.widget, this.props.room?.roomId);
         ModuleApi.instance.widgetLifecycle.preapprovePreload(descriptor).then((approved) => {
             if (approved && !this.unmounted) {
                 this.setState({ hasPermissionToLoad: true });

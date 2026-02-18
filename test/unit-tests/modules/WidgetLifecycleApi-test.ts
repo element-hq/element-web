@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { WidgetDescriptor } from "@element-hq/element-web-module-api";
 
 import { WidgetLifecycleApi, toWidgetDescriptor } from "../../../src/modules/WidgetLifecycleApi";
-import { Widget, WidgetKind } from "matrix-widget-api";
+import { Widget } from "matrix-widget-api";
 
 const mkDescriptor = (overrides: Partial<WidgetDescriptor> = {}): WidgetDescriptor => ({
     id: "test-widget",
@@ -16,7 +16,6 @@ const mkDescriptor = (overrides: Partial<WidgetDescriptor> = {}): WidgetDescript
     creatorUserId: "@alice:example.org",
     type: "m.custom",
     origin: "https://example.org",
-    kind: "room",
     roomId: "!room:example.org",
     ...overrides,
 });
@@ -29,14 +28,14 @@ describe("WidgetLifecycleApi", () => {
     });
 
     describe("toWidgetDescriptor", () => {
-        it("converts a Widget to a WidgetDescriptor for a room widget", () => {
+        it("converts a Widget to a WidgetDescriptor", () => {
             const widget = new Widget({
                 id: "w1",
                 creatorUserId: "@bob:example.org",
                 type: "m.jitsi",
                 url: "https://jitsi.example.org/meet?conf=$matrix_room_id",
             });
-            const descriptor = toWidgetDescriptor(widget, WidgetKind.Room, "!room:example.org");
+            const descriptor = toWidgetDescriptor(widget, "!room:example.org");
             expect(descriptor).toEqual({
                 id: "w1",
                 templateUrl: "https://jitsi.example.org/meet?conf=$matrix_room_id",
@@ -44,31 +43,18 @@ describe("WidgetLifecycleApi", () => {
                 type: "m.jitsi",
                 origin: "https://jitsi.example.org",
                 roomId: "!room:example.org",
-                kind: "room",
             });
         });
 
-        it("maps Account widget kind", () => {
+        it("omits roomId when not provided", () => {
             const widget = new Widget({
                 id: "w1",
                 creatorUserId: "@bob:example.org",
                 type: "m.custom",
                 url: "https://example.org",
             });
-            const descriptor = toWidgetDescriptor(widget, WidgetKind.Account);
-            expect(descriptor.kind).toBe("account");
+            const descriptor = toWidgetDescriptor(widget);
             expect(descriptor.roomId).toBeUndefined();
-        });
-
-        it("maps Modal widget kind", () => {
-            const widget = new Widget({
-                id: "w1",
-                creatorUserId: "@bob:example.org",
-                type: "m.custom",
-                url: "https://example.org",
-            });
-            const descriptor = toWidgetDescriptor(widget, WidgetKind.Modal);
-            expect(descriptor.kind).toBe("modal");
         });
     });
 

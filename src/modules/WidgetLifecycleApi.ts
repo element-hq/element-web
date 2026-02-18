@@ -5,36 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Widget, WidgetKind as MatrixWidgetKind } from "matrix-widget-api";
+import type { Widget } from "matrix-widget-api";
 
 import type {
     CapabilitiesApprover,
     IdentityApprover,
     PreloadApprover,
     WidgetDescriptor,
-    WidgetKind,
     WidgetLifecycleApi as WidgetLifecycleApiInterface,
 } from "@element-hq/element-web-module-api";
-
-const toModuleWidgetKind = (kind: MatrixWidgetKind): WidgetKind => {
-    switch (kind) {
-        case MatrixWidgetKind.Account:
-            return "account";
-        case MatrixWidgetKind.Modal:
-            return "modal";
-        case MatrixWidgetKind.Room:
-        default:
-            return "room";
-    }
-};
 
 /**
  * Converts a matrix-widget-api {@link Widget} into a {@link WidgetDescriptor} for the module API.
  * @param widget - The widget instance from matrix-widget-api.
- * @param kind - The widget kind (room, account, or modal).
  * @param roomId - The room ID the widget belongs to, if applicable.
  */
-export const toWidgetDescriptor = (widget: Widget, kind: MatrixWidgetKind, roomId?: string): WidgetDescriptor => {
+export const toWidgetDescriptor = (widget: Widget, roomId?: string): WidgetDescriptor => {
     return {
         id: widget.id,
         templateUrl: widget.templateUrl,
@@ -42,7 +28,6 @@ export const toWidgetDescriptor = (widget: Widget, kind: MatrixWidgetKind, roomI
         type: widget.type,
         origin: widget.origin,
         roomId,
-        kind: toModuleWidgetKind(kind),
     };
 };
 
