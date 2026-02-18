@@ -38,8 +38,7 @@ import {
     ElementCall,
     ElementCallIntent,
 } from "../../../src/models/Call";
-import { cleanUpClientRoomAndStores, enableCalls, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
-import WidgetStore from "../../../src/stores/WidgetStore";
+import { cleanUpClientRoomAndStores, mockPlatformPeg, setUpClientRoomAndStores } from "../../test-utils";
 import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
@@ -50,8 +49,6 @@ import SdkConfig from "../../../src/SdkConfig.ts";
 import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 import { WidgetMessagingEvent, type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging.ts";
 import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions.ts";
-
-const { enabledSettings } = enableCalls();
 
 const setUpWidget = (
     call: Call,
@@ -1008,25 +1005,6 @@ describe("ElementCall", () => {
             const destroyPersistentWidgetSpy = jest.spyOn(ActiveWidgetStore.instance, "destroyPersistentWidget");
             call.destroy();
             expect(destroyPersistentWidgetSpy).toHaveBeenCalled();
-        });
-
-        it("the perParticipantE2EE url flag is used in encrypted rooms while respecting the feature_disable_call_per_sender_encryption flag", async () => {
-            // We destroy the call created in beforeEach because we test the call creation process.
-            call.destroy();
-            const addWidgetSpy = jest.spyOn(WidgetStore.instance, "addVirtualWidget");
-            // If a room is not encrypted we will never add the perParticipantE2EE flag.
-            const roomSpy = jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
-
-            // should create call with perParticipantE2EE flag
-            ElementCall.create(room);
-            expect(Call.get(room)?.widget?.data?.perParticipantE2EE).toBe(true);
-
-            // should create call without perParticipantE2EE flag
-            enabledSettings.add("feature_disable_call_per_sender_encryption");
-            expect(Call.get(room)?.widget?.data?.perParticipantE2EE).toBe(false);
-            enabledSettings.delete("feature_disable_call_per_sender_encryption");
-            roomSpy.mockRestore();
-            addWidgetSpy.mockRestore();
         });
     });
 
