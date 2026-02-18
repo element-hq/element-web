@@ -46,7 +46,7 @@ export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
  * The events emitted when the {@link DeviceState} of the current device
  * changes.
  */
-export enum CurrentDeviceEvents {
+export const enum CurrentDeviceEvents {
     DeviceStateChanged = "device_state",
 }
 
