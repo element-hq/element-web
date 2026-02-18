@@ -26,7 +26,7 @@ jobs:
                   path: storybook-static
 
             - name: 🚀 Deploy to Cloudflare Pages
-              uses: cloudflare/wrangler-action@9681c2997648301493e78cacbfb790a9f19c833f # v3
+              uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
