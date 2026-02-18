@@ -222,7 +222,6 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     public render(): React.ReactNode {
         const { mxEvent, reactions } = this.props;
         const { myReactions, showAll } = this.state;
-        const client = this.context.room?.client;
 
         if (!reactions || !isContentActionable(mxEvent)) {
             return null;
@@ -249,7 +248,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 return (
                     <ReactionsRowButtonItem
                         key={content}
-                        client={client}
+                        client={this.context.room?.client}
                         content={content}
                         count={deduplicatedEvents.length}
                         mxEvent={mxEvent}
