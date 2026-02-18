@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type ComponentProps, type JSX } from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
 import {
@@ -18,9 +18,9 @@ import {
     DELEGATED_OIDC_COMPATIBILITY,
 } from "matrix-js-sdk/src/matrix";
 import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
+import { Button, Tooltip } from "@vector-im/compound-web";
 
 import PlatformPeg from "../../../PlatformPeg";
-import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
@@ -78,10 +78,10 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     fragmentAfterLogin,
     idp,
     primary,
-    mini,
+    mini: iconOnly,
     action,
     flow,
-    ...props
+    disabled,
 }) => {
     let label: string;
     if (idp) {
@@ -114,27 +114,39 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     const classes = classNames(
         "mx_SSOButton",
         {
-            mx_SSOButton_mini: mini,
-            mx_SSOButton_default: !idp,
-            mx_SSOButton_primary: primary,
+            mx_SSOButton_mini: iconOnly,
         },
         brandPart,
     );
 
-    if (mini) {
-        // TODO fallback icon
+    const commonProps: Partial<ComponentProps<typeof Button>> = {
+        iconOnly,
+        className: classes,
+        onClick,
+        kind: "secondary",
+        disabled,
+    };
+
+    if (iconOnly || primary) {
+        commonProps.kind = "primary";
+    }
+
+    // TODO fallback icon
+    if (iconOnly) {
         return (
-            <AccessibleButton {...props} title={label} className={classes} onClick={onClick}>
-                {icon}
-            </AccessibleButton>
+            <Tooltip label={label}>
+                <Button {...commonProps} size="lg">
+                    {icon}
+                </Button>
+            </Tooltip>
         );
     }
 
     return (
-        <AccessibleButton {...props} className={classes} onClick={onClick}>
+        <Button {...commonProps} size="sm">
             {icon}
             {label}
-        </AccessibleButton>
+        </Button>
     );
 };
 
