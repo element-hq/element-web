@@ -6,19 +6,15 @@
  */
 
 .reactionsRowButton {
-    all: unset;
-    box-sizing: border-box;
     display: inline-flex;
     font: inherit;
-    color: inherit;
-    line-height: 20px;
+    line-height: var(--cpd-font-size-heading-sm);
     padding: 1px 6px;
     border: 1px solid var(--cpd-color-gray-400);
     border-radius: 10px;
     background-color: var(--cpd-color-gray-200);
     user-select: none;
     align-items: center;
-    cursor: pointer;
 }
 
 .reactionsRowButtonSelected {
