@@ -19,11 +19,17 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 import { Button, Tooltip } from "@vector-im/compound-web";
+import { MacIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PlatformPeg from "../../../PlatformPeg";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
+import { Icon as FacebookIcon } from "../../../../res/img/element-icons/brands/facebook.svg";
+import { Icon as GithubIcon } from "../../../../res/img/element-icons/brands/github.svg";
+import { Icon as GitlabIcon } from "../../../../res/img/element-icons/brands/gitlab.svg";
+import { Icon as GoogleIcon } from "../../../../res/img/element-icons/brands/google.svg";
+import { Icon as TwitterIcon } from "../../../../res/img/element-icons/brands/twitter.svg";
 
 interface ISSOButtonProps extends IProps {
     idp?: IIdentityProvider;
@@ -31,24 +37,22 @@ interface ISSOButtonProps extends IProps {
     action?: SSOAction;
 }
 
-const getIcon = (brand: IdentityProviderBrand | string): string | null => {
+const getIcon = (brand: IdentityProviderBrand | string): typeof FacebookIcon | null => {
     switch (brand) {
-        /* eslint-disable @typescript-eslint/no-require-imports */
         case IdentityProviderBrand.Apple:
-            return require("@vector-im/compound-design-tokens/icons/mac.svg").default;
+            return MacIcon;
         case IdentityProviderBrand.Facebook:
-            return require(`../../../../res/img/element-icons/brands/facebook.svg`).default;
+            return FacebookIcon;
         case IdentityProviderBrand.Github:
-            return require(`../../../../res/img/element-icons/brands/github.svg`).default;
+            return GithubIcon;
         case IdentityProviderBrand.Gitlab:
-            return require(`../../../../res/img/element-icons/brands/gitlab.svg`).default;
+            return GitlabIcon;
         case IdentityProviderBrand.Google:
-            return require(`../../../../res/img/element-icons/brands/google.svg`).default;
+            return GoogleIcon;
         case IdentityProviderBrand.Twitter:
-            return require(`../../../../res/img/element-icons/brands/twitter.svg`).default;
+            return TwitterIcon;
         default:
             return null;
-        /* eslint-enable @typescript-eslint/no-require-imports */
     }
 };
 
@@ -104,23 +108,19 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
             mx_SSOButton_mini: iconOnly,
         }),
         onClick,
-        kind: "secondary",
+        kind: primary ? "primary" : "secondary",
         disabled,
     };
 
-    if (iconOnly || primary) {
-        commonProps.kind = "primary";
-    }
-
     let icon: JSX.Element | undefined;
-    const brandIcon = idp?.brand ? getIcon(idp.brand) : null;
-    if (idp?.brand && brandIcon) {
+    const BrandIcon = idp?.brand ? getIcon(idp.brand) : null;
+    if (idp?.brand && BrandIcon) {
         const brandName = idp.brand.split(".").pop();
-        icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
+        icon = <BrandIcon aria-label={brandName} />;
         commonProps["data-testid"] = `idp-${idp.id}`;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
         const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24) ?? undefined;
-        icon = <img src={src} height="24" width="24" alt={idp.name} />;
+        icon = <img src={src} alt={idp.name} />;
     }
 
     // TODO fallback icon

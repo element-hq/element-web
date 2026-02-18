@@ -22,18 +22,24 @@ Please see LICENSE files in the repository root for full details.
         width: 100%;
         display: inline-block;
 
-        > img {
+        svg,
+        img {
+            width: 24px;
+            height: 24px;
             object-fit: contain;
             position: absolute;
             left: 8px;
             top: 4px;
+            color: var(--cpd-color-icon-primary);
         }
     }
 
     .mx_SSOButton_mini {
-        > img {
-            left: 12px;
-            top: 12px;
+        svg,
+        img {
+            /* 30px parent, 24px self */
+            padding: 3px;
+            position: unset;
         }
 
         & + .mx_SSOButton_mini {
