@@ -9,7 +9,7 @@
     display: inline-flex;
     appearance: none;
     font: inherit;
-    line-height: 20px;
+    line-height: var(--cpd-font-size-heading-sm);
     margin: 0;
     padding: 1px 6px;
     border: 1px solid var(--cpd-color-gray-400);
