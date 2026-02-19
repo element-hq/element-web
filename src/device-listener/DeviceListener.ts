@@ -20,7 +20,12 @@ import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "../utils/device/clientInformation";
 import SettingsStore, { type CallbackFn } from "../settings/SettingsStore";
-import { DeviceListenerOtherDevices, DeviceListenerCurrentDevice, type DeviceState } from ".";
+import {
+    DeviceListenerOtherDevices,
+    DeviceListenerCurrentDevice,
+    type DeviceState,
+    CurrentDeviceChangedEmitter,
+} from ".";
 
 const logger = baseLogger.getChild("DeviceListener:");
 
@@ -38,15 +43,18 @@ export class DeviceListener {
      *
      * Defined after {@link DeviceListener.start} has been called, before {@link
      * DeviceListener.stop} is called.
-     *
-     * When defined, emits `CurrentDeviceEvents` events when the state
+     */
+    public currentDevice?: DeviceListenerCurrentDevice;
+
+    /**
+     * Emits `CurrentDeviceEvents` events when the state
      * of the current device changes.
      *
      * @example
      * ```ts
      * const deviceState = useTypedEventEmitterState(
-     *     DeviceListener.sharedInstance().currentDevice,
-     *     CurrentDeviceEvents.DeviceState,
+     *     DeviceListener.sharedInstance().currentDeviceChangedEmitter,
+     *     CurrentDeviceEvents.DeviceStateChanged,
      *     (state?: DeviceState): DeviceState => {
      *         return state ?? DeviceListener.sharedInstance().getDeviceState();
      *     },
@@ -56,7 +64,7 @@ export class DeviceListener {
      * Now `deviceState` will reflect the state of the current device and
      * trigger an update when it changes.
      */
-    public currentDevice?: DeviceListenerCurrentDevice;
+    public currentDeviceChangedEmitter = new CurrentDeviceChangedEmitter();
 
     private running = false;
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.

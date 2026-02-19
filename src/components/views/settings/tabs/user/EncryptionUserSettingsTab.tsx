@@ -64,7 +64,7 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
     const [state, setState] = useState<State>(initialState);
 
     const deviceState = useTypedEventEmitterState(
-        DeviceListener.sharedInstance().currentDevice,
+        DeviceListener.sharedInstance().currentDeviceChangedEmitter,
         CurrentDeviceEvents.DeviceStateChanged,
         (state?: DeviceState): DeviceState => {
             return state ?? DeviceListener.sharedInstance().getDeviceState();

@@ -16,7 +16,6 @@ import {
     type SyncState,
     RoomStateEvent,
     ClientEvent,
-    TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 
 import { type DeviceListener, type DeviceState } from ".";
@@ -43,26 +42,9 @@ export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disa
 export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
 
 /**
- * The events emitted when the {@link DeviceState} of the current device
- * changes.
- */
-export const enum CurrentDeviceEvents {
-    DeviceStateChanged = "device_state",
-}
-
-/**
- * You must provide one of these if you listen to {@link CurrentDeviceEvents}
- * emitted by {@link DeviceListenerCurrentDevice}. It specifies how to handle
- * each type of event.
- */
-type EventHandlerMap = {
-    [CurrentDeviceEvents.DeviceStateChanged]: (state: DeviceState) => void;
-};
-
-/**
  * Handles all of DeviceListener's work that relates to the current device.
  */
-export class DeviceListenerCurrentDevice extends TypedEventEmitter<CurrentDeviceEvents, EventHandlerMap> {
+export class DeviceListenerCurrentDevice {
     /**
      * The DeviceListener launching this instance.
      */
@@ -105,8 +87,6 @@ export class DeviceListenerCurrentDevice extends TypedEventEmitter<CurrentDevice
     private cachedKeyBackupUploadActive: boolean | undefined = undefined;
 
     public constructor(deviceListener: DeviceListener, client: MatrixClient, logger: Logger) {
-        super();
-
         this.deviceListener = deviceListener;
         this.client = client;
         this.logger = logger;
@@ -283,7 +263,7 @@ export class DeviceListenerCurrentDevice extends TypedEventEmitter<CurrentDevice
     private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
         this.deviceState = newState;
 
-        this.emit(CurrentDeviceEvents.DeviceStateChanged, newState);
+        this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
 
         if (newState === "ok" || this.dismissedThisDeviceToast) {
             hideSetupEncryptionToast();
