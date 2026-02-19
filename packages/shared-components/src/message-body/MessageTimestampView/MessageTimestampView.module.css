@@ -9,7 +9,7 @@
     color: var(--cpd-color-text-secondary) !important; /* override anchor color */
     font-size: var(--cpd-font-size-body-xs);
     font-variant-numeric: tabular-nums;
-    display: block; /* enable the width setting below */
+    display: inline-block;
     white-space: nowrap;
     user-select: none;
     text-decoration: none;

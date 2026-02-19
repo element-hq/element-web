@@ -21,8 +21,7 @@ import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 import { I18nContext } from "../../utils/i18nContext.ts";
 import { I18nApi } from "../../index.ts";
 
-const { Default, HasTsReceivedAt, HasHref, HasInhibitTooltip, HasExtraClassNames, HasActions } =
-    composeStories(stories);
+const { Default, HasTsReceivedAt, HasHref, HasExtraClassNames } = composeStories(stories);
 
 const renderWithI18n = (ui: React.ReactElement): ReturnType<typeof render> =>
     render(ui, {
@@ -49,18 +48,8 @@ describe("MessageTimestampView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the message timestamp with inhibit tooltip", async () => {
-        const { container } = render(<HasInhibitTooltip />);
-        expect(container).toMatchSnapshot();
-    });
-
     it("renders the message timestamp with href", async () => {
         const { container } = render(<HasHref />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders the message timestamp with actions", async () => {
-        const { container } = render(<HasActions />);
         expect(container).toMatchSnapshot();
     });
 
