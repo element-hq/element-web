@@ -14,7 +14,7 @@ import { useViewModel } from "../../viewmodel";
 import { humanizeRelativeTime } from "../../utils/humanize";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import styles from "./DateSeparatorView.module.css";
-import { Flex } from "../../utils/Flex";
+import { DateSeparatorDatePicker } from "./DateSeparatorDatePicker";
 
 /**
  * Props for DateSeparatorContextMenu component.
@@ -41,54 +41,40 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
     const i18n = useI18n();
     const snapshot = useViewModel(vm);
 
-    const datePicker = snapshot.jumpToDatePicker ? (
-        <MenuItem
-            label={null}
-            onSelect={null}
-            data-testid="jump-to-date-picker"
-            hideChevron={true}
-            className={styles.picker}
-        >
-            {snapshot.jumpToDatePicker}
-        </MenuItem>
-    ) : undefined;
-
     return (
-        <Flex className={styles.menu}>
-            <Menu
-                open={open}
-                onOpenChange={(newOpen) => {
-                    onOpenChange?.(newOpen);
-                }}
-                title={i18n.translate("room|jump_to_date")}
-                showTitle={false}
-                trigger={children}
-                align="start"
-            >
-                <MenuItem
-                    label={capitalize(humanizeRelativeTime(i18n).format(-1, "week"))}
-                    onSelect={vm.onBeginningPicked}
-                    // onClick={(evt) => evt.stopPropagation()}
-                    data-testid="jump-to-date-last-week"
-                    hideChevron={true}
-                />
-                <MenuItem
-                    label={capitalize(humanizeRelativeTime(i18n).format(-1, "month"))}
-                    onSelect={vm.onBeginningPicked}
-                    // onClick={(evt) => evt.stopPropagation()}
-                    data-testid="jump-to-date-last-month"
-                    hideChevron={true}
-                />
-                <MenuItem
-                    label={i18n.translate("room|jump_to_date_beginning")}
-                    onSelect={vm.onBeginningPicked}
-                    // onClick={(evt) => evt.stopPropagation()}
-                    data-testid="jump-to-date-beginning"
-                    hideChevron={true}
-                />
-                {datePicker && <Separator decorative />}
-                {datePicker}
-            </Menu>
-        </Flex>
+        <Menu
+            open={open}
+            onOpenChange={(newOpen) => {
+                onOpenChange?.(newOpen);
+            }}
+            title={i18n.translate("room|jump_to_date")}
+            showTitle={false}
+            trigger={children}
+            align="start"
+        >
+            <MenuItem
+                label={capitalize(humanizeRelativeTime(i18n).format(-1, "week"))}
+                onSelect={vm.onBeginningPicked}
+                // onClick={(evt) => evt.stopPropagation()}
+                data-testid="jump-to-date-last-week"
+                hideChevron={true}
+            />
+            <MenuItem
+                label={capitalize(humanizeRelativeTime(i18n).format(-1, "month"))}
+                onSelect={vm.onBeginningPicked}
+                // onClick={(evt) => evt.stopPropagation()}
+                data-testid="jump-to-date-last-month"
+                hideChevron={true}
+            />
+            <MenuItem
+                label={i18n.translate("room|jump_to_date_beginning")}
+                onSelect={vm.onBeginningPicked}
+                // onClick={(evt) => evt.stopPropagation()}
+                data-testid="jump-to-date-beginning"
+                hideChevron={true}
+            />
+            {snapshot.jumpToEnabled && <Separator decorative />}
+            {snapshot.jumpToEnabled && <DateSeparatorDatePicker vm={vm} />}
+        </Menu>
     );
 };

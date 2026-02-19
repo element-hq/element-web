@@ -28,10 +28,6 @@ export interface DateSeparatorViewSnapshot {
      */
     jumpToEnabled?: boolean;
     /**
-     * Optional extra menu item/content shown in the jump-to menu.
-     */
-    jumpToDatePicker?: React.ReactNode;
-    /**
      * Extra CSS classes to apply to the component.
      */
     className?: string;
@@ -44,6 +40,8 @@ export interface DateSeparatorViewActions {
     onLastMonthPicked: () => void;
     /** Jump to the beginning of the room history. */
     onBeginningPicked: () => void;
+    /** Jump to the picked date of the room history. */
+    onDatePicked: (dateString: string) => void;
 }
 
 /**

@@ -18,9 +18,10 @@ const DateSeparatorViewWrapper = ({
     onLastWeekPicked,
     onLastMonthPicked,
     onBeginningPicked,
+    onDatePicked,
     ...rest
 }: DateSeparatorProps): JSX.Element => {
-    const vm = useMockedViewModel(rest, { onLastWeekPicked, onLastMonthPicked, onBeginningPicked });
+    const vm = useMockedViewModel(rest, { onLastWeekPicked, onLastMonthPicked, onBeginningPicked, onDatePicked });
     return <DateSeparatorView vm={vm} />;
 };
 
@@ -35,6 +36,7 @@ export default {
         onLastWeekPicked: () => console.log("onLastWeekPicked"),
         onLastMonthPicked: () => console.log("onLastMonthPicked"),
         onBeginningPicked: () => console.log("onBeginningPicked"),
+        onDatePicked: () => console.log("onDatePicked"),
     },
 } as Meta<typeof DateSeparatorViewWrapper>;
 
@@ -60,12 +62,11 @@ WithJumpToTooltip.play = async ({ canvasElement }) => {
 export const WithJumpToDatePicker = Template.bind({});
 WithJumpToDatePicker.args = {
     jumpToEnabled: true,
-    jumpToDatePicker: <span>Jump to date - Date picker - Go button</span>,
 };
 WithJumpToDatePicker.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByText("Today"));
-    await expect(within(canvasElement.ownerDocument.body).findByText("JumpToDatePicker")).resolves.toBeInTheDocument();
+    await expect(within(canvasElement.ownerDocument.body).findByText("Jump to date")).resolves.toBeInTheDocument();
 };
 
 export const LongLocalizedLabel = Template.bind({});
