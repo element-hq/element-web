@@ -220,8 +220,10 @@ test.describe("Message url previews", () => {
             await use({ roomId });
         },
     });
-    test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room }) => {
-        await page.route("**/_matrix/client/v1/media/preview_url**", (route, request) => {
+    test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {
+        axe.disableRules("color-contrast");
+
+        await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
@@ -233,24 +235,31 @@ test.describe("Message url previews", () => {
         await page.goto(`#/room/${room.roomId}`);
         const msgTile = await sendMessage(page, "https://example.org");
         await expect(msgTile.getByRole("link", { name: "A simple site" })).toBeVisible();
+        await expect(axe).toHaveNoViolations();
         await expect(msgTile).toMatchScreenshot("preview-basic.png", screenshotOptions(page));
     });
-    test("should render a preview with a thumbnail", { tag: "@screenshot" }, async ({ page, user, bot, app, room }) => {
-        const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
-        await page.route("**/_matrix/client/v1/media/preview_url**", (route, request) => {
-            const requestedPage = new URL(request.url()).searchParams.get("url");
-            expect(requestedPage).toEqual("https://example.org/");
-            return route.fulfill({
-                json: {
-                    "og:title": "A simple site",
-                    "og:description": "And with a brief description",
-                    "og:image": mxc,
-                },
+    test(
+        "should render a preview with a thumbnail",
+        { tag: "@screenshot" },
+        async ({ page, user, bot, app, room, axe }) => {
+            axe.disableRules("color-contrast");
+            const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
+            await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
+                const requestedPage = new URL(request.url()).searchParams.get("url");
+                expect(requestedPage).toEqual("https://example.org/");
+                return route.fulfill({
+                    json: {
+                        "og:title": "A simple site",
+                        "og:description": "And with a brief description",
+                        "og:image": mxc,
+                    },
+                });
             });
-        });
-        await page.goto(`#/room/${room.roomId}`);
-        const msgTile = await sendMessage(page, "https://example.org");
-        await expect(msgTile.getByRole("link", { name: "A simple site" })).toBeVisible();
-        await expect(msgTile).toMatchScreenshot("preview-with-thumb.png", screenshotOptions(page));
-    });
+            await page.goto(`#/room/${room.roomId}`);
+            const msgTile = await sendMessage(page, "https://example.org");
+            await expect(msgTile.getByRole("link", { name: "A simple site" })).toBeVisible();
+            await expect(axe).toHaveNoViolations();
+            await expect(msgTile).toMatchScreenshot("preview-with-thumb.png", screenshotOptions(page));
+        },
+    );
 });
