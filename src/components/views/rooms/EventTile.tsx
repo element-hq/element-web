@@ -39,6 +39,7 @@ import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-de
 import {
     DecryptionFailureBodyView,
     SenderProfileView,
+    type SenderProfileViewActions,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -96,7 +97,7 @@ import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile.t
 
 interface SenderProfileWrapperProps {
     mxEvent: MatrixEvent;
-    onClick?(): void;
+    onClick?: SenderProfileViewActions["onClick"];
     withTooltip?: boolean;
 }
 
