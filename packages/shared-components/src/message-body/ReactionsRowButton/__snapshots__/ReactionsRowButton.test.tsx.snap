@@ -28,7 +28,7 @@ exports[`ReactionsRowButton > renders the selected reaction button 1`] = `
 <div>
   <button
     aria-label="Alice and Bob reacted with 👍"
-    class="reactionsRowButton mx_ReactionsRowButton_selected reactionsRowButtonSelected"
+    class="reactionsRowButton reactionsRowButtonSelected"
     tabindex="0"
     type="button"
   >
