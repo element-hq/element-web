@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type ComponentProps, type JSX } from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
 import {
@@ -18,12 +18,18 @@ import {
     DELEGATED_OIDC_COMPATIBILITY,
 } from "matrix-js-sdk/src/matrix";
 import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
+import { Button, Tooltip } from "@vector-im/compound-web";
+import { MacIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PlatformPeg from "../../../PlatformPeg";
-import AccessibleButton from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
+import { Icon as FacebookIcon } from "../../../../res/img/element-icons/brands/facebook.svg";
+import { Icon as GithubIcon } from "../../../../res/img/element-icons/brands/github.svg";
+import { Icon as GitlabIcon } from "../../../../res/img/element-icons/brands/gitlab.svg";
+import { Icon as GoogleIcon } from "../../../../res/img/element-icons/brands/google.svg";
+import { Icon as TwitterIcon } from "../../../../res/img/element-icons/brands/twitter.svg";
 
 interface ISSOButtonProps extends IProps {
     idp?: IIdentityProvider;
@@ -31,24 +37,22 @@ interface ISSOButtonProps extends IProps {
     action?: SSOAction;
 }
 
-const getIcon = (brand: IdentityProviderBrand | string): string | null => {
+const getIcon = (brand: IdentityProviderBrand | string): typeof FacebookIcon | null => {
     switch (brand) {
-        /* eslint-disable @typescript-eslint/no-require-imports */
         case IdentityProviderBrand.Apple:
-            return require("@vector-im/compound-design-tokens/icons/mac.svg").default;
+            return MacIcon;
         case IdentityProviderBrand.Facebook:
-            return require(`../../../../res/img/element-icons/brands/facebook.svg`).default;
+            return FacebookIcon;
         case IdentityProviderBrand.Github:
-            return require(`../../../../res/img/element-icons/brands/github.svg`).default;
+            return GithubIcon;
         case IdentityProviderBrand.Gitlab:
-            return require(`../../../../res/img/element-icons/brands/gitlab.svg`).default;
+            return GitlabIcon;
         case IdentityProviderBrand.Google:
-            return require(`../../../../res/img/element-icons/brands/google.svg`).default;
+            return GoogleIcon;
         case IdentityProviderBrand.Twitter:
-            return require(`../../../../res/img/element-icons/brands/twitter.svg`).default;
+            return TwitterIcon;
         default:
             return null;
-        /* eslint-enable @typescript-eslint/no-require-imports */
     }
 };
 
@@ -78,10 +82,10 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     fragmentAfterLogin,
     idp,
     primary,
-    mini,
+    mini: iconOnly,
     action,
     flow,
-    ...props
+    disabled,
 }) => {
     let label: string;
     if (idp) {
@@ -98,43 +102,43 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         PlatformPeg.get()?.startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id, action);
     };
 
+    const commonProps: Partial<ComponentProps<typeof Button>> & Record<`data-${string}`, string> = {
+        iconOnly,
+        className: classNames("mx_SSOButton", {
+            mx_SSOButton_mini: iconOnly,
+        }),
+        onClick,
+        kind: primary ? "primary" : "secondary",
+        disabled,
+    };
+
     let icon: JSX.Element | undefined;
-    let brandClass: string | undefined;
-    const brandIcon = idp?.brand ? getIcon(idp.brand) : null;
-    if (idp?.brand && brandIcon) {
+    const BrandIcon = idp?.brand ? getIcon(idp.brand) : null;
+    if (idp?.brand && BrandIcon) {
         const brandName = idp.brand.split(".").pop();
-        brandClass = `mx_SSOButton_brand_${brandName}`;
-        icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
+        icon = <BrandIcon aria-label={brandName} />;
+        commonProps["data-testid"] = `idp-${idp.id}`;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
         const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24) ?? undefined;
-        icon = <img src={src} height="24" width="24" alt={idp.name} />;
+        icon = <img src={src} alt={idp.name} />;
     }
 
-    const brandPart = brandClass ? { [brandClass]: brandClass } : undefined;
-    const classes = classNames(
-        "mx_SSOButton",
-        {
-            mx_SSOButton_mini: mini,
-            mx_SSOButton_default: !idp,
-            mx_SSOButton_primary: primary,
-        },
-        brandPart,
-    );
-
-    if (mini) {
-        // TODO fallback icon
+    // TODO fallback icon
+    if (iconOnly) {
         return (
-            <AccessibleButton {...props} title={label} className={classes} onClick={onClick}>
-                {icon}
-            </AccessibleButton>
+            <Tooltip label={label}>
+                <Button {...commonProps} size="lg">
+                    {icon}
+                </Button>
+            </Tooltip>
         );
     }
 
     return (
-        <AccessibleButton {...props} className={classes} onClick={onClick}>
+        <Button {...commonProps} size="sm">
             {icon}
             {label}
-        </AccessibleButton>
+        </Button>
     );
 };
 

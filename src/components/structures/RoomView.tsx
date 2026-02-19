@@ -46,7 +46,11 @@ import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
-import { RoomStatusBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    EncryptionEventView,
+    RoomStatusBarView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -69,6 +73,7 @@ import { TimelineRenderingType, MainSplitContentType } from "../../contexts/Room
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
 import { type IMatrixClientCreds } from "../../MatrixClientPeg";
+import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
@@ -111,7 +116,6 @@ import { type FocusComposerPayload } from "../../dispatcher/payloads/FocusCompos
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { createRoomFromLocalRoom } from "../../utils/direct-messages";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
-import EncryptionEvent from "../views/messages/EncryptionEvent";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { LargeLoader } from "./LargeLoader";
@@ -136,6 +140,7 @@ import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusM
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
+import { EncryptionEventViewModel } from "../../viewmodels/event-tiles/EncryptionEventViewModel.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -313,7 +318,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     let encryptionTile: ReactNode;
 
     if (encryptionEvent) {
-        encryptionTile = <EncryptionEvent mxEvent={encryptionEvent} />;
+        encryptionTile = <EncryptionEventWrappedView mxEvent={encryptionEvent} />;
     }
 
     let statusBar: ReactElement | null = null;
@@ -403,6 +408,15 @@ function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatus
     }, [vm, props]);
 
     return <RoomStatusBarView vm={vm} />;
+}
+
+/**
+ * Wrap an EncryptionEventView and ViewModel into one component, for usage with legacy React components.
+ */
+function EncryptionEventWrappedView({ mxEvent }: { mxEvent: MatrixEvent }): ReactElement | null {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new EncryptionEventViewModel({ mxEvent, cli }));
+    return <EncryptionEventView vm={vm} />;
 }
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {

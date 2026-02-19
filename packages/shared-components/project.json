@@ -5,7 +5,7 @@
         "build": {
             "cache": true,
             "command": "vite build",
-            "inputs": ["{projectRoot}/src/**/*"],
+            "inputs": ["src"],
             "outputs": ["{projectRoot}/dist"],
             "options": { "cwd": "packages/shared-components" }
         },
@@ -13,6 +13,25 @@
             "command": "vite build --watch",
             "options": { "cwd": "packages/shared-components" },
             "continuous": true
+        },
+        "typedoc": {
+            "cache": "true",
+            "command": "typedoc",
+            "inputs": ["src"],
+            "outputs": ["{projectRoot}/typedoc"],
+            "options": { "cwd": "packages/shared-components" }
+        },
+        "storybook": {
+            "cache": "true",
+            "inputs": ["src", "{projectRoot}/.storybook", "{projectRoot}/typedoc"],
+            "outputs": ["{projectRoot}/storybook-static"],
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": ["storybook build", "node scripts/storybook-build-i18n.ts"],
+                "parallel": false,
+                "cwd": "packages/shared-components"
+            },
+            "dependsOn": ["build", "typedoc"]
         }
     }
 }
