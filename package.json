@@ -56,7 +56,7 @@
         "@element-hq/element-web-module-api": "catalog:",
         "@element-hq/web-shared-components": "workspace:*",
         "@fontsource/fira-code": "^5",
-        "@fontsource/inter": "^5",
+        "@fontsource/inter": "catalog:",
         "@formatjs/intl-segmenter": "^12.0.0",
         "@matrix-org/analytics-events": "^0.32.0",
         "@matrix-org/emojibase-bindings": "^1.5.0",
