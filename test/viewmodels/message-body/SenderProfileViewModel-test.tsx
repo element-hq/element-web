@@ -119,7 +119,7 @@ describe("SenderProfileViewModel", () => {
             member: createMember(),
         });
 
-        withHandler.onClick?.({} as never);
+        withHandler.onClick?.();
 
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(withoutHandler.onClick).toBeUndefined();

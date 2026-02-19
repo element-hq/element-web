@@ -12,7 +12,6 @@ import {
     type SenderProfileViewModel as SenderProfileViewModelInterface,
     type SenderProfileViewSnapshot,
 } from "@element-hq/web-shared-components";
-import { type MouseEvent } from "react";
 
 import { _t } from "../../languageHandler";
 import UserIdentifier from "../../customisations/UserIdentifier";
@@ -76,8 +75,8 @@ export class SenderProfileViewModel
         super(props, SenderProfileViewModel.computeSnapshot(props));
     }
 
-    public onClick(evt: MouseEvent<HTMLDivElement>): void {
-        this.props.onClick?.(evt);
+    public onClick(): void {
+        this.props.onClick?.();
     }
 
     public setProps(newProps: Partial<SenderProfileViewModelProps>): void {
