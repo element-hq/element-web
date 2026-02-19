@@ -57,7 +57,7 @@ export interface RoomListViewActions {
 /**
  * The view model type for the room list view
  */
-export type RoomListViewModel = ViewModel<RoomListSnapshot> & RoomListViewActions;
+export type RoomListViewModel = ViewModel<RoomListSnapshot, RoomListViewActions>;
 
 /**
  * Props for RoomListView component

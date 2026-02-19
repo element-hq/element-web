@@ -47,7 +47,7 @@ interface FooViewActions {
 
 // ViewModel is an object (usually a class) that implements both the interfaces listed above.
 // https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
-export type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
+export type FooViewModel = ViewModel<FooViewSnapshot, FooViewActions>;
 
 interface FooViewProps {
     // Ideally the view only depends on the view model i.e you don't expect any other props here.
