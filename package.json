@@ -46,10 +46,12 @@
         "oidc-client-ts": "3.4.1",
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001766",
+        "markdown-it": "14.1.1",
         "testcontainers": "^11.0.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0",
-        "matrix-widget-api": "^1.16.1"
+        "matrix-widget-api": "^1.16.1",
+        "qs": "6.14.2"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
