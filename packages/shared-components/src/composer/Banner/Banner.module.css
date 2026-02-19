@@ -9,7 +9,6 @@
     container-type: inline-size;
     container-name: banner;
     display: flex;
-    align-items: center;
     justify-content: start;
     gap: var(--cpd-space-3x);
     padding: var(--cpd-space-4x);
@@ -49,19 +48,9 @@
 }
 
 .icon {
-    /* lock icon dimensions */
-    min-width: 32px;
-    min-height: 32px;
-    max-width: 32px;
-    max-height: 32px;
-
-    margin: 4px;
-
-    /* centre svg icons, as they are not full width */
-    flex: 0;
+    width: 24px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
 }
 
 .icon img {
