@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -102,7 +102,7 @@ const meta = {
     parameters: {
         design: {
             type: "figma",
-            url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=101-13062",
+            url: "https://www.figma.com/design/rTaQE2nIUSLav4Tg3nozq7/Compound-Web-Components?node-id=10800-21153&t=gFDc2D7TMEffSSCo-0",
         },
     },
 } satisfies Meta<typeof RoomListItemWrapper>;
@@ -111,6 +111,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const LongContent: Story = {
+    args: {
+        name: "Loooooooooooooooooooooooooooooooooooooong name",
+        messagePreview: "Loooooooooooooooooooooooooooooooooooooong preview",
+    },
+};
 
 export const Selected: Story = {
     args: {
@@ -210,4 +217,31 @@ export const WithoutHoverMenu: Story = {
     args: {
         showMoreOptionsMenu: false,
     },
+};
+
+export const WithLargeFont: Story = {
+    args: {
+        isSelected: true,
+    },
+    decorators: [
+        (Story) => {
+            useEffect(() => {
+                document.documentElement.style.setProperty("font-size", "36px");
+            }, []);
+            return <Story />;
+        },
+    ],
+};
+
+export const WithZoom: Story = {
+    args: {
+        isSelected: true,
+    },
+    decorators: [
+        (Story, context) => (
+            <div style={{ zoom: 2 }}>
+                <Story />
+            </div>
+        ),
+    ],
 };

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { Tooltip } from "@vector-im/compound-web";
+import { Button, Tooltip } from "@vector-im/compound-web";
 import { RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import AccessibleButton from "../../../views/elements/AccessibleButton";
@@ -55,7 +55,9 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
                 </div>
             </div>
             {errorText && <ErrorMessage message={errorText} />}
-            <input onClick={onSubmitForm} type="button" className="mx_Login_submit" value={_t("action|next")} />
+            <Button onClick={onSubmitForm} type="button" className="mx_Login_submit" size="sm">
+                {_t("action|next")}
+            </Button>
             <div className="mx_AuthBody_did-not-receive">
                 <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_resend_prompt")}</span>
                 <Tooltip description={_t("auth|check_email_resend_tooltip")} placement="top" open={tooltipVisible}>

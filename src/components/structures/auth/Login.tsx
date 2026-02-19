@@ -10,6 +10,7 @@ import React, { type JSX, type ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
+import { Button } from "@vector-im/compound-web";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import Login, { type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
@@ -439,9 +440,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     private renderOidcNativeStep = (): React.ReactNode => {
         const flow = this.state.flows!.find((flow) => flow.type === "oidcNativeFlow")! as OidcNativeFlow;
         return (
-            <AccessibleButton
+            <Button
                 className="mx_Login_fullWidthButton"
                 kind="primary"
+                size="sm"
                 onClick={async () => {
                     await startOidcLogin(
                         this.props.serverConfig.delegatedAuthentication!,
@@ -452,7 +454,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 }}
             >
                 {_t("action|continue")}
-            </AccessibleButton>
+            </Button>
         );
     };
 
