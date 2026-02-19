@@ -304,7 +304,7 @@ const SpaceSetupFirstRooms: React.FC<{
     space: Room;
     title: string;
     description: JSX.Element;
-    onFinished(firstRoomId?: string): void;
+    onFinished(this: void, firstRoomId?: string): void;
 }> = ({ space, title, description, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
@@ -399,7 +399,7 @@ const SpaceSetupFirstRooms: React.FC<{
 
 const SpaceAddExistingRooms: React.FC<{
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }> = ({ space, onFinished }) => {
     return (
         <div>
@@ -423,7 +423,7 @@ const SpaceAddExistingRooms: React.FC<{
 };
 
 interface ISpaceSetupPublicShareProps extends Pick<IProps & IState, "justCreatedOpts" | "space" | "firstRoomId"> {
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SpaceSetupPublicShare: React.FC<ISpaceSetupPublicShareProps> = ({
@@ -455,7 +455,7 @@ const SpaceSetupPublicShare: React.FC<ISpaceSetupPublicShareProps> = ({
 const SpaceSetupPrivateScope: React.FC<{
     space: Room;
     justCreatedOpts?: IOpts;
-    onFinished(createRooms: boolean): void;
+    onFinished(this: void, createRooms: boolean): void;
 }> = ({ space, justCreatedOpts, onFinished }) => {
     return (
         <div className="mx_SpaceRoomView_privateScope">
@@ -498,7 +498,7 @@ const validateEmailRules = withValidation({
 
 const SpaceSetupPrivateInvite: React.FC<{
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }> = ({ space, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");

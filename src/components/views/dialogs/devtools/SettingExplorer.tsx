@@ -192,7 +192,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
 
 interface IViewSettingProps extends Pick<IDevtoolsProps, "onBack"> {
     setting: SettingKey;
-    onEdit(): Promise<void>;
+    onEdit(this: void): Promise<void>;
 }
 
 const ViewSetting: React.FC<IViewSettingProps> = ({ setting, onEdit, onBack }) => {
@@ -249,8 +249,8 @@ function renderSettingValue(val: any): string {
 }
 
 interface ISettingsListProps extends Pick<IDevtoolsProps, "onBack"> {
-    onView(setting: string): void;
-    onEdit(setting: string): void;
+    onView(this: void, setting: string): void;
+    onEdit(this: void, setting: string): void;
 }
 
 const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) => {

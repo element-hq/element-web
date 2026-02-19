@@ -23,8 +23,8 @@ import JoinRuleDropdown from "../elements/JoinRuleDropdown";
 
 interface IProps {
     space: Room;
-    onAddExistingSpaceClick(): void;
-    onFinished(added?: boolean): void;
+    onAddExistingSpaceClick(this: void): void;
+    onFinished(this: void, added?: boolean): void;
 }
 
 const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick, onFinished }) => {

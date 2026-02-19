@@ -16,7 +16,7 @@ import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps {
     mxEvent: MatrixEvent;
-    onClick?(): void;
+    onClick?(this: void): void;
     withTooltip?: boolean;
 }
 

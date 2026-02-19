@@ -33,7 +33,7 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
         roomId?: string;
     };
     viewAvatarOnClick?: boolean;
-    onClick?(): void;
+    onClick?(this: void): void;
 }
 
 const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, size = "36px", ...otherProps }) => {

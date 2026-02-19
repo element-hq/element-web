@@ -43,7 +43,7 @@ export const flattenSpaceHierarchy = (
 
     flattenedSpaceIds.forEach((id) => {
         const roomIds = spaceEntityMap.get(id);
-        roomIds?.forEach(flattenedRooms.add, flattenedRooms);
+        roomIds?.forEach((roomId) => flattenedRooms.add(roomId), flattenedRooms);
     });
 
     return flattenedRooms;

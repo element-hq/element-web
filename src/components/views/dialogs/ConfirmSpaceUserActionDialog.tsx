@@ -21,8 +21,8 @@ interface IProps extends Omit<BaseProps, "matrixClient" | "children" | "onFinish
     specificLabel: string;
     noneLabel?: string;
     warningMessage?: string;
-    onFinished(success?: boolean, reason?: string, rooms?: Room[]): void;
-    spaceChildFilter?(child: Room): boolean;
+    onFinished(this: void, success?: boolean, reason?: string, rooms?: Room[]): void;
+    spaceChildFilter?(this: void, child: Room): boolean;
 }
 
 const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({

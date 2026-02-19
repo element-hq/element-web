@@ -37,7 +37,7 @@ import { validateNumberInRange } from "../../../utils/validate";
 
 interface IProps {
     room: Room;
-    onFinished(doExport?: boolean): void;
+    onFinished(this: void, doExport?: boolean): void;
 }
 
 interface ExportConfig {

@@ -20,8 +20,8 @@ import InlineSpinner from "../elements/InlineSpinner";
 interface Props {
     searchInfo?: SearchInfo;
     isRoomEncrypted: boolean;
-    onSearchScopeChange(scope: SearchScope): void;
-    onCancelClick(): void;
+    onSearchScopeChange(this: void, scope: SearchScope): void;
+    onCancelClick(this: void): void;
 }
 
 const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSearchScopeChange, onCancelClick }) => {

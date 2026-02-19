@@ -33,8 +33,8 @@ const Container: React.FC<{
 interface IBaseProps {
     member: RoomMember;
     isUpdating: boolean;
-    startUpdating(): void;
-    stopUpdating(): void;
+    startUpdating(this: void): void;
+    stopUpdating(this: void): void;
 }
 
 export const RoomKickButton = ({

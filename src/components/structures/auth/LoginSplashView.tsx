@@ -27,7 +27,7 @@ interface Props {
      *
      * @param event - The click event
      */
-    onLogoutClick: (event: ButtonEvent) => void;
+    onLogoutClick: (this: void, event: ButtonEvent) => void;
 
     /**
      * Error that caused `/sync` to fail. If set, an error message will be shown on the splash screen.

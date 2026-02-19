@@ -19,7 +19,7 @@ export const useTimeoutToggle = (
     timeoutMs: number,
 ): {
     value: boolean;
-    toggle(): void;
+    toggle(this: void): void;
 } => {
     const timeoutId = useRef<number | undefined>(undefined);
     const [value, setValue] = useState<boolean>(defaultValue);

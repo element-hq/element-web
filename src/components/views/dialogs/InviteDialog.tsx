@@ -1124,7 +1124,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ currentTabId: tabId });
     };
 
-    private async onLinkClick(e: React.MouseEvent<HTMLAnchorElement>): Promise<void> {
+    private async onLinkClick(this: void, e: React.MouseEvent<HTMLAnchorElement>): Promise<void> {
         e.preventDefault();
         selectText(e.currentTarget);
     }

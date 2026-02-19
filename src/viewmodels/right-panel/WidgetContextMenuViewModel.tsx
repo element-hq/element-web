@@ -238,10 +238,10 @@ interface WidgetContextMenuProps {
     menuDisplayed: boolean;
     trigger: ReactNode;
     // override delete handler
-    onDeleteClick?(): void;
+    onDeleteClick?(this: void): void;
     // override edit handler
-    onEditClick?(): void;
-    onFinished(): void;
+    onEditClick?(this: void): void;
+    onFinished(this: void): void;
 }
 
 export type WidgetContextMenuViewModelProps = WidgetContextMenuProps & {

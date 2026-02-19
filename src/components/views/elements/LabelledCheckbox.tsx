@@ -21,7 +21,7 @@ interface IProps {
     // Whether or not to disable the checkbox
     disabled?: boolean;
     // The function to call when the value changes
-    onChange(checked: boolean): void;
+    onChange(this: void, checked: boolean): void;
     // Optional additional CSS class to apply to the label
     className?: string;
     // The id for the checkbox

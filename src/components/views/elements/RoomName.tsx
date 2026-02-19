@@ -13,7 +13,7 @@ import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 
 interface IProps {
     room?: Room;
-    children?(name: string): JSX.Element;
+    children?(this: void, name: string): JSX.Element;
 }
 
 /**

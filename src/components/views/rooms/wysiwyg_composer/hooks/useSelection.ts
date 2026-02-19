@@ -29,7 +29,7 @@ function setSelectionContext(composerContext: ComposerContextState): void {
 }
 
 export function useSelection(): ReturnType<typeof useFocus>[1] & {
-    onInput(): void;
+    onInput(this: void): void;
 } {
     const composerContext = useComposerContext();
     const [isFocused, focusProps] = useFocus();

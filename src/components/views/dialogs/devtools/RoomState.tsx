@@ -40,12 +40,12 @@ export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) =>
 
 interface StateEventButtonProps {
     label: string;
-    onClick(): void;
+    onClick(this: void): void;
 }
 
 const RoomStateHistory: React.FC<{
     mxEvent: MatrixEvent;
-    onBack(): void;
+    onBack(this: void): void;
 }> = ({ mxEvent, onBack }) => {
     const cli = useContext(MatrixClientContext);
     const events = useAsyncMemo(

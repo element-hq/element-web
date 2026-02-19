@@ -96,7 +96,7 @@ export const CallGuestLinkButton: React.FC<{ room: Room }> = ({ room }) => {
  * @param onFinished Callback that is getting called if the dialog wants to close.
  */
 export const JoinRuleDialog: React.FC<{
-    onFinished(): void;
+    onFinished(this: void): void;
     room: Room;
     canInvite: boolean;
 }> = ({ onFinished, room, canInvite }) => {
