@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, useEffect } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SenderProfileView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import SenderProfile from "../messages/SenderProfile";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
@@ -27,6 +27,27 @@ import { renderReplyTile } from "../../../events/EventTileFactory";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type IBodyProps } from "../messages/IBodyProps";
+import { SenderProfileViewModel } from "../../../viewmodels/message-body/SenderProfileViewModel";
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
+
+interface SenderProfileItemProps {
+    mxEvent: MatrixEvent;
+}
+
+const SenderProfileItem: React.FC<SenderProfileItemProps> = ({ mxEvent }) => {
+    const sender = mxEvent.getSender();
+    const member = useRoomMemberProfile({
+        userId: sender,
+        member: mxEvent.sender,
+    });
+
+    const vm = useCreateAutoDisposedViewModel(() => new SenderProfileViewModel({ mxEvent, member }));
+    useEffect(() => {
+        vm.setProps({ mxEvent, member });
+    }, [mxEvent, member, vm]);
+
+    return <SenderProfileView vm={vm} />;
+};
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -125,7 +146,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             sender = (
                 <div className="mx_ReplyTile_sender">
                     <MemberAvatar member={mxEvent.sender} fallbackUserId={mxEvent.getSender()} size="16px" />
-                    <SenderProfile mxEvent={mxEvent} />
+                    <SenderProfileItem mxEvent={mxEvent} />
                 </div>
             );
         }

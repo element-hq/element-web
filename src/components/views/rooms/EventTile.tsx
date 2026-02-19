@@ -36,7 +36,11 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
+import {
+    DecryptionFailureBodyView,
+    SenderProfileView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
@@ -57,7 +61,6 @@ import { type ComposerInsertPayload } from "../../../dispatcher/payloads/Compose
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
-import SenderProfile from "../messages/SenderProfile";
 import MessageTimestamp from "../messages/MessageTimestamp";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
@@ -86,8 +89,33 @@ import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { SenderProfileViewModel } from "../../../viewmodels/message-body/SenderProfileViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile.ts";
+
+interface SenderProfileWrapperProps {
+    mxEvent: MatrixEvent;
+    onClick?(): void;
+    withTooltip?: boolean;
+}
+
+const SenderProfileItem: React.FC<SenderProfileWrapperProps> = ({ mxEvent, onClick, withTooltip }) => {
+    const sender = mxEvent.getSender();
+    const member = useRoomMemberProfile({
+        userId: sender,
+        member: mxEvent.sender,
+    });
+
+    const vm = useCreateAutoDisposedViewModel(
+        () => new SenderProfileViewModel({ mxEvent, member, onClick, withTooltip }),
+    );
+    useEffect(() => {
+        vm.setProps({ mxEvent, member, onClick, withTooltip });
+    }, [mxEvent, member, onClick, withTooltip, vm]);
+
+    return <SenderProfileView vm={vm} />;
+};
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1114,11 +1142,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 this.context.timelineRenderingType === TimelineRenderingType.Pinned ||
                 this.context.timelineRenderingType === TimelineRenderingType.Thread
             ) {
-                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
+                sender = <SenderProfileItem onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
             } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} withTooltip />;
+                sender = <SenderProfileItem mxEvent={this.props.mxEvent} withTooltip />;
             } else {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+                sender = <SenderProfileItem mxEvent={this.props.mxEvent} />;
             }
         }
 
