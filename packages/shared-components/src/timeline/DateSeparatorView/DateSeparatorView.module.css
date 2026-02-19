@@ -5,11 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.separator {
-    div {
-        padding: 0 25px;
-        display: flex;
+.menu {
+    div [role="menu"] {
+        padding-top: 0;
+        padding-bottom: 0;
+        max-inline-size: none !important;
     }
+}
+
+.content {
+    padding: 0 25px;
+    cursor: pointer;
 
     h2 {
         flex: 0 0 auto;
@@ -26,4 +32,9 @@
         height: 16px;
         color: var(--cpd-color-icon-secondary);
     }
+}
+
+.picker {
+    color: var(--cpd-color-text-primary) !important;
+    font: var(--cpd-font-body-md-medium) !important;
 }

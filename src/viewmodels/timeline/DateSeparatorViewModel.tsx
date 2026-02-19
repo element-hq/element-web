@@ -10,8 +10,6 @@ import {
     type DateSeparatorViewSnapshot as DateSeparatorViewSnapshotInterface,
     type DateSeparatorViewModel as DateSeparatorViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { capitalize } from "lodash";
 import React from "react";
 import { Direction, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -27,14 +25,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import BugReportDialog from "../../components/views/dialogs/BugReportDialog";
-import AccessibleButton, { type ButtonEvent } from "../../components/views/elements/AccessibleButton";
-import { ContextMenuTooltipButton } from "../../components/structures/ContextMenu";
-import IconizedContextMenu, {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from "../../components/views/context_menus/IconizedContextMenu";
+import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import JumpToDatePicker from "../../components/views/messages/JumpToDatePicker";
-import { contextMenuBelow } from "../../components/views/rooms/RoomTile";
 import { SdkContextClass } from "../../contexts/SDKContext";
 
 export interface DateSeparatorViewModelProps {
@@ -69,11 +61,6 @@ export class DateSeparatorViewModel
      * Controls whether the jump-to-date menu is exposed in the snapshot.
      */
     private jumpToDateEnabled: boolean;
-    /**
-     * Anchor rectangle for the jump-to-date context menu.
-     * Undefined means the menu is closed.
-     */
-    private contextMenuPosition?: DOMRect;
 
     public constructor(props: DateSeparatorViewModelProps) {
         const relativeDatesEnabled = SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
@@ -82,7 +69,6 @@ export class DateSeparatorViewModel
         super(props, {
             label: DateSeparatorViewModel.computeLabel(props, relativeDatesEnabled),
             className: "mx_TimelineSeparator",
-            headerContent: undefined,
         });
 
         this.relativeDatesEnabled = relativeDatesEnabled;
@@ -116,8 +102,11 @@ export class DateSeparatorViewModel
         return {
             label,
             className: "mx_TimelineSeparator",
-            headerContent:
-                this.jumpToDateEnabled && !this.props.forExport ? this.renderJumpToDateMenu(label) : undefined,
+            jumpToEnabled: this.jumpToDateEnabled && !this.props.forExport,
+            jumpToDatePicker:
+                this.jumpToDateEnabled && !this.props.forExport ? (
+                    <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
+                ) : undefined,
         };
     }
 
@@ -271,96 +260,27 @@ export class DateSeparatorViewModel
         });
     };
 
-    public pickLastWeek = (): Promise<void> => {
+    public onLastWeekPicked = (): Promise<void> => {
         const date = new Date();
         date.setDate(date.getDate() - 7);
         void this.pickDate(date);
-        this.closeMenu();
         return Promise.resolve();
     };
 
-    public pickLastMonth = (): Promise<void> => {
+    public onLastMonthPicked = (): Promise<void> => {
         const date = new Date();
         // Month numbers are 0-11 and setMonth handles rollover.
         date.setMonth(date.getMonth() - 1, 1);
         void this.pickDate(date);
-        this.closeMenu();
         return Promise.resolve();
     };
 
-    public pickTheBeginning = (): Promise<void> => {
+    public onBeginningPicked = (): Promise<void> => {
         void this.pickDate(new Date(0));
-        this.closeMenu();
         return Promise.resolve();
     };
 
     private onDatePicked = (dateString: string): void => {
         void this.pickDate(dateString);
-        this.closeMenu();
     };
-
-    private onContextMenuOpenClick = (e: ButtonEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        const target = e.target as HTMLButtonElement;
-        this.contextMenuPosition = target.getBoundingClientRect();
-        this.updateSnapshot();
-    };
-
-    private onContextMenuCloseClick = (): void => {
-        this.closeMenu();
-    };
-
-    private closeMenu = (): void => {
-        this.contextMenuPosition = undefined;
-        this.updateSnapshot();
-    };
-
-    private renderJumpToDateMenu(label: string): React.ReactElement {
-        let contextMenu: React.ReactElement | undefined;
-        if (this.contextMenuPosition) {
-            const relativeTimeFormat = DateSeparatorViewModel.relativeTimeFormat;
-            contextMenu = (
-                <IconizedContextMenu
-                    {...contextMenuBelow(this.contextMenuPosition)}
-                    onFinished={this.onContextMenuCloseClick}
-                >
-                    <IconizedContextMenuOptionList first>
-                        <IconizedContextMenuOption
-                            label={capitalize(relativeTimeFormat.format(-1, "week"))}
-                            onClick={this.pickLastWeek}
-                            data-testid="jump-to-date-last-week"
-                        />
-                        <IconizedContextMenuOption
-                            label={capitalize(relativeTimeFormat.format(-1, "month"))}
-                            onClick={this.pickLastMonth}
-                            data-testid="jump-to-date-last-month"
-                        />
-                        <IconizedContextMenuOption
-                            label={_t("room|jump_to_date_beginning")}
-                            onClick={this.pickTheBeginning}
-                            data-testid="jump-to-date-beginning"
-                        />
-                    </IconizedContextMenuOptionList>
-
-                    <IconizedContextMenuOptionList>
-                        <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
-                    </IconizedContextMenuOptionList>
-                </IconizedContextMenu>
-            );
-        }
-
-        return (
-            <ContextMenuTooltipButton
-                data-testid="jump-to-date-separator-button"
-                onClick={this.onContextMenuOpenClick}
-                isExpanded={Boolean(this.contextMenuPosition)}
-                title={_t("room|jump_to_date")}
-            >
-                <h2 aria-hidden="true">{label}</h2>
-                <ChevronDownIcon />
-                {contextMenu}
-            </ContextMenuTooltipButton>
-        );
-    }
 }

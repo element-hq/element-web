@@ -6,12 +6,17 @@
  */
 
 import classNames from "classnames";
-import React, { type JSX } from "react";
+import React, { type JSX, useState } from "react";
+import { Tooltip } from "@vector-im/compound-web";
+import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../viewmodel/useViewModel";
 import styles from "./DateSeparatorView.module.css";
+import { Flex } from "../../utils/Flex";
+import { useI18n } from "../../utils/i18nContext";
 import { TimelineSeparator } from "../../message-body/TimelineSeparator";
+import { DateSeparatorContextMenu } from "./DateSeparatorContextMenu";
 
 export interface DateSeparatorViewSnapshot {
     /**
@@ -19,20 +24,32 @@ export interface DateSeparatorViewSnapshot {
      */
     label: string;
     /**
+     * Controls whether the jump-to menu is rendered.
+     */
+    jumpToEnabled?: boolean;
+    /**
+     * Optional extra menu item/content shown in the jump-to menu.
+     */
+    jumpToDatePicker?: React.ReactNode;
+    /**
      * Extra CSS classes to apply to the component.
      */
     className?: string;
-    /**
-     * Optional custom header content (for example a jump-to-date menu trigger).
-     * When provided, this replaces the default content.
-     */
-    headerContent?: JSX.Element;
+}
+
+export interface DateSeparatorViewActions {
+    /** Jump to messages from the last week. */
+    onLastWeekPicked: () => void;
+    /** Jump to messages from the last month. */
+    onLastMonthPicked: () => void;
+    /** Jump to the beginning of the room history. */
+    onBeginningPicked: () => void;
 }
 
 /**
  * The view model for the component.
  */
-export type DateSeparatorViewModel = ViewModel<DateSeparatorViewSnapshot>;
+export type DateSeparatorViewModel = ViewModel<DateSeparatorViewSnapshot> & DateSeparatorViewActions;
 
 interface DateSeparatorViewProps {
     /**
@@ -43,7 +60,8 @@ interface DateSeparatorViewProps {
 
 /**
  * Renders a timeline date separator.
- * Uses `jumpToDateMenu` when present, otherwise renders the default date heading.
+ * When `jumpToEnabled` is true, wraps the separator label with a jump-to menu trigger.
+ * The tooltip is disabled while the menu is open to avoid overlap.
  *
  * @example
  * ```tsx
@@ -51,17 +69,44 @@ interface DateSeparatorViewProps {
  * ```
  */
 export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
-    const { label, className, headerContent } = useViewModel(vm);
+    const { translate: _t } = useI18n();
+    const { label, className, jumpToEnabled } = useViewModel(vm);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const dateHeaderContent = (
-        <div>
+    let content = (
+        <Flex className={styles.content}>
             <h2 aria-hidden="true">{label}</h2>
-        </div>
+        </Flex>
     );
 
+    if (jumpToEnabled) {
+        content = (
+            <Tooltip
+                description={_t("room|jump_to_date")}
+                placement="right"
+                isTriggerInteractive={false}
+                nonInteractiveTriggerTabIndex={-1}
+                disabled={isMenuOpen}
+            >
+                <DateSeparatorContextMenu vm={vm} open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                    <Flex
+                        data-testid="jump-to-date-separator-button"
+                        className={classNames(styles.content)}
+                        aria-live="off"
+                        role="button"
+                        tabIndex={0}
+                    >
+                        <h2 aria-hidden="true">{label}</h2>
+                        <ChevronDownIcon />
+                    </Flex>
+                </DateSeparatorContextMenu>
+            </Tooltip>
+        );
+    }
+
     return (
-        <TimelineSeparator label={label} className={classNames(className, styles.separator)}>
-            {headerContent || dateHeaderContent}
+        <TimelineSeparator label={label} className={classNames(className)}>
+            {content}
         </TimelineSeparator>
     );
 }

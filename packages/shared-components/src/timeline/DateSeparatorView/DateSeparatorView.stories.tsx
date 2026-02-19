@@ -6,15 +6,21 @@
  */
 
 import React, { type JSX } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import { DateSeparatorView, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
+import { DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "./DateSeparatorView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 
-type DateSeparatorProps = DateSeparatorViewSnapshot;
+type DateSeparatorProps = DateSeparatorViewSnapshot & DateSeparatorViewActions;
 
-const DateSeparatorViewWrapper = ({ ...rest }: DateSeparatorProps): JSX.Element => {
-    const vm = useMockedViewModel(rest, {});
+const DateSeparatorViewWrapper = ({
+    onLastWeekPicked,
+    onLastMonthPicked,
+    onBeginningPicked,
+    ...rest
+}: DateSeparatorProps): JSX.Element => {
+    const vm = useMockedViewModel(rest, { onLastWeekPicked, onLastMonthPicked, onBeginningPicked });
     return <DateSeparatorView vm={vm} />;
 };
 
@@ -24,7 +30,11 @@ export default {
     tags: ["autodocs"],
     args: {
         label: "Today",
+        jumpToEnabled: false,
         className: "",
+        onLastWeekPicked: () => console.log("onLastWeekPicked"),
+        onLastMonthPicked: () => console.log("onLastMonthPicked"),
+        onBeginningPicked: () => console.log("onBeginningPicked"),
     },
 } as Meta<typeof DateSeparatorViewWrapper>;
 
@@ -37,13 +47,25 @@ HasExtraClassNames.args = {
     className: "extra_class_1 extra_class_2",
 };
 
-export const WithHeaderContent = Template.bind({});
-WithHeaderContent.args = {
-    headerContent: (
-        <div data-testid="header-content" role="presentation">
-            Header content
-        </div>
-    ),
+export const WithJumpToTooltip = Template.bind({});
+WithJumpToTooltip.args = {
+    jumpToEnabled: true,
+};
+WithJumpToTooltip.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByText("Today"));
+    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
+};
+
+export const WithJumpToDatePicker = Template.bind({});
+WithJumpToDatePicker.args = {
+    jumpToEnabled: true,
+    jumpToDatePicker: <span>Jump to date - Date picker - Go button</span>,
+};
+WithJumpToDatePicker.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByText("Today"));
+    await expect(within(canvasElement.ownerDocument.body).findByText("JumpToDatePicker")).resolves.toBeInTheDocument();
 };
 
 export const LongLocalizedLabel = Template.bind({});
