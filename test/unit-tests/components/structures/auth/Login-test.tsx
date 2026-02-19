@@ -281,13 +281,13 @@ describe("Login", function () {
             ],
         });
 
-        const { container } = getComponent();
+        const { container, getByTestId } = getComponent();
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         for (const idp of idpsWithIcons) {
-            const ssoButton = container.querySelector(`.mx_SSOButton.mx_SSOButton_brand_${idp.brand}`);
+            const ssoButton = getByTestId(`idp-${idp.id}`);
             expect(ssoButton).toBeTruthy();
-            expect(ssoButton?.querySelector(`img[alt="${idp.brand}"]`)).toBeTruthy();
+            expect(ssoButton.childNodes[0]).toHaveAccessibleName(idp.brand);
         }
 
         const ssoButtons = container.querySelectorAll(".mx_SSOButton");
@@ -394,7 +394,10 @@ describe("Login", function () {
 
             // tried to register
             expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
-            expect(logger.error).toHaveBeenCalledWith(new Error(OidcError.DynamicRegistrationFailed));
+            expect(logger.error).toHaveBeenCalledWith(
+                "Failed to get oidc native flow",
+                new Error(OidcError.DynamicRegistrationFailed),
+            );
 
             // continued with normal setup
             expect(mockClient.loginFlows).toHaveBeenCalled();

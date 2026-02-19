@@ -260,7 +260,7 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
 1. `logout_redirect_url`: Optional URL to redirect the user to after they have logged out. Some SSO systems support a page that the
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
-   all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
+   all unauthenticated users will be automatically redirected to the SSO/OIDC system to start their login. If instead you'd only like to
    have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
    redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
@@ -275,8 +275,6 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
 
 ## Native OIDC
-
-Native OIDC support is currently in labs and is subject to change.
 
 Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
 Issuer must have a trailing forward slash. As an example:

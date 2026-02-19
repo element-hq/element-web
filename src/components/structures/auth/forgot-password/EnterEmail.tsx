@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, useRef } from "react";
 import { EmailSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Button } from "@vector-im/compound-web";
 
 import { _t, _td } from "../../../../languageHandler";
 import EmailField from "../../../views/auth/EmailField";
@@ -74,9 +75,9 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
                         />
                     </div>
                     {errorText && <ErrorMessage message={errorText} />}
-                    <button type="submit" className="mx_Login_submit">
+                    <Button type="submit" className="mx_Login_submit" size="sm">
                         {submitButtonChild}
-                    </button>
+                    </Button>
                     <div className="mx_AuthBody_button-container">
                         <AccessibleButton
                             className="mx_AuthBody_sign-in-instead-button"

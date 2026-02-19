@@ -15,6 +15,7 @@ import OfflineIcon from "@vector-im/compound-design-tokens/assets/web/icons/pres
 import BusyIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-strikethrough-8x8";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
+import { Flex } from "@element-hq/web-shared-components";
 
 import RoomAvatar from "./RoomAvatar";
 import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
@@ -48,10 +49,10 @@ export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
             : "mx_RoomAvatarView_RoomAvatar_icon";
 
     return (
-        <div className="mx_RoomAvatarView">
+        <Flex className="mx_RoomAvatarView">
             <RoomAvatar className={classNames("mx_RoomAvatarView_RoomAvatar", maskClass)} size="32px" room={room} />
             {label ? <Tooltip label={label}>{icon}</Tooltip> : icon}
-        </div>
+        </Flex>
     );
 }
 

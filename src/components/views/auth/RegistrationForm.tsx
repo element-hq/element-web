@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type BaseSyntheticEvent, type ComponentProps, type ReactNode } from "react";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Button } from "@vector-im/compound-web";
 
 import * as Email from "../../../email";
 import { looksValid as phoneNumberLooksValid, type PhoneNumberCountryDefinition } from "../../../phonenumber";
@@ -548,12 +549,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
     public render(): ReactNode {
         const registerButton = (
-            <input
-                className="mx_Login_submit"
-                type="submit"
-                value={_t("action|register")}
-                disabled={!this.props.canSubmit}
-            />
+            <Button className="mx_Login_submit" size="sm" type="submit" disabled={!this.props.canSubmit}>
+                {_t("action|register")}
+            </Button>
         );
 
         let emailHelperText: JSX.Element | undefined;
