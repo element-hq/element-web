@@ -28,6 +28,10 @@ export interface DateSeparatorViewSnapshot {
      */
     jumpToEnabled?: boolean;
     /**
+     * Reference timestamp used to prefill the jump-to-date picker value.
+     */
+    jumpToTimstamp?: number;
+    /**
      * Extra CSS classes to apply to the component.
      */
     className?: string;
@@ -91,6 +95,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
                         data-testid="jump-to-date-separator-button"
                         className={classNames(styles.content)}
                         aria-live="off"
+                        aria-label={_t("room|jump_to_date")}
                         role="button"
                         tabIndex={0}
                     >
@@ -103,7 +108,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
     }
 
     return (
-        <TimelineSeparator label={label} className={classNames(className)}>
+        <TimelineSeparator label={label} className={classNames(className)} role={jumpToEnabled ? "none" : "separator"}>
             {content}
         </TimelineSeparator>
     );

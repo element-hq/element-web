@@ -10,15 +10,14 @@ import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import { describe, it, expect } from "vitest";
 import { waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import { DateSeparatorView, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
-import { MockViewModel } from "../../viewmodel";
+import { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
 import * as stories from "./DateSeparatorView.stories";
-import { type ViewModel } from "../../viewmodel/ViewModel";
 
-const { Default, HasExtraClassNames, WithHeaderContent, LongLocalizedLabel } = composeStories(stories);
+const { Default, HasExtraClassNames, WithJumpToDatePicker, LongLocalizedLabel } = composeStories(stories);
 
-class MutableDateSeparatorViewModel implements ViewModel<DateSeparatorViewSnapshot> {
+class MutableDateSeparatorViewModel implements DateSeparatorViewModel {
     private listeners = new Set<() => void>();
 
     public constructor(private snapshot: DateSeparatorViewSnapshot) {}
@@ -38,18 +37,14 @@ class MutableDateSeparatorViewModel implements ViewModel<DateSeparatorViewSnapsh
         this.listeners.add(listener);
         return () => this.listeners.delete(listener);
     };
+
+    public onLastWeekPicked = (): void => undefined;
+    public onLastMonthPicked = (): void => undefined;
+    public onBeginningPicked = (): void => undefined;
+    public onDatePicked = (_dateString: string): void => undefined;
 }
 
 describe("DateSeparatorView", () => {
-    function customRender(
-        snapshot: DateSeparatorViewSnapshot = {
-            label: "Today",
-            className: "",
-        },
-    ): ReturnType<typeof render> {
-        return render(<DateSeparatorView vm={new MockViewModel(snapshot)} />);
-    }
-
     it("renders default story", () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
@@ -63,10 +58,11 @@ describe("DateSeparatorView", () => {
         expect(container.firstElementChild).toHaveClass("extra_class_2");
     });
 
-    it("renders with header content story", () => {
-        const { container } = render(<WithHeaderContent />);
+    it("renders with jump to date picker story", async () => {
+        const { container } = render(<WithJumpToDatePicker />);
         expect(container).toMatchSnapshot();
-        expect(screen.getByTestId("header-content")).toBeInTheDocument();
+        await userEvent.click(screen.getByTestId("jump-to-date-separator-button"));
+        await expect(screen.findByTestId("jump-to-date-last-week")).resolves.toBeInTheDocument();
     });
 
     it("renders long localized label story", () => {
@@ -75,16 +71,6 @@ describe("DateSeparatorView", () => {
         expect(
             screen.getByText("Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time"),
         ).toBeInTheDocument();
-    });
-
-    it("renders custom menu button instead of default heading", () => {
-        const { queryByRole, getByTestId } = customRender({
-            label: "Today",
-            headerContent: <button data-testid="custom-jump-menu">Jump</button>,
-        });
-
-        expect(getByTestId("custom-jump-menu")).toBeInTheDocument();
-        expect(queryByRole("heading", { level: 2, name: "Today" })).not.toBeInTheDocument();
     });
 
     it("updates when view model snapshot changes", async () => {

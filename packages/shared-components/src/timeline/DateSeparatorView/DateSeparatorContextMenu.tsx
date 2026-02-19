@@ -13,7 +13,6 @@ import { useI18n } from "../../utils/i18nContext";
 import { useViewModel } from "../../viewmodel";
 import { humanizeRelativeTime } from "../../utils/humanize";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
-import styles from "./DateSeparatorView.module.css";
 import { DateSeparatorDatePicker } from "./DateSeparatorDatePicker";
 
 /**
@@ -41,6 +40,15 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
     const i18n = useI18n();
     const snapshot = useViewModel(vm);
 
+    const onKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
+        if (event.key !== "ArrowDown") return;
+        event.preventDefault();
+        const input = document.querySelector<HTMLInputElement>(
+            '[data-testid="jump-to-date-picker"] input[type="date"]',
+        );
+        input?.focus();
+    };
+
     return (
         <Menu
             open={open}
@@ -54,27 +62,29 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
         >
             <MenuItem
                 label={capitalize(humanizeRelativeTime(i18n).format(-1, "week"))}
-                onSelect={vm.onBeginningPicked}
-                // onClick={(evt) => evt.stopPropagation()}
+                onSelect={vm.onLastWeekPicked}
                 data-testid="jump-to-date-last-week"
                 hideChevron={true}
             />
             <MenuItem
                 label={capitalize(humanizeRelativeTime(i18n).format(-1, "month"))}
-                onSelect={vm.onBeginningPicked}
-                // onClick={(evt) => evt.stopPropagation()}
+                onSelect={vm.onLastMonthPicked}
                 data-testid="jump-to-date-last-month"
                 hideChevron={true}
             />
             <MenuItem
                 label={i18n.translate("room|jump_to_date_beginning")}
                 onSelect={vm.onBeginningPicked}
-                // onClick={(evt) => evt.stopPropagation()}
                 data-testid="jump-to-date-beginning"
                 hideChevron={true}
+                onKeyDown={onKeyDown}
             />
             {snapshot.jumpToEnabled && <Separator decorative />}
-            {snapshot.jumpToEnabled && <DateSeparatorDatePicker vm={vm} />}
+            {snapshot.jumpToEnabled && (
+                <MenuItem as="div" label={null} onSelect={null} hideChevron={true}>
+                    <DateSeparatorDatePicker vm={vm} onSubmitted={() => onOpenChange?.(false)} />
+                </MenuItem>
+            )}
         </Menu>
     );
 };

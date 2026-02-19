@@ -7,8 +7,8 @@
 
 :global([role="menu"]:has([data-testid="jump-to-date-picker"])) {
     max-inline-size: none !important;
-    padding-top: var(--cpd-space-2x);
-    padding-bottom: var(--cpd-space-2x);
+    padding-top: var(--cpd-space-1x);
+    padding-bottom: var(--cpd-space-1x);
 }
 
 .content {
@@ -32,17 +32,15 @@
     }
 }
 
-.picker_menuitem {
-    color: var(--cpd-color-text-primary);
-    font: var(--cpd-font-body-md-medium);
-    padding-block: var(--cpd-space-2x);
-    padding-inline: var(--cpd-space-4x);
-    gap: 0;
-}
-
 .picker_form {
     display: flex;
     flex-direction: row;
+    gap: 0;
+}
+
+.picker_menuitem {
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-md-medium);
     gap: 0;
 }
 
@@ -57,7 +55,7 @@
     flex-direction: row;
     min-width: 0;
     margin: 0;
-    margin-left: 8px;
+    margin-left: var(--cpd-space-2x);
     border-radius: 8px;
     border: 1px solid var(--cpd-color-border-interactive-secondary);
     transition: border-color 0.25s;
@@ -100,7 +98,7 @@
     font: inherit;
     border: none;
     border-radius: 8px;
-    padding: var(--cpd-space-2x) var(--cpd-space-4x) var(--cpd-space-2x) var(--cpd-space-2x);
+    padding: var(--cpd-space-2x) var(--cpd-space-5x) var(--cpd-space-2x) var(--cpd-space-2x);
     color: inherit;
     background-color: inherit;
     -webkit-box-flex: 1;
@@ -126,14 +124,29 @@
 }
 
 .picker_input_calendar_icon {
-    position: absolute;
-    right: 9px;
-    top: 50%;
     width: 16px;
     height: 16px;
-    transform: translateY(-50%);
     color: var(--cpd-color-text-primary);
-    pointer-events: none;
+}
+
+.picker_input_calendar_button {
+    position: absolute;
+    right: var(--cpd-space-2x);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--cpd-space-1x);
+}
+
+.picker_input_calendar_button:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
 }
 
 .picker_button {

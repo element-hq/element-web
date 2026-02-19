@@ -32,6 +32,7 @@ export default {
     args: {
         label: "Today",
         jumpToEnabled: false,
+        jumpToTimstamp: 0,
         className: "",
         onLastWeekPicked: () => console.log("onLastWeekPicked"),
         onLastMonthPicked: () => console.log("onLastMonthPicked"),
@@ -52,6 +53,7 @@ HasExtraClassNames.args = {
 export const WithJumpToTooltip = Template.bind({});
 WithJumpToTooltip.args = {
     jumpToEnabled: true,
+    jumpToTimstamp: new Date("2025-01-15T12:00:00.000Z").getTime(),
 };
 WithJumpToTooltip.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -62,6 +64,7 @@ WithJumpToTooltip.play = async ({ canvasElement }) => {
 export const WithJumpToDatePicker = Template.bind({});
 WithJumpToDatePicker.args = {
     jumpToEnabled: true,
+    jumpToTimstamp: new Date("2025-01-15T12:00:00.000Z").getTime(),
 };
 WithJumpToDatePicker.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
