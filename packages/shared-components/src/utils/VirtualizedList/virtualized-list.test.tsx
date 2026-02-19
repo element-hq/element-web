@@ -11,14 +11,10 @@ import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import { FlatVirtualizedList, type FlatVirtualizedListProps } from "./FlatVirtualizedList";
+import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "./GroupedVirtualizedList";
+import type { VirtualizedListContext } from "./virtualized-list";
 
-const expectTabIndex = (element: Element, expected: string): void => {
-    expect(element.getAttribute("tabindex")).toBe(expected);
-};
-
-const expectAttribute = (element: Element, attr: string, expected: string): void => {
-    expect(element.getAttribute(attr)).toBe(expected);
-};
+// ─── Test types ──────────────────────────────────────────────────────────────
 
 interface TestItem {
     id: string;
@@ -29,7 +25,169 @@ interface TestItem {
 const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
-describe("FlatVirtualizedList", () => {
+// ─── Shared helpers ──────────────────────────────────────────────────────────
+
+const expectTabIndex = (element: Element, expected: string): void => {
+    expect(element.getAttribute("tabindex")).toBe(expected);
+};
+
+const expectAttribute = (element: Element, attr: string, expected: string): void => {
+    expect(element.getAttribute(attr)).toBe(expected);
+};
+
+const getItemKey = (item: TestItemWithSeparator): string => (typeof item === "string" ? item : item.id);
+
+/** Renders an item element used by the default mock. */
+function renderItemElement(
+    index: number,
+    item: TestItemWithSeparator,
+    context: VirtualizedListContext<any>,
+): React.JSX.Element {
+    const itemKey = typeof item === "string" ? item : item.id;
+    const isFocused = context.tabIndexKey === itemKey;
+    return (
+        <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1} role="gridcell">
+            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+        </div>
+    );
+}
+
+/** Renders a clickable item element used by the scroll-click test mock. */
+function renderClickableItemElement(
+    index: number,
+    item: TestItemWithSeparator,
+    context: VirtualizedListContext<any>,
+    onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+    onClick: () => void,
+): React.JSX.Element {
+    const itemKey = typeof item === "string" ? item : item.id;
+    const isFocused = context.tabIndexKey === itemKey;
+    return (
+        <div
+            className="mx_item"
+            data-testid={`row-${index}`}
+            tabIndex={isFocused ? 0 : -1}
+            role="button"
+            onClick={onClick}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    onClick();
+                }
+            }}
+            onFocus={(e) => onFocus(item, e)}
+        >
+            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+        </div>
+    );
+}
+
+// ─── Variant definitions ─────────────────────────────────────────────────────
+
+interface ListTestVariant {
+    name: string;
+    /** Build the JSX element for the given items and props. */
+    createComponent: (
+        items: TestItemWithSeparator[],
+        mockGetItemComponent: any,
+        mockIsItemFocusable: any,
+        extraProps?: Record<string, unknown>,
+    ) => React.JSX.Element;
+    /** Wire up the default `getItemComponent` mock (simple items, no onFocus). */
+    setupDefaultMock: (mockGetItemComponent: any, getItems: () => TestItemWithSeparator[]) => void;
+    /** Wire up the `getItemComponent` mock for the click-after-scroll test. */
+    setupClickTestMock: (mockGetItemComponent: any, mockOnClick: any, getItems: () => TestItemWithSeparator[]) => void;
+}
+
+const flatVariant: ListTestVariant = {
+    name: "FlatVirtualizedList",
+
+    createComponent(items, mockGetItemComponent, mockIsItemFocusable, extraProps = {}) {
+        const props: FlatVirtualizedListProps<TestItemWithSeparator, any> = {
+            items,
+            "getItemComponent": mockGetItemComponent,
+            "isItemFocusable": mockIsItemFocusable,
+            getItemKey,
+            "role": "grid",
+            "aria-rowcount": items.length,
+            "aria-colcount": 1,
+            ...extraProps,
+        };
+        return <FlatVirtualizedList {...props} />;
+    },
+
+    setupDefaultMock(mockGetItemComponent, _getItems) {
+        mockGetItemComponent.mockImplementation(
+            (index: number, item: TestItemWithSeparator, context: VirtualizedListContext<any>) =>
+                renderItemElement(index, item, context),
+        );
+    },
+
+    setupClickTestMock(mockGetItemComponent, mockOnClick, _getItems) {
+        mockGetItemComponent.mockImplementation(
+            (
+                index: number,
+                item: TestItemWithSeparator,
+                context: VirtualizedListContext<any>,
+                onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+            ) => renderClickableItemElement(index, item, context, onFocus, () => mockOnClick(item)),
+        );
+    },
+};
+
+const groupedVariant: ListTestVariant = {
+    name: "GroupedVirtualizedList",
+
+    createComponent(items, mockGetItemComponent, mockIsItemFocusable, extraProps = {}) {
+        const props: GroupedVirtualizedListProps<TestItemWithSeparator, any> = {
+            "groups": [items],
+            "getItemComponent": mockGetItemComponent,
+            "getGroupHeaderComponent": (groupIndex: number) => (
+                <div className="mx_group_header" data-testid={`group-header-${groupIndex}`}>
+                    Group {groupIndex}
+                </div>
+            ),
+            "isItemFocusable": mockIsItemFocusable,
+            getItemKey,
+            "role": "grid",
+            "aria-rowcount": items.length,
+            "aria-colcount": 1,
+            ...extraProps,
+        };
+        return <GroupedVirtualizedList {...props} />;
+    },
+
+    setupDefaultMock(mockGetItemComponent, getItems) {
+        mockGetItemComponent.mockImplementation(
+            (index: number, context: VirtualizedListContext<any>, _onFocus: unknown) => {
+                const item = getItems()[index];
+                return renderItemElement(index, item, context);
+            },
+        );
+    },
+
+    setupClickTestMock(mockGetItemComponent, mockOnClick, getItems) {
+        mockGetItemComponent.mockImplementation(
+            (
+                index: number,
+                context: VirtualizedListContext<any>,
+                onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+            ) => {
+                const item = getItems()[index];
+                return renderClickableItemElement(index, item, context, onFocus, () => mockOnClick(item));
+            },
+        );
+    },
+};
+
+// ─── Shared test suite ───────────────────────────────────────────────────────
+
+const virtuosoWrapper = ({ children }: PropsWithChildren): React.JSX.Element => (
+    <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
+        {children}
+    </VirtuosoMockContext.Provider>
+);
+
+describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant) => {
     const mockGetItemComponent = vi.fn();
     const mockIsItemFocusable = vi.fn();
 
@@ -40,46 +198,30 @@ describe("FlatVirtualizedList", () => {
         { id: "3", name: "Item 3" },
     ];
 
-    const defaultProps: FlatVirtualizedListProps<TestItemWithSeparator, any> = {
-        items: defaultItems,
-        getItemComponent: mockGetItemComponent,
-        isItemFocusable: mockIsItemFocusable,
-        getItemKey: (item) => (typeof item === "string" ? item : item.id),
-    };
+    /** Tracks whichever items were most recently passed to render / rerender,
+     *  so the grouped variant's mock can look them up by index. */
+    let currentItems: TestItemWithSeparator[] = defaultItems;
 
     const getListComponent = (
-        props: Partial<FlatVirtualizedListProps<TestItemWithSeparator, any>> = {},
+        items: TestItemWithSeparator[],
+        extraProps: Record<string, unknown> = {},
     ): React.JSX.Element => {
-        const mergedProps = { ...defaultProps, ...props };
-        return (
-            <FlatVirtualizedList {...mergedProps} role="grid" aria-rowcount={props.items?.length} aria-colcount={1} />
-        );
+        currentItems = items;
+        return variant.createComponent(items, mockGetItemComponent, mockIsItemFocusable, extraProps);
     };
 
     const renderListWithHeight = (
-        props: Partial<FlatVirtualizedListProps<TestItemWithSeparator, any>> = {},
+        overrides: { items?: TestItemWithSeparator[] } & Record<string, unknown> = {},
     ): ReturnType<typeof render> => {
-        const mergedProps = { ...defaultProps, ...props };
-        return render(getListComponent(mergedProps), {
-            wrapper: ({ children }: PropsWithChildren) => (
-                <VirtuosoMockContext.Provider value={{ viewportHeight: 400, itemHeight: 56 }}>
-                    <>{children}</>
-                </VirtuosoMockContext.Provider>
-            ),
-        });
+        const { items: overrideItems, ...extraProps } = overrides;
+        const items = overrideItems ?? defaultItems;
+        return render(getListComponent(items, extraProps), { wrapper: virtuosoWrapper });
     };
 
     beforeEach(() => {
         vi.clearAllMocks();
-        mockGetItemComponent.mockImplementation((index: number, item: TestItemWithSeparator, context: any) => {
-            const itemKey = typeof item === "string" ? item : item.id;
-            const isFocused = context.tabIndexKey === itemKey;
-            return (
-                <div className="mx_item" data-testid={`row-${index}`} tabIndex={isFocused ? 0 : -1} role="gridcell">
-                    {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
-                </div>
-            );
-        });
+        currentItems = defaultItems;
+        variant.setupDefaultMock(mockGetItemComponent, () => currentItems);
         mockIsItemFocusable.mockImplementation((item: TestItemWithSeparator) => item !== SEPARATOR_ITEM);
     });
 
@@ -257,9 +399,9 @@ describe("FlatVirtualizedList", () => {
             expectTabIndex(items[2], "0"); // Should have moved to third item (skipping separator)
         });
 
-        it("should skip non-focusable items when navigating down", async () => {
+        it("should skip non-focusable items when navigating down", () => {
             // Create items where every other item is not focusable
-            const mixedItems = [
+            const mixedItems: TestItemWithSeparator[] = [
                 { id: "1", name: "Item 1", isFocusable: true },
                 { id: "2", name: "Item 2", isFocusable: false },
                 { id: "3", name: "Item 3", isFocusable: true },
@@ -287,7 +429,7 @@ describe("FlatVirtualizedList", () => {
         });
 
         it("should skip non-focusable items when navigating up", () => {
-            const mixedItems = [
+            const mixedItems: TestItemWithSeparator[] = [
                 { id: "1", name: "Item 1", isFocusable: true },
                 SEPARATOR_ITEM,
                 { id: "2", name: "Item 2", isFocusable: false },
@@ -342,7 +484,7 @@ describe("FlatVirtualizedList", () => {
 
             // Verify item 2 is focused
             let items = container.querySelectorAll(".mx_item");
-            expectTabIndex(items[2], "0"); // ArrowDown skips to item 2
+            expectTabIndex(items[2], "0"); // ArrowDown skips separator
 
             // Simulate blur by focusing elsewhere
             fireEvent.blur(container);
@@ -370,41 +512,14 @@ describe("FlatVirtualizedList", () => {
 
         it("should not scroll to top when clicking an item after manual scroll", () => {
             // Create a larger list to enable meaningful scrolling
-            const largerItems = Array.from({ length: 50 }, (_, i) => ({
+            const largerItems: TestItemWithSeparator[] = Array.from({ length: 50 }, (_, i) => ({
                 id: `item-${i}`,
                 name: `Item ${i}`,
             }));
 
             const mockOnClick = vi.fn();
 
-            mockGetItemComponent.mockImplementation(
-                (
-                    index: number,
-                    item: TestItemWithSeparator,
-                    context: any,
-                    onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
-                ) => {
-                    const itemKey = typeof item === "string" ? item : item.id;
-                    const isFocused = context.tabIndexKey === itemKey;
-                    return (
-                        <div
-                            className="mx_item"
-                            data-testid={`row-${index}`}
-                            tabIndex={isFocused ? 0 : -1}
-                            role="button"
-                            onClick={() => mockOnClick(item)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                    mockOnClick(item);
-                                }
-                            }}
-                            onFocus={(e) => onFocus(item, e)}
-                        >
-                            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
-                        </div>
-                    );
-                },
-            );
+            variant.setupClickTestMock(mockGetItemComponent, mockOnClick, () => currentItems);
 
             const { container } = renderListWithHeight({ items: largerItems });
             const listContainer = screen.getByRole("grid");
@@ -433,11 +548,10 @@ describe("FlatVirtualizedList", () => {
             // Find a visible item to click on (should be items from further down the list)
             const visibleItems = container.querySelectorAll(".mx_item");
             expect(visibleItems.length).toBeGreaterThan(0);
-            const clickTargetItem = visibleItems[0]; // Click on the first visible item
+            const clickTargetItem = visibleItems[0];
 
             // Click on the visible item
             fireEvent.click(clickTargetItem);
-
             // The click should trigger the onFocus callback, which updates the tabIndexKey
             // This simulates the real user interaction where clicking an item focuses it
             fireEvent.focus(clickTargetItem);
@@ -471,17 +585,11 @@ describe("FlatVirtualizedList", () => {
             let container = screen.getByRole("grid");
             expectAttribute(container, "aria-rowcount", "4");
 
-            // Update with fewer items
-            const fewerItems = [
+            const fewerItems: TestItemWithSeparator[] = [
                 { id: "1", name: "Item 1" },
                 { id: "2", name: "Item 2" },
             ];
-            rerender(
-                getListComponent({
-                    ...defaultProps,
-                    items: fewerItems,
-                }),
-            );
+            rerender(getListComponent(fewerItems));
 
             container = screen.getByRole("grid");
             expectAttribute(container, "aria-rowcount", "2");
@@ -539,7 +647,7 @@ describe("FlatVirtualizedList", () => {
             );
 
             return render(
-                <VirtualizedList
+                <FlatVirtualizedList
                     items={largeItems}
                     getItemComponent={mockGetItemComponent}
                     isItemFocusable={mockIsItemFocusable}
