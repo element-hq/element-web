@@ -266,6 +266,17 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
             }
 
             if (handled) {
+                // If a child element (e.g. a button) currently has DOM focus rather than the
+                // scroller itself, move focus to the scroller before the scroll takes effect.
+                // Without this, when Virtuoso unmounts the focused child because it has been
+                // scrolled out of the visible range, the browser moves focus to <body> and
+                // subsequent keyboard events no longer reach this handler.
+                if (virtuosoDomRef.current instanceof HTMLElement) {
+                    const activeEl = document.activeElement;
+                    if (activeEl && activeEl !== virtuosoDomRef.current && virtuosoDomRef.current.contains(activeEl)) {
+                        virtuosoDomRef.current.focus({ preventScroll: true });
+                    }
+                }
                 e.stopPropagation();
                 e.preventDefault();
             } else {
