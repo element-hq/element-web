@@ -16,7 +16,7 @@ WS_PORT=3000
 
 # Check the playwright version
 PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
-IMAGE_NAME="ghcr.io/element-web/playwright-server:$PW_VERSION"
+IMAGE_NAME="ghcr.io/element-hq/element-web/playwright-server:$PW_VERSION"
 
 # Pull the image, failing that build the image
 docker pull "$IMAGE_NAME" 2>/dev/null || build_image "$IMAGE_NAME"
