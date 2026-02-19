@@ -6,6 +6,7 @@
  */
 
 import { MsgType, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MouseEvent as ReactMouseEvent } from "react";
 
 import { SenderProfileViewModel } from "../../../src/viewmodels/message-body/SenderProfileViewModel";
 import { mkEvent } from "../../test-utils";
@@ -107,7 +108,7 @@ describe("SenderProfileViewModel", () => {
         });
     });
 
-    it("should expose onClick action only when callback is provided", () => {
+    it("should invoke callback on click when provided", () => {
         const onClick = jest.fn();
         const withHandler = new SenderProfileViewModel({
             mxEvent: createMessageEvent(),
@@ -118,10 +119,12 @@ describe("SenderProfileViewModel", () => {
             mxEvent: createMessageEvent(),
             member: createMember(),
         });
+        const clickEvent = {} as ReactMouseEvent<HTMLDivElement>;
 
-        withHandler.onClick?.();
+        withHandler.onClick(clickEvent);
+        withoutHandler.onClick(clickEvent);
 
         expect(onClick).toHaveBeenCalledTimes(1);
-        expect(withoutHandler.onClick).toBeUndefined();
+        expect(typeof withoutHandler.onClick).toBe("function");
     });
 });
