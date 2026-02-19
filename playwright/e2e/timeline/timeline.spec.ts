@@ -1009,7 +1009,12 @@ test.describe("Timeline", () => {
             await expect(page.locator("video")).not.toBeVisible();
         });
 
-        test("should insert a mention when clicking sender profile in timeline", async ({ page, app, homeserver, room }) => {
+        test("should insert a mention when clicking sender profile in timeline", async ({
+            page,
+            app,
+            homeserver,
+            room,
+        }) => {
             const senderDisplayName = "SenderBot";
             const messageFromSender = "message from sender";
 
