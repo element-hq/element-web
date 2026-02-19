@@ -161,7 +161,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
             return (
                 <Banner type="critical" role="status" aria-labelledby={bannerTitleId}>
                     <div className={styles.container}>
-                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="medium">
                             {_t("room|status_bar|server_connectivity_lost_title")}
                         </Text>
                         <Text className={styles.description}>
@@ -192,7 +192,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     }
                 >
                     <div className={styles.container}>
-                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="medium">
                             {_t("room|status_bar|requires_consent_agreement_title")}
                         </Text>
                     </div>
@@ -220,7 +220,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     }
                 >
                     <div className={styles.container}>
-                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="medium">
                             {{
                                 monthly_active_user: _t("room|status_bar|monthly_user_limit_reached_title"),
                                 hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
@@ -250,7 +250,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         </Button>
                     }
                 >
-                    <Text className={styles.title} id={bannerTitleId} weight="semibold">
+                    <Text className={styles.title} id={bannerTitleId} weight="medium">
                         {_t("room|status_bar|failed_to_create_room_title")}
                     </Text>
                 </Banner>
@@ -268,9 +268,10 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                 {vm.onDeleteAllClick && (
                                     <Button
                                         size="sm"
-                                        kind="destructive"
+                                        kind="secondary"
                                         Icon={DeleteIcon}
                                         disabled={snapshot.isResending}
+                                        className={styles.secondaryAction}
                                         onClick={deleteAllClick}
                                     >
                                         {_t("room|status_bar|delete_all")}
@@ -294,7 +295,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     aria-labelledby={bannerTitleId}
                 >
                     <div className={styles.container}>
-                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="medium">
                             {_t("room|status_bar|some_messages_not_sent")}
                         </Text>
                         <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>

@@ -6,6 +6,10 @@
     }
 }
 
+.secondaryAction svg {
+    color: var(--cpd-color-text-secondary) !important;
+}
+
 .primaryAction svg {
     color: var(--cpd-color-text-on-solid-primary) !important;
 }
