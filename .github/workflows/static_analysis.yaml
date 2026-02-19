@@ -19,8 +19,30 @@ env:
 permissions: {} # No permissions required
 
 jobs:
-    ts_lint:
-        name: "Typescript Syntax Check"
+    lint:
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: Typescript Syntax Check
+                      install: layered
+                      command: "lint:types"
+                    - name: ESLint
+                      install: normal
+                      command: "lint:js"
+                    - name: Style Lint
+                      install: normal
+                      command: "lint:style"
+                    - name: Workflow Lint
+                      install: normal
+                      command: "lint:workflows"
+                    - name: Analyse Dead Code
+                      install: normal
+                      command: "lint:knip"
+                    - name: Rethemendex Check
+                      command: "rethemendex"
+                      assert-diff: true
+        name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -31,130 +53,56 @@ jobs:
                   cache: "pnpm"
                   node-version: "lts/*"
 
-            - name: Install Dependencies
+            - name: Install Dependencies (layered)
+              if: matrix.install == 'layered'
               run: "./scripts/layered.sh"
+            - name: Install Dependencies (normal)
+              if: matrix.install == 'normal'
+              run: "pnpm install --frozen-lockfile"
 
-            - name: Typecheck
-              run: "pnpm run lint:types"
+            - name: Run ${{ matrix.command }}
+              run: pnpm run "$CMD" && pnpm -r --if-present run "$CMD"
+              env:
+                  CMD: ${{ matrix.command }}
 
-            - name: Typecheck Shared Components
-              run: "pnpm --dir packages/shared-components run lint:types"
+            - name: Assert no changes
+              run: git diff --exit-code
+              if: matrix.assert-diff
 
-    i18n_lint_ew:
-        name: "i18n Check (Element Web)"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@abf186831e2acb3e98fca13a0711a3fa1364d2b1
+    i18n:
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: Element Web
+                      allowed-hardcoded-keys: |
+                          console_dev_note
+                          labs|element_call_video_rooms
+                          labs|feature_disable_call_per_sender_encryption
+                          voip|element_call
+                          error|invalid_json
+                          error|misconfigured
+                          welcome_to_element
+                          devtools|settings|elementCallUrl
+                          labs|sliding_sync_description
+                          settings|voip|noise_suppression_description
+                          settings|voip|echo_cancellation_description
+                    - name: Shared Components
+                      path: "packages/shared-components"
+        name: "i18n Check (${{ matrix.name }})"
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         permissions:
             pull-requests: read
         with:
             hardcoded-words: "Element"
             packageManager: pnpm
-            allowed-hardcoded-keys: |
-                console_dev_note
-                labs|element_call_video_rooms
-                labs|feature_disable_call_per_sender_encryption
-                voip|element_call
-                error|invalid_json
-                error|misconfigured
-                welcome_to_element
-                devtools|settings|elementCallUrl
-                labs|sliding_sync_description
-                settings|voip|noise_suppression_description
-                settings|voip|echo_cancellation_description
+            path: ${{ matrix.path }}
+            allowed-hardcoded-keys: ${{ matrix.allowed-hardcoded-keys }}
 
-    i18n_lint_shared_components:
-        name: "i18n Check (Shared Components)"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@abf186831e2acb3e98fca13a0711a3fa1364d2b1
-        permissions:
-            pull-requests: read
-        with:
-            path: "packages/shared-components"
-            hardcoded-words: "Element"
-            packageManager: pnpm
-
-    rethemendex_lint:
-        name: "Rethemendex Check"
+    # Dummy job to simplify branch protections
+    ci:
+        name: Static Analysis
+        needs: [lint, i18n]
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
-            - run: ./res/css/rethemendex.sh
-
-            - run: git diff --exit-code
-
-    js_lint:
-        name: "ESLint"
-        runs-on: ubuntu-24.04
-        steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-              with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            # Does not need branch matching as only analyses this layer
-            - name: Install Deps
-              run: "pnpm install --frozen-lockfile"
-
-            - name: Run Linter
-              run: "pnpm run lint:js"
-
-            - name: Run Linter
-              run: "pnpm --dir packages/shared-components run lint:js"
-
-    style_lint:
-        name: "Style Lint"
-        runs-on: ubuntu-24.04
-        steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-              with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            # Does not need branch matching as only analyses this layer
-            - name: Install Deps
-              run: "pnpm install"
-
-            - name: Run Linter
-              run: "pnpm run lint:style"
-
-    workflow_lint:
-        name: "Workflow Lint"
-        runs-on: ubuntu-24.04
-        steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-              with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            # Does not need branch matching as only analyses this layer
-            - name: Install Deps
-              run: "pnpm install --frozen-lockfile"
-
-            - name: Run Linter
-              run: "pnpm lint:workflows"
-
-    analyse_dead_code:
-        name: "Analyse Dead Code"
-        runs-on: ubuntu-24.04
-        steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-              with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            - name: Install Deps
-              run: "pnpm install --frozen-lockfile"
-
-            - name: Run linter
-              run: "pnpm run lint:knip"
+            - run: echo "Ok"
