@@ -25,7 +25,7 @@ export const ANNOTATION = "_screenshot";
 class StaleScreenshotReporter implements Reporter {
     private readonly snapshotRoots = new Set<string>();
     private readonly screenshots = new Set<string>();
-    private failing = false;
+    private readonly failing = new Set<string>();
     private success = true;
 
     public onBegin(config: FullConfig): void {
@@ -36,8 +36,11 @@ class StaleScreenshotReporter implements Reporter {
 
     public onTestEnd(test: TestCase): void {
         if (!test.ok()) {
-            this.failing = true;
+            this.failing.add(test.id);
+            return;
         }
+        this.failing.delete(test.id); // delete if passed on re-run
+
         for (const annotation of test.annotations) {
             if (annotation.type === ANNOTATION && annotation.description) {
                 this.screenshots.add(annotation.description);
@@ -54,7 +57,10 @@ class StaleScreenshotReporter implements Reporter {
     }
 
     public async onExit(): Promise<void> {
-        if (this.failing) return;
+        if (this.failing.size) {
+            console.error(`${this.failing.size} tests failed, skipping stale screenshot reporter.`);
+        }
+
         if (!this.snapshotRoots.size) {
             this.error("No snapshot directories found, did you set the snapshotDir in your Playwright config?", "");
             return;
