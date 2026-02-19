@@ -221,8 +221,7 @@ test.describe("Message url previews", () => {
         },
     });
     test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room }) => {
-        // TODO: This should be changed to _matrix/client/v1/media/preview_url when the matrix-js-sdk is updated.
-        await page.route("**/_matrix/media/v3/preview_url**", (route, request) => {
+        await page.route("**/_matrix/client/v1/media/preview_url**", (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
@@ -238,8 +237,7 @@ test.describe("Message url previews", () => {
     });
     test("should render a preview with a thumbnail", { tag: "@screenshot" }, async ({ page, user, bot, app, room }) => {
         const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
-        // TODO: This should be changed to _matrix/client/v1/media/preview_url when the matrix-js-sdk is updated.
-        await page.route("**/_matrix/media/v3/preview_url**", (route, request) => {
+        await page.route("**/_matrix/client/v1/media/preview_url**", (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
             expect(requestedPage).toEqual("https://example.org/");
             return route.fulfill({
