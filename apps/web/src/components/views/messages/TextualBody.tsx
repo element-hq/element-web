@@ -13,6 +13,7 @@ import {
     type UrlPreviewViewSnapshotPreview,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
+
 import EventContentBody from "./EventContentBody.tsx";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";

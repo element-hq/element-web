@@ -3,6 +3,7 @@
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
+        "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
         "edit": "Edit",
@@ -177,7 +178,14 @@
             "unsupported": "The encryption used by this room isn't supported."
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
-        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "url_preview": {
+            "close": "Close preview",
+            "show_n_more": {
+                "one": "Show %(count)s other preview",
+                "other": "Show %(count)s other previews"
+            }
+        }
     },
     "widget": {
         "context_menu": {
