@@ -53,13 +53,6 @@ jobs:
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
-            # Not all the jobs need depenencies so sometimes there is nothing to cache,
-            # in which case setup-node's post run cache job fails the whole job, so make
-            # the cache directory.
-            - name: Verify PNPM Cache Directory
-              run: |
-                  PNPM_STORE_PATH="$( pnpm store path --silent )"
-                  [ -d "$PNPM_STORE_PATH" ] || mkdir -vp "$PNPM_STORE_PATH"
 
             - name: Install Dependencies (layered)
               if: matrix.install == 'layered'
