@@ -171,7 +171,7 @@ describe("ThreadPanel", () => {
 
         function findEvents(container: HTMLElement): EventData[] {
             return Array.from(container.querySelectorAll(".mx_EventTile")).map((el) => {
-                const sender = el.querySelector(".mx_DisambiguatedProfile_displayName")?.textContent ?? null;
+                const sender = el.querySelector(".mx_DisambiguatedProfile span[dir='auto']")?.textContent ?? null;
                 const content = el.querySelector(".mx_EventTile_body")?.textContent ?? null;
                 return { sender, content };
             });
