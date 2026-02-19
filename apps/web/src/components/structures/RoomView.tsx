@@ -270,7 +270,7 @@ export interface IRoomState {
     showAvatarChanges: boolean;
     showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
-    showUrlPreview?: boolean;
+    showUrlPreview: boolean;
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     hasPinnedWidgets?: boolean;

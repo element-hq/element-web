@@ -27,6 +27,7 @@ export interface UrlPreviewViewModelProps {
     client: MatrixClient;
     mxEvent: MatrixEvent;
     mediaVisible: boolean;
+    visible: boolean;
     onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
 }
 
@@ -59,14 +60,37 @@ function getTitleFromOpenGraph(response: IPreviewUrlResponse, link: string): str
     return link;
 }
 
+export enum PreviewVisibility {
+    /**
+     * Preview is entirely hidden from view and can not be changed.
+     */
+    Hidden,
+    /**
+     * Preview is entirely hidden from view but the user may change this.
+     */
+    UserHidden,
+    /**
+     * Preview is visible but media should not be rendered.
+     */
+    MediaHidden,
+    /**
+     * Preview is visible and media should be rendered.
+     */
+    Visible,
+}
+
 /**
- * ViewModel for fetching and rendering room previews.
+ * ViewModel for fetching and rendering URL previews for an individual event.
  */
 export class UrlPreviewViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewViewModelProps>
     implements UrlPreviewGroupViewActions
 {
-    private static isLinkPreviewable(node: Element): boolean {
+    /**
+     * Determine if an anchor element can be rendered into a preview.
+     * @param node The anchor element DOM node.
+     */
+    private static isLinkPreviewable(node: HTMLAnchorElement): boolean {
         // don't try to preview relative links
         const href = node.getAttribute("href");
         if (!href || !URL.canParse(href)) {
@@ -102,13 +126,18 @@ export class UrlPreviewViewModel
         }
     }
 
+    /**
+     * Calculate the set of links from a set of DOM nodes.
+     * @param nodes An array of DOM elements that may be or contain anchor elements.
+     * @returns A unique array of links that can be previewed, in order of discovery.
+     */
     private static findLinks(nodes: ArrayLike<Element>): string[] {
         let links = new Set<string>();
 
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href")) {
-                if (this.isLinkPreviewable(node)) {
+                if (this.isLinkPreviewable(node as HTMLAnchorElement)) {
                     links.add(node.getAttribute("href")!);
                 }
             } else if (node.tagName === "PRE" || node.tagName === "CODE" || node.tagName === "BLOCKQUOTE") {
@@ -120,6 +149,13 @@ export class UrlPreviewViewModel
         return [...links];
     }
 
+    /**
+     * Fetch a complete preview of a given URL.
+     * Will always return a cached response if it was previously calculated.
+     * @param link A URL to be previewed.
+     * @returns A Promise that returns the snapshot needed to render the preview, or null
+     * if the resource could not be previewed.
+     */
     private async fetchPreview(link: string): Promise<UrlPreviewViewSnapshotPreview | null> {
         const cached = this.previewCache.get(link);
         if (cached) {
@@ -131,12 +167,14 @@ export class UrlPreviewViewModel
             const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
             // Ensure we have something relevant to render.
             // The title must not just be the link, or we must have an image.
-            if (title === link || !hasImage) {
+            if (title === link && !hasImage) {
                 return null;
             }
 
             const media =
-                typeof preview["og:image"] === "string" ? mediaFromMxc(preview["og:image"], this.client) : undefined;
+                typeof preview["og:image"] === "string" && this.visibility >= PreviewVisibility.MediaHidden
+                    ? mediaFromMxc(preview["og:image"], this.client)
+                    : undefined;
             const needsTooltip = link !== title && PlatformPeg.get()?.needsUrlTooltips();
 
             // TODO: Magic numbers
@@ -168,11 +206,7 @@ export class UrlPreviewViewModel
                     : undefined,
             } satisfies UrlPreviewViewSnapshotPreview;
             this.previewCache.set(link, result);
-            return {
-                ...result,
-                // We still want to cache the media in case it's enabled, but exclude from the snapshot.
-                image: this.mediaVisible ? result.image : undefined,
-            };
+            return result;
         } catch (error) {
             if (error instanceof MatrixError && error.httpStatus === 404) {
                 // Quieten 404 Not found errors, not all URLs can have a preview generated
@@ -184,33 +218,61 @@ export class UrlPreviewViewModel
         return null;
     }
 
-    private eventSendTime: number;
-    private limitPreviews = true;
-    private mediaVisible: boolean;
     private readonly client: MatrixClient;
     private readonly storageKey: string;
+    private readonly eventSendTime: number;
     private readonly useCompactLayoutSettingWatcher: string;
+
+    /**
+     * Should the URL preview render according to the application.
+     */
+    private urlPreviewVisible: boolean;
+    /**
+     * Should media be rendered in the preview.
+     */
+    private mediaVisible: boolean;
+    /**
+     * Has the user opted to render this individual preview, or hide it.
+     */
+    private urlPreviewEnabledByUser: boolean;
+
+    /**
+     * Calculated set of links from the provided DOM element.
+     */
     private links: Array<string> = [];
 
+    /**
+     * Should the preview limit how many links are rendered. If `false`, all
+     * links will be rendered.
+     */
+    private limitPreviews = true;
+
+    /**
+     * A cache containing all previously calculated previews.
+     */
     private previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
+
+    /**
+     * Callback for when the image element is clicked on.
+     */
     private readonly onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
 
     public constructor(props: UrlPreviewViewModelProps) {
         const storageKey = `hide_preview_${props.mxEvent.getId()}`;
-        const showUrlPreview = window.localStorage.getItem(storageKey) !== "1";
         super(props, {
             previews: [],
-            hidden: !showUrlPreview,
             totalPreviewCount: 0,
             previewsLimited: true,
             overPreviewLimit: false,
             compactLayout: SettingsStore.getValue("useCompactLayout"),
         });
+        this.urlPreviewEnabledByUser = global.localStorage.getItem(storageKey) !== "1";
+        this.urlPreviewVisible = props.visible;
+        this.mediaVisible = props.mediaVisible;
         this.storageKey = storageKey;
         this.client = props.client;
         this.eventSendTime = props.mxEvent.getTs();
         this.onImageClicked = props.onImageClicked;
-        this.mediaVisible = props.mediaVisible;
         this.useCompactLayoutSettingWatcher = SettingsStore.watchSetting(
             "useCompactLayout",
             null,
@@ -227,50 +289,105 @@ export class UrlPreviewViewModel
         SettingsStore.unwatchSetting(this.useCompactLayoutSettingWatcher);
     }
 
+    /**
+     * Get the visibility for the preview based on the the internal
+     * and external state.
+     */
+    private get visibility(): PreviewVisibility {
+        if (!this.urlPreviewVisible) {
+            return PreviewVisibility.Hidden;
+        } else if (!this.urlPreviewEnabledByUser) {
+            return PreviewVisibility.UserHidden;
+        } else if (!this.mediaVisible) {
+            return PreviewVisibility.MediaHidden;
+        }
+        return PreviewVisibility.Visible;
+    }
+
     private async computeSnapshot(): Promise<void> {
-        const previews = await Promise.all(
-            this.links
-                .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetchPreview(link)),
-        );
+        const previews =
+            this.visibility <= PreviewVisibility.UserHidden
+                ? []
+                : await Promise.all(
+                      this.links
+                          .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                          .map((link) => this.fetchPreview(link)),
+                  );
         this.snapshot.merge({
             previews: previews.filter((m) => !!m),
             totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
         });
+        console.log("SNAPSHOT", this.visibility, previews, this.snapshot.current);
     }
 
-    public updateEventElement(eventElement: HTMLDivElement): void {
+    /**
+     * Trigger a recalculation of the links in an event.
+     * @param eventElement
+     */
+    public updateEventElement(eventElement: HTMLDivElement): Promise<void> {
         this.links = UrlPreviewViewModel.findLinks([eventElement]);
-        if (!this.snapshot.current.hidden) {
-            void this.computeSnapshot();
-        }
+        return this.computeSnapshot();
     }
 
+    /**
+     * Update the view model about the status of whether the event should be
+     * viewable.
+     * @param urlPreviewVisible Whether URL previews are hidden for this room.
+     * @param mediaVisible Whether media is hidden for this room or event.
+     */
+    public updateHidden(urlPreviewVisible: boolean, mediaVisible: boolean): void {
+        this.urlPreviewVisible = urlPreviewVisible;
+        this.mediaVisible = mediaVisible;
+        // Changing the visibility here means we need to clear cache as we may need to load
+        // the media again.
+        this.previewCache.clear();
+        void this.computeSnapshot();
+    }
+
+    /**
+     * Called when the user has requsted previews be visible. The provided
+     * props `urlPreviewVisible` state will always override this.
+     */
     public readonly onShowClick = (): void => {
-        this.snapshot.merge({
-            hidden: false,
-        });
         // FIXME: persist this somewhere smarter than local storage
+        this.urlPreviewEnabledByUser = true;
         global.localStorage?.removeItem(this.storageKey);
+        void this.computeSnapshot();
     };
 
+    /**
+     * Called when the user has requsted previews be hidden. Will take precedence
+     * over other settings.
+     */
     public readonly onHideClick = (): void => {
-        this.snapshot.merge({
-            hidden: true,
-        });
         // FIXME: persist this somewhere smarter than local storage
         global.localStorage?.setItem(this.storageKey, "1");
+        this.urlPreviewEnabledByUser = false;
+        void this.computeSnapshot();
     };
 
+    /**
+     * Called when the user toggle the number of previews visible.
+     */
     public readonly onTogglePreviewLimit = (): void => {
         this.limitPreviews = !this.limitPreviews;
         void this.computeSnapshot();
     };
 
+    /**
+     * Called when the user clicks on the preview thumbnail.
+     */
     public readonly onImageClick = (preview: UrlPreviewViewSnapshotPreview): void => {
         // Render a lightbox.
         this.onImageClicked(preview);
     };
+
+    /**
+     * `true` only when the user has chosen to hide previews.
+     */
+    public get isPreviewHiddenByUser(): boolean {
+        return this.visibility === PreviewVisibility.UserHidden;
+    }
 }

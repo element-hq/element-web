@@ -16,7 +16,6 @@ import { LinkPreview } from "./LinkPreview";
 
 export interface UrlPreviewGroupViewSnapshot {
     previews: Array<UrlPreviewViewSnapshotPreview>;
-    hidden: boolean;
     totalPreviewCount: number;
     previewsLimited: boolean;
     overPreviewLimit: boolean;
@@ -43,8 +42,8 @@ export interface UrlPreviewGroupViewActions {
  */
 export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
-    const { previews, hidden, totalPreviewCount, previewsLimited, overPreviewLimit, compactLayout } = useViewModel(vm);
-    if (hidden) {
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit, compactLayout } = useViewModel(vm);
+    if (previews.length === 0) {
         return null;
     }
 

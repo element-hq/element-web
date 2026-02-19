@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCallback } from "react";
+import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCallback, useEffect } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
     UrlPreviewGroupView,
@@ -89,7 +89,8 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
 
     public getEventTileOps = (): IEventTileOps => ({
         isWidgetHidden: () => {
-            return this.props.urlPreviewViewModel.getSnapshot().hidden ?? false;
+            // This controls whether the Show preview button is visibile.
+            return this.props.urlPreviewViewModel.isPreviewHiddenByUser;
         },
 
         unhideWidget: () => {
@@ -186,17 +187,14 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
     }
 
     public componentDidMount(): void {
-        console.log("url componentDidMount", this.props.mxEvent.getId());
         if (this.contentRef.current) {
-            this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
+            void this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
         }
     }
 
     public componentDidUpdate(): void {
-        console.log("url componentDidUpdate", this.props.mxEvent.getId());
         if (this.contentRef.current && !this.props.editState) {
-            console.log("Updating url preview");
-            this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
+            void this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
         }
     }
 
@@ -349,7 +347,13 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
                 mxEvent: props.mxEvent,
                 mediaVisible: mediaVisible,
                 onImageClicked: onUrlPreviewImageClicked,
+                visible: props.showUrlPreview ?? false,
             }),
     );
+
+    useEffect(() => {
+        vm.updateHidden(props.showUrlPreview ?? false, mediaVisible);
+    }, [vm, props.showUrlPreview, mediaVisible]);
+
     return <InnerTextualBody urlPreviewViewModel={vm} {...props} />;
 }
