@@ -43,7 +43,8 @@ const SenderProfileItem: React.FC<SenderProfileItemProps> = ({ mxEvent }) => {
 
     const vm = useCreateAutoDisposedViewModel(() => new SenderProfileViewModel({ mxEvent, member }));
     useEffect(() => {
-        vm.setProps({ mxEvent, member });
+        vm.setMxEvent(mxEvent);
+        vm.setMember(member);
     }, [mxEvent, member, vm]);
 
     return <SenderProfileView vm={vm} />;

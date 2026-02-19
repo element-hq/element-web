@@ -85,7 +85,7 @@ describe("SenderProfileViewModel", () => {
         expect(vm.getSnapshot().displayIdentifier).toBeUndefined();
     });
 
-    it("should update snapshot when setProps is called", () => {
+    it("should update snapshot when setters are called", () => {
         const vm = new SenderProfileViewModel({
             mxEvent: createMessageEvent(MsgType.Emote),
             member: null,
@@ -94,13 +94,11 @@ describe("SenderProfileViewModel", () => {
         const subscriber = jest.fn();
         vm.subscribe(subscriber);
 
-        vm.setProps({
-            mxEvent: createMessageEvent(MsgType.Text),
-            member: createMember({ rawDisplayName: "Alice Updated" }),
-            withTooltip: true,
-        });
+        vm.setMxEvent(createMessageEvent(MsgType.Text));
+        vm.setMember(createMember({ rawDisplayName: "Alice Updated" }));
+        vm.setWithTooltip(true);
 
-        expect(subscriber).toHaveBeenCalledTimes(1);
+        expect(subscriber).toHaveBeenCalledTimes(3);
         expect(vm.getSnapshot()).toMatchObject({
             isVisible: true,
             displayName: "Alice Updated",
@@ -108,7 +106,7 @@ describe("SenderProfileViewModel", () => {
         });
     });
 
-    it("should invoke callback on click when provided", () => {
+    it("should only call onClick callback when callback is provided", () => {
         const onClick = jest.fn();
         const withHandler = new SenderProfileViewModel({
             mxEvent: createMessageEvent(),
@@ -121,8 +119,8 @@ describe("SenderProfileViewModel", () => {
         });
         const clickEvent = {} as ReactMouseEvent<HTMLDivElement>;
 
-        withHandler.onClick(clickEvent);
-        withoutHandler.onClick(clickEvent);
+        withHandler.onClick?.(clickEvent);
+        withoutHandler.onClick?.(clickEvent);
 
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(typeof withoutHandler.onClick).toBe("function");

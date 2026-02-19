@@ -8,7 +8,8 @@
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import { render, screen } from "@test-utils";
-import { describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 
 import * as stories from "./SenderProfileView.stories";
 
@@ -34,5 +35,15 @@ describe("SenderProfileView", () => {
 
         expect(screen.getByText("@alice:example.org")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
+    });
+
+    it("calls onClick when clicked", async () => {
+        const onClick = vi.fn();
+        const user = userEvent.setup();
+
+        render(<Default onClick={onClick} />);
+        await user.click(screen.getByRole("button", { name: "Alice" }));
+
+        expect(onClick).toHaveBeenCalledTimes(1);
     });
 });

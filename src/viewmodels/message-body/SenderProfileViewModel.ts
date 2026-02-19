@@ -6,7 +6,6 @@
  */
 
 import { MsgType, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
-import { type MouseEvent } from "react";
 import {
     BaseViewModel,
     type SenderProfileViewActions,
@@ -76,12 +75,22 @@ export class SenderProfileViewModel
         super(props, SenderProfileViewModel.computeSnapshot(props));
     }
 
-    public onClick(evt: MouseEvent<HTMLDivElement>): void {
-        this.props.onClick?.(evt);
+    public setMxEvent(mxEvent: MatrixEvent): void {
+        this.props.mxEvent = mxEvent;
+        this.snapshot.set(SenderProfileViewModel.computeSnapshot(this.props));
     }
 
-    public setProps(newProps: Partial<SenderProfileViewModelProps>): void {
-        this.props = { ...this.props, ...newProps };
+    public setMember(member?: RoomMember | null): void {
+        this.props.member = member;
+        this.snapshot.set(SenderProfileViewModel.computeSnapshot(this.props));
+    }
+
+    public onClick: SenderProfileViewActions["onClick"] = (evt): void => {
+        this.props.onClick?.(evt);
+    };
+
+    public setWithTooltip(withTooltip?: boolean): void {
+        this.props.withTooltip = withTooltip;
         this.snapshot.set(SenderProfileViewModel.computeSnapshot(this.props));
     }
 }

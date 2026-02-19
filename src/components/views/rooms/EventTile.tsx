@@ -93,7 +93,7 @@ import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body
 import { SenderProfileViewModel } from "../../../viewmodels/message-body/SenderProfileViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
-import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile.ts";
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 
 interface SenderProfileWrapperProps {
     mxEvent: MatrixEvent;
@@ -112,8 +112,10 @@ const SenderProfileItem: React.FC<SenderProfileWrapperProps> = ({ mxEvent, onCli
         () => new SenderProfileViewModel({ mxEvent, member, onClick, withTooltip }),
     );
     useEffect(() => {
-        vm.setProps({ mxEvent, member, onClick, withTooltip });
-    }, [mxEvent, member, onClick, withTooltip, vm]);
+        vm.setMxEvent(mxEvent);
+        vm.setMember(member);
+        vm.setWithTooltip(withTooltip);
+    }, [mxEvent, member, withTooltip, vm]);
 
     return <SenderProfileView vm={vm} />;
 };
