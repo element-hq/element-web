@@ -49,10 +49,16 @@ jobs:
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-			  if: matrix.install != ''
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
+            # Not all the jobs need depenencies so sometimes there is nothing to cache,
+            # in which case setup-node's post run cache job fails the whole job, so make
+            # the cache directory.
+            - name: Verify PNPM Cache Directory
+              run: |
+                  PNPM_STORE_PATH="$( pnpm store path --silent )"
+                  [ -d "$PNPM_STORE_PATH" ] || mkdir -vp "$PNPM_STORE_PATH"
 
             - name: Install Dependencies (layered)
               if: matrix.install == 'layered'
