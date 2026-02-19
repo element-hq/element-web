@@ -23,7 +23,7 @@
 
 .banner[data-type="critical"] {
     background: var(--cpd-color-gradient-critical-linear);
-    border-color: var(--cpd-color-border-critical-primary);
+    border-color: var(--cpd-color-red-500);
 }
 
 .banner[data-type="info"] {
