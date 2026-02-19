@@ -113,7 +113,7 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
 /**
  * Utility type for the prop scrollIntoViewOnChange allowing it to be memoised by a caller without repeating types
  */
-export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
+export type ScrollIntoViewOnChange<Item, Context> = NonNullable<
     VirtuosoProps<Item, VirtualizedListContext<Context>>["scrollIntoViewOnChange"]
 >;
 
@@ -124,7 +124,7 @@ export type ScrollIntoViewOnChange<Item, Context = any> = NonNullable<
  * @template Item - The type of data items in the list
  * @template Context - The type of additional context data passed to items
  */
-export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
+export function VirtualizedList<Item, Context>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const {
         items,
