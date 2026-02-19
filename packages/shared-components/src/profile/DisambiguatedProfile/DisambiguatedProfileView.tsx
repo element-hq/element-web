@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -51,7 +51,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 /**
@@ -87,34 +87,21 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
         mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
 
-    // Handle keyboard interaction for accessibility if onClick is provided
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
-              }
-          }
-        : undefined;
-
     return (
-        <div
+        <button
+            type="button"
             className={classNames(className, styles.disambiguatedProfile)}
             title={title}
             onClick={vm.onClick}
-            onKeyDown={handleKeyDown}
-            role={vm.onClick ? "button" : undefined}
-            tabIndex={vm.onClick ? 0 : undefined}
+            tabIndex={0}
         >
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
             {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
             {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
-                    {displayIdentifier}
-                </span>
+                <span className={classNames(className, styles.disambiguatedProfile_mxid)}>{displayIdentifier}</span>
             )}
-        </div>
+        </button>
     );
 }

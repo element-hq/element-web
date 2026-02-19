@@ -7,6 +7,7 @@
 
 .disambiguatedProfile {
     overflow: hidden;
+    all: unset;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
