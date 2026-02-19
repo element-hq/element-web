@@ -45,6 +45,12 @@ export default {
         onRetryRoomCreationClick: fn(),
         onTermsAndConditionsClicked: fn(),
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/rTaQE2nIUSLav4Tg3nozq7/Compound-Web-Components?node-id=11019-2353&t=p8SkJGh9tJx09MTJ-4",
+        },
+    },
 } as Meta<typeof RoomStatusBarViewWrapper>;
 
 const Template: StoryFn<typeof RoomStatusBarViewWrapper> = (args) => <RoomStatusBarViewWrapper {...args} />;

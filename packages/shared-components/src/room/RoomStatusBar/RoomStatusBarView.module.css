@@ -6,6 +6,14 @@
     }
 }
 
+.primaryAction svg {
+    color: var(--cpd-color-text-on-solid-primary) !important;
+}
+
+.title {
+    color: var(--cpd-color-text-critical-primary);
+}
+
 .description {
     color: var(--cpd-color-text-secondary);
 }

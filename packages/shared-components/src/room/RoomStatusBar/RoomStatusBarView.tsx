@@ -161,7 +161,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
             return (
                 <Banner type="critical" role="status" aria-labelledby={bannerTitleId}>
                     <div className={styles.container}>
-                        <Text id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|server_connectivity_lost_title")}
                         </Text>
                         <Text className={styles.description} size="sm">
@@ -179,7 +179,8 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     actions={
                         <Button
                             onClick={termsAndConditionsClicked}
-                            kind="secondary"
+                            className={styles.primaryAction}
+                            kind="primary"
                             size="sm"
                             as="a"
                             href={snapshot.consentUri}
@@ -191,7 +192,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     }
                 >
                     <div className={styles.container}>
-                        <Text id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|requires_consent_agreement_title")}
                         </Text>
                     </div>
@@ -219,7 +220,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     }
                 >
                     <div className={styles.container}>
-                        <Text id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
                             {{
                                 monthly_active_user: _t("room|status_bar|monthly_user_limit_reached_title"),
                                 hs_disabled: _t("room|status_bar|homeserver_blocked_title"),
@@ -240,8 +241,8 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     actions={
                         <Button
                             size="sm"
-                            kind="secondary"
-                            className={styles.container}
+                            kind="primary"
+                            className={styles.primaryAction}
                             Icon={RestartIcon}
                             onClick={retryRoomCreationClick}
                         >
@@ -249,7 +250,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                         </Button>
                     }
                 >
-                    <Text id={bannerTitleId} weight="semibold" className={styles.container}>
+                    <Text className={styles.title} id={bannerTitleId} weight="semibold">
                         {_t("room|status_bar|failed_to_create_room_title")}
                     </Text>
                 </Banner>
@@ -278,11 +279,11 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                 {vm.onResendAllClick && (
                                     <Button
                                         size="sm"
-                                        kind="secondary"
+                                        kind="primary"
                                         Icon={RestartIcon}
                                         disabled={snapshot.isResending}
                                         onClick={resendClick}
-                                        className={styles.container}
+                                        className={styles.primaryAction}
                                     >
                                         {_t("room|status_bar|retry_all")}
                                     </Button>
@@ -293,7 +294,7 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                     aria-labelledby={bannerTitleId}
                 >
                     <div className={styles.container}>
-                        <Text id={bannerTitleId} weight="semibold">
+                        <Text className={styles.title} id={bannerTitleId} weight="semibold">
                             {_t("room|status_bar|some_messages_not_sent")}
                         </Text>
                         <Text className={styles.description} size="sm">
