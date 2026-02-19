@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -46,7 +46,7 @@ export interface SenderProfileViewActions {
     /**
      * Optional click action for sender profile.
      */
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    onClick: () => void;
 }
 
 export type SenderProfileViewModel = ViewModel<SenderProfileViewSnapshot> & SenderProfileViewActions;
@@ -59,42 +59,29 @@ export function SenderProfileView({ vm }: Readonly<SenderProfileViewProps>): JSX
     const { isVisible, displayName, displayIdentifier, title, colorClass, className, emphasizeDisplayName } =
         useViewModel(vm);
 
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
-              }
-          }
-        : undefined;
-
     if (!isVisible) {
         return <></>;
     }
 
     return (
-        <div
-            className={classNames(styles.senderProfile, className)}
+        <button
+            type="button"
+            className={classNames(className, styles.senderProfile)}
             title={title}
-            onClick={vm.onClick}
-            onKeyDown={handleKeyDown}
-            role={vm.onClick ? "button" : undefined}
-            tabIndex={vm.onClick ? 0 : undefined}
+            tabIndex={0}
+            onClick={() => vm.onClick?.()}
         >
             <span
                 className={classNames(colorClass, {
                     [styles.senderProfile_displayName]: emphasizeDisplayName,
-                    mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
                 })}
                 dir="auto"
             >
                 {displayName}
             </span>
             {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.senderProfile_mxid)}>
-                    {displayIdentifier}
-                </span>
+                <span className={classNames(className, styles.senderProfile_mxid)}>{displayIdentifier}</span>
             )}
-        </div>
+        </button>
     );
 }
