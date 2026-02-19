@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type SyntheticEvent } from "react";
 import classNames from "classnames";
+import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -433,12 +434,9 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     />
                     {forgotPasswordJsx}
                     {!this.props.busy && (
-                        <input
-                            className="mx_Login_submit"
-                            type="submit"
-                            value={_t("action|sign_in")}
-                            disabled={this.props.disableSubmit}
-                        />
+                        <Button className="mx_Login_submit" size="sm" type="submit" disabled={this.props.disableSubmit}>
+                            {_t("action|sign_in")}
+                        </Button>
                     )}
                 </form>
             </div>

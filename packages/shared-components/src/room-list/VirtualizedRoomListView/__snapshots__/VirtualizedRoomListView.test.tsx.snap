@@ -39,7 +39,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView selected bold mx_RoomListItemView_selected"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -188,7 +188,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -310,7 +310,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -438,7 +438,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView bold"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -560,7 +560,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -688,7 +688,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -833,7 +833,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView bold"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -961,7 +961,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -1083,7 +1083,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >
@@ -1211,7 +1211,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 class="flex roomListItem mx_RoomListItemView bold"
                 data-state="closed"
                 role="option"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 tabindex="-1"
                 type="button"
               >

@@ -482,7 +482,6 @@
         "email_address": "Email address",
         "emoji": "Emoji",
         "encrypted": "Encrypted",
-        "encryption_enabled": "Encryption enabled",
         "error": "Error",
         "faq": "FAQ",
         "favourites": "Favourites",
@@ -3460,16 +3459,6 @@
             "see_older_messages": "Click here to see older messages.",
             "unknown_predecessor": "Can't find the old version of this room (room ID: %(roomId)s), and we have not been provided with 'via_servers' to look for it.",
             "unknown_predecessor_guess_server": "Can't find the old version of this room (room ID: %(roomId)s), and we have not been provided with 'via_servers' to look for it. It's possible that guessing the server from the room ID will work. If you want to try, click this link:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignored attempt to disable encryption",
-            "disabled": "Encryption not enabled",
-            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
-            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
-            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
-            "parameters_changed": "Some encryption parameters have been changed.",
-            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
-            "unsupported": "The encryption used by this room isn't supported."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s has allowed guests to join the room.",
