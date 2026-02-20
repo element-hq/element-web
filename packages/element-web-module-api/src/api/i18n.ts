@@ -41,19 +41,19 @@ export interface I18nApi {
     /**
      * Register translations for the module, may override app's existing translations
      */
-    register(translations: Partial<Translations>): void;
+    register(this: void, translations: Partial<Translations>): void;
 
     /**
      * Perform a translation, with optional variables
      * @param key - The key to translate
      * @param variables - Optional variables to interpolate into the translation
      */
-    translate(key: keyof Translations, variables?: Variables): string;
+    translate(this: void, key: keyof Translations, variables?: Variables): string;
 
     /**
      * Convert a timestamp into a translated, human-readable time,
      * using the current system time as a reference, eg. "5 minutes ago".
      * @param timeMillis - The time in milliseconds since epoch
      */
-    humanizeTime(timeMillis: number): string;
+    humanizeTime(this: void, timeMillis: number): string;
 }

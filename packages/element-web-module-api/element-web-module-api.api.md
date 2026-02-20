@@ -174,10 +174,10 @@ export interface ExtrasApi {
 
 // @public
 export interface I18nApi {
-    humanizeTime(timeMillis: number): string;
+    humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
-    register(translations: Partial<Translations>): void;
-    translate(key: keyof Translations, variables?: Variables): string;
+    register(this: void, translations: Partial<Translations>): void;
+    translate(this: void, key: keyof Translations, variables?: Variables): string;
 }
 
 // @alpha @deprecated (undocumented)
@@ -445,3 +445,4 @@ export interface WidgetVariablesCustomisations {
 // (No @packageDocumentation comment for this package)
 
 ```
+
