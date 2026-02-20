@@ -30,7 +30,7 @@ export interface DateSeparatorViewSnapshot {
     /**
      * Reference timestamp used to prefill the jump-to-date picker value.
      */
-    jumpToTimstamp?: number;
+    jumpToTimestamp?: number;
     /**
      * Extra CSS classes to apply to the component.
      */

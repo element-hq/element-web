@@ -30,7 +30,7 @@ export interface DateSeparatorDatePickerProps {
  */
 export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = ({ vm, onSubmitted }): JSX.Element => {
     const snapshot = useViewModel(vm);
-    const date = snapshot.jumpToTimstamp ? new Date(snapshot.jumpToTimstamp) : new Date();
+    const date = snapshot.jumpToTimestamp ? new Date(snapshot.jumpToTimestamp) : new Date();
     const dateInputDefaultValue = formatDateForInput(date);
 
     const i18n = useI18n();
@@ -59,10 +59,19 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
     const onCalendarButtonClick = (): void => {
         const input = dateInputRef.current;
         if (!input) return;
+
         input.focus();
-        if ("showPicker" in input) {
-            input.showPicker();
+
+        try {
+            if ("showPicker" in input) {
+                input.showPicker();
+                return;
+            }
+        } catch {
+            // Some browsers can throw if gesture/context is rejected.
         }
+
+        input.click();
     };
 
     const onCalendarButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
@@ -75,7 +84,7 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
         <div data-testid="jump-to-date-picker" className={styles.picker_menuitem}>
             <Root className={styles.picker_form} onSubmit={onJumpToDateSubmit}>
                 <span className={styles.picker_label}>{i18n.translate("room|jump_to_date")}</span>
-                <Field name="jump-to-date" className={styles.picker_input}>
+                <Field name="jump-to-date-field" className={styles.picker_input}>
                     <Label className={styles.picker_input_label} htmlFor={dateInputId}>
                         {i18n.translate("room|jump_to_date_prompt")}
                     </Label>
@@ -101,6 +110,7 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
                         aria-label={i18n.translate("room|jump_to_date")}
                         onClick={onCalendarButtonClick}
                         onKeyDown={onCalendarButtonKeyDown}
+                        data-testid="jump-to-date-show-picker"
                     >
                         <CalendarIcon className={styles.picker_input_calendar_icon} aria-hidden="true" />
                     </button>

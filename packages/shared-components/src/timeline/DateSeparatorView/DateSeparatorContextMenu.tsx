@@ -43,9 +43,9 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
     const onKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
         if (event.key !== "ArrowDown") return;
         event.preventDefault();
-        const input = document.querySelector<HTMLInputElement>(
-            '[data-testid="jump-to-date-picker"] input[type="date"]',
-        );
+
+        const menu = event.currentTarget.closest('[role="menu"]');
+        const input = menu?.querySelector<HTMLInputElement>('input[type="date"]');
         input?.focus();
     };
 

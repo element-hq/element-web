@@ -43,7 +43,7 @@ function renderMenu({
     const vm = new TestDateSeparatorViewModel({
         label: "Today",
         jumpToEnabled,
-        jumpToTimstamp: new Date("2025-01-15T12:00:00.000Z").getTime(),
+        jumpToTimestamp: new Date("2025-01-15T12:00:00.000Z").getTime(),
     });
 
     render(
@@ -113,4 +113,3 @@ describe("DateSeparatorContextMenu", () => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 });
-

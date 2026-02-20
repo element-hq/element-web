@@ -26,7 +26,6 @@ import { UIFeature } from "../../settings/UIFeature";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import BugReportDialog from "../../components/views/dialogs/BugReportDialog";
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
-import JumpToDatePicker from "../../components/views/messages/JumpToDatePicker";
 import { SdkContextClass } from "../../contexts/SDKContext";
 
 export interface DateSeparatorViewModelProps {
@@ -103,10 +102,7 @@ export class DateSeparatorViewModel
             label,
             className: "mx_TimelineSeparator",
             jumpToEnabled: this.jumpToDateEnabled && !this.props.forExport,
-            jumpToDatePicker:
-                this.jumpToDateEnabled && !this.props.forExport ? (
-                    <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
-                ) : undefined,
+            jumpToTimestamp: this.props.ts,
         };
     }
 
@@ -280,7 +276,8 @@ export class DateSeparatorViewModel
         return Promise.resolve();
     };
 
-    private onDatePicked = (dateString: string): void => {
+    public onDatePicked = (dateString: string): Promise<void> => {
         void this.pickDate(dateString);
+        return Promise.resolve();
     };
 }
