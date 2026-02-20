@@ -7,7 +7,6 @@
 
 .disambiguatedProfile {
     overflow: hidden;
-    all: unset;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
@@ -25,4 +24,8 @@
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;
     }
+}
+
+button {
+    all: unset;
 }
