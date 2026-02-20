@@ -483,7 +483,6 @@
         "email_address": "Adres e-mail",
         "emoji": "Emoji",
         "encrypted": "Szyfrowanie",
-        "encryption_enabled": "Włączono szyfrowanie",
         "error": "Błąd",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
@@ -3417,15 +3416,6 @@
             "see_older_messages": "Kliknij tutaj, aby zobaczyć starsze wiadomości.",
             "unknown_predecessor": "Nie można znaleźć starej wersji tego pokoju (ID pokoju: %(roomId)s), a nie dostarczono nam 'via_servers', aby ją znaleźć.",
             "unknown_predecessor_guess_server": "Nie można znaleźć starej wersji tego pokoju (ID pokoju: %(roomId)s), a nie dostarczono nam 'via_servers', aby ją znaleźć. Można spróbować odgadnąć serwer na podstawie ID pokoju. Jeśli chcesz spróbować, kliknij ten link:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Zignorowano próbę wyłączenia szyfrowania",
-            "disabled": "Nie włączono szyfrowania",
-            "enabled": "Wiadomości w tym pokoju są szyfrowane end-to-end. Możesz zweryfikować osoby, które dołączą klikając na ich zdjęcie profilowe.",
-            "enabled_dm": "Wiadomości tutaj są szyfrowane end-to-end. Aby zweryfikować profil %(displayName)s - kliknij na zdjęcie profilowe.",
-            "enabled_local": "Wiadomości na tym czacie będą szyfrowane end-to-end.",
-            "parameters_changed": "Niektóre parametry szyfrowania zostały zmienione.",
-            "unsupported": "Szyfrowanie wykorzystywane przez ten pokój nie jest obsługiwane."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s pozwolił, by goście dołączali do pokoju.",

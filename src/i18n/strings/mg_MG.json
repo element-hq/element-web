@@ -429,7 +429,6 @@
         "email_address": "Adiresy imailaka",
         "emoji": "Sary fanehoam-pietseam-po",
         "encrypted": "Nafenina",
-        "encryption_enabled": "Kilalao",
         "error": "Fahadisoana",
         "faq": "Soloky",
         "favourites": "Ankafizina",
@@ -2938,15 +2937,6 @@
             "see_older_messages": "Kitiho eto raha hijery hafatra tranainy.",
             "unknown_predecessor": "Tsy hita ny dikan-teny taloha amin'ity efitrano ity ( ID efitrano:%(roomId)s ), ary tsy nomena via_servers izahay hitadiavana azy.",
             "unknown_predecessor_guess_server": "Tsy hita ny kinova tranainy an'ity efitrano ity ( ID efitrano:%(roomId)s ), ary tsy nomena via_servers izahay hitadiavana azy. Mety ho azo atao ny maminavina ny mpizara avy amin'ny ID efitrano. Raha te hanandrana ianao dia tsindrio ity rohy ity:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Tsy noraharahiana ny fikasana hanafoana ny fanafenana",
-            "disabled": "Tsy mandeha ny encryption",
-            "enabled": "Ny hafatra ao amin'ity efitrano ity dia misy encryption. Rehefa miditra ny olona dia azonao atao ny manamarina azy ireo ao amin'ny mombamomba azy, tsindrio fotsiny ny sarin'ny mombamomba azy.",
-            "enabled_dm": "Ny hafatra eto dia misy encryption avy hatrany. manamarina%(displayName)s ao amin'ny mombamomba azy - tsindrio ny sarin'ny mombamomba azy.",
-            "enabled_local": "Ny hafatra ao amin'ity chat ity dia hatao encryption.",
-            "parameters_changed": "Misy masontsivana fanafenana novana.",
-            "unsupported": "Ny fanafenana ampiasain'ity efitrano ity dia tsy tohanana."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)sdia namela ny vahiny hanatevin-daharana ny efitrano.",

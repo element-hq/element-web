@@ -482,7 +482,6 @@
         "email_address": "E-postadresse",
         "emoji": "Emoji",
         "encrypted": "Kryptert",
-        "encryption_enabled": "Kryptering er skrudd på",
         "error": "Feil",
         "faq": "Ofte Stilte Spørsmål",
         "favourites": "Favoritter",
@@ -3448,15 +3447,6 @@
             "see_older_messages": "Klikk for å se eldre meldinger.",
             "unknown_predecessor": "Finner ikke den gamle versjonen av dette rommet (rom-ID:%(roomId)s), og vi har ikke fått 'via_servers' for å lete etter det.",
             "unknown_predecessor_guess_server": "Finner ikke den gamle versjonen av dette rommet (rom-ID:%(roomId)s), og vi har ikke fått 'via_servers' for å lete etter det. Det er mulig at gjette serveren fra rom-ID-en vil fungere. Hvis du vil prøve, klikk på denne lenken:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignorert forsøk på å deaktivere kryptering",
-            "disabled": "Kryptering er ikke skrudd på",
-            "enabled": "Meldinger i dette rommet er ende-til-ende-kryptert. Når folk blir med, kan du bekrefte dem i profilen deres, bare trykk på profilbildet deres.",
-            "enabled_dm": "Meldinger her er ende-til-ende-kryptert. Bekreft %(displayName)s i profilen deres - trykk på profilbildet deres.",
-            "enabled_local": "Meldinger i denne chatten vil være ende-til-ende-kryptert.",
-            "parameters_changed": "Noen krypteringsparametere er endret.",
-            "unsupported": "Krypteringen som brukes av dette rommet støttes ikke."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s har tillatt gjester å bli med i rommet.",
