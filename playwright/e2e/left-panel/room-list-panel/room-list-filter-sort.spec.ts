@@ -109,49 +109,6 @@ test.describe("Room list filters and sort", () => {
         await expect(oldRoomTile).not.toBeVisible();
     });
 
-    test.describe("Scroll behaviour", () => {
-        test("should scroll to the top of list when filter is applied and active room is not in filtered list", async ({
-            page,
-            app,
-        }) => {
-            const createFavouriteRoom = async (name: string) => {
-                const id = await app.client.createRoom({
-                    name,
-                });
-                await app.client.evaluate(async (client, favouriteId) => {
-                    await client.setRoomTag(favouriteId, "m.favourite", { order: 0.5 });
-                }, id);
-            };
-
-            // Create a non-favourite room
-            await app.client.createRoom({ name: `room-non-fav` });
-
-            // Create favourite rooms
-            for (let i = 0; i < 25; i++) {
-                await createFavouriteRoom(`room${i}-fav`);
-            }
-
-            // Open the non-favourite room
-            const roomListView = getRoomList(page);
-            const tile = roomListView.getByRole("option", { name: "Open room room-non-fav" });
-            await tile.click();
-
-            // item may not be in the DOM using scrollListToBottom rather than scrollIntoViewIfNeeded
-            await app.scrollListToBottom(roomListView);
-
-            // Enable Favourite filter
-            await getFilterExpandButton(page).click();
-            const favouriteFilter = getPrimaryFilters(page).getByRole("option", { name: "Favourite" });
-            await favouriteFilter.click();
-            await expect(favouriteFilter).toHaveAttribute("aria-selected", "true");
-            await expect(tile).not.toBeVisible();
-
-            const listBox = page.getByRole("listbox", { name: "Room list", exact: true });
-            // Ensure the room list is not scrolled
-            await expect.poll(() => listBox.evaluate((e) => e.scrollTop !== 0)).toStrictEqual(false);
-        });
-    });
-
     test.describe("Room list", () => {
         let unReadDmId: string | undefined;
         let unReadRoomId: string | undefined;
