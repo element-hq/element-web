@@ -456,7 +456,6 @@
         "email_address": "Sähköpostiosoite",
         "emoji": "Emoji",
         "encrypted": "Salattu",
-        "encryption_enabled": "Salaus käytössä",
         "error": "Virhe",
         "faq": "Usein kysytyt kysymykset",
         "favourites": "Suosikit",
@@ -2905,14 +2904,6 @@
         "m.room.create": {
             "continuation": "Tämä huone on jatkumo toisesta keskustelusta.",
             "see_older_messages": "Napsauta tästä nähdäksesi vanhemmat viestit."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ohitettu yritys poistaa salaus käytöstä",
-            "disabled": "Salaus pois käytöstä",
-            "enabled_dm": "Viestit ovat päästä päähän salattuja. Vahvista käyttäjä %(displayName)s hänen  profiilissaan - napauta hänen profiilikuvaa.",
-            "enabled_local": "Tässä keskustelussa olevat viestit salataan päästä päähän.",
-            "parameters_changed": "Joitakin salausparametreja on muutettu.",
-            "unsupported": "Tämän huoneen käyttämää salausta ei tueta."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s salli vieraiden liittyvän huoneeseen.",

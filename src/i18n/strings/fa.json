@@ -337,7 +337,6 @@
         "email_address": "آدرس ایمیل",
         "emoji": "شکلک",
         "encrypted": "رمزشده",
-        "encryption_enabled": "رمزگذاری فعال است",
         "error": "خطا",
         "faq": "سوالات پرتکرار",
         "favourites": "موردعلاقه‌ها",
@@ -1847,11 +1846,6 @@
         "m.room.create": {
             "continuation": "این اتاق ادامه گفتگوی دیگر است.",
             "see_older_messages": "برای دیدن پیام های قدیمی اینجا کلیک کنید."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "تلاش برای غیرفعال کردن رمزگذاری نادیده گرفته شد",
-            "disabled": "رمزگذاری فعال نیست",
-            "unsupported": "رمزگذاری استفاده شده توسط این اتاق پشتیبانی نمی شود."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s به مهمانان اجازه عضویت در اتاق را داد.",

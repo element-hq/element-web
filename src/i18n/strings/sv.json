@@ -482,7 +482,6 @@
         "email_address": "E-postadress",
         "emoji": "Emoji",
         "encrypted": "Krypterat",
-        "encryption_enabled": "Kryptering aktiverad",
         "error": "Fel",
         "faq": "Vanliga frågor",
         "favourites": "Favoriter",
@@ -3360,15 +3359,6 @@
             "see_older_messages": "Klicka här för att se äldre meddelanden.",
             "unknown_predecessor": "Kan inte hitta den gamla versionen av det här rummet (rums-ID: %(roomId)s), och vi har inte fått ”via_servers” för att leta efter det.",
             "unknown_predecessor_guess_server": "Kan inte hitta den gamla versionen av det här rummet (rums-ID: %(roomId)s), och vi har inte fått ”via_servers” för att leta efter det. Det är möjligt att det går att gissa servern från rums-ID:t. Om du vill pröva, klicka på den här länken:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignorerade försök att inaktivera kryptering",
-            "disabled": "Kryptering är inte aktiverad",
-            "enabled": "Meddelanden i det här rummet är totalsträckskrypterade. När personer går med kan du verifiera dem i deras profil genom att trycka på deras profilbild.",
-            "enabled_dm": "Meddelanden här är totalsträckskrypterade. Verifiera %(displayName)s i deras profil - tryck på deras profilbild.",
-            "enabled_local": "Meddelanden i den här chatten kommer att vara totalsträckskypterade.",
-            "parameters_changed": "Vissa krypteringsparametrar har ändrats.",
-            "unsupported": "Krypteringen som används i det här rummet stöds inte."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s har tillåtit gäster att gå med i rummet.",

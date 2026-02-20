@@ -482,7 +482,6 @@
         "email_address": "Dirección de correo electrónico",
         "emoji": "Emoticono",
         "encrypted": "Cifrado",
-        "encryption_enabled": "El cifrado está activado",
         "error": "Error",
         "faq": "Preguntas frecuentes",
         "favourites": "Favoritos",
@@ -2812,13 +2811,6 @@
         "m.room.create": {
             "continuation": "Esta sala es una continuación de otra.",
             "see_older_messages": "Haz clic aquí para ver mensajes anteriores."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Se ha ignorado un intento de desactivar el cifrado",
-            "disabled": "El cifrado no está activado",
-            "enabled_local": "Los mensajes en esta conversación serán cifrados de extremo a extremo.",
-            "parameters_changed": "Algunos parámetros del cifrado han cambiado.",
-            "unsupported": "El cifrado usado por esta sala no es compatible."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s autorizó a unirse a la sala a personas todavía sin cuenta.",

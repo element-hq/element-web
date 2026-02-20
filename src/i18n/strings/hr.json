@@ -485,7 +485,6 @@
         "email_address": "E-adresa",
         "emoji": "Emotikon",
         "encrypted": "Šifrirano",
-        "encryption_enabled": "Šifriranje je omogućeno",
         "error": "Geška",
         "faq": "Česta pitanja",
         "favourites": "Favoriti",
@@ -3506,16 +3505,6 @@
             "see_older_messages": "Kliknite ovdje za pregled starijih poruka.",
             "unknown_predecessor": "Nije moguće pronaći staru inačicu ove sobe (ID sobe: %(roomId)s), a nismo dobili ‘via_servers’ za pretraživanje.",
             "unknown_predecessor_guess_server": "Nije moguće pronaći staru inačicu ove sobe (ID sobe: %(roomId)s), a nismo dobili ‘via_servers’ za pretraživanje. Poslužitelj bi se mogao pronaći na temelju ID-a sobe. Ako želite pokušati, kliknite ovu poveznicu:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignorirani pokušaj onemogućavanja šifriranja",
-            "disabled": "Šifriranje nije omogućeno",
-            "enabled": "Poruke u ovoj sobi sveobuhvatno su šifrirane. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo dodirnete njihovu profilnu sliku.",
-            "enabled_dm": "Ovdje su poruke sveobuhvatno šifrirane. Potvrdite %(displayName)s u njihovu profilu – dodirnite njihovu profilnu sliku.",
-            "enabled_local": "Poruke u ovom razgovoru bit će sveobuhvatno šifrirane.",
-            "parameters_changed": "Neki parametri šifriranja su promijenjeni.",
-            "state_enabled": "Poruke i događaji u ovoj sobi sveobuhvatno su šifrirani. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo dodirnete njihovu profilnu sliku.",
-            "unsupported": "Šifriranje kojim se koristi ova soba nije podržano."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s dopustio/la je gostima da se pridruže sobi.",

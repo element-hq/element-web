@@ -475,7 +475,6 @@
         "email_address": "E-posta Adresi",
         "emoji": "Emoji",
         "encrypted": "Şifrelenmiş",
-        "encryption_enabled": "Şifreleme etkin",
         "error": "Hata",
         "faq": "SSS",
         "favourites": "Favoriler",
@@ -3262,15 +3261,6 @@
             "see_older_messages": "Daha eski mesajları görmek için buraya tıklayın.",
             "unknown_predecessor": "Bu odanın eski sürümünü bulamıyoruz (oda kimliği: %(roomId)s) ve aramak için bize 'via_servers' sağlanmadı.",
             "unknown_predecessor_guess_server": "Bu odanın eski sürümünü bulamıyoruz (oda kimliği: %(roomId)s) ve bu sürümü aramamız için bize 'via_servers' sağlanmadı. Oda kimliğinden sunucuyu tahmin etmenin işe yaraması mümkün. Denemek isterseniz, bu bağlantıya tıklayın:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Şifrelemeyi devre dışı bırakma denemesi yok sayıldı",
-            "disabled": "Şifreleme etkin değil",
-            "enabled": "Bu odadaki mesajlar uçtan uca şifrelenmiştir. Kullanıcılar katıldığında, profillerinde onları doğrulayabilirsiniz, profil resimlerine dokunmanız yeterlidir.",
-            "enabled_dm": "Buradaki mesajlar uçtan uca şifrelenir. Profilinden %(displayName)s'i doğrulayın - profil resmine dokunun.",
-            "enabled_local": "Bu sohbetteki mesajlar uçtan uca şifrelenecektir.",
-            "parameters_changed": "Bazı şifreleme parametreleri değiştirildi.",
-            "unsupported": "Bu odada kullanılan şifreleme desteklenmiyor."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s misafirlerin odaya katılmasına izin verdi.",
