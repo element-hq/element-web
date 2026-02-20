@@ -127,6 +127,20 @@ export class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implemen
 }
 ```
 
+#### Binding of View Model Actions:
+
+All view model actions must be defined as arrow functions to ensure they are bound to the class instance.
+
+Using standard class methods can result in `this` being undefined when the function is passed as a callback (e.g. to a React event handler), which may cause runtime errors.
+
+Correct pattern:
+
+```ts
+public doSomething = (): void => {
+    ...
+};
+```
+
 ### `useViewModel` hook
 
 Your view must call this hook with the view-model as argument. Think of this as your view subscribing to the view model.<br>

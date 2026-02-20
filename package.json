@@ -153,6 +153,7 @@
         "@element-hq/element-web-playwright-common-local": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",
+        "@nx-tools/nx-container": "^7.2.1",
         "@nx/jest": "^22.5.0",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "catalog:",
