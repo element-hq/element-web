@@ -1,0 +1,77 @@
+name: CD # Continuous Delivery
+on:
+    push:
+        branches: [develop]
+concurrency: ${{ github.workflow }}-${{ github.ref_name }}
+
+permissions: {}
+env:
+    NX_DEFAULT_OUTPUT_STYLE: static
+
+jobs:
+    docker:
+        name: Docker Bake
+        runs-on: ubuntu-24.04
+        permissions:
+            id-token: write # needed for signing the images with GitHub OIDC Token
+            packages: write # needed for publishing packages to GHCR
+            # Needed for nx-set-shas
+            contents: read
+            actions: read
+        steps:
+            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              with:
+                  # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+                  fetch-depth: 0
+                  # reduce the size of the checkout with tree filtering,
+                  # see https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/
+                  filter: tree:0
+
+            - name: Prepare nx
+              uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4
+              with:
+                  main-branch-name: develop
+
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+
+            - name: Set up Docker Buildx
+              id: builder
+              uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+              with:
+                  node-version-file: package.json
+                  cache: "pnpm"
+
+            - name: Install Deps
+              run: "pnpm install --frozen-lockfile"
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - run: pnpm nx affected -t docker:build
+              env:
+                  INPUT_PUSH: true
+                  INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  INPUT_BUILDER: ${{ steps.builder.outputs.name }}
+
+            - name: Sign the images with GitHub OIDC token
+              env:
+                  PATTERN: "^ghcr.io/element-hq/element-web*"
+              run: |
+                  docker image ls --digests --format '{{.Repository}}@{{.Digest}}' | grep "$PATTERN" | while read -r TARGET; do
+                    # Check if digest is valid (not <none>)
+                    if [[ "$TARGET" != *"@<none>"* ]]; then
+                      echo "Signing $TARGET..."
+                      cosign sign --yes "$TARGET"
+                    fi
+                  done

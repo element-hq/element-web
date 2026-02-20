@@ -47,7 +47,7 @@
         "build:storybook": "nx run @element-hq/web-shared-components:storybook",
         "build:doc": "nx run @element-hq/web-shared-components:typedoc",
         "lint": "pnpm lint:types && pnpm lint:js",
-        "lint:js": "eslint --max-warnings 0 src && prettier --check .",
+        "lint:js": "eslint --max-warnings 0 src && prettier --ignore-path ../../.prettierignore --check .",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "dependencies": {

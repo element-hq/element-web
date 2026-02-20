@@ -1,0 +1,31 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "root": "packages/playwright-common",
+    "targets": {
+        "docker:prebuild": {
+            "cache": true,
+            "command": "echo PLAYWRIGHT_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}') > .env.docker:build",
+            "inputs": [{ "runtime": "pnpm --silent -- playwright --version" }],
+            "outputs": ["{projectRoot}/.env.docker:build"],
+            "options": { "cwd": "packages/playwright-common" }
+        },
+        "docker:build": {
+            "executor": "@nx-tools/nx-container:build",
+            "dependsOn": ["docker:prebuild"],
+            "options": {
+                "load": true,
+                "engine": "docker",
+                "platforms": ["linux/amd64", "linux/arm64"],
+                "provenance": "true",
+                "sbom": true,
+                "build-args": ["PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION"],
+                "context": "packages/playwright-common",
+                "metadata": {
+                    "images": ["ghcr.io/element-hq/element-web/playwright-server"],
+                    "tags": ["type=raw,enable=true,value=$PLAYWRIGHT_VERSION"]
+                }
+            }
+        }
+    }
+}
