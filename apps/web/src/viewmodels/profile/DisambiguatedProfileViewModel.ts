@@ -6,10 +6,10 @@
  */
 import {
     BaseViewModel,
-    type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
+import type { MouseEvent } from "react";
 
 import { _t } from "../../languageHandler";
 import { getUserNameColorClass } from "../../utils/FormattingUtils";
@@ -64,7 +64,7 @@ export interface DisambiguatedProfileViewModelProps {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: DisambiguatedProfileViewActions["onClick"];
+    onClick?: (event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
     /**
      * Optional CSS class name to apply to the profile.
      */
@@ -140,7 +140,7 @@ export class DisambiguatedProfileViewModel
         this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
-    public onClick: DisambiguatedProfileViewActions["onClick"] = (evt): void => {
+    public onClick = (evt: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
         this.props.onClick?.(evt);
     };
 }

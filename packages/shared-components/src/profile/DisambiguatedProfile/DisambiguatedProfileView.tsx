@@ -51,7 +51,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLButtonElement> & MouseEventHandler<HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
 }
 
 /**
