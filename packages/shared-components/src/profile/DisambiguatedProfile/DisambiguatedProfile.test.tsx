@@ -118,7 +118,8 @@ describe("DisambiguatedProfileView", () => {
         const profileContainer = getProfileContainer("Keyboard User");
         expect(profileContainer.tagName).toBe("BUTTON");
         expect(profileContainer).toHaveAttribute("type", "button");
-        expect(profileContainer).toHaveAttribute("tabIndex", "0");
+        expect(profileContainer).not.toHaveAttribute("tabindex");
+        expect(profileContainer.tabIndex).toBe(0);
     });
 
     it("should call onClick on keyboard activation keys", async () => {
@@ -166,7 +167,8 @@ describe("DisambiguatedProfileView", () => {
         render(<DisambiguatedProfileView vm={vm} />);
         const profileContainer = getProfileContainer("Static User");
         expect(profileContainer.tagName).toBe("BUTTON");
-        expect(profileContainer).toHaveAttribute("tabIndex", "0");
+        expect(profileContainer).not.toHaveAttribute("tabindex");
+        expect(profileContainer.tabIndex).toBe(0);
     });
 
     it("should display tooltip title when provided", () => {

@@ -4,7 +4,6 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
 <div>
   <button
     class="disambiguatedProfile"
-    tabindex="0"
     type="button"
   >
     <span
@@ -21,7 +20,6 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
 <div>
   <button
     class="disambiguatedProfile"
-    tabindex="0"
     title="Eve (@eve:matrix.org)"
     type="button"
   >
@@ -44,7 +42,6 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 <div>
   <button
     class="disambiguatedProfile"
-    tabindex="0"
     type="button"
   >
     <span
@@ -66,7 +63,6 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
 <div>
   <button
     class="disambiguatedProfile"
-    tabindex="0"
     type="button"
   >
     <span
@@ -83,7 +79,6 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 <div>
   <button
     class="disambiguatedProfile"
-    tabindex="0"
     type="button"
   >
     <span
@@ -100,7 +95,6 @@ exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
 <div>
   <button
     class="disambiguatedProfile"
-    tabindex="0"
     title="Diana (@diana:example.org)"
     type="button"
   >

@@ -51,7 +51,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLButtonElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement> & MouseEventHandler<HTMLDivElement>;
 }
 
 /**
@@ -87,21 +87,22 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
         mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
 
+    const Component = vm.onClick ? "button" : "div";
+
     return (
-        <button
-            type="button"
+        <Component
+            // Only valid for <button>
+            type={vm.onClick ? "button" : undefined}
             className={classNames(className, styles.disambiguatedProfile)}
             title={title}
             onClick={vm.onClick}
-            tabIndex={0}
         >
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
             {displayIdentifier && (
                 <span className={classNames(className, styles.disambiguatedProfile_mxid)}>{displayIdentifier}</span>
             )}
-        </button>
+        </Component>
     );
 }
