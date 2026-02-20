@@ -123,38 +123,32 @@ test.describe("Room list filters and sort", () => {
                 }, id);
             };
 
-            // Create 5 favourite rooms
-            let i = 0;
-            for (; i < 5; i++) {
-                await createFavouriteRoom(`room${i}-fav`);
-            }
-
             // Create a non-favourite room
             await app.client.createRoom({ name: `room-non-fav` });
 
-            // Create rest of the favourite rooms
-            for (; i < 20; i++) {
+            // Create favourite rooms
+            for (let i = 0; i < 25; i++) {
                 await createFavouriteRoom(`room${i}-fav`);
             }
 
             // Open the non-favourite room
             const roomListView = getRoomList(page);
             const tile = roomListView.getByRole("option", { name: "Open room room-non-fav" });
+            await tile.click();
+
             // item may not be in the DOM using scrollListToBottom rather than scrollIntoViewIfNeeded
             await app.scrollListToBottom(roomListView);
-            await tile.click();
 
             // Enable Favourite filter
             await getFilterExpandButton(page).click();
-            const primaryFilters = getPrimaryFilters(page);
-            await primaryFilters.getByRole("option", { name: "Favourite" }).click();
+            const favouriteFilter = getPrimaryFilters(page).getByRole("option", { name: "Favourite" });
+            await favouriteFilter.click();
+            await expect(favouriteFilter).toHaveAttribute("aria-selected", "true");
             await expect(tile).not.toBeVisible();
 
+            const listBox = page.getByRole("listbox", { name: "Room list", exact: true });
             // Ensure the room list is not scrolled
-            const isScrolledDown = await page
-                .getByRole("listbox", { name: "Room list", exact: true })
-                .evaluate((e) => e.scrollTop !== 0);
-            expect(isScrolledDown).toStrictEqual(false);
+            await expect.poll(() => listBox.evaluate((e) => e.scrollTop !== 0)).toStrictEqual(false);
         });
     });
 
