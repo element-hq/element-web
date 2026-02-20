@@ -9,8 +9,8 @@ import {
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
-import type { MouseEvent } from "react";
 
+import type { MouseEvent } from "react";
 import { _t } from "../../languageHandler";
 import { getUserNameColorClass } from "../../utils/FormattingUtils";
 import UserIdentifier from "../../customisations/UserIdentifier";
