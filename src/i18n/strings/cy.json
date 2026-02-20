@@ -485,7 +485,6 @@
         "email_address": "Cyfeiriad e-bost",
         "emoji": "Emoji",
         "encrypted": "Wedi'i amgryptio",
-        "encryption_enabled": "Amgryptio wedi'i alluogi",
         "error": "Gwall",
         "faq": "Cwestiynau Cyffredin",
         "favourites": "Ffefrynnau",
@@ -3460,16 +3459,6 @@
             "see_older_messages": "Cliciwch yma i weld negeseuon hŷn.",
             "unknown_predecessor": "Methu â dod o hyd i'r hen fersiwn o'r ystafell hon (ID ystafell: %(roomId)s), ac nid ydym wedi cael 'via_servers' i chwilio amdano.",
             "unknown_predecessor_guess_server": "Methu â dod o hyd i'r hen fersiwn o'r ystafell hon (ID ystafell: %(roomId)s), ac nid ydym wedi cael 'via_servers' i chwilio amdano. Mae'n bosibl y bydd dyfalu'r gweinydd o ID yr ystafell yn gweithio. Os ydych chi eisiau ceisio, cliciwch ar y ddolen hon:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Wedi anwybyddu ymgais i analluogi amgryptio",
-            "disabled": "Nid yw amgryptio wedi'i alluogi",
-            "enabled": "Mae negeseuon yn yr ystafell hon wedi'u hamgryptio pen-i-ben. Pan fydd pobl yn ymuno, gallwch chi eu gwirio yn eu proffil, dim ond tapio ar eu llun proffil.",
-            "enabled_dm": "Mae negeseuon yma wedi'u hamgryptio o'r dechrau i'r diwedd. Dilyswch %(displayName)s yn eu proffil - tapiwch ar eu llun proffil.",
-            "enabled_local": "Bydd negeseuon yn y sgwrs hon yn cael eu hamgryptio o'r dechrau i'r diwedd.",
-            "parameters_changed": "Mae rhai paramedrau amgryptio wedi'u newid.",
-            "state_enabled": "Mae negeseuon a digwyddiadau cyflwr yn yr ystafell hon wedi'u hamgryptio o'r dechrau i'r diwedd. Pan fydd pobl yn ymuno, gallwch eu gwirio yn eu proffil, dim ond tapio ar eu llun proffil.",
-            "unsupported": "Nid yw'r amgryptio sy'n cael ei ddefnyddiogan yr ystafell hon yn cael ei gefnogi."
         },
         "m.room.guest_access": {
             "can_join": "Mae %(senderDisplayName)s wedi caniatáu i westeion ymuno â'r ystafell.",

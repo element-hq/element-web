@@ -482,7 +482,6 @@
         "email_address": "E-mailová adresa",
         "emoji": "Emoji",
         "encrypted": "Šifrováno",
-        "encryption_enabled": "Šifrování je zapnuté",
         "error": "Chyba",
         "faq": "Často kladené dotazy (FAQ)",
         "favourites": "Oblíbené",
@@ -3465,16 +3464,6 @@
             "see_older_messages": "Klepnutím zobrazíte starší zprávy.",
             "unknown_predecessor": "Nepodařilo se najít starou verzi této místnosti (ID místnosti: %(roomId)s), a nebyl poskytnut parametr 'via_servers', který by umožnil její vyhledání.",
             "unknown_predecessor_guess_server": "Nepodařilo se najít starou verzi této místnosti (ID místnosti: %(roomId)s), a nebyl poskytnut parametr 'via_servers', který by umožnil její vyhledání. Je možné, že odhad serveru z ID místnosti bude fungovat. Pokud to chcete zkusit, klikněte na tento odkaz:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignorovaný pokus o deaktivaci šifrování",
-            "disabled": "Šifrování je vypnuté",
-            "enabled": "Zprávy v této místnosti jsou koncově šifrovány. Když lidé vstoupí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
-            "enabled_dm": "Zprávy jsou zde koncově šifrovány. Ověřte %(displayName)s v jeho profilu - klepněte na jeho profilový obrázek.",
-            "enabled_local": "Zprávy v této místnosti budou koncově šifrovány.",
-            "parameters_changed": "Byly změněny některé parametry šifrování.",
-            "state_enabled": "Zprávy a události v této místnosti jsou koncově šifrovány. Když se lidé připojí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
-            "unsupported": "Šifrování používané v této místnosti není podporované."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s povolil(a) přístup hostům.",

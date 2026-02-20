@@ -349,7 +349,6 @@
         "email_address": "Retpoŝtadreso",
         "emoji": "Mienetoj",
         "encrypted": "Ĉifrata",
-        "encryption_enabled": "Ĉifrado estas ŝaltita",
         "error": "Eraro",
         "faq": "Oftaj demandoj",
         "favourites": "Elstarigitaj",
@@ -2132,12 +2131,6 @@
         "m.room.create": {
             "continuation": "Ĉi tiu ĉambro estas daŭrigo de alia interparolo.",
             "see_older_messages": "Klaku ĉi tien por vidi pli malnovajn mesaĝojn."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Malatentis provon malŝalti ĉifradon",
-            "disabled": "Ĉifrado ne estas ŝaltita",
-            "parameters_changed": "Ŝanĝiĝis iuj parametroj de ĉifrado.",
-            "unsupported": "La ĉifro uzata de ĉi tiu ĉambro ne estas subtenata."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s permesis al gastoj aliĝi al la ĉambro.",

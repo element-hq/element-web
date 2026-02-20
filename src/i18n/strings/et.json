@@ -482,7 +482,6 @@
         "email_address": "E-posti aadress",
         "emoji": "Emotikon",
         "encrypted": "Krüptitud",
-        "encryption_enabled": "Krüptimine on kasutusel",
         "error": "Viga",
         "faq": "Korduma kippuvad küsimused",
         "favourites": "Lemmikud",
@@ -3036,11 +3035,13 @@
             "connection_section": "Ühendus",
             "dialog_title": "<strong>Seadistused:</strong> Heli ja video",
             "echo_cancellation": "Kaja eemaldamine",
+            "echo_cancellation_description": "Eemaldab kõnede ajal mikrofonisisendi taustamüra. See seadistus kehtib ka Element Calli puhul.",
             "enable_fallback_ice_server": "Varuvariandina luba kasutada ka teist kõnehõlbustusserverit (%(server)s)",
             "enable_fallback_ice_server_description": "On kasutusel vaid siis, kui sinu koduserver sellist teenust ei võimalda. Seeläbi jagatakse kõne ajal sinu seadme IP-aadressi.",
             "mirror_local_feed": "Peegelda kohalikku videovoogu",
             "missing_permissions_prompt": "Meediaga seotud õigused puuduvad. Nende nõutamiseks klõpsi järgnevat nuppu.",
             "noise_suppression": "Müra vähendamine",
+            "noise_suppression_description": "Vähendab kõnede ajal mikrofonisisendi taustamüra. See seadistus kehtib ka Element Calli puhul.",
             "request_permissions": "Nõuta meediaõigusi",
             "title": "Heli ja video",
             "video_input_empty": "Ei leidnud ühtegi veebikaamerat",
@@ -3457,16 +3458,6 @@
             "see_older_messages": "Vanemate sõnumite nägemiseks klõpsi siia.",
             "unknown_predecessor": "Me ei leia selle jututoa vana versiooni (jututoa tunnus: %(roomId)s) ja meil pole otsimiseks ka teavet „via_servers“ meetodi alusel.",
             "unknown_predecessor_guess_server": "Me ei leia selle jututoa vana versiooni (jututoa tunnus: %(roomId)s) ja meil pole otsimiseks ka teavet „via_servers“ meetodi alusel. Võimalik, et me suudame jututoa tunnuse alusel serveri nime välja mõelda. Kui tahad proovida, siis klõpsi seda linki:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Eirasin katset lõpetada krüptimise kasutamine",
-            "disabled": "Krüptimine ei ole kasutusel",
-            "enabled": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad neid verifitseerida.",
-            "enabled_dm": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
-            "enabled_local": "Sõnumid siin vestluses on läbivalt krüptitud.",
-            "parameters_changed": "Mõned krüptimise parameetrid on muutunud.",
-            "state_enabled": "Selle jututoa sõnumid ja olekusündmused on läbivalt krüptitud. Kui uued kasutajad liituvad, siis saad nad verifitseerida tunnuspildile klõpsates.",
-            "unsupported": "Selles jututoas kasutatud krüptimine ei ole toetatud."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s on lubanud külalistel jututoaga liituda.",

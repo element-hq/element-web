@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, ClientStoppedError, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, ClientStoppedError } from "matrix-js-sdk/src/matrix";
 import { logger as baseLogger, LogSpan } from "matrix-js-sdk/src/logger";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
@@ -20,22 +20,16 @@ import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "../utils/device/clientInformation";
 import SettingsStore, { type CallbackFn } from "../settings/SettingsStore";
-import { DeviceListenerOtherDevices, DeviceListenerCurrentDevice, type DeviceState } from ".";
+import {
+    DeviceListenerOtherDevices,
+    DeviceListenerCurrentDevice,
+    type DeviceState,
+    CurrentDeviceChangedEmitter,
+} from ".";
 
 const logger = baseLogger.getChild("DeviceListener:");
 
-/**
- * The events emitted by {@link DeviceListener}
- */
-export enum DeviceListenerEvents {
-    DeviceState = "device_state",
-}
-
-type EventHandlerMap = {
-    [DeviceListenerEvents.DeviceState]: (state: DeviceState) => void;
-};
-
-export class DeviceListener extends TypedEventEmitter<DeviceListenerEvents, EventHandlerMap> {
+export class DeviceListener {
     private dispatcherRef?: string;
 
     /**
@@ -44,10 +38,33 @@ export class DeviceListener extends TypedEventEmitter<DeviceListenerEvents, Even
      */
     public otherDevices?: DeviceListenerOtherDevices;
 
-    /** All the information about whether this device's encrypytion is OK. Only
-     * set if `running` is true, otherwise undefined.
+    /**
+     * All the information about whether this device's encrypytion is OK.
+     *
+     * Defined after {@link DeviceListener.start} has been called, before {@link
+     * DeviceListener.stop} is called.
      */
     public currentDevice?: DeviceListenerCurrentDevice;
+
+    /**
+     * Emits `CurrentDeviceEvents` events when the state
+     * of the current device changes.
+     *
+     * @example
+     * ```ts
+     * const deviceState = useTypedEventEmitterState(
+     *     DeviceListener.sharedInstance().currentDeviceChangedEmitter,
+     *     CurrentDeviceEvents.DeviceStateChanged,
+     *     (state?: DeviceState): DeviceState => {
+     *         return state ?? DeviceListener.sharedInstance().getDeviceState();
+     *     },
+     * );
+     * ```
+     *
+     * Now `deviceState` will reflect the state of the current device and
+     * trigger an update when it changes.
+     */
+    public currentDeviceChangedEmitter = new CurrentDeviceChangedEmitter();
 
     private running = false;
     // The client with which the instance is running. Only set if `running` is true, otherwise undefined.
