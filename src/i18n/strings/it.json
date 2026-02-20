@@ -432,7 +432,6 @@
         "email_address": "Indirizzo email",
         "emoji": "Emoji",
         "encrypted": "Crittografato",
-        "encryption_enabled": "Crittografia attivata",
         "error": "Errore",
         "faq": "Domande frequenti",
         "favourites": "Preferiti",
@@ -2955,15 +2954,6 @@
             "see_older_messages": "Clicca qui per vedere i messaggi precedenti.",
             "unknown_predecessor": "Impossibile trovare la vecchia versione della stanza (ID stanza: %(roomId)s) e non ci è stato fornito 'via_servers' per cercarla.",
             "unknown_predecessor_guess_server": "Impossibile trovare la vecchia versione della stanza (ID stanza: %(roomId)s) e non ci è stato fornito 'via_servers' per cercarla. È possibile che indovinare il server dall'ID della stanza possa funzionare. Se vuoi provare, clicca questo link:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Tentativo di disattivare la crittografia ignorato",
-            "disabled": "Crittografia non attivata",
-            "enabled": "I messaggi in questa stanza sono cifrati end-to-end. Quando qualcuno entra puoi verificarlo nel suo profilo, ti basta toccare la sua immagine.",
-            "enabled_dm": "Qui i messaggi sono cifrati end-to-end. Verifica %(displayName)s nel suo profilo - tocca la sua immagine.",
-            "enabled_local": "I messaggi in questa conversazione saranno cifrati end-to-end.",
-            "parameters_changed": "Alcuni parametri di crittografia sono stati modificati.",
-            "unsupported": "La crittografia usata da questa stanza non è supportata."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s ha attivato l'accesso per ospiti alla stanza.",

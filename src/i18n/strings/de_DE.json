@@ -482,7 +482,6 @@
         "email_address": "E-Mail-Adresse",
         "emoji": "Emojis",
         "encrypted": "Verschlüsselt",
-        "encryption_enabled": "Verschlüsselung aktiviert",
         "error": "Fehler",
         "faq": "Häufige Fragen",
         "favourites": "Favoriten",
@@ -3036,11 +3035,13 @@
             "connection_section": "Verbindung",
             "dialog_title": "<strong>Einstellungen:</strong> Sprache und Video",
             "echo_cancellation": "Echounterdrückung",
+            "echo_cancellation_description": "Entfernt das Echo aus deinem Mikrofon während Anrufen. Diese Einstellung gilt auch für Element Call.",
             "enable_fallback_ice_server": "Ersatz-Anrufassistenz-Server erlauben (%(server)s)",
             "enable_fallback_ice_server_description": "Dieser wird nur verwendet, sollte dein Heim-Server keinen bieten. Deine IP-Adresse würde während eines Anrufs geteilt werden.",
             "mirror_local_feed": "Lokalen Video-Feed spiegeln",
             "missing_permissions_prompt": "Fehlende Medienberechtigungen, klicke auf die Schaltfläche unten, um sie anzufordern.",
             "noise_suppression": "Rauschreduzierung",
+            "noise_suppression_description": "Reduziert Hintergrundgeräusche in deinem Mikrofon während Anrufen. Diese Einstellung gilt auch für Element Call.",
             "request_permissions": "Medienberechtigungen anfordern",
             "title": "Anrufe",
             "video_input_empty": "Keine Webcam erkannt",
@@ -3457,16 +3458,6 @@
             "see_older_messages": "Klicke hier, um ältere Nachrichten zu sehen.",
             "unknown_predecessor": "Die alte Version dieses Chats (ID: %(roomId)s) kann nicht gefunden werden. Es gibt auch keine „via_servers“ Information für eine Suche.",
             "unknown_predecessor_guess_server": "Die alte Version dieses Chats (ID: %(roomId)s) kann nicht gefunden werden. Es gibt auch keine „via_servers“ Information für eine Suche. Möglicherweise kann der Server auf Basis der ID erraten werden. Wenn du dies probieren möchtest, klicke diesen Link:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert",
-            "disabled": "Verschlüsselung nicht aktiviert",
-            "enabled": "Nachrichten in diesem Chat sind Ende-zu-Ende-verschlüsselt. Wenn Personen beitreten, kannst du sie in ihrem Profil verifizieren, indem du auf deren Profilbild klickst.",
-            "enabled_dm": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s in deren Profil – klicke auf deren Profilbild.",
-            "enabled_local": "Nachrichten in dieser Unterhaltung werden Ende-zu-Ende-verschlüsselt.",
-            "parameters_changed": "Einige Verschlüsselungsoptionen wurden geändert.",
-            "state_enabled": "Nachrichten und State-Events sind in diesem Chat Ende-zu-Ende verschlüsselt. Du kannst neue Mitglieder, die dem Chat beitreten, auf ihrem Profil verifizieren. Dies erreichst du durch Klick auf das Profilbild.",
-            "unsupported": "Die von diesem Chat verwendete Verschlüsselung wird nicht unterstützt."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s hat Gästen erlaubt, diesem Chat beizutreten.",

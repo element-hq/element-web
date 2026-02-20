@@ -482,7 +482,6 @@
         "email_address": "E-mail-cím",
         "emoji": "Emodzsi",
         "encrypted": "Titkosítva",
-        "encryption_enabled": "Titkosítás bekapcsolva",
         "error": "Hiba",
         "faq": "GYIK",
         "favourites": "Kedvencek",
@@ -3430,16 +3429,6 @@
             "see_older_messages": "Ide kattintva megnézheted a régi üzeneteket.",
             "unknown_predecessor": "A szoba régi verziója nem található (szobaazonosító: %(roomId)s), és a megkereséséhez nem lett megadva a „via_servers”.",
             "unknown_predecessor_guess_server": "A szoba régi verziója nem található (szobaazonosító: %(roomId)s), és a megkereséséhez nem lett megadva a „via_servers”. Lehetséges, hogy a szobaazonosító kitalálása működni fog. Ha meg akarja próbálni, kattintson erre a hivatkozásra:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "A titkosítás kikapcsolására tett kísérlet figyelmen kívül lett hagyva",
-            "disabled": "Titkosítás nincs engedélyezve",
-            "enabled": "Az ebben a szobában lévő üzenetek végpontok közti titkosítással rendelkeznek. Amikor valaki csatlakozik, akkor ellenőrizheti a profilján, csak koppintson a profilképére.",
-            "enabled_dm": "Az itt található üzenetek végpontok közti titkosítással rendelkeznek. Ellenőrizze %(displayName)s felhasználót a profilján – kattintson a a profilképére.",
-            "enabled_local": "Az üzenetek ebben a beszélgetésben végponti titkosítással vannak védve.",
-            "parameters_changed": "Néhány titkosítási paraméter megváltozott.",
-            "state_enabled": "Az ebben a szobában lévő üzenetek és állapotesemények végpontok közötti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak koppintson a profilképére.",
-            "unsupported": "A szobában használt titkosítás nem támogatott."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s megengedte a vendégeknek, hogy beléphessenek a szobába.",

@@ -18,7 +18,7 @@ import {
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 
-import { type DeviceListener, type DeviceState, DeviceListenerEvents } from ".";
+import { type DeviceListener, type DeviceState } from ".";
 import {
     hideToast as hideSetupEncryptionToast,
     showToast as showSetupEncryptionToast,
@@ -263,7 +263,7 @@ export class DeviceListenerCurrentDevice {
     private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
         this.deviceState = newState;
 
-        this.deviceListener.emit(DeviceListenerEvents.DeviceState, newState);
+        this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
 
         if (newState === "ok" || this.dismissedThisDeviceToast) {
             hideSetupEncryptionToast();

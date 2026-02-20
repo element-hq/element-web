@@ -482,7 +482,6 @@
         "email_address": "Alamat email",
         "emoji": "Emoji",
         "encrypted": "Terenkripsi",
-        "encryption_enabled": "Enkripsi diaktifkan",
         "error": "Kesalahan",
         "faq": "Pertanyaan Umum",
         "favourites": "Favorit",
@@ -3446,16 +3445,6 @@
             "see_older_messages": "Klik di sini untuk melihat pesan-pesan lama.",
             "unknown_predecessor": "Tidak dapat mencari versi lama ruangan ini (ID ruangan: %(roomId)s), dan kami tidak disediakan dengan 'via_servers' untuk mencarinya.",
             "unknown_predecessor_guess_server": "Tidak dapat mencari versi lama ruangan ini (ID ruangan: %(roomId)s), dan kami tidak disediakan dengan 'via_servers' untuk mencarinya. Ini mungkin bahwa menebak server dari ID ruangan akan bekerja. Jika Anda ingin mencoba, klik tautan berikut:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Mengabaikan percobaan untuk menonaktifkan enkripsi",
-            "disabled": "Enkripsi tidak diaktifkan",
-            "enabled": "Pesan-pesan di ruangan ini dienkripsi secara ujung ke ujung. Ketika orang-orang bergabung, Anda dapat memverifikasi mereka di profil mereka dengan mengetuk pada foto profil mereka.",
-            "enabled_dm": "Pesan-pesan di sini dienkripsi secara ujung ke ujung. Verifikasi %(displayName)s di profilnya — ketuk pada profilnya.",
-            "enabled_local": "Pesan di obrolan ini akan dienkripsi secara ujung ke ujung.",
-            "parameters_changed": "Beberapa parameter enkripsi telah diubah.",
-            "state_enabled": "Pesan dan peristiwa status di ruangan ini dienkripsi secara ujung ke ujung. Saat orang bergabung, Anda dapat memverifikasi mereka di profil mereka, cukup ketuk gambar profil mereka.",
-            "unsupported": "Enkripsi yang digunakan di ruangan ini tidak didukung."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s telah mengizinkan tamu untuk bergabung dengan ruangan ini.",

@@ -485,7 +485,6 @@
         "email_address": "Emailová adresa",
         "emoji": "Emotikon",
         "encrypted": "Zašifrované",
-        "encryption_enabled": "Šifrovanie zapnuté",
         "error": "Chyba",
         "faq": "Často kladené otázky (FAQ)",
         "favourites": "Obľúbené",
@@ -3499,16 +3498,6 @@
             "see_older_messages": "Kliknutím sem zobrazíte staršie správy.",
             "unknown_predecessor": "Nie je možné nájsť starú verziu tejto miestnosti (ID miestnosti: %(roomId)s) a nebol nám poskytnutý parameter 'via_servers' na jej vyhľadanie.",
             "unknown_predecessor_guess_server": "Nie je možné nájsť starú verziu tejto miestnosti (ID miestnosti: %(roomId)s) a nebol nám poskytnutý parameter 'via_servers' na jej vyhľadanie. Je možné, že uhádnutie servera na základe ID miestnosti bude fungovať. Ak to chcete skúsiť, kliknite na tento odkaz:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignorovaný pokus o vypnutie šifrovania",
-            "disabled": "Šifrovanie nie je zapnuté",
-            "enabled": "Správy v tejto miestnosti sú šifrované od vás až k príjemcovi. Keď sa ľudia pridajú, môžete ich overiť v ich profile, stačí len ťuknúť na ich profilový obrázok.",
-            "enabled_dm": "Správy sú tu end-to-end šifrované. Overte %(displayName)s v ich profile - ťuknite na ich profilový obrázok.",
-            "enabled_local": "Správy v tejto konverzácii sú šifrované od vás až k príjemcovi.",
-            "parameters_changed": "Niektoré parametre šifrovania boli zmenené.",
-            "state_enabled": "Správy a udalosti v tejto miestnosti sú šifrované end-to-end. Keď sa ľudia pripoja, môžete ich overiť v ich profile, stačí ťuknúť na ich profilový obrázok.",
-            "unsupported": "Šifrovanie používané v tejto miestnosti nie je podporované."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s umožnil hosťom vstúpiť do miestnosti.",
