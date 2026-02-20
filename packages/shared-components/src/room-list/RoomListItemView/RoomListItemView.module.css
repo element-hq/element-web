@@ -85,7 +85,6 @@
 .selected {
     .container {
         background-color: var(--cpd-color-bg-action-tertiary-selected);
-        font: var(--cpd-font-body-md-semibold);
         color: var(--cpd-color-text-primary);
     }
 
