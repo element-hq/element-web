@@ -86,14 +86,11 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_UserMenu_contextMenu_themeButton {
-            min-width: 32px;
-            max-width: 32px;
-            width: 32px;
-            height: 32px;
+            flex-shrink: 0;
             margin-left: 8px;
-            border-radius: 32px;
-            background-color: $theme-button-bg-color;
-            cursor: pointer;
+
+            /* Compound overrides to match transitional designs */
+            padding: calc(var(--cpd-icon-button-size) * 0.25);
 
             /* to make alignment easier, create flexbox for the image */
             display: flex;
@@ -102,6 +99,11 @@ Please see LICENSE files in the repository root for full details.
 
             /* For enhanced visibility under contrast control */
             outline: 1px solid transparent;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
         }
 
         &.mx_UserMenu_contextMenu_guestPrompts {
