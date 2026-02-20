@@ -89,9 +89,6 @@ Please see LICENSE files in the repository root for full details.
             flex-shrink: 0;
             margin-left: 8px;
 
-            /* Compound overrides to match transitional designs */
-            padding: calc(var(--cpd-icon-button-size) * 0.25);
-
             /* to make alignment easier, create flexbox for the image */
             display: flex;
             align-items: center;
@@ -100,6 +97,8 @@ Please see LICENSE files in the repository root for full details.
             /* For enhanced visibility under contrast control */
             outline: 1px solid transparent;
 
+            /* Compound overrides to match transitional designs */
+            padding: var(--cpd-space-2x);
             svg {
                 width: 16px;
                 height: 16px;
