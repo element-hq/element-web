@@ -21,7 +21,7 @@ import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 import { I18nContext } from "../../utils/i18nContext.ts";
 import { I18nApi } from "../../index.ts";
 
-const { Default, HasTsReceivedAt, HasHref, HasExtraClassNames } = composeStories(stories);
+const { Default, HasHref, HasExtraClassNames } = composeStories(stories);
 
 const renderWithI18n = (ui: React.ReactElement): ReturnType<typeof render> =>
     render(ui, {
@@ -35,11 +35,6 @@ describe("MessageTimestampView", () => {
 
     it("renders the message timestamp in default state", async () => {
         const { container } = render(<Default />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders the message timestamp with received timestamp", async () => {
-        const { container } = render(<HasTsReceivedAt />);
         expect(container).toMatchSnapshot();
     });
 

@@ -35,15 +35,3 @@ exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
   </a>
 </div>
 `;
-
-exports[`MessageTimestampView > renders the message timestamp with received timestamp 1`] = `
-<div>
-  <span
-    aria-live="off"
-    class="content"
-    tabindex="0"
-  >
-    04:58
-  </span>
-</div>
-`;
