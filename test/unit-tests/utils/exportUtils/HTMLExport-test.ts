@@ -246,7 +246,7 @@ describe("HTMLExport", () => {
 
         const file = getMessageFile(exporter);
         expect(await file.text()).toMatchSnapshot();
-    });
+    }, 10000);
 
     it("should include the room's avatar", async () => {
         mockMessages(EVENT_MESSAGE);

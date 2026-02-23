@@ -414,7 +414,6 @@
         "edited": "e përpunuar",
         "email_address": "Adresë email",
         "encrypted": "I fshehtëzuar",
-        "encryption_enabled": "Fshehtëzim i aktivizuar",
         "error": "Gabim",
         "favourites": "Të parapëlqyer",
         "feedback": "Mendime",
@@ -2761,13 +2760,6 @@
             "see_older_messages": "Klikoni këtu për të parë mesazhe më të vjetër.",
             "unknown_predecessor": "S’gjendet dot versioni i vjetër i kësaj dhome (ID dhome: %(roomId)s) dhe s’na është dhënë “via_servers” që të shohim për të.",
             "unknown_predecessor_guess_server": "S’gjendet dot versioni i vjetër i kësaj dhome (ID dhome: %(roomId)s) dhe s’na është dhënë “via_servers” që të shohim për të. Ka mundësi që hamendësimi i shërbyesit prej ID-së së dhomës të funksionojë. Nëse doni të provoni, klikoni këtë lidhje:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "U shpërfill përpjekje për të çaktivizuar fshehtëzimin",
-            "disabled": "Fshehtëzim jo i aktivizuar",
-            "enabled_local": "Mesazhet në këtë fjalosje do të jenë të fshehtëzuar skaj-më-skaj.",
-            "parameters_changed": "Janë ndryshuar disa parametra fshehtëzimi.",
-            "unsupported": "Fshehtëzimi i përdorur nga kjo dhomë nuk mbulohet."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s ka lejuar vizitorë të marrin pjesë në dhomë.",

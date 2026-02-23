@@ -475,7 +475,6 @@
         "email_address": "E-posta Adresi",
         "emoji": "Emoji",
         "encrypted": "Şifrelenmiş",
-        "encryption_enabled": "Şifreleme etkin",
         "error": "Hata",
         "faq": "SSS",
         "favourites": "Favoriler",
@@ -3263,15 +3262,6 @@
             "unknown_predecessor": "Bu odanın eski sürümünü bulamıyoruz (oda kimliği: %(roomId)s) ve aramak için bize 'via_servers' sağlanmadı.",
             "unknown_predecessor_guess_server": "Bu odanın eski sürümünü bulamıyoruz (oda kimliği: %(roomId)s) ve bu sürümü aramamız için bize 'via_servers' sağlanmadı. Oda kimliğinden sunucuyu tahmin etmenin işe yaraması mümkün. Denemek isterseniz, bu bağlantıya tıklayın:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Şifrelemeyi devre dışı bırakma denemesi yok sayıldı",
-            "disabled": "Şifreleme etkin değil",
-            "enabled": "Bu odadaki mesajlar uçtan uca şifrelenmiştir. Kullanıcılar katıldığında, profillerinde onları doğrulayabilirsiniz, profil resimlerine dokunmanız yeterlidir.",
-            "enabled_dm": "Buradaki mesajlar uçtan uca şifrelenir. Profilinden %(displayName)s'i doğrulayın - profil resmine dokunun.",
-            "enabled_local": "Bu sohbetteki mesajlar uçtan uca şifrelenecektir.",
-            "parameters_changed": "Bazı şifreleme parametreleri değiştirildi.",
-            "unsupported": "Bu odada kullanılan şifreleme desteklenmiyor."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s misafirlerin odaya katılmasına izin verdi.",
             "forbidden": "Odaya misafirlerin girişini engelleyen %(senderDisplayName)s.",
@@ -3364,8 +3354,6 @@
             "label": "Mesaj Eylemleri",
             "view_in_room": "Odada görüntüle"
         },
-        "message_timestamp_received_at": "%(dateTime)s alındı",
-        "message_timestamp_sent_at": "Gönderildi: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s %(oldGlob)s ile eşleşen banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
             "changed_rule_rooms": "%(senderName)s %(oldGlob)s ile eşleşen odaları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",

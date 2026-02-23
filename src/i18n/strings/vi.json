@@ -395,7 +395,6 @@
         "email_address": "Địa chỉ thư điện tử",
         "emoji": "Biểu tượng cảm xúc",
         "encrypted": "Được mã hóa",
-        "encryption_enabled": "Mã hóa được bật",
         "error": "Lỗi",
         "faq": "Câu hỏi thường gặp",
         "favourites": "Yêu thích",
@@ -2707,13 +2706,6 @@
         "m.room.create": {
             "continuation": "Căn phòng này là sự tiếp nối của một cuộc trò chuyện khác.",
             "see_older_messages": "Bấm vào đây để xem các tin nhắn cũ hơn."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Bỏ qua nỗ lực vô hiệu hóa mã hóa",
-            "disabled": "Mã hóa không được bật",
-            "enabled_local": "Tin nhắn trong phòng này sẽ được mã hóa đầu-cuối.",
-            "parameters_changed": "Một số thông số mã hóa vừa được thay đổi.",
-            "unsupported": "Mã hóa mà phòng này sử dụng không được hỗ trợ."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s vừa cho phép khách có thể tham gia phòng.",

@@ -19,10 +19,16 @@
         "start_chat": "Neuer Chat"
     },
     "common": {
+        "encryption_enabled": "Verschlüsselung aktiviert",
         "preferences": "Einstellungen"
     },
     "left_panel": {
         "open_dial_pad": "Wähltastatur öffnen"
+    },
+    "notifications": {
+        "all_messages": "All Nachrichten",
+        "mentions_keywords": "Erwähnungen und Schlüsselwörter",
+        "mute_room": "Chat stummschalten"
     },
     "room": {
         "context_menu": {
@@ -47,8 +53,63 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "Öffne den Chat %(roomName)s",
+            "invitation": "Öffne die Chat Einladung zu %(roomName)s",
+            "mention": {
+                "one": "Öffne die Chat Einladung zu %(roomName)s mit einer Erwähnung.",
+                "other": "Öffne die Chat Einladung zu %(roomName)s mit %(count)s Erwähnungen."
+            },
+            "unread": {
+                "one": "Öffne den Chat %(roomName)s mit einer ungelesenen Nachricht.",
+                "other": "Öffne den Chat %(roomName)s mit %(count)s ungelesenen Nachrichten."
+            },
+            "unsent_message": "Öffne den Chat %(roomName)s mit einer ungesendeten Nachricht."
+        },
         "appearance": "Darstellung",
+        "collapse_filters": "Filter Liste einklappen",
+        "empty": {
+            "no_chats": "Bisher keine Chats",
+            "no_chats_description": "Lege los, indem du jemandem schreibst oder eine Gruppe erstellst",
+            "no_chats_description_no_room_rights": "Lege los, indem du jemandem schreibst",
+            "no_favourites": "Du hast noch keine Chats als Favorit markiert",
+            "no_favourites_description": "In den Chat Einstellungen kannst du einen Chat als Favorit markieren",
+            "no_invites": "Du hast keine ungelesenen Einladungen",
+            "no_lowpriority": "Du hast keine Chats mit niedriger Priorität.",
+            "no_mentions": "Du hast keine ungelesenen Erwähnungen",
+            "no_people": "Du hast noch keine Direktnachrichten",
+            "no_people_description": "Wähle Filter ab, um Chats zu sehen.",
+            "no_rooms": "Du bist noch in keinem Chat",
+            "no_rooms_description": "Wähle Filter ab, um Chats zu sehen.",
+            "no_unread": "Glückwunsch! Du hast keine ungelesenen Nachrichten.",
+            "show_activity": "Alle Aktivitäten ansehen",
+            "show_chats": "Alle Chats anzeigen"
+        },
+        "expand_filters": "Filterliste ausklappen",
+        "filters": {
+            "favourite": "Favoriten",
+            "invites": "Einladungen",
+            "low_priority": "Niedrige Priorität",
+            "mentions": "Erwähnungen",
+            "people": "Personen",
+            "rooms": "Gruppen",
+            "unread": "Ungelesen"
+        },
+        "list_title": "Chatliste",
+        "more_options": {
+            "copy_link": "Chatlink kopieren",
+            "favourited": "Favorisiert",
+            "leave_room": "Chat verlassen",
+            "low_priority": "Niedrige Priorität",
+            "mark_read": "Als gelesen markieren",
+            "mark_unread": "Als ungelesen markieren"
+        },
+        "notification_options": "Benachrichtigungsoptionen",
         "open_space_menu": "Menü für Spaces öffnen",
+        "primary_filters": "Filter für die Chatliste",
+        "room": {
+            "more_options": "Weitere Optionen"
+        },
         "room_options": "Chatoptionen",
         "show_message_previews": "Nachrichtenvorschau anzeigen",
         "sort": "Sortieren",
@@ -95,6 +156,12 @@
             "audio_player": "Audio-Player",
             "error_downloading_audio": "Fehler beim Herunterladen der Audiodatei",
             "unnamed_audio": "Unbenannte Audiodatei"
+        },
+        "m.room.encryption": {
+            "disabled": "Verschlüsselung nicht aktiviert",
+            "enabled": "Nachrichten in diesem Chat sind Ende-zu-Ende-verschlüsselt. Wenn Personen beitreten, kannst du sie in ihrem Profil verifizieren, indem du auf deren Profilbild klickst.",
+            "enabled_dm": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s in deren Profil – klicke auf deren Profilbild.",
+            "enabled_local": "Nachrichten in diesem Chat werden Ende-zu-Ende-verschlüsselt."
         }
     },
     "widget": {

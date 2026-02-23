@@ -22,6 +22,7 @@ electron/pub
 .vscode
 .vscode/
 .env
+.env.*
 /coverage
 # Auto-generated file
 /src/modules.js

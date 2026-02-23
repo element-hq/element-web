@@ -171,7 +171,9 @@
             "parameters_changed": "Some encryption parameters have been changed.",
             "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
-        }
+        },
+        "message_timestamp_received_at": "Received at: %(dateTime)s",
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
     },
     "widget": {
         "context_menu": {
