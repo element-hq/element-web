@@ -373,7 +373,6 @@
         "email_address": "Tölvupóstfang",
         "emoji": "Tjáningartáknmynd",
         "encrypted": "Dulritað",
-        "encryption_enabled": "Dulritun virk",
         "error": "Villa",
         "faq": "Algengar spurningar",
         "favourites": "Eftirlæti",
@@ -2414,12 +2413,6 @@
         "m.room.create": {
             "continuation": "Þessi spjallrás er framhald af öðru samtali.",
             "see_older_messages": "Smelltu hér til að sjá eldri skilaboð."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Hunsaði tilraun til að gera dulritun óvirka",
-            "disabled": "Dulritun ekki virk",
-            "enabled_local": "Skilaboð í þessu spjalli verða enda-í-enda dulrituð.",
-            "unsupported": "Dulritunin sem notuð er í þessari spjallrás er ekki studd."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s hefur leyft gestum að koma inn á spjallrásina.",

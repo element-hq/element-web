@@ -75,11 +75,25 @@ describe("DisambiguatedProfileViewModel", () => {
         const subscriber = jest.fn();
 
         vm.subscribe(subscriber);
-        onClick({} as never);
+        vm.onClick?.({} as never);
 
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(subscriber).not.toHaveBeenCalled();
         expect(vm.getSnapshot()).toBe(prevSnapshot);
+    });
+
+    it("should keep onClick bound when extracted as a callback", () => {
+        const onClick = jest.fn();
+        const vm = new DisambiguatedProfileViewModel({
+            member,
+            fallbackName: "Fallback",
+            onClick,
+        });
+
+        const clickHandler = vm.onClick;
+
+        expect(() => clickHandler?.({} as never)).not.toThrow();
+        expect(onClick).toHaveBeenCalledTimes(1);
     });
 
     it("should emit snapshot update when fallbackName changes", () => {

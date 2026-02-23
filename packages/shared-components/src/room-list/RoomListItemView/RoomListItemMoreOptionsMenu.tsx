@@ -54,6 +54,7 @@ export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuP
                     tooltip={_t("room_list|room|more_options")}
                     aria-label={_t("room_list|room|more_options")}
                     size="24px"
+                    style={{ padding: "2px" }}
                 >
                     <OverflowHorizontalIcon />
                 </IconButton>

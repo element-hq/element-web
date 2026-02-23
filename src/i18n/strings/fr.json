@@ -482,7 +482,6 @@
         "email_address": "Adresse e-mail",
         "emoji": "Émojis",
         "encrypted": "Chiffré",
-        "encryption_enabled": "Chiffrement activé",
         "error": "Erreur",
         "faq": "FAQ",
         "favourites": "Favoris",
@@ -3460,16 +3459,6 @@
             "unknown_predecessor": "L’ancienne version de ce salon (identifiant : %(roomId)s) est introuvable, et 'via_servers' ne nous a pas été fourni pour le trouver.",
             "unknown_predecessor_guess_server": "L’ancienne version de ce salon (identifiant : %(roomId)s) est introuvable, et 'via_servers' ne nous a pas été fourni pour le trouver. Il est possible que déduire le serveur à partir de l’identifiant de salon puisse marcher. Si vous voulez essayer, cliquez sur ce lien :"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Essai de désactiver le chiffrement ignoré",
-            "disabled": "Chiffrement non activé",
-            "enabled": "Les messages ici sont chiffrés de bout en bout. Quand les gens viennent, vous pouvez les vérifier dans leur profil, tapez simplement sur leur image de profil.",
-            "enabled_dm": "Les messages ici sont chiffrés de bout en bout. Vérifiez %(displayName)s dans son profil - cliquez sur son image de profil.",
-            "enabled_local": "Les messages de cette conversation seront chiffrés de bout en bout.",
-            "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
-            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier dans leur profil en cliquant sur leur photo de profil.",
-            "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s a autorisé les visiteurs à rejoindre le salon.",
             "forbidden": "%(senderDisplayName)s a empêché les visiteurs de rejoindre le salon.",
@@ -3563,8 +3552,6 @@
             "label": "Actions de message",
             "view_in_room": "Voir dans le salon"
         },
-        "message_timestamp_received_at": "Reçu à : %(dateTime)s",
-        "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s a mis à jour une règle de bannissement correspondant à %(oldGlob)s vers une règle correspondant à %(newGlob)s pour %(reason)s",
             "changed_rule_rooms": "%(senderName)s a changé une règle qui bannit les salons correspondant à %(oldGlob)s vers une règle correspondant à %(newGlob)s pour %(reason)s",

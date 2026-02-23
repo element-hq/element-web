@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode } from "react";
+import React, { type JSX, createRef, type ReactNode, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
     ChatSolidIcon,
@@ -18,6 +18,7 @@ import {
     NotificationsSolidIcon,
     ThemeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { IconButton } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -31,8 +32,8 @@ import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog, { shouldShowLogoutDialog } from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
-import { findHighContrastTheme, getCustomTheme, isHighContrastTheme } from "../../theme";
-import { RovingAccessibleButton } from "../../accessibility/RovingTabIndex";
+import { findHighContrastTheme, isHighContrastTheme } from "../../theme";
+import { useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import { getHomePageUrl } from "../../utils/pages";
@@ -52,6 +53,8 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher.ts";
+import { useTypedEventEmitterState } from "../../hooks/useEventEmitter.ts";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -62,8 +65,6 @@ type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
 
 interface IState {
     contextMenuPosition: PartialDOMRect | null;
-    isDarkTheme: boolean;
-    isHighContrast: boolean;
     selectedSpace?: Room | null;
 }
 
@@ -83,6 +84,51 @@ const below = (rect: PartialDOMRect): MenuProps => {
     };
 };
 
+const ThemeSwitchButton = (): JSX.Element => {
+    const [onFocus, isActive, ref] = useRovingTabIndex();
+    const themeWatcher = useMemo(() => new ThemeWatcher(), []);
+    const [isHighContrast, isDark] = useTypedEventEmitterState(
+        themeWatcher,
+        ThemeWatcherEvent.Change,
+        (theme: string) => [isHighContrastTheme(theme), themeWatcher.isUserOnDarkTheme()],
+    );
+
+    const onSwitchThemeClick = (ev: ButtonEvent): void => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        PosthogTrackers.trackInteraction("WebUserMenuThemeToggleButton", ev);
+
+        // Disable system theme matching if the user hits this button
+        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+
+        let newTheme = isDark ? "light" : "dark";
+        if (isHighContrast) {
+            const hcTheme = findHighContrastTheme(newTheme);
+            if (hcTheme) {
+                newTheme = hcTheme;
+            }
+        }
+        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
+        themeWatcher.recheck(newTheme);
+    };
+
+    return (
+        <IconButton
+            ref={ref}
+            onFocus={onFocus}
+            tabIndex={isActive ? 0 : -1}
+            className="mx_UserMenu_contextMenu_themeButton"
+            onClick={onSwitchThemeClick}
+            tooltip={isDark ? _t("user_menu|switch_theme_light") : _t("user_menu|switch_theme_dark")}
+            size="32px"
+            kind="secondary"
+        >
+            <ThemeIcon />
+        </IconButton>
+    );
+};
+
 export default class UserMenu extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
     declare public context: React.ContextType<typeof SDKContext>;
@@ -97,8 +143,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         this.state = {
             contextMenuPosition: null,
-            isDarkTheme: this.isUserOnDarkTheme(),
-            isHighContrast: this.isUserOnHighContrastTheme(),
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
         };
     }
@@ -111,7 +155,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
     }
 
     public componentWillUnmount(): void {
@@ -120,30 +163,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
-    }
-
-    private isUserOnDarkTheme(): boolean {
-        if (SettingsStore.getValue("use_system_theme")) {
-            return window.matchMedia("(prefers-color-scheme: dark)").matches;
-        } else {
-            const theme = SettingsStore.getValue("theme");
-            if (theme.startsWith("custom-")) {
-                return !!getCustomTheme(theme.substring("custom-".length)).is_dark;
-            }
-            return theme === "dark";
-        }
-    }
-
-    private isUserOnHighContrastTheme(): boolean {
-        if (SettingsStore.getValue("use_system_theme")) {
-            return window.matchMedia("(prefers-contrast: more)").matches;
-        } else {
-            const theme = SettingsStore.getValue("theme");
-            if (theme.startsWith("custom-")) {
-                return false;
-            }
-            return isHighContrastTheme(theme);
-        }
     }
 
     private onProfileUpdate = async (): Promise<void> => {
@@ -155,13 +174,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private onSelectedSpaceUpdate = async (): Promise<void> => {
         this.setState({
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
-        });
-    };
-
-    private onThemeChanged = (): void => {
-        this.setState({
-            isDarkTheme: this.isUserOnDarkTheme(),
-            isHighContrast: this.isUserOnHighContrastTheme(),
         });
     };
 
@@ -198,25 +210,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
     private onCloseMenu = (): void => {
         this.setState({ contextMenuPosition: null });
-    };
-
-    private onSwitchThemeClick = (ev: ButtonEvent): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        PosthogTrackers.trackInteraction("WebUserMenuThemeToggleButton", ev);
-
-        // Disable system theme matching if the user hits this button
-        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
-
-        let newTheme = this.state.isDarkTheme ? "light" : "dark";
-        if (this.state.isHighContrast) {
-            const hcTheme = findHighContrastTheme(newTheme);
-            if (hcTheme) {
-                newTheme = hcTheme;
-            }
-        }
-        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
     private onSettingsOpen = (ev: ButtonEvent, tabId?: string, props?: Record<string, any>): void => {
@@ -398,17 +391,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         </span>
                     </div>
 
-                    <RovingAccessibleButton
-                        className="mx_UserMenu_contextMenu_themeButton"
-                        onClick={this.onSwitchThemeClick}
-                        title={
-                            this.state.isDarkTheme
-                                ? _t("user_menu|switch_theme_light")
-                                : _t("user_menu|switch_theme_dark")
-                        }
-                    >
-                        <ThemeIcon width="16px" height="16px" />
-                    </RovingAccessibleButton>
+                    <ThemeSwitchButton />
                 </div>
                 {topSection}
                 {primaryOptionList}
