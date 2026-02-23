@@ -226,7 +226,11 @@ export const WithLargeFont: Story = {
     decorators: [
         (Story) => {
             useEffect(() => {
+                const originalFontSize = getComputedStyle(document.documentElement).fontSize;
                 document.documentElement.style.setProperty("font-size", "36px");
+                return () => {
+                    document.documentElement.style.setProperty("font-size", originalFontSize);
+                };
             }, []);
             return <Story />;
         },
