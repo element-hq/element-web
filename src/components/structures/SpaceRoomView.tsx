@@ -64,7 +64,6 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Field from "../views/elements/Field";
 import RoomFacePile from "../views/elements/RoomFacePile";
-import RoomName from "../views/elements/RoomName";
 import RoomTopic from "../views/elements/RoomTopic";
 import withValidation from "../views/elements/Validation";
 import RoomInfoLine from "../views/rooms/RoomInfoLine";
@@ -76,6 +75,7 @@ import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import SpacePillButton from "./SpacePillButton.tsx";
+import { useRoomName } from "../../hooks/useRoomName.ts";
 
 interface IProps {
     space: Room;
@@ -214,6 +214,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
     const userId = cli.getSafeUserId();
+    const name = useRoomName(space);
 
     const storeIsShowingSpaceMembers = useCallback(
         () =>
@@ -273,12 +274,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                 <RoomAvatar room={space} size="80px" viewAvatarOnClick={true} type="square" />
             </div>
             <div className="mx_SpaceRoomView_landing_name">
-                <RoomName room={space}>
-                    {(name) => {
-                        const tags = { name: () => <h1>{name}</h1> };
-                        return _t("space|landing_welcome", {}, tags) as JSX.Element;
-                    }}
-                </RoomName>
+                {_t("space|landing_welcome", {}, { name: () => <h1>{name}</h1> })}
             </div>
             <div className="mx_SpaceRoomView_landing_infoBar">
                 <RoomInfoLine room={space} />
