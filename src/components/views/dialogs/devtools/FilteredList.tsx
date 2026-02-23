@@ -19,7 +19,7 @@ const LOAD_TILES_STEP_SIZE = 50;
 interface IProps {
     children: React.ReactElement[];
     query: string;
-    onChange(value: string): void;
+    onChange(this: void, value: string): void;
 }
 
 const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {

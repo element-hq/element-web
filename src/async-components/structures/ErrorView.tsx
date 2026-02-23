@@ -116,7 +116,7 @@ const linkFactory =
     );
 
 export const UnsupportedBrowserView: React.FC<{
-    onAccept?(): void;
+    onAccept?(this: void): void;
 }> = ({ onAccept }) => {
     const config = SdkConfig.get();
     const brand = config.brand ?? "Element";

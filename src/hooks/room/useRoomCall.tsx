@@ -93,9 +93,9 @@ export const useRoomCall = (
     room: Room | LocalRoom,
 ): {
     voiceCallDisabledReason: string | null;
-    voiceCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
+    voiceCallClick(this: void, evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
     videoCallDisabledReason: string | null;
-    videoCallClick(evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
+    videoCallClick(this: void, evt: React.MouseEvent | undefined, selectedType: PlatformCallType): void;
     toggleCallMaximized: () => void;
     isViewingCall: boolean;
     isConnectedToCall: boolean;

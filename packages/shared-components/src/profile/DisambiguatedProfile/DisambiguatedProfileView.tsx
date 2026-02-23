@@ -57,8 +57,10 @@ export interface DisambiguatedProfileViewActions {
 /**
  * The view model for DisambiguatedProfileView.
  */
-export type DisambiguatedProfileViewModel = ViewModel<DisambiguatedProfileViewSnapshot> &
-    DisambiguatedProfileViewActions;
+export type DisambiguatedProfileViewModel = ViewModel<
+    DisambiguatedProfileViewSnapshot,
+    DisambiguatedProfileViewActions
+>;
 
 interface DisambiguatedProfileViewProps {
     /**

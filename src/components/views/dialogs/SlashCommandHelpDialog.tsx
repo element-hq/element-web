@@ -20,7 +20,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
  */
 interface IProps {
     roomId: string;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ roomId, onFinished }) => {

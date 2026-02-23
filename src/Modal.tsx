@@ -93,7 +93,7 @@ export interface IHandle<C extends ComponentType> {
      *
      * @param args - Arguments to return to {@link finished}.
      */
-    close(...args: OnFinishedParams<C>): void;
+    close(this: void, ...args: OnFinishedParams<C>): void;
 }
 
 interface IOptions<C extends ComponentType> {

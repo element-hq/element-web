@@ -10,7 +10,7 @@ import { type FocusEvent, useCallback, useEffect, useRef, useState } from "react
 
 export function useIsFocused(): {
     isFocused: boolean;
-    onFocus(event: FocusEvent<HTMLElement>): void;
+    onFocus(this: void, event: FocusEvent<HTMLElement>): void;
 } {
     const [isFocused, setIsFocused] = useState(false);
     const timeoutIDRef = useRef<number>(undefined);

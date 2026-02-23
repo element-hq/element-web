@@ -20,9 +20,9 @@ export function useEditing(
     initialContent?: string,
 ): {
     isSaveDisabled: boolean;
-    onChange(content: string): void;
-    editMessage(): Promise<ISendEventResponse | undefined>;
-    endEditing(): void;
+    onChange(this: void, content: string): void;
+    editMessage(this: void): Promise<ISendEventResponse | undefined>;
+    endEditing(this: void): void;
 } {
     const roomContext = useScopedRoomContext("timelineRenderingType");
     const mxClient = useMatrixClientContext();

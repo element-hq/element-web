@@ -19,7 +19,7 @@ interface Props {
     roomId?: string; // for per-room settings
     label?: string;
     isExplicit?: boolean;
-    onChange?(value: string): void;
+    onChange?(this: void, value: string): void;
 }
 
 const SettingsField = ({ settingKey, level, roomId, isExplicit, label, onChange: _onSave }: Props): JSX.Element => {

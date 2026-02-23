@@ -36,7 +36,7 @@ interface ClickableProps extends Props {
     /**
      * If specified will return an AccessibleButton instead of a div.
      */
-    onClick(ev: ButtonEvent): void;
+    onClick(this: void, ev: ButtonEvent): void;
     tabIndex?: number;
 }
 

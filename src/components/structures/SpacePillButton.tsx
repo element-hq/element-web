@@ -13,7 +13,7 @@ const SpacePillButton: React.FC<{
     title: string;
     icon: JSX.Element;
     description: string;
-    onClick(): void;
+    onClick(this: void): void;
 }> = ({ title, icon, description, onClick }) => {
     return (
         <AccessibleButton className="mx_SpacePillButton" onClick={onClick}>

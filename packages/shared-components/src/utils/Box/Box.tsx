@@ -55,7 +55,7 @@ export function Box({
     ...props
 }: React.PropsWithChildren<BoxProps>): JSX.Element {
     const style = useMemo(() => {
-        const style: Record<string, any> = {};
+        const style: Record<string, string> = {};
         if (flex) style["--mx-box-flex"] = flex;
         if (shrink) style["--mx-box-shrink"] = shrink;
         if (grow) style["--mx-box-grow"] = grow;

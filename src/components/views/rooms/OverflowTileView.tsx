@@ -14,7 +14,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 interface Props {
     // The number of remaining items
     remaining: number;
-    onClick(): void;
+    onClick(this: void): void;
 }
 
 /**

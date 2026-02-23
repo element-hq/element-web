@@ -26,7 +26,7 @@ import { SettingsSubsection, SettingsSubsectionText } from "../settings/shared/S
 
 interface IProps {
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space }) => {

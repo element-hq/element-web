@@ -171,8 +171,14 @@ interface IProps {
     handleLeftRight?: boolean;
     handleInputFields?: boolean;
     scrollIntoView?: boolean | ScrollIntoViewOptions;
-    children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent): void; onDragEndHandler(): void }): ReactNode;
-    onKeyDown?(ev: React.KeyboardEvent, state: IState, dispatch: Dispatch<IAction>): void;
+    children(
+        this: void,
+        renderProps: {
+            onKeyDownHandler(this: void, ev: React.KeyboardEvent): void;
+            onDragEndHandler(this: void): void;
+        },
+    ): ReactNode;
+    onKeyDown?(this: void, ev: React.KeyboardEvent, state: IState, dispatch: Dispatch<IAction>): void;
 }
 
 export const findSiblingElement = (

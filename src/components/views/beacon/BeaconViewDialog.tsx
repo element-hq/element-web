@@ -33,7 +33,7 @@ export interface IProps {
     matrixClient: MatrixClient;
     // open the map centered on this beacon's location
     initialFocusedBeacon?: Beacon;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 // track the 'focused time' as ts

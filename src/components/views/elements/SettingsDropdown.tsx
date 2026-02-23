@@ -21,7 +21,7 @@ interface Props {
     label?: string;
     isExplicit?: boolean;
     hideIfCannotSet?: boolean;
-    onChange?(option: string): void;
+    onChange?(this: void, option: string): void;
 }
 
 const SettingsDropdown = ({

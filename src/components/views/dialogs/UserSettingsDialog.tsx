@@ -58,7 +58,7 @@ interface IProps {
      */
     initialEncryptionState?: State;
     sdkContext: SdkContextClass;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 function titleForTabID(tabId: UserTab): React.ReactNode {

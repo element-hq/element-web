@@ -114,7 +114,7 @@ const usePendingActions = (): Map<PendingActionType, Set<string>> => {
 };
 
 interface IProps {
-    onVisibilityChange?(): void;
+    onVisibilityChange?(this: void): void;
 }
 
 const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {

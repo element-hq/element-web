@@ -42,7 +42,7 @@ interface Props {
     promise: Promise<ISearchResults>;
     abortController?: AbortController;
     className: string;
-    onUpdate(inProgress: boolean, results: ISearchResults | null, error: Error | null): void;
+    onUpdate(this: void, inProgress: boolean, results: ISearchResults | null, error: Error | null): void;
     ref?: Ref<ScrollPanel>;
 }
 

@@ -88,7 +88,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
         }
     }
 
-    private elementsForCommit(commit: Commit): JSX.Element {
+    private elementsForCommit(this: void, commit: Commit): JSX.Element {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
                 <a href={commit.html_url} target="_blank" rel="noreferrer noopener">

@@ -32,7 +32,7 @@ import SettingsTab from "../settings/tabs/SettingsTab";
 interface IProps {
     matrixClient: MatrixClient;
     space: Room;
-    closeSettingsFn(): void;
+    closeSettingsFn(this: void): void;
 }
 
 const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space, closeSettingsFn }) => {

@@ -24,7 +24,7 @@ const INITIAL_NUM_PREVIEWS = 2;
 interface IProps {
     links: string[]; // the URLs to be previewed
     mxEvent: MatrixEvent; // the Event associated with the preview
-    onCancelClick(): void; // called when the preview's cancel ('hide') button is clicked
+    onCancelClick(this: void): void; // called when the preview's cancel ('hide') button is clicked
 }
 
 const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {

@@ -24,7 +24,7 @@ export const stringify = (object: object): string => {
 interface IEventEditorProps extends Pick<IDevtoolsProps, "onBack"> {
     fieldDefs: IFieldDef[]; // immutable
     defaultContent?: string;
-    onSend(fields: string[], content: IContent): Promise<unknown>;
+    onSend(this: void, fields: string[], content: IContent): Promise<unknown>;
 }
 
 interface IFieldDef {

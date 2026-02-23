@@ -17,8 +17,8 @@ import { AddExistingToSpace, defaultSpacesRenderer, SubspaceSelector } from "./A
 
 interface IProps {
     space: Room;
-    onCreateSubspaceClick(): void;
-    onFinished(added?: boolean): void;
+    onCreateSubspaceClick(this: void): void;
+    onFinished(this: void, added?: boolean): void;
 }
 
 const AddExistingSubspaceDialog: React.FC<IProps> = ({ space, onCreateSubspaceClick, onFinished }) => {
