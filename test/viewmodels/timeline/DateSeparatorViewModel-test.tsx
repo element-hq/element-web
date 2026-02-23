@@ -6,9 +6,7 @@
  */
 
 import React from "react";
-import { DateSeparatorView } from "@element-hq/web-shared-components";
 import { mocked } from "jest-mock";
-import { fireEvent, render, screen } from "jest-matrix-react";
 import { ConnectionError, Direction } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../src/dispatcher/dispatcher";
@@ -75,11 +73,6 @@ describe("DateSeparatorViewModel", () => {
         return new DateSeparatorViewModel({ ...defaultProps, ...props });
     };
 
-    const renderViewModel = (props: Partial<typeof defaultProps> & { forExport?: boolean } = {}) => {
-        const vm = createViewModel(props);
-        return { vm, ...render(<DateSeparatorView vm={vm} />) };
-    };
-
     beforeEach(() => {
         jest.useFakeTimers();
         jest.setSystemTime(nowDate.getTime());
@@ -144,7 +137,35 @@ describe("DateSeparatorViewModel", () => {
         });
         const vm = createViewModel();
 
-        expect(vm.getSnapshot().headerContent).toBeDefined();
+        expect(vm.getSnapshot().jumpToEnabled).toBeTruthy();
+    });
+
+    it("exposes jumpFromDate in snapshot", () => {
+        const vm = createViewModel();
+
+        expect(vm.getSnapshot().jumpFromDate).toBe("2021-12-17");
+    });
+
+    it("does not expose jumpToDateMenu when exporting", () => {
+        mocked(SettingsStore).getValue.mockImplementation((key): any => {
+            if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
+            if (key === "feature_jump_to_date") return true;
+            return undefined;
+        });
+        const vm = createViewModel({ forExport: true });
+
+        expect(vm.getSnapshot().jumpToEnabled).toBeFalsy();
+    });
+
+    it("updates jumpToEnabled when feature_jump_to_date changes at runtime", () => {
+        const vm = createViewModel();
+        expect(vm.getSnapshot().jumpToEnabled).toBeFalsy();
+
+        const callback = watchCallbacks.get("feature_jump_to_date");
+        expect(callback).toBeDefined();
+        callback?.("feature_jump_to_date", null, null, null, true);
+
+        expect(vm.getSnapshot().jumpToEnabled).toBeTruthy();
     });
 
     it("dispatches ViewRoom when pickDate resolves in active room", async () => {
@@ -203,14 +224,14 @@ describe("DateSeparatorViewModel", () => {
         expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(false);
     });
 
-    describe("rendering with DateSeparatorView", () => {
+    describe("snapshot labels", () => {
         it.each(testCases)("formats date correctly when current time is %s", (_d, ts, result) => {
-            expect(renderViewModel({ ts }).container.textContent).toContain(result);
+            expect(createViewModel({ ts }).getSnapshot().label).toContain(result);
         });
 
         describe("when forExport is true", () => {
             it.each(testCases)("formats date in full when current time is %s", (_d, ts) => {
-                expect(renderViewModel({ ts, forExport: true }).container.textContent).toContain(
+                expect(createViewModel({ ts, forExport: true }).getSnapshot().label).toContain(
                     formatFullDateNoTime(new Date(ts)),
                 );
             });
@@ -226,113 +247,105 @@ describe("DateSeparatorViewModel", () => {
             });
 
             it.each(testCases)("formats date in full when current time is %s", (_d, ts) => {
-                expect(renderViewModel({ ts }).container.textContent).toContain(formatFullDateNoTime(new Date(ts)));
+                expect(createViewModel({ ts }).getSnapshot().label).toContain(formatFullDateNoTime(new Date(ts)));
+            });
+        });
+    });
+
+    describe("jump actions", () => {
+        beforeEach(() => {
+            mocked(SettingsStore).getValue.mockImplementation((key): any => {
+                if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
+                if (key === "feature_jump_to_date") return true;
+                return undefined;
             });
         });
 
-        describe("when feature_jump_to_date is enabled", () => {
-            beforeEach(() => {
-                mocked(SettingsStore).getValue.mockImplementation((key): any => {
-                    if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
-                    if (key === "feature_jump_to_date") return true;
-                    return undefined;
-                });
-            });
-
-            [
-                {
-                    timeDescriptor: "last week",
-                    jumpButtonTestId: "jump-to-date-last-week",
-                },
-                {
-                    timeDescriptor: "last month",
-                    jumpButtonTestId: "jump-to-date-last-month",
-                },
-                {
-                    timeDescriptor: "the beginning",
-                    jumpButtonTestId: "jump-to-date-beginning",
-                },
-            ].forEach((testCase) => {
-                it(`can jump to ${testCase.timeDescriptor}`, async () => {
-                    renderViewModel();
-                    fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
-
-                    const returnedDate = new Date();
-                    returnedDate.setDate(nowDate.getDate() - 100);
-                    const returnedEventId = "$abc";
-                    mockTimestampToEvent.mockResolvedValue({
-                        event_id: returnedEventId,
-                        origin_server_ts: returnedDate.getTime(),
-                    });
-                    fireEvent.click(await screen.findByTestId(testCase.jumpButtonTestId));
-                    await flushPromisesWithFakeTimers();
-
-                    expect(dispatcher.dispatch).toHaveBeenCalledWith({
-                        action: Action.ViewRoom,
-                        event_id: returnedEventId,
-                        highlighted: true,
-                        room_id: roomId,
-                        metricsTrigger: undefined,
-                    });
-                });
-            });
-
-            it("does not jump when room changed before request resolves", async () => {
-                renderViewModel();
-                fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
-
-                mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+        [
+            {
+                timeDescriptor: "last week",
+                run: (vm: DateSeparatorViewModel): Promise<void> => vm.onLastWeekPicked(),
+            },
+            {
+                timeDescriptor: "last month",
+                run: (vm: DateSeparatorViewModel): Promise<void> => vm.onLastMonthPicked(),
+            },
+            {
+                timeDescriptor: "the beginning",
+                run: (vm: DateSeparatorViewModel): Promise<void> => vm.onBeginningPicked(),
+            },
+        ].forEach((testCase) => {
+            it(`can jump to ${testCase.timeDescriptor}`, async () => {
+                const returnedDate = new Date();
+                returnedDate.setDate(nowDate.getDate() - 100);
+                const returnedEventId = "$abc";
                 mockTimestampToEvent.mockResolvedValue({
-                    event_id: "$abc",
-                    origin_server_ts: 0,
+                    event_id: returnedEventId,
+                    origin_server_ts: returnedDate.getTime(),
                 });
-                fireEvent.click(await screen.findByTestId("jump-to-date-last-week"));
+                const vm = createViewModel();
+
+                await testCase.run(vm);
                 await flushPromisesWithFakeTimers();
 
-                expect(dispatcher.dispatch).not.toHaveBeenCalled();
+                expect(mockTimestampToEvent).toHaveBeenCalledWith(roomId, expect.any(Number), Direction.Forward);
+                expect(dispatcher.dispatch).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    event_id: returnedEventId,
+                    highlighted: true,
+                    room_id: roomId,
+                    metricsTrigger: undefined,
+                });
             });
+        });
 
-            it("does not show jump to date error if user switched room", async () => {
-                renderViewModel();
-                fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
-
-                mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
-                mockTimestampToEvent.mockRejectedValue(new Error("Fake error in test"));
-                fireEvent.click(await screen.findByTestId("jump-to-date-last-week"));
-                await flushPromisesWithFakeTimers();
-
-                expect(Modal.createDialog).not.toHaveBeenCalled();
+        it("does not jump when room changed before request resolves", async () => {
+            mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+            mockTimestampToEvent.mockResolvedValue({
+                event_id: "$abc",
+                origin_server_ts: 0,
             });
+            const vm = createViewModel();
 
-            it("shows error dialog with submit debug logs option when non-networking error occurs", async () => {
-                renderViewModel();
-                fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
+            await vm.onLastWeekPicked();
+            await flushPromisesWithFakeTimers();
 
-                mockTimestampToEvent.mockRejectedValue(new Error("Fake error in test"));
-                fireEvent.click(await screen.findByTestId("jump-to-date-last-week"));
-                await flushPromisesWithFakeTimers();
+            expect(dispatcher.dispatch).not.toHaveBeenCalled();
+        });
 
-                expect(Modal.createDialog).toHaveBeenCalled();
-                const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
-                expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(
-                    true,
-                );
-            });
+        it("does not show jump to date error if user switched room", async () => {
+            mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+            mockTimestampToEvent.mockRejectedValue(new Error("Fake error in test"));
+            const vm = createViewModel();
 
-            it("shows error dialog without submit debug logs option when networking error occurs", async () => {
-                renderViewModel();
-                fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
+            await vm.onLastWeekPicked();
+            await flushPromisesWithFakeTimers();
 
-                mockTimestampToEvent.mockRejectedValue(new ConnectionError("Fake connection error in test"));
-                fireEvent.click(await screen.findByTestId("jump-to-date-last-week"));
-                await flushPromisesWithFakeTimers();
+            expect(Modal.createDialog).not.toHaveBeenCalled();
+        });
 
-                expect(Modal.createDialog).toHaveBeenCalled();
-                const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
-                expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(
-                    false,
-                );
-            });
+        it("shows error dialog with submit debug logs option when non-networking error occurs", async () => {
+            mockTimestampToEvent.mockRejectedValue(new Error("Fake error in test"));
+            const vm = createViewModel();
+
+            await vm.onLastWeekPicked();
+            await flushPromisesWithFakeTimers();
+
+            expect(Modal.createDialog).toHaveBeenCalled();
+            const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
+            expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(true);
+        });
+
+        it("shows error dialog without submit debug logs option when networking error occurs", async () => {
+            mockTimestampToEvent.mockRejectedValue(new ConnectionError("Fake connection error in test"));
+            const vm = createViewModel();
+
+            await vm.onLastWeekPicked();
+            await flushPromisesWithFakeTimers();
+
+            expect(Modal.createDialog).toHaveBeenCalled();
+            const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
+            expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(false);
         });
     });
 });

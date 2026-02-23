@@ -5,12 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-:global([role="menu"]:has([data-testid="jump-to-date-picker"])) {
-    max-inline-size: none !important;
-    padding-top: var(--cpd-space-1x);
-    padding-bottom: var(--cpd-space-1x);
-}
-
 .content {
     padding: 0 25px;
     cursor: pointer;
@@ -34,14 +28,12 @@
 
 .picker_form {
     display: flex;
-    flex-direction: row;
-    gap: 0;
-}
-
-.picker_menuitem {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    padding: 0;
+    gap: var(--cpd-space-4x);
     color: var(--cpd-color-text-primary);
     font: var(--cpd-font-body-md-medium);
-    gap: 0;
 }
 
 .picker_label {
@@ -50,106 +42,19 @@
 }
 
 .picker_input {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    min-width: 0;
-    margin: 0;
-    margin-left: var(--cpd-space-2x);
-    border-radius: 8px;
-    border: 1px solid var(--cpd-color-border-interactive-secondary);
-    transition: border-color 0.25s;
+    margin-left: auto; /* pushes this item to row end */
     &:focus-within {
         border-color: var(--cpd-color-border-focused);
     }
-    &:focus-within .picker_input_floating_label {
-        color: var(--cpd-color-border-focused);
-    }
-}
-
-.picker_input_label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-.picker_input_floating_label {
-    position: absolute;
-    top: -6px;
-    left: 8px;
-    z-index: 1;
-    padding: 0 2px;
-    background: var(--cpd-color-bg-canvas-default);
-    color: var(--cpd-color-text-secondary);
-    font: var(--cpd-font-body-xs-regular);
-    line-height: var(--cpd-font-line-height-regular);
-    pointer-events: none;
-    white-space: nowrap;
 }
 
 .picker_input_date {
-    position: relative;
     font: inherit;
-    border: none;
-    border-radius: 8px;
-    padding: var(--cpd-space-2x) var(--cpd-space-5x) var(--cpd-space-2x) var(--cpd-space-2x);
-    color: inherit;
-    background-color: inherit;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    min-width: 0;
-    &:focus {
-        outline: 0;
-        border-color: transparent;
-    }
-    &::-webkit-calendar-picker-indicator {
-        opacity: 0;
-        position: absolute;
-        inset-inline-end: 0;
-        inline-size: 28px;
-        block-size: 100%;
-        cursor: pointer;
-    }
-
     :global(.cpd-theme-dark) & {
         color-scheme: dark;
     }
 }
 
-.picker_input_calendar_icon {
-    width: 16px;
-    height: 16px;
-    color: var(--cpd-color-text-primary);
-}
-
-.picker_input_calendar_button {
-    position: absolute;
-    right: var(--cpd-space-2x);
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    border-radius: var(--cpd-space-1x);
-}
-
-.picker_input_calendar_button:focus-visible {
-    outline: 2px solid var(--cpd-color-border-focused);
-    outline-offset: 2px;
-}
-
 .picker_button {
-    margin-left: var(--cpd-space-2x);
-    padding: var(--cpd-space-2x) var(--cpd-space-4x);
+    flex: 1;
 }

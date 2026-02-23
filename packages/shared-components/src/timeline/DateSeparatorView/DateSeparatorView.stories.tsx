@@ -53,7 +53,7 @@ HasExtraClassNames.args = {
 export const WithJumpToTooltip = Template.bind({});
 WithJumpToTooltip.args = {
     jumpToEnabled: true,
-    jumpToTimestamp: new Date("2025-01-15T12:00:00.000Z").getTime(),
+    jumpFromDate: "2025-01-15",
 };
 WithJumpToTooltip.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -64,7 +64,7 @@ WithJumpToTooltip.play = async ({ canvasElement }) => {
 export const WithJumpToDatePicker = Template.bind({});
 WithJumpToDatePicker.args = {
     jumpToEnabled: true,
-    jumpToTimestamp: new Date("2025-01-15T12:00:00.000Z").getTime(),
+    jumpFromDate: "2025-01-15",
 };
 WithJumpToDatePicker.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);

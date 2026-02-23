@@ -6,6 +6,7 @@
  */
 
 import {
+    formatDateForInput,
     BaseViewModel,
     type DateSeparatorViewSnapshot as DateSeparatorViewSnapshotInterface,
     type DateSeparatorViewModel as DateSeparatorViewModelInterface,
@@ -102,7 +103,7 @@ export class DateSeparatorViewModel
             label,
             className: "mx_TimelineSeparator",
             jumpToEnabled: this.jumpToDateEnabled && !this.props.forExport,
-            jumpToTimestamp: this.props.ts,
+            jumpFromDate: formatDateForInput(new Date(this.props.ts)),
         };
     }
 

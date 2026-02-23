@@ -80,11 +80,7 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
                 onKeyDown={onKeyDown}
             />
             {snapshot.jumpToEnabled && <Separator decorative />}
-            {snapshot.jumpToEnabled && (
-                <MenuItem as="div" label={null} onSelect={null} hideChevron={true}>
-                    <DateSeparatorDatePicker vm={vm} onSubmitted={() => onOpenChange?.(false)} />
-                </MenuItem>
-            )}
+            {snapshot.jumpToEnabled && <DateSeparatorDatePicker vm={vm} onSubmitted={() => onOpenChange?.(false)} />}
         </Menu>
     );
 };

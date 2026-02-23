@@ -112,4 +112,48 @@ describe("DateSeparatorContextMenu", () => {
         expect(vm.onDatePicked).toHaveBeenCalledWith("2025-01-10");
         expect(onOpenChange).toHaveBeenCalledWith(false);
     });
+
+    it("moves focus from date input to submit button on Tab", async () => {
+        const user = userEvent.setup();
+        renderMenu({ open: true, jumpToEnabled: true });
+
+        const dateInput = screen.getByLabelText("Pick a date to jump to");
+        const submitButton = screen.getByRole("button", { name: "Go" });
+        dateInput.focus();
+        await user.keyboard("{Tab}");
+
+        expect(submitButton).toHaveFocus();
+    });
+
+    it("submits date picker with Enter on the submit button", async () => {
+        const user = userEvent.setup();
+        const onOpenChange = vi.fn<(open: boolean) => void>();
+        const { vm } = renderMenu({ open: true, jumpToEnabled: true, onOpenChange });
+
+        const dateInput = screen.getByLabelText("Pick a date to jump to");
+        fireEvent.input(dateInput, { target: { value: "2025-01-11" } });
+
+        const submitButton = screen.getByRole("button", { name: "Go" });
+        submitButton.focus();
+        await user.keyboard("{Enter}");
+
+        expect(vm.onDatePicked).toHaveBeenCalledWith("2025-01-11");
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it("submits date picker with Space on the submit button", async () => {
+        const user = userEvent.setup();
+        const onOpenChange = vi.fn<(open: boolean) => void>();
+        const { vm } = renderMenu({ open: true, jumpToEnabled: true, onOpenChange });
+
+        const dateInput = screen.getByLabelText("Pick a date to jump to");
+        fireEvent.input(dateInput, { target: { value: "2025-01-12" } });
+
+        const submitButton = screen.getByRole("button", { name: "Go" });
+        submitButton.focus();
+        await user.keyboard(" ");
+
+        expect(vm.onDatePicked).toHaveBeenCalledWith("2025-01-12");
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
 });

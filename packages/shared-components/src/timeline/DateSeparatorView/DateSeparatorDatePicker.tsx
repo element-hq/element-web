@@ -6,8 +6,7 @@
  */
 
 import React, { type JSX, useId, useRef, useState } from "react";
-import { Root, Submit, Field, Label, TextControl } from "@vector-im/compound-web";
-import { CalendarIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Root, Submit, Field, TextControl, MenuItem } from "@vector-im/compound-web";
 
 import { formatDateForInput } from "../../utils/DateUtils";
 import { useI18n } from "../../utils/i18nContext";
@@ -30,95 +29,80 @@ export interface DateSeparatorDatePickerProps {
  */
 export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = ({ vm, onSubmitted }): JSX.Element => {
     const snapshot = useViewModel(vm);
-    const date = snapshot.jumpToTimestamp ? new Date(snapshot.jumpToTimestamp) : new Date();
+    const date = snapshot.jumpFromDate ? new Date(snapshot.jumpFromDate) : new Date();
     const dateInputDefaultValue = formatDateForInput(date);
 
     const i18n = useI18n();
     const dateInputId = useId();
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
     const dateInputRef = useRef<HTMLInputElement>(null);
-    const calendarButtonRef = useRef<HTMLButtonElement>(null);
     const submitButtonRef = useRef<HTMLButtonElement>(null);
+
+    const onDateInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (event.key === "Tab" && !event.shiftKey) {
+            event.preventDefault();
+            submitButtonRef.current?.focus();
+        }
+    };
 
     const onDateValueInput = (event: React.InputEvent<HTMLInputElement>): void => {
         setDateValue(event.currentTarget.value);
     };
 
-    const onJumpToDateSubmit = (event: React.SubmitEvent<HTMLFormElement>): void => {
-        event.preventDefault();
+    const submitDate = (): void => {
         vm.onDatePicked(dateValue);
         onSubmitted?.();
     };
 
-    const onDateInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (event.key !== "Tab") return;
+    const onJumpToDateSubmit = (event: React.SubmitEvent<HTMLFormElement>): void => {
         event.preventDefault();
-        calendarButtonRef.current?.focus();
+        submitDate();
     };
 
-    const onCalendarButtonClick = (): void => {
-        const input = dateInputRef.current;
-        if (!input) return;
-
-        input.focus();
-
-        try {
-            if ("showPicker" in input) {
-                input.showPicker();
-                return;
-            }
-        } catch {
-            // Some browsers can throw if gesture/context is rejected.
-        }
-
-        input.click();
+    const onSubmitButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
+        if (event.key !== "Enter" && event.key !== " " && event.key !== "Spacebar") return;
+        event.preventDefault();
+        submitDate();
     };
 
-    const onCalendarButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
-        if (event.key !== "Tab" || event.shiftKey) return;
+    const keepMenuOpenOnSelect = (event: Event): void => {
         event.preventDefault();
-        submitButtonRef.current?.focus();
     };
 
     return (
-        <div data-testid="jump-to-date-picker" className={styles.picker_menuitem}>
+        <MenuItem
+            as="div"
+            data-testid="jump-to-date-picker"
+            label={null}
+            onSelect={keepMenuOpenOnSelect}
+            hideChevron={true}
+        >
             <Root className={styles.picker_form} onSubmit={onJumpToDateSubmit}>
                 <span className={styles.picker_label}>{i18n.translate("room|jump_to_date")}</span>
                 <Field name="jump-to-date-field" className={styles.picker_input}>
-                    <Label className={styles.picker_input_label} htmlFor={dateInputId}>
-                        {i18n.translate("room|jump_to_date_prompt")}
-                    </Label>
-                    <span className={styles.picker_input_floating_label} aria-hidden="true">
-                        {i18n.translate("room|jump_to_date_prompt")}
-                    </span>
                     <TextControl
                         ref={dateInputRef}
                         id={dateInputId}
                         type="date"
+                        aria-label={i18n.translate("room|jump_to_date_prompt")}
                         onInput={onDateValueInput}
                         onKeyDown={onDateInputKeyDown}
                         value={dateValue}
-                        // Prevent people from selecting a day in the future
-                        // (there won't be any events there anyway).
                         max={formatDateForInput(new Date())}
                         className={styles.picker_input_date}
                     />
-                    <button
-                        ref={calendarButtonRef}
-                        type="button"
-                        className={styles.picker_input_calendar_button}
-                        aria-label={i18n.translate("room|jump_to_date")}
-                        onClick={onCalendarButtonClick}
-                        onKeyDown={onCalendarButtonKeyDown}
-                        data-testid="jump-to-date-show-picker"
-                    >
-                        <CalendarIcon className={styles.picker_input_calendar_icon} aria-hidden="true" />
-                    </button>
                 </Field>
-                <Submit ref={submitButtonRef} className={styles.picker_button} type="submit" kind="primary" size="sm">
+                <Submit
+                    ref={submitButtonRef}
+                    className={styles.picker_button}
+                    type="submit"
+                    kind="primary"
+                    size="sm"
+                    onKeyDown={onSubmitButtonKeyDown}
+                >
                     {i18n.translate("action|go")}
                 </Submit>
             </Root>
-        </div>
+        </MenuItem>
     );
 };

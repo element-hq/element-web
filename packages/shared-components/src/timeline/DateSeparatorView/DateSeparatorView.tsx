@@ -28,9 +28,9 @@ export interface DateSeparatorViewSnapshot {
      */
     jumpToEnabled?: boolean;
     /**
-     * Reference timestamp used to prefill the jump-to-date picker value.
+     * Reference date as input format used to prefill the jump-to-date picker value.
      */
-    jumpToTimestamp?: number;
+    jumpFromDate?: string;
     /**
      * Extra CSS classes to apply to the component.
      */
@@ -45,7 +45,7 @@ export interface DateSeparatorViewActions {
     /** Jump to the beginning of the room history. */
     onBeginningPicked: () => void;
     /** Jump to the picked date of the room history. */
-    onDatePicked: (dateString: string) => void;
+    onDatePicked: (date: string) => void;
 }
 
 /**
@@ -74,6 +74,15 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
     const { translate: _t } = useI18n();
     const { label, className, jumpToEnabled } = useViewModel(vm);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const onMenuOpenChange = (newOpen: boolean): void => {
+        setIsMenuOpen(newOpen);
+
+        if (!newOpen && document.activeElement instanceof HTMLElement) {
+            if (document.activeElement.dataset.testid === "jump-to-date-separator-button") {
+                document.activeElement.blur();
+            }
+        }
+    };
 
     let content = (
         <Flex className={styles.content}>
@@ -90,7 +99,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
                 nonInteractiveTriggerTabIndex={-1}
                 disabled={isMenuOpen}
             >
-                <DateSeparatorContextMenu vm={vm} open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <DateSeparatorContextMenu vm={vm} open={isMenuOpen} onOpenChange={onMenuOpenChange}>
                     <Flex
                         data-testid="jump-to-date-separator-button"
                         className={classNames(styles.content)}
