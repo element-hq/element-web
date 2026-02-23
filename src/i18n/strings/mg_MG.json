@@ -3025,8 +3025,6 @@
             "label": "Asa atao amin'ny hafatra",
             "view_in_room": "Jereo ao amin'ny"
         },
-        "message_timestamp_received_at": "Voaray tamin'ny:%(dateTime)s",
-        "message_timestamp_sent_at": "Nalefa tamin'ny:%(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)snanavao ny fitsipika fandrarana izay nifanaraka%(oldGlob)s mifanaraka%(newGlob)s hoan'ny%(reason)s",
             "changed_rule_rooms": "%(senderName)snanova fitsipika mandràra ny fampifanarahana ny efitrano%(oldGlob)s mifanaraka%(newGlob)s hoan'ny%(reason)s",

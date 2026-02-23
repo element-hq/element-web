@@ -3488,8 +3488,6 @@
             "label": "메시지 동작",
             "view_in_room": "방에서 보기"
         },
-        "message_timestamp_received_at": "수신시간: %(dateTime)s",
-        "message_timestamp_sent_at": "발송 시간: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s님이 차단 규칙의 일치 패턴을 **'%(oldGlob)s'**에서 '%(newGlob)s'(으)로 '%(reason)s' 사유로 변경했습니다.",
             "changed_rule_rooms": "%(senderName)s님이 채팅방 차단 규칙의 일치 패턴을 **'%(oldGlob)s'**에서 '%(newGlob)s'(으)로 '%(reason)s' 사유로 변경했습니다.",

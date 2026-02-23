@@ -3523,8 +3523,6 @@
             "label": "Üzenetműveletek",
             "view_in_room": "Megjelenítés szobában"
         },
-        "message_timestamp_received_at": "Érkezett: %(dateTime)s",
-        "message_timestamp_sent_at": "Elküldve:%(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s megváltoztatta a kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
             "changed_rule_rooms": "%(senderName)s megváltoztatta a szobákat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",

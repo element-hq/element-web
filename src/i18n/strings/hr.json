@@ -3599,8 +3599,6 @@
             "label": "Radnje s porukama",
             "view_in_room": "Pregled u sobi"
         },
-        "message_timestamp_received_at": "Primljeno u: %(dateTime)s",
-        "message_timestamp_sent_at": "Poslano u: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ažurirao/la je pravilo kojim se zabranjuju korisnici koji odgovaraju %(oldGlob)s na one koji odgovaraju %(newGlob)s za %(reason)s",
             "changed_rule_rooms": "%(senderName)s promijenio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(oldGlob)s na one koje odgovaraju %(newGlob)s za %(reason)s",

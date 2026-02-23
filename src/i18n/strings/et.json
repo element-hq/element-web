@@ -3552,8 +3552,6 @@
             "label": "Tegevused sõnumitega",
             "view_in_room": "Vaata jututoas"
         },
-        "message_timestamp_received_at": "Saabumise aeg: %(dateTime)s",
-        "message_timestamp_sent_at": "Saatmise aeg: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s muutis %(reason)s tõttu ligipääsukeelu reegli algset tingimust %(oldGlob)s uueks tingimuseks %(newGlob)s",
             "changed_rule_rooms": "%(senderName)s muutis %(reason)s tõttu jututubade ligipääsukeelu reegli algset tingimust %(oldGlob)s uueks tingimuseks %(newGlob)s",

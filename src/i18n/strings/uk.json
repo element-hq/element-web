@@ -3546,8 +3546,6 @@
             "label": "Дії з повідомленням",
             "view_in_room": "Дивитися в кімнаті"
         },
-        "message_timestamp_received_at": "Отримано: %(dateTime)s",
-        "message_timestamp_sent_at": "Надіслано: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s змінює правило блокування зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
             "changed_rule_rooms": "%(senderName)s змінює правило блокування кімнат зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
