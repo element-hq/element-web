@@ -10,7 +10,6 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import imageFile from "../../../static/element.png";
-
 import { LinkPreview } from "./LinkPreview";
 
 export default {
