@@ -68,7 +68,7 @@ instance should be provided as a prop.
 
 Here's a basic example:
 
-```jsx
+```tsx
 import { ViewExample } from "@element-hq/web-shared-components";
 
 function MyApp() {
@@ -180,27 +180,32 @@ export const Disabled: Story = {
 
 #### MVVM Component Stories
 
-For MVVM components, create a wrapper component that uses `useMockedViewModel`:
+For MVVM components, create a wrapper component that uses `useMockedViewModel` and `withViewDocs`:
 
 ```tsx
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MyComponentView, type MyComponentViewSnapshot, type MyComponentViewActions } from "./MyComponentView";
-import { useMockedViewModel } from "../../useMockedViewModel";
+import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 // Combine snapshot and actions for easier typing
 type MyComponentProps = MyComponentViewSnapshot & MyComponentViewActions;
 
-// Wrapper component that creates a mocked ViewModel
-const MyComponentViewWrapper = ({ onAction, ...rest }: MyComponentProps): JSX.Element => {
+// Wrapper component that creates a mocked ViewModel.
+// Must be a named variable (not inline) for docgen to extract its props.
+const MyComponentViewWrapperImpl = ({ onAction, ...rest }: MyComponentProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         onAction,
     });
     return <MyComponentView vm={vm} />;
 };
+// withViewDocs copies the View's JSDoc description onto the wrapper for Storybook autodocs
+const MyComponentViewWrapper = withViewDocs(MyComponentViewWrapperImpl, MyComponentView);
 
-export default {
+// Must use `satisfies` (not `as` or `: Meta`) to preserve type info for docgen
+const meta = {
     title: "Category/MyComponentView",
     component: MyComponentViewWrapper,
     tags: ["autodocs"],
@@ -211,19 +216,28 @@ export default {
         // Action properties (callbacks)
         onAction: fn(),
     },
-} as Meta<typeof MyComponentViewWrapper>;
+} satisfies Meta<typeof MyComponentViewWrapper>;
 
-const Template: StoryFn<typeof MyComponentViewWrapper> = (args) => <MyComponentViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof MyComponentViewWrapper>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const Loading = Template.bind({});
-Loading.args = {
-    isLoading: true,
+export const Loading: Story = {
+    args: {
+        isLoading: true,
+    },
 };
 ```
 
 Thanks to this approach, we can directly use primitives in the story arguments instead of a view model object.
+
+> [!IMPORTANT]
+> Three requirements must be met for snapshot field documentation to appear in Storybook's ArgTypes table:
+>
+> 1. **Named wrapper variable** — the wrapper must be assigned to a named `const` (e.g. `MyComponentViewWrapperImpl`) before being passed to `withViewDocs`, so that `react-docgen-typescript` can extract its props.
+> 2. **`withViewDocs` call** — wraps the wrapper component with the original View to copy the View's JSDoc description.
+> 3. **`satisfies Meta`** — the meta object must use `satisfies Meta<...>` (not `as Meta<...>` or `: Meta<...> =`). Type assertions and annotations erase the inferred component type that docgen relies on.
 
 #### Linking Figma Designs
 
@@ -239,7 +253,7 @@ This package uses [@storybook/addon-designs](https://github.com/storybookjs/addo
 Example with Figma integration:
 
 ```tsx
-export default {
+const meta = {
     title: "Room List/RoomListSearchView",
     component: RoomListSearchViewWrapper,
     tags: ["autodocs"],
@@ -252,7 +266,9 @@ export default {
             url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=98-1979",
         },
     },
-} as Meta<typeof RoomListSearchViewWrapper>;
+} satisfies Meta<typeof RoomListSearchViewWrapper>;
+
+export default meta;
 ```
 
 The Figma design will appear in the "Design" tab in Storybook.
