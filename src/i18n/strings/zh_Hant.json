@@ -431,7 +431,6 @@
         "email_address": "電子郵件地址",
         "emoji": "表情符號",
         "encrypted": "開啟加密",
-        "encryption_enabled": "加密已啟用",
         "error": "錯誤",
         "faq": "常見問答集",
         "favourites": "我的最愛",
@@ -2951,15 +2950,6 @@
             "see_older_messages": "點擊此處以檢視更早以前的訊息。",
             "unknown_predecessor": "找不到此聊天室的舊版本（聊天室 ID：%(roomId)s），且我們未提供「via_servers」來檢視它。",
             "unknown_predecessor_guess_server": "找不到此聊天室的舊版本（聊天室 ID：%(roomId)s），且我們未提供「via_servers」來檢視它。從聊天室 ID 猜測伺服器可能會有用。若您想嘗試，請點擊此連結："
-        },
-        "m.room.encryption": {
-            "disable_attempt": "已忽略嘗試停用加密",
-            "disabled": "加密未啟用",
-            "enabled": "此聊天室中的訊息為端到端加密。當人們加入時，您可以在他們的個人檔案中驗證他們，點擊他們的個人檔案就可以了。",
-            "enabled_dm": "此處的訊息為端到端加密。請在其個人檔案中驗證 %(displayName)s - 點擊其個人檔案圖片。",
-            "enabled_local": "此聊天中的訊息將使用端對端加密。",
-            "parameters_changed": "部份加密參數已變更。",
-            "unsupported": "不支援此聊天室使用的加密。"
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s 已允許訪客加入聊天室。",

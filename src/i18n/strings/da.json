@@ -454,7 +454,6 @@
         "email_address": "E-mailadresse",
         "emoji": "Emoji",
         "encrypted": "Krypteret",
-        "encryption_enabled": "Kryptering aktiveret",
         "error": "Fejl",
         "faq": "Ofte stillede spørgsmål",
         "favourites": "Favoritter",
@@ -2990,15 +2989,6 @@
             "see_older_messages": "Klik her for at se ældre beskeder.",
             "unknown_predecessor": "Kan ikke finde den gamle version af dette rum (rum-ID: %(roomId)s), og vi har ikke fået 'via_servers' til at kunne søge efter det med.",
             "unknown_predecessor_guess_server": "Kan ikke finde den gamle version af dette rum (rum-ID: %(roomId)s), og vi har ikke fået adgang til 'via_servers' for at kunne søge efter det. Det er muligt, at det vil fungere at gætte serveren ud fra rum-ID'et. Hvis du vil prøve, skal du klikke på dette link:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Ignoreret forsøg på at deaktivere kryptering",
-            "disabled": "Kryptering er ikke aktiveret",
-            "enabled": "Beskeder i dette rum er end-to-end krypteret. Når folk tilmelder sig, kan du verificere dem via deres profil ved at trykke på deres profilbillede.",
-            "enabled_dm": "Beskeder her er end-to-end krypteret. Verificér %(displayName)s via deres profil – tryk på deres profilbillede.",
-            "enabled_local": "Beskeder i denne samtale vil blive krypteret fra ende til ende.",
-            "parameters_changed": "Nogle krypteringsparametre er blevet ændret.",
-            "unsupported": "Krypteringen, der bruges af dette rum, understøttes ikke."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s har givet gæster adgang til rummet.",

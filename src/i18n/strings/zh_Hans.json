@@ -409,7 +409,6 @@
         "email_address": "邮箱地址",
         "emoji": "表情符号",
         "encrypted": "已加密",
-        "encryption_enabled": "已启用加密",
         "error": "错误",
         "faq": "常见问答集",
         "favourites": "收藏夹",
@@ -2631,14 +2630,6 @@
         "m.room.create": {
             "continuation": "此房间是另一个对话的延续之处。",
             "see_older_messages": "点击这里以查看更早的消息。"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "已忽略禁用加密的尝试",
-            "disabled": "未启用加密",
-            "enabled": "这个房间里的消息是端到端加密的。当人们加入时，你可以在他们的个人资料中验证他们，只需点击他们的个人资料图片即可。",
-            "enabled_local": "此聊天中的消息会被端到端加密。",
-            "parameters_changed": "一些加密参数已更改。",
-            "unsupported": "不支持此房间使用的加密方式。"
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s 将此房间改为允许游客加入。",

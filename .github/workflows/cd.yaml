@@ -61,6 +61,7 @@ jobs:
             - run: pnpm nx affected -t docker:build
               env:
                   INPUT_PUSH: true
+                  INPUT_LOAD: false
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 

@@ -307,7 +307,6 @@
         "email_address": "El. pašto adresas",
         "emoji": "Jaustukai",
         "encrypted": "Užšifruota",
-        "encryption_enabled": "Šifravimas įjungtas",
         "error": "Klaida",
         "faq": "DUK",
         "favourites": "Mėgstami",
@@ -1866,13 +1865,6 @@
         "m.room.create": {
             "continuation": "Šis kambarys yra kito pokalbio pratęsimas.",
             "see_older_messages": "Spustelėkite čia, norėdami matyti senesnes žinutes."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Bandymas išjungti šifravimą buvo ignoruotas",
-            "disabled": "Šifravimas neįjungtas",
-            "enabled_local": "Žinutės šiame pokalbyje bus visapusiškai užšifruotos.",
-            "parameters_changed": "Pakeisti kai kurie šifravimo parametrai.",
-            "unsupported": "Šiame kambaryje naudojamas šifravimas nėra palaikomas."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s leido svečiams prisijungti prie kambario.",

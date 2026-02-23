@@ -20,7 +20,9 @@
         "start_chat": "Alusta vestlust"
     },
     "common": {
-        "preferences": "Eelistused"
+        "encryption_enabled": "Krüptimine on kasutusel",
+        "preferences": "Eelistused",
+        "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel"
     },
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik"
@@ -159,6 +161,16 @@
             "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "unnamed_audio": "Nimetu helifail"
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Eirasin katset lõpetada krüptimise kasutamine",
+            "disabled": "Krüptimine ei ole kasutusel",
+            "enabled": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad neid verifitseerida.",
+            "enabled_dm": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
+            "enabled_local": "Sõnumid siin vestluses on läbivalt krüptitud.",
+            "parameters_changed": "Mõned krüptimise parameetrid on muutunud.",
+            "state_enabled": "Selle jututoa sõnumid ja olekusündmused on läbivalt krüptitud. Kui uued kasutajad liituvad, siis saad nad verifitseerida tunnuspildile klõpsates.",
+            "unsupported": "Selles jututoas kasutatud krüptimine ei ole toetatud."
         }
     },
     "widget": {

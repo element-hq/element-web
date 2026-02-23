@@ -373,7 +373,6 @@
         "edited": "editada",
         "email_address": "Enderezo de correo",
         "encrypted": "Cifrado",
-        "encryption_enabled": "Cifrado activado",
         "error": "Fallo",
         "faq": "PMF",
         "favourites": "Favoritas",
@@ -2478,13 +2477,6 @@
         "m.room.create": {
             "continuation": "Esta sala é continuación doutra conversa.",
             "see_older_messages": "Preme aquí para ver mensaxes antigas."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Intento ignorado de desactivar o cifrado",
-            "disabled": "Cifrado desactivado",
-            "enabled_local": "As mensaxes deste chat van estar cifrados de extremo-a-extremo.",
-            "parameters_changed": "Algún dos parámetros de cifrado foron cambiados.",
-            "unsupported": "O cifrado desta sala non está soportado."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s permite que as convidadas se unan a sala.",

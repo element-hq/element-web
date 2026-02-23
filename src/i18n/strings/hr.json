@@ -485,7 +485,6 @@
         "email_address": "E-adresa",
         "emoji": "Emotikon",
         "encrypted": "Šifrirano",
-        "encryption_enabled": "Šifriranje je omogućeno",
         "error": "Geška",
         "faq": "Česta pitanja",
         "favourites": "Favoriti",
@@ -3507,16 +3506,6 @@
             "unknown_predecessor": "Nije moguće pronaći staru inačicu ove sobe (ID sobe: %(roomId)s), a nismo dobili ‘via_servers’ za pretraživanje.",
             "unknown_predecessor_guess_server": "Nije moguće pronaći staru inačicu ove sobe (ID sobe: %(roomId)s), a nismo dobili ‘via_servers’ za pretraživanje. Poslužitelj bi se mogao pronaći na temelju ID-a sobe. Ako želite pokušati, kliknite ovu poveznicu:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Ignorirani pokušaj onemogućavanja šifriranja",
-            "disabled": "Šifriranje nije omogućeno",
-            "enabled": "Poruke u ovoj sobi sveobuhvatno su šifrirane. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo dodirnete njihovu profilnu sliku.",
-            "enabled_dm": "Ovdje su poruke sveobuhvatno šifrirane. Potvrdite %(displayName)s u njihovu profilu – dodirnite njihovu profilnu sliku.",
-            "enabled_local": "Poruke u ovom razgovoru bit će sveobuhvatno šifrirane.",
-            "parameters_changed": "Neki parametri šifriranja su promijenjeni.",
-            "state_enabled": "Poruke i događaji u ovoj sobi sveobuhvatno su šifrirani. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo dodirnete njihovu profilnu sliku.",
-            "unsupported": "Šifriranje kojim se koristi ova soba nije podržano."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s dopustio/la je gostima da se pridruže sobi.",
             "forbidden": "%(senderDisplayName)s spriječio/la je goste da se pridruže sobi.",
@@ -3610,8 +3599,6 @@
             "label": "Radnje s porukama",
             "view_in_room": "Pregled u sobi"
         },
-        "message_timestamp_received_at": "Primljeno u: %(dateTime)s",
-        "message_timestamp_sent_at": "Poslano u: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ažurirao/la je pravilo kojim se zabranjuju korisnici koji odgovaraju %(oldGlob)s na one koji odgovaraju %(newGlob)s za %(reason)s",
             "changed_rule_rooms": "%(senderName)s promijenio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(oldGlob)s na one koje odgovaraju %(newGlob)s za %(reason)s",
