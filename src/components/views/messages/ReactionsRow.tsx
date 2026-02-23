@@ -73,7 +73,6 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
 };
 
 interface ReactionsRowButtonItemProps {
-    client?: MatrixClient;
     mxEvent: MatrixEvent;
     content: string;
     count: number;
