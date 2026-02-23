@@ -5,20 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
-
 import { MediaBody } from "./MediaBody";
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-export default {
+const meta = {
     title: "MessageBody/MediaBody",
     component: MediaBody,
     tags: ["autodocs"],
     args: {
         children: "Media content goes here",
     },
-} as Meta<typeof MediaBody>;
+} satisfies Meta<typeof MediaBody>;
 
-const Template: StoryFn<typeof MediaBody> = (args) => <MediaBody {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
