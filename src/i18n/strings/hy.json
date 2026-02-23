@@ -3455,8 +3455,6 @@
             "label": "Հաղորդագրության գործողություններ",
             "view_in_room": "Դիտել սենյակում"
         },
-        "message_timestamp_received_at": "Ստացվել է՝ %(dateTime)s-ին",
-        "message_timestamp_sent_at": "Ուղարկվել է՝ %(dateTime)s֊ին",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s թարմացրեց արգելքի կանոնը, որը նախկինում համապատասխանում էր %(oldGlob)s-ին, այժմ՝ %(newGlob)s-ին՝ %(reason)s պատճառով։",
             "changed_rule_rooms": "%(senderName)s փոխեց կանոնը, որը արգելափակում էր %(oldGlob)s համապատասխանող սենյակները, այժմ այն գործում է %(newGlob)s համապատասխանողների համար՝ %(reason)s պատճառով։",

@@ -3552,8 +3552,6 @@
             "label": "Nachrichtenaktionen",
             "view_in_room": "Im Chat anzeigen"
         },
-        "message_timestamp_received_at": "Empfangen am: %(dateTime)s",
-        "message_timestamp_sent_at": "Gesendet am: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s hat die Regel für Sperren von %(oldGlob)s auf %(newGlob)s aktualisiert. Grund: %(reason)s",
             "changed_rule_rooms": "%(senderName)s hat eine Sperr-Regel für Chats von %(oldGlob)s nach %(newGlob)s wegen %(reason)s geändert",

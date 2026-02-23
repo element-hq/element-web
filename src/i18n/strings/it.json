@@ -3045,8 +3045,6 @@
             "label": "Azioni messaggio",
             "view_in_room": "Vedi nella stanza"
         },
-        "message_timestamp_received_at": "Ricevuto il: %(dateTime)s",
-        "message_timestamp_sent_at": "Inviato il: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ha modificato una regola di ban che corrispondeva a %(oldGlob)s per corrispondere a %(newGlob)s perchè %(reason)s",
             "changed_rule_rooms": "%(senderName)s ha modificato una regola che bandiva stanze corrispondenti a %(oldGlob)s per corrispondere a %(newGlob)s perchè %(reason)s",

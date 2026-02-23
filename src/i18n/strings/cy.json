@@ -3553,8 +3553,6 @@
             "label": "Camau Gweithredu Neges",
             "view_in_room": "Golwg yn yr ystafell"
         },
-        "message_timestamp_received_at": "Derbyniwyd am: %(dateTime)s",
-        "message_timestamp_sent_at": "Anfonwyd am: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "Mae %(senderName)s wedi diweddaru rheol gwahardd oedd yn cyfateb %(oldGlob)s i %(newGlob)s ar gyfer %(reason)s",
             "changed_rule_rooms": "Newidiodd %(senderName)s reol a oedd yn gwahardd ystafelloedd sy'n cyfateb i %(oldGlob)s i gyfateb %(newGlob)s am %(reason)s",

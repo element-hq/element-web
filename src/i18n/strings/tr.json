@@ -3354,8 +3354,6 @@
             "label": "Mesaj Eylemleri",
             "view_in_room": "Odada görüntüle"
         },
-        "message_timestamp_received_at": "%(dateTime)s alındı",
-        "message_timestamp_sent_at": "Gönderildi: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s %(oldGlob)s ile eşleşen banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
             "changed_rule_rooms": "%(senderName)s %(oldGlob)s ile eşleşen odaları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
