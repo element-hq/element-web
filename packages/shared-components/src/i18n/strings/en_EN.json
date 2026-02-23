@@ -184,7 +184,8 @@
             "show_n_more": {
                 "one": "Show %(count)s other preview",
                 "other": "Show %(count)s other previews"
-            }
+            },
+            "view_image": "View image"
         }
     },
     "widget": {

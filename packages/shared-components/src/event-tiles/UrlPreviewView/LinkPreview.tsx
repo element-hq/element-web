@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type MouseEventHandler, type JSX, useCallback } from "react";
+import React, { type MouseEventHandler, type JSX, useCallback, useId } from "react";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import classNames from "classnames";
@@ -28,12 +28,7 @@ export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewAction
 export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const hideButton = onHideClick && (
-        <IconButton
-            className="mx_LinkPreviewGroup_hide"
-            size="20px"
-            onClick={() => onHideClick()}
-            aria-label={_t("timeline|url_preview|close")}
-        >
+        <IconButton size="20px" onClick={() => onHideClick()} aria-label={_t("timeline|url_preview|close")}>
             <CloseIcon />
         </IconButton>
     );
@@ -55,7 +50,11 @@ export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...previ
     // Don't render a button to show the image, just hide it outright
     if (preview.image?.imageThumb) {
         img = (
-            <button className={styles.mx_LinkPreviewWidget_image} onClick={onImageClickHandler}>
+            <button
+                aria-label={_t("timeline|url_preview|view_image")}
+                className={styles.mx_LinkPreviewWidget_image}
+                onClick={onImageClickHandler}
+            >
                 <img className={styles.thumbnail} src={preview.image.imageThumb} alt="" />
             </button>
         );
