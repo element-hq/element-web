@@ -7,19 +7,21 @@
 
 import React, { type JSX } from "react";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EncryptionEventView, EncryptionEventState, type EncryptionEventViewSnapshot } from "./EncryptionEventView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type EncryptionEventProps = EncryptionEventViewSnapshot;
 
-const EncryptionEventViewWrapper = ({ ...rest }: EncryptionEventProps): JSX.Element => {
+const EncryptionEventViewWrapperImpl = ({ ...rest }: EncryptionEventProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {});
 
     return <EncryptionEventView vm={vm} />;
 };
+const EncryptionEventViewWrapper = withViewDocs(EncryptionEventViewWrapperImpl, EncryptionEventView);
 
-export default {
+const meta = {
     title: "Event/EncryptionEvent",
     component: EncryptionEventViewWrapper,
     tags: ["autodocs"],
@@ -37,46 +39,54 @@ export default {
         userName: "Alice",
         className: "",
     },
-} as Meta<typeof EncryptionEventViewWrapper>;
+} satisfies Meta<typeof EncryptionEventViewWrapper>;
 
-const Template: StoryFn<typeof EncryptionEventViewWrapper> = (args) => <EncryptionEventViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const StateEncryptionEnabled = Template.bind({});
-StateEncryptionEnabled.args = {
-    state: EncryptionEventState.ENABLED,
-    encryptedStateEvents: true,
+export const StateEncryptionEnabled: Story = {
+    args: {
+        state: EncryptionEventState.ENABLED,
+        encryptedStateEvents: true,
+    },
 };
 
-export const ParametersChanged = Template.bind({});
-ParametersChanged.args = {
-    state: EncryptionEventState.CHANGED,
+export const ParametersChanged: Story = {
+    args: {
+        state: EncryptionEventState.CHANGED,
+    },
 };
 
-export const DisableAttempt = Template.bind({});
-DisableAttempt.args = {
-    state: EncryptionEventState.DISABLE_ATTEMPT,
+export const DisableAttempt: Story = {
+    args: {
+        state: EncryptionEventState.DISABLE_ATTEMPT,
+    },
 };
 
-export const EnabledDirectMessage = Template.bind({});
-EnabledDirectMessage.args = {
-    state: EncryptionEventState.ENABLED_DM,
-    userName: "Alice",
+export const EnabledDirectMessage: Story = {
+    args: {
+        state: EncryptionEventState.ENABLED_DM,
+        userName: "Alice",
+    },
 };
 
-export const EnabledLocalRoom = Template.bind({});
-EnabledLocalRoom.args = {
-    state: EncryptionEventState.ENABLED_LOCAL,
+export const EnabledLocalRoom: Story = {
+    args: {
+        state: EncryptionEventState.ENABLED_LOCAL,
+    },
 };
 
-export const Unsupported = Template.bind({});
-Unsupported.args = {
-    state: EncryptionEventState.UNSUPPORTED,
+export const Unsupported: Story = {
+    args: {
+        state: EncryptionEventState.UNSUPPORTED,
+    },
 };
 
-export const WithTimestamp = Template.bind({});
-WithTimestamp.args = {
-    state: EncryptionEventState.ENABLED,
-    timestamp: <span>14:56</span>,
+export const WithTimestamp: Story = {
+    args: {
+        state: EncryptionEventState.ENABLED,
+        timestamp: <span>14:56</span>,
+    },
 };
