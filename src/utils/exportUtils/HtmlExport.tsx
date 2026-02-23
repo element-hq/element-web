@@ -57,7 +57,9 @@ export default class HTMLExporter extends Exporter {
     }
 
     private renderToStaticMarkupWithProviders(element: JSX.Element): string {
-        return renderToStaticMarkup(<I18nContext.Provider value={window.mxModuleApi.i18n}>{element}</I18nContext.Provider>);
+        return renderToStaticMarkup(
+            <I18nContext.Provider value={window.mxModuleApi.i18n}>{element}</I18nContext.Provider>,
+        );
     }
 
     protected async getRoomAvatar(): Promise<string> {
