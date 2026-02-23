@@ -6,7 +6,6 @@
  */
 
 import React, { type JSX } from "react";
-import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -40,7 +39,6 @@ const meta = {
     args: {
         displayName: "Alice",
         emphasizeDisplayName: true,
-        onClick: fn(),
     },
 } satisfies Meta<typeof DisambiguatedProfileViewWrapper>;
 
@@ -75,6 +73,14 @@ export const WithTooltip: Story = {
     args: {
         displayName: "Diana",
         title: "Diana (@diana:example.org)",
+    },
+};
+
+export const WithTooltipAndActions: Story = {
+    args: {
+        displayName: "Diana",
+        title: "Diana (@diana:example.org)",
+        onClick: () => console.log("Clicked disambiguated profile"),
     },
 };
 

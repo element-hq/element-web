@@ -27,5 +27,8 @@
 }
 
 button {
-    all: unset;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background-color: inherit;
 }
