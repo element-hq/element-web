@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
-import { logIntoElement } from "./utils";
+import { createBot, logIntoElement } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Complete security", () => {
@@ -15,6 +15,16 @@ test.describe("Complete security", () => {
     test.use({
         displayName: "Jeff",
     });
+
+    test(
+        "Complete Security dialog appears correctly",
+        { tag: "@screenshot" },
+        async ({ page, credentials, homeserver }) => {
+            await createBot(page, homeserver, credentials, true);
+            await logIntoElement(page, credentials);
+            await expect(page.getByRole("dialog")).toMatchScreenshot("complete-security.png");
+        },
+    );
 
     test("should go straight to the welcome screen if we have no signed device", async ({
         page,
