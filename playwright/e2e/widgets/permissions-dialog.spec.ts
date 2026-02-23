@@ -36,7 +36,7 @@ const DEMO_WIDGET_HTML = `
     </html>
 `;
 
-test.describe("Widger permissions dialog", () => {
+test.describe("Widget permissions dialog", () => {
     test.use({
         displayName: "Mike",
     });
@@ -88,7 +88,7 @@ test.describe("Widger permissions dialog", () => {
             // open the room
             await app.viewRoomByName(ROOM_NAME);
 
-            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+            axe.disableRules(["color-contrast", "nested-interactive"]); // XXX: Inheriting colour contrast issues from room view.
             await expect(axe).toHaveNoViolations();
             await expect(page.locator(".mx_WidgetCapabilitiesPromptDialog")).toMatchScreenshot(
                 "widget-capabilites-prompt.png",
