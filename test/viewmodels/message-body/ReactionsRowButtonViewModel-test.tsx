@@ -103,19 +103,6 @@ describe("ReactionsRowButtonViewModel", () => {
         expect(tooltipSetPropsSpy).not.toHaveBeenCalled();
     });
 
-    it("setContext forwards client to tooltip via setProps on each invocation", () => {
-        const vm = new ReactionsRowButtonViewModel(createProps());
-        const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
-
-        vm.setContext(client);
-
-        expect(tooltipSetPropsSpy).toHaveBeenCalledWith({ client });
-
-        vm.setContext(client);
-
-        expect(tooltipSetPropsSpy).toHaveBeenCalledTimes(2);
-    });
-
     it("setReactionData forwards to tooltip via setProps and updates snapshot content", () => {
         const vm = new ReactionsRowButtonViewModel(createProps());
         const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
