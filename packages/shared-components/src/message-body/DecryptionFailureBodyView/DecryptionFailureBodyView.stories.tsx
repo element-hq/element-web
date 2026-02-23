@@ -7,23 +7,25 @@
 
 import React, { type JSX } from "react";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     DecryptionFailureBodyView,
     DecryptionFailureReason,
     type DecryptionFailureBodyViewSnapshot,
 } from "./DecryptionFailureBodyView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DecryptionFailureBodyProps = DecryptionFailureBodyViewSnapshot;
 
-const DecryptionFailureBodyViewWrapper = ({ ...rest }: DecryptionFailureBodyProps): JSX.Element => {
+const DecryptionFailureBodyViewWrapperImpl = ({ ...rest }: DecryptionFailureBodyProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {});
 
     return <DecryptionFailureBodyView vm={vm} />;
 };
+const DecryptionFailureBodyViewWrapper = withViewDocs(DecryptionFailureBodyViewWrapperImpl, DecryptionFailureBodyView);
 
-export default {
+const meta = {
     title: "MessageBody/DecryptionFailureBodyView",
     component: DecryptionFailureBodyViewWrapper,
     tags: ["autodocs"],
@@ -40,42 +42,46 @@ export default {
         isLocalDeviceVerified: true,
         extraClassNames: ["extra_class"],
     },
-} as Meta<typeof DecryptionFailureBodyViewWrapper>;
+} satisfies Meta<typeof DecryptionFailureBodyViewWrapper>;
 
-const Template: StoryFn<typeof DecryptionFailureBodyViewWrapper> = (args) => (
-    <DecryptionFailureBodyViewWrapper {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const HasExtraClassNames = Template.bind({});
-HasExtraClassNames.args = {
-    decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
-    extraClassNames: ["extra_class_1", "extra_class_2"],
+export const HasExtraClassNames: Story = {
+    args: {
+        decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
+        extraClassNames: ["extra_class_1", "extra_class_2"],
+    },
 };
 
-export const HasErrorClassName = Template.bind({});
-HasErrorClassName.args = {
-    decryptionFailureReason: DecryptionFailureReason.UNSIGNED_SENDER_DEVICE,
-    extraClassNames: undefined,
+export const HasErrorClassName: Story = {
+    args: {
+        decryptionFailureReason: DecryptionFailureReason.UNSIGNED_SENDER_DEVICE,
+        extraClassNames: undefined,
+    },
 };
 
-export const HasErrorBlockIcon = Template.bind({});
-HasErrorBlockIcon.args = {
-    decryptionFailureReason: DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
-    extraClassNames: undefined,
+export const HasErrorBlockIcon: Story = {
+    args: {
+        decryptionFailureReason: DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
+        extraClassNames: undefined,
+    },
 };
 
-export const HasBackupConfiguredVerifiedFalse = Template.bind({});
-HasBackupConfiguredVerifiedFalse.args = {
-    decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
-    isLocalDeviceVerified: false,
-    extraClassNames: undefined,
+export const HasBackupConfiguredVerifiedFalse: Story = {
+    args: {
+        decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
+        isLocalDeviceVerified: false,
+        extraClassNames: undefined,
+    },
 };
 
-export const HasBackupConfiguredVerifiedTrue = Template.bind({});
-HasBackupConfiguredVerifiedTrue.args = {
-    decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
-    isLocalDeviceVerified: true,
-    extraClassNames: undefined,
+export const HasBackupConfiguredVerifiedTrue: Story = {
+    args: {
+        decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
+        isLocalDeviceVerified: true,
+        extraClassNames: undefined,
+    },
 };

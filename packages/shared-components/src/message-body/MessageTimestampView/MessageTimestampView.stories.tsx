@@ -8,24 +8,26 @@
 import React, { type ReactNode } from "react";
 import { expect, userEvent, within } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     MessageTimestampView,
     type MessageTimestampViewActions,
     type MessageTimestampViewSnapshot,
 } from "./MessageTimestampView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type MessageTimestampProps = MessageTimestampViewSnapshot & MessageTimestampViewActions;
-const MessageTimestampWrapper = ({ onClick, onContextMenu, ...rest }: MessageTimestampProps): ReactNode => {
+const MessageTimestampWrapperImpl = ({ onClick, onContextMenu, ...rest }: MessageTimestampProps): ReactNode => {
     const vm = useMockedViewModel(rest, {
         onClick,
         onContextMenu,
     });
     return <MessageTimestampView vm={vm} />;
 };
+const MessageTimestampWrapper = withViewDocs(MessageTimestampWrapperImpl, MessageTimestampView);
 
-export default {
+const meta = {
     title: "MessageBody/MessageTimestamp",
     component: MessageTimestampWrapper,
     tags: ["autodocs"],
@@ -37,44 +39,51 @@ export default {
         className: "",
         href: "",
     },
-} as Meta<typeof MessageTimestampWrapper>;
+} satisfies Meta<typeof MessageTimestampWrapper>;
 
-const Template: StoryFn<typeof MessageTimestampWrapper> = (args) => <MessageTimestampWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
-Default.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.hover(canvas.getByText("04:58"));
-    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
+export const Default: Story = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await userEvent.hover(canvas.getByText("04:58"));
+        await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
+    },
 };
 
-export const HasTsReceivedAt = Template.bind({});
-HasTsReceivedAt.args = {
-    tsReceivedAt: "Thu, 17 Nov 2022, 4:58:33 pm",
-};
-HasTsReceivedAt.play = async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.hover(canvas.getByText("04:58"));
-    await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
-};
-
-export const HasInhibitTooltip = Template.bind({});
-HasInhibitTooltip.args = {
-    inhibitTooltip: true,
+export const HasTsReceivedAt: Story = {
+    args: {
+        tsReceivedAt: "Thu, 17 Nov 2022, 4:58:33 pm",
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await userEvent.hover(canvas.getByText("04:58"));
+        await expect(within(canvasElement.ownerDocument.body).findByRole("tooltip")).resolves.toBeInTheDocument();
+    },
 };
 
-export const HasExtraClassNames = Template.bind({});
-HasExtraClassNames.args = {
-    className: "extra_class_1 extra_class_2",
+export const HasInhibitTooltip: Story = {
+    args: {
+        inhibitTooltip: true,
+    },
 };
 
-export const HasHref = Template.bind({});
-HasHref.args = {
-    href: "~",
+export const HasExtraClassNames: Story = {
+    args: {
+        className: "extra_class_1 extra_class_2",
+    },
 };
 
-export const HasActions = Template.bind({});
-HasActions.args = {
-    onClick: () => console.log("Clicked message timestamp"),
-    onContextMenu: () => console.log("Context menu on message timestamp"),
+export const HasHref: Story = {
+    args: {
+        href: "~",
+    },
+};
+
+export const HasActions: Story = {
+    args: {
+        onClick: () => console.log("Clicked message timestamp"),
+        onContextMenu: () => console.log("Context menu on message timestamp"),
+    },
 };
