@@ -498,6 +498,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showJoinLeaves: true,
             showAvatarChanges: true,
             showDisplaynameChanges: true,
+            // Default to false to avoid any accidental leakage.
+            showUrlPreview: false,
             matrixClientIsReady: context.client?.isInitialSyncComplete(),
             mainSplitContentType: MainSplitContentType.Timeline,
             timelineRenderingType: TimelineRenderingType.Room,
