@@ -5,12 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type HTMLAttributes, type JSX } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import { ReactionsRowButtonTooltipView, type ReactionsRowButtonTooltipViewModel } from "../ReactionsRowButtonTooltip";
 import styles from "./ReactionsRowButton.module.css";
+
+type ButtonAttribute = HTMLAttributes<HTMLButtonElement>;
 
 export interface ReactionsRowButtonViewSnapshot {
     /**
@@ -24,11 +26,11 @@ export interface ReactionsRowButtonViewSnapshot {
     /**
      * The CSS class name.
      */
-    className?: string;
+    className?: ButtonAttribute["className"];
     /**
      * The aria-label for the button.
      */
-    ariaLabel?: string;
+    ariaLabel?: ButtonAttribute["aria-label"];
     /**
      * Whether the reaction button is selected by the current user.
      */
