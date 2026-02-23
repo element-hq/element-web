@@ -2997,8 +2997,6 @@
             "label": "Viestitoiminnot",
             "view_in_room": "Näytä huoneessa"
         },
-        "message_timestamp_received_at": "Vastaanotettu: %(dateTime)s",
-        "message_timestamp_sent_at": "Lähetetty: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s muutti estosääntöä muodosta %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
             "changed_rule_rooms": "%(senderName)s muutti sääntöä, joka esti huoneita säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
