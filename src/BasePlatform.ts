@@ -245,14 +245,6 @@ export default abstract class BasePlatform {
 
     public loudNotification(ev: MatrixEvent, room: Room): void {}
 
-    public clearNotification(notif: Notification): void {
-        // Some browsers don't support this, e.g Safari on iOS
-        // https://developer.mozilla.org/en-US/docs/Web/API/Notification/close
-        if (notif.close) {
-            notif.close();
-        }
-    }
-
     /**
      * Returns true if the platform requires URL previews in tooltips, otherwise false.
      * @returns {boolean} whether the platform requires URL previews in tooltips

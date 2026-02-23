@@ -433,11 +433,9 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             // do this. Instead, clear all notifications for a room once
             // there are no notifs left in that room., which is not quite
             // as good but it's something.
-            const plaf = PlatformPeg.get();
-            if (!plaf) return;
             if (this.notifsByRoom[room.roomId] === undefined) return;
             for (const notif of this.notifsByRoom[room.roomId]) {
-                plaf.clearNotification(notif);
+                notif.close();
             }
             delete this.notifsByRoom[room.roomId];
         }
