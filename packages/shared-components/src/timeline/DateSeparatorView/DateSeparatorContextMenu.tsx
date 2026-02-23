@@ -38,6 +38,7 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
     children,
 }): JSX.Element => {
     const i18n = useI18n();
+    const { translate: _t } = useI18n();
     const snapshot = useViewModel(vm);
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
@@ -55,7 +56,7 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
             onOpenChange={(newOpen) => {
                 onOpenChange?.(newOpen);
             }}
-            title={i18n.translate("room|jump_to_date")}
+            title={_t("room|jump_to_date")}
             showTitle={false}
             trigger={children}
             align="start"
@@ -73,7 +74,7 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
                 hideChevron={true}
             />
             <MenuItem
-                label={i18n.translate("room|jump_to_date_beginning")}
+                label={_t("room|jump_to_date_beginning")}
                 onSelect={vm.onBeginningPicked}
                 data-testid="jump-to-date-beginning"
                 hideChevron={true}

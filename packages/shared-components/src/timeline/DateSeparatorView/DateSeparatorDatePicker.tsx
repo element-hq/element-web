@@ -32,7 +32,7 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
     const date = snapshot.jumpFromDate ? new Date(snapshot.jumpFromDate) : new Date();
     const dateInputDefaultValue = formatDateForInput(date);
 
-    const i18n = useI18n();
+    const { translate: _t } = useI18n();
     const dateInputId = useId();
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
     const dateInputRef = useRef<HTMLInputElement>(null);
@@ -78,13 +78,13 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
             hideChevron={true}
         >
             <Root className={styles.picker_form} onSubmit={onJumpToDateSubmit}>
-                <span className={styles.picker_label}>{i18n.translate("room|jump_to_date")}</span>
+                <span className={styles.picker_label}>{_t("room|jump_to_date")}</span>
                 <Field name="jump-to-date-field" className={styles.picker_input}>
                     <TextControl
                         ref={dateInputRef}
                         id={dateInputId}
                         type="date"
-                        aria-label={i18n.translate("room|jump_to_date_prompt")}
+                        aria-label={_t("room|jump_to_date_prompt")}
                         onInput={onDateValueInput}
                         onKeyDown={onDateInputKeyDown}
                         value={dateValue}
@@ -100,7 +100,7 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
                     size="sm"
                     onKeyDown={onSubmitButtonKeyDown}
                 >
-                    {i18n.translate("action|go")}
+                    {_t("action|go")}
                 </Submit>
             </Root>
         </MenuItem>
