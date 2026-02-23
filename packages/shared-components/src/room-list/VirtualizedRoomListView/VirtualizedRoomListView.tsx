@@ -10,6 +10,7 @@ import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
 import { RoomListItemView, type Room } from "../RoomListItemView";
+import styles from "./VirtualizedRoomListView.module.css";
 import { useViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
 import { VirtualizedList, type VirtualizedListContext } from "../../utils/VirtualizedList";
@@ -175,6 +176,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
 
     return (
         <VirtualizedList
+            className={styles.roomListScroller}
             context={context}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             // If fixedItemHeight is not set and initialTopMostItemIndex=undefined, virtuoso crashes

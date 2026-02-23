@@ -5,10 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/**
- * Room list container styles
- */
-.roomList {
-    height: 100%;
-    width: 100%;
+.roomListScroller {
+    /*
+     * Chromium: force overlay scrollbar so it doesn't consume layout space.
+     * `!important` is needed to override Virtuoso's inline `overflow-y: auto`.
+     * Browsers that don't recognise `overlay` will ignore this declaration
+     * entirely and keep the inline value.
+     */
+    overflow-y: overlay !important;
 }
