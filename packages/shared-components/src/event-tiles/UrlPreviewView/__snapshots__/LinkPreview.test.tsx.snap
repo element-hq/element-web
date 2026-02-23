@@ -9,6 +9,7 @@ exports[`LinkPreview > renders a preview 1`] = `
       class="mx_LinkPreviewWidget_wrapImageCaption"
     >
       <button
+        aria-label="View image"
         class="mx_LinkPreviewWidget_image"
       >
         <img
@@ -45,7 +46,7 @@ exports[`LinkPreview > renders a preview 1`] = `
     </div>
     <button
       aria-label="Close preview"
-      class="_icon-button_1215g_8 mx_LinkPreviewGroup_hide"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 20px;"
@@ -81,6 +82,7 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
       class="mx_LinkPreviewWidget_wrapImageCaption"
     >
       <button
+        aria-label="View image"
         class="mx_LinkPreviewWidget_image"
       >
         <img
@@ -117,7 +119,7 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
     </div>
     <button
       aria-label="Close preview"
-      class="_icon-button_1215g_8 mx_LinkPreviewGroup_hide"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 20px;"
@@ -176,7 +178,7 @@ exports[`LinkPreview > renders a preview with a tooltip 1`] = `
     </div>
     <button
       aria-label="Close preview"
-      class="_icon-button_1215g_8 mx_LinkPreviewGroup_hide"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 20px;"
@@ -229,7 +231,7 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
     </div>
     <button
       aria-label="Close preview"
-      class="_icon-button_1215g_8 mx_LinkPreviewGroup_hide"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 20px;"
@@ -287,7 +289,7 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
     </div>
     <button
       aria-label="Close preview"
-      class="_icon-button_1215g_8 mx_LinkPreviewGroup_hide"
+      class="_icon-button_1215g_8"
       data-kind="primary"
       role="button"
       style="--cpd-icon-button-size: 20px;"
