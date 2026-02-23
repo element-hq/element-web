@@ -17,7 +17,7 @@ import {
     type ReactionsRowButtonViewActions,
 } from "./ReactionsRowButtonView";
 
-type WrapperProps = ReactionsRowButtonViewSnapshot &
+type WrapperProps = Omit<ReactionsRowButtonViewSnapshot, "tooltipVm"> &
     Partial<ReactionsRowButtonViewActions> & {
         tooltipFormattedSenders?: ReactionsRowButtonTooltipViewSnapshot["formattedSenders"];
         tooltipCaption?: ReactionsRowButtonTooltipViewSnapshot["caption"];
@@ -40,10 +40,15 @@ const ReactionsRowButtonViewWrapper = ({
         {},
     );
 
-    const vm = useMockedViewModel(snapshotProps, {
-        onClick: onClick ?? fn(),
-        tooltipVm,
-    });
+    const vm = useMockedViewModel(
+        {
+            ...snapshotProps,
+            tooltipVm,
+        },
+        {
+            onClick: onClick ?? fn(),
+        },
+    );
 
     return <ReactionsRowButtonView vm={vm} />;
 };

@@ -46,6 +46,10 @@ export interface ReactionsRowButtonViewSnapshot {
      * The alt text for the custom reaction image.
      */
     imageAlt?: string;
+    /**
+     * View model for the tooltip wrapper.
+     */
+    tooltipVm: ReactionsRowButtonTooltipViewModel;
 }
 
 export interface ReactionsRowButtonViewActions {
@@ -55,16 +59,7 @@ export interface ReactionsRowButtonViewActions {
     onClick: () => void;
 }
 
-export interface ReactionsRowButtonViewModels {
-    /**
-     * View model for the tooltip wrapper.
-     */
-    tooltipVm: ReactionsRowButtonTooltipViewModel;
-}
-
-export type ReactionsRowButtonViewModel = ViewModel<ReactionsRowButtonViewSnapshot> &
-    ReactionsRowButtonViewActions &
-    ReactionsRowButtonViewModels;
+export type ReactionsRowButtonViewModel = ViewModel<ReactionsRowButtonViewSnapshot> & ReactionsRowButtonViewActions;
 
 interface ReactionsRowButtonViewProps {
     /**
@@ -77,7 +72,8 @@ interface ReactionsRowButtonViewProps {
  * Renders the reaction button in a reactions row.
  */
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
-    const { content, count, className, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt } = useViewModel(vm);
+    const { content, count, className, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt, tooltipVm } =
+        useViewModel(vm);
     const ariaDisabled = isDisabled ? true : undefined;
     const classes = classNames(className, styles.reactionsRowButton, {
         [styles.reactionsRowButtonSelected]: isSelected,
@@ -99,7 +95,7 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
     );
 
     return (
-        <ReactionsRowButtonTooltipView vm={vm.tooltipVm}>
+        <ReactionsRowButtonTooltipView vm={tooltipVm}>
             <button
                 type="button"
                 className={classes}

@@ -64,7 +64,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
     it("updates count with merge and does not touch tooltip props", () => {
         const vm = new ReactionsRowButtonViewModel(createProps());
-        const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
+        const tooltipSetPropsSpy = jest.spyOn(vm.getSnapshot().tooltipVm, "setProps");
         const listener = jest.fn();
         vm.subscribe(listener);
 
@@ -81,7 +81,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
     it("updates selected state with myReactionEvent without touching tooltip props", () => {
         const vm = new ReactionsRowButtonViewModel(createProps());
-        const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
+        const tooltipSetPropsSpy = jest.spyOn(vm.getSnapshot().tooltipVm, "setProps");
         const listener = jest.fn();
         vm.subscribe(listener);
         const myReactionEvent = createReactionEvent("@me:example.org");
@@ -95,7 +95,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
     it("updates disabled state without touching tooltip props", () => {
         const vm = new ReactionsRowButtonViewModel(createProps({ disabled: false }));
-        const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
+        const tooltipSetPropsSpy = jest.spyOn(vm.getSnapshot().tooltipVm, "setProps");
 
         vm.setDisabled(true);
 
@@ -105,7 +105,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
     it("setReactionData forwards to tooltip via setProps and updates snapshot content", () => {
         const vm = new ReactionsRowButtonViewModel(createProps());
-        const tooltipSetPropsSpy = jest.spyOn(vm.tooltipVm, "setProps");
+        const tooltipSetPropsSpy = jest.spyOn(vm.getSnapshot().tooltipVm, "setProps");
         const reactionEvents = [createReactionEvent("@carol:example.org", "👎")];
 
         vm.setReactionData("👎", reactionEvents, false);

@@ -62,10 +62,11 @@ export class ReactionsRowButtonViewModel
     extends BaseViewModel<ReactionsRowButtonViewSnapshot, ReactionsRowButtonViewModelProps>
     implements ReactionsRowButtonViewModelInterface
 {
-    public readonly tooltipVm: ReactionsRowButtonTooltipViewModel;
+    private readonly tooltipVm: ReactionsRowButtonTooltipViewModel;
 
     private static readonly computeSnapshot = (
         props: ReactionsRowButtonViewModelProps,
+        tooltipVm: ReactionsRowButtonTooltipViewModel,
     ): ReactionsRowButtonViewSnapshot => {
         const {
             client,
@@ -123,19 +124,21 @@ export class ReactionsRowButtonViewModel
             isDisabled: !!disabled,
             imageSrc,
             imageAlt,
+            tooltipVm,
         };
     };
 
     public constructor(props: ReactionsRowButtonViewModelProps) {
-        super(props, ReactionsRowButtonViewModel.computeSnapshot(props));
-        this.tooltipVm = new ReactionsRowButtonTooltipViewModel({
+        const tooltipVm = new ReactionsRowButtonTooltipViewModel({
             client: props.client,
             mxEvent: props.mxEvent,
             content: props.content,
             reactionEvents: props.reactionEvents,
             customReactionImagesEnabled: props.customReactionImagesEnabled,
         });
-        this.disposables.track(this.tooltipVm);
+        super(props, ReactionsRowButtonViewModel.computeSnapshot(props, tooltipVm));
+        this.tooltipVm = tooltipVm;
+        this.disposables.track(tooltipVm);
     }
 
     private setSnapshot(nextSnapshot: ReactionsRowButtonViewSnapshot): void {
@@ -164,7 +167,7 @@ export class ReactionsRowButtonViewModel
         this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
 
         this.tooltipVm.setProps({ content, reactionEvents, customReactionImagesEnabled });
-        this.setSnapshot(ReactionsRowButtonViewModel.computeSnapshot(this.props));
+        this.setSnapshot(ReactionsRowButtonViewModel.computeSnapshot(this.props, this.tooltipVm));
     }
 
     public setCount(count: number): void {
