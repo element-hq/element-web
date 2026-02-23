@@ -36,7 +36,6 @@ test.describe("Roles & Permissions room settings tab", () => {
 
         // Change the role of Alice to Moderator (50)
         await combobox.selectOption("Moderator");
-        await expect(combobox).toHaveValue("50");
 
         // Should display a modal to warn that we are demoting the only admin user
         const modal = await page.locator(".mx_Dialog", {
@@ -49,6 +48,7 @@ test.describe("Roles & Permissions room settings tab", () => {
         const respPromise = page.waitForRequest("**/state/**");
         await applyButton.click();
         await respPromise;
+        await expect(combobox).toHaveValue("50");
 
         // Reload and check Alice is still Moderator (50)
         await page.reload();
