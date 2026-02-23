@@ -89,10 +89,11 @@ export const test = base.extend<TestFixtures>({
     },
 
     botCreateOpts: {},
-    bot: async ({ page, homeserver, botCreateOpts, user }, use) => {
+    bot: async ({ page, homeserver, botCreateOpts, user }, use, testInfo) => {
         const bot = new Bot(page, homeserver, botCreateOpts);
         await bot.prepareClient(); // eagerly register the bot
         await use(bot);
+        await bot.onTestFinished(testInfo);
     },
 
     // eslint-disable-next-line no-empty-pattern
