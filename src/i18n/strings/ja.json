@@ -413,7 +413,6 @@
         "email_address": "メールアドレス",
         "emoji": "絵文字",
         "encrypted": "暗号化",
-        "encryption_enabled": "暗号化が有効です",
         "error": "エラー",
         "faq": "よくある質問",
         "favourites": "お気に入り",
@@ -2697,13 +2696,6 @@
         "m.room.create": {
             "continuation": "このルームは別の会話の続きです。",
             "see_older_messages": "ここをクリックすると、以前のメッセージを表示します。"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "暗号化を無効にする試みを無視しました",
-            "disabled": "暗号化が有効になっていません",
-            "enabled_local": "このチャットのメッセージはエンドツーエンドで暗号化されます。",
-            "parameters_changed": "暗号化のパラメーターのいくつかが変更されました。",
-            "unsupported": "このルームで使用されている暗号化はサポートされていません。"
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)sがこのルームへのゲストによる参加を許可しました。",

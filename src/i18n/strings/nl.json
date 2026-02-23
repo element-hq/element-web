@@ -395,7 +395,6 @@
         "email_address": "E-mailadres",
         "emoji": "Emoji",
         "encrypted": "Versleuteld",
-        "encryption_enabled": "Versleuteling ingeschakeld",
         "error": "Fout",
         "faq": "FAQ",
         "favourites": "Favorieten",
@@ -2529,13 +2528,6 @@
         "m.room.create": {
             "continuation": "Deze kamer is een voortzetting van een ander gesprek.",
             "see_older_messages": "Klik hier om oudere berichten te bekijken."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Poging om versleuteling uit te schakelen genegeerd",
-            "disabled": "Versleuteling niet ingeschakeld",
-            "enabled_local": "Berichten in deze chat worden eind-tot-eind versleuteld.",
-            "parameters_changed": "Enkele versleutingsparameters zijn gewijzigd.",
-            "unsupported": "De versleuteling gebruikt in deze kamer wordt niet ondersteund."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s heeft gasten toegestaan de kamer te betreden.",

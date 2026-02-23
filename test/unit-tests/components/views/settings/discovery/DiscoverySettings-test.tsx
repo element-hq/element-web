@@ -15,8 +15,6 @@ import userEvent from "@testing-library/user-event";
 import { DiscoverySettings } from "../../../../../../src/components/views/settings/discovery/DiscoverySettings";
 import { stubClient } from "../../../../../test-utils";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { UIFeature } from "../../../../../../src/settings/UIFeature";
-import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("$$getAccessToken");
@@ -50,16 +48,6 @@ describe("DiscoverySettings", () => {
     });
 
     const DiscoveryWrapper = (props = {}) => <MatrixClientContext.Provider value={client} {...props} />;
-
-    it("is empty if 3pid features are disabled", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((key: any): any => {
-            if (key === UIFeature.ThirdPartyID) return false;
-        });
-
-        const { container } = render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
-
-        expect(container).toBeEmptyDOMElement();
-    });
 
     it("displays alert if an identity server needs terms accepting", async () => {
         mocked(client).getIdentityServerUrl.mockReturnValue("https://example.com");

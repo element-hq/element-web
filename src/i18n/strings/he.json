@@ -343,7 +343,6 @@
         "email_address": "כתובת דוא\"ל",
         "emoji": "אימוג'י",
         "encrypted": "מוצפן",
-        "encryption_enabled": "הצפנה הופעלה",
         "error": "שגיאה",
         "faq": "שאלות נפוצות",
         "favourites": "מועדפים",
@@ -2016,13 +2015,6 @@
         "m.room.create": {
             "continuation": "החדר הזה הוא המשך לשיחה אחרת.",
             "see_older_messages": "לחץ כאן לראות הודעות ישנות."
-        },
-        "m.room.encryption": {
-            "disable_attempt": "התעלם מהניסיון להשבית את ההצפנה",
-            "disabled": "ההצפנה לא מופעלת",
-            "enabled_local": "הודעות בצ'אט זה יוצפו מקצה לקצה.",
-            "parameters_changed": "מספר פרמטרים של הצפנה שונו.",
-            "unsupported": "ההצפנה בה משתמשים בחדר זה אינה נתמכת."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s איפשר לאורחים להכנס אל החדר.",

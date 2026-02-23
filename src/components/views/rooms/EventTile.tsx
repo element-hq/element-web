@@ -36,7 +36,11 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
+import {
+    useCreateAutoDisposedViewModel,
+    DecryptionFailureBodyView,
+    MessageTimestampView,
+} from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
@@ -58,7 +62,6 @@ import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
-import MessageTimestamp from "../messages/MessageTimestamp";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from "../messages/ReactionsRow";
@@ -81,6 +84,7 @@ import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
+import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
@@ -88,6 +92,10 @@ import { ElementCallEventType } from "../../../call-types";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
+import {
+    MessageTimestampViewModel,
+    type MessageTimestampViewModelProps,
+} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1157,15 +1165,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             ts = this.props.mxEvent.getTs();
         }
 
-        const messageTimestampProps = {
+        const messageTimestampProps: MessageTimestampViewModelProps = {
             showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
             showTwelveHour: this.props.isTwelveHour,
             ts,
             receivedTs: getLateEventInfo(this.props.mxEvent)?.received_ts,
         };
-        const messageTimestamp = <MessageTimestamp {...messageTimestampProps} />;
+        const messageTimestamp = <MessageTimestampWrapper {...messageTimestampProps} />;
         const linkedMessageTimestamp = (
-            <MessageTimestamp
+            <MessageTimestampWrapper
                 {...messageTimestampProps}
                 href={permalink}
                 onClick={this.onPermalinkClicked}
@@ -1590,4 +1598,32 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
     }, [verificationState, vm]);
 
     return <DecryptionFailureBodyView vm={vm} />;
+}
+
+/**
+ * Wraps MessageTimestampView with a view model synced to the provided props.
+ * This wrapper can be removed after EventTile has been changed to a function component.
+ */
+function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+    useEffect(() => {
+        vm.setTimestamp(props.ts);
+        vm.setReceivedTimestamp(props.receivedTs);
+        vm.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+            showRelative: props.showRelative,
+        });
+        vm.setHref(props.href);
+        vm.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
+    }, [vm, props]);
+
+    return (
+        <>
+            {/* Render icon as described in, https://github.com/matrix-org/matrix-react-sdk/pull/11760 */}
+            {props.receivedTs ? (
+                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
+            ) : undefined}
+            <MessageTimestampView vm={vm} />
+        </>
+    );
 }

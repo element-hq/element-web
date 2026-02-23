@@ -465,7 +465,6 @@
         "email_address": "Epasta adrese",
         "emoji": "Emocijzīmes",
         "encrypted": "Šifrēts",
-        "encryption_enabled": "Šifrēšana iespējota",
         "error": "Kļūda",
         "faq": "BUJ",
         "favourites": "Izlase",
@@ -2882,15 +2881,6 @@
             "see_older_messages": "Noklikšķiniet šeit, lai skatītu vecākas ziņas.",
             "unknown_predecessor": "Nevar atrast veco šīs istabas versiju (istabas ID:%(roomId)s), un mums nav pieejams “via_servers”, lai to meklētu.",
             "unknown_predecessor_guess_server": "Nevar atrast šīs telpas veco versiju (istabas ID:%(roomId)s), un mums nav pieejams 'via_servers' , lai to meklētu. Iespējams, ka noderēs servera uzminēšana pēc istabas ID. Ja vēlaties izmēģināt, noklikšķiniet uz šīs saites:"
-        },
-        "m.room.encryption": {
-            "disable_attempt": "Vērā neņemts mēģinājums atspējot šifrēšanu",
-            "disabled": "Šifrēšana nav iespējota",
-            "enabled": "Ziņas šajā istabā ir pilnībā šifrētas. Kad cilvēki pievienosies, Tu vari apstiprināt viņus viņu profilā, ir tikai jāpiesit viņu profila attēlam.",
-            "enabled_dm": "Ziņas šeit ir pilnībā šifrētas. Apstiprini %(displayName)s viņa profilā - piesit viņa profila attēlam!",
-            "enabled_local": "Ziņām šajā istabā tiek piemērota pilnīga šifrēšana.",
-            "parameters_changed": "Daži šifrēšanas parametri ir mainīti.",
-            "unsupported": "Šajā telpā izmantotā šifrēšana netiek atbalstīta."
         },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s atļāva viesiem pievienoties istabai.",
