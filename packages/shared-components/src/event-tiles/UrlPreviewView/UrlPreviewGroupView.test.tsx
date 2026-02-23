@@ -12,11 +12,19 @@ import React from "react";
 
 import * as stories from "./UrlPreviewGroupView.stories.tsx";
 
-const { Default } = composeStories(stories);
+const { Default, MultiplePreviews, MultiplePreviewsHidden } = composeStories(stories);
 
 describe("UrlPreviewGroupView", () => {
-    it("renders an empty view", () => {
+    it("renders a single preview", () => {
         const { container } = render(<Default />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders multiple previews", () => {
+        const { container } = render(<MultiplePreviews />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders multiple previews which are hidden", () => {
+        const { container } = render(<MultiplePreviewsHidden />);
         expect(container).toMatchSnapshot();
     });
 });

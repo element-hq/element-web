@@ -10,7 +10,6 @@ import { Button } from "@vector-im/compound-web";
 
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { useI18n } from "../../utils/i18nContext";
-import styles from "./UrlPreviewGroupView.module.css";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 
@@ -59,7 +58,7 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     }
 
     return (
-        <div className={styles.container}>
+        <div>
             {previews.map((preview, i) => (
                 <LinkPreview
                     key={preview.link}

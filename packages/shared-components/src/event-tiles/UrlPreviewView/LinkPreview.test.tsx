@@ -12,11 +12,27 @@ import React from "react";
 
 import * as stories from "./LinkPreview.stories.tsx";
 
-const { Default } = composeStories(stories);
+const { Default, WithCompactLayout, WithTooltip, Title, TitleAndDescription } = composeStories(stories);
 
 describe("LinkPreview", () => {
-    it("renders an empty view", () => {
+    it("renders a preview", () => {
         const { container } = render(<Default />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders a preview with just a title", () => {
+        const { container } = render(<Title />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders a preview with just a title and description", () => {
+        const { container } = render(<TitleAndDescription />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders a preview with a tooltip", () => {
+        const { container } = render(<WithTooltip />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders a preview with a compact layout", () => {
+        const { container } = render(<WithCompactLayout />);
         expect(container).toMatchSnapshot();
     });
 });

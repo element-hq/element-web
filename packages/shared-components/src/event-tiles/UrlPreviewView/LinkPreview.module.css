@@ -39,6 +39,11 @@
             flex: 0 0 100px;
             text-align: center;
             cursor: pointer;
+
+            /* Clear default <button> styles */
+            padding: 0;
+            border: none;
+            background: none;
         }
 
         .mx_LinkPreviewWidget_caption {

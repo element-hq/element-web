@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 import type { Meta, StoryFn } from "@storybook/react-vite";
+import imageFile from "../../../static/element.png";
 
 import {
     UrlPreviewGroupView,
@@ -53,8 +54,8 @@ Default.args = {
             description: "A simple description",
             link: "https://matrix.org",
             image: {
-                imageThumb: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
-                imageFull: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+                imageThumb: imageFile,
+                imageFull: imageFile,
             },
         },
     ],
@@ -65,30 +66,48 @@ MultiplePreviews.args = {
     previews: [
         {
             title: "One",
-            description: "Good dog",
+            description: "Great description",
             link: "https://matrix.org",
             image: {
-                imageThumb: "https://images.dog.ceo/breeds/otterhound/n02091635_979.jpg",
-                imageFull: "https://images.dog.ceo/breeds/otterhound/n02091635_979.jpg",
+                imageThumb: imageFile,
+                imageFull: imageFile,
             },
         },
         {
             title: "Two",
-            description: "Good dog",
+            description: "Another description",
             link: "https://matrix.org",
             image: {
-                imageThumb: "https://images.dog.ceo/breeds/eskimo/n02109961_930.jpg",
-                imageFull: "https://images.dog.ceo/breeds/eskimo/n02109961_930.jpg",
+                imageThumb: imageFile,
+                imageFull: imageFile,
             },
         },
         {
             title: "Three",
-            description: "Good dog",
+            description: "One more description",
             link: "https://matrix.org",
             image: {
-                imageThumb: "https://images.dog.ceo/breeds/pekinese/n02086079_22136.jpg",
-                imageFull: "https://images.dog.ceo/breeds/pekinese/n02086079_22136.jpg",
+                imageThumb: imageFile,
+                imageFull: imageFile,
             },
         },
     ],
+};
+
+export const MultiplePreviewsHidden = Template.bind({});
+MultiplePreviewsHidden.args = {
+    previews: [
+        {
+            title: "A simple title",
+            description: "A simple description",
+            link: "https://matrix.org",
+            image: {
+                imageThumb: imageFile,
+                imageFull: imageFile,
+            },
+        },
+    ],
+    overPreviewLimit: true,
+    previewsLimited: true,
+    totalPreviewCount: 10,
 };

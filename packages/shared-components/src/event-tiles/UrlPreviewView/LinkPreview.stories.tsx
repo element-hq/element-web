@@ -7,7 +7,9 @@
 
 import React from "react";
 import { fn } from "storybook/test";
+
 import type { Meta, StoryFn } from "@storybook/react-vite";
+import imageFile from "../../../static/element.png";
 
 import { LinkPreview } from "./LinkPreview";
 
@@ -30,8 +32,8 @@ Default.args = {
     link: "https://matrix.org",
     siteName: "Site name",
     image: {
-        imageThumb: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
-        imageFull: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+        imageThumb: imageFile,
+        imageFull: imageFile,
     },
 };
 
@@ -44,14 +46,14 @@ Title.args = {
 export const TitleAndDescription = Template.bind({});
 TitleAndDescription.args = {
     title: "A simple title",
-    description: "With a good ol description",
+    description: "A simple description",
     link: "https://matrix.org",
 };
 
 export const WithTooltip = Template.bind({});
 WithTooltip.args = {
     title: "A simple title",
-    description: "With a good ol description",
+    description: "A simple description",
     showTooltipOnLink: true,
     link: "https://matrix.org",
 };
@@ -64,7 +66,7 @@ WithCompactLayout.args = {
     link: "https://matrix.org",
     siteName: "Site name",
     image: {
-        imageThumb: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
-        imageFull: "https://images.dog.ceo/breeds/kuvasz/n02104029_1369.jpg",
+        imageThumb: imageFile,
+        imageFull: imageFile,
     },
 };

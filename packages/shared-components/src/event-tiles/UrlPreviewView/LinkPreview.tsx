@@ -55,15 +55,9 @@ export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...previ
     // Don't render a button to show the image, just hide it outright
     if (preview.image?.imageThumb) {
         img = (
-            <div className={styles.mx_LinkPreviewWidget_image}>
-                <img
-                    className={styles.thumbnail}
-                    src={preview.image.imageThumb}
-                    onClick={onImageClickHandler}
-                    role="button"
-                    alt=""
-                />
-            </div>
+            <button className={styles.mx_LinkPreviewWidget_image} onClick={onImageClickHandler}>
+                <img className={styles.thumbnail} src={preview.image.imageThumb} alt="" />
+            </button>
         );
     }
 
