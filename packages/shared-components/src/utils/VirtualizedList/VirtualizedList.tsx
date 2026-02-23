@@ -149,8 +149,6 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
     const [visibleRange, setVisibleRange] = useState<ListRange | undefined>(undefined);
     /** Map from item keys to their indices in the items array */
     const [keyToIndexMap, setKeyToIndexMap] = useState<Map<string, number>>(new Map());
-    /** Whether the list is currently scrolling to an item */
-    const isScrollingToItem = useRef<boolean>(false);
     /** Whether the list is currently focused */
     const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -173,28 +171,20 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
 
     /**
      * Scrolls to a specific item index and sets it as focused.
-     * Uses Virtuoso's scrollIntoView method for smooth scrolling.
+     * Updates tabIndexKey immediately so the UI reflects the new focus
+     * synchronously, then asks Virtuoso to scroll the item into view.
      */
     const scrollToIndex = useCallback(
         (index: number, align?: "center" | "end" | "start"): void => {
             // Ensure index is within bounds
             const clampedIndex = Math.max(0, Math.min(index, items.length - 1));
-            if (isScrollingToItem.current) {
-                // If already scrolling to an item drop this request. Adding further requests
-                // causes the event to bubble up and be handled by other components(unintentional timeline scrolling was observed).
-                return;
-            }
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
-                isScrollingToItem.current = true;
+                setTabIndexKey(key);
                 virtuosoHandleRef.current?.scrollIntoView({
                     index: clampedIndex,
                     align: align,
                     behavior: "auto",
-                    done: () => {
-                        setTabIndexKey(key);
-                        isScrollingToItem.current = false;
-                    },
                 });
             }
         },
@@ -266,6 +256,17 @@ export function VirtualizedList<Item, Context = any>(props: IVirtualizedListProp
             }
 
             if (handled) {
+                // If a child element (e.g. a button) currently has DOM focus rather than the
+                // scroller itself, move focus to the scroller before the scroll takes effect.
+                // Without this, when Virtuoso unmounts the focused child because it has been
+                // scrolled out of the visible range, the browser moves focus to <body> and
+                // subsequent keyboard events no longer reach this handler.
+                if (virtuosoDomRef.current instanceof HTMLElement) {
+                    const activeEl = document.activeElement;
+                    if (activeEl && activeEl !== virtuosoDomRef.current && virtuosoDomRef.current.contains(activeEl)) {
+                        virtuosoDomRef.current.focus({ preventScroll: true });
+                    }
+                }
                 e.stopPropagation();
                 e.preventDefault();
             } else {
