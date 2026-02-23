@@ -56,6 +56,10 @@ export default class HTMLExporter extends Exporter {
             : _t("export_chat|media_omitted_file_size");
     }
 
+    private renderToStaticMarkupWithProviders(element: JSX.Element): string {
+        return renderToStaticMarkup(<I18nContext.Provider value={window.mxModuleApi.i18n}>{element}</I18nContext.Provider>);
+    }
+
     protected async getRoomAvatar(): Promise<string> {
         let blob: Blob | undefined = undefined;
         const avatarUrl = Avatar.avatarUrlForRoom(this.room, 32, 32, "crop");
@@ -73,7 +77,7 @@ export default class HTMLExporter extends Exporter {
         const avatar = (
             <BaseAvatar size="32px" name={this.room.name} title={this.room.name} url={blob ? avatarPath : ""} />
         );
-        return renderToStaticMarkup(avatar);
+        return this.renderToStaticMarkupWithProviders(avatar);
     }
 
     protected async wrapHTML(content: string, currentPage: number, nbPages: number): Promise<string> {
@@ -93,7 +97,7 @@ export default class HTMLExporter extends Exporter {
         const safeExporter = escapeHtml(exporter);
         const safeRoomName = escapeHtml(this.room.name);
         const safeTopic = escapeHtml(topic);
-        const safeExportedText = renderToStaticMarkup(
+        const safeExportedText = this.renderToStaticMarkupWithProviders(
             <p>
                 {_t(
                     "export_chat|export_info",
@@ -123,7 +127,7 @@ export default class HTMLExporter extends Exporter {
         );
 
         const safeTopicText = topic ? _t("export_chat|topic", { topic: safeTopic }) : "";
-        const previousMessagesLink = renderToStaticMarkup(
+        const previousMessagesLink = this.renderToStaticMarkupWithProviders(
             currentPage !== 0 ? (
                 <div style={{ textAlign: "center" }}>
                     <a href={`./messages${currentPage === 1 ? "" : currentPage}.html`} style={{ fontWeight: "bold" }}>
@@ -135,7 +139,7 @@ export default class HTMLExporter extends Exporter {
             ),
         );
 
-        const nextMessagesLink = renderToStaticMarkup(
+        const nextMessagesLink = this.renderToStaticMarkupWithProviders(
             currentPage < nbPages - 1 ? (
                 <div style={{ textAlign: "center", margin: "10px" }}>
                     <a href={"./messages" + (currentPage + 2) + ".html"} style={{ fontWeight: "bold" }}>
@@ -263,7 +267,7 @@ export default class HTMLExporter extends Exporter {
                     <DateSeparatorView vm={dateSeparatorViewModel} />
                 </li>
             );
-            return renderToStaticMarkup(dateSeparator);
+            return this.renderToStaticMarkupWithProviders(dateSeparator);
         } finally {
             dateSeparatorViewModel.dispose();
         }
@@ -335,7 +339,7 @@ export default class HTMLExporter extends Exporter {
             eventTileMarkup = tempElement.innerHTML;
             tempRoot.unmount();
         } else {
-            eventTileMarkup = renderToStaticMarkup(EventTile);
+            eventTileMarkup = this.renderToStaticMarkupWithProviders(EventTile);
         }
 
         if (filePath) {
