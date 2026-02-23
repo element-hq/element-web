@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type MouseEventHandler, type JSX, useCallback, useId } from "react";
+import React, { type MouseEventHandler, type JSX, useCallback } from "react";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import classNames from "classnames";
@@ -15,7 +15,7 @@ import styles from "./LinkPreview.module.css";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
 
 export interface LinkPreviewActions {
-    onHideClick?: () => void;
+    onHideClick?: () => Promise<void>;
     onImageClick: () => void;
 }
 

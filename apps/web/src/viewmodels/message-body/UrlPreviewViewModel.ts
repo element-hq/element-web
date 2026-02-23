@@ -172,7 +172,7 @@ export class UrlPreviewViewModel
             }
 
             const media =
-                typeof preview["og:image"] === "string" && this.visibility >= PreviewVisibility.MediaHidden
+                typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden
                     ? mediaFromMxc(preview["og:image"], this.client)
                     : undefined;
             const needsTooltip = link !== title && PlatformPeg.get()?.needsUrlTooltips();
@@ -319,7 +319,6 @@ export class UrlPreviewViewModel
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
         });
-        console.log("SNAPSHOT", this.visibility, previews, this.snapshot.current);
     }
 
     /**
@@ -350,22 +349,22 @@ export class UrlPreviewViewModel
      * Called when the user has requsted previews be visible. The provided
      * props `urlPreviewVisible` state will always override this.
      */
-    public readonly onShowClick = (): void => {
+    public readonly onShowClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
         this.urlPreviewEnabledByUser = true;
         global.localStorage?.removeItem(this.storageKey);
-        void this.computeSnapshot();
+        return this.computeSnapshot();
     };
 
     /**
      * Called when the user has requsted previews be hidden. Will take precedence
      * over other settings.
      */
-    public readonly onHideClick = (): void => {
+    public readonly onHideClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
         global.localStorage?.setItem(this.storageKey, "1");
         this.urlPreviewEnabledByUser = false;
-        void this.computeSnapshot();
+        return this.computeSnapshot();
     };
 
     /**

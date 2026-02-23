@@ -27,7 +27,7 @@ export interface UrlPreviewGroupViewProps {
 
 export interface UrlPreviewGroupViewActions {
     onTogglePreviewLimit: () => void;
-    onHideClick: () => void;
+    onHideClick: () => Promise<void>;
     onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;
 }
 
