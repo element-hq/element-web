@@ -6,7 +6,7 @@
  */
 
 import React, { type PropsWithChildren } from "react";
-import { render, screen, fireEvent } from "@test-utils";
+import { render, screen, fireEvent, waitFor, act } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
@@ -490,6 +490,173 @@ describe("VirtualizedList", () => {
             const container = screen.getByRole("grid");
 
             expectAttribute(container, "aria-label", "Custom list label");
+        });
+    });
+
+    describe("Focus preservation during keyboard navigation", () => {
+        /**
+         * Renders a 50-item list using real Virtuoso (no mock context) inside a
+         * fixed-height container.  Because the tests run in real Chromium,
+         * Virtuoso will measure the viewport, virtualise items, and honour
+         * scrollIntoView calls exactly as it does in production.
+         */
+        const ITEM_HEIGHT = 52;
+        const VIEWPORT_HEIGHT = 400;
+
+        const renderRealVirtualizedList = (): ReturnType<typeof render> => {
+            const largeItems: TestItemWithSeparator[] = Array.from({ length: 50 }, (_, i) => ({
+                id: `item-${i}`,
+                name: `Item ${i}`,
+            }));
+
+            mockIsItemFocusable.mockReturnValue(true);
+
+            mockGetItemComponent.mockImplementation(
+                (
+                    index: number,
+                    item: TestItemWithSeparator,
+                    context: any,
+                    onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+                ) => {
+                    const itemKey = typeof item === "string" ? item : item.id;
+                    const isFocused = context.tabIndexKey === itemKey;
+                    return (
+                        <button
+                            type="button"
+                            className="mx_item"
+                            data-testid={`row-${index}`}
+                            tabIndex={isFocused ? 0 : -1}
+                            role="gridcell"
+                            style={{ height: `${ITEM_HEIGHT}px`, display: "block", width: "100%" }}
+                            onFocus={(e) => onFocus(item, e)}
+                        >
+                            {item === SEPARATOR_ITEM ? "---" : (item as TestItem).name}
+                        </button>
+                    );
+                },
+            );
+
+            return render(
+                <VirtualizedList
+                    items={largeItems}
+                    getItemComponent={mockGetItemComponent}
+                    isItemFocusable={mockIsItemFocusable}
+                    getItemKey={(item) => (typeof item === "string" ? item : item.id)}
+                    role="grid"
+                    style={{ height: `${VIEWPORT_HEIGHT}px` }}
+                    fixedItemHeight={ITEM_HEIGHT}
+                />,
+            );
+        };
+
+        it("should scroll down through many items with ArrowDown and virtualise earlier items out of the DOM", async () => {
+            const { container } = renderRealVirtualizedList();
+            const listContainer = screen.getByRole("grid");
+
+            // Wait for Virtuoso to finish its initial render.
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
+
+            fireEvent.focus(listContainer);
+
+            const TARGET_INDEX = 20;
+
+            // Press ArrowDown many times — each press calls scrollIntoView which
+            // makes Virtuoso scroll and re-virtualise automatically.
+            for (let i = 0; i < TARGET_INDEX; i++) {
+                await act(async () => {
+                    fireEvent.keyDown(listContainer, { code: "ArrowDown" });
+                });
+            }
+
+            // The focused item should be item-20.
+            await waitFor(() => {
+                const focused = Array.from(container.querySelectorAll(".mx_item")).find(
+                    (el) => el.getAttribute("tabindex") === "0",
+                );
+                expect(focused).toBeDefined();
+                expect(focused!.textContent).toBe(`Item ${TARGET_INDEX}`);
+            });
+
+            // The first item should have been virtualised out of the DOM.
+            expect(container.querySelector("[data-testid='row-0']")).toBeNull();
+        });
+
+        it("should move focus from a focused child element to the scroller on keyboard navigation", async () => {
+            renderRealVirtualizedList();
+            const listContainer = screen.getByRole("grid");
+
+            // Wait for Virtuoso to finish its initial render.
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
+
+            // Directly focus a child button (not the scroller itself).
+            // This simulates a user clicking/tabbing into a button inside the list.
+            const firstButton = screen.getByTestId("row-0");
+            await act(async () => {
+                firstButton.focus();
+            });
+
+            // Verify the child button has DOM focus, not the scroller.
+            expect(document.activeElement).toBe(firstButton);
+            expect(document.activeElement).not.toBe(listContainer);
+
+            // Press ArrowDown — the handler should detect that a child element
+            // has focus and move it to the scroller before scrolling, so that
+            // Virtuoso unmounting the child doesn't send focus to <body>.
+            await act(async () => {
+                fireEvent.keyDown(listContainer, { code: "ArrowDown" });
+            });
+
+            // After the keyDown, focus should have moved to the scroller element
+            // (not remain on the child button, and not escape to <body>).
+            expect(document.activeElement).toBe(listContainer);
+        });
+
+        it("should scroll up through many items with ArrowUp and virtualise later items out of the DOM", async () => {
+            const { container } = renderRealVirtualizedList();
+            const listContainer = screen.getByRole("grid");
+
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
+
+            fireEvent.focus(listContainer);
+
+            // First navigate down to item-30.
+            for (let i = 0; i < 30; i++) {
+                await act(async () => {
+                    fireEvent.keyDown(listContainer, { code: "ArrowDown" });
+                });
+            }
+
+            await waitFor(() => {
+                const focused = Array.from(container.querySelectorAll(".mx_item")).find(
+                    (el) => el.getAttribute("tabindex") === "0",
+                );
+                expect(focused!.textContent).toBe("Item 30");
+            });
+
+            // Now navigate back up 20 times to item-10.
+            for (let i = 0; i < 20; i++) {
+                await act(async () => {
+                    fireEvent.keyDown(listContainer, { code: "ArrowUp" });
+                });
+            }
+
+            // The focused item should be item-10.
+            await waitFor(() => {
+                const focused = Array.from(container.querySelectorAll(".mx_item")).find(
+                    (el) => el.getAttribute("tabindex") === "0",
+                );
+                expect(focused).toBeDefined();
+                expect(focused!.textContent).toBe("Item 10");
+            });
+
+            // Items near the bottom (e.g. item-30) should have been virtualised out.
+            expect(container.querySelector("[data-testid='row-30']")).toBeNull();
         });
     });
 });
