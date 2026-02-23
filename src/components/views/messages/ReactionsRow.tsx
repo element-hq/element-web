@@ -8,13 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useEffect, type JSX, type SyntheticEvent } from "react";
 import classNames from "classnames";
-import {
-    type MatrixClient,
-    type MatrixEvent,
-    MatrixEventEvent,
-    type Relations,
-    RelationsEvent,
-} from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MatrixEventEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -83,8 +77,7 @@ interface ReactionsRowButtonItemProps {
 }
 
 const ReactionsRowButtonItem: React.FC<ReactionsRowButtonItemProps> = (props) => {
-    const matrixClient = useMatrixClientContext();
-    const client = props.client ?? matrixClient;
+    const client = useMatrixClientContext();
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -243,7 +236,6 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 return (
                     <ReactionsRowButtonItem
                         key={content}
-                        client={this.context.room?.client}
                         content={content}
                         count={deduplicatedEvents.length}
                         mxEvent={mxEvent}
