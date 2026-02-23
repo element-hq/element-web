@@ -37,7 +37,7 @@ export interface ReactionsRowButtonViewSnapshot {
      * Whether the reaction button is disabled.
      * @default false
      */
-    isDisabled: boolean;
+    isDisabled?: boolean;
     /**
      * The image URL to render when using a custom reaction image.
      */
