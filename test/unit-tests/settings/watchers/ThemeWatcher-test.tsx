@@ -189,4 +189,20 @@ describe("ThemeWatcher", function () {
         const themeWatcher = new ThemeWatcher();
         expect(themeWatcher.getEffectiveTheme()).toBe("dark");
     });
+
+    it("should identify custom dark themes as dark", () => {
+        SettingsStore.getValueAt = makeGetValueAt({ use_system_theme: false, theme: "custom-darkula" });
+        SettingsStore.getValue = makeGetValue({
+            custom_themes: [
+                {
+                    name: "darkula",
+                    is_dark: true,
+                },
+            ],
+        });
+
+        const themeWatcher = new ThemeWatcher();
+        expect(themeWatcher.getEffectiveTheme()).toBe("custom-darkula");
+        expect(themeWatcher.isUserOnDarkTheme()).toBe(true);
+    });
 });

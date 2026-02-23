@@ -3539,8 +3539,6 @@
             "label": "Aksi Pesan",
             "view_in_room": "Tampilkan di ruangan"
         },
-        "message_timestamp_received_at": "Diterima pada: %(dateTime)s",
-        "message_timestamp_sent_at": "Dikirim pada: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s memperbarui sebuah peraturan pencekalan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
             "changed_rule_rooms": "%(senderName)s mengubah sebuah peraturan pencekalan ruangan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",

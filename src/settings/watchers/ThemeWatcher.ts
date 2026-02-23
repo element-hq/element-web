@@ -13,7 +13,7 @@ import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import { findHighContrastTheme } from "../../theme";
+import { findHighContrastTheme, getCustomTheme } from "../../theme";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
 
@@ -123,6 +123,17 @@ export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvent, T
             }
         }
         return SettingsStore.getValue("theme");
+    }
+
+    /**
+     * Returns true if user is on a dark theme, if false implies user is on a light theme
+     */
+    public isUserOnDarkTheme(): boolean {
+        const theme = this.currentTheme;
+        if (theme.startsWith("custom-")) {
+            return !!getCustomTheme(theme.substring("custom-".length)).is_dark;
+        }
+        return theme === "dark" || theme === "dark-hc";
     }
 
     private themeBasedOnSystem(): string | undefined {

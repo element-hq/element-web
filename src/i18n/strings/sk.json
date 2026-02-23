@@ -3592,8 +3592,6 @@
             "label": "Akcie správy",
             "view_in_room": "Zobraziť v miestnosti"
         },
-        "message_timestamp_received_at": "Prijaté: %(dateTime)s",
-        "message_timestamp_sent_at": "Odoslané:%(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s aktualizoval pravidlo zakázať vstúpiť pôvodne sa zhodujúce s %(oldGlob)s na %(newGlob)s, dôvod: %(reason)s",
             "changed_rule_rooms": "%(senderName)s zmenil pravidlo zakázať vstúpiť do miestností pôvodne zhodujúcich sa s %(oldGlob)s na miestnosti zhodujúce sa s %(newGlob)s, dôvod: %(reason)s",

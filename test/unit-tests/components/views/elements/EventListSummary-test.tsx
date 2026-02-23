@@ -265,7 +265,12 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent("user_1 was unbanned, joined and left 7 times and was invited");
+
+        // And there is no spoiler on the user's name since they were not banned
+        expect(summary).not.toContainHTML("mx_EventTile_spoiler_content");
     });
 
     it("truncates multiple sequences of repetitions with other events between", function () {
@@ -309,9 +314,14 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent(
-            "user_1 was unbanned, joined and left 2 times, was banned, " + "joined and left 3 times and was invited",
+            "user_1 was unbanned, joined and left 2 times, was banned, joined and left 3 times and was invited",
         );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_1</span>');
     });
 
     it("handles multiple users following the same sequence of memberships", function () {
@@ -361,9 +371,14 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent(
             "user_1 and one other were unbanned, joined and left 2 times and were banned",
         );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_1</span>');
     });
 
     it("handles many users following the same sequence of memberships", function () {
@@ -393,9 +408,14 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent(
             "user_0 and 19 others were unbanned, joined and left 2 times and were banned",
         );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_0</span>');
     });
 
     it("correctly orders sequences of transitions by the order of their first event", function () {

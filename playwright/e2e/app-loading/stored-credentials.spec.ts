@@ -30,6 +30,7 @@ test("Shows the last known page on reload", async ({ pageWithCredentials: page }
     const app = new ElementAppPage(page);
     await app.client.createRoom({ name: "Test Room" });
     await app.viewRoomByName("Test Room");
+    await expect(page).toHaveURL(/\/#\/room\//);
 
     // Navigate away
     await page.goto("about:blank");

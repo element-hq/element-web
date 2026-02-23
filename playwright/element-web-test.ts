@@ -136,6 +136,10 @@ export const expect = baseExpect.extend<Expectations>({
                 border-color: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;
             }
+            span.mx_Pill:not([style*="--avatar-letter: ''"])::before {
+                background: var(--cpd-color-fuchsia-1200) !important;
+                color: white !important;
+            }
             .mx_ReplyChain {
                 border-left-color: var(--cpd-color-blue-1200) !important;
             }

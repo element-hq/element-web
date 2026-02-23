@@ -3521,8 +3521,6 @@
             "label": "Ações da mensagem",
             "view_in_room": "Ver na sala"
         },
-        "message_timestamp_received_at": "Recebido em: %(dateTime)s",
-        "message_timestamp_sent_at": "Enviado em: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s alterou uma regra que bania o que correspondia a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s",
             "changed_rule_rooms": "%(senderName)s alterou uma regra que bania salas que correspondiam a %(oldGlob)s para corresponder a %(newGlob)s devido à %(reason)s",

@@ -3541,8 +3541,6 @@
             "label": "Meldingshandlinger",
             "view_in_room": "Vis i rom"
         },
-        "message_timestamp_received_at": "Mottatt den: %(dateTime)s",
-        "message_timestamp_sent_at": "Sendt den: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s oppdaterte en forbudsregel som matchet %(oldGlob)s til å matche %(newGlob)s for %(reason)s",
             "changed_rule_rooms": "%(senderName)s endret en regel som forbød rom som samsvarte %(oldGlob)s til å matche %(newGlob)s for %(reason)s",
