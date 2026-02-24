@@ -187,7 +187,7 @@ export class ReactionsRowButtonViewModel
 
     public onClick = (): void => {
         const { client, mxEvent, myReactionEvent, content, disabled } = this.props;
-        if (disabled) return
+        if (disabled) return;
 
         if (myReactionEvent) {
             client.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId()!);

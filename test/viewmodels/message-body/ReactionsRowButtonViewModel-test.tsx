@@ -12,7 +12,7 @@ import {
     type ReactionsRowButtonViewModelProps,
 } from "../../../src/viewmodels/message-body/ReactionsRowButtonViewModel";
 import { type ReactionsRowButtonTooltipViewModel } from "../../../src/viewmodels/message-body/ReactionsRowButtonTooltipViewModel";
-import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
+import { createTestClient, mkEvent, mkStubRoom } from "../../test-utils";
 import dis from "../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../src/dispatcher/dispatcher");

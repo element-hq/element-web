@@ -8,7 +8,7 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel";
 import { type ReactionsRowButtonTooltipViewSnapshot } from "../ReactionsRowButtonTooltip";
 import {
@@ -19,6 +19,7 @@ import {
 
 type WrapperProps = Omit<ReactionsRowButtonViewSnapshot, "tooltipVm"> &
     Partial<ReactionsRowButtonViewActions> & {
+        ariaLabel?: string;
         tooltipFormattedSenders?: ReactionsRowButtonTooltipViewSnapshot["formattedSenders"];
         tooltipCaption?: ReactionsRowButtonTooltipViewSnapshot["caption"];
         tooltipOpen?: ReactionsRowButtonTooltipViewSnapshot["tooltipOpen"];
@@ -53,7 +54,7 @@ const ReactionsRowButtonViewWrapper = ({
     return <ReactionsRowButtonView vm={vm} />;
 };
 
-export default {
+const meta = {
     title: "MessageBody/ReactionsRowButton",
     component: ReactionsRowButtonViewWrapper,
     tags: ["autodocs"],
@@ -69,21 +70,24 @@ export default {
         tooltipCaption: undefined,
         tooltipOpen: true,
     },
-} as Meta<typeof ReactionsRowButtonViewWrapper>;
+} satisfies Meta<typeof ReactionsRowButtonViewWrapper>;
 
-const Template: StoryFn<typeof ReactionsRowButtonViewWrapper> = (args) => <ReactionsRowButtonViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const Selected = Template.bind({});
-Selected.args = {
-    isSelected: true,
+export const Selected: Story = {
+    args: {
+        isSelected: true,
+    },
 };
 
-export const WithTooltip = Template.bind({});
-WithTooltip.args = {
-    count: 3,
-    tooltipFormattedSenders: "Alice, Bob and Charlie",
-    tooltipCaption: ":thumbsup:",
-    tooltipOpen: true,
+export const WithTooltip: Story = {
+    args: {
+        count: 3,
+        tooltipFormattedSenders: "Alice, Bob and Charlie",
+        tooltipCaption: ":thumbsup:",
+        tooltipOpen: true,
+    },
 };
