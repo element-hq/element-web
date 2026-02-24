@@ -25,6 +25,11 @@ interface TestItem {
 const SEPARATOR_ITEM = "SEPARATOR" as const;
 type TestItemWithSeparator = TestItem | typeof SEPARATOR_ITEM;
 
+interface TestGroupHeader {
+    id: string;
+    name: string;
+}
+
 // ─── Shared helpers ──────────────────────────────────────────────────────────
 
 const expectTabIndex = (element: Element, expected: string): void => {
@@ -96,10 +101,17 @@ interface ListTestVariant {
     setupDefaultMock: (mockGetItemComponent: any, getItems: () => TestItemWithSeparator[]) => void;
     /** Wire up the `getItemComponent` mock for the click-after-scroll test. */
     setupClickTestMock: (mockGetItemComponent: any, mockOnClick: any, getItems: () => TestItemWithSeparator[]) => void;
+    /** Number of ArrowDown key presses after initial focus to reach the first regular item.
+     *  0 for flat lists, 1 for grouped lists (to skip past the group header). */
+    stepsToFirstItem: number;
+    /** CSS selector matching all elements that participate in keyboard navigation. */
+    navigableSelector: string;
 }
 
 const flatVariant: ListTestVariant = {
     name: "FlatVirtualizedList",
+    stepsToFirstItem: 0,
+    navigableSelector: ".mx_item",
 
     createComponent(items, mockGetItemComponent, mockIsItemFocusable, extraProps = {}) {
         const props: FlatVirtualizedListProps<TestItemWithSeparator, any> = {
@@ -136,18 +148,33 @@ const flatVariant: ListTestVariant = {
 
 const groupedVariant: ListTestVariant = {
     name: "GroupedVirtualizedList",
+    stepsToFirstItem: 1,
+    navigableSelector: ".mx_group_header, .mx_item",
 
     createComponent(items, mockGetItemComponent, mockIsItemFocusable, extraProps = {}) {
-        const props: GroupedVirtualizedListProps<TestItemWithSeparator, any> = {
-            "groups": [items],
+        const header: TestGroupHeader = { id: "test-group-header", name: "Group 0" };
+        const props: GroupedVirtualizedListProps<TestGroupHeader, TestItemWithSeparator, any> = {
+            "groups": [{ header, items }],
             "getItemComponent": mockGetItemComponent,
-            "getGroupHeaderComponent": (groupIndex: number) => (
-                <div className="mx_group_header" data-testid={`group-header-${groupIndex}`}>
-                    Group {groupIndex}
+            "getGroupHeaderComponent": (
+                _groupIndex: number,
+                header: TestGroupHeader,
+                context: VirtualizedListContext<any>,
+                onFocus: (header: TestGroupHeader, e: React.FocusEvent) => void,
+            ) => (
+                <div
+                    className="mx_group_header"
+                    data-testid={`group-header-${header.id}`}
+                    tabIndex={context.tabIndexKey === header.id ? 0 : -1}
+                    onFocus={(e) => onFocus(header, e)}
+                >
+                    {header.name}
                 </div>
             ),
+            "isGroupHeaderFocusable": () => true,
             "isItemFocusable": mockIsItemFocusable,
             getItemKey,
+            "getHeaderKey": (header) => header.id,
             "role": "grid",
             "aria-rowcount": items.length,
             "aria-colcount": 1,
@@ -156,25 +183,21 @@ const groupedVariant: ListTestVariant = {
         return <GroupedVirtualizedList {...props} />;
     },
 
-    setupDefaultMock(mockGetItemComponent, getItems) {
+    setupDefaultMock(mockGetItemComponent, _getItems) {
         mockGetItemComponent.mockImplementation(
-            (index: number, context: VirtualizedListContext<any>, _onFocus: unknown) => {
-                const item = getItems()[index];
-                return renderItemElement(index, item, context);
-            },
+            (index: number, item: TestItemWithSeparator, context: VirtualizedListContext<any>) =>
+                renderItemElement(index, item, context),
         );
     },
 
-    setupClickTestMock(mockGetItemComponent, mockOnClick, getItems) {
+    setupClickTestMock(mockGetItemComponent, mockOnClick, _getItems) {
         mockGetItemComponent.mockImplementation(
             (
                 index: number,
+                item: TestItemWithSeparator,
                 context: VirtualizedListContext<any>,
                 onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
-            ) => {
-                const item = getItems()[index];
-                return renderClickableItemElement(index, item, context, onFocus, () => mockOnClick(item));
-            },
+            ) => renderClickableItemElement(index, item, context, onFocus, () => mockOnClick(item)),
         );
     },
 };
@@ -241,12 +264,21 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
         });
     });
 
+    /** Press ArrowDown the required number of times to move from the initial
+     *  focus target (e.g. a group header) to the first regular item. */
+    const navigateToFirstItem = (container: Element): void => {
+        for (let i = 0; i < variant.stepsToFirstItem; i++) {
+            fireEvent.keyDown(container, { code: "ArrowDown" });
+        }
+    };
+
     describe("Keyboard Navigation", () => {
         it("should handle ArrowDown key navigation", () => {
             renderListWithHeight();
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
+            navigateToFirstItem(container);
             fireEvent.keyDown(container, { code: "ArrowDown" });
 
             // ArrowDown should skip the non-focusable item at index 1 and go to index 2
@@ -260,8 +292,9 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             renderListWithHeight();
             const container = screen.getByRole("grid");
 
-            // First focus and navigate down to second item
+            // First focus and navigate down past separator
             fireEvent.focus(container);
+            navigateToFirstItem(container);
             fireEvent.keyDown(container, { code: "ArrowDown" });
 
             // Then navigate back up
@@ -279,18 +312,19 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
 
             // First focus and navigate to a later item
             fireEvent.focus(container);
+            navigateToFirstItem(container);
             fireEvent.keyDown(container, { code: "ArrowDown" });
             fireEvent.keyDown(container, { code: "ArrowDown" });
 
-            // Then press Home to go to first item
+            // Then press Home to go to first navigable element
             fireEvent.keyDown(container, { code: "Home" });
 
-            // Verify focus moved to first item
-            const items = container.querySelectorAll(".mx_item");
-            expectTabIndex(items[0], "0");
-            // Check that other items are not focused
-            for (let i = 1; i < items.length; i++) {
-                expectTabIndex(items[i], "-1");
+            // Verify focus moved to the very first navigable element
+            const allNav = container.querySelectorAll(variant.navigableSelector);
+            expectTabIndex(allNav[0], "0");
+            // Check that other navigable elements are not focused
+            for (let i = 1; i < allNav.length; i++) {
+                expectTabIndex(allNav[i], "-1");
             }
         });
 
@@ -298,20 +332,19 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             renderListWithHeight();
             const container = screen.getByRole("grid");
 
-            // First focus on the list (starts at first item)
+            // First focus on the list
             fireEvent.focus(container);
 
             // Then press End to go to last item
             fireEvent.keyDown(container, { code: "End" });
 
-            // Verify focus moved to last visible item
-            const items = container.querySelectorAll(".mx_item");
-            // Should focus on the last visible item
-            const lastIndex = items.length - 1;
-            expectTabIndex(items[lastIndex], "0");
-            // Check that other items are not focused
+            // Verify focus moved to last visible navigable element
+            const allNav = container.querySelectorAll(variant.navigableSelector);
+            const lastIndex = allNav.length - 1;
+            expectTabIndex(allNav[lastIndex], "0");
+            // Check that other navigable elements are not focused
             for (let i = 0; i < lastIndex; i++) {
-                expectTabIndex(items[i], "-1");
+                expectTabIndex(allNav[i], "-1");
             }
         });
 
@@ -319,8 +352,9 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             renderListWithHeight();
             const container = screen.getByRole("grid");
 
-            // First focus on the list (starts at first item)
+            // First focus on the list and navigate to first item
             fireEvent.focus(container);
+            navigateToFirstItem(container);
 
             // Then press PageDown to jump down by viewport size
             fireEvent.keyDown(container, { code: "PageDown" });
@@ -337,8 +371,9 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             renderListWithHeight();
             const container = screen.getByRole("grid");
 
-            // First focus and navigate to last item to have something to page up from
+            // First focus, navigate to first item, then End
             fireEvent.focus(container);
+            navigateToFirstItem(container);
             fireEvent.keyDown(container, { code: "End" });
 
             // Then press PageUp to jump up by viewport size
@@ -357,6 +392,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
+            navigateToFirstItem(container);
 
             // Store initial state - first item should be focused
             const initialItems = container.querySelectorAll(".mx_item");
@@ -418,6 +454,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             const container = screen.getByRole("grid");
 
             fireEvent.focus(container);
+            navigateToFirstItem(container);
             fireEvent.keyDown(container, { code: "ArrowDown" });
 
             // Verify it skipped the non-focusable item at index 1
@@ -449,8 +486,9 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             fireEvent.keyDown(container, { code: "End" });
             fireEvent.keyDown(container, { code: "ArrowUp" });
 
-            // Verify it skipped non-focusable items
-            // and went to the first focusable item
+            // Verify it skipped non-focusable items and went to the first focusable item.
+            // For grouped lists the header sits above the first item, so ArrowUp from
+            // Item 2 (skipping the non-focusable entries) lands on Item 1.
             const items = container.querySelectorAll(".mx_item");
             expectTabIndex(items[0], "0"); // Item 1 is focused
             expectTabIndex(items[3], "-1"); // Item 3 is not focused anymore
@@ -458,19 +496,19 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
     });
 
     describe("Focus Management", () => {
-        it("should focus first item when list gains focus for the first time", () => {
+        it("should focus first navigable element when list gains focus for the first time", () => {
             renderListWithHeight();
             const container = screen.getByRole("grid");
 
-            // Initial focus should go to first item
+            // Initial focus should go to first navigable element
             fireEvent.focus(container);
 
-            // Verify first item gets focus
-            const items = container.querySelectorAll(".mx_item");
-            expectTabIndex(items[0], "0");
-            // Other items should not be focused
-            for (let i = 1; i < items.length; i++) {
-                expectTabIndex(items[i], "-1");
+            // Verify first navigable element gets focus
+            const allNav = container.querySelectorAll(variant.navigableSelector);
+            expectTabIndex(allNav[0], "0");
+            // Other navigable elements should not be focused
+            for (let i = 1; i < allNav.length; i++) {
+                expectTabIndex(allNav[i], "-1");
             }
         });
 
@@ -480,11 +518,12 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
 
             // Focus and navigate to simulate previous usage
             fireEvent.focus(container);
+            navigateToFirstItem(container);
             fireEvent.keyDown(container, { code: "ArrowDown" });
 
-            // Verify item 2 is focused
+            // Verify item 2 is focused (ArrowDown skips separator)
             let items = container.querySelectorAll(".mx_item");
-            expectTabIndex(items[2], "0"); // ArrowDown skips separator
+            expectTabIndex(items[2], "0");
 
             // Simulate blur by focusing elsewhere
             fireEvent.blur(container);
@@ -524,10 +563,11 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             const { container } = renderListWithHeight({ items: largerItems });
             const listContainer = screen.getByRole("grid");
 
-            // Step 1: Focus the list initially (this sets tabIndexKey to first item: "item-0")
+            // Step 1: Focus the list initially and navigate to the first regular item
             fireEvent.focus(listContainer);
+            navigateToFirstItem(listContainer);
 
-            // Verify first item is focused initially and tabIndexKey is set to first item
+            // Verify first item is focused and tabIndexKey is set to first item
             let items = container.querySelectorAll(".mx_item");
             expectTabIndex(items[0], "0");
             expectAttribute(items[0], "data-testid", "row-0");
@@ -567,6 +607,34 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // item-0 should still not be visible (if the fix is working)
             const item0AfterClick = container.querySelector("[data-testid='row-0']");
             expect(item0AfterClick).toBeNull();
+        });
+    });
+
+    describe("Group header keyboard navigation", () => {
+        // These tests only exercise meaningful behaviour for the grouped variant;
+        // for the flat variant they degenerate to basic navigation assertions.
+        it("should navigate from first navigable element to the first item with ArrowDown", () => {
+            renderListWithHeight();
+            const container = screen.getByRole("grid");
+
+            fireEvent.focus(container);
+            navigateToFirstItem(container);
+
+            const items = container.querySelectorAll(".mx_item");
+            expectTabIndex(items[0], "0");
+        });
+
+        it("should navigate back to the first navigable element with ArrowUp from the first item", () => {
+            renderListWithHeight();
+            const container = screen.getByRole("grid");
+
+            fireEvent.focus(container);
+            navigateToFirstItem(container);
+            // Now press ArrowUp to go back before the first item
+            fireEvent.keyDown(container, { code: "ArrowUp" });
+
+            const allNav = container.querySelectorAll(variant.navigableSelector);
+            expectTabIndex(allNav[0], "0");
         });
     });
 

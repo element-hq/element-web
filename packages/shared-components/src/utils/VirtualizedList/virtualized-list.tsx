@@ -93,6 +93,28 @@ export interface VirtualizedListProps<Item, Context> extends Omit<
      * @param range - The new visible range with startIndex and endIndex
      */
     rangeChanged?: (range: ListRange) => void;
+
+    /**
+     * Optional function to map from the items array index to the scroll index
+     * used by virtuoso's scrollIntoView. This is needed when the items array
+     * contains entries (such as group headers) that don't have a direct 1:1
+     * mapping with virtuoso's own item indices.
+     *
+     * @param itemsIndex - The index in the items array
+     * @returns The index to pass to virtuoso's scrollIntoView
+     */
+    mapScrollIndex?: (itemsIndex: number) => number;
+
+    /**
+     * Optional function to map from virtuoso's reported visible-range indices
+     * back to the items array indices. This is needed when virtuoso reports
+     * ranges in a different index space than the items array (e.g., in
+     * GroupedVirtuoso where group headers are not counted in the range).
+     *
+     * @param virtuosoIndex - The index reported by virtuoso's rangeChanged
+     * @returns The corresponding index in the items array
+     */
+    mapRangeIndex?: (virtuosoIndex: number) => number;
 }
 
 /**
@@ -135,8 +157,18 @@ export function useVirtualizedList<Item, Context>(
     props: VirtualizedListProps<Item, Context>,
 ): UseVirtualizedListResult<Item, Context> {
     // Extract our custom props to avoid conflicts with Virtuoso props
-    const { items, isItemFocusable, getItemKey, context, onKeyDown, totalCount, rangeChanged, ...virtuosoProps } =
-        props;
+    const {
+        items,
+        isItemFocusable,
+        getItemKey,
+        context,
+        onKeyDown,
+        totalCount,
+        rangeChanged,
+        mapScrollIndex,
+        mapRangeIndex,
+        ...virtuosoProps
+    } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
@@ -181,14 +213,15 @@ export function useVirtualizedList<Item, Context>(
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
                 setTabIndexKey(key);
+                const scrollIndex = mapScrollIndex ? mapScrollIndex(clampedIndex) : clampedIndex;
                 virtuosoHandleRef.current?.scrollIntoView({
-                    index: clampedIndex,
+                    index: scrollIndex,
                     align: align,
                     behavior: "auto",
                 });
             }
         },
-        [items, getItemKey],
+        [items, getItemKey, mapScrollIndex],
     );
 
     /**
@@ -345,10 +378,13 @@ export function useVirtualizedList<Item, Context>(
     // Combine internal range tracking with optional external callback
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
-            setVisibleRange(range);
+            const internalRange = mapRangeIndex
+                ? { startIndex: mapRangeIndex(range.startIndex), endIndex: mapRangeIndex(range.endIndex) }
+                : range;
+            setVisibleRange(internalRange);
             rangeChanged?.(range);
         },
-        [rangeChanged],
+        [rangeChanged, mapRangeIndex],
     );
 
     return {

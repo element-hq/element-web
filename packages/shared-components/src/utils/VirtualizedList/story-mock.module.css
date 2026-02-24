@@ -15,3 +15,16 @@
 .itemSelected {
     background-color: #559f24;
 }
+
+.group {
+    all: unset;
+    width: 100%;
+    padding: 8px;
+    background-color: #00adad;
+    border: 1px solid lightgrey;
+    font-weight: "bold";
+}
+
+.groupSelected {
+    background-color: #559f24;
+}
