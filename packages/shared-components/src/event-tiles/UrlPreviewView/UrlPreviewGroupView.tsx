@@ -33,12 +33,7 @@ export interface UrlPreviewGroupViewActions {
 }
 
 /**
- * UrlPreviewGroupView renders a compact event tile with an icon, title, and optional subtitle/content.
- *
- * @example
- * ```tsx
- * <UrlPreviewGroupView icon={<Icon />} title="Room created" />
- * ```
+ * UrlPreviewGroupView renders a list of URL previews for a single event.
  */
 export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();

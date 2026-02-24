@@ -23,6 +23,10 @@ export interface LinkPreviewAdditionalProps {
 
 export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewActions & LinkPreviewAdditionalProps;
 
+/**
+ * LinkPreview renders a single preview component for a single link on an event. It is usually rendered as part of
+ * a `UrlPreviewGroupView`.
+ */
 export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
 
