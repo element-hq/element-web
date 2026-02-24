@@ -10,7 +10,7 @@ import webpack from "webpack";
 import { type Translations } from "matrix-web-i18n";
 
 const EW_I18N_BASE_PATH = "src/i18n/strings/";
-const SC_I18N_BASE_PATH = "packages/shared-components/src/i18n/strings/";
+const SC_I18N_BASE_PATH = "../../packages/shared-components/src/i18n/strings/";
 
 const INCLUDE_LANGS = [...new Set([...fs.readdirSync(EW_I18N_BASE_PATH)])]
     .filter((fn) => fn.endsWith(".json"))

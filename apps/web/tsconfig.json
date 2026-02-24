@@ -18,11 +18,11 @@
         "strict": true,
         "paths": {
             "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
-            "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
+            "rollup/parseAst": ["../../node_modules/rollup/dist/parseAst"]
         }
     },
     "include": [
-        "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "../../node_modules/matrix-js-sdk/src/@types/*.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",
