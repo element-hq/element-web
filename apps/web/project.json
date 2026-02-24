@@ -1,7 +1,6 @@
 {
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
-    "implicitDependencies": ["@element-hq/web-shared-components"],
     "targets": {
         "prebuild:i18n": {
             "cache": true,
