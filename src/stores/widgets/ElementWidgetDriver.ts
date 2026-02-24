@@ -41,6 +41,7 @@ import {
     type Room,
     type SendDelayedEventRequestOpts,
     type MatrixClient,
+    TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -577,23 +578,79 @@ export class ElementWidgetDriver extends WidgetDriver {
      * in "limit".
      * @returns A generator that emits events.
      */
-    private *readRoomTimelineIterator(
+    private async *readRoomTimelineIterator(
         room: Room,
         eventType: string,
         msgtype: string | undefined,
         stateKey: string | undefined,
         limit: number,
         since: string | undefined,
-    ): Generator<IRoomEvent, void, void> {
+    ): AsyncGenerator<IRoomEvent, void, void> {
         let resultCount: number = 0;
-        const events = [...room.getLiveTimeline().getEvents()]; // timelines are most recent last
-        for (let ev = events.pop(); ev && resultCount < limit && ev.getId() !== since; ev = events.pop()) {
+
+        const window = new TimelineWindow(room.client, room.getLiveTimeline().getTimelineSet());
+        await window.load();
+        // Initial window events
+        const events = [...window.getEvents()]; // timelines are most recent last
+        let hasMore = true;
+        let ev;
+        for (ev = events.pop(); ev && resultCount < limit && ev.getId() !== since; ev = events.pop()) {
+            // backpaginate more events if we just popped the last available one.
+            if (events.length === 0 && hasMore) {
+                // initialize window
+
+                logger.debug(
+                    "[ElementWidgetDriver][readRoomTimeline] Before window.unpaginate. window.getEvents().length=",
+                    window.getEvents().length,
+                );
+                // use unpaginate to make sure we only get events in the window we have not yet seen!
+                window.unpaginate(window.getEvents().length, false);
+                // This should be 0
+                logger.debug(
+                    "[ElementWidgetDriver][readRoomTimeline] After window.unpaginate. window.getEvents().length=",
+                    window.getEvents().length,
+                );
+
+                logger.debug(
+                    "[ElementWidgetDriver][readRoomTimeline] window.paginate(Direction.Backward, 1000)",
+                    window.getEvents().length,
+                );
+                const beforeTs = Date.now();
+                await window.paginate(Direction.Backward, 1000);
+                const afterTs = Date.now();
+                hasMore = window.canPaginate(Direction.Backward);
+                logger.debug(
+                    `[ElementWidgetDriver][readRoomTimeline] done paginating (${afterTs - beforeTs}ms). window.getEvents().length=`,
+                    window.getEvents().length,
+                    "hasMore =",
+                    hasMore,
+                );
+                events.push(...window.getEvents());
+                logger.info("[ElementWidgetDriver][readRoomTimeline] events after backfill", events.length);
+            }
+
             if (ev.getType() !== eventType) continue;
             if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
             if (stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            // Add a new event which fulfills all required conditions
             yield ev.getEffectiveEvent() as IRoomEvent;
             resultCount++;
         }
+        logger.info(
+            "[ElementWidgetDriver][readRoomTimeline] DONE with condition:",
+            "\nresultCount < limit: ",
+            resultCount,
+            "<",
+            limit,
+            "\nevents.length: ",
+            events.length,
+            "\nhasMore ",
+            hasMore,
+            "\nev.getId() !== since",
+            ev?.getId(),
+            "!==",
+            since,
+        );
     }
 
     /**
@@ -623,7 +680,11 @@ export class ElementWidgetDriver extends WidgetDriver {
         limit = limit > 0 ? Math.min(limit, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (room === null) return [];
-        return [...this.readRoomTimelineIterator(room, eventType, msgtype, stateKey, limit, since)];
+        const events: IRoomEvent[] = [];
+        for await (const ev of this.readRoomTimelineIterator(room, eventType, msgtype, stateKey, limit, since)) {
+            events.push(ev);
+        }
+        return events;
     }
 
     /**
