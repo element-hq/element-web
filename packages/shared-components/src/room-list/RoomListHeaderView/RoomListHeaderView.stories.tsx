@@ -8,18 +8,19 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     RoomListHeaderView,
     type RoomListHeaderViewActions,
     type RoomListHeaderViewSnapshot,
 } from "./RoomListHeaderView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 
 type RoomListHeaderProps = RoomListHeaderViewSnapshot & RoomListHeaderViewActions;
 
-const RoomListHeaderViewWrapper = ({
+const RoomListHeaderViewWrapperImpl = ({
     createChatRoom,
     createRoom,
     createVideoRoom,
@@ -44,8 +45,9 @@ const RoomListHeaderViewWrapper = ({
     });
     return <RoomListHeaderView vm={vm} />;
 };
+const RoomListHeaderViewWrapper = withViewDocs(RoomListHeaderViewWrapperImpl, RoomListHeaderView);
 
-export default {
+const meta = {
     title: "Room List/RoomListHeaderView",
     component: RoomListHeaderViewWrapper,
     tags: ["autodocs"],
@@ -67,18 +69,21 @@ export default {
             url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=2925-19173",
         },
     },
-} as Meta<typeof RoomListHeaderViewWrapper>;
+} satisfies Meta<typeof RoomListHeaderViewWrapper>;
 
-const Template: StoryFn<typeof RoomListHeaderViewWrapper> = (args) => <RoomListHeaderViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const NoSpaceMenu = Template.bind({});
-NoSpaceMenu.args = {
-    displaySpaceMenu: false,
+export const NoSpaceMenu: Story = {
+    args: {
+        displaySpaceMenu: false,
+    },
 };
 
-export const NoComposeMenu = Template.bind({});
-NoComposeMenu.args = {
-    displayComposeMenu: false,
+export const NoComposeMenu: Story = {
+    args: {
+        displayComposeMenu: false,
+    },
 };

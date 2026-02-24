@@ -103,7 +103,7 @@ export interface RoomListHeaderViewActions {
 /**
  * The view model for the room list header component.
  */
-export type RoomListHeaderViewModel = ViewModel<RoomListHeaderViewSnapshot> & RoomListHeaderViewActions;
+export type RoomListHeaderViewModel = ViewModel<RoomListHeaderViewSnapshot, RoomListHeaderViewActions>;
 
 interface RoomListHeaderViewProps {
     /**

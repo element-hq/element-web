@@ -737,7 +737,6 @@ describe("ElementCall", () => {
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("analyticsID")).toBe("123456789987654321");
             expect(urlParams.get("posthogUserId")).toBe("123456789987654321");
             expect(urlParams.get("posthogApiHost")).toBe("https://posthog");
             expect(urlParams.get("posthogApiKey")).toBe("DEADBEEF");

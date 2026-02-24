@@ -22,7 +22,7 @@ interface IProps {
     rageshakeLabel?: string;
     rageshakeData?: Record<string, any>;
     children?: ReactNode;
-    onFinished(sendFeedback?: boolean): void;
+    onFinished(this: void, sendFeedback?: boolean): void;
 }
 
 const GenericFeatureFeedbackDialog: React.FC<IProps> = ({

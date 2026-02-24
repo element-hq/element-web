@@ -32,7 +32,7 @@ const useMapWithStyle = ({
 }: {
     id: string;
     centerGeoUri?: string;
-    onError?(error: Error): void;
+    onError?(this: void, error: Error): void;
     interactive?: boolean;
     bounds?: Bounds;
     allowGeolocate?: boolean;

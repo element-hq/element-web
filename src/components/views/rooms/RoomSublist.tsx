@@ -705,7 +705,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         );
     }
 
-    private onScrollPrevent(e: Event): void {
+    private onScrollPrevent(this: void, e: Event): void {
         // the RoomTile calls scrollIntoView and the browser may scroll a div we do not wish to be scrollable
         // this fixes https://github.com/vector-im/element-web/issues/14413
         (e.target as HTMLDivElement).scrollTop = 0;

@@ -38,9 +38,8 @@ export class VisibilityProvider {
             return false;
         }
 
-        const isVisibleFn = RoomListCustomisations.isRoomVisible;
-        if (isVisibleFn) {
-            return isVisibleFn(room);
+        if (RoomListCustomisations.isRoomVisible) {
+            return RoomListCustomisations.isRoomVisible(room);
         }
 
         return true; // default

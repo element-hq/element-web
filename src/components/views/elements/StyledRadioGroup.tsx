@@ -27,7 +27,7 @@ interface IProps<T extends string> {
     value?: T; // if not provided no options will be selected
     outlined?: boolean;
     disabled?: boolean;
-    onChange(newValue: T): void;
+    onChange(this: void, newValue: T): void;
 }
 
 function StyledRadioGroup<T extends string>({

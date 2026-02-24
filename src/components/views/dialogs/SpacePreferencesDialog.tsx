@@ -17,16 +17,16 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import { useSettingValue } from "../../../hooks/useSettings";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import RoomName from "../elements/RoomName";
 import { SpacePreferenceTab } from "../../../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { type NonEmptyArray } from "../../../@types/common";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../settings/shared/SettingsSubsection";
+import { useRoomName } from "../../../hooks/useRoomName.ts";
 
 interface IProps {
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space }) => {
@@ -60,6 +60,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
 };
 
 const SpacePreferencesDialog: React.FC<IProps> = ({ space, onFinished }) => {
+    const name = useRoomName(space);
     const tabs: NonEmptyArray<Tab<SpacePreferenceTab>> = [
         new Tab(
             SpacePreferenceTab.Appearance,
@@ -77,9 +78,7 @@ const SpacePreferencesDialog: React.FC<IProps> = ({ space, onFinished }) => {
             title={_t("common|preferences")}
             fixedWidth={false}
         >
-            <h4>
-                <RoomName room={space} />
-            </h4>
+            <h4>{name}</h4>
             <div className="mx_SettingsDialog_content">
                 <TabbedView tabs={tabs} activeTabId={SpacePreferenceTab.Appearance} onChange={() => {}} />
             </div>

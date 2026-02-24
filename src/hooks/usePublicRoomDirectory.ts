@@ -44,8 +44,8 @@ export const usePublicRoomDirectory = (): {
     publicRooms: IPublicRoomsChunkRoom[];
     protocols: Protocols | null;
     config?: IPublicRoomDirectoryConfig | null;
-    setConfig(config: IPublicRoomDirectoryConfig | null): void;
-    search(opts: IPublicRoomsOpts): Promise<boolean>;
+    setConfig(this: void, config: IPublicRoomDirectoryConfig | null): void;
+    search(this: void, opts: IPublicRoomsOpts): Promise<boolean>;
     error?: Error | true; // true if an unknown error is encountered
 } => {
     const [publicRooms, setPublicRooms] = useState<IPublicRoomsChunkRoom[]>([]);

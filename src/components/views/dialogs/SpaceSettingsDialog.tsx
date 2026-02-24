@@ -39,7 +39,7 @@ export enum SpaceSettingsTab {
 interface IProps {
     matrixClient: MatrixClient;
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFinished }) => {

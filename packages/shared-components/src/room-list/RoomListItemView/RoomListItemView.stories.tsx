@@ -12,6 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "./RoomListItemView";
 import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItemView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 import { renderAvatar } from "../story-mocks";
 
@@ -26,7 +27,7 @@ type RoomListItemProps = RoomListItemSnapshot &
     };
 
 // Wrapper component that creates a mocked ViewModel
-const RoomListItemWrapper = ({
+const RoomListItemWrapperImpl = ({
     onOpenRoom,
     onMarkAsRead,
     onMarkAsUnread,
@@ -67,6 +68,7 @@ const RoomListItemWrapper = ({
         />
     );
 };
+const RoomListItemWrapper = withViewDocs(RoomListItemWrapperImpl, RoomListItemView);
 
 const meta = {
     title: "Room List/RoomListItemView",

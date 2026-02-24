@@ -56,7 +56,7 @@ interface ICommandOpts {
     runFn?: RunFn;
     category: string;
     hideCompletionAfterSpace?: boolean;
-    isEnabled?(matrixClient: MatrixClient | null, roomId: string | null): boolean;
+    isEnabled?(this: void, matrixClient: MatrixClient | null, roomId: string | null): boolean;
     renderingTypes?: TimelineRenderingType[];
 }
 

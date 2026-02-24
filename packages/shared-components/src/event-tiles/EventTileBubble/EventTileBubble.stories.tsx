@@ -8,10 +8,10 @@
 import React from "react";
 import { LockSolidIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EventTileBubble } from "./EventTileBubble";
 
-export default {
+const meta = {
     title: "Event/EventTileBubble",
     component: EventTileBubble,
     tags: ["autodocs"],
@@ -21,29 +21,33 @@ export default {
         subtitle: "Subtitle goes here",
         className: "custom-class",
     },
-} as Meta<typeof EventTileBubble>;
+} satisfies Meta<typeof EventTileBubble>;
 
-const Template: StoryFn<typeof EventTileBubble> = (args) => <EventTileBubble {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const HasLockSolidIcon = Template.bind({});
-HasLockSolidIcon.args = {
-    className: undefined,
-    icon: <LockSolidIcon />,
-    children: undefined,
+export const HasLockSolidIcon: Story = {
+    args: {
+        className: undefined,
+        icon: <LockSolidIcon />,
+        children: undefined,
+    },
 };
 
-export const HasChildren = Template.bind({});
-HasChildren.args = {
-    className: undefined,
-    children: <div>children</div>,
+export const HasChildren: Story = {
+    args: {
+        className: undefined,
+        children: <div>children</div>,
+    },
 };
 
-export const IsCryptoEventBubble = Template.bind({});
-IsCryptoEventBubble.args = {
-    className: undefined,
-    icon: <LockSolidIcon />,
-    title: "Encryption enabled",
-    subtitle: "Messages here are end-to-end encrypted. Verify XYZ in their profile - tap on their profile picture.",
+export const IsCryptoEventBubble: Story = {
+    args: {
+        className: undefined,
+        icon: <LockSolidIcon />,
+        title: "Encryption enabled",
+        subtitle: "Messages here are end-to-end encrypted. Verify XYZ in their profile - tap on their profile picture.",
+    },
 };

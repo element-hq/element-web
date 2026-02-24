@@ -52,16 +52,16 @@ export function usePlainTextListeners(
     ref: RefObject<HTMLDivElement | null>;
     autocompleteRef: RefObject<Autocomplete | null>;
     content?: string;
-    onBeforeInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
-    onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
-    onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
-    onKeyDown(event: KeyboardEvent<HTMLDivElement>): void;
-    setContent(text?: string): void;
-    handleMention: (link: string, text: string, attributes: AllowedMentionAttributes) => void;
-    handleAtRoomMention: (attributes: AllowedMentionAttributes) => void;
-    handleCommand: (text: string) => void;
-    handleEmoji: (emoji: string) => void;
-    onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
+    onBeforeInput(this: void, event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
+    onInput(this: void, event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
+    onPaste(this: void, event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
+    onKeyDown(this: void, event: KeyboardEvent<HTMLDivElement>): void;
+    setContent(this: void, text?: string): void;
+    handleMention: (this: void, link: string, text: string, attributes: AllowedMentionAttributes) => void;
+    handleAtRoomMention: (this: void, attributes: AllowedMentionAttributes) => void;
+    handleCommand: (this: void, text: string) => void;
+    handleEmoji: (this: void, emoji: string) => void;
+    onSelect: (this: void, event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
     const roomContext = useScopedRoomContext("room", "timelineRenderingType", "replyToEvent");

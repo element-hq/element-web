@@ -61,7 +61,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
 interface IProps {
     roomId: string;
     threadRootId?: string | null;
-    onFinished(finished?: boolean): void;
+    onFinished(this: void, finished?: boolean): void;
 }
 
 type ToolInfo = [label: TranslationKey, tool: Tool];

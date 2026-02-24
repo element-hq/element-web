@@ -308,7 +308,7 @@ export default class EventIndex extends EventEmitter {
      * @returns {bool} Returns true if the event can be indexed, false
      * otherwise.
      */
-    private isValidEvent(ev: MatrixEvent): boolean {
+    private isValidEvent(this: void, ev: MatrixEvent): boolean {
         const isUsefulType = [EventType.RoomMessage, EventType.RoomName, EventType.RoomTopic].includes(
             ev.getType() as EventType,
         );

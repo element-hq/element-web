@@ -29,7 +29,7 @@ interface Props {
     matrixClient: MatrixClient;
     room: Room;
     member: RoomMember;
-    onFinished(redact?: boolean): void;
+    onFinished(this: void, redact?: boolean): void;
 }
 
 const BulkRedactDialog: React.FC<Props> = (props) => {

@@ -16,8 +16,8 @@ import { KeyBindingAction } from "../KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledCheckbox> {
-    onChange(): void; // we handle keyup/down ourselves so lose the ChangeEvent
-    onClose(): void; // gets called after onChange on KeyBindingAction.ActivateSelectedButton
+    onChange(this: void): void; // we handle keyup/down ourselves so lose the ChangeEvent
+    onClose(this: void): void; // gets called after onChange on KeyBindingAction.ActivateSelectedButton
 }
 
 // Semantic component for representing a styled role=menuitemcheckbox

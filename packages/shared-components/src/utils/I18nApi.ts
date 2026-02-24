@@ -21,7 +21,7 @@ export class I18nApi implements II18nApi {
     /**
      * Register translations for the module, may override app's existing translations
      */
-    public register(translations: Partial<Translations>): void {
+    public register(this: void, translations: Partial<Translations>): void {
         const langs: Record<string, Record<string, string>> = {};
 
         for (const key in translations) {
@@ -42,11 +42,9 @@ export class I18nApi implements II18nApi {
      * @param key - The key to translate
      * @param variables - Optional variables to interpolate into the translation
      */
-    public translate(key: TranslationKey, variables?: Variables): string {
+    public translate(this: void, key: TranslationKey, variables?: Variables): string {
         return _t(key, variables);
     }
 
-    public humanizeTime(timeMillis: number): string {
-        return humanizeTime(timeMillis, this);
-    }
+    public humanizeTime = (timeMillis: number): string => humanizeTime(timeMillis, this);
 }

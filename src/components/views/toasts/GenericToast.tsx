@@ -17,14 +17,14 @@ export interface IProps {
     primaryLabel: string;
     PrimaryIcon?: ComponentType<React.SVGAttributes<SVGElement>>;
 
-    onPrimaryClick(): void;
+    onPrimaryClick(this: void): void;
 }
 
 interface IPropsExtended extends IProps {
     secondaryLabel: string;
     SecondaryIcon?: ComponentType<React.SVGAttributes<SVGElement>>;
     destructive?: "primary" | "secondary";
-    onSecondaryClick(): void;
+    onSecondaryClick(this: void): void;
 
     // If set, this will override the max-width (of the description) making the toast wider or narrower than standard
     overrideWidth?: string;

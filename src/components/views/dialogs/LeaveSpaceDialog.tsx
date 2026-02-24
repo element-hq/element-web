@@ -20,7 +20,7 @@ import { isOnlyAdmin } from "../../../utils/membership";
 
 interface IProps {
     space: Room;
-    onFinished(leave: boolean, rooms?: Room[]): void;
+    onFinished(this: void, leave: boolean, rooms?: Room[]): void;
 }
 
 const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {

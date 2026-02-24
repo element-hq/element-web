@@ -70,7 +70,7 @@ export interface AudioPlayerViewActions {
 /**
  * The view model for the audio player.
  */
-export type AudioPlayerViewModel = ViewModel<AudioPlayerViewSnapshot> & AudioPlayerViewActions;
+export type AudioPlayerViewModel = ViewModel<AudioPlayerViewSnapshot, AudioPlayerViewActions>;
 
 interface AudioPlayerViewProps {
     /**
