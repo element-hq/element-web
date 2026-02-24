@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
-import { DateSeparatorContextMenu } from "./DateSeparatorContextMenu";
+import { DateSeparatorContextMenuView } from "./DateSeparatorContextMenuView";
 
 class TestDateSeparatorViewModel implements DateSeparatorViewModel {
     private listeners = new Set<() => void>();
@@ -47,17 +47,17 @@ function renderMenu({
     });
 
     render(
-        <DateSeparatorContextMenu vm={vm} open={open} onOpenChange={onOpenChange}>
+        <DateSeparatorContextMenuView vm={vm} open={open} onOpenChange={onOpenChange}>
             <button type="button" data-testid="jump-to-trigger">
                 Trigger
             </button>
-        </DateSeparatorContextMenu>,
+        </DateSeparatorContextMenuView>,
     );
 
     return { vm, onOpenChange };
 }
 
-describe("DateSeparatorContextMenu", () => {
+describe("DateSeparatorContextMenuView", () => {
     it("renders menu actions and date picker when open", () => {
         renderMenu({ open: true, jumpToEnabled: true });
 

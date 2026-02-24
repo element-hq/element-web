@@ -16,7 +16,7 @@ import styles from "./DateSeparatorView.module.css";
 import { Flex } from "../../utils/Flex";
 import { useI18n } from "../../utils/i18nContext";
 import { TimelineSeparator } from "../../message-body/TimelineSeparator";
-import { DateSeparatorContextMenu } from "./DateSeparatorContextMenu";
+import { DateSeparatorContextMenuView } from "./DateSeparatorContextMenuView";
 
 export interface DateSeparatorViewSnapshot {
     /**
@@ -38,14 +38,14 @@ export interface DateSeparatorViewSnapshot {
 }
 
 export interface DateSeparatorViewActions {
-    /** Jump to messages from the last week. */
-    onLastWeekPicked: () => void;
-    /** Jump to messages from the last month. */
-    onLastMonthPicked: () => void;
-    /** Jump to the beginning of the room history. */
-    onBeginningPicked: () => void;
-    /** Jump to the picked date of the room history. */
-    onDatePicked: (date: string) => void;
+    /** Optional: Jump to messages from the last week. */
+    onLastWeekPicked?: () => void;
+    /** Optional: Jump to messages from the last month. */
+    onLastMonthPicked?: () => void;
+    /** Optional: Jump to the beginning of the room history. */
+    onBeginningPicked?: () => void;
+    /** Optional: Jump to the picked date of the room history. */
+    onDatePicked?: (date: string) => void;
 }
 
 /**
@@ -99,7 +99,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
                 nonInteractiveTriggerTabIndex={-1}
                 disabled={isMenuOpen}
             >
-                <DateSeparatorContextMenu vm={vm} open={isMenuOpen} onOpenChange={onMenuOpenChange}>
+                <DateSeparatorContextMenuView vm={vm} open={isMenuOpen} onOpenChange={onMenuOpenChange}>
                     <Flex
                         data-testid="jump-to-date-separator-button"
                         className={classNames(styles.content)}
@@ -111,7 +111,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
                         <h2 aria-hidden="true">{label}</h2>
                         <ChevronDownIcon />
                     </Flex>
-                </DateSeparatorContextMenu>
+                </DateSeparatorContextMenuView>
             </Tooltip>
         );
     }

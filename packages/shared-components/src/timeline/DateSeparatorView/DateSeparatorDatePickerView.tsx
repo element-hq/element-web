@@ -15,9 +15,9 @@ import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import styles from "./DateSeparatorView.module.css";
 
 /**
- * Props for DateSeparatorDatePicker component.
+ * Props for DateSeparatorDatePickerView component.
  */
-export interface DateSeparatorDatePickerProps {
+export interface DateSeparatorDatePickerViewProps {
     /** The date separator view model. */
     vm: DateSeparatorViewModel;
     /** Called after a date has been submitted. */
@@ -27,7 +27,10 @@ export interface DateSeparatorDatePickerProps {
 /**
  * Date picker menu item.
  */
-export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = ({ vm, onSubmitted }): JSX.Element => {
+export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewProps> = ({
+    vm,
+    onSubmitted,
+}): JSX.Element => {
     const snapshot = useViewModel(vm);
     const date = snapshot.jumpFromDate ? new Date(snapshot.jumpFromDate) : new Date();
     const dateInputDefaultValue = formatDateForInput(date);
@@ -50,7 +53,7 @@ export const DateSeparatorDatePicker: React.FC<DateSeparatorDatePickerProps> = (
     };
 
     const submitDate = (): void => {
-        vm.onDatePicked(dateValue);
+        vm.onDatePicked?.(dateValue);
         onSubmitted?.();
     };
 

@@ -13,12 +13,12 @@ import { useI18n } from "../../utils/i18nContext";
 import { useViewModel } from "../../viewmodel";
 import { humanizeRelativeTime } from "../../utils/humanize";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
-import { DateSeparatorDatePicker } from "./DateSeparatorDatePicker";
+import { DateSeparatorDatePickerView } from "./DateSeparatorDatePickerView";
 
 /**
  * Props for DateSeparatorContextMenu component.
  */
-export interface DateSeparatorContextMenuProps {
+export interface DateSeparatorContextMenuViewProps {
     /** The date separator view model. */
     vm: DateSeparatorViewModel;
     /** Whether the menu is open (controlled by the parent). */
@@ -31,7 +31,7 @@ export interface DateSeparatorContextMenuProps {
  * Date separator jump-to menu.
  * Uses the wrapped child as the menu trigger.
  */
-export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorContextMenuProps>> = ({
+export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSeparatorContextMenuViewProps>> = ({
     vm,
     open,
     onOpenChange,
@@ -63,25 +63,27 @@ export const DateSeparatorContextMenu: React.FC<PropsWithChildren<DateSeparatorC
         >
             <MenuItem
                 label={capitalize(humanizeRelativeTime(i18n).format(-1, "week"))}
-                onSelect={vm.onLastWeekPicked}
+                onSelect={() => vm.onLastWeekPicked?.()}
                 data-testid="jump-to-date-last-week"
                 hideChevron={true}
             />
             <MenuItem
                 label={capitalize(humanizeRelativeTime(i18n).format(-1, "month"))}
-                onSelect={vm.onLastMonthPicked}
+                onSelect={() => vm.onLastMonthPicked?.()}
                 data-testid="jump-to-date-last-month"
                 hideChevron={true}
             />
             <MenuItem
                 label={_t("room|jump_to_date_beginning")}
-                onSelect={vm.onBeginningPicked}
+                onSelect={() => vm.onBeginningPicked?.()}
                 data-testid="jump-to-date-beginning"
                 hideChevron={true}
                 onKeyDown={onKeyDown}
             />
             {snapshot.jumpToEnabled && <Separator decorative />}
-            {snapshot.jumpToEnabled && <DateSeparatorDatePicker vm={vm} onSubmitted={() => onOpenChange?.(false)} />}
+            {snapshot.jumpToEnabled && (
+                <DateSeparatorDatePickerView vm={vm} onSubmitted={() => onOpenChange?.(false)} />
+            )}
         </Menu>
     );
 };
