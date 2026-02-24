@@ -14,7 +14,7 @@ import styles from "./ReactionsRowButton.module.css";
 
 type ButtonAttribute = HTMLAttributes<HTMLButtonElement>;
 
-export interface ReactionsRowButtonViewSnapshot {
+export interface ReactionsRowButtonViewSnapshot extends Pick<HTMLAttributes<HTMLButtonElement>, "className" | "aria-label"> {
     /**
      * The reaction content to display when not using a custom image.
      */
@@ -23,14 +23,6 @@ export interface ReactionsRowButtonViewSnapshot {
      * The total number of reactions for this content.
      */
     count: number;
-    /**
-     * The CSS class name.
-     */
-    className?: ButtonAttribute["className"];
-    /**
-     * The aria-label for the button.
-     */
-    ariaLabel?: ButtonAttribute["aria-label"];
     /**
      * Whether the reaction button is selected by the current user.
      */
