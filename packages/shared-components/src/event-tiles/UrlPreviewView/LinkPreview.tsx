@@ -6,8 +6,7 @@
  */
 
 import React, { type MouseEventHandler, type JSX, useCallback } from "react";
-import { IconButton, Tooltip } from "@vector-im/compound-web";
-import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+import { Tooltip, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
 import { useI18n } from "../../utils/i18nContext";
@@ -15,7 +14,6 @@ import styles from "./LinkPreview.module.css";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
 
 export interface LinkPreviewActions {
-    onHideClick?: () => Promise<void>;
     onImageClick: () => void;
 }
 
@@ -25,13 +23,8 @@ export interface LinkPreviewAdditionalProps {
 
 export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewActions & LinkPreviewAdditionalProps;
 
-export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
+export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
-    const hideButton = onHideClick && (
-        <IconButton size="20px" onClick={() => onHideClick()} aria-label={_t("timeline|url_preview|close")}>
-            <CloseIcon />
-        </IconButton>
-    );
 
     const onImageClickHandler = useCallback<MouseEventHandler>(
         (ev) => {
@@ -52,7 +45,7 @@ export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...previ
         img = (
             <button
                 aria-label={_t("timeline|url_preview|view_image")}
-                className={styles.mx_LinkPreviewWidget_image}
+                className={styles.image}
                 onClick={onImageClickHandler}
             >
                 <img className={styles.thumbnail} src={preview.image.imageThumb} alt="" />
@@ -67,28 +60,29 @@ export function LinkPreview({ onHideClick, onImageClick, compactLayout, ...previ
     );
     return (
         <div className={classNames(styles.container, compactLayout && "compactLayout")}>
-            <div className={styles.mx_LinkPreviewWidget_wrapImageCaption}>
+            <div className={styles.wrapImageCaption}>
                 {img}
-                <div className={styles.mx_LinkPreviewWidget_caption}>
-                    <div className={styles.mx_LinkPreviewWidget_title}>
+                <div className={styles.caption}>
+                    <Text type="body" size="md" className={styles.title}>
                         {preview.showTooltipOnLink ? (
                             <Tooltip label={new URL(preview.link, window.location.href).toString()}>{anchor}</Tooltip>
                         ) : (
                             anchor
                         )}
                         {preview.siteName && (
-                            <span className={styles.mx_LinkPreviewWidget_siteName}>{" - " + preview.siteName}</span>
+                            <Text as="span" size="md" weight="regular">
+                                {" - " + preview.siteName}
+                            </Text>
                         )}
-                    </div>
+                    </Text>
                     {preview.description && (
-                        <div
-                            className={styles.mx_LinkPreviewWidget_description}
+                        <Text
+                            className={styles.description}
                             dangerouslySetInnerHTML={{ __html: preview.description }}
                         />
                     )}
                 </div>
             </div>
-            {hideButton}
         </div>
     );
 }

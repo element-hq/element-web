@@ -6,12 +6,13 @@
  */
 
 import React, { type JSX } from "react";
-import { Button } from "@vector-im/compound-web";
-
+import { Button, IconButton } from "@vector-im/compound-web";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { useI18n } from "../../utils/i18nContext";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
+import styles from "./UrlPreviewGroupView.module.css";
 
 export interface UrlPreviewGroupViewSnapshot {
     previews: Array<UrlPreviewViewSnapshotPreview>;
@@ -49,7 +50,7 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     let toggleButton: JSX.Element | undefined;
     if (overPreviewLimit) {
         toggleButton = (
-            <Button kind="tertiary" size="sm" onClick={() => vm.onTogglePreviewLimit()}>
+            <Button className={styles.toggleButton} kind="tertiary" size="sm" onClick={() => vm.onTogglePreviewLimit()}>
                 {previewsLimited
                     ? _t("timeline|url_preview|show_n_more", { count: totalPreviewCount - previews.length })
                     : _t("action|collapse")}
@@ -58,17 +59,22 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     }
 
     return (
-        <div>
-            {previews.map((preview, i) => (
-                <LinkPreview
-                    key={preview.link}
-                    compactLayout={compactLayout}
-                    onHideClick={i == 0 ? vm.onHideClick : undefined}
-                    onImageClick={() => vm.onImageClick(preview)}
-                    {...preview}
-                />
-            ))}
-            {toggleButton}
+        <div className={styles.wrapper}>
+            <div className={styles.previewGroup}>
+                {previews.map((preview, i) => (
+                    <LinkPreview
+                        key={preview.link}
+                        compactLayout={compactLayout}
+                        onHideClick={i == 0 ? vm.onHideClick : undefined}
+                        onImageClick={() => vm.onImageClick(preview)}
+                        {...preview}
+                    />
+                ))}
+                {toggleButton}
+            </div>
+            <IconButton size="20px" onClick={() => vm.onHideClick()} aria-label={_t("timeline|url_preview|close")}>
+                <CloseIcon />
+            </IconButton>
         </div>
     );
 }

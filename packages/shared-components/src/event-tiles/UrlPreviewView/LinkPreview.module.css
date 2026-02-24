@@ -11,67 +11,70 @@
 }
 
 .container {
-    margin: var(--cpd-space-4x) 0 var(--cpd-space-4x) auto;
-    display: flex;
+    display: inline flex;
     column-gap: var(--cpd-space-1x);
     border-inline-start: 2px solid var(--cpd-color-bg-subtle-primary);
     border-radius: 2px;
     color: var(--cpd-color-gray-900);
+    min-width: 400px;
+
     &.compactLayout & {
-        margin-top: 6px;
-        margin-bottom: 6px;
+        margin-top: var(--cpd-space-3x);
+        margin-bottom: var(--cpd-space-3x);
     }
 
-    /* Exclude mx_LinkPreviewGroup_hide from wrapping */
-    .mx_LinkPreviewWidget_wrapImageCaption {
-        display: flex;
+    .wrapImageCaption {
+        display: inline-flex;
+        flex-direction: row;
         flex-wrap: wrap;
         row-gap: var(--cpd-space-2x);
         flex: 1;
+    }
 
-        .mx_LinkPreviewWidget_image,
-        .mx_LinkPreviewWidget_caption {
-            margin-inline-start: var(--cpd-space-4x);
-            min-width: 0; /* Prevent blowout */
+    .image,
+    .caption {
+        display: inline-flex;
+        flex-direction: column;
+        margin-inline-start: var(--cpd-space-4x);
+        min-width: 0; /* Prevent blowout */
+    }
+
+    .image {
+        /* Clear default <button> styles */
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .caption {
+        flex: 1;
+        overflow: hidden; /* cause it to wrap rather than clip */
+    }
+
+    .title,
+    .description {
+        display: inline-block;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: normal;
+    }
+
+    .title {
+        display: inline-block;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        margin: var(--cpd-space-1x) 0;
+
+        > a {
+            font-weight: var(--cpd-font-weight-semibold);
+            text-decoration: none;
         }
+    }
 
-        .mx_LinkPreviewWidget_image {
-            flex: 0 0 100px;
-            text-align: center;
-            cursor: pointer;
-
-            /* Clear default <button> styles */
-            padding: 0;
-            border: none;
-            background: none;
-        }
-
-        .mx_LinkPreviewWidget_caption {
-            flex: 1;
-            overflow: hidden; /* cause it to wrap rather than clip */
-        }
-
-        .mx_LinkPreviewWidget_title,
-        .mx_LinkPreviewWidget_description {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            white-space: normal;
-        }
-
-        .mx_LinkPreviewWidget_title {
-            font-weight: bold;
-            -webkit-line-clamp: 2;
-
-            .mx_LinkPreviewWidget_siteName {
-                font-weight: normal;
-            }
-        }
-
-        .mx_LinkPreviewWidget_description {
-            margin-top: var(--cpd-space-2x);
-            word-wrap: break-word;
-            -webkit-line-clamp: 3;
-        }
+    .description {
+        margin: var(--cpd-space-1x) 0;
+        word-wrap: break-word;
+        line-clamp: 2;
+        -webkit-line-clamp: 3;
     }
 }

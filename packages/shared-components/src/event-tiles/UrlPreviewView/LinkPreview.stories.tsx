@@ -17,7 +17,6 @@ export default {
     component: LinkPreview,
     tags: ["autodocs"],
     args: {
-        onHideClick: fn(),
         onImageClick: fn(),
     },
 } satisfies Meta<typeof LinkPreview>;
@@ -64,6 +63,19 @@ WithCompactLayout.args = {
     description: "A simple description",
     link: "https://matrix.org",
     siteName: "Site name",
+    image: {
+        imageThumb: imageFile,
+        imageFull: imageFile,
+    },
+};
+
+export const WithVeryLongText = Template.bind({});
+WithVeryLongText.args = {
+    title: "GitHub - element-hq/not-a-real-repo: A very very long PR title that should be rendered nicely",
+    description:
+        "This PR doesn't actually exist and neither does the repository. It might exist one day if we go into the business of making paradoxical repository names.",
+    link: "https://matrix.org",
+    siteName: "GitHub",
     image: {
         imageThumb: imageFile,
         imageFull: imageFile,

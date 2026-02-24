@@ -6,11 +6,11 @@ exports[`LinkPreview > renders a preview 1`] = `
     class="container"
   >
     <div
-      class="mx_LinkPreviewWidget_wrapImageCaption"
+      class="wrapImageCaption"
     >
       <button
         aria-label="View image"
-        class="mx_LinkPreviewWidget_image"
+        class="image"
       >
         <img
           alt=""
@@ -19,10 +19,10 @@ exports[`LinkPreview > renders a preview 1`] = `
         />
       </button>
       <div
-        class="mx_LinkPreviewWidget_caption"
+        class="caption"
       >
-        <div
-          class="mx_LinkPreviewWidget_title"
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
             href="https://matrix.org"
@@ -32,43 +32,18 @@ exports[`LinkPreview > renders a preview 1`] = `
             A simple title
           </a>
           <span
-            class="mx_LinkPreviewWidget_siteName"
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
           >
              - Site name
           </span>
-        </div>
-        <div
-          class="mx_LinkPreviewWidget_description"
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
         >
           A simple description
-        </div>
+        </p>
       </div>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="primary"
-      role="button"
-      style="--cpd-icon-button-size: 20px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -79,11 +54,11 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
     class="container compactLayout"
   >
     <div
-      class="mx_LinkPreviewWidget_wrapImageCaption"
+      class="wrapImageCaption"
     >
       <button
         aria-label="View image"
-        class="mx_LinkPreviewWidget_image"
+        class="image"
       >
         <img
           alt=""
@@ -92,10 +67,10 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
         />
       </button>
       <div
-        class="mx_LinkPreviewWidget_caption"
+        class="caption"
       >
-        <div
-          class="mx_LinkPreviewWidget_title"
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
             href="https://matrix.org"
@@ -105,43 +80,18 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
             A simple title
           </a>
           <span
-            class="mx_LinkPreviewWidget_siteName"
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
           >
              - Site name
           </span>
-        </div>
-        <div
-          class="mx_LinkPreviewWidget_description"
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
         >
           A simple description
-        </div>
+        </p>
       </div>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="primary"
-      role="button"
-      style="--cpd-icon-button-size: 20px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -152,13 +102,13 @@ exports[`LinkPreview > renders a preview with a tooltip 1`] = `
     class="container"
   >
     <div
-      class="mx_LinkPreviewWidget_wrapImageCaption"
+      class="wrapImageCaption"
     >
       <div
-        class="mx_LinkPreviewWidget_caption"
+        class="caption"
       >
-        <div
-          class="mx_LinkPreviewWidget_title"
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
             aria-labelledby="_r_0_"
@@ -168,39 +118,14 @@ exports[`LinkPreview > renders a preview with a tooltip 1`] = `
           >
             A simple title
           </a>
-        </div>
-        <div
-          class="mx_LinkPreviewWidget_description"
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
         >
           A simple description
-        </div>
+        </p>
       </div>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="primary"
-      role="button"
-      style="--cpd-icon-button-size: 20px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -211,13 +136,13 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
     class="container"
   >
     <div
-      class="mx_LinkPreviewWidget_wrapImageCaption"
+      class="wrapImageCaption"
     >
       <div
-        class="mx_LinkPreviewWidget_caption"
+        class="caption"
       >
-        <div
-          class="mx_LinkPreviewWidget_title"
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
             href="https://matrix.org"
@@ -226,34 +151,9 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
           >
             A simple title
           </a>
-        </div>
+        </p>
       </div>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="primary"
-      role="button"
-      style="--cpd-icon-button-size: 20px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -264,13 +164,13 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
     class="container"
   >
     <div
-      class="mx_LinkPreviewWidget_wrapImageCaption"
+      class="wrapImageCaption"
     >
       <div
-        class="mx_LinkPreviewWidget_caption"
+        class="caption"
       >
-        <div
-          class="mx_LinkPreviewWidget_title"
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
             href="https://matrix.org"
@@ -279,39 +179,14 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
           >
             A simple title
           </a>
-        </div>
-        <div
-          class="mx_LinkPreviewWidget_description"
+        </p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
         >
           A simple description
-        </div>
+        </p>
       </div>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="primary"
-      role="button"
-      style="--cpd-icon-button-size: 20px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;

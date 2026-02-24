@@ -11,6 +11,7 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 
 import * as stories from "./LinkPreview.stories.tsx";
+import userEvent from "@testing-library/user-event";
 
 const { Default, WithCompactLayout, WithTooltip, Title, TitleAndDescription } = composeStories(stories);
 
@@ -27,8 +28,9 @@ describe("LinkPreview", () => {
         const { container } = render(<TitleAndDescription />);
         expect(container).toMatchSnapshot();
     });
-    it("renders a preview with a tooltip", () => {
-        const { container } = render(<WithTooltip />);
+    it("renders a preview with a tooltip", async () => {
+        const { container, getByText } = render(<WithTooltip />);
+        await userEvent.hover(getByText("A simple title"));
         expect(container).toMatchSnapshot();
     });
     it("renders a preview with a compact layout", () => {
