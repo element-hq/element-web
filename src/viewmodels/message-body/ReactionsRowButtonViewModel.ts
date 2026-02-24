@@ -63,6 +63,8 @@ export class ReactionsRowButtonViewModel
     implements ReactionsRowButtonViewModelInterface
 {
     private readonly tooltipVm: ReactionsRowButtonTooltipViewModel;
+    private static readonly getAriaLabel = (snapshot: ReactionsRowButtonViewSnapshot): string | undefined =>
+        (snapshot as ReactionsRowButtonViewSnapshot & { ariaLabel?: string }).ariaLabel;
 
     private static readonly computeSnapshot = (
         props: ReactionsRowButtonViewModelProps,
@@ -115,7 +117,7 @@ export class ReactionsRowButtonViewModel
             }
         }
 
-        return {
+        const snapshot = {
             content,
             count,
             className,
@@ -126,6 +128,8 @@ export class ReactionsRowButtonViewModel
             imageAlt,
             tooltipVm,
         };
+
+        return snapshot;
     };
 
     public constructor(props: ReactionsRowButtonViewModelProps) {
@@ -147,7 +151,8 @@ export class ReactionsRowButtonViewModel
         if (
             nextSnapshot.content === currentSnapshot.content &&
             nextSnapshot.count === currentSnapshot.count &&
-            nextSnapshot.ariaLabel === currentSnapshot.ariaLabel &&
+            ReactionsRowButtonViewModel.getAriaLabel(nextSnapshot) ===
+                ReactionsRowButtonViewModel.getAriaLabel(currentSnapshot) &&
             nextSnapshot.isSelected === currentSnapshot.isSelected &&
             nextSnapshot.isDisabled === currentSnapshot.isDisabled &&
             nextSnapshot.imageSrc === currentSnapshot.imageSrc &&

@@ -51,6 +51,8 @@ describe("ReactionsRowButtonViewModel", () => {
 
     const getTooltipVm = (vm: ReactionsRowButtonViewModel): ReactionsRowButtonTooltipViewModel =>
         vm.getSnapshot().tooltipVm as ReactionsRowButtonTooltipViewModel;
+    const getAriaLabel = (vm: ReactionsRowButtonViewModel): string | undefined =>
+        (vm.getSnapshot() as { ariaLabel?: string }).ariaLabel;
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -81,6 +83,12 @@ describe("ReactionsRowButtonViewModel", () => {
         vm.setCount(5);
 
         expect(listener).toHaveBeenCalledTimes(2);
+    });
+
+    it("includes an ariaLabel in the snapshot", () => {
+        const vm = new ReactionsRowButtonViewModel(createProps());
+
+        expect(getAriaLabel(vm)).toContain("reacted with 👍");
     });
 
     it("updates selected state with myReactionEvent without touching tooltip props", () => {

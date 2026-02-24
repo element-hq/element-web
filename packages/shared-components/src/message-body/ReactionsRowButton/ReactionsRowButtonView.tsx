@@ -12,9 +12,10 @@ import { type ViewModel, useViewModel } from "../../viewmodel";
 import { ReactionsRowButtonTooltipView, type ReactionsRowButtonTooltipViewModel } from "../ReactionsRowButtonTooltip";
 import styles from "./ReactionsRowButton.module.css";
 
-type ButtonAttribute = HTMLAttributes<HTMLButtonElement>;
-
-export interface ReactionsRowButtonViewSnapshot extends Pick<HTMLAttributes<HTMLButtonElement>, "className" | "aria-label"> {
+export interface ReactionsRowButtonViewSnapshot extends Pick<
+    HTMLAttributes<HTMLButtonElement>,
+    "className" | "aria-label"
+> {
     /**
      * The reaction content to display when not using a custom image.
      */
