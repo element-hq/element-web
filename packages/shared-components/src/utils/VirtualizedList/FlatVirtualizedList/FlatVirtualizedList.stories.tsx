@@ -11,21 +11,32 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FlatVirtualizedList, type FlatVirtualizedListProps } from "./FlatVirtualizedList";
 import { type VirtualizedListContext } from "../virtualized-list";
 import { items, SimpleItemComponent } from "../story-mock";
+import { getContainerAccessibleProps, getItemAccessibleProps } from "../accessbility";
 
 const meta = {
     title: "Utils/VirtualizedList/FlatVirtualizedList",
     component: FlatVirtualizedList<SimpleItemComponent, undefined>,
     args: {
         items,
-        getItemComponent: (
-            _index: number,
+        "getItemComponent": (
+            index: number,
             item: SimpleItemComponent,
             context: VirtualizedListContext<undefined>,
             onFocus: (item: SimpleItemComponent, e: React.FocusEvent) => void,
-        ) => <SimpleItemComponent key={item.id} item={item} context={context} onFocus={onFocus} />,
-        isItemFocusable: () => true,
-        getItemKey: (item) => item.id,
-        style: { height: "400px" },
+        ) => (
+            <SimpleItemComponent
+                key={item.id}
+                item={item}
+                context={context}
+                onFocus={onFocus}
+                {...getItemAccessibleProps("listbox", index, items.length)}
+            />
+        ),
+        "isItemFocusable": () => true,
+        "getItemKey": (item) => item.id,
+        "style": { height: "400px" },
+        "aria-label": "Flat virtualized list",
+        ...getContainerAccessibleProps("listbox"),
     },
 } satisfies Meta<FlatVirtualizedListProps<SimpleItemComponent, undefined>>;
 
