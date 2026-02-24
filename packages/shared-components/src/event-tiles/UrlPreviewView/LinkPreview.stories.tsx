@@ -20,7 +20,7 @@ export default {
         onHideClick: fn(),
         onImageClick: fn(),
     },
-} as Meta<typeof LinkPreview>;
+} satisfies Meta<typeof LinkPreview>;
 
 const Template: StoryFn<typeof LinkPreview> = (args) => <LinkPreview {...args} />;
 

@@ -42,7 +42,7 @@ export default {
         onImageClick: fn(),
         onTogglePreviewLimit: fn(),
     },
-} as Meta<typeof UrlPreviewGroupViewWrapper>;
+} satisfies Meta<typeof UrlPreviewGroupViewWrapper>;
 
 const Template: StoryFn<typeof UrlPreviewGroupViewWrapper> = (args) => <UrlPreviewGroupViewWrapper {...args} />;
 
@@ -61,8 +61,26 @@ Default.args = {
     ],
 };
 
-export const MultiplePreviews = Template.bind({});
-MultiplePreviews.args = {
+export const MultiplePreviewsHidden = Template.bind({});
+MultiplePreviewsHidden.args = {
+    previews: [
+        {
+            title: "A simple title",
+            description: "A simple description",
+            link: "https://matrix.org",
+            image: {
+                imageThumb: imageFile,
+                imageFull: imageFile,
+            },
+        },
+    ],
+    overPreviewLimit: true,
+    previewsLimited: true,
+    totalPreviewCount: 10,
+};
+
+export const MultiplePreviewsVisible = Template.bind({});
+MultiplePreviewsVisible.args = {
     previews: [
         {
             title: "One",
@@ -92,22 +110,7 @@ MultiplePreviews.args = {
             },
         },
     ],
-};
-
-export const MultiplePreviewsHidden = Template.bind({});
-MultiplePreviewsHidden.args = {
-    previews: [
-        {
-            title: "A simple title",
-            description: "A simple description",
-            link: "https://matrix.org",
-            image: {
-                imageThumb: imageFile,
-                imageFull: imageFile,
-            },
-        },
-    ],
     overPreviewLimit: true,
-    previewsLimited: true,
+    previewsLimited: false,
     totalPreviewCount: 10,
 };

@@ -16,7 +16,6 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEv
 
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
-import { linkifyAndSanitizeHtml } from "../../Linkify";
 import PlatformPeg from "../../PlatformPeg";
 import { thumbHeight } from "../../ImageUtils";
 import SettingsStore from "../../settings/SettingsStore";
@@ -34,31 +33,6 @@ export interface UrlPreviewViewModelProps {
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
 export const PREVIEW_WIDTH = 100;
 export const PREVIEW_HEIGHT = 100;
-
-function getNumberFromOpenGraph(value: number | string | undefined): number | undefined {
-    if (typeof value === "number") {
-        return value;
-    } else if (typeof value === "string" && value) {
-        const i = parseInt(value, 10);
-        if (!isNaN(i)) {
-            return i;
-        }
-    }
-    return undefined;
-}
-
-function getTitleFromOpenGraph(response: IPreviewUrlResponse, link: string): string {
-    if (typeof response["og:title"] === "string" && response["og:title"]) {
-        return response["og:title"].trim();
-    }
-    if (typeof response["og:site_name"] === "string" && response["og:site_name"]) {
-        return response["og:site_name"].trim();
-    }
-    if (typeof response["og:description"] === "string" && response["og:description"]) {
-        return response["og:description"].trim();
-    }
-    return link;
-}
 
 export enum PreviewVisibility {
     /**
@@ -87,43 +61,102 @@ export class UrlPreviewViewModel
     implements UrlPreviewGroupViewActions
 {
     /**
-     * Determine if an anchor element can be rendered into a preview.
-     * @param node The anchor element DOM node.
+     * Parse a numeric value from OpenGraph. The OpenGraph spec defines all values as strings
+     * although Synapse may return these values as numbers. To be compatible, test strings
+     * and numbers.
+     * @param value The numeric value
+     * @returns A number if the value parsed correctly, or undefined otherwise.
      */
-    private static isLinkPreviewable(node: HTMLAnchorElement): boolean {
+    private static getNumberFromOpenGraph(value: number | string | undefined): number | undefined {
+        if (typeof value === "number") {
+            return value;
+        } else if (typeof value === "string" && value) {
+            const i = parseInt(value, 10);
+            if (!isNaN(i)) {
+                return i;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Calculate the best possible title from an opengraph response.
+     * @param response The opengraph response
+     * @param link The link being used to preview.
+     * @returns The title value.
+     */
+    private static getBaseMetadataFromResponse(
+        response: IPreviewUrlResponse,
+        link: string,
+    ): Pick<UrlPreviewViewSnapshotPreview, "title" | "description" | "siteName"> {
+        let title =
+            typeof response["og:title"] === "string" && response["og:title"].trim()
+                ? response["og:title"].trim()
+                : undefined;
+        let description =
+            typeof response["og:description"] === "string" && response["og:description"].trim()
+                ? response["og:description"].trim()
+                : undefined;
+        let siteName =
+            typeof response["og:site_name"] === "string" && response["og:site_name"].trim()
+                ? response["og:site_name"].trim()
+                : undefined;
+
+        if (!title && description) {
+            title = description;
+            description = undefined;
+        } else if (!title && siteName) {
+            title = siteName;
+            siteName = undefined;
+        } else if (!title) {
+            title = link;
+        }
+
+        return {
+            title,
+            description,
+            siteName,
+        };
+    }
+
+    /**
+     * Determine if an anchor element can be rendered into a preview.
+     * If it can, return the value of `href`
+     * @param node The anchor element DOM node.
+     * @returns The value of the `href` of the node, or null if this node cannot be previewed.
+     */
+    private static getAnchorLink(node: HTMLAnchorElement): string | null {
         // don't try to preview relative links
         const href = node.getAttribute("href");
         if (!href || !URL.canParse(href)) {
-            return false;
+            return null;
         }
 
         const url = new URL(href);
         if (!["http:", "https:"].includes(url.protocol)) {
-            return false;
+            return null;
         }
         // never preview permalinks (if anything we should give a smart
         // preview of the room/user they point to: nobody needs to be reminded
         // what the matrix.to site looks like).
         if (isPermalinkHost(url.host)) {
-            return false;
+            return null;
         }
 
         // as a random heuristic to avoid highlighting things like "foo.pl"
         // we require the linked text to either include a / (either from http://
         // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
         // link, in which case we check the target text differs from the link value.
-        // TODO: make this configurable?
         if (node.textContent?.includes("/")) {
-            return true;
+            return href;
         }
 
         if (node.textContent?.toLowerCase().trim().startsWith(url.host.toLowerCase())) {
             // it's a "foo.pl" style link
-            return false;
-        } else {
-            // it's a [foo bar](http://foo.com) style link
-            return true;
+            return null;
         }
+        // it's a [foo bar](http://foo.com) style link
+        return href;
     }
 
     /**
@@ -131,19 +164,19 @@ export class UrlPreviewViewModel
      * @param nodes An array of DOM elements that may be or contain anchor elements.
      * @returns A unique array of links that can be previewed, in order of discovery.
      */
-    private static findLinks(nodes: ArrayLike<Element>): string[] {
+    private static findLinks(nodes: Iterable<Element>): string[] {
         let links = new Set<string>();
 
-        for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href")) {
-                if (this.isLinkPreviewable(node as HTMLAnchorElement)) {
-                    links.add(node.getAttribute("href")!);
+        for (const node of nodes) {
+            if (node.tagName === "A") {
+                const href = this.getAnchorLink(node as HTMLAnchorElement);
+                if (href) {
+                    links.add(href);
                 }
             } else if (node.tagName === "PRE" || node.tagName === "CODE" || node.tagName === "BLOCKQUOTE") {
                 continue;
             } else if (node.children && node.children.length) {
-                links = new Set([...this.findLinks(node.children), ...links]);
+                links = new Set([...links, ...this.findLinks(node.children)]);
             }
         }
         return [...links];
@@ -161,52 +194,10 @@ export class UrlPreviewViewModel
         if (cached) {
             return cached;
         }
+        let preview: IPreviewUrlResponse;
+
         try {
-            const preview = await this.client.getUrlPreview(link, this.eventSendTime);
-            const title = getTitleFromOpenGraph(preview, link);
-            const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
-            // Ensure we have something relevant to render.
-            // The title must not just be the link, or we must have an image.
-            if (title === link && !hasImage) {
-                return null;
-            }
-
-            const media =
-                typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden
-                    ? mediaFromMxc(preview["og:image"], this.client)
-                    : undefined;
-            const needsTooltip = link !== title && PlatformPeg.get()?.needsUrlTooltips();
-
-            // TODO: Magic numbers
-            const imageMaxHeight = 100;
-            const declaredHeight = getNumberFromOpenGraph(preview["og:image:height"]);
-            const width = Math.min(getNumberFromOpenGraph(preview["og:image:width"]) || 101, 100);
-            // TODO: This is wrong.
-            const height = thumbHeight(width, declaredHeight, imageMaxHeight, imageMaxHeight) ?? imageMaxHeight;
-
-            const result = {
-                link,
-                title,
-                siteName: typeof preview["og:site_name"] === "string" ? preview["og:site_name"] : undefined,
-                showTooltipOnLink: needsTooltip,
-                // Don't show a description if it's the same as the title.
-                description:
-                    typeof preview["og:description"] === "string" && title !== preview["og:description"]
-                        ? linkifyAndSanitizeHtml(preview["og:description"])
-                        : undefined,
-                image: media
-                    ? {
-                          // TODO: Check nulls
-                          imageThumb: media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale")!,
-                          imageFull: media.srcHttp!,
-                          width,
-                          height,
-                          fileSize: getNumberFromOpenGraph(preview["matrix:image:size"]),
-                      }
-                    : undefined,
-            } satisfies UrlPreviewViewSnapshotPreview;
-            this.previewCache.set(link, result);
-            return result;
+            preview = await this.client.getUrlPreview(link, this.eventSendTime);
         } catch (error) {
             if (error instanceof MatrixError && error.httpStatus === 404) {
                 // Quieten 404 Not found errors, not all URLs can have a preview generated
@@ -214,8 +205,46 @@ export class UrlPreviewViewModel
             } else {
                 logger.error("Failed to get URL preview: ", error);
             }
+            return null;
         }
-        return null;
+
+        const { title, description, siteName } = UrlPreviewViewModel.getBaseMetadataFromResponse(preview, link);
+        const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
+        // Ensure we have something relevant to render.
+        // The title must not just be the link, or we must have an image.
+        if (title === link && !hasImage) {
+            return null;
+        }
+        let image: UrlPreviewViewSnapshotPreview["image"];
+        if (typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden) {
+            const media = mediaFromMxc(preview["og:image"], this.client);
+            const declaredHeight = UrlPreviewViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
+            const declaredWidth = UrlPreviewViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
+            const width = Math.min(declaredWidth ?? PREVIEW_WIDTH, PREVIEW_WIDTH);
+            const height = thumbHeight(width, declaredHeight, PREVIEW_WIDTH, PREVIEW_WIDTH) ?? PREVIEW_WIDTH;
+            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale");
+            // No thumb, no preview.
+            if (thumb) {
+                image = {
+                    imageThumb: thumb,
+                    imageFull: media.srcHttp ?? thumb,
+                    width,
+                    height,
+                    fileSize: UrlPreviewViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
+                };
+            }
+        }
+
+        const result = {
+            link,
+            title,
+            description,
+            siteName,
+            showTooltipOnLink: link !== title && PlatformPeg.get()?.needsUrlTooltips(),
+            image,
+        } satisfies UrlPreviewViewSnapshotPreview;
+        this.previewCache.set(link, result);
+        return result;
     }
 
     private readonly client: MatrixClient;
@@ -250,7 +279,7 @@ export class UrlPreviewViewModel
     /**
      * A cache containing all previously calculated previews.
      */
-    private previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
+    private readonly previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
 
     /**
      * Callback for when the image element is clicked on.

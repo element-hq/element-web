@@ -12,7 +12,7 @@ import React from "react";
 
 import * as stories from "./UrlPreviewGroupView.stories.tsx";
 
-const { Default, MultiplePreviews, MultiplePreviewsHidden } = composeStories(stories);
+const { Default, MultiplePreviewsHidden, MultiplePreviewsVisible } = composeStories(stories);
 
 describe("UrlPreviewGroupView", () => {
     it("renders a single preview", () => {
@@ -20,7 +20,7 @@ describe("UrlPreviewGroupView", () => {
         expect(container).toMatchSnapshot();
     });
     it("renders multiple previews", () => {
-        const { container } = render(<MultiplePreviews />);
+        const { container } = render(<MultiplePreviewsVisible />);
         expect(container).toMatchSnapshot();
     });
     it("renders multiple previews which are hidden", () => {

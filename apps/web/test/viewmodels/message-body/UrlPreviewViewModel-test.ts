@@ -8,7 +8,7 @@
 import { expect } from "@jest/globals";
 
 import type { MockedObject } from "jest-mock";
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 import { UrlPreviewViewModel } from "../../../src/viewmodels/message-body/UrlPreviewViewModel";
 import type { UrlPreviewViewSnapshotPreview } from "@element-hq/web-shared-components";
 import { getMockClientWithEventEmitter, mkEvent } from "../../test-utils";
@@ -80,6 +80,39 @@ describe("UrlPreviewViewModel", () => {
             previewsLimited: true,
             totalPreviewCount: 1,
         });
+    });
+    it("should preview nested URLs but ignore some element types", async () => {
+        const { vm, client } = getViewModel();
+        vm.onTogglePreviewLimit();
+        client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+        const msg = document.createElement("div");
+        msg.innerHTML = `
+    <ul>
+        <a href="https://example.org/1">Test1</a>
+        <li><a href="https://example.org/2">Test2</a></li>
+        <li>
+            <ol>
+                <li><a href="https://example.org/3">Test3</a></li>
+            </ol>
+        </li>
+    </ul>
+    <pre><a href="https://example.org">Test4</a></pre>
+    <code><a href="https://example.org">Test5</a></code>
+    <blockquote><a href="https://example.org">Test6</a></blockquote>`;
+        await vm.updateEventElement(msg);
+        const { previews } = vm.getSnapshot();
+        expect(previews).toHaveLength(3);
+        expect(previews).toMatchObject([
+            {
+                link: "https://example.org/1",
+            },
+            {
+                link: "https://example.org/2",
+            },
+            {
+                link: "https://example.org/3",
+            },
+        ]);
     });
     it("should hide preview when invisible", async () => {
         const { vm, client } = getViewModel({ visible: false, mediaVisible: true });
@@ -285,5 +318,63 @@ describe("UrlPreviewViewModel", () => {
         msg.innerHTML = `<a href="${item.href}">${item.text}</a>`;
         await vm.updateEventElement(msg);
         expect(vm.getSnapshot().previews).toHaveLength(item.hasPreview ? 1 : 0);
+    });
+
+    // og:url, og:type are ignored.
+    const baseOg = {
+        "og:url": "https://example.org",
+        "og:type": "document",
+    };
+
+    it.each<[IPreviewUrlResponse, Omit<UrlPreviewViewSnapshotPreview, "link">]>([
+        [{ ...baseOg, "og:title": "Basic title" }, { title: "Basic title" }],
+        [
+            { ...baseOg, "og:site_name": "Site name", "og:title": "" },
+            { title: "Site name", siteName: undefined },
+        ],
+        [
+            { ...baseOg, "og:description": "A description", "og:title": "" },
+            { title: "A description", description: undefined },
+        ],
+        [
+            { ...baseOg, "og:title": "Cool blog", "og:site_name": "Cool site" },
+            { title: "Cool blog", siteName: "Cool site" },
+        ],
+        [
+            {
+                ...baseOg,
+                "og:title": "Media test",
+                // API *may* return a string, so check we parse correctly.
+                "og:image:height": "500" as unknown as number,
+                "og:image:width": 500,
+                "matrix:image:size": 1024,
+                "og:image": IMAGE_MXC,
+            },
+            {
+                title: "Media test",
+                image: {
+                    imageThumb: "https://example.org/image/thumb",
+                    imageFull: "https://example.org/image/src",
+                    fileSize: 1024,
+                    width: 100,
+                    height: 100,
+                },
+            },
+        ],
+    ])("handles different kinds of opengraph responses %s", async (og, preview) => {
+        const { vm, client } = getViewModel();
+        // eslint-disable-next-line no-restricted-properties
+        client.mxcUrlToHttp.mockImplementation((url, width) => {
+            expect(url).toEqual(IMAGE_MXC);
+            if (width) {
+                return "https://example.org/image/thumb";
+            }
+            return "https://example.org/image/src";
+        });
+        client.getUrlPreview.mockResolvedValueOnce(og);
+        const msg = document.createElement("div");
+        msg.innerHTML = `<a href="https://example.org">test</a>`;
+        await vm.updateEventElement(msg);
+        expect(vm.getSnapshot().previews[0]).toMatchObject(preview);
     });
 });
