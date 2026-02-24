@@ -29,15 +29,13 @@ const meta = {
     title: "Timeline/DateSeparatorView",
     component: DateSeparatorViewWrapper,
     tags: ["autodocs"],
+    argTypes: {
+        jumpToEnabled: { control: "boolean" },
+        jumpFromDate: { control: "text" },
+        className: { control: "text" },
+    },
     args: {
         label: "Today",
-        jumpToEnabled: false,
-        jumpFromDate: "",
-        className: "",
-        onLastWeekPicked: () => console.log("onLastWeekPicked"),
-        onLastMonthPicked: () => console.log("onLastMonthPicked"),
-        onBeginningPicked: () => console.log("onBeginningPicked"),
-        onDatePicked: () => console.log("onDatePicked"),
     },
 } satisfies Meta<typeof DateSeparatorViewWrapper>;
 
@@ -53,7 +51,14 @@ export const HasExtraClassNames: Story = {
 };
 
 export const WithJumpToTooltip: Story = {
-    args: { jumpToEnabled: true, jumpFromDate: "2025-01-15" },
+    args: {
+        jumpToEnabled: true,
+        jumpFromDate: "2025-01-15",
+        onLastWeekPicked: () => console.log("onLastWeekPicked"),
+        onLastMonthPicked: () => console.log("onLastMonthPicked"),
+        onBeginningPicked: () => console.log("onBeginningPicked"),
+        onDatePicked: () => console.log("onDatePicked"),
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await userEvent.hover(canvas.getByText("Today"));
@@ -62,7 +67,14 @@ export const WithJumpToTooltip: Story = {
 };
 
 export const WithJumpToDatePicker: Story = {
-    args: { jumpToEnabled: true, jumpFromDate: "2025-01-15" },
+    args: {
+        jumpToEnabled: true,
+        jumpFromDate: "2025-01-15",
+        onLastWeekPicked: () => console.log("onLastWeekPicked"),
+        onLastMonthPicked: () => console.log("onLastMonthPicked"),
+        onBeginningPicked: () => console.log("onBeginningPicked"),
+        onDatePicked: () => console.log("onDatePicked"),
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await userEvent.click(canvas.getByText("Today"));

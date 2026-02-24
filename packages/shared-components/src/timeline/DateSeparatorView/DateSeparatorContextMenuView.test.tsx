@@ -47,11 +47,16 @@ function renderMenu({
     });
 
     render(
-        <DateSeparatorContextMenuView vm={vm} open={open} onOpenChange={onOpenChange}>
-            <button type="button" data-testid="jump-to-trigger">
-                Trigger
-            </button>
-        </DateSeparatorContextMenuView>,
+        <DateSeparatorContextMenuView
+            vm={vm}
+            open={open}
+            onOpenChange={onOpenChange}
+            trigger={
+                <button type="button" data-testid="jump-to-trigger">
+                    Trigger
+                </button>
+            }
+        />,
     );
 
     return { vm, onOpenChange };
@@ -65,13 +70,6 @@ describe("DateSeparatorContextMenuView", () => {
         expect(screen.getByTestId("jump-to-date-last-month")).toBeInTheDocument();
         expect(screen.getByTestId("jump-to-date-beginning")).toBeInTheDocument();
         expect(screen.getByTestId("jump-to-date-picker")).toBeInTheDocument();
-    });
-
-    it("hides date picker when jumpToEnabled is false", () => {
-        renderMenu({ open: true, jumpToEnabled: false });
-
-        expect(screen.getByTestId("jump-to-date-last-week")).toBeInTheDocument();
-        expect(screen.queryByTestId("jump-to-date-picker")).not.toBeInTheDocument();
     });
 
     it("calls onOpenChange for opening and closing transitions", async () => {

@@ -10,19 +10,20 @@ import { Menu, MenuItem, Separator } from "@vector-im/compound-web";
 import { capitalize } from "lodash";
 
 import { useI18n } from "../../utils/i18nContext";
-import { useViewModel } from "../../viewmodel";
 import { humanizeRelativeTime } from "../../utils/humanize";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import { DateSeparatorDatePickerView } from "./DateSeparatorDatePickerView";
 
 /**
- * Props for DateSeparatorContextMenu component.
+ * Props for DateSeparatorContextMenuView component.
  */
 export interface DateSeparatorContextMenuViewProps {
     /** The date separator view model. */
     vm: DateSeparatorViewModel;
     /** Whether the menu is open (controlled by the parent). */
     open: boolean;
+    /** The element used as the menu trigger. */
+    trigger: React.ReactNode;
     /** Called when the menu requests an open state change. */
     onOpenChange?: (open: boolean) => void;
 }
@@ -34,12 +35,11 @@ export interface DateSeparatorContextMenuViewProps {
 export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSeparatorContextMenuViewProps>> = ({
     vm,
     open,
+    trigger,
     onOpenChange,
-    children,
 }): JSX.Element => {
     const i18n = useI18n();
     const { translate: _t } = useI18n();
-    const snapshot = useViewModel(vm);
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
         if (event.key !== "ArrowDown") return;
@@ -58,7 +58,7 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
             }}
             title={_t("room|jump_to_date")}
             showTitle={false}
-            trigger={children}
+            trigger={trigger}
             align="start"
         >
             <MenuItem
@@ -80,10 +80,8 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
                 hideChevron={true}
                 onKeyDown={onKeyDown}
             />
-            {snapshot.jumpToEnabled && <Separator decorative />}
-            {snapshot.jumpToEnabled && (
-                <DateSeparatorDatePickerView vm={vm} onSubmitted={() => onOpenChange?.(false)} />
-            )}
+            <Separator decorative />
+            <DateSeparatorDatePickerView vm={vm} onSubmitted={() => onOpenChange?.(false)} />
         </Menu>
     );
 };

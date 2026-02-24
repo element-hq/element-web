@@ -47,30 +47,30 @@ class MutableDateSeparatorViewModel implements DateSeparatorViewModel {
 describe("DateSeparatorView", () => {
     it("renders default story", () => {
         const { container } = render(<Default />);
-        expect(container).toMatchSnapshot();
         expect(screen.getByText("Today")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 
     it("renders with extra class names", () => {
         const { container } = render(<HasExtraClassNames />);
-        expect(container).toMatchSnapshot();
         expect(container.firstElementChild).toHaveClass("extra_class_1");
         expect(container.firstElementChild).toHaveClass("extra_class_2");
+        expect(container).toMatchSnapshot();
     });
 
     it("renders with jump to date picker story", async () => {
         const { container } = render(<WithJumpToDatePicker />);
-        expect(container).toMatchSnapshot();
         await userEvent.click(screen.getByTestId("jump-to-date-separator-button"));
         await expect(screen.findByTestId("jump-to-date-last-week")).resolves.toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 
     it("renders long localized label story", () => {
         const { container } = render(<LongLocalizedLabel />);
-        expect(container).toMatchSnapshot();
         expect(
             screen.getByText("Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time"),
         ).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
     });
 
     it("updates when view model snapshot changes", async () => {

@@ -6,17 +6,15 @@
  */
 
 import classNames from "classnames";
-import React, { type JSX, useState } from "react";
-import { Tooltip } from "@vector-im/compound-web";
-import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
+import React, { type JSX, useRef, useState } from "react";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../viewmodel/useViewModel";
 import styles from "./DateSeparatorView.module.css";
 import { Flex } from "../../utils/Flex";
-import { useI18n } from "../../utils/i18nContext";
 import { TimelineSeparator } from "../../message-body/TimelineSeparator";
 import { DateSeparatorContextMenuView } from "./DateSeparatorContextMenuView";
+import { DateSeparatorButton } from "./DateSeparatorButton";
 
 export interface DateSeparatorViewSnapshot {
     /**
@@ -71,54 +69,41 @@ interface DateSeparatorViewProps {
  * ```
  */
 export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
-    const { translate: _t } = useI18n();
     const { label, className, jumpToEnabled } = useViewModel(vm);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const triggerRef = useRef<HTMLDivElement>(null);
     const onMenuOpenChange = (newOpen: boolean): void => {
         setIsMenuOpen(newOpen);
 
-        if (!newOpen && document.activeElement instanceof HTMLElement) {
-            if (document.activeElement.dataset.testid === "jump-to-date-separator-button") {
-                document.activeElement.blur();
-            }
+        if (!newOpen && triggerRef.current?.contains(document.activeElement)) {
+            triggerRef.current.blur();
         }
     };
 
-    let content = (
-        <Flex className={styles.content}>
-            <h2 aria-hidden="true">{label}</h2>
-        </Flex>
-    );
-
     if (jumpToEnabled) {
-        content = (
-            <Tooltip
-                description={_t("room|jump_to_date")}
-                placement="right"
-                isTriggerInteractive={false}
-                nonInteractiveTriggerTabIndex={-1}
-                disabled={isMenuOpen}
-            >
-                <DateSeparatorContextMenuView vm={vm} open={isMenuOpen} onOpenChange={onMenuOpenChange}>
-                    <Flex
-                        data-testid="jump-to-date-separator-button"
-                        className={classNames(styles.content)}
-                        aria-live="off"
-                        aria-label={_t("room|jump_to_date")}
-                        role="button"
-                        tabIndex={0}
-                    >
-                        <h2 aria-hidden="true">{label}</h2>
-                        <ChevronDownIcon />
-                    </Flex>
-                </DateSeparatorContextMenuView>
-            </Tooltip>
+        return (
+            <TimelineSeparator label={label} className={classNames(className)} role="none">
+                <DateSeparatorContextMenuView
+                    vm={vm}
+                    open={isMenuOpen}
+                    onOpenChange={onMenuOpenChange}
+                    trigger={
+                        <DateSeparatorButton
+                            label={label}
+                            tooltipOpen={isMenuOpen ? false : undefined}
+                            buttonRef={triggerRef}
+                        />
+                    }
+                />
+            </TimelineSeparator>
         );
     }
 
     return (
-        <TimelineSeparator label={label} className={classNames(className)} role={jumpToEnabled ? "none" : "separator"}>
-            {content}
+        <TimelineSeparator label={label} className={classNames(className)}>
+            <Flex className={styles.content}>
+                <h2 aria-hidden="true">{label}</h2>
+            </Flex>
         </TimelineSeparator>
     );
 }
