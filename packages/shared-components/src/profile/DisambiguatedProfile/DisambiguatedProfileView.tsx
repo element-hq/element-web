@@ -100,9 +100,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
-            {displayIdentifier && (
-                <span className={displayIdentifierClasses}>{displayIdentifier}</span>
-            )}
+            {displayIdentifier && <span className={displayIdentifierClasses}>{displayIdentifier}</span>}
         </Component>
     );
 }
