@@ -28,6 +28,8 @@
 
 button {
     padding: 0;
-    border: none;
-    background: none;
+    border: 0;
+    color: inherit;
+    background-color: inherit;
+    font-size: var(--cpd-font-size-root);
 }
