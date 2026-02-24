@@ -80,7 +80,15 @@ test.describe("Composer", () => {
             test.use({ viewport: { width: 1280, height: 720 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
-                await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker.png");
+                // Mask the background of the screenshot to avoid failing the test just because some
+                // other component have changed its rendering.
+                await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker.png", {
+                    css: `
+                        .mx_ContextualMenu_background {
+                            background-color: magenta !important;
+                        }
+                    `,
+                });
             });
         });
 
@@ -88,7 +96,15 @@ test.describe("Composer", () => {
             test.use({ viewport: { width: 1280, height: 360 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
                 await app.getComposer(false).getByRole("button", { name: "Emoji" }).click();
-                await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker-small.png");
+                // Mask the background of the screenshot to avoid failing the test just because some
+                // other component have changed its rendering.
+                await expect(page.getByTestId("mx_EmojiPicker")).toMatchScreenshot("emoji-picker-small.png", {
+                    css: `
+                        .mx_ContextualMenu_background {
+                            background-color: magenta !important;
+                        }
+                    `,
+                });
             });
         });
 

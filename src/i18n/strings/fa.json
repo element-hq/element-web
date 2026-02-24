@@ -337,7 +337,6 @@
         "email_address": "آدرس ایمیل",
         "emoji": "شکلک",
         "encrypted": "رمزشده",
-        "encryption_enabled": "رمزگذاری فعال است",
         "error": "خطا",
         "faq": "سوالات پرتکرار",
         "favourites": "موردعلاقه‌ها",
@@ -1848,11 +1847,6 @@
             "continuation": "این اتاق ادامه گفتگوی دیگر است.",
             "see_older_messages": "برای دیدن پیام های قدیمی اینجا کلیک کنید."
         },
-        "m.room.encryption": {
-            "disable_attempt": "تلاش برای غیرفعال کردن رمزگذاری نادیده گرفته شد",
-            "disabled": "رمزگذاری فعال نیست",
-            "unsupported": "رمزگذاری استفاده شده توسط این اتاق پشتیبانی نمی شود."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s به مهمانان اجازه عضویت در اتاق را داد.",
             "forbidden": "%(senderDisplayName)s از پیوستن مهمان به اتاق جلوگیری کرد.",
@@ -1909,11 +1903,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s سطح قدرت %(powerLevelDiffText)s تغییر داد.",
             "user_from_to": "%(userId)s از %(fromPowerLevel)s به %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 شرکت همه سرورها ممنوع است! دیگر نمی توان از این اتاق استفاده کرد.",
-            "changed": "%(senderDisplayName)s ACL های سرور را برای این اتاق تغییر داد.",
-            "set": "%(senderDisplayName)s ACL های سرور را برای این اتاق تنظیم کرده است."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s دعوت نامه %(targetDisplayName)s را برای پیوستن به اتاق باطل کرد.",

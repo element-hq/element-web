@@ -18,7 +18,7 @@ import { showToast } from "../../../src/toasts/UnverifiedSessionToast";
 import { filterConsole, flushPromises, stubClient } from "../../test-utils";
 import ToastContainer from "../../../src/components/structures/ToastContainer";
 import { Action } from "../../../src/dispatcher/actions";
-import DeviceListener from "../../../src/DeviceListener";
+import { DeviceListener } from "../../../src/device-listener";
 
 describe("UnverifiedSessionToast", () => {
     const otherDevice: IMyDevice = {

@@ -64,7 +64,6 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Field from "../views/elements/Field";
 import RoomFacePile from "../views/elements/RoomFacePile";
-import RoomName from "../views/elements/RoomName";
 import RoomTopic from "../views/elements/RoomTopic";
 import withValidation from "../views/elements/Validation";
 import RoomInfoLine from "../views/rooms/RoomInfoLine";
@@ -76,6 +75,7 @@ import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import SpacePillButton from "./SpacePillButton.tsx";
+import { useRoomName } from "../../hooks/useRoomName.ts";
 
 interface IProps {
     space: Room;
@@ -214,6 +214,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
     const userId = cli.getSafeUserId();
+    const name = useRoomName(space);
 
     const storeIsShowingSpaceMembers = useCallback(
         () =>
@@ -273,12 +274,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                 <RoomAvatar room={space} size="80px" viewAvatarOnClick={true} type="square" />
             </div>
             <div className="mx_SpaceRoomView_landing_name">
-                <RoomName room={space}>
-                    {(name) => {
-                        const tags = { name: () => <h1>{name}</h1> };
-                        return _t("space|landing_welcome", {}, tags) as JSX.Element;
-                    }}
-                </RoomName>
+                {_t("space|landing_welcome", {}, { name: () => <h1>{name}</h1> })}
             </div>
             <div className="mx_SpaceRoomView_landing_infoBar">
                 <RoomInfoLine room={space} />
@@ -304,7 +300,7 @@ const SpaceSetupFirstRooms: React.FC<{
     space: Room;
     title: string;
     description: JSX.Element;
-    onFinished(firstRoomId?: string): void;
+    onFinished(this: void, firstRoomId?: string): void;
 }> = ({ space, title, description, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
@@ -399,7 +395,7 @@ const SpaceSetupFirstRooms: React.FC<{
 
 const SpaceAddExistingRooms: React.FC<{
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }> = ({ space, onFinished }) => {
     return (
         <div>
@@ -423,7 +419,7 @@ const SpaceAddExistingRooms: React.FC<{
 };
 
 interface ISpaceSetupPublicShareProps extends Pick<IProps & IState, "justCreatedOpts" | "space" | "firstRoomId"> {
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SpaceSetupPublicShare: React.FC<ISpaceSetupPublicShareProps> = ({
@@ -455,7 +451,7 @@ const SpaceSetupPublicShare: React.FC<ISpaceSetupPublicShareProps> = ({
 const SpaceSetupPrivateScope: React.FC<{
     space: Room;
     justCreatedOpts?: IOpts;
-    onFinished(createRooms: boolean): void;
+    onFinished(this: void, createRooms: boolean): void;
 }> = ({ space, justCreatedOpts, onFinished }) => {
     return (
         <div className="mx_SpaceRoomView_privateScope">
@@ -498,7 +494,7 @@ const validateEmailRules = withValidation({
 
 const SpaceSetupPrivateInvite: React.FC<{
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }> = ({ space, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");

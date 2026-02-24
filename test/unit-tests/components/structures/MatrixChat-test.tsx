@@ -78,6 +78,7 @@ jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
 // Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
 // plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
 jest.mock("../../../../src/settings/watchers/ThemeWatcher");
+jest.mock("../../../../src/theme");
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
@@ -1268,7 +1269,7 @@ describe("<MatrixChat />", () => {
             fireEvent.change(screen.getByLabelText("Password"), { target: { value: password } });
 
             // sign in button is an input
-            fireEvent.click(screen.getByDisplayValue("Sign in"));
+            fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
         };
 
         beforeEach(() => {
@@ -1838,5 +1839,40 @@ describe("<MatrixChat />", () => {
                 ),
             );
         });
+    });
+
+    describe("blacklistUnverifiedDevices settings", () => {
+        beforeEach(async () => {
+            mockPlatformPeg();
+            getComponent({});
+            // Force a client start manually to avoid needing to go through the login flow.
+            defaultDispatcher.dispatch({
+                action: Action.ClientStarted,
+            });
+            await flushPromises();
+        });
+
+        afterEach(() => {
+            SettingsStore.reset();
+        });
+
+        it("should ignore room-device-level blacklistUnverifiedDevices updates", async () => {
+            // Set the blacklist toggle at a room-specific level ...
+            await SettingsStore.setValue(
+                "blacklistUnverifiedDevices",
+                "!room:example.com",
+                SettingLevel.ROOM_DEVICE,
+                true,
+            );
+            // ... which SHOULD NOT affect the global blacklist property.
+            expect(mockClient.getCrypto()!.globalBlacklistUnverifiedDevices).toBeFalsy();
+        }, 10e3);
+
+        it("should update globalBlacklistUnverifiedDevices on device-level updates", async () => {
+            // Set the blacklist toggle at a device level ...
+            await SettingsStore.setValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE, true);
+            // shich SHOULD affect the global blacklist property.
+            expect(mockClient.getCrypto()!.globalBlacklistUnverifiedDevices).toBeTruthy();
+        }, 10e3);
     });
 });

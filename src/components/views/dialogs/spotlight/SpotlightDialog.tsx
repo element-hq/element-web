@@ -106,7 +106,7 @@ const AVATAR_SIZE = "24px";
 interface IProps {
     initialText?: string;
     initialFilter?: Filter;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 function nodeIsForRecentlyViewed(node?: HTMLElement): boolean {
@@ -191,7 +191,7 @@ interface IResult extends IBaseResult {
     avatar: JSX.Element;
     name: string;
     description?: string;
-    onClick?(): void;
+    onClick?(this: void): void;
 }
 
 type Result = IRoomResult | IPublicRoomResult | IMemberResult | IResult;

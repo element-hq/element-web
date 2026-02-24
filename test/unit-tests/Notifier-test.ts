@@ -149,7 +149,7 @@ describe("Notifier", () => {
         MockPlatform = mockPlatformPeg({
             supportsNotifications: jest.fn().mockReturnValue(true),
             maySendNotifications: jest.fn().mockReturnValue(true),
-            displayNotification: jest.fn(),
+            displayNotification: jest.fn().mockReturnValue({ close: jest.fn() }),
             loudNotification: jest.fn(),
         });
 
@@ -171,7 +171,7 @@ describe("Notifier", () => {
         const event = new MatrixEvent({
             sender: "@alice:server.org",
             type: "m.room.message",
-            room_id: "!room:server.org",
+            room_id: roomId,
             content: {
                 body: "hey",
             },
@@ -269,6 +269,21 @@ describe("Notifier", () => {
             emitLiveEvent(event);
 
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(testRoom.name, "hey", null, testRoom, event);
+        });
+
+        it("closes a desktop notification when room is marked read", () => {
+            mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            emitLiveEvent(event);
+
+            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(testRoom.name, "hey", null, testRoom, event);
+            mockClient!.emit(RoomEvent.Receipt, event, testRoom);
+            expect(
+                (
+                    MockPlatform.displayNotification.mock.results[0].value as ReturnType<
+                        typeof MockPlatform.displayNotification
+                    >
+                ).close,
+            ).toHaveBeenCalled();
         });
 
         it("creates a loud notification when enabled", () => {
@@ -525,7 +540,8 @@ describe("Notifier", () => {
                         content: {},
                     }),
                     {
-                        kind: "session",
+                        // TODO: Once https://github.com/matrix-org/matrix-js-sdk/pull/5134 is merged this can be MembershipKind.Session
+                        kind: "session" as any,
                         data: {
                             call_id: "123",
                             application: "m.call",

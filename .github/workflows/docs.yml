@@ -17,33 +17,36 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Fetch element-desktop
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: element-hq/element-desktop
                   path: element-desktop
 
             - name: Fetch element-web
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   path: element-web
 
             - name: Fetch matrix-js-sdk
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: matrix-org/matrix-js-sdk
                   path: matrix-js-sdk
 
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+              with:
+                  package_json_file: element-web/package.json
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
-                  cache-dependency-path: element-web/yarn.lock
+                  cache: "pnpm"
+                  cache-dependency-path: element-web/pnpm-lock.yaml
                   node-version: "lts/*"
 
             - name: Generate automations docs
               working-directory: element-web
               run: |
-                  yarn install --frozen-lockfile
-                  yarn node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
+                  pnpm install --frozen-lockfile
+                  pnpm node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook

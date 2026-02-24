@@ -54,7 +54,7 @@ export const reorderLexicographically = (
     fromIndex: number,
     toIndex: number,
     maxLen = 50,
-): IEntry[] => {
+): Required<IEntry>[] => {
     // sanity check inputs
     if (fromIndex < 0 || toIndex < 0 || fromIndex > orders.length || toIndex > orders.length || fromIndex === toIndex) {
         return [];

@@ -1648,6 +1648,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return;
             }
 
+            // Re-apply theme now that account data (including custom_themes) is loaded, otherwise we might end up with the wrong theme applied if the user has custom themes enabled
+            setTheme();
+
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
@@ -1793,8 +1796,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const crypto = cli.getCrypto();
         if (crypto) {
-            const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
-            crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
+            crypto.globalBlacklistUnverifiedDevices = SettingsStore.getValueAt(
+                SettingLevel.DEVICE,
+                "blacklistUnverifiedDevices",
+            );
+            SettingsStore.watchSetting(
+                "blacklistUnverifiedDevices",
+                null,
+                (_settingName, _roomId, atLevel, blacklistEnabled: boolean) => {
+                    if (atLevel != SettingLevel.DEVICE) {
+                        return;
+                    }
+                    crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
+                },
+            );
         }
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
@@ -2008,7 +2023,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setPageSubtitle();
     }
 
-    private onLogoutClick(event: ButtonEvent): void {
+    private onLogoutClick(this: void, event: ButtonEvent): void {
         dis.dispatch({
             action: "logout",
         });
@@ -2032,7 +2047,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.stores.resizeNotifier.notifyWindowResized();
     };
 
-    private dispatchTimelineResize(): void {
+    private dispatchTimelineResize(this: void): void {
         dis.dispatch({ action: "timeline_resize" });
     }
 
@@ -2053,7 +2068,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     // returns a promise which resolves to the new MatrixClient
-    private onRegistered(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+    private onRegistered(this: void, credentials: IMatrixClientCreds): Promise<MatrixClient> {
         return Lifecycle.setLoggedIn(credentials);
     }
 

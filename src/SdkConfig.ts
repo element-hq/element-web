@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { mergeWith } from "lodash";
 
 import { SnakedObject } from "./utils/SnakedObject";
-import { type IConfigOptions, type ISsoRedirectOptions } from "./IConfigOptions";
+import { type IConfigOptions } from "./IConfigOptions";
 import { isObject, objectClone } from "./utils/objects";
 import { type DeepReadonly, type Defaultize } from "./@types/common";
 
@@ -19,6 +19,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     brand: "Element",
     help_url: "https://element.io/help",
     help_encryption_url: "https://element.io/help#encryption",
+    help_key_storage_url: "https://element.io/help#encryption5",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
     uisi_autorageshake_app: "element-auto-uisi",
@@ -139,15 +140,4 @@ export default class SdkConfig {
     public static add(cfg: Partial<ConfigOptions>): void {
         SdkConfig.put(mergeConfig(SdkConfig.get(), cfg));
     }
-}
-
-export function parseSsoRedirectOptions(config: IConfigOptions): ISsoRedirectOptions {
-    // Ignore deprecated options if the config is using new ones
-    if (config.sso_redirect_options) return config.sso_redirect_options;
-
-    // We can cheat here because the default is false anyways
-    if (config.sso_immediate_redirect) return { immediate: true };
-
-    // Default: do nothing
-    return {};
 }

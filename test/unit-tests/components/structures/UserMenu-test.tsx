@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, waitFor } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { DEVICE_CODE_SCOPE, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
@@ -22,6 +22,7 @@ import Modal from "../../../../src/Modal";
 import { mockOpenIdConfiguration } from "../../../test-utils/oidc";
 import { Action } from "../../../../src/dispatcher/actions";
 import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
+import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 
 describe("<UserMenu>", () => {
     let client: MatrixClient;
@@ -150,5 +151,27 @@ describe("<UserMenu>", () => {
                 props: { showMsc4108QrCode: true },
             });
         });
+    });
+
+    it("should toggle theme on switcher click", async () => {
+        sdkContext.client = stubClient();
+        const spy = jest.spyOn(SettingsStore, "setValue");
+
+        const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
+        render(<UserMenu isPanelCollapsed={true} />);
+
+        screen.getByRole("button", { name: /User menu/i }).click();
+
+        const themeSwitchButton = await screen.findByRole("button", { name: "Switch to dark mode" });
+        expect(themeSwitchButton).toBeInTheDocument();
+
+        expect(spy).not.toHaveBeenCalled();
+        fireEvent.click(themeSwitchButton);
+        expect(spy).toHaveBeenCalledWith("use_system_theme", null, "device", false);
+        expect(spy).toHaveBeenCalledWith("theme", null, "device", "dark");
+
+        fireEvent.click(themeSwitchButton);
+        expect(spy).toHaveBeenCalledWith("use_system_theme", null, "device", false);
+        expect(spy).toHaveBeenCalledWith("theme", null, "device", "light");
     });
 });

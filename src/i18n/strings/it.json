@@ -432,7 +432,6 @@
         "email_address": "Indirizzo email",
         "emoji": "Emoji",
         "encrypted": "Crittografato",
-        "encryption_enabled": "Crittografia attivata",
         "error": "Errore",
         "faq": "Domande frequenti",
         "favourites": "Preferiti",
@@ -1268,7 +1267,6 @@
         "ask_to_join": "Attiva \"Chiedi di entrare\"",
         "automatic_debug_logs": "Invia automaticamente log di debug per qualsiasi errore",
         "automatic_debug_logs_decryption": "Invia automaticamente log di debug per errori di decifrazione",
-        "automatic_debug_logs_key_backup": "Invia automaticamente log di debug quando il backup delle chiavi non funziona",
         "beta_description": "Cosa riserva il futuro di %(brand)s? I laboratori sono il miglior modo di provare cose in anticipo, testare nuove funzioni ed aiutare a plasmarle prima che vengano distribuite.",
         "beta_feature": "Questa è una funzionalità beta",
         "beta_feedback_leave_button": "Per abbandonare la beta, vai nelle impostazioni.",
@@ -2957,15 +2955,6 @@
             "unknown_predecessor": "Impossibile trovare la vecchia versione della stanza (ID stanza: %(roomId)s) e non ci è stato fornito 'via_servers' per cercarla.",
             "unknown_predecessor_guess_server": "Impossibile trovare la vecchia versione della stanza (ID stanza: %(roomId)s) e non ci è stato fornito 'via_servers' per cercarla. È possibile che indovinare il server dall'ID della stanza possa funzionare. Se vuoi provare, clicca questo link:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Tentativo di disattivare la crittografia ignorato",
-            "disabled": "Crittografia non attivata",
-            "enabled": "I messaggi in questa stanza sono cifrati end-to-end. Quando qualcuno entra puoi verificarlo nel suo profilo, ti basta toccare la sua immagine.",
-            "enabled_dm": "Qui i messaggi sono cifrati end-to-end. Verifica %(displayName)s nel suo profilo - tocca la sua immagine.",
-            "enabled_local": "I messaggi in questa conversazione saranno cifrati end-to-end.",
-            "parameters_changed": "Alcuni parametri di crittografia sono stati modificati.",
-            "unsupported": "La crittografia usata da questa stanza non è supportata."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s ha attivato l'accesso per ospiti alla stanza.",
             "forbidden": "%(senderDisplayName)s ha disattivato l'accesso per ospiti alla stanza.",
@@ -3027,11 +3016,6 @@
             "changed": "%(senderName)s ha modificato il livello di poteri di %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s da %(fromPowerLevel)s a %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Tutti i server sono banditi dalla partecipazione! Questa stanza non può più essere usata.",
-            "changed": "%(senderDisplayName)s ha cambiato le ACL del server per questa stanza.",
-            "set": "%(senderDisplayName)s ha impostato le ACL del server per questa stanza."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s ha revocato l'invito a %(targetDisplayName)s di unirsi alla stanza.",
             "sent": "%(senderName)s ha mandato un invito a %(targetDisplayName)s per unirsi alla stanza."
@@ -3061,8 +3045,6 @@
             "label": "Azioni messaggio",
             "view_in_room": "Vedi nella stanza"
         },
-        "message_timestamp_received_at": "Ricevuto il: %(dateTime)s",
-        "message_timestamp_sent_at": "Inviato il: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ha modificato una regola di ban che corrispondeva a %(oldGlob)s per corrispondere a %(newGlob)s perchè %(reason)s",
             "changed_rule_rooms": "%(senderName)s ha modificato una regola che bandiva stanze corrispondenti a %(oldGlob)s per corrispondere a %(newGlob)s perchè %(reason)s",
@@ -3236,14 +3218,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)ssono usciti e rientrati %(count)s volte",
                 "one": "%(severalUsers)ssono usciti e rientrati"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sha cambiato le ACL del server",
-                "other": "%(oneUser)sha cambiato le ACL del server %(count)s volte"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)shanno cambiato le ACL del server",
-                "other": "%(severalUsers)shanno cambiato le ACL del server %(count)s volte"
             },
             "unbanned": {
                 "other": "è stato riammesso %(count)s volte",

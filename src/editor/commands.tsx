@@ -13,7 +13,7 @@ import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import type EditorModel from "./model";
 import { Type } from "./parts";
-import { type Command, CommandCategories, getCommand } from "../SlashCommands";
+import { type Command, CommandCategories, getCommand } from "../slash-commands/SlashCommands";
 import { UserFriendlyError, _t, _td } from "../languageHandler";
 import Modal from "../Modal";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";

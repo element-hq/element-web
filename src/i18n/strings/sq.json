@@ -414,7 +414,6 @@
         "edited": "e përpunuar",
         "email_address": "Adresë email",
         "encrypted": "I fshehtëzuar",
-        "encryption_enabled": "Fshehtëzim i aktivizuar",
         "error": "Gabim",
         "favourites": "Të parapëlqyer",
         "feedback": "Mendime",
@@ -1194,7 +1193,6 @@
     "labs": {
         "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
         "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
-        "automatic_debug_logs_key_backup": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon",
         "beta_description": "Ç’vjen më pas për %(brand)s? Labs janë mënyra më e mirë për t’i pasur gjërat që herët, për të testuar veçori të reja dhe për të ndihmuar t’u jepet formë para se të hidhen faktikisht në qarkullim.",
         "beta_feature": "Kjo është një veçori beta",
         "beta_feedback_leave_button": "Që të braktisni beta-n, vizitoni rregullimet tuaja.",
@@ -2763,13 +2761,6 @@
             "unknown_predecessor": "S’gjendet dot versioni i vjetër i kësaj dhome (ID dhome: %(roomId)s) dhe s’na është dhënë “via_servers” që të shohim për të.",
             "unknown_predecessor_guess_server": "S’gjendet dot versioni i vjetër i kësaj dhome (ID dhome: %(roomId)s) dhe s’na është dhënë “via_servers” që të shohim për të. Ka mundësi që hamendësimi i shërbyesit prej ID-së së dhomës të funksionojë. Nëse doni të provoni, klikoni këtë lidhje:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "U shpërfill përpjekje për të çaktivizuar fshehtëzimin",
-            "disabled": "Fshehtëzim jo i aktivizuar",
-            "enabled_local": "Mesazhet në këtë fjalosje do të jenë të fshehtëzuar skaj-më-skaj.",
-            "parameters_changed": "Janë ndryshuar disa parametra fshehtëzimi.",
-            "unsupported": "Fshehtëzimi i përdorur nga kjo dhomë nuk mbulohet."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s ka lejuar vizitorë të marrin pjesë në dhomë.",
             "forbidden": "%(senderDisplayName)s ka penguar vizitorë të marrin pjesë në dhomë.",
@@ -2829,11 +2820,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s ndryshoi shkallën e pushtetit të %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s nga %(fromPowerLevel)s në %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Janë dëbuar nga pjesëmarrja krejt shërbyesit! Kjo dhomë s’mund të përdoret më.",
-            "changed": "%(senderDisplayName)s ndryshoi ACL-ra shërbyesi për këtë dhomë.",
-            "set": "%(senderDisplayName)s caktoi ACL-ra shërbyesi për këtë dhomë."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s shfuqizoi ftesën për %(targetDisplayName)s që të marrë pjesë në dhomë.",
@@ -3027,14 +3013,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sdolën dhe rihynë",
                 "other": "%(severalUsers)sdolën dhe rihynë %(count)s herë"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sndryshoi ACL-ra shërbyesi",
-                "other": "%(oneUser)sndryshoi ACL-ra shërbyesi %(count)s herë"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sndryshuan ACL-ra shërbyesi",
-                "other": "%(severalUsers)sndryshuan ACL-ra shërbyesi %(count)s herë"
             },
             "unbanned": {
                 "other": "i është hequr dëbimi %(count)s herë",

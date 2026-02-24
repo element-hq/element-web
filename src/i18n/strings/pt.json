@@ -477,7 +477,6 @@
         "email_address": "Endereço de email",
         "emoji": "Emoji",
         "encrypted": "Encriptado",
-        "encryption_enabled": "Encriptação ativada",
         "error": "Erro",
         "faq": "Perguntas frequentes",
         "favourites": "Favoritos",
@@ -1394,7 +1393,6 @@
         "ask_to_join": "Permitir pedir para participar",
         "automatic_debug_logs": "Envia automaticamente registos de depuração em qualquer erro",
         "automatic_debug_logs_decryption": "Envia automaticamente registos de depuração em caso de erros de desencriptação",
-        "automatic_debug_logs_key_backup": "Envia automaticamente registos de depuração quando a cópia de segurança das chaves não está a funcionar",
         "beta_description": "O que vais fazer a seguir em %(brand)s? Os laboratórios são a melhor forma de obteres informações antecipadas, testares novas funcionalidades e ajudares a moldá-las antes do seu lançamento efetivo.",
         "beta_feature": "Esta é uma funcionalidade beta",
         "beta_feedback_leave_button": "Para sair da versão beta, visita as tuas definições.",
@@ -2005,28 +2003,9 @@
         "add_space_label": "Adiciona espaço",
         "breadcrumbs_empty": "Nenhuma sala visitada recentemente",
         "breadcrumbs_label": "Salas visitadas recentemente",
-        "empty": {
-            "no_chats": "Ainda sem conversas",
-            "no_chats_description": "Começa a enviar mensagens a alguém ou a crie uma sala",
-            "no_chats_description_no_room_rights": "Começa por enviar uma mensagem a alguém",
-            "no_favourites": "Ainda não tem um conversa favorita",
-            "no_favourites_description": "Pode adicionar uma conversa aos seus favoritos nas definições de conversa",
-            "no_people": "Ainda não tem conversas diretas com ninguém",
-            "no_people_description": "Pode desseleccionar filtros para veres as suas outras conversas",
-            "no_rooms": "Você ainda não está em nenhuma sala",
-            "no_rooms_description": "Pode desmarcar filtros para ver as suas outras conversas",
-            "no_unread": "Parabéns! Não tens nenhuma mensagem por ler",
-            "show_chats": "Mostra todas as conversas"
-        },
         "failed_add_tag": "Falha ao adicionar %(tagName)s à sala",
         "failed_remove_tag": "Não foi possível remover a marcação %(tagName)s desta sala",
         "failed_set_dm_tag": "Falha ao definir a etiqueta de mensagem direta",
-        "filters": {
-            "favourite": "Favoritos",
-            "people": "Pessoas",
-            "rooms": "Salas",
-            "unread": "Não lido"
-        },
         "home_menu_label": "Opções de casa",
         "join_public_room_label": "Participa na sala pública",
         "joining_rooms_status": {
@@ -2035,22 +2014,12 @@
         },
         "list_title": "Lista de salas",
         "more_options": {
-            "copy_link": "Copiar link da sala",
-            "favourited": "Adicionado aos favoritos",
-            "leave_room": "Sair da sala",
-            "low_priority": "Baixa prioridade",
-            "mark_read": "Marcar como lido",
-            "mark_unread": "Marcar como não lido"
+            "leave_room": "Sair da sala"
         },
         "notification_options": "Opções de notificação",
-        "primary_filters": "Filtros da lista de salas",
         "redacting_messages_status": {
             "one": "Atualmente removendo mensagens na %(count)s sala",
             "other": "Atualmente removendo mensagens em %(count)s salas"
-        },
-        "room": {
-            "more_options": "Mais opções",
-            "open_room": "Abrir a sala %(roomName)s"
         },
         "show_less": "Mostrar menos",
         "show_n_more": {
@@ -3303,15 +3272,6 @@
             "unknown_predecessor": "Não é possível encontrar a versão antiga desta sala (ID da sala: %(roomId)s), e não nos foi fornecido o 'via_servers' para a procurar.",
             "unknown_predecessor_guess_server": "Não consegues encontrar a versão antiga desta sala (ID da sala: %(roomId)s), e não nos foi fornecido o 'via_servers' para a procurar. É possível que adivinhes o servidor a partir do ID da sala. Se quiseres tentar, clica neste link:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Tentativa ignorada de desativar a encriptação",
-            "disabled": "Encriptação não ativada",
-            "enabled": "As mensagens nesta sala são encriptadas de ponta a ponta. Quando as pessoas se juntam a nós, podes verificá-las no seu perfil, basta tocares na fotografia de perfil.",
-            "enabled_dm": "As mensagens aqui são encriptadas de ponta a ponta. Verifica %(displayName)s no seu perfil - toca na fotografia de perfil.",
-            "enabled_local": "As mensagens neste chat serão encriptadas de ponta a ponta.",
-            "parameters_changed": "Alguns parâmetros de encriptação foram alterados.",
-            "unsupported": "A encriptação utilizada por esta sala não é suportada."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s permitiu que convidados entram na sala.",
             "forbidden": "%(senderDisplayName)s bloqueou que convidados entrem na sala.",
@@ -3374,11 +3334,6 @@
             "changed": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s para %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Todos os servidores foram banidos de participar! Esta sala ficou inutilizável.",
-            "changed": "%(senderDisplayName)s mudou a lista de controlo de acessos de servidores desta sala.",
-            "set": "%(senderDisplayName)s definir a lista de controlo de acessos de servidores para esta sala."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s revocou o convite a %(targetDisplayName)s para se juntar à sala.",
             "sent": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala."
@@ -3409,8 +3364,6 @@
             "label": "Acções de mensagens",
             "view_in_room": "Vista na sala"
         },
-        "message_timestamp_received_at": "Recebido em: %(dateTime)s",
-        "message_timestamp_sent_at": "Enviado em:%(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s atualizou uma regra de banimento que correspondia a %(oldGlob)s à correspondência %(newGlob)s devido a %(reason)s",
             "changed_rule_rooms": "%(senderName)s alterou uma regra que proibia salas correspondentes a %(oldGlob)s para correspondência %(newGlob)s devido a %(reason)s",
@@ -3585,14 +3538,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)s aderiram e saíram",
                 "other": "%(severalUsers)s aderiram e saíram %(count)s vezes"
-            },
-            "server_acls": {
-                "one": "%(oneUser)salterou as ACLs do servidor",
-                "other": "%(oneUser)salterou as ACLs do servidor %(count)s vezes"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)salterou as ACLs do servidor",
-                "other": "%(severalUsers)salterou as ACLs do servidor %(count)s vezes"
             },
             "unbanned": {
                 "one": "foi não banido",

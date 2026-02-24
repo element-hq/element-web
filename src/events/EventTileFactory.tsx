@@ -17,21 +17,25 @@ import {
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { TextualEventView } from "@element-hq/web-shared-components";
+import {
+    EncryptionEventView,
+    TextualEventView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { type EventTileProps } from "../components/views/rooms/EventTile";
+import { type IEventTileType, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
-import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
 import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import MKeyVerificationRequest from "../components/views/messages/MKeyVerificationRequest";
 import { WidgetType } from "../widgets/WidgetType";
 import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
@@ -42,6 +46,7 @@ import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
+import { EncryptionEventViewModel } from "../viewmodels/event-tiles/EncryptionEventViewModel";
 import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
 import { ElementCallEventType } from "../call-types";
 
@@ -61,7 +66,7 @@ export interface EventTileTypeProps extends Pick<
     | "isSeeingThroughMessageHiddenForModeration"
     | "inhibitInteraction"
 > {
-    ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
+    ref?: React.RefObject<IEventTileType | null>;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
@@ -79,6 +84,14 @@ const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props
 export const TextualEventFactory: Factory = (ref, props) => {
     const vm = new TextualEventViewModel(props);
     return <TextualEventView vm={vm} />;
+};
+function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new EncryptionEventViewModel({ mxEvent, cli }));
+    return <EncryptionEventView vm={vm} ref={ref} />;
+}
+const EncryptionEventFactory: Factory = (ref, props) => {
+    return <EncryptionEventWrappedView ref={ref} {...props} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
@@ -99,7 +112,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
 ]);
 
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
-    [EventType.RoomEncryption, (ref, props) => <EncryptionEvent ref={ref} {...props} />],
+    [EventType.RoomEncryption, EncryptionEventFactory],
     [EventType.RoomCanonicalAlias, TextualEventFactory],
     [EventType.RoomCreate, RoomCreateEventFactory],
     [EventType.RoomMember, TextualEventFactory],

@@ -26,11 +26,11 @@ import {
     showSpaceSettings,
 } from "../../utils/space";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { createRoom, hasCreateRoomRights } from "../../components/viewmodels/roomlist/utils";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { createRoom, hasCreateRoomRights } from "./utils";
 
 export interface Props {
     /**
@@ -170,20 +170,26 @@ export class RoomListHeaderViewModel
     };
 
     public sort = (option: SortOption): void => {
-        let sortingAlgorithm: SortingAlgorithm;
+        const oldSortingAlgorithm = RoomListStoreV3.instance.activeSortAlgorithm;
+        let newSortingAlgorithm: SortingAlgorithm;
         switch (option) {
             case "alphabetical":
-                sortingAlgorithm = SortingAlgorithm.Alphabetic;
+                newSortingAlgorithm = SortingAlgorithm.Alphabetic;
                 break;
             case "recent":
-                sortingAlgorithm = SortingAlgorithm.Recency;
+                newSortingAlgorithm = SortingAlgorithm.Recency;
                 break;
             case "unread-first":
-                sortingAlgorithm = SortingAlgorithm.Unread;
+                newSortingAlgorithm = SortingAlgorithm.Unread;
                 break;
         }
-        RoomListStoreV3.instance.resort(sortingAlgorithm);
+        RoomListStoreV3.instance.resort(newSortingAlgorithm);
         this.snapshot.merge({ activeSortOption: option });
+
+        // Record analytics for this action
+        if (oldSortingAlgorithm) {
+            PosthogTrackers.trackRoomListSortingAlgorithmChange(oldSortingAlgorithm, newSortingAlgorithm);
+        }
     };
 
     public toggleMessagePreview = (): void => {

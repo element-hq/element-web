@@ -27,7 +27,7 @@ import { parseEvent } from "../../../editor/deserialize";
 import { CommandPartCreator, type Part, type PartCreator, type SerializedPart } from "../../../editor/parts";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
-import { CommandCategories } from "../../../SlashCommands";
+import { CommandCategories } from "../../../slash-commands/SlashCommands";
 import { Action } from "../../../dispatcher/actions";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import SendHistoryManager from "../../../SendHistoryManager";

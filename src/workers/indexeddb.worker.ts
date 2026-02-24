@@ -10,6 +10,7 @@ import { IndexedDBStoreWorker } from "matrix-js-sdk/src/indexeddb-worker";
 
 const ctx: Worker = self as any;
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const remoteWorker = new IndexedDBStoreWorker(ctx.postMessage);
 
 ctx.onmessage = remoteWorker.onMessage;

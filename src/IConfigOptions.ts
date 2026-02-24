@@ -134,8 +134,6 @@ export interface IConfigOptions {
 
     logout_redirect_url?: string;
 
-    // sso_immediate_redirect is deprecated in favour of sso_redirect_options.immediate
-    sso_immediate_redirect?: boolean;
     sso_redirect_options?: ISsoRedirectOptions;
 
     custom_translations_url?: string;
@@ -160,6 +158,7 @@ export interface IConfigOptions {
     terms_and_conditions_links?: { url: string; text: string }[];
     help_url: string;
     help_encryption_url: string;
+    help_key_storage_url: string;
 
     latex_maths_delims?: {
         inline?: {

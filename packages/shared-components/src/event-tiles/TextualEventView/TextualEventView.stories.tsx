@@ -5,21 +5,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { type Meta, type StoryFn } from "@storybook/react-vite";
+import { type Meta, type StoryObj } from "@storybook/react-vite";
 
 import { TextualEventView as TextualEventComponent } from "./TextualEventView";
 import { MockViewModel } from "../../viewmodel/MockViewModel";
 
-export default {
+const meta = {
     title: "Event/TextualEvent",
     component: TextualEventComponent,
     tags: ["autodocs"],
     args: {
         vm: new MockViewModel({ content: "Dummy textual event text" }),
     },
-} as Meta<typeof TextualEventComponent>;
+} satisfies Meta<typeof TextualEventComponent>;
 
-const Template: StoryFn<typeof TextualEventComponent> = (args) => <TextualEventComponent {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};

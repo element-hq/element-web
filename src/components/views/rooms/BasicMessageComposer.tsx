@@ -29,7 +29,7 @@ import { parseEvent, parsePlainTextMessage } from "../../../editor/deserialize";
 import { renderModel } from "../../../editor/render";
 import SettingsStore from "../../../settings/SettingsStore";
 import { IS_MAC, Key } from "../../../Keyboard";
-import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
+import { CommandCategories, CommandMap, parseCommandString } from "../../../slash-commands/SlashCommands";
 import Range from "../../../editor/range";
 import MessageComposerFormatBar, { Formatting } from "./MessageComposerFormatBar";
 import type DocumentOffset from "../../../editor/offset";

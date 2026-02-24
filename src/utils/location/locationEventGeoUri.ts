@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, M_LOCATION } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, M_LOCATION, type MLocationEvent } from "matrix-js-sdk/src/matrix";
+
+type LocationEvent = { geo_uri: string } & MLocationEvent;
 
 /**
  * Find the geo-URI contained within a location event.
@@ -16,7 +18,7 @@ export const locationEventGeoUri = (mxEvent: MatrixEvent): string => {
     // events until the end of days, or until we figure out mutable
     // events - so folks can read their old chat history correctly.
     // https://github.com/matrix-org/matrix-doc/issues/3516
-    const content = mxEvent.getContent();
-    const loc = M_LOCATION.findIn(content) as { uri?: string };
+    const content = mxEvent.getContent<LocationEvent>();
+    const loc = M_LOCATION.findIn(content);
     return loc?.uri ?? content["geo_uri"];
 };

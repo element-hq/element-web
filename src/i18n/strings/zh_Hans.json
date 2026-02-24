@@ -409,7 +409,6 @@
         "email_address": "邮箱地址",
         "emoji": "表情符号",
         "encrypted": "已加密",
-        "encryption_enabled": "已启用加密",
         "error": "错误",
         "faq": "常见问答集",
         "favourites": "收藏夹",
@@ -1161,7 +1160,6 @@
         "ask_to_join": "启用 “需要验证加入请求”",
         "automatic_debug_logs": "遇到任何错误自动发送调试日志",
         "automatic_debug_logs_decryption": "自动发送有关解密错误的debug日志",
-        "automatic_debug_logs_key_backup": "当密钥备份无法运作时自动发送debug日志",
         "beta_description": "%(brand)s的下一步是什么？实验室是早期获得东西、测试新功能和在它们发布前帮助塑造的最好方式。",
         "beta_feature": "这是beta功能",
         "beta_feedback_leave_button": "要离开beta，请访问你的设置。",
@@ -2633,14 +2631,6 @@
             "continuation": "此房间是另一个对话的延续之处。",
             "see_older_messages": "点击这里以查看更早的消息。"
         },
-        "m.room.encryption": {
-            "disable_attempt": "已忽略禁用加密的尝试",
-            "disabled": "未启用加密",
-            "enabled": "这个房间里的消息是端到端加密的。当人们加入时，你可以在他们的个人资料中验证他们，只需点击他们的个人资料图片即可。",
-            "enabled_local": "此聊天中的消息会被端到端加密。",
-            "parameters_changed": "一些加密参数已更改。",
-            "unsupported": "不支持此房间使用的加密方式。"
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s 将此房间改为允许游客加入。",
             "forbidden": "%(senderDisplayName)s 将此房间改为游客禁入。",
@@ -2701,11 +2691,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s更改了%(powerLevelDiffText)s的权力级别。",
             "user_from_to": "%(userId)s 从 %(fromPowerLevel)s 变为 %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 所有服务器都已禁止参与！此房间不再可用。",
-            "changed": "%(senderDisplayName)s 为此房间更改了服务器 ACL。",
-            "set": "%(senderDisplayName)s 为此房间设置了服务器 ACL。"
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s 撤销了对 %(targetDisplayName)s 加入房间的邀请。",
@@ -2897,14 +2882,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s离开并重新加入了%(count)s次",
                 "one": "%(severalUsers)s离开并重新加入了"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s 已更改服务器访问控制列表",
-                "other": "%(oneUser)s 已更改服务器访问控制列表 %(count)s 次"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s 已更改服务器访问控制列表",
-                "other": "%(severalUsers)s 已更改服务器的访问控制列表 %(count)s 此"
             },
             "unbanned": {
                 "other": "被解封 %(count)s 次",

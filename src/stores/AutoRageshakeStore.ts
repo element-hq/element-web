@@ -85,7 +85,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    private async onDecryptionAttempt(ev: MatrixEvent): Promise<void> {
+    private onDecryptionAttempt = async (ev: MatrixEvent): Promise<void> => {
         if (!this.state.initialSyncCompleted) {
             return;
         }
@@ -143,19 +143,19 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                 new Map([[senderUserId, new Map([[messageContent.device_id, messageContent]])]]),
             );
         }
-    }
+    };
 
-    private async onSyncStateChange(
+    private onSyncStateChange = async (
         _state: SyncState,
         _prevState: SyncState | null,
         data?: SyncStateData,
-    ): Promise<void> {
+    ): Promise<void> => {
         if (!this.state.initialSyncCompleted) {
             await this.updateState({ initialSyncCompleted: !!data?.nextSyncToken });
         }
-    }
+    };
 
-    private async onDeviceMessage(ev: MatrixEvent): Promise<void> {
+    private onDeviceMessage = async (ev: MatrixEvent): Promise<void> => {
         if (ev.getType() !== AUTO_RS_REQUEST) return;
         const messageContent = ev.getContent();
         const recipientRageshake = messageContent["recipient_rageshake"] || "";
@@ -180,7 +180,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                 `Not sending sender-side autorageshake for event ${messageContent["event_id"]}/session ${messageContent["session_id"]}: last rageshake was too recent`,
             );
         }
-    }
+    };
 }
 
 window.mxAutoRageshakeStore = AutoRageshakeStore.instance;

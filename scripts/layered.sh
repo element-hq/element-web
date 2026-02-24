@@ -14,7 +14,7 @@ set -ex
 # for the primary repo (element-web in this case).
 
 # Install dependencies
-yarn install --frozen-lockfile
+pnpm install --frozen-lockfile
 
 # Pass appropriate repo to fetchdep.sh
 export PR_ORG=element-hq
@@ -24,8 +24,8 @@ export PR_REPO=element-web
 scripts/fetchdep.sh matrix-org matrix-js-sdk develop
 pushd matrix-js-sdk
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
-yarn link
-yarn install --frozen-lockfile
+pnpm link
+pnpm install --frozen-lockfile
 popd
 
 # Also set up matrix-analytics-events for branch with matching name
@@ -34,13 +34,13 @@ scripts/fetchdep.sh matrix-org matrix-analytics-events
 # This is expected as this project does not share a release cycle but we still branch match it
 if [ -d matrix-analytics-events ]; then
     pushd matrix-analytics-events
-    yarn link
-    yarn install --frozen-lockfile
-    yarn build:ts
+    pnpm link
+    pnpm install --frozen-lockfile
+    pnpm build:ts
     popd
 fi
 
 # Link the layers into element-web
-yarn link matrix-js-sdk
-[ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
-yarn install --frozen-lockfile $@
+pnpm link matrix-js-sdk
+[ -d matrix-analytics-events ] && pnpm link @matrix-org/analytics-events
+pnpm install --frozen-lockfile $@

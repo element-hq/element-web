@@ -16,7 +16,7 @@ import { createTestClient, withClientContextRenderOptions } from "../../../../..
 import { copyPlaintext } from "../../../../../../src/utils/strings";
 import Modal from "../../../../../../src/Modal";
 import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
-import DeviceListener from "../../../../../../src/DeviceListener";
+import { DeviceListener } from "../../../../../../src/device-listener";
 
 jest.mock("../../../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),

@@ -424,7 +424,6 @@
         "email_address": "Ηλεκτρονική διεύθυνση",
         "emoji": "Εικονίδια",
         "encrypted": "Κρυπτογραφημένο",
-        "encryption_enabled": "Η κρυπτογράφηση ενεργοποιήθηκε",
         "error": "Σφάλμα",
         "faq": "Συχνές ερωτήσεις",
         "favourites": "Αγαπημένα",
@@ -1220,7 +1219,6 @@
         "ask_to_join": "Ενεργοποίηση αίτησης συμμετοχής",
         "automatic_debug_logs": "Αυτόματη αποστολή αρχείων καταγραφής εντοπισμού σφαλμάτων για οποιοδήποτε σφάλμα",
         "automatic_debug_logs_decryption": "Αυτόματη αποστολή αρχείων καταγραφής εντοπισμού σφαλμάτων για σφάλματα αποκρυπτογράφησης",
-        "automatic_debug_logs_key_backup": "Αυτόματη αποστολή αρχείων καταγραφής εντοπισμού σφαλμάτων όταν η δημιουργία αντίγραφου κλειδιού ασφαλείας δεν λειτουργεί",
         "beta_feature": "Αυτή είναι μια δυνατότητα beta",
         "beta_feedback_leave_button": "Για να αποχωρήσετε από την έκδοση beta, μεταβείτε στις ρυθμίσεις σας.",
         "bridge_state": "Εμφάνιση πληροφοριών σχετικά με τις γέφυρες στις ρυθμίσεις δωματίου",
@@ -2726,12 +2724,6 @@
             "continuation": "Αυτό το δωμάτιο είναι η συνέχεια μιας άλλης συνομιλίας.",
             "see_older_messages": "Κάντε κλικ εδώ για να δείτε παλαιότερα μηνύματα."
         },
-        "m.room.encryption": {
-            "disable_attempt": "Αγνοήθηκε προσπάθεια απενεργοποίησης κρυπτογράφησης",
-            "disabled": "Η κρυπτογράφηση δεν ενεργοποιήθηκε",
-            "parameters_changed": "Ορισμένες παράμετροι κρυπτογράφησης έχουν αλλάξει.",
-            "unsupported": "Η κρυπτογράφηση που χρησιμοποιείται από αυτό το δωμάτιο δεν υποστηρίζεται."
-        },
         "m.room.guest_access": {
             "can_join": "Ο %(senderDisplayName)s επέτρεψε τους επισκέπτες να μπαίνουν στο δωμάτιο.",
             "forbidden": "Ο %(senderDisplayName)s απέτρεψε τους επισκέπτες από το να μπαίνουν στο δωμάτιο.",
@@ -2792,11 +2784,6 @@
         "m.room.power_levels": {
             "changed": "Ο %(senderName)s άλλαξε το επίπεδο δύναμης του %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s από %(fromPowerLevel)s σε %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Όλοι οι διακομιστές αποκλείστηκαν από την συμμετοχή! Αυτή η αίθουσα δεν μπορεί να χρησιμοποιηθεί πλέον.",
-            "changed": "Ο %(senderDisplayName)s άλλαξε τα ACLs του διακομιστή για αυτό το δωμάτιο.",
-            "set": "Ο %(senderDisplayName)s όρισε τα ACLs του διακομιστή για αυτό το δωμάτιο."
         },
         "m.room.third_party_invite": {
             "revoked": "Ο %(senderName)s ανακάλεσε την πρόσκληση στον %(targetDisplayName)s για να συνδεθεί στο δωμάτιο.",
@@ -2996,14 +2983,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)s έφυγαν και επανασυνδέθηκαν",
                 "other": "%(severalUsers)sέφυγε και επανασυνδέθηκε %(count)s φορές"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sάλλαξε τα ACLs του διακομιστή",
-                "other": "%(oneUser)sάλλαξε τα ACLs του διακομιστή %(count)s φορές"
-            },
-            "server_acls_multiple": {
-                "other": "%(severalUsers)sάλλαξαν τα ACLs του διακομιστή %(count)s φορές",
-                "one": "%(severalUsers)sάλλαξαν τα ACLs του διακομιστή"
             },
             "unbanned": {
                 "one": "αφαιρέθηκε η απόκλιση του",

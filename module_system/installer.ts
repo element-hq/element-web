@@ -38,7 +38,7 @@ export function installer(config: BuildConfig): void {
     let exitCode = 0;
 
     // We cheat a bit and store the current package.json and lockfile so we can safely
-    // run `yarn add` without creating extra committed files for people. We restore
+    // run `pnpm add` without creating extra committed files for people. We restore
     // these files by simply overwriting them when we're done.
     const packageDeps = readCurrentPackageDetails();
 
@@ -47,7 +47,7 @@ export function installer(config: BuildConfig): void {
     const currentOptDeps = getOptionalDepNames(packageDeps.packageJson);
 
     try {
-        // Install the modules with yarn
+        // Install the modules with pnpm
         const yarnAddRef = config.modules.join(" ");
         callYarnAdd(yarnAddRef); // install them all at once
 
@@ -108,20 +108,20 @@ type RawDependencies = {
 
 function readCurrentPackageDetails(): RawDependencies {
     return {
-        lockfile: fs.readFileSync("./yarn.lock", "utf-8"),
+        lockfile: fs.readFileSync("./pnpm-lock.yaml", "utf-8"),
         packageJson: fs.readFileSync("./package.json", "utf-8"),
     };
 }
 
 function writePackageDetails(deps: RawDependencies): void {
-    fs.writeFileSync("./yarn.lock", deps.lockfile, "utf-8");
+    fs.writeFileSync("./pnpm-lock.yaml", deps.lockfile, "utf-8");
     fs.writeFileSync("./package.json", deps.packageJson, "utf-8");
 }
 
 function callYarnAdd(dep: string): void {
     // Add the module to the optional dependencies section just in case something
     // goes wrong in restoring the original package details.
-    childProcess.execSync(`yarn add -O ${dep}`, {
+    childProcess.execSync(`pnpm add -O ${dep}`, {
         env: process.env,
         stdio: ["inherit", "inherit", "inherit"],
     });
@@ -170,7 +170,7 @@ function getTopLevelDependencyVersion(dep: string): string {
 
 function getModuleApiVersionFor(moduleName: string): string {
     // We'll just pretend that this isn't highly problematic...
-    // Yarn is fairly stable in putting modules in a flat hierarchy, at least.
+    // pnpm is fairly stable in putting modules in a flat hierarchy, at least.
     const pkgJsonStr = fs.readFileSync(`./node_modules/${moduleName}/package.json`, "utf-8");
     return findDepVersionInPackageJson(moduleApiDepName, pkgJsonStr);
 }

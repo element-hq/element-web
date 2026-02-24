@@ -59,7 +59,7 @@ export default abstract class Exporter {
         return this.makeFileNameNoExtension(SdkConfig.get().brand) + ".zip";
     }
 
-    protected onBeforeUnload(e: BeforeUnloadEvent): string {
+    protected onBeforeUnload(this: void, e: BeforeUnloadEvent): string {
         e.preventDefault();
         return (e.returnValue = _t("export_chat|unload_confirm"));
     }

@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
-import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/DeviceListener";
+import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
@@ -35,7 +35,6 @@ import { Action } from "../../src/dispatcher/actions";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
-import { UIFeature } from "../../src/settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
 
@@ -653,10 +652,8 @@ describe("DeviceListener", () => {
                 // all devices verified by default
                 mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === UIFeature.BulkUnverifiedSessionsReminder,
-                );
             });
+
             describe("bulk unverified sessions toasts", () => {
                 it("hides toast when cross signing is not ready", async () => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
@@ -669,24 +666,6 @@ describe("DeviceListener", () => {
                     await createAndStart();
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                     expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
-                });
-
-                it("hides toast when feature is disabled", async () => {
-                    // BulkUnverifiedSessionsReminder set to false
-                    jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                    // currentDevice, device2 are verified, device3 is unverified
-                    // ie if reminder was enabled it should be shown
-                    mockCrypto!.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                        switch (deviceId) {
-                            case currentDevice.deviceId:
-                            case device2.deviceId:
-                                return deviceTrustVerified;
-                            default:
-                                return deviceTrustUnverified;
-                        }
-                    });
-                    await createAndStart();
-                    expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                 });
 
                 it("hides toast when current device is unverified", async () => {
@@ -755,7 +734,7 @@ describe("DeviceListener", () => {
                         new Set<string>([device3.deviceId]),
                     );
 
-                    await instance.dismissUnverifiedSessions([device3.deviceId]);
+                    await instance.otherDevices?.dismissUnverifiedSessions([device3.deviceId]);
                     await flushPromises();
 
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();

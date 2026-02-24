@@ -15,8 +15,8 @@ import DialogButtons from "../elements/DialogButtons";
 import EmailField from "../auth/EmailField";
 
 interface IProps {
-    onFinished(continued: false, email?: undefined): void;
-    onFinished(continued: true, email: string): void;
+    onFinished(this: void, continued: false, email?: undefined): void;
+    onFinished(this: void, continued: true, email: string): void;
 }
 
 const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {

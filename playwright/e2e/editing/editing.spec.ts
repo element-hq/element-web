@@ -38,7 +38,7 @@ test.describe("Editing", () => {
     const editLastMessage = async (page: Page, edit: string) => {
         const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
         await eventTile.hover();
-        await eventTile.getByRole("button", { name: "Edit" }).click();
+        await eventTile.getByRole("button", { name: "Edit", exact: true }).click();
 
         const textbox = page.getByRole("textbox", { name: "Edit message" });
         await textbox.fill(edit);
@@ -284,7 +284,7 @@ test.describe("Editing", () => {
             await expect(tile.getByText("Message", { exact: true })).toBeVisible();
             const line = tile.locator(".mx_EventTile_line");
             await line.hover();
-            await line.getByRole("button", { name: "Edit" }).click();
+            await line.getByRole("button", { name: "Edit", exact: true }).click();
             await expect(axe).toHaveNoViolations();
             const editComposer = page.getByRole("textbox", { name: "Edit message" });
             await editComposer.pressSequentially("Foo");

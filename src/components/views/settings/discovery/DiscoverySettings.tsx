@@ -14,8 +14,6 @@ import { Alert } from "@vector-im/compound-web";
 import { getThreepidsWithBindStatus } from "../../../../boundThreepids";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { type ThirdPartyIdentifier } from "../../../../AddThreepid";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { UIFeature } from "../../../../settings/UIFeature";
 import { _t } from "../../../../languageHandler";
 import SetIdServer from "../SetIdServer";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
@@ -123,8 +121,6 @@ export const DiscoverySettings: React.FC = () => {
             } catch {}
         })();
     }, [client, getThreepidState]);
-
-    if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;
 
     if (mustAgreeToTerms && requiredPolicyInfo.policiesAndServices) {
         const intro = (

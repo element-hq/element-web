@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     roomId: string;
-    onFinished(leave: boolean): void;
+    onFinished(this: void, leave: boolean): void;
 }
 
 /*

@@ -39,6 +39,7 @@ import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
 import { ElementCallEventType } from "./call-types.ts";
+import Spoiler from "./components/views/elements/Spoiler.tsx";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -107,7 +108,7 @@ function textForMemberEvent(
     client: MatrixClient,
     allowJSX: boolean,
     showHiddenEvents?: boolean,
-): (() => string) | null {
+): (() => Renderable) | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender?.name || getRoomMemberDisplayname(client, ev);
     const targetName = ev.target?.name || getRoomMemberDisplayname(client, ev, ev.getStateKey());
@@ -133,10 +134,26 @@ function textForMemberEvent(
             }
         }
         case KnownMembership.Ban:
-            return () =>
-                reason
-                    ? _t("timeline|m.room.member|ban_reason", { senderName, targetName, reason })
-                    : _t("timeline|m.room.member|ban", { senderName, targetName });
+            if (allowJSX) {
+                return reason
+                    ? () =>
+                          _t(
+                              "timeline|m.room.member|ban_reason_spoiler",
+                              { senderName, reason },
+                              { user: () => <Spoiler>{targetName}</Spoiler> },
+                          )
+                    : () =>
+                          _t(
+                              "timeline|m.room.member|ban_spoiler",
+                              { senderName },
+                              { user: () => <Spoiler>{targetName}</Spoiler> },
+                          );
+            }
+
+            return reason
+                ? () => _t("timeline|m.room.member|ban_reason", { senderName, reason })
+                : () => _t("timeline|m.room.member|ban", { senderName });
+
         case KnownMembership.Join:
             if (prevContent && prevContent.membership === KnownMembership.Join) {
                 const modDisplayname = getModification(prevContent.displayname, content.displayname);
@@ -343,35 +360,6 @@ function textForGuestAccessEvent(ev: MatrixEvent): (() => string) | null {
                     rule: ev.getContent().guest_access,
                 });
     }
-}
-
-function textForServerACLEvent(ev: MatrixEvent): (() => string) | null {
-    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    const prevContent = ev.getPrevContent();
-    const current = ev.getContent();
-    const prev = {
-        deny: Array.isArray(prevContent.deny) ? prevContent.deny : [],
-        allow: Array.isArray(prevContent.allow) ? prevContent.allow : [],
-        allow_ip_literals: prevContent.allow_ip_literals !== false,
-    };
-
-    let getText: () => string;
-    if (prev.deny.length === 0 && prev.allow.length === 0) {
-        getText = () => _t("timeline|m.room.server_acl|set", { senderDisplayName });
-    } else {
-        getText = () => _t("timeline|m.room.server_acl|changed", { senderDisplayName });
-    }
-
-    if (!Array.isArray(current.allow)) {
-        current.allow = [];
-    }
-
-    // If we know for sure everyone is banned, mark the room as obliterated
-    if (current.allow.length === 0) {
-        return () => getText() + " " + _t("timeline|m.room.server_acl|all_servers_banned");
-    }
-
-    return getText;
 }
 
 function textForMessageEvent(ev: MatrixEvent, client: MatrixClient): (() => string) | null {
@@ -909,7 +897,6 @@ const stateHandlers: IHandlers = {
     [EventType.RoomHistoryVisibility]: textForHistoryVisibilityEvent,
     [EventType.RoomPowerLevels]: textForPowerEvent,
     [EventType.RoomPinnedEvents]: textForPinnedEvent,
-    [EventType.RoomServerAcl]: textForServerACLEvent,
     [EventType.RoomTombstone]: textForTombstoneEvent,
     [EventType.RoomJoinRules]: textForJoinRulesEvent,
     [EventType.RoomGuestAccess]: textForGuestAccessEvent,

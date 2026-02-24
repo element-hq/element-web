@@ -43,15 +43,15 @@ const GROUP_MARGIN = 24;
 
 interface IProps {
     space: Room;
-    onCreateRoomClick(ev: ButtonEvent): void;
-    onAddSubspaceClick(): void;
-    onFinished(added?: boolean): void;
+    onCreateRoomClick(this: void, ev: ButtonEvent): void;
+    onAddSubspaceClick(this: void): void;
+    onFinished(this: void, added?: boolean): void;
 }
 
 export const Entry: React.FC<{
     room: Room;
     checked: boolean;
-    onChange?(value: boolean): void;
+    onChange?(this: void, value: boolean): void;
 }> = ({ room, checked, onChange }) => {
     const id = useId();
     return (
@@ -86,7 +86,7 @@ interface IAddExistingToSpaceProps {
     footerPrompt?: ReactNode;
     filterPlaceholder: string;
     emptySelectionButton?: ReactNode;
-    onFinished(added: boolean): void;
+    onFinished(this: void, added: boolean): void;
     roomsRenderer?: Renderer;
     spacesRenderer?: Renderer;
     dmsRenderer?: Renderer;
@@ -391,7 +391,7 @@ interface ISubspaceSelectorProps {
     title: string;
     space: Room;
     value: Room;
-    onChange(space: Room): void;
+    onChange(this: void, space: Room): void;
 }
 
 export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, space, value, onChange }) => {

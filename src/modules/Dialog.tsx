@@ -20,7 +20,7 @@ const OuterDialog = <M, P extends object>({
     title: string;
     Dialog: ComponentType<DialogProps<M> & P>;
     props: P;
-    onFinished(ok: boolean, model: M | null): void;
+    onFinished(this: void, ok: boolean, model: M | null): void;
 }): JSX.Element => {
     const close = useCallback(() => onFinished(false, null), [onFinished]);
     const submit = useCallback((model: M) => onFinished(true, model), [onFinished]);

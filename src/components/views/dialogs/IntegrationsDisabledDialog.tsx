@@ -16,7 +16,7 @@ import DialogButtons from "../elements/DialogButtons";
 import { UserTab } from "./UserTab";
 
 interface IProps {
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 export const IntegrationsDisabledDialog: React.FC<IProps> = ({ onFinished }) => {

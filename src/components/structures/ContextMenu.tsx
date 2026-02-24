@@ -92,9 +92,9 @@ export interface IProps extends MenuProps {
     closeOnInteraction?: boolean;
 
     // Function to be called on menu close
-    onFinished(): void;
+    onFinished(this: void): void;
     // on resize callback
-    windowResize?(): void;
+    windowResize?(this: void): void;
 }
 
 interface IState {

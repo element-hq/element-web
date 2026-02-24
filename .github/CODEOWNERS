@@ -1,7 +1,7 @@
 *                         @element-hq/element-web-reviewers
 /.github/workflows/**     @element-hq/element-web-team
 /package.json             @element-hq/element-web-team
-/yarn.lock                @element-hq/element-web-team
+/pnpm-lock.yaml           @element-hq/element-web-team
 
 /src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
 /test/SecurityManager-test.ts                                           @element-hq/element-crypto-web-reviewers

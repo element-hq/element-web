@@ -1,0 +1,388 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<RoomListPrimaryFilters /> stories > snapshots > renders Default story 1`] = `
+<div>
+  <div
+    class="flex roomListPrimaryFilters"
+    data-testid="primary-filters"
+    style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <button
+      aria-controls="_r_0_"
+      aria-expanded="false"
+      aria-label="Expand filter list"
+      class="_icon-button_1215g_8 iconButton"
+      data-kind="secondary"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_147l5_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+    </button>
+    <div
+      aria-label="Room list filters"
+      class="flex list"
+      id="_r_0_"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Unreads
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        People
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Rooms
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Favourites
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Mentions
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Invites
+      </button>
+      <button
+        aria-hidden="true"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8 wrapping"
+        role="option"
+        tabindex="0"
+      >
+        Low priority
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowContainer story 1`] = `
+<div>
+  <div
+    style="width: 180px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
+  >
+    <div
+      class="flex roomListPrimaryFilters"
+      data-testid="primary-filters"
+      style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        aria-controls="_r_3_"
+        aria-expanded="false"
+        aria-label="Expand filter list"
+        class="_icon-button_1215g_8 iconButton"
+        data-kind="secondary"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
+      </button>
+      <div
+        aria-label="Room list filters"
+        class="flex list"
+        id="_r_3_"
+        role="listbox"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+      >
+        <button
+          aria-hidden="false"
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          People
+        </button>
+        <button
+          aria-hidden="false"
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+        <button
+          aria-hidden="true"
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8 wrapping"
+          role="option"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowWithActiveWrappingFilter story 1`] = `
+<div>
+  <div
+    style="width: 180px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
+  >
+    <div
+      class="flex roomListPrimaryFilters"
+      data-testid="primary-filters"
+      style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      <button
+        aria-controls="_r_4_"
+        aria-expanded="false"
+        aria-label="Expand filter list"
+        class="_icon-button_1215g_8 iconButton"
+        data-kind="secondary"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
+      </button>
+      <div
+        aria-label="Room list filters"
+        class="flex list"
+        id="_r_4_"
+        role="listbox"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+      >
+        <button
+          aria-selected="true"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Unreads
+        </button>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          People
+        </button>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NoFilters story 1`] = `
+<div>
+  <div
+    class="flex roomListPrimaryFilters"
+    data-testid="primary-filters"
+    style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      aria-label="Room list filters"
+      class="flex list"
+      id="_r_2_"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    />
+  </div>
+</div>
+`;
+
+exports[`<RoomListPrimaryFilters /> stories > snapshots > renders PeopleSelected story 1`] = `
+<div>
+  <div
+    class="flex roomListPrimaryFilters"
+    data-testid="primary-filters"
+    style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+  >
+    <button
+      aria-controls="_r_1_"
+      aria-expanded="false"
+      aria-label="Expand filter list"
+      class="_icon-button_1215g_8 iconButton"
+      data-kind="secondary"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_147l5_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+          />
+        </svg>
+      </div>
+    </button>
+    <div
+      aria-label="Room list filters"
+      class="flex list"
+      id="_r_1_"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Unreads
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="true"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        People
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Rooms
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Favourites
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Mentions
+      </button>
+      <button
+        aria-hidden="false"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="option"
+        tabindex="0"
+      >
+        Invites
+      </button>
+      <button
+        aria-hidden="true"
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8 wrapping"
+        role="option"
+        tabindex="0"
+      >
+        Low priority
+      </button>
+    </div>
+  </div>
+</div>
+`;

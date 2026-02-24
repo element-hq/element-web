@@ -1,5 +1,7 @@
 # @element-hq/web-shared-components
 
+[Online storybook](https://shared-components-storybook.element.dev)
+
 Shared React components library for Element Web, Aurora, Element
 modules... This package provides opinionated UI components built on top of the
 [Compound Design System](https://compound.element.io) and [Compound
@@ -14,8 +16,8 @@ When adding this library to a new project, as well as installing
 dependency:
 
 ```bash
-yarn add @element-hq/web-shared-components
-yarn add @vector-im/compound-web
+pnpm add @element-hq/web-shared-components
+pnpm add @vector-im/compound-web
 ```
 
 (This avoids problems where we end up with different versions of compound-web in the
@@ -66,7 +68,7 @@ instance should be provided as a prop.
 
 Here's a basic example:
 
-```jsx
+```tsx
 import { ViewExample } from "@element-hq/web-shared-components";
 
 function MyApp() {
@@ -97,22 +99,22 @@ function MyApp() {
 ### Prerequisites
 
 - Node.js >= 20.0.0
-- Yarn 1.22.22+
+- pnpm => 10
 
 ### Setup
 
 ```bash
 # Install dependencies
-yarn install
+pnpm install
 
 # Build the library
-yarn prepare
+pnpm prepare
 ```
 
 ### Running Storybook
 
 ```bash
-yarn storybook
+pnpm storybook
 ```
 
 ### Write components
@@ -178,27 +180,32 @@ export const Disabled: Story = {
 
 #### MVVM Component Stories
 
-For MVVM components, create a wrapper component that uses `useMockedViewModel`:
+For MVVM components, create a wrapper component that uses `useMockedViewModel` and `withViewDocs`:
 
 ```tsx
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MyComponentView, type MyComponentViewSnapshot, type MyComponentViewActions } from "./MyComponentView";
-import { useMockedViewModel } from "../../useMockedViewModel";
+import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 // Combine snapshot and actions for easier typing
 type MyComponentProps = MyComponentViewSnapshot & MyComponentViewActions;
 
-// Wrapper component that creates a mocked ViewModel
-const MyComponentViewWrapper = ({ onAction, ...rest }: MyComponentProps): JSX.Element => {
+// Wrapper component that creates a mocked ViewModel.
+// Must be a named variable (not inline) for docgen to extract its props.
+const MyComponentViewWrapperImpl = ({ onAction, ...rest }: MyComponentProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         onAction,
     });
     return <MyComponentView vm={vm} />;
 };
+// withViewDocs copies the View's JSDoc description onto the wrapper for Storybook autodocs
+const MyComponentViewWrapper = withViewDocs(MyComponentViewWrapperImpl, MyComponentView);
 
-export default {
+// Must use `satisfies` (not `as` or `: Meta`) to preserve type info for docgen
+const meta = {
     title: "Category/MyComponentView",
     component: MyComponentViewWrapper,
     tags: ["autodocs"],
@@ -209,19 +216,28 @@ export default {
         // Action properties (callbacks)
         onAction: fn(),
     },
-} as Meta<typeof MyComponentViewWrapper>;
+} satisfies Meta<typeof MyComponentViewWrapper>;
 
-const Template: StoryFn<typeof MyComponentViewWrapper> = (args) => <MyComponentViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof MyComponentViewWrapper>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const Loading = Template.bind({});
-Loading.args = {
-    isLoading: true,
+export const Loading: Story = {
+    args: {
+        isLoading: true,
+    },
 };
 ```
 
 Thanks to this approach, we can directly use primitives in the story arguments instead of a view model object.
+
+> [!IMPORTANT]
+> Three requirements must be met for snapshot field documentation to appear in Storybook's ArgTypes table:
+>
+> 1. **Named wrapper variable** — the wrapper must be assigned to a named `const` (e.g. `MyComponentViewWrapperImpl`) before being passed to `withViewDocs`, so that `react-docgen-typescript` can extract its props.
+> 2. **`withViewDocs` call** — wraps the wrapper component with the original View to copy the View's JSDoc description.
+> 3. **`satisfies Meta`** — the meta object must use `satisfies Meta<...>` (not `as Meta<...>` or `: Meta<...> =`). Type assertions and annotations erase the inferred component type that docgen relies on.
 
 #### Linking Figma Designs
 
@@ -237,7 +253,7 @@ This package uses [@storybook/addon-designs](https://github.com/storybookjs/addo
 Example with Figma integration:
 
 ```tsx
-export default {
+const meta = {
     title: "Room List/RoomListSearchView",
     component: RoomListSearchViewWrapper,
     tags: ["autodocs"],
@@ -250,10 +266,59 @@ export default {
             url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=98-1979",
         },
     },
-} as Meta<typeof RoomListSearchViewWrapper>;
+} satisfies Meta<typeof RoomListSearchViewWrapper>;
+
+export default meta;
 ```
 
 The Figma design will appear in the "Design" tab in Storybook.
+
+#### Non-UI Utility Stories
+
+For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
+
+`src/utils/humanize.stories.tsx`
+
+```tsx
+import React from "react";
+import { Markdown } from "@storybook/addon-docs/blocks";
+
+import type { Meta } from "@storybook/react-vite";
+import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
+
+const meta = {
+    title: "utils/humanize",
+    parameters: {
+        docs: {
+            page: () => (
+                <>
+                    <h1>humanize</h1>
+                    <Markdown>{humanizeTimeDoc}</Markdown>
+                </>
+            ),
+        },
+    },
+    tags: ["autodocs", "skip-test"],
+} satisfies Meta;
+
+export default meta;
+
+// Docs-only story - renders nothing but triggers autodocs
+export const Docs = {
+    render: () => null,
+};
+```
+
+> [!NOTE]
+> Be sure to include the `skip-test` tag in your utility stories to prevent them from running as visual tests.
+
+**Workflow:**
+
+1. Write TsDoc in your utility function
+2. Export the function from `src/index.ts`
+3. Run `pnpm build:doc` to generate TypeDoc markdown
+4. Create a `.stories.tsx` file importing the generated markdown
+5. The documentation appears automatically in Storybook
 
 ### Tests
 
@@ -265,7 +330,7 @@ These tests cover the logic of the components and utilities. Built with Vitest
 and React Testing Library.
 
 ```bash
-yarn test:unit
+pnpm test:unit
 ```
 
 ### Visual Regression Tests
@@ -274,7 +339,7 @@ These tests ensure the UI components render correctly.
 Built with Storybook and run under vitest using playwright.
 
 ```bash
-yarn test:storybook:update
+pnpm test:storybook:update
 ```
 
 Each story will be rendered and a screenshot will be taken and compared to the
@@ -288,11 +353,11 @@ Screenshots are located in `packages/shared-components/__vis__/`.
 
 ### Translations
 
-First see our [translation guide](../../docs/translation.md) and [translation dev guide](../../docs/translation-dev.md).
+First see our [translation guide](../../docs/translating.md) and [translation dev guide](../../docs/translating-dev.md).
 To generate translation strings for this package, run:
 
 ```bash
-yarn i18n
+pnpm i18n
 ```
 
 ## Publish a new version

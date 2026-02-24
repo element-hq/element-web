@@ -10,14 +10,13 @@ import React, { type ReactNode } from "react";
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type MessagePanel from "../MessagePanel";
-import type { WrappedEvent } from "../MessagePanel";
+import { SeparatorKind, type WrappedEvent } from "../MessagePanel";
 import { BaseGrouper } from "./BaseGrouper";
 import { hasText } from "../../../TextForEvent";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
-import { SeparatorKind } from "../../views/messages/TimelineSeparator";
 
 const groupedStateEvents = [
     EventType.RoomMember,

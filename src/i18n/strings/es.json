@@ -12,8 +12,6 @@
             "one": "1 mención sin leer."
         },
         "recent_rooms": "Salas recientes",
-        "room_messsage_not_sent": "Abrir sala %(roomName)s con un mensaje no enviado.",
-        "room_n_unread_invite": "Abrir invitación de sala %(roomName)s.",
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado de la sala",
         "seek_bar_label": "Barra de búsqueda de audio",
@@ -484,7 +482,6 @@
         "email_address": "Dirección de correo electrónico",
         "emoji": "Emoticono",
         "encrypted": "Cifrado",
-        "encryption_enabled": "El cifrado está activado",
         "error": "Error",
         "faq": "Preguntas frecuentes",
         "favourites": "Favoritos",
@@ -1275,7 +1272,6 @@
     "labs": {
         "automatic_debug_logs": "Mandar automáticamente los registros de depuración cuando ocurra cualquier error",
         "automatic_debug_logs_decryption": "Enviar los registros de depuración automáticamente de fallos al descifrar",
-        "automatic_debug_logs_key_backup": "Enviar automáticamente los registros de depuración cuando la clave de respaldo no funcione",
         "beta_description": "¿Qué novedades se esperan en %(brand)s? La sección de experimentos es la mejor manera de ver las cosas antes de que se publiquen, probar nuevas funcionalidades y ayudar a mejorarlas antes de su lanzamiento.",
         "beta_feature": "Esta funcionalidad está en beta",
         "beta_feedback_leave_button": "Para salir de la beta, ve a tus ajustes.",
@@ -2816,13 +2812,6 @@
             "continuation": "Esta sala es una continuación de otra.",
             "see_older_messages": "Haz clic aquí para ver mensajes anteriores."
         },
-        "m.room.encryption": {
-            "disable_attempt": "Se ha ignorado un intento de desactivar el cifrado",
-            "disabled": "El cifrado no está activado",
-            "enabled_local": "Los mensajes en esta conversación serán cifrados de extremo a extremo.",
-            "parameters_changed": "Algunos parámetros del cifrado han cambiado.",
-            "unsupported": "El cifrado usado por esta sala no es compatible."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s autorizó a unirse a la sala a personas todavía sin cuenta.",
             "forbidden": "%(senderDisplayName)s ha prohibido que los invitados se unan a la sala.",
@@ -2882,11 +2871,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s cambió el nivel de acceso de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 No puede participar ningún servidor. Esta sala ya no se puede usar más.",
-            "changed": "%(senderDisplayName)s cambió los permisos de la sala.",
-            "set": "%(senderDisplayName)s ha establecido los permisos de la sala."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s ha revocado la invitación para que %(targetDisplayName)s se una a la sala.",
@@ -3080,14 +3064,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s se fueron y volvieron a unirse %(count)s veces",
                 "one": "%(severalUsers)s se fueron y volvieron a unirse"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s cambió los permisos del servidor",
-                "other": "%(oneUser)s cambió los permisos del servidor %(count)s veces"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s cambió los permisos del servidor",
-                "other": "%(severalUsers)s cambió los permisos del servidor %(count)s veces"
             },
             "unbanned": {
                 "other": "se le quitó el veto %(count)s veces",

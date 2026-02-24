@@ -186,6 +186,7 @@ export function createTestClient(): MatrixClient {
         peekInRoom: jest.fn().mockResolvedValue(mkStubRoom(undefined, undefined, undefined)),
         stopPeeking: jest.fn(),
 
+        getEventTimeline: jest.fn().mockResolvedValue([]),
         paginateEventTimeline: jest.fn().mockResolvedValue(undefined),
         sendReadReceipt: jest.fn().mockResolvedValue(undefined),
         getRoomIdForAlias: jest.fn().mockResolvedValue(undefined),
@@ -351,6 +352,10 @@ export function createTestClient(): MatrixClient {
         },
         search: jest.fn().mockResolvedValue({}),
         processRoomEventsSearch: jest.fn().mockResolvedValue({ highlights: [], results: [] }),
+        invite: jest.fn(),
+        kick: jest.fn(),
+        ban: jest.fn(),
+        sendTextMessage: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

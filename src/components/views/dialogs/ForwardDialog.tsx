@@ -73,7 +73,7 @@ interface IProps {
     // We need a permalink creator for the source room to pass through to EventTile
     // in case the event is a reply (even though the user can't get at the link)
     permalinkCreator: RoomPermalinkCreator;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 interface IEntryProps<K extends keyof TimelineEvents> {
@@ -81,7 +81,7 @@ interface IEntryProps<K extends keyof TimelineEvents> {
     type: K;
     content: TimelineEvents[K];
     matrixClient: MatrixClient;
-    onFinished(success: boolean): void;
+    onFinished(this: void, success: boolean): void;
 }
 
 enum SendState {
@@ -213,7 +213,7 @@ const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; 
         // beacon pulses get transformed into static locations on forward
         M_BEACON.matches(event.getType())
     ) {
-        const timestamp = M_TIMESTAMP.findIn<number>(content);
+        const timestamp = M_TIMESTAMP.findIn<number>(content as ILocationContent);
         const geoUri = locationEventGeoUri(event);
         return {
             type,

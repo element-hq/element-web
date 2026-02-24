@@ -431,7 +431,6 @@
         "email_address": "電子郵件地址",
         "emoji": "表情符號",
         "encrypted": "開啟加密",
-        "encryption_enabled": "加密已啟用",
         "error": "錯誤",
         "faq": "常見問答集",
         "favourites": "我的最愛",
@@ -1259,7 +1258,6 @@
         "ask_to_join": "啟用要求加入",
         "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌",
         "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",
-        "automatic_debug_logs_key_backup": "金鑰備份無法運作時，自動傳送除錯紀錄檔",
         "beta_description": "%(brand)s 的下一步是什麼？實驗室是提早取得資訊、測試新功能，並在實際釋出前協助塑造它們的最佳方式。",
         "beta_feature": "這是 Beta 測試功能",
         "beta_feedback_leave_button": "請到設定頁面離開 Beta 測試版。",
@@ -2953,15 +2951,6 @@
             "unknown_predecessor": "找不到此聊天室的舊版本（聊天室 ID：%(roomId)s），且我們未提供「via_servers」來檢視它。",
             "unknown_predecessor_guess_server": "找不到此聊天室的舊版本（聊天室 ID：%(roomId)s），且我們未提供「via_servers」來檢視它。從聊天室 ID 猜測伺服器可能會有用。若您想嘗試，請點擊此連結："
         },
-        "m.room.encryption": {
-            "disable_attempt": "已忽略嘗試停用加密",
-            "disabled": "加密未啟用",
-            "enabled": "此聊天室中的訊息為端到端加密。當人們加入時，您可以在他們的個人檔案中驗證他們，點擊他們的個人檔案就可以了。",
-            "enabled_dm": "此處的訊息為端到端加密。請在其個人檔案中驗證 %(displayName)s - 點擊其個人檔案圖片。",
-            "enabled_local": "此聊天中的訊息將使用端對端加密。",
-            "parameters_changed": "部份加密參數已變更。",
-            "unsupported": "不支援此聊天室使用的加密。"
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s 已允許訪客加入聊天室。",
             "forbidden": "%(senderDisplayName)s 已拒絕訪客加入聊天室。",
@@ -3022,11 +3011,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s 變更了 %(powerLevelDiffText)s 權限等級。",
             "user_from_to": "%(userId)s 從 %(fromPowerLevel)s 變為 %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 所有伺服器都已被封鎖！ 這間聊天室無法使用。",
-            "changed": "%(senderDisplayName)s 已為此聊天室更改伺服器的存取控制列表。",
-            "set": "%(senderDisplayName)s 已為此聊天室設置伺服器的存取控制列表。"
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s 撤銷了對 %(targetDisplayName)s 加入此聊天室的邀請。",
@@ -3228,14 +3212,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s 離開並重新加入了 %(count)s 次",
                 "one": "%(severalUsers)s 離開並重新加入了"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s 變更了伺服器 ACL",
-                "other": "%(oneUser)s 變更了伺服器 ACL %(count)s 次"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s 變更了伺服器 ACL",
-                "other": "%(severalUsers)s 變更了伺服器 ACL %(count)s 次"
             },
             "unbanned": {
                 "other": "被取消阻擋了 %(count)s 次",

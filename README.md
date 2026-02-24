@@ -116,14 +116,14 @@ instead of adding that last line.
 Element is a modular webapp built with modern ES6 and uses a Node.js build system.
 Ensure you have the latest LTS version of Node.js installed.
 
-Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
+Using `pnpm` instead of `npm` is recommended. Please see the pnpm [install
+guide](https://pnpm.io/installation#using-corepack) if you do not have it already.
 
 1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
-1. Install `yarn` if not present already.
+1. Install `pnpm` if not present already.
 1. Clone the repo: `git clone https://github.com/element-hq/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
-1. Install the prerequisites: `yarn install`.
+1. Install the prerequisites: `pnpm install`.
     - If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
       environment](./developer_guide.md#setting-up-a-dev-environment) below). Alternatively, you
@@ -131,11 +131,11 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
       the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it. See the [configuration docs](docs/config.md) for details.
-1. `yarn dist` to build a tarball to deploy. Untaring this file will give
+1. `pnpm dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
 
-Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
+Note that `pnpm dist` is not supported on Windows, so Windows users can run `pnpm build`,
 which will build all the necessary files into the `webapp` directory. The version of Element
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your web server to actually serve up the app, which is
@@ -225,3 +225,6 @@ This software is multi licensed by New Vector Ltd (Element). It can be used eith
 
 (3) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to).
 Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.
+
+Please contact [licensing@element.io](mailto:licensing@element.io) to purchase
+an Element commercial license for this software.

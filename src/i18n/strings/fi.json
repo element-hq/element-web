@@ -12,7 +12,6 @@
             "one": "Yksi lukematon maininta."
         },
         "recent_rooms": "Viimeisimmät huoneet",
-        "room_n_unread_invite": "Avaa huoneen %(roomName)s kutsu.",
         "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
@@ -457,7 +456,6 @@
         "email_address": "Sähköpostiosoite",
         "emoji": "Emoji",
         "encrypted": "Salattu",
-        "encryption_enabled": "Salaus käytössä",
         "error": "Virhe",
         "faq": "Usein kysytyt kysymykset",
         "favourites": "Suosikit",
@@ -1414,8 +1412,7 @@
         "mentions_and_keywords_description": "Vastaanota ilmoitukset maininnoista ja asiasanoista <a>asetuksissa</a> määrittämälläsi tavalla",
         "mentions_keywords": "Maininnat ja avainsanat",
         "message_didnt_send": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
-        "mute_description": "Et saa ilmoituksia",
-        "mute_room": "Mykistä huone"
+        "mute_description": "Et saa ilmoituksia"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s pyytää varmennusta"
@@ -1760,22 +1757,8 @@
         "add_space_label": "Lisää avaruus",
         "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
         "breadcrumbs_label": "Hiljattain vieraillut huoneet",
-        "empty": {
-            "no_chats": "Ei keskusteluja vielä",
-            "no_chats_description": "Aloita lähettämällä viestejä jollekin henkilölle tai luomalla huone",
-            "no_chats_description_no_room_rights": "Aloita lähettämällä viesti jollekin",
-            "no_favourites": "Sinulla ei ole vielä suosikkikeskustelua",
-            "no_rooms": "Et ole vielä missään huoneessa",
-            "no_unread": "Onnittelut! Sinulla ei ole lukemattomia viestejä",
-            "show_chats": "Näytä kaikki keskustelut"
-        },
         "failed_add_tag": "Tagin %(tagName)s lisääminen huoneeseen epäonnistui",
         "failed_remove_tag": "Tagin %(tagName)s poistaminen huoneesta epäonnistui",
-        "filters": {
-            "favourite": "Suosikit",
-            "people": "Ihmiset",
-            "rooms": "Huoneet"
-        },
         "home_menu_label": "Etusivun valinnat",
         "join_public_room_label": "Liity julkiseen huoneeseen",
         "joining_rooms_status": {
@@ -1784,18 +1767,12 @@
         },
         "list_title": "Huoneluettelo",
         "more_options": {
-            "copy_link": "Kopioi huoneen linkki",
-            "leave_room": "Poistu huoneesta",
-            "mark_read": "Merkitse luetuksi",
-            "mark_unread": "Merkitse lukemattomaksi"
+            "leave_room": "Poistu huoneesta"
         },
         "notification_options": "Ilmoitusasetukset",
         "redacting_messages_status": {
             "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
             "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
-        },
-        "room": {
-            "open_room": "Avoin huone %(roomName)s"
         },
         "show_less": "Näytä vähemmän",
         "show_n_more": {
@@ -2928,14 +2905,6 @@
             "continuation": "Tämä huone on jatkumo toisesta keskustelusta.",
             "see_older_messages": "Napsauta tästä nähdäksesi vanhemmat viestit."
         },
-        "m.room.encryption": {
-            "disable_attempt": "Ohitettu yritys poistaa salaus käytöstä",
-            "disabled": "Salaus pois käytöstä",
-            "enabled_dm": "Viestit ovat päästä päähän salattuja. Vahvista käyttäjä %(displayName)s hänen  profiilissaan - napauta hänen profiilikuvaa.",
-            "enabled_local": "Tässä keskustelussa olevat viestit salataan päästä päähän.",
-            "parameters_changed": "Joitakin salausparametreja on muutettu.",
-            "unsupported": "Tämän huoneen käyttämää salausta ei tueta."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s salli vieraiden liittyvän huoneeseen.",
             "forbidden": "%(senderDisplayName)s on estänyt vieraiden liittymisen huoneeseen.",
@@ -2997,11 +2966,6 @@
             "changed": "%(senderName)s muutti %(powerLevelDiffText)s:n oikeustasoa.",
             "user_from_to": "%(userId)s tasolta %(fromPowerLevel)s tasolle %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "Kaikki palvelimet ovat saaneet porttikiellon huoneeseen! Tätä huonetta ei voi enää käyttää.",
-            "changed": "%(senderDisplayName)s muutti tämän huoneen palvelinten pääsynvalvontalistaa.",
-            "set": "%(senderDisplayName)s loi tämän huoneen palvelinten pääsynvalvontalistan."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s kumosi henkilön %(targetDisplayName)s kutsun liittyä tähän huoneeseen.",
             "sent": "%(senderName)s kutsui käyttäjän %(targetDisplayName)s liittymään huoneeseen."
@@ -3033,8 +2997,6 @@
             "label": "Viestitoiminnot",
             "view_in_room": "Näytä huoneessa"
         },
-        "message_timestamp_received_at": "Vastaanotettu: %(dateTime)s",
-        "message_timestamp_sent_at": "Lähetetty: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s muutti estosääntöä muodosta %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
             "changed_rule_rooms": "%(senderName)s muutti sääntöä, joka esti huoneita säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",

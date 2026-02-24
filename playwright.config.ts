@@ -6,22 +6,34 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defineConfig, devices } from "@playwright/test";
+import {
+    defineConfig,
+    devices,
+    type Project,
+    type PlaywrightTestOptions,
+    type PlaywrightWorkerOptions,
+} from "@playwright/test";
 
 import { type WorkerOptions } from "./playwright/services";
 
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
-const chromeProject = {
+const chromeProject: Project<PlaywrightTestOptions, WorkerOptions & PlaywrightWorkerOptions>["use"] = {
     ...devices["Desktop Chrome"],
     channel: "chromium",
     permissions: ["clipboard-write", "clipboard-read", "microphone"],
     launchOptions: {
         args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
     },
+    connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
+        ? {
+              wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
+              exposeNetwork: "<loopback>",
+          }
+        : undefined,
 };
 
-export default defineConfig<WorkerOptions>({
+export default defineConfig<{}, WorkerOptions>({
     projects: [
         {
             name: "Chrome",
@@ -79,7 +91,7 @@ export default defineConfig<WorkerOptions>({
         trace: "on-first-retry",
     },
     webServer: {
-        command: process.env.CI ? "npx serve -p 8080 -L ./webapp" : "yarn start",
+        command: process.env.CI ? "npx serve -p 8080 -L ./webapp" : "pnpm start",
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,
         timeout: (process.env.CI ? 30 : 120) * 1000,
@@ -91,6 +103,7 @@ export default defineConfig<WorkerOptions>({
     retries: process.env.CI ? 2 : 0,
     reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
     snapshotDir: "playwright/snapshots",
-    snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
+    // When running the browser in docker, set the platform to `linux` as that is the platform where the browser is running
+    snapshotPathTemplate: `{snapshotDir}/{testFilePath}/{arg}-${process.env.PW_TEST_CONNECT_WS_ENDPOINT ? "linux" : "{platform}"}{ext}`,
     forbidOnly: !!process.env.CI,
 });

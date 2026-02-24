@@ -373,7 +373,6 @@
         "email_address": "Tölvupóstfang",
         "emoji": "Tjáningartáknmynd",
         "encrypted": "Dulritað",
-        "encryption_enabled": "Dulritun virk",
         "error": "Villa",
         "faq": "Algengar spurningar",
         "favourites": "Eftirlæti",
@@ -1052,7 +1051,6 @@
     "labs": {
         "automatic_debug_logs": "Senda atvikaskrár sjálfkrafa við allar villur",
         "automatic_debug_logs_decryption": "Senda atvikaskrár sjálfkrafa við afkóðunarvillur",
-        "automatic_debug_logs_key_backup": "Senda atvikaskrár sjálfkrafa þegar öryggisafrit dulritunarlykla virkar ekki",
         "beta_description": "Hvað er væntanlegt í %(brand)s? Að taka þátt í tilraunum gefur færi á að sjá nýja hluti fyrr, prófa nýja eiginleika og vera með í að móta þá áður en þeir fara í almenna notkun.",
         "beta_feature": "Þetta er beta-prófunareiginleiki",
         "beta_feedback_leave_button": "Til að hætta í beta-prófunarútgáfunni, skaltu fara í stillingarnar þínar.",
@@ -2416,12 +2414,6 @@
             "continuation": "Þessi spjallrás er framhald af öðru samtali.",
             "see_older_messages": "Smelltu hér til að sjá eldri skilaboð."
         },
-        "m.room.encryption": {
-            "disable_attempt": "Hunsaði tilraun til að gera dulritun óvirka",
-            "disabled": "Dulritun ekki virk",
-            "enabled_local": "Skilaboð í þessu spjalli verða enda-í-enda dulrituð.",
-            "unsupported": "Dulritunin sem notuð er í þessari spjallrás er ekki studd."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s hefur leyft gestum að koma inn á spjallrásina.",
             "forbidden": "%(senderDisplayName)s hefur bannað gestum að koma inn á spjallrásina.",
@@ -2480,11 +2472,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s breytti völdum %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s úr %(fromPowerLevel)s í %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Öllum netþjónum er núna bannað að taka þátt! Þessa spjallrás er ekki lengur hægt að nota.",
-            "changed": "%(senderDisplayName)s breytti ACL á netþjóni fyrir þessa spjallrás.",
-            "set": "%(senderDisplayName)s stillti ACL á netþjóni fyrir þessa spjallrás."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s afturkallaði boð til %(targetDisplayName)s um þátttöku í spjallrásinni.",

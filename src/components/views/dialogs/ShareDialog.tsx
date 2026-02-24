@@ -56,7 +56,7 @@ interface BaseProps {
     /**
      * A function that is called when the dialog is dismissed
      */
-    onFinished(): void;
+    onFinished(this: void): void;
     /**
      * An optional string to use as the dialog title.
      * If not provided, an appropriate title for the target type will be used.

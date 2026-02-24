@@ -12,18 +12,6 @@
             "one": "1 непрочитана згадка."
         },
         "recent_rooms": "Недавні кімнати",
-        "room_messsage_not_sent": "Відкрити кімнату %(roomName)s з не надісланим повідомленням.",
-        "room_n_unread_invite": "Відкрити запрошення кімнати %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Відкрити кімнату %(roomName)s з 1 непрочитаним повідомленням.",
-            "few": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними повідомленнями.",
-            "many": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними повідомленнями."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Відкрити кімнату %(roomName)s з 1 непрочитаною згадкою.",
-            "few": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними згадками.",
-            "many": "Відкрити кімнату %(roomName)s з %(count)s непрочитаними згадками."
-        },
         "room_name": "Кімната %(name)s",
         "room_status_bar": "Панель стану кімнати",
         "seek_bar_label": "Панель гортання аудіо",
@@ -494,7 +482,6 @@
         "email_address": "Адреса е-пошти",
         "emoji": "Емодзі",
         "encrypted": "Зашифроване",
-        "encryption_enabled": "Шифрування увімкнено",
         "error": "Помилка",
         "faq": "ЧаПи",
         "favourites": "Вибрані",
@@ -1507,7 +1494,6 @@
         "ask_to_join": "Увімкнути запити на приєднання",
         "automatic_debug_logs": "Автоматично надсилати журнал зневадження про всі помилки",
         "automatic_debug_logs_decryption": "Автоматично надсилати журнали зневадження при збоях розшифрування",
-        "automatic_debug_logs_key_backup": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів",
         "beta_description": "Що далі для %(brand)s? Експериментальні — це найкращий спосіб спробувати функції на ранній стадії розробки, протестувати їх і допомогти сформувати їх до фактичного запуску.",
         "beta_feature": "Це бета-можливість",
         "beta_feedback_leave_button": "Щоб вийти з бета-тестування, перейдіть до налаштувань.",
@@ -1716,7 +1702,6 @@
         "class_global": "Глобально",
         "class_other": "Інше",
         "default": "Типовий",
-        "default_settings": "Згідно з усталеними налаштуваннями",
         "email_pusher_app_display_name": "Сповіщення е-поштою",
         "enable_prompt_toast_description": "Увімкнути сповіщення стільниці",
         "enable_prompt_toast_title": "Сповіщення",
@@ -1735,8 +1720,7 @@
         "mentions_and_keywords_description": "Отримувати лише вказані у ваших <a>налаштуваннях</a> згадки й ключові слова",
         "mentions_keywords": "Згадки та ключові слова",
         "message_didnt_send": "Повідомлення не надіслане. Натисніть, щоб дізнатись більше.",
-        "mute_description": "Ви не отримуватимете жодних сповіщень",
-        "mute_room": "Вимкнути сповіщення кімнати"
+        "mute_description": "Ви не отримуватимете жодних сповіщень"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s робить запит на звірення"
@@ -2152,37 +2136,9 @@
         "add_space_label": "Додати простір",
         "breadcrumbs_empty": "Немає недавно відвіданих кімнат",
         "breadcrumbs_label": "Недавно відвідані кімнати",
-        "collapse_filters": "Згорнути список фільтрів",
-        "empty": {
-            "no_chats": "Ще немає бесід",
-            "no_chats_description": "Почніть користування, надіславши комусь повідомлення або створивши кімнату",
-            "no_chats_description_no_room_rights": "Розпочніть користування, написавши комусь повідомлення",
-            "no_favourites": "У вас ще немає обраних бесід",
-            "no_favourites_description": "Ви можете додати бесіду до обраних у її налаштуваннях",
-            "no_invites": "У вас немає непрочитаних запрошень",
-            "no_lowpriority": "У вас немає неважливих кімнат",
-            "no_mentions": "У вас немає непрочитаних згадок",
-            "no_people": "У вас ще немає особистих бесід",
-            "no_people_description": "Ви можете очистити фільтри, щоб побачити інші ваші бесіди",
-            "no_rooms": "Ви ще не входили до кімнат",
-            "no_rooms_description": "Ви можете очистити фільтри, щоб побачити інші ваші бесіди",
-            "no_unread": "Вітаємо! У вас немає непрочитаних повідомлень",
-            "show_activity": "Переглянути всю діяльність",
-            "show_chats": "Показати всі бесіди"
-        },
-        "expand_filters": "Розгорнути список фільтрів",
         "failed_add_tag": "Не вдалось додати до кімнати мітку %(tagName)s",
         "failed_remove_tag": "Не вдалося прибрати з кімнати мітку %(tagName)s",
         "failed_set_dm_tag": "Не вдалося встановити мітку особистого повідомлення",
-        "filters": {
-            "favourite": "Обрані",
-            "invites": "Запрошення",
-            "low_priority": "Неважливі",
-            "mentions": "Згадування",
-            "people": "Люди",
-            "rooms": "Кімнати",
-            "unread": "Непрочитані"
-        },
         "home_menu_label": "Параметри домівки",
         "join_public_room_label": "Приєднатись до загальнодоступної кімнати",
         "joining_rooms_status": {
@@ -2191,22 +2147,12 @@
         },
         "list_title": "Список кімнат",
         "more_options": {
-            "copy_link": "Копіювати посилання на кімнату",
-            "favourited": "Обране",
-            "leave_room": "Вийти з кімнати",
-            "low_priority": "Неважливі",
-            "mark_read": "Позначити прочитаним",
-            "mark_unread": "Позначити непрочитаним"
+            "leave_room": "Вийти з кімнати"
         },
         "notification_options": "Параметри сповіщень",
-        "primary_filters": "Фільтри списку кімнат",
         "redacting_messages_status": {
             "one": "Триває видалення повідомлень в %(count)s кімнаті",
             "other": "Триває видалення повідомлень у %(count)s кімнатах"
-        },
-        "room": {
-            "more_options": "Інші опції",
-            "open_room": "Відкрити кімнату %(roomName)s"
         },
         "show_less": "Згорнути",
         "show_n_more": {
@@ -3507,15 +3453,6 @@
             "unknown_predecessor": "Не можемо знайти стару версію цієї кімнати (ідентифікатор кімнати: %(roomId)s), а нам не було надано 'via_servers', щоб знайти її.",
             "unknown_predecessor_guess_server": "Не можемо знайти стару версію цієї кімнати (ідентифікатор кімнати: %(roomId)s), а нам не було надано 'via_servers', щоб знайти її. Можливо, вам вдасться вгадати сервер за ID кімнати. Якщо ви хочете спробувати, натисніть на це посилання:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Знехтувані спроби вимкнути шифрування",
-            "disabled": "Шифрування не ввімкнено",
-            "enabled": "Повідомлення в цій кімнаті наскрізно зашифровані. Коли люди приєднуються, ви можете перевірити їх у їхньому профілі, просто торкнувшись зображення профілю.",
-            "enabled_dm": "Повідомлення тут наскрізно зашифровані. Перевірте %(displayName)s у їхньому профілі - торкніться їхнього зображення профілю.",
-            "enabled_local": "Повідомлення в цій бесіді будуть захищені наскрізним шифруванням.",
-            "parameters_changed": "Деякі параметри шифрування змінилися.",
-            "unsupported": "Шифрування, використане цією кімнатою не підтримується."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s дозволяє гостям приєднуватися до кімнати.",
             "forbidden": "%(senderDisplayName)s забороняє гостям приєднуватися до кімнати.",
@@ -3578,11 +3515,6 @@
             "changed": "%(senderName)s змінює рівень повноважень %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s з %(fromPowerLevel)s до %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Всім серверам заборонено доступ до кімнати! Нею більше не можна користуватися.",
-            "changed": "%(senderDisplayName)s змінює серверні права доступу для цієї кімнати.",
-            "set": "%(senderDisplayName)s встановлює серверні права доступу для цієї кімнати."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s відкликає запрошення %(targetDisplayName)s приєднання до кімнати.",
             "sent": "%(senderName)s надсилає запрошення %(targetDisplayName)s приєднатися до кімнати."
@@ -3614,8 +3546,6 @@
             "label": "Дії з повідомленням",
             "view_in_room": "Дивитися в кімнаті"
         },
-        "message_timestamp_received_at": "Отримано: %(dateTime)s",
-        "message_timestamp_sent_at": "Надіслано: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s змінює правило блокування зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
             "changed_rule_rooms": "%(senderName)s змінює правило блокування кімнат зі збігу з %(oldGlob)s на збіг з %(newGlob)s через %(reason)s",
@@ -3798,14 +3728,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)sвиходять і повертаються",
                 "other": "%(severalUsers)sвиходять і повертаються %(count)s разів"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sзмінює серверні права доступу",
-                "other": "%(oneUser)sзмінює серверні права доступу %(count)s разів"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sзмінює серверні права доступу",
-                "other": "%(severalUsers)sзмінює серверні права доступу %(count)s разів"
             },
             "unbanned": {
                 "other": "розблоковано %(count)s разів",

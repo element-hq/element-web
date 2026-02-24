@@ -349,7 +349,6 @@
         "email_address": "Retpoŝtadreso",
         "emoji": "Mienetoj",
         "encrypted": "Ĉifrata",
-        "encryption_enabled": "Ĉifrado estas ŝaltita",
         "error": "Eraro",
         "faq": "Oftaj demandoj",
         "favourites": "Elstarigitaj",
@@ -2133,12 +2132,6 @@
             "continuation": "Ĉi tiu ĉambro estas daŭrigo de alia interparolo.",
             "see_older_messages": "Klaku ĉi tien por vidi pli malnovajn mesaĝojn."
         },
-        "m.room.encryption": {
-            "disable_attempt": "Malatentis provon malŝalti ĉifradon",
-            "disabled": "Ĉifrado ne estas ŝaltita",
-            "parameters_changed": "Ŝanĝiĝis iuj parametroj de ĉifrado.",
-            "unsupported": "La ĉifro uzata de ĉi tiu ĉambro ne estas subtenata."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s permesis al gastoj aliĝi al la ĉambro.",
             "forbidden": "%(senderDisplayName)s malpermesis al gastoj aliĝi al la ĉambro.",
@@ -2197,11 +2190,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s ŝanĝis la povnivelon de %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s de %(fromPowerLevel)s al %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Ĉiuj serviloj estas forbaritaj de partoprenado! La ĉambro ne plu povas esti uzata.",
-            "changed": "%(senderDisplayName)s ŝanĝis la servilblokajn listojn por ĉi tiu ĉambro.",
-            "set": "%(senderDisplayName)s agordis la servilblokajn listojn por ĉi tiu ĉambro."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s nuligis inviton en la ĉambron por %(targetDisplayName)s.",
@@ -2347,14 +2335,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s%(count)s-foje foriris kaj re-aliĝis",
                 "one": "%(severalUsers)s foriris kaj re-aliĝis"
-            },
-            "server_acls": {
-                "one": "%(oneUser)s ŝanĝis la servilblokajn listojn",
-                "other": "%(oneUser)s ŝanĝis la servilblokajn listojn %(count)s-foje"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)s ŝanĝis la servilblokajn listojn",
-                "other": "%(severalUsers)s ŝanĝis la servilblokajn listojn %(count)s-foje"
             },
             "unbanned": {
                 "other": "%(count)s-foje malforbariĝis",

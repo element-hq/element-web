@@ -12,18 +12,6 @@
             "one": "1 непрочитанное упоминание."
         },
         "recent_rooms": "Недавние комнаты",
-        "room_messsage_not_sent": "Открыть комнату %(roomName)s с неотправленным сообщением.",
-        "room_n_unread_invite": "Открыть приглашение в комнату %(roomName)s.",
-        "room_n_unread_messages": {
-            "one": "Открыть комнату %(roomName)s с 1 непрочитанным сообщением.",
-            "few": "Открыть комнату %(roomName)s с %(count)s непрочитанными сообщениями.",
-            "many": "Открыть комнату %(roomName)s с %(count)s непрочитанными сообщениями."
-        },
-        "room_n_unread_messages_mentions": {
-            "one": "Открыть комнату %(roomName)s с 1 непрочитанным упоминанием.",
-            "few": "Открыть комнату %(roomName)s с %(count)s непрочитанными упоминаниями.",
-            "many": "Открыть комнату %(roomName)s с %(count)s непрочитанными упоминаниями."
-        },
         "room_name": "Комната %(name)s",
         "room_status_bar": "Строка состояния комнаты",
         "seek_bar_label": "Панель поиска аудио",
@@ -494,7 +482,6 @@
         "email_address": "Электронная почта",
         "emoji": "Смайлы",
         "encrypted": "Зашифровано",
-        "encryption_enabled": "Шифрование включено",
         "error": "Ошибка",
         "faq": "Часто задаваемые вопросы",
         "favourites": "Избранные",
@@ -1508,7 +1495,6 @@
         "ask_to_join": "Включить запрос на присоединение",
         "automatic_debug_logs": "Автоматическая отправка журналов отладки при любой ошибке",
         "automatic_debug_logs_decryption": "Автоматическая отправка журналов отладки при ошибках расшифровки",
-        "automatic_debug_logs_key_backup": "Автоматически отправлять журналы отладки, когда резервное копирование ключей не работает",
         "beta_description": "Что нового в %(brand)s? Labs — это лучший способ получить и испытать новые функции, помогая сформировать их перед выходом в свет.",
         "beta_feature": "Это бета-функция",
         "beta_feedback_leave_button": "Чтобы выйти из бета-версии, зайдите в настройки.",
@@ -1717,7 +1703,6 @@
         "class_global": "Глобально",
         "class_other": "Другие",
         "default": "По умолчанию",
-        "default_settings": "Соответствует настройкам по умолчанию",
         "email_pusher_app_display_name": "Уведомления по электронной почте",
         "enable_prompt_toast_description": "Включить уведомления на рабочем столе",
         "enable_prompt_toast_title": "Уведомления",
@@ -1736,8 +1721,7 @@
         "mentions_and_keywords_description": "Получать уведомления только по упоминаниям и ключевым словам, установленным в ваших <a>настройках</a>",
         "mentions_keywords": "Упоминания и ключевые слова",
         "message_didnt_send": "Сообщение не отправлено. Нажмите для получения информации.",
-        "mute_description": "Вы не будете получать никаких уведомлений",
-        "mute_room": "Заглушить комнату"
+        "mute_description": "Вы не будете получать никаких уведомлений"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s запрашивает проверку"
@@ -2148,37 +2132,9 @@
         "add_space_label": "Добавить пространство",
         "breadcrumbs_empty": "Нет недавно посещенных комнат",
         "breadcrumbs_label": "Недавно посещённые комнаты",
-        "collapse_filters": "Свернуть список фильтров",
-        "empty": {
-            "no_chats": "Пока нет доступных чатов",
-            "no_chats_description": "Начните с отправки сообщений или создания комнаты",
-            "no_chats_description_no_room_rights": "Начните переписку с отправки сообщения",
-            "no_favourites": "У вас пока нет чатов в Избранное",
-            "no_favourites_description": "Вы можете добавить в Избранное в настройках чата",
-            "no_invites": "У вас нет непрочитанных приглашений",
-            "no_lowpriority": "У вас нет комнат с низким приоритетом",
-            "no_mentions": "У вас нет непрочитанных упоминаний",
-            "no_people": "У вас пока нет личных чатов",
-            "no_people_description": "Вы можете убрать фильтры, чтобы увидеть другие ваши чаты",
-            "no_rooms": "Вы еще не находитесь ни в одной комнате",
-            "no_rooms_description": "Вы можете убрать фильтры, чтобы увидеть другие ваши чаты",
-            "no_unread": "Поздравляю! У вас нет непрочитанных сообщений",
-            "show_activity": "Посмотреть всю активность",
-            "show_chats": "Показать все чаты"
-        },
-        "expand_filters": "Развернуть список фильтров",
         "failed_add_tag": "Не удалось добавить тег %(tagName)s в комнату",
         "failed_remove_tag": "Не удалось удалить тег %(tagName)s из комнаты",
         "failed_set_dm_tag": "Не удалось установить метку личного сообщения",
-        "filters": {
-            "favourite": "Избранное",
-            "invites": "Приглашения",
-            "low_priority": "Низкий приоритет",
-            "mentions": "Упоминания",
-            "people": "Люди",
-            "rooms": "Комнаты",
-            "unread": "Непрочитанные"
-        },
         "home_menu_label": "Параметры раздела \"Главная\"",
         "join_public_room_label": "Присоединиться к публичной комнате",
         "joining_rooms_status": {
@@ -2187,22 +2143,12 @@
         },
         "list_title": "Список комнат",
         "more_options": {
-            "copy_link": "Скопировать ссылку на комнату",
-            "favourited": "Избранное",
-            "leave_room": "Покинуть комнату",
-            "low_priority": "Низкий приоритет",
-            "mark_read": "Отметить как прочитанное",
-            "mark_unread": "Отметить как непрочитанное"
+            "leave_room": "Покинуть комнату"
         },
         "notification_options": "Настройки уведомлений",
-        "primary_filters": "Фильтры комнат",
         "redacting_messages_status": {
             "one": "Удаляются сообщения в %(count)s комнате",
             "other": "Удаляются сообщения в %(count)s комнатах"
-        },
-        "room": {
-            "more_options": "Дополнительные параметры",
-            "open_room": "Открыть комнату %(roomName)s"
         },
         "show_less": "Показать меньше",
         "show_n_more": {
@@ -3516,15 +3462,6 @@
             "unknown_predecessor": "Не удалось найти старую версию этой комнаты (идентификатор комнаты:%(roomId)s) или нам не предоставили «via_servers» для ее поиска.",
             "unknown_predecessor_guess_server": "Не удалось найти старую версию этой комнаты (идентификатор комнаты:%(roomId)s) или нам не предоставили «via_servers» для ее поиска. Вполне возможно, что угадать сервер по идентификатору комнаты получится. Если вы хотите попробовать, нажмите на эту ссылку:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Игнорируемая попытка отключить шифрование",
-            "disabled": "Шифрование не включено",
-            "enabled": "Сообщения в этой комнате полностью зашифрованы. Когда пользователи присоединяются, вы можете подтвердить их в их профиле, просто нажав на изображение профиля.",
-            "enabled_dm": "Сообщения полностью зашифрованы. Подтвердите %(displayName)s данные в профиле пользователя — нажмите на его изображение профиля.",
-            "enabled_local": "Сообщения в этой переписке будут защищены сквозным шифрованием.",
-            "parameters_changed": "Некоторые параметры шифрования были изменены.",
-            "unsupported": "Шифрование этой комнаты не поддерживается."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s разрешил(а) гостям входить в комнату.",
             "forbidden": "%(senderDisplayName)s запретил(а) гостям входить в комнату.",
@@ -3587,11 +3524,6 @@
             "changed": "%(senderName)s изменил(а) уровни прав %(powerLevelDiffText)s.",
             "user_from_to": "для %(userId)s с %(fromPowerLevel)s на %(toPowerLevel)s"
         },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Все серверы запрещены к участию! Эта комната больше не может быть использована.",
-            "changed": "%(senderDisplayName)s изменил(а) серверные разрешения для этой комнаты.",
-            "set": "%(senderDisplayName)s устанавливает серверные разрешения для этой комнаты."
-        },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s отозвал/а приглашение %(targetDisplayName)s присоединиться к комнате.",
             "sent": "%(senderName)s пригласил(а) %(targetDisplayName)s в комнату."
@@ -3623,8 +3555,6 @@
             "label": "Сообщение действий",
             "view_in_room": "Просмотреть в комнате"
         },
-        "message_timestamp_received_at": "Получено в: %(dateTime)s",
-        "message_timestamp_sent_at": "Отправлено в: %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s обновил(а) правило блокировки по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
             "changed_rule_rooms": "%(senderName)s изменил(а) правило блокировки комнат по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
@@ -3801,14 +3731,6 @@
             "rejoined_multiple": {
                 "other": "%(severalUsers)s покинули и снова присоединились %(count)s раз(а)",
                 "one": "%(severalUsers)s покинули и снова присоединились"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sизменил(а) разрешения сервера",
-                "other": "%(oneUser)sизменил(а) разрешения сервера %(count)s раз(а)"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sизменили разрешения сервера",
-                "other": "%(severalUsers)sизменили разрешения сервера %(count)s раз(а)"
             },
             "unbanned": {
                 "other": "разблокирован(а) %(count)s раз(а)",

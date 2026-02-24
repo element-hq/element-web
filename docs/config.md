@@ -160,7 +160,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
 20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-21. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
+21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
+22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -249,7 +250,7 @@ Together, the options might look like this in your config:
 Note that `index.html` also has an og:image meta tag that is set to an image hosted on element.io. This is the image used if
 links to your copy of Element appear in some websites like Facebook, and indeed Element itself. This has to be static in the HTML
 and an absolute URL (and HTTP rather than HTTPS), so it's not possible for this to be an option in config.json. If you'd like to
-change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`. Alternatively, you can edit
+change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" pnpm build`. Alternatively, you can edit
 the `og:image` meta tag in `index.html` directly each time you download a new version of Element.
 
 ## SSO setup
@@ -259,7 +260,7 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
 1. `logout_redirect_url`: Optional URL to redirect the user to after they have logged out. Some SSO systems support a page that the
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
-   all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
+   all unauthenticated users will be automatically redirected to the SSO/OIDC system to start their login. If instead you'd only like to
    have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
    redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
@@ -274,8 +275,6 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
 
 ## Native OIDC
-
-Native OIDC support is currently in labs and is subject to change.
 
 Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
 Issuer must have a trailing forward slash. As an example:
@@ -581,8 +580,6 @@ Currently, the following UI feature flags are supported:
   This should only be used if the room history visibility options are managed by the server.
 - `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
   timeline for recent messages. When false day dates will be used.
-- `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
-  to true.
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 - `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
 - `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.

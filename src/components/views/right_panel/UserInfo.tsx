@@ -192,7 +192,7 @@ interface IProps {
     user: Member;
     room?: Room;
     phase: RightPanelPhases.MemberInfo | RightPanelPhases.EncryptionPanel;
-    onClose(): void;
+    onClose(this: void): void;
     verificationRequest?: VerificationRequest;
     verificationRequestPromise?: Promise<VerificationRequest>;
 }

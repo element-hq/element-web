@@ -343,7 +343,6 @@
         "email_address": "כתובת דוא\"ל",
         "emoji": "אימוג'י",
         "encrypted": "מוצפן",
-        "encryption_enabled": "הצפנה הופעלה",
         "error": "שגיאה",
         "faq": "שאלות נפוצות",
         "favourites": "מועדפים",
@@ -2017,13 +2016,6 @@
             "continuation": "החדר הזה הוא המשך לשיחה אחרת.",
             "see_older_messages": "לחץ כאן לראות הודעות ישנות."
         },
-        "m.room.encryption": {
-            "disable_attempt": "התעלם מהניסיון להשבית את ההצפנה",
-            "disabled": "ההצפנה לא מופעלת",
-            "enabled_local": "הודעות בצ'אט זה יוצפו מקצה לקצה.",
-            "parameters_changed": "מספר פרמטרים של הצפנה שונו.",
-            "unsupported": "ההצפנה בה משתמשים בחדר זה אינה נתמכת."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s איפשר לאורחים להכנס אל החדר.",
             "forbidden": "%(senderDisplayName)s מנע אפשרות מאורחים להכנס אל החדר.",
@@ -2072,11 +2064,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s שינה את רמת ההרשאה של %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s מ%(fromPowerLevel)s ל%(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 כל השרתים חסומים מהשתתפות! החדר הזה אינו בשימוש יותר.",
-            "changed": "%(senderDisplayName)s שינה את הגדרות של השרת עבור חדר זה.",
-            "set": "%(senderDisplayName)s הגדיר את רשימת הכניסה של השרת עבור חדר זה."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s דחה את ההזמנה של %(targetDisplayName)s להצטרף אל החדר.",

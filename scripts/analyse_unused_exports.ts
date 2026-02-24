@@ -28,7 +28,7 @@ ignore.push("/common.ts");
 // We ignore js-sdk by default as it may export for other non element-web projects
 if (!includeJSSDK) ignore.push("matrix-js-sdk");
 
-const command = `yarn ts-prune --ignore "${ignore.join("|")}" | grep -v "(used in module)"`;
+const command = `pnpm ts-prune --ignore "${ignore.join("|")}" | grep -v "(used in module)"`;
 
 exec(command, (error, stdout, stderr) => {
     if (error) throw error;

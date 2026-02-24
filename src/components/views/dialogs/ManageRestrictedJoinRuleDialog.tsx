@@ -25,13 +25,13 @@ import { filterBoolean } from "../../../utils/arrays";
 interface IProps {
     room: Room;
     selected?: string[];
-    onFinished(rooms?: string[]): void;
+    onFinished(this: void, rooms?: string[]): void;
 }
 
 const Entry: React.FC<{
     room: Room;
     checked: boolean;
-    onChange(value: boolean): void;
+    onChange(this: void, value: boolean): void;
 }> = ({ room, checked, onChange }) => {
     const localRoom = room instanceof Room;
 

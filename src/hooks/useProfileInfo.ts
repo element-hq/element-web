@@ -25,7 +25,7 @@ export const useProfileInfo = (): {
     ready: boolean;
     loading: boolean;
     profile: IProfileInfo | null;
-    search(opts: IProfileInfoOpts): Promise<boolean>;
+    search(this: void, opts: IProfileInfoOpts): Promise<boolean>;
 } => {
     const [profile, setProfile] = useState<IProfileInfo | null>(null);
 

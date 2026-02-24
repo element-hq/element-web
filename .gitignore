@@ -22,6 +22,7 @@ electron/pub
 .vscode
 .vscode/
 .env
+.env.*
 /coverage
 # Auto-generated file
 /src/modules.js
@@ -41,3 +42,10 @@ storybook-static
 
 # TSC incremental compilation information
 *.tsbuildinfo
+
+/.link-config
+
+.nx/cache
+.nx/workspace-data
+
+.pnpm-store

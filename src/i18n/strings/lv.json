@@ -465,7 +465,6 @@
         "email_address": "Epasta adrese",
         "emoji": "Emocijzīmes",
         "encrypted": "Šifrēts",
-        "encryption_enabled": "Šifrēšana iespējota",
         "error": "Kļūda",
         "faq": "BUJ",
         "favourites": "Izlase",
@@ -1228,7 +1227,6 @@
         "ask_to_join": "Iespējot aicinājumus pievienoties",
         "automatic_debug_logs": "Automātiski nosūtīt atkļūdošanas žurnālus par jebkuru kļūdu",
         "automatic_debug_logs_decryption": "Automātiski nosūtīt atkļūdošanas žurnālus par atšifrēšanas kļūdām",
-        "automatic_debug_logs_key_backup": "Automātiski nosūtīt atkļūdošanas žurnālus, ja nedarbojas atslēgas dublēšana",
         "beta_description": "Kas gaidāms %(brand)s? Laboratorijas ir labākais veids, kā agri iegūt un izmēģināt jaunas iespējas un palīdzēt tās pilnveidot, pirms tās tiek izlaistas.",
         "beta_feature": "Šī ir beta funkcija",
         "beta_feedback_leave_button": "Lai izietu no beta versijas, atveriet iestatījumus.",
@@ -2884,15 +2882,6 @@
             "unknown_predecessor": "Nevar atrast veco šīs istabas versiju (istabas ID:%(roomId)s), un mums nav pieejams “via_servers”, lai to meklētu.",
             "unknown_predecessor_guess_server": "Nevar atrast šīs telpas veco versiju (istabas ID:%(roomId)s), un mums nav pieejams 'via_servers' , lai to meklētu. Iespējams, ka noderēs servera uzminēšana pēc istabas ID. Ja vēlaties izmēģināt, noklikšķiniet uz šīs saites:"
         },
-        "m.room.encryption": {
-            "disable_attempt": "Vērā neņemts mēģinājums atspējot šifrēšanu",
-            "disabled": "Šifrēšana nav iespējota",
-            "enabled": "Ziņas šajā istabā ir pilnībā šifrētas. Kad cilvēki pievienosies, Tu vari apstiprināt viņus viņu profilā, ir tikai jāpiesit viņu profila attēlam.",
-            "enabled_dm": "Ziņas šeit ir pilnībā šifrētas. Apstiprini %(displayName)s viņa profilā - piesit viņa profila attēlam!",
-            "enabled_local": "Ziņām šajā istabā tiek piemērota pilnīga šifrēšana.",
-            "parameters_changed": "Daži šifrēšanas parametri ir mainīti.",
-            "unsupported": "Šajā telpā izmantotā šifrēšana netiek atbalstīta."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s atļāva viesiem pievienoties istabai.",
             "forbidden": "%(senderDisplayName)s aizliedza viesiem pievienoties istabai.",
@@ -2953,11 +2942,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s nomainīja jaudas līmeni %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s no %(fromPowerLevel)s uz %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 Visiem serveriem ir liegta pieeja dalībai! Šī istaba vairs nevar tikt izmantota.",
-            "changed": "%(senderDisplayName)s nomainīja servera ACL piekļuves šai istabai.",
-            "set": "%(senderDisplayName)s iestatīja servera ACL piekļuves šai istabai."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s atsauca uzaicinājumu %(targetDisplayName)s pievienoties istabai.",
@@ -3190,16 +3174,6 @@
                 "zero": "%(severalUsers)s pameta un atkal pievienojās %(count)s reižu",
                 "one": "%(severalUsers)s pameta un atkal pievienojās",
                 "other": "%(severalUsers)s pameta un atkal pievienojās %(count)s reizes"
-            },
-            "server_acls": {
-                "zero": "%(oneUser)s nomainīja servera ACL %(count)s reižu",
-                "one": "%(oneUser)s nomainīja servera ACL",
-                "other": "%(oneUser)s nomainīja servera ACL %(count)s reizes"
-            },
-            "server_acls_multiple": {
-                "zero": "%(severalUsers)s nomainīja servera ACL %(count)s reižu",
-                "one": "%(severalUsers)s nomainīja servera ACL",
-                "other": "%(severalUsers)s nomainīja servera ACL %(count)s reizes"
             },
             "unbanned": {
                 "zero": "tika atcelts liegums %(count)s reižu",

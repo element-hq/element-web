@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { type IConfigOptions } from "../IConfigOptions";
@@ -18,19 +17,6 @@ export function getHomePageUrl(appConfig: IConfigOptions, matrixClient: MatrixCl
 
     const pagesConfig = config.get("embedded_pages");
     let pageUrl = pagesConfig ? new SnakedObject(pagesConfig).get("home_url") : null;
-
-    if (!pageUrl) {
-        // This is a deprecated config option for the home page
-        // (despite the name, given we also now have a welcome
-        // page, which is not the same).
-        pageUrl = (<any>appConfig).welcomePageUrl;
-        if (pageUrl) {
-            logger.warn(
-                "You are using a deprecated config option: `welcomePageUrl`. Please use " +
-                    "`embedded_pages.home_url` instead, per https://github.com/vector-im/element-web/issues/21428",
-            );
-        }
-    }
 
     if (!pageUrl) {
         pageUrl = getEmbeddedPagesWellKnown(matrixClient)?.home_url;

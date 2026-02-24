@@ -25,7 +25,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
     const [onFocus, isActive, refCallback] = useRovingTabIndex<HTMLInputElement>();
 
-    const onDateValueInput = (ev: React.ChangeEvent<HTMLInputElement>): void => setDateValue(ev.target.value);
+    const onDateValueInput = (ev: React.InputEvent<HTMLInputElement>): void => setDateValue(ev.currentTarget.value);
     const onJumpToDateSubmit = (ev: FormEvent): void => {
         ev.preventDefault();
         onDatePicked(dateValue);

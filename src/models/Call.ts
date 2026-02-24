@@ -721,7 +721,6 @@ export class ElementCall extends Call {
         // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
         const analyticsID: string = accountAnalyticsData?.pseudonymousAnalyticsOptIn ? accountAnalyticsData?.id : "";
 
-        params.append("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
         params.append("posthogUserId", analyticsID);
         params.append("posthogApiHost", posthogConfig.api_host);
         params.append("posthogApiKey", posthogConfig.project_api_key);

@@ -12,6 +12,7 @@ import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
+import { I18nContext } from "@element-hq/web-shared-components";
 
 import defaultDispatcher from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
@@ -92,7 +93,7 @@ export interface IHandle<C extends ComponentType> {
      *
      * @param args - Arguments to return to {@link finished}.
      */
-    close(...args: OnFinishedParams<C>): void;
+    close(this: void, ...args: OnFinishedParams<C>): void;
 }
 
 interface IOptions<C extends ComponentType> {
@@ -436,18 +437,21 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
             const staticDialog = (
                 <StrictMode>
-                    <TooltipProvider>
-                        <div className={classes}>
-                            <Glass className="mx_Dialog_border">
-                                <div className="mx_Dialog">{this.staticModal.elem}</div>
-                            </Glass>
-                            <div
-                                data-testid="dialog-background"
-                                className="mx_Dialog_background mx_Dialog_staticBackground"
-                                onClick={this.onBackgroundClick}
-                            />
-                        </div>
-                    </TooltipProvider>
+                    {/* Provide I18nContext for shared-components used inside dialogs rendered in a separate root. */}
+                    <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                        <TooltipProvider>
+                            <div className={classes}>
+                                <Glass className="mx_Dialog_border">
+                                    <div className="mx_Dialog">{this.staticModal.elem}</div>
+                                </Glass>
+                                <div
+                                    data-testid="dialog-background"
+                                    className="mx_Dialog_background mx_Dialog_staticBackground"
+                                    onClick={this.onBackgroundClick}
+                                />
+                            </div>
+                        </TooltipProvider>
+                    </I18nContext.Provider>
                 </StrictMode>
             );
 
@@ -465,18 +469,21 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
             const dialog = (
                 <StrictMode>
-                    <TooltipProvider>
-                        <div className={classes}>
-                            <Glass className="mx_Dialog_border">
-                                <div className="mx_Dialog">{modal.elem}</div>
-                            </Glass>
-                            <div
-                                data-testid="dialog-background"
-                                className="mx_Dialog_background"
-                                onClick={this.onBackgroundClick}
-                            />
-                        </div>
-                    </TooltipProvider>
+                    {/* Provide I18nContext for shared-components used inside dialogs rendered in a separate root. */}
+                    <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                        <TooltipProvider>
+                            <div className={classes}>
+                                <Glass className="mx_Dialog_border">
+                                    <div className="mx_Dialog">{modal.elem}</div>
+                                </Glass>
+                                <div
+                                    data-testid="dialog-background"
+                                    className="mx_Dialog_background"
+                                    onClick={this.onBackgroundClick}
+                                />
+                            </div>
+                        </TooltipProvider>
+                    </I18nContext.Provider>
                 </StrictMode>
             );
 

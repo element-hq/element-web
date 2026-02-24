@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import { _t } from "../../../languageHandler";
-import { type Command, CommandCategories, Commands } from "../../../SlashCommands";
+import { type Command, CommandCategories, Commands } from "../../../slash-commands/SlashCommands";
 import InfoDialog from "./InfoDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
@@ -20,7 +20,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
  */
 interface IProps {
     roomId: string;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ roomId, onFinished }) => {

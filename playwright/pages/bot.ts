@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type JSHandle, type Page } from "@playwright/test";
+import { type JSHandle, type Page, type TestInfo } from "@playwright/test";
 import { uniqueId } from "lodash";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
@@ -116,30 +116,44 @@ export class Bot extends Client {
         const credentials = await this.getCredentials();
         const clientHandle = await this.page.evaluateHandle(
             async ({ baseUrl, credentials, opts }) => {
-                function getLogger(loggerName: string): Logger {
-                    const logger = {
-                        getChild: (namespace: string) => getLogger(`${loggerName}:${namespace}`),
-                        trace(...msg: any[]): void {
-                            console.trace(loggerName, ...msg);
-                        },
-                        debug(...msg: any[]): void {
-                            console.debug(loggerName, ...msg);
-                        },
-                        info(...msg: any[]): void {
-                            console.info(loggerName, ...msg);
-                        },
-                        warn(...msg: any[]): void {
-                            console.warn(loggerName, ...msg);
-                        },
-                        error(...msg: any[]): void {
-                            console.error(loggerName, ...msg);
-                        },
-                    } satisfies Logger;
+                class NestedLogger implements Logger {
+                    constructor(
+                        public readonly loggerName: string,
+                        private writeLog: (msg: string) => void,
+                    ) {}
 
-                    return logger as unknown as Logger;
+                    getChild(namespace: string): Logger {
+                        return new NestedLogger(`${this.loggerName}:${namespace}`, this.writeLog);
+                    }
+
+                    trace(...msg: any[]): void {
+                        this.writeLog(`T ${this.loggerName} ${msg.join(" ")}`);
+                    }
+                    debug(...msg: any[]): void {
+                        this.writeLog(`D  ${this.loggerName}  ${msg.join(" ")}`);
+                    }
+                    info(...msg: any[]): void {
+                        this.writeLog(`I  ${this.loggerName}  ${msg.join(" ")}`);
+                    }
+                    warn(...msg: any[]): void {
+                        this.writeLog(`W  ${this.loggerName}  ${msg.join(" ")}`);
+                    }
+                    error(...msg: any[]): void {
+                        this.writeLog(`E ${this.loggerName}  ${msg.join(" ")}`);
+                    }
                 }
 
-                const logger = getLogger(`bot ${credentials.userId}`);
+                class PlaywrightLogger extends NestedLogger {
+                    public log = "";
+
+                    constructor() {
+                        super("", (msg: string) => {
+                            this.log += msg + "\n";
+                        });
+                    }
+                }
+
+                const logger = new PlaywrightLogger();
 
                 // Store the cached secret storage key and return it when `getSecretStorageKey` is called
                 let cachedKey: { keyId: string; key: Uint8Array<ArrayBuffer> };
@@ -250,5 +264,18 @@ export class Bot extends Client {
         }
 
         return clientHandle;
+    }
+
+    public async onTestFinished(testInfo: TestInfo): Promise<void> {
+        if (testInfo.status !== "passed") {
+            const credentials = await this.getCredentials();
+            const client = await this.getClientHandle();
+            // @ts-ignore private field logger
+            const body = await client.evaluate((cli) => (<PlaywrightLogger>cli.logger).log);
+            await testInfo.attach(`playwright-bot-${credentials.userId}`, {
+                body,
+                contentType: "text/plain",
+            });
+        }
     }
 }

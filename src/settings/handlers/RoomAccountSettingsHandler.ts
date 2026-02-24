@@ -7,7 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type RoomAccountDataEvents,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+    RoomEvent,
+} from "matrix-js-sdk/src/matrix";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
@@ -17,6 +23,14 @@ import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
+
+declare module "matrix-js-sdk/src/types" {
+    interface RoomAccountDataEvents {
+        [ALLOWED_WIDGETS_EVENT_TYPE]: { [eventId: string]: boolean };
+        [DEFAULT_SETTINGS_EVENT_TYPE]: Record<string, any>;
+        "org.matrix.room.preview_urls": { disable: boolean };
+    }
+}
 
 /**
  * Gets and sets settings at the "room-account" level for the current user.
@@ -81,11 +95,11 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
     }
 
     // helper function to send room account data then await it being echoed back
-    private async setRoomAccountData(
+    private async setRoomAccountData<K extends keyof RoomAccountDataEvents, F extends keyof RoomAccountDataEvents[K]>(
         roomId: string,
-        eventType: string,
-        field: string | null,
-        value: any,
+        eventType: K,
+        field: F | null,
+        value: RoomAccountDataEvents[K][F],
     ): Promise<void> {
         let content: ReturnType<RoomAccountSettingsHandler["getSettings"]>;
 
@@ -101,7 +115,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         const deferred = Promise.withResolvers<void>();
         const handler = (event: MatrixEvent, room: Room): void => {
             if (room.roomId !== roomId || event.getType() !== eventType) return;
-            if (field !== null && event.getContent()[field] !== value) return;
+            if (field !== null && event.getContent<Record<F, RoomAccountDataEvents[K][F]>>()[field] !== value) return;
             this.client.off(RoomEvent.AccountData, handler);
             deferred.resolve();
         };

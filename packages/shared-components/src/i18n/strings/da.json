@@ -10,6 +10,9 @@
         "play": "Afspil",
         "search": "Søg"
     },
+    "notifications": {
+        "all_messages": "Alle beskeder"
+    },
     "time": {
         "about_day_ago": "omkring en dag siden",
         "about_hour_ago": "for omkring en time siden",

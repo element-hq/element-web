@@ -56,7 +56,7 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
             }
             subHeading={_t("settings|encryption|key_storage|description", undefined, {
                 a: (sub) => (
-                    <a href={SdkConfig.get("help_encryption_url")} target="_blank" rel="noreferrer noopener">
+                    <a href={SdkConfig.get("help_key_storage_url")} target="_blank" rel="noreferrer noopener">
                         {sub}
                     </a>
                 ),

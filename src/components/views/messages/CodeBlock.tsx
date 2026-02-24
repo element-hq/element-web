@@ -23,7 +23,7 @@ interface Props {
 
 const ExpandCollapseButton: React.FC<{
     expanded: boolean;
-    onClick(): void;
+    onClick(this: void): void;
 }> = ({ expanded, onClick }) => {
     return (
         <span className="mx_EventTile_button" onClick={onClick}>

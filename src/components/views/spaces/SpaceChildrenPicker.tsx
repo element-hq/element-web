@@ -27,7 +27,7 @@ interface ISpecificChildrenPickerProps {
     filterPlaceholder: string;
     rooms: Room[];
     selected: Set<Room>;
-    onChange(selected: boolean, room: Room): void;
+    onChange(this: void, selected: boolean, room: Room): void;
 }
 
 const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
@@ -89,7 +89,7 @@ interface IProps {
     noneLabel?: string;
     allLabel: string;
     specificLabel: string;
-    onChange(rooms: Room[]): void;
+    onChange(this: void, rooms: Room[]): void;
 }
 
 const SpaceChildrenPicker: React.FC<IProps> = ({

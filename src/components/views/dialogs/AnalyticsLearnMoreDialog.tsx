@@ -23,7 +23,7 @@ export enum ButtonClicked {
 }
 
 interface IProps {
-    onFinished(buttonClicked?: ButtonClicked): void;
+    onFinished(this: void, buttonClicked?: ButtonClicked): void;
     analyticsOwner: string;
     privacyPolicyUrl?: string;
     primaryButton?: string;

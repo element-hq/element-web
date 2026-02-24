@@ -8,3 +8,29 @@ Please see LICENSE files in the repository root for full details.
 .docs-story {
     background: var(--cpd-color-bg-canvas-default);
 }
+
+/* Username color classes - these are defined in the main app's _common.pcss
+   but need to be available in Storybook for components that use colorClass */
+.mx_Username_color1 {
+    color: var(--cpd-color-text-decorative-1);
+}
+
+.mx_Username_color2 {
+    color: var(--cpd-color-text-decorative-2);
+}
+
+.mx_Username_color3 {
+    color: var(--cpd-color-text-decorative-3);
+}
+
+.mx_Username_color4 {
+    color: var(--cpd-color-text-decorative-4);
+}
+
+.mx_Username_color5 {
+    color: var(--cpd-color-text-decorative-5);
+}
+
+.mx_Username_color6 {
+    color: var(--cpd-color-text-decorative-6);
+}

@@ -8,8 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import path from "path";
 import { readFile } from "node:fs/promises";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { expect, test } from "../../element-web-test";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 test.describe("migration", { tag: "@no-webkit" }, function () {
     test.use({

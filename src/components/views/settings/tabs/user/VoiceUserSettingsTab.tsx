@@ -216,12 +216,14 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                             <SettingsToggleInput
                                 name="voice-noise-suppression"
                                 label={_t("settings|voip|noise_suppression")}
+                                helpMessage={_t("settings|voip|noise_suppression_description")}
                                 checked={this.state.audioNoiseSuppression}
                                 onChange={this.onNoiseSuppressionChanged}
                             />
                             <SettingsToggleInput
                                 name="voice-echo-cancellation"
                                 label={_t("settings|voip|echo_cancellation")}
+                                helpMessage={_t("settings|voip|echo_cancellation_description")}
                                 checked={this.state.audioEchoCancellation}
                                 onChange={this.onEchoCancellationChanged}
                             />

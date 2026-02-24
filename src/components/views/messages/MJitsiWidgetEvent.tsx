@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EventTileBubble } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import WidgetStore from "../../../stores/WidgetStore";
-import EventTileBubble from "./EventTileBubble";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 
@@ -43,32 +43,35 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             return (
                 <EventTileBubble
                     icon={<VideoCallSolidIcon />}
-                    className="mx_MJitsiWidgetEvent"
+                    className="mx_EventTileBubble mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_ended", { senderName })}
-                    timestamp={this.props.timestamp}
-                />
+                >
+                    {this.props.timestamp}
+                </EventTileBubble>
             );
         } else if (prevUrl) {
             // modified
             return (
                 <EventTileBubble
                     icon={<VideoCallSolidIcon />}
-                    className="mx_MJitsiWidgetEvent"
+                    className="mx_EventTileBubble mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_updated", { senderName })}
                     subtitle={joinCopy}
-                    timestamp={this.props.timestamp}
-                />
+                >
+                    {this.props.timestamp}
+                </EventTileBubble>
             );
         } else {
             // assume added
             return (
                 <EventTileBubble
                     icon={<VideoCallSolidIcon />}
-                    className="mx_MJitsiWidgetEvent"
+                    className="mx_EventTileBubble mx_MJitsiWidgetEvent"
                     title={_t("timeline|m.widget|jitsi_started", { senderName })}
                     subtitle={joinCopy}
-                    timestamp={this.props.timestamp}
-                />
+                >
+                    {this.props.timestamp}
+                </EventTileBubble>
             );
         }
     }

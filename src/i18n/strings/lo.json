@@ -372,7 +372,6 @@
         "email_address": "ທີ່ຢູ່ອີເມວ",
         "emoji": "ອີໂມຈິ",
         "encrypted": "ເຂົ້າລະຫັດແລ້ວ",
-        "encryption_enabled": "ເປີດໃຊ້ການເຂົ້າລະຫັດແລ້ວ",
         "error": "ມີບັນຫາ",
         "faq": "ຄໍາຖາມທີ່ພົບເປັນປະຈໍາ",
         "favourites": "ລາຍການທີ່ມັກ",
@@ -1075,7 +1074,6 @@
     "labs": {
         "automatic_debug_logs": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ",
         "automatic_debug_logs_decryption": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດໃນຄວາມຜິດພາດການຖອດລະຫັດ",
-        "automatic_debug_logs_key_backup": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດເມື່ອການສຳຮອງຂໍ້ມູນກະແຈບໍ່ເຮັດວຽກ",
         "beta_feature": "ນີ້ແມ່ນຄຸນສົມບັດເບຕ້າ",
         "beta_feedback_leave_button": "ເພື່ອອອກຈາກເບຕ້າ, ໃຫ້ເຂົ້າໄປທີ່ການຕັ້ງຄ່າຂອງທ່ານ.",
         "beta_feedback_title": "%(featureName)s ຄຳຕິຊົມເບຕ້າ",
@@ -2384,12 +2382,6 @@
             "continuation": "ຫ້ອງນີ້ແມ່ນສືບຕໍ່ການສົນທະນາອື່ນ.",
             "see_older_messages": "ກົດທີ່ນີ້ເພື່ອເບິ່ງຂໍ້ຄວາມເກົ່າ."
         },
-        "m.room.encryption": {
-            "disable_attempt": "ປະຕິເສດຄວາມພະຍາຍາມປິດການເຂົ້າລະຫັດ",
-            "disabled": "ບໍ່ໄດ້ເປີດໃຊ້ການເຂົ້າລະຫັດ",
-            "parameters_changed": "ບາງຕົວກໍານົດການເຂົ້າລະຫັດໄດ້ຖືກປ່ຽນແປງ.",
-            "unsupported": "ບໍ່ຮອງຮັບການເຂົ້າລະຫັດທີ່ໃຊ້ໂດຍຫ້ອງນີ້."
-        },
         "m.room.guest_access": {
             "can_join": "%(senderDisplayName)s ໄດ້ອະນຸຍາດໃຫ້ແຂກເຂົ້າຮ່ວມຫ້ອງແລ້ວ.",
             "forbidden": "%(senderDisplayName)s ໄດ້ປ້ອງກັນບໍ່ໃຫ້ແຂກເຂົ້າຮ່ວມຫ້ອງ.",
@@ -2448,11 +2440,6 @@
         "m.room.power_levels": {
             "changed": "%(senderName)s ໄດ້ປ່ຽນລະດັບພະລັງງານຂອງ %(powerLevelDiffText)s.",
             "user_from_to": "%(userId)s ຈາກ %(fromPowerLevel)s ຫາ %(toPowerLevel)s"
-        },
-        "m.room.server_acl": {
-            "all_servers_banned": "🎉 ເຊີບເວີທັງໝົດຖືກຫ້າມບໍ່ໃຫ້ເຂົ້າຮ່ວມ! ຫ້ອງນີ້ບໍ່ສາມາດໃຊ້ໄດ້ອີກຕໍ່ໄປ.",
-            "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນເຊີບເວີ ACLs ສໍາລັບຫ້ອງນີ້.",
-            "set": "%(senderDisplayName)s ຕັ້ງ ACL ຂອງເຊີບເວີສໍາລັບຫ້ອງນີ້."
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s ໄດ້ຖອນຄຳເຊີນສຳລັບ %(targetDisplayName)s ເພື່ອເຂົ້າຮ່ວມຫ້ອງ.",
@@ -2645,14 +2632,6 @@
             "rejoined_multiple": {
                 "one": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມໃຫມ່",
                 "other": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມຄືນ %(count)sຄັ້ງ"
-            },
-            "server_acls": {
-                "one": "%(oneUser)sໄດ້ປ່ຽນເຊີບເວີ ACLs",
-                "other": "%(oneUser)sປ່ຽນເຊີບເວີ ACLs %(count)s ເທື່ອ"
-            },
-            "server_acls_multiple": {
-                "one": "%(severalUsers)sປ່ຽນ ACL ຂອງເຊີບເວີ",
-                "other": "%(severalUsers)sປ່ຽນເຊີບເວີ ACLs %(count)sຄັ້ງ"
             },
             "unbanned": {
                 "one": "ຍົກເລີກການຫ້າມ",
