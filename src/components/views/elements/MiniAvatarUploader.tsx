@@ -24,9 +24,9 @@ interface IProps {
     hasAvatar: boolean;
     noAvatarLabel?: string;
     hasAvatarLabel?: string;
-    setAvatarUrl(url: string): Promise<unknown>;
+    setAvatarUrl(this: void, url: string): Promise<unknown>;
     isUserAvatar?: boolean;
-    onClick?(ev: MouseEvent<HTMLInputElement>): void;
+    onClick?(this: void, ev: MouseEvent<HTMLInputElement>): void;
     children?: ReactNode;
 }
 

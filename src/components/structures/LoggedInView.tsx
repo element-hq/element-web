@@ -87,7 +87,7 @@ interface IProps {
     matrixClient: MatrixClient;
     // Called with the credentials of a registered user (if they were a ROU that
     // transitioned to PWLU)
-    onRegistered: (credentials: IMatrixClientCreds) => Promise<MatrixClient>;
+    onRegistered: (this: void, credentials: IMatrixClientCreds) => Promise<MatrixClient>;
     hideToSRUsers: boolean;
     // eslint-disable-next-line camelcase
     page_type?: string;

@@ -113,8 +113,8 @@ interface ISpaceCreateFormProps extends BProps {
     aliasFieldRef: RefObject<RoomAliasField | null>;
     showAliasField?: boolean;
     children?: ReactNode;
-    onSubmit(e: SyntheticEvent): void;
-    setAlias(alias: string): void;
+    onSubmit(this: void, e: SyntheticEvent): void;
+    setAlias(this: void, alias: string): void;
 }
 
 export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
@@ -198,7 +198,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
 };
 
 const SpaceCreateMenu: React.FC<{
-    onFinished(): void;
+    onFinished(this: void): void;
 }> = ({ onFinished }) => {
     const cli = useMatrixClientContext();
     const settingAllowPublicSpaces = useSettingValue(UIFeature.AllowCreatingPublicSpaces);

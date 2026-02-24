@@ -89,10 +89,11 @@ export const test = base.extend<TestFixtures>({
     },
 
     botCreateOpts: {},
-    bot: async ({ page, homeserver, botCreateOpts, user }, use) => {
+    bot: async ({ page, homeserver, botCreateOpts, user }, use, testInfo) => {
         const bot = new Bot(page, homeserver, botCreateOpts);
         await bot.prepareClient(); // eagerly register the bot
         await use(bot);
+        await bot.onTestFinished(testInfo);
     },
 
     // eslint-disable-next-line no-empty-pattern
@@ -134,6 +135,10 @@ export const expect = baseExpect.extend<Expectations>({
             .mx_BaseAvatar {
                 background-color: var(--cpd-color-fuchsia-1200) !important;
                 border-color: var(--cpd-color-fuchsia-1200) !important;
+                color: white !important;
+            }
+            span.mx_Pill:not([style*="--avatar-letter: ''"])::before {
+                background: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;
             }
             .mx_ReplyChain {

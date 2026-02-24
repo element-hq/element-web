@@ -362,6 +362,21 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             }
         }
 
+        let discoverySection;
+        if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+            discoverySection = <DiscoverySettings />;
+        }
+
+        let privacySection;
+        if (discoverySection || posthogSection) {
+            privacySection = (
+                <SettingsSection heading={_t("common|privacy")}>
+                    {discoverySection}
+                    {posthogSection}
+                </SettingsSection>
+            );
+        }
+
         return (
             <SettingsTab>
                 {warning}
@@ -370,10 +385,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     {secureBackup}
                     {eventIndex}
                 </SettingsSection>
-                <SettingsSection heading={_t("common|privacy")}>
-                    <DiscoverySettings />
-                    {posthogSection}
-                </SettingsSection>
+                {privacySection}
                 {advancedSection}
             </SettingsTab>
         );

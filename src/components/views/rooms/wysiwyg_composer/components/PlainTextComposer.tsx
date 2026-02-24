@@ -22,14 +22,14 @@ import { useSettingValue } from "../../../../../hooks/useSettings";
 
 interface PlainTextComposerProps {
     disabled?: boolean;
-    onChange?: (content: string) => void;
-    onSend?: () => void;
+    onChange?: (this: void, content: string) => void;
+    onSend?: (this: void) => void;
     placeholder?: string;
     initialContent?: string;
     className?: string;
     leftComponent?: ReactNode;
     rightComponent?: ReactNode;
-    children?: (ref: RefObject<HTMLDivElement | null>, composerFunctions: ComposerFunctions) => ReactNode;
+    children?: (this: void, ref: RefObject<HTMLDivElement | null>, composerFunctions: ComposerFunctions) => ReactNode;
     eventRelation?: IEventRelation;
 }
 

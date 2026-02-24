@@ -31,7 +31,7 @@ interface IProps {
      * If mode is "sas", the user wants to verify the device with SAS. Otherwise, the dialog was dismissed normally.
      * @param mode The mode of dismissal.
      */
-    onFinished(mode?: "sas"): void;
+    onFinished(this: void, mode?: "sas"): void;
 }
 
 const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {

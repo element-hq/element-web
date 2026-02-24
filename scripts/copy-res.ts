@@ -7,7 +7,7 @@ import * as chokidar from "chokidar";
 import * as fs from "node:fs";
 import _ from "lodash";
 import webpack from "webpack";
-import type { Translations } from "matrix-web-i18n";
+import { type Translations } from "matrix-web-i18n";
 
 const EW_I18N_BASE_PATH = "src/i18n/strings/";
 const SC_I18N_BASE_PATH = "packages/shared-components/src/i18n/strings/";
@@ -28,16 +28,13 @@ function errCheck(err: unknown): void {
     }
 }
 
-// Check if webapp exists
-if (!fs.existsSync("webapp")) {
-    fs.mkdirSync("webapp");
-}
-// Check if i18n exists
-if (!fs.existsSync("webapp/i18n/")) {
-    fs.mkdirSync("webapp/i18n/");
+const I18N_DEST = "webapp/i18n/";
+// Check if webapp/i18n exists
+if (!fs.existsSync(I18N_DEST)) {
+    fs.mkdirSync(I18N_DEST, { recursive: true });
 }
 
-const logWatch = (path: string) => {
+const logWatch = (path: string): void => {
     if (verbose) {
         console.log(`Watching: ${path}`);
     }
@@ -72,7 +69,7 @@ function prepareLangFile(lang: string): [filename: string, json: string] {
     return [filename, json];
 }
 
-function genLangFile(dest: string, filename: string, json: string) {
+function genLangFile(dest: string, filename: string, json: string): void {
     fs.writeFileSync(dest + filename, json);
     if (verbose) {
         console.log("Generated language file: " + filename);
@@ -139,7 +136,6 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
 }
 
 // language resources
-const I18N_DEST = "webapp/i18n/";
 const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce<Record<string, string>>((m, l) => {
     const [filename, json] = prepareLangFile(l);
     if (!watch) {

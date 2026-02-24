@@ -16,7 +16,7 @@ import { useRoomState } from "../../hooks/useRoomState.ts";
 interface IProps {
     room: Room;
     parent: HTMLElement | null;
-    onFileDrop(dataTransfer: DataTransfer): void;
+    onFileDrop(this: void, dataTransfer: DataTransfer): void;
 }
 
 interface IState {

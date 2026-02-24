@@ -3552,8 +3552,6 @@
             "label": "Actions de message",
             "view_in_room": "Voir dans le salon"
         },
-        "message_timestamp_received_at": "Reçu à : %(dateTime)s",
-        "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s a mis à jour une règle de bannissement correspondant à %(oldGlob)s vers une règle correspondant à %(newGlob)s pour %(reason)s",
             "changed_rule_rooms": "%(senderName)s a changé une règle qui bannit les salons correspondant à %(oldGlob)s vers une règle correspondant à %(newGlob)s pour %(reason)s",

@@ -199,6 +199,7 @@ module.exports = {
             files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts", "*.ts"],
             extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             rules: {
+                "@typescript-eslint/unbound-method": ["error", { ignoreStatic: true }],
                 "@typescript-eslint/explicit-function-return-type": [
                     "error",
                     {
@@ -238,6 +239,7 @@ module.exports = {
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
                 "@typescript-eslint/no-empty-object-type": "off",
+                "@typescript-eslint/unbound-method": "off",
 
                 // Jest/Playwright specific
 

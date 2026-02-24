@@ -23,7 +23,7 @@ interface IProps {
     dialogTitle?: string;
     serverConfig: ValidatedServerConfig;
     disabled?: boolean;
-    onServerConfigChange?(config: ValidatedServerConfig): void;
+    onServerConfigChange?(this: void, config: ValidatedServerConfig): void;
 }
 
 const showPickerDialog = (

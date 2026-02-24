@@ -8,12 +8,18 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type AudioPlayerProps = AudioPlayerViewSnapshot & AudioPlayerViewActions;
-const AudioPlayerViewWrapper = ({ togglePlay, onKeyDown, onSeekbarChange, ...rest }: AudioPlayerProps): JSX.Element => {
+const AudioPlayerViewWrapperImpl = ({
+    togglePlay,
+    onKeyDown,
+    onSeekbarChange,
+    ...rest
+}: AudioPlayerProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         togglePlay,
         onKeyDown,
@@ -21,8 +27,9 @@ const AudioPlayerViewWrapper = ({ togglePlay, onKeyDown, onSeekbarChange, ...res
     });
     return <AudioPlayerView vm={vm} />;
 };
+const AudioPlayerViewWrapper = withViewDocs(AudioPlayerViewWrapperImpl, AudioPlayerView);
 
-export default {
+const meta = {
     title: "Audio/AudioPlayerView",
     component: AudioPlayerViewWrapper,
     tags: ["autodocs"],
@@ -44,23 +51,27 @@ export default {
         onKeyDown: fn(),
         onSeekbarChange: fn(),
     },
-} as Meta<typeof AudioPlayerViewWrapper>;
+} satisfies Meta<typeof AudioPlayerViewWrapper>;
 
-const Template: StoryFn<typeof AudioPlayerViewWrapper> = (args) => <AudioPlayerViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const NoMediaName = Template.bind({});
-NoMediaName.args = {
-    mediaName: undefined,
+export const NoMediaName: Story = {
+    args: {
+        mediaName: undefined,
+    },
 };
 
-export const NoSize = Template.bind({});
-NoSize.args = {
-    sizeBytes: undefined,
+export const NoSize: Story = {
+    args: {
+        sizeBytes: undefined,
+    },
 };
 
-export const HasError = Template.bind({});
-HasError.args = {
-    error: true,
+export const HasError: Story = {
+    args: {
+        error: true,
+    },
 };

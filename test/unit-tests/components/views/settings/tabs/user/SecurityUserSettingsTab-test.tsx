@@ -5,7 +5,7 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { render } from "jest-matrix-react";
+import { render, screen } from "jest-matrix-react";
 import React, { act } from "react";
 import userEvent from "@testing-library/user-event";
 
@@ -21,6 +21,8 @@ import {
 } from "../../../../../../test-utils";
 import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
 import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
+import { UIFeature } from "../../../../../../../src/settings/UIFeature";
+import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 
 describe("<SecurityUserSettingsTab />", () => {
     const defaultProps = {
@@ -88,5 +90,15 @@ describe("<SecurityUserSettingsTab />", () => {
             );
         });
         expect(getByText("You have no ignored users.")).toBeVisible();
+    });
+
+    it("does not render privacy header if 3pid features are disabled", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((key: any): any => {
+            if (key === UIFeature.ThirdPartyID) return false;
+        });
+
+        render(getComponent());
+
+        expect(screen.queryByRole("heading", { name: "Privacy" })).toBeNull();
     });
 });

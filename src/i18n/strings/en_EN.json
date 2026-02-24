@@ -3483,8 +3483,10 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepted the invitation for %(displayName)s",
             "accepted_invite": "%(targetName)s accepted an invitation",
-            "ban": "%(senderName)s banned %(targetName)s",
-            "ban_reason": "%(senderName)s banned %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s banned a user",
+            "ban_reason": "%(senderName)s banned a user: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s banned <user/>: %(reason)s",
+            "ban_spoiler": "%(senderName)s banned <user/>",
             "change_avatar": "%(senderName)s changed their profile picture",
             "change_name": "%(oldDisplayName)s changed their display name to %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s changed their display name and profile picture",

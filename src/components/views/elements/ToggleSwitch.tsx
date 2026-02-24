@@ -25,7 +25,7 @@ interface IProps {
     tooltip?: string;
 
     // Called when the checked state changes. First argument will be the new state.
-    onChange(checked: boolean): void;
+    onChange(this: void, checked: boolean): void;
 
     // id to bind with other elements
     id?: string;

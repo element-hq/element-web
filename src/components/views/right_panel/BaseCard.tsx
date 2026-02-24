@@ -28,9 +28,9 @@ interface IProps {
     ariaLabelledBy?: string;
     withoutScrollContainer?: boolean;
     closeLabel?: string;
-    onClose?(ev: MouseEvent<HTMLButtonElement>): void;
-    onBack?(ev: MouseEvent<HTMLButtonElement>): void;
-    onKeyDown?(ev: KeyboardEvent): void;
+    onClose?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
+    onBack?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
+    onKeyDown?(this: void, ev: KeyboardEvent): void;
     cardState?: any;
     ref?: Ref<HTMLDivElement>;
     // Ref for the 'close' button the card

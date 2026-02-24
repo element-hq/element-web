@@ -37,7 +37,7 @@ export const dynamicImportConversionFunctions = async (): Promise<{
      * `false` to format it for writing to an editor element.
      * @returns a string of plain text that may contain markdown
      */
-    richToPlain(rich: string, inMessageFormat: boolean): Promise<string>;
+    richToPlain(this: void, rich: string, inMessageFormat: boolean): Promise<string>;
 
     /**
      * Creates a rust model from plain text input (interpreted as markdown) and uses it to generate the rich text
@@ -49,7 +49,7 @@ export const dynamicImportConversionFunctions = async (): Promise<{
      * `false` to format it for writing to an editor element.
      * @returns a string of html
      */
-    plainToRich(plain: string, inMessageFormat: boolean): Promise<string>;
+    plainToRich(this: void, plain: string, inMessageFormat: boolean): Promise<string>;
 }> => {
     const { richToPlain, plainToRich } = await import("@vector-im/matrix-wysiwyg");
 

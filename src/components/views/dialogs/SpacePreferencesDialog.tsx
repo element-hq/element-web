@@ -26,7 +26,7 @@ import { useRoomName } from "../../../hooks/useRoomName.ts";
 
 interface IProps {
     space: Room;
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space }) => {

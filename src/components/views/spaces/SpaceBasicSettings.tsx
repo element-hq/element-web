@@ -21,9 +21,9 @@ interface IProps {
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;
-    setAvatar(avatar?: File): void;
-    setName(name: string): void;
-    setTopic(topic: string): void;
+    setAvatar(this: void, avatar?: File): void;
+    setName(this: void, name: string): void;
+    setTopic(this: void, topic: string): void;
 }
 
 export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" | "setAvatar">> = ({

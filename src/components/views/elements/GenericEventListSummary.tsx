@@ -31,7 +31,7 @@ interface IProps {
     // An array of EventTiles to render when expanded
     "children": ReactNode[] | null;
     // Called when the event list expansion is toggled
-    onToggle?(): void;
+    onToggle?(this: void): void;
     // The layout currently used
     "layout"?: Layout;
     "data-testid"?: string;
