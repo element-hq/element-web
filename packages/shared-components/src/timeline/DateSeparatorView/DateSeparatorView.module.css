@@ -50,8 +50,21 @@
 
 .picker_input_date {
     font: inherit;
-    :global(.cpd-theme-dark) & {
+    color-scheme: light;
+
+    :global(.cpd-theme-dark) &,
+    :global(.cpd-theme-dark-hc) & {
         color-scheme: dark;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .picker_input_date {
+        color-scheme: dark;
+        :global(.cpd-theme-light) &,
+        :global(.cpd-theme-light-hc) & {
+            color-scheme: light;
+        }
     }
 }
 
