@@ -17,8 +17,8 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledRadioButton> {
     label?: string;
-    onChange(): void; // we handle keyup/down ourselves so lose the ChangeEvent
-    onClose(): void; // gets called after onChange on KeyBindingAction.Enter
+    onChange(this: void): void; // we handle keyup/down ourselves so lose the ChangeEvent
+    onClose(this: void): void; // gets called after onChange on KeyBindingAction.Enter
 }
 
 // Semantic component for representing a styled role=menuitemradio

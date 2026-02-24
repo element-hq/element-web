@@ -16,8 +16,8 @@ import { type XOR } from "../../../../@types/common";
 import { type Tool } from "../DevtoolsDialog";
 
 export interface IDevtoolsProps {
-    onBack(): void;
-    setTool(label: TranslationKey, tool: Tool): void;
+    onBack(this: void): void;
+    setTool(this: void, label: TranslationKey, tool: Tool): void;
 }
 
 interface IMinProps extends Pick<IDevtoolsProps, "onBack"> {
@@ -28,7 +28,7 @@ interface IMinProps extends Pick<IDevtoolsProps, "onBack"> {
 
 interface IProps extends IMinProps {
     actionLabel: TranslationKey;
-    onAction(): Promise<string | void>;
+    onAction(this: void): Promise<string | void>;
 }
 
 const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({

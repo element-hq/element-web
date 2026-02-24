@@ -20,7 +20,7 @@ interface KeyBackupProps {
     /**
      * Callback to invoke when the back button is clicked.
      */
-    onBack(): void;
+    onBack(this: void): void;
 }
 
 /**

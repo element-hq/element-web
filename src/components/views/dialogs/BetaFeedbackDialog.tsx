@@ -21,7 +21,7 @@ import { type SettingKey } from "../../../settings/Settings.tsx";
 
 interface IProps {
     featureId: SettingKey;
-    onFinished(sendFeedback?: boolean): void;
+    onFinished(this: void, sendFeedback?: boolean): void;
 }
 
 const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {

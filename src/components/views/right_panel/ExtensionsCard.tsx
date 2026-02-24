@@ -35,7 +35,7 @@ import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContext
 
 interface Props {
     room: Room;
-    onClose(): void;
+    onClose(this: void): void;
 }
 
 interface IAppRowProps {

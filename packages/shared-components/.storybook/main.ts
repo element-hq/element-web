@@ -49,6 +49,12 @@ const config: StorybookConfig = {
     },
     typescript: {
         reactDocgen: "react-docgen-typescript",
+        reactDocgenTypescriptOptions: {
+            // The default exclude is ["**/**.stories.tsx"] which prevents
+            // docgen from extracting snapshot field descriptions from wrapper
+            // components defined in story files.
+            exclude: [],
+        },
     },
     async viteFinal(config) {
         return mergeConfig(config, {

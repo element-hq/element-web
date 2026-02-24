@@ -23,7 +23,7 @@ import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContext
 interface IProps {
     room: Room;
     widgetId: string;
-    onClose(): void;
+    onClose(this: void): void;
 }
 
 const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {

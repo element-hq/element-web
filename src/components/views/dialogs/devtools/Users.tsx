@@ -78,7 +78,7 @@ export const UserList: React.FC<Pick<IDevtoolsProps, "onBack">> = ({ onBack }) =
 
 interface UserButtonProps {
     member: RoomMember;
-    onClick(): void;
+    onClick(this: void): void;
 }
 
 /**
@@ -216,7 +216,7 @@ const UserView: React.FC<UserProps> = ({ member, onBack }) => {
 interface DeviceButtonProps {
     crypto: CryptoApi;
     device: Device;
-    onClick(): void;
+    onClick(this: void): void;
 }
 
 /**

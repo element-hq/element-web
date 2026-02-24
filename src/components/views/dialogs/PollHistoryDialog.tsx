@@ -17,7 +17,7 @@ type PollHistoryDialogProps = {
     room: Room;
     matrixClient: MatrixClient;
     permalinkCreator: RoomPermalinkCreator;
-    onFinished(): void;
+    onFinished(this: void): void;
 };
 
 export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({

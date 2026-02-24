@@ -23,8 +23,8 @@ export const DAY_MS = HOUR_MS * 24;
  */
 export function getDaysArray(weekday: Intl.DateTimeFormatOptions["weekday"] = "short"): string[] {
     const sunday = 1672574400000; // 2023-01-01 12:00 UTC
-    const { format } = new Intl.DateTimeFormat(getUserLanguage(), { weekday, timeZone: "UTC" });
-    return [...Array(7).keys()].map((day) => format(sunday + day * DAY_MS));
+    const dateTimeFormat = new Intl.DateTimeFormat(getUserLanguage(), { weekday, timeZone: "UTC" });
+    return [...Array(7).keys()].map((day) => dateTimeFormat.format(sunday + day * DAY_MS));
 }
 
 /**
@@ -32,8 +32,8 @@ export function getDaysArray(weekday: Intl.DateTimeFormatOptions["weekday"] = "s
  * @param month - format desired "numeric" | "2-digit" | "long" | "short" | "narrow"
  */
 export function getMonthsArray(month: Intl.DateTimeFormatOptions["month"] = "short"): string[] {
-    const { format } = new Intl.DateTimeFormat(getUserLanguage(), { month, timeZone: "UTC" });
-    return [...Array(12).keys()].map((m) => format(Date.UTC(2021, m)));
+    const dateTimeFormat = new Intl.DateTimeFormat(getUserLanguage(), { month, timeZone: "UTC" });
+    return [...Array(12).keys()].map((m) => dateTimeFormat.format(Date.UTC(2021, m)));
 }
 
 // XXX: Ideally we could just specify `hour12: boolean` but it has issues on Chrome in the `en` locale

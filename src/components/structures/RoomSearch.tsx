@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export default class RoomSearch extends React.PureComponent<IProps> {
-    private openSpotlight(): void {
+    private openSpotlight(this: void): void {
         defaultDispatcher.fire(Action.OpenSpotlight);
     }
 

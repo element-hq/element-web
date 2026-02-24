@@ -8,22 +8,24 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     DisambiguatedProfileView,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewActions,
 } from "./DisambiguatedProfileView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DisambiguatedProfileProps = DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions;
 
-const DisambiguatedProfileViewWrapper = ({ onClick, ...rest }: DisambiguatedProfileProps): JSX.Element => {
+const DisambiguatedProfileViewWrapperImpl = ({ onClick, ...rest }: DisambiguatedProfileProps): JSX.Element => {
     const vm = useMockedViewModel(rest, { onClick });
     return <DisambiguatedProfileView vm={vm} />;
 };
+const DisambiguatedProfileViewWrapper = withViewDocs(DisambiguatedProfileViewWrapperImpl, DisambiguatedProfileView);
 
-export default {
+const meta = {
     title: "Profile/DisambiguatedProfile",
     component: DisambiguatedProfileViewWrapper,
     tags: ["autodocs"],
@@ -40,44 +42,48 @@ export default {
         emphasizeDisplayName: true,
         onClick: fn(),
     },
-} as Meta<typeof DisambiguatedProfileViewWrapper>;
+} satisfies Meta<typeof DisambiguatedProfileViewWrapper>;
 
-const Template: StoryFn<typeof DisambiguatedProfileViewWrapper> = (args) => (
-    <DisambiguatedProfileViewWrapper {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const WithMxid = Template.bind({});
-WithMxid.args = {
-    displayName: "Alice",
-    displayIdentifier: "@alice:example.org",
-    colorClass: "mx_Username_color1",
+export const WithMxid: Story = {
+    args: {
+        displayName: "Alice",
+        displayIdentifier: "@alice:example.org",
+        colorClass: "mx_Username_color1",
+    },
 };
 
-export const WithColorClass = Template.bind({});
-WithColorClass.args = {
-    displayName: "Bob",
-    colorClass: "mx_Username_color3",
+export const WithColorClass: Story = {
+    args: {
+        displayName: "Bob",
+        colorClass: "mx_Username_color3",
+    },
 };
 
-export const Emphasized = Template.bind({});
-Emphasized.args = {
-    displayName: "Charlie",
-    emphasizeDisplayName: true,
+export const Emphasized: Story = {
+    args: {
+        displayName: "Charlie",
+        emphasizeDisplayName: true,
+    },
 };
 
-export const WithTooltip = Template.bind({});
-WithTooltip.args = {
-    displayName: "Diana",
-    title: "Diana (@diana:example.org)",
+export const WithTooltip: Story = {
+    args: {
+        displayName: "Diana",
+        title: "Diana (@diana:example.org)",
+    },
 };
 
-export const FullExample = Template.bind({});
-FullExample.args = {
-    displayName: "Eve",
-    displayIdentifier: "@eve:matrix.org",
-    colorClass: "mx_Username_color5",
-    title: "Eve (@eve:matrix.org)",
-    emphasizeDisplayName: true,
+export const FullExample: Story = {
+    args: {
+        displayName: "Eve",
+        displayIdentifier: "@eve:matrix.org",
+        colorClass: "mx_Username_color5",
+        title: "Eve (@eve:matrix.org)",
+        emphasizeDisplayName: true,
+    },
 };

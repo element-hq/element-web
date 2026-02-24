@@ -9,9 +9,9 @@ import React from "react";
 import { useArgs } from "storybook/preview-api";
 
 import { SeekBar } from "./SeekBar";
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-export default {
+const meta = {
     title: "Audio/SeekBar",
     component: SeekBar,
     tags: ["autodocs"],
@@ -23,16 +23,19 @@ export default {
     args: {
         value: 50,
     },
-} as Meta<typeof SeekBar>;
+    render: function Render(args) {
+        const [, updateArgs] = useArgs();
+        return <SeekBar onChange={(evt) => updateArgs({ value: parseInt(evt.target.value, 10) })} {...args} />;
+    },
+} satisfies Meta<typeof SeekBar>;
 
-const Template: StoryFn<typeof SeekBar> = (args) => {
-    const [, updateArgs] = useArgs();
-    return <SeekBar onChange={(evt) => updateArgs({ value: parseInt(evt.target.value, 10) })} {...args} />;
-};
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-    disabled: true,
+export const Disabled: Story = {
+    args: {
+        disabled: true,
+    },
 };

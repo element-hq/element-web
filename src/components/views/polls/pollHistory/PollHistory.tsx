@@ -23,7 +23,7 @@ type PollHistoryProps = {
     room: Room;
     matrixClient: MatrixClient;
     permalinkCreator: RoomPermalinkCreator;
-    onFinished(): void;
+    onFinished(this: void): void;
 };
 
 const sortEventsByLatest = (left: MatrixEvent, right: MatrixEvent): number => right.getTs() - left.getTs();

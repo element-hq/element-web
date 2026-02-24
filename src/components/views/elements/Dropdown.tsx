@@ -306,7 +306,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         return keys[index <= 0 ? keys.length - 1 : (index - 1) % keys.length];
     }
 
-    private scrollIntoView(node: Element | null): void {
+    private scrollIntoView(this: void, node: Element | null): void {
         node?.scrollIntoView({
             block: "nearest",
             behavior: "auto",

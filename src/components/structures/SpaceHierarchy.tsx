@@ -78,7 +78,7 @@ interface IProps {
     space: Room;
     initialText?: string;
     additionalButtons?: ReactNode;
-    showRoom(cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, roomType?: RoomType): void;
+    showRoom(this: void, cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, roomType?: RoomType): void;
 }
 
 interface ITileProps {
@@ -88,9 +88,9 @@ interface ITileProps {
     numChildRooms?: number;
     hasPermissions?: boolean;
     children?: ReactNode;
-    onViewRoomClick(): void;
-    onJoinRoomClick(): Promise<unknown>;
-    onToggleClick?(): void;
+    onViewRoomClick(this: void): void;
+    onJoinRoomClick(this: void): Promise<unknown>;
+    onToggleClick?(this: void): void;
 }
 
 const Tile: React.FC<ITileProps> = ({
@@ -468,9 +468,9 @@ interface IHierarchyLevelProps {
     hierarchy: RoomHierarchy;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
-    onViewRoomClick(roomId: string, roomType?: RoomType): void;
-    onJoinRoomClick(roomId: string, parents: Set<string>): Promise<unknown>;
-    onToggleClick?(parentId: string, childId: string): void;
+    onViewRoomClick(this: void, roomId: string, roomType?: RoomType): void;
+    onJoinRoomClick(this: void, roomId: string, parents: Set<string>): Promise<unknown>;
+    onToggleClick?(this: void, parentId: string, childId: string): void;
 }
 
 export const toLocalRoom = (cli: MatrixClient, room: HierarchyRoom, hierarchy: RoomHierarchy): HierarchyRoom => {
@@ -600,7 +600,7 @@ export const useRoomHierarchy = (
     rooms?: HierarchyRoom[];
     hierarchy?: RoomHierarchy;
     error?: Error;
-    loadMore(pageSize?: number): Promise<void>;
+    loadMore(this: void, pageSize?: number): Promise<void>;
 } => {
     const [rooms, setRooms] = useState<HierarchyRoom[]>([]);
     const [hierarchy, setHierarchy] = useState<RoomHierarchy>();

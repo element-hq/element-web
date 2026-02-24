@@ -26,7 +26,7 @@ interface NewRecoveryMethodDialogProps {
     /**
      * Callback when the dialog is dismissed.
      */
-    onFinished(): void;
+    onFinished(this: void): void;
 }
 
 // Export as default instead of a named export so that it can be dynamically imported with React lazy

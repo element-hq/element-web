@@ -26,7 +26,7 @@ interface IProps {
     labelKnock?: string;
     labelPublic?: string;
     labelRestricted?: string; // if omitted then this option will be hidden, e.g if unsupported
-    onChange(value: JoinRule): void;
+    onChange(this: void, value: JoinRule): void;
 }
 
 const JoinRuleDropdown: React.FC<IProps> = ({

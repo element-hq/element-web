@@ -2023,7 +2023,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setPageSubtitle();
     }
 
-    private onLogoutClick(event: ButtonEvent): void {
+    private onLogoutClick(this: void, event: ButtonEvent): void {
         dis.dispatch({
             action: "logout",
         });
@@ -2047,7 +2047,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.stores.resizeNotifier.notifyWindowResized();
     };
 
-    private dispatchTimelineResize(): void {
+    private dispatchTimelineResize(this: void): void {
         dis.dispatch({ action: "timeline_resize" });
     }
 
@@ -2068,7 +2068,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     // returns a promise which resolves to the new MatrixClient
-    private onRegistered(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+    private onRegistered(this: void, credentials: IMatrixClientCreds): Promise<MatrixClient> {
         return Lifecycle.setLoggedIn(credentials);
     }
 

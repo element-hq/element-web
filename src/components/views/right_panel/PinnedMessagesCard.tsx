@@ -44,7 +44,7 @@ interface PinnedMessagesCardProps {
     /**
      * Callback for when the card is closed.
      */
-    onClose(): void;
+    onClose(this: void): void;
 }
 
 export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMessagesCardProps): JSX.Element {

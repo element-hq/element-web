@@ -33,7 +33,7 @@ interface IArgs<T, D = void> {
     rules: IRule<T, D>[];
     description?(this: T, derivedData: D, results: IResult[]): ReactNode;
     hideDescriptionIfValid?: boolean;
-    deriveData?(data: Data): Promise<D>;
+    deriveData?(this: T, data: Data): Promise<D>;
     memoize?: boolean;
 }
 
@@ -78,8 +78,10 @@ export interface IValidationResult {
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
 export default function withValidation<T = void, D = void>({
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     description,
     hideDescriptionIfValid,
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     deriveData,
     rules,
     memoize,

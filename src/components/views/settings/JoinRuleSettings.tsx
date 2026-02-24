@@ -32,9 +32,9 @@ import LabelledCheckbox from "../elements/LabelledCheckbox";
 export interface JoinRuleSettingsProps {
     room: Room;
     promptUpgrade?: boolean;
-    closeSettingsFn(): void;
-    onError(error: unknown): void;
-    beforeChange?(joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
+    closeSettingsFn(this: void): void;
+    onError(this: void, error: unknown): void;
+    beforeChange?(this: void, joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
     disabledOptions?: Set<JoinRule>;
     hiddenOptions?: Set<JoinRule>;
     recommendedOption?: JoinRule;

@@ -22,7 +22,7 @@ import SpacePillButton from "../../structures/SpacePillButton.tsx";
 
 interface IProps {
     space: Room;
-    onFinished?(): void;
+    onFinished?(this: void): void;
 }
 
 const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {

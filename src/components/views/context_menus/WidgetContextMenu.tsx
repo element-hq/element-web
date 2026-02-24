@@ -36,9 +36,9 @@ interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "child
     userWidget?: boolean;
     showUnpin?: boolean;
     // override delete handler
-    onDeleteClick?(): void;
+    onDeleteClick?(this: void): void;
     // override edit handler
-    onEditClick?(): void;
+    onEditClick?(this: void): void;
 }
 
 const showStreamAudioStreamButton = (app: IWidget): boolean => {
