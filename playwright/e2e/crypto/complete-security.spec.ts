@@ -22,7 +22,7 @@ test.describe("Complete security", () => {
         async ({ page, credentials, homeserver }) => {
             await createBot(page, homeserver, credentials, true);
             await logIntoElement(page, credentials);
-            await expect(page.getByRole("dialog")).toMatchScreenshot("complete-security.png");
+            await expect(page.getByRole("main")).toMatchScreenshot("complete-security.png");
         },
     );
 
