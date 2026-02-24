@@ -688,7 +688,6 @@ export function mkStubRoom(
         fetchRoomThreads: jest.fn().mockReturnValue(Promise.resolve()),
         findEventById: jest.fn().mockReturnValue(undefined),
         findPredecessor: jest.fn().mockReturnValue({ roomId: "", eventId: null }),
-        getAccountData: (_: EventType | string) => undefined as MatrixEvent | undefined,
         getAltAliases: jest.fn().mockReturnValue([]),
         getAvatarUrl: () => "mxc://avatar.url/room.png",
         getCanonicalAlias: jest.fn(),
