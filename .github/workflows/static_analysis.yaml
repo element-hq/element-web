@@ -25,7 +25,7 @@ jobs:
             matrix:
                 include:
                     - name: Typescript Syntax Check
-                      install: layered
+                      install: ${{ github.ref == 'refs/heads/master' && 'normal' || 'layered' }}
                       command: "lint:types"
                     - name: ESLint
                       install: normal

@@ -53,8 +53,13 @@ jobs:
                   cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
                   node-version: "lts/*"
 
-            - name: Fetch layered build
+            - name: Install Dependencies (Layered)
+              if: ${{ github.ref != 'refs/heads/master' }}
               run: ./scripts/layered.sh
+
+            - name: Install Dependencies (Non layered)
+              if: ${{ github.ref == 'refs/heads/master' }}
+              run: pnpm install --frozen-lockfile
 
             - name: Copy config
               run: cp element.io/develop/config.json config.json
