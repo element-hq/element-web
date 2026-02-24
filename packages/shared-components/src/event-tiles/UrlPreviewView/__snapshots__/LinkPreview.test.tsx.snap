@@ -96,40 +96,6 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
 </div>
 `;
 
-exports[`LinkPreview > renders a preview with a tooltip 1`] = `
-<div>
-  <div
-    class="container"
-  >
-    <div
-      class="wrapImageCaption"
-    >
-      <div
-        class="caption"
-      >
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-        >
-          <a
-            aria-labelledby="_r_0_"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
-        </p>
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
-        >
-          A simple description
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`LinkPreview > renders a preview with just a title 1`] = `
 <div>
   <div

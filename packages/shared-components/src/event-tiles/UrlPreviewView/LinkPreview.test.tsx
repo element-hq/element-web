@@ -5,13 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render } from "@test-utils";
+import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
 import React from "react";
+import userEvent from "@testing-library/user-event";
 
 import * as stories from "./LinkPreview.stories.tsx";
-import userEvent from "@testing-library/user-event";
 
 const { Default, WithCompactLayout, WithTooltip, Title, TitleAndDescription } = composeStories(stories);
 
@@ -29,9 +29,12 @@ describe("LinkPreview", () => {
         expect(container).toMatchSnapshot();
     });
     it("renders a preview with a tooltip", async () => {
-        const { container, getByText } = render(<WithTooltip />);
-        await userEvent.hover(getByText("A simple title"));
-        expect(container).toMatchSnapshot();
+        const user = userEvent.setup();
+        render(<WithTooltip />);
+        await user.tab();
+        expect(screen.getByText("A simple title")).toHaveFocus();
+        // Tooltip has the URL
+        expect(await screen.findByText("https://matrix.org/")).toBeVisible();
     });
     it("renders a preview with a compact layout", () => {
         const { container } = render(<WithCompactLayout />);

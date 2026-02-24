@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type MouseEventHandler, type JSX, useCallback } from "react";
+import React, { type MouseEventHandler, type JSX, useCallback, useMemo } from "react";
 import { Tooltip, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
@@ -25,6 +25,13 @@ export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewAction
 
 export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
+
+    const tooltipCaption = useMemo(() => {
+        if (preview.showTooltipOnLink) {
+            return new URL(preview.link, window.location.href).toString();
+        }
+        return null;
+    }, [preview.link, preview.showTooltipOnLink]);
 
     const onImageClickHandler = useCallback<MouseEventHandler>(
         (ev) => {
@@ -64,11 +71,7 @@ export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPre
                 {img}
                 <div className={styles.caption}>
                     <Text type="body" size="md" className={styles.title}>
-                        {preview.showTooltipOnLink ? (
-                            <Tooltip label={new URL(preview.link, window.location.href).toString()}>{anchor}</Tooltip>
-                        ) : (
-                            anchor
-                        )}
+                        {tooltipCaption ? <Tooltip label={tooltipCaption}>{anchor}</Tooltip> : anchor}
                         {preview.siteName && (
                             <Text as="span" size="md" weight="regular">
                                 {" - " + preview.siteName}
