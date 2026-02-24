@@ -212,6 +212,15 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         </div>
       </div>
     </div>
+    <button
+      class="_button_13vu4_8"
+      data-kind="tertiary"
+      data-size="sm"
+      role="button"
+      tabindex="0"
+    >
+      Collapse
+    </button>
   </div>
 </div>
 `;
