@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type PropsWithChildren } from "react";
+import React, { type JSX, type PropsWithChildren, useRef } from "react";
 import { Menu, MenuItem, Separator } from "@vector-im/compound-web";
 import { capitalize } from "lodash";
 
@@ -40,14 +40,12 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
 }): JSX.Element => {
     const i18n = useI18n();
     const { translate: _t } = useI18n();
+    const dateInputRef = useRef<HTMLInputElement>(null);
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
         if (event.key !== "ArrowDown") return;
         event.preventDefault();
-
-        const menu = event.currentTarget.closest('[role="menu"]');
-        const input = menu?.querySelector<HTMLInputElement>('input[type="date"]');
-        input?.focus();
+        dateInputRef.current?.focus();
     };
 
     return (
@@ -81,7 +79,7 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
                 onKeyDown={onKeyDown}
             />
             <Separator decorative />
-            <DateSeparatorDatePickerView vm={vm} onSubmitted={() => onOpenChange?.(false)} />
+            <DateSeparatorDatePickerView vm={vm} inputRef={dateInputRef} onSubmitted={() => onOpenChange?.(false)} />
         </Menu>
     );
 };

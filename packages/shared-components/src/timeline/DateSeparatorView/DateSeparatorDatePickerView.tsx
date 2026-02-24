@@ -20,6 +20,8 @@ import styles from "./DateSeparatorView.module.css";
 export interface DateSeparatorDatePickerViewProps {
     /** The date separator view model. */
     vm: DateSeparatorViewModel;
+    /** Optional input ref shared with parent for focus management. */
+    inputRef?: React.RefObject<HTMLInputElement | null>;
     /** Called after a date has been submitted. */
     onSubmitted?: () => void;
 }
@@ -29,6 +31,7 @@ export interface DateSeparatorDatePickerViewProps {
  */
 export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewProps> = ({
     vm,
+    inputRef,
     onSubmitted,
 }): JSX.Element => {
     const snapshot = useViewModel(vm);
@@ -38,7 +41,8 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
     const { translate: _t } = useI18n();
     const dateInputId = useId();
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
-    const dateInputRef = useRef<HTMLInputElement>(null);
+    const localDateInputRef = useRef<HTMLInputElement>(null);
+    const dateInputRef = inputRef ?? localDateInputRef;
     const submitButtonRef = useRef<HTMLButtonElement>(null);
 
     const onDateInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
