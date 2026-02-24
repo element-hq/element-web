@@ -540,7 +540,8 @@ describe("Notifier", () => {
                         content: {},
                     }),
                     {
-                        kind: "session",
+                        // TODO: Once https://github.com/matrix-org/matrix-js-sdk/pull/5134 is merged this can be MembershipKind.Session
+                        kind: "session" as any,
                         data: {
                             call_id: "123",
                             application: "m.call",
