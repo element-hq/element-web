@@ -1,0 +1,89 @@
+{
+    "name": "element-web-monorepo",
+    "version": "0.0.0",
+    "description": "Element: the future of secure communication",
+    "author": "New Vector Ltd.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/element-hq/element-web"
+    },
+    "license": "SEE LICENSE IN README.md",
+    "type": "module",
+    "scripts": {
+        "lint": "pnpm -r lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
+        "lint:prettier": "prettier --check .",
+        "lint:prettier-fix": "prettier --log-level=warn --write .",
+        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
+        "lint:knip": "knip",
+        "postinstall": "node scripts/pnpm-link.ts"
+    },
+    "resolutions": {
+        "pretty-format@30>react-is": "19.2.4",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "oidc-client-ts": "3.4.1",
+        "jwt-decode": "4.0.0",
+        "caniuse-lite": "1.0.30001766",
+        "markdown-it": "14.1.1",
+        "testcontainers": "^11.0.0",
+        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
+        "wrap-ansi": "npm:wrap-ansi@^7.0.0",
+        "matrix-widget-api": "^1.16.1",
+        "qs": "6.14.2"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@action-validator/cli": "^0.6.0",
+        "@action-validator/core": "^0.6.0",
+        "@nx-tools/nx-container": "^7.2.1",
+        "@nx/jest": "^22.5.0",
+        "@types/node": "22",
+        "cronstrue": "^3.0.0",
+        "eslint-plugin-matrix-org": "^3.0.0",
+        "husky": "^9.0.0",
+        "knip": "^5.36.2",
+        "lint-staged": "^16.0.0",
+        "lodash": "^4.17.21",
+        "minimist": "^1.2.6",
+        "nx": "22.5.1",
+        "prettier": "3.8.1",
+        "typescript": "catalog:",
+        "yaml": "^2.3.3"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "matrix-js-sdk"
+        ],
+        "ignoredBuiltDependencies": [
+            "@sentry/cli",
+            "nx"
+        ],
+        "patchedDependencies": {
+            "@vector-im/matrix-wysiwyg": "patches/@vector-im__matrix-wysiwyg.patch",
+            "react-blurhash": "patches/react-blurhash.patch",
+            "linkify-html": "patches/linkify-html.patch",
+            "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
+            "@types/mdx": "patches/@types__mdx.patch",
+            "await-lock": "patches/await-lock.patch",
+            "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
+            "jsdom": "patches/jsdom.patch",
+            "rollup": "patches/rollup.patch"
+        },
+        "peerDependencyRules": {
+            "allowedVersions": {
+                "react": "19",
+                "react-dom": "19",
+                "eslint": "8"
+            }
+        },
+        "allowedDeprecatedVersions": {
+            "eslint": "8",
+            "react-beautiful-dnd": "13"
+        }
+    },
+    "engines": {
+        "node": ">=22.18"
+    },
+    "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
+    "private": true
+}

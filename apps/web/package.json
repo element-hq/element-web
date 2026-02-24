@@ -29,29 +29,12 @@
         "lint:js-fix": "prettier --log-level=warn --write . && eslint --fix src test playwright module_system",
         "lint:types": "nx lint:types",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
-        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
-        "lint:knip": "knip",
         "test": "nx test:unit",
         "test:playwright": "playwright test",
         "test:playwright:open": "pnpm test:playwright --ui",
         "test:playwright:screenshots": "playwright-screenshots-experimental pnpm playwright test --update-snapshots --project=Chrome --grep @screenshot",
         "coverage": "pnpm test --coverage",
-        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
-        "postinstall": "node scripts/pnpm-link.ts"
-    },
-    "resolutions": {
-        "pretty-format@30>react-is": "19.2.4",
-        "@types/react": "catalog:",
-        "@types/react-dom": "catalog:",
-        "oidc-client-ts": "3.4.1",
-        "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001766",
-        "markdown-it": "14.1.1",
-        "testcontainers": "^11.0.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^7.0.0",
-        "matrix-widget-api": "^1.16.1",
-        "qs": "6.14.2"
+        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
@@ -129,8 +112,6 @@
         "what-input": "^5.2.10"
     },
     "devDependencies": {
-        "@action-validator/cli": "^0.6.0",
-        "@action-validator/core": "^0.6.0",
         "@babel/core": "^7.12.10",
         "@babel/eslint-parser": "^7.12.10",
         "@babel/eslint-plugin": "^7.12.10",
@@ -155,8 +136,6 @@
         "@element-hq/element-web-playwright-common-local": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",
-        "@nx-tools/nx-container": "^7.2.1",
-        "@nx/jest": "^22.5.0",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "catalog:",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
@@ -203,7 +182,6 @@
         "blob-polyfill": "^9.0.0",
         "chokidar": "^5.0.0",
         "copy-webpack-plugin": "^13.0.0",
-        "cronstrue": "^3.0.0",
         "css-loader": "^7.0.0",
         "css-minimizer-webpack-plugin": "^7.0.0",
         "dotenv": "^17.0.0",
@@ -223,7 +201,6 @@
         "fake-indexeddb": "^6.0.0",
         "file-loader": "^6.0.0",
         "html-webpack-plugin": "^5.5.3",
-        "husky": "^9.0.0",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^30.0.0",
         "jest-canvas-mock": "^2.5.2",
@@ -232,13 +209,10 @@
         "jest-mock": "^30.0.0",
         "jest-raw-loader": "^1.0.1",
         "jsqr": "^1.4.0",
-        "knip": "^5.36.2",
-        "lint-staged": "^16.0.0",
         "matrix-web-i18n": "catalog:",
         "mini-css-extract-plugin": "2.10.0",
         "minimist": "^1.2.6",
         "modernizr": "^3.12.0",
-        "nx": "22.5.1",
         "postcss": "8.5.6",
         "postcss-easings": "4.0.0",
         "postcss-hexrgba": "2.1.0",
@@ -270,37 +244,6 @@
         "webpack-retry-chunk-load-plugin": "^3.1.1",
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "matrix-js-sdk"
-        ],
-        "ignoredBuiltDependencies": [
-            "@sentry/cli",
-            "nx"
-        ],
-        "patchedDependencies": {
-            "@vector-im/matrix-wysiwyg": "patches/@vector-im__matrix-wysiwyg.patch",
-            "react-blurhash": "patches/react-blurhash.patch",
-            "linkify-html": "patches/linkify-html.patch",
-            "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
-            "@types/mdx": "patches/@types__mdx.patch",
-            "await-lock": "patches/await-lock.patch",
-            "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
-            "jsdom": "patches/jsdom.patch",
-            "rollup": "patches/rollup.patch"
-        },
-        "peerDependencyRules": {
-            "allowedVersions": {
-                "react": "19",
-                "react-dom": "19",
-                "eslint": "8"
-            }
-        },
-        "allowedDeprecatedVersions": {
-            "eslint": "8",
-            "react-beautiful-dnd": "13"
-        }
     },
     "@casualbot/jest-sonar-reporter": {
         "outputDirectory": "coverage",
