@@ -6,7 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCallback, useEffect } from "react";
+import React, {
+    type JSX,
+    createRef,
+    type SyntheticEvent,
+    type MouseEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+} from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
     UrlPreviewGroupView,
@@ -314,15 +322,6 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
 
 export default function TextualBody(props: IBodyProps): React.ReactElement {
     const [mediaVisible] = useMediaVisible(props.mxEvent);
-
-    /**
-     * TODO: Ignore while editing.
-     const stoppedEditing = prevProps.editState && !this.props.editState;
-     const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-     if (messageWasEdited || stoppedEditing) {
-         this.urlPreviewVMRef.current?.recomputeSnapshot();
-     }
-     */
 
     const onUrlPreviewImageClicked = useCallback((preview: UrlPreviewViewSnapshotPreview): void => {
         if (!preview.image?.imageFull) {
