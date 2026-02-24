@@ -84,7 +84,6 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
 
     const displayNameClasses = classNames(colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
-        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
 
     const Component = vm.onClick ? "button" : "div";
