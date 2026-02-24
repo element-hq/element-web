@@ -80,7 +80,7 @@ export class ReactionsRowButtonViewModel
             customReactionImagesEnabled,
         } = props;
 
-        const room = client?.getRoom(mxEvent.getRoomId());
+        const room = client.getRoom(mxEvent.getRoomId());
         let ariaLabel: string | undefined;
         let customReactionName: string | undefined;
 
