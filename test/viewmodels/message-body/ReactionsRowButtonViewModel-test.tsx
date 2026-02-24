@@ -54,7 +54,7 @@ describe("ReactionsRowButtonViewModel", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        client = stubClient();
+        client = createTestClient();
         room = mkStubRoom("!room:example.org", "Test Room", client);
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         mxEvent = mkEvent({
