@@ -6,4 +6,4 @@
  */
 
 export { GroupedVirtualizedList } from "./GroupedVirtualizedList";
-export type { GroupedVirtualizedListProps } from "./GroupedVirtualizedList";
+export type { GroupedVirtualizedListProps, Group } from "./GroupedVirtualizedList";
