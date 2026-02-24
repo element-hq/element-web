@@ -218,7 +218,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           type="button"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_17aw4_14"
+                            class="mx_DisambiguatedProfile_displayName mx_Username_color2 _disambiguatedProfile_displayName_17aw4_14"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -358,7 +358,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           type="button"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_17aw4_14"
+                            class="mx_DisambiguatedProfile_displayName mx_Username_color2 _disambiguatedProfile_displayName_17aw4_14"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -501,7 +501,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           type="button"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_17aw4_14"
+                            class="mx_DisambiguatedProfile_displayName mx_Username_color2 _disambiguatedProfile_displayName_17aw4_14"
                             dir="auto"
                           >
                             @userId:matrix.org

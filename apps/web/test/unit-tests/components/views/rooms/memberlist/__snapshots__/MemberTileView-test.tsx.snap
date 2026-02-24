@@ -40,7 +40,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
             type="button"
           >
             <span
-              class=""
+              class="mx_DisambiguatedProfile_displayName"
               dir="auto"
             >
               @userId:matrix.org
@@ -115,7 +115,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
             type="button"
           >
             <span
-              class=""
+              class="mx_DisambiguatedProfile_displayName"
               dir="auto"
             >
               @userId:matrix.org
@@ -190,7 +190,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
             type="button"
           >
             <span
-              class=""
+              class="mx_DisambiguatedProfile_displayName"
               dir="auto"
             >
               @userId:matrix.org

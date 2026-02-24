@@ -194,4 +194,27 @@ describe("DisambiguatedProfileView", () => {
         const displayNameElement = screen.getByText("Colored User");
         expect(displayNameElement).toHaveClass("mx_Username_color3");
     });
+
+    it("should expose legacy display name class for host app selectors", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            displayName: "Legacy User",
+        });
+
+        render(<DisambiguatedProfileView vm={vm} />);
+        expect(screen.getByText("Legacy User")).toHaveClass("mx_DisambiguatedProfile_displayName");
+    });
+
+    it("should expose legacy MXID class without leaking the root className", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            displayName: "Legacy User",
+            displayIdentifier: "@legacy:example.org",
+            className: "mx_DisambiguatedProfile",
+        });
+
+        render(<DisambiguatedProfileView vm={vm} />);
+
+        const mxidElement = screen.getByText("@legacy:example.org");
+        expect(mxidElement).toHaveClass("mx_DisambiguatedProfile_mxid");
+        expect(mxidElement).not.toHaveClass("mx_DisambiguatedProfile");
+    });
 });
