@@ -569,7 +569,7 @@ export class RoomViewStore extends EventEmitter {
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {
-            this.dis?.dispatch({
+            this.dis?.dispatch<JoinRoomErrorPayload>({
                 action: Action.JoinRoomError,
                 roomId,
                 err,
@@ -592,11 +592,11 @@ export class RoomViewStore extends EventEmitter {
         }
     }
 
-    public showJoinRoomError(err: MatrixError, roomId: string): void {
-        let description: ReactNode = err.message ? err.message : JSON.stringify(err);
-        logger.log("Failed to join room:", description);
-
-        if (err.name === "ConnectionError") {
+    public showJoinRoomError(err: unknown, roomId: string | null): void {
+        let description: ReactNode = err instanceof Error && err.message ? err.message : JSON.stringify(err);
+        if (err instanceof MatrixError === false) {
+            // This isn't a MatrixError so just show the error verbatim.
+        } else if (err.name === "ConnectionError") {
             description = _t("room|error_join_connection");
         } else if (err.errcode === "M_INCOMPATIBLE_ROOM_VERSION") {
             description = (
@@ -607,7 +607,7 @@ export class RoomViewStore extends EventEmitter {
                 </div>
             );
         } else if (err.httpStatus === 404) {
-            const invitingUserId = this.getInvitingUserId(roomId);
+            const invitingUserId = roomId && this.getInvitingUserId(roomId);
             // provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
@@ -617,10 +617,9 @@ export class RoomViewStore extends EventEmitter {
                     description = _t("room|error_join_404_invite");
                 }
             }
-
             // provide a more detailed error than "No known servers" when attempting to
             // join using a room ID and no via servers
-            if (roomId === this.state.roomId && this.state.viaServers.length === 0) {
+            else if (roomId === this.state.roomId && this.state.viaServers.length === 0) {
                 description = (
                     <div>
                         {_t("room|error_join_404_1")}
@@ -631,6 +630,7 @@ export class RoomViewStore extends EventEmitter {
                 );
             }
         }
+        logger.log("Failed to join room:", description);
 
         Modal.createDialog(ErrorDialog, {
             title: _t("room|error_join_title"),
@@ -641,7 +641,7 @@ export class RoomViewStore extends EventEmitter {
     private joinRoomError(payload: JoinRoomErrorPayload): void {
         this.setState({
             joining: false,
-            joinError: payload.err,
+            joinError: payload.err instanceof Error ? payload.err : null,
         });
         if (payload.err && !payload.canAskToJoin) {
             this.showJoinRoomError(payload.err, payload.roomId);
