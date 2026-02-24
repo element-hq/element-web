@@ -67,8 +67,9 @@ interface ReactionsRowButtonViewProps {
  * Renders the reaction button in a reactions row.
  */
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
-    const { content, count, className, ariaLabel, isSelected, isDisabled, imageSrc, imageAlt, tooltipVm } =
-        useViewModel(vm);
+    const snapshot = useViewModel(vm) as ReactionsRowButtonViewSnapshot & { ariaLabel?: string };
+    const { content, count, className, isSelected, isDisabled, imageSrc, imageAlt, tooltipVm } = snapshot;
+    const ariaLabel = snapshot["aria-label"] ?? snapshot.ariaLabel;
     const ariaDisabled = isDisabled ? true : undefined;
     const classes = classNames(className, styles.reactionsRowButton, {
         [styles.reactionsRowButtonSelected]: isSelected,
