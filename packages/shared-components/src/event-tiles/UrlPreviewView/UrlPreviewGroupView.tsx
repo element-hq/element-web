@@ -65,7 +65,6 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
                     <LinkPreview
                         key={preview.link}
                         compactLayout={compactLayout}
-                        onHideClick={i == 0 ? vm.onHideClick : undefined}
                         onImageClick={() => vm.onImageClick(preview)}
                         {...preview}
                     />
