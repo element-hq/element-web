@@ -22,7 +22,6 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import { useMyRoomMembership } from "../../../hooks/useRoomMembers";
 import AccessibleButton from "../elements/AccessibleButton";
 import InlineSpinner from "../elements/InlineSpinner";
-import RoomName from "../elements/RoomName";
 import RoomTopic from "../elements/RoomTopic";
 import RoomFacePile from "../elements/RoomFacePile";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -30,6 +29,7 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { BetaPill } from "../beta/BetaCard";
 import RoomInfoLine from "./RoomInfoLine";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
+import { useRoomName } from "../../../hooks/useRoomName.ts";
 
 interface IProps {
     room: Room;
@@ -56,6 +56,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const cannotJoin =
         getEffectiveMembership(myMembership) === EffectiveMembership.Leave && joinRule !== JoinRule.Public;
+    const name = useRoomName(room);
 
     const viewLabs = (): void =>
         defaultDispatcher.dispatch({
@@ -169,9 +170,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         <div className="mx_RoomPreviewCard">
             {inviterSection}
             <div className="mx_RoomPreviewCard_avatar">{avatarRow}</div>
-            <h1 className="mx_RoomPreviewCard_name">
-                <RoomName room={room} />
-            </h1>
+            <h1 className="mx_RoomPreviewCard_name">{name}</h1>
             <RoomInfoLine room={room} />
             <RoomTopic room={room} className="mx_RoomPreviewCard_topic" />
             {room.getJoinRule() === "public" && <RoomFacePile room={room} />}
