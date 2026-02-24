@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import { Button, IconButton } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
+
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { useI18n } from "../../utils/i18nContext";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
