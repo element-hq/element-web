@@ -194,15 +194,4 @@ describe("DisambiguatedProfileView", () => {
         const displayNameElement = screen.getByText("Colored User");
         expect(displayNameElement).toHaveClass("mx_Username_color3");
     });
-
-    it("should apply emphasis styling when emphasizeDisplayName is true", () => {
-        const vm = new DisambiguatedProfileViewModel({
-            displayName: "Emphasized User",
-            emphasizeDisplayName: true,
-        });
-
-        render(<DisambiguatedProfileView vm={vm} />);
-        const displayNameElement = screen.getByText("Emphasized User");
-        expect(displayNameElement).toHaveClass("mx_DisambiguatedProfile_displayName");
-    });
 });
