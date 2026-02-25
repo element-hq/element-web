@@ -658,20 +658,18 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
         // Try the new module API first, then fall back to legacy path
-        const newApiApproved = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
+        let approved: boolean | undefined = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
             toWidgetDescriptor(this.forWidget, this.inRoomId),
         );
-        if (newApiApproved) {
-            return observer.update({
-                state: OpenIDRequestState.Allowed,
-                token: await MatrixClientPeg.safeGet().getOpenIdToken(),
-            });
-        }
 
-        // Legacy module API fallback
-        const legacyOpts: ApprovalOpts = { approved: undefined };
-        ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, legacyOpts, this.forWidget);
-        if (legacyOpts.approved) {
+        if (!approved) {
+            // Legacy module API fallback
+            const legacyOpts: ApprovalOpts = { approved: undefined };
+            ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, legacyOpts, this.forWidget);
+            approved = legacyOpts.approved;
+        }
+        
+        if (approved) {
             return observer.update({
                 state: OpenIDRequestState.Allowed,
                 token: await MatrixClientPeg.safeGet().getOpenIdToken(),

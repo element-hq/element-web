@@ -193,10 +193,21 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.setState({ isUserProfileReady: true });
     };
 
-    // This is a function to make the impact of calling SettingsStore slightly less
-    private hasPermissionToLoad = (props: IProps): boolean => {
+    /**
+     * Synchronous permission check (fast path).
+     *
+     * Returns true when the widget can be loaded immediately, based on:
+     *  - local (Jitsi) widgets,
+     *  - account-level (user) widgets (no room),
+     *  - the **legacy** module API ({@link WidgetLifecycle.PreLoadRequest}),
+     *  - explicit user consent stored in the `allowedWidgets` setting,
+     *  - the current user being the widget creator.
+     */
+    private hasPermissionToLoadSync = (props: IProps): boolean => {
         if (this.usingLocalWidget()) return true;
         if (!props.room) return true; // user widgets always have permissions
+
+        // Legacy module API (synchronous)
         const opts: ApprovalOpts = { approved: undefined };
         ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(this.props.app));
         if (opts.approved) return true;
@@ -208,6 +219,36 @@ export default class AppTile extends React.Component<IProps, IState> {
             (currentlyAllowedWidgets[props.app.eventId] ?? false);
         return allowed || props.userId === props.creatorUserId;
     };
+
+    /**
+     * Unified permission check that consults **both** the legacy (sync) and
+     * new (async) module APIs.
+     *
+     * 1. Runs the fast synchronous checks ({@link hasPermissionToLoadSync}).
+     *    If any approve, resolves `true` immediately.
+     * 2. Falls back to the new module API
+     *    ({@link ModuleApi.widgetLifecycle.preapprovePreload}) which may be
+     *    async (config look-ups, network calls, etc.).
+     * 3. Returns `false` only when **neither** API grants permission.
+     *
+     * Every call site that needs to know "can this widget load?" should go
+     * through this method so the two APIs are never accidentally divergent.
+     */
+    private async resolvePermissionToLoad(props: IProps): Promise<boolean> {
+        // Phase 1 – synchronous checks (legacy module API, settings, creator)
+        if (this.hasPermissionToLoadSync(props)) return true;
+
+        // Phase 2 – async new module API
+        if (!props.room) return false; // only room widgets go through the async path
+        try {
+            const descriptor = toWidgetDescriptor(this.widget, props.room.roomId);
+            const approved = await ModuleApi.instance.widgetLifecycle.preapprovePreload(descriptor);
+            return approved === true;
+        } catch (err) {
+            logger.error("Module API preload approval check failed", err);
+            return false;
+        }
+    }
 
     private onUserLeftRoom(): void {
         const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(
@@ -271,9 +312,9 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Don't show loading at all if the widget is ready once the IFrame is loaded (waitForIframeLoad = true).
             // We only need the loading screen if the widget sends a contentLoaded event (waitForIframeLoad = false).
             loading: !this.props.waitForIframeLoad && !PersistedElement.isMounted(this.persistKey),
-            // Assume that widget has permission to load if we are the user who
-            // added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: this.hasPermissionToLoad(newProps),
+            // Use the sync check for the initial render (constructor can't await).
+            // componentDidMount will immediately follow up with the full async check.
+            hasPermissionToLoad: this.hasPermissionToLoadSync(newProps),
             isUserProfileReady: OwnProfileStore.instance.isProfileInfoFetched,
             error: null,
             menuDisplayed: false,
@@ -282,32 +323,26 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onAllowedWidgetsChange = (): void => {
-        const hasPermissionToLoad = this.hasPermissionToLoad(this.props);
+        this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+            if (this.unmounted) return;
 
-        if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
-            // Force the widget to be non-persistent (able to be deleted/forgotten)
-            ActiveWidgetStore.instance.destroyPersistentWidget(
-                this.props.app.id,
-                isAppWidget(this.props.app) ? this.props.app.roomId : null,
-            );
-            PersistedElement.destroyElement(this.persistKey);
-            this.messaging?.stop();
-        }
+            if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
+                // Force the widget to be non-persistent (able to be deleted/forgotten)
+                ActiveWidgetStore.instance.destroyPersistentWidget(
+                    this.props.app.id,
+                    isAppWidget(this.props.app) ? this.props.app.roomId : null,
+                );
+                PersistedElement.destroyElement(this.persistKey);
+                this.messaging?.stop();
+            }
 
-        this.setState({ hasPermissionToLoad });
-    };
-
-    private checkPreloadApproval(): void {
-        const descriptor = toWidgetDescriptor(this.widget, this.props.room?.roomId);
-        ModuleApi.instance.widgetLifecycle.preapprovePreload(descriptor).then((approved) => {
-            if (approved && !this.unmounted) {
-                this.setState({ hasPermissionToLoad: true });
+            if (!this.state.hasPermissionToLoad && hasPermissionToLoad) {
                 this.startWidget();
             }
-        }).catch((err) => {
-            logger.error("New API preload approval check failed", err);
+
+            this.setState({ hasPermissionToLoad });
         });
-    }
+    };
 
     private isMixedContent(): boolean {
         const parentContentProtocol = window.location.protocol;
@@ -341,12 +376,19 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.setupMessagingListeners();
         }
 
-        // Only fetch IM token on mount if we're showing and have permission to load
-        if (this.messaging && this.state.hasPermissionToLoad) {
+        // The constructor used the sync-only fast path for initial state.
+        // Now run the full check (sync + async) to catch any module API approvals.
+        if (this.state.hasPermissionToLoad && this.messaging) {
+            // Sync check already approved — start immediately, no need to re-check.
             this.startWidget();
-        } else if (!this.state.hasPermissionToLoad && this.props.room) {
-            // Check the module API for preload approval (async)
-            this.checkPreloadApproval();
+        } else {
+            this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+                if (this.unmounted) return;
+                this.setState({ hasPermissionToLoad });
+                if (hasPermissionToLoad) {
+                    this.startWidget();
+                }
+            });
         }
         this.watchUserReady();
 
