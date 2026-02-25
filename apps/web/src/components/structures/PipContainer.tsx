@@ -6,9 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject, type ReactNode, useRef } from "react";
+import React, { type RefObject, type ReactNode, useRef, useEffect } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
+import {
+    useCreateAutoDisposedViewModel,
+    WidgetPipView,
+    type WidgetPipViewProps,
+} from "@element-hq/web-shared-components";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -21,7 +26,8 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../stores/ActiveWi
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import { WidgetPip } from "../views/pips/WidgetPip";
+import RoomAvatar from "../views/avatars/RoomAvatar";
+import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../../viewmodels/room/WidgetPip";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -251,7 +257,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
         if (this.state.showWidgetInPip && this.state.persistentWidgetId) {
             pipContent.push(({ onStartMoving }) => (
-                <WidgetPip
+                <WidgetPipWrappedView
                     key="widget-pip"
                     widgetId={this.state.persistentWidgetId!}
                     room={MatrixClientPeg.safeGet().getRoom(this.state.persistentRoomId ?? undefined)!}
@@ -283,4 +289,34 @@ export const PipContainer: React.FC = () => {
     const movePersistedElement = useRef<() => void>(null);
 
     return <PipContainerInner movePersistedElement={movePersistedElement} />;
+};
+
+type Props = { viewingRoom: boolean } & WidgetPipViewModelProps &
+    Pick<WidgetPipViewProps, "onStartMoving" | "movePersistedElement" | "onStartMoving">;
+
+/**
+ * A wrapper for the WidgetPipView component.
+ *
+ * This exposes the new shared WidgetPipView with the same api it was previously done and how
+ * it is used in the PipContainerInner component.
+ * @param props The same props the legacy WidgetPip was using.
+ * @returns
+ */
+const WidgetPipWrappedView: React.FC<Props> = (props: Props) => {
+    const vm = useCreateAutoDisposedViewModel(() => new WidgetPipViewModel(props));
+
+    useEffect(() => {
+        // Use an effect to update viewingRoom. It is not required in the view but just the vm.
+        vm.onViewedRoomChanged(props.viewingRoom);
+    }, [vm, props.viewingRoom]);
+
+    return (
+        <WidgetPipView
+            vm={vm}
+            // props only used in the view and not the vm get passed directly.
+            movePersistedElement={props.movePersistedElement}
+            onStartMoving={props.onStartMoving}
+            RoomAvatar={({ size }) => <RoomAvatar size={size} room={props.room} />}
+        />
+    );
 };

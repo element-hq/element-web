@@ -1,0 +1,28 @@
+.container {
+    width: 304px; /* from $width */
+    height: 278px; /* from $height */
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--cpd-space-3x);
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-6x);
+    gap: var(--cpd-space-3x);
+    box-shadow: 0 0 var(--cpd-space-2x) rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    top: 0;
+    gap: var(--cpd-space-2x);
+    display: flex;
+    font: var(--cpd-font-body-md-semibold);
+    align-items: center;
+}
+
+.roundedCornerContainer {
+    border-radius: var(--cpd-space-4x);
+    overflow: hidden;
+    display: flex;
+    flex-grow: 1;
+}
