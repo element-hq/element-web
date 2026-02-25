@@ -24,6 +24,7 @@ import { BlurhashEncoder } from "../../src/BlurhashEncoder";
 import Modal from "../../src/Modal";
 import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
 import { _t } from "../../src/languageHandler";
+import MSC4335UserLimitExceededDialog from "../../src/components/views/dialogs/MSC4335UserLimitExceededDialog";
 
 jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
 
@@ -313,6 +314,55 @@ describe("ContentMessages", () => {
                 ErrorDialog,
                 expect.objectContaining({
                     description: _t("upload_failed_size", { fileName: "fileName" }),
+                }),
+            );
+            dialogSpy.mockRestore();
+        });
+
+        it("handles MSC4335 M_USER_LIMIT_EXCEEDED error with hard limit", async () => {
+            mocked(client.uploadContent).mockRejectedValue(
+                new MatrixError({
+                    "errcode": "ORG.MATRIX.MSC4335_USER_LIMIT_EXCEEDED",
+                    "error": "User limit exceeded",
+                    "org.matrix.msc4335.info_uri": "https://example.com/info",
+                }),
+            );
+            const file = new File([], "fileName", { type: "image/jpeg" });
+            const dialogSpy = jest.spyOn(Modal, "createDialog");
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+            expect(dialogSpy).toHaveBeenCalledWith(
+                MSC4335UserLimitExceededDialog,
+                expect.objectContaining({
+                    title: _t("upload_failed_title"),
+                    error: {
+                        infoUri: "https://example.com/info",
+                        canUpgrade: false,
+                    },
+                }),
+            );
+            dialogSpy.mockRestore();
+        });
+
+        it("handles MSC4335 M_USER_LIMIT_EXCEEDED error with soft limit", async () => {
+            mocked(client.uploadContent).mockRejectedValue(
+                new MatrixError({
+                    "errcode": "ORG.MATRIX.MSC4335_USER_LIMIT_EXCEEDED",
+                    "error": "User limit exceeded",
+                    "org.matrix.msc4335.info_uri": "https://example.com/info",
+                    "org.matrix.msc4335.can_upgrade": true,
+                }),
+            );
+            const file = new File([], "fileName", { type: "image/jpeg" });
+            const dialogSpy = jest.spyOn(Modal, "createDialog");
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+            expect(dialogSpy).toHaveBeenCalledWith(
+                MSC4335UserLimitExceededDialog,
+                expect.objectContaining({
+                    title: _t("upload_failed_title"),
+                    error: {
+                        infoUri: "https://example.com/info",
+                        canUpgrade: true,
+                    },
                 }),
             );
             dialogSpy.mockRestore();
