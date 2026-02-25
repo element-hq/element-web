@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Widget } from "matrix-widget-api";
-
 import type {
     CapabilitiesApprover,
     IdentityApprover,

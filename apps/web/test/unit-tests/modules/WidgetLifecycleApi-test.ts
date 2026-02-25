@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { WidgetDescriptor } from "@element-hq/element-web-module-api";
-
-import { WidgetLifecycleApi, toWidgetDescriptor } from "../../../src/modules/WidgetLifecycleApi";
 import { Widget } from "matrix-widget-api";
+
+import type { WidgetDescriptor } from "@element-hq/element-web-module-api";
+import { WidgetLifecycleApi, toWidgetDescriptor } from "../../../src/modules/WidgetLifecycleApi";
 
 const mkDescriptor = (overrides: Partial<WidgetDescriptor> = {}): WidgetDescriptor => ({
     id: "test-widget",
