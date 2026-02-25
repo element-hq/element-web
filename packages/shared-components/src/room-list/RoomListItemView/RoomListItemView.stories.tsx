@@ -225,6 +225,15 @@ export const WithLargeFont: Story = {
     args: {
         isSelected: true,
     },
+    // Render the story in an iframe to avoid affecting other story
+    parameters: {
+        docs: {
+            story: {
+                inline: false,
+                iframeHeight: 170,
+            },
+        },
+    },
     decorators: [
         (Story) => {
             useEffect(() => {
