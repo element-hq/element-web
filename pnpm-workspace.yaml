@@ -19,7 +19,7 @@ catalog:
     "@element-hq/element-web-module-api": 1.9.1
     # Compound
     "@vector-im/compound-design-tokens": 6.9.0
-    "@vector-im/compound-web": 8.3.6
+    "@vector-im/compound-web": 8.4.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts

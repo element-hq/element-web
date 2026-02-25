@@ -11,6 +11,7 @@ import { capitalize } from "lodash";
 
 import { useI18n } from "../../utils/i18nContext";
 import { humanizeRelativeTime } from "../../utils/humanize";
+import styles from "./DateSeparatorView.module.css";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import { DateSeparatorDatePickerView } from "./DateSeparatorDatePickerView";
 
@@ -58,24 +59,28 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
             showTitle={false}
             trigger={trigger}
             align="start"
+            className={styles.picker_menu}
         >
             <MenuItem
                 label={capitalize(humanizeRelativeTime(i18n).format(-1, "week"))}
                 onSelect={() => vm.onLastWeekPicked?.()}
                 data-testid="jump-to-date-last-week"
                 hideChevron={true}
+                className={styles.picker_menu_item}
             />
             <MenuItem
                 label={capitalize(humanizeRelativeTime(i18n).format(-1, "month"))}
                 onSelect={() => vm.onLastMonthPicked?.()}
                 data-testid="jump-to-date-last-month"
                 hideChevron={true}
+                className={styles.picker_menu_item}
             />
             <MenuItem
                 label={_t("room|jump_to_date_beginning")}
                 onSelect={() => vm.onBeginningPicked?.()}
                 data-testid="jump-to-date-beginning"
                 hideChevron={true}
+                className={styles.picker_menu_item}
                 onKeyDown={onKeyDown}
             />
             <Separator decorative />

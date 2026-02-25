@@ -26,12 +26,24 @@
     }
 }
 
+.picker_menu {
+    max-inline-size: none !important;
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+.picker_menu_item {
+    padding: var(--cpd-space-3x) var(--cpd-space-5x) !important;
+    padding-block: none !important;
+    padding-inline: none !important;
+}
+
 .picker_form {
     display: flex;
     flex-direction: row !important;
-    flex-wrap: wrap;
-    padding: 0;
-    gap: var(--cpd-space-4x);
+    flex-wrap: wrap !important;
+    padding: 0 !important;
+    gap: var(--cpd-space-2x) !important;
     color: var(--cpd-color-text-primary);
     font: var(--cpd-font-body-md-medium);
 }
@@ -39,10 +51,10 @@
 .picker_label {
     align-self: center;
     white-space: nowrap;
+    flex-grow: 1;
 }
 
 .picker_input {
-    margin-left: auto; /* pushes this item to row end */
     &:focus-within {
         border-color: var(--cpd-color-border-focused);
     }
@@ -51,6 +63,7 @@
 .picker_input_date {
     font: inherit;
     color-scheme: light;
+    padding: var(--cpd-space-2x) !important;
 
     :global(.cpd-theme-dark) &,
     :global(.cpd-theme-dark-hc) & {
@@ -66,8 +79,4 @@
             color-scheme: light;
         }
     }
-}
-
-.picker_button {
-    flex: 1;
 }

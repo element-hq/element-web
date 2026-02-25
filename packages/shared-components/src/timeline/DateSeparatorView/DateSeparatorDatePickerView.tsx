@@ -83,6 +83,7 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
             label={null}
             onSelect={keepMenuOpenOnSelect}
             hideChevron={true}
+            className={styles.picker_menu_item}
         >
             <Root className={styles.picker_form} onSubmit={onJumpToDateSubmit}>
                 <span className={styles.picker_label}>{_t("room|jump_to_date")}</span>
