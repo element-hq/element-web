@@ -93,7 +93,9 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
         <Component
             // Only valid for <button>
             type={vm.onClick ? "button" : undefined}
-            className={classNames(className, styles.disambiguatedProfile)}
+            className={classNames(className, styles.disambiguatedProfile, {
+                [styles.disambiguatedProfileButton]: !!vm.onClick,
+            })}
             title={title}
             onClick={vm.onClick}
         >

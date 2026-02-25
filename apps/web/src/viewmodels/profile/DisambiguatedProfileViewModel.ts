@@ -140,7 +140,7 @@ export class DisambiguatedProfileViewModel
         this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
-    public onClick = (evt: MouseEvent<HTMLButtonElement | HTMLDivElement>): void => {
-        this.props.onClick?.(evt);
-    };
+    public get onClick(): ((event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void) | undefined {
+        return this.props.onClick;
+    }
 }

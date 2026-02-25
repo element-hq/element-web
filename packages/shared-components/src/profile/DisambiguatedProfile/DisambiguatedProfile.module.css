@@ -9,7 +9,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
@@ -26,10 +25,12 @@
     }
 }
 
-button {
+.disambiguatedProfileButton {
     padding: 0;
     border: 0;
+    font: inherit;
     color: inherit;
-    background-color: inherit;
-    font-size: var(--cpd-font-size-root);
+    background: none;
+    cursor: pointer;
+    text-align: start;
 }

@@ -65,7 +65,7 @@ describe("DisambiguatedProfileView", () => {
             actions: Partial<DisambiguatedProfileViewActions> = {},
         ) {
             super(snapshot);
-            this.onClick = actions.onClick ?? vi.fn();
+            this.onClick = actions.onClick;
         }
     }
 
@@ -159,16 +159,16 @@ describe("DisambiguatedProfileView", () => {
         expect(onClick).not.toHaveBeenCalled();
     });
 
-    it("should still render as a button when onClick is not provided", () => {
+    it("should render a non-interactive container when onClick is not provided", () => {
         const vm = new DisambiguatedProfileViewModel({
             displayName: "Static User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        const profileContainer = getProfileContainer("Static User");
-        expect(profileContainer.tagName).toBe("BUTTON");
-        expect(profileContainer).not.toHaveAttribute("tabindex");
-        expect(profileContainer.tabIndex).toBe(0);
+        const displayNameElement = screen.getByText("Static User");
+
+        expect(screen.queryByRole("button", { name: "Static User" })).not.toBeInTheDocument();
+        expect(displayNameElement.parentElement?.tagName).toBe("DIV");
     });
 
     it("should display tooltip title when provided", () => {
@@ -178,7 +178,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByText("User With Tooltip").closest("button")).toHaveAttribute(
+        expect(screen.getByText("User With Tooltip").parentElement).toHaveAttribute(
             "title",
             "User With Tooltip (@user:example.org)",
         );
