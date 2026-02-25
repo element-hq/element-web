@@ -87,7 +87,7 @@ const meta = {
         ...defaultSnapshot,
         isSelected: false,
         isFocused: false,
-        roomIndex: 0,
+        roomIndex: 1,
         roomCount: 10,
         onOpenRoom: fn(),
         onMarkAsRead: fn(),
