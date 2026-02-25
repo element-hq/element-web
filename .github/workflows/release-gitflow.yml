@@ -11,5 +11,6 @@ jobs:
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
+            dir: apps/web
             dependencies: |
                 matrix-js-sdk

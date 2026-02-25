@@ -5,13 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "./RoomListItemView";
 import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItemView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 import { renderAvatar } from "../story-mocks";
 
@@ -26,7 +27,7 @@ type RoomListItemProps = RoomListItemSnapshot &
     };
 
 // Wrapper component that creates a mocked ViewModel
-const RoomListItemWrapper = ({
+const RoomListItemWrapperImpl = ({
     onOpenRoom,
     onMarkAsRead,
     onMarkAsUnread,
@@ -67,6 +68,7 @@ const RoomListItemWrapper = ({
         />
     );
 };
+const RoomListItemWrapper = withViewDocs(RoomListItemWrapperImpl, RoomListItemView);
 
 const meta = {
     title: "Room List/RoomListItemView",
@@ -217,4 +219,35 @@ export const WithoutHoverMenu: Story = {
     args: {
         showMoreOptionsMenu: false,
     },
+};
+
+export const WithLargeFont: Story = {
+    args: {
+        isSelected: true,
+    },
+    decorators: [
+        (Story) => {
+            useEffect(() => {
+                const originalFontSize = getComputedStyle(document.documentElement).fontSize;
+                document.documentElement.style.setProperty("font-size", "36px");
+                return () => {
+                    document.documentElement.style.setProperty("font-size", originalFontSize);
+                };
+            }, []);
+            return <Story />;
+        },
+    ],
+};
+
+export const WithZoom: Story = {
+    args: {
+        isSelected: true,
+    },
+    decorators: [
+        (Story, context) => (
+            <div style={{ zoom: 2 }}>
+                <Story />
+            </div>
+        ),
+    ],
 };

@@ -20,7 +20,9 @@
         "start_chat": "채팅 시작"
     },
     "common": {
-        "preferences": "환경설정"
+        "encryption_enabled": "암호화 활성화됨",
+        "preferences": "환경설정",
+        "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
     },
     "left_panel": {
         "open_dial_pad": "다이얼 패드 열기"
@@ -157,6 +159,16 @@
             "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
             "unnamed_audio": "이름 없는 오디오"
+        },
+        "m.room.encryption": {
+            "disable_attempt": "암호화를 비활성화하려는 시도가 무시되었습니다.",
+            "disabled": "암호화가 활성화되지 않았습니다",
+            "enabled": "이 방의 메시지는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
+            "enabled_dm": "이곳의 메시지는 종단간 암호화로 보호됩니다. 프로필 사진을 탭하여 %(displayName)s 님을 인증하세요.",
+            "enabled_local": "이 채팅의 메시지는 종단간 암호화됩니다.",
+            "parameters_changed": "일부 암호화 설정이 변경되었습니다.",
+            "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
+            "unsupported": "이 방에서 사용 중인 암호화 방식은 지원되지 않습니다."
         }
     },
     "widget": {

@@ -105,7 +105,7 @@ export interface RoomListItemActions {
 /**
  * The view model type for a room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot> & RoomListItemActions;
+export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
 
 /**
  * Props for RoomListItemView component
@@ -163,7 +163,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                 mx_RoomListItemView_selected: isSelected,
             })}
             gap="var(--cpd-space-3x)"
-            align="center"
+            align="stretch"
             type="button"
             role="option"
             aria-posinset={roomIndex + 1}

@@ -17,11 +17,13 @@ jobs:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
             - name: Download package
+              working-directory: apps/web
               run: |
                   wget "https://github.com/element-hq/element-web/releases/download/$VERSION/element-$VERSION.tar.gz"
                   wget "https://github.com/element-hq/element-web/releases/download/$VERSION/element-$VERSION.tar.gz.asc"
 
             - name: Check GPG signature
+              working-directory: apps/web
               run: |
                   wget "https://packages.element.io/element-release-key.gpg"
                   gpg --import element-release-key.gpg
@@ -31,6 +33,7 @@ jobs:
                   FINGERPRINT: ${{ vars.GPG_FINGERPRINT }}
 
             - name: Prepare
+              working-directory: apps/web
               run: |
                   mkdir -p debian/tmp/DEBIAN
                   find debian -maxdepth 1 -type f -exec cp "{}" debian/tmp/DEBIAN/ \;
@@ -41,6 +44,7 @@ jobs:
                   ln -s /etc/element-web/config.json debian/tmp/usr/share/element-web/config.json
 
             - name: Write changelog
+              working-directory: apps/web
               run: |
                   VERSION=$(cat package.json | jq -r .version)
                   TIME=$(date -d "$PUBLISHED_AT" -R)
@@ -57,6 +61,7 @@ jobs:
                   PUBLISHED_AT: ${{ github.event.release.published_at }}
 
             - name: Build deb package
+              working-directory: apps/web
               run: |
                   VERSION=$(cat package.json | jq -r .version)
                   dpkg-gencontrol -v"$VERSION" -ldebian/tmp/DEBIAN/changelog
@@ -65,14 +70,14 @@ jobs:
             - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: element-web.deb
-                  path: element-web.deb
+                  path: apps/web/element-web.deb
                   retention-days: 14
 
             - name: Publish to packages.element.io
               if: github.event.release.prerelease == false
               uses: element-hq/packages.element.io@master
               with:
-                  file: element-web.deb
+                  file: apps/web/element-web.deb
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   bucket-api: ${{ vars.CF_R2_S3_API }}
                   bucket-key-id: ${{ secrets.CF_R2_ACCESS_KEY_ID }}

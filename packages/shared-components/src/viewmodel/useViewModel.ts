@@ -14,7 +14,7 @@ import { type ViewModel } from "./ViewModel";
  * @param vm The view model to use
  * @returns The current snapshot
  */
-export function useViewModel<T>(vm: ViewModel<T>): T {
+export function useViewModel<T>(vm: ViewModel<T, unknown>): T {
     // We need to pass the same getSnapshot function as getServerSnapshot as this
     // is used when making the HTML chat export.
     return useSyncExternalStore(vm.subscribe, vm.getSnapshot, vm.getSnapshot);

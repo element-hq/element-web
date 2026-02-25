@@ -15,10 +15,11 @@
     /* Needed to position the selected marker */
     position: relative;
     cursor: pointer;
-    height: 44px;
     width: 100%;
     /* Gap between items, accounted for in ROOM_LIST_ITEM_HEIGHT */
-    margin-bottom: var(--cpd-space-2x);
+    padding-bottom: var(--cpd-space-2x);
+    /* 44px height + padding bottom */
+    min-height: calc(44px + var(--cpd-space-2x));
 
     font: var(--cpd-font-body-md-regular);
     letter-spacing: var(--cpd-font-letter-spacing-body-md);
@@ -60,7 +61,6 @@
 
 .container {
     flex: 1;
-    height: 100%;
     margin: 0 var(--cpd-space-3x);
     padding: 0 var(--cpd-space-2x);
     border-radius: 8px;
@@ -86,7 +86,6 @@
 .selected {
     .container {
         background-color: var(--cpd-color-bg-action-tertiary-selected);
-        font: var(--cpd-font-body-md-semibold);
         color: var(--cpd-color-text-primary);
     }
 
@@ -94,9 +93,10 @@
     .container::before {
         content: "";
         position: absolute;
-        /* Marker height is 34px, room list item height is 44px. So position is at 5px and top and bottom */
+        /* Marker height is 34px, room list item height is 44px. So position is at 5px at and bottom */
         top: 5px;
-        bottom: 5px;
+        /* Add the padding bottom to center */
+        bottom: calc(5px + var(--cpd-space-2x));
         left: 0;
         width: 4px;
         background-color: var(--cpd-color-bg-accent-rest);

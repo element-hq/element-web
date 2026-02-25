@@ -10,17 +10,18 @@ import { fn } from "storybook/test";
 import { IconButton } from "@vector-im/compound-web";
 import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     type WidgetContextMenuAction,
     type WidgetContextMenuSnapshot,
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type WidgetContextMenuViewModelProps = WidgetContextMenuSnapshot & WidgetContextMenuAction;
 
-const WidgetContextMenuViewWrapper = ({
+const WidgetContextMenuViewWrapperImpl = ({
     onStreamAudioClick,
     onEditClick,
     onSnapshotClick,
@@ -41,8 +42,9 @@ const WidgetContextMenuViewWrapper = ({
     });
     return <WidgetContextMenuView vm={vm} />;
 };
+const WidgetContextMenuViewWrapper = withViewDocs(WidgetContextMenuViewWrapperImpl, WidgetContextMenuView);
 
-export default {
+const meta = {
     title: "RightPanel/WidgetContextMenuView",
     component: WidgetContextMenuViewWrapper,
     tags: ["autodocs"],
@@ -54,7 +56,6 @@ export default {
         showSnapshotButton: true,
         showMoveButtons: [true, true],
         canModify: true,
-        widgetMessaging: undefined,
         isMenuOpened: true,
         trigger: (
             <IconButton size="24px" aria-label="context menu trigger button" inert={true} tabIndex={-1}>
@@ -69,16 +70,18 @@ export default {
         onFinished: fn(),
         onMoveButton: fn(),
     },
-} as Meta<typeof WidgetContextMenuViewWrapper>;
+} satisfies Meta<typeof WidgetContextMenuViewWrapper>;
 
-const Template: StoryFn<typeof WidgetContextMenuViewWrapper> = (args) => <WidgetContextMenuViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof WidgetContextMenuViewWrapper>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const OnlyBasicModification = Template.bind({});
-OnlyBasicModification.args = {
-    showSnapshotButton: false,
-    showMoveButtons: [false, false],
-    showStreamAudioStreamButton: false,
-    showEditButton: false,
+export const OnlyBasicModification: Story = {
+    args: {
+        showSnapshotButton: false,
+        showMoveButtons: [false, false],
+        showStreamAudioStreamButton: false,
+        showEditButton: false,
+    },
 };

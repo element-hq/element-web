@@ -47,7 +47,7 @@
         "build:storybook": "nx run @element-hq/web-shared-components:storybook",
         "build:doc": "nx run @element-hq/web-shared-components:typedoc",
         "lint": "pnpm lint:types && pnpm lint:js",
-        "lint:js": "eslint --max-warnings 0 src && prettier --check .",
+        "lint:js": "eslint --max-warnings 0 src",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "dependencies": {
@@ -65,6 +65,7 @@
     "devDependencies": {
         "@element-hq/element-web-playwright-common-local": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
+        "@fontsource/inter": "catalog:",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@playwright/test": "catalog:",
         "@storybook/addon-a11y": "^10.0.7",

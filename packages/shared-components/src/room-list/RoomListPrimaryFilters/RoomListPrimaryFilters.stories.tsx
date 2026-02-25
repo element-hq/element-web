@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
 import type { FilterId } from "./useVisibleFilters";
 
-const meta: Meta<typeof RoomListPrimaryFilters> = {
+const meta = {
     title: "Room List/RoomListPrimaryFilters",
     component: RoomListPrimaryFilters,
     tags: ["autodocs"],
@@ -25,10 +25,10 @@ const meta: Meta<typeof RoomListPrimaryFilters> = {
             url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel-2025?node-id=98-1979&t=vafb4zoYMNLRuAbh-4",
         },
     },
-};
+} satisfies Meta<typeof RoomListPrimaryFilters>;
 
 export default meta;
-type Story = StoryObj<typeof RoomListPrimaryFilters>;
+type Story = StoryObj<typeof meta>;
 
 // All available filter IDs
 const allFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite", "mentions", "invites", "low_priority"];
