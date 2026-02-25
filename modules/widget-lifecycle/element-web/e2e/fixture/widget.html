@@ -1,0 +1,61 @@
+<!-- Based on element-modules/modules/opendesk/element-web/tests/fixture/widget.html -->
+<html lang="en">
+    <head>
+        <title>Demo Widget</title>
+        <script>
+            const getCapabilities = () => {
+                const caps = new URLSearchParams(window.location.search).get("caps");
+                if (!caps) {
+                    return ["org.matrix.msc2762.receive.state_event:m.room.topic"];
+                }
+                if (caps === "none") return [];
+                return caps
+                    .split(",")
+                    .map((cap) => cap.trim())
+                    .filter(Boolean);
+            };
+
+            let sendEventCount = 0;
+            window.onmessage = async (ev) => {
+                if (ev.data.action === "capabilities") {
+                    window.parent.postMessage(
+                        Object.assign(
+                            {
+                                response: {
+                                    capabilities: getCapabilities(),
+                                },
+                            },
+                            ev.data,
+                        ),
+                        "*",
+                    );
+                } else if (ev.data.action === "notify_capabilities") {
+                    window.parent.postMessage(
+                        {
+                            api: "fromWidget",
+                            widgetId: ev.data.widgetId,
+                            requestId: "widget-" + sendEventCount,
+                            action: "get_openid",
+                            data: {},
+                        },
+                        "*",
+                    );
+                } else if (ev.data.action === "get_openid" && ev.data.response?.state === "allowed") {
+                    const { access_token } = ev.data.response;
+
+                    const hsUrl = new URLSearchParams(window.location.search).get("hsUrl");
+                    const response = await fetch(
+                        `${hsUrl}/_matrix/federation/v1/openid/userinfo?access_token=${access_token}`,
+                    );
+                    const { sub } = await response.json();
+
+                    const titleElement = document.getElementById("title");
+                    titleElement.innerText = `Hello ${sub}!`;
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <h1 id="title">Hello unknown!</h1>
+    </body>
+</html>
