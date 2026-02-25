@@ -438,7 +438,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     type: "javascript/auto",
                     use: [
                         {
-                            loader: path.resolve("./recorder-worklet-loader.cjs"),
+                            loader: path.join(__dirname, "recorder-worklet-loader.cjs"),
                         },
                         {
                             loader: "babel-loader",

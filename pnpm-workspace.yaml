@@ -1,7 +1,7 @@
 nodeLinker: hoisted
 linkWorkspacePackages: true
 packages:
-    - "."
+    - "apps/*"
     - "packages/*"
 cleanupUnusedCatalogs: true
 catalog:

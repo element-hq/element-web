@@ -70,7 +70,7 @@ jobs:
               run: cp -vnpr _current_version/bundles/* _deploy/bundles/
 
             - name: Copy config
-              run: cp element.io/app/config.json _deploy/config.json
+              run: cp apps/web/element.io/app/config.json _deploy/config.json
 
             - name: Populate 404.html
               run: echo "404 Not Found" > _deploy/404.html
