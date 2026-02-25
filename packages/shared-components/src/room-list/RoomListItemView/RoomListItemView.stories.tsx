@@ -260,3 +260,17 @@ export const WithZoom: Story = {
         ),
     ],
 };
+
+export const FirstItem: Story = {
+    args: {
+        roomIndex: 0,
+        isSelected: true,
+    },
+};
+
+export const LastItem: Story = {
+    args: {
+        roomIndex: 9,
+        isSelected: true,
+    },
+};
