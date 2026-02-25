@@ -5,6 +5,7 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "download": "Download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "invite": "Invite",
@@ -161,6 +162,9 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        },
+        "m.file": {
+            "error_invalid": "Invalid file"
         },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
