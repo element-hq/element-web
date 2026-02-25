@@ -195,20 +195,22 @@ describe("DisambiguatedProfileView", () => {
         expect(displayNameElement).toHaveClass("mx_Username_color3");
     });
 
-    it("should expose legacy display name class for host app selectors", () => {
+    it("should apply the display name class hook from snapshot props", () => {
         const vm = new DisambiguatedProfileViewModel({
             displayName: "Legacy User",
+            classNameDisplayName: "mx_DisambiguatedProfile_displayName",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
         expect(screen.getByText("Legacy User")).toHaveClass("mx_DisambiguatedProfile_displayName");
     });
 
-    it("should expose legacy MXID class without leaking the root className", () => {
+    it("should apply the MXID class hook from snapshot props without leaking the root className", () => {
         const vm = new DisambiguatedProfileViewModel({
             displayName: "Legacy User",
             displayIdentifier: "@legacy:example.org",
             className: "mx_DisambiguatedProfile",
+            classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);

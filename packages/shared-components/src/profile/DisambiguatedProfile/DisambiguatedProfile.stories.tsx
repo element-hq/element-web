@@ -32,6 +32,8 @@ const meta = {
         displayName: { control: "text" },
         colorClass: { control: "text" },
         className: { control: "text" },
+        classNameDisplayName: { control: "text" },
+        classNameDisplayIdentifier: { control: "text" },
         displayIdentifier: { control: "text" },
         title: { control: "text" },
         emphasizeDisplayName: { control: "boolean" },
@@ -39,6 +41,8 @@ const meta = {
     args: {
         displayName: "Alice",
         emphasizeDisplayName: true,
+        classNameDisplayName: "mx_DisambiguatedProfile_displayName",
+        classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
     },
 } satisfies Meta<typeof DisambiguatedProfileViewWrapper>;
 

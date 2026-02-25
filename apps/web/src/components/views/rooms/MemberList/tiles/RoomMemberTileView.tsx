@@ -54,6 +54,8 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
                 member,
                 withTooltip: true,
                 className: "mx_DisambiguatedProfile",
+                classNameDisplayName: "mx_DisambiguatedProfile_displayName",
+                classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
             }),
     );
     useEffect(() => {

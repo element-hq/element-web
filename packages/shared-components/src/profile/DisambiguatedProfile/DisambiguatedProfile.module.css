@@ -25,14 +25,10 @@
     }
 }
 
-.disambiguatedProfileButton {
+button {
+    /* Clear default <button> styles */
     padding: 0;
-    border: 0;
-    margin: 0;
-    letter-spacing: var(--cpd-letter-spacing-body-md);
-    color: inherit;
-    position: relative;
-    top: -1px;
+    border: none;
+    vertical-align: baseline;
     background: none;
-    cursor: pointer;
 }

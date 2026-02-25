@@ -29,6 +29,14 @@ export interface DisambiguatedProfileViewSnapshot {
      */
     className?: string;
     /**
+     * The CSS class name applied to the display name span.
+     */
+    classNameDisplayName?: string;
+    /**
+     * The CSS class name applied to the display identifier span.
+     */
+    classNameDisplayIdentifier?: string;
+    /**
      * The formatted user identifier to display when disambiguation is needed.
      * Undefined if disambiguation is not required.
      */
@@ -80,12 +88,21 @@ interface DisambiguatedProfileViewProps {
  * ```
  */
 export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
-    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, className } = useViewModel(vm);
+    const {
+        displayName,
+        colorClass,
+        displayIdentifier,
+        title,
+        emphasizeDisplayName,
+        className,
+        classNameDisplayName,
+        classNameDisplayIdentifier,
+    } = useViewModel(vm);
 
-    const displayNameClasses = classNames("mx_DisambiguatedProfile_displayName", colorClass, {
+    const displayNameClasses = classNames(classNameDisplayName, colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
     });
-    const displayIdentifierClasses = classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid);
+    const displayIdentifierClasses = classNames(classNameDisplayIdentifier, styles.disambiguatedProfile_mxid);
 
     const Component = vm.onClick ? "button" : "div";
 
@@ -93,9 +110,7 @@ export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileVi
         <Component
             // Only valid for <button>
             type={vm.onClick ? "button" : undefined}
-            className={classNames(className, styles.disambiguatedProfile, {
-                [styles.disambiguatedProfileButton]: !!vm.onClick,
-            })}
+            className={classNames(className, styles.disambiguatedProfile)}
             title={title}
             onClick={vm.onClick}
         >
