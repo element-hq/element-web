@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { MaybePromise } from "../utils";
+
 /**
  * A description of a widget passed to approver callbacks.
  * Contains the information needed to make approval decisions.
@@ -31,14 +33,14 @@ export type WidgetDescriptor = {
  * Return `true` to auto-approve, or any other value to defer to the default consent flow.
  * @alpha Subject to change.
  */
-export type PreloadApprover = (widget: WidgetDescriptor) => boolean | Promise<boolean> | undefined;
+export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 /**
  * Callback that decides whether a widget should be auto-approved to receive
  * the user's OpenID identity token.
  * Return `true` to auto-approve, or any other value to defer to the default consent flow.
  * @alpha Subject to change.
  */
-export type IdentityApprover = (widget: WidgetDescriptor) => boolean | Promise<boolean> | undefined;
+export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 /**
  * Callback that decides which of a widget's requested capabilities should be auto-approved.
  * Return a `Set` of approved capability strings, or `undefined` to defer to the default consent flow.
@@ -47,7 +49,7 @@ export type IdentityApprover = (widget: WidgetDescriptor) => boolean | Promise<b
 export type CapabilitiesApprover = (
     widget: WidgetDescriptor,
     requestedCapabilities: Set<string>,
-) => Set<string> | Promise<Set<string> | undefined> | undefined;
+) => MaybePromise<Set<string> | undefined>;
 
 /**
  * API for modules to auto-approve widget preloading, identity token requests, and capability requests.

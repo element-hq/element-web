@@ -67,7 +67,7 @@ export interface BuiltinsApi {
 }
 
 // @alpha
-export type CapabilitiesApprover = (widget: WidgetDescriptor, requestedCapabilities: Set<string>) => Set<string> | Promise<Set<string> | undefined> | undefined;
+export type CapabilitiesApprover = (widget: WidgetDescriptor, requestedCapabilities: Set<string>) => MaybePromise<Set<string> | undefined>;
 
 // @alpha @deprecated (undocumented)
 export interface ChatExportCustomisations<ExportFormat, ExportType> {
@@ -186,7 +186,7 @@ export interface I18nApi {
 }
 
 // @alpha
-export type IdentityApprover = (widget: WidgetDescriptor) => boolean | Promise<boolean> | undefined;
+export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 
 // @alpha @deprecated (undocumented)
 export type LegacyCustomisations<T extends object> = (customisations: T) => void;
@@ -241,6 +241,9 @@ export interface MatrixEvent {
     type: string;
     unsigned: Record<string, unknown>;
 }
+
+// @public
+export type MaybePromise<T> = T | PromiseLike<T>;
 
 // @alpha @deprecated (undocumented)
 export interface Media {
@@ -334,7 +337,7 @@ export type OriginalMessageComponentProps = {
 };
 
 // @alpha
-export type PreloadApprover = (widget: WidgetDescriptor) => boolean | Promise<boolean> | undefined;
+export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 
 // @public
 export interface Profile {
