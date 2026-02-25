@@ -32,11 +32,11 @@ pnpm install
 popd
 ```
 
-Clone the repo and switch to the `element-web` directory:
+Clone the repo and switch to the `element-web/apps/web` directory:
 
 ```bash
 git clone https://github.com/element-hq/element-web.git
-cd element-web
+cd element-web/apps/web
 ```
 
 Configure the app by copying `config.sample.json` to `config.json` and
