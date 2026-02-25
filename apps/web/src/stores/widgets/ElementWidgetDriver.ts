@@ -668,7 +668,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, legacyOpts, this.forWidget);
             approved = legacyOpts.approved;
         }
-        
+
         if (approved) {
             return observer.update({
                 state: OpenIDRequestState.Allowed,
