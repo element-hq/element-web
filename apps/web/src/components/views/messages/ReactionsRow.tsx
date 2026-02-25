@@ -6,22 +6,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type SyntheticEvent } from "react";
+import React, { useEffect, type JSX, type SyntheticEvent } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, MatrixEventEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ReactionsRowButtonView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { isContentActionable } from "../../../utils/EventUtils";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import ContextMenu, { aboveLeftOf, useContextMenu } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
-import ReactionsRowButton from "./ReactionsRowButton";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
+import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
@@ -62,6 +64,52 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
             {contextMenu}
         </React.Fragment>
     );
+};
+
+interface ReactionsRowButtonItemProps {
+    mxEvent: MatrixEvent;
+    content: string;
+    count: number;
+    reactionEvents: MatrixEvent[];
+    myReactionEvent?: MatrixEvent;
+    disabled?: boolean;
+    customReactionImagesEnabled?: boolean;
+}
+
+const ReactionsRowButtonItem: React.FC<ReactionsRowButtonItemProps> = (props) => {
+    const client = useMatrixClientContext();
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ReactionsRowButtonViewModel({
+                client,
+                mxEvent: props.mxEvent,
+                content: props.content,
+                count: props.count,
+                reactionEvents: props.reactionEvents,
+                myReactionEvent: props.myReactionEvent,
+                disabled: props.disabled,
+                customReactionImagesEnabled: props.customReactionImagesEnabled,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
+    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
+
+    useEffect(() => {
+        vm.setCount(props.count);
+    }, [props.count, vm]);
+
+    useEffect(() => {
+        vm.setMyReactionEvent(props.myReactionEvent);
+    }, [props.myReactionEvent, vm]);
+
+    useEffect(() => {
+        vm.setDisabled(props.disabled);
+    }, [props.disabled, vm]);
+
+    return <ReactionsRowButtonView vm={vm} />;
 };
 
 interface IProps {
@@ -186,7 +234,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                     return mxEvent.getRelation()?.key === content;
                 });
                 return (
-                    <ReactionsRowButton
+                    <ReactionsRowButtonItem
                         key={content}
                         content={content}
                         count={deduplicatedEvents.length}
