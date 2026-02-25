@@ -46,6 +46,12 @@ interface IState {
 
     /** Time to sleep between crawlwer passes, in milliseconds. */
     crawlerSleepTime: number;
+
+    /** Tokenizer mode for search indexing. */
+    tokenizerMode: string;
+
+    /** Initial tokenizer mode when dialog was opened. */
+    initialTokenizerMode: string;
 }
 
 /*
@@ -55,6 +61,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     public constructor(props: IProps) {
         super(props);
 
+        const initialTokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode");
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,
@@ -63,6 +70,8 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
             roomCount: 0,
             currentRoom: null,
             crawlerSleepTime: SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime"),
+            tokenizerMode: initialTokenizerMode,
+            initialTokenizerMode: initialTokenizerMode,
         };
     }
 
@@ -125,6 +134,51 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 
+    private readonly onTokenizerModeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+        this.setState({ tokenizerMode: e.target.value });
+        // Don't save to settings yet - wait for Done button
+    };
+
+    private readonly onDone = async (): Promise<void> => {
+        // Check if tokenizer mode has changed
+        if (this.state.tokenizerMode !== this.state.initialTokenizerMode) {
+            // Show confirmation dialog
+            const ConfirmTokenizerChangeDialog = (await import("./ConfirmTokenizerChangeDialog")).default;
+            Modal.createDialog(
+                ConfirmTokenizerChangeDialog,
+                {
+                    onFinished: async (confirmed?: boolean) => {
+                        if (confirmed) {
+                            // Save the tokenizer mode setting
+                            SettingsStore.setValue(
+                                "tokenizerMode",
+                                null,
+                                SettingLevel.DEVICE,
+                                this.state.tokenizerMode,
+                            );
+                        } else {
+                            // User cancelled - revert tokenizer mode to initial value
+                            this.setState((prevState) => ({ tokenizerMode: prevState.initialTokenizerMode }));
+                            SettingsStore.setValue(
+                                "tokenizerMode",
+                                null,
+                                SettingLevel.DEVICE,
+                                this.state.initialTokenizerMode,
+                            );
+                        }
+                        this.props.onFinished();
+                    },
+                },
+                undefined,
+                /* priority = */ false,
+                /* static = */ true,
+            );
+        } else {
+            // No change, just close the dialog
+            this.props.onFinished();
+        }
+    };
+
     public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
@@ -165,6 +219,18 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                         value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange}
                     />
+                    <Field
+                        element="select"
+                        label={_t("settings|security|tokenizer_mode")}
+                        value={this.state.tokenizerMode}
+                        onChange={this.onTokenizerModeChange}
+                    >
+                        <option value="ngram">{_t("settings|security|tokenizer_mode_ngram")}</option>
+                        <option value="language">{_t("settings|security|tokenizer_mode_language")}</option>
+                    </Field>
+                    <div className="mx_SettingsTab_subsectionText">
+                        {_t("settings|security|tokenizer_mode_description")}
+                    </div>
                 </div>
             </div>
         );
@@ -178,7 +244,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                 {eventIndexingSettings}
                 <DialogButtons
                     primaryButton={_t("action|done")}
-                    onPrimaryButtonClick={this.props.onFinished}
+                    onPrimaryButtonClick={this.onDone}
                     primaryButtonClass="primary"
                     cancelButton={_t("action|disable")}
                     onCancel={this.onDisable}
