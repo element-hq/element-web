@@ -19,6 +19,7 @@ import { type ExtrasApi } from "./extras.ts";
 import { type BuiltinsApi } from "./builtins.ts";
 import { type StoresApi } from "./stores.ts";
 import { type ClientApi } from "./client.ts";
+import { type WidgetLifecycleApi } from "./widget-lifecycle.ts";
 
 /**
  * Module interface for modules to implement.
@@ -135,6 +136,12 @@ export interface Api
      * Access some very specific functionality from the client.
      */
     readonly client: ClientApi;
+
+    /**
+     * API for modules to auto-approve widget preloading, identity token requests, and capability requests.
+     * @alpha Subject to change.
+     */
+    readonly widgetLifecycle: WidgetLifecycleApi;
 
     /**
      * Create a ReactDOM root for rendering React components.
