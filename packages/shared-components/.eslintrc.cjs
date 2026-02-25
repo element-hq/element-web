@@ -65,6 +65,7 @@ module.exports = {
                 allowInterfaces: "with-single-extends",
             },
         ],
+        "storybook/meta-satisfies-type": "error",
     },
     overrides: [
         {
