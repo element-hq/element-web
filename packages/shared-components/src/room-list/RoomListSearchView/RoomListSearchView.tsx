@@ -50,7 +50,7 @@ export interface RoomListSearchViewActions {
 /**
  * The view model for the room list search component.
  */
-export type RoomListSearchViewModel = ViewModel<RoomListSearchViewSnapshot> & RoomListSearchViewActions;
+export type RoomListSearchViewModel = ViewModel<RoomListSearchViewSnapshot, RoomListSearchViewActions>;
 
 interface RoomListSearchViewProps {
     /**

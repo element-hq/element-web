@@ -84,7 +84,7 @@ interface DecryptionFailureBodyViewProps {
     /**
      * React ref to attach to any React components returned
      */
-    ref?: React.RefObject<any>;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
 /**

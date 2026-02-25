@@ -8,17 +8,18 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     RoomListSearchView,
     type RoomListSearchViewActions,
     type RoomListSearchViewSnapshot,
 } from "./RoomListSearchView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type RoomListSearchProps = RoomListSearchViewSnapshot & RoomListSearchViewActions;
 
-const RoomListSearchViewWrapper = ({
+const RoomListSearchViewWrapperImpl = ({
     onSearchClick,
     onDialPadClick,
     onExploreClick,
@@ -31,8 +32,9 @@ const RoomListSearchViewWrapper = ({
     });
     return <RoomListSearchView vm={vm} />;
 };
+const RoomListSearchViewWrapper = withViewDocs(RoomListSearchViewWrapperImpl, RoomListSearchView);
 
-export default {
+const meta = {
     title: "Room List/RoomListSearchView",
     component: RoomListSearchViewWrapper,
     tags: ["autodocs"],
@@ -50,25 +52,29 @@ export default {
             url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel-2025?node-id=98-1979&t=vafb4zoYMNLRuAbh-4",
         },
     },
-} as Meta<typeof RoomListSearchViewWrapper>;
+} satisfies Meta<typeof RoomListSearchViewWrapper>;
 
-const Template: StoryFn<typeof RoomListSearchViewWrapper> = (args) => <RoomListSearchViewWrapper {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const WithDialPad = Template.bind({});
-WithDialPad.args = {
-    displayDialButton: true,
+export const WithDialPad: Story = {
+    args: {
+        displayDialButton: true,
+    },
 };
 
-export const WithoutExplore = Template.bind({});
-WithoutExplore.args = {
-    displayExploreButton: false,
+export const WithoutExplore: Story = {
+    args: {
+        displayExploreButton: false,
+    },
 };
 
-export const AllButtons = Template.bind({});
-AllButtons.args = {
-    displayExploreButton: true,
-    displayDialButton: true,
-    searchShortcut: "⌘ K",
+export const AllButtons: Story = {
+    args: {
+        displayExploreButton: true,
+        displayDialButton: true,
+        searchShortcut: "⌘ K",
+    },
 };

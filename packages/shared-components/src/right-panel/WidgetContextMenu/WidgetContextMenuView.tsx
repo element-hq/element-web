@@ -89,7 +89,7 @@ export interface WidgetContextMenuAction {
     onMoveButton: (direction: number) => void;
 }
 
-export type WidgetContextMenuViewModel = ViewModel<WidgetContextMenuSnapshot> & WidgetContextMenuAction;
+export type WidgetContextMenuViewModel = ViewModel<WidgetContextMenuSnapshot, WidgetContextMenuAction>;
 
 interface WidgetContextMenuViewProps {
     vm: WidgetContextMenuViewModel;

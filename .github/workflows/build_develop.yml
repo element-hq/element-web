@@ -40,6 +40,7 @@ jobs:
               run: "./scripts/layered.sh"
 
             - name: Build, Package & Upload sourcemaps
+              working-directory: apps/web
               run: "./scripts/ci_package.sh"
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -55,20 +56,22 @@ jobs:
                   CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
 
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+              working-directory: apps/web
 
             - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
               with:
                   name: webapp
-                  path: dist/develop.tar.gz
+                  path: apps/web/dist/develop.tar.gz
                   retention-days: 1
 
             - name: Extract webapp
               run: |
                   mkdir _deploy
-                  tar xf dist/develop.tar.gz -C _deploy --strip-components=1
+                  tar xf apps/web/dist/develop.tar.gz -C _deploy --strip-components=1
 
             - name: Copy config
-              run: cp element.io/develop/config.json _deploy/config.json
+              working-directory: apps/web
+              run: cp apps/web/element.io/develop/config.json _deploy/config.json
 
             - name: Populate 404.html
               run: echo "404 Not Found" > _deploy/404.html
@@ -115,7 +118,7 @@ jobs:
             # Checksum algorithm specified as per https://developers.cloudflare.com/r2/examples/aws/aws-cli/
             - name: Deploy to R2
               run: |
-                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
+                  aws s3 cp apps/web/dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
                   aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}

@@ -1,7 +1,7 @@
 nodeLinker: hoisted
 linkWorkspacePackages: true
 packages:
-    - "."
+    - "apps/*"
     - "packages/*"
 cleanupUnusedCatalogs: true
 catalog:
@@ -16,7 +16,7 @@ catalog:
     "@element-hq/element-web-playwright-common": 2.2.7
     "@playwright/test": 1.58.2
     # Module API
-    "@element-hq/element-web-module-api": 1.9.0
+    "@element-hq/element-web-module-api": 1.9.1
     # Compound
     "@vector-im/compound-design-tokens": 6.10.0
     "@vector-im/compound-web": 8.3.6

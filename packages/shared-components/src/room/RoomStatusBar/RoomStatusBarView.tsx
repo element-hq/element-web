@@ -100,7 +100,7 @@ export type RoomStatusBarViewSnapshot =
 /**
  * The view model for RoomStatusBarView.
  */
-export type RoomStatusBarViewModel = ViewModel<RoomStatusBarViewSnapshot> & RoomStatusBarViewActions;
+export type RoomStatusBarViewModel = ViewModel<RoomStatusBarViewSnapshot, RoomStatusBarViewActions>;
 
 interface RoomStatusBarViewProps {
     /**
