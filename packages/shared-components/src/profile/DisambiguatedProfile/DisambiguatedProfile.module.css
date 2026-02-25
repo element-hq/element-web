@@ -28,9 +28,11 @@
 .disambiguatedProfileButton {
     padding: 0;
     border: 0;
-    font: inherit;
+    margin: 0;
+    letter-spacing: var(--cpd-letter-spacing-body-md);
     color: inherit;
+    position: relative;
+    top: -1px;
     background: none;
     cursor: pointer;
-    text-align: start;
 }
