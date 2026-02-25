@@ -1,41 +1,49 @@
 {
-    "$schema": "./node_modules/nx/schemas/project-schema.json",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
-    "implicitDependencies": ["@element-hq/web-shared-components"],
     "targets": {
         "prebuild:i18n": {
             "cache": true,
             "command": "node scripts/copy-res.ts",
-            "inputs": ["{projectRoot}/src/i18n/strings/*.json"],
-            "outputs": ["{projectRoot}/webapp/i18n/"]
+            "inputs": [
+                "{projectRoot}/src/i18n/strings/*.json",
+                "{workspaceRoot}/packages/shared-components/src/i18n/strings/*.json"
+            ],
+            "outputs": ["{projectRoot}/webapp/i18n/"],
+            "options": { "cwd": "apps/web" }
         },
         "prebuild:module_system": {
             "cache": true,
             "command": "node module_system/scripts/install.ts",
             "inputs": ["{projectRoot}/build_config.yaml"],
-            "outputs": ["{projectRoot}/src/modules.js", "{projectRoot}/package.json", "{workspaceRoot}/pnpm-lock.yaml"]
+            "outputs": ["{projectRoot}/src/modules.js", "{projectRoot}/package.json", "{workspaceRoot}/pnpm-lock.yaml"],
+            "options": { "cwd": "apps/web" }
         },
         "prebuild:rethemendex": {
             "cache": true,
             "executor": "nx:run-script",
             "options": {
-                "script": "rethemendex"
+                "script": "rethemendex",
+                "cwd": "apps/web"
             },
             "inputs": ["{projectRoot}/res/css/**/*"],
             "outputs": ["{projectRoot}/res/css/_components.pcss"]
         },
         "build": {
             "command": "webpack-cli --disable-interpret --progress --mode production",
-            "outputs": ["{projectRoot}/webapp"]
+            "outputs": ["{projectRoot}/webapp"],
+            "options": { "cwd": "apps/web" }
         },
         "start:i18n": {
             "command": "node scripts/copy-res.ts -w",
-            "continuous": true
+            "continuous": true,
+            "options": { "cwd": "apps/web" }
         },
         "start": {
             "command": "webpack-dev-server --disable-interpret --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
             "dependsOn": ["prebuild:module_system", "prebuild:rethemendex", "start:i18n", "^start"],
-            "continuous": true
+            "continuous": true,
+            "options": { "cwd": "apps/web" }
         },
         "lint:types": {
             "executor": "nx:run-commands",
@@ -45,14 +53,16 @@
                     "tsc --noEmit",
                     "tsc --noEmit -p playwright"
                 ],
-                "parallel": false
+                "parallel": false,
+                "cwd": "apps/web"
             },
             "dependsOn": ["^build"]
         },
         "test:unit": {
             "executor": "@nx/jest:jest",
             "options": {
-                "jestConfig": "jest.config.ts"
+                "jestConfig": "{projectRoot}/jest.config.ts",
+                "cwd": "apps/web"
             },
             "dependsOn": ["^build"]
         }

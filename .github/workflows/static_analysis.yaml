@@ -27,6 +27,9 @@ jobs:
                     - name: Typescript Syntax Check
                       install: layered
                       command: "lint:types"
+                    - name: Prettier
+                      install: normal
+                      command: "lint:prettier"
                     - name: ESLint
                       install: normal
                       command: "lint:js"
@@ -62,7 +65,7 @@ jobs:
               run: "pnpm install --frozen-lockfile"
 
             - name: Run ${{ matrix.command }}
-              run: pnpm run "$CMD" && pnpm -r --if-present run "$CMD"
+              run: pnpm --if-present run "$CMD" && pnpm -r --if-present run "$CMD"
               env:
                   CMD: ${{ matrix.command }}
 
@@ -76,6 +79,7 @@ jobs:
             matrix:
                 include:
                     - name: Element Web
+                      path: "apps/web"
                       allowed-hardcoded-keys: |
                           console_dev_note
                           labs|element_call_video_rooms

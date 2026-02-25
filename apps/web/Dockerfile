@@ -17,7 +17,7 @@ RUN pnpm install
 RUN /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
-RUN cp /src/config.sample.json /src/webapp/config.json
+RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
 FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:c9448f9aaf2dee3dccfe0d2e51d6927cc9fbfdbcada66b0b01c0759816d86a5b
@@ -28,12 +28,12 @@ USER root
 # Install jq and moreutils for sponge, both used by our entrypoints
 RUN apk add jq moreutils
 
-COPY --from=builder /src/webapp /app
+COPY --from=builder /src/apps/web/webapp /app
 
 # Override default nginx config. Templates in `/etc/nginx/templates` are passed
 # through `envsubst` by the nginx docker image entry point.
-COPY /docker/nginx-templates/* /etc/nginx/templates/
-COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
+COPY /apps/web/docker/nginx-templates/* /etc/nginx/templates/
+COPY /apps/web/docker/docker-entrypoint.d/* /docker-entrypoint.d/
 
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html

@@ -21,6 +21,7 @@ jobs:
               run: "pnpm install --frozen-lockfile"
 
             - name: Fetch Jitsi
+              working-directory: apps/web
               run: "pnpm vendor:jitsi"
 
             - name: Create Pull Request
