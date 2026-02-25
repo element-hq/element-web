@@ -12,7 +12,7 @@ describe("ImageSize", () => {
     describe("suggestedSize", () => {
         it("constrains width", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 648, h: 162 });
-            expect(size).toStrictEqual({ w: 324, h: 81 });
+            expect(size).toStrictEqual({ w: 576, h: 144 });
         });
         it("constrains height", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 162, h: 648 });
@@ -24,11 +24,11 @@ describe("ImageSize", () => {
         });
         it("returns max values if content size is not specified", () => {
             const size = suggestedSize(ImageSize.Normal, {});
-            expect(size).toStrictEqual({ w: 324, h: 324 });
+            expect(size).toStrictEqual({ w: 576, h: 324 });
         });
         it("returns integer values", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 642, h: 350 }); // does not divide evenly
-            expect(size).toStrictEqual({ w: 324, h: 176 });
+            expect(size).toStrictEqual({ w: 576, h: 314 });
         });
         it("returns integer values for portrait images", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 720, h: 1280 });
