@@ -186,7 +186,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         const contentUrl = this.getContentUrl();
         const fileType = this.content.info?.mimetype ?? "application/octet-stream";
         // defaultProps breaks types on IBodyProps, so instead define the default here.
-        const showGenericPlaceholder = false; //this.props.showGenericPlaceholder ?? true;
+        const showGenericPlaceholder = this.props.showGenericPlaceholder ?? true;
 
         let showDownloadLink =
             !showGenericPlaceholder ||

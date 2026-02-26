@@ -10,7 +10,7 @@ import React, { type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     MFileBodyView,
-    MFileBodyViewinfoIcon,
+    MFileBodyViewInfoIcon,
     MFileBodyViewRendering,
     type MFileBodyViewActions,
     type MFileBodyViewSnapshot,
@@ -51,7 +51,7 @@ const meta = {
             control: { type: "select" },
         },
         infoIcon: {
-            options: Object.entries(MFileBodyViewinfoIcon)
+            options: Object.entries(MFileBodyViewInfoIcon)
                 .filter(([key, value]) => key === value)
                 .map(([key]) => key),
             control: { type: "select" },
@@ -61,7 +61,7 @@ const meta = {
         rendering: MFileBodyViewRendering.INFO,
         infoLabel: "spec.pdf",
         infoTooltip: "spec.pdf (22 KB)",
-        infoIcon: MFileBodyViewinfoIcon.ATTACHMENT,
+        infoIcon: MFileBodyViewInfoIcon.ATTACHMENT,
         downloadLabel: "Download",
         fileUrl: "https://example.org/spec.pdf",
         className: "",
@@ -87,14 +87,14 @@ export const Invalid: Story = {
 
 export const AudioInfo: Story = {
     args: {
-        infoIcon: MFileBodyViewinfoIcon.AUDIO,
+        infoIcon: MFileBodyViewInfoIcon.AUDIO,
         infoLabel: "voice-message.ogg",
     },
 };
 
 export const VideoInfo: Story = {
     args: {
-        infoIcon: MFileBodyViewinfoIcon.VIDEO,
+        infoIcon: MFileBodyViewInfoIcon.VIDEO,
         infoLabel: "clip.mp4",
     },
 };

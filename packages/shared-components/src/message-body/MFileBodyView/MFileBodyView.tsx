@@ -35,11 +35,16 @@ export enum MFileBodyViewRendering {
 /**
  * Which info icon to render.
  */
-export enum MFileBodyViewinfoIcon {
+export enum MFileBodyViewInfoIcon {
     ATTACHMENT = "ATTACHMENT",
     AUDIO = "AUDIO",
     VIDEO = "VIDEO",
 }
+
+/**
+ * @deprecated Use `MFileBodyViewInfoIcon`.
+ */
+export const MFileBodyViewinfoIcon = MFileBodyViewInfoIcon;
 
 export interface MFileBodyViewSnapshot {
     /**
@@ -57,7 +62,7 @@ export interface MFileBodyViewSnapshot {
     /**
      * info icon variant.
      */
-    infoIcon?: MFileBodyViewinfoIcon;
+    infoIcon?: MFileBodyViewInfoIcon;
     /**
      * Optional download button/link label.
      */
@@ -130,9 +135,9 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
         rendering === MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME;
 
     let icon = <AttachmentIcon />;
-    if (infoIcon === MFileBodyViewinfoIcon.AUDIO) {
+    if (infoIcon === MFileBodyViewInfoIcon.AUDIO) {
         icon = <VolumeOnSolidIcon />;
-    } else if (infoIcon === MFileBodyViewinfoIcon.VIDEO) {
+    } else if (infoIcon === MFileBodyViewInfoIcon.VIDEO) {
         icon = <VideoCallSolidIcon />;
     }
 

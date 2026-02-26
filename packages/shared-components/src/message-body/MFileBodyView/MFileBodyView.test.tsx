@@ -13,7 +13,7 @@ import { describe, it, expect, vi } from "vitest";
 import {
     MFileBodyView,
     MFileBodyViewRendering,
-    MFileBodyViewinfoIcon,
+    MFileBodyViewInfoIcon,
     type MFileBodyViewActions,
     type MFileBodyViewSnapshot,
 } from "./MFileBodyView";
@@ -43,7 +43,7 @@ const defaultSnapshot: MFileBodyViewSnapshot = {
     rendering: MFileBodyViewRendering.INFO,
     infoLabel: "spec.pdf",
     infoTooltip: "spec.pdf (22 KB)",
-    infoIcon: MFileBodyViewinfoIcon.ATTACHMENT,
+    infoIcon: MFileBodyViewInfoIcon.ATTACHMENT,
     downloadLabel: "Download",
     fileUrl: "https://example.org/spec.pdf",
     className: "",

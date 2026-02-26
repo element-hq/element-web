@@ -8,7 +8,7 @@
 export {
     MFileBodyView,
     MFileBodyViewRendering,
-    MFileBodyViewinfoIcon,
+    MFileBodyViewInfoIcon,
     type MFileBodyViewActions,
     type MFileBodyViewSnapshot,
     type MFileBodyViewModel,
