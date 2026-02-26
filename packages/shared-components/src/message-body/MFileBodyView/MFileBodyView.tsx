@@ -24,9 +24,10 @@ import { useI18n } from "../../utils/i18nContext";
  * Which visual state to render for the file body.
  */
 export enum MFileBodyViewRendering {
-    ENCRYPTED_PENDING = "ENCRYPTED_PENDING",
-    ENCRYPTED_IFRAME_DOWNLOAD = "ENCRYPTED_IFRAME_DOWNLOAD",
-    UNENCRYPTED_DOWNLOAD = "UNENCRYPTED_DOWNLOAD",
+    INFO = "INFO",
+    DOWNLOAD_UNENCRYPTED = "DOWNLOAD_UNENCRYPTED",
+    DOWNLOAD_ENCRYPTED_PENDING = "DOWNLOAD_ENCRYPTED_PENDING",
+    DOWNLOAD_ENCRYPTED_IFRAME = "DOWNLOAD_ENCRYPTED_IFRAME",
     EXPORT = "EXPORT",
     INVALID = "INVALID",
 }
@@ -48,11 +49,7 @@ export interface MFileBodyViewSnapshot {
     /**
      * Visible info label (normally the file name).
      */
-    filename: string;
-    /**
-     * Whether to show the generic info row.
-     */
-    showInfo?: boolean;
+    infoLabel?: string;
     /**
      * Optional tooltip text for the info.
      */
@@ -62,17 +59,13 @@ export interface MFileBodyViewSnapshot {
      */
     infoIcon?: MFileBodyViewinfoIcon;
     /**
-     * Whether to show download controls for the active rendering.
-     */
-    showDownload?: boolean;
-    /**
      * Optional download button/link label.
      */
     downloadLabel?: string;
     /**
-     * Href for `UNENCRYPTED_DOWNLOAD` and `EXPORT`.
+     * Url used for `DOWNLOAD_UNENCRYPTED` and `EXPORT`.
      */
-    downloadHref?: string;
+    fileUrl?: string;
     /**
      * Extra CSS classe for host-level styling.
      */
@@ -122,20 +115,19 @@ interface MFileBodyViewProps {
 
 export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBodyViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const {
-        rendering,
-        filename,
-        showInfo,
-        infoTooltip,
-        infoIcon,
-        showDownload,
-        downloadLabel,
-        downloadHref,
-        className,
-    } = useViewModel(vm);
+    const { rendering, infoLabel, infoTooltip, infoIcon, downloadLabel, fileUrl, className } = useViewModel(vm);
 
     const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
-    const resolvedInfoTooltip = infoTooltip ?? filename;
+    const resolvedInfoLabel = infoLabel ?? _t("common|attachment");
+    const resolvedInfoTooltip = infoTooltip ?? resolvedInfoLabel;
+    const showInfo =
+        rendering === MFileBodyViewRendering.INFO ||
+        rendering === MFileBodyViewRendering.EXPORT ||
+        rendering === MFileBodyViewRendering.INVALID;
+    const showDownload =
+        rendering === MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED ||
+        rendering === MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING ||
+        rendering === MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME;
 
     let icon = <AttachmentIcon />;
     if (infoIcon === MFileBodyViewinfoIcon.AUDIO) {
@@ -148,7 +140,7 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
         <button className={styles.info} onClick={vm.onInfoClick} type="button">
             <span className={styles.info_icon}>{icon}</span>
             <Tooltip description={resolvedInfoTooltip} placement="right">
-                <span className={styles.info_label}>{filename}</span>
+                <span className={styles.info_label}>{resolvedInfoLabel}</span>
             </Tooltip>
         </button>
     ) : null;
@@ -159,11 +151,14 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
         case MFileBodyViewRendering.EXPORT:
             return (
                 <span className={classes}>
-                    <a href={downloadHref}>{info}</a>
+                    <a href={fileUrl}>{info}</a>
                 </span>
             );
 
-        case MFileBodyViewRendering.ENCRYPTED_PENDING:
+        case MFileBodyViewRendering.INFO:
+            return <span className={classes}>{info}</span>;
+
+        case MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING:
             return (
                 <span className={classes}>
                     {info}
@@ -178,7 +173,7 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
                 </span>
             );
 
-        case MFileBodyViewRendering.ENCRYPTED_IFRAME_DOWNLOAD:
+        case MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME:
             return (
                 <span className={classes}>
                     {info}
@@ -214,7 +209,7 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
                 </span>
             );
 
-        case MFileBodyViewRendering.UNENCRYPTED_DOWNLOAD:
+        case MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED:
             return (
                 <span className={classes}>
                     {info}
@@ -226,7 +221,7 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
                                 kind="secondary"
                                 Icon={DownloadIcon}
                                 as="a"
-                                href={downloadHref}
+                                href={fileUrl}
                                 target="_blank"
                                 rel="noreferrer noopener"
                                 onClick={vm.onDownloadLinkClick}

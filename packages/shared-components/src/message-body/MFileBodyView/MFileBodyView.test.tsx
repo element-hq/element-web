@@ -35,18 +35,17 @@ const {
     VideoInfo,
     UnencryptedDownload,
     EncryptedIframeDownload,
+    EncryptedPendingDownload,
     HasExtraClassNames,
 } = composeStories(stories);
 
 const defaultSnapshot: MFileBodyViewSnapshot = {
-    rendering: MFileBodyViewRendering.ENCRYPTED_PENDING,
-    filename: "spec.pdf",
-    showInfo: true,
+    rendering: MFileBodyViewRendering.INFO,
+    infoLabel: "spec.pdf",
     infoTooltip: "spec.pdf (22 KB)",
     infoIcon: MFileBodyViewinfoIcon.ATTACHMENT,
-    showDownload: true,
     downloadLabel: "Download",
-    downloadHref: "https://example.org/spec.pdf",
+    fileUrl: "https://example.org/spec.pdf",
     className: "",
 };
 
@@ -74,19 +73,32 @@ describe("MFileBodyView", () => {
         ["video-info", VideoInfo],
         ["unencrypted-download", UnencryptedDownload],
         ["encrypted-iframe-download", EncryptedIframeDownload],
+        ["encrypted-pending-download", EncryptedPendingDownload],
         ["has-extra-class-names", HasExtraClassNames],
     ])("matches snapshot for %s story", (_name, Story) => {
         const { container } = renderWithI18n(<Story />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders info row and download button in encrypted-pending mode", () => {
+    it("renders info row in info-only mode", () => {
         const vm = new TestViewModel(defaultSnapshot);
 
         renderWithI18n(<MFileBodyView vm={vm} />);
 
         expect(screen.getByRole("button", { name: "spec.pdf" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Download" })).not.toBeInTheDocument();
+    });
+
+    it("renders download button in encrypted-pending mode", () => {
+        const vm = new TestViewModel({
+            ...defaultSnapshot,
+            rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
+        });
+
+        renderWithI18n(<MFileBodyView vm={vm} />);
+
         expect(screen.getByRole("button", { name: "Download" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "spec.pdf" })).not.toBeInTheDocument();
     });
 
     it("invokes onInfoClick when info row is clicked", () => {
@@ -101,7 +113,13 @@ describe("MFileBodyView", () => {
 
     it("invokes onDownloadClick in encrypted-pending mode", () => {
         const onDownloadClick = vi.fn();
-        const vm = new TestViewModel(defaultSnapshot, { onDownloadClick });
+        const vm = new TestViewModel(
+            {
+                ...defaultSnapshot,
+                rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
+            },
+            { onDownloadClick },
+        );
 
         renderWithI18n(<MFileBodyView vm={vm} />);
 
@@ -114,7 +132,7 @@ describe("MFileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: MFileBodyViewRendering.UNENCRYPTED_DOWNLOAD,
+                rendering: MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
             },
             { onDownloadLinkClick },
         );
@@ -130,23 +148,22 @@ describe("MFileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: MFileBodyViewRendering.ENCRYPTED_IFRAME_DOWNLOAD,
-                showInfo: false,
+                rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME,
             },
             { onDownloadIframeLoad },
         );
 
         renderWithI18n(<MFileBodyView vm={vm} />);
 
-        const iframe = screen.getByTitle("spec.pdf");
+        const iframe = screen.getByTitle("Download");
         fireEvent.load(iframe);
         expect(onDownloadIframeLoad).toHaveBeenCalledTimes(1);
     });
 
-    it("hides info row when showInfo is false", () => {
+    it("hides info row in download mode", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            showInfo: false,
+            rendering: MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
         });
 
         renderWithI18n(<MFileBodyView vm={vm} />);

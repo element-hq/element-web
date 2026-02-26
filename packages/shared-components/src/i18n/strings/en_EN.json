@@ -21,6 +21,7 @@
         "start_chat": "Start chat"
     },
     "common": {
+        "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"

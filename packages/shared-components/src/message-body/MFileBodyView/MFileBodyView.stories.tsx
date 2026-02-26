@@ -56,22 +56,14 @@ const meta = {
                 .map(([key]) => key),
             control: { type: "select" },
         },
-        showInfo: {
-            control: { type: "boolean" },
-        },
-        showDownload: {
-            control: { type: "boolean" },
-        },
     },
     args: {
-        rendering: MFileBodyViewRendering.ENCRYPTED_PENDING,
-        filename: "spec.pdf",
-        showInfo: true,
+        rendering: MFileBodyViewRendering.INFO,
+        infoLabel: "spec.pdf",
         infoTooltip: "spec.pdf (22 KB)",
         infoIcon: MFileBodyViewinfoIcon.ATTACHMENT,
-        showDownload: false,
         downloadLabel: "Download",
-        downloadHref: "https://example.org/spec.pdf",
+        fileUrl: "https://example.org/spec.pdf",
         className: "",
     },
 } satisfies Meta<typeof MFileBodyViewWrapper>;
@@ -90,37 +82,38 @@ export const Export: Story = {
 export const Invalid: Story = {
     args: {
         rendering: MFileBodyViewRendering.INVALID,
-        showDownload: false,
     },
 };
 
 export const AudioInfo: Story = {
     args: {
         infoIcon: MFileBodyViewinfoIcon.AUDIO,
-        filename: "voice-message.ogg",
+        infoLabel: "voice-message.ogg",
     },
 };
 
 export const VideoInfo: Story = {
     args: {
         infoIcon: MFileBodyViewinfoIcon.VIDEO,
-        filename: "clip.mp4",
+        infoLabel: "clip.mp4",
     },
 };
 
 export const UnencryptedDownload: Story = {
     args: {
-        showInfo: false,
-        showDownload: true,
-        rendering: MFileBodyViewRendering.UNENCRYPTED_DOWNLOAD,
+        rendering: MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
     },
 };
 
 export const EncryptedIframeDownload: Story = {
     args: {
-        showInfo: false,
-        showDownload: true,
-        rendering: MFileBodyViewRendering.ENCRYPTED_IFRAME_DOWNLOAD,
+        rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME,
+    },
+};
+
+export const EncryptedPendingDownload: Story = {
+    args: {
+        rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
     },
 };
 
