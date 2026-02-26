@@ -42,6 +42,44 @@ function getBrowserNameVersion(browser: string): [name: string, version: number]
 
 let precalculatedIsBrowserSupported: boolean | null = null;
 
+function calculateBrowserSupport(): boolean {
+    const browsers = browserlist(SUPPORTED_BROWSER_QUERY).sort();
+    const minimumBrowserVersions = new Map<string, number>();
+    for (const browser of browsers) {
+        const [browserName, browserVersion] = getBrowserNameVersion(browser);
+        // We sorted the browsers so will encounter the minimum version first
+        if (minimumBrowserVersions.has(browserName)) continue;
+        minimumBrowserVersions.set(browserName, browserVersion);
+    }
+
+    const details = parseUserAgent(navigator.userAgent);
+
+    if (!SUPPORTED_DEVICE_TYPES.includes(details.deviceType)) {
+        logger.warn("Browser unsupported, unsupported device type", details.deviceType);
+        return false;
+    }
+
+    if (!details.client) {
+        logger.warn("Browser unsupported, unknown client", navigator.userAgent);
+        return false;
+    }
+
+    // We don't care about the browser version for desktop devices
+    // We ship our own browser (electron) for desktop devices
+    if (details.deviceType === DeviceType.Desktop) {
+        return true;
+    }
+
+    const [browserName, browserVersion] = getBrowserNameVersion(details.client);
+    const minimumVersion = minimumBrowserVersions.get(browserName);
+    // Check both with the sub-version cut off and without as some browsers have less granular versioning e.g. Safari
+    if (!minimumVersion || browserVersion < minimumVersion) {
+        logger.warn("Browser unsupported, unsupported user agent", details.client);
+        return false;
+    }
+    return true;
+}
+
 /**
  * Function to check if the current browser is considered supported by our support policy.
  * Based on user agent parsing so may be inaccurate if the user has fingerprint prevention turned up to 11.
@@ -53,43 +91,8 @@ export function getBrowserSupport(): boolean {
     if (precalculatedIsBrowserSupported !== null) {
         return precalculatedIsBrowserSupported;
     }
-    return (precalculatedIsBrowserSupported = (() => {
-        const browsers = browserlist(SUPPORTED_BROWSER_QUERY).sort();
-        const minimumBrowserVersions = new Map<string, number>();
-        for (const browser of browsers) {
-            const [browserName, browserVersion] = getBrowserNameVersion(browser);
-            // We sorted the browsers so will encounter the minimum version first
-            if (minimumBrowserVersions.has(browserName)) continue;
-            minimumBrowserVersions.set(browserName, browserVersion);
-        }
-
-        const details = parseUserAgent(navigator.userAgent);
-
-        if (!SUPPORTED_DEVICE_TYPES.includes(details.deviceType)) {
-            logger.warn("Browser unsupported, unsupported device type", details.deviceType);
-            return false;
-        }
-
-        if (!details.client) {
-            logger.warn("Browser unsupported, unknown client", navigator.userAgent);
-            return false;
-        }
-
-        // We don't care about the browser version for desktop devices
-        // We ship our own browser (electron) for desktop devices
-        if (details.deviceType === DeviceType.Desktop) {
-            return true;
-        }
-
-        const [browserName, browserVersion] = getBrowserNameVersion(details.client);
-        const minimumVersion = minimumBrowserVersions.get(browserName);
-        // Check both with the sub-version cut off and without as some browsers have less granular versioning e.g. Safari
-        if (!minimumVersion || browserVersion < minimumVersion) {
-            logger.warn("Browser unsupported, unsupported user agent", details.client);
-            return false;
-        }
-        return true;
-    })());
+    precalculatedIsBrowserSupported = calculateBrowserSupport();
+    return precalculatedIsBrowserSupported;
 }
 
 /**
