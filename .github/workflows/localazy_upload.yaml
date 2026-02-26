@@ -1,5 +1,6 @@
 name: Localazy Upload
 on:
+    workflow_dispatch: {}
     push:
         branches: [develop]
         paths:
