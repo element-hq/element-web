@@ -54,13 +54,13 @@ function calculateBrowserSupport(): boolean {
 
     const details = parseUserAgent(navigator.userAgent);
 
-    if (!SUPPORTED_DEVICE_TYPES.includes(details.deviceType)) {
-        logger.warn("Browser unsupported, unsupported device type", details.deviceType);
+    if (!details.client) {
+        logger.warn("Browser unsupported, unknown client", navigator.userAgent);
         return false;
     }
 
-    if (!details.client) {
-        logger.warn("Browser unsupported, unknown client", navigator.userAgent);
+    if (!SUPPORTED_DEVICE_TYPES.includes(details.deviceType)) {
+        logger.warn("Browser unsupported, unsupported device type", details.deviceType);
         return false;
     }
 
@@ -87,8 +87,8 @@ function calculateBrowserSupport(): boolean {
  * This is calculated once and stored for the lifetime of the session to prevent logspam.
  * @returns `true` if the browser is supported by us, or `false` if *any* of the checks fail.
  */
-export function getBrowserSupport(): boolean {
-    if (precalculatedIsBrowserSupported !== null) {
+export function getBrowserSupport(useCache = true): boolean {
+    if (useCache && precalculatedIsBrowserSupported !== null) {
         return precalculatedIsBrowserSupported;
     }
     precalculatedIsBrowserSupported = calculateBrowserSupport();
@@ -98,8 +98,8 @@ export function getBrowserSupport(): boolean {
 /**
  * Shows a user warning toast if the user's browser is not supported.
  */
-export function checkBrowserSupport(): void {
-    const supported = getBrowserSupport();
+export function checkBrowserSupport(useCache = true): void {
+    const supported = getBrowserSupport(useCache);
     if (supported) return;
 
     if (localStorage.getItem(LOCAL_STORAGE_KEY)) {

@@ -26,7 +26,7 @@ describe("SupportedBrowser", () => {
             const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
             const warnLogSpy = jest.spyOn(logger, "warn");
             Object.defineProperty(window, "navigator", { value: { userAgent: userAgent }, writable: true });
-            checkBrowserSupport();
+            checkBrowserSupport(false);
             if (expectedWarning) {
                 expect(warnLogSpy).toHaveBeenCalledWith(expectedWarning, expect.any(String));
                 expect(toastSpy).toHaveBeenCalled();
@@ -96,7 +96,7 @@ describe("SupportedBrowser", () => {
             "Mozilla/5.0 (X11; CrOS x86_64 15633.69.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.212 Safari/537.36";
         Object.defineProperty(window, "navigator", { value: { userAgent: userAgent }, writable: true });
 
-        checkBrowserSupport();
+        checkBrowserSupport(false);
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, unsupported user agent", expect.any(String));
         expect(toastSpy).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -109,7 +109,7 @@ describe("SupportedBrowser", () => {
         toastSpy.mockClear();
         warnLogSpy.mockClear();
 
-        checkBrowserSupport();
+        checkBrowserSupport(false);
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, but user has previously accepted");
         expect(toastSpy).not.toHaveBeenCalled();
     });
