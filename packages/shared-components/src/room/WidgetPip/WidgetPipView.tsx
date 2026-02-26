@@ -57,7 +57,7 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar, onStartM
                 <IconButton
                     size="28px"
                     data-testid="base-card-back-button"
-                    onClick={vm.onBackClick}
+                    onClick={(ev) => vm.onBackClick(ev)}
                     tooltip={_t("action|back")}
                     kind="secondary"
                 >
