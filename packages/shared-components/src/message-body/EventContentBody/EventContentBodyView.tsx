@@ -49,20 +49,34 @@ export interface EventContentBodyViewSnapshot {
 
 export type EventContentBodyViewModel = ViewModel<EventContentBodyViewSnapshot>;
 
-export interface EventContentBodyViewProps {
+interface EventContentBodyBaseViewProps {
     /**
      * The ViewModel providing the snapshot data.
      */
     vm: EventContentBodyViewModel;
-    /**
-     * Whether to render the content in a div or span.
-     */
-    as: "span" | "div";
-    /**
-     * Optional ref to forward to the rendered element.
-     */
-    ref?: Ref<HTMLElement>;
 }
+
+export type EventContentBodyViewProps =
+    | (EventContentBodyBaseViewProps & {
+          /**
+           * Render the content in a span element.
+           */
+          as: "span";
+          /**
+           * Optional ref to forward to the rendered span element.
+           */
+          ref?: Ref<HTMLSpanElement>;
+      })
+    | (EventContentBodyBaseViewProps & {
+          /**
+           * Render the content in a div element.
+           */
+          as: "div";
+          /**
+           * Optional ref to forward to the rendered div element.
+           */
+          ref?: Ref<HTMLDivElement>;
+      });
 
 /**
  * View component for rendering Matrix event content body.
@@ -73,16 +87,23 @@ export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyV
     const snapshot = useViewModel(vm);
     const { body, formattedBody, replacer, className, dir, parseFormattedBody } = snapshot;
 
-    const As = as;
     const parseBody =
         parseFormattedBody ??
         ((formatted: string, inputReplacer?: Replacer) =>
             parse(formatted, inputReplacer ? { replace: inputReplacer } : undefined));
     const children = formattedBody ? parseBody(formattedBody, replacer) : applyReplacerOnString(body, replacer);
 
+    if (as === "span") {
+        return (
+            <span ref={ref} className={className} dir={dir}>
+                {children}
+            </span>
+        );
+    }
+
     return (
-        <As ref={ref as any} className={className} dir={dir}>
+        <div ref={ref} className={className} dir={dir}>
             {children}
-        </As>
+        </div>
     );
 }

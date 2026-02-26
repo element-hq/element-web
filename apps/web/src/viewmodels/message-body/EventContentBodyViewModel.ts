@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Ref } from "react";
 import { type IContent, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -86,10 +85,6 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
      */
     includeDir?: boolean;
     /**
-     * does something
-     */
-    ref?: Ref<HTMLElement>;
-    /**
      * Whether to render the content in a div or span.
      */
     as: "span" | "div";
@@ -159,26 +154,11 @@ export class EventContentBodyViewModel
     extends BaseViewModel<EventContentBodyViewSnapshot, EventContentBodyViewModelProps>
     implements EventContentBodyViewModelInterface
 {
-    private static readonly parseFormattedBody = (
-        formattedBody: string,
-        replacer?: Replacer,
-    ): ReturnType<typeof parse> => parse(formattedBody, replacer ? { replace: replacer } : undefined);
-
-    private static readonly computeSnapshot = (props: EventContentBodyViewModelProps): EventContentBodyViewSnapshot => {
-        const {
-            content,
-            stripReply,
-            highlights,
-            linkify,
-            includeDir = true,
-            as,
-            enableBigEmoji,
-            mediaIsVisible,
-        } = props;
-
+    private static readonly computeBodySnapshot = (
+        props: EventContentBodyViewModelProps,
+    ): Pick<EventContentBodyViewSnapshot, "body" | "formattedBody" | "className"> => {
+        const { content, stripReply, highlights, linkify, enableBigEmoji, mediaIsVisible } = props;
         const isEmote = content.msgtype === MsgType.Emote;
-        const replacer = createReplacer(props);
-
         const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, {
             disableBigEmoji: isEmote || !enableBigEmoji,
             stripReplyFallback: stripReply,
@@ -186,11 +166,30 @@ export class EventContentBodyViewModel
             linkify,
         });
 
-        // Force dir="auto" on divs
-        const dir: "auto" | undefined = as === "div" || includeDir ? "auto" : undefined;
-
         return {
             body: emojiBodyElements || strippedBody,
+            formattedBody,
+            className,
+        };
+    };
+
+    private static readonly computeDir = (props: EventContentBodyViewModelProps): "auto" | undefined => {
+        const { as, includeDir = true } = props;
+        return as === "div" || includeDir ? "auto" : undefined;
+    };
+
+    private static readonly parseFormattedBody = (
+        formattedBody: string,
+        replacer?: Replacer,
+    ): ReturnType<typeof parse> => parse(formattedBody, replacer ? { replace: replacer } : undefined);
+
+    private static readonly computeSnapshot = (props: EventContentBodyViewModelProps): EventContentBodyViewSnapshot => {
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(props);
+        const replacer = createReplacer(props);
+        const dir = EventContentBodyViewModel.computeDir(props);
+
+        return {
+            body,
             formattedBody,
             replacer,
             parseFormattedBody: EventContentBodyViewModel.parseFormattedBody,
@@ -210,7 +209,8 @@ export class EventContentBodyViewModel
 
         this.props.mxEvent = mxEvent;
         this.props.content = content;
-        const { body, formattedBody, replacer, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
+        const replacer = createReplacer(this.props);
 
         this.snapshot.merge({ body, formattedBody, replacer, className });
     }
@@ -219,7 +219,7 @@ export class EventContentBodyViewModel
         if (this.props.stripReply === stripReply) return;
 
         this.props.stripReply = stripReply;
-        const { body, formattedBody, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });
     }
@@ -228,7 +228,7 @@ export class EventContentBodyViewModel
         if (this.props.highlights === highlights) return;
 
         this.props.highlights = highlights;
-        const { body, formattedBody, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });
     }
@@ -237,7 +237,7 @@ export class EventContentBodyViewModel
         if (this.props.as === as) return;
 
         this.props.as = as;
-        const { dir } = EventContentBodyViewModel.computeSnapshot(this.props);
+        const dir = EventContentBodyViewModel.computeDir(this.props);
 
         this.snapshot.merge({ dir });
     }
@@ -246,7 +246,7 @@ export class EventContentBodyViewModel
         if (this.props.enableBigEmoji === enableBigEmoji) return;
 
         this.props.enableBigEmoji = enableBigEmoji;
-        const { body, formattedBody, className } = EventContentBodyViewModel.computeSnapshot(this.props);
+        const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });
     }
@@ -255,7 +255,7 @@ export class EventContentBodyViewModel
         if (this.props.shouldShowPillAvatar === shouldShowPillAvatar) return;
 
         this.props.shouldShowPillAvatar = shouldShowPillAvatar;
-        const { replacer } = EventContentBodyViewModel.computeSnapshot(this.props);
+        const replacer = createReplacer(this.props);
 
         this.snapshot.merge({ replacer });
     }
