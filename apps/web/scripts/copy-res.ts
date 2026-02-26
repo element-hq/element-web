@@ -11,6 +11,7 @@ import { type Translations } from "matrix-web-i18n";
 
 const EW_I18N_BASE_PATH = "src/i18n/strings/";
 const SC_I18N_BASE_PATH = "../../packages/shared-components/src/i18n/strings/";
+const LANG_JSON_PATH = "webapp/i18n/languages.json";
 
 const INCLUDE_LANGS = [...new Set([...fs.readdirSync(EW_I18N_BASE_PATH)])]
     .filter((fn) => fn.endsWith(".json"))
@@ -87,7 +88,7 @@ function genLangList(langFileMap: Record<string, string>): void {
             languages[normalizedLanguage] = langFileMap[lang];
         }
     });
-    fs.writeFile("webapp/i18n/languages.json", JSON.stringify(languages, null, 4), function (err) {
+    fs.writeFile(LANG_JSON_PATH, JSON.stringify(languages, null, 4), function (err) {
         if (err) {
             console.error("Copy Error occured: " + err.message);
             throw new Error("Failed to generate languages.json");
@@ -138,7 +139,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
 // language resources
 const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce<Record<string, string>>((m, l) => {
     const [filename, json] = prepareLangFile(l);
-    if (!watch) {
+    if (!watch || !fs.readdirSync(I18N_DEST).some(x => x === filename)) {
         genLangFile(I18N_DEST, filename, json);
     }
     m[l] = filename;
@@ -147,6 +148,8 @@ const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce<Record<string, string>>((m, l) =>
 
 if (watch) {
     INCLUDE_LANGS.forEach((l) => watchLanguage(l, I18N_DEST, I18N_FILENAME_MAP));
-} else {
-    genLangList(I18N_FILENAME_MAP);
+}
+
+if (!watch || !fs.existsSync(LANG_JSON_PATH)) {
+    genLangList(I18N_FILENAME_MAP)
 }
