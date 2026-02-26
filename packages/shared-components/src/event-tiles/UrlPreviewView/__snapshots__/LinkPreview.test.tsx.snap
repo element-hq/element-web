@@ -25,6 +25,7 @@ exports[`LinkPreview > renders a preview 1`] = `
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
+            class="link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -73,6 +74,7 @@ exports[`LinkPreview > renders a preview with a compact layout 1`] = `
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
+            class="link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -111,6 +113,7 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
+            class="link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -139,6 +142,7 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
         >
           <a
+            class="link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"

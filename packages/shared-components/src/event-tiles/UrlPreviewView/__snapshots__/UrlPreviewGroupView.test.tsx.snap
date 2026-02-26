@@ -31,6 +31,7 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
             >
               <a
+                class="link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -107,6 +108,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
             >
               <a
+                class="link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -145,6 +147,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
             >
               <a
+                class="link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -183,6 +186,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
             >
               <a
+                class="link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -268,6 +272,7 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
             >
               <a
+                class="link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
