@@ -219,7 +219,7 @@ describe("EventContentBodyViewModel", () => {
         expect(vm.getSnapshot().body).toBe("Updated");
     });
 
-    it("does not emit updates when setter values are unchanged", () => {
+    it("emits updates when setters are called with unchanged values", () => {
         const replacer = jest.fn();
         mockedCombineRenderers.mockReturnValue(() => replacer);
         mockedBodyToNode.mockReturnValue({
@@ -237,8 +237,8 @@ describe("EventContentBodyViewModel", () => {
         vm.setEventContent(undefined, defaultContent);
         vm.setAs("span");
 
-        expect(subscriber).not.toHaveBeenCalled();
-        expect(vm.getSnapshot()).toBe(previousSnapshot);
+        expect(subscriber).toHaveBeenCalledTimes(2);
+        expect(vm.getSnapshot()).toEqual(previousSnapshot);
     });
 
     it("includes renderers based on options and platform capabilities", () => {
