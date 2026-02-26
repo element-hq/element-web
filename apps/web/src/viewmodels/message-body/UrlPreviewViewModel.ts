@@ -14,12 +14,14 @@ import {
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
+import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events";
 
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import PlatformPeg from "../../PlatformPeg";
 import { thumbHeight } from "../../ImageUtils";
 import SettingsStore from "../../settings/SettingsStore";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
 
 const logger = rootLogger.getChild("UrlPreviewViewModel");
 
@@ -404,6 +406,13 @@ export class UrlPreviewViewModel
         // FIXME: persist this somewhere smarter than local storage
         globalThis.localStorage?.setItem(this.storageKey, "1");
         this.urlPreviewEnabledByUser = false;
+        PosthogAnalytics.instance.trackEvent<UrlPreviewVisibilityChanged>({
+            eventName: "UrlPreviewVisibilityChanged",
+            previewKind: "LegacyCard",
+            hasThumbnail: this.snapshot.current.previews.some((p) => !!p.image),
+            previewCount: this.snapshot.current.previews.length,
+            visible: this.urlPreviewEnabledByUser,
+        });
         return this.computeSnapshot();
     };
 
