@@ -87,7 +87,7 @@ const meta = {
         ...defaultSnapshot,
         isSelected: false,
         isFocused: false,
-        roomIndex: 0,
+        roomIndex: 1,
         roomCount: 10,
         onOpenRoom: fn(),
         onMarkAsRead: fn(),
@@ -225,6 +225,15 @@ export const WithLargeFont: Story = {
     args: {
         isSelected: true,
     },
+    // Render the story in an iframe to avoid affecting other story
+    parameters: {
+        docs: {
+            story: {
+                inline: false,
+                iframeHeight: 170,
+            },
+        },
+    },
     decorators: [
         (Story) => {
             useEffect(() => {
@@ -250,4 +259,18 @@ export const WithZoom: Story = {
             </div>
         ),
     ],
+};
+
+export const FirstItem: Story = {
+    args: {
+        roomIndex: 0,
+        isSelected: true,
+    },
+};
+
+export const LastItem: Story = {
+    args: {
+        roomIndex: 9,
+        isSelected: true,
+    },
 };
