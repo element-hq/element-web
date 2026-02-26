@@ -85,78 +85,64 @@ export class ReactionsRowViewModel
         super(internalProps, ReactionsRowViewModel.computeSnapshot(internalProps));
     }
 
-    private updateSnapshotFromProps(): void {
-        const current = this.snapshot.current;
-        const next = ReactionsRowViewModel.computeDerivedSnapshot(this.props);
+    public setActionable(isActionable: boolean): void {
+        this.props = {
+            ...this.props,
+            isActionable,
+        };
+
+        const isVisible = this.props.isActionable && this.props.reactionGroupCount > 0;
+
+        this.snapshot.merge({ isVisible });
+    }
+
+    public setReactionGroupCount(reactionGroupCount: number): void {
+        this.props = {
+            ...this.props,
+            reactionGroupCount,
+        };
+
+        const nextIsVisible = this.props.isActionable && this.props.reactionGroupCount > 0;
+        const nextShowAllButtonVisible =
+            this.props.reactionGroupCount > MAX_ITEMS_WHEN_LIMITED + 1 && !this.props.showAll;
         const updates: Partial<ReactionsRowViewSnapshot> = {};
 
-        if (current.isVisible !== next.isVisible) updates.isVisible = next.isVisible;
-        if (current.showAllButtonVisible !== next.showAllButtonVisible) {
-            updates.showAllButtonVisible = next.showAllButtonVisible;
+        if (this.snapshot.current.isVisible !== nextIsVisible) {
+            updates.isVisible = nextIsVisible;
         }
-        if (current.showAddReactionButton !== next.showAddReactionButton) {
-            updates.showAddReactionButton = next.showAddReactionButton;
+        if (this.snapshot.current.showAllButtonVisible !== nextShowAllButtonVisible) {
+            updates.showAllButtonVisible = nextShowAllButtonVisible;
         }
-        if (current.addReactionButtonActive !== next.addReactionButtonActive) {
-            updates.addReactionButtonActive = next.addReactionButtonActive;
-        }
-        if (current.children !== next.children) {
-            updates.children = next.children;
-        }
-
         if (Object.keys(updates).length > 0) {
             this.snapshot.merge(updates);
         }
     }
 
-    public setActionable(isActionable: boolean): void {
-        if (this.props.isActionable === isActionable) return;
-
-        this.props = {
-            ...this.props,
-            isActionable,
-        };
-        this.updateSnapshotFromProps();
-    }
-
-    public setReactionGroupCount(reactionGroupCount: number): void {
-        if (this.props.reactionGroupCount === reactionGroupCount) return;
-
-        this.props = {
-            ...this.props,
-            reactionGroupCount,
-        };
-        this.updateSnapshotFromProps();
-    }
-
     public setCanReact(canReact: boolean): void {
-        if (this.props.canReact === canReact) return;
-
         this.props = {
             ...this.props,
             canReact,
         };
-        this.updateSnapshotFromProps();
+
+        this.snapshot.merge({ showAddReactionButton: canReact });
     }
 
     public setAddReactionButtonActive(addReactionButtonActive: boolean): void {
-        if (!!this.props.addReactionButtonActive === addReactionButtonActive) return;
-
         this.props = {
             ...this.props,
             addReactionButtonActive,
         };
-        this.updateSnapshotFromProps();
+
+        this.snapshot.merge({ addReactionButtonActive });
     }
 
     public setChildren(children?: ReactNode): void {
-        if (this.props.children === children) return;
-
         this.props = {
             ...this.props,
             children,
         };
-        this.updateSnapshotFromProps();
+
+        this.snapshot.merge({ children });
     }
 
     public setAddReactionHandlers({
@@ -171,13 +157,11 @@ export class ReactionsRowViewModel
     }
 
     public onShowAllClick = (): void => {
-        if (this.props.showAll) return;
-
         this.props = {
             ...this.props,
             showAll: true,
         };
-        this.updateSnapshotFromProps();
+        this.snapshot.merge({ showAllButtonVisible: false });
     };
 
     public onAddReactionClick = (event: MouseEvent<HTMLButtonElement>): void => {
