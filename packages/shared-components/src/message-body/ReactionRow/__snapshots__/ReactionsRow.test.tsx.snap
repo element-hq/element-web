@@ -67,7 +67,6 @@ exports[`ReactionsRowView > renders the default reactions row 1`] = `
     <button
       aria-label="Add reaction"
       class="addReactionButton addReactionButtonVisible"
-      title="Add reaction"
       type="button"
     >
       <svg
@@ -162,7 +161,6 @@ exports[`ReactionsRowView > renders the row with a show-all button 1`] = `
     <button
       aria-label="Add reaction"
       class="addReactionButton addReactionButtonVisible"
-      title="Add reaction"
       type="button"
     >
       <svg
