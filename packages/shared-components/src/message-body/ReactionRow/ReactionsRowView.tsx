@@ -8,6 +8,7 @@
 import React, { type JSX, type MouseEventHandler, type ReactNode } from "react";
 import classNames from "classnames";
 import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./ReactionsRow.module.css";
@@ -112,6 +113,19 @@ export function ReactionsRowView({ vm }: Readonly<ReactionsRowViewProps>): JSX.E
           }
         : undefined;
 
+    const addReactionButton = (
+        <button
+            type="button"
+            className={addReactionButtonClasses}
+            aria-label={addReactionButtonLabel}
+            disabled={addReactionButtonDisabled}
+            onClick={vm.onAddReactionClick}
+            onContextMenu={onAddReactionContextMenu}
+        >
+            <ReactionAddIcon />
+        </button>
+    );
+
     return (
         <div className={classNames(className, styles.reactionsRow)} role="toolbar" aria-label={ariaLabel}>
             {children}
@@ -121,17 +135,9 @@ export function ReactionsRowView({ vm }: Readonly<ReactionsRowViewProps>): JSX.E
                 </button>
             )}
             {showAddReactionButton && (
-                <button
-                    type="button"
-                    className={addReactionButtonClasses}
-                    aria-label={addReactionButtonLabel}
-                    title={addReactionButtonLabel}
-                    disabled={addReactionButtonDisabled}
-                    onClick={vm.onAddReactionClick}
-                    onContextMenu={onAddReactionContextMenu}
-                >
-                    <ReactionAddIcon />
-                </button>
+                <Tooltip description={addReactionButtonLabel} placement="right">
+                    {addReactionButton}
+                </Tooltip>
             )}
         </div>
     );
