@@ -21,7 +21,6 @@ export PR_ORG=element-hq
 export PR_REPO=element-web
 
 js_sdk_dep=`jq -r '.dependencies["matrix-js-sdk"]' < package.json`
-analytics_events_dep=`jq -r '.dependencies["@matrix-org/analytics-events"]' < package.json`
 
 # Set up the js-sdk first (unless package.json pins a specific version)
 if [ "$js_sdk_dep" = "github:matrix-org/matrix-js-sdk#develop" ]; then
