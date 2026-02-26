@@ -45,7 +45,7 @@ export interface ReactionsRowViewSnapshot {
     /**
      * Accessible label for the add-reaction button.
      */
-    addReactionButtonLabel?: string;
+    addReactionButtonLabel: string;
     /**
      * Force the add-reaction button to be visible.
      */
