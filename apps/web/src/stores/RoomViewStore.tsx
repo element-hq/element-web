@@ -569,10 +569,11 @@ export class RoomViewStore extends EventEmitter {
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {
+            logger.error("Error thrown while handling joinRoom", err);
             this.dis?.dispatch<JoinRoomErrorPayload>({
                 action: Action.JoinRoomError,
                 roomId,
-                err,
+                err: err instanceof Error ? err : new Error("Unknown error occured"),
                 canAskToJoin: payload.canAskToJoin,
             });
 
