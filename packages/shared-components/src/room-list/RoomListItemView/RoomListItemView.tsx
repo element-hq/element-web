@@ -160,6 +160,8 @@ export const RoomListItemView = memo(function RoomListItemView({
             className={classNames(styles.roomListItem, "mx_RoomListItemView", {
                 [styles.selected]: isSelected,
                 [styles.bold]: item.isBold,
+                [styles.firstItem]: roomIndex === 0,
+                [styles.lastItem]: roomIndex === roomCount - 1,
                 mx_RoomListItemView_selected: isSelected,
             })}
             gap="var(--cpd-space-3x)"
