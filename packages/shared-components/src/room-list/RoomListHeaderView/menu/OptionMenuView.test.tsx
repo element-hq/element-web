@@ -36,7 +36,7 @@ describe("<OptionMenuView />", () => {
         await user.click(button);
 
         expect(screen.getByRole("menuitemradio", { name: "A-Z" })).toBeChecked();
-        expect(screen.getByRole("menuitemradio", { name: "Activity" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Latest activity" })).not.toBeChecked();
         expect(screen.getByRole("menuitemradio", { name: "Unread first" })).not.toBeChecked();
     });
 
@@ -52,7 +52,7 @@ describe("<OptionMenuView />", () => {
 
         expect(screen.getByRole("menuitemradio", { name: "A-Z" })).not.toBeChecked();
         expect(screen.getByRole("menuitemradio", { name: "Unread first" })).not.toBeChecked();
-        expect(screen.getByRole("menuitemradio", { name: "Activity" })).toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Latest activity" })).toBeChecked();
     });
 
     it("should show `Unread First` selected if activeSortOption is unread-first", async () => {
@@ -66,7 +66,7 @@ describe("<OptionMenuView />", () => {
         await user.click(button);
 
         expect(screen.getByRole("menuitemradio", { name: "A-Z" })).not.toBeChecked();
-        expect(screen.getByRole("menuitemradio", { name: "Activity" })).not.toBeChecked();
+        expect(screen.getByRole("menuitemradio", { name: "Latest activity" })).not.toBeChecked();
         expect(screen.getByRole("menuitemradio", { name: "Unread first" })).toBeChecked();
     });
 
@@ -91,7 +91,7 @@ describe("<OptionMenuView />", () => {
 
         await user.click(screen.getByRole("button", { name: "Room Options" }));
 
-        await user.click(screen.getByRole("menuitemradio", { name: "Activity" }));
+        await user.click(screen.getByRole("menuitemradio", { name: "Latest activity" }));
 
         expect(vm.sort).toHaveBeenCalledWith("recent");
     });
