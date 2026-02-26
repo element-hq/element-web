@@ -6,8 +6,14 @@
  */
 
 .thumbnail {
+    /* Thumbnails are always limited to a maxiumum of 100px */
     max-width: 100px;
     max-height: 100px;
+}
+
+.link {
+    color: var(--cpd-color-text-link-external);
+    text-decoration-line: none;
 }
 
 .container {
@@ -16,7 +22,6 @@
     border-inline-start: 2px solid var(--cpd-color-bg-subtle-primary);
     border-radius: 2px;
     color: var(--cpd-color-gray-900);
-    min-width: 400px;
 
     &.compactLayout & {
         margin-top: var(--cpd-space-3x);

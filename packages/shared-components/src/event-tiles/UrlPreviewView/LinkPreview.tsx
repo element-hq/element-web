@@ -65,7 +65,7 @@ export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPre
     }
 
     const anchor = (
-        <a href={preview.link} target="_blank" rel="noreferrer noopener">
+        <a className={styles.link} href={preview.link} target="_blank" rel="noreferrer noopener">
             {preview.title}
         </a>
     );
