@@ -13,6 +13,6 @@ export interface JoinRoomErrorPayload extends Pick<ActionPayload, "action"> {
     action: Action.JoinRoomError;
 
     roomId: string | null;
-    err: unknown;
+    err: Error;
     canAskToJoin?: boolean;
 }
