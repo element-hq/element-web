@@ -55,7 +55,9 @@ export class ReactionsRowViewModel
     extends BaseViewModel<ReactionsRowViewSnapshot, InternalProps>
     implements ReactionsRowViewModelInterface
 {
-    private static readonly computeDerivedSnapshot = (props: InternalProps): Pick<
+    private static readonly computeDerivedSnapshot = (
+        props: InternalProps,
+    ): Pick<
         ReactionsRowViewSnapshot,
         "isVisible" | "showAllButtonVisible" | "showAddReactionButton" | "addReactionButtonActive" | "children"
     > => ({

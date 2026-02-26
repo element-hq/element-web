@@ -11,11 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ReactionsRowButtonView } from "../ReactionsRowButton";
 import { useMockedViewModel } from "../../viewmodel";
-import {
-    ReactionsRowView,
-    type ReactionsRowViewActions,
-    type ReactionsRowViewSnapshot,
-} from "./ReactionsRowView";
+import { ReactionsRowView, type ReactionsRowViewActions, type ReactionsRowViewSnapshot } from "./ReactionsRowView";
 
 interface MockReactionButtonProps {
     content: string;
@@ -37,8 +33,8 @@ const MockReactionButton = ({ content, count, isSelected }: Readonly<MockReactio
         {
             content,
             count,
-            isSelected: !!isSelected,
-            isDisabled: false,
+            "isSelected": !!isSelected,
+            "isDisabled": false,
             tooltipVm,
             "aria-label": `${count} reactions for ${content}`,
         },
