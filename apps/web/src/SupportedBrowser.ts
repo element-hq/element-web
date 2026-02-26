@@ -83,8 +83,9 @@ function calculateBrowserSupport(): boolean {
 /**
  * Function to check if the current browser is considered supported by our support policy.
  * Based on user agent parsing so may be inaccurate if the user has fingerprint prevention turned up to 11.
- *
  * This is calculated once and stored for the lifetime of the session to prevent logspam.
+ *
+ * @param useCache Recalculate browser support rather than using the cached result.
  * @returns `true` if the browser is supported by us, or `false` if *any* of the checks fail.
  */
 export function getBrowserSupport(useCache = true): boolean {
@@ -97,6 +98,8 @@ export function getBrowserSupport(useCache = true): boolean {
 
 /**
  * Shows a user warning toast if the user's browser is not supported.
+ *
+ * @param useCache Recalculate browser support rather than using the cached result.
  */
 export function checkBrowserSupport(useCache = true): void {
     const supported = getBrowserSupport(useCache);
