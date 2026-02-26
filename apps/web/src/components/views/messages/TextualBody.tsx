@@ -104,9 +104,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             // only strip reply if this is the original replying event, edits thereafter do not have the fallback
             const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
 
+            this.EventContentBodyViewModel.setEventContent(mxEvent, content);
+            this.EventContentBodyViewModel.setStripReply(stripReply);
+
             if (mxEventChanged) {
-                this.EventContentBodyViewModel.setEventContent(mxEvent, content);
-                this.EventContentBodyViewModel.setStripReply(stripReply);
                 this.EventContentBodyViewModel.setEnableBigEmoji(SettingsStore.getValue("TextualBody.enableBigEmoji"));
                 this.EventContentBodyViewModel.setShouldShowPillAvatar(
                     SettingsStore.getValue("Pill.shouldShowPillAvatar"),
