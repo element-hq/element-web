@@ -202,61 +202,47 @@ export class EventContentBodyViewModel
         super(props, EventContentBodyViewModel.computeSnapshot(props));
     }
 
-    public setEventContent(mxEvent: MatrixEvent | undefined, content: IContent): void {
-        const mxEventChanged = this.props.mxEvent !== mxEvent;
-        const contentChanged = this.props.content !== content;
-        if (!mxEventChanged && !contentChanged) return;
-
+    public setEventContent = (mxEvent: MatrixEvent | undefined, content: IContent): void => {
         this.props.mxEvent = mxEvent;
         this.props.content = content;
         const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
         const replacer = createReplacer(this.props);
 
         this.snapshot.merge({ body, formattedBody, replacer, className });
-    }
+    };
 
-    public setStripReply(stripReply?: boolean): void {
-        if (this.props.stripReply === stripReply) return;
-
+    public setStripReply = (stripReply?: boolean): void => {
         this.props.stripReply = stripReply;
         const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });
-    }
+    };
 
-    public setHighlights(highlights?: string[]): void {
-        if (this.props.highlights === highlights) return;
-
+    public setHighlights = (highlights?: string[]): void => {
         this.props.highlights = highlights;
         const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });
-    }
+    };
 
-    public setAs(as: "span" | "div"): void {
-        if (this.props.as === as) return;
-
+    public setAs = (as: "span" | "div"): void => {
         this.props.as = as;
         const dir = EventContentBodyViewModel.computeDir(this.props);
 
         this.snapshot.merge({ dir });
-    }
+    };
 
-    public setEnableBigEmoji(enableBigEmoji?: boolean): void {
-        if (this.props.enableBigEmoji === enableBigEmoji) return;
-
+    public setEnableBigEmoji = (enableBigEmoji?: boolean): void => {
         this.props.enableBigEmoji = enableBigEmoji;
         const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
 
         this.snapshot.merge({ body, formattedBody, className });
-    }
+    };
 
-    public setShouldShowPillAvatar(shouldShowPillAvatar?: boolean): void {
-        if (this.props.shouldShowPillAvatar === shouldShowPillAvatar) return;
-
+    public setShouldShowPillAvatar = (shouldShowPillAvatar?: boolean): void => {
         this.props.shouldShowPillAvatar = shouldShowPillAvatar;
         const replacer = createReplacer(this.props);
 
         this.snapshot.merge({ replacer });
-    }
+    };
 }
