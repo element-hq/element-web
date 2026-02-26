@@ -1,0 +1,9 @@
+/webapp
+/config.json
+/config.json.*
+/config.local*.json
+# Legacy skinning file that some people might still have
+/src/component-index.js
+# Auto-generated file
+/src/modules.js
+/build_config.yaml

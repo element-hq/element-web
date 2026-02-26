@@ -13,6 +13,7 @@ import type { Room } from "../RoomListItemView";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { RoomListView, type RoomListSnapshot, type RoomListViewActions } from "./RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
     renderAvatar,
     createGetRoomItemViewModel,
@@ -26,7 +27,7 @@ type RoomListViewProps = RoomListSnapshot & RoomListViewActions & { renderAvatar
 const mockFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite"];
 
 // Wrapper component that creates a mocked ViewModel
-const RoomListViewWrapper = ({
+const RoomListViewWrapperImpl = ({
     onToggleFilter,
     createChatRoom,
     createRoom,
@@ -44,6 +45,7 @@ const RoomListViewWrapper = ({
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
+const RoomListViewWrapper = withViewDocs(RoomListViewWrapperImpl, RoomListView);
 
 const meta = {
     title: "Room List/RoomListView",

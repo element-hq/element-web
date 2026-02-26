@@ -6,9 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import classNames from "classnames";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { VirtualizedList, type IVirtualizedListProps, type VirtualizedListContext } from "./VirtualizedList";
+import styles from "./story-mock.module.css";
 
 interface SimpleItem {
     id: string;
@@ -30,16 +32,21 @@ const meta = {
             item: SimpleItem,
             context: VirtualizedListContext<undefined>,
             onFocus: (item: SimpleItem, e: React.FocusEvent) => void,
-        ) => (
-            <div
-                key={item.id}
-                style={{ padding: "12px 16px", borderBottom: "1px solid #e0e0e0" }}
-                tabIndex={context.tabIndexKey === item.id ? 0 : -1}
-                onFocus={(e) => onFocus(item, e)}
-            >
-                {item.label}
-            </div>
-        ),
+        ) => {
+            const selected = context.tabIndexKey === item.id;
+
+            return (
+                <button
+                    type="button"
+                    key={item.id}
+                    className={classNames(styles.item, { [styles.itemSelected]: selected })}
+                    tabIndex={selected ? 0 : -1}
+                    onFocus={(e) => onFocus(item, e)}
+                >
+                    {item.label}
+                </button>
+            );
+        },
         isItemFocusable: () => true,
         getItemKey: (item) => item.id,
         style: { height: "400px" },

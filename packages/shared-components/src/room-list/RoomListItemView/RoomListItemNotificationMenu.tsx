@@ -21,7 +21,7 @@ import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemVi
 /**
  * View model type for room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot> & RoomListItemActions;
+export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
 
 /**
  * Props for RoomListItemNotificationMenu component
