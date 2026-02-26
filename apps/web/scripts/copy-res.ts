@@ -139,7 +139,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
 // language resources
 const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce<Record<string, string>>((m, l) => {
     const [filename, json] = prepareLangFile(l);
-    if (!watch || !fs.readdirSync(I18N_DEST).some(x => x === filename)) {
+    if (!watch || !fs.readdirSync(I18N_DEST).some((x) => x === filename)) {
         genLangFile(I18N_DEST, filename, json);
     }
     m[l] = filename;
@@ -151,5 +151,5 @@ if (watch) {
 }
 
 if (!watch || !fs.existsSync(LANG_JSON_PATH)) {
-    genLangList(I18N_FILENAME_MAP)
+    genLangList(I18N_FILENAME_MAP);
 }
