@@ -49,7 +49,7 @@ export class WidgetPipViewModel
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
     }
 
-    public onViewedRoomChanged(viewing: boolean): void {
+    public setViewingRoom(viewing: boolean): void {
         this.viewingRoom = viewing;
     }
 

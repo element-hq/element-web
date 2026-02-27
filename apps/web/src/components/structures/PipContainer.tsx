@@ -307,7 +307,7 @@ const WidgetPipWrappedView: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         // Use an effect to update viewingRoom. It is not required in the view but just the vm.
-        vm.onViewedRoomChanged(props.viewingRoom);
+        vm.setViewingRoom(props.viewingRoom);
     }, [vm, props.viewingRoom]);
 
     return (

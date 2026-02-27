@@ -16,7 +16,7 @@ import { useI18n } from "../..";
 
 export interface WidgetPipViewActions {
     onBackClick: (ev: React.MouseEvent<Element, MouseEvent>) => void;
-    onViewedRoomChanged: (viewed: boolean) => void;
+    setViewingRoom: (viewing: boolean) => void;
     persistentAppComponent: React.FC<{
         persistentWidgetId: string;
         persistentRoomId: string;
