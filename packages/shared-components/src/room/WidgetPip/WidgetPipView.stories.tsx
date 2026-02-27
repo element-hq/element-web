@@ -49,10 +49,9 @@ export default {
         widgetId: "xyz",
         roomId: "roomId",
         roomName: "Room Name",
-        movePersistedElement: fn(),
-        onStartMoving: fn(),
         onBackClick: fn(),
         persistentAppComponent: PersistentAppMock,
+        onViewedRoomChanged: fn(),
     },
     parameters: {
         design: {
@@ -60,7 +59,7 @@ export default {
             url: "https://www.figma.com/design/aOEkaJtaBmPy058V7uoqVr/Element-Call-Updates---Q1-2026--New-?node-id=21-31333&p=f&t=zBuFi63PKdQ0Nhab-0",
         },
     },
-} as Meta<typeof WidgetPipViewWrapper>;
+} satisfies Meta<typeof WidgetPipViewWrapper>;
 
 const Template: StoryFn<typeof WidgetPipViewWrapper> = (args) => <WidgetPipViewWrapper {...args} />;
 

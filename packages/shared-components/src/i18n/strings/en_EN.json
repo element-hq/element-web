@@ -3,6 +3,7 @@
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
+        "back": "Back",
         "delete": "Delete",
         "dismiss": "Dismiss",
         "edit": "Edit",

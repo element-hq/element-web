@@ -91,14 +91,14 @@ export class WidgetPipViewModel
         );
     };
 
-    private onRoomName(): void {
+    private readonly onRoomName = (): void => {
         this.snapshot.merge({ roomName: this.room.name });
-    }
+    };
 
-    private onCallChange(...args: unknown[]): void {
+    private readonly onCallChange = (...args: unknown[]): void => {
         const [call, forRoomId] = args as [Call | null, string];
         if (forRoomId === this.room.roomId) {
             this.call = call?.widget.id === this.widgetId ? call : null;
         }
-    }
+    };
 }
