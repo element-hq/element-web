@@ -21,10 +21,8 @@ import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
+import { linkifyAndSanitizeHtml, sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
-
-export { linkifyAndSanitizeHtml } from "./Linkify";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
