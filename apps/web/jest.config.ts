@@ -55,20 +55,20 @@ const config: Config = {
         "!<rootDir>/src/**/*.d.ts",
     ],
     coverageReporters: ["text-summary", "lcov"],
-    testResultsProcessor: "@casualbot/jest-sonar-reporter",
+    reporters: ["@casualbot/jest-sonar-reporter"],
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
 };
 
 // if we're running under GHA, enable the GHA reporter
 if (env["GITHUB_ACTIONS"] !== undefined) {
-    const reporters: Config["reporters"] = [["github-actions", { silent: false }], "summary"];
+    config.reporters.push(["github-actions", { silent: false }]);
+    config.reporters.push("summary");
 
     // if we're running against the develop branch, also enable the slow test reporter
     if (env["GITHUB_REF"] == "refs/heads/develop") {
-        reporters.push("<rootDir>/test/slowReporter.cjs");
+        config.reporters.push("<rootDir>/test/slowReporter.cjs");
     }
-    config.reporters = reporters;
 }
 
 export default config;
