@@ -12,31 +12,23 @@ import { describe, it, expect } from "vitest";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import { BaseViewModel } from "../../viewmodel/BaseViewModel";
 import { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
 import * as stories from "./DateSeparatorView.stories";
 
 const { Default, HasExtraClassNames, WithJumpToDatePicker, LongLocalizedLabel } = composeStories(stories);
 
-class MutableDateSeparatorViewModel implements DateSeparatorViewModel {
-    private listeners = new Set<() => void>();
-
-    public constructor(private snapshot: DateSeparatorViewSnapshot) {}
-
-    public setSnapshot(snapshot: DateSeparatorViewSnapshot): void {
-        this.snapshot = snapshot;
-        for (const listener of this.listeners) {
-            listener();
-        }
+class MutableDateSeparatorViewModel
+    extends BaseViewModel<DateSeparatorViewSnapshot, undefined>
+    implements DateSeparatorViewModel
+{
+    public constructor(snapshot: DateSeparatorViewSnapshot) {
+        super(undefined, snapshot);
     }
 
-    public getSnapshot = (): DateSeparatorViewSnapshot => {
-        return this.snapshot;
-    };
-
-    public subscribe = (listener: () => void): (() => void) => {
-        this.listeners.add(listener);
-        return () => this.listeners.delete(listener);
-    };
+    public setSnapshot(snapshot: DateSeparatorViewSnapshot): void {
+        this.snapshot.set(snapshot);
+    }
 
     public onLastWeekPicked = (): void => undefined;
     public onLastMonthPicked = (): void => undefined;

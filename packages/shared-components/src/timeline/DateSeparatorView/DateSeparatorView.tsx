@@ -6,7 +6,7 @@
  */
 
 import classNames from "classnames";
-import React, { type JSX, useRef, useState } from "react";
+import React, { type JSX, useState } from "react";
 
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../viewmodel/useViewModel";
@@ -71,12 +71,13 @@ interface DateSeparatorViewProps {
 export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
     const { label, className, jumpToEnabled } = useViewModel(vm);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const triggerRef = useRef<HTMLDivElement>(null);
+    const [isTriggerHovered, setIsTriggerHovered] = useState(false);
+    const [isTriggerFocused, setIsTriggerFocused] = useState(false);
     const onMenuOpenChange = (newOpen: boolean): void => {
         setIsMenuOpen(newOpen);
-
-        if (!newOpen && triggerRef.current?.contains(document.activeElement)) {
-            triggerRef.current.blur();
+        if (newOpen) {
+            setIsTriggerHovered(false);
+            setIsTriggerFocused(false);
         }
     };
 
@@ -90,9 +91,12 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
                     trigger={
                         <DateSeparatorButton
                             label={label}
-                            tooltipOpen={isMenuOpen ? false : undefined}
+                            tooltipOpen={!isMenuOpen && (isTriggerHovered || isTriggerFocused)}
                             className={styles.content}
-                            buttonRef={triggerRef}
+                            onMouseEnter={() => setIsTriggerHovered(true)}
+                            onMouseLeave={() => setIsTriggerHovered(false)}
+                            onFocus={(event) => setIsTriggerFocused(event.currentTarget.matches(":focus-visible"))}
+                            onBlur={() => setIsTriggerFocused(false)}
                         />
                     }
                 />

@@ -22,6 +22,14 @@ export interface DateSeparatorButtonProps {
     className?: string;
     /** Optional ref for the button container element. */
     buttonRef?: React.Ref<HTMLDivElement>;
+    /** Called when the pointer enters the button trigger. */
+    onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+    /** Called when the pointer leaves the button trigger. */
+    onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+    /** Called when the button trigger receives focus. */
+    onFocus?: React.FocusEventHandler<HTMLDivElement>;
+    /** Called when the button trigger loses focus. */
+    onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }
 
 /** Interactive date separator button that opens the jump-to-date menu. */
