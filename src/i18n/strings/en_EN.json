@@ -669,8 +669,8 @@
         "join_rule_knock_label": "Anyone can request to join, but admins or moderators need to grant access. You can change this later.",
         "join_rule_public_label": "Anyone will be able to find and join this room.",
         "join_rule_public_parent_space_label": "Anyone will be able to find and join this room, not just members of <SpaceName/>.",
-        "join_rule_restricted": "Visible to space members",
-        "join_rule_restricted_label": "Everyone in <SpaceName/> will be able to find and join this room.",
+        "join_rule_restricted": "Standard",
+        "join_rule_restricted_label": "Anyone in <SpaceName/> can join.",
         "name_validation_required": "Please enter a name for the room",
         "room_visibility_label": "Room visibility",
         "state_encrypted_warning": "Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.",
@@ -732,7 +732,7 @@
         "subspace_join_rule_invite_only": "Private space (invite only)",
         "subspace_join_rule_label": "Space visibility",
         "subspace_join_rule_public_description": "Anyone will be able to find and join this space, not just members of <SpaceName/>.",
-        "subspace_join_rule_restricted_description": "Anyone in <SpaceName/> will be able to find and join."
+        "subspace_join_rule_restricted_description": "Anyone in <SpaceName/> can join."
     },
     "credits": {
         "default_cover_photo": "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
@@ -2366,26 +2366,26 @@
             "join_rule_knock_description": "People cannot join unless access is granted.",
             "join_rule_public_description": "Anyone can find and join.",
             "join_rule_restricted": "Space members",
-            "join_rule_restricted_description": "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>",
-            "join_rule_restricted_description_active_space": "Anyone in <spaceName/> can find and join. You can select other spaces too.",
-            "join_rule_restricted_description_prompt": "Anyone in a space can find and join. You can select multiple spaces.",
-            "join_rule_restricted_description_spaces": "Spaces with access",
-            "join_rule_restricted_dialog_description": "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.",
-            "join_rule_restricted_dialog_empty_warning": "You're removing all spaces. Access will default to invite only",
+            "join_rule_restricted_description": "Anyone in authorized spaces can join without an invitation. <a>Manage spaces</a>",
+            "join_rule_restricted_description_active_space": "Anyone in <spaceName/> can join.",
+            "join_rule_restricted_description_prompt": "Anyone in a space can join.",
+            "join_rule_restricted_description_spaces": "Authorized spaces",
+            "join_rule_restricted_dialog_description": "Spaces where members can join <RoomName/> without an invitation.",
+            "join_rule_restricted_dialog_empty_warning": "You're removing all authorized spaces. Access will default to invite only",
             "join_rule_restricted_dialog_filter_placeholder": "Search spaces",
-            "join_rule_restricted_dialog_heading_known": "Other spaces you know",
-            "join_rule_restricted_dialog_heading_other": "Other spaces or rooms you might not know",
-            "join_rule_restricted_dialog_heading_room": "Spaces you know that contain this room",
+            "join_rule_restricted_dialog_heading_known": "Your spaces that do not contain this room",
+            "join_rule_restricted_dialog_heading_other": "Other spaces you are not member of",
+            "join_rule_restricted_dialog_heading_room": "Your spaces that contain this room",
             "join_rule_restricted_dialog_heading_space": "Spaces you know that contain this space",
             "join_rule_restricted_dialog_heading_unknown": "These are likely ones other room admins are a part of.",
-            "join_rule_restricted_dialog_title": "Select spaces",
+            "join_rule_restricted_dialog_title": "Manage spaces",
             "join_rule_restricted_n_more": {
                 "one": "& %(count)s more",
                 "other": "& %(count)s more"
             },
             "join_rule_restricted_summary": {
-                "one": "Currently, a space has access",
-                "other": "Currently, %(count)s spaces have access"
+                "one": "Currently, one space has been authorized",
+                "other": "Currently, %(count)s spaces been authorized"
             },
             "join_rule_restricted_upgrade_description": "This upgrade will allow members of selected spaces access to this room without an invite.",
             "join_rule_restricted_upgrade_warning": "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.",
