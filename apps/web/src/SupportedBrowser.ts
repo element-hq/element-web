@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import browserlist from "browserslist";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import memoizeOne from "memoize-one";
 
 import { DeviceType, parseUserAgent } from "./utils/device/parseUserAgent";
 import ToastStore from "./stores/ToastStore";
@@ -39,8 +40,6 @@ function getBrowserNameVersion(browser: string): [name: string, version: number]
     const browserNameLc = browserName.toLowerCase();
     return [browserNameLc, parseInt(browserVersion, 10)];
 }
-
-let precalculatedIsBrowserSupported: boolean | null = null;
 
 function calculateBrowserSupport(): boolean {
     const browsers = browserlist(SUPPORTED_BROWSER_QUERY).sort();
@@ -85,24 +84,15 @@ function calculateBrowserSupport(): boolean {
  * Based on user agent parsing so may be inaccurate if the user has fingerprint prevention turned up to 11.
  * This is calculated once and stored for the lifetime of the session to prevent logspam.
  *
- * @param useCache Recalculate browser support rather than using the cached result.
  * @returns `true` if the browser is supported by us, or `false` if *any* of the checks fail.
  */
-export function getBrowserSupport(useCache = true): boolean {
-    if (useCache && precalculatedIsBrowserSupported !== null) {
-        return precalculatedIsBrowserSupported;
-    }
-    precalculatedIsBrowserSupported = calculateBrowserSupport();
-    return precalculatedIsBrowserSupported;
-}
+export const getBrowserSupport = memoizeOne(calculateBrowserSupport);
 
 /**
  * Shows a user warning toast if the user's browser is not supported.
- *
- * @param useCache Recalculate browser support rather than using the cached result.
  */
-export function checkBrowserSupport(useCache = true): void {
-    const supported = getBrowserSupport(useCache);
+export function checkBrowserSupport(): void {
+    const supported = getBrowserSupport();
     if (supported) return;
 
     if (localStorage.getItem(LOCAL_STORAGE_KEY)) {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { checkBrowserSupport, LOCAL_STORAGE_KEY } from "../../src/SupportedBrowser";
+import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "../../src/SupportedBrowser";
 import ToastStore from "../../src/stores/ToastStore";
 import GenericToast from "../../src/components/views/toasts/GenericToast";
 
@@ -18,6 +18,7 @@ describe("SupportedBrowser", () => {
     beforeEach(() => {
         jest.resetAllMocks();
         localStorage.clear();
+        getBrowserSupport.clear();
     });
 
     const testUserAgentFactory =
@@ -26,7 +27,7 @@ describe("SupportedBrowser", () => {
             const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
             const warnLogSpy = jest.spyOn(logger, "warn");
             Object.defineProperty(window, "navigator", { value: { userAgent: userAgent }, writable: true });
-            checkBrowserSupport(false);
+            checkBrowserSupport();
             if (expectedWarning) {
                 expect(warnLogSpy).toHaveBeenCalledWith(expectedWarning, expect.any(String));
                 expect(toastSpy).toHaveBeenCalled();
@@ -96,7 +97,7 @@ describe("SupportedBrowser", () => {
             "Mozilla/5.0 (X11; CrOS x86_64 15633.69.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.212 Safari/537.36";
         Object.defineProperty(window, "navigator", { value: { userAgent: userAgent }, writable: true });
 
-        checkBrowserSupport(false);
+        checkBrowserSupport();
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, unsupported user agent", expect.any(String));
         expect(toastSpy).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -109,7 +110,8 @@ describe("SupportedBrowser", () => {
         toastSpy.mockClear();
         warnLogSpy.mockClear();
 
-        checkBrowserSupport(false);
+        getBrowserSupport.clear();
+        checkBrowserSupport();
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, but user has previously accepted");
         expect(toastSpy).not.toHaveBeenCalled();
     });
