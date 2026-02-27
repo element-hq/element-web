@@ -48,7 +48,7 @@ overrides:
   testcontainers: ^11.0.0
   wrap-ansi-cjs: npm:wrap-ansi@^7.0.0
   wrap-ansi: npm:wrap-ansi@^7.0.0
-  matrix-widget-api: ^1.16.1
+  matrix-widget-api: ^1.17.0
   qs: 6.14.2
 
 packageExtensionsChecksum: sha256-OFePh8Fn8A1ZEWgJF51vTMPT/HEVyXQyj6YGIztPb0w=
@@ -285,7 +285,7 @@ importers:
         specifier: github:matrix-org/matrix-js-sdk#develop
         version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5739b59faaf33fa55457dcaa76ffebe0506d1466
       matrix-widget-api:
-        specifier: ^1.16.1
+        specifier: ^1.17.0
         version: 1.17.0
       memoize-one:
         specifier: ^6.0.0
