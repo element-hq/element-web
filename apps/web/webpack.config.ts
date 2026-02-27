@@ -799,6 +799,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // Only output errors, warnings, or new compilations.
                 // This hides the massive list of modules.
                 stats: "minimal",
+                writeToDisk: true,
             },
 
             // Enable Hot Module Replacement without page refresh as a fallback in
