@@ -274,6 +274,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 20. Do not use `React.Component::forceUpdate`.
 21. Prefer to use [compound typography components](https://compound.element.io/?path=/docs/compound-web_typography--docs) instead of raw HTML elements for text. This ensures consistent font usage and letter spacing across the app.
 22. If you can't use 21, don't forget to apply the correct CSS classes for font and letter spacing.
+23. Prefer to use `Flex` or `Box` components from shared-components for layout instead of raw HTML elements with CSS flexbox styles.
 
 ## Stylesheets
 

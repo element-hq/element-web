@@ -5,13 +5,131 @@
     "action": {
         "delete": "Kustuta",
         "dismiss": "Loobu",
+        "edit": "Muuda",
         "explore_rooms": "Tutvu jututubadega",
+        "invite": "Kutsu",
+        "new_conversation": "Uus vestlus",
+        "new_room": "Uus jututuba",
+        "new_video_room": "Uus videotuba",
+        "open_menu": "Ava menüü",
         "pause": "Peata",
         "play": "Esita",
-        "search": "Otsing"
+        "remove": "Eemalda",
+        "retry": "Proovi uuesti",
+        "search": "Otsing",
+        "start_chat": "Alusta vestlust"
+    },
+    "common": {
+        "encryption_enabled": "Krüptimine on kasutusel",
+        "preferences": "Eelistused",
+        "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel"
     },
     "left_panel": {
         "open_dial_pad": "Ava numbriklahvistik"
+    },
+    "notifications": {
+        "all_messages": "Kõik sõnumid",
+        "default_settings": "Sobita vaikimisi seadistustega",
+        "mentions_keywords": "Mainimised ja märksõnad",
+        "mute_room": "Summuta jututuba"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Jututoa eelistused"
+        },
+        "history_visibility_badge": {
+            "private": "Uued liikmed ei näe ajalugu",
+            "shared": "Uued liikmed näevad ajalugu",
+            "world_readable": "Kõik võivad ajalugu näha"
+        },
+        "status_bar": {
+            "delete_all": "Kustuta kõik",
+            "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenuse haldajaga või peakasutajaga.",
+            "exceeded_resource_limit_title": "Kuna see koduserver on ületanud etteantud ressursside ülempiiri, siis sinu sõnum on saatmata.",
+            "failed_to_create_room_title": "Selle kasutajaga ei õnnestunud alustada vestlust",
+            "homeserver_blocked_title": "Kuna see koduserver on peakasutaja või haldaaja poolt blokeerinud, siis sinu sõnum on saatmata.",
+            "monthly_user_limit_reached_title": "Sinu sõnum on saatmata, kuna see koduserver on saavutanud oma igakuise aktiivsete kasutajate ülempiiri.",
+            "requires_consent_agreement_title": "Sa ei saa sõnumeid saata enne, kui oled meie kasutustingimustega tutvunud ja nendega nõustunud.",
+            "retry_all": "Proovi kõikidega uuesti",
+            "select_messages_to_retry": "Sa võid valida kas kõik või mõned sõnumid kas kustutamiseks või uuesti saatmiseks",
+            "server_connectivity_lost_description": "Saadetud sõnumid salvestatakse seniks, kuni võrguühendus on taastunud.",
+            "server_connectivity_lost_title": "Võrguühendus serveriga on katkenud.",
+            "some_messages_not_sent": "Mõned sinu sõnumid on saatmata"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Ava jututuba: %(roomName)s",
+            "invitation": "Ava %(roomName)s jututoa kutse.",
+            "mention": {
+                "one": "Ava %(roomName)s jututuba ühe lugemata mainimisega.",
+                "other": "Ava %(roomName)s jututuba %(count)s lugemata mainimisega."
+            },
+            "unread": {
+                "one": "Ava %(roomName)s jututuba ühe lugemata sõnumiga.",
+                "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga."
+            },
+            "unsent_message": "Ava „%(roomName)s“ jututuba saatmata sõnumiga."
+        },
+        "appearance": "Välimus",
+        "collapse_filters": "Ahenda filtriloendit",
+        "empty": {
+            "no_chats": "Vestlusi veel ei leidu",
+            "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
+            "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
+            "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
+            "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
+            "no_invites": "Sul pole lugemata kutseid",
+            "no_lowpriority": "Sul pole ühtegi vähetähtsat jututuba",
+            "no_mentions": "Sul pole lugemata mainimisi",
+            "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
+            "no_people_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
+            "no_rooms": "Sa veel ei osale mitte üheski jututoas",
+            "no_rooms_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
+            "no_unread": "Õnnitlused! Sul pole ühtegi lugemata sõnumit",
+            "show_activity": "Vaata kõiki tegevusi",
+            "show_chats": "Näita kõiki vestlusi"
+        },
+        "expand_filters": "Laienda filtriloendit",
+        "filters": {
+            "favourite": "Lemmikud",
+            "invites": "Kutsed",
+            "low_priority": "Vähetähtis",
+            "mentions": "Mainimised",
+            "people": "Osalejad",
+            "rooms": "Jututoad",
+            "unread": "Lugemata"
+        },
+        "list_title": "Jututubade loend",
+        "more_options": {
+            "copy_link": "Kopeeri jututoa link",
+            "favourited": "Märgitud lemmikuks",
+            "leave_room": "Lahku jututoast",
+            "low_priority": "Vähetähtis",
+            "mark_read": "Märgi loetuks",
+            "mark_unread": "Märgi mitteloetuks"
+        },
+        "notification_options": "Teavituste eelistused",
+        "open_space_menu": "Ava kogukonna menüü",
+        "primary_filters": "Jututubade loendi filtrid",
+        "room": {
+            "more_options": "Täiendavad seadistused"
+        },
+        "room_options": "Jututoa valikud",
+        "show_message_previews": "Näita sõnumite eelvaateid",
+        "sort": "Järjesta",
+        "sort_type": {
+            "activity": "Aktiivsuse alusel",
+            "atoz": "Tähestiku järjekorras",
+            "unread_first": "Esmalt lugemata"
+        },
+        "space_menu": {
+            "home": "Kogukonna avaleht",
+            "space_settings": "Kogukonna seadistused"
+        }
+    },
+    "terms": {
+        "tac_button": "Vaata üle kasutustingimused"
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -30,10 +148,39 @@
         "n_minutes_ago": "%(num)s minutit tagasi"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "Kuna sinu seade on verifitseerimata, siis saatja on blokeerinud võimaluse, et sa saaksid selle sõnumi",
+            "historical_event_no_key_backup": "Varasemad sõnumid pole selles seadmes loetavad",
+            "historical_event_unverified_device": "Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima",
+            "historical_event_user_not_joined": "Sul pole ligipääsu antud sõnumile",
+            "sender_identity_previously_verified": "Saatja verifitseeritud võrguidentiteet on lähtestatud",
+            "sender_unsigned_device": "Saadetud ebaturvalisest seadmest.",
+            "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestunud"
+        },
         "m.audio": {
             "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "unnamed_audio": "Nimetu helifail"
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Eirasin katset lõpetada krüptimise kasutamine",
+            "disabled": "Krüptimine ei ole kasutusel",
+            "enabled": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad neid verifitseerida.",
+            "enabled_dm": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
+            "enabled_local": "Sõnumid siin vestluses on läbivalt krüptitud.",
+            "parameters_changed": "Mõned krüptimise parameetrid on muutunud.",
+            "state_enabled": "Selle jututoa sõnumid ja olekusündmused on läbivalt krüptitud. Kui uued kasutajad liituvad, siis saad nad verifitseerida tunnuspildile klõpsates.",
+            "unsupported": "Selles jututoas kasutatud krüptimine ei ole toetatud."
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Liigu vasakule",
+            "move_right": "Liigu paremale",
+            "remove": "Eemalda kõigilt",
+            "revoke": "Tühista õigused",
+            "screenshot": "Pildista",
+            "start_audio_stream": "Käivita audiovoog"
         }
     }
 }

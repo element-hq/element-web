@@ -1,9 +1,10 @@
 name: Localazy Upload
 on:
+    workflow_dispatch: {}
     push:
         branches: [develop]
         paths:
-            - "src/i18n/strings/en_EN.json"
+            - "apps/web/src/i18n/strings/en_EN.json"
             - "packages/shared-components/src/i18n/strings/en_EN.json"
 permissions: {} # No permissions needed
 jobs:

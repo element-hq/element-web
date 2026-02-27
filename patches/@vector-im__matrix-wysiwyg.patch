@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 8163a3bea0bba33af6fc97cd21c1a04ddef548b7..dfef973c43d84b8f0453be7e67db89a654426c60 100644
+--- a/package.json
++++ b/package.json
+@@ -11,6 +11,7 @@
+     "license": "SEE LICENSE IN README.md",
+     "exports": {
+         ".": {
++            "types": "./dist/index.d.ts",
+             "import": "./dist/matrix-wysiwyg.js",
+             "require": "./dist/matrix-wysiwyg.umd.cjs"
+         }

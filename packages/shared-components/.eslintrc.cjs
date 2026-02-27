@@ -9,9 +9,10 @@ module.exports = {
     root: true,
     plugins: ["matrix-org", "eslint-plugin-react-compiler"],
     extends: [
-        "plugin:matrix-org/babel",
         "plugin:matrix-org/react",
         "plugin:matrix-org/a11y",
+        "plugin:matrix-org/typescript",
+        "plugin:matrix-org/react",
         "plugin:storybook/recommended",
     ],
     parserOptions: {
@@ -30,37 +31,48 @@ module.exports = {
         "react/jsx-key": ["error"],
         "matrix-org/require-copyright-header": "error",
         "react-compiler/react-compiler": "error",
+        "no-restricted-imports": [
+            "error",
+            {
+                paths: [
+                    {
+                        name: "react",
+                        importNames: ["act"],
+                        message: "Please use @test-utils instead.",
+                    },
+                ],
+            },
+        ],
+
+        "@typescript-eslint/unbound-method": ["error", { ignoreStatic: true }],
+        "@typescript-eslint/explicit-function-return-type": [
+            "error",
+            {
+                allowExpressions: true,
+            },
+        ],
+
+        // We're okay being explicit at the moment
+        // "@typescript-eslint/no-empty-interface": "off",
+        // We'd rather not do this but we do
+        // "@typescript-eslint/ban-ts-comment": "off",
+        // We're okay with assertion errors when we ask for them
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-empty-object-type": [
+            "error",
+            {
+                // We do this sometimes to brand interfaces
+                allowInterfaces: "with-single-extends",
+            },
+        ],
+        "storybook/meta-satisfies-type": "error",
     },
     overrides: [
         {
-            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}"],
-            extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
+            files: ["src/**/*.test.{ts,tsx}"],
             rules: {
-                "@typescript-eslint/explicit-function-return-type": [
-                    "error",
-                    {
-                        allowExpressions: true,
-                    },
-                ],
-
-                // Remove Babel things manually due to override limitations
-                "@babel/no-invalid-this": ["off"],
-
-                // We're okay being explicit at the moment
-                "@typescript-eslint/no-empty-interface": "off",
-                // We disable this while we're transitioning
+                "@typescript-eslint/unbound-method": "off",
                 "@typescript-eslint/no-explicit-any": "off",
-                // We'd rather not do this but we do
-                "@typescript-eslint/ban-ts-comment": "off",
-                // We're okay with assertion errors when we ask for them
-                "@typescript-eslint/no-non-null-assertion": "off",
-                "@typescript-eslint/no-empty-object-type": [
-                    "error",
-                    {
-                        // We do this sometimes to brand interfaces
-                        allowInterfaces: "with-single-extends",
-                    },
-                ],
             },
         },
     ],

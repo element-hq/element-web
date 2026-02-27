@@ -25,6 +25,7 @@ env:
     ENABLE_COVERAGE: ${{ github.event_name != 'merge_group' && inputs.disable_coverage != 'true' }}
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
+    NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
 permissions: {}
 
@@ -39,15 +40,16 @@ jobs:
                 runner: [1, 2]
         steps:
             - name: Checkout code
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
-            - name: Yarn cache
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - name: pnpm cache
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   node-version: "lts/*"
-                  cache: "yarn"
+                  cache: "pnpm"
 
             - name: Install Deps
               run: "./scripts/layered.sh"
@@ -55,20 +57,22 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               with:
                   path: /tmp/jest_cache
-                  key: ${{ hashFiles('**/yarn.lock') }}
+                  key: ${{ hashFiles('**/pnpm-lock.yaml') }}
 
             - name: Get number of CPU cores
               id: cpu-cores
               uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
 
             - name: Run tests
+              working-directory: apps/web
               run: |
-                  yarn test \
+                  pnpm test \
                       --coverage=${{ env.ENABLE_COVERAGE }} \
                       --ci \
+                      --no-tui \
                       --max-workers ${{ steps.cpu-cores.outputs.count }} \
                       --shard ${{ matrix.runner }}/${{ strategy.job-total }} \
                       --cacheDirectory /tmp/jest_cache
@@ -80,6 +84,7 @@ jobs:
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'
+              working-directory: apps/web
               run: mv coverage/lcov.info coverage/${{ steps.setupNode.outputs.node-version }}-${{ matrix.runner }}.lcov.info
 
             - name: Upload Artifact
@@ -88,8 +93,8 @@ jobs:
               with:
                   name: coverage-${{ matrix.runner }}
                   path: |
-                      coverage
-                      !coverage/lcov-report
+                      apps/web/coverage
+                      !apps/web/coverage/lcov-report
 
     complete:
         name: jest-tests
@@ -104,7 +109,7 @@ jobs:
 
             - name: Skip SonarCloud in merge queue
               if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
-              uses: guibranco/github-status-action-v2@5530c593759f489bba08272e96986ffc571c1ea1
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: success
@@ -118,35 +123,36 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout code
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
 
-            - name: Yarn cache
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - name: pnpm cache
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
                   node-version: "lts/*"
-                  cache: "yarn"
+                  cache: "pnpm"
 
             - name: Install Shared Component Deps
               working-directory: "packages/shared-components"
-              run: "yarn install"
+              run: "pnpm install"
 
             - name: Cache storybook & vitest
-              uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               with:
                   path: |
                       packages/shared-components/node_modules/.cache
                       packages/shared-components/node_modules/.vite/vitest
-                  key: ${{ hashFiles('packages/shared-components/yarn.lock') }}
+                  key: ${{ hashFiles('pnpm-lock.yaml') }}
 
             - name: Get installed Playwright version
               working-directory: packages/shared-components
               id: playwright
-              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -155,11 +161,11 @@ jobs:
             - name: Install Playwright browsers
               working-directory: packages/shared-components
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: "yarn playwright install --with-deps --only-shell"
+              run: "pnpm playwright install --with-deps --only-shell"
 
             - name: Run tests
               working-directory: "packages/shared-components"
-              run: yarn test:unit --coverage=${{ env.ENABLE_COVERAGE }}
+              run: pnpm test:unit --coverage=${{ env.ENABLE_COVERAGE }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'

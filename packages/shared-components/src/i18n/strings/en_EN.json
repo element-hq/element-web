@@ -20,14 +20,27 @@
         "start_chat": "Start chat"
     },
     "common": {
-        "preferences": "Preferences"
+        "encryption_enabled": "Encryption enabled",
+        "preferences": "Preferences",
+        "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad"
     },
+    "notifications": {
+        "all_messages": "All messages",
+        "default_settings": "Match default settings",
+        "mentions_keywords": "Mentions and keywords",
+        "mute_room": "Mute room"
+    },
     "room": {
         "context_menu": {
             "title": "Room options"
+        },
+        "history_visibility_badge": {
+            "private": "New members don't see history",
+            "shared": "New members see history",
+            "world_readable": "Anyone can see history"
         },
         "status_bar": {
             "delete_all": "Delete all",
@@ -45,13 +58,68 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "Open room %(roomName)s",
+            "invitation": "Open room %(roomName)s invitation.",
+            "mention": {
+                "one": "Open room %(roomName)s with 1 unread mention.",
+                "other": "Open room %(roomName)s with %(count)s unread mentions."
+            },
+            "unread": {
+                "one": "Open room %(roomName)s with 1 unread message.",
+                "other": "Open room %(roomName)s with %(count)s unread messages."
+            },
+            "unsent_message": "Open room %(roomName)s with an unsent message."
+        },
         "appearance": "Appearance",
+        "collapse_filters": "Collapse filter list",
+        "empty": {
+            "no_chats": "No chats yet",
+            "no_chats_description": "Get started by messaging someone or by creating a room",
+            "no_chats_description_no_room_rights": "Get started by messaging someone",
+            "no_favourites": "You don't have favourite chats yet",
+            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_invites": "You don't have any unread invites",
+            "no_lowpriority": "You don't have any low priority rooms",
+            "no_mentions": "You don't have any unread mentions",
+            "no_people": "You don’t have direct chats with anyone yet",
+            "no_people_description": "You can deselect filters in order to see your other chats",
+            "no_rooms": "You’re not in any room yet",
+            "no_rooms_description": "You can deselect filters in order to see your other chats",
+            "no_unread": "Congrats! You don’t have any unread messages",
+            "show_activity": "See all activity",
+            "show_chats": "Show all chats"
+        },
+        "expand_filters": "Expand filter list",
+        "filters": {
+            "favourite": "Favourites",
+            "invites": "Invites",
+            "low_priority": "Low priority",
+            "mentions": "Mentions",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unreads"
+        },
+        "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy room link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread"
+        },
+        "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
+        "room": {
+            "more_options": "More Options"
+        },
         "room_options": "Room Options",
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
-            "activity": "Activity",
+            "activity": "Latest activity",
             "atoz": "A-Z",
             "unread_first": "Unread first"
         },
@@ -80,11 +148,32 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "The sender has blocked you from receiving this message because your device is unverified",
+            "historical_event_no_key_backup": "Historical messages are not available on this device",
+            "historical_event_unverified_device": "You need to verify this device for access to historical messages",
+            "historical_event_user_not_joined": "You don't have access to this message",
+            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_unsigned_device": "Sent from an insecure device.",
+            "unable_to_decrypt": "Unable to decrypt message"
+        },
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
-        }
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignored attempt to disable encryption",
+            "disabled": "Encryption not enabled",
+            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
+            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
+            "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "unsupported": "The encryption used by this room isn't supported."
+        },
+        "message_timestamp_received_at": "Received at: %(dateTime)s",
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
     },
     "widget": {
         "context_menu": {

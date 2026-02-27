@@ -8,12 +8,12 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RichItem } from "./RichItem";
 
 const currentTimestamp = new Date("2025-03-09T12:00:00Z").getTime();
 
-export default {
+const meta = {
     title: "RichList/RichItem",
     component: RichItem,
     tags: ["autodocs"],
@@ -32,33 +32,39 @@ export default {
             context: "button",
         },
     },
-} as Meta<typeof RichItem>;
+    render: (args) => (
+        <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
+            <RichItem {...args} />
+        </ul>
+    ),
+} satisfies Meta<typeof RichItem>;
 
-const Template: StoryFn<typeof RichItem> = (args) => (
-    <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
-        <RichItem {...args} />
-    </ul>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const Selected = Template.bind({});
-Selected.args = {
-    selected: true,
+export const Selected: Story = {
+    args: {
+        selected: true,
+    },
 };
 
-export const WithoutTimestamp = Template.bind({});
-WithoutTimestamp.args = {
-    timestamp: undefined,
+export const WithoutTimestamp: Story = {
+    args: {
+        timestamp: undefined,
+    },
 };
 
-export const Hover = Template.bind({});
-Hover.parameters = { pseudo: { hover: true } };
+export const Hover: Story = {
+    parameters: { pseudo: { hover: true } },
+};
 
-const TemplateSeparator: StoryFn<typeof RichItem> = (args) => (
-    <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
-        <RichItem {...args} />
-        <RichItem {...args} />
-    </ul>
-);
-export const Separator = TemplateSeparator.bind({});
+export const Separator: Story = {
+    render: (args) => (
+        <ul role="listbox" style={{ all: "unset", listStyle: "none" }}>
+            <RichItem {...args} />
+            <RichItem {...args} />
+        </ul>
+    ),
+};
