@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { ReactNode } from "react";
+
 export interface UrlPreviewViewSnapshotPreview {
     /**
      * The URL for the preview.
@@ -15,16 +17,40 @@ export interface UrlPreviewViewSnapshotPreview {
      */
     showTooltipOnLink?: boolean;
     /**
-     *
+     * The title of the page being previewed.
      */
     title: string;
+    /**
+     * The site name to be displayed alongside the title.
+     */
     siteName?: string;
-    description?: string;
+    /**
+     * Description of the site. May contain links.
+     */
+    description?: ReactNode;
+    /**
+     * Preview image to display.
+     */
     image?: {
+        /**
+         * The HTTP URI of the the thumbnail.
+         */
         imageThumb: string;
+        /**
+         * The HTTP URI of the full image.
+         */
         imageFull: string;
+        /**
+         * File size in bytes.
+         */
         fileSize?: number;
+        /**
+         * The width of the thumbnail. Must not exceed 100px.
+         */
         width?: number;
+        /**
+         * The height of the thumbnail. Must not exceed 100px.
+         */
         height?: number;
     };
 }
