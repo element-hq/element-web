@@ -82,12 +82,7 @@ export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPre
                             </Text>
                         )}
                     </Text>
-                    {preview.description && (
-                        <Text
-                            className={styles.description}
-                            dangerouslySetInnerHTML={{ __html: preview.description }}
-                        />
-                    )}
+                    {preview.description && <Text className={styles.description}>{preview.description}</Text>}
                 </div>
             </div>
         </div>
