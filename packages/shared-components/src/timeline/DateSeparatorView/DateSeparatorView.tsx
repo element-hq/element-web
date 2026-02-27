@@ -91,6 +91,7 @@ export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX
                         <DateSeparatorButton
                             label={label}
                             tooltipOpen={isMenuOpen ? false : undefined}
+                            className={styles.content}
                             buttonRef={triggerRef}
                         />
                     }

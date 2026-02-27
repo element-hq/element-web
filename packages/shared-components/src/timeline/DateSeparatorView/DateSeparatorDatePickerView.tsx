@@ -12,7 +12,7 @@ import { formatDateForInput } from "../../utils/DateUtils";
 import { useI18n } from "../../utils/i18nContext";
 import { useViewModel } from "../../viewmodel";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
-import styles from "./DateSeparatorView.module.css";
+import styles from "./DateSeparatorDatePickerView.module.css";
 
 /**
  * Props for DateSeparatorDatePickerView component.
@@ -80,13 +80,12 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
         <MenuItem
             as="div"
             data-testid="jump-to-date-picker"
-            label={null}
+            label={_t("room|jump_to_date")}
             onSelect={keepMenuOpenOnSelect}
             hideChevron={true}
             className={styles.picker_menu_item}
         >
             <Root className={styles.picker_form} onSubmit={onJumpToDateSubmit}>
-                <span className={styles.picker_label}>{_t("room|jump_to_date")}</span>
                 <Field name="jump-to-date-field" className={styles.picker_input}>
                     <TextControl
                         ref={dateInputRef}

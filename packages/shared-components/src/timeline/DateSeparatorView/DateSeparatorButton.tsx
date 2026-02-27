@@ -5,12 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import classNames from "classnames";
 import React from "react";
 import { Tooltip } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
-import styles from "./DateSeparatorView.module.css";
 import { Flex } from "../../utils/Flex";
 import { useI18n } from "../../utils/i18nContext";
 
@@ -20,6 +18,8 @@ export interface DateSeparatorButtonProps {
     label: string;
     /** Controls tooltip visibility when parent manages open state. */
     tooltipOpen?: boolean;
+    /** Extra CSS classes to apply to the component. */
+    className?: string;
     /** Optional ref for the button container element. */
     buttonRef?: React.Ref<HTMLDivElement>;
 }
@@ -28,6 +28,7 @@ export interface DateSeparatorButtonProps {
 export function DateSeparatorButton({
     label,
     tooltipOpen,
+    className,
     buttonRef,
     ...props
 }: DateSeparatorButtonProps): React.ReactNode {
@@ -37,7 +38,7 @@ export function DateSeparatorButton({
             <Flex
                 ref={buttonRef}
                 data-testid="jump-to-date-separator-button"
-                className={classNames(styles.content)}
+                className={className}
                 aria-live="off"
                 aria-label={_t("room|jump_to_date")}
                 role="button"

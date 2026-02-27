@@ -11,9 +11,9 @@ import { capitalize } from "lodash";
 
 import { useI18n } from "../../utils/i18nContext";
 import { humanizeRelativeTime } from "../../utils/humanize";
-import styles from "./DateSeparatorView.module.css";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import { DateSeparatorDatePickerView } from "./DateSeparatorDatePickerView";
+import styles from "./DateSeparatorContextMenuView.module.css";
 
 /**
  * Props for DateSeparatorContextMenuView component.
@@ -83,7 +83,7 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
                 className={styles.picker_menu_item}
                 onKeyDown={onKeyDown}
             />
-            <Separator decorative />
+            <Separator decorative className={styles.picker_separator} />
             <DateSeparatorDatePickerView vm={vm} inputRef={dateInputRef} onSubmitted={() => onOpenChange?.(false)} />
         </Menu>
     );
