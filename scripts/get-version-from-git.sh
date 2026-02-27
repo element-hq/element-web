@@ -6,6 +6,6 @@
 set -e
 
 # Since the deps are fetched from git & linked, we can rev-parse
-JSSDK_SHA=$(git -C node_modules/matrix-js-sdk rev-parse --short=12 HEAD)
+JSSDK_SHA=$(git -C $(pnpm -w root)/matrix-js-sdk rev-parse --short=12 HEAD)
 VECTOR_SHA=$(git rev-parse --short=12 HEAD) # use the ACTUAL SHA rather than assume develop
 echo "$VECTOR_SHA-js-$JSSDK_SHA"
