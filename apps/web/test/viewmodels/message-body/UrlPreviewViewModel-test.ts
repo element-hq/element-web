@@ -50,13 +50,7 @@ function getViewModel({ mediaVisible, visible } = { mediaVisible: true, visible:
 
 describe("UrlPreviewViewModel", () => {
     it("should return no previews by default", () => {
-        expect(getViewModel().vm.getSnapshot()).toEqual({
-            compactLayout: false,
-            overPreviewLimit: false,
-            previews: [],
-            previewsLimited: true,
-            totalPreviewCount: 0,
-        });
+        expect(getViewModel().vm.getSnapshot()).toMatchSnapshot();
     });
     it("should preview a single valid URL", async () => {
         const { vm, client } = getViewModel();
@@ -64,22 +58,7 @@ describe("UrlPreviewViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toEqual({
-            previews: [
-                {
-                    link: "https://example.org",
-                    title: "This is an example!",
-                    siteName: "Example.org",
-                    showTooltipOnLink: undefined,
-                    description: "This is a description",
-                    image: undefined,
-                },
-            ],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should preview nested URLs but ignore some element types", async () => {
         const { vm, client } = getViewModel();
@@ -119,13 +98,7 @@ describe("UrlPreviewViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toEqual({
-            previews: [],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
     it("should preview a URL with media", async () => {
@@ -150,28 +123,7 @@ describe("UrlPreviewViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toEqual({
-            previews: [
-                {
-                    link: "https://example.org",
-                    title: "This is an example!",
-                    siteName: undefined,
-                    showTooltipOnLink: undefined,
-                    description: undefined,
-                    image: {
-                        height: 100,
-                        width: 100,
-                        fileSize: 10000,
-                        imageThumb: "https://example.org/image/thumb",
-                        imageFull: "https://example.org/image/src",
-                    },
-                },
-            ],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should ignore media when mediaVisible is false", async () => {
         const { vm, client } = getViewModel({ mediaVisible: false, visible: true });
@@ -187,22 +139,7 @@ describe("UrlPreviewViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toEqual({
-            previews: [
-                {
-                    link: "https://example.org",
-                    title: "This is an example!",
-                    siteName: undefined,
-                    showTooltipOnLink: undefined,
-                    description: undefined,
-                    image: undefined,
-                },
-            ],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
         // eslint-disable-next-line no-restricted-properties
         expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
     });
@@ -213,22 +150,7 @@ describe("UrlPreviewViewModel", () => {
         msg.innerHTML =
             '<a href="https://example.org">Test</a><a href="https://example.org">Test</a><a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toEqual({
-            previews: [
-                {
-                    link: "https://example.org",
-                    title: "This is an example!",
-                    siteName: "Example.org",
-                    showTooltipOnLink: undefined,
-                    description: "This is a description",
-                    image: undefined,
-                },
-            ],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
         expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
     });
     it("should ignore failed previews", async () => {
@@ -237,13 +159,7 @@ describe("UrlPreviewViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toEqual({
-            previews: [],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should handle image clicks", async () => {
         const { vm, client, onImageClicked } = getViewModel();
@@ -278,31 +194,10 @@ describe("UrlPreviewViewModel", () => {
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
         await vm.onHideClick();
-        expect(vm.getSnapshot()).toEqual({
-            previews: [],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
 
         await vm.onShowClick();
-        expect(vm.getSnapshot()).toEqual({
-            previews: [
-                {
-                    link: "https://example.org",
-                    title: "This is an example!",
-                    siteName: "Example.org",
-                    showTooltipOnLink: undefined,
-                    description: "This is a description",
-                    image: undefined,
-                },
-            ],
-            compactLayout: false,
-            overPreviewLimit: false,
-            previewsLimited: true,
-            totalPreviewCount: 1,
-        });
+        expect(vm.getSnapshot()).toMatchSnapshot();
     });
 
     it.each([
@@ -326,42 +221,21 @@ describe("UrlPreviewViewModel", () => {
         "og:type": "document",
     };
 
-    it.each<[IPreviewUrlResponse, Omit<UrlPreviewViewSnapshotPreview, "link">]>([
-        [{ ...baseOg, "og:title": "Basic title" }, { title: "Basic title" }],
-        [
-            { ...baseOg, "og:site_name": "Site name", "og:title": "" },
-            { title: "Site name", siteName: undefined },
-        ],
-        [
-            { ...baseOg, "og:description": "A description", "og:title": "" },
-            { title: "A description", description: undefined },
-        ],
-        [
-            { ...baseOg, "og:title": "Cool blog", "og:site_name": "Cool site" },
-            { title: "Cool blog", siteName: "Cool site" },
-        ],
-        [
-            {
-                ...baseOg,
-                "og:title": "Media test",
-                // API *may* return a string, so check we parse correctly.
-                "og:image:height": "500" as unknown as number,
-                "og:image:width": 500,
-                "matrix:image:size": 1024,
-                "og:image": IMAGE_MXC,
-            },
-            {
-                title: "Media test",
-                image: {
-                    imageThumb: "https://example.org/image/thumb",
-                    imageFull: "https://example.org/image/src",
-                    fileSize: 1024,
-                    width: 100,
-                    height: 100,
-                },
-            },
-        ],
-    ])("handles different kinds of opengraph responses %s", async (og, preview) => {
+    it.each<IPreviewUrlResponse>([
+        { ...baseOg, "og:title": "Basic title" },
+        { ...baseOg, "og:site_name": "Site name", "og:title": "" },
+        { ...baseOg, "og:description": "A description", "og:title": "" },
+        { ...baseOg, "og:title": "Cool blog", "og:site_name": "Cool site" },
+        {
+            ...baseOg,
+            "og:title": "Media test",
+            // API *may* return a string, so check we parse correctly.
+            "og:image:height": "500" as unknown as number,
+            "og:image:width": 500,
+            "matrix:image:size": 1024,
+            "og:image": IMAGE_MXC,
+        },
+    ])("handles different kinds of opengraph responses %s", async (og) => {
         const { vm, client } = getViewModel();
         // eslint-disable-next-line no-restricted-properties
         client.mxcUrlToHttp.mockImplementation((url, width) => {
@@ -375,6 +249,6 @@ describe("UrlPreviewViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = `<a href="https://example.org">test</a>`;
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot().previews[0]).toMatchObject(preview);
+        expect(vm.getSnapshot().previews[0]).toMatchSnapshot();
     });
 });
