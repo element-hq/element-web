@@ -124,6 +124,20 @@ describe("RoomListViewViewModel", () => {
 
             expect(viewModel.getSnapshot().isLoadingRooms).toBe(false);
         });
+
+        // This test ensures that the room list item vms are preserved when the room list is changing
+        it("should keep existing view model when ListsUpdate event fires", () => {
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
+
+            // Create view model for room1
+            const room1VM = viewModel.getRoomItemViewModel("!room1:server");
+            expect(room1VM).toBeDefined();
+
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            // View model should be still valid
+            expect(room1VM.isDisposed).toBe(false);
+        });
     });
 
     describe("Space switching", () => {
