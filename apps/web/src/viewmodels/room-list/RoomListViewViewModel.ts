@@ -133,9 +133,6 @@ export class RoomListViewViewModel
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
 
-        // Clear view models since room list changed
-        this.clearViewModels();
-
         this.updateRoomListData();
     };
 
@@ -291,11 +288,13 @@ export class RoomListViewViewModel
 
         const newSpaceId = this.roomsResult.spaceId;
 
-        // Clear view models since room list structure changed
-        this.clearViewModels();
-
         // Detect space change
         if (oldSpaceId !== newSpaceId) {
+            // Clear view models when the space changes
+            // We only want to do this on space changes, not on regular list updates, to preserve view models when possible
+            // The view models are disposed when scrolling out of view (handled by updateVisibleRooms)
+            this.clearViewModels();
+
             // Space changed - get the last selected room for the new space to prevent flicker
             const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
 
