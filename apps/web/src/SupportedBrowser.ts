@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import browserlist from "browserslist";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import memoizeOne from "memoize-one";
 
 import { DeviceType, parseUserAgent } from "./utils/device/parseUserAgent";
 import ToastStore from "./stores/ToastStore";
@@ -40,11 +41,7 @@ function getBrowserNameVersion(browser: string): [name: string, version: number]
     return [browserNameLc, parseInt(browserVersion, 10)];
 }
 
-/**
- * Function to check if the current browser is considered supported by our support policy.
- * Based on user agent parsing so may be inaccurate if the user has fingerprint prevention turned up to 11.
- */
-export function getBrowserSupport(): boolean {
+function calculateBrowserSupport(): boolean {
     const browsers = browserlist(SUPPORTED_BROWSER_QUERY).sort();
     const minimumBrowserVersions = new Map<string, number>();
     for (const browser of browsers) {
@@ -56,33 +53,40 @@ export function getBrowserSupport(): boolean {
 
     const details = parseUserAgent(navigator.userAgent);
 
-    let supported = true;
+    if (!details.client) {
+        logger.warn("Browser unsupported, unknown client", navigator.userAgent);
+        return false;
+    }
+
     if (!SUPPORTED_DEVICE_TYPES.includes(details.deviceType)) {
         logger.warn("Browser unsupported, unsupported device type", details.deviceType);
-        supported = false;
+        return false;
     }
 
-    if (details.client) {
-        // We don't care about the browser version for desktop devices
-        // We ship our own browser (electron) for desktop devices
-        if (details.deviceType === DeviceType.Desktop) {
-            return supported;
-        }
-
-        const [browserName, browserVersion] = getBrowserNameVersion(details.client);
-        const minimumVersion = minimumBrowserVersions.get(browserName);
-        // Check both with the sub-version cut off and without as some browsers have less granular versioning e.g. Safari
-        if (!minimumVersion || browserVersion < minimumVersion) {
-            logger.warn("Browser unsupported, unsupported user agent", details.client);
-            supported = false;
-        }
-    } else {
-        logger.warn("Browser unsupported, unknown client", navigator.userAgent);
-        supported = false;
+    // We don't care about the browser version for desktop devices
+    // We ship our own browser (electron) for desktop devices
+    if (details.deviceType === DeviceType.Desktop) {
+        return true;
     }
 
-    return supported;
+    const [browserName, browserVersion] = getBrowserNameVersion(details.client);
+    const minimumVersion = minimumBrowserVersions.get(browserName);
+    // Check both with the sub-version cut off and without as some browsers have less granular versioning e.g. Safari
+    if (!minimumVersion || browserVersion < minimumVersion) {
+        logger.warn("Browser unsupported, unsupported user agent", details.client);
+        return false;
+    }
+    return true;
 }
+
+/**
+ * Function to check if the current browser is considered supported by our support policy.
+ * Based on user agent parsing so may be inaccurate if the user has fingerprint prevention turned up to 11.
+ * This is calculated once and stored for the lifetime of the session to prevent logspam.
+ *
+ * @returns `true` if the browser is supported by us, or `false` if *any* of the checks fail.
+ */
+export const getBrowserSupport = memoizeOne(calculateBrowserSupport);
 
 /**
  * Shows a user warning toast if the user's browser is not supported.
