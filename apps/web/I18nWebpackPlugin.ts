@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import webpack from "webpack";
-import * as fs from "node:fs";
+import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import _ from "lodash";
 import { type Translations } from "matrix-web-i18n";
@@ -16,6 +16,15 @@ interface Options {
     stringsPath: string;
     // Additional paths to strings which will be merged into the application's own strings for supported languages
     additionalStringsPaths?: string[];
+}
+
+async function exists(path: string): Promise<boolean> {
+    try {
+        await fs.access(path);
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 export class I18nWebpackPlugin {
@@ -44,7 +53,7 @@ export class I18nWebpackPlugin {
                     for (const p of paths) {
                         compilation.contextDependencies.add(p);
 
-                        if (!fs.existsSync(p)) {
+                        if (!(await exists(p))) {
                             compilation.errors.push(
                                 new webpack.WebpackError(`I18nWebpackPlugin: strings path not found: ${p}`),
                             );
@@ -53,7 +62,7 @@ export class I18nWebpackPlugin {
                     }
 
                     const primaryPath = paths[0];
-                    const includeLangs = [...new Set([...fs.readdirSync(primaryPath)])]
+                    const includeLangs = [...new Set([...(await fs.readdir(primaryPath))])]
                         .filter((fn) => fn.endsWith(".json"))
                         .map((f) => f.slice(0, -5));
 
@@ -61,12 +70,12 @@ export class I18nWebpackPlugin {
 
                     for (const lang of includeLangs) {
                         let translations: Translations = {};
-                        paths.forEach((p) => {
+                        for (const p of paths) {
                             const f = path.join(p, lang + ".json");
 
-                            if (fs.existsSync(f)) {
+                            if (await exists(f)) {
                                 try {
-                                    const content = fs.readFileSync(f, "utf-8");
+                                    const content = await fs.readFile(f, "utf-8");
                                     translations = _.merge(translations, JSON.parse(content));
                                     compilation.fileDependencies.add(f);
                                 } catch (e) {
@@ -77,7 +86,7 @@ export class I18nWebpackPlugin {
                                     );
                                 }
                             }
-                        });
+                        }
 
                         const json = JSON.stringify(translations, null, 4);
                         const jsonBuffer = Buffer.from(json);
