@@ -47,7 +47,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
               role="none"
             />
             <div
-              class="_flex_4dswl_9 _content_1d6uw_8"
+              class="_flex_4dswl_9 _content_5dcky_8"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             >
               <h2
