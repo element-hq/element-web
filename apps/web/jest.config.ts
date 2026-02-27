@@ -59,7 +59,7 @@ const config: Config = {
     moduleDirectories: ["node_modules", "test/test-utils"],
 };
 
-// if we're running under GHA, enable the GHA reporter
+// if we're running under GHA, enable relevant reporters
 if (env["GITHUB_ACTIONS"] !== undefined) {
     config.reporters ??= [];
     config.reporters.push(["github-actions", { silent: false }]);
