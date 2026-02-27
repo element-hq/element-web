@@ -10,6 +10,7 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type SecretStorageKeyDescriptionAesV1 } from "matrix-js-sdk/src/secret-storage";
 
 import { RecoveryPanelOutOfSync } from "../../../../../../src/components/views/settings/encryption/RecoveryPanelOutOfSync";
 import { AccessCancelledError, accessSecretStorage } from "../../../../../../src/SecurityManager";
@@ -66,13 +67,15 @@ describe("<RecoveyPanelOutOfSync />", () => {
         expect(onForgotRecoveryKey).toHaveBeenCalled();
     });
 
-    it("should access to 4S and call onFinish when 'Enter recovery key' is clicked", async () => {
+    it("should load backup decryption key and call onFinish when 'Enter recovery key' is clicked", async () => {
         jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
 
         const user = userEvent.setup();
         mocked(accessSecretStorage).mockImplementation(async (func = async (): Promise<void> => {}) => {
             return await func();
         });
+
+        mocked(matrixClient.isKeyBackupKeyStored).mockResolvedValue(fakeKeyBackupKey());
 
         const onFinish = jest.fn();
         renderComponent(onFinish);
@@ -81,7 +84,9 @@ describe("<RecoveyPanelOutOfSync />", () => {
         expect(accessSecretStorage).toHaveBeenCalled();
         expect(onFinish).toHaveBeenCalled();
 
+        expect(matrixClient.isKeyBackupKeyStored).toHaveBeenCalled();
         expect(matrixClient.getCrypto()!.resetKeyBackup).not.toHaveBeenCalled();
+        expect(matrixClient.getCrypto()!.loadSessionBackupPrivateKeyFromSecretStorage).toHaveBeenCalled();
     });
 
     it("should reset key backup if needed", async () => {
@@ -136,3 +141,23 @@ describe("<RecoveyPanelOutOfSync />", () => {
         expect(onAccessSecretStorageFailed).not.toHaveBeenCalled();
     });
 });
+
+/**
+ * Just enough of a key backup key to persuade RecoveryPanelOutOfSync that we
+ * don't need to reset backup.
+ */
+function fakeKeyBackupKey(): Record<string, SecretStorageKeyDescriptionAesV1> {
+    return {
+        x: {
+            iv: "x",
+            mac: "y",
+            name: "n",
+            algorithm: "a",
+            passphrase: {
+                algorithm: "m.pbkdf2",
+                iterations: 1,
+                salt: "s",
+            },
+        },
+    };
+}
