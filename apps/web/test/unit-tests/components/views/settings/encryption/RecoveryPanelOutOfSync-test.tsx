@@ -33,7 +33,6 @@ describe("<RecoveyPanelOutOfSync />", () => {
         onForgotRecoveryKey = jest.fn(),
         onAccessSecretStorageFailed = jest.fn(),
     ) {
-        matrixClient = createTestClient();
         return render(
             <RecoveryPanelOutOfSync
                 onFinish={onFinish}
@@ -43,6 +42,10 @@ describe("<RecoveyPanelOutOfSync />", () => {
             withClientContextRenderOptions(matrixClient),
         );
     }
+
+    beforeEach(() => {
+        matrixClient = createTestClient();
+    });
 
     afterEach(() => {
         jest.clearAllMocks();
