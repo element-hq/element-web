@@ -87,3 +87,16 @@ export const NoComposeMenu: Story = {
         displayComposeMenu: false,
     },
 };
+
+export const LongTitle: Story = {
+    decorators: [
+        (Story) => (
+            <div style={{ width: "200px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+    args: {
+        title: "Loooooooooooooooooooooooooooooooooooooong title",
+    },
+};
