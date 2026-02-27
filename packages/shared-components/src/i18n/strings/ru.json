@@ -5,15 +5,33 @@
     "action": {
         "delete": "Удалить",
         "dismiss": "Закрыть",
+        "edit": "Редактировать",
         "explore_rooms": "Обзор комнат",
+        "invite": "Пригласить",
+        "new_conversation": "Новый диалог",
+        "new_room": "Новая комната",
+        "new_video_room": "Новая видеокомната",
+        "open_menu": "Открыть меню",
         "pause": "Пауза",
         "play": "Воспроизведение",
-        "search": "Поиск"
+        "remove": "Удалить",
+        "retry": "Повторить",
+        "search": "Поиск",
+        "start_chat": "Начать чат"
     },
     "left_panel": {
         "open_dial_pad": "Открыть панель набора номера"
     },
+    "notifications": {
+        "all_messages": "Все сообщения",
+        "default_settings": "Соответствует настройкам по умолчанию",
+        "mentions_keywords": "Упоминания и ключевые слова",
+        "mute_room": "Заглушить комнату"
+    },
     "room": {
+        "context_menu": {
+            "title": "Настройки комнаты"
+        },
         "status_bar": {
             "delete_all": "Удалить всё",
             "exceeded_resource_limit_description": "Свяжись с администратором сервиса, чтобы продолжить пользоваться услугой.",
@@ -27,6 +45,49 @@
             "server_connectivity_lost_description": "Отправленные сообщения будут сохранены, пока соединение не восстановится.",
             "server_connectivity_lost_title": "Соединение с сервером потеряно",
             "some_messages_not_sent": "Некоторые сообщения не были отправлены"
+        }
+    },
+    "room_list": {
+        "appearance": "Внешний вид",
+        "collapse_filters": "Свернуть список фильтров",
+        "empty": {
+            "show_activity": "Посмотреть всю активность",
+            "show_chats": "Показать все чаты"
+        },
+        "filters": {
+            "favourite": "Избранное",
+            "invites": "Приглашения",
+            "low_priority": "Низкий приоритет",
+            "mentions": "Упоминания",
+            "people": "Люди",
+            "rooms": "Комнаты",
+            "unread": "Непрочитанные"
+        },
+        "list_title": "Список комнат",
+        "more_options": {
+            "copy_link": "Скопировать ссылку на комнату",
+            "favourited": "Избранное",
+            "leave_room": "Покинуть комнату",
+            "low_priority": "Низкий приоритет",
+            "mark_read": "Отметить как прочитанное",
+            "mark_unread": "Отметить как непрочитанное"
+        },
+        "notification_options": "Параметры уведомлений",
+        "open_space_menu": "Открыть меню пространств",
+        "primary_filters": "Фильтры комнат",
+        "room": {
+            "more_options": "Другие параметры"
+        },
+        "room_options": "Настройки комнаты",
+        "show_message_previews": "Показать предварительный просмотр сообщений",
+        "sort": "Сортировать",
+        "sort_type": {
+            "activity": "Последняя активность",
+            "unread_first": "Сначала непрочитанные"
+        },
+        "space_menu": {
+            "home": "Пространство — Главная",
+            "space_settings": "Настройки Пространства"
         }
     },
     "terms": {
@@ -49,6 +110,9 @@
         "n_minutes_ago": "%(num)s минут назад"
     },
     "timeline": {
+        "decryption_failure": {
+            "sender_unsigned_device": "Отправлено с незащищенного устройства"
+        },
         "m.audio": {
             "audio_player": "Аудиоплеер",
             "error_downloading_audio": "Ошибка загрузки аудио",

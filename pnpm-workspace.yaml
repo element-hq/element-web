@@ -18,7 +18,7 @@ catalog:
     # Module API
     "@element-hq/element-web-module-api": 1.9.1
     # Compound
-    "@vector-im/compound-design-tokens": 6.9.0
+    "@vector-im/compound-design-tokens": 6.10.0
     "@vector-im/compound-web": 8.3.6
     # i18n
     matrix-web-i18n: 3.6.0
