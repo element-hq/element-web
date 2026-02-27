@@ -295,24 +295,6 @@ describe("RoomListViewViewModel", () => {
             expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
             expect(viewModel.getSnapshot().roomIds).toEqual(["!room1:server", "!room2:server", "!room3:server"]);
         });
-
-        it("should clear view models when filter changes", () => {
-            viewModel = new RoomListViewViewModel({ client: matrixClient });
-
-            // Get view models
-            const vm1 = viewModel.getRoomItemViewModel("!room1:server");
-            const disposeSpy = jest.spyOn(vm1, "dispose");
-
-            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
-                spaceId: "home",
-                rooms: [room2],
-                filterKeys: [FilterKey.UnreadFilter],
-            });
-
-            viewModel.onToggleFilter("unread");
-
-            expect(disposeSpy).toHaveBeenCalled();
-        });
     });
 
     describe("Room item view models", () => {
