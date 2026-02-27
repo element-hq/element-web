@@ -13,3 +13,5 @@ export {
 } from "./UrlPreviewGroupView";
 
 export { type UrlPreviewViewSnapshotPreview } from "./types";
+
+export { UrlPreviewStatusBar } from "./UrlPreviewStatusBar";

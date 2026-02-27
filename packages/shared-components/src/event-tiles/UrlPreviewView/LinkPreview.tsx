@@ -71,17 +71,15 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             <div className={styles.wrapImageCaption}>
                 {img}
                 <div className={styles.caption}>
+                    <Text as="span" size="sm" weight="regular">
+                        {preview.siteName}
+                    </Text>
                     <Text type="body" size="md" className={styles.title}>
                         {tooltipCaption ? <Tooltip label={tooltipCaption}>{anchor}</Tooltip> : anchor}
-                        {preview.siteName && (
-                            <Text as="span" size="md" weight="regular">
-                                {" - " + preview.siteName}
-                            </Text>
-                        )}
                     </Text>
-                    {preview.description && (
-                        <LinkedText className={styles.description}>{preview.description}</LinkedText>
-                    )}
+                    <LinkedText type="body" size="md" className={styles.description}>
+                        {preview.description}
+                    </LinkedText>
                 </div>
             </div>
         </div>

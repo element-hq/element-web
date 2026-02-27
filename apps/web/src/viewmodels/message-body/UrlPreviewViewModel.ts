@@ -29,6 +29,7 @@ export interface UrlPreviewViewModelProps {
     mediaVisible: boolean;
     visible: boolean;
     onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
+    canHidePreview: boolean;
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
@@ -362,6 +363,15 @@ export class UrlPreviewViewModel
             this.links = newLinks;
             return this.computeSnapshot();
         }
+    }
+
+    /**
+     * Trigger a recalculation of the links based upon a set of links.
+     * @param links A set of URLs
+     */
+    public updateWithLinks(links: string[]): Promise<void> {
+        this.links = links;
+        return this.computeSnapshot();
     }
 
     /**
