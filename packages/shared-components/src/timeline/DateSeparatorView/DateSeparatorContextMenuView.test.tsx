@@ -123,6 +123,31 @@ describe("DateSeparatorContextMenuView", () => {
         expect(submitButton).toHaveFocus();
     });
 
+    it("moves focus from submit button back to date input on Shift+Tab", async () => {
+        const user = userEvent.setup();
+        renderMenu({ open: true, jumpToEnabled: true });
+
+        const dateInput = screen.getByLabelText("Pick a date to jump to");
+        const submitButton = screen.getByRole("button", { name: "Go" });
+        submitButton.focus();
+        await user.keyboard("{Shift>}{Tab}{/Shift}");
+
+        expect(dateInput).toHaveFocus();
+    });
+
+    it("closes the menu on Tab from the submit button", async () => {
+        const user = userEvent.setup();
+        const onOpenChange = vi.fn<(open: boolean) => void>();
+        const { vm } = renderMenu({ open: true, jumpToEnabled: true, onOpenChange });
+
+        const submitButton = screen.getByRole("button", { name: "Go" });
+        submitButton.focus();
+        await user.keyboard("{Tab}");
+
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(vm.onDatePicked).not.toHaveBeenCalled();
+    });
+
     it("submits date picker with Enter on the submit button", async () => {
         const user = userEvent.setup();
         const onOpenChange = vi.fn<(open: boolean) => void>();

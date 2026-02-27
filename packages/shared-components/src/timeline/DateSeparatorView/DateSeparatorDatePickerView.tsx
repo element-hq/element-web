@@ -24,6 +24,8 @@ export interface DateSeparatorDatePickerViewProps {
     inputRef?: React.RefObject<HTMLInputElement | null>;
     /** Called after a date has been submitted. */
     onSubmitted?: () => void;
+    /** Called when the picker is dismissed without submitting. */
+    onDismissed?: () => void;
 }
 
 /**
@@ -33,6 +35,7 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
     vm,
     inputRef,
     onSubmitted,
+    onDismissed,
 }): JSX.Element => {
     const snapshot = useViewModel(vm);
     const date = snapshot.jumpFromDate ? new Date(snapshot.jumpFromDate) : new Date();
@@ -46,9 +49,13 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
     const submitButtonRef = useRef<HTMLButtonElement>(null);
 
     const onDateInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (event.key === "Tab" && !event.shiftKey) {
-            event.preventDefault();
-            submitButtonRef.current?.focus();
+        if (event.key === "Tab") {
+            if (event.shiftKey) {
+                onDismissed?.();
+            } else {
+                event.preventDefault();
+                submitButtonRef.current?.focus();
+            }
         }
     };
 
@@ -67,9 +74,19 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
     };
 
     const onSubmitButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
-        if (event.key !== "Enter" && event.key !== " " && event.key !== "Spacebar") return;
-        event.preventDefault();
-        submitDate();
+        if (event.key === "Tab") {
+            if (event.shiftKey) {
+                event.preventDefault();
+                dateInputRef.current?.focus();
+            } else {
+                onDismissed?.();
+            }
+        }
+
+        if (event.key == "Enter" || event.key == " " || event.key == "Spacebar") {
+            event.preventDefault();
+            submitDate();
+        }
     };
 
     const keepMenuOpenOnSelect = (event: Event): void => {

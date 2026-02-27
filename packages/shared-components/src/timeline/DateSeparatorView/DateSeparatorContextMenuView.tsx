@@ -84,7 +84,12 @@ export const DateSeparatorContextMenuView: React.FC<PropsWithChildren<DateSepara
                 onKeyDown={onKeyDown}
             />
             <Separator decorative className={styles.picker_separator} />
-            <DateSeparatorDatePickerView vm={vm} inputRef={dateInputRef} onSubmitted={() => onOpenChange?.(false)} />
+            <DateSeparatorDatePickerView
+                vm={vm}
+                inputRef={dateInputRef}
+                onSubmitted={() => onOpenChange?.(false)}
+                onDismissed={() => onOpenChange?.(false)}
+            />
         </Menu>
     );
 };
