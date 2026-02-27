@@ -61,7 +61,7 @@ const config: Config = {
 
 // if we're running under GHA, enable the GHA reporter
 if (env["GITHUB_ACTIONS"] !== undefined) {
-	config.reporters = config.reporters ?? [];
+    config.reporters = config.reporters ?? [];
     config.reporters.push(["github-actions", { silent: false }]);
     config.reporters.push("summary");
     config.reporters.push("@casualbot/jest-sonar-reporter");
