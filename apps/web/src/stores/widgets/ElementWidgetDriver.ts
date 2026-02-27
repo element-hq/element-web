@@ -388,7 +388,8 @@ export class ElementWidgetDriver extends WidgetDriver {
         for (const ev of room._unstable_getStickyEvents()) {
             stickyEvents.push(ev.getEffectiveEvent() as IRoomEvent);
         }
-
+        // Notice that the capability checks are not done here; they are done in the matrix-widget-api.
+        // The ClientWidgetAPI will do the filtering of events based on the capabilities advertised by the driver.
         return stickyEvents;
     }
 
