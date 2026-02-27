@@ -13,12 +13,15 @@ import {
 } from "@element-hq/web-shared-components";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
 
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import PlatformPeg from "../../PlatformPeg";
 import { thumbHeight } from "../../ImageUtils";
 import SettingsStore from "../../settings/SettingsStore";
+import { Linkify } from "../../Linkify";
+import { decode } from "html-entities";
 
 const logger = rootLogger.getChild("UrlPreviewViewModel");
 
@@ -114,7 +117,7 @@ export class UrlPreviewViewModel
 
         return {
             title,
-            description,
+            description: description && <Linkify>{decode(description)}</Linkify>,
             siteName,
         };
     }
