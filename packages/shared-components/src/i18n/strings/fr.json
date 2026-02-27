@@ -20,7 +20,9 @@
         "start_chat": "Démarrer une discussion"
     },
     "common": {
-        "preferences": "Préférences"
+        "encryption_enabled": "Chiffrement activé",
+        "preferences": "Préférences",
+        "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
     },
     "left_panel": {
         "open_dial_pad": "Ouvrir le pavé de numérotation"
@@ -117,7 +119,7 @@
         "show_message_previews": "Afficher les aperçus des messages",
         "sort": "Trier",
         "sort_type": {
-            "activity": "Activité",
+            "activity": "Dernière activité",
             "atoz": "A-Z",
             "unread_first": "Non-lus en premier"
         },
@@ -159,7 +161,19 @@
             "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "unnamed_audio": "Audio sans nom"
-        }
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Essai de désactiver le chiffrement ignoré",
+            "disabled": "Chiffrement désactivé",
+            "enabled": "Les messages ici sont chiffrés de bout en bout. Quand les gens viennent, vous pouvez les vérifier dans leur profil, tapez simplement sur leur image de profil.",
+            "enabled_dm": "Les messages ici sont chiffrés de bout en bout. Vérifiez %(displayName)s dans son profil - cliquez sur son image de profil.",
+            "enabled_local": "Les messages de cette discussion seront chiffrés de bout en bout.",
+            "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
+            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier dans leur profil en cliquant sur leur photo de profil.",
+            "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
+        },
+        "message_timestamp_received_at": "Reçu à : %(dateTime)s",
+        "message_timestamp_sent_at": "Envoyé à : %(dateTime)s"
     },
     "widget": {
         "context_menu": {

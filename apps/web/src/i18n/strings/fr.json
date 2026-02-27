@@ -3482,7 +3482,7 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s a accepté l’invitation pour %(displayName)s",
             "accepted_invite": "%(targetName)s a accepté une invitation",
-            "ban": "%(senderName)s a banni %(targetName)s",
+            "ban": "%(senderName)s a banni un utilisateur",
             "ban_reason": "%(senderName)s a banni %(targetName)s : %(reason)s",
             "change_avatar": "%(senderName)s a changé son image de profil",
             "change_name": "%(oldDisplayName)s a changé son nom d’affichage en %(displayName)s",
