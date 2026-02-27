@@ -24,7 +24,7 @@ import {
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import Modal from "../Modal";
-import { _t } from "../languageHandler";
+import { _t, UserFriendlyError } from "../languageHandler";
 import { getCachedRoomIdForAlias, storeRoomAliasInCache } from "../RoomAliasCache";
 import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
@@ -573,7 +573,7 @@ export class RoomViewStore extends EventEmitter {
             this.dis?.dispatch<JoinRoomErrorPayload>({
                 action: Action.JoinRoomError,
                 roomId,
-                err: err instanceof Error ? err : new Error("Unknown error occured"),
+                err: err instanceof Error ? err : new UserFriendlyError("room|error_join_unknown", { cause: err }),
                 canAskToJoin: payload.canAskToJoin,
             });
 

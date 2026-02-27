@@ -1990,6 +1990,7 @@
         "error_join_incompatible_version_1": "Sorry, your homeserver is too old to participate here.",
         "error_join_incompatible_version_2": "Please contact your homeserver administrator.",
         "error_join_title": "Failed to join",
+        "error_join_unknown": "An unknonw error occured.",
         "error_jump_to_date": "Server returned %(statusCode)s with error code %(errorCode)s",
         "error_jump_to_date_connection": "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.",
         "error_jump_to_date_details": "Error details",
