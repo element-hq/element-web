@@ -2,16 +2,6 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
     "targets": {
-        "prebuild:i18n": {
-            "cache": true,
-            "command": "node scripts/copy-res.ts",
-            "inputs": [
-                "{projectRoot}/src/i18n/strings/*.json",
-                "{workspaceRoot}/packages/shared-components/src/i18n/strings/*.json"
-            ],
-            "outputs": ["{projectRoot}/webapp/i18n/"],
-            "options": { "cwd": "apps/web" }
-        },
         "prebuild:module_system": {
             "cache": true,
             "command": "node module_system/scripts/install.ts",
@@ -34,14 +24,9 @@
             "outputs": ["{projectRoot}/webapp"],
             "options": { "cwd": "apps/web" }
         },
-        "start:i18n": {
-            "command": "node scripts/copy-res.ts -w",
-            "continuous": true,
-            "options": { "cwd": "apps/web" }
-        },
         "start": {
             "command": "webpack-dev-server --disable-interpret --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
-            "dependsOn": ["prebuild:module_system", "prebuild:rethemendex", "start:i18n", "^start"],
+            "dependsOn": ["prebuild:module_system", "prebuild:rethemendex", "^start"],
             "continuous": true,
             "options": { "cwd": "apps/web" }
         },
