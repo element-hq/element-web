@@ -206,7 +206,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         },
         {
             value: JoinRule.Public,
-            label: withRecommendLabel(_t("common|public"), JoinRule.Public),
+            label: withRecommendLabel(_t("room_settings|security|join_rule_public"), JoinRule.Public),
             description: <>{_t("room_settings|security|join_rule_public_description")}</>,
         },
     ];
