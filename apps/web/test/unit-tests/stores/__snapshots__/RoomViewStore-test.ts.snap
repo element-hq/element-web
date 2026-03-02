@@ -12,6 +12,20 @@ exports[`RoomViewStore should display an error message when the room is unreacha
 }
 `;
 
+exports[`RoomViewStore should display an invite-specific error message when the room is unreachable 1`] = `
+{
+  "description": "The person who invited you has already left.",
+  "title": "Failed to join",
+}
+`;
+
+exports[`RoomViewStore should display an invite-specific error message when the room is unreachable 2`] = `
+{
+  "description": "The person who invited you has already left, or their server is offline.",
+  "title": "Failed to join",
+}
+`;
+
 exports[`RoomViewStore should display the generic error message when the roomId doesnt match 1`] = `
 {
   "description": "MatrixError: [404] my 404 error",

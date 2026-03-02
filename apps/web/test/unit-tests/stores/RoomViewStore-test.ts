@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import {
     RoomViewLifecycle,
@@ -20,6 +20,9 @@ import { Action } from "../../../src/dispatcher/actions";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
+    mkEvent,
+    mkRoom,
+    mkRoomMember,
     setupAsyncStoreWithClient,
     untilDispatch,
     untilEmission,
@@ -126,6 +129,7 @@ describe("RoomViewStore", function () {
         getUserId: jest.fn().mockReturnValue(userId),
         getSafeUserId: jest.fn().mockReturnValue(userId),
         getDeviceId: jest.fn().mockReturnValue("ABC123"),
+        getDomain: jest.fn().mockReturnValue("server"),
         sendStateEvent: jest.fn().mockResolvedValue({}),
         supportsThreads: jest.fn(),
         isInitialSyncComplete: jest.fn().mockResolvedValue(false),
@@ -144,7 +148,7 @@ describe("RoomViewStore", function () {
             }
         })(),
     });
-    const room = new Room(roomId, mockClient, userId);
+    const room = mkRoom(mockClient, roomId);
     const room2 = new Room(roomId2, mockClient, userId);
     getRooms.mockReturnValue([room, room2]);
 
@@ -439,6 +443,31 @@ describe("RoomViewStore", function () {
         expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
     });
 
+    // The server bob is on will affect the message we send.
+    it.each(["server", "another-server"])(
+        "should display an invite-specific error message when the room is unreachable",
+        async (bobsServer) => {
+            room.getMyMembership.mockReturnValue(KnownMembership.Invite);
+            room.getMember.mockImplementationOnce((memberUserId) => {
+                if (userId === memberUserId) {
+                    const member = mkRoomMember(roomId, userId, KnownMembership.Invite);
+                    member.events.member!.getSender = () => `@bob:${bobsServer}`;
+                    return member;
+                }
+                return null;
+            });
+            dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+            await untilDispatch(Action.ActiveRoomChanged, dis);
+
+            // Generate error to display the expected error message
+            const error = new MatrixError(undefined, 404);
+            roomViewStore.showJoinRoomError(error, roomId);
+
+            // Check the modal props
+            expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
+        },
+    );
+
     it("should display the generic error message when the roomId doesnt match", async () => {
         // When
         // Generate error to display the expected error message
@@ -450,9 +479,9 @@ describe("RoomViewStore", function () {
     });
 
     it("clears the unread flag when viewing a room", async () => {
-        room.getAccountData = jest.fn().mockReturnValue({
-            getContent: jest.fn().mockReturnValue({ unread: true }),
-        });
+        room.getAccountData.mockReturnValue(
+            mkEvent({ type: "m.marked_unread", user: "@anyone:example.org", content: { unread: true }, event: true }),
+        );
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
         expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(roomId, "m.marked_unread", {

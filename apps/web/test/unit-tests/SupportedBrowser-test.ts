@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { checkBrowserSupport, LOCAL_STORAGE_KEY } from "../../src/SupportedBrowser";
+import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "../../src/SupportedBrowser";
 import ToastStore from "../../src/stores/ToastStore";
 import GenericToast from "../../src/components/views/toasts/GenericToast";
 
@@ -18,6 +18,7 @@ describe("SupportedBrowser", () => {
     beforeEach(() => {
         jest.resetAllMocks();
         localStorage.clear();
+        getBrowserSupport.clear();
     });
 
     const testUserAgentFactory =
@@ -109,6 +110,7 @@ describe("SupportedBrowser", () => {
         toastSpy.mockClear();
         warnLogSpy.mockClear();
 
+        getBrowserSupport.clear();
         checkBrowserSupport();
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, but user has previously accepted");
         expect(toastSpy).not.toHaveBeenCalled();
