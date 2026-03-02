@@ -75,7 +75,7 @@ export interface ReactionsRowViewActions {
     onAddReactionContextMenu?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export type ReactionsRowViewModel = ViewModel<ReactionsRowViewSnapshot> & ReactionsRowViewActions;
+export type ReactionsRowViewModel = ViewModel<ReactionsRowViewSnapshot, ReactionsRowViewActions>;
 
 interface ReactionsRowViewProps {
     vm: ReactionsRowViewModel;
