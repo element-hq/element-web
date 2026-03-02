@@ -81,11 +81,10 @@ describe("MFileBodyViewModel", () => {
         const vm = createVm();
 
         expect(vm.refIFrame).toBeDefined();
-        expect(vm.refIFrameLink).toBeDefined();
+        expect(vm.refLink).toBeDefined();
         expect(vm.getSnapshot()).toMatchObject({
             rendering: "DOWNLOAD_UNENCRYPTED",
-            downloadLabel: "Download",
-            fileUrl: "https://server/file",
+            href: "https://server/file",
             className: "mx_MFileBody",
         });
     });
@@ -102,8 +101,8 @@ describe("MFileBodyViewModel", () => {
 
         expect(vm.getSnapshot()).toMatchObject({
             rendering: "INFO",
-            infoLabel: "alt",
-            infoIcon: expectedIcon,
+            label: "alt",
+            icon: expectedIcon,
             className: "mx_MFileBody",
         });
     });
@@ -117,8 +116,8 @@ describe("MFileBodyViewModel", () => {
 
         expect(vm.getSnapshot()).toMatchObject({
             rendering: "EXPORT",
-            infoLabel: "alt",
-            fileUrl: "https://server/export-file",
+            label: "alt",
+            href: "https://server/export-file",
         });
     });
 

@@ -108,7 +108,7 @@ export class MFileBodyViewModel
     implements MFileBodyViewModelInterface
 {
     public readonly refIFrame: RefObject<HTMLIFrameElement>;
-    public readonly refIFrameLink: RefObject<HTMLAnchorElement>;
+    public readonly refLink: RefObject<HTMLAnchorElement>;
     private decryptedBlob?: Blob;
     private userDidClick = false;
     private readonly fileDownloader: FileDownloader;
@@ -116,7 +116,7 @@ export class MFileBodyViewModel
     public constructor(props: MFileBodyViewModelProps) {
         super(props, MFileBodyViewModel.computeSnapshot(props));
         this.refIFrame = createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>;
-        this.refIFrameLink = createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>;
+        this.refLink = createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>;
         this.fileDownloader = new FileDownloader(() => this.refIFrame.current);
     }
 
@@ -148,16 +148,16 @@ export class MFileBodyViewModel
             showDownloadLink = false;
         }
 
-        const infoLabel = presentableTextForFile(content, _t("common|attachment"), true, true);
-        const infoTooltip = showFileInfo ? presentableTextForFile(content, _t("common|attachment"), true) : undefined;
+        const label = presentableTextForFile(content, _t("common|attachment"), true, true);
+        const tooltip = showFileInfo ? presentableTextForFile(content, _t("common|attachment"), true) : undefined;
 
         if (props.forExport) {
             return {
                 rendering: MFileBodyViewRendering.EXPORT,
-                infoLabel,
-                infoTooltip,
-                infoIcon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
-                fileUrl: content.file?.url || content.url,
+                label,
+                tooltip,
+                icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
+                href: content.file?.url || content.url,
                 className: "mx_MFileBody",
             };
         }
@@ -169,10 +169,9 @@ export class MFileBodyViewModel
                         ? MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME
                         : MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING
                     : MFileBodyViewRendering.INFO,
-                infoLabel,
-                infoTooltip,
-                infoIcon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
-                downloadLabel: downloadLabelForFile(content, true),
+                label,
+                tooltip,
+                icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
                 className: "mx_MFileBody",
             };
         }
@@ -180,20 +179,19 @@ export class MFileBodyViewModel
         if (media.srcHttp) {
             return {
                 rendering: showDownloadLink ? MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED : MFileBodyViewRendering.INFO,
-                infoLabel,
-                infoTooltip,
-                infoIcon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
-                downloadLabel: downloadLabelForFile(content, true),
-                fileUrl: media.srcHttp,
+                label,
+                tooltip,
+                icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
+                href: media.srcHttp,
                 className: "mx_MFileBody",
             };
         }
 
         return {
             rendering: MFileBodyViewRendering.INVALID,
-            infoLabel,
-            infoTooltip,
-            infoIcon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
+            label,
+            tooltip,
+            icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
             className: "mx_MFileBody",
         };
     }
@@ -220,7 +218,7 @@ export class MFileBodyViewModel
             opts: {
                 imgSrc: DOWNLOAD_ICON_URL,
                 imgStyle: null,
-                style: computedStyle(this.refIFrameLink.current),
+                style: computedStyle(this.refLink.current),
                 textContent: text,
             },
         });

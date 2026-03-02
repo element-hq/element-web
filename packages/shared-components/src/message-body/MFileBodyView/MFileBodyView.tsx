@@ -38,6 +38,7 @@ export enum MFileBodyViewRendering {
 export enum MFileBodyViewInfoIcon {
     ATTACHMENT = "ATTACHMENT",
     AUDIO = "AUDIO",
+    DOWNLOAD = "DOWNLOAD",
     VIDEO = "VIDEO",
 }
 
@@ -52,25 +53,21 @@ export interface MFileBodyViewSnapshot {
      */
     rendering: MFileBodyViewRendering;
     /**
-     * Visible info label (normally the file name).
+     * Optional label (normally the file name). Defaults to 'Attachment' or 'Download' depending on rendering.
      */
-    infoLabel?: string;
+    label?: string;
     /**
-     * Optional tooltip text for the info.
+     * Optional tooltip for info button. Defaults to label.
      */
-    infoTooltip?: string;
+    tooltip?: string;
     /**
-     * info icon variant.
+     * Optional icon. Defaults to 'ATTACHMENT' or 'DOWNNLOAD' depending on rendering.
      */
-    infoIcon?: MFileBodyViewInfoIcon;
-    /**
-     * Optional download button/link label.
-     */
-    downloadLabel?: string;
+    icon?: MFileBodyViewInfoIcon;
     /**
      * Url used for `DOWNLOAD_UNENCRYPTED` and `EXPORT`.
      */
-    fileUrl?: string;
+    href?: string;
     /**
      * Extra CSS classe for host-level styling.
      */
@@ -108,44 +105,44 @@ interface MFileBodyViewProps {
     vm: MFileBodyViewModel;
 
     /**
-     * Optional iframe ref for encrypted download flow.
+     * Optional iframe ref for encrypted download flow
      */
     refIFrame?: React.RefObject<HTMLIFrameElement>;
 
     /**
-     * Optional hidden anchor ref used to mirror download button styling.
+     * Optional hidden anchor ref used for encrypted download flow
      */
-    refIFrameLink?: React.RefObject<HTMLAnchorElement>;
+    refLink?: React.RefObject<HTMLAnchorElement>;
 }
 
-export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBodyViewProps>): JSX.Element {
+export function MFileBodyView({ vm, refIFrame, refLink }: Readonly<MFileBodyViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { rendering, infoLabel, infoTooltip, infoIcon, downloadLabel, fileUrl, className } = useViewModel(vm);
+    const { rendering, label, tooltip, icon, href, className } = useViewModel(vm);
 
-    const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
-    const resolvedInfoLabel = infoLabel ?? _t("common|attachment");
-    const resolvedInfoTooltip = infoTooltip ?? resolvedInfoLabel;
     const showInfo =
         rendering === MFileBodyViewRendering.INFO ||
         rendering === MFileBodyViewRendering.EXPORT ||
         rendering === MFileBodyViewRendering.INVALID;
-    const showDownload =
-        rendering === MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED ||
-        rendering === MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING ||
-        rendering === MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME;
 
-    let icon = <AttachmentIcon />;
-    if (infoIcon === MFileBodyViewInfoIcon.AUDIO) {
-        icon = <VolumeOnSolidIcon />;
-    } else if (infoIcon === MFileBodyViewInfoIcon.VIDEO) {
-        icon = <VideoCallSolidIcon />;
+    const resolvedLabel = label ?? (showInfo ? _t("common|attachment") : _t("action|download"));
+    const resolvedInfoTooltip = tooltip ?? resolvedLabel;
+
+    let resolvedIcon = showInfo ? AttachmentIcon : DownloadIcon;
+    if (icon === MFileBodyViewInfoIcon.AUDIO) {
+        resolvedIcon = VolumeOnSolidIcon;
+    } else if (icon === MFileBodyViewInfoIcon.ATTACHMENT) {
+        resolvedIcon = AttachmentIcon;
+    } else if (icon === MFileBodyViewInfoIcon.DOWNLOAD) {
+        resolvedIcon = DownloadIcon;
+    } else if (icon === MFileBodyViewInfoIcon.VIDEO) {
+        resolvedIcon = VideoCallSolidIcon;
     }
 
     const info = showInfo ? (
-        <button className={styles.info} onClick={vm.onInfoClick} type="button">
-            <span className={styles.info_icon}>{icon}</span>
+        <button data-type="info" onClick={vm.onInfoClick} type="button">
+            <span data-type="info-icon">{React.createElement(resolvedIcon)}</span>
             <Tooltip description={resolvedInfoTooltip} placement="right">
-                <span className={styles.info_label}>{resolvedInfoLabel}</span>
+                <span data-type="info-label">{resolvedLabel}</span>
             </Tooltip>
         </button>
     ) : null;
@@ -156,7 +153,7 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
         case MFileBodyViewRendering.EXPORT:
             return (
                 <span className={classes}>
-                    <a href={fileUrl}>{info}</a>
+                    <a href={href}>{info}</a>
                 </span>
             );
 
@@ -166,75 +163,64 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
         case MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING:
             return (
                 <span className={classes}>
-                    {info}
-                    {showDownload && (
-                        <div className={styles.download}>
-                            {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
-                            <Button size="sm" kind="secondary" Icon={DownloadIcon} onClick={vm.onDownloadClick}>
-                                {resolvedDownloadLabel}
-                            </Button>
-                        </div>
-                    )}
+                    <div data-type="download">
+                        {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
+                        <Button size="sm" kind="secondary" Icon={resolvedIcon} onClick={vm.onDownloadClick}>
+                            {resolvedLabel}
+                        </Button>
+                    </div>
                 </span>
             );
 
         case MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME:
             return (
                 <span className={classes}>
-                    {info}
-                    {showDownload && (
-                        <div className={styles.download}>
-                            <div aria-hidden style={{ display: "none" }}>
-                                {/*
-                                 * Add dummy copy of the button
-                                 * We'll use it to learn how the download button
-                                 * would have been styled if it was rendered inline.
-                                 */}
-                                {/* this violates multiple eslint rules
-                            so ignore it completely */}
-                                <Button size="sm" kind="secondary" Icon={DownloadIcon} as="a" ref={refIFrameLink} />
-                            </div>
+                    <div data-type="download">
+                        <div aria-hidden style={{ display: "none" }}>
                             {/*
+                             * Add dummy copy of the button
+                             * We'll use it to learn how the download button
+                             * would have been styled if it was rendered inline.
+                             * this violates multiple eslint rules so ignore it completely */}
+                            <Button size="sm" kind="secondary" Icon={resolvedIcon} as="a" ref={refLink} />
+                        </div>
+                        {/*
                             TODO: Move iframe (and dummy link) into FileDownloader.
                             We currently have it set up this way because of styles applied to the iframe
                             itself which cannot be easily handled/overridden by the FileDownloader. In
                             future, the download link may disappear entirely at which point it could also
                             be suitable to just remove this bit of code.
                             */}
-                            <iframe
-                                aria-hidden
-                                title={resolvedDownloadLabel}
-                                src="usercontent/"
-                                onLoad={vm.onDownloadIframeLoad}
-                                ref={refIFrame}
-                                sandbox="allow-scripts allow-downloads"
-                            />
-                        </div>
-                    )}
+                        <iframe
+                            aria-hidden
+                            title={resolvedLabel}
+                            src="usercontent/"
+                            onLoad={vm.onDownloadIframeLoad}
+                            ref={refIFrame}
+                            sandbox="allow-scripts allow-downloads"
+                        />
+                    </div>
                 </span>
             );
 
         case MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED:
             return (
                 <span className={classes}>
-                    {info}
-                    {showDownload && (
-                        <div className={styles.download}>
-                            {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}
-                            <Button
-                                size="sm"
-                                kind="secondary"
-                                Icon={DownloadIcon}
-                                as="a"
-                                href={fileUrl}
-                                target="_blank"
-                                rel="noreferrer noopener"
-                                onClick={vm.onDownloadLinkClick}
-                            >
-                                {resolvedDownloadLabel}
-                            </Button>
-                        </div>
-                    )}
+                    <div data-type="download">
+                        {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}
+                        <Button
+                            size="sm"
+                            kind="secondary"
+                            Icon={resolvedIcon}
+                            as="a"
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            onClick={vm.onDownloadLinkClick}
+                        >
+                            {resolvedLabel}
+                        </Button>
+                    </div>
                 </span>
             );
 
@@ -243,7 +229,7 @@ export function MFileBodyView({ vm, refIFrame, refIFrameLink }: Readonly<MFileBo
             return (
                 <span className={classes}>
                     {info}
-                    <span className={styles.invalid}>{_t("timeline|m.file|error_invalid")}</span>
+                    <span data-type="invalid">{_t("timeline|m.file|error_invalid")}</span>
                 </span>
             );
     }

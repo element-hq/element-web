@@ -50,7 +50,7 @@ const meta = {
                 .map(([key]) => key),
             control: { type: "select" },
         },
-        infoIcon: {
+        icon: {
             options: Object.entries(MFileBodyViewInfoIcon)
                 .filter(([key, value]) => key === value)
                 .map(([key]) => key),
@@ -59,11 +59,10 @@ const meta = {
     },
     args: {
         rendering: MFileBodyViewRendering.INFO,
-        infoLabel: "spec.pdf",
-        infoTooltip: "spec.pdf (22 KB)",
-        infoIcon: MFileBodyViewInfoIcon.ATTACHMENT,
-        downloadLabel: "Download",
-        fileUrl: "https://example.org/spec.pdf",
+        label: "spec.pdf",
+        tooltip: "spec.pdf (22 KB)",
+        icon: MFileBodyViewInfoIcon.ATTACHMENT,
+        href: "https://example.org/spec.pdf",
         className: "",
     },
 } satisfies Meta<typeof MFileBodyViewWrapper>;
@@ -87,15 +86,15 @@ export const Invalid: Story = {
 
 export const AudioInfo: Story = {
     args: {
-        infoIcon: MFileBodyViewInfoIcon.AUDIO,
-        infoLabel: "voice-message.ogg",
+        icon: MFileBodyViewInfoIcon.AUDIO,
+        label: "voice-message.ogg",
     },
 };
 
 export const VideoInfo: Story = {
     args: {
-        infoIcon: MFileBodyViewInfoIcon.VIDEO,
-        infoLabel: "clip.mp4",
+        icon: MFileBodyViewInfoIcon.VIDEO,
+        label: "clip.mp4",
     },
 };
 
@@ -114,20 +113,5 @@ export const EncryptedIframeDownload: Story = {
 export const EncryptedPendingDownload: Story = {
     args: {
         rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
-    },
-};
-
-export const HasExtraClassNames: Story = {
-    args: {
-        className: "extra_class_1 extra_class_2",
-    },
-};
-
-export const HasActions: Story = {
-    args: {
-        onInfoClick: () => console.log("Clicked info"),
-        onDownloadClick: () => console.log("Clicked download"),
-        onDownloadLinkClick: () => console.log("Clicked download link"),
-        onDownloadIframeLoad: () => console.log("Loaded download iframe"),
     },
 };
