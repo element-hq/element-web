@@ -5,7 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type MatrixEvent, Room, RoomEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type MatrixEvent,
+    Room,
+    RoomEvent,
+    PendingEventOrdering,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { createTestClient, flushPromises } from "../../test-utils";
@@ -40,6 +47,7 @@ jest.mock("../../../src/stores/CallStore", () => ({
     },
     CallStoreEvent: {
         ConnectedCalls: "connected_calls",
+        Participants: "participants",
     },
 }));
 
@@ -309,6 +317,28 @@ describe("RoomListItemViewModel", () => {
             await flushPromises();
 
             expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
+        });
+
+        it("should listen to call participant changes", () => {
+            const mockCall = {
+                callType: CallType.Voice,
+                participants: new Map(),
+            } as unknown as Call;
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
+
+            // Simulate participant joining
+            mockCall.participants.set(matrixClient.getUserId()! as unknown as RoomMember, new Set());
+
+            // Get the callback registered for participant changes
+            const mockCalls = (CallStore.instance.on as jest.Mock).mock.calls;
+            const participantsCallback = mockCalls[mockCalls.length - 1][1];
+            // Trigger participants event
+            participantsCallback(room.roomId);
+
+            expect(viewModel.getSnapshot().notification.callType).toBe("voice");
         });
     });
 
