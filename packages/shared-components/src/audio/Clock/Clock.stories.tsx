@@ -5,25 +5,25 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
-
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Clock } from "./Clock";
 
-export default {
+const meta = {
     title: "Audio/Clock",
     component: Clock,
     tags: ["autodocs"],
     args: {
         seconds: 20,
     },
-} as Meta<typeof Clock>;
+} satisfies Meta<typeof Clock>;
 
-const Template: StoryFn<typeof Clock> = (args) => <Clock {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const LotOfSeconds = Template.bind({});
-LotOfSeconds.args = {
-    seconds: 99999999999999,
+export const LotOfSeconds: Story = {
+    args: {
+        seconds: 99999999999999,
+    },
 };

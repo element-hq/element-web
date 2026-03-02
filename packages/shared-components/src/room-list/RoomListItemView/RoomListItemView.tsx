@@ -7,6 +7,7 @@
 
 import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react";
 import classNames from "classnames";
+import { Text } from "@vector-im/compound-web";
 
 import { Flex } from "../../utils/Flex";
 import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
@@ -104,7 +105,7 @@ export interface RoomListItemActions {
 /**
  * The view model type for a room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot> & RoomListItemActions;
+export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
 
 /**
  * Props for RoomListItemView component
@@ -159,10 +160,12 @@ export const RoomListItemView = memo(function RoomListItemView({
             className={classNames(styles.roomListItem, "mx_RoomListItemView", {
                 [styles.selected]: isSelected,
                 [styles.bold]: item.isBold,
+                [styles.firstItem]: roomIndex === 0,
+                [styles.lastItem]: roomIndex === roomCount - 1,
                 mx_RoomListItemView_selected: isSelected,
             })}
             gap="var(--cpd-space-3x)"
-            align="center"
+            align="stretch"
             type="button"
             role="option"
             aria-posinset={roomIndex + 1}
@@ -174,31 +177,33 @@ export const RoomListItemView = memo(function RoomListItemView({
             tabIndex={isFocused ? 0 : -1}
             {...props}
         >
-            {renderAvatar(item.room)}
-            <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
-                {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                <div className={styles.text}>
-                    <div className={styles.roomName} title={item.name} data-testid="room-name">
-                        {item.name}
-                    </div>
-                    {item.messagePreview && (
-                        <div className={styles.messagePreview} title={item.messagePreview}>
-                            {item.messagePreview}
+            <Flex className={styles.container} gap="var(--cpd-space-3x)" align="center">
+                {renderAvatar(item.room)}
+                <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
+                    {/* We truncate the room name when too long. Title here is to show the full name on hover */}
+                    <div className={styles.ellipsis}>
+                        <div className={styles.roomName} title={item.name} data-testid="room-name">
+                            {item.name}
                         </div>
+                        {item.messagePreview && (
+                            <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
+                                {item.messagePreview}
+                            </Text>
+                        )}
+                    </div>
+                    {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
+                        <RoomListItemHoverMenu
+                            showMoreOptionsMenu={item.showMoreOptionsMenu}
+                            showNotificationMenu={item.showNotificationMenu}
+                            vm={vm}
+                        />
                     )}
-                </div>
-                {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
-                    <RoomListItemHoverMenu
-                        showMoreOptionsMenu={item.showMoreOptionsMenu}
-                        showNotificationMenu={item.showNotificationMenu}
-                        vm={vm}
-                    />
-                )}
 
-                {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
-                <div className={styles.notificationDecoration} aria-hidden={true}>
-                    <NotificationDecoration {...item.notification} />
-                </div>
+                    {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
+                    <div className={styles.notificationDecoration} aria-hidden={true}>
+                        <NotificationDecoration {...item.notification} />
+                    </div>
+                </Flex>
             </Flex>
         </Flex>
     );

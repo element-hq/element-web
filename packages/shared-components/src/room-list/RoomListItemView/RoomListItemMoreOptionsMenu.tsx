@@ -25,7 +25,7 @@ import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemVi
 /**
  * View model type for room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot> & RoomListItemActions;
+export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
 
 /**
  * Props for RoomListItemMoreOptionsMenu component
@@ -54,6 +54,7 @@ export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuP
                     tooltip={_t("room_list|room|more_options")}
                     aria-label={_t("room_list|room|more_options")}
                     size="24px"
+                    style={{ padding: "2px" }}
                 >
                     <OverflowHorizontalIcon />
                 </IconButton>

@@ -53,8 +53,8 @@ export interface VirtualizedRoomListViewProps {
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
-/** Height of a single room list item in pixels */
-const ROOM_LIST_ITEM_HEIGHT = 48;
+/** Height of a single room list item in pixels (44px item + 8px padding bottom) */
+const ROOM_LIST_ITEM_HEIGHT = 52;
 
 /**
  * Type for context used in ListView
@@ -177,11 +177,12 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         <VirtualizedList
             context={context}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
-            initialTopMostItemIndex={activeRoomIndex}
+            // If fixedItemHeight is not set and initialTopMostItemIndex=undefined, virtuoso crashes
+            // Id we don't set it, it works
+            {...(activeRoomIndex !== undefined ? { initialTopMostItemIndex: activeRoomIndex } : {})}
             data-testid="room-list"
             role="listbox"
             aria-label={_t("room_list|list_title")}
-            fixedItemHeight={ROOM_LIST_ITEM_HEIGHT}
             items={roomIds}
             getItemComponent={getItemComponent}
             getItemKey={getItemKey}

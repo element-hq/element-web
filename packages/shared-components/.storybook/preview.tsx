@@ -1,4 +1,8 @@
 import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@storybook/react-vite";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
 
 import "./compound.css";
 import "./preview.css";

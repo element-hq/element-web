@@ -21,7 +21,7 @@ import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemVi
 /**
  * View model type for room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot> & RoomListItemActions;
+export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
 
 /**
  * Props for RoomListItemNotificationMenu component
@@ -51,6 +51,7 @@ export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMen
             trigger={
                 <IconButton
                     size="24px"
+                    style={{ padding: "2px" }}
                     tooltip={_t("room_list|notification_options")}
                     aria-label={_t("room_list|notification_options")}
                 >
