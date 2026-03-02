@@ -72,7 +72,6 @@ jobs:
                   pnpm test \
                       --coverage=${{ env.ENABLE_COVERAGE }} \
                       --ci \
-                      --no-tui \
                       --max-workers ${{ steps.cpu-cores.outputs.count }} \
                       --shard ${{ matrix.runner }}/${{ strategy.job-total }} \
                       --cacheDirectory /tmp/jest_cache
