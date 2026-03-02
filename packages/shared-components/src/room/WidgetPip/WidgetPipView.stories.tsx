@@ -22,7 +22,7 @@ const PersistentAppMock: React.FC = () => <div style={{ backgroundColor: "grey",
 const WidgetPipViewWrapper = ({
     onBackClick,
     persistentAppComponent,
-    setViewingRoom: onViewedRoomChanged,
+    setViewingRoom,
     ...rest
 }: WidgetPipViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
