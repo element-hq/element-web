@@ -5,8 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 import type { MatrixEvent } from "../models/event";
+import type { AccountAuthInfo } from "./auth.ts";
 
 /**
  * Properties for all message components.
@@ -92,6 +93,71 @@ export type CustomRoomPreviewBarRenderFunction = (
 ) => JSX.Element;
 
 /**
+ * Authentication server config object.
+ * @alpha Subject to change.
+ */
+export interface CustomLoginComponentPropsServerConfig {
+    /**
+     * The URL of the homeserver's client-server API
+     */
+    hsUrl: string;
+    /**
+     * The name of the homeserver to present to the user
+     */
+    hsName: string;
+}
+
+/**
+ * Properties for login component.
+ * @alpha Subject to change.
+ */
+export type CustomLoginComponentProps = {
+    /**
+     * The details of the currently chosen Matrix homeserver
+     */
+    serverConfig: CustomLoginComponentPropsServerConfig;
+    /**
+     * The URL fragment to send the user to after authentication is complete
+     */
+    fragmentAfterLogin?: string;
+    /**
+     * Additional components to render as children
+     */
+    children?: ReactNode;
+    /**
+     * Function to complete login
+     * @param data - the data to authenticate the user with
+     */
+    onLoggedIn(data: AccountAuthInfo): void;
+    /**
+     * Function to change the selected server
+     * @param config - new server configuration details
+     */
+    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+};
+
+/**
+ * Function used to render a component with a superset of the known props.
+ * @alpha Unlikely to change
+ */
+export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
+    /**
+     * Properties for the component to be rendered.
+     */
+    props: P,
+    /**
+     * Render function for the original component.
+     */
+    originalComponent: (props: P) => JSX.Element,
+) => JSX.Element;
+
+/**
+ * Function used to render a login component.
+ * @alpha Unlikely to change
+ */
+export type CustomLoginRenderFunction = ExtendablePropsRenderFunction<CustomLoginComponentProps>;
+
+/**
  * API for inserting custom components into Element.
  * @alpha Subject to change.
  */
@@ -143,4 +209,19 @@ export interface CustomComponentsApi {
      * ```
      */
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
+
+    /**
+     * Register a renderer for the login component.
+     *
+     * The render function should return a rendered component.
+     *
+     * @param renderer - The render function for the login component.
+     * @example
+     * ```
+     *  customComponents.registerLoginComponent((props, OriginalComponent) => {
+     *      return <YourCustomComponent onLoggedIn={props.onLoggedIn} />;
+     *  });
+     * ```
+     */
+    registerLoginComponent(renderer: CustomLoginRenderFunction): void;
 }
