@@ -79,6 +79,7 @@ export class RoomListItemViewModel
 
         // Subscribe to call state changes
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, this.onCallStateChanged);
+        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Participants, this.onCallParticipantsChanged);
 
         // Subscribe to room-specific events
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
@@ -98,6 +99,14 @@ export class RoomListItemViewModel
 
     private onMessagePreviewSettingChanged = (): void => {
         void this.loadAndSetMessagePreview();
+    };
+
+    private onCallParticipantsChanged = (...args: unknown[]): void => {
+        // Only react to participant changes for this room
+        const roomId = args[0] as string;
+        if (roomId === this.props.room.roomId) {
+            this.onCallStateChanged();
+        }
     };
 
     private onCallStateChanged = (): void => {
