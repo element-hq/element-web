@@ -2361,6 +2361,7 @@
             "join_rule_invite_description": "Only invited people can join.",
             "join_rule_knock": "Ask to join",
             "join_rule_knock_description": "People cannot join unless access is granted.",
+            "join_rule_public": "Anyone",
             "join_rule_public_description": "Anyone can join.",
             "join_rule_restricted": "Space members",
             "join_rule_restricted_description": "Anyone in authorised spaces can join without an invitation. <a>Manage spaces</a>",
