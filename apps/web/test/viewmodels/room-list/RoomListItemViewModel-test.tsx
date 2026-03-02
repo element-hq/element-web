@@ -344,6 +344,71 @@ describe("RoomListItemViewModel", () => {
 
             expect(viewModel.getSnapshot().notification.callType).toBe("voice");
         });
+
+        it("should not update the item when there is already an active call and participants join", () => {
+            const mockCall = {
+                callType: CallType.Voice,
+                participants: new Map([[matrixClient.getUserId()! as unknown as RoomMember, new Set<string>()]]),
+                off: jest.fn(),
+                on: jest.fn(),
+            };
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall as unknown as Call);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            // Trigger onCallStateChanged so the call is tracked and the participant listener is registered
+            const mockCalls = (CallStore.instance.on as jest.Mock).mock.calls;
+            const callStateCallback = mockCalls[mockCalls.length - 1][1];
+            callStateCallback();
+
+            expect(viewModel.getSnapshot().notification.callType).toBe("voice");
+
+            // Record the snapshot version before the participant event fires
+            const snapshotBefore = viewModel.getSnapshot();
+
+            // Simulate another participant joining while the call is already active
+            mockCall.participants.set("@other:server" as unknown as RoomMember, new Set<string>());
+            const participantsChangeCallback = mockCall.on.mock.calls[0][1];
+            participantsChangeCallback(mockCall.participants);
+
+            // Snapshot should not have changed
+            expect(viewModel.getSnapshot()).toBe(snapshotBefore);
+        });
+
+        it("should unsubscribe from old call participants when the call changes", () => {
+            const firstCall = {
+                callType: CallType.Voice,
+                participants: new Map([[matrixClient.getUserId()! as unknown as RoomMember, new Set<string>()]]),
+                off: jest.fn(),
+                on: jest.fn(),
+            };
+            const secondCall = {
+                callType: CallType.Video,
+                participants: new Map([[matrixClient.getUserId()! as unknown as RoomMember, new Set<string>()]]),
+                off: jest.fn(),
+                on: jest.fn(),
+            };
+
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(firstCall as unknown as Call);
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+
+            // Trigger onCallStateChanged to register the first call
+            const mockCalls = (CallStore.instance.on as jest.Mock).mock.calls;
+            const callStateCallback = mockCalls[mockCalls.length - 1][1];
+            callStateCallback();
+
+            const participantsCallback = firstCall.on.mock.calls[0][1];
+            expect(firstCall.on).toHaveBeenCalledWith("participants", participantsCallback);
+
+            // Now switch to a different call
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(secondCall as unknown as Call);
+            callStateCallback();
+
+            // The old call's listener must have been removed
+            expect(firstCall.off).toHaveBeenCalledWith("participants", participantsCallback);
+            // The new call must have a listener registered
+            expect(secondCall.on).toHaveBeenCalledWith("participants", expect.any(Function));
+        });
     });
 
     describe("Room name updates", () => {
