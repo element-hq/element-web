@@ -270,6 +270,76 @@ describe("PollCreateDialog", () => {
             M_POLL_KIND_DISCLOSED.name,
         );
     });
+
+    it("renders max selections input defaulting to 1", () => {
+        const dialog = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />
+            </MatrixClientContext.Provider>,
+        );
+        const maxSelectionsInput = dialog.container.querySelector("#poll-max-selections-input") as HTMLInputElement;
+        expect(maxSelectionsInput).toBeInTheDocument();
+        expect(maxSelectionsInput.value).toBe("1");
+    });
+
+    it("sends a multi-select poll with max_selections when set", () => {
+        const dialog = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />
+            </MatrixClientContext.Provider>,
+        );
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+        fireEvent.change(dialog.container.querySelector("#poll-max-selections-input")!, {
+            target: { value: "2" },
+        });
+
+        fireEvent.click(dialog.container.querySelector("button")!);
+        const [, , eventType, sentEventContent] = mockClient.sendEvent.mock.calls[0];
+        expect(M_POLL_START.matches(eventType)).toBeTruthy();
+        expect((sentEventContent as any)[M_POLL_START.name].max_selections).toBe(2);
+    });
+
+    it("clamps max_selections to number of non-empty options", () => {
+        const dialog = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />
+            </MatrixClientContext.Provider>,
+        );
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+        // Set max_selections higher than number of options
+        fireEvent.change(dialog.container.querySelector("#poll-max-selections-input")!, {
+            target: { value: "10" },
+        });
+
+        fireEvent.click(dialog.container.querySelector("button")!);
+        const [, , , sentEventContent] = mockClient.sendEvent.mock.calls[0];
+        // Should be clamped to 2 (number of non-empty options)
+        expect((sentEventContent as any)[M_POLL_START.name].max_selections).toBe(2);
+    });
+
+    it("retains max_selections when editing a multi-select poll", () => {
+        const previousEvent: MatrixEvent = new MatrixEvent(
+            PollStartEvent.from("Poll Q", ["Answer 1", "Answer 2", "Answer 3"], M_POLL_KIND_DISCLOSED, 2).serialize(),
+        );
+        previousEvent.event.event_id = "$prevEventId";
+
+        const dialog = render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <PollCreateDialog room={createRoom()} onFinished={jest.fn()} editingMxEvent={previousEvent} />
+            </MatrixClientContext.Provider>,
+        );
+
+        const maxSelectionsInput = dialog.container.querySelector("#poll-max-selections-input") as HTMLInputElement;
+        expect(maxSelectionsInput.value).toBe("2");
+
+        fireEvent.click(dialog.container.querySelector("button")!);
+        const [, , , sentEventContent] = mockClient.sendEvent.mock.calls[0];
+        expect((sentEventContent as ReplacementEvent<any>)["m.new_content"][M_POLL_START.name].max_selections).toBe(2);
+    });
 });
 
 function createRoom(): Room {

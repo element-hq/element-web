@@ -194,6 +194,27 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
           >
             Add option
           </div>
+          <h2>
+            Maximum selections
+          </h2>
+          <div
+            class="mx_Field mx_Field_input"
+          >
+            <input
+              id="poll-max-selections-input"
+              label="Number of options each voter can select"
+              max="1"
+              min="1"
+              placeholder="Number of options each voter can select"
+              type="number"
+              value="1"
+            />
+            <label
+              for="poll-max-selections-input"
+            >
+              Number of options each voter can select
+            </label>
+          </div>
         </div>
       </div>
       <div
@@ -459,6 +480,27 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
           >
             Add option
           </div>
+          <h2>
+            Maximum selections
+          </h2>
+          <div
+            class="mx_Field mx_Field_input"
+          >
+            <input
+              id="poll-max-selections-input"
+              label="Number of options each voter can select"
+              max="3"
+              min="1"
+              placeholder="Number of options each voter can select"
+              type="number"
+              value="1"
+            />
+            <label
+              for="poll-max-selections-input"
+            >
+              Number of options each voter can select
+            </label>
+          </div>
         </div>
       </div>
       <div
@@ -683,6 +725,27 @@ exports[`PollCreateDialog renders info from a previous event 1`] = `
             tabindex="0"
           >
             Add option
+          </div>
+          <h2>
+            Maximum selections
+          </h2>
+          <div
+            class="mx_Field mx_Field_input"
+          >
+            <input
+              id="poll-max-selections-input"
+              label="Number of options each voter can select"
+              max="2"
+              min="1"
+              placeholder="Number of options each voter can select"
+              type="number"
+              value="1"
+            />
+            <label
+              for="poll-max-selections-input"
+            >
+              Number of options each voter can select
+            </label>
           </div>
         </div>
       </div>

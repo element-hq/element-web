@@ -14,6 +14,7 @@ import { CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { _t } from "../../../languageHandler";
 import { Icon as TrophyIcon } from "../../../../res/img/element-icons/trophy.svg";
 import StyledRadioButton from "../elements/StyledRadioButton";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 type PollOptionContentProps = {
     answer: PollAnswerSubevent;
@@ -41,6 +42,7 @@ interface PollOptionProps extends PollOptionContentProps {
     isEnded?: boolean;
     isChecked?: boolean;
     onOptionSelected?: (id: string) => void;
+    maxSelections?: number;
     children?: ReactNode;
 }
 
@@ -55,6 +57,7 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { chi
     children,
     answer,
     onOptionSelected,
+    maxSelections,
 }) => {
     let ariaLabel: string;
 
@@ -75,6 +78,23 @@ const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { chi
             number: optionNumber,
             answer: answer.text,
         });
+    }
+
+    if ((maxSelections ?? 1) > 1) {
+        return (
+            <StyledCheckbox
+                className="mx_PollOption_live-option"
+                checked={isChecked}
+                disabled={isEnded}
+                aria-label={ariaLabel}
+                onChange={(e) => {
+                    e.stopPropagation();
+                    onOptionSelected?.(answer.id);
+                }}
+            >
+                <div aria-hidden="true">{children}</div>
+            </StyledCheckbox>
+        );
     }
 
     return (
@@ -103,6 +123,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
     isEnded,
     isChecked,
     onOptionSelected,
+    maxSelections,
 }) => {
     const cls = classNames({
         mx_PollOption: true,
@@ -123,6 +144,7 @@ export const PollOption: React.FC<PollOptionProps> = ({
                 voteCount={voteCount}
                 displayVoteCount={displayVoteCount}
                 onOptionSelected={onOptionSelected}
+                maxSelections={maxSelections}
             >
                 <PollOptionContent
                     isWinner={isWinner}
