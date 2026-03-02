@@ -38,7 +38,7 @@ export class RestrictedGuestsSynapseContainer extends SynapseContainer {
     }
 }
 
-export interface RestrictedGuestsMasModuleConfig {
+interface RestrictedGuestsMasModuleConfig {
     adminApiBaseUrl: string;
     oauthBaseUrl?: string;
     clientId: string;
