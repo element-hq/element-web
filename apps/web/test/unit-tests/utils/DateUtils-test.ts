@@ -11,7 +11,6 @@ import {
     formatRelativeTime,
     formatDuration,
     formatFullDateNoDayISO,
-    formatDateForInput,
     formatTimeLeft,
     formatPreciseDuration,
     formatLocalDateShort,
@@ -349,15 +348,6 @@ describe("formatFullDateNoDayNoTime", () => {
     it("should return a date formatted for en-GB locale", () => {
         expect(formatFullDateNoDayNoTime(REPEATABLE_DATE, "en-GB")).toMatchInlineSnapshot(`"17/11/2022"`);
     });
-});
-
-describe("formatDateForInput", () => {
-    it.each([["1993-11-01"], ["1066-10-14"], ["0571-04-22"], ["0062-02-05"]])(
-        "should format %s",
-        (dateString: string) => {
-            expect(formatDateForInput(new Date(dateString))).toBe(dateString);
-        },
-    );
 });
 
 describe("formatTimeLeft", () => {

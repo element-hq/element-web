@@ -8,6 +8,7 @@
         "download": "Download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
+        "go": "Go",
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
@@ -44,6 +45,9 @@
             "shared": "New members see history",
             "world_readable": "Anyone can see history"
         },
+        "jump_to_date": "Jump to date",
+        "jump_to_date_beginning": "The beginning of the room",
+        "jump_to_date_prompt": "Pick a date to jump to",
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
