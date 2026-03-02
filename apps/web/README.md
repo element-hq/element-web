@@ -69,11 +69,11 @@ guide](https://pnpm.io/installation#using-corepack) if you do not have it alread
 1. Install the prerequisites: `pnpm install`.
     - If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
-      environment](./developer_guide.md#setting-up-a-dev-environment) below). Alternatively, you
+      environment](../../developer_guide.md#setting-up-a-dev-environment) below). Alternatively, you
       can use <https://develop.element.io> - the continuous integration release of
       the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it. See the [configuration docs](docs/config.md) for details.
+   modifying it. See the [configuration docs](../../docs/config.md) for details.
 1. `pnpm dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
@@ -87,7 +87,7 @@ entirely static content.
 # config.json
 
 Element supports a variety of settings to configure default servers, behaviour, themes, etc.
-See the [configuration docs](docs/config.md) for more details.
+See the [configuration docs](../../docs/config.md) for more details.
 
 # Labs Features
 
@@ -115,9 +115,9 @@ Dockerfile.
 
 Please read through the following:
 
-1. [Developer guide](./developer_guide.md)
-2. [Code style](./code_style.md)
-3. [Contribution guide](./CONTRIBUTING.md)
+1. [Developer guide](../../developer_guide.md)
+2. [Code style](../../code_style.md)
+3. [Contribution guide](../../CONTRIBUTING.md)
 
 # Extending Element Web with Modules
 
@@ -128,4 +128,4 @@ Element Web supports a module system that allows you to extend or modify functio
 Modules are extensions that can add or modify Element Web's functionality. They are:
 
 - Built using the [`@element-hq/element-web-module-api`](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api)
-- Loaded in EW via [config.json](docs/config.md#modules)
+- Loaded in EW via [config.json](../../docs/config.md#modules)
