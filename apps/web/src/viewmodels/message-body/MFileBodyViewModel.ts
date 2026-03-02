@@ -132,6 +132,7 @@ export class MFileBodyViewModel
     private static computeSnapshot(props: MFileBodyViewModelProps, decryptedBlob?: Blob): MFileBodyViewSnapshot {
         const content = props.mxEvent.getContent<MediaEventContent>();
         const media = mediaFromContent(content);
+        const isEncrypted = props.mediaEventHelper?.media.isEncrypted === true;
 
         //Whether or not to show the default placeholder for the file. Defaults to true.
         const showFileInfo = props.showFileInfo ?? true;
@@ -148,40 +149,57 @@ export class MFileBodyViewModel
             showDownloadLink = false;
         }
 
-        const label = presentableTextForFile(content, _t("common|attachment"), true, true);
-        const tooltip = showFileInfo ? presentableTextForFile(content, _t("common|attachment"), true) : undefined;
+        const fileInfoLabel = presentableTextForFile(content, _t("common|attachment"), true, true);
+        const fileInfoTooltip = showFileInfo
+            ? presentableTextForFile(content, _t("common|attachment"), true)
+            : undefined;
+        const downloadLabel = downloadLabelForFile(content, true);
 
         if (props.forExport) {
             return {
                 rendering: MFileBodyViewRendering.EXPORT,
-                label,
-                tooltip,
+                label: showFileInfo ? fileInfoLabel : undefined,
+                tooltip: fileInfoTooltip,
                 icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
                 href: content.file?.url || content.url,
                 className: "mx_MFileBody",
             };
         }
 
-        if (media.isEncrypted) {
+        if (isEncrypted) {
+            const rendering = showDownloadLink
+                ? decryptedBlob
+                    ? MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME
+                    : MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING
+                : MFileBodyViewRendering.INFO;
+
             return {
-                rendering: showDownloadLink
-                    ? decryptedBlob
-                        ? MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME
-                        : MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING
-                    : MFileBodyViewRendering.INFO,
-                label,
-                tooltip,
-                icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
+                rendering,
+                label: rendering === MFileBodyViewRendering.INFO ? fileInfoLabel : downloadLabel,
+                tooltip: rendering === MFileBodyViewRendering.INFO ? fileInfoTooltip : undefined,
+                icon:
+                    rendering === MFileBodyViewRendering.INFO
+                        ? showFileInfo
+                            ? MFileBodyViewModel.getInfoIcon(content)
+                            : undefined
+                        : MFileBodyViewInfoIcon.DOWNLOAD,
                 className: "mx_MFileBody",
             };
         }
 
         if (media.srcHttp) {
+            const rendering = showDownloadLink ? MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED : MFileBodyViewRendering.INFO;
+
             return {
-                rendering: showDownloadLink ? MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED : MFileBodyViewRendering.INFO,
-                label,
-                tooltip,
-                icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
+                rendering,
+                label: rendering === MFileBodyViewRendering.INFO ? fileInfoLabel : downloadLabel,
+                tooltip: rendering === MFileBodyViewRendering.INFO ? fileInfoTooltip : undefined,
+                icon:
+                    rendering === MFileBodyViewRendering.INFO
+                        ? showFileInfo
+                            ? MFileBodyViewModel.getInfoIcon(content)
+                            : undefined
+                        : MFileBodyViewInfoIcon.DOWNLOAD,
                 href: media.srcHttp,
                 className: "mx_MFileBody",
             };
@@ -189,8 +207,8 @@ export class MFileBodyViewModel
 
         return {
             rendering: MFileBodyViewRendering.INVALID,
-            label,
-            tooltip,
+            label: showFileInfo ? fileInfoLabel : undefined,
+            tooltip: fileInfoTooltip,
             icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
             className: "mx_MFileBody",
         };
@@ -261,13 +279,13 @@ export class MFileBodyViewModel
     public onDownloadClick = (): Promise<void> => this.decryptFile();
 
     public onDownloadLinkClick = (event: MouseEvent<HTMLAnchorElement>): void => {
+        event.preventDefault();
+        event.stopPropagation();
+
         if (!this.props.mediaEventHelper) return;
 
         const fileType = this.content.info?.mimetype ?? "application/octet-stream";
         logger.log(`Downloading ${fileType} as blob (unencrypted)`);
-
-        event.preventDefault();
-        event.stopPropagation();
 
         this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
             const blobUrl = URL.createObjectURL(blob);
