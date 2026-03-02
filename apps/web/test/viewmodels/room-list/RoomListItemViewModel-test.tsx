@@ -277,6 +277,8 @@ describe("RoomListItemViewModel", () => {
             const mockCall = {
                 callType: CallType.Voice,
                 participants: new Map([[matrixClient.getUserId()!, {}]]),
+                off: jest.fn(),
+                on: jest.fn(),
             } as unknown as Call;
 
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
@@ -292,6 +294,8 @@ describe("RoomListItemViewModel", () => {
             const mockCall = {
                 callType: CallType.Video,
                 participants: new Map([[matrixClient.getUserId()!, {}]]),
+                off: jest.fn(),
+                on: jest.fn(),
             } as unknown as Call;
 
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
@@ -307,6 +311,8 @@ describe("RoomListItemViewModel", () => {
             const mockCall = {
                 callType: CallType.Voice,
                 participants: new Map(),
+                off: jest.fn(),
+                on: jest.fn(),
             } as unknown as Call;
 
             jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
@@ -373,6 +379,28 @@ describe("RoomListItemViewModel", () => {
 
             // Snapshot should not have changed
             expect(viewModel.getSnapshot()).toBe(snapshotBefore);
+        });
+
+        it("should react to participant changes when a call already exists at instantiation time", () => {
+            const mockCall = {
+                callType: CallType.Voice,
+                participants: new Map([]),
+                off: jest.fn(),
+                on: jest.fn(),
+            };
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall as unknown as Call);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
+
+            // Simulate participant joining
+            mockCall.participants.set(matrixClient.getUserId()! as unknown as RoomMember, new Set());
+
+            // Get the callback registered for participant changes
+            const participantsChangeCallback = mockCall.on.mock.calls[0][1];
+            participantsChangeCallback();
+
+            expect(viewModel.getSnapshot().notification.callType).toBe("voice");
         });
 
         it("should unsubscribe from old call participants when the call changes", () => {
