@@ -19,6 +19,7 @@ import styles from "./MFileBodyView.module.css";
 import { type ViewModel } from "../../viewmodel/ViewModel";
 import { useViewModel } from "../../viewmodel/useViewModel";
 import { useI18n } from "../../utils/i18nContext";
+import { MediaBody } from "../MediaBody";
 
 /**
  * Which visual state to render for the file body.
@@ -139,12 +140,12 @@ export function MFileBodyView({ vm, refIFrame, refLink }: Readonly<MFileBodyView
     }
 
     const info = showInfo ? (
-        <button data-type="info" onClick={vm.onInfoClick} type="button">
+        <MediaBody data-type="info" onClick={vm.onInfoClick} role="button" tabIndex={0}>
             <span data-type="info-icon">{React.createElement(resolvedIcon)}</span>
             <Tooltip description={resolvedInfoTooltip} placement="right">
                 <span data-type="info-label">{resolvedLabel}</span>
             </Tooltip>
-        </button>
+        </MediaBody>
     ) : null;
 
     const classes = classNames(styles.content, className);

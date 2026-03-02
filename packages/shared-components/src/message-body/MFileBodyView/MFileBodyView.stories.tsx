@@ -84,6 +84,13 @@ export const Invalid: Story = {
     },
 };
 
+export const LongFilename: Story = {
+    args: {
+        label: "a very long filename to show ellipsis.pdf",
+        tooltip: "a very long filename to show ellipsis.pdf (12 kB)",
+    },
+};
+
 export const AudioInfo: Story = {
     args: {
         icon: MFileBodyViewInfoIcon.AUDIO,
