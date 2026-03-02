@@ -53,3 +53,7 @@ export function humanizeTime(timeMillis: number, i18nApi?: I18nApi): string {
         return _t("time|in_n_days", { num: days });
     }
 }
+
+export function humanizeRelativeTime(i18nApi?: I18nApi): Intl.RelativeTimeFormat {
+    return new Intl.RelativeTimeFormat(i18nApi?.language, { style: "long", numeric: "auto" });
+}
