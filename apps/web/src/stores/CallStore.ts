@@ -23,8 +23,6 @@ export enum CallStoreEvent {
     Call = "call",
     // Signals a change in the active calls
     ConnectedCalls = "connected_calls",
-    // Signals a change in the participants of a call
-    Participants = "participants",
     // Signals a change in the configured RTC transports.
     TransportsUpdated = "transports_updated",
 }
@@ -166,9 +164,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
                         this.connectedCalls = new Set([...this.connectedCalls].filter((c) => c !== call));
                     }
                 };
-                const onParticipants = (): void => {
-                    this.emit(CallStoreEvent.Participants, room.roomId);
-                };
                 const onDestroy = (): void => {
                     this.calls.delete(room.roomId);
                     for (const [event, listener] of this.callListeners.get(call)!) call.off(event, listener);
@@ -176,7 +171,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
                 };
 
                 call.on(CallEvent.ConnectionState, onConnectionState);
-                call.on(CallEvent.Participants, onParticipants);
                 call.on(CallEvent.Destroy, onDestroy);
 
                 this.calls.set(room.roomId, call);
@@ -184,7 +178,6 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
                     call,
                     new Map<CallEvent, (...args: any[]) => unknown>([
                         [CallEvent.ConnectionState, onConnectionState],
-                        [CallEvent.Participants, onParticipants],
                         [CallEvent.Destroy, onDestroy],
                     ]),
                 );
