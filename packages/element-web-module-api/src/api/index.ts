@@ -20,6 +20,7 @@ import { type BuiltinsApi } from "./builtins.ts";
 import { type StoresApi } from "./stores.ts";
 import { type ClientApi } from "./client.ts";
 import { type WidgetLifecycleApi } from "./widget-lifecycle.ts";
+import { type CustomisationsApi } from "./customisations.ts";
 
 /**
  * Module interface for modules to implement.
@@ -142,6 +143,12 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly widgetLifecycle: WidgetLifecycleApi;
+
+    /**
+     * Allows modules to customise behaviour of app's components.
+     * @alpha Subject to change.
+     */
+    readonly customisations: CustomisationsApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

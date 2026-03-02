@@ -50,6 +50,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly customComponents: CustomComponentsApi;
     // @alpha
+    readonly customisations: CustomisationsApi;
+    // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
@@ -113,6 +115,10 @@ export interface CustomComponentsApi {
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }
 
+// @alpha
+export interface CustomisationsApi {
+    registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
+}
 // @alpha
 export type CustomMessageComponentProps = {
     mxEvent: MatrixEvent;
@@ -402,6 +408,17 @@ export type Translations = Record<string, {
     [ietfLanguageTag: string]: string;
 }>;
 
+// @alpha
+export const enum UIComponent {
+    AddIntegrations = "UIComponent.addIntegrations",
+    CreateRooms = "UIComponent.roomCreation",
+    CreateSpaces = "UIComponent.spaceCreation",
+    ExploreRooms = "UIComponent.exploreRooms",
+    FilterContainer = "UIComponent.filterContainer",
+    InviteUsers = "UIComponent.sendInvites",
+    RoomOptionsMenu = "UIComponent.roomOptionsMenu"
+}
+
 // @alpha @deprecated (undocumented)
 export interface UserIdentifierCustomisations {
     getDisplayUserIdentifier(userId: string, opts: {
@@ -476,4 +493,3 @@ export interface WidgetVariablesCustomisations {
 // (No @packageDocumentation comment for this package)
 
 ```
-
