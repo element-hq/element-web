@@ -36,7 +36,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
-import { CallEvent } from "../../models/Call";
+import { type Call, CallEvent } from "../../models/Call";
 
 interface RoomItemProps {
     room: Room;
@@ -53,6 +53,10 @@ export class RoomListItemViewModel
     implements RoomListItemActions
 {
     private notifState: RoomNotificationState;
+    /**
+     * Track the current call for this room to manager listeners
+     */
+    private currentCall: Call | null = null;
 
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
@@ -103,12 +107,12 @@ export class RoomListItemViewModel
 
     /**
      * Handler for call participant changes. Only updates the item if the call moves between having participants and not having participants, to avoid unnecessary updates.
-     * @param participants - The current call participants
      */
-    private onCallParticipantsChanged = (participants: Map<RoomMember, Set<string>>): void => {
+    private onCallParticipantsChanged = (...args: unknown[]): void => {
+        const participants = args[0] as Map<RoomMember, Set<string>>;
         const hasCall = Boolean(this.snapshot.current.notification.callType);
         // There is already an active call, we don't need to update the item
-        if (hasCall && participants.size > 0) return;
+        if (hasCall && participants?.size > 0) return;
 
         this.updateItem();
     };
@@ -117,9 +121,12 @@ export class RoomListItemViewModel
         // Only update if call state for this room actually changed
         const call = CallStore.instance.getCall(this.props.room.roomId);
 
-        // Unsubscribe from previous call participants if there was a call before
-        call?.off(CallEvent.Participants, this.onCallParticipantsChanged);
-        call?.on(CallEvent.Participants, this.onCallParticipantsChanged);
+        // Remove listener from previous call (if any) and add to new call to track participant changes
+        if (call !== this.currentCall) {
+            this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+            if (call) this.disposables.trackListener(call, CallEvent.Participants, this.onCallParticipantsChanged);
+        }
+        this.currentCall = call;
 
         const currentCallType = this.snapshot.current.notification.callType;
         const newCallType =
