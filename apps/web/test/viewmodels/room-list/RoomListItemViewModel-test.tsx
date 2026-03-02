@@ -47,7 +47,6 @@ jest.mock("../../../src/stores/CallStore", () => ({
     },
     CallStoreEvent: {
         ConnectedCalls: "connected_calls",
-        Participants: "participants",
     },
 }));
 
@@ -323,20 +322,25 @@ describe("RoomListItemViewModel", () => {
             const mockCall = {
                 callType: CallType.Voice,
                 participants: new Map(),
-            } as unknown as Call;
-            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
+                off: jest.fn(),
+                on: jest.fn(),
+            };
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall as unknown as Call);
 
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
             expect(viewModel.getSnapshot().notification.callType).toBeUndefined();
+
+            // Get the callback registered for call state changes
+            const mockCalls = (CallStore.instance.on as jest.Mock).mock.calls;
+            const callStateCallback = mockCalls[mockCalls.length - 1][1];
+            callStateCallback();
 
             // Simulate participant joining
             mockCall.participants.set(matrixClient.getUserId()! as unknown as RoomMember, new Set());
 
             // Get the callback registered for participant changes
-            const mockCalls = (CallStore.instance.on as jest.Mock).mock.calls;
-            const participantsCallback = mockCalls[mockCalls.length - 1][1];
-            // Trigger participants event
-            participantsCallback(room.roomId);
+            const participantsChangeCallback = mockCall.on.mock.calls[0][1];
+            participantsChangeCallback();
 
             expect(viewModel.getSnapshot().notification.callType).toBe("voice");
         });
