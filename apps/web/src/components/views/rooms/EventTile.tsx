@@ -13,7 +13,6 @@ import React, {
     useContext,
     useEffect,
     useMemo,
-    useReducer,
     useState,
     type JSX,
     type Ref,
@@ -1695,8 +1694,19 @@ function ReactionsRowButtonItem(props: Readonly<ReactionsRowButtonItemProps>): J
     return <ReactionsRowButtonView vm={vm} />;
 }
 
-const getReactionGroupCount = (reactions?: Relations | null): number =>
-    reactions?.getSortedAnnotationsByKey()?.filter(([, events]) => events.size > 0).length ?? 0;
+interface ReactionGroup {
+    content: string;
+    events: MatrixEvent[];
+}
+
+const getReactionGroups = (reactions?: Relations | null): ReactionGroup[] =>
+    reactions
+        ?.getSortedAnnotationsByKey()
+        ?.map(([content, events]) => ({
+            content,
+            events: [...events],
+        }))
+        .filter(({ events }) => events.length > 0) ?? [];
 
 const getMyReactions = (reactions: Relations | null | undefined, userId?: string): MatrixEvent[] | null => {
     if (!reactions || !userId) {
@@ -1719,16 +1729,16 @@ interface ReactionsRowWrapperProps {
 function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrapperProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
+    const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
     const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [, forceRender] = useReducer((value: number) => value + 1, 0);
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new ReactionsRowViewModel({
                 isActionable: isContentActionable(mxEvent),
-                reactionGroupCount: getReactionGroupCount(reactions),
+                reactionGroupCount: reactionGroups.length,
                 canReact: roomContext.canReact,
                 addReactionButtonActive: false,
             }),
@@ -1744,10 +1754,10 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
     }, []);
 
     const updateReactionsState = useCallback((): void => {
+        const nextReactionGroups = getReactionGroups(reactions);
+        setReactionGroups(nextReactionGroups);
         setMyReactions(getMyReactions(reactions, userId));
-        vm.setReactionGroupCount(getReactionGroupCount(reactions));
-        // Relations models mutate in place, so we force a render to refresh mapped items.
-        forceRender();
+        vm.setReactionGroupCount(nextReactionGroups.length);
     }, [reactions, userId, vm]);
 
     useEffect(() => {
@@ -1807,48 +1817,40 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
     const snapshot = useViewModel(vm);
     const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
     const items = useMemo((): JSX.Element[] | undefined => {
-        const mappedItems = reactions
-            ?.getSortedAnnotationsByKey()
-            ?.map(([content, events]) => {
-                const count = events.size;
-                if (!count) {
-                    return null;
+        const mappedItems = reactionGroups.map(({ content, events }) => {
+            // Deduplicate reaction events by sender per Matrix spec.
+            const deduplicatedEvents = uniqBy(events, (event: MatrixEvent) => event.getSender());
+            const myReactionEvent = myReactions?.find((reactionEvent) => {
+                if (reactionEvent.isRedacted()) {
+                    return false;
                 }
+                return reactionEvent.getRelation()?.key === content;
+            });
 
-                // Deduplicate reaction events by sender per Matrix spec.
-                const deduplicatedEvents = uniqBy([...events], (event: MatrixEvent) => event.getSender());
-                const myReactionEvent = myReactions?.find((reactionEvent) => {
-                    if (reactionEvent.isRedacted()) {
-                        return false;
+            return (
+                <ReactionsRowButtonItem
+                    key={content}
+                    content={content}
+                    count={deduplicatedEvents.length}
+                    mxEvent={mxEvent}
+                    reactionEvents={deduplicatedEvents}
+                    myReactionEvent={myReactionEvent}
+                    customReactionImagesEnabled={customReactionImagesEnabled}
+                    disabled={
+                        !roomContext.canReact ||
+                        (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
                     }
-                    return reactionEvent.getRelation()?.key === content;
-                });
+                />
+            );
+        });
 
-                return (
-                    <ReactionsRowButtonItem
-                        key={content}
-                        content={content}
-                        count={deduplicatedEvents.length}
-                        mxEvent={mxEvent}
-                        reactionEvents={deduplicatedEvents}
-                        myReactionEvent={myReactionEvent}
-                        customReactionImagesEnabled={customReactionImagesEnabled}
-                        disabled={
-                            !roomContext.canReact ||
-                            (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
-                        }
-                    />
-                );
-            })
-            .filter((item): item is JSX.Element => !!item);
-
-        if (!mappedItems?.length) {
+        if (!mappedItems.length) {
             return undefined;
         }
 
         return snapshot.showAllButtonVisible ? mappedItems.slice(0, MAX_ITEMS_WHEN_LIMITED) : mappedItems;
     }, [
-        reactions,
+        reactionGroups,
         myReactions,
         mxEvent,
         customReactionImagesEnabled,
