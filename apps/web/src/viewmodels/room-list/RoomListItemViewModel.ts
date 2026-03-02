@@ -93,6 +93,11 @@ export class RoomListItemViewModel
         void this.loadAndSetMessagePreview();
     }
 
+    public dispose(): void {
+        super.dispose();
+        this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+    }
+
     private onNotificationChanged = (): void => {
         this.updateItem();
     };
@@ -107,12 +112,12 @@ export class RoomListItemViewModel
 
     /**
      * Handler for call participant changes. Only updates the item if the call moves between having participants and not having participants, to avoid unnecessary updates.
+     * @param participants The current call participants
      */
-    private onCallParticipantsChanged = (...args: unknown[]): void => {
-        const participants = args[0] as Map<RoomMember, Set<string>>;
+    private onCallParticipantsChanged = (participants: Map<RoomMember, Set<string>>): void => {
         const hasCall = Boolean(this.snapshot.current.notification.callType);
         // There is already an active call, we don't need to update the item
-        if (hasCall && participants?.size > 0) return;
+        if (hasCall && participants.size > 0) return;
 
         this.updateItem();
     };
@@ -124,7 +129,7 @@ export class RoomListItemViewModel
         // Remove listener from previous call (if any) and add to new call to track participant changes
         if (call !== this.currentCall) {
             this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
-            if (call) this.disposables.trackListener(call, CallEvent.Participants, this.onCallParticipantsChanged);
+            call?.on(CallEvent.Participants, this.onCallParticipantsChanged);
         }
         this.currentCall = call;
 
