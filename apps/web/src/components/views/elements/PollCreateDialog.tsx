@@ -47,6 +47,7 @@ interface IState extends IScrollableBaseState {
     busy: boolean;
     kind: KnownPollKind;
     autoFocusTarget: FocusTarget;
+    maxSelections: number;
 }
 
 const MIN_OPTIONS = 2;
@@ -65,6 +66,7 @@ function creatingInitialState(): IState {
         busy: false,
         kind: M_POLL_KIND_DISCLOSED,
         autoFocusTarget: FocusTarget.Topic,
+        maxSelections: 1,
     };
 }
 
@@ -81,6 +83,7 @@ function editingInitialState(editingMxEvent: MatrixEvent): IState {
         busy: false,
         kind: poll.kind,
         autoFocusTarget: FocusTarget.Topic,
+        maxSelections: poll.maxSelections,
     };
 }
 
@@ -118,6 +121,10 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         this.setState({ options: newOptions }, () => this.checkCanSubmit());
     };
 
+    private onMaxSelectionsChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        this.setState({ maxSelections: parseInt(e.target.value, 10) || 1 });
+    };
+
     private onOptionAdd = (): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.push("");
@@ -129,10 +136,13 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     };
 
     private createEvent(): IPartialEvent<object> {
+        const nonEmptyOptions = this.state.options.map((a) => a.trim()).filter((a) => !!a);
+        const clampedMaxSelections = Math.max(1, Math.min(this.state.maxSelections, nonEmptyOptions.length));
         const pollStart = PollStartEvent.from(
             this.state.question.trim(),
-            this.state.options.map((a) => a.trim()).filter((a) => !!a),
+            nonEmptyOptions,
             this.state.kind.name,
+            clampedMaxSelections,
         ).serialize();
 
         if (!this.props.editingMxEvent) {
@@ -248,6 +258,17 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 >
                     {_t("poll|options_add_button")}
                 </AccessibleButton>
+                <h2>{_t("poll|max_selections_heading")}</h2>
+                <Field
+                    id="poll-max-selections-input"
+                    type="number"
+                    value={String(this.state.maxSelections)}
+                    min={1}
+                    max={this.state.options.filter((o) => o.trim().length > 0).length || 1}
+                    label={_t("poll|max_selections_label")}
+                    onChange={this.onMaxSelectionsChange}
+                    disabled={this.state.busy}
+                />
                 {this.state.busy && (
                     <div className="mx_PollCreateDialog_busy">
                         <Spinner />
