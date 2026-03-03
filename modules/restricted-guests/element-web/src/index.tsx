@@ -12,6 +12,7 @@ import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
 import { name as ModuleName } from "../package.json";
 import RoomPreviewBar from "./RoomPreviewBar.tsx";
+import AuthFooter from "./AuthFooter.tsx";
 
 const GUEST_INVISIBLE_COMPONENTS = [
     "UIComponent.sendInvites",
@@ -41,14 +42,26 @@ class RestrictedGuestsModule implements Module {
             throw new Error(`Errors in module configuration for "${ModuleName}"`);
         }
 
+        const appConfig = this.api.config.get();
+        if (appConfig.sso_redirect_options?.immediate) {
+            console.warn(`${ModuleName} found incompatible option 'sso_redirect_options.immediate', turning it off.`);
+            appConfig.sso_redirect_options.immediate = false;
+        }
+
+        // Room preview bar customisations (for Matrix guest support)
         this.api.customComponents.registerRoomPreviewBar((props, OriginalComponent) => (
             <RoomPreviewBar {...props} api={this.api} config={this.config!}>
                 <OriginalComponent {...props} />
             </RoomPreviewBar>
         ));
+        this.api.customisations.registerShouldShowComponent(this.shouldShowComponent);
 
-        // TODO replace this with a more generic API
-        this.api._registerLegacyComponentVisibilityCustomisations(this);
+        // Login component customisations (for no guest support)
+        this.api.customComponents.registerLoginComponent((props, OriginalComponent) => (
+            <OriginalComponent {...props}>
+                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} config={this.config!} />
+            </OriginalComponent>
+        ));
     }
 
     /**
@@ -58,11 +71,12 @@ class RestrictedGuestsModule implements Module {
      * @returns true, if the user should see the component
      */
     public readonly shouldShowComponent = (component: string): boolean => {
-        if (!this.config || !this.api.profile.value.userId?.startsWith(this.config.guest_user_prefix)) {
-            return true;
+        const profile = this.api.profile.value;
+        if (this.config && (profile.isGuest || profile.userId?.startsWith(this.config.guest_user_prefix))) {
+            return GUEST_INVISIBLE_COMPONENTS.includes(component);
         }
 
-        return GUEST_INVISIBLE_COMPONENTS.includes(component);
+        return true;
     };
 }
 

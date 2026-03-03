@@ -40,5 +40,8 @@ export const CONFIG_KEY = "io.element.element-web-modules.restricted-guests";
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
         [CONFIG_KEY]: input<ConfigSchema>;
+        sso_redirect_options?: {
+            immediate?: boolean; // incompatible option
+        };
     }
 }
