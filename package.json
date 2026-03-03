@@ -32,7 +32,8 @@
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0",
         "matrix-widget-api": "^1.17.0",
-        "qs": "6.14.2"
+        "qs": "6.14.2",
+        "serialize-javascript": "7.0.3"
     },
     "dependencies": {},
     "devDependencies": {
