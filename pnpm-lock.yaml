@@ -283,8 +283,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/09663302e15b93a88cae6631574c88e1df94031c
+        specifier: 41.1.0-rc.0
+        version: 41.1.0-rc.0
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -7895,9 +7895,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/09663302e15b93a88cae6631574c88e1df94031c:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/09663302e15b93a88cae6631574c88e1df94031c}
-    version: 41.0.0
+  matrix-js-sdk@41.1.0-rc.0:
+    resolution: {integrity: sha512-gXUp/3wOM4uzodtqFKMN2v5RmTmExZxtN6abKdPbbWP1Swk5JPim/4lBWY4gGau5wp8ONiTyk93w8M635Ujudw==}
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -18896,7 +18895,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/09663302e15b93a88cae6631574c88e1df94031c:
+  matrix-js-sdk@41.1.0-rc.0:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 17.1.0
