@@ -20,7 +20,7 @@ import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
-import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { FilterKey } from "../../../../src/stores/room-list-v3/skip-list/filters";
 import { RoomNotificationStateStore } from "../../../../src/stores/notifications/RoomNotificationStateStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";

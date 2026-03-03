@@ -11,7 +11,7 @@ import { type Room, ClientEvent, SyncState, type EmptyObject } from "matrix-js-s
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
-import { DefaultTagID, type TagID } from "../room-list/models";
+import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
 import { type FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";

@@ -23,7 +23,7 @@ import { type MessagePreview, MessagePreviewStore } from "../../../src/stores/ro
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { DefaultTagID } from "../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { CallStore } from "../../../src/stores/CallStore";

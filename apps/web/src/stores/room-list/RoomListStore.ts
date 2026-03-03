@@ -10,7 +10,7 @@ import { type MatrixClient, type Room, EventType, type EmptyObject } from "matri
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, type TagID } from "./models";
+import { OrderedDefaultTagIDs, RoomUpdateCause } from "./models";
 import {
     type IListOrderingMap,
     type ITagMap,
@@ -34,7 +34,8 @@ import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreat
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
+import { getChangedOverrideRoomMutePushRules } from "../room-list-v3/utils";
+import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 export const LISTS_LOADING_EVENT = RoomListStoreEvent.ListsLoading; // unused; used by SlidingRoomListStore

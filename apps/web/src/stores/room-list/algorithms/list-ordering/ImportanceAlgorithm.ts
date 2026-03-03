@@ -10,7 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { RoomUpdateCause, type TagID } from "../../models";
+import { type TagID } from "../../../room-list-v3/skip-list/tag";
+import { RoomUpdateCause } from "../../models";
 import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";

@@ -14,7 +14,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";
-import { DefaultTagID, RoomUpdateCause, type TagID } from "../models";
+import { DefaultTagID, type TagID } from "../../room-list-v3/skip-list/tag";
+import { RoomUpdateCause } from "../models";
 import {
     type IListOrderingMap,
     type IOrderingAlgorithmMap,
