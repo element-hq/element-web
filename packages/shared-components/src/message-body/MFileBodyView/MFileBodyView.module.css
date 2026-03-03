@@ -6,10 +6,16 @@
  */
 
 .content {
-    display: inline-flex;
+    display: flex;
     flex-direction: row;
-    gap: var(--cpd-space-3x);
-    height: var(--cpd-space-9x);
+    min-width: 0;
+
+    & a {
+        display: flex;
+        flex-grow: 1;
+        text-decoration: none;
+        color: inherit;
+    }
 }
 
 .content [data-type="info"] {
@@ -56,15 +62,15 @@
     }
 
     & object {
-        margin-left: -16px;
-        padding-right: 4px;
-        margin-top: -4px;
+        margin-left: -1 * var(--cpd-space-4x);
+        padding-right: var(--cpd-space-1x);
+        margin-top: -1 * var(--cpd-space-1x);
         vertical-align: middle;
         pointer-events: none;
     }
 }
 
-.content [data-type="invalid"] {
-    display: inline-flex;
-    align-items: center;
+.invalid {
+    display: block;
+    color: var(--cpd-color-text-critical-primary);
 }

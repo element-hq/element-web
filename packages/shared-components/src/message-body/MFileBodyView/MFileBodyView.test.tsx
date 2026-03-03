@@ -30,12 +30,13 @@ const {
     Default,
     Export,
     Invalid,
-    LongFilename,
     AudioInfo,
     VideoInfo,
+    LongFilenameInfo,
     UnencryptedDownload,
     EncryptedIframeDownload,
     EncryptedPendingDownload,
+    LongFilenameDownload,
 } = composeStories(stories);
 
 const defaultSnapshot: MFileBodyViewSnapshot = {
@@ -62,12 +63,13 @@ describe("MFileBodyView", () => {
         ["default", Default],
         ["export", Export],
         ["invalid", Invalid],
-        ["long-filename", LongFilename],
+        ["long-filename-info", LongFilenameInfo],
         ["audio-info", AudioInfo],
         ["video-info", VideoInfo],
         ["unencrypted-download", UnencryptedDownload],
         ["encrypted-iframe-download", EncryptedIframeDownload],
         ["encrypted-pending-download", EncryptedPendingDownload],
+        ["long-filename-download", LongFilenameDownload],
     ])("matches snapshot for %s story", (_name, Story) => {
         const { container } = renderWithI18n(<Story />);
         expect(container).toMatchSnapshot();

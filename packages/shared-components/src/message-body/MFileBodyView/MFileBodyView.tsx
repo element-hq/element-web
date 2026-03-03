@@ -62,15 +62,15 @@ export interface MFileBodyViewSnapshot {
      */
     tooltip?: string;
     /**
-     * Optional icon. Defaults to 'ATTACHMENT' or 'DOWNNLOAD' depending on rendering.
+     * Optional icon. Defaults to `ATTACHMENT` for info/export/invalid modes and `DOWNLOAD` for download modes.
      */
     icon?: MFileBodyViewInfoIcon;
     /**
-     * Url used for `DOWNLOAD_UNENCRYPTED` and `EXPORT`.
+     * URL used for `DOWNLOAD_UNENCRYPTED` and `EXPORT`.
      */
     href?: string;
     /**
-     * Extra CSS classe for host-level styling.
+     * Extra CSS class for host-level styling.
      */
     className?: string;
 }
@@ -116,6 +116,22 @@ interface MFileBodyViewProps {
     refLink?: React.RefObject<HTMLAnchorElement>;
 }
 
+/**
+ * Renders the body of a file message for info, export, and download flows.
+ *
+ * Rendering is selected by `snapshot.rendering` from the view model and supports:
+ * - info-only display (`INFO`, `INVALID`)
+ * - export link (`EXPORT`)
+ * - unencrypted download link (`DOWNLOAD_UNENCRYPTED`)
+ * - encrypted download states (`DOWNLOAD_ENCRYPTED_PENDING`, `DOWNLOAD_ENCRYPTED_IFRAME`)
+ *
+ * Labels, tooltips, and icons are resolved from snapshot values with i18n fallbacks.
+ *
+ * @example
+ * ```tsx
+ * <MFileBodyView vm={fileBodyViewModel} />
+ * ```
+ */
 export function MFileBodyView({ vm, refIFrame, refLink }: Readonly<MFileBodyViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
     const { rendering, label, tooltip, icon, href, className } = useViewModel(vm);
@@ -228,10 +244,10 @@ export function MFileBodyView({ vm, refIFrame, refLink }: Readonly<MFileBodyView
         case MFileBodyViewRendering.INVALID:
         default:
             return (
-                <span className={classes}>
-                    {info}
-                    <span data-type="invalid">{_t("timeline|m.file|error_invalid")}</span>
-                </span>
+                <>
+                    <span className={classes}>{info}</span>
+                    <span className={styles.invalid}>{_t("timeline|m.file|error_invalid")}</span>
+                </>
             );
     }
 }

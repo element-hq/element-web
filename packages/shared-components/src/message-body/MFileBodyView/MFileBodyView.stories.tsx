@@ -84,7 +84,7 @@ export const Invalid: Story = {
     },
 };
 
-export const LongFilename: Story = {
+export const LongFilenameInfo: Story = {
     args: {
         label: "a very long filename to show ellipsis.pdf",
         tooltip: "a very long filename to show ellipsis.pdf (12 kB)",
@@ -120,5 +120,12 @@ export const EncryptedIframeDownload: Story = {
 export const EncryptedPendingDownload: Story = {
     args: {
         rendering: MFileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
+    },
+};
+
+export const LongFilenameDownload: Story = {
+    args: {
+        rendering: MFileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
+        label: "a very long filename to show ellipsis.pdf",
     },
 };

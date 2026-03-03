@@ -7,6 +7,7 @@
 
 .audioPlayer {
     padding: var(--cpd-space-4x) var(--cpd-space-3x) var(--cpd-space-3x) var(--cpd-space-3x) !important;
+    border-radius: var(--cpd-space-2x) !important;
 }
 
 .mediaInfo {
