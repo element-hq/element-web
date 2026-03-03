@@ -71,7 +71,7 @@ export interface EncryptionEventViewProps {
  *
  * @example
  * ```tsx
- * <EncryptionEventView vm={encryptionEventVm} className="encryptionEventCustomClass" />
+ * <EncryptionEventView vm={encryptionEventVm} className="mx_EncryptionEvent" />
  * ```
  */
 export function EncryptionEventView({ vm, ref, className }: Readonly<EncryptionEventViewProps>): JSX.Element {

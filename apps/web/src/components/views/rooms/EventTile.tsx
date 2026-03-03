@@ -1617,7 +1617,7 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
         vm.setVerificationState(verificationState);
     }, [verificationState, vm]);
 
-    return <DecryptionFailureBodyView vm={vm} />;
+    return <DecryptionFailureBodyView vm={vm} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }
 
 /**

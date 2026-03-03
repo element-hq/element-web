@@ -347,5 +347,5 @@ function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element
     useEffect(() => {
         vm.setVerificationState(verificationState);
     }, [verificationState, vm]);
-    return <DecryptionFailureBodyView vm={vm} ref={ref} />;
+    return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }
