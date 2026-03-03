@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { RelationType } from "matrix-js-sdk/src/matrix";
 
-import { MessageEventPreview } from "../../../../../src/stores/room-list/previews/MessageEventPreview";
+// Import directly from the file to avoid circular dependencies with MessagePreviewStore
+import { MessageEventPreview } from "../../../../../src/stores/message-preview/previews/MessageEventPreview";
 import { mkEvent, stubClient } from "../../../../test-utils";
 
 describe("MessageEventPreview", () => {

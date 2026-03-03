@@ -42,7 +42,7 @@ import { TestSdkContext } from "../../../TestSdkContext";
 import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
-import { MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../../../src/stores/message-preview";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { ConnectionState } from "../../../../../src/models/Call";
