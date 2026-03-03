@@ -85,7 +85,6 @@ describe("MFileBodyViewModel", () => {
         expect(vm.getSnapshot()).toMatchObject({
             rendering: "DOWNLOAD_UNENCRYPTED",
             href: "https://server/file",
-            className: "mx_MFileBody",
         });
     });
 
@@ -103,7 +102,6 @@ describe("MFileBodyViewModel", () => {
             rendering: "INFO",
             label: "alt",
             icon: expectedIcon,
-            className: "mx_MFileBody",
         });
     });
 

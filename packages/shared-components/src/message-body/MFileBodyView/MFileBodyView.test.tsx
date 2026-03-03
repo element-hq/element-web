@@ -263,12 +263,9 @@ describe("MFileBodyView", () => {
     });
 
     it("applies extra class names to the root element", () => {
-        const vm = new TestViewModel({
-            ...defaultSnapshot,
-            className: "custom-file-body another-class",
-        });
+        const vm = new TestViewModel(defaultSnapshot);
 
-        const { container } = renderWithI18n(<MFileBodyView vm={vm} />);
+        const { container } = renderWithI18n(<MFileBodyView vm={vm} className="custom-file-body another-class" />);
         expect(container.firstElementChild).toHaveClass("custom-file-body", "another-class");
     });
 });

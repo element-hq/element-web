@@ -162,7 +162,6 @@ export class MFileBodyViewModel
                 tooltip: fileInfoTooltip,
                 icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
                 href: content.file?.url || content.url,
-                className: "mx_MFileBody",
             };
         }
 
@@ -183,7 +182,6 @@ export class MFileBodyViewModel
                             ? MFileBodyViewModel.getInfoIcon(content)
                             : undefined
                         : MFileBodyViewInfoIcon.DOWNLOAD,
-                className: "mx_MFileBody",
             };
         }
 
@@ -201,7 +199,6 @@ export class MFileBodyViewModel
                             : undefined
                         : MFileBodyViewInfoIcon.DOWNLOAD,
                 href: media.srcHttp,
-                className: "mx_MFileBody",
             };
         }
 
@@ -210,7 +207,6 @@ export class MFileBodyViewModel
             label: showFileInfo ? fileInfoLabel : undefined,
             tooltip: fileInfoTooltip,
             icon: showFileInfo ? MFileBodyViewModel.getInfoIcon(content) : undefined,
-            className: "mx_MFileBody",
         };
     }
 

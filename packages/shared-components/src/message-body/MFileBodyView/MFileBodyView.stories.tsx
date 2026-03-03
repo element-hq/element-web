@@ -25,8 +25,9 @@ const MFileBodyViewWrapperImpl = ({
     onDownloadClick,
     onDownloadLinkClick,
     onDownloadIframeLoad,
+    className,
     ...snapshotProps
-}: MFileBodyViewProps): ReactNode => {
+}: MFileBodyViewProps & { className?: string }): ReactNode => {
     const vm = useMockedViewModel(snapshotProps, {
         onInfoClick,
         onDownloadClick,
@@ -34,7 +35,7 @@ const MFileBodyViewWrapperImpl = ({
         onDownloadIframeLoad,
     });
 
-    return <MFileBodyView vm={vm} />;
+    return <MFileBodyView vm={vm} className={className} />;
 };
 
 const MFileBodyViewWrapper = withViewDocs(MFileBodyViewWrapperImpl, MFileBodyView);

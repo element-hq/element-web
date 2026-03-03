@@ -69,10 +69,6 @@ export interface MFileBodyViewSnapshot {
      * URL used for `DOWNLOAD_UNENCRYPTED` and `EXPORT`.
      */
     href?: string;
-    /**
-     * Extra CSS class for host-level styling.
-     */
-    className?: string;
 }
 
 export interface MFileBodyViewActions {
@@ -106,6 +102,11 @@ interface MFileBodyViewProps {
     vm: MFileBodyViewModel;
 
     /**
+     * Optional CSS class for host-level styling.
+     */
+    className?: string;
+
+    /**
      * Optional iframe ref for encrypted download flow
      */
     refIFrame?: React.RefObject<HTMLIFrameElement>;
@@ -132,9 +133,9 @@ interface MFileBodyViewProps {
  * <MFileBodyView vm={fileBodyViewModel} />
  * ```
  */
-export function MFileBodyView({ vm, refIFrame, refLink }: Readonly<MFileBodyViewProps>): JSX.Element {
+export function MFileBodyView({ vm, refIFrame, refLink, className }: Readonly<MFileBodyViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { rendering, label, tooltip, icon, href, className } = useViewModel(vm);
+    const { rendering, label, tooltip, icon, href } = useViewModel(vm);
 
     const showInfo =
         rendering === MFileBodyViewRendering.INFO ||

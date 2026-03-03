@@ -54,7 +54,7 @@ function MFileBodyViewWrapped({
         });
     }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
 
-    return <MFileBodyView vm={vm} refIFrame={vm.refIFrame} refLink={vm.refLink} />;
+    return <MFileBodyView vm={vm} refIFrame={vm.refIFrame} refLink={vm.refLink} className="mx_MFileBody" />;
 }
 
 // Exported for explicit fallback usage where callers want file-body rendering.
