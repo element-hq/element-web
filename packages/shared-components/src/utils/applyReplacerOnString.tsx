@@ -11,7 +11,13 @@ import { Text, type HTMLReactParserOptions } from "html-react-parser";
 type Replacer = HTMLReactParserOptions["replace"];
 
 /**
- * Passes through any non-string inputs verbatim, as such they should only be used for emoji bodies.
+ * Applies a parser replacer to string content while passing through JSX elements unchanged.
+ *
+ * @param input Plain-text body content or pre-rendered JSX elements (for example emoji bodies).
+ * Non-string items are returned verbatim.
+ * @param replacer Optional replace callback to run on string items.
+ * @returns The original `input` when no replacer is provided; otherwise an array where string
+ * items are replaced and JSX elements are passed through unchanged.
  */
 export function applyReplacerOnString(
     input: string | JSX.Element[],
