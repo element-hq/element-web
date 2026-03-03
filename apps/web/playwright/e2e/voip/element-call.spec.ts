@@ -508,7 +508,7 @@ test.describe("Element Call", () => {
 
             await openAndJoinCall(page);
             await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+            const pipContainer = page.getByTestId("widget-pip-container");
 
             // We should have a PiP container here.
             await expect(pipContainer).toBeVisible();
@@ -541,7 +541,7 @@ test.describe("Element Call", () => {
 
             await openAndJoinCall(page);
             await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+            const pipContainer = page.getByTestId("widget-pip-container");
 
             // We should have a PiP container here.
             await expect(pipContainer).toBeVisible();
@@ -578,7 +578,7 @@ test.describe("Element Call", () => {
             await openAndJoinCall(page, true);
 
             await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+            const pipContainer = page.getByTestId("widget-pip-container");
 
             // We should have a PiP container here.
             await expect(pipContainer).toBeVisible();
