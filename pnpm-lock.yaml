@@ -47,7 +47,7 @@ overrides:
   markdown-it: 14.1.1
   testcontainers: ^11.0.0
   wrap-ansi-cjs: npm:wrap-ansi@^10.0.0
-  wrap-ansi: npm:wrap-ansi@^7.0.0
+  wrap-ansi: npm:wrap-ansi@^10.0.0
   matrix-widget-api: ^1.17.0
   qs: 6.14.2
   serialize-javascript: 7.0.3
@@ -10695,10 +10695,6 @@ packages:
     resolution: {integrity: sha512-SGcvg80f0wUy2/fXES19feHMz8E0JoXv2uNgHOu4Dgi2OrCy1lqwFYEJz1BLbDI0exjPMe/ZdzZ/YpGECBG/aQ==}
     engines: {node: '>=20'}
 
-  wrap-ansi@7.0.0:
-    resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
-    engines: {node: '>=10'}
-
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
@@ -12373,7 +12369,7 @@ snapshots:
       string-width-cjs: string-width@4.2.3
       strip-ansi: 7.2.0
       strip-ansi-cjs: strip-ansi@6.0.1
-      wrap-ansi: 7.0.0
+      wrap-ansi: 10.0.0
       wrap-ansi-cjs: wrap-ansi@10.0.0
 
   '@istanbuljs/load-nyc-config@1.1.0':
@@ -15935,13 +15931,13 @@ snapshots:
     dependencies:
       string-width: 4.2.3
       strip-ansi: 6.0.1
-      wrap-ansi: 7.0.0
+      wrap-ansi: 10.0.0
 
   cliui@8.0.1:
     dependencies:
       string-width: 4.2.3
       strip-ansi: 6.0.1
-      wrap-ansi: 7.0.0
+      wrap-ansi: 10.0.0
 
   clone-deep@4.0.1:
     dependencies:
@@ -18728,7 +18724,7 @@ snapshots:
       eventemitter3: 5.0.4
       log-update: 6.1.0
       rfdc: 1.4.1
-      wrap-ansi: 7.0.0
+      wrap-ansi: 10.0.0
 
   loader-runner@4.3.1: {}
 
@@ -18779,7 +18775,7 @@ snapshots:
       cli-cursor: 5.0.0
       slice-ansi: 7.1.2
       strip-ansi: 7.2.0
-      wrap-ansi: 7.0.0
+      wrap-ansi: 10.0.0
 
   loglevel@1.9.2: {}
 
@@ -22228,12 +22224,6 @@ snapshots:
       ansi-styles: 6.2.3
       string-width: 8.2.0
       strip-ansi: 7.2.0
-
-  wrap-ansi@7.0.0:
-    dependencies:
-      ansi-styles: 4.3.0
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
 
   wrappy@1.0.2: {}
 
