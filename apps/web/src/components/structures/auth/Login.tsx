@@ -64,8 +64,6 @@ interface IState {
     busyLoggingIn?: boolean;
     errorText?: ReactNode;
     loginIncorrect: boolean;
-    // can we attempt to log in or are there validation errors?
-    canTryLogin: boolean;
 
     flows?: ClientLoginFlow[];
 
@@ -104,7 +102,6 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             busy: false,
             errorText: null,
             loginIncorrect: false,
-            canTryLogin: true,
 
             username: props.defaultUsername ? props.defaultUsername : "",
             phoneCountry: "",
@@ -232,7 +229,6 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             username: username,
             busy: doWellknownLookup,
             errorText: null,
-            canTryLogin: true,
         });
         if (doWellknownLookup) {
             const serverName = username.split(":").slice(1).join(":");
@@ -382,7 +378,6 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                     this.setState({
                         errorText: messageForConnectionError(err, this.props.serverConfig),
                         loginIncorrect: false,
-                        canTryLogin: false,
                     });
                 },
             )
