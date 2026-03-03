@@ -1643,7 +1643,7 @@ function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Ele
             {props.receivedTs ? (
                 <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
             ) : undefined}
-            <MessageTimestampView vm={vm} />
+            <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );
 }
