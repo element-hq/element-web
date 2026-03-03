@@ -38,5 +38,17 @@ describe("ImageSize", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 720, h: 800 });
             expect(size).toStrictEqual({ w: 291, h: 324 });
         });
+        it("constrains square image", () => {
+            const size = suggestedSize(ImageSize.Normal, { w: 1000, h: 1000 });
+            expect(size).toStrictEqual({ w: 324, h: 324 });
+        });
+        it("constrains slightly vertical square image", () => {
+            const size = suggestedSize(ImageSize.Normal, { w: 999, h: 1000 });
+            expect(size).toStrictEqual({ w: 323, h: 324 });
+        });
+        it("constrains slightly horizontal square image", () => {
+            const size = suggestedSize(ImageSize.Normal, { w: 1000, h: 999 });
+            expect(size).toStrictEqual({ w: 324, h: 323 });
+        });
     });
 });
