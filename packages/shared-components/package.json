@@ -93,7 +93,7 @@
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-deprecate": "^0.8.7",
+        "eslint-plugin-deprecate": "^0.9.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsx-a11y": "^6.10.2",
         "eslint-plugin-matrix-org": "^3.0.0",
