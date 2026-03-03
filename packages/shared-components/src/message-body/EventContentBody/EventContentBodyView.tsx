@@ -37,7 +37,6 @@ export interface EventContentBodyViewSnapshot {
     parseFormattedBody?: ParseFormattedBody;
     /**
      * CSS class names to apply to the container element.
-     * Includes classes like mx_EventTile_body, mx_EventTile_bigEmoji, markdown-body, etc.
      */
     className: string;
     /**
