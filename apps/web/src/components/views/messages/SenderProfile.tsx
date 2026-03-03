@@ -38,6 +38,8 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 emphasizeDisplayName: true,
                 withTooltip,
                 className: "mx_DisambiguatedProfile",
+                classNameDisplayName: "mx_DisambiguatedProfile_displayName",
+                classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
             }),
     );
 

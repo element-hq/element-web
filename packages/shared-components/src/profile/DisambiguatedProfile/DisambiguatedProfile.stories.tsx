@@ -6,7 +6,6 @@
  */
 
 import React, { type JSX } from "react";
-import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -33,6 +32,8 @@ const meta = {
         displayName: { control: "text" },
         colorClass: { control: "text" },
         className: { control: "text" },
+        classNameDisplayName: { control: "text" },
+        classNameDisplayIdentifier: { control: "text" },
         displayIdentifier: { control: "text" },
         title: { control: "text" },
         emphasizeDisplayName: { control: "boolean" },
@@ -40,7 +41,8 @@ const meta = {
     args: {
         displayName: "Alice",
         emphasizeDisplayName: true,
-        onClick: fn(),
+        classNameDisplayName: "mx_DisambiguatedProfile_displayName",
+        classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
     },
 } satisfies Meta<typeof DisambiguatedProfileViewWrapper>;
 
@@ -75,6 +77,14 @@ export const WithTooltip: Story = {
     args: {
         displayName: "Diana",
         title: "Diana (@diana:example.org)",
+    },
+};
+
+export const WithTooltipAndActions: Story = {
+    args: {
+        displayName: "Diana",
+        title: "Diana (@diana:example.org)",
+        onClick: () => console.log("Clicked disambiguated profile"),
     },
 };
 

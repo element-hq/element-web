@@ -25,3 +25,11 @@
         margin-inline-start: 5px;
     }
 }
+
+button {
+    /* Clear default <button> styles */
+    padding: 0;
+    border: none;
+    vertical-align: baseline;
+    background: none;
+}

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -29,6 +29,14 @@ export interface DisambiguatedProfileViewSnapshot {
      */
     className?: string;
     /**
+     * The CSS class name applied to the display name span.
+     */
+    classNameDisplayName?: string;
+    /**
+     * The CSS class name applied to the display identifier span.
+     */
+    classNameDisplayIdentifier?: string;
+    /**
      * The formatted user identifier to display when disambiguation is needed.
      * Undefined if disambiguation is not required.
      */
@@ -51,7 +59,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
 }
 
 /**
@@ -80,41 +88,36 @@ interface DisambiguatedProfileViewProps {
  * ```
  */
 export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
-    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, className } = useViewModel(vm);
+    const {
+        displayName,
+        colorClass,
+        displayIdentifier,
+        title,
+        emphasizeDisplayName,
+        className,
+        classNameDisplayName,
+        classNameDisplayIdentifier,
+    } = useViewModel(vm);
 
-    const displayNameClasses = classNames(colorClass, {
+    const displayNameClasses = classNames(classNameDisplayName, colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
-        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
+    const displayIdentifierClasses = classNames(classNameDisplayIdentifier, styles.disambiguatedProfile_mxid);
 
-    // Handle keyboard interaction for accessibility if onClick is provided
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
-              }
-          }
-        : undefined;
+    const Component = vm.onClick ? "button" : "div";
 
     return (
-        <div
+        <Component
+            // Only valid for <button>
+            type={vm.onClick ? "button" : undefined}
             className={classNames(className, styles.disambiguatedProfile)}
             title={title}
             onClick={vm.onClick}
-            onKeyDown={handleKeyDown}
-            role={vm.onClick ? "button" : undefined}
-            tabIndex={vm.onClick ? 0 : undefined}
         >
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
-            {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
-                    {displayIdentifier}
-                </span>
-            )}
-        </div>
+            {displayIdentifier && <span className={displayIdentifierClasses}>{displayIdentifier}</span>}
+        </Component>
     );
 }
