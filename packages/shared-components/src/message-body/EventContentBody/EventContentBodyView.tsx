@@ -83,7 +83,7 @@ export type EventContentBodyViewProps = EventContentBodyBaseViewProps &
 export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyViewProps>): JSX.Element {
     const snapshot = useViewModel(vm);
     const { body, formattedBody, replacer, className, dir, parseFormattedBody } = snapshot;
-
+    const { body, formattedBody, replacer, className, dir, parseFormattedBody } = useViewModel(vm);
     const parseBody =
         parseFormattedBody ??
         ((formatted: string, inputReplacer?: Replacer) =>
