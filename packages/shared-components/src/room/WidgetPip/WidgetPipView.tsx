@@ -52,7 +52,7 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar, onStartM
     const { translate: _t } = useI18n();
     return (
         // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        <div data-test-id="widget-pip-container" className={styles.container} onMouseDown={onStartMoving}>
+        <div data-testid="widget-pip-container" className={styles.container} onMouseDown={onStartMoving}>
             <div className={styles.header}>
                 <IconButton
                     size="28px"
