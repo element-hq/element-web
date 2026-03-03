@@ -15,7 +15,7 @@ import {
 import { _t } from "../../languageHandler";
 import { formatList } from "../../utils/FormattingUtils";
 import { unicodeToShortcode } from "../../HtmlUtils";
-import { REACTION_SHORTCODE_KEY } from "../../components/views/messages/ReactionsRow";
+import { REACTION_SHORTCODE_KEY } from "./reactionShortcode";
 
 export interface ReactionsRowButtonTooltipViewModelProps {
     /**
