@@ -33,9 +33,9 @@ import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
 import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
-import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
 import { Action } from "../../dispatcher/actions";
 import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
+import { getChangedOverrideRoomMutePushRules } from "./utils";
 
 /**
  * These are the filters passed to the room skip list.

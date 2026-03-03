@@ -27,7 +27,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { SortingAlgorithm } from "../../../../src/stores/room-list-v3/skip-list/sorters";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
-import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
+import * as utilsRLS from "../../../../src/stores/room-list-v3/utils.ts";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 
@@ -852,7 +852,7 @@ describe("RoomListStoreV3", () => {
 
             // Let's say that muted room 64 becomes un-muted.
             const unmutedRoom = rooms[64];
-            jest.spyOn(roomMute, "getChangedOverrideRoomMutePushRules").mockImplementation(() => [unmutedRoom.roomId]);
+            jest.spyOn(utilsRLS, "getChangedOverrideRoomMutePushRules").mockImplementation(() => [unmutedRoom.roomId]);
             client.getRoom = jest.fn().mockReturnValue(unmutedRoom);
             const payload = {
                 action: "MatrixActions.accountData",
