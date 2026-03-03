@@ -184,6 +184,14 @@ const DEFAULT_CONFIG = {
     },
     room_list_publication_rules: [{ action: "allow" }],
     modules: [] as Array<{ module: string; config?: Record<string, unknown> }>,
+    matrix_authentication_service: undefined as
+        | undefined
+        | {
+              enabled?: boolean;
+              endpoint?: string;
+              secret?: string | null;
+              secret_path?: string | null;
+          },
 };
 
 /**
@@ -278,7 +286,22 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
     }
 
     public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
-        this.mas = mas;
+        if (mas) {
+            this.mas = mas;
+            this.withConfig({
+                matrix_authentication_service: {
+                    enabled: true,
+                    endpoint: `http://${mas.getHostname()}:8080/`,
+                    secret: mas.sharedSecret,
+                },
+                // Must be disabled when using MAS.
+                password_config: {
+                    enabled: false,
+                },
+                // Must be disabled when using MAS.
+                enable_registration: false,
+            });
+        }
         return this;
     }
 

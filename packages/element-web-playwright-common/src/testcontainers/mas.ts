@@ -156,6 +156,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
         super(image);
 
         const initialConfig = deepCopy(DEFAULT_CONFIG);
+        initialConfig.database.host = db.getHostname();
         initialConfig.database.username = db.getUsername();
         initialConfig.database.password = db.getPassword();
 
@@ -205,6 +206,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
             await super.start(),
             `http://localhost:${port}`,
             this.args,
+            this.config.matrix.secret,
         );
     }
 }
@@ -219,6 +221,7 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
         container: StartedTestContainer,
         public readonly baseUrl: string,
         private readonly args: string[],
+        public readonly sharedSecret: string,
     ) {
         super(container);
     }
