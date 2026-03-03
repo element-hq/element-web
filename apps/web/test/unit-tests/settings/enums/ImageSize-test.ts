@@ -34,5 +34,9 @@ describe("ImageSize", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 720, h: 1280 });
             expect(size).toStrictEqual({ w: 182, h: 324 });
         });
+        it("returns integer values for slightly vertical images", () => {
+            const size = suggestedSize(ImageSize.Normal, { w: 720, h: 800 });
+            expect(size).toStrictEqual({ w: 291, h: 324 });
+        });
     });
 });
