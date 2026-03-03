@@ -21,7 +21,7 @@ export * from "./message-body/MessageTimestampView";
 export * from "./message-body/DecryptionFailureBodyView";
 export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./message-body/ReactionsRowButton";
-export * from "./message-body/ReactionRow";
+export * from "./message-body/ReactionsRow";
 export * from "./message-body/TimelineSeparator/";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";

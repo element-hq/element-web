@@ -1859,10 +1859,6 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
         snapshot.showAllButtonVisible,
     ]);
 
-    useEffect(() => {
-        vm.setChildren(items);
-    }, [items, vm]);
-
     if (!snapshot.isVisible || !items?.length) {
         return null;
     }
@@ -1878,7 +1874,9 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
 
     return (
         <>
-            <ReactionsRowView vm={vm} />
+            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
+                {items}
+            </ReactionsRowView>
             {contextMenu}
         </>
     );

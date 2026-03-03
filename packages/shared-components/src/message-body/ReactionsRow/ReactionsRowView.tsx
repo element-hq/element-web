@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type MouseEventHandler, type ReactNode } from "react";
+import React, { type JSX, type MouseEventHandler, type PropsWithChildren } from "react";
 import classNames from "classnames";
 import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
@@ -22,14 +22,6 @@ export interface ReactionsRowViewSnapshot {
      * Controls whether the row should render at all.
      */
     isVisible: boolean;
-    /**
-     * Reaction button elements to render in the row.
-     */
-    children?: ReactNode;
-    /**
-     * Optional CSS className for the row container.
-     */
-    className?: string;
     /**
      * Whether to render the "show all" button.
      */
@@ -79,14 +71,20 @@ export type ReactionsRowViewModel = ViewModel<ReactionsRowViewSnapshot, Reaction
 
 interface ReactionsRowViewProps {
     vm: ReactionsRowViewModel;
+    /**
+     * Optional CSS className for the row container.
+     */
+    className?: string;
+    /**
+     * Reaction button elements to render in the row.
+     */
+    children?: PropsWithChildren["children"];
 }
 
-export function ReactionsRowView({ vm }: Readonly<ReactionsRowViewProps>): JSX.Element {
+export function ReactionsRowView({ vm, className, children }: Readonly<ReactionsRowViewProps>): JSX.Element {
     const {
         ariaLabel,
         isVisible,
-        children,
-        className,
         showAllButtonVisible,
         showAllButtonLabel,
         showAddReactionButton,
