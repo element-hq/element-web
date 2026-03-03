@@ -55,8 +55,8 @@ interface EventContentBodyBaseViewProps {
     vm: EventContentBodyViewModel;
 }
 
-export type EventContentBodyViewProps =
-    | (EventContentBodyBaseViewProps & {
+export type EventContentBodyViewProps = EventContentBodyBaseViewProps & 
+     ({
           /**
            * Render the content in a span element.
            */
@@ -65,8 +65,8 @@ export type EventContentBodyViewProps =
            * Optional ref to forward to the rendered span element.
            */
           ref?: Ref<HTMLSpanElement>;
-      })
-    | (EventContentBodyBaseViewProps & {
+      }
+    | {
           /**
            * Render the content in a div element.
            */
