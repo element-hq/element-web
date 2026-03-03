@@ -10,20 +10,21 @@ import {
     type MasConfig,
     type StartedMatrixAuthenticationServiceContainer,
     type StartedSynapseContainer,
-    type SynapseConfig,
+    type SynapseContainer,
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
-import type { Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api";
-import type { Fixtures } from "@playwright/test";
+import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import { type StartedNetwork } from "testcontainers";
+import { type Logger } from "@element-hq/element-web-playwright-common/lib/utils/logger.ts";
+import { type Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api";
 
-import { test as base, expect } from "../../../../playwright/element-web-test";
 import { RestrictedGuestsSynapseContainer, RestrictedGuestsSynapseWithMasContainer } from "./services";
+import { test as subBase, expect } from "../../../../playwright/element-web-test";
 
 const MAS_CLIENT_ID = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
 const MAS_CLIENT_SECRET = "restricted-guests-secret";
 const MAS_SHARED_SECRET = "restricted-guests-shared-secret";
-const MAS_INTERNAL_URL = "http://mas:8080";
+const MAS_INTERNAL_URL = "http://guest-mas:8080";
 const GUEST_HOMESERVER_NAME = "guest-homeserver";
-const GUEST_HOMESERVER_INTERNAL_URL = "http://guest-homeserver:8008";
 
 const MAS_HTTP_LISTENERS: NonNullable<MasConfig["http"]>["listeners"] = [
     {
@@ -60,16 +61,10 @@ const MAS_HTTP_LISTENERS: NonNullable<MasConfig["http"]>["listeners"] = [
     },
 ];
 
-const MAS_CONFIG: Partial<MasConfig> = {
+const BASE_MAS_CONFIG: Partial<MasConfig> = {
     http: {
         listeners: MAS_HTTP_LISTENERS,
         public_base: "",
-    },
-    matrix: {
-        kind: "synapse",
-        homeserver: GUEST_HOMESERVER_NAME,
-        endpoint: GUEST_HOMESERVER_INTERNAL_URL,
-        secret: MAS_SHARED_SECRET,
     },
     policy: {
         data: {
@@ -88,17 +83,43 @@ const MAS_CONFIG: Partial<MasConfig> = {
     ],
 };
 
-const applySharedTestConfig = (testInstance: typeof base) => {
-    testInstance.use({
-        displayName: "Tommy",
-        synapseConfig: {
-            allow_guest_access: true,
-        },
-        labsFlags: ["feature_ask_to_join"],
-    });
-};
+declare module "@element-hq/element-web-module-api" {
+    export interface Config {
+        embedded_pages?: {
+            login_for_welcome?: boolean;
+        };
+    }
+}
 
-const sharedFixtures: Fixtures<{ testRoomId: string }, { bot: Credentials }, any, any> = {
+async function getMas(
+    name: string,
+    postgres: StartedPostgreSqlContainer,
+    network: StartedNetwork,
+    logger: Logger,
+    config: Partial<MasConfig>,
+): Promise<StartedMatrixAuthenticationServiceContainer> {
+    const container = await new MatrixAuthenticationServiceContainer(postgres)
+        .withNetwork(network)
+        .withNetworkAliases(name)
+        .withLogConsumer(logger.getConsumer(name))
+        .withConfig(config)
+        .start();
+    return container;
+}
+
+// We do some wacky things here in order to run the test suite against multiple homeserver configurations
+const base = subBase.extend<
+    {
+        testRoomId: string;
+    },
+    {
+        auth: "mas" | "legacy";
+
+        bot: Credentials;
+        guestMas?: StartedMatrixAuthenticationServiceContainer;
+        guestHomeserver: StartedSynapseContainer;
+    }
+>({
     testRoomId: [
         async ({ homeserver, bot }, use) => {
             const { room_id: roomId } = (await homeserver.csApi.request("POST", "/v3/createRoom", bot.accessToken, {
@@ -125,158 +146,184 @@ const sharedFixtures: Fixtures<{ testRoomId: string }, { bot: Credentials }, any
         },
         { scope: "worker" },
     ],
-};
 
-const test = base.extend<
-    {
-        testRoomId: string;
-    },
-    {
-        guestHomeserver: StartedSynapseContainer;
-        bot: Credentials;
-    }
->({
-    ...sharedFixtures,
-    guestHomeserver: [
-        async ({ logger, synapseConfig, network }, use) => {
-            const container = await new RestrictedGuestsSynapseContainer()
-                .withConfig(synapseConfig)
-                .withConfig({ server_name: GUEST_HOMESERVER_NAME })
-                .withNetwork(network)
-                .withNetworkAliases(GUEST_HOMESERVER_NAME)
-                .withLogConsumer(logger.getConsumer("guest_homeserver"))
-                .start();
-
+    auth: ["mas", { scope: "worker" }],
+    // Optional MAS on the default homeserver, enabled only when we are testing the non-guest login UX
+    mas: [
+        async ({ logger, network, postgres, auth, synapseConfig }, use) => {
+            if (auth !== "mas" || synapseConfig.allow_guest_access !== false) {
+                return use(undefined);
+            }
+            const container = await getMas("mas", postgres, network, logger, {
+                ...BASE_MAS_CONFIG,
+                matrix: {
+                    kind: "synapse",
+                    homeserver: "homeserver",
+                    endpoint: "http://homeserver:8008",
+                    secret: MAS_SHARED_SECRET,
+                },
+            });
             await use(container);
             await container.stop();
         },
         { scope: "worker" },
     ],
-});
-
-const masTest = base.extend<
-    {
-        testRoomId: string;
-    },
-    {
-        guestHomeserver: StartedSynapseContainer;
-        guestMas: StartedMatrixAuthenticationServiceContainer;
-        bot: Credentials;
-    }
->({
-    ...sharedFixtures,
+    // Optional MAS on the module homeserver
     guestMas: [
-        async ({ logger, network, postgres }, use) => {
-            const container = await new MatrixAuthenticationServiceContainer(postgres)
+        async ({ logger, network, auth }, use) => {
+            if (auth !== "mas") {
+                return use(undefined);
+            }
+
+            // We need a separate postgres so it doesn't fight with the default MAS
+            const postgres = await new PostgreSqlContainer("postgres:13.3-alpine")
                 .withNetwork(network)
-                .withNetworkAliases("mas")
-                .withLogConsumer(logger.getConsumer("guest_mas"))
-                .withConfig(MAS_CONFIG)
+                .withNetworkAliases("guest-mas-postgres")
+                .withLogConsumer(logger.getConsumer("guest-mas-postgres"))
                 .start();
 
+            const container = await getMas("guest-mas", postgres, network, logger, {
+                ...BASE_MAS_CONFIG,
+                matrix: {
+                    kind: "synapse",
+                    homeserver: GUEST_HOMESERVER_NAME,
+                    endpoint: "http://guest-homeserver:8008",
+                    secret: MAS_SHARED_SECRET,
+                },
+            });
             await use(container);
             await container.stop();
+            await postgres.stop();
         },
         { scope: "worker" },
     ],
+    // Module homeserver
     guestHomeserver: [
         async ({ logger, synapseConfig, network, guestMas }, use) => {
-            const container = await new RestrictedGuestsSynapseWithMasContainer({
-                adminApiBaseUrl: MAS_INTERNAL_URL,
-                oauthBaseUrl: MAS_INTERNAL_URL,
-                clientId: MAS_CLIENT_ID,
-                clientSecret: MAS_CLIENT_SECRET,
-            })
+            let container: SynapseContainer;
+            if (guestMas) {
+                container = new RestrictedGuestsSynapseWithMasContainer({
+                    adminApiBaseUrl: MAS_INTERNAL_URL,
+                    oauthBaseUrl: MAS_INTERNAL_URL,
+                    clientId: MAS_CLIENT_ID,
+                    clientSecret: MAS_CLIENT_SECRET,
+                }).withMatrixAuthenticationService(guestMas);
+            } else {
+                container = new RestrictedGuestsSynapseContainer();
+            }
+
+            const startedContainer = await container
                 .withConfig(synapseConfig)
                 .withConfig({
                     server_name: GUEST_HOMESERVER_NAME,
-                    matrix_authentication_service: {
-                        enabled: true,
-                        endpoint: `${MAS_INTERNAL_URL}/`,
-                        secret: MAS_SHARED_SECRET,
-                    },
-                    // Must be disabled when using MAS.
-                    password_config: {
-                        enabled: false,
-                    },
-                    // Must be disabled when using MAS.
-                    enable_registration: false,
-                } as Partial<SynapseConfig>)
-                .withMatrixAuthenticationService(guestMas)
+                })
                 .withNetwork(network)
                 .withNetworkAliases(GUEST_HOMESERVER_NAME)
                 .withLogConsumer(logger.getConsumer("guest_homeserver"))
                 .start();
 
-            await use(container);
-            await container.stop();
+            await use(startedContainer);
+            await startedContainer.stop();
         },
         { scope: "worker" },
     ],
+    displayName: "Tommy",
+    labsFlags: ["feature_ask_to_join"],
+    config: {
+        embedded_pages: {
+            login_for_welcome: true,
+        },
+    },
+    page: async ({ page }, use) => {
+        await page.goto("/");
+        await use(page);
+    },
 });
 
-type RestrictedGuestsTestInstance = typeof test;
-
-const defineRestrictedGuestsTests = (testInstance: RestrictedGuestsTestInstance, suiteName: string) => {
-    applySharedTestConfig(testInstance);
-
-    testInstance.describe(suiteName, () => {
-        testInstance.use({
-            page: async ({ page }, use) => {
-                await page.goto("/");
-                await use(page);
+for (const auth of ["mas", "legacy"] as const) {
+    for (const guestsEnabled of [true, false]) {
+        const test = base.extend({
+            auth,
+            synapseConfig: {
+                allow_guest_access: guestsEnabled,
             },
         });
 
-        testInstance("should error if config is missing", async ({ page }) => {
-            await expect(page.getByText("Your Element is misconfigured")).toBeVisible();
-            await expect(page.getByText("Errors in module configuration")).toBeVisible();
-        });
-
-        testInstance.describe("with config", () => {
-            testInstance.beforeEach(({ config, guestHomeserver }) => {
-                config["io.element.element-web-modules.restricted-guests"] = {
-                    guest_user_homeserver_url: guestHomeserver.baseUrl,
-                };
+        test.describe(`Restricted guests auth=${auth} guests=${guestsEnabled}`, () => {
+            test("should error if config is missing", async ({ page }) => {
+                await expect(page.getByText("Your Element is misconfigured")).toBeVisible();
+                await expect(page.getByText("Errors in module configuration")).toBeVisible();
             });
 
-            testInstance(
-                "should show the default room preview bar for logged in users",
-                { tag: ["@screenshot"] },
-                async ({ page, user, testRoomId }) => {
-                    // Go to a room we are not a member of
-                    await page.goto(`/#/room/${testRoomId}`);
+            test.describe("with config", () => {
+                test.beforeEach(({ config, guestHomeserver }) => {
+                    config["io.element.element-web-modules.restricted-guests"] = {
+                        guest_user_homeserver_url: guestHomeserver.baseUrl,
+                    };
+                });
 
-                    const button = page.getByRole("button", { name: "Join the discussion" });
-                    await expect(button).toBeVisible();
-                },
-            );
+                if (guestsEnabled) {
+                    // The screenshots between the two auth type tests for guests should be identical.
+                    test(
+                        "should show the default room preview bar for logged in users",
+                        { tag: ["@screenshot"] },
+                        async ({ page, user, testRoomId }) => {
+                            // Go to a room we are not a member of
+                            await page.goto(`/#/room/${testRoomId}`);
+                            const button = page.getByRole("button", { name: "Join the discussion" });
+                            await expect(button).toBeVisible();
+                        },
+                    );
 
-            testInstance(
-                "should show the module's room preview bar for guests",
-                { tag: ["@screenshot"] },
-                async ({ page, testRoomId }) => {
-                    // Go to a room we are not a member of
-                    await page.goto(`/#/room/${testRoomId}`);
+                    test(
+                        "should show the module's room preview bar for guests",
+                        { tag: ["@screenshot"] },
+                        async ({ page, testRoomId }) => {
+                            // Go to a room we are not a member of
+                            await page.goto(`/#/room/${testRoomId}`);
 
-                    const button = page.getByRole("button", { name: "Join", exact: true });
-                    await expect(button).toBeVisible();
-                    await expect(page.locator(".mx_RoomPreviewBar")).toMatchScreenshot(`preview-bar.png`);
+                            const button = page.getByRole("button", { name: "Join as guest", exact: true });
+                            await expect(button).toBeVisible();
+                            await expect(page.locator(".mx_RoomPreviewBar")).toMatchScreenshot(`preview-bar.png`);
 
-                    await button.click();
-                    const dialog = page.getByRole("dialog");
-                    await expect(dialog).toMatchScreenshot(`dialog.png`);
+                            await button.click();
+                            const dialog = page.getByRole("dialog");
+                            await expect(dialog).toMatchScreenshot(`dialog.png`);
 
-                    await dialog.getByPlaceholder("Name").fill("Jim");
-                    await dialog.getByRole("button", { name: "Continue as guest" }).click();
+                            await dialog.getByPlaceholder("Name").fill("Jim");
+                            await dialog.getByRole("button", { name: "Continue as guest" }).click();
 
-                    await expect(page.getByText("Ask to join?")).toBeVisible();
-                },
-            );
+                            await expect(page.getByText("Ask to join?")).toBeVisible();
+                        },
+                    );
+                } else {
+                    test.use({
+                        page: async ({ page, testRoomId }, use) => {
+                            // Go to a room we are not a member of
+                            await page.goto(`/#/room/${testRoomId}`);
+                            await use(page);
+                        },
+                        user: async ({ pageWithCredentials, credentials }, use) => {
+                            await use(credentials);
+                        },
+                    });
+
+                    test("should show the module login ux", { tag: ["@screenshot"] }, async ({ page }) => {
+                        const button = page.getByRole("button", { name: "Join as guest", exact: true });
+                        await expect(button).toBeVisible();
+                        await expect(page.getByRole("main")).toMatchScreenshot(`login-${auth}.png`);
+
+                        await button.click();
+                        const dialog = page.getByRole("dialog");
+                        await expect(dialog).toMatchScreenshot(`dialog.png`);
+
+                        await dialog.getByPlaceholder("Name").fill("Jim");
+                        await dialog.getByRole("button", { name: "Continue as guest" }).click();
+
+                        await expect(page.getByText("Join the discussion")).toBeVisible();
+                    });
+                }
+            });
         });
-    });
-};
-
-// The screenshots between the two tests should be identical.
-defineRestrictedGuestsTests(test, "Restricted Guests");
-defineRestrictedGuestsTests(masTest as RestrictedGuestsTestInstance, "Restricted Guests (MAS)");
+    }
+}
