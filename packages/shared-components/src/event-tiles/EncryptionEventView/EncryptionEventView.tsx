@@ -35,8 +35,6 @@ export type EncryptionEventViewSnapshot = {
     encryptedStateEvents?: boolean;
     /** Display name for DM partner, used by ENABLED_DM subtitle text. */
     userName?: string;
-    /** Optional CSS classes passed through to EventTileBubble. */
-    className?: string;
     /** Optional timestamp element rendered in the EventTileBubble footer slot. */
     timestamp?: JSX.Element;
 };
@@ -52,14 +50,33 @@ export interface EncryptionEventViewProps {
      */
     vm: ViewModel<EncryptionEventViewSnapshot>;
     /**
-     * Ref forwarded to the root DOM element.
+     * Optional CSS classes passed through to EventTileBubble.
+     */
+    className?: string;
+    /**
+     * Optional Ref forwarded to the root DOM element.
      */
     ref?: React.RefObject<HTMLDivElement>;
 }
 
-export function EncryptionEventView({ vm, ref }: Readonly<EncryptionEventViewProps>): JSX.Element {
+/**
+ * Renders a timeline bubble describing an encryption-related room event.
+ *
+ * Text and icon are selected from `snapshot.state` with optional context:
+ * - `encryptedStateEvents` switches to state-event specific wording.
+ * - `userName` is used for DM-specific subtitle text.
+ * - `timestamp` renders in the bubble footer slot.
+ *
+ * Use `className` for host-level styling, following the default React pattern.
+ *
+ * @example
+ * ```tsx
+ * <EncryptionEventView vm={encryptionEventVm} className="encryptionEventCustomClass" />
+ * ```
+ */
+export function EncryptionEventView({ vm, ref, className }: Readonly<EncryptionEventViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { state, encryptedStateEvents, userName, className, timestamp } = useViewModel(vm);
+    const { state, encryptedStateEvents, userName, timestamp } = useViewModel(vm);
 
     let icon = <LockSolidIcon />;
     let title = encryptedStateEvents ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled");

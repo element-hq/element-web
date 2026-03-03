@@ -717,7 +717,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               style="height: 400px;"
             >
               <div
-                class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
+                class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent"
               >
                 <svg
                   fill="currentColor"

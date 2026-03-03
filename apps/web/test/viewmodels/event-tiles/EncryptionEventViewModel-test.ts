@@ -64,7 +64,6 @@ describe("EncryptionEventViewModel", () => {
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.ENABLED));
         expect(vm.getSnapshot()).toMatchObject({
             state: EncryptionEventState.ENABLED,
-            className: "mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon",
             encryptedStateEvents: false,
         });
     });
@@ -125,7 +124,6 @@ describe("EncryptionEventViewModel", () => {
 
         const vm = createVm();
         await waitFor(() => expect(vm.getSnapshot().state).toBe(EncryptionEventState.UNSUPPORTED));
-        expect(vm.getSnapshot().className).toBe("mx_EventTileBubble mx_cryptoEvent");
     });
 
     it("sets ENABLED_DM with partner display name", async () => {
