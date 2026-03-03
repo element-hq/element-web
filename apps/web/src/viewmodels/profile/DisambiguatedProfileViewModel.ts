@@ -6,7 +6,6 @@
  */
 import {
     BaseViewModel,
-    type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
