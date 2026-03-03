@@ -14,7 +14,7 @@ exports[`<PresenceIconView/> renders correctly for presence=busy 1`] = `
       xmlns="http://www.w3.org/2000/svg"
     >
       <g
-        clip-path="url(#a)"
+        clip-path="url(#cpd_PresenceStrikethrough8X8Icon_a)"
       >
         <path
           clip-rule="evenodd"
@@ -24,7 +24,7 @@ exports[`<PresenceIconView/> renders correctly for presence=busy 1`] = `
       </g>
       <defs>
         <clippath
-          id="a"
+          id="cpd_PresenceStrikethrough8X8Icon_a"
         >
           <path
             d="M0 0h8v8H0z"
@@ -50,7 +50,7 @@ exports[`<PresenceIconView/> renders correctly for presence=offline 1`] = `
       xmlns="http://www.w3.org/2000/svg"
     >
       <g
-        clip-path="url(#a)"
+        clip-path="url(#cpd_PresenceOutline8X8Icon_a)"
       >
         <path
           clip-rule="evenodd"
@@ -60,7 +60,7 @@ exports[`<PresenceIconView/> renders correctly for presence=offline 1`] = `
       </g>
       <defs>
         <clippath
-          id="a"
+          id="cpd_PresenceOutline8X8Icon_a"
         >
           <path
             d="M0 0h8v8H0z"
@@ -86,7 +86,7 @@ exports[`<PresenceIconView/> renders correctly for presence=online 1`] = `
       xmlns="http://www.w3.org/2000/svg"
     >
       <g
-        clip-path="url(#a)"
+        clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
       >
         <path
           d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
@@ -94,7 +94,7 @@ exports[`<PresenceIconView/> renders correctly for presence=online 1`] = `
       </g>
       <defs>
         <clippath
-          id="a"
+          id="cpd_PresenceSolid8X8Icon_a"
         >
           <path
             d="M0 0h8v8H0z"
@@ -120,7 +120,7 @@ exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreacha
       xmlns="http://www.w3.org/2000/svg"
     >
       <g
-        clip-path="url(#a)"
+        clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
       >
         <path
           d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
@@ -128,7 +128,7 @@ exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreacha
       </g>
       <defs>
         <clippath
-          id="a"
+          id="cpd_PresenceSolid8X8Icon_a"
         >
           <path
             d="M0 0h8v8H0z"
@@ -154,7 +154,7 @@ exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreacha
       xmlns="http://www.w3.org/2000/svg"
     >
       <g
-        clip-path="url(#a)"
+        clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
       >
         <path
           d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
@@ -162,7 +162,7 @@ exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreacha
       </g>
       <defs>
         <clippath
-          id="a"
+          id="cpd_PresenceSolid8X8Icon_a"
         >
           <path
             d="M0 0h8v8H0z"
