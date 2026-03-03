@@ -25,6 +25,7 @@ import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotif
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
+import { keepIfSame } from "../../utils/keepIfSame";
 
 interface RoomListViewViewModelProps {
     client: MatrixClient;
@@ -132,9 +133,6 @@ export class RoomListViewViewModel
 
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
-
-        // Clear view models since room list changed
-        this.clearViewModels();
 
         this.updateRoomListData();
     };
@@ -291,11 +289,13 @@ export class RoomListViewViewModel
 
         const newSpaceId = this.roomsResult.spaceId;
 
-        // Clear view models since room list structure changed
-        this.clearViewModels();
-
         // Detect space change
         if (oldSpaceId !== newSpaceId) {
+            // Clear view models when the space changes
+            // We only want to do this on space changes, not on regular list updates, to preserve view models when possible
+            // The view models are disposed when scrolling out of view (handled by updateVisibleRooms)
+            this.clearViewModels();
+
             // Space changed - get the last selected room for the new space to prevent flicker
             const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
 
@@ -408,13 +408,16 @@ export class RoomListViewViewModel
         // Build the complete state atomically to ensure consistency
         // roomIds and roomListState must always be in sync
         const roomIds = this.roomIds;
+
+        // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
+        const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
+        const newFilterKeys = this.roomsResult.filterKeys?.map((k) => String(k));
         const roomListState: RoomListViewState = {
             activeRoomIndex,
             spaceId: this.roomsResult.spaceId,
-            filterKeys: this.roomsResult.filterKeys?.map((k) => String(k)),
+            filterKeys: keepIfSame(previousFilterKeys, newFilterKeys),
         };
 
-        const filterIds = [...filterKeyToIdMap.values()];
         const activeFilterId = this.activeFilter !== undefined ? filterKeyToIdMap.get(this.activeFilter) : undefined;
         const isRoomListEmpty = roomIds.length === 0;
         const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
@@ -423,7 +426,6 @@ export class RoomListViewViewModel
         this.snapshot.merge({
             isLoadingRooms,
             isRoomListEmpty,
-            filterIds,
             activeFilterId,
             roomListState,
             roomIds,

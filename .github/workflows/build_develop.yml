@@ -70,7 +70,6 @@ jobs:
                   tar xf apps/web/dist/develop.tar.gz -C _deploy --strip-components=1
 
             - name: Copy config
-              working-directory: apps/web
               run: cp apps/web/element.io/develop/config.json _deploy/config.json
 
             - name: Populate 404.html

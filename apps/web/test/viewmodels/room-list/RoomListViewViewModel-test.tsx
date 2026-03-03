@@ -124,6 +124,20 @@ describe("RoomListViewViewModel", () => {
 
             expect(viewModel.getSnapshot().isLoadingRooms).toBe(false);
         });
+
+        // This test ensures that the room list item vms are preserved when the room list is changing
+        it("should keep existing view model when ListsUpdate event fires", () => {
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
+
+            // Create view model for room1
+            const room1VM = viewModel.getRoomItemViewModel("!room1:server");
+            expect(room1VM).toBeDefined();
+
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            // View model should be still valid
+            expect(room1VM.isDisposed).toBe(false);
+        });
     });
 
     describe("Space switching", () => {
@@ -294,24 +308,6 @@ describe("RoomListViewViewModel", () => {
 
             expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
             expect(viewModel.getSnapshot().roomIds).toEqual(["!room1:server", "!room2:server", "!room3:server"]);
-        });
-
-        it("should clear view models when filter changes", () => {
-            viewModel = new RoomListViewViewModel({ client: matrixClient });
-
-            // Get view models
-            const vm1 = viewModel.getRoomItemViewModel("!room1:server");
-            const disposeSpy = jest.spyOn(vm1, "dispose");
-
-            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
-                spaceId: "home",
-                rooms: [room2],
-                filterKeys: [FilterKey.UnreadFilter],
-            });
-
-            viewModel.onToggleFilter("unread");
-
-            expect(disposeSpy).toHaveBeenCalled();
         });
     });
 

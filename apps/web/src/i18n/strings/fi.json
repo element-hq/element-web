@@ -603,12 +603,12 @@
         "mode_plain": "Piilota muotoilu",
         "mode_rich_text": "Näytä muotoilu",
         "no_perms_notice": "Sinulla ei ole oikeutta kirjoittaa tässä huoneessa",
-        "placeholder": "Lähetä viesti…",
-        "placeholder_encrypted": "Lähetä salattu viesti…",
-        "placeholder_reply": "Lähetä vastaus…",
-        "placeholder_reply_encrypted": "Lähetä salattu vastaus…",
-        "placeholder_thread": "Vastaa ketjuun…",
-        "placeholder_thread_encrypted": "Vastaa salattuun ketjuun…",
+        "placeholder": "Lähetä salaamaton viesti…",
+        "placeholder_encrypted": "Lähetä viesti…",
+        "placeholder_reply": "Lähetä salaamaton vastaus…",
+        "placeholder_reply_encrypted": "Lähetä vastaus…",
+        "placeholder_thread": "Vastaa salaamattomaan ketjuun…",
+        "placeholder_thread_encrypted": "Vastaa ketjuun…",
         "poll_button": "Kysely",
         "poll_button_no_perms_description": "Sinulla ei ole oikeutta aloittaa kyselyitä tässä huoneessa.",
         "poll_button_no_perms_title": "Lisäoikeuksia tarvitaan",
@@ -784,10 +784,10 @@
     "encryption": {
         "access_secret_storage_dialog": {
             "key_validation_text": {
-                "wrong_security_key": "Väärä palautusavain"
+                "wrong_security_key": "Antamasi palautusavain on virheellinen."
             },
             "restoring": "Palautetaan avaimia varmuuskopiosta",
-            "security_key_title": "Palautusavain"
+            "security_key_title": "Anna palautusavaimesi"
         },
         "bootstrap_title": "Otetaan avaimet käyttöön",
         "confirm_encryption_setup_body": "Napsauta alla olevaa painiketta vahvistaaksesi salauksen asettamisen.",
@@ -1721,7 +1721,7 @@
         "pinned_message_badge": "Kiinnitetty viesti",
         "pinned_message_banner": {
             "button_view_all": "Näytä kaikki",
-            "description": "Tässä huoneessa on kiinnitettyjä viestejä. Napsauta nähdäksesi ne.",
+            "description": "Kiinnitetyt viestit",
             "title": "<bold>%(index)s/%(length)s</bold> kiinnitettyä viestiä"
         },
         "read_topic": "Lue aihe napsauttamalla",
@@ -1959,11 +1959,11 @@
             "error_join_rule_change_title": "Liittymissääntöjen päivittäminen epäonnistui",
             "error_join_rule_change_unknown": "Tuntematon virhe",
             "guest_access_warning": "Käyttäjät, joilla on tuettu asiakasohjelma, voivat liittyä huoneeseen ilman rekisteröityä käyttäjätiliä.",
-            "history_visibility_invited": "Vain jäsenet (kutsumisestaan lähtien)",
+            "history_visibility_invited": "Jäsenet kutsusta lähtien",
             "history_visibility_legend": "Ketkä voivat lukea historiaa?",
-            "history_visibility_shared": "Vain jäsenet (tämän valinnan tekemisestä lähtien)",
-            "history_visibility_warning": "Muutokset historian lukuoikeuksiin pätevät vain tuleviin viesteihin tässä huoneessa. Nykyisen historian näkyvyys ei muutu.",
-            "history_visibility_world_readable": "Kaikki",
+            "history_visibility_shared": "Jäsenet (koko historia)",
+            "history_visibility_warning": "Muutokset eivät vaikuta aiempiin viesteihin, vain uusiin. <a>Lue lisää</a>",
+            "history_visibility_world_readable": "Kuka tahansa (historia on julkinen)",
             "join_rule_description": "Päätä ketkä voivat liittyä huoneeseen %(roomName)s.",
             "join_rule_invite": "Yksityinen (vain kutsulla)",
             "join_rule_invite_description": "Vain kutsutut ihmiset voivat liittyä.",
@@ -2243,13 +2243,13 @@
                 "download_or_copy": "%(downloadButton)s tai %(copyButton)s",
                 "enter_phrase_title": "Kirjoita turvalause",
                 "enter_phrase_to_confirm": "Kirjoita turvalause toistamiseen vahvistaaksesi sen.",
-                "generate_security_key_description": "Luomme sinulle turva-vaimen talletettavaksi jonnekin turvalliseen paikkaan, kuten salasanojen hallintasovellukseen tai kassakaappiin.",
+                "generate_security_key_description": "Luomme sinulle palautusavaimen talletettavaksi jonnekin turvalliseen paikkaan, kuten salasanojen hallintasovellukseen tai kassakaappiin.",
                 "generate_security_key_title": "Luo palautusavain",
                 "pass_phrase_match_failed": "Ei täsmää.",
                 "pass_phrase_match_success": "Täsmää!",
                 "phrase_strong_enough": "Hienoa! Tämä turvalause vaikuttaa riittävän vahvalta.",
                 "secret_storage_query_failure": "Salaisen tallennustilan tilaa ei voi kysellä",
-                "security_key_safety_reminder": "Talleta turva-avaimesi turvalliseen paikkaan, kuten salasanojen hallintasovellukseen tai kassakaappiin, sillä sitä käytetään salaamasi datan suojaamiseen.",
+                "security_key_safety_reminder": "Talleta palautusavaimesi turvalliseen paikkaan, kuten salasanojen hallintasovellukseen tai kassakaappiin, sillä sitä käytetään salaamiesi tietojen suojaamiseen.",
                 "set_phrase_again": "Palaa asettamaan se uudelleen.",
                 "settings_reminder": "Voit myös ottaa käyttöön suojatun varmuuskopioinnin ja hallita avaimia asetuksista.",
                 "title_confirm_phrase": "Vahvista turvalause",
@@ -2383,7 +2383,7 @@
             "message_search_unsupported": "%(brand)sissa ei ole joitain komponentteja, joita tarvitaan viestien turvalliseen välimuistitallennukseen. Jos haluat kokeilla tätä ominaisuutta, käännä mukautettu %(brand)s Desktop, jossa on mukana <nativeLink>hakukomponentit</nativeLink>.",
             "record_session_details": "Talleta asiakasohjelmiston nimi, versio ja URL-osoite tunnistaaksesi istunnot istuntohallinnassa",
             "send_analytics": "Lähetä analytiikkatietoja",
-            "strict_encryption": "Älä koskaan lähetä salattuja viestejä vahvistamattomiin istuntoihin tästä istunnosta"
+            "strict_encryption": "Lähetä viestejä vain vahvistetuille käyttäjille"
         },
         "send_read_receipts": "Lähetä lukukuittaukset",
         "send_read_receipts_unsupported": "Palvelimesi ei tue lukukuittausten lähettämisen poistamista käytöstä.",
@@ -2622,7 +2622,7 @@
         "upgraderoom": "Päivittää huoneen uuteen versioon",
         "upgraderoom_permission_error": "Sinulla ei ole vaadittavia oikeuksia tämän komennon käyttämiseksi.",
         "usage": "Käyttö",
-        "verify": "Varmentaa käyttäjän, istunnon ja julkiset avaimet",
+        "verify": "Vahvista yksi omista laitteistasi manuaalisesti",
         "whois": "Näyttää tietoa käyttäjästä"
     },
     "space": {
@@ -3476,7 +3476,7 @@
         "error_need_kick_permission": "Sinun täytyy pystyä potkia käyttäjiä voidaksesi tehdä tuon.",
         "error_need_to_be_logged_in": "Sinun pitää olla kirjautunut.",
         "error_unable_start_audio_stream_description": "Äänen suoratoiston aloittaminen ei onnistu.",
-        "modal_data_warning": "Tällä näytöllä olevaa tietoa jaetaan verkkotunnuksen %(widgetDomain)s kanssa",
+        "modal_data_warning": "Alla olevat tiedot jaetaan verkkotunnuksen %(widgetDomain)s kanssa",
         "no_name": "Tuntematon sovellus",
         "open_id_permissions_dialog": {
             "remember_selection": "Muista tämä"

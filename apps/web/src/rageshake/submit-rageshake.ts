@@ -22,6 +22,7 @@ import SdkConfig from "../SdkConfig";
 import { getServerVersionFromFederationApi } from "../components/views/dialogs/devtools/ServerInfo";
 import type * as Tar from "tar-js";
 import { BugReportEndpointURLLocal } from "../IConfigOptions";
+import { getBrowserSupport } from "../SupportedBrowser";
 
 interface IOpts {
     labels?: string[];
@@ -118,6 +119,7 @@ async function collectBaseInformation(body: FormData, opts: IOpts): Promise<void
     body.append("app", opts.customApp || "element-web");
     body.append("version", version ?? "UNKNOWN");
     body.append("user_agent", userAgent);
+    body.append("supported_environment", getBrowserSupport().toString());
     body.append("installed_pwa", installedPWA);
     body.append("touch_input", touchInput);
 

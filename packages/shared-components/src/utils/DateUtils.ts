@@ -33,3 +33,17 @@ export function formatSeconds(inSeconds: number): string {
 
     return output;
 }
+
+/**
+ * Formats dates to be compatible with attributes of a `<input type="date">`. Dates
+ * should be formatted like "2020-06-23" (formatted according to ISO8601).
+ *
+ * @param date The date to format.
+ * @returns The date string in ISO8601 format ready to be used with an `<input>`
+ */
+export function formatDateForInput(date: Date): string {
+    const year = `${date.getFullYear()}`.padStart(4, "0");
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
