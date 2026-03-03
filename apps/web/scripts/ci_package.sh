@@ -6,6 +6,6 @@ set -ex
 
 rm dist/element-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
-DIST_VERSION=`$(dirname $0)/get-version-from-git.sh`
+DIST_VERSION=`$(dirname $0)/../../../scripts/get-version-from-git.sh`
 
 CI_PACKAGE=true DIST_VERSION=$DIST_VERSION scripts/package.sh

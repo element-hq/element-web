@@ -16,8 +16,8 @@ import { mediaFromMxc } from "../../customisations/Media";
 import { _t } from "../../languageHandler";
 import { formatList } from "../../utils/FormattingUtils";
 import dis from "../../dispatcher/dispatcher";
-import { REACTION_SHORTCODE_KEY } from "../../components/views/messages/ReactionsRow";
 import { ReactionsRowButtonTooltipViewModel } from "./ReactionsRowButtonTooltipViewModel";
+import { REACTION_SHORTCODE_KEY } from "./reactionShortcode";
 
 export interface ReactionsRowButtonViewModelProps {
     /**

@@ -8,15 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type MessagePanel from "../MessagePanel";
 import { SeparatorKind, type WrappedEvent } from "../MessagePanel";
 import { BaseGrouper } from "./BaseGrouper";
 import { hasText } from "../../../TextForEvent";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import DateSeparator from "../../views/messages/DateSeparator";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
+import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
 
 const groupedStateEvents = [
     EventType.RoomMember,
@@ -24,6 +25,14 @@ const groupedStateEvents = [
     EventType.RoomServerAcl,
     EventType.RoomPinnedEvents,
 ];
+
+/**
+ * Creates and auto-disposes the DateSeparatorViewModel for grouped timeline rendering.
+ */
+function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
+    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    return <DateSeparatorView vm={vm} />;
+}
 
 // Wrap consecutive grouped events in a ListSummary
 export class MainGrouper extends BaseGrouper {
@@ -113,10 +122,11 @@ export class MainGrouper extends BaseGrouper {
         const ret: ReactNode[] = [];
 
         if (panel.wantsSeparator(this.prevEvent, this.events[0].event) === SeparatorKind.Date) {
+            const separatorRoomId = this.events[0].event.getRoomId()!;
             const ts = this.events[0].event.getTs();
             ret.push(
-                <li key={ts + "~"}>
-                    <DateSeparator roomId={this.events[0].event.getRoomId()!} ts={ts} />
+                <li key={`${separatorRoomId}-${ts}~`}>
+                    <DateSeparatorWrapper roomId={separatorRoomId} ts={ts} />
                 </li>,
             );
         }

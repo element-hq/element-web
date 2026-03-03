@@ -27,6 +27,12 @@ export interface TimelineSeparatorProps {
      * Optional children to render inside the timeline separator
      */
     children?: PropsWithChildren["children"];
+    /**
+     * ARIA role for the separator container.
+     * Use "none" when the separator contains interactive controls.
+     * @default "separator"
+     */
+    role?: "separator" | "none";
 }
 
 /**
@@ -35,13 +41,13 @@ export interface TimelineSeparatorProps {
  * @param label the accessible label string describing the separator
  * @param children the children to draw within the timeline separator
  */
-const TimelineSeparator: React.FC<TimelineSeparatorProps> = ({ label, className, children }) => {
+const TimelineSeparator: React.FC<TimelineSeparatorProps> = ({ label, className, children, role = "separator" }) => {
     // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
     return (
         <Flex
             className={classNames(className, styles.timelineSeparator)}
-            role="separator"
-            aria-label={label}
+            role={role}
+            aria-label={role === "separator" ? label : undefined}
             align="center"
         >
             <hr role="none" />

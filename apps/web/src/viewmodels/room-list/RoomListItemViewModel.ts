@@ -14,7 +14,7 @@ import {
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
-import type { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { Room, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
@@ -36,6 +36,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
+import { type Call, CallEvent } from "../../models/Call";
 
 interface RoomItemProps {
     room: Room;
@@ -52,6 +53,10 @@ export class RoomListItemViewModel
     implements RoomListItemActions
 {
     private notifState: RoomNotificationState;
+    /**
+     * Track the current call for this room to manager listeners
+     */
+    private currentCall: Call | null = null;
 
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
@@ -79,6 +84,8 @@ export class RoomListItemViewModel
 
         // Subscribe to call state changes
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, this.onCallStateChanged);
+        // If there is an active call for this room, listen to participant changes
+        this.listenToCallParticipants();
 
         // Subscribe to room-specific events
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
@@ -86,6 +93,11 @@ export class RoomListItemViewModel
 
         // Load message preview asynchronously (sync data is already complete)
         void this.loadAndSetMessagePreview();
+    }
+
+    public dispose(): void {
+        super.dispose();
+        this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
     }
 
     private onNotificationChanged = (): void => {
@@ -100,9 +112,38 @@ export class RoomListItemViewModel
         void this.loadAndSetMessagePreview();
     };
 
+    /**
+     * Handler for call participant changes. Only updates the item if the call moves between having participants and not having participants, to avoid unnecessary updates.
+     * @param participants The current call participants
+     */
+    private onCallParticipantsChanged = (participants: Map<RoomMember, Set<string>>): void => {
+        const hasCall = Boolean(this.snapshot.current.notification.callType);
+        // There is already an active call, we don't need to update the item
+        if (hasCall && participants.size > 0) return;
+
+        this.updateItem();
+    };
+
+    /**
+     * Listen to participant changes for the current call in this room (if any) to trigger updates when participants join/leave the call.
+     */
+    private listenToCallParticipants(): void {
+        const call = CallStore.instance.getCall(this.props.room.roomId);
+
+        // Remove listener from previous call (if any) and add to new call to track participant changes
+        if (call !== this.currentCall) {
+            this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+            call?.on(CallEvent.Participants, this.onCallParticipantsChanged);
+        }
+        this.currentCall = call;
+    }
+
     private onCallStateChanged = (): void => {
         // Only update if call state for this room actually changed
         const call = CallStore.instance.getCall(this.props.room.roomId);
+
+        this.listenToCallParticipants();
+
         const currentCallType = this.snapshot.current.notification.callType;
         const newCallType =
             call && call.participants.size > 0 ? (call.callType === CallType.Voice ? "voice" : "video") : undefined;

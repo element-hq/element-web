@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useId, useState } from "react";
+import React, { type JSX, memo, useId, useState } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
@@ -53,11 +53,11 @@ export interface RoomListPrimaryFiltersProps {
  * The primary filters component for the room list.
  * Displays a collapsible list of filters with expand/collapse functionality.
  */
-export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({
+export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
     filterIds,
     activeFilterId,
     onToggleFilter,
-}): JSX.Element | null => {
+}: RoomListPrimaryFiltersProps): JSX.Element | null {
     const id = useId();
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -113,4 +113,4 @@ export const RoomListPrimaryFilters: React.FC<RoomListPrimaryFiltersProps> = ({
             </Flex>
         </Flex>
     );
-};
+});

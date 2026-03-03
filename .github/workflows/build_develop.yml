@@ -58,7 +58,7 @@ jobs:
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
               working-directory: apps/web
 
-            - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+            - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: webapp
                   path: apps/web/dist/develop.tar.gz
@@ -70,7 +70,6 @@ jobs:
                   tar xf apps/web/dist/develop.tar.gz -C _deploy --strip-components=1
 
             - name: Copy config
-              working-directory: apps/web
               run: cp apps/web/element.io/develop/config.json _deploy/config.json
 
             - name: Populate 404.html

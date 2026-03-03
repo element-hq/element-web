@@ -29,6 +29,7 @@ import postcssEasings from "postcss-easings";
 
 import pkgJson from "./package.json" with { type: "json" };
 import componentsJson from "./components.json" with { type: "json" };
+import { I18nWebpackPlugin } from "./I18nWebpackPlugin.ts";
 import type { sentryWebpackPlugin as sentryWebpackPluginType } from "@sentry/webpack-plugin/webpack5";
 
 // Environment variables
@@ -618,6 +619,11 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         plugins: [
             ...moduleReplacementPlugins,
 
+            new I18nWebpackPlugin({
+                stringsPath: "src/i18n/strings/",
+                additionalStringsPaths: ["../../packages/shared-components/src/i18n/strings/"],
+            }),
+
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
                 filename: "bundles/[fullhash]/[name].css",
@@ -793,6 +799,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 // Only output errors, warnings, or new compilations.
                 // This hides the massive list of modules.
                 stats: "minimal",
+                writeToDisk: true,
             },
 
             // Enable Hot Module Replacement without page refresh as a fallback in
