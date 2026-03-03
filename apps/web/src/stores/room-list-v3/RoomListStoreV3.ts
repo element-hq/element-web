@@ -14,7 +14,6 @@ import type { ActionPayload } from "../../dispatcher/payloads";
 import type { FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
-import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
@@ -36,6 +35,7 @@ import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../ut
 import { Action } from "../../dispatcher/actions";
 import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
 import { getChangedOverrideRoomMutePushRules } from "./utils";
+import { isRoomVisible } from "./isRoomVisible";
 
 /**
  * These are the filters passed to the room skip list.
@@ -92,7 +92,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     public getRooms(): Room[] {
         let rooms = this.matrixClient?.getVisibleRooms(this.msc3946ProcessDynamicPredecessor) ?? [];
-        rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
+        rooms = rooms.filter((r) => isRoomVisible(r));
         return rooms;
     }
 
@@ -356,7 +356,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private addRoomAndEmit(room: Room, isNewRoom = false): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
         if (isNewRoom) {
-            if (!VisibilityProvider.instance.isRoomVisible(room)) {
+            if (!isRoomVisible(room)) {
                 logger.info(
                     `RoomListStoreV3: Refusing to add new room ${room.roomId} because isRoomVisible returned false.`,
                 );

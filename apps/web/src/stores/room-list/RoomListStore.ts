@@ -28,7 +28,7 @@ import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
-import { VisibilityProvider } from "./filters/VisibilityProvider";
+import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { SpaceWatcher } from "./SpaceWatcher";
 import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
@@ -347,7 +347,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
-        if (!VisibilityProvider.instance.isRoomVisible(room)) {
+        if (!isRoomVisible(room)) {
             return; // don't do anything on rooms that aren't visible
         }
 
@@ -515,7 +515,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
         if (!this.matrixClient) return [];
 
         let rooms = this.matrixClient.getVisibleRooms(this.msc3946ProcessDynamicPredecessor);
-        rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
+        rooms = rooms.filter((r) => isRoomVisible(r));
 
         if (this.prefilterConditions.length > 0) {
             rooms = rooms.filter((r) => {

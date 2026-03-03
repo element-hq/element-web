@@ -15,7 +15,7 @@ import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
 import { type FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
-import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
+import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -116,7 +116,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
 
         let numFavourites = 0;
         for (const room of visibleRooms) {
-            if (VisibilityProvider.instance.isRoomVisible(room)) {
+            if (isRoomVisible(room)) {
                 globalState.add(this.getRoomState(room));
 
                 if (room.tags[DefaultTagID.Favourite] && !room.getType()) numFavourites++;

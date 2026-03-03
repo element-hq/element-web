@@ -32,7 +32,7 @@ import {
 } from "../../../utils/membership";
 import { type OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
-import { VisibilityProvider } from "../filters/VisibilityProvider";
+import { isRoomVisible } from "../../room-list-v3/isRoomVisible";
 import { CallStore, CallStoreEvent } from "../../CallStore";
 
 /**
@@ -171,7 +171,7 @@ export class Algorithm extends EventEmitter {
             val = null;
         }
 
-        if (val && !VisibilityProvider.instance.isRoomVisible(val)) {
+        if (val && !isRoomVisible(val)) {
             val = null; // the room isn't visible - lie to the rest of this function
         }
 
