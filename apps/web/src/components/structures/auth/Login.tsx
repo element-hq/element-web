@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type JSX, memo, type ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
@@ -32,6 +32,7 @@ import AccessibleButton, { type ButtonEvent } from "../../views/elements/Accessi
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
+import { ModuleApi } from "../../../modules/Api.ts";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -45,13 +46,15 @@ interface IProps {
     defaultDeviceDisplayName?: string;
     fragmentAfterLogin?: string;
     defaultUsername?: string;
+    // Any additional content to show, will be rendered between main actions & footer actions
+    children?: ReactNode;
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
     onLoggedIn(data: IMatrixClientCreds): void;
 
     // login shouldn't know or care how registration, password recovery, etc is done.
-    onRegisterClick(): void;
+    onRegisterClick?(): void;
     onForgotPasswordClick?(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;
 }
@@ -88,7 +91,7 @@ type OnPasswordLogin = {
 /*
  * A wire component which glues together login UI components and Login logic
  */
-export default class LoginComponent extends React.PureComponent<IProps, IState> {
+class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     private loginLogic!: Login;
 
@@ -281,7 +284,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     public onRegisterClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.props.onRegisterClick();
+        this.props.onRegisterClick?.();
     };
 
     public onTryRegisterClick = (ev: ButtonEvent): void => {
@@ -512,7 +515,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     )}
                 </div>
             );
-        } else if (SettingsStore.getValue(UIFeature.Registration)) {
+        } else if (this.props.onRegisterClick && SettingsStore.getValue(UIFeature.Registration)) {
             footer = (
                 <span className="mx_AuthBody_changeFlow">
                     {_t(
@@ -546,9 +549,21 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                         disabled={this.isBusy()}
                     />
                     {this.renderLoginComponentForFlows()}
+                    {this.props.children}
                     {footer}
                 </AuthBody>
             </AuthPage>
         );
     }
 }
+
+const WrappedLoginComponent = memo((props: IProps): JSX.Element => {
+    const moduleRenderer = ModuleApi.instance.customComponents.loginComponentRenderer;
+    if (moduleRenderer) {
+        return moduleRenderer(props, (props) => <LoginComponent {...props} />);
+    }
+
+    return <LoginComponent {...props} />;
+});
+
+export default WrappedLoginComponent;
