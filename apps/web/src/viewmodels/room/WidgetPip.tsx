@@ -32,18 +32,19 @@ export class WidgetPipViewModel
     extends BaseViewModel<WidgetPipViewSnapshot, Props>
     implements WidgetPipViewModelInterface
 {
-    private readonly widget: IApp;
     private readonly widgetId: string;
     private readonly room: Room;
+    private readonly widget: IApp;
 
-    private call: Call | null = null;
+    private call: Call | null;
     private viewingRoom?: boolean;
 
     public constructor(props: Props) {
         super(props, { widgetId: props.widgetId, roomName: props.room.name, roomId: props.room.roomId });
-        this.room = props.room;
         this.widgetId = props.widgetId;
+        this.room = props.room;
         this.widget = WidgetStore.instance.getApps(this.room.roomId).find((app) => app.id === this.widgetId)!;
+        this.call = CallStore.instance.getCall(props.room.roomId) ?? null;
 
         this.disposables.trackListener(this.room, RoomEvent.Name, this.onRoomName);
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
