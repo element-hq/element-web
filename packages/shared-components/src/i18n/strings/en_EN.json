@@ -7,6 +7,7 @@
         "dismiss": "Dismiss",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
+        "go": "Go",
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
@@ -20,7 +21,9 @@
         "start_chat": "Start chat"
     },
     "common": {
-        "preferences": "Preferences"
+        "encryption_enabled": "Encryption enabled",
+        "preferences": "Preferences",
+        "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad"
@@ -40,6 +43,9 @@
             "shared": "New members see history",
             "world_readable": "Anyone can see history"
         },
+        "jump_to_date": "Jump to date",
+        "jump_to_date_beginning": "The beginning of the room",
+        "jump_to_date_prompt": "Pick a date to jump to",
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
@@ -117,7 +123,7 @@
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
-            "activity": "Activity",
+            "activity": "Latest activity",
             "atoz": "A-Z",
             "unread_first": "Unread first"
         },
@@ -159,7 +165,19 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
-        }
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Ignored attempt to disable encryption",
+            "disabled": "Encryption not enabled",
+            "enabled": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "enabled_dm": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.",
+            "enabled_local": "Messages in this chat will be end-to-end encrypted.",
+            "parameters_changed": "Some encryption parameters have been changed.",
+            "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
+            "unsupported": "The encryption used by this room isn't supported."
+        },
+        "message_timestamp_received_at": "Received at: %(dateTime)s",
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
     },
     "widget": {
         "context_menu": {

@@ -1,30 +1,30 @@
 /build
 /dist
 /lib
-/node_modules
-/webapp
+node_modules
+/apps/web/webapp
 /*.log
 pnpm-lock.yaml
 electron/dist
 electron/pub
 **/.idea
 /.tmp
-/webpack-stats.json
+webpack-stats.json
 .vscode
 .vscode/
 .env
-/coverage
+coverage
 # Auto-generated file
-/src/modules.ts
-/src/modules.js
-/src/i18n/strings
-/build_config.yaml
+/apps/web/src/modules.ts
+/apps/web/src/modules.js
+src/i18n/strings
+/apps/web//build_config.yaml
 # Raises an error because it contains a template var breaking the script tag
-src/vector/index.html
-src/vector/modernizr.cjs
+/apps/web/src/vector/index.html
+/apps/web/src/vector/modernizr.cjs
 /docs/lib
 /book
-/debian/tmp
+debian/tmp
 /.npmrc
 package-lock.json
 
@@ -33,20 +33,22 @@ package-lock.json
 /docs/changelogs
 
 # Legacy skinning file that some people might still have
-/src/component-index.js
+/apps/web/src/component-index.js
 
 # Downloaded and already minified
-res/jitsi_external_api.min.js
+/apps/web/res/jitsi_external_api.min.js
 
 # This file is also machine-generated
-/playwright/e2e/crypto/test_indexeddb_cryptostore_dump/dump.json
-/playwright/test-results/
-/playwright/html-report/
-/playwright/logs/
-/playwright/snapshots/
+/apps/web/playwright/e2e/crypto/test_indexeddb_cryptostore_dump/dump.json
+/apps/web/playwright/test-results/
+/apps/web/playwright/html-report/
+/apps/web/playwright/logs/
+/apps/web/playwright/snapshots/
 
 # Shared components generated files
-packages/shared-components/dist/
-packages/shared-components/src/i18n/i18nKeys.d.ts
-packages/shared-components/typedoc/
+/packages/shared-components/dist/
+/packages/shared-components/src/i18n/i18nKeys.d.ts
+/packages/shared-components/typedoc/
+/packages/shared-components/storybook-static/
 
+/.nx/

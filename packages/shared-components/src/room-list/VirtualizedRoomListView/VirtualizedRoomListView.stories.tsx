@@ -13,6 +13,7 @@ import type { Room } from "../RoomListItemView";
 import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
 import type { RoomListSnapshot, RoomListViewActions } from "../RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { renderAvatar, createGetRoomItemViewModel, mockRoomIds } from "../story-mocks";
 
@@ -22,7 +23,7 @@ type RoomListStoryProps = RoomListSnapshot & RoomListViewActions & { renderAvata
 const storyRoomIds = mockRoomIds.slice(0, 10);
 
 // Wrapper component that creates a mocked ViewModel
-const RoomListWrapper = ({
+const RoomListWrapperImpl = ({
     onToggleFilter,
     createChatRoom,
     createRoom,
@@ -45,6 +46,7 @@ const RoomListWrapper = ({
         </div>
     );
 };
+const RoomListWrapper = withViewDocs(RoomListWrapperImpl, VirtualizedRoomListView);
 
 const mockFilterIds: FilterId[] = ["unread", "people"];
 
@@ -54,7 +56,7 @@ const defaultRoomListState: RoomListViewState = {
     filterKeys: undefined,
 };
 
-const meta: Meta<RoomListStoryProps> = {
+const meta = {
     title: "Room List/VirtualizedRoomListView",
     component: RoomListWrapper,
     tags: ["autodocs"],
@@ -86,9 +88,9 @@ const meta: Meta<RoomListStoryProps> = {
             </div>
         ),
     ],
-};
+} satisfies Meta<typeof RoomListWrapper>;
 
 export default meta;
-type Story = StoryObj<RoomListStoryProps>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};

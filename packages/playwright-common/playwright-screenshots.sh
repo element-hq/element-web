@@ -2,19 +2,24 @@
 
 set -e
 
-# Handle symlinks here as we tend to be executed as an npm binary
-SCRIPT_PATH=$(readlink -f "$0")
-SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+function build_image() {
+    local IMAGE_NAME="$1"
+    # Handle symlinks here as we tend to be executed as an npm binary
+    local SCRIPT_PATH=$(readlink -f "$0")
+    local SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 
-IMAGE_NAME="element-web-playwright-server"
+    echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
+    docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=${IMAGE_NAME#*:}" "$SCRIPT_DIR"
+}
+
 WS_PORT=3000
 
 # Check the playwright version
-PW_VERSION=$(npm exec --silent -- playwright --version | gcut -d" " -f2)
-echo "Building $IMAGE_NAME:$PW_VERSION image in $SCRIPT_DIR"
+PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
+IMAGE_NAME="ghcr.io/element-hq/element-web/playwright-server:$PW_VERSION"
 
-# Build the image
-docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=$PW_VERSION" "$SCRIPT_DIR"
+# Pull the image, failing that build the image
+docker pull "$IMAGE_NAME" 2>/dev/null || build_image "$IMAGE_NAME"
 
 # Start the playwright-server in docker
 CONTAINER=$(docker run --network=host --rm -d -e PORT="$WS_PORT" "$IMAGE_NAME")

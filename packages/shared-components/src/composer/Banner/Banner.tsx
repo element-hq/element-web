@@ -16,7 +16,7 @@ import React, {
 } from "react";
 import { Button } from "@vector-im/compound-web";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 
 import styles from "./Banner.module.css";
