@@ -38,7 +38,7 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRooms } from "../../../utils/room/sorting/RecentAlgorithm";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import { Action } from "../../../dispatcher/actions";

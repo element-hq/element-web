@@ -27,7 +27,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRooms } from "../../../utils/room/sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";

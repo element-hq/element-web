@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { type TagID } from "../../../room-list-v3/skip-list/tag";
-import { type IAlgorithm } from "./IAlgorithm";
-import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import * as Unread from "../../../../Unread";
-import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
+import { type TagID } from "../../../stores/room-list-v3/skip-list/tag";
+import { type Algorithm } from "./Algorithm";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import * as Unread from "../../../Unread";
+import { EffectiveMembership, getEffectiveMembership } from "../../membership";
 
-export function shouldCauseReorder(event: MatrixEvent): boolean {
+function shouldCauseReorder(event: MatrixEvent): boolean {
     const type = event.getType();
     const content = event.getContent();
     const prevContent = event.getPrevContent();
@@ -117,7 +117,7 @@ export const getLastTs = (r: Room, userId: string): number => {
  * Sorts rooms according to the last event's timestamp in each room that seems
  * useful to the user.
  */
-export class RecentAlgorithm implements IAlgorithm {
+export class RecentAlgorithm implements Algorithm {
     public sortRooms(rooms: Room[], tagId: TagID): Room[] {
         return sortRooms(rooms);
     }

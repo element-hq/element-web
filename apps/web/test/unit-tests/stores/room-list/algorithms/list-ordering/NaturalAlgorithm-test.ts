@@ -14,7 +14,7 @@ import { SortAlgorithm } from "../../../../../../src/stores/room-list/algorithms
 import { DefaultTagID } from "../../../../../../src/stores/room-list-v3/skip-list/tag";
 import { RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
 import { AlphabeticAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/AlphabeticAlgorithm";
-import { RecentAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { RecentAlgorithm } from "../../../../../../src/utils/room/sorting/RecentAlgorithm";
 import { RoomNotificationStateStore } from "../../../../../../src/stores/notifications/RoomNotificationStateStore";
 import * as RoomNotifs from "../../../../../../src/RoomNotifs";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";

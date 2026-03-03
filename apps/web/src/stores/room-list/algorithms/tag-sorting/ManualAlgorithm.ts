@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { type TagID } from "../../../room-list-v3/skip-list/tag";
-import { type IAlgorithm } from "./IAlgorithm";
+import { type Algorithm } from "../../../../utils/room/sorting/Algorithm";
 
 /**
  * Sorts rooms according to the tag's `order` property on the room.
  */
-export class ManualAlgorithm implements IAlgorithm {
+export class ManualAlgorithm implements Algorithm {
     public sortRooms(rooms: Room[], tagId: TagID): Room[] {
         const getOrderProp = (r: Room): number => r.tags[tagId].order || 0;
         return rooms.sort((a, b) => {

@@ -70,7 +70,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
-import { RecentAlgorithm } from "../../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { RecentAlgorithm } from "../../../../utils/room/sorting/RecentAlgorithm";
 import { SdkContextClass } from "../../../../contexts/SDKContext";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";

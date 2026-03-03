@@ -12,7 +12,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mkMessage, mkRoom, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import "../../../../../src/stores/room-list/RoomListStore";
-import { RecentAlgorithm } from "../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { RecentAlgorithm } from "../../../../../src/utils/room/sorting/RecentAlgorithm";
 import { makeThreadEvent, mkThread } from "../../../../test-utils/threads";
 import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 
