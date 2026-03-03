@@ -121,16 +121,16 @@ Please see LICENSE files in the repository root for full details.
         white-space: normal; /* display mxid */
 
         .mx_DisambiguatedProfile_displayName {
-            white-space: nowrap; /* truncate long display names */
-            margin-inline-end: 5px;
+            white-space: nowrap !important; /* truncate long display names */
+            margin-inline-end: 5px !important;
 
             /* For RTL displayName */
-            unicode-bidi: embed;
-            direction: ltr;
+            unicode-bidi: embed !important;
+            direction: ltr !important;
         }
 
         .mx_DisambiguatedProfile_mxid {
-            margin-inline-start: 0; /* Align mxid with truncated displayName
+            margin-inline-start: 0 !important; /* Align mxid with truncated displayName
                 inside mx_EventTile[data-layout="bubble"] */
         }
     }
@@ -140,10 +140,10 @@ Please see LICENSE files in the repository root for full details.
     > .mx_DisambiguatedProfile,
     /* inside a thread, outside of mx_ReplyTile */
     .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
-        position: relative;
-        top: -2px;
-        left: 2px;
-        font-size: $font-15px;
+        position: relative !important;
+        top: -2px !important;
+        left: 2px !important;
+        font-size: $font-15px !important;
     }
 
     .mx_MessageActionBar {

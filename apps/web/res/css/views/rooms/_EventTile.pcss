@@ -86,11 +86,11 @@ $left-gutter: 64px;
     }
 
     .mx_DisambiguatedProfile {
-        color: $primary-content;
-        font: var(--cpd-font-body-md-regular);
-        display: inline-block;
-        padding-bottom: 0px;
-        padding-top: 0px;
+        color: $primary-content !important;
+        font: var(--cpd-font-body-md-regular) !important;
+        display: inline-block !important;
+        padding-bottom: 0px !important;
+        padding-top: 0px !important;
     }
 
     .mx_ReactionsRow {
@@ -289,39 +289,39 @@ $left-gutter: 64px;
         }
 
         .mx_DisambiguatedProfile {
-            order: 2;
-            width: var(--name-width);
-            margin-inline-end: 0; /* override mx_EventTile > * */
+            order: 2 !important;
+            width: var(--name-width) !important;
+            margin-inline-end: 0 !important; /* override mx_EventTile > * */
 
             > .mx_DisambiguatedProfile_displayName {
-                width: 100%;
-                text-align: end;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                width: 100% !important;
+                text-align: end !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
             }
 
             > .mx_DisambiguatedProfile_mxid {
-                visibility: collapse;
-                margin-left: 0; /* Override the inherited margin. */
-                padding: 0 5px;
+                visibility: collapse !important;
+                margin-left: 0 !important; /* Override the inherited margin. */
+                padding: 0 5px !important;
             }
 
             &:hover {
-                overflow: visible;
-                z-index: 10;
+                overflow: visible !important;
+                z-index: 10 !important;
 
                 > .mx_DisambiguatedProfile_displayName {
-                    overflow: visible;
-                    display: inline;
-                    background-color: $event-selected-color;
-                    border-radius: 8px 0 0 8px;
-                    padding-right: $spacing-8;
+                    overflow: visible !important;
+                    display: inline !important;
+                    background-color: $event-selected-color !important;
+                    border-radius: 8px 0 0 8px !important;
+                    padding-right: $spacing-8 !important;
                 }
 
                 > .mx_DisambiguatedProfile_mxid {
-                    visibility: visible;
-                    opacity: 1;
-                    background-color: $event-selected-color;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    background-color: $event-selected-color !important;
                 }
             }
         }
@@ -486,9 +486,10 @@ $left-gutter: 64px;
         }
 
         > .mx_DisambiguatedProfile {
-            line-height: $font-20px;
-            margin-left: $left-gutter;
-            max-width: calc(100% - $left-gutter);
+            line-height: $font-20px !important;
+            margin-bottom: 4px;
+            margin-left: $left-gutter !important;
+            max-width: calc(100% - $left-gutter) !important;
         }
 
         > .mx_EventTile_avatar {
@@ -1014,24 +1015,24 @@ $left-gutter: 64px;
     }
 
     .mx_DisambiguatedProfile {
-        display: inline-flex;
-        align-items: center;
-        flex: 1;
+        display: inline-flex !important;
+        align-items: center !important;
+        flex: 1 !important;
 
         .mx_DisambiguatedProfile_displayName,
         .mx_DisambiguatedProfile_mxid {
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            display: block !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
 
         .mx_DisambiguatedProfile_displayName {
-            flex: none;
-            max-width: 100%;
+            flex: none !important;
+            max-width: 100% !important;
         }
 
         .mx_DisambiguatedProfile_mxid {
-            flex: 1;
+            flex: 1 !important;
         }
     }
 
@@ -1215,8 +1216,8 @@ $left-gutter: 64px;
                     align-items: center;
 
                     .mx_DisambiguatedProfile {
-                        margin-left: 8px;
-                        flex: 1;
+                        margin-left: 8px !important;
+                        flex: 1 !important;
                     }
                 }
             }

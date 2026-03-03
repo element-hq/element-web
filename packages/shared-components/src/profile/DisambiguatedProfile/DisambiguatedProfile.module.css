@@ -7,13 +7,18 @@
 
 .disambiguatedProfile {
     overflow: hidden;
+    background: none;
+    padding: 0;
+    border: none;
+    vertical-align: baseline;
     text-overflow: ellipsis;
+    text-align: start;
     white-space: nowrap;
     cursor: pointer;
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
-        letter-spacing: var(--cpd-letter-spacing-body-md);
+        letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
         margin-inline-end: 0;
         /* keeps the height in check, important for the bubble apperance */
         line-height: 1;
@@ -24,12 +29,4 @@
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;
     }
-}
-
-button {
-    /* Clear default <button> styles */
-    padding: 0;
-    border: none;
-    vertical-align: baseline;
-    background: none;
 }
