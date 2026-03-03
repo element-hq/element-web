@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+import { AxeBuilder } from "@axe-core/playwright";
 
 // This fixture is useful for simple component library tests that won't want any extra services like a homeserver, so we
 // explicitly avoid pulling anything more than playwright's base fixtures in.
