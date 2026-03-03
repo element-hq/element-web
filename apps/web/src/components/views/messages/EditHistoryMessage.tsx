@@ -80,8 +80,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         if (prevProps.mxEvent !== this.props.mxEvent) {
             const mxEventContent = getReplacedContent(this.props.mxEvent);
             this.EventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
-            this.EventContentBodyViewModel.setEnableBigEmoji(SettingsStore.getValue("TextualBody.enableBigEmoji"));
-            this.EventContentBodyViewModel.setShouldShowPillAvatar(SettingsStore.getValue("Pill.shouldShowPillAvatar"));
         }
     }
 

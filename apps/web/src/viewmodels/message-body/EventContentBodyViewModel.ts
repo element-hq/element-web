@@ -28,6 +28,7 @@ import {
 } from "../../renderer";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { filterBoolean } from "../../utils/arrays";
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * Options for configuring which renderers to apply.
@@ -200,6 +201,24 @@ export class EventContentBodyViewModel
 
     public constructor(props: EventContentBodyViewModelProps) {
         super(props, EventContentBodyViewModel.computeSnapshot(props));
+
+        const enableBigEmojiWatcherRef = SettingsStore.watchSetting(
+            "TextualBody.enableBigEmoji",
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                this.setEnableBigEmoji(newVal);
+            },
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(enableBigEmojiWatcherRef));
+
+        const shouldShowPillAvatarWatcherRef = SettingsStore.watchSetting(
+            "Pill.shouldShowPillAvatar",
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                this.setShouldShowPillAvatar(newVal);
+            },
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(shouldShowPillAvatarWatcherRef));
     }
 
     public setEventContent = (mxEvent: MatrixEvent | undefined, content: IContent): void => {

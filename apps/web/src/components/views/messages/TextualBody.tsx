@@ -107,13 +107,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             this.EventContentBodyViewModel.setEventContent(mxEvent, content);
             this.EventContentBodyViewModel.setStripReply(stripReply);
 
-            if (mxEventChanged) {
-                this.EventContentBodyViewModel.setEnableBigEmoji(SettingsStore.getValue("TextualBody.enableBigEmoji"));
-                this.EventContentBodyViewModel.setShouldShowPillAvatar(
-                    SettingsStore.getValue("Pill.shouldShowPillAvatar"),
-                );
-            }
-
             if (mxEventChanged || wrapperChanged) {
                 this.EventContentBodyViewModel.setAs(willHaveWrapper ? "span" : "div");
             }
