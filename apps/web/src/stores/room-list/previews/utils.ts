@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { DefaultTagID, type TagID } from "../models";
+import { DefaultTagID, type TagID } from "../../room-list-v3/skip-list/tag";
 
 export function isSelf(event: MatrixEvent): boolean {
     const selfUserId = MatrixClientPeg.safeGet().getSafeUserId();

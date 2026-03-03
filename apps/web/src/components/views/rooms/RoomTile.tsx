@@ -20,7 +20,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuTooltipButton, type MenuProps } from "../../structures/ContextMenu";
-import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
+import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
 import { type MessagePreview, MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RoomNotifState } from "../../../RoomNotifs";

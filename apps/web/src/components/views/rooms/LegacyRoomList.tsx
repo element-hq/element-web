@@ -34,7 +34,7 @@ import { useFeatureEnabled } from "../../../hooks/useSettings.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore.ts";
 import { type ITagMap } from "../../../stores/room-list/algorithms/models.ts";
-import { DefaultTagID, type TagID } from "../../../stores/room-list/models.ts";
+import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore.ts";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore.ts";
 import {

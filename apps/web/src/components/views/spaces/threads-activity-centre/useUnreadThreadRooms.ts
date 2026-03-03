@@ -16,7 +16,7 @@ import { getThreadNotificationLevel } from "../../../../utils/notifications";
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
-import { VisibilityProvider } from "../../../../stores/room-list/filters/VisibilityProvider";
+import { isRoomVisible } from "../../../../stores/room-list-v3/isRoomVisible";
 
 const MIN_UPDATE_INTERVAL_MS = 500;
 
@@ -86,7 +86,7 @@ function computeUnreadThreadRooms(
 
     for (const room of visibleRooms) {
         // We only care about rooms with unread threads
-        if (VisibilityProvider.instance.isRoomVisible(room) && doesRoomHaveUnreadThreads(room)) {
+        if (isRoomVisible(room) && doesRoomHaveUnreadThreads(room)) {
             // Get the greatest notification level of all threads
             const notificationLevel = getThreadNotificationLevel(room);
 

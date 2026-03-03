@@ -11,7 +11,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { NaturalAlgorithm } from "../../../../../../src/stores/room-list/algorithms/list-ordering/NaturalAlgorithm";
 import { SortAlgorithm } from "../../../../../../src/stores/room-list/algorithms/models";
-import { DefaultTagID, RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../../src/stores/room-list-v3/skip-list/tag";
+import { RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
 import { AlphabeticAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/AlphabeticAlgorithm";
 import { RecentAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import { RoomNotificationStateStore } from "../../../../../../src/stores/notifications/RoomNotificationStateStore";

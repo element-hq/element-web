@@ -13,7 +13,8 @@ import { RoomNotificationStateStore } from "../../../../../../src/stores/notific
 import { ImportanceAlgorithm } from "../../../../../../src/stores/room-list/algorithms/list-ordering/ImportanceAlgorithm";
 import { SortAlgorithm } from "../../../../../../src/stores/room-list/algorithms/models";
 import * as RoomNotifs from "../../../../../../src/RoomNotifs";
-import { DefaultTagID, RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../../src/stores/room-list-v3/skip-list/tag";
+import { RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
 import { AlphabeticAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/AlphabeticAlgorithm";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";

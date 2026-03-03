@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixEvent, EventType, type IPushRules } from "matrix-js-sdk/src/matrix";
 
-import { type ActionPayload } from "../../../dispatcher/payloads";
-import { isRuleMaybeRoomMuteRule } from "../../../RoomNotifs";
-import { arrayDiff } from "../../../utils/arrays";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { isRuleMaybeRoomMuteRule } from "../../RoomNotifs";
+import { arrayDiff } from "../../utils/arrays";
 
 /**
  * Gets any changed push rules that are room specific overrides

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Sorter, SortingAlgorithm } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
-import { DefaultTagID } from "../../../room-list/models";
 import { BaseRecencySorter } from "./BaseRecencySorter";
+import { DefaultTagID } from "../tag";
 
 export class RecencySorter extends BaseRecencySorter implements Sorter {
     public get type(): SortingAlgorithm.Recency {
