@@ -55,34 +55,34 @@ interface EventContentBodyBaseViewProps {
     vm: EventContentBodyViewModel;
 }
 
-export type EventContentBodyViewProps = EventContentBodyBaseViewProps & 
-     ({
-          /**
-           * Render the content in a span element.
-           */
-          as: "span";
-          /**
-           * Optional ref to forward to the rendered span element.
-           */
-          ref?: Ref<HTMLSpanElement>;
-      }
-    | {
-          /**
-           * Render the content in a div element.
-           */
-          as: "div";
-          /**
-           * Optional ref to forward to the rendered div element.
-           */
-          ref?: Ref<HTMLDivElement>;
-      });
+export type EventContentBodyViewProps = EventContentBodyBaseViewProps &
+    (
+        | {
+              /**
+               * Render the content in a span element.
+               */
+              as: "span";
+              /**
+               * Optional ref to forward to the rendered span element.
+               */
+              ref?: Ref<HTMLSpanElement>;
+          }
+        | {
+              /**
+               * Render the content in a div element.
+               */
+              as: "div";
+              /**
+               * Optional ref to forward to the rendered div element.
+               */
+              ref?: Ref<HTMLDivElement>;
+          }
+    );
 
 /**
  * View component for rendering Matrix event content body.
  */
 export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyViewProps>): JSX.Element {
-    const snapshot = useViewModel(vm);
-    const { body, formattedBody, replacer, className, dir, parseFormattedBody } = snapshot;
     const { body, formattedBody, replacer, className, dir, parseFormattedBody } = useViewModel(vm);
     const parseBody =
         parseFormattedBody ??
