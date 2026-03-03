@@ -80,8 +80,6 @@ export type EventContentBodyViewProps =
 
 /**
  * View component for rendering Matrix event content body.
- * This is a "dumb" component that only renders based on the snapshot data.
- * All Matrix SDK interactions and content processing happen in the ViewModel.
  */
 export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyViewProps>): JSX.Element {
     const snapshot = useViewModel(vm);
