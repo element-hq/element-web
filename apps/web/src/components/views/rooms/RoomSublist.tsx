@@ -33,7 +33,7 @@ import { type ListNotificationState } from "../../../stores/notifications/ListNo
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { type ListLayout } from "../../../stores/room-list/ListLayout";
-import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
+import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import RoomListStore, { LISTS_UPDATE_EVENT, LISTS_LOADING_EVENT } from "../../../stores/room-list/RoomListStore";
 import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";

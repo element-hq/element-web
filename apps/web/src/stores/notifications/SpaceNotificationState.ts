@@ -13,7 +13,7 @@ import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { type RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
-import { DefaultTagID } from "../room-list/models";
+import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 import RoomListStore from "../room-list/RoomListStore";
 import { RoomNotificationStateStore } from "./RoomNotificationStateStore";
 

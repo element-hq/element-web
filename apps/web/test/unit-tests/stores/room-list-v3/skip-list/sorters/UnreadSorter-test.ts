@@ -11,7 +11,7 @@ import { stubClient } from "../../../../../test-utils";
 import { getMockedRooms } from "../getMockedRooms";
 import { CallStore } from "../../../../../../src/stores/CallStore";
 import type { Call } from "../../../../../../src/models/Call";
-import { DefaultTagID } from "../../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../../src/stores/room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../../../../../../src/stores/notifications/RoomNotificationStateStore";
 import type { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
 import * as utils from "../../../../../../src/utils/notifications";

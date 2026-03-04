@@ -10,7 +10,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import RoomListStore from "../../stores/room-list/RoomListStore";
-import { DefaultTagID, type TagID } from "../../stores/room-list/models";
+import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
 

@@ -11,7 +11,7 @@ import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/Invali
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
 import { type IPreview } from "./IPreview";
-import { type TagID } from "../models";
+import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
