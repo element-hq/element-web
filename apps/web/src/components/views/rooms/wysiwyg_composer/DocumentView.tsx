@@ -146,24 +146,30 @@ function useDocumentSync(
     }, [room, composerModel, editorRef, onContentChanged]);
 
     // Apply incoming delta events from the room timeline and update the DOM.
+    // Use a ref for composerModel so the listener closure always has the latest
+    // value without needing to re-register on every model change.
+    const composerModelRef = useRef(composerModel);
     useEffect(() => {
-        if (!isCollaborative(composerModel)) return;
+        composerModelRef.current = composerModel;
+    });
 
+    useEffect(() => {
         const onTimeline = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
-            // Skip events sent by this exact device — they're already in the local model.
-            // We cannot skip by userId alone (same user on two devices must receive each other's changes).
+            // Skip events sent by this exact device — already in the local model.
             const eventDeviceId = event.getUnsigned()?.["device_id"] as string | undefined;
             if (event.getSender() === client.getUserId() && eventDeviceId === client.getDeviceId()) return;
+
+            const model = composerModelRef.current;
+            if (!isCollaborative(model)) return;
 
             const data = event.getContent<{ data?: string }>().data;
             if (!data) return;
             try {
-                composerModel.receive_changes(base64Decode(data));
-                // Update the editor DOM with the merged content.
+                model.receive_changes(base64Decode(data));
                 if (editorRef.current) {
-                    editorRef.current.innerHTML = composerModel.get_content_as_html();
+                    editorRef.current.innerHTML = model.get_content_as_html();
                     onContentChanged();
                 }
             } catch (e) {
@@ -175,7 +181,9 @@ function useDocumentSync(
         room.on("Room.timeline" as any, onTimeline);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return () => room.off("Room.timeline" as any, onTimeline);
-    }, [room, client, composerModel, editorRef, onContentChanged]);
+        // Intentionally omit composerModel — we use composerModelRef instead.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [room, client, editorRef, onContentChanged]);
 
     // Debounced delta send triggered after each keystroke.
     // Also saves a full snapshot to room state so the document persists on refresh.
@@ -241,16 +249,24 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     // Track whether the editor has content so we can hide the placeholder.
     const [hasContent, setHasContent] = useState(false);
 
-    const notifyContentChanged = useCallback(() => {
+    // Stable callback ref so useDocumentSync doesn't re-register its listener
+    // every time the component re-renders.
+    const notifyContentChangedRef = useRef(() => {
         setHasContent(Boolean(ref.current?.textContent?.trim()));
-    }, [ref]);
+    });
 
-    const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel, ref, notifyContentChanged);
+    const { isLoaded, scheduleDeltaSend } = useDocumentSync(
+        room,
+        client,
+        composerModel,
+        ref,
+        notifyContentChangedRef.current,
+    );
 
     const handleInput = useCallback(() => {
-        notifyContentChanged();
+        notifyContentChangedRef.current();
         scheduleDeltaSend();
-    }, [notifyContentChanged, scheduleDeltaSend]);
+    }, [scheduleDeltaSend]);
 
     // Forward clicks anywhere in the content area to the contentEditable.
     const handleContentClick = useCallback(() => {
