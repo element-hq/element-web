@@ -189,7 +189,7 @@ function useDocumentSync(
                     if (editorRef.current) {
                         suppressMutations.current = true;
                         editorRef.current.innerHTML = composerModel.get_content_as_html();
-                        suppressMutations.current = false;
+                        requestAnimationFrame(() => { suppressMutations.current = false; });
                         onContentChanged();
                     }
                     logger.info("[DocumentView] Loaded document from room state");
@@ -216,8 +216,10 @@ function useDocumentSync(
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
 
-            const eventDeviceId = event.getUnsigned()?.["device_id"] as string | undefined;
-            if (event.getSender() === client.getUserId() && eventDeviceId === client.getDeviceId()) return;
+            // Skip our own events. In encrypted rooms device_id may not be in
+            // unsigned, so also skip by sender alone — the local model already
+            // has our own changes via save_incremental().
+            if (event.getSender() === client.getUserId()) return;
 
             const model = composerModelRef.current;
             if (!isCollaborative(model)) { logger.warn("[DocumentView] Model not collaborative yet, dropping delta"); return; }
@@ -227,11 +229,14 @@ function useDocumentSync(
             try {
                 model.receive_changes(base64Decode(data));
                 if (editorRef.current) {
+                    // Suppress MutationObserver during DOM update. Use
+                    // requestAnimationFrame to reset the flag AFTER the observer's
+                    // microtask has fired so it doesn't schedule a spurious delta send.
                     suppressMutations.current = true;
                     const caretOffset = saveCaretOffset(editorRef.current);
                     editorRef.current.innerHTML = model.get_content_as_html();
                     restoreCaretOffset(editorRef.current, caretOffset);
-                    suppressMutations.current = false;
+                    requestAnimationFrame(() => { suppressMutations.current = false; });
                     onContentChanged();
                 }
                 logger.info("[DocumentView] Applied remote delta successfully");
