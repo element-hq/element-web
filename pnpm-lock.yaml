@@ -52,6 +52,7 @@ overrides:
   qs: 6.15.0
   serialize-javascript: 7.0.3
   '@vector-im/matrix-wysiwyg': link:/Users/davidlangley/dev/matrix-rich-text-editor/platforms/web
+  '@vector-im/matrix-wysiwyg-wasm': link:/Users/davidlangley/dev/matrix-rich-text-editor/bindings/wysiwyg-wasm
 
 packageExtensionsChecksum: sha256-OFePh8Fn8A1ZEWgJF51vTMPT/HEVyXQyj6YGIztPb0w=
 

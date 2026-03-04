@@ -199,6 +199,8 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     const { ref, isWysiwygReady, wysiwyg, actionStates } = wysiwygResult;
     const composerModel = wysiwygResult.composerModel;
 
+    logger.info("[DocumentView] render — isWysiwygReady:", isWysiwygReady, "ref.current:", ref.current);
+
     // Place the cursor at the end and focus the editor once the WASM model is
     // ready.  Without this the editor is enabled but has no selection, so no
     // cursor appears even after the element receives focus.
@@ -211,11 +213,19 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     }, [scheduleDeltaSend]);
 
     // Forward clicks anywhere in the content area to the contentEditable.
-    // The click may land on the wrapper divs rather than the contentEditable
-    // itself, so always ensure the editor has focus after any click in this area.
     const handleContentClick = useCallback(() => {
-        ref.current?.focus();
+        logger.info("[DocumentView] click — ref.current:", ref.current, "activeElement before focus:", document.activeElement);
+        if (ref.current) {
+            ref.current.focus();
+            logger.info("[DocumentView] after focus() — activeElement:", document.activeElement, "contentEditable:", ref.current.contentEditable);
+        } else {
+            logger.warn("[DocumentView] click — ref.current is null!");
+        }
     }, [ref]);
+
+    const handleKeyDown = useCallback((ev: React.KeyboardEvent) => {
+        logger.info("[DocumentView] keydown — key:", ev.key, "target:", ev.target, "activeElement:", document.activeElement);
+    }, []);
 
     if (!isLoaded) {
         return <div className="mx_DocumentView mx_DocumentView_loading" />;
@@ -223,7 +233,8 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
 
     return (
         <ComposerContext.Provider value={composerContext}>
-            <div className="mx_DocumentView" data-testid="DocumentView">
+            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+            <div className="mx_DocumentView" data-testid="DocumentView" onKeyDown={handleKeyDown}>
                 <div className="mx_DocumentView_toolbar">
                     <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
                 </div>

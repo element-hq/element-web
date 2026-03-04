@@ -1,95 +1,96 @@
 {
-    "name": "element-web-monorepo",
-    "version": "0.0.0",
-    "description": "Element: the future of secure communication",
-    "author": "New Vector Ltd.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/element-hq/element-web"
+  "name": "element-web-monorepo",
+  "version": "0.0.0",
+  "description": "Element: the future of secure communication",
+  "author": "New Vector Ltd.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/element-hq/element-web"
+  },
+  "license": "SEE LICENSE IN README.md",
+  "type": "module",
+  "scripts": {
+    "i18n": "pnpm -r i18n",
+    "i18n:sort": "pnpm -r i18n:sort",
+    "i18n:lint": "pnpm -r i18n:lint",
+    "lint": "pnpm -r lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
+    "lint:prettier": "prettier --check .",
+    "lint:prettier-fix": "prettier --log-level=warn --write .",
+    "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
+    "lint:knip": "knip",
+    "postinstall": "node scripts/pnpm-link.ts"
+  },
+  "resolutions": {
+    "pretty-format@30>react-is": "19.2.4",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "oidc-client-ts": "3.4.1",
+    "jwt-decode": "4.0.0",
+    "caniuse-lite": "1.0.30001774",
+    "markdown-it": "14.1.1",
+    "testcontainers": "^11.0.0",
+    "wrap-ansi-cjs": "npm:wrap-ansi@^10.0.0",
+    "wrap-ansi": "npm:wrap-ansi@^10.0.0",
+    "matrix-widget-api": "^1.17.0",
+    "qs": "6.15.0",
+    "serialize-javascript": "7.0.3"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@action-validator/cli": "^0.6.0",
+    "@action-validator/core": "^0.6.0",
+    "@nx-tools/nx-container": "^7.2.1",
+    "@nx/jest": "^22.5.0",
+    "@types/node": "22",
+    "cronstrue": "^3.0.0",
+    "eslint-plugin-matrix-org": "^3.0.0",
+    "husky": "^9.0.0",
+    "knip": "^5.36.2",
+    "lint-staged": "^16.0.0",
+    "lodash": "^4.17.21",
+    "minimist": "^1.2.6",
+    "nx": "22.5.3",
+    "prettier": "3.8.1",
+    "typescript": "catalog:",
+    "yaml": "^2.3.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "matrix-js-sdk"
+    ],
+    "ignoredBuiltDependencies": [
+      "@sentry/cli",
+      "nx"
+    ],
+    "patchedDependencies": {
+      "react-blurhash": "patches/react-blurhash.patch",
+      "linkify-html": "patches/linkify-html.patch",
+      "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
+      "@types/mdx": "patches/@types__mdx.patch",
+      "await-lock": "patches/await-lock.patch",
+      "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
+      "jsdom": "patches/jsdom.patch",
+      "rollup": "patches/rollup.patch"
     },
-    "license": "SEE LICENSE IN README.md",
-    "type": "module",
-    "scripts": {
-        "i18n": "pnpm -r i18n",
-        "i18n:sort": "pnpm -r i18n:sort",
-        "i18n:lint": "pnpm -r i18n:lint",
-        "lint": "pnpm -r lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
-        "lint:prettier": "prettier --check .",
-        "lint:prettier-fix": "prettier --log-level=warn --write .",
-        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
-        "lint:knip": "knip",
-        "postinstall": "node scripts/pnpm-link.ts"
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "19",
+        "react-dom": "19",
+        "eslint": "8"
+      }
     },
-    "resolutions": {
-        "pretty-format@30>react-is": "19.2.4",
-        "@types/react": "catalog:",
-        "@types/react-dom": "catalog:",
-        "oidc-client-ts": "3.4.1",
-        "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001774",
-        "markdown-it": "14.1.1",
-        "testcontainers": "^11.0.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^10.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^10.0.0",
-        "matrix-widget-api": "^1.17.0",
-        "qs": "6.15.0",
-        "serialize-javascript": "7.0.3"
+    "allowedDeprecatedVersions": {
+      "eslint": "8",
+      "react-beautiful-dnd": "13"
     },
-    "dependencies": {},
-    "devDependencies": {
-        "@action-validator/cli": "^0.6.0",
-        "@action-validator/core": "^0.6.0",
-        "@nx-tools/nx-container": "^7.2.1",
-        "@nx/jest": "^22.5.0",
-        "@types/node": "22",
-        "cronstrue": "^3.0.0",
-        "eslint-plugin-matrix-org": "^3.0.0",
-        "husky": "^9.0.0",
-        "knip": "^5.36.2",
-        "lint-staged": "^16.0.0",
-        "lodash": "^4.17.21",
-        "minimist": "^1.2.6",
-        "nx": "22.5.3",
-        "prettier": "3.8.1",
-        "typescript": "catalog:",
-        "yaml": "^2.3.3"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "matrix-js-sdk"
-        ],
-        "ignoredBuiltDependencies": [
-            "@sentry/cli",
-            "nx"
-        ],
-        "patchedDependencies": {
-            "react-blurhash": "patches/react-blurhash.patch",
-            "linkify-html": "patches/linkify-html.patch",
-            "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
-            "@types/mdx": "patches/@types__mdx.patch",
-            "await-lock": "patches/await-lock.patch",
-            "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
-            "jsdom": "patches/jsdom.patch",
-            "rollup": "patches/rollup.patch"
-        },
-        "peerDependencyRules": {
-            "allowedVersions": {
-                "react": "19",
-                "react-dom": "19",
-                "eslint": "8"
-            }
-        },
-        "allowedDeprecatedVersions": {
-            "eslint": "8",
-            "react-beautiful-dnd": "13"
-        },
-        "overrides": {
-            "@vector-im/matrix-wysiwyg": "link:/Users/davidlangley/dev/matrix-rich-text-editor/platforms/web"
-        }
-    },
-    "engines": {
-        "node": ">=22.18"
-    },
-    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
-    "private": true
+    "overrides": {
+      "@vector-im/matrix-wysiwyg": "link:/Users/davidlangley/dev/matrix-rich-text-editor/platforms/web",
+      "@vector-im/matrix-wysiwyg-wasm": "link:/Users/davidlangley/dev/matrix-rich-text-editor/bindings/wysiwyg-wasm"
+    }
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+  "private": true
 }
