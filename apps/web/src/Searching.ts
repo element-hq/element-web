@@ -17,8 +17,8 @@ import {
     EventType,
     type MatrixClient,
     type SearchResult,
+    type IEventWithRoomId,
 } from "matrix-js-sdk/src/matrix";
-import { type IEventWithRoomId } from "matrix-js-sdk/src/@types/search";
 
 import { type ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";
