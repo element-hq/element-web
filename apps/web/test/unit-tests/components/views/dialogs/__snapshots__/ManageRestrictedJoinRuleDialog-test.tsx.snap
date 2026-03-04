@@ -30,7 +30,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
         <strong>
           !roomId:server
         </strong>
-        without an invitation.
+         without an invitation.
       </span>
     </p>
     <div
@@ -243,7 +243,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should render empty state 1`] = `
         <strong>
           !roomId:server
         </strong>
-        without an invitation.
+         without an invitation.
       </span>
     </p>
     <div
