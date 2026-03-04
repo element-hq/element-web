@@ -72,10 +72,7 @@ export class DecryptionFailureBodyViewModel
     public constructor(props: DecryptionFailureBodyViewModelProps) {
         super(
             props,
-            DecryptionFailureBodyViewModel.computeSnapshot(
-                props.decryptionFailureCode,
-                props.verificationState,
-            ),
+            DecryptionFailureBodyViewModel.computeSnapshot(props.decryptionFailureCode, props.verificationState),
         );
     }
 

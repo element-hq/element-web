@@ -14,7 +14,10 @@ import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type EncryptionEventProps = EncryptionEventViewSnapshot;
 
-const EncryptionEventViewWrapperImpl = ({ className, ...rest }: EncryptionEventProps & { className?: string }): JSX.Element => {
+const EncryptionEventViewWrapperImpl = ({
+    className,
+    ...rest
+}: EncryptionEventProps & { className?: string }): JSX.Element => {
     const vm = useMockedViewModel(rest, {});
 
     return <EncryptionEventView vm={vm} className={className} />;
