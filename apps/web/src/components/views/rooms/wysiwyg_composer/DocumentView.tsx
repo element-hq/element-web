@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { useWysiwyg, type UseWysiwyg } from "@vector-im/matrix-wysiwyg";
@@ -13,6 +13,7 @@ import { useWysiwyg, type UseWysiwyg } from "@vector-im/matrix-wysiwyg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { FormattingButtons } from "./components/FormattingButtons.tsx";
 import { Editor } from "./components/Editor.tsx";
+import { ComposerContext, getDefaultContextValue } from "./ComposerContext.ts";
 
 /**
  * Matrix event type for incremental Automerge deltas sent as timeline events.
@@ -188,6 +189,9 @@ interface DocumentViewProps {
 export const DocumentView = memo(function DocumentView({ room }: DocumentViewProps) {
     const client = useMatrixClientContext();
 
+    // ComposerContext is required by the Editor's useSelection hook.
+    const composerContext = useMemo(() => getDefaultContextValue(), []);
+
     // Cast to the extended type to access composerModel when available (requires
     // @vector-im/matrix-wysiwyg >= langleyd/automerge build).
     const wysiwygResult = useWysiwyg({ isAutoFocusEnabled: true }) as UseWysiwygExtended;
@@ -205,14 +209,16 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     }
 
     return (
-        <div className="mx_DocumentView" data-testid="DocumentView">
-            <div className="mx_DocumentView_toolbar">
-                <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
+        <ComposerContext.Provider value={composerContext}>
+            <div className="mx_DocumentView" data-testid="DocumentView">
+                <div className="mx_DocumentView_toolbar">
+                    <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
+                </div>
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+                <div className="mx_DocumentView_content" onInput={handleInput}>
+                    <Editor ref={ref} disabled={!isWysiwygReady} placeholder="Start typing your document…" />
+                </div>
             </div>
-            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-            <div className="mx_DocumentView_content" onInput={handleInput}>
-                <Editor ref={ref} disabled={!isWysiwygReady} placeholder="Start typing your document…" />
-            </div>
-        </div>
+        </ComposerContext.Provider>
     );
 });

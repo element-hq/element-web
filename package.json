@@ -63,7 +63,6 @@
             "nx"
         ],
         "patchedDependencies": {
-            "@vector-im/matrix-wysiwyg": "patches/@vector-im__matrix-wysiwyg.patch",
             "react-blurhash": "patches/react-blurhash.patch",
             "linkify-html": "patches/linkify-html.patch",
             "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
@@ -83,6 +82,9 @@
         "allowedDeprecatedVersions": {
             "eslint": "8",
             "react-beautiful-dnd": "13"
+        },
+        "overrides": {
+            "@vector-im/matrix-wysiwyg": "link:/Users/davidlangley/dev/matrix-rich-text-editor/platforms/web"
         }
     },
     "engines": {

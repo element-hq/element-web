@@ -51,6 +51,7 @@ overrides:
   matrix-widget-api: ^1.17.0
   qs: 6.15.0
   serialize-javascript: 7.0.3
+  '@vector-im/matrix-wysiwyg': link:/Users/davidlangley/dev/matrix-rich-text-editor/platforms/web
 
 packageExtensionsChecksum: sha256-OFePh8Fn8A1ZEWgJF51vTMPT/HEVyXQyj6YGIztPb0w=
 
@@ -61,9 +62,6 @@ patchedDependencies:
   '@types/mdx':
     hash: c209882c533714d2dcbf4cf397002125ea83677ef152eff403386611cd0f0d3a
     path: patches/@types__mdx.patch
-  '@vector-im/matrix-wysiwyg':
-    hash: 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
-    path: patches/@vector-im__matrix-wysiwyg.patch
   await-lock:
     hash: b767a571946a4f8710ac54b1a7bec8a7c1570f9b85d75922392fae20d0578964
     path: patches/await-lock.patch
@@ -178,8 +176,8 @@ importers:
         specifier: 'catalog:'
         version: 8.4.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@6.10.1(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@vector-im/matrix-wysiwyg':
-        specifier: 2.40.0
-        version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.2.4)
+        specifier: link:/Users/davidlangley/dev/matrix-rich-text-editor/platforms/web
+        version: link:../../../../matrix-rich-text-editor/platforms/web
       '@zxcvbn-ts/core':
         specifier: ^3.0.4
         version: 3.0.4
@@ -284,7 +282,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c7cd5570d32f7c3556c0f82bbe2eb97f78a9418c
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5d0e2efaf32c00cc71e0259078f289c4180a9338
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -4579,13 +4577,6 @@ packages:
       '@types/react':
         optional: true
 
-  '@vector-im/matrix-wysiwyg@2.40.0':
-    resolution: {integrity: sha512-8LRFLs5PEKYs4lOL7aJ4lL/hGCrvEvOYkCR3JggXYXDVMtX4LmfdlKYucSAe98pCmqAAbLRvlRcR1bTOYvM8ug==}
-    peerDependencies:
-      react: ^18.2.0 || ^19.0.0
-    bundledDependencies:
-      - '@vector-im/matrix-wysiwyg-wasm'
-
   '@vitejs/plugin-react@5.1.4':
     resolution: {integrity: sha512-VIcFLdRi/VYRU8OL/puL7QXMYafHmqOnwTZY50U1JPlCNj30PxCMx65c494b1K9be9hX83KVt0+gTEwTWLqToA==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -7846,8 +7837,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c7cd5570d32f7c3556c0f82bbe2eb97f78a9418c:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c7cd5570d32f7c3556c0f82bbe2eb97f78a9418c}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5d0e2efaf32c00cc71e0259078f289c4180a9338:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5d0e2efaf32c00cc71e0259078f289c4180a9338}
     version: 41.0.0
     engines: {node: '>=22.0.0'}
 
@@ -14757,10 +14748,6 @@ snapshots:
       - '@types/react-dom'
       - react-dom
 
-  '@vector-im/matrix-wysiwyg@2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.2.4)':
-    dependencies:
-      react: 19.2.4
-
   '@vitejs/plugin-react@5.1.4(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.6))(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@babel/core': 7.29.0
@@ -18779,7 +18766,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c7cd5570d32f7c3556c0f82bbe2eb97f78a9418c:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5d0e2efaf32c00cc71e0259078f289c4180a9338:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 17.1.0
