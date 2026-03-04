@@ -12,8 +12,8 @@ import {
     type SynapseContainer,
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 import { type Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api";
-import { makePostgres } from "@element-hq/element-web-playwright-common/lib/testcontainers/postgres.ts";
-import { makeMas } from "@element-hq/element-web-playwright-common/lib/testcontainers/mas.ts";
+import { makePostgres } from "@element-hq/element-web-playwright-common/lib/testcontainers/postgres.js";
+import { makeMas } from "@element-hq/element-web-playwright-common/lib/testcontainers/mas.js";
 
 import { RestrictedGuestsSynapseContainer, RestrictedGuestsSynapseWithMasContainer } from "./services";
 import { test as subBase, expect } from "../../../../playwright/element-web-test";
@@ -224,12 +224,9 @@ const base = subBase.extend<
             login_for_welcome: true,
         },
     },
-    page: async ({ page }, use) => {
-        await page.goto("/");
-        await use(page);
-    },
 });
 
+base.slow();
 for (const auth of ["mas", "legacy"] as const) {
     for (const guestsEnabled of [true, false]) {
         const test = base.extend({
@@ -241,15 +238,18 @@ for (const auth of ["mas", "legacy"] as const) {
 
         test.describe(`Restricted guests auth=${auth} guests=${guestsEnabled}`, () => {
             test("should error if config is missing", async ({ page }) => {
+                await page.goto("/");
                 await expect(page.getByText("Your Element is misconfigured")).toBeVisible();
                 await expect(page.getByText("Errors in module configuration")).toBeVisible();
             });
 
             test.describe("with config", () => {
-                test.beforeEach(({ config, guestHomeserver }) => {
+                test.beforeEach(async ({ config, guestHomeserver, page, testRoomId }) => {
                     config["io.element.element-web-modules.restricted-guests"] = {
                         guest_user_homeserver_url: guestHomeserver.baseUrl,
                     };
+                    // Go to a room we are not a member of
+                    await page.goto(`/#/room/${testRoomId}`);
                 });
 
                 if (guestsEnabled) {
@@ -268,10 +268,7 @@ for (const auth of ["mas", "legacy"] as const) {
                     test(
                         "should show the module's room preview bar for guests",
                         { tag: ["@screenshot"] },
-                        async ({ page, testRoomId }) => {
-                            // Go to a room we are not a member of
-                            await page.goto(`/#/room/${testRoomId}`);
-
+                        async ({ page }) => {
                             const button = page.getByRole("button", { name: "Join as guest", exact: true });
                             await expect(button).toBeVisible();
                             await expect(page.locator(".mx_RoomPreviewBar")).toMatchScreenshot(`preview-bar.png`);
@@ -287,17 +284,6 @@ for (const auth of ["mas", "legacy"] as const) {
                         },
                     );
                 } else {
-                    test.use({
-                        page: async ({ page, testRoomId }, use) => {
-                            // Go to a room we are not a member of
-                            await page.goto(`/#/room/${testRoomId}`);
-                            await use(page);
-                        },
-                        user: async ({ pageWithCredentials, credentials }, use) => {
-                            await use(credentials);
-                        },
-                    });
-
                     test("should show the module login ux", { tag: ["@screenshot"] }, async ({ page }) => {
                         const button = page.getByRole("button", { name: "Join as guest", exact: true });
                         await expect(button).toBeVisible();
