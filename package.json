@@ -26,13 +26,13 @@
         "@types/react-dom": "catalog:",
         "oidc-client-ts": "3.4.1",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001766",
+        "caniuse-lite": "1.0.30001774",
         "markdown-it": "14.1.1",
         "testcontainers": "^11.0.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^7.0.0",
+        "wrap-ansi-cjs": "npm:wrap-ansi@^10.0.0",
+        "wrap-ansi": "npm:wrap-ansi@^10.0.0",
         "matrix-widget-api": "^1.17.0",
-        "qs": "6.14.2",
+        "qs": "6.15.0",
         "serialize-javascript": "7.0.3"
     },
     "dependencies": {},
@@ -49,7 +49,7 @@
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
         "minimist": "^1.2.6",
-        "nx": "22.5.1",
+        "nx": "22.5.3",
         "prettier": "3.8.1",
         "typescript": "catalog:",
         "yaml": "^2.3.3"
@@ -88,6 +88,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
+    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
     "private": true
 }

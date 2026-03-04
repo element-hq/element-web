@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { type IPreview } from "./IPreview";
-import { type TagID } from "../models";
+import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { getHtmlText } from "../../../HtmlUtils";

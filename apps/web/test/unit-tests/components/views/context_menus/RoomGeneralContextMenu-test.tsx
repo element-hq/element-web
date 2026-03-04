@@ -21,7 +21,7 @@ import {
 } from "../../../../../src/components/views/context_menus/RoomGeneralContextMenu";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { mkMessage, stubClient } from "../../../../test-utils/test-utils";
