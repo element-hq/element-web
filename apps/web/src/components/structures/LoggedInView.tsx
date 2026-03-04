@@ -451,6 +451,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         const inputableElement = getInputableElement(element);
         if (inputableElement === document.activeElement) return; // nothing to do
 
+        // Don't redirect paste when the document view is active.
+        if (document.activeElement?.closest(".mx_DocumentView")) return;
+
         if (inputableElement?.focus) {
             inputableElement.focus();
         } else {
@@ -670,7 +673,10 @@ class LoggedInView extends React.Component<IProps, IState> {
 
             // If the user is entering a printable character outside of an input field
             // redirect it to the composer for them.
-            if (!isClickShortcut && isPrintable && !getInputableElement(ev.target as HTMLElement)) {
+            // Exception: if the active element is inside the document view, the editor
+            // should handle typing directly without being redirected.
+            const inDocumentView = !!document.activeElement?.closest(".mx_DocumentView");
+            if (!isClickShortcut && isPrintable && !getInputableElement(ev.target as HTMLElement) && !inDocumentView) {
                 const inThread = !!document.activeElement?.closest(".mx_ThreadView");
                 // synchronous dispatch so we focus before key generates input
                 dis.dispatch(

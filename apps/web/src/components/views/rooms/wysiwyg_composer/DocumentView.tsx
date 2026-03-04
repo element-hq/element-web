@@ -210,17 +210,12 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         scheduleDeltaSend();
     }, [scheduleDeltaSend]);
 
-    // Forward clicks anywhere in the content area to the contentEditable so
-    // the user can click anywhere in the document space to start typing.
-    const handleContentClick = useCallback(
-        (ev: React.MouseEvent<HTMLDivElement>) => {
-            // Only forward if the click didn't already land on the editor itself.
-            if (ev.target !== ref.current && ref.current) {
-                ref.current.focus();
-            }
-        },
-        [ref],
-    );
+    // Forward clicks anywhere in the content area to the contentEditable.
+    // The click may land on the wrapper divs rather than the contentEditable
+    // itself, so always ensure the editor has focus after any click in this area.
+    const handleContentClick = useCallback(() => {
+        ref.current?.focus();
+    }, [ref]);
 
     if (!isLoaded) {
         return <div className="mx_DocumentView mx_DocumentView_loading" />;
