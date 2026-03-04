@@ -18,7 +18,7 @@ import {
     Room,
 } from "matrix-js-sdk/src/matrix";
 
-import { MessagePreviewStore } from "../../../../src/stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../../src/stores/message-preview";
 import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "../../../test-utils";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { mkThread } from "../../../test-utils/threads";
