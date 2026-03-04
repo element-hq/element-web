@@ -2,11 +2,12 @@
 
 set -e
 
+# Handle symlinks here as we tend to be executed as an npm binary
+SCRIPT_PATH=$(readlink -f "$0")
+SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+
 function build_image() {
     local IMAGE_NAME="$1"
-    # Handle symlinks here as we tend to be executed as an npm binary
-    local SCRIPT_PATH=$(readlink -f "$0")
-    local SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 
     echo "Building $IMAGE_NAME image in $SCRIPT_DIR"
     docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=${IMAGE_NAME#*:}" "$SCRIPT_DIR"
@@ -34,7 +35,7 @@ trap clean_up EXIT
 
 # Wait for playwright-server to be ready
 echo "Waiting for playwright-server"
-pnpm wait-on "tcp:$WS_PORT"
+pnpm --dir "$SCRIPT_DIR" wait-on "tcp:$WS_PORT"
 
 # Run the test we were given, setting PW_TEST_CONNECT_WS_ENDPOINT accordingly
 echo "Running '$@'"
