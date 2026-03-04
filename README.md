@@ -9,7 +9,7 @@
 
 # Element
 
-Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
+Element (formerly known as Vector and Riot) is a Matrix web & desktop client built using the [Matrix
 JS SDK](https://github.com/matrix-org/matrix-js-sdk).
 
 # Supported Environments
@@ -42,8 +42,8 @@ Element has several tiers of support for different environments:
 The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
 
 For accessing Element on an Android or iOS device, we currently recommend the
-native apps [element-android](https://github.com/element-hq/element-android)
-and [element-ios](https://github.com/element-hq/element-ios).
+native apps [element-x-android](https://github.com/element-hq/element-x-android)
+and [element-x-ios](https://github.com/element-hq/element-x-ios).
 
 # Getting Started
 
@@ -55,91 +55,16 @@ To host your own instance of Element see [Installing Element Web](docs/install.m
 
 To install Element as a desktop application, see [Running as a desktop app](#running-as-a-desktop-app) below.
 
-# Important Security Notes
+---
 
-## Separate domains
+# Monorepo
 
-We do not recommend running Element from the same domain name as your Matrix
-homeserver. The reason is the risk of XSS (cross-site-scripting)
-vulnerabilities that could occur if someone caused Element to load and render
-malicious user generated content from a Matrix API which then had trusted
-access to Element (or other apps) due to sharing the same domain.
+This repository is a monorepo hosting Element Web and other related projects in various subdirectories.
+You can read more about the structure [here](docs/monorepo.md).
 
-We have put some coarse mitigations into place to try to protect against this
-situation, but it's still not good practice to do it in the first place. See
-<https://github.com/element-hq/element-web/issues/1977> for more details.
+# Element Web
 
-## Configuration best practices
-
-Unless you have special requirements, you will want to add the following to
-your web server configuration when hosting Element Web:
-
-- The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
-  framed and protect from [clickjacking][owasp-clickjacking].
-- The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
-  header, as the modern replacement for `X-Frame-Options` (though both should be
-  included since not all browsers support it yet, see
-  [this][owasp-clickjacking-csp]).
-- The `X-Content-Type-Options: nosniff` header, to [disable MIME
-  sniffing][mime-sniffing].
-- The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
-  legacy browsers.
-
-[mime-sniffing]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing
-[owasp-clickjacking-csp]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples
-[owasp-clickjacking]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html
-
-If you are using nginx, this would look something like the following:
-
-```
-add_header X-Frame-Options SAMEORIGIN;
-add_header X-Content-Type-Options nosniff;
-add_header X-XSS-Protection "1; mode=block";
-add_header Content-Security-Policy "frame-ancestors 'self'";
-```
-
-For Apache, the configuration looks like:
-
-```
-Header set X-Frame-Options SAMEORIGIN
-Header set X-Content-Type-Options nosniff
-Header set X-XSS-Protection "1; mode=block"
-Header set Content-Security-Policy "frame-ancestors 'self'"
-```
-
-Note: In case you are already setting a `Content-Security-Policy` header
-elsewhere, you should modify it to include the `frame-ancestors` directive
-instead of adding that last line.
-
-# Building From Source
-
-Element is a modular webapp built with modern ES6 and uses a Node.js build system.
-Ensure you have the latest LTS version of Node.js installed.
-
-Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
-
-1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
-1. Install `yarn` if not present already.
-1. Clone the repo: `git clone https://github.com/element-hq/element-web.git`.
-1. Switch to the element-web directory: `cd element-web`.
-1. Install the prerequisites: `yarn install`.
-    - If you're using the `develop` branch, then it is recommended to set up a
-      proper development environment (see [Setting up a dev
-      environment](./developer_guide.md#setting-up-a-dev-environment) below). Alternatively, you
-      can use <https://develop.element.io> - the continuous integration release of
-      the develop branch.
-1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it. See the [configuration docs](docs/config.md) for details.
-1. `yarn dist` to build a tarball to deploy. Untaring this file will give
-   a version-specific directory containing all the files that need to go on your
-   web server.
-
-Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
-which will build all the necessary files into the `webapp` directory. The version of Element
-will not appear in Settings without using the dist script. You can then mount the
-`webapp` directory on your web server to actually serve up the app, which is
-entirely static content.
+To learn more about Element Web [click here](apps/web/README.md)
 
 # Running as a Desktop app
 
@@ -152,33 +77,6 @@ To build it yourself, follow the instructions at <https://github.com/element-hq/
 Many thanks to @aviraldg for the initial work on the Electron integration.
 
 The [configuration docs](docs/config.md#desktop-app-configuration) show how to override the desktop app's default settings if desired.
-
-# config.json
-
-Element supports a variety of settings to configure default servers, behaviour, themes, etc.
-See the [configuration docs](docs/config.md) for more details.
-
-# Labs Features
-
-Some features of Element may be enabled by flags in the `Labs` section of the settings.
-Some of these features are described in [labs.md](https://github.com/element-hq/element-web/blob/develop/docs/labs.md).
-
-# Caching requirements
-
-Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
-
-```
-/config.*.json
-/i18n
-/home
-/sites
-/index.html
-```
-
-We also recommend that you force browsers to re-validate any cached copy of Element on page load by configuring your
-webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Element on
-the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
-Dockerfile.
 
 # Development
 
@@ -214,3 +112,6 @@ This software is multi licensed by New Vector Ltd (Element). It can be used eith
 
 (3) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to).
 Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.
+
+Please contact [licensing@element.io](mailto:licensing@element.io) to purchase
+an Element commercial license for this software.

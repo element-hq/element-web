@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Clock renders the clock 1`] = `
+exports[`Clock > renders the clock 1`] = `
 <div>
   <time
     class="mx_Clock"
@@ -11,7 +11,7 @@ exports[`Clock renders the clock 1`] = `
 </div>
 `;
 
-exports[`Clock renders the clock with a lot of seconds 1`] = `
+exports[`Clock > renders the clock with a lot of seconds 1`] = `
 <div>
   <time
     class="mx_Clock"

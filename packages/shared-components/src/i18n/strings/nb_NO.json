@@ -1,0 +1,155 @@
+{
+    "a11y": {
+        "seek_bar_label": "Søkelinje for lyd"
+    },
+    "action": {
+        "delete": "Slett",
+        "dismiss": "Avvis",
+        "edit": "Rediger",
+        "explore_rooms": "Se alle rom",
+        "invite": "Inviter",
+        "new_conversation": "Ny samtale",
+        "new_room": "Nytt rom",
+        "new_video_room": "Nytt videorom",
+        "open_menu": "Åpne meny",
+        "pause": "Sett på pause",
+        "play": "Spill av",
+        "remove": "Fjern",
+        "retry": "Prøv på nytt",
+        "search": "Søk",
+        "start_chat": "Start chat"
+    },
+    "common": {
+        "preferences": "Innstillinger"
+    },
+    "left_panel": {
+        "open_dial_pad": "Åpne nummerpanelet"
+    },
+    "notifications": {
+        "all_messages": "Alle meldinger",
+        "default_settings": "Match standardinnstillingene",
+        "mentions_keywords": "Omtaler og nøkkelord",
+        "mute_room": "Demp rommet"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Rominnstillinger"
+        },
+        "history_visibility_badge": {
+            "private": "Nye medlemmer ser ikke historikken",
+            "shared": "Nye medlemmer ser historikk",
+            "world_readable": "Alle kan se historikken"
+        },
+        "status_bar": {
+            "delete_all": "Slett alle",
+            "exceeded_resource_limit_description": "Kontakt tjenesteadministratoren din for å fortsette å bruke tjenesten.",
+            "exceeded_resource_limit_title": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har overskredet en ressursgrense.",
+            "failed_to_create_room_title": "Kunne ikke starte en chat med denne brukeren",
+            "homeserver_blocked_title": "Meldingen din ble ikke sendt fordi denne hjemmeserveren er blokkert av dens administrator.",
+            "monthly_user_limit_reached_title": "Meldingen din ble ikke sendt fordi denne hjemmeserveren har nådd sin månedlige grense for aktive brukere.",
+            "requires_consent_agreement_title": "Du kan ikke sende noen meldinger før du har lest og godtatt våre vilkår og betingelser.",
+            "retry_all": "Prøv alle på nytt",
+            "select_messages_to_retry": "Du kan velge alle eller individuelle meldinger for å prøve på nytt eller slette",
+            "server_connectivity_lost_description": "Sendte meldinger vil bli lagret til tilkoblingen er tilbake.",
+            "server_connectivity_lost_title": "Tilkoblingen til tjeneren er nede.",
+            "some_messages_not_sent": "Noen av meldingene dine er ikke sendt"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Åpne rom %(roomName)s",
+            "invitation": "Invitasjon til det åpne rommet %(roomName)s.",
+            "unsent_message": "Åpent rom %(roomName)s med en usendt melding."
+        },
+        "appearance": "Utseende",
+        "empty": {
+            "no_chats": "Ingen chat ennå",
+            "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
+            "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
+            "no_favourites": "Du har ikke noen favorittchatter ennå.",
+            "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
+            "no_invites": "Du har ingen uleste invitasjoner",
+            "no_lowpriority": "Du har ingen rom med lav prioritet",
+            "no_mentions": "Du har ingen uleste omtaler",
+            "no_people": "Du har ikke direkte chatter med noen ennå",
+            "no_rooms": "Du er ikke med i noen rom ennå",
+            "no_unread": "Gratulerer! Du har ingen uleste meldinger",
+            "show_activity": "Se alle aktiviteter",
+            "show_chats": "Vis alle chatter"
+        },
+        "filters": {
+            "favourite": "Favoritter",
+            "invites": "Invitasjoner",
+            "low_priority": "Lav prioritet",
+            "mentions": "Omtaler",
+            "people": "Personer",
+            "rooms": "Rom",
+            "unread": "Uleste"
+        },
+        "list_title": "Romliste",
+        "more_options": {
+            "copy_link": "Kopier romlenke",
+            "favourited": "Favorittmerket",
+            "leave_room": "Forlat rommet",
+            "low_priority": "Lav prioritet"
+        },
+        "open_space_menu": "Åpne Område-meny",
+        "room_options": "Rominnstillinger",
+        "show_message_previews": "Aktiver forhåndsvisning av meldinger",
+        "sort": "Sorter",
+        "sort_type": {
+            "activity": "Siste aktivitet",
+            "atoz": "A-Å",
+            "unread_first": "Ulest først"
+        },
+        "space_menu": {
+            "home": "Område hjem",
+            "space_settings": "Område-innstillinger"
+        }
+    },
+    "terms": {
+        "tac_button": "Gå gjennom betingelser og vilkår"
+    },
+    "time": {
+        "about_day_ago": "cirka 1 dag siden",
+        "about_hour_ago": "cirka 1 time siden",
+        "about_minute_ago": "cirka 1 minutt siden",
+        "few_seconds_ago": "noen sekunder siden",
+        "in_about_day": "rundt en dag fra nå",
+        "in_about_hour": "rundt en time fra nå",
+        "in_about_minute": "rundt et minutt fra nå",
+        "in_few_seconds": "om noen sekunder fra nå",
+        "in_n_days": "%(num)s dager fra nå",
+        "in_n_hours": "%(num)s timer fra nå",
+        "in_n_minutes": "%(num)s minutter fra nå",
+        "n_days_ago": "%(num)s dager siden",
+        "n_hours_ago": "%(num)s timer siden",
+        "n_minutes_ago": "%(num)s minutter siden"
+    },
+    "timeline": {
+        "decryption_failure": {
+            "blocked": "Avsenderen har blokkert deg fra å motta denne meldingen fordi enheten din ikke er verifisert",
+            "historical_event_no_key_backup": "Historiske meldinger er ikke tilgjengelige på denne enheten",
+            "historical_event_unverified_device": "Du må verifisere denne enheten for å få tilgang til historiske meldinger",
+            "historical_event_user_not_joined": "Du har ikke tilgang til denne meldingen",
+            "sender_identity_previously_verified": "Avsenderens bekreftede identitet ble tilbakestilt",
+            "sender_unsigned_device": "Sendt fra en usikker enhet.",
+            "unable_to_decrypt": "Kan ikke dekryptere meldingen"
+        },
+        "m.audio": {
+            "audio_player": "Lydavspiller",
+            "error_downloading_audio": "Feil ved nedlasting av lyd",
+            "unnamed_audio": "Ikke navngitt lyd"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Flytt til venstre",
+            "move_right": "Flytt til høyre",
+            "remove": "Fjern for alle",
+            "revoke": "Trekk tilbake rettigheter",
+            "screenshot": "Ta et bilde",
+            "start_audio_stream": "Start lydstrøm"
+        }
+    }
+}

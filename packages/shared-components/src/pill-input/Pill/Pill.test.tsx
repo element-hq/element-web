@@ -6,8 +6,9 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render } from "jest-matrix-react";
+import { render } from "@test-utils";
 import React from "react";
+import { describe, it, expect } from "vitest";
 
 import * as stories from "./Pill.stories";
 

@@ -1,0 +1,61 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SpaceCreateMenu_wrapper {
+    /* background blur everything except SpacePanel */
+    .mx_ContextualMenu_background {
+        background-color: $dialog-backdrop-color;
+        opacity: 0.6;
+        left: 68px;
+    }
+
+    .mx_ContextualMenu {
+        padding: 24px;
+        width: 480px;
+        box-sizing: border-box;
+        background-color: $background;
+        position: relative;
+
+        > div {
+            > h2 {
+                font-weight: var(--cpd-font-weight-semibold);
+                font-size: $font-18px;
+                margin-top: 4px;
+            }
+
+            > p {
+                font-size: $font-15px;
+                color: $secondary-content;
+            }
+        }
+
+        .mx_SpaceCreateMenu_back {
+            width: 24px;
+            height: 24px;
+            padding: var(--cpd-space-0-5x);
+            background-color: $panel-actions;
+            border-radius: 14px;
+            margin-bottom: 12px;
+
+            svg {
+                color: $tertiary-content;
+            }
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            padding: 8px 22px;
+            margin-left: auto;
+            display: block;
+            width: min-content;
+        }
+
+        .mx_AccessibleButton_disabled {
+            cursor: not-allowed;
+        }
+    }
+}

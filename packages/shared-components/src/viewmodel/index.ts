@@ -12,3 +12,5 @@ export * from "./ViewModelSubscriptions";
 export type * from "./ViewModel";
 export * from "./MockViewModel";
 export * from "./useCreateAutoDisposedViewModel";
+export * from "./useMockedViewModel";
+export * from "./useViewModel";

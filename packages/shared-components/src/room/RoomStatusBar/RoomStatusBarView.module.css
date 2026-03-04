@@ -1,0 +1,23 @@
+.container {
+    color: var(--cpd-color-text-primary);
+    svg {
+        /* Ensure button icons are primary too */
+        color: var(--cpd-color-text-primary) !important;
+    }
+}
+
+.secondaryAction svg {
+    color: var(--cpd-color-text-secondary) !important;
+}
+
+.primaryAction svg {
+    color: var(--cpd-color-text-on-solid-primary) !important;
+}
+
+.title {
+    color: var(--cpd-color-text-critical-primary);
+}
+
+.description {
+    color: var(--cpd-color-text-primary);
+}

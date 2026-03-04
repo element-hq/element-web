@@ -184,6 +184,16 @@ Please ensure your changes match the cosmetic style of the existing project,
 and **_never_** mix cosmetic and functional changes in the same commit, as it
 makes it horribly hard to review otherwise.
 
+## Shared Components
+
+When creating new UI components, consider whether they should be added to the shared components package (`packages/shared-components`) rather than directly in the main `src/` directory. Components should be placed in shared components if they:
+
+- Are reusable across different parts of the application
+- Could potentially be used by other Element projects (Element Desktop, Aurora, Element modules...)
+- Follow established patterns and don't have tight coupling to specific application logic
+
+For more details, see the [shared components README](./packages/shared-components/README.md).
+
 ## Attribution
 
 Everyone who contributes anything to Matrix is welcome to be listed in the

@@ -6,7 +6,8 @@
  */
 
 import { type KeyboardEvent } from "react";
-import { renderHook } from "jest-matrix-react";
+import { renderHook } from "@test-utils";
+import { vi, describe, expect, it, beforeEach, afterEach } from "vitest";
 
 import { useListKeyboardNavigation } from "./useListKeyboardNavigation";
 
@@ -31,20 +32,20 @@ describe("useListKeyDown", () => {
 
         // Mock event object
         mockEvent = {
-            preventDefault: jest.fn(),
+            preventDefault: vi.fn(),
             key: "",
         };
 
         // Mock focus methods
         mockItems.forEach((item) => {
-            item.focus = jest.fn();
-            item.click = jest.fn();
+            item.focus = vi.fn();
+            item.click = vi.fn();
         });
     });
 
     afterEach(() => {
         document.body.removeChild(mockList);
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     function render(): {
@@ -91,7 +92,7 @@ describe("useListKeyDown", () => {
         ],
     )("should handle %s to focus the %inth element", (key, finalPosition, startPosition) => {
         const result = render();
-        mockList.contains = jest.fn().mockReturnValue(true);
+        mockList.contains = vi.fn().mockReturnValue(true);
 
         Object.defineProperty(document, "activeElement", {
             value: mockItems[startPosition],
@@ -109,7 +110,7 @@ describe("useListKeyDown", () => {
 
     it.each([["ArrowDown"], ["ArrowUp"]])("should not handle %s when active element is not in list", (key) => {
         const result = render();
-        mockList.contains = jest.fn().mockReturnValue(false);
+        mockList.contains = vi.fn().mockReturnValue(false);
 
         const outsideElement = document.createElement("button");
 

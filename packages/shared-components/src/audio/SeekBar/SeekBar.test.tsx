@@ -5,9 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render } from "jest-matrix-react";
+import { render } from "@test-utils";
 import React from "react";
 import { composeStories } from "@storybook/react-vite";
+import { describe, it, expect } from "vitest";
 
 import * as stories from "./SeekBar.stories.tsx";
 const { Default } = composeStories(stories);

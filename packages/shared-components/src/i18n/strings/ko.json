@@ -1,0 +1,184 @@
+{
+    "a11y": {
+        "seek_bar_label": "오디오 탐색 바"
+    },
+    "action": {
+        "delete": "삭제",
+        "dismiss": "버리기",
+        "edit": "편집",
+        "explore_rooms": "방 검색",
+        "invite": "초대",
+        "new_conversation": "새로운 대화",
+        "new_room": "새로운 방",
+        "new_video_room": "새로운 비디오룸",
+        "open_menu": "메뉴 열기",
+        "pause": "일시중지",
+        "play": "재생",
+        "remove": "제거",
+        "retry": "재시도",
+        "search": "찾기",
+        "start_chat": "채팅 시작"
+    },
+    "common": {
+        "encryption_enabled": "암호화 활성화됨",
+        "preferences": "환경설정",
+        "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
+    },
+    "left_panel": {
+        "open_dial_pad": "다이얼 패드 열기"
+    },
+    "notifications": {
+        "all_messages": "모든 메시지",
+        "default_settings": "기본 설정 따르기",
+        "mentions_keywords": "멘션 및 키워드",
+        "mute_room": "방 알림 끄기"
+    },
+    "room": {
+        "context_menu": {
+            "title": "채팅방 옵션"
+        },
+        "history_visibility_badge": {
+            "private": "신규 회원은 이전 기록을 볼 수 없습니다.",
+            "shared": "신규 회원은 기록을 볼 수 있습니다.",
+            "world_readable": "누구나 히스토리를 볼 수 있습니다"
+        },
+        "status_bar": {
+            "delete_all": "전체 삭제",
+            "exceeded_resource_limit_description": "서비스를 계속 이용하시려면 서비스 관리자에게 문의하십시오.",
+            "exceeded_resource_limit_title": "이 홈 서버가 리소스 한도를 초과하여 귀하의 메시지가 전송되지 않았습니다.",
+            "failed_to_create_room_title": "이 사용자와 채팅을 시작할 수 없습니다",
+            "homeserver_blocked_title": "귀하의 메시지는 이 홈서버 관리자에 의해 차단되었기 때문에 전송되지 않았습니다.",
+            "monthly_user_limit_reached_title": "해당 홈서버의 월간 활성 사용자 수 제한에 도달하여 메시지가 전송되지 않았습니다.",
+            "requires_consent_agreement_title": "이용약관을 검토하고 동의하기 전까지는 메시지를 보낼 수 없습니다.",
+            "retry_all": "전체 재시도",
+            "select_messages_to_retry": "모든 메시지 또는 개별 메시지를 선택하여 재시도하거나 삭제할 수 있습니다.",
+            "server_connectivity_lost_description": "보낸 메시지는 연결이 복구될 때까지 저장됩니다.",
+            "server_connectivity_lost_title": "서버와의 연결이 끊어졌습니다.",
+            "some_messages_not_sent": "일부 메시지가 전송되지 않았습니다."
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "%(roomName)s 방 열기",
+            "invitation": "%(roomName)s 방 초대장 확인하기",
+            "mention": {
+                "other": "읽지 않은 언급 %(count)s개가 있는 %(roomName)s 방 열기"
+            },
+            "unread": {
+                "other": "읽지 않은 메세지 %(count)s개가 있는 %(roomName)s 방 열기"
+            },
+            "unsent_message": "전송되지 않은 메시지가 있는 %(roomName)s 방 열기"
+        },
+        "appearance": "모양",
+        "collapse_filters": "필터 목록 접기",
+        "empty": {
+            "no_chats": "아직 채팅이 없습니다.",
+            "no_chats_description": "메시지를 보내거나 방을 만들어 활동을 시작해 보세요.",
+            "no_chats_description_no_room_rights": "메시지를 보내 대화를 시작해 보세요.",
+            "no_favourites": "아직 즐겨찾는 채팅방이 없습니다.",
+            "no_favourites_description": "채팅 설정에서 대화를 즐겨찾기에 추가할 수 있습니다.",
+            "no_invites": "읽지 않은 초대장이 없습니다",
+            "no_lowpriority": "우선순위가 낮은 방이 없습니다.",
+            "no_mentions": "읽지 않은 멘션이 없습니다.",
+            "no_people": "아직 대화 중인 상대가 없습니다.",
+            "no_people_description": "다른 채팅을 확인하려면 적용된 필터를 해제해 주세요.",
+            "no_rooms": "아직 참여 중인 방이 없습니다.",
+            "no_rooms_description": "다른 채팅을 확인하려면 적용된 필터를 해제해 주세요.",
+            "no_unread": "축하합니다! 읽지 않은 메시지가 모두 확인되었습니다.",
+            "show_activity": "모든 활동 보기",
+            "show_chats": "모든 채팅 보기"
+        },
+        "expand_filters": "필터 목록 펼치기",
+        "filters": {
+            "favourite": "즐겨찾기",
+            "invites": "초대",
+            "low_priority": "우선순위 낮음",
+            "mentions": "멘션",
+            "people": "사람",
+            "rooms": "채팅방",
+            "unread": "안 읽음"
+        },
+        "list_title": "채팅방 목록",
+        "more_options": {
+            "copy_link": "방 링크 복사",
+            "favourited": "즐겨찾기",
+            "leave_room": "방 떠나기",
+            "low_priority": "우선순위 낮음",
+            "mark_read": "읽음으로 표시",
+            "mark_unread": "읽지 않음으로 표시"
+        },
+        "notification_options": "알림 옵션",
+        "open_space_menu": "스페이스 메뉴 열기",
+        "primary_filters": "채팅방 목록 필터",
+        "room": {
+            "more_options": "옵션 더보기"
+        },
+        "room_options": "채팅방 옵션",
+        "show_message_previews": "메시지 미리보기 표시",
+        "sort": "정렬",
+        "sort_type": {
+            "activity": "활동내역",
+            "atoz": "A-Z",
+            "unread_first": "안읽은 글 우선"
+        },
+        "space_menu": {
+            "home": "스페이스 홈",
+            "space_settings": "스페이스 설정"
+        }
+    },
+    "terms": {
+        "tac_button": "이용 약관을 검토하세요."
+    },
+    "time": {
+        "about_day_ago": "약 1일 전",
+        "about_hour_ago": "약 1 시간 전",
+        "about_minute_ago": "약 1분 전",
+        "few_seconds_ago": "몇 초 전",
+        "in_about_day": "하루 정도 후",
+        "in_about_hour": "지금부터 한 시간 정도 후에",
+        "in_about_minute": "지금부터 약 1분 후",
+        "in_few_seconds": "몇 초 후",
+        "in_n_days": "지금부터 %(num)s 일 후에",
+        "in_n_hours": "지금부터 %(num)s 시간 후",
+        "in_n_minutes": "지금부터 %(num)s분 후",
+        "n_days_ago": "%(num)s일 전",
+        "n_hours_ago": "%(num)s 시간 전",
+        "n_minutes_ago": "%(num)s분 전"
+    },
+    "timeline": {
+        "decryption_failure": {
+            "blocked": "발신자가 귀하의 기기가 인증되지 않았기 때문에 이 메시지를 수신하지 못하도록 차단했습니다.",
+            "historical_event_no_key_backup": "이 기기에서는 이전 메시지를 볼 수 없습니다.",
+            "historical_event_unverified_device": "이전 메시지에 액세스하려면 이 장치를 인증해야 합니다.",
+            "historical_event_user_not_joined": "이 메시지에 액세스할 수 없습니다.",
+            "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
+            "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
+            "unable_to_decrypt": "메시지를 해독할 수 없습니다."
+        },
+        "m.audio": {
+            "audio_player": "오디오 플레이어",
+            "error_downloading_audio": "오디오 다운로드 중 오류 발생",
+            "unnamed_audio": "이름 없는 오디오"
+        },
+        "m.room.encryption": {
+            "disable_attempt": "암호화를 비활성화하려는 시도가 무시되었습니다.",
+            "disabled": "암호화가 활성화되지 않았습니다",
+            "enabled": "이 방의 메시지는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
+            "enabled_dm": "이곳의 메시지는 종단간 암호화로 보호됩니다. 프로필 사진을 탭하여 %(displayName)s 님을 인증하세요.",
+            "enabled_local": "이 채팅의 메시지는 종단간 암호화됩니다.",
+            "parameters_changed": "일부 암호화 설정이 변경되었습니다.",
+            "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
+            "unsupported": "이 방에서 사용 중인 암호화 방식은 지원되지 않습니다."
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "왼쪽으로 이동",
+            "move_right": "오른쪽으로 이동",
+            "remove": "모든 사람에게서 제거",
+            "revoke": "권한 취소",
+            "screenshot": "사진 촬영",
+            "start_audio_stream": "오디오 스트림 시작"
+        }
+    }
+}

@@ -1,0 +1,47 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.view {
+    /* From figma, this should be aligned with the room header */
+    min-height: 64px;
+    box-sizing: border-box;
+    border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-bg-subtle-primary);
+    padding: 0 var(--cpd-space-3x);
+}
+
+.search {
+    /* The search button should take all the remaining space */
+    flex: 1;
+    /* !important is needed to override compound button in EW */
+    font: var(--cpd-font-body-md-regular) !important;
+    color: var(--cpd-color-text-secondary) !important;
+    min-width: 0;
+
+    svg {
+        fill: var(--cpd-color-icon-secondary);
+    }
+}
+
+.search_container {
+    flex: 1;
+
+    /* Shrink and truncate the search text */
+    white-space: nowrap;
+    overflow: hidden;
+
+    kbd {
+        font-family: inherit;
+    }
+}
+
+.search_text {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: start;
+}

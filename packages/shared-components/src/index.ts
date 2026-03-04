@@ -12,15 +12,35 @@ export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./avatar/AvatarWithDetails";
 export * from "./composer/Banner";
-export * from "./composer/HistoryVisibleBannerView";
+export * from "./crypto/SasEmoji";
+export * from "./event-tiles/EncryptionEventView";
+export * from "./event-tiles/EventTileBubble";
 export * from "./event-tiles/TextualEventView";
 export * from "./message-body/MediaBody";
+export * from "./message-body/MessageTimestampView";
+export * from "./message-body/DecryptionFailureBodyView";
+export * from "./message-body/ReactionsRowButtonTooltip";
+export * from "./message-body/ReactionsRowButton";
+export * from "./message-body/ReactionRow";
+export * from "./message-body/TimelineSeparator/";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
+export * from "./room/RoomStatusBar";
+export * from "./profile/DisambiguatedProfile";
+export * from "./room/HistoryVisibilityBadge";
 export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
+export * from "./room-list/RoomListHeaderView";
+export * from "./room-list/RoomListSearchView";
+export * from "./room-list/RoomListView";
+export * from "./room-list/RoomListItemView";
+export * from "./room-list/RoomListPrimaryFilters";
+export * from "./room-list/VirtualizedRoomListView";
+export * from "./timeline/DateSeparatorView/";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./right-panel/WidgetContextMenu";
+export * from "./utils/VirtualizedList";
 
 // Utils
 export * from "./utils/i18n";
@@ -30,12 +50,5 @@ export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 export * from "./utils/FormattingUtils";
 export * from "./utils/I18nApi";
-
 // MVVM
 export * from "./viewmodel";
-export * from "./useMockedViewModel";
-export * from "./useViewModel";
-
-// i18n (we must export this directly in order to not confuse the type bundler, it seems,
-// otherwise it will leave it as a relative import rather than bundling it)
-export type * from "./i18nKeys.d.ts";

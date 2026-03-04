@@ -7,8 +7,7 @@
 
 import React, { type ChangeEventHandler, type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
+import { type ViewModel, useViewModel } from "../../viewmodel";
 import { MediaBody } from "../../message-body/MediaBody";
 import { Flex } from "../../utils/Flex";
 import styles from "./AudioPlayerView.module.css";
@@ -71,7 +70,7 @@ export interface AudioPlayerViewActions {
 /**
  * The view model for the audio player.
  */
-export type AudioPlayerViewModel = ViewModel<AudioPlayerViewSnapshot> & AudioPlayerViewActions;
+export type AudioPlayerViewModel = ViewModel<AudioPlayerViewSnapshot, AudioPlayerViewActions>;
 
 interface AudioPlayerViewProps {
     /**

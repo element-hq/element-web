@@ -1,0 +1,55 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2015, 2016 , 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_UploadBar {
+    /* line up with the shield area in the composer */
+    padding: 5px 21px 0;
+    position: relative;
+
+    display: grid;
+    grid-template:
+        "icon     filename cancel" auto
+        "progress progress progress" auto
+        / min-content auto min-content;
+    gap: var(--cpd-space-1-5x);
+
+    & > svg {
+        grid-area: icon;
+        height: 18px;
+        width: 18px;
+        color: $muted-fg-color;
+        align-self: center;
+    }
+
+    .mx_UploadBar_filename {
+        grid-area: filename;
+        color: $muted-fg-color;
+        position: relative;
+        font-size: $font-15px;
+        vertical-align: middle;
+    }
+
+    .mx_UploadBar_cancel {
+        grid-area: cancel;
+        height: 16px;
+        width: 16px;
+        color: $muted-fg-color;
+        align-self: center;
+    }
+
+    .mx_ProgressBar {
+        grid-area: progress;
+        width: 100%;
+    }
+}
+
+.mx_ThreadView {
+    .mx_UploadBar {
+        padding-left: 0;
+    }
+}

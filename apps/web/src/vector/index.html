@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" style="height: 100%;">
+  <head>
+    <meta charset="utf-8">
+    <title>Element</title>
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/120.png') %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/144.png') %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/152.png') %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/180.png') %>">
+    <link rel="manifest" href="manifest.json">
+    <meta name="referrer" content="no-referrer">
+    <link rel="icon" type="image/png" sizes="24x24" href="<%= require('../../res/vector-icons/24.png') %>">
+    <link rel="icon" type="image/png" sizes="144x144" href="<%= require('../../res/vector-icons/144.png') %>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<%= require('../../res/vector-icons/512.png') %>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-title" content="Element">
+    <meta name="application-name" content="Element">
+    <meta name="theme-color" content="#ffffff">
+    <meta property="og:image" content="<%= og_image_url %>" />
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        style-src 'self' 'unsafe-inline' <%= csp_extra_source %>;
+        script-src 'self' 'wasm-unsafe-eval' https://www.recaptcha.net/recaptcha/ https://www.gstatic.com/recaptcha/ <%= csp_extra_source %>;
+        img-src * blob: data:;
+        connect-src * blob:;
+        font-src 'self' data: <%= csp_extra_source %>;
+        media-src * blob: data:;
+        child-src * blob: data:;
+        worker-src 'self' blob: <%= csp_extra_source %>;
+        frame-src * blob: data:;
+        form-action 'self' <%= csp_extra_source %>;
+        manifest-src 'self' <%= csp_extra_source %>;
+    ">
+    <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
+        var file = htmlWebpackPlugin.files.css[i];
+        var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
+        if (match) {
+            var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+        %>
+           <link rel="stylesheet" disabled="disabled" data-mx-theme="<%= title %>" title="<%= title %>" href="<%= file %>">
+        <% } else { %>
+           <link rel="stylesheet" href="<%= file %>">
+        <% }
+    } %>
+
+    <% for (const tag of htmlWebpackPlugin.tags.headTags) {
+        let path = tag.attributes && tag.attributes.href;
+        if (path && path.includes("/Inter/")) { %>
+            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
+        <% }
+    } %>
+
+  </head>
+  <body style="height: 100%; margin: 0;">
+    <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
+    <div id="matrixchat" style="height: 100%;" class="notranslate"></div>
+
+<%
+    // insert <script> tags for the JS entry points
+    for (let file of htmlWebpackPlugin.files.js) {
+        if (file.includes("bundle.js") || file.includes("unhomoglyph_data")) {
+%>    <script src="<%= file %>"></script>
+<%
+        }
+    }
+%>
+
+    <!-- Legacy supporting Prefetch images -->
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/bold.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/inline-code.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/italic.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/quote.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('@vector-im/compound-design-tokens/icons/strikethrough.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+
+    <!-- let CSS themes pass constants to the app -->
+    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"></div><div id="mx_theme_tertiaryAccentColor"></div>
+
+    <!-- We eagerly create these containers to ensure their CSS stacking context order is sensible -->
+    <div id="mx_PersistedElement_container"></div>
+    <div id="mx_Dialog_StaticContainer"></div>
+    <div id="mx_Dialog_Container"></div>
+    <div id="mx_ContextualMenu_Container"></div>
+  </body>
+</html>

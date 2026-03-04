@@ -160,7 +160,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 19. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
 20. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-21. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
+21. `help_key_storage_url`: The URL to point users to for help with key storage, defaults to `https://element.io/help#encryption5`.
+22. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -249,7 +250,7 @@ Together, the options might look like this in your config:
 Note that `index.html` also has an og:image meta tag that is set to an image hosted on element.io. This is the image used if
 links to your copy of Element appear in some websites like Facebook, and indeed Element itself. This has to be static in the HTML
 and an absolute URL (and HTTP rather than HTTPS), so it's not possible for this to be an option in config.json. If you'd like to
-change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`. Alternatively, you can edit
+change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" pnpm build`. Alternatively, you can edit
 the `og:image` meta tag in `index.html` directly each time you download a new version of Element.
 
 ## SSO setup
@@ -259,7 +260,7 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
 1. `logout_redirect_url`: Optional URL to redirect the user to after they have logged out. Some SSO systems support a page that the
    user can be sent to in order to log them out of that system too, making logout symmetric between Element and the SSO system.
 2. `sso_redirect_options`: Options to define how to handle unauthenticated users. If the object contains `"immediate": true`, then
-   all unauthenticated users will be automatically redirected to the SSO system to start their login. If instead you'd only like to
+   all unauthenticated users will be automatically redirected to the SSO/OIDC system to start their login. If instead you'd only like to
    have users which land on the welcome page to be redirected, use `"on_welcome_page": true`. Additionally, there is an option to
    redirect anyone landing on the login page, by using `"on_login_page": true`. As an example:
     ```json
@@ -274,8 +275,6 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
     It is most common to use the `immediate` flag instead of `on_welcome_page`.
 
 ## Native OIDC
-
-Native OIDC support is currently in labs and is subject to change.
 
 Static OIDC Client IDs are preferred and can be specified under `oidc_static_clients` as a mapping from `issuer` to configuration object containing `client_id`.
 Issuer must have a trailing forward slash. As an example:
@@ -391,8 +390,6 @@ The VoIP and Jitsi options are:
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
     - `use_exclusively`: A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in
       the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.
-    - `participant_limit`: The maximum number of users who can join a call; if
-      this number is exceeded, the user will not be able to join a given call.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
     - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),
@@ -409,6 +406,7 @@ If you run your own rageshake server to collect bug reports, the following optio
 1. `bug_report_endpoint_url`: URL for where to submit rageshake logs to. Rageshakes include feedback submissions and bug reports. When
    not present in the config, the app will disable all rageshake functionality. Set to `https://rageshakes.element.io/api/submit` to submit
    rageshakes to us, or use your own rageshake server.
+   You may also set the value to `"local"` if you wish to only store logs locally, in order to download them for debugging.
 2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
    alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
    (in contrast to other rageshakes submitted by the app, which use `element-web`).
@@ -582,11 +580,25 @@ Currently, the following UI feature flags are supported:
   This should only be used if the room history visibility options are managed by the server.
 - `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the
   timeline for recent messages. When false day dates will be used.
-- `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
-  to true.
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 - `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
 - `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
+
+## Modules
+
+`modules`: An optional array of module paths to load at runtime. Each entry is a URL or path to a JavaScript module entry point that will be dynamically imported when Element Web starts.
+
+**Note:** This is separate from the build-time module system configured via `build_config.yaml`. Runtime modules are loaded dynamically from the paths specified in `config.json`, while build-time modules are bundled during compilation.
+
+**Example:**
+
+```json
+{
+    "modules": ["https://example.com/my-module.js", "/path/to/local-module.js"]
+}
+```
+
+Each module URL is loaded using dynamic import (`import()`). The modules are loaded in order after Element Web initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api).
 
 ## Undocumented / developer options
 
@@ -596,4 +608,3 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
-5. `modules`: An optional list of modules to load. This is used for testing and development purposes only.

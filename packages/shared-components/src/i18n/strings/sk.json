@@ -1,0 +1,84 @@
+{
+    "a11y": {
+        "seek_bar_label": "Panel vyhľadávania zvuku"
+    },
+    "action": {
+        "delete": "Vymazať",
+        "dismiss": "Zamietnuť",
+        "explore_rooms": "Preskúmať miestnosti",
+        "invite": "Pozvať",
+        "new_conversation": "Nová konverzácia",
+        "new_room": "Nová miestnosť",
+        "new_video_room": "Nová video miestnosť",
+        "open_menu": "Otvoriť ponuku",
+        "pause": "Pozastaviť",
+        "play": "Prehrať",
+        "retry": "Skúsiť znova",
+        "search": "Hľadať",
+        "start_chat": "Začať konverzáciu"
+    },
+    "common": {
+        "preferences": "Predvoľby"
+    },
+    "left_panel": {
+        "open_dial_pad": "Otvoriť číselník"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Možnosti miestnosti"
+        },
+        "status_bar": {
+            "delete_all": "Vymazať všetko",
+            "exceeded_resource_limit_description": "Ak chcete službu naďalej používať, kontaktujte svojho správcu služby.",
+            "exceeded_resource_limit_title": "Vaša správa nebola odoslaná, pretože tento domovský server prekročil limit zdrojov.",
+            "failed_to_create_room_title": "Nepodarilo sa začať konverzáciu s týmto používateľom",
+            "homeserver_blocked_title": "Vaša správa nebola odoslaná, pretože tento domovský server bol blokovaný jeho správcom.",
+            "monthly_user_limit_reached_title": "Vaša správa nebola odoslaná, pretože tento domovský server dosiahol svoj mesačný limit aktívnych používateľov.",
+            "requires_consent_agreement_title": "Nemôžete odosielať žiadne správy, kým si neprečítate a nesúhlasíte s našimi zmluvnými podmienkami.",
+            "retry_all": "Skúsiť všetko znova",
+            "select_messages_to_retry": "Môžete vybrať všetky alebo jednotlivé správy, ktoré chcete opakovane odoslať alebo vymazať",
+            "server_connectivity_lost_description": "Odoslané správy budú uložené, kým sa neobnoví pripojenie.",
+            "server_connectivity_lost_title": "Spojenie so serverom bolo prerušené.",
+            "some_messages_not_sent": "Niektoré vaše správy ešte neboli odoslané"
+        }
+    },
+    "room_list": {
+        "open_space_menu": "Otvoriť ponuku priestoru",
+        "room_options": "Možnosti miestnosti",
+        "sort": "Zoradiť",
+        "sort_type": {
+            "activity": "Aktivita",
+            "atoz": "A-Z"
+        },
+        "space_menu": {
+            "home": "Domov priestoru",
+            "space_settings": "Nastavenia priestoru"
+        }
+    },
+    "terms": {
+        "tac_button": "Prečítať zmluvné podmienky"
+    },
+    "time": {
+        "about_day_ago": "asi pred jedným dňom",
+        "about_hour_ago": "približne pred hodinou",
+        "about_minute_ago": "približne pred minútou",
+        "few_seconds_ago": "pred pár sekundami",
+        "in_about_day": "približne o deň",
+        "in_about_hour": "približne o hodinu",
+        "in_about_minute": "približne o minútu",
+        "in_few_seconds": "o pár sekúnd",
+        "in_n_days": "o %(num)s dní",
+        "in_n_hours": "o %(num)s hodín",
+        "in_n_minutes": "o %(num)s minút",
+        "n_days_ago": "pred %(num)s dňami",
+        "n_hours_ago": "pred %(num)s hodinami",
+        "n_minutes_ago": "pred %(num)s minútami"
+    },
+    "timeline": {
+        "m.audio": {
+            "audio_player": "Prehrávač zvuku",
+            "error_downloading_audio": "Chyba pri sťahovaní zvuku",
+            "unnamed_audio": "Nepomenovaný zvukový záznam"
+        }
+    }
+}

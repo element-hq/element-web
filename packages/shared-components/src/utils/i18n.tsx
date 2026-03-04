@@ -25,13 +25,11 @@ import React from "react";
 import { KEY_SEPARATOR } from "matrix-web-i18n";
 import counterpart from "counterpart";
 
-import type { TranslationKey } from "../index";
-
-// @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
-import webpackLangJsonUrl from "$webapp/i18n/languages.json";
-
 export { KEY_SEPARATOR, normalizeLanguageKey, getNormalizedLanguageKeys } from "matrix-web-i18n";
 
+// Path where we load language files from (the index plus translations for each language)
+// The filename is appended to this, so a relative path here will result in a fetch for
+// a relative URL.
 const i18nFolder = "i18n/";
 
 // Control whether to also return original, untranslated strings
@@ -96,7 +94,7 @@ const translateWithFallback = (text: string, options?: IVariables): { translated
     // Even the translation via FALLBACK_LOCALE failed; this can happen if
     //
     // 1. The string isn't in the translations dictionary, usually because you're in develop
-    // and haven't run yarn i18n
+    // and haven't run pnpm i18n
     // 2. Loading the translation resources over the network failed, which can happen due to
     // to network or if the client tried to load a translation that's been removed from the
     // server.
@@ -421,13 +419,7 @@ async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
 }
 
 export async function getLangsJson(): Promise<Languages> {
-    let url: string;
-    if (typeof webpackLangJsonUrl === "string") {
-        // in Jest this 'url' isn't a URL, so just fall through
-        url = webpackLangJsonUrl;
-    } else {
-        url = i18nFolder + "languages.json";
-    }
+    const url = i18nFolder + "languages.json";
 
     const res = await fetch(url, { method: "GET" });
 

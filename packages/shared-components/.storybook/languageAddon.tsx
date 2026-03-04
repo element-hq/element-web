@@ -10,16 +10,14 @@ import { WithTooltip, IconButton, TooltipLinkList } from "storybook/internal/com
 import React from "react";
 import { GlobeIcon } from "@storybook/icons";
 
-// We can't import `shared/i18n.tsx` directly here.
-// The storybook addon doesn't seem to benefit the vite config of storybook and we can't resolve the alias in i18n.tsx.
-import json from "../../../webapp/i18n/languages.json";
-const languages = Object.keys(json).filter((lang) => lang !== "default");
+const languages: string[] = JSON.parse(process.env.STORYBOOK_LANGUAGES!);
 
 /**
  * Returns the title of a language in the user's locale.
  */
 function languageTitle(language: string): string {
-    return new Intl.DisplayNames([language], { type: "language", style: "short" }).of(language) || language;
+    const normalisedLang = language.toLowerCase().replace("_", "-");
+    return new Intl.DisplayNames([normalisedLang], { type: "language", style: "short" }).of(normalisedLang) || language;
 }
 
 export const languageAddon: Addon = {

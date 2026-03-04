@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<SpaceMenuView /> > should match snapshot 1`] = `
+<DocumentFragment>
+  <button
+    aria-disabled="false"
+    aria-expanded="false"
+    aria-haspopup="menu"
+    aria-label="Open space menu"
+    class="_icon-button_1215g_8 button"
+    data-kind="primary"
+    data-state="closed"
+    id="radix-_r_0_"
+    role="button"
+    style="--cpd-icon-button-size: 24px; padding: 2px;"
+    tabindex="0"
+    type="button"
+  >
+    <div
+      class="_indicator-icon_147l5_17"
+      style="--cpd-icon-button-size: 100%;"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+        />
+      </svg>
+    </div>
+  </button>
+</DocumentFragment>
+`;

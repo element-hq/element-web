@@ -37,6 +37,7 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
     NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
+    NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
 permissions: {} # No permissions required
 
@@ -50,13 +51,14 @@ jobs:
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
                   node-version: "lts/*"
 
             - name: Fetch layered build
@@ -66,18 +68,20 @@ jobs:
               run: scripts/layered.sh
 
             - name: Copy config
+              working-directory: apps/web
               run: cp element.io/develop/config.json config.json
 
             - name: Build
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) yarn build
+              working-directory: apps/web
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: webapp
-                  path: webapp
+                  path: apps/web/webapp
                   retention-days: 1
 
             - name: Calculate runner variables
@@ -122,32 +126,33 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   name: webapp
-                  path: webapp
+                  path: apps/web/webapp
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               with:
-                  cache: "yarn"
-                  cache-dependency-path: yarn.lock
+                  cache: "pnpm"
+                  cache-dependency-path: pnpm-lock.yaml
                   node-version: "lts/*"
 
             - name: Install dependencies
-              run: yarn install --frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Get installed Playwright version
               id: playwright
-              run: echo "version=$(yarn list --pattern @playwright/test --depth=0 --json --non-interactive --no-progress | jq -r '.data.trees[].name')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -155,27 +160,28 @@ jobs:
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: yarn playwright install --with-deps --no-shell
+              run: pnpm playwright install --with-deps --no-shell
 
             - name: Install system dependencies for WebKit
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
-              run: yarn playwright install-deps webkit
+              run: pnpm playwright install-deps webkit
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
+              working-directory: apps/web
               run: |
-                  yarn playwright test \
+                  pnpm playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
-                  path: blob-report
+                  path: apps/web/blob-report
                   retention-days: 1
 
     downstream-modules:
@@ -194,25 +200,27 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               if: inputs.skip != true
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
+            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+              if: inputs.skip != true
+            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
               if: inputs.skip != true
               with:
-                  cache: "yarn"
+                  cache: "pnpm"
                   node-version: "lts/*"
 
             - name: Install dependencies
               if: inputs.skip != true
-              run: yarn install --frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   pattern: all-blob-reports-*
                   path: all-blob-reports
@@ -220,7 +228,7 @@ jobs:
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: yarn playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
+              run: pnpm playwright merge-reports --reporter=html,./apps/web/playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
@@ -228,7 +236,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: html-report
                   path: playwright-report

@@ -1,0 +1,35 @@
+{
+    "action": {
+        "delete": "削除",
+        "dismiss": "閉じる",
+        "explore_rooms": "ルームを探す",
+        "pause": "一時停止",
+        "play": "再生",
+        "search": "検索"
+    },
+    "left_panel": {
+        "open_dial_pad": "ダイヤルパッドを開く"
+    },
+    "time": {
+        "about_day_ago": "約1日前",
+        "about_hour_ago": "約1時間前",
+        "about_minute_ago": "約1分前",
+        "few_seconds_ago": "数秒前",
+        "in_about_day": "今から約1日前",
+        "in_about_hour": "今から約1時間前",
+        "in_about_minute": "今から約1分前",
+        "in_few_seconds": "今から数秒前",
+        "in_n_days": "今から%(num)s日前",
+        "in_n_hours": "今から%(num)s時間前",
+        "in_n_minutes": "今から%(num)s分前",
+        "n_days_ago": "%(num)s日前",
+        "n_hours_ago": "%(num)s時間前",
+        "n_minutes_ago": "%(num)s分前"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "音声をダウンロードする際にエラーが発生しました",
+            "unnamed_audio": "名前のない音声"
+        }
+    }
+}

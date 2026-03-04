@@ -1,0 +1,392 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_SpacePanel {
+    --activeBackground-color: $panel-actions;
+    --activeBorder-color: $primary-content;
+    --activeBorder-transparent-gap: 1px;
+    --gutterSize: 14px;
+    --height-nested: 24px;
+    --height-topLevel: 32px;
+
+    background-color: $spacePanel-bg-color;
+    flex: 0 0 auto;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    /* Fix for the blurred avatar-background */
+    z-index: 1;
+
+    /* For enhanced visibility under contrast control */
+    outline: 1px solid transparent;
+
+    /* Create another flexbox so the Panel fills the container */
+    display: flex;
+    flex-direction: column;
+
+    &.collapsed {
+        width: 68px;
+    }
+
+    &.newUi {
+        background-color: var(--cpd-color-bg-canvas-default);
+        border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+    }
+
+    .mx_SpacePanel_toggleCollapse {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background-color: $tertiary-content;
+        top: 19px; /* v-align with avatar */
+        right: -8px;
+
+        svg {
+            height: inherit;
+            width: inherit;
+            display: inline-block;
+            color: $background;
+            /* Slight alignment tweak to center the asset */
+            margin-left: 1px;
+        }
+
+        &:not(.expanded) {
+            opacity: 0;
+        }
+
+        &.expanded svg {
+            transform: rotate(180deg);
+            /* Slight alignment tweak to center the asset */
+            margin-left: -1px;
+        }
+    }
+
+    &:hover .mx_SpacePanel_toggleCollapse {
+        opacity: 1;
+        /* For enhanced visibility under contrast control */
+        outline: 1px solid transparent;
+    }
+
+    ul {
+        margin: 0;
+        list-style: none;
+        padding: 0;
+    }
+
+    .mx_SpaceButton_toggleCollapse {
+        cursor: pointer;
+    }
+
+    .mx_SpaceItem_dragging {
+        .mx_SpaceButton_toggleCollapse {
+            visibility: hidden;
+        }
+    }
+
+    .mx_SpaceItem {
+        display: inline-flex;
+        flex-flow: wrap;
+
+        &.mx_SpaceItem_narrow {
+            align-self: baseline;
+        }
+    }
+
+    .mx_SpaceItem.collapsed {
+        & > .mx_SpaceButton > .mx_SpaceButton_toggleCollapse {
+            padding: 0 10px;
+            margin: 0 -10px;
+        }
+
+        & > .mx_SpaceTreeLevel {
+            display: none;
+        }
+    }
+
+    .mx_SpaceItem_new {
+        position: relative;
+    }
+
+    .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
+        margin-left: var(--gutterSize);
+        min-width: 40px;
+    }
+
+    .mx_SpaceButton {
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        padding: 4px 4px 4px 0;
+        width: 100%;
+        cursor: pointer;
+
+        &.mx_SpaceButton_active {
+            &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
+                background-color: var(--activeBackground-color);
+            }
+
+            &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+                padding: var(--activeBorder-transparent-gap);
+                border: 3px var(--activeBorder-color) solid;
+            }
+        }
+
+        .mx_SpaceButton_selectionWrapper {
+            position: relative;
+            display: flex;
+            flex: 1;
+            align-items: center;
+            border-radius: 12px;
+            padding: 4px;
+            width: calc(100% - 32px);
+            min-width: 0;
+        }
+
+        &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+            flex: initial;
+            width: 32px;
+        }
+
+        .mx_SpaceButton_name {
+            flex: 1;
+            margin-left: 8px;
+            white-space: nowrap;
+            display: block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font: var(--cpd-font-body-md-regular);
+        }
+
+        .mx_SpaceButton_toggleCollapse {
+            height: 20px;
+            width: var(--gutterSize);
+            flex-shrink: 0;
+            padding: 10px 0;
+
+            svg {
+                width: 20px;
+                height: inherit;
+                display: inline-block;
+                color: $tertiary-content;
+                /* Re-align with parent */
+                margin-left: -3px;
+            }
+        }
+
+        .mx_SpaceButton_icon {
+            /* Calculate height excluding padding to allow svg to inherit */
+            width: calc(var(--height-topLevel) - 14px);
+            height: calc(var(--height-topLevel) - 14px);
+            flex-shrink: 0;
+            border-radius: 8px;
+            padding: 7px;
+            background-color: $panel-actions;
+
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $secondary-content;
+            }
+        }
+
+        &.mx_SpaceButton_new .mx_SpaceButton_icon {
+            background-color: unset;
+
+            svg {
+                color: $primary-content;
+                transition: all 0.2s ease-in-out; /* TODO transition */
+            }
+        }
+
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon svg {
+            transform: rotate(45deg);
+        }
+
+        .mx_SpaceButton_menuButton {
+            width: 16px;
+            height: 16px;
+            padding: var(--cpd-space-0-5x);
+            flex-shrink: 0;
+            margin-top: auto;
+            margin-bottom: auto;
+            display: none;
+            position: absolute;
+            right: 4px;
+
+            svg {
+                width: inherit;
+                height: inherit;
+                display: block;
+                color: $primary-content;
+            }
+        }
+    }
+
+    .mx_SpaceTreeLevel {
+        display: flex;
+        flex-direction: column;
+        max-width: 250px;
+        min-width: 0;
+        flex-grow: 1;
+
+        .mx_SpaceTreeLevel {
+            /* Indent subspaces */
+            padding-left: 16px;
+        }
+    }
+
+    .mx_SpaceButton_avatarWrapper {
+        position: relative;
+        line-height: 0;
+    }
+
+    .mx_SpacePanel_badgeContainer {
+        /* Create a flexbox to make aligning dot badges easier */
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+
+        .mx_NotificationBadge {
+            margin: 0 2px; /* centering */
+            background-clip: padding-box;
+        }
+
+        .mx_NotificationBadge_dot {
+            /* make the smaller dot occupy the same width for centering */
+            margin: 0 -1px 0 0;
+            border: 3px solid $spacePanel-bg-color;
+        }
+
+        .mx_NotificationBadge_2char,
+        .mx_NotificationBadge_3char {
+            margin: -5px -5px 0 0;
+            border: 2px solid $spacePanel-bg-color;
+        }
+    }
+
+    .mx_SpaceButton:hover,
+    .mx_SpaceButton:focus-within,
+    .mx_SpaceButton_hasMenuOpen {
+        &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
+            display: block;
+        }
+    }
+
+    .mx_SpaceItem:not(.mx_SpaceItem_new) {
+        .mx_SpaceButton:hover,
+        .mx_SpaceButton:focus-within,
+        .mx_SpaceButton_hasMenuOpen {
+            &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_name {
+                max-width: calc(100% - 56px);
+            }
+        }
+    }
+
+    /* root space buttons are bigger and not indented */
+    & > .mx_AutoHideScrollbar {
+        flex: 1;
+        padding: 0 0 16px 0;
+        scrollbar-gutter: stable;
+
+        &.mx_IndicatorScrollbar_topOverflow {
+            mask-image: linear-gradient(to bottom, transparent, black 16px);
+        }
+
+        &.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(
+                to top,
+                transparent,
+                rgb(255, 255, 255, 30%) 4px,
+                rgb(255, 255, 255, 55%) 8px,
+                rgb(255, 255, 255, 75%) 12px,
+                black 16px
+            );
+        }
+
+        &.mx_IndicatorScrollbar_topOverflow.mx_IndicatorScrollbar_bottomOverflow {
+            /* This stacks two gradients on top of one another, which lets us
+               have a fixed pixel offset from both top and bottom for the colour stops.
+               Note the top fade is much smaller because the spaces start close to the top,
+               so otherwise a large gradient suddenly appears when you scroll down.
+             */
+            mask-image:
+                linear-gradient(to bottom, transparent, black 16px),
+                linear-gradient(
+                    to top,
+                    transparent,
+                    rgb(255, 255, 255, 30%) 4px,
+                    rgb(255, 255, 255, 55%) 8px,
+                    rgb(255, 255, 255, 75%) 12px,
+                    black 16px
+                );
+            mask-position:
+                0% 0%,
+                0% 100%;
+            mask-size:
+                calc(100% - 10px) 50%,
+                calc(100% - 10px) 50%;
+            mask-repeat: no-repeat;
+        }
+    }
+
+    .mx_UserMenu {
+        padding-bottom: 12px;
+        border-bottom: 1px solid $separator;
+        margin: 12px 14px 4px 18px;
+        width: min-content;
+        max-width: 226px;
+
+        /* Display the container and img here as block elements so they don't take
+         * up extra vertical space.
+         */
+        .mx_UserMenu_userAvatar_BaseAvatar {
+            display: block;
+        }
+    }
+
+    &.newUi .mx_UserMenu {
+        margin-top: var(--cpd-space-4x);
+        border-bottom: none;
+    }
+}
+
+.mx_SpacePanel_contextMenu {
+    max-width: 360px;
+
+    .mx_SpacePanel_contextMenu_header {
+        margin: 12px 16px 12px;
+        font-weight: var(--cpd-font-weight-semibold);
+        font-size: $font-15px;
+        line-height: $font-18px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mx_SpacePanel_contextMenu_separatorLabel {
+        color: $tertiary-content;
+        font-size: $font-10px;
+        line-height: $font-12px;
+        font-weight: var(--cpd-font-weight-semibold);
+    }
+}
+
+.mx_SpacePanel_sharePublicSpace {
+    margin: 0;
+}
+
+.mx_SpacePanel_Tooltip_KeyboardShortcut {
+    kbd {
+        font-family: inherit;
+        text-transform: capitalize;
+    }
+}

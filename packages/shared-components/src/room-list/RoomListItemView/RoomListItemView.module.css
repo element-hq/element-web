@@ -1,0 +1,129 @@
+/*
+ * Copyright 2025 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.roomListItem {
+    /* Remove button default style */
+    background: unset;
+    border: none;
+    text-align: unset;
+
+    /* Needed to position the selected marker */
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+
+    /* Gap between items, accounted for in ROOM_LIST_ITEM_HEIGHT */
+    --padding-top: var(--cpd-space-1x);
+    --padding-bottom: var(--cpd-space-1x);
+    padding: var(--padding-top) 0 var(--padding-bottom) 0;
+
+    /* 44px height + padding */
+    min-height: calc(44px + var(--padding-top) + var(--padding-bottom));
+
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    color: var(--cpd-color-text-secondary);
+
+    /* Hide the menu by default */
+    .hoverMenu {
+        display: none;
+    }
+}
+
+/* Show hover menu and background on hover/focus/menu-open states */
+.roomListItem:hover,
+.roomListItem:focus-visible,
+/* When the context menu is opened */
+.roomListItem[data-state="open"],
+/* When the options and notifications menu are opened */
+.roomListItem:has(.hoverMenu > button[data-state="open"]) {
+    color: var(--cpd-color-text-primary);
+
+    .container {
+        background-color: var(--cpd-color-bg-action-tertiary-hovered);
+    }
+
+    /* Preserve selected background on hover/focus/menu-open states */
+    &.selected .container {
+        background-color: var(--cpd-color-bg-action-tertiary-selected);
+    }
+
+    .hoverMenu {
+        display: flex;
+    }
+
+    /* When the menu is visible, hide the notification decoration to avoid clutter */
+    .notificationDecoration {
+        display: none;
+    }
+}
+
+.container {
+    flex: 1;
+    margin: 0 var(--cpd-space-3x);
+    padding: 0 var(--cpd-space-2x);
+    border-radius: 8px;
+    min-width: 0;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.text {
+    min-width: 0;
+}
+
+.ellipsis,
+.roomName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.selected {
+    .container {
+        background-color: var(--cpd-color-bg-action-tertiary-selected);
+        color: var(--cpd-color-text-primary);
+    }
+
+    /* Visual marker at the left on the container when the room is selected */
+    .container::before {
+        content: "";
+        position: absolute;
+        /* Marker height is 34px, room list item height is 44px. So position is at 5px at and bottom + padding */
+        top: calc(5px + var(--padding-top));
+        bottom: calc(5px + var(--padding-bottom));
+        left: 0;
+        width: 4px;
+        background-color: var(--cpd-color-bg-accent-rest);
+        border-radius: 0 8px 8px 0;
+    }
+}
+
+.bold .roomName {
+    font: var(--cpd-font-body-md-semibold);
+    color: var(--cpd-color-text-primary);
+}
+
+/* Set icon color for hover menu buttons */
+.hoverMenu svg {
+    fill: var(--cpd-color-icon-primary);
+}
+
+/*
+ * Remove top padding for the first item and bottom padding for the last item to align them with the container border.
+ * And adjust the selected marker position accordingly.
+ */
+.firstItem {
+    --padding-top: 0px;
+}
+
+.lastItem {
+    --padding-bottom: 0px;
+}

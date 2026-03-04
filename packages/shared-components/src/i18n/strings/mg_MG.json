@@ -1,0 +1,38 @@
+{
+    "a11y": {
+        "seek_bar_label": "Audio mitady bar"
+    },
+    "action": {
+        "delete": "Esorina",
+        "dismiss": "Hanario",
+        "explore_rooms": "Tsidiho ny efitrano",
+        "pause": "Mihato",
+        "play": "Milalao",
+        "search": "Karohina"
+    },
+    "left_panel": {
+        "open_dial_pad": "Sokafy ny dial pad"
+    },
+    "time": {
+        "about_day_ago": "Tokony ho iray andro izay",
+        "about_hour_ago": "Manakaiky adin'iray Teo ho eo",
+        "about_minute_ago": "Misy iray minitra Teo izay",
+        "few_seconds_ago": "Segondra vitsy lasa",
+        "in_about_day": "Anatiny iray andro eo ho eo",
+        "in_about_hour": "Adiny iray eo ho eo",
+        "in_about_minute": "Afaka iray minitra eo ho eo",
+        "in_few_seconds": "Afaka segondra vitsy",
+        "in_n_days": "%(num) s andro manomboka izao",
+        "in_n_hours": "% (num) sAnatiny ora vitsivitsy",
+        "in_n_minutes": "% (Num) sAfaka minitra vitsy",
+        "n_days_ago": "%(num)s Andro vitsivitsy izay",
+        "n_hours_ago": "%(num)sOra maromaro",
+        "n_minutes_ago": "%(Num)s Minitra vitsivitsy izay"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Hadisoana tamin'ny fampidinana feo",
+            "unnamed_audio": "Audio tsy voatonona anarana"
+        }
+    }
+}

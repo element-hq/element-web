@@ -1,0 +1,27 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": ["src/index.ts"],
+    "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-missing-exports"],
+    "out": "typedoc",
+    "hidePageHeader": true,
+    "hidePageTitle": true,
+    "hideBreadcrumbs": true,
+    "useCodeBlocks": true,
+    "parametersFormat": "table",
+    "propertiesFormat": "table",
+    "enumMembersFormat": "table",
+    "typeDeclarationFormat": "table",
+    "indexFormat": "table",
+    "publicPath": "https://github.com/element-hq/element-web/blob/develop/packages/shared-components/",
+    "sourceLinkTemplate": "https://github.com/element-hq/element-web/blob/develop/{path}#L{line}",
+    "name": "@element-hq/web-shared-components",
+    "categorizeByGroup": true,
+    "externalSymbolLinkMappings": {
+        "@types/react": {
+            "*": "https://react.dev/"
+        },
+        "react-virtuoso": {
+            "*": "https://virtuoso.dev/"
+        }
+    }
+}

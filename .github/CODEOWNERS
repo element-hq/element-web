@@ -1,32 +1,36 @@
 *                         @element-hq/element-web-reviewers
 /.github/workflows/**     @element-hq/element-web-team
-/package.json             @element-hq/element-web-team
-/yarn.lock                @element-hq/element-web-team
+package.json              @element-hq/element-web-team
+/pnpm-lock.yaml           @element-hq/element-web-team
 
-/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
-/test/SecurityManager-test.ts                                           @element-hq/element-crypto-web-reviewers
-/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
-/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
-/test/components/views/dialogs/security/                                @element-hq/element-crypto-web-reviewers
-/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
-/test/stores/SetupEncryptionStore-test.ts                               @element-hq/element-crypto-web-reviewers
-/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
-/src/components/views/settings/encryption/                              @element-hq/element-crypto-web-reviewers
-/test/unit-tests/components/views/settings/encryption/                  @element-hq/element-crypto-web-reviewers
-/src/components/views/dialogs/devtools/Crypto.tsx                       @element-hq/element-crypto-web-reviewers
-/playwright/e2e/crypto/                                                 @element-hq/element-crypto-web-reviewers
-/playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
+/apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
+/apps/web/test/SecurityManager-test.ts                                           @element-hq/element-crypto-web-reviewers
+/apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
+/apps/web/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
+/apps/web/test/components/views/dialogs/security/                                @element-hq/element-crypto-web-reviewers
+/apps/web/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
+/apps/web/test/stores/SetupEncryptionStore-test.ts                               @element-hq/element-crypto-web-reviewers
+/apps/web/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
+/apps/web/src/components/views/settings/encryption/                              @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/components/views/settings/encryption/                  @element-hq/element-crypto-web-reviewers
+/apps/web/src/components/views/dialogs/devtools/Crypto.tsx                       @element-hq/element-crypto-web-reviewers
+/apps/web/playwright/e2e/crypto/                                                 @element-hq/element-crypto-web-reviewers
+/apps/web/playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
+/packages/shared-components/src/crypto/                                          @element-hq/element-crypto-web-reviewers
 
 
-/src/models/Call.ts                       @element-hq/element-call-reviewers
-/src/call-types.ts                        @element-hq/element-call-reviewers
-/src/components/views/voip                @element-hq/element-call-reviewers
-/playwright/e2e/voip/element-call.spec.ts @element-hq/element-call-reviewers
+/apps/web/src/models/Call.ts                             @element-hq/element-call-reviewers
+/apps/web/src/call-types.ts                              @element-hq/element-call-reviewers
+/apps/web/src/components/views/voip                      @element-hq/element-call-reviewers
+/apps/web/playwright/e2e/voip/element-call.spec.ts       @element-hq/element-call-reviewers
 
 # Ignore translations as those will be updated by GHA for Localazy download
-/src/i18n/strings
-/src/i18n/strings/en_EN.json  @element-hq/element-web-reviewers
+/apps/web/src/i18n/strings
+/packages/shared-components/src/i18n/strings
+/apps/web/src/i18n/strings/en_EN.json                    @element-hq/element-web-reviewers
+/packages/shared-components/src/i18n/strings/en_EN.json  @element-hq/element-web-reviewers
+
 # Ignore the synapse & mas plugins as this is updated by GHA for docker image updating
-/playwright/testcontainers/synapse.ts
-/playwright/testcontainers/mas.ts
+/apps/web/playwright/testcontainers/synapse.ts
+/apps/web/playwright/testcontainers/mas.ts
 

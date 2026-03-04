@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`/lenny should match snapshot with args 1`] = `
+{
+  "body": "( ͡° ͜ʖ ͡°) this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/lenny should match snapshot with no args 1`] = `
+{
+  "body": "( ͡° ͜ʖ ͡°)",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/shrug should match snapshot with args 1`] = `
+{
+  "body": "¯\\_(ツ)_/¯ this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/shrug should match snapshot with no args 1`] = `
+{
+  "body": "¯\\_(ツ)_/¯",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/tableflip should match snapshot with args 1`] = `
+{
+  "body": "(╯°□°）╯︵ ┻━┻ this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/tableflip should match snapshot with no args 1`] = `
+{
+  "body": "(╯°□°）╯︵ ┻━┻",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/unflip should match snapshot with args 1`] = `
+{
+  "body": "┬──┬ ノ( ゜-゜ノ) this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`/unflip should match snapshot with no args 1`] = `
+{
+  "body": "┬──┬ ノ( ゜-゜ノ)",
+  "msgtype": "m.text",
+}
+`;

@@ -1,0 +1,35 @@
+{
+    "action": {
+        "delete": "ລຶບ",
+        "dismiss": "ຍົກເລີກ",
+        "explore_rooms": "ການສຳຫຼວດຫ້ອງ",
+        "pause": "ຢຸດຊົ່ວຄາວ",
+        "play": "ຫຼິ້ນ",
+        "search": "ຊອກຫາ"
+    },
+    "left_panel": {
+        "open_dial_pad": "ເປີດແຜ່ນປັດ"
+    },
+    "time": {
+        "about_day_ago": "ປະມານຫນຶ່ງມື້ກ່ອນຫນ້ານີ້",
+        "about_hour_ago": "ປະມານຫນຶ່ງຊົ່ວໂມງກ່ອນຫນ້ານີ້",
+        "about_minute_ago": "ປະມານໜຶ່ງວິນາທີກ່ອນຫນ້ານີ້",
+        "few_seconds_ago": "ສອງສາມວິນາທີກ່ອນຫນ້ານີ້",
+        "in_about_day": "ປະມານນຶ່ງມື້ຈາກນີ້",
+        "in_about_hour": "ປະມານຫນຶ່ງຊົ່ວໂມງຈາກປະຈຸບັນນີ້",
+        "in_about_minute": "ປະມານໜຶ່ງນາທີຕໍ່ຈາກນີ້",
+        "in_few_seconds": "ສອງສາມວິນາທີຕໍ່ຈາກນີ້ໄປ",
+        "in_n_days": "%(num)s ມື້ຕໍ່ຈາກນີ້",
+        "in_n_hours": "%(num)s ຊົ່ວໂມງຈາກປະຈຸບັນນີ້",
+        "in_n_minutes": "%(num)s ນາທີຕໍ່ຈາກນີ້",
+        "n_days_ago": "%(num)sມື້ກ່ອນຫນ້ານີ້",
+        "n_hours_ago": "%(num)s ຊົ່ວໂມງກ່ອນ",
+        "n_minutes_ago": "%(num)s ນາທີກ່ອນ"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "ເກີດຄວາມຜິດພາດໃນການດາວໂຫຼດສຽງ",
+            "unnamed_audio": "ສຽງບໍ່ມີຊື່"
+        }
+    }
+}

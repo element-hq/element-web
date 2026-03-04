@@ -1,6 +1,10 @@
 import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@storybook/react-vite";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
 
-import "../../../res/css/shared.pcss";
+import "./compound.css";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { setLanguage } from "../src/utils/i18n";
@@ -80,7 +84,7 @@ const withI18nProvider: Decorator = (Story) => {
 };
 
 const preview: Preview = {
-    tags: ["autodocs"],
+    tags: ["autodocs", "snapshot"],
     decorators: [withThemeProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {

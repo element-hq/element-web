@@ -1,0 +1,33 @@
+name: Publish shared component storybook
+on:
+    workflow_dispatch: {}
+    push:
+        branches:
+            - "develop"
+        paths:
+            - "packages/shared-components/**/*"
+
+permissions: {}
+
+jobs:
+    build:
+        name: Build storybook
+        uses: ./.github/workflows/shared-component-storybook-build.yml
+
+    publish:
+        name: Publish storybook
+        runs-on: ubuntu-latest
+        needs: build
+        environment: SharedComponents
+        steps:
+            - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
+              with:
+                  name: shared-components-storybook
+                  path: storybook-static
+
+            - name: 🚀 Deploy to Cloudflare Pages
+              uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
+              with:
+                  apiToken: ${{ secrets.CF_PAGES_TOKEN }}
+                  accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
+                  command: pages deploy storybook-static --project-name=shared-components-storybook

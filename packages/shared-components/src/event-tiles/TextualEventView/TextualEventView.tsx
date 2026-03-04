@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, type JSX } from "react";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../useViewModel";
+import { type ViewModel, useViewModel } from "../../viewmodel";
 
 export type TextualEventViewSnapshot = {
     content: string | ReactNode;

@@ -1,0 +1,27 @@
+{
+    "action": {
+        "delete": "מחק",
+        "dismiss": "התעלם",
+        "explore_rooms": "גלה חדרים",
+        "search": "חפש"
+    },
+    "left_panel": {
+        "open_dial_pad": "פתח לוח חיוג"
+    },
+    "time": {
+        "about_day_ago": "בערך לפני יום",
+        "about_hour_ago": "בערך לפני כשעה",
+        "about_minute_ago": "לפני בערך דקה",
+        "few_seconds_ago": "לפני מספר שניות",
+        "in_about_day": "בערך בעוד יום מעכשיו",
+        "in_about_hour": "בערך בעוד כשעה",
+        "in_about_minute": "בערך עוד דקה אחת",
+        "in_few_seconds": "בעוד מספר שניות מעכשיו",
+        "in_n_days": "בעוד %(num)s ימים מעכשיו",
+        "in_n_hours": "בעוד %(num)s שעות",
+        "in_n_minutes": "בעוד %(num)s דקות",
+        "n_days_ago": "לפני %(num)s ימים",
+        "n_hours_ago": "לפני %(num)s שעות",
+        "n_minutes_ago": "לפני %(num)s דקות"
+    }
+}

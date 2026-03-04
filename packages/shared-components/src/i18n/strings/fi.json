@@ -1,0 +1,38 @@
+{
+    "a11y": {
+        "seek_bar_label": "Äänen siirtymispalkki"
+    },
+    "action": {
+        "delete": "Poista",
+        "dismiss": "Hylkää",
+        "explore_rooms": "Selaa huoneita",
+        "pause": "Keskeytä",
+        "play": "Toista",
+        "search": "Haku"
+    },
+    "left_panel": {
+        "open_dial_pad": "Avaa näppäimistö"
+    },
+    "time": {
+        "about_day_ago": "noin päivä sitten",
+        "about_hour_ago": "noin tunti sitten",
+        "about_minute_ago": "noin minuutti sitten",
+        "few_seconds_ago": "muutama sekunti sitten",
+        "in_about_day": "noin päivä sitten",
+        "in_about_hour": "noin tunti sitten",
+        "in_about_minute": "noin minuutti sitten",
+        "in_few_seconds": "muutama sekunti sitten",
+        "in_n_days": "%(num)s päivää sitten",
+        "in_n_hours": "%(num)s tuntia sitten",
+        "in_n_minutes": "%(num)s minuuttia sitten",
+        "n_days_ago": "%(num)s päivää sitten",
+        "n_hours_ago": "%(num)s tuntia sitten",
+        "n_minutes_ago": "%(num)s minuuttia sitten"
+    },
+    "timeline": {
+        "m.audio": {
+            "error_downloading_audio": "Virhe ääntä ladattaessa",
+            "unnamed_audio": "Nimetön ääni"
+        }
+    }
+}
