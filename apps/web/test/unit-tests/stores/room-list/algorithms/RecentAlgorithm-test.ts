@@ -14,7 +14,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import "../../../../../src/stores/room-list/RoomListStore";
 import { RecentAlgorithm } from "../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import { makeThreadEvent, mkThread } from "../../../../test-utils/threads";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 
 describe("RecentAlgorithm", () => {
     let algorithm: RecentAlgorithm;

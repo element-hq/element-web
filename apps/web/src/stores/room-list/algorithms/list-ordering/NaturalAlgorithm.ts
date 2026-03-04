@@ -12,7 +12,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
-import { RoomUpdateCause, type TagID } from "../../models";
+import { type TagID } from "../../../room-list-v3/skip-list/tag";
+import { RoomUpdateCause } from "../../models";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 type NaturalCategorizedRoomMap = {

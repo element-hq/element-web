@@ -23,7 +23,8 @@ import defaultDispatcher, { type MatrixDispatcher } from "../../../../src/dispat
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import SettingsStore, { type CallbackFn } from "../../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../../src/stores/room-list/algorithms/models";
-import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause } from "../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
+import { OrderedDefaultTagIDs, RoomUpdateCause } from "../../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { flushPromises, stubClient, upsertRoomStateEvents, mkRoom } from "../../../test-utils";

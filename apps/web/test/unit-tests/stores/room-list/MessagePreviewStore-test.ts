@@ -20,7 +20,7 @@ import {
 
 import { MessagePreviewStore } from "../../../../src/stores/room-list/MessagePreviewStore";
 import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "../../../test-utils";
-import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { mkThread } from "../../../test-utils/threads";
 
 describe("MessagePreviewStore", () => {

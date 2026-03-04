@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { EventEmitter } from "events";
 import { type ITagMap, type ListAlgorithm, type SortAlgorithm } from "./algorithms/models";
-import { type RoomUpdateCause, type TagID } from "./models";
+import { type RoomUpdateCause } from "./models";
+import { type TagID } from "../room-list-v3/skip-list/tag";
 import { type IFilterCondition } from "./filters/IFilterCondition";
 
 export enum RoomListStoreEvent {
