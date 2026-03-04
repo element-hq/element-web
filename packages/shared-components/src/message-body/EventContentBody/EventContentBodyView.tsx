@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type Ref } from "react";
+import React, { type JSX, memo, type Ref } from "react";
 import parse, { type HTMLReactParserOptions } from "html-react-parser";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -82,7 +82,11 @@ export type EventContentBodyViewProps = EventContentBodyBaseViewProps &
 /**
  * View component for rendering Matrix event content body.
  */
-export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyViewProps>): JSX.Element {
+export const EventContentBodyView = memo(function EventContentBodyView({
+    vm,
+    as,
+    ref,
+}: Readonly<EventContentBodyViewProps>): JSX.Element {
     const { body, formattedBody, replacer, className, dir, parseFormattedBody } = useViewModel(vm);
     const parseBody =
         parseFormattedBody ??
@@ -103,4 +107,4 @@ export function EventContentBodyView({ vm, as, ref }: Readonly<EventContentBodyV
             {children}
         </div>
     );
-}
+});
