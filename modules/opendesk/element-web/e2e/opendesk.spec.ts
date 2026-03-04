@@ -51,20 +51,20 @@ test.use({
     page: async ({ context, page, moduleDir }, use) => {
         for (const path of ["logo.svg", "app1.png", "app2.png"]) {
             await context.route(`/${path}*`, async (route) => {
-                await route.fulfill({ path: `${moduleDir}/tests/fixture/${path}` });
+                await route.fulfill({ path: `${moduleDir}/e2e/fixture/${path}` });
             });
         }
         await context.route("http://localhost:8080/ics/navigation.json*", async (route) => {
             await route.fulfill({
-                path: `${moduleDir}/tests/fixture/navigation.json`,
+                path: `${moduleDir}/e2e/fixture/navigation.json`,
                 contentType: "application/json",
             });
         });
         await context.route("http://localhost:8080/ics/silent", async (route) => {
-            await route.fulfill({ path: `${moduleDir}/tests/fixture/silent-login.html`, contentType: "text/html" });
+            await route.fulfill({ path: `${moduleDir}/e2e/fixture/silent-login.html`, contentType: "text/html" });
         });
         await context.route("http://localhost:8080/widget.html*", async (route) => {
-            await route.fulfill({ path: `${moduleDir}/tests/fixture/widget.html`, contentType: "text/html" });
+            await route.fulfill({ path: `${moduleDir}/e2e/fixture/widget.html`, contentType: "text/html" });
         });
 
         await page.goto("/");
