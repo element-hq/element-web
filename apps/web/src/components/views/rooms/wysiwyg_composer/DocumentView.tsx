@@ -130,6 +130,12 @@ function restoreCaretOffset(editor: HTMLElement, offset: number): void {
         sel?.addRange(range);
     }
 }
+
+/**
+ * Encode a UTF-8 string as a lowercase hex string, as required by
+ * the Automerge `set_actor_id` API.
+ */
+function toHex(str: string): string {
     return Array.from(new TextEncoder().encode(str))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
