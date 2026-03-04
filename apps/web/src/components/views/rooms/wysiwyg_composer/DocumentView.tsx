@@ -199,8 +199,6 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     const { ref, isWysiwygReady, wysiwyg, actionStates } = wysiwygResult;
     const composerModel = wysiwygResult.composerModel;
 
-    logger.info("[DocumentView] render — isWysiwygReady:", isWysiwygReady, "ref.current:", ref.current);
-
     // Place the cursor at the end and focus the editor once the WASM model is
     // ready.  Without this the editor is enabled but has no selection, so no
     // cursor appears even after the element receives focus.
@@ -214,29 +212,18 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
 
     // Forward clicks anywhere in the content area to the contentEditable.
     const handleContentClick = useCallback(() => {
-        logger.info("[DocumentView] click — ref.current:", ref.current, "activeElement before focus:", document.activeElement);
-        if (ref.current) {
-            ref.current.focus();
-            logger.info("[DocumentView] after focus() — activeElement:", document.activeElement, "contentEditable:", ref.current.contentEditable);
-        } else {
-            logger.warn("[DocumentView] click — ref.current is null!");
-        }
+        ref.current?.focus();
     }, [ref]);
 
-    const handleKeyDown = useCallback((ev: React.KeyboardEvent) => {
-        logger.info("[DocumentView] keydown — key:", ev.key, "target:", ev.target, "activeElement:", document.activeElement);
-    }, []);
-
-    if (!isLoaded) {
-        return <div className="mx_DocumentView mx_DocumentView_loading" />;
-    }
-
+    // Always render the Editor so that `ref.current` is attached before
+    // useComposerModel's effect runs and calls initModel().  The loading
+    // overlay only hides the toolbar while the Automerge document is loading.
     return (
         <ComposerContext.Provider value={composerContext}>
             {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-            <div className="mx_DocumentView" data-testid="DocumentView" onKeyDown={handleKeyDown}>
+            <div className="mx_DocumentView" data-testid="DocumentView">
                 <div className="mx_DocumentView_toolbar">
-                    <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
+                    {isLoaded && <FormattingButtons composer={wysiwyg} actionStates={actionStates} />}
                 </div>
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <div className="mx_DocumentView_content" onInput={handleInput} onClick={handleContentClick}>
