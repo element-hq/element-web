@@ -47,7 +47,7 @@ const createApi = (config: unknown = {}) => {
 
 const widget: WidgetDescriptor = {
     id: "widget-id",
-    templateUrl: "https://example.com",
+    templateUrl: "https://example.com/",
     creatorUserId: "@user-id",
     kind: "room",
 };

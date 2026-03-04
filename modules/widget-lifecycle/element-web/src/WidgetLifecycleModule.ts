@@ -6,11 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Api, Module, WidgetDescriptor, WidgetLifecycleApi } from "@element-hq/element-web-module-api";
-
 import { CONFIG_KEY, parseWidgetLifecycleConfig, type WidgetLifecycleModuleConfig } from "./config";
 import { constructWidgetPermissions } from "./utils/constructWidgetPermissions";
 import { matchPattern } from "./utils/matchPattern";
-import { normalizeWidgetUrl } from "./utils/normalizeWidgetUrl";
 
 /** Subset of {@link WidgetLifecycleApi} used by the module for registration only. */
 export type WidgetLifecycleApiAdapter = Pick<
@@ -53,14 +51,12 @@ export default class WidgetLifecycleModule implements Module {
     }
 
     private preapprovePreload(widget: WidgetDescriptor): boolean {
-        const normalizedUrl = normalizeWidgetUrl(widget.templateUrl);
-        const configuration = constructWidgetPermissions(this.config, normalizedUrl);
+        const configuration = constructWidgetPermissions(this.config, widget.templateUrl);
         return configuration.preload_approved === true;
     }
 
     private preapproveIdentity(widget: WidgetDescriptor): boolean {
-        const normalizedUrl = normalizeWidgetUrl(widget.templateUrl);
-        const configuration = constructWidgetPermissions(this.config, normalizedUrl);
+        const configuration = constructWidgetPermissions(this.config, widget.templateUrl);
         return configuration.identity_approved === true;
     }
 
@@ -68,8 +64,7 @@ export default class WidgetLifecycleModule implements Module {
         widget: WidgetDescriptor,
         requestedCapabilities: Set<string>,
     ): Set<string> | undefined {
-        const normalizedUrl = normalizeWidgetUrl(widget.templateUrl);
-        const configuration = constructWidgetPermissions(this.config, normalizedUrl);
+        const configuration = constructWidgetPermissions(this.config, widget.templateUrl);
         const capabilitiesApproved = configuration.capabilities_approved;
 
         if (!capabilitiesApproved) return undefined;

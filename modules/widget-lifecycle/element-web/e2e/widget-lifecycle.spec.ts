@@ -47,6 +47,8 @@ test.use({
 
 test.describe("Widget Lifecycle", () => {
     test.describe("trusted widgets", () => {
+        // Configure the module to pre-approve the widget URL for preloading, identity tokens,
+        // and the m.room.topic state event capability.
         test.use({
             config: {
                 "io.element.element-web-modules.widget-lifecycle": {
@@ -62,6 +64,9 @@ test.describe("Widget Lifecycle", () => {
         });
 
         test("auto-approves preload and identity", async ({ page, user, homeserver }, testInfo) => {
+            // A bot creates a room with the widget pinned to the top panel, then invites the test user.
+            // Because the widget was added by a different user (the bot), Element would normally show a
+            // preload consent dialog before loading it — this test verifies that dialog is skipped.
             const bot = await homeserver.registerUser(`bot_${testInfo.testId}`, "password", "Bot");
             const { room_id: roomId } = await homeserver.csApi.request<{ room_id: string }>(
                 "POST",
@@ -102,6 +107,11 @@ test.describe("Widget Lifecycle", () => {
             await page.getByText("Trusted Widget").click();
             await page.getByRole("button", { name: "Accept" }).click();
 
+            // No preload dialog should appear — the widget loads immediately.
+            await expect(page.getByRole("button", { name: "Continue" })).not.toBeVisible();
+
+            // The widget greets the user by ID, proving the identity token was also auto-approved
+            // and passed to the widget without any consent prompts.
             await expect(
                 page
                     .frameLocator('iframe[title="Trusted Widget"]')
@@ -119,6 +129,7 @@ test.describe("Widget Lifecycle", () => {
                     name: "Capabilities Widget",
                 },
             );
+            // The widget requests two capabilities: m.room.topic (in the allowlist) and m.room.name (not in the allowlist).
             await homeserver.csApi.request<{ event_id: string }>(
                 "PUT",
                 `/v3/rooms/${encodeURIComponent(roomId)}/state/im.vector.modular.widgets/1`,
@@ -150,11 +161,13 @@ test.describe("Widget Lifecycle", () => {
             await page.getByText("Capabilities Widget").click();
             await page.getByRole("button", { name: "Accept" }).click();
 
+            // A capabilities approval dialog should appear since m.room.name was not pre-approved.
             await expect(page.getByRole("button", { name: "Approve" })).toBeVisible();
         });
     });
 
     test.describe("untrusted widgets", () => {
+        // No widget URLs are pre-approved, so all lifecycle prompts should be shown to the user.
         test.use({
             config: {
                 "io.element.element-web-modules.widget-lifecycle": {
@@ -163,7 +176,11 @@ test.describe("Widget Lifecycle", () => {
             },
         });
 
-        test("shows dialogs for untrusted widgets", async ({ page, user, homeserver }, testInfo) => {
+        test("shows preload, capabilities, and OpenID dialogs for untrusted widgets", async ({
+            page,
+            user,
+            homeserver,
+        }, testInfo) => {
             const bot = await homeserver.registerUser(`bot_${testInfo.testId}`, "password", "Bot");
             const { room_id: roomId } = await homeserver.csApi.request<{ room_id: string }>(
                 "POST",
@@ -204,6 +221,15 @@ test.describe("Widget Lifecycle", () => {
             await page.getByText("Untrusted Widget").click();
             await page.getByRole("button", { name: "Accept" }).click();
 
+            // 1. Preload consent dialog — shown because the widget was added by another user (the bot).
+            await expect(page.getByRole("button", { name: "Continue" })).toBeVisible();
+            await page.getByRole("button", { name: "Continue" }).click();
+
+            // 2. Capabilities dialog — the widget requests m.room.topic once it loads.
+            await expect(page.getByRole("button", { name: "Approve" })).toBeVisible();
+            await page.getByRole("button", { name: "Approve" }).click();
+
+            // 3. OpenID identity dialog — the widget requests an identity token after capabilities are granted.
             await expect(page.getByRole("button", { name: "Continue" })).toBeVisible();
         });
     });

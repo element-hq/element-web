@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { ModuleFactory } from "@element-hq/element-web-module-api";
-
 import WidgetLifecycleModule from "./WidgetLifecycleModule";
 
 export default WidgetLifecycleModule satisfies ModuleFactory;

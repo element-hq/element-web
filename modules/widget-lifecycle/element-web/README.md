@@ -19,7 +19,6 @@ This is useful when widgets have multiple routes or capabilities include variabl
 
 ## Matching and precedence
 
-- Widget URLs are normalized by stripping query parameters and hash fragments before matching.
 - Patterns ending in `*` are matched by prefix; other patterns must match exactly.
 - If multiple rules match, the most specific match wins per field.
 - The capabilities allow-list is not merged across rules; the most specific rule that defines it wins.
