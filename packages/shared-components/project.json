@@ -32,6 +32,25 @@
                 "cwd": "packages/shared-components"
             },
             "dependsOn": ["build", "typedoc"]
+        },
+        "test:unit": {
+            "command": "vitest --project=unit",
+            "options": { "cwd": "packages/shared-components" }
+        },
+        "test:storybook": {
+            "command": "vitest --project=storybook",
+            "options": { "cwd": "packages/shared-components" },
+            "dependsOn": ["typedoc"]
+        },
+        "test:storybook:update": {
+            "command": "playwright-screenshots-experimental nx test:storybook --run --update",
+            "options": {
+                "env": {
+                    "CI": "1"
+                },
+                "cwd": "packages/shared-components"
+            },
+            "dependsOn": ["typedoc"]
         }
     }
 }
