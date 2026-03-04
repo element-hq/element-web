@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { useWysiwyg, type UseWysiwyg } from "@vector-im/matrix-wysiwyg";
 
@@ -154,34 +154,44 @@ function useDocumentSync(
     });
 
     useEffect(() => {
-        const onTimeline = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
+        logger.info("[DocumentView] Registering delta listeners for room", room.roomId);
+
+        const applyDeltaEvent = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
-            // Skip events sent by this exact device — already in the local model.
+
             const eventDeviceId = event.getUnsigned()?.["device_id"] as string | undefined;
             if (event.getSender() === client.getUserId() && eventDeviceId === client.getDeviceId()) return;
 
             const model = composerModelRef.current;
-            if (!isCollaborative(model)) return;
+            if (!isCollaborative(model)) { logger.warn("[DocumentView] Model not collaborative yet, dropping delta"); return; }
 
             const data = event.getContent<{ data?: string }>().data;
-            if (!data) return;
+            if (!data) { logger.warn("[DocumentView] Delta event has no data"); return; }
             try {
                 model.receive_changes(base64Decode(data));
                 if (editorRef.current) {
                     editorRef.current.innerHTML = model.get_content_as_html();
                     onContentChanged();
                 }
+                logger.info("[DocumentView] Applied remote delta successfully");
             } catch (e) {
                 logger.warn("[DocumentView] Failed to apply remote delta", e);
             }
         };
 
+        // For unencrypted rooms: events arrive ready to use on Room.timeline.
+        // For encrypted rooms: events arrive as m.room.encrypted on Room.timeline
+        // and are only usable after MatrixEventEvent.Decrypted fires on the client.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        room.on("Room.timeline" as any, onTimeline);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return () => room.off("Room.timeline" as any, onTimeline);
-        // Intentionally omit composerModel — we use composerModelRef instead.
+        room.on("Room.timeline" as any, applyDeltaEvent);
+        client.on(MatrixEventEvent.Decrypted, applyDeltaEvent);
+
+        return () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            room.off("Room.timeline" as any, applyDeltaEvent);
+            client.off(MatrixEventEvent.Decrypted, applyDeltaEvent);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [room, client, editorRef, onContentChanged]);
 
