@@ -33,7 +33,7 @@ import {
 } from "../../../../test-utils";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import RoomTile from "../../../../../src/components/views/rooms/RoomTile";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import PlatformPeg from "../../../../../src/PlatformPeg";
 import type BasePlatform from "../../../../../src/BasePlatform";

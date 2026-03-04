@@ -20,7 +20,7 @@ import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotif
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { MessagePreviewStore } from "../../stores/room-list/MessagePreviewStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { DefaultTagID } from "../../stores/room-list/models";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";

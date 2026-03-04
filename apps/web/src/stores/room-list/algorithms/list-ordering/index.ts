@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { ImportanceAlgorithm } from "./ImportanceAlgorithm";
 import { ListAlgorithm, type SortAlgorithm } from "../models";
 import { NaturalAlgorithm } from "./NaturalAlgorithm";
-import { type TagID } from "../../models";
+import { type TagID } from "../../../room-list-v3/skip-list/tag";
 import { type OrderingAlgorithm } from "./OrderingAlgorithm";
 
 interface AlgorithmFactory {

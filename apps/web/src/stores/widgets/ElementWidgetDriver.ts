@@ -64,6 +64,8 @@ import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleRunner } from "../../modules/ModuleRunner";
+import { ModuleApi } from "../../modules/Api";
+import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
 import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 
@@ -250,13 +252,20 @@ export class ElementWidgetDriver extends WidgetDriver {
             missing.delete(cap);
         });
 
+        // Try the new module API first, then fall back to legacy paths
         let approved: Set<string> | undefined;
-        if (WidgetPermissionCustomisations.preapproveCapabilities) {
-            approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
-        } else {
-            const opts: CapabilitiesOpts = { approvedCapabilities: undefined };
-            ModuleRunner.instance.invoke(WidgetLifecycle.CapabilitiesRequest, opts, this.forWidget, requested);
-            approved = opts.approvedCapabilities;
+        approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
+            toWidgetDescriptor(this.forWidget, this.inRoomId),
+            requested,
+        );
+        if (!approved) {
+            if (WidgetPermissionCustomisations.preapproveCapabilities) {
+                approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
+            } else {
+                const opts: CapabilitiesOpts = { approvedCapabilities: undefined };
+                ModuleRunner.instance.invoke(WidgetLifecycle.CapabilitiesRequest, opts, this.forWidget, requested);
+                approved = opts.approvedCapabilities;
+            }
         }
         if (approved) {
             approved.forEach((cap) => {
@@ -663,9 +672,19 @@ export class ElementWidgetDriver extends WidgetDriver {
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
-        const opts: ApprovalOpts = { approved: undefined };
-        ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, opts, this.forWidget);
-        if (opts.approved) {
+        // Try the new module API first, then fall back to legacy path
+        let approved: boolean | undefined = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
+            toWidgetDescriptor(this.forWidget, this.inRoomId),
+        );
+
+        if (!approved) {
+            // Legacy module API fallback
+            const legacyOpts: ApprovalOpts = { approved: undefined };
+            ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, legacyOpts, this.forWidget);
+            approved = legacyOpts.approved;
+        }
+
+        if (approved) {
             return observer.update({
                 state: OpenIDRequestState.Allowed,
                 token: await MatrixClientPeg.safeGet().getOpenIdToken(),

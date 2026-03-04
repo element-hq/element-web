@@ -22,7 +22,7 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
 import { PollStartEventPreview } from "./previews/PollStartEventPreview";
-import { type TagID } from "./models";
+import { type TagID } from "../room-list-v3/skip-list/tag";
 import { LegacyCallInviteEventPreview } from "./previews/LegacyCallInviteEventPreview";
 import { LegacyCallAnswerEventPreview } from "./previews/LegacyCallAnswerEventPreview";
 import { LegacyCallHangupEvent } from "./previews/LegacyCallHangupEvent";
