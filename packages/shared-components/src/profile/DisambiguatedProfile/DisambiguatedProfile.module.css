@@ -11,6 +11,7 @@
     padding: 0;
     line-height: inherit;
     letter-spacing: inherit;
+    margin-bottom: var(--cpd-space-1x) !important;
     font: inherit;
     border: none;
     vertical-align: baseline;
