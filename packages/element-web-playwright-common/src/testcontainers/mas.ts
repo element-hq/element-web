@@ -11,6 +11,7 @@ import {
     type StartedTestContainer,
     Wait,
     type ExecResult,
+    type StartedNetwork,
 } from "testcontainers";
 import { type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
@@ -23,6 +24,7 @@ import { type Credentials } from "../utils/api.js";
 //   curl -sL https://element-hq.github.io/matrix-authentication-service/config.schema.json \
 //     | npx json-schema-to-typescript -o packages/element-web-playwright-common/src/testconainers/mas-config.ts
 import type { RootConfig as MasConfig } from "./mas-config.js";
+import type { Logger } from "../utils/logger.js";
 
 export { type MasConfig };
 
@@ -348,4 +350,20 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
 
         await this.manage("add-email", username, address);
     }
+}
+
+export async function makeMas(
+    postgres: StartedPostgreSqlContainer,
+    network: StartedNetwork,
+    logger: Logger,
+    config: Partial<MasConfig>,
+    name = "mas",
+): Promise<StartedMatrixAuthenticationServiceContainer> {
+    const container = await new MatrixAuthenticationServiceContainer(postgres)
+        .withNetwork(network)
+        .withNetworkAliases(name)
+        .withLogConsumer(logger.getConsumer(name))
+        .withConfig(config)
+        .start();
+    return container;
 }
