@@ -31,15 +31,15 @@ export function getTagsForRoom(room: Room): TagID[] {
 
     if (!tags.length) tags.push(DefaultTagID.Untagged);
 
-    return tags || [DefaultTagID.Untagged];
+    return tags;
 }
 
 /**
  * Get the tags for a room that the user has joined. It checks for user defined tags first, then checks if it's a DM, and finally checks if it's a conference room.
  * @param room
- * @returns
+ * @returns an array of tags for the room. If the room has no user defined tags, is not a DM, and is not a conference room, it will return an empty array.
  */
-function getTagsOfJoinedRoom(room: Room): TagID[] {
+export function getTagsOfJoinedRoom(room: Room): TagID[] {
     let tags = Object.keys(room.tags || {});
 
     if (tags.length === 0) {
