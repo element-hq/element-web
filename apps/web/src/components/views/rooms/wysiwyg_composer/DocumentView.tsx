@@ -443,6 +443,70 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         ref.current?.focus();
     }, [ref]);
 
+    // Expose a lightweight diagnostic on `window.__docDebug()` so we can
+    // compare CRDT state across clients from the browser console without
+    // flooding the log.  Returns a plain object — safe to JSON.stringify.
+    useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).__docDebug = () => {
+            const model = composerModel;
+            const collab = isCollaborative(model);
+            const timeline = room.getLiveTimeline().getEvents();
+            const deltas = timeline.filter((e) => e.getType() === DOC_DELTA_EVENT_TYPE);
+            const stateEvt = room.currentState.getStateEvents(DOC_STATE_EVENT_TYPE, "");
+
+            // Simple hash of a base64 string for quick comparison.
+            const simpleHash = (s: string): string => {
+                let h = 0;
+                for (let i = 0; i < s.length; i++) {
+                    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+                }
+                return (h >>> 0).toString(16).padStart(8, "0");
+            };
+
+            const docBytes = collab ? base64Encode(model.save_document()) : null;
+            const info = {
+                userId: client.getUserId(),
+                deviceId: client.getDeviceId(),
+                roomId: room.roomId,
+                modelReady: collab,
+                heads: collab ? model.get_heads() : null,
+                html: collab ? model.get_content_as_html() : null,
+                docHash: docBytes ? simpleHash(docBytes) : null,
+                docBytesLen: docBytes ? docBytes.length : null,
+                domHTML: ref.current?.innerHTML ?? null,
+                timelineDeltaCount: deltas.length,
+                timelineDeltaSenders: deltas.map((e) => `${e.getSender()} @${e.getTs()}`),
+                snapshotTs: stateEvt?.getTs() ?? null,
+                snapshotHash: stateEvt?.getContent<{ data?: string }>().data
+                    ? simpleHash(stateEvt!.getContent<{ data: string }>().data)
+                    : null,
+            };
+            const json = JSON.stringify(info, null, 2);
+            // eslint-disable-next-line no-console
+            console.log("[DocDebug]", json);
+            // Fallback copy: execCommand works from console unlike clipboard API.
+            try {
+                const ta = document.createElement("textarea");
+                ta.value = json;
+                ta.style.position = "fixed";
+                ta.style.opacity = "0";
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+                // eslint-disable-next-line no-console
+                console.log("[DocDebug] Copied to clipboard ✓");
+            } catch { /* ignore */ }
+            return info;
+        };
+
+        return () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            delete (window as any).__docDebug;
+        };
+    }, [composerModel, room, client, ref]);
+
     // Always render the Editor so that `ref.current` is attached before
     // useComposerModel's effect runs and calls initModel().  The loading
     // overlay only hides the toolbar while the Automerge document is loading.
