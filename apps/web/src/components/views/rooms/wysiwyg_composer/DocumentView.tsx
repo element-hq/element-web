@@ -234,6 +234,12 @@ function useDocumentSync(
             logger.info(`[DocumentView] Replayed ${appliedDeltas} delta(s) from timeline`);
         }
 
+        // Flush the incremental save cursor. receive_changes() uses load_incremental()
+        // internally which marks the replayed changes as "unsaved". Without this drain
+        // call, the first save_incremental() after load would return the entire document
+        // history and hit the Matrix 65KB event size limit.
+        composerModel.save_incremental();
+
         // 3. Update the editor DOM to reflect the loaded + replayed state.
         if (editorRef.current) {
             suppressMutations.current = true;
@@ -262,6 +268,9 @@ function useDocumentSync(
         }
         try {
             model.receive_changes(deltaBytes);
+            // Drain the incremental save cursor so that received changes are not
+            // re-included in the next save_incremental() call from this client.
+            model.save_incremental();
             if (editorRef.current) {
                 suppressMutations.current = true;
                 const caretOffset = saveCaretOffset(editorRef.current);
