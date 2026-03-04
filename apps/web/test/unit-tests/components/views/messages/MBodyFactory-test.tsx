@@ -19,7 +19,7 @@ import {
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { MFileBodyViewFactory, renderMBody } from "../../../../../src/components/views/messages/MBodyFactory";
+import { FileBodyViewFactory, renderMBody } from "../../../../../src/components/views/messages/MBodyFactory";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
@@ -108,7 +108,7 @@ describe("MBodyFactory", () => {
                             mxEvent: mediaEvent,
                             mediaEventHelper: new MediaEventHelper(mediaEvent),
                         },
-                        MFileBodyViewFactory,
+                        FileBodyViewFactory,
                     )}
                 </ScopedRoomContextProvider>,
             );
@@ -139,7 +139,7 @@ describe("MBodyFactory", () => {
                             mediaEventHelper: new MediaEventHelper(mediaEvent),
                             showFileInfo: true,
                         },
-                        MFileBodyViewFactory,
+                        FileBodyViewFactory,
                     )}
                 </ScopedRoomContextProvider>,
             );
