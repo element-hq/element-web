@@ -31,6 +31,9 @@ const DOC_STATE_EVENT_TYPE = "org.element.doc.automerge";
 /** Debounce delay (ms) before sending an incremental delta after a keystroke. */
 const DELTA_DEBOUNCE_MS = 500;
 
+/** Save a full snapshot to room state every N deltas (not every send). */
+const SNAPSHOT_EVERY_N_DELTAS = 20;
+
 // ------------------------------------------------------------------
 // Collaboration type augmentation
 //
@@ -171,33 +174,61 @@ function useDocumentSync(
         }
     }, [client, composerModel]);
 
-    // Load the initial document from room state if a snapshot exists,
-    // then update the editor DOM to reflect the loaded content.
+    // Load the initial document from the room-state snapshot, then replay
+    // any delta timeline events that arrived after the snapshot so we catch
+    // up to the latest state even if the snapshot is stale.
     useEffect(() => {
         if (!isCollaborative(composerModel)) {
             setIsLoaded(true);
             return;
         }
 
+        // 1. Load full snapshot from room state (instant, no pagination).
         const stateEvent = room.currentState.getStateEvents(DOC_STATE_EVENT_TYPE, "");
+        const snapshotTs = stateEvent?.getTs() ?? 0;
         if (stateEvent) {
             const data = stateEvent.getContent<{ data?: string }>().data;
             if (data) {
                 try {
                     composerModel.load_document(base64Decode(data));
-                    // Reflect the loaded document in the editor DOM.
-                    if (editorRef.current) {
-                        suppressMutations.current = true;
-                        editorRef.current.innerHTML = composerModel.get_content_as_html();
-                        requestAnimationFrame(() => { suppressMutations.current = false; });
-                        onContentChanged();
-                    }
-                    logger.info("[DocumentView] Loaded document from room state");
+                    logger.info("[DocumentView] Loaded snapshot from room state");
                 } catch (e) {
-                    logger.warn("[DocumentView] Failed to load document from room state", e);
+                    logger.warn("[DocumentView] Failed to load snapshot from room state", e);
                 }
             }
         }
+
+        // 2. Replay delta events from the local timeline that arrived after the
+        //    snapshot. receive_changes() is idempotent — re-applying deltas
+        //    already included in the snapshot is a harmless no-op.
+        const timeline = room.getLiveTimeline().getEvents();
+        let appliedDeltas = 0;
+        for (const evt of timeline) {
+            if (evt.getType() !== DOC_DELTA_EVENT_TYPE) continue;
+            // Only replay events newer than the snapshot to reduce work,
+            // though idempotency means replaying older ones is safe too.
+            if (evt.getTs() <= snapshotTs) continue;
+            const data = evt.getContent<{ data?: string }>().data;
+            if (!data) continue;
+            try {
+                composerModel.receive_changes(base64Decode(data));
+                appliedDeltas++;
+            } catch (e) {
+                logger.warn("[DocumentView] Failed to replay delta from timeline", e);
+            }
+        }
+        if (appliedDeltas > 0) {
+            logger.info(`[DocumentView] Replayed ${appliedDeltas} delta(s) from timeline`);
+        }
+
+        // 3. Update the editor DOM to reflect the loaded + replayed state.
+        if (editorRef.current) {
+            suppressMutations.current = true;
+            editorRef.current.innerHTML = composerModel.get_content_as_html();
+            requestAnimationFrame(() => { suppressMutations.current = false; });
+            onContentChanged();
+        }
+
         setIsLoaded(true);
     }, [room, composerModel, editorRef, onContentChanged]);
 
@@ -261,7 +292,10 @@ function useDocumentSync(
     }, [room, client, editorRef, onContentChanged]);
 
     // Debounced delta send triggered after each keystroke.
-    // Also saves a full snapshot to room state so the document persists on refresh.
+    // Saves a full snapshot to room state every SNAPSHOT_EVERY_N_DELTAS sends
+    // so the document persists on refresh without rate-limit pressure.
+    const deltaSendCount = useRef(0);
+
     const scheduleDeltaSend = useCallback(() => {
         if (!isCollaborative(composerModel)) return;
 
@@ -281,17 +315,62 @@ function useDocumentSync(
                     heads,
                 });
 
-                // Persist a full snapshot to room state so the document survives refresh.
-                const snapshot = composerModel.save_document();
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await client.sendStateEvent(room.roomId, DOC_STATE_EVENT_TYPE as any, {
-                    data: base64Encode(snapshot),
-                });
+                deltaSendCount.current++;
+
+                // Persist a full snapshot periodically so the document survives
+                // refresh. Includes heads so loaders can skip already-merged deltas.
+                if (deltaSendCount.current % SNAPSHOT_EVERY_N_DELTAS === 0) {
+                    const snapshot = composerModel.save_document();
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    await client.sendStateEvent(room.roomId, DOC_STATE_EVENT_TYPE as any, {
+                        data: base64Encode(snapshot),
+                        heads,
+                    });
+                    logger.info("[DocumentView] Saved snapshot to room state");
+                }
             } catch (e) {
                 logger.warn("[DocumentView] Failed to send delta", e);
             }
         }, DELTA_DEBOUNCE_MS);
     }, [client, composerModel, room.roomId]);
+
+    // Flush pending delta and save a final snapshot when the document view
+    // unmounts (user closes/switches away). This ensures nothing is lost.
+    const composerModelRefForCleanup = useRef(composerModel);
+    useEffect(() => { composerModelRefForCleanup.current = composerModel; });
+
+    useEffect(() => {
+        return () => {
+            // Cancel any pending debounce timer.
+            if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
+
+            const model = composerModelRefForCleanup.current;
+            if (!isCollaborative(model)) return;
+            try {
+                const delta = model.save_incremental();
+                const snapshot = model.save_document();
+                const heads = model.get_heads();
+                if (delta.length > 0) {
+                    // Fire-and-forget: send final delta.
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
+                        data: base64Encode(delta),
+                        heads,
+                    }).catch((e) => logger.warn("[DocumentView] Failed to send final delta on unmount", e));
+                }
+                // Always save snapshot on close so next load starts fresh.
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                client.sendStateEvent(room.roomId, DOC_STATE_EVENT_TYPE as any, {
+                    data: base64Encode(snapshot),
+                    heads,
+                }).catch((e) => logger.warn("[DocumentView] Failed to save snapshot on unmount", e));
+                logger.info("[DocumentView] Flushed delta and saved snapshot on unmount");
+            } catch (e) {
+                logger.warn("[DocumentView] Error during unmount flush", e);
+            }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [client, room.roomId]);
 
     return { isLoaded, scheduleDeltaSend, suppressMutations };
 }
