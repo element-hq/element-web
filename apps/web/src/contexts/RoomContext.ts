@@ -28,6 +28,8 @@ export enum MainSplitContentType {
     Timeline,
     MaximisedWidget,
     Call,
+    /** Collaborative document editing view backed by Automerge. */
+    Document,
 }
 
 export interface RoomContextType extends IRoomState {

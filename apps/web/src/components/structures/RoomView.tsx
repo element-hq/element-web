@@ -70,6 +70,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
+import { DocumentView } from "../views/rooms/wysiwyg_composer/DocumentView";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
 import { type IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -602,6 +603,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         if (this.context.widgetLayoutStore.hasMaximisedWidget(room)) {
             return MainSplitContentType.MaximisedWidget;
+        }
+        if (this.roomViewStore.isViewingDocument()) {
+            return MainSplitContentType.Document;
         }
         return MainSplitContentType.Timeline;
     };
@@ -2711,6 +2715,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         {previewBar}
                     </>
                 );
+                break;
+            }
+            case MainSplitContentType.Document: {
+                mainSplitContentClassName = "mx_MainSplit_document";
+                mainSplitBody = this.state.room ? <DocumentView room={this.state.room} /> : undefined;
+                break;
             }
         }
         const mainSplitContentClasses = classNames("mx_RoomView_body", mainSplitContentClassName);

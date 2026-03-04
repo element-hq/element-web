@@ -109,6 +109,10 @@ interface State {
      * Whether we're viewing a call or call lobby in this room
      */
     viewingCall: boolean;
+    /**
+     * Whether we're viewing the collaborative document editor for this room
+     */
+    viewingDocument: boolean;
 
     promptAskToJoin: boolean;
 
@@ -133,6 +137,7 @@ const INITIAL_STATE: State = {
     viaServers: [],
     wasContextSwitch: false,
     viewingCall: false,
+    viewingDocument: false,
     promptAskToJoin: false,
     viewRoomOpts: { buttons: [] },
 };
@@ -231,6 +236,7 @@ export class RoomViewStore extends EventEmitter {
                     viaServers: [],
                     wasContextSwitch: false,
                     viewingCall: false,
+                    viewingDocument: false,
                 });
                 break;
             case Action.ViewRoomError:
@@ -402,6 +408,7 @@ export class RoomViewStore extends EventEmitter {
                     viaServers: payload.via_servers,
                     wasContextSwitch: payload.context_switch,
                     viewingCall: payload.view_call ?? false,
+                    viewingDocument: payload.view_document ?? false,
                 });
                 // set this room as the room subscription. We need to await for it as this will fetch
                 // all room state for this room, which is required before we get the state below.
@@ -431,6 +438,13 @@ export class RoomViewStore extends EventEmitter {
                 viaServers: payload.via_servers ?? [],
                 wasContextSwitch: payload.context_switch ?? false,
                 viewingCall,
+                // Preserve doc view when re-entering the same room; reset on room switch.
+                viewingDocument:
+                    payload.view_document !== undefined
+                        ? payload.view_document
+                        : payload.room_id === this.state.roomId
+                          ? this.state.viewingDocument
+                          : false,
             };
 
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
@@ -757,6 +771,13 @@ export class RoomViewStore extends EventEmitter {
 
     public isViewingCall(): boolean {
         return this.state.viewingCall;
+    }
+
+    /**
+     * Whether the collaborative document view is currently showing.
+     */
+    public isViewingDocument(): boolean {
+        return this.state.viewingDocument;
     }
 
     /**

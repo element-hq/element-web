@@ -1,0 +1,44 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DocumentView {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--cpd-color-bg-canvas-default);
+}
+
+.mx_DocumentView_loading {
+    /* Placeholder while the document is being loaded from room state */
+}
+
+.mx_DocumentView_toolbar {
+    display: flex;
+    align-items: center;
+    padding: var(--cpd-space-2x) var(--cpd-space-4x);
+    border-bottom: 1px solid var(--cpd-color-border-disabled);
+    flex-shrink: 0;
+}
+
+.mx_DocumentView_content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--cpd-space-8x) var(--cpd-space-12x);
+
+    /* Give the editor enough room to feel like a document */
+    .mx_WysiwygComposer_Editor {
+        min-height: 100%;
+
+        .mx_WysiwygComposer_Editor_content {
+            min-height: 400px;
+            font-size: var(--cpd-font-size-body-lg);
+            line-height: 1.6;
+            caret-color: var(--cpd-color-text-primary);
+        }
+    }
+}

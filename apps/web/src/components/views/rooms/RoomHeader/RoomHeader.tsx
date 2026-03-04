@@ -18,6 +18,7 @@ import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icon
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
+import DocumentIcon from "@vector-im/compound-design-tokens/assets/web/icons/document";
 import { HistoryVisibility, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Flex, Box } from "@element-hq/web-shared-components";
@@ -51,6 +52,8 @@ import WithPresenceIndicator, { useDmMember } from "../../avatars/WithPresenceIn
 import { type IOOBData } from "../../../../stores/ThreepidInviteStore.ts";
 import { MainSplitContentType } from "../../../structures/RoomView.tsx";
 import defaultDispatcher from "../../../../dispatcher/dispatcher.ts";
+import { Action } from "../../../../dispatcher/actions.ts";
+import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload.ts";
 import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
@@ -291,10 +294,24 @@ function RoomHeaderButtons({
 
     const roomContext = useScopedRoomContext("mainSplitContentType");
     const isVideoRoom = calcIsVideoRoom(room);
+    const isViewingDocument = roomContext.mainSplitContentType === MainSplitContentType.Document;
     const showChatButton =
         isVideoRoom ||
         roomContext.mainSplitContentType === MainSplitContentType.MaximisedWidget ||
         roomContext.mainSplitContentType === MainSplitContentType.Call;
+
+    const toggleDocumentView = useCallback(
+        (evt: React.MouseEvent): void => {
+            evt.stopPropagation();
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: undefined,
+                view_document: !isViewingDocument,
+            });
+        },
+        [isViewingDocument, room.roomId],
+    );
     return (
         <>
             {additionalButtons?.map((props) => {
@@ -327,6 +344,16 @@ function RoomHeaderButtons({
             )}
 
             {showChatButton && <VideoRoomChatButton room={room} />}
+
+            <Tooltip label={isViewingDocument ? _t("room|document|close") : _t("room|document|open")}>
+                <IconButton
+                    aria-label={isViewingDocument ? _t("room|document|close") : _t("room|document|open")}
+                    aria-pressed={isViewingDocument}
+                    onClick={toggleDocumentView}
+                >
+                    <DocumentIcon />
+                </IconButton>
+            </Tooltip>
 
             <Tooltip label={_t("common|threads")}>
                 <IconButton
