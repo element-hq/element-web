@@ -29,16 +29,32 @@ Please see LICENSE files in the repository root for full details.
     flex: 1;
     overflow-y: auto;
     padding: var(--cpd-space-8x) var(--cpd-space-12x);
+    /* Forward clicks anywhere in this area to the editor */
+    cursor: text;
 
-    /* Give the editor enough room to feel like a document */
+    /*
+     * The composer's editor stack is designed for a small multi-line input.
+     * In document mode we want it to fill the full available height so that
+     * clicking anywhere in the content area lands on the contentEditable div.
+     */
     .mx_WysiwygComposer_Editor {
-        min-height: 100%;
+        height: 100%;
+        min-height: 400px;
+
+        .mx_WysiwygComposer_Editor_container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
         .mx_WysiwygComposer_Editor_content {
+            flex: 1;
             min-height: 400px;
             font-size: var(--cpd-font-size-body-lg);
             line-height: 1.6;
             caret-color: var(--cpd-color-text-primary);
+            /* Remove the narrow composer outline */
+            border: none;
         }
     }
 }

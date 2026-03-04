@@ -27,6 +27,11 @@ Please see LICENSE files in the repository root for full details.
     flex: 1;
     position: relative;
 
+    /* The outer div has tabIndex=-1 for keyboard shortcuts. Suppress the
+     * browser's default focus outline — the editor's own outline is sufficient. */
+    &:focus {
+        outline: none;
+    }
     .mx_MainSplit {
         flex: 1 1 0;
     }

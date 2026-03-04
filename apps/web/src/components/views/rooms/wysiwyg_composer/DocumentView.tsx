@@ -14,6 +14,7 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { FormattingButtons } from "./components/FormattingButtons.tsx";
 import { Editor } from "./components/Editor.tsx";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext.ts";
+import { useSetCursorPosition } from "./hooks/useSetCursorPosition.ts";
 
 /**
  * Matrix event type for incremental Automerge deltas sent as timeline events.
@@ -198,11 +199,28 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     const { ref, isWysiwygReady, wysiwyg, actionStates } = wysiwygResult;
     const composerModel = wysiwygResult.composerModel;
 
+    // Place the cursor at the end and focus the editor once the WASM model is
+    // ready.  Without this the editor is enabled but has no selection, so no
+    // cursor appears even after the element receives focus.
+    useSetCursorPosition(!isWysiwygReady, ref);
+
     const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel);
 
     const handleInput = useCallback(() => {
         scheduleDeltaSend();
     }, [scheduleDeltaSend]);
+
+    // Forward clicks anywhere in the content area to the contentEditable so
+    // the user can click anywhere in the document space to start typing.
+    const handleContentClick = useCallback(
+        (ev: React.MouseEvent<HTMLDivElement>) => {
+            // Only forward if the click didn't already land on the editor itself.
+            if (ev.target !== ref.current && ref.current) {
+                ref.current.focus();
+            }
+        },
+        [ref],
+    );
 
     if (!isLoaded) {
         return <div className="mx_DocumentView mx_DocumentView_loading" />;
@@ -215,7 +233,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
                     <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
                 </div>
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-                <div className="mx_DocumentView_content" onInput={handleInput}>
+                <div className="mx_DocumentView_content" onInput={handleInput} onClick={handleContentClick}>
                     <Editor ref={ref} disabled={!isWysiwygReady} placeholder="Start typing your document…" />
                 </div>
             </div>
