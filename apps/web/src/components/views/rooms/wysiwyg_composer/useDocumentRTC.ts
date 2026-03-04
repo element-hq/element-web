@@ -84,17 +84,29 @@ export function useDocumentRTC(
 
         const connect = async (): Promise<void> => {
             // 1. Get available transports from the homeserver.
-            let transports;
+            // MSC4143 is still unstable, and some deployments only advertise foci via .well-known.
+            const transports: unknown[] = [];
             try {
-                transports = await client._unstable_getRTCTransports();
+                transports.push(...(await client._unstable_getRTCTransports()));
             } catch (e) {
-                logger.info("[DocumentRTC] Homeserver does not support /rtc/transports, falling back to Matrix events", e);
-                return;
+                logger.info("[DocumentRTC] Homeserver does not support /rtc/transports (MSC4143), trying .well-known fallback", e);
+            }
+
+            try {
+                await client.waitForClientWellKnown();
+                const foci = client.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
+                if (Array.isArray(foci)) {
+                    transports.push(...foci);
+                } else if (foci) {
+                    transports.push(foci);
+                }
+            } catch (e) {
+                logger.info("[DocumentRTC] Failed to read .well-known MatrixRTC foci", e);
             }
 
             const livekitTransport = transports.find(isLivekitTransportConfig);
             if (!livekitTransport) {
-                logger.info("[DocumentRTC] No LiveKit transport in /rtc/transports, falling back to Matrix events");
+                logger.info("[DocumentRTC] No LiveKit transport configured, falling back to Matrix events");
                 return;
             }
 
