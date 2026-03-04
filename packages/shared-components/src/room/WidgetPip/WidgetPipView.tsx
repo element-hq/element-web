@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject, type FC, type CSSProperties } from "react";
+import React, { type RefObject, type FC } from "react";
 import { ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { IconButton } from "@vector-im/compound-web";
 
@@ -20,7 +20,6 @@ export interface WidgetPipViewActions {
     persistentAppComponent: React.FC<{
         persistentWidgetId: string;
         persistentRoomId: string;
-        pointerEvents: CSSProperties["pointerEvents"];
         movePersistedElement: RefObject<(() => void) | null>;
     }>;
 }
@@ -70,7 +69,6 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar, onStartM
                 <vm.persistentAppComponent
                     persistentWidgetId={snapshot.widgetId}
                     persistentRoomId={snapshot.roomId}
-                    pointerEvents="none"
                     movePersistedElement={movePersistedElement}
                 >
                     {}

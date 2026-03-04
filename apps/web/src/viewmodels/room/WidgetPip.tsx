@@ -86,7 +86,6 @@ export class WidgetPipViewModel
             <PersistentApp
                 persistentWidgetId={props.persistentWidgetId}
                 persistentRoomId={props.persistentRoomId}
-                pointerEvents={props.pointerEvents}
                 movePersistedElement={props.movePersistedElement}
             />
         );
