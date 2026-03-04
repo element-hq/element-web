@@ -36,7 +36,7 @@ export function getTagsForRoom(room: Room): TagID[] {
 
 /**
  * Get the tags for a room that the user has joined. It checks for user defined tags first, then checks if it's a DM, and finally checks if it's a conference room.
- * @param room
+ * @param room - the room to get the tags for
  * @returns an array of tags for the room. If the room has no user defined tags, is not a DM, and is not a conference room, it will return an empty array.
  */
 export function getTagsOfJoinedRoom(room: Room): TagID[] {
