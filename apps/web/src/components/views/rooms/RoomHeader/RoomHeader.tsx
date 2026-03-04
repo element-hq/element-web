@@ -351,7 +351,7 @@ function RoomHeaderButtons({
                     aria-pressed={isViewingDocument}
                     onClick={toggleDocumentView}
                 >
-                    <DocumentIcon />
+                    <DocumentIcon className={isViewingDocument ? "mx_RoomHeader_toggled" : undefined} />
                 </IconButton>
             </Tooltip>
 
