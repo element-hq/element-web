@@ -6,16 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixAuthenticationServiceContainer,
     type MasConfig,
     type StartedMatrixAuthenticationServiceContainer,
     type StartedSynapseContainer,
     type SynapseContainer,
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
-import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
-import { type StartedNetwork } from "testcontainers";
-import { type Logger } from "@element-hq/element-web-playwright-common/lib/utils/logger.ts";
 import { type Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api";
+import { makePostgres } from "@element-hq/element-web-playwright-common/lib/testcontainers/postgres.ts";
+import { makeMas } from "@element-hq/element-web-playwright-common/lib/testcontainers/mas.ts";
 
 import { RestrictedGuestsSynapseContainer, RestrictedGuestsSynapseWithMasContainer } from "./services";
 import { test as subBase, expect } from "../../../../playwright/element-web-test";
@@ -91,22 +89,6 @@ declare module "@element-hq/element-web-module-api" {
     }
 }
 
-async function getMas(
-    name: string,
-    postgres: StartedPostgreSqlContainer,
-    network: StartedNetwork,
-    logger: Logger,
-    config: Partial<MasConfig>,
-): Promise<StartedMatrixAuthenticationServiceContainer> {
-    const container = await new MatrixAuthenticationServiceContainer(postgres)
-        .withNetwork(network)
-        .withNetworkAliases(name)
-        .withLogConsumer(logger.getConsumer(name))
-        .withConfig(config)
-        .start();
-    return container;
-}
-
 // We do some wacky things here in order to run the test suite against multiple homeserver configurations
 const base = subBase.extend<
     {
@@ -154,15 +136,21 @@ const base = subBase.extend<
             if (auth !== "mas" || synapseConfig.allow_guest_access !== false) {
                 return use(undefined);
             }
-            const container = await getMas("mas", postgres, network, logger, {
-                ...BASE_MAS_CONFIG,
-                matrix: {
-                    kind: "synapse",
-                    homeserver: "homeserver",
-                    endpoint: "http://homeserver:8008",
-                    secret: MAS_SHARED_SECRET,
+            const container = await makeMas(
+                postgres,
+                network,
+                logger,
+                {
+                    ...BASE_MAS_CONFIG,
+                    matrix: {
+                        kind: "synapse",
+                        homeserver: "homeserver",
+                        endpoint: "http://homeserver:8008",
+                        secret: MAS_SHARED_SECRET,
+                    },
                 },
-            });
+                "mas",
+            );
             await use(container);
             await container.stop();
         },
@@ -176,21 +164,23 @@ const base = subBase.extend<
             }
 
             // We need a separate postgres so it doesn't fight with the default MAS
-            const postgres = await new PostgreSqlContainer("postgres:13.3-alpine")
-                .withNetwork(network)
-                .withNetworkAliases("guest-mas-postgres")
-                .withLogConsumer(logger.getConsumer("guest-mas-postgres"))
-                .start();
+            const postgres = await makePostgres(network, logger, "guest-mas-postgres");
 
-            const container = await getMas("guest-mas", postgres, network, logger, {
-                ...BASE_MAS_CONFIG,
-                matrix: {
-                    kind: "synapse",
-                    homeserver: GUEST_HOMESERVER_NAME,
-                    endpoint: "http://guest-homeserver:8008",
-                    secret: MAS_SHARED_SECRET,
+            const container = await makeMas(
+                postgres,
+                network,
+                logger,
+                {
+                    ...BASE_MAS_CONFIG,
+                    matrix: {
+                        kind: "synapse",
+                        homeserver: GUEST_HOMESERVER_NAME,
+                        endpoint: "http://guest-homeserver:8008",
+                        secret: MAS_SHARED_SECRET,
+                    },
                 },
-            });
+                "guest-mas",
+            );
             await use(container);
             await container.stop();
             await postgres.stop();
