@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
-    --MessageActionBar-size-box: 34px; /* 28px + 3px (margin) * 2 */
+    --MessageActionBar-size-margin: 3px;
     --MessageActionBar-item-hover-background: var(--cpd-color-bg-subtle-secondary);
     --MessageActionBar-item-hover-borderRadius: 6px;
     --MessageActionBar-item-hover-zIndex: 1;
@@ -17,7 +17,7 @@ Please see LICENSE files in the repository root for full details.
     visibility: hidden;
     cursor: pointer;
     display: flex;
-    height: var(--MessageActionBar-size-box);
+    gap: 2px;
     line-height: $font-24px;
     border-radius: 8px;
     background: $background;
@@ -74,7 +74,7 @@ Please see LICENSE files in the repository root for full details.
         white-space: nowrap;
         display: inline-block;
         position: relative;
-        margin: calc((var(--MessageActionBar-size-box) - var(--MessageActionBar-size-button)) / 2) 4px;
+        margin: var(--MessageActionBar-size-margin);
 
         &:hover {
             background: var(--MessageActionBar-item-hover-background);
