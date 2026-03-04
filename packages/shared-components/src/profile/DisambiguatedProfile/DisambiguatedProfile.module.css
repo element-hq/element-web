@@ -11,7 +11,6 @@
     padding: 0;
     line-height: inherit;
     font: inherit;
-    margin-bottom: var(--cpd-space-1x);
     border: none;
     vertical-align: baseline;
     text-overflow: ellipsis;
