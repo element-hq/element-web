@@ -8,7 +8,7 @@
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
 import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
-import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../membership";
+import { EffectiveMembership, getEffectiveMembershipTag } from "../membership";
 import DMRoomMap from "../DMRoomMap";
 
 /**
@@ -18,8 +18,6 @@ import DMRoomMap from "../DMRoomMap";
  */
 export function getTagsForRoom(room: Room): TagID[] {
     const tags: TagID[] = [];
-
-    if (!getEffectiveMembership(room.getMyMembership())) return [DefaultTagID.Untagged]; // peeked room has no tags
 
     const membership = getEffectiveMembershipTag(room);
 
