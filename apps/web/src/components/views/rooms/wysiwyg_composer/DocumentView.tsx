@@ -97,6 +97,7 @@ function useDocumentSync(
     client: MatrixClient,
     composerModel: unknown,
     editorRef: React.RefObject<HTMLDivElement | null>,
+    onContentChanged: () => void,
 ): {
     isLoaded: boolean;
     scheduleDeltaSend: () => void;
@@ -133,6 +134,7 @@ function useDocumentSync(
                     // Reflect the loaded document in the editor DOM.
                     if (editorRef.current) {
                         editorRef.current.innerHTML = composerModel.get_content_as_html();
+                        onContentChanged();
                     }
                     logger.info("[DocumentView] Loaded document from room state");
                 } catch (e) {
@@ -141,7 +143,7 @@ function useDocumentSync(
             }
         }
         setIsLoaded(true);
-    }, [room, composerModel, editorRef]);
+    }, [room, composerModel, editorRef, onContentChanged]);
 
     // Apply incoming delta events from the room timeline and update the DOM.
     useEffect(() => {
@@ -150,8 +152,10 @@ function useDocumentSync(
         const onTimeline = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
-            // Skip our own events – the changes are already in the local model.
-            if (event.getSender() === client.getUserId()) return;
+            // Skip events sent by this exact device — they're already in the local model.
+            // We cannot skip by userId alone (same user on two devices must receive each other's changes).
+            const eventDeviceId = event.getUnsigned()?.["device_id"] as string | undefined;
+            if (event.getSender() === client.getUserId() && eventDeviceId === client.getDeviceId()) return;
 
             const data = event.getContent<{ data?: string }>().data;
             if (!data) return;
@@ -160,6 +164,7 @@ function useDocumentSync(
                 // Update the editor DOM with the merged content.
                 if (editorRef.current) {
                     editorRef.current.innerHTML = composerModel.get_content_as_html();
+                    onContentChanged();
                 }
             } catch (e) {
                 logger.warn("[DocumentView] Failed to apply remote delta", e);
@@ -170,7 +175,7 @@ function useDocumentSync(
         room.on("Room.timeline" as any, onTimeline);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return () => room.off("Room.timeline" as any, onTimeline);
-    }, [room, client, composerModel, editorRef]);
+    }, [room, client, composerModel, editorRef, onContentChanged]);
 
     // Debounced delta send triggered after each keystroke.
     // Also saves a full snapshot to room state so the document persists on refresh.
@@ -235,9 +240,19 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
 
     const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel, ref);
 
+    // Track whether the editor has content so we can hide the placeholder.
+    const [hasContent, setHasContent] = useState(false);
+
+    const notifyContentChanged = useCallback(() => {
+        setHasContent(Boolean(ref.current?.textContent?.trim()));
+    }, [ref]);
+
+    const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel, ref, notifyContentChanged);
+
     const handleInput = useCallback(() => {
+        notifyContentChanged();
         scheduleDeltaSend();
-    }, [scheduleDeltaSend]);
+    }, [notifyContentChanged, scheduleDeltaSend]);
 
     // Forward clicks anywhere in the content area to the contentEditable.
     const handleContentClick = useCallback(() => {
@@ -256,7 +271,11 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
                 </div>
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <div className="mx_DocumentView_content" onInput={handleInput} onClick={handleContentClick}>
-                    <Editor ref={ref} disabled={!isWysiwygReady} placeholder="Start typing your document…" />
+                    <Editor
+                        ref={ref}
+                        disabled={!isWysiwygReady}
+                        placeholder={hasContent ? undefined : "Start typing your document…"}
+                    />
                 </div>
             </div>
         </ComposerContext.Provider>
