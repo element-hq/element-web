@@ -12,6 +12,8 @@
     line-height: inherit;
     letter-spacing: inherit;
     font: inherit;
+    position: relative;
+    top: -1px;
     border: none;
     vertical-align: baseline;
     text-overflow: ellipsis;
