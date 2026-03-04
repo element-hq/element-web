@@ -7,6 +7,7 @@
 
 import React, { type JSX } from "react";
 import { LockSolidIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./EncryptionEventView.module.css";
@@ -78,7 +79,7 @@ export function EncryptionEventView({ vm, ref, className }: Readonly<EncryptionE
     const { translate: _t } = useI18n();
     const { state, encryptedStateEvents, userName, timestamp } = useViewModel(vm);
 
-    let icon = <LockSolidIcon />;
+    let icon = <LockSolidIcon data-state="supported" />;
     let title = encryptedStateEvents ? _t("common|state_encryption_enabled") : _t("common|encryption_enabled");
     let subtitle = "";
 
@@ -103,14 +104,20 @@ export function EncryptionEventView({ vm, ref, className }: Readonly<EncryptionE
             break;
         case EncryptionEventState.UNSUPPORTED:
         default:
-            icon = <ErrorSolidIcon className={styles.error} />;
+            icon = <ErrorSolidIcon data-state="unsupported" />;
             title = _t("timeline|m.room.encryption|disabled");
             subtitle = _t("timeline|m.room.encryption|unsupported");
             break;
     }
 
     return (
-        <EventTileBubble icon={icon} className={className} title={title} subtitle={subtitle} ref={ref}>
+        <EventTileBubble
+            icon={icon}
+            className={classNames(className, styles.content)}
+            title={title}
+            subtitle={subtitle}
+            ref={ref}
+        >
             {timestamp}
         </EventTileBubble>
     );
