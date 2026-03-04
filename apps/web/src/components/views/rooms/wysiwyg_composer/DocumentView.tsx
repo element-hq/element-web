@@ -80,10 +80,56 @@ function base64Decode(b64: string): Uint8Array {
 }
 
 /**
- * Encode a UTF-8 string as a lowercase hex string, as required by
- * the Automerge `set_actor_id` API.
+ * Save the caret position as a character offset from the start of the
+ * editor's text content. Returns -1 if there is no selection.
  */
-function toHex(str: string): string {
+function saveCaretOffset(editor: HTMLElement): number {
+    const sel = document.getSelection();
+    if (!sel || sel.rangeCount === 0) return -1;
+    const range = sel.getRangeAt(0).cloneRange();
+    range.selectNodeContents(editor);
+    range.setEnd(sel.getRangeAt(0).endContainer, sel.getRangeAt(0).endOffset);
+    return range.toString().length;
+}
+
+/**
+ * Restore a caret position (character offset) inside the editor after an
+ * innerHTML replacement. Walks text nodes to find the right position.
+ */
+function restoreCaretOffset(editor: HTMLElement, offset: number): void {
+    if (offset < 0) return;
+    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
+    let remaining = offset;
+    let node: Text | null = null;
+    let nodeOffset = 0;
+    while (walker.nextNode()) {
+        const text = walker.currentNode as Text;
+        if (text.length >= remaining) {
+            node = text;
+            nodeOffset = remaining;
+            break;
+        }
+        remaining -= text.length;
+    }
+    if (!node && editor.lastChild) {
+        // offset past end — place at end
+        const range = document.createRange();
+        range.selectNodeContents(editor);
+        range.collapse(false);
+        const sel = document.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+        return;
+    }
+    if (node) {
+        const range = document.createRange();
+        range.setStart(node, nodeOffset);
+        range.collapse(true);
+        const sel = document.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+    }
+}
     return Array.from(new TextEncoder().encode(str))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
@@ -101,9 +147,11 @@ function useDocumentSync(
 ): {
     isLoaded: boolean;
     scheduleDeltaSend: () => void;
+    suppressMutations: React.MutableRefObject<boolean>;
 } {
     const [isLoaded, setIsLoaded] = useState(false);
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const suppressMutations = useRef(false);
 
     // Set actor ID as hex-encoded userId:deviceId for correct CRDT attribution.
     // set_actor_id() requires a hex string (decoded to raw bytes internally).
@@ -133,7 +181,9 @@ function useDocumentSync(
                     composerModel.load_document(base64Decode(data));
                     // Reflect the loaded document in the editor DOM.
                     if (editorRef.current) {
+                        suppressMutations.current = true;
                         editorRef.current.innerHTML = composerModel.get_content_as_html();
+                        suppressMutations.current = false;
                         onContentChanged();
                     }
                     logger.info("[DocumentView] Loaded document from room state");
@@ -171,7 +221,11 @@ function useDocumentSync(
             try {
                 model.receive_changes(base64Decode(data));
                 if (editorRef.current) {
+                    suppressMutations.current = true;
+                    const caretOffset = saveCaretOffset(editorRef.current);
                     editorRef.current.innerHTML = model.get_content_as_html();
+                    restoreCaretOffset(editorRef.current, caretOffset);
+                    suppressMutations.current = false;
                     onContentChanged();
                 }
                 logger.info("[DocumentView] Applied remote delta successfully");
@@ -228,7 +282,7 @@ function useDocumentSync(
         }, DELTA_DEBOUNCE_MS);
     }, [client, composerModel, room.roomId]);
 
-    return { isLoaded, scheduleDeltaSend };
+    return { isLoaded, scheduleDeltaSend, suppressMutations };
 }
 
 // ------------------------------------------------------------------
@@ -265,7 +319,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         setHasContent(Boolean(ref.current?.textContent?.trim()));
     });
 
-    const { isLoaded, scheduleDeltaSend } = useDocumentSync(
+    const { isLoaded, scheduleDeltaSend, suppressMutations } = useDocumentSync(
         room,
         client,
         composerModel,
@@ -277,6 +331,22 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         notifyContentChangedRef.current();
         scheduleDeltaSend();
     }, [scheduleDeltaSend]);
+
+    // MutationObserver to catch formatting/structural changes that don't
+    // fire onInput (e.g. bold, italic applied via the toolbar).
+    const scheduleDeltaSendRef = useRef(scheduleDeltaSend);
+    useEffect(() => { scheduleDeltaSendRef.current = scheduleDeltaSend; }, [scheduleDeltaSend]);
+
+    useEffect(() => {
+        if (!ref.current) return;
+        const observer = new MutationObserver(() => {
+            if (suppressMutations.current) return;
+            scheduleDeltaSendRef.current();
+            notifyContentChangedRef.current();
+        });
+        observer.observe(ref.current, { childList: true, subtree: true, characterData: true, attributes: true });
+        return () => observer.disconnect();
+    }, [ref, isWysiwygReady, suppressMutations]); // re-attach after editor becomes enabled
 
     // Forward clicks anywhere in the content area to the contentEditable.
     const handleContentClick = useCallback(() => {
