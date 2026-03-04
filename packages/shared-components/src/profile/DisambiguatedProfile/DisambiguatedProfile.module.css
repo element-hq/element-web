@@ -16,6 +16,7 @@
     vertical-align: baseline;
     text-overflow: ellipsis;
     text-align: start;
+    margin: 0 !important;
     white-space: nowrap;
     cursor: pointer;
 
