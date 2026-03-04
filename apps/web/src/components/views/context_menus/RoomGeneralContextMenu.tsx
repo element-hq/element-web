@@ -44,6 +44,7 @@ import { shouldShowComponent } from "../../../customisations/helpers/UIComponent
 import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { getTagsForRoom } from "../../../utils/room/getTagsForRoom";
 
 export interface RoomGeneralContextMenuProps extends IContextMenuProps {
     room: Room;
@@ -121,9 +122,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     ...props
 }) => {
     const cli = useContext(MatrixClientContext);
-    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
-        RoomListStore.instance.getTagsForRoom(room),
-    );
+    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () => getTagsForRoom(room));
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     const wrapHandler = (
         handler: (ev: ButtonEvent) => void,
@@ -148,7 +147,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
         if (!cli) return;
         if (tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority) {
             const inverseTag = tagId === DefaultTagID.Favourite ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
-            const isApplied = RoomListStore.instance.getTagsForRoom(room).includes(tagId);
+            const isApplied = getTagsForRoom(room).includes(tagId);
             const removeTag = isApplied ? tagId : inverseTag;
             const addTag = isApplied ? null : tagId;
             dis.dispatch(RoomListActions.tagRoom(cli, room, removeTag, addTag, 0));
