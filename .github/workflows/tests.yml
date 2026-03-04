@@ -43,6 +43,7 @@ jobs:
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
+                  persist-credentials: false
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - name: pnpm cache
@@ -70,21 +71,25 @@ jobs:
               working-directory: apps/web
               run: |
                   pnpm test \
-                      --coverage=${{ env.ENABLE_COVERAGE }} \
+                      --coverage=$ENABLE_COVERAGE \
                       --ci \
-                      --max-workers ${{ steps.cpu-cores.outputs.count }} \
-                      --shard ${{ matrix.runner }}/${{ strategy.job-total }} \
+                      --max-workers $MAX_WORKERS \
+                      --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
                   JEST_SONAR_UNIQUE_OUTPUT_NAME: true
 
                   # tell jest to use coloured output
                   FORCE_COLOR: true
+                  MAX_WORKERS: ${{ steps.cpu-cores.outputs.count }}
+                  SHARD: ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'
               working-directory: apps/web
-              run: mv coverage/lcov.info coverage/${{ steps.setupNode.outputs.node-version }}-${{ matrix.runner }}.lcov.info
+              run: mv coverage/lcov.info coverage/$NODE_VERSION-${{ matrix.runner }}.lcov.info
+              env:
+                  NODE_VERSION: ${{ steps.setupNode.outputs.node-version }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
@@ -125,6 +130,7 @@ jobs:
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
+                  persist-credentials: false
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - name: pnpm cache
@@ -164,7 +170,7 @@ jobs:
 
             - name: Run tests
               working-directory: "packages/shared-components"
-              run: pnpm test:unit --coverage=${{ env.ENABLE_COVERAGE }}
+              run: pnpm test:unit --coverage=$ENABLE_COVERAGE
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'

@@ -54,6 +54,7 @@ jobs:
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: element-hq/element-web
+                  persist-credentials: false
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -172,9 +173,11 @@ jobs:
               working-directory: apps/web
               run: |
                   pnpm playwright test \
-                      --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
+                      --shard "$SHARD" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
+              env:
+                  SHARD: ${{ format('{0}/{1}', matrix.runner, needs.build.outputs.num-runners) }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
@@ -188,7 +191,7 @@ jobs:
         name: Downstream Playwright tests [element-modules]
         needs: build
         if: inputs.skip != true && github.event_name == 'merge_group'
-        uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@main
+        uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@main # zizmor: ignore[unpinned-uses]
         with:
             webapp-artifact: webapp
 
