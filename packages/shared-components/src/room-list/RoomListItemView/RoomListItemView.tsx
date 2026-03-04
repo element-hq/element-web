@@ -5,18 +5,25 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react";
+import React, { type JSX, memo, useEffect, useRef, type ReactNode, useState } from "react";
 import classNames from "classnames";
 import { Text } from "@vector-im/compound-web";
 
 import { Flex } from "../../utils/Flex";
 import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
+import {
+    type CallParticipantListItem,
+    CallParticipantsList,
+    type CallParticipantsListData,
+} from "./CallParticipantsList";
 import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
 import { type RoomNotifState } from "./RoomNotifs";
 import styles from "./RoomListItemView.module.css";
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
+
+const CALL_ROOM_ICON_SIZE = 24;
 
 /**
  * Opaque type representing a Room object from the parent application
@@ -75,6 +82,8 @@ export interface RoomListItemSnapshot {
     canMarkAsUnread: boolean;
     /** The room's notification state */
     roomNotifState: RoomNotifState;
+    /** Optional data for the participant list in a call channel */
+    callParticipants?: CallParticipantsListData;
 }
 
 /**
@@ -125,6 +134,8 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     roomCount: number;
     /** Function to render the room avatar */
     renderAvatar: (room: Room) => ReactNode;
+    /** Function to render a user avatar for the member list on a call channel */
+    renderCallUserAvatar: (participant: CallParticipantListItem) => ReactNode;
 }
 
 /**
@@ -139,9 +150,14 @@ export const RoomListItemView = memo(function RoomListItemView({
     roomIndex,
     roomCount,
     renderAvatar,
+    renderCallUserAvatar,
     ...props
 }: RoomListItemViewProps): JSX.Element {
     const ref = useRef<HTMLButtonElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    const [maxCallRoomIcons, setMaxCallRoomIcons] = useState<number>(0);
+
     const item = useViewModel(vm);
 
     useEffect(() => {
@@ -149,6 +165,30 @@ export const RoomListItemView = memo(function RoomListItemView({
             ref.current?.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
         }
     }, [isFocused]);
+
+    useEffect(() => {
+        if (!contentRef.current) return;
+
+        const updateSize = (): void => {
+            if (!contentRef.current) return;
+
+            const containerRect = contentRef.current.getBoundingClientRect();
+
+            setMaxCallRoomIcons(Math.floor(containerRect.width / 2 / CALL_ROOM_ICON_SIZE));
+        };
+
+        updateSize();
+
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (contentRef.current === entry.target) updateSize();
+            }
+        });
+
+        if (contentRef.current) observer.observe(contentRef.current);
+
+        return () => observer.disconnect();
+    }, []);
 
     // Generate a11y label from notification state and room name
     const a11yLabel = getA11yLabel(item.name, item.notification);
@@ -179,7 +219,7 @@ export const RoomListItemView = memo(function RoomListItemView({
         >
             <Flex className={styles.container} gap="var(--cpd-space-3x)" align="center">
                 {renderAvatar(item.room)}
-                <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
+                <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between" ref={contentRef}>
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
                     <div className={styles.ellipsis}>
                         <div className={styles.roomName} title={item.name} data-testid="room-name">
@@ -191,6 +231,24 @@ export const RoomListItemView = memo(function RoomListItemView({
                             </Text>
                         )}
                     </div>
+                    {/**Container for both so they are both right-aligned via the flex container*/}
+                    <div className={styles.rightAlignedContainer}>
+                        {item.callParticipants && (
+                            <div className={styles.callRoomList}>
+                                <CallParticipantsList
+                                    renderAvatar={renderCallUserAvatar}
+                                    {...item.callParticipants}
+                                    maxIcons={maxCallRoomIcons}
+                                />
+                            </div>
+                        )}
+                        {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
+                        {item.notification.hasAnyNotificationOrActivity && (
+                            <div className={styles.notificationDecoration} aria-hidden={true}>
+                                <NotificationDecoration {...item.notification} />
+                            </div>
+                        )}
+                    </div>
                     {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
                         <RoomListItemHoverMenu
                             showMoreOptionsMenu={item.showMoreOptionsMenu}
@@ -198,11 +256,6 @@ export const RoomListItemView = memo(function RoomListItemView({
                             vm={vm}
                         />
                     )}
-
-                    {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
-                    <div className={styles.notificationDecoration} aria-hidden={true}>
-                        <NotificationDecoration {...item.notification} />
-                    </div>
                 </Flex>
             </Flex>
         </Flex>

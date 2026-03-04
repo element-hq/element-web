@@ -10,9 +10,9 @@ import {
     RoomNotifState,
     type RoomListItemSnapshot,
     type RoomListItemActions,
+    type CallParticipantListItem,
 } from "@element-hq/web-shared-components";
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import type { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
@@ -36,6 +36,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
+
 
 interface RoomItemProps {
     room: Room;
@@ -101,15 +102,7 @@ export class RoomListItemViewModel
     };
 
     private onCallStateChanged = (): void => {
-        // Only update if call state for this room actually changed
-        const call = CallStore.instance.getCall(this.props.room.roomId);
-        const currentCallType = this.snapshot.current.notification.callType;
-        const newCallType =
-            call && call.participants.size > 0 ? (call.callType === CallType.Voice ? "voice" : "video") : undefined;
-
-        if (currentCallType !== newCallType) {
-            this.updateItem();
-        }
+        this.updateItem();
     };
 
     private onRoomChanged = (): void => {
@@ -214,10 +207,15 @@ export class RoomListItemViewModel
 
         // Video room and call state tracking
         const call = CallStore.instance.getCall(room.roomId);
-        const participantCount = call?.participants.size ?? 0;
-        const hasParticipantsInCall = participantCount > 0;
-        const callType =
-            call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
+
+        const callParticipants: CallParticipantListItem[] = [...call?.participants?.keys() ?? []].map(roomMember => {
+            return {
+                id: roomMember.userId,
+                name: roomMember.name,
+                avatarUrl: roomMember.getAvatarUrl(client.baseUrl, 24, 24, "scale", true, false),
+            }
+        });
+
 
         return {
             id: room.roomId,
@@ -226,7 +224,7 @@ export class RoomListItemViewModel
             isBold: notifState.hasAnyNotificationOrActivity,
             messagePreview,
             notification: {
-                hasAnyNotificationOrActivity: notifState.hasAnyNotificationOrActivity || hasParticipantsInCall,
+                hasAnyNotificationOrActivity: notifState.hasAnyNotificationOrActivity,
                 isUnsentMessage: notifState.isUnsentMessage,
                 invited: notifState.invited,
                 isMention: notifState.isMention,
@@ -235,7 +233,6 @@ export class RoomListItemViewModel
                 hasUnreadCount: notifState.hasUnreadCount,
                 count: notifState.count,
                 muted: isNotificationMute,
-                callType: hasParticipantsInCall ? callType : undefined,
             },
             showMoreOptionsMenu,
             showNotificationMenu,
@@ -246,6 +243,9 @@ export class RoomListItemViewModel
             canMarkAsRead,
             canMarkAsUnread,
             roomNotifState,
+            callParticipants: {
+                participants: callParticipants
+            }
         };
     }
 

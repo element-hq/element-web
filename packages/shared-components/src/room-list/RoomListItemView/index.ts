@@ -24,3 +24,4 @@ export type { RoomListItemContextMenuProps } from "./RoomListItemContextMenu";
 export { NotificationDecoration } from "./NotificationDecoration";
 export type { NotificationDecorationProps, NotificationDecorationData } from "./NotificationDecoration";
 export { RoomNotifState } from "./RoomNotifs";
+export * from "./CallParticipantsList";

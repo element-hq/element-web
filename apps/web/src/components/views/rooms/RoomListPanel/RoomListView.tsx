@@ -10,6 +10,7 @@ import {
     RoomListView as SharedRoomListView,
     useCreateAutoDisposedViewModel,
     type Room as SharedRoom,
+    type CallParticipantListItem,
 } from "@element-hq/web-shared-components";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
@@ -19,6 +20,7 @@ import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 import { RoomListViewViewModel } from "../../../../viewmodels/room-list/RoomListViewViewModel";
+import BaseAvatar from "../../avatars/BaseAvatar.tsx";
 
 /**
  * RoomListView component using shared components with proper MVVM pattern.
@@ -34,6 +36,16 @@ export function RoomListView(): JSX.Element {
         return <RoomAvatarView room={room as Room} />;
     }, []);
 
+    // Render avatar for each user - memoized to prevent re-renders
+    const renderUserAvatar = useCallback((participant: CallParticipantListItem): ReactNode => {
+        return <BaseAvatar
+            url={participant.avatarUrl ?? undefined}
+            name={participant.name}
+            size="24px"
+            type="round"
+        />;
+    }, []);
+
     // Handle keyboard navigation for landmarks
     const onKeyDown = useCallback((ev: React.KeyboardEvent) => {
         const navAction = getKeyBindingsManager().getNavigationAction(ev);
@@ -47,5 +59,5 @@ export function RoomListView(): JSX.Element {
         }
     }, []);
 
-    return <SharedRoomListView vm={vm} renderAvatar={renderAvatar} onKeyDown={onKeyDown} />;
+    return <SharedRoomListView vm={vm} renderAvatar={renderAvatar} onKeyDown={onKeyDown} renderUserAvatar={renderUserAvatar} />;
 }
