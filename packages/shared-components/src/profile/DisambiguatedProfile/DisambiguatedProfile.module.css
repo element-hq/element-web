@@ -7,12 +7,12 @@
 
 .disambiguatedProfile {
     overflow: hidden;
-    background: none;
-    padding: 0;
+    background: none !important;
+    padding: 0 !important;
     line-height: inherit;
     letter-spacing: inherit;
     font: inherit;
-    border: none;
+    border: none !important;
     vertical-align: baseline;
     text-overflow: ellipsis;
     text-align: start;
