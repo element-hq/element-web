@@ -541,7 +541,7 @@ export class Algorithm extends EventEmitter {
         }
     }
 
-    public getTagsForRoom(room: Room): TagID[] {
+    private getTagsForRoom(room: Room): TagID[] {
         const tags: TagID[] = [];
 
         if (!getEffectiveMembership(room.getMyMembership())) return []; // peeked room has no tags

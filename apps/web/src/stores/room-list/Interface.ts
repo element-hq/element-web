@@ -93,15 +93,6 @@ export interface RoomListStore extends EventEmitter {
     removeFilter(filter: IFilterCondition): void;
 
     /**
-     * Gets the tags for a room identified by the store. The returned set
-     * should never be empty, and will contain DefaultTagID.Untagged if
-     * the store is not aware of any tags.
-     * @param room The room to get the tags for.
-     * @returns The tags for the room.
-     */
-    getTagsForRoom(room: Room): TagID[];
-
-    /**
      * Manually update a room with a given cause. This should only be used if the
      * room list store would otherwise be incapable of doing the update itself. Note
      * that this may race with the room list's regular operation.
