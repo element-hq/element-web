@@ -64,7 +64,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             const settingsGroupAccess = page.getByRole("group", { name: "Access" });
             const settingsGroupHistory = page.getByRole("group", { name: "Who can read history?" });
 
-            await settingsGroupAccess.getByText("Anyone").click();
+            await settingsGroupAccess.getByText("Anyone", { exact: true }).click();
             await settingsGroupHistory.getByText("Anyone").click();
 
             // Test that we have the warning appear.
@@ -87,7 +87,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             const settingsGroupAccess = page.getByRole("group", { name: "Access" });
             const settingsGroupHistory = page.getByRole("group", { name: "Who can read history?" });
 
-            await settingsGroupAccess.getByText("Anyone").click();
+            await settingsGroupAccess.getByText("Anyone", { exact: true }).click();
             await settingsGroupHistory.getByText("Anyone").click();
 
             // De-op ourselves
