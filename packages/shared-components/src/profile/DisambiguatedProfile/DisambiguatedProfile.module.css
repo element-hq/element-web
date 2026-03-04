@@ -9,6 +9,9 @@
     overflow: hidden;
     background: none;
     padding: 0;
+    line-height: inherit;
+    font: inherit;
+    margin-bottom: 4px;
     border: none;
     vertical-align: baseline;
     text-overflow: ellipsis;
