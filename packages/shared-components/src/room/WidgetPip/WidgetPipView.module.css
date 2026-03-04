@@ -8,7 +8,7 @@
     background: var(--cpd-color-bg-canvas-default);
     border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: var(--cpd-space-6x);
-    gap: var(--cpd-space-3x);
+    gap: var(--cpd-space-2x);
     box-shadow: 0 0 var(--cpd-space-2x) rgba(0, 0, 0, 0.1);
 }
 
