@@ -82,6 +82,7 @@
         "linkify-react": "4.3.2",
         "linkify-string": "4.3.2",
         "linkifyjs": "4.3.2",
+        "livekit-client": "^2.17.2",
         "lodash": "npm:lodash-es@^4.17.21",
         "maplibre-gl": "^5.0.0",
         "matrix-encrypt-attachment": "^1.0.3",

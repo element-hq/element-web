@@ -15,6 +15,7 @@ import { FormattingButtons } from "./components/FormattingButtons.tsx";
 import { Editor } from "./components/Editor.tsx";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext.ts";
 import { useSetCursorPosition } from "./hooks/useSetCursorPosition.ts";
+import { useDocumentRTC } from "./useDocumentRTC.ts";
 
 /**
  * Matrix event type for incremental Automerge deltas sent as timeline events.
@@ -30,6 +31,12 @@ const DOC_STATE_EVENT_TYPE = "org.element.doc.automerge";
 
 /** Debounce delay (ms) before sending an incremental delta after a keystroke. */
 const DELTA_DEBOUNCE_MS = 500;
+
+/**
+ * Debounce when sending over LiveKit (much lower latency, no rate limits).
+ * Kept small to batch rapid keystrokes without perceptible delay.
+ */
+const DELTA_DEBOUNCE_RTC_MS = 50;
 
 /** Save a full snapshot to room state every N deltas (not every send). */
 const SNAPSHOT_EVERY_N_DELTAS = 20;
@@ -153,6 +160,12 @@ function useDocumentSync(
     composerModel: unknown,
     editorRef: React.RefObject<HTMLDivElement | null>,
     onContentChanged: () => void,
+    /** If provided, send deltas via LiveKit instead of Matrix events. */
+    rtc?: {
+        publishDelta: (bytes: Uint8Array) => void;
+        onDeltaRef: React.MutableRefObject<((bytes: Uint8Array) => void) | null>;
+        isConnected: boolean;
+    },
 ): {
     isLoaded: boolean;
     scheduleDeltaSend: () => void;
@@ -240,85 +253,109 @@ function useDocumentSync(
         composerModelRef.current = composerModel;
     });
 
+    /** Apply raw Automerge delta bytes to the model and update the DOM. */
+    const applyDeltaBytes = useCallback((deltaBytes: Uint8Array): void => {
+        const model = composerModelRef.current;
+        if (!isCollaborative(model)) {
+            logger.warn("[DocumentView] Model not collaborative yet, dropping delta");
+            return;
+        }
+        try {
+            model.receive_changes(deltaBytes);
+            if (editorRef.current) {
+                suppressMutations.current = true;
+                const caretOffset = saveCaretOffset(editorRef.current);
+                editorRef.current.innerHTML = model.get_content_as_html();
+                restoreCaretOffset(editorRef.current, caretOffset);
+                requestAnimationFrame(() => { suppressMutations.current = false; });
+                onContentChanged();
+            }
+        } catch (e) {
+            logger.warn("[DocumentView] Failed to apply remote delta", e);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editorRef, onContentChanged]);
+
+    // Wire the LiveKit onDeltaRef callback when RTC is provided.
     useEffect(() => {
-        logger.info("[DocumentView] Registering delta listeners for room", room.roomId);
+        if (!rtc) return;
+        rtc.onDeltaRef.current = applyDeltaBytes;
+        return () => { rtc.onDeltaRef.current = null; };
+    }, [rtc, applyDeltaBytes]);
+
+    // Matrix event fallback: only used when LiveKit is NOT connected.
+    useEffect(() => {
+        // If LiveKit is connected, deltas come through the data channel — skip Matrix listener.
+        if (rtc?.isConnected) {
+            logger.info("[DocumentView] LiveKit connected — skipping Matrix delta listener");
+            return;
+        }
+
+        logger.info("[DocumentView] Registering Matrix delta listener (no LiveKit)");
 
         const applyDeltaEvent = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
-
-            // Skip our own events. In encrypted rooms device_id may not be in
-            // unsigned, so also skip by sender alone — the local model already
-            // has our own changes via save_incremental().
+            // Skip our own events — local model already has our changes.
             if (event.getSender() === client.getUserId()) return;
-
-            const model = composerModelRef.current;
-            if (!isCollaborative(model)) { logger.warn("[DocumentView] Model not collaborative yet, dropping delta"); return; }
-
             const data = event.getContent<{ data?: string }>().data;
-            if (!data) { logger.warn("[DocumentView] Delta event has no data"); return; }
-            try {
-                model.receive_changes(base64Decode(data));
-                if (editorRef.current) {
-                    // Suppress MutationObserver during DOM update. Use
-                    // requestAnimationFrame to reset the flag AFTER the observer's
-                    // microtask has fired so it doesn't schedule a spurious delta send.
-                    suppressMutations.current = true;
-                    const caretOffset = saveCaretOffset(editorRef.current);
-                    editorRef.current.innerHTML = model.get_content_as_html();
-                    restoreCaretOffset(editorRef.current, caretOffset);
-                    requestAnimationFrame(() => { suppressMutations.current = false; });
-                    onContentChanged();
-                }
-                logger.info("[DocumentView] Applied remote delta successfully");
-            } catch (e) {
-                logger.warn("[DocumentView] Failed to apply remote delta", e);
-            }
+            if (!data) return;
+            applyDeltaBytes(base64Decode(data));
         };
 
-        // For unencrypted rooms: events arrive ready to use on Room.timeline.
-        // For encrypted rooms: events arrive as m.room.encrypted on Room.timeline
-        // and are only usable after MatrixEventEvent.Decrypted fires on the client.
+        // For unencrypted rooms: events arrive ready on Room.timeline.
+        // For encrypted rooms: decrypt fires MatrixEventEvent.Decrypted.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         room.on("Room.timeline" as any, applyDeltaEvent);
         client.on(MatrixEventEvent.Decrypted, applyDeltaEvent);
-
         return () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             room.off("Room.timeline" as any, applyDeltaEvent);
             client.off(MatrixEventEvent.Decrypted, applyDeltaEvent);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [room, client, editorRef, onContentChanged]);
+    }, [room, client, rtc?.isConnected, applyDeltaBytes]);
 
     // Debounced delta send triggered after each keystroke.
-    // Saves a full snapshot to room state every SNAPSHOT_EVERY_N_DELTAS sends
-    // so the document persists on refresh without rate-limit pressure.
+    // When LiveKit is connected: sends via data channel (50ms debounce, no rate limits).
+    // When falling back: sends as Matrix timeline event (500ms debounce).
+    // Saves a full snapshot to room state every SNAPSHOT_EVERY_N_DELTAS sends.
     const deltaSendCount = useRef(0);
+    const rtcRef = useRef(rtc);
+    useEffect(() => { rtcRef.current = rtc; });
 
     const scheduleDeltaSend = useCallback(() => {
         if (!isCollaborative(composerModel)) return;
 
         if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
 
+        const useRTC = rtcRef.current?.isConnected ?? false;
+        const debounceMs = useRTC ? DELTA_DEBOUNCE_RTC_MS : DELTA_DEBOUNCE_MS;
+
         debounceTimer.current = setTimeout(async () => {
             debounceTimer.current = null;
             if (!isCollaborative(composerModel)) return;
             try {
                 const delta = composerModel.save_incremental();
-                if (delta.length === 0) return; // Nothing new to send.
+                if (delta.length === 0) return;
 
                 const heads = composerModel.get_heads();
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                await client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
-                    data: base64Encode(delta),
-                    heads,
-                });
+
+                if (rtcRef.current?.isConnected) {
+                    // Fast path: send over LiveKit data channel.
+                    rtcRef.current.publishDelta(delta);
+                } else {
+                    // Fallback: send as Matrix timeline event.
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    await client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
+                        data: base64Encode(delta),
+                        heads,
+                    });
+                }
 
                 deltaSendCount.current++;
 
-                // Persist a full snapshot periodically so the document survives
-                // refresh. Includes heads so loaders can skip already-merged deltas.
+                // Persist a full snapshot periodically regardless of transport.
                 if (deltaSendCount.current % SNAPSHOT_EVERY_N_DELTAS === 0) {
                     const snapshot = composerModel.save_document();
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -331,7 +368,7 @@ function useDocumentSync(
             } catch (e) {
                 logger.warn("[DocumentView] Failed to send delta", e);
             }
-        }, DELTA_DEBOUNCE_MS);
+        }, debounceMs);
     }, [client, composerModel, room.roomId]);
 
     // Flush pending delta and save a final snapshot when the document view
@@ -395,6 +432,9 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     const { ref, isWysiwygReady, wysiwyg, actionStates } = wysiwygResult;
     const composerModel = wysiwygResult.composerModel;
 
+    // LiveKit real-time transport (falls back gracefully if unavailable).
+    const rtc = useDocumentRTC(room, client);
+
     // Place the cursor at the end and focus the editor once the WASM model is
     // ready.  Without this the editor is enabled but has no selection, so no
     // cursor appears even after the element receives focus.
@@ -415,6 +455,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         composerModel,
         ref,
         notifyContentChangedRef.current,
+        rtc,
     );
 
     const handleInput = useCallback(() => {
@@ -470,6 +511,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
                 deviceId: client.getDeviceId(),
                 roomId: room.roomId,
                 modelReady: collab,
+                rtcConnected: rtc.isConnected,
                 heads: collab ? model.get_heads() : null,
                 html: collab ? model.get_content_as_html() : null,
                 docHash: docBytes ? simpleHash(docBytes) : null,
@@ -505,7 +547,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             delete (window as any).__docDebug;
         };
-    }, [composerModel, room, client, ref]);
+    }, [composerModel, room, client, ref, rtc]);
 
     // Always render the Editor so that `ref.current` is attached before
     // useComposerModel's effect runs and calls initModel().  The loading
