@@ -1,6 +1,8 @@
 name: Backport
 on:
-    pull_request_target:
+    # Privilege escalation necessary to enable backporting PRs from forks
+    # 🚨 We must not execute any checked out code here.
+    pull_request_target: # zizmor: ignore[dangerous-triggers]
         types:
             - closed
             - labeled

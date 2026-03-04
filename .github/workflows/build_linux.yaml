@@ -109,6 +109,7 @@ jobs:
               with:
                   repository: element-hq/element-desktop
                   ref: ${{ inputs.ref }}
+                  persist-credentials: false
 
             - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
@@ -184,13 +185,15 @@ jobs:
                   fi
 
             - name: Build App
-              run: pnpm build --publish never ${{ steps.config.outputs.build-args }} -l ${{ inputs.targets }}
+              run: pnpm build --publish never $BUILD_ARGS -l $TARGETS
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
                   # Workaround for https://github.com/electron-userland/electron-builder/issues/5721
                   USE_HARD_LINKS: false
+                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
+                  TARGETS: ${{ inputs.targets }}
 
             - name: Check native libraries
               run: |

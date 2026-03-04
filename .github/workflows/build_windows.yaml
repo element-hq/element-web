@@ -112,6 +112,7 @@ jobs:
               with:
                   repository: element-hq/element-desktop
                   ref: ${{ inputs.ref }}
+                  persist-credentials: false
 
             - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
@@ -146,7 +147,9 @@ jobs:
               run: |
                   rustup toolchain install stable --profile minimal --no-self-update
                   rustup default stable
-                  rustup target add ${{ steps.config.outputs.target }}
+                  rustup target add $env:TARGET
+              env:
+                  TARGET: ${{ steps.config.outputs.target }}
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -187,7 +190,9 @@ jobs:
               if: steps.cache.outputs.cache-hit != 'true'
               run: |
                   refreshenv
-                  pnpm build:native --target ${{ steps.config.outputs.target }}
+                  pnpm build:native --target $env:TARGET
+              env:
+                  TARGET: ${{ steps.config.outputs.target }}
 
             - name: Install and configure eSigner CKA
               run: |
@@ -209,7 +214,7 @@ jobs:
 
                   # Configure - default credentials from https://www.ssl.com/guide/esigner-demo-credentials-and-certificates/
                   ${{ env.INSTALL_DIR }}/eSignerCKATool.exe config `
-                      -mode ${{ vars.ESIGNER_MODE || 'sandbox' }} `
+                      -mode "$env:ESIGNER_MODE" `
                       -user "${{ secrets.ESIGNER_USER_NAME || 'esigner_demo' }}" `
                       -pass "${{ secrets.ESIGNER_USER_PASSWORD || 'esignerDemo#1' }}" `
                       -totp "${{ secrets.ESIGNER_USER_TOTP || 'RDXYgV9qju+6/7GnMf1vCbKexXVJmUVr+86Wq/8aIGg=' }}" `
@@ -228,12 +233,14 @@ jobs:
                   echo "ED_SIGNTOOL_THUMBPRINT=$Thumbprint" >> $env:GITHUB_ENV
                   echo "ED_SIGNTOOL_SUBJECT_NAME=$SubjectName" >> $env:GITHUB_ENV
               env:
+                  ESIGNER_MODE: ${{ vars.ESIGNER_MODE || 'sandbox' }}
                   ESIGNER_URL: https://github.com/SSLcom/eSignerCKA/releases/download/v1.0.6/SSL.COM-eSigner-CKA_1.0.6.zip
                   INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
                   MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
 
             - name: Build App
-              run: pnpm build --publish never ${{ steps.config.outputs.build-args }} -w ${{ inputs.targets }}
+              run: pnpm build --publish never $BUILD_ARGS -w $TARGETS
+              shell: bash
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
@@ -243,6 +250,8 @@ jobs:
                   # We just give the installer a static name, so you'll just see this in the 'about' dialog.
                   # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
                   VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
+                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
+                  TARGETS: ${{ inputs.targets }}
 
             - name: Trust eSigner sandbox cert
               if: inputs.sign == ''

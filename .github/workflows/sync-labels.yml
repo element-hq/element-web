@@ -11,7 +11,7 @@ on:
 permissions: {} # Uses ELEMENT_BOT_TOKEN
 jobs:
     sync-labels:
-        uses: element-hq/element-meta/.github/workflows/sync-labels.yml@develop
+        uses: element-hq/element-meta/.github/workflows/sync-labels.yml@dac99c67f08f8f2a079e885ffb682a2f39cd3960
         with:
             LABELS: |
                 element-hq/element-web

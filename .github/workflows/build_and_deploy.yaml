@@ -79,7 +79,7 @@ jobs:
             matrix:
                 arch: [x64, arm64]
         uses: ./.github/workflows/build_windows.yaml
-        secrets: inherit
+        secrets: inherit # zizmor: ignore[secrets-inherit]
         with:
             sign: true
             arch: ${{ matrix.arch }}
@@ -90,7 +90,7 @@ jobs:
         needs: prepare
         name: macOS
         uses: ./.github/workflows/build_macos.yaml
-        secrets: inherit
+        secrets: inherit # zizmor: ignore[secrets-inherit]
         with:
             sign: true
             base-url: https://packages.element.io/${{ needs.prepare.outputs.packages-dir }}
@@ -258,7 +258,7 @@ jobs:
                       ${{ steps.deb.outputs.arm64 }}
 
             - name: Publish amd64 deb to packages.element.io
-              uses: element-hq/packages.element.io@master
+              uses: element-hq/packages.element.io@master # zizmor: ignore[unpinned-uses]
               if: needs.prepare.outputs.deploy == 'true' && needs.linux.result == 'success'
               with:
                   file: ${{ steps.deb.outputs.amd64 }}
@@ -268,7 +268,7 @@ jobs:
                   bucket-access-key: ${{ secrets.CF_R2_TOKEN }}
 
             - name: Publish arm64 deb to packages.element.io
-              uses: element-hq/packages.element.io@master
+              uses: element-hq/packages.element.io@master # zizmor: ignore[unpinned-uses]
               if: needs.prepare.outputs.deploy == 'true' && needs.linux.result == 'success'
               with:
                   file: ${{ steps.deb.outputs.arm64 }}

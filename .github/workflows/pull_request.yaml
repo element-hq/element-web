@@ -1,11 +1,13 @@
 name: Pull Request
 on:
-    pull_request_target:
+    # Privilege escalation necessary access members of the review teams
+    # 🚨 We must not execute any checked out code here, and be careful around use of user-controlled inputs.
+    pull_request_target: # zizmor: ignore[dangerous-triggers]
         types: [opened, edited, labeled, unlabeled, synchronize]
 permissions: {}
 jobs:
     action:
-        uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop # zizmor: ignore[unpinned-uses]
         permissions:
             pull-requests: write
         secrets:

@@ -55,6 +55,8 @@ jobs:
             nightly-version: ${{ steps.versions.outputs.nightly }}
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -84,7 +86,10 @@ jobs:
 
             - name: Fetch Element Web (${{ inputs.version }})
               if: steps.branch-matching.outcome == 'failure' || steps.branch-matching.outcome == 'skipped'
-              run: pnpm run fetch --noverify -d ${{ inputs.config }} ${{ inputs.version }}
+              run: pnpm run fetch --noverify -d ${CONFIG} ${VERSION}
+              env:
+                  CONFIG: ${{ inputs.config }}
+                  VERSION: ${{ inputs.version }}
 
             - name: Copy variant config
               run: cp "$CONFIG_DIR/build.json" variant.json
@@ -159,13 +164,15 @@ jobs:
                   WEB_VERSION=${WEBAPP_VERSION:0:12}
                   JS_VERSION=${WEBAPP_VERSION:16:12}
 
-                  echo "### Nightly build ${{ steps.versions.outputs.nightly }}" >> $GITHUB_STEP_SUMMARY
+                  echo "### Nightly build ${NIGHTLY_VERSION}" >> $GITHUB_STEP_SUMMARY
                   echo "" >> $GITHUB_STEP_SUMMARY
                   echo "| Component   | Version |" >> $GITHUB_STEP_SUMMARY
                   echo "| ----------- | ------- |" >> $GITHUB_STEP_SUMMARY
                   echo "| Bundle Hash | $BUNDLE_HASH |" >> $GITHUB_STEP_SUMMARY
                   echo "| Element Web | [$WEB_VERSION](https://github.com/element-hq/element-web/commit/$WEB_VERSION) |" >> $GITHUB_STEP_SUMMARY
                   echo "| JS SDK      | [$JS_VERSION](https://github.com/matrix-org/matrix-js-sdk/commit/$JS_VERSION) |" >> $GITHUB_STEP_SUMMARY
+              env:
+                  NIGHTLY_VERSION: ${{ steps.versions.outputs.nightly }}
 
             - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:

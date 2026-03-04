@@ -39,6 +39,7 @@ jobs:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: ${{ github.repository == 'element-hq/element-web-pro' && 'element-hq/element-desktop' || github.repository }}
+                  persist-credentials: false
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -55,7 +56,9 @@ jobs:
                   path: dist
 
             - name: Prepare for tests
-              run: ${{ inputs.prepare_cmd }}
+              # This is set by the caller of the reusable workflow, they have the ability to run the command they specify
+              # directly without our help so this is fine.
+              run: ${{ inputs.prepare_cmd }} # zizmor: ignore[template-injection]
               if: inputs.prepare_cmd
 
             - name: Expand executable path

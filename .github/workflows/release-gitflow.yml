@@ -7,6 +7,6 @@ concurrency: ${{ github.repository }}-${{ github.workflow }}
 permissions: {} # Uses ELEMENT_BOT_TOKEN
 jobs:
     merge:
-        uses: matrix-org/matrix-js-sdk/.github/workflows/release-gitflow.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-gitflow.yml@develop # zizmor: ignore[unpinned-uses]
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
