@@ -238,8 +238,6 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     // cursor appears even after the element receives focus.
     useSetCursorPosition(!isWysiwygReady, ref);
 
-    const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel, ref);
-
     // Track whether the editor has content so we can hide the placeholder.
     const [hasContent, setHasContent] = useState(false);
 
