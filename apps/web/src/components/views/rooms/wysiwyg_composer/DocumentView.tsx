@@ -46,6 +46,7 @@ interface CollaborativeComposerModel {
     receive_changes(data: Uint8Array): unknown;
     get_heads(): string[];
     set_actor_id(actor: string): void;
+    get_content_as_html(): string;
 }
 
 /**
@@ -78,6 +79,16 @@ function base64Decode(b64: string): Uint8Array {
     return bytes;
 }
 
+/**
+ * Encode a UTF-8 string as a lowercase hex string, as required by
+ * the Automerge `set_actor_id` API.
+ */
+function toHex(str: string): string {
+    return Array.from(new TextEncoder().encode(str))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+}
+
 // ------------------------------------------------------------------
 // Hook: useDocumentSync
 // ------------------------------------------------------------------
@@ -85,6 +96,7 @@ function useDocumentSync(
     room: Room,
     client: MatrixClient,
     composerModel: unknown,
+    editorRef: React.RefObject<HTMLDivElement | null>,
 ): {
     isLoaded: boolean;
     scheduleDeltaSend: () => void;
@@ -92,10 +104,11 @@ function useDocumentSync(
     const [isLoaded, setIsLoaded] = useState(false);
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Set actor ID to userId:deviceId for correct CRDT attribution.
+    // Set actor ID as hex-encoded userId:deviceId for correct CRDT attribution.
+    // set_actor_id() requires a hex string (decoded to raw bytes internally).
     useEffect(() => {
         if (!isCollaborative(composerModel)) return;
-        const actorId = `${client.getUserId()}:${client.getDeviceId()}`;
+        const actorId = toHex(`${client.getUserId()}:${client.getDeviceId()}`);
         try {
             composerModel.set_actor_id(actorId);
         } catch (e) {
@@ -103,7 +116,8 @@ function useDocumentSync(
         }
     }, [client, composerModel]);
 
-    // Load the initial document from room state if a snapshot exists.
+    // Load the initial document from room state if a snapshot exists,
+    // then update the editor DOM to reflect the loaded content.
     useEffect(() => {
         if (!isCollaborative(composerModel)) {
             setIsLoaded(true);
@@ -116,6 +130,10 @@ function useDocumentSync(
             if (data) {
                 try {
                     composerModel.load_document(base64Decode(data));
+                    // Reflect the loaded document in the editor DOM.
+                    if (editorRef.current) {
+                        editorRef.current.innerHTML = composerModel.get_content_as_html();
+                    }
                     logger.info("[DocumentView] Loaded document from room state");
                 } catch (e) {
                     logger.warn("[DocumentView] Failed to load document from room state", e);
@@ -123,9 +141,9 @@ function useDocumentSync(
             }
         }
         setIsLoaded(true);
-    }, [room, composerModel]);
+    }, [room, composerModel, editorRef]);
 
-    // Apply incoming delta events from the room timeline.
+    // Apply incoming delta events from the room timeline and update the DOM.
     useEffect(() => {
         if (!isCollaborative(composerModel)) return;
 
@@ -139,19 +157,23 @@ function useDocumentSync(
             if (!data) return;
             try {
                 composerModel.receive_changes(base64Decode(data));
+                // Update the editor DOM with the merged content.
+                if (editorRef.current) {
+                    editorRef.current.innerHTML = composerModel.get_content_as_html();
+                }
             } catch (e) {
                 logger.warn("[DocumentView] Failed to apply remote delta", e);
             }
         };
 
-        // MatrixEvent is fired as "Room.timeline" on the Room object.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         room.on("Room.timeline" as any, onTimeline);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return () => room.off("Room.timeline" as any, onTimeline);
-    }, [room, client, composerModel]);
+    }, [room, client, composerModel, editorRef]);
 
     // Debounced delta send triggered after each keystroke.
+    // Also saves a full snapshot to room state so the document persists on refresh.
     const scheduleDeltaSend = useCallback(() => {
         if (!isCollaborative(composerModel)) return;
 
@@ -169,6 +191,13 @@ function useDocumentSync(
                 await client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
                     data: base64Encode(delta),
                     heads,
+                });
+
+                // Persist a full snapshot to room state so the document survives refresh.
+                const snapshot = composerModel.save_document();
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await client.sendStateEvent(room.roomId, DOC_STATE_EVENT_TYPE as any, {
+                    data: base64Encode(snapshot),
                 });
             } catch (e) {
                 logger.warn("[DocumentView] Failed to send delta", e);
@@ -204,7 +233,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     // cursor appears even after the element receives focus.
     useSetCursorPosition(!isWysiwygReady, ref);
 
-    const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel);
+    const { isLoaded, scheduleDeltaSend } = useDocumentSync(room, client, composerModel, ref);
 
     const handleInput = useCallback(() => {
         scheduleDeltaSend();
