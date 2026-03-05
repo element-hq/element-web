@@ -21,7 +21,7 @@ import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 import { I18nContext } from "../../utils/i18nContext.ts";
 import { I18nApi } from "../../index.ts";
 
-const { Default, HasHref, HasExtraClassNames } = composeStories(stories);
+const { Default, HasHref } = composeStories(stories);
 
 const renderWithI18n = (ui: React.ReactElement): ReturnType<typeof render> =>
     render(ui, {
@@ -38,9 +38,16 @@ describe("MessageTimestampView", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders the message timestamp with extra class names", async () => {
-        const { container } = render(<HasExtraClassNames />);
-        expect(container).toMatchSnapshot();
+    it("applies custom className to the timestamp element", async () => {
+        const vm = new MockViewModel<MessageTimestampViewSnapshot>({
+            ts: "04:58",
+            tsSentAt: "Thu, 17 Nov 2022, 4:58:32 pm",
+        });
+
+        renderWithI18n(<MessageTimestampView vm={vm} className="extra_class_1 extra_class_2" />);
+
+        const target = screen.getByText("04:58");
+        expect(target).toHaveClass("extra_class_1", "extra_class_2");
     });
 
     it("renders the message timestamp with href", async () => {

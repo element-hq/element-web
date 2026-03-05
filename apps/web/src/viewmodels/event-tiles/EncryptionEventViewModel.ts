@@ -78,13 +78,11 @@ export class EncryptionEventViewModel
         props: EncryptionEventViewModelProps,
         isEncrypted: boolean,
     ): EncryptionEventViewSnapshotInterface {
-        // Keep legacy class names for compatibility with existing timeline layout and styling.
         const newSnapshot: EncryptionEventViewSnapshotInterface = {
             state: EncryptionEventState.CHANGED,
             encryptedStateEvents: undefined,
             userName: undefined,
             timestamp: props.timestamp,
-            className: "mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon",
         };
 
         const content = props.mxEvent.getContent<RoomEncryptionEventContent>();
@@ -113,8 +111,6 @@ export class EncryptionEventViewModel
             newSnapshot.state = EncryptionEventState.DISABLE_ATTEMPT;
         } else {
             newSnapshot.state = EncryptionEventState.UNSUPPORTED;
-            // Unsupported branch matches legacy EncryptionEvent class usage (no icon class).
-            newSnapshot.className = "mx_EventTileBubble mx_cryptoEvent";
         }
 
         return newSnapshot;

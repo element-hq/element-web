@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { PollStartEventPreview } from "../../../../../src/stores/room-list/previews/PollStartEventPreview";
+// Import directly from the file to avoid circular dependencies with MessagePreviewStore
+import { PollStartEventPreview } from "../../../../../src/stores/message-preview/previews/PollStartEventPreview";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { makePollStartEvent } from "../../../../test-utils";
 

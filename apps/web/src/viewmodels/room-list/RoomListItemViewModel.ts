@@ -18,7 +18,7 @@ import type { Room, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
-import { MessagePreviewStore } from "../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../stores/message-preview";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../utils/DMRoomMap";

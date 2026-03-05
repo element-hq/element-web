@@ -53,15 +53,12 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
                 fallbackName: name,
                 member,
                 withTooltip: true,
-                className: "mx_DisambiguatedProfile",
-                classNameDisplayName: "mx_DisambiguatedProfile_displayName",
-                classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
             }),
     );
     useEffect(() => {
         disambiguatedProfileVM.setMember(name, member);
     }, [disambiguatedProfileVM, member, name]);
-    const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} />;
+    const nameJSX = <DisambiguatedProfileView vm={disambiguatedProfileVM} className="mx_DisambiguatedProfile" />;
 
     const presenceState = member.presenceState;
     let presenceJSX: JSX.Element | undefined;

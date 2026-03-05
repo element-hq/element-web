@@ -37,9 +37,6 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 colored: true,
                 emphasizeDisplayName: true,
                 withTooltip,
-                className: "mx_DisambiguatedProfile",
-                classNameDisplayName: "mx_DisambiguatedProfile_displayName",
-                classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
             }),
     );
 
@@ -47,7 +44,7 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         disambiguatedProfileVM.setMember(sender ?? "", member);
     }, [disambiguatedProfileVM, member, sender]);
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
-        <DisambiguatedProfileView vm={disambiguatedProfileVM} />
+        <DisambiguatedProfileView vm={disambiguatedProfileVM} className="mx_DisambiguatedProfile" />
     ) : (
         <></>
     );

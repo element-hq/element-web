@@ -109,7 +109,6 @@ describe("DateSeparatorViewModel", () => {
         const vm = createViewModel();
 
         expect(vm.getSnapshot().label).toBe("today");
-        expect(vm.getSnapshot().className).toBe("mx_TimelineSeparator");
     });
 
     it("uses full date when exporting", () => {

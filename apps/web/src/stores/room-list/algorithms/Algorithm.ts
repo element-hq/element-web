@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
@@ -24,16 +24,12 @@ import {
     type ListAlgorithm,
     type SortAlgorithm,
 } from "./models";
-import {
-    EffectiveMembership,
-    getEffectiveMembership,
-    getEffectiveMembershipTag,
-    splitRoomsByMembership,
-} from "../../../utils/membership";
+import { EffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { type OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import { isRoomVisible } from "../../room-list-v3/isRoomVisible";
 import { CallStore, CallStoreEvent } from "../../CallStore";
+import { getTagsForRoom, getTagsOfJoinedRoom } from "../../../utils/room/getTagsForRoom";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -499,7 +495,7 @@ export class Algorithm extends EventEmitter {
 
         // Now process all the joined rooms. This is a bit more complicated
         for (const room of memberships[EffectiveMembership.Join]) {
-            const tags = this.getTagsOfJoinedRoom(room);
+            const tags = getTagsOfJoinedRoom(room);
 
             let inTag = false;
             if (tags.length > 0) {
@@ -539,42 +535,6 @@ export class Algorithm extends EventEmitter {
                 }
             }
         }
-    }
-
-    public getTagsForRoom(room: Room): TagID[] {
-        const tags: TagID[] = [];
-
-        if (!getEffectiveMembership(room.getMyMembership())) return []; // peeked room has no tags
-
-        const membership = getEffectiveMembershipTag(room);
-
-        if (membership === EffectiveMembership.Invite) {
-            tags.push(DefaultTagID.Invite);
-        } else if (membership === EffectiveMembership.Leave) {
-            tags.push(DefaultTagID.Archived);
-        } else {
-            tags.push(...this.getTagsOfJoinedRoom(room));
-        }
-
-        if (!tags.length) tags.push(DefaultTagID.Untagged);
-
-        return tags;
-    }
-
-    private getTagsOfJoinedRoom(room: Room): TagID[] {
-        let tags = Object.keys(room.tags || {});
-
-        if (tags.length === 0) {
-            // Check to see if it's a DM if it isn't anything else
-            if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
-                tags = [DefaultTagID.DM];
-            }
-        }
-        if (room.isCallRoom() && (room.getJoinRule() === JoinRule.Public || room.getJoinRule() === JoinRule.Knock)) {
-            tags.push(DefaultTagID.Conference);
-        }
-
-        return tags;
     }
 
     /**
@@ -677,7 +637,7 @@ export class Algorithm extends EventEmitter {
         let didTagChange = false;
         if (cause === RoomUpdateCause.PossibleTagChange) {
             const oldTags = this.roomIdsToTags[room.roomId] || [];
-            const newTags = this.getTagsForRoom(room);
+            const newTags = getTagsForRoom(room);
             const diff = arrayDiff(oldTags, newTags);
             if (diff.removed.length > 0 || diff.added.length > 0) {
                 for (const rmTag of diff.removed) {
@@ -737,7 +697,7 @@ export class Algorithm extends EventEmitter {
             }
 
             // Get the tags for the room and populate the cache
-            const roomTags = this.getTagsForRoom(room).filter((t) => !isNullOrUndefined(this.cachedRooms[t]));
+            const roomTags = getTagsForRoom(room).filter((t) => !isNullOrUndefined(this.cachedRooms[t]));
 
             // "This should never happen" condition - we specify DefaultTagID.Untagged in getTagsForRoom(),
             // which means we should *always* have a tag to go off of.

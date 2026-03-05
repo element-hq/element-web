@@ -64,19 +64,7 @@ export interface DisambiguatedProfileViewModelProps {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: (event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
-    /**
-     * Optional CSS class name to apply to the profile.
-     */
-    className?: string;
-    /**
-     * Optional CSS class name to apply to the display name span.
-     */
-    classNameDisplayName?: string;
-    /**
-     * Optional CSS class name to apply to the display identifier span.
-     */
-    classNameDisplayIdentifier?: string;
+    onClick?: DisambiguatedProfileViewActions["onClick"];
 }
 
 /**
@@ -90,16 +78,7 @@ export class DisambiguatedProfileViewModel
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
-        const {
-            member,
-            fallbackName,
-            colored,
-            emphasizeDisplayName,
-            withTooltip,
-            className,
-            classNameDisplayName,
-            classNameDisplayIdentifier,
-        } = props;
+        const { member, fallbackName, colored, emphasizeDisplayName, withTooltip } = props;
 
         // Compute display name
         const displayName = member?.rawDisplayName || fallbackName;
@@ -139,9 +118,6 @@ export class DisambiguatedProfileViewModel
         return {
             displayName,
             colorClass,
-            className,
-            classNameDisplayName,
-            classNameDisplayIdentifier,
             displayIdentifier,
             title,
             emphasizeDisplayName,
