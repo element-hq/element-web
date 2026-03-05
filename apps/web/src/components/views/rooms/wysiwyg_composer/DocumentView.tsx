@@ -14,7 +14,6 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { FormattingButtons } from "./components/FormattingButtons.tsx";
 import { Editor } from "./components/Editor.tsx";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext.ts";
-import { useSetCursorPosition } from "./hooks/useSetCursorPosition.ts";
 import { useDocumentRTC } from "./useDocumentRTC.ts";
 
 /**
@@ -498,12 +497,18 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         rtc,
     );
 
-    // Place the cursor at the end and focus the editor only after BOTH the WASM
-    // model is ready AND the document content has been written to the DOM.
-    // Waiting for isLoaded prevents the cursor being placed into the empty editor
-    // before innerHTML is populated, which would leave it one position short on
-    // the first keypress.
-    useSetCursorPosition(!isWysiwygReady || !isLoaded, ref);
+    // Place the cursor at position 0 (document start, like Google Docs) once the
+    // WASM model is ready AND the document content has been written to the DOM.
+    useEffect(() => {
+        if (!isWysiwygReady || !isLoaded || !ref.current) return;
+        const range = document.createRange();
+        range.selectNodeContents(ref.current);
+        range.collapse(true); // collapse to start
+        const sel = document.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+        ref.current.focus();
+    }, [isWysiwygReady, isLoaded, ref]);
 
     const handleInput = useCallback(() => {
         notifyContentChangedRef.current();
