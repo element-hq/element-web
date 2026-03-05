@@ -142,7 +142,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
             >
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_1z02j_1"
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_3pbrs_1"
               >
                 <span
                   dir="auto"
@@ -1578,7 +1578,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
             >
               <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_1z02j_1"
+                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_3pbrs_1"
               >
                 <span
                   dir="auto"

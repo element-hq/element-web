@@ -7,7 +7,7 @@ exports[`NewRoomIntro topic should render a link in the topic 1`] = `
   <span>
     Topic: 
     <p
-      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_1z02j_1"
+      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_3pbrs_1"
     >
       <span
         dir="auto"
