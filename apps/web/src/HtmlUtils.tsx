@@ -323,13 +323,11 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
     if (opts.linkify) {
         // Prevent mutating the source of sanitizeParams.
         sanitizeParams = { ...sanitizeParams };
-        sanitizeParams.allowedClasses ??= {};
-        if (typeof sanitizeParams.allowedClasses.a === "boolean") {
-            // All classes are already allowed for "a"
-        } else {
-            sanitizeParams.allowedClasses.a ??= [];
-            sanitizeParams.allowedClasses.a.push("linkified");
-        }
+        if (typeof sanitizeParams.allowedAttributes === "object") {
+            const attribs = { ...sanitizeParams.allowedAttributes };
+            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], "data-linkified"];
+            sanitizeParams.allowedAttributes = attribs;
+        } // else: No attibutes are are allowed for "a"
     }
 
     try {
@@ -393,6 +391,7 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
                 safeBody = phtml.body.innerHTML;
             }
         } else if (opts.linkify) {
+            console.log(sanitizeParams);
             // If we are linkifying plain text, pass the result through sanitizeHtml so that the highlighter configured in sanitizeParams.textFilter gets applied.
             safeBody = sanitizeHtml(linkifyHtml(escapeHtml(plainBody)), sanitizeParams);
         } else if (highlighter) {

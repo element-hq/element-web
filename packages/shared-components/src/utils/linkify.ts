@@ -231,12 +231,12 @@ export function generateLinkedTextOptions({
         if (canClick === false) {
             return {
                 "href": undefined,
-                "data-linkfied": "true",
+                "data-linkified": "true",
             };
         }
 
         const attrs: Record<string, unknown> = {
-            "data-linkfied": "true",
+            "data-linkified": "true",
         };
 
         const options = events(href, type);

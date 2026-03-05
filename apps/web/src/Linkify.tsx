@@ -300,7 +300,6 @@ function urlTargetTransformFunction(href: string | string): string {
 }
 
 export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): string {
-    console.log("formatHref", href, type);
     switch (type) {
         case LinkifyMatrixOpaqueIdType.URL:
             if (href.startsWith("mxc://") && MatrixClientPeg.get()) {
@@ -318,7 +317,6 @@ export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): strin
         case LinkifyMatrixOpaqueIdType.RoomAlias:
         case LinkifyMatrixOpaqueIdType.UserId:
         default: {
-            console.log("formatHref", { href, type });
             return tryTransformEntityToPermalink(MatrixClientPeg.safeGet(), href) ?? "";
         }
     }
