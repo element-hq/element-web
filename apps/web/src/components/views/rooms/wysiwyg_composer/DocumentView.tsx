@@ -37,6 +37,9 @@ const DOC_STATE_EVENT_TYPE = "org.element.doc.automerge";
  */
 const DELTA_DEBOUNCE_MS = 500;
 
+/** Minimum time (ms) the "Saving…" indicator stays visible before transitioning to "Saved". */
+const SAVING_MIN_DISPLAY_MS = 500;
+
 /** How long (ms) to show the "Saved" indicator before resetting to idle. */
 const SAVED_CLEAR_DELAY_MS = 2000;
 
@@ -357,9 +360,18 @@ function useDocumentSync(
             debounceTimer.current = null;
             if (!isCollaborative(composerModel)) return;
             setSaveStatus("saving");
+            const savingStartedAt = Date.now();
+
+            /** Wait until at least SAVING_MIN_DISPLAY_MS have elapsed since entering "saving". */
+            const awaitMinSavingDisplay = (): Promise<void> => {
+                const remaining = SAVING_MIN_DISPLAY_MS - (Date.now() - savingStartedAt);
+                return remaining > 0 ? new Promise((r) => setTimeout(r, remaining)) : Promise.resolve();
+            };
+
             try {
                 const delta = composerModel.save_incremental();
                 if (delta.length === 0) {
+                    await awaitMinSavingDisplay();
                     setSaveStatus("saved");
                     savedClearTimer.current = setTimeout(() => setSaveStatus("idle"), SAVED_CLEAR_DELAY_MS);
                     return;
@@ -393,6 +405,7 @@ function useDocumentSync(
                     logger.info("[DocumentView] Saved snapshot to room state");
                 }
 
+                await awaitMinSavingDisplay();
                 setSaveStatus("saved");
                 savedClearTimer.current = setTimeout(() => setSaveStatus("idle"), SAVED_CLEAR_DELAY_MS);
             } catch (e) {
