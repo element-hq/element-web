@@ -1,0 +1,108 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LinkedText > renders a custom href 1`] = `
+<div>
+  <p
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+  >
+    I love working on 
+    <a
+      href="https://example.org"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      https://matrix.org
+    </a>
+    .
+  </p>
+</div>
+`;
+
+exports[`LinkedText > renders a custom target 1`] = `
+<div>
+  <p
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+  >
+    I love working on 
+    <a
+      href="https://matrix.org"
+      rel="noreferrer noopener"
+      target="_fake_target"
+    >
+      https://matrix.org
+    </a>
+    .
+  </p>
+</div>
+`;
+
+exports[`LinkedText > renders a room alias 1`] = `
+<div>
+  <p
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+  >
+    I love talking in 
+    <a
+      href="#general:example.org"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      #general:example.org
+    </a>
+    .
+  </p>
+</div>
+`;
+
+exports[`LinkedText > renders a standard link 1`] = `
+<div>
+  <p
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+  >
+    I love working on 
+    <a
+      href="https://matrix.org"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      https://matrix.org
+    </a>
+    .
+  </p>
+</div>
+`;
+
+exports[`LinkedText > renders a user ID 1`] = `
+<div>
+  <p
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+  >
+    I love talking to 
+    <a
+      href="@alice:example.org"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      @alice:example.org
+    </a>
+    .
+  </p>
+</div>
+`;
+
+exports[`LinkedText > renders an unclickable link 1`] = `
+<div>
+  <p
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+  >
+    I love working on 
+    <a
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      https://matrix.org
+    </a>
+    .
+  </p>
+</div>
+`;

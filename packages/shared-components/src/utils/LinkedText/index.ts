@@ -5,4 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { LinkedText } from "./LinkedText";
+export { LinkedText, type LinkedTextProps } from "./LinkedText";

@@ -25,7 +25,7 @@ import dis from "../dispatcher/dispatcher";
 import { _t, _td, UserFriendlyError } from "../languageHandler";
 import Modal from "../Modal";
 import MultiInviter from "../utils/MultiInviter";
-import { Linkify, topicToHtml } from "../HtmlUtils";
+import { topicToHtml } from "../HtmlUtils";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { textToHtmlRainbow } from "../utils/colour";
@@ -61,6 +61,7 @@ import { goto, join } from "./join";
 import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
+import { ElementLinkedText } from "../Linkify";
 
 export { CommandCategories, Command };
 
@@ -270,7 +271,7 @@ export const Commands = [
 
             Modal.createDialog(InfoDialog, {
                 title: room.name,
-                description: <Linkify>{body}</Linkify>,
+                description: <ElementLinkedText>{body}</ElementLinkedText>,
                 hasCloseButton: true,
                 className: "markdown-body",
             });

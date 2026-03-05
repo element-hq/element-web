@@ -46,10 +46,11 @@ import { _t } from "../../../languageHandler.tsx";
 import RoomAvatar from "../avatars/RoomAvatar.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
-import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
+import { topicToHtml } from "../../../HtmlUtils.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 import { useRoomName } from "../../../hooks/useRoomName.ts";
+import { ElementLinkedText } from "../../../Linkify.tsx";
 
 interface IProps {
     room: Room;
@@ -89,7 +90,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = vm.expanded ? <Linkify>{body}</Linkify> : body;
+    const content = vm.expanded ? <ElementLinkedText>{body}</ElementLinkedText> : body;
 
     return (
         <Flex

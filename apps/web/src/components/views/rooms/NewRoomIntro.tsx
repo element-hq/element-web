@@ -32,7 +32,8 @@ import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useTopic } from "../../../hooks/room/useTopic";
-import { topicToHtml, Linkify } from "../../../HtmlUtils";
+import { topicToHtml } from "../../../HtmlUtils";
+import { ElementLinkedText } from "../../../Linkify.tsx";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -137,14 +138,14 @@ const NewRoomIntro: React.FC = () => {
                             {sub}
                         </AccessibleButton>
                     ),
-                    topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
+                    topic: () => <ElementLinkedText>{topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>,
                 },
             );
         } else if (topic) {
             topicText = _t(
                 "room|intro|display_topic",
                 {},
-                { topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
+                { topic: () => <ElementLinkedText>{topicToHtml(topic?.text, topic?.html)}</ElementLinkedText> },
             );
         } else if (canAddTopic) {
             topicText = _t(

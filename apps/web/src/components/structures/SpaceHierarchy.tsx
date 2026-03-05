@@ -55,7 +55,7 @@ import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/spaces/SpaceStore";
-import { Linkify, topicToHtml } from "../../HtmlUtils";
+import { topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { type IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
@@ -73,6 +73,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import RoomContext from "../../contexts/RoomContext.ts";
+import { ElementLinkedText } from "../../Linkify.tsx";
 
 interface IProps {
     space: Room;
@@ -234,19 +235,10 @@ const Tile: React.FC<ITileProps> = ({
     let topicSection: ReactNode | undefined;
     if (topic) {
         topicSection = (
-            <Linkify
-                options={{
-                    attributes: {
-                        onClick(ev: MouseEvent) {
-                            // prevent clicks on links from bubbling up to the room tile
-                            ev.stopPropagation();
-                        },
-                    },
-                }}
-            >
+            <ElementLinkedText canClick={false}>
                 {" · "}
                 {topic}
-            </Linkify>
+            </ElementLinkedText>
         );
     }
 

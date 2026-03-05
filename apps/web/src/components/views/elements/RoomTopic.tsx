@@ -20,8 +20,9 @@ import InfoDialog from "../dialogs/InfoDialog";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
-import { Linkify, topicToHtml } from "../../../HtmlUtils";
+import { topicToHtml } from "../../../HtmlUtils";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
+import { ElementLinkedText } from "../../../Linkify";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
     room: Room;
@@ -74,19 +75,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                 title: room.name,
                 description: (
                     <div>
-                        <Linkify
-                            options={{
-                                attributes: {
-                                    onClick(e: React.MouseEvent<HTMLDivElement>) {
-                                        onClick(e);
-                                        modal.close();
-                                    },
-                                },
-                            }}
-                            as="p"
-                        >
-                            {body}
-                        </Linkify>
+                        <ElementLinkedText onLinkClick={() => modal.close()}>{body}</ElementLinkedText>
                         {canSetTopic && (
                             <AccessibleButton
                                 kind="primary_outline"
@@ -122,7 +111,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                 onFocus={onHover}
                 aria-label={_t("room|read_topic")}
             >
-                <Linkify>{body}</Linkify>
+                <ElementLinkedText>{body}</ElementLinkedText>
             </div>
         </Tooltip>
     );

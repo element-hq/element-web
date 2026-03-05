@@ -21,7 +21,7 @@ import InteractiveAuth, {
 } from "../../structures/InteractiveAuth";
 import { type ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
-import { Linkify } from "../../../Linkify";
+import { ElementLinkedText } from "../../../Linkify";
 
 type DialogAesthetics = Partial<{
     [x in AuthType]: {
@@ -163,9 +163,9 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         if (this.state.authError) {
             content = (
                 <div id="mx_Dialog_content">
-                    <Linkify>
-                        <div role="alert">{this.state.authError.message || this.state.authError.toString()}</div>
-                    </Linkify>
+                    <ElementLinkedText role="alert">
+                        {this.state.authError.message || this.state.authError.toString()}
+                    </ElementLinkedText>
                     <br />
                     <AccessibleButton onClick={this.onDismissClick} className="mx_GeneralButton" autoFocus={true}>
                         {_t("action|dismiss")}

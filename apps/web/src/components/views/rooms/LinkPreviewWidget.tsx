@@ -10,13 +10,13 @@ import React, { type JSX, type ComponentProps, createRef, type ReactNode } from 
 import { decode } from "html-entities";
 import { type MatrixEvent, type IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 
-import { Linkify } from "../../../HtmlUtils";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { mediaFromMxc } from "../../../customisations/Media";
 import ImageView from "../elements/ImageView";
 import LinkWithTooltip from "../elements/LinkWithTooltip";
 import PlatformPeg from "../../../PlatformPeg";
+import { ElementLinkedText } from "../../../Linkify";
 
 interface IProps {
     link: string;
@@ -128,7 +128,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
                             )}
                         </div>
                         <div className="mx_LinkPreviewWidget_description">
-                            <Linkify>{description}</Linkify>
+                            <ElementLinkedText>{description}</ElementLinkedText>
                         </div>
                     </div>
                 </div>

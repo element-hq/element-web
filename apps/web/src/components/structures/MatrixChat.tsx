@@ -125,7 +125,7 @@ import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSet
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
-import { getHtmlText, Linkify } from "../../HtmlUtils";
+import { getHtmlText } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
@@ -139,7 +139,7 @@ import { setTheme } from "../../theme";
 import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenForwardDialogPayload";
 import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
 import Markdown from "../../Markdown";
-import { sanitizeHtmlParams } from "../../Linkify";
+import { ElementLinkedText, sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
 
@@ -1458,7 +1458,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     key,
                     title: userNotice.title,
                     props: {
-                        description: <Linkify>{userNotice.description}</Linkify>,
+                        description: <ElementLinkedText>{userNotice.description}</ElementLinkedText>,
                         primaryLabel: _t("action|ok"),
                         onPrimaryClick: () => {
                             ToastStore.sharedInstance().dismissToast(key);

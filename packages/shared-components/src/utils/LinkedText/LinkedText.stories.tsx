@@ -8,12 +8,16 @@ import React from "react";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { LinkedText } from "./LinkedText";
+import { fn } from "storybook/test";
 
 export default {
     title: "Utils/LinkedText",
     component: LinkedText,
     args: {
-        children: "Test",
+        children: "I love working on https://matrix.org.",
+    },
+    argTypes: {
+        canClick: { control: "boolean" },
     },
     tags: ["autodocs"],
 } satisfies Meta<typeof LinkedText>;
@@ -22,6 +26,39 @@ const Template: StoryFn<typeof LinkedText> = ({ children, ...args }) => <LinkedT
 
 export const Default = Template.bind({});
 
-Default.args = {
+Default.args = {};
+
+export const Unclickable = Template.bind({});
+
+Unclickable.args = {
     children: "I love working on https://matrix.org.",
+    canClick: false,
+};
+
+export const WithUserId = Template.bind({});
+
+WithUserId.args = {
+    children: "I love talking to @alice:example.org.",
+    userIdListener: fn(),
+};
+
+export const WithRoomAlias = Template.bind({});
+
+WithRoomAlias.args = {
+    children: "I love talking in #general:example.org.",
+    roomAliasListener: fn(),
+};
+
+export const WithCustomUrlTarget = Template.bind({});
+
+WithCustomUrlTarget.args = {
+    urlTargetTransformer: () => "_fake_target",
+};
+
+export const WithCustomHref = Template.bind({});
+
+WithCustomHref.args = {
+    hrefTransformer: () => {
+        return "https://example.org";
+    },
 };
