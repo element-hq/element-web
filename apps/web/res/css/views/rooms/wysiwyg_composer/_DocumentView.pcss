@@ -36,6 +36,9 @@ Please see LICENSE files in the repository root for full details.
     padding-inline: var(--cpd-space-3x);
     font-size: var(--cpd-font-size-body-sm);
     white-space: nowrap;
+    text-align: left;
+    /* Wide enough for "Saving…" so the left edge never shifts between states. */
+    min-width: 4.5em;
     transition: color 0.2s ease;
 }
 
