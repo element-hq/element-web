@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, type ReactNode } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -60,15 +60,21 @@ const ReactionsRowViewWrapper = ({
     onShowAllClick,
     onAddReactionClick,
     onAddReactionContextMenu,
+    children,
+    className,
     ...snapshotProps
-}: WrapperProps): JSX.Element => {
+}: WrapperProps & { children?: ReactNode; className?: string }): JSX.Element => {
     const vm = useMockedViewModel(snapshotProps, {
         onShowAllClick: onShowAllClick ?? fn(),
         onAddReactionClick: onAddReactionClick ?? fn(),
         onAddReactionContextMenu: onAddReactionContextMenu ?? fn(),
     });
 
-    return <ReactionsRowView vm={vm} />;
+    return (
+        <ReactionsRowView vm={vm} className={className}>
+            {children}
+        </ReactionsRowView>
+    );
 };
 
 const meta = {

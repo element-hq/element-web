@@ -29,7 +29,7 @@ import { LegacyCallHangupEvent } from "./previews/LegacyCallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { type IPreview } from "./previews/IPreview";
+import { type Preview } from "./previews";
 import shouldHideEvent from "../../shouldHideEvent";
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -41,7 +41,7 @@ const PREVIEWS: Record<
     string,
     {
         isState: boolean;
-        previewer: IPreview;
+        previewer: Preview;
     }
 > = {
     "m.room.message": {

@@ -13,7 +13,7 @@ import { type TagID } from "../../room-list-v3/skip-list/tag";
 /**
  * Represents an event preview.
  */
-export interface IPreview {
+export interface Preview {
     /**
      * Gets the text which represents the event as a preview.
      * @param event The event to preview.

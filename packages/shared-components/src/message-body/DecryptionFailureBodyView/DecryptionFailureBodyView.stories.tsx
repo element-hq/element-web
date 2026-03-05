@@ -18,10 +18,13 @@ import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DecryptionFailureBodyProps = DecryptionFailureBodyViewSnapshot;
 
-const DecryptionFailureBodyViewWrapperImpl = ({ ...rest }: DecryptionFailureBodyProps): JSX.Element => {
+const DecryptionFailureBodyViewWrapperImpl = ({
+    className,
+    ...rest
+}: DecryptionFailureBodyProps & { className?: string }): JSX.Element => {
     const vm = useMockedViewModel(rest, {});
 
-    return <DecryptionFailureBodyView vm={vm} />;
+    return <DecryptionFailureBodyView vm={vm} className={className} />;
 };
 const DecryptionFailureBodyViewWrapper = withViewDocs(DecryptionFailureBodyViewWrapperImpl, DecryptionFailureBodyView);
 
@@ -40,7 +43,7 @@ const meta = {
     args: {
         decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
         isLocalDeviceVerified: true,
-        extraClassNames: ["extra_class"],
+        className: "extra_class",
     },
 } satisfies Meta<typeof DecryptionFailureBodyViewWrapper>;
 
@@ -49,24 +52,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const HasExtraClassNames: Story = {
-    args: {
-        decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
-        extraClassNames: ["extra_class_1", "extra_class_2"],
-    },
-};
-
 export const HasErrorClassName: Story = {
     args: {
         decryptionFailureReason: DecryptionFailureReason.UNSIGNED_SENDER_DEVICE,
-        extraClassNames: undefined,
+        className: undefined,
     },
 };
 
 export const HasErrorBlockIcon: Story = {
     args: {
         decryptionFailureReason: DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED,
-        extraClassNames: undefined,
+        className: undefined,
     },
 };
 
@@ -74,7 +70,7 @@ export const HasBackupConfiguredVerifiedFalse: Story = {
     args: {
         decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
         isLocalDeviceVerified: false,
-        extraClassNames: undefined,
+        className: undefined,
     },
 };
 
@@ -82,6 +78,6 @@ export const HasBackupConfiguredVerifiedTrue: Story = {
     args: {
         decryptionFailureReason: DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,
         isLocalDeviceVerified: true,
-        extraClassNames: undefined,
+        className: undefined,
     },
 };

@@ -1617,7 +1617,7 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
         vm.setVerificationState(verificationState);
     }, [verificationState, vm]);
 
-    return <DecryptionFailureBodyView vm={vm} />;
+    return <DecryptionFailureBodyView vm={vm} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }
 
 /**
@@ -1643,7 +1643,7 @@ function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Ele
             {props.receivedTs ? (
                 <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
             ) : undefined}
-            <MessageTimestampView vm={vm} />
+            <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );
 }
@@ -1859,10 +1859,6 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
         snapshot.showAllButtonVisible,
     ]);
 
-    useEffect(() => {
-        vm.setChildren(items);
-    }, [items, vm]);
-
     if (!snapshot.isVisible || !items?.length) {
         return null;
     }
@@ -1878,7 +1874,9 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
 
     return (
         <>
-            <ReactionsRowView vm={vm} />
+            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
+                {items}
+            </ReactionsRowView>
             {contextMenu}
         </>
     );

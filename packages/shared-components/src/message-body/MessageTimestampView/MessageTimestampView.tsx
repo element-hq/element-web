@@ -33,10 +33,6 @@ export interface MessageTimestampViewSnapshot {
      */
     inhibitTooltip?: boolean;
     /**
-     * Extra class name to apply to the component
-     */
-    className?: string;
-    /**
      * If specified, will be rendered as an anchor bearing the href, a `span` element will be used otherwise
      */
     href?: string;
@@ -55,6 +51,9 @@ export interface MessageTimestampViewActions {
 
 /**
  * The view model for the message timestamp.
+ *
+ * Snapshot data describes timestamp content and rendering behavior, while
+ * container styling is supplied via component props.
  */
 export type MessageTimestampViewModel = ViewModel<MessageTimestampViewSnapshot> & MessageTimestampViewActions;
 
@@ -63,6 +62,10 @@ interface MessageTimestampViewProps {
      * The view model for the message timestamp.
      */
     vm: MessageTimestampViewModel;
+    /**
+     * Optional CSS class name to apply to the component.
+     */
+    className?: string;
 }
 
 /**
@@ -70,17 +73,18 @@ interface MessageTimestampViewProps {
  *
  * The view model provides the timestamp values and display options. The component
  * can render as a link when `href` is set, and can show both sent-at and received-at
- * times in the tooltip when `tsReceivedAt` is provided.
+ * times in the tooltip when `tsReceivedAt` is provided. Use `className` for
+ * host-level styling.
  *
  * @example
  * ```tsx
- * <MessageTimestampView vm={messageTimestampViewModel} />
+ * <MessageTimestampView vm={messageTimestampViewModel} className="mx_MessageTimestamp" />
  * ```
  */
-export function MessageTimestampView({ vm }: Readonly<MessageTimestampViewProps>): JSX.Element {
+export function MessageTimestampView({ vm, className }: Readonly<MessageTimestampViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
 
-    const { ts, tsSentAt, tsReceivedAt, inhibitTooltip, className, href } = useViewModel(vm);
+    const { ts, tsSentAt, tsReceivedAt, inhibitTooltip, href } = useViewModel(vm);
 
     const onKeyDown = (event: KeyboardEvent<HTMLElement>): void => {
         if (vm.onClick) {

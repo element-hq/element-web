@@ -18,12 +18,17 @@ import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type MessageTimestampProps = MessageTimestampViewSnapshot & MessageTimestampViewActions;
-const MessageTimestampWrapperImpl = ({ onClick, onContextMenu, ...rest }: MessageTimestampProps): ReactNode => {
+const MessageTimestampWrapperImpl = ({
+    onClick,
+    onContextMenu,
+    className,
+    ...rest
+}: MessageTimestampProps & { className?: string }): ReactNode => {
     const vm = useMockedViewModel(rest, {
         onClick,
         onContextMenu,
     });
-    return <MessageTimestampView vm={vm} />;
+    return <MessageTimestampView vm={vm} className={className} />;
 };
 const MessageTimestampWrapper = withViewDocs(MessageTimestampWrapperImpl, MessageTimestampView);
 
@@ -66,12 +71,6 @@ export const HasTsReceivedAt: Story = {
 export const HasInhibitTooltip: Story = {
     args: {
         inhibitTooltip: true,
-    },
-};
-
-export const HasExtraClassNames: Story = {
-    args: {
-        className: "extra_class_1 extra_class_2",
     },
 };
 

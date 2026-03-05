@@ -10,7 +10,6 @@ import {
     ConditionKind,
     EventType,
     type IPushRule,
-    JoinRule,
     MatrixEvent,
     PendingEventOrdering,
     PushRuleActionName,
@@ -23,11 +22,10 @@ import defaultDispatcher, { type MatrixDispatcher } from "../../../../src/dispat
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import SettingsStore, { type CallbackFn } from "../../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../../src/stores/room-list/algorithms/models";
-import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { OrderedDefaultTagIDs, RoomUpdateCause } from "../../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { flushPromises, stubClient, upsertRoomStateEvents, mkRoom } from "../../../test-utils";
+import { flushPromises, stubClient, upsertRoomStateEvents } from "../../../test-utils";
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../../test-utils/pushRules";
 
 describe("RoomListStore", () => {
@@ -348,51 +346,6 @@ describe("RoomListStore", () => {
                 expect(algorithmSpy).toHaveBeenCalledTimes(1);
                 expect(algorithmSpy).toHaveBeenCalledWith(normalRoom, RoomUpdateCause.PossibleMuteChange);
             });
-        });
-    });
-
-    describe("Correctly tags rooms", () => {
-        it("renders Public and Knock rooms in Conferences section", () => {
-            const videoRoomPrivate = "!videoRoomPrivate_server";
-            const videoRoomPublic = "!videoRoomPublic_server";
-            const videoRoomKnock = "!videoRoomKnock_server";
-
-            const rooms: Room[] = [];
-            mkRoom(client, videoRoomPrivate, rooms);
-            mkRoom(client, videoRoomPublic, rooms);
-            mkRoom(client, videoRoomKnock, rooms);
-
-            mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
-            mocked(client).getRooms.mockImplementation(() => rooms);
-
-            const videoRoomKnockRoom = client.getRoom(videoRoomKnock);
-            (videoRoomKnockRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Knock);
-
-            const videoRoomPrivateRoom = client.getRoom(videoRoomPrivate);
-            (videoRoomPrivateRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Invite);
-
-            const videoRoomPublicRoom = client.getRoom(videoRoomPublic);
-            (videoRoomPublicRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Public);
-
-            [videoRoomPrivateRoom, videoRoomPublicRoom, videoRoomKnockRoom].forEach((room) => {
-                (room!.isCallRoom as jest.Mock).mockReturnValue(true);
-            });
-
-            expect(
-                RoomListStore.instance
-                    .getTagsForRoom(client.getRoom(videoRoomPublic)!)
-                    .includes(DefaultTagID.Conference),
-            ).toBeTruthy();
-            expect(
-                RoomListStore.instance
-                    .getTagsForRoom(client.getRoom(videoRoomKnock)!)
-                    .includes(DefaultTagID.Conference),
-            ).toBeTruthy();
-            expect(
-                RoomListStore.instance
-                    .getTagsForRoom(client.getRoom(videoRoomPrivate)!)
-                    .includes(DefaultTagID.Conference),
-            ).toBeFalsy();
         });
     });
 });

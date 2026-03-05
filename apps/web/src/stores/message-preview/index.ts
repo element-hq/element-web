@@ -5,10 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.content svg[data-state="supported"] {
-    color: inherit;
-}
-
-.content svg[data-state="unsupported"] {
-    color: var(--cpd-color-icon-critical-primary);
-}
+export { type MessagePreview, MessagePreviewStore } from "./MessagePreviewStore";
