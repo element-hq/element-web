@@ -2,4 +2,5 @@
     a {
         color: var(--cpd-color-text-link-external);
     }
+    margin: 0;
 }
