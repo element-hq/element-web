@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { describe, it, expect } from "vitest";
-import { linkifyjs, LinkifyMatrixOpaqueIdType } from "@element-hq/web-shared-components";
+
+import { linkifyjs, LinkifyMatrixOpaqueIdType } from "./linkify";
 
 describe("linkify-matrix", () => {
     const linkTypesByInitialCharacter: Record<string, string> = {

@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import React from "react";
+import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { LinkedText } from "./LinkedText";
-import { fn } from "storybook/test";
 
 export default {
     title: "Utils/LinkedText",
