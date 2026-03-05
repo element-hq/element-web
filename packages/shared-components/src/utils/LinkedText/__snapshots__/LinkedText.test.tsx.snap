@@ -7,6 +7,7 @@ exports[`LinkedText > renders a custom href 1`] = `
   >
     I love working on 
     <a
+      data-linkfied="true"
       href="https://example.org"
       rel="noreferrer noopener"
       target="_blank"
@@ -25,6 +26,7 @@ exports[`LinkedText > renders a custom target 1`] = `
   >
     I love working on 
     <a
+      data-linkfied="true"
       href="https://matrix.org"
       rel="noreferrer noopener"
       target="_fake_target"
@@ -43,6 +45,7 @@ exports[`LinkedText > renders a room alias 1`] = `
   >
     I love talking in 
     <a
+      data-linkfied="true"
       href="#general:example.org"
       rel="noreferrer noopener"
       target="_blank"
@@ -61,6 +64,7 @@ exports[`LinkedText > renders a standard link 1`] = `
   >
     I love working on 
     <a
+      data-linkfied="true"
       href="https://matrix.org"
       rel="noreferrer noopener"
       target="_blank"
@@ -79,6 +83,7 @@ exports[`LinkedText > renders a user ID 1`] = `
   >
     I love talking to 
     <a
+      data-linkfied="true"
       href="@alice:example.org"
       rel="noreferrer noopener"
       target="_blank"
@@ -97,6 +102,7 @@ exports[`LinkedText > renders an unclickable link 1`] = `
   >
     I love working on 
     <a
+      data-linkfied="true"
       rel="noreferrer noopener"
       target="_blank"
     >
