@@ -23,7 +23,7 @@ describe("linkify-matrix", () => {
      * @param testName Due to all the tests using the same logic underneath, it makes to generate it in a bit smarter way
      * @param char
      */
-    function genTests(char: "#" | "@" | "+") {
+    function genTests(char: "#" | "@") {
         const type = linkTypesByInitialCharacter[char];
         it("should not parse " + char + "foo without domain", () => {
             const test = char + "foo";
