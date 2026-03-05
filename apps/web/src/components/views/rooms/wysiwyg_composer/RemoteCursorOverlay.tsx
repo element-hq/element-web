@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { memo, useEffect, useState } from "react";
+import { selectContent } from "@vector-im/matrix-wysiwyg";
 
 // ─── Colour palette ──────────────────────────────────────────────────────────
 
@@ -68,9 +69,20 @@ interface Rect {
 }
 
 /**
- * Compute client rects for a selection range described by UTF-16 offsets
- * inside the editor.  Uses a temporary DOM Range via `selectContent()` would
- * be disruptive (it moves the real selection), so we walk text nodes manually.
+ * Compute client rects for a selection range described by UTF-16 model offsets
+ * inside the editor.
+ *
+ * We reuse `selectContent()` from the RTE package instead of walking text nodes
+ * ourselves because the Rust model adds an implicit +1 offset at every block
+ * boundary (paragraph, list item, etc.) — the same accounting that selectContent
+ * already handles correctly.  Without this, a cursor on an empty line is mapped
+ * to the wrong text node and appears on the *next* line with content.
+ *
+ * Steps:
+ *   1. Save the current window selection.
+ *   2. Call selectContent(editor, start, end) — sets window selection correctly.
+ *   3. Read client rects from the resulting Range.
+ *   4. Restore the saved selection so the local user's caret is unchanged.
  */
 function rectsForRange(
     editor: HTMLElement,
@@ -79,71 +91,70 @@ function rectsForRange(
     containerRect: DOMRect,
     scrollTop: number,
 ): { caretRect: Rect | null; selectionRects: Rect[] } {
-    // Walk text nodes, converting UTF-16 code-unit offsets to DOM positions.
-    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
-    let consumed = 0;
+    const sel = window.getSelection();
 
-    let startNode: Text | null = null;
-    let startOffset = 0;
-    let endNode: Text | null = null;
-    let endOffset = 0;
-
-    const min = Math.min(start, end);
-    const max = Math.max(start, end);
-
-    while (walker.nextNode()) {
-        const text = walker.currentNode as Text;
-        const len = text.length; // JS string length === UTF-16 code units
-
-        if (!startNode && consumed + len >= min) {
-            startNode = text;
-            startOffset = min - consumed;
+    // Save current selection so we can restore it after reading rects.
+    const savedRanges: Range[] = [];
+    if (sel) {
+        for (let i = 0; i < sel.rangeCount; i++) {
+            savedRanges.push(sel.getRangeAt(i).cloneRange());
         }
-        if (!endNode && consumed + len >= max) {
-            endNode = text;
-            endOffset = max - consumed;
-            break;
-        }
-        consumed += len;
     }
 
-    if (!startNode || !endNode) return { caretRect: null, selectionRects: [] };
+    try {
+        // selectContent uses the RTE package's offset-to-DOM mapper which
+        // correctly accounts for block-boundary separators.
+        selectContent(editor, start, end);
 
-    const range = document.createRange();
-    range.setStart(startNode, startOffset);
-    range.setEnd(endNode, endOffset);
+        const range = sel?.rangeCount ? sel.getRangeAt(0) : null;
+        if (!range) return { caretRect: null, selectionRects: [] };
 
-    const rects = Array.from(range.getClientRects());
-    const translate = (r: DOMRect): Rect => ({
-        top: r.top - containerRect.top + scrollTop,
-        left: r.left - containerRect.left,
-        width: r.width,
-        height: r.height,
-    });
+        let rects = Array.from(range.getClientRects());
+        // Collapsed range on a <br> or empty container returns no rects in some
+        // browsers — fall back to the bounding rect.
+        if (rects.length === 0) {
+            const b = range.getBoundingClientRect();
+            if (b.width !== 0 || b.height !== 0) rects = [b as DOMRect];
+        }
 
-    if (start === end) {
-        // Collapsed caret: single zero-width rect.
-        const r = rects[0];
-        if (!r) return { caretRect: null, selectionRects: [] };
-        return { caretRect: translate(r), selectionRects: [] };
+        const translate = (r: DOMRect): Rect => ({
+            top: r.top - containerRect.top + scrollTop,
+            left: r.left - containerRect.left,
+            width: r.width,
+            height: r.height,
+        });
+
+        if (start === end) {
+            // Collapsed caret: single zero-width rect.
+            const r = rects[0];
+            if (!r) return { caretRect: null, selectionRects: [] };
+            return { caretRect: translate(r), selectionRects: [] };
+        }
+
+        // Selection: caretRect at the focus end, selectionRects for highlighting.
+        const focusIsEnd = end === Math.max(start, end);
+        const caretDomRect = focusIsEnd ? rects[rects.length - 1] : rects[0];
+        const caretRect = caretDomRect
+            ? {
+                  top: caretDomRect.top - containerRect.top + scrollTop,
+                  left: focusIsEnd
+                      ? caretDomRect.right - containerRect.left
+                      : caretDomRect.left - containerRect.left,
+                  width: 0,
+                  height: caretDomRect.height,
+              }
+            : null;
+
+        return { caretRect, selectionRects: rects.map(translate) };
+    } finally {
+        // Always restore the original selection, even if an exception occurs.
+        if (sel) {
+            sel.removeAllRanges();
+            for (const r of savedRanges) {
+                sel.addRange(r);
+            }
+        }
     }
-
-    // Selection: caretRect at the focus end, selectionRects for highlighting.
-    const focusIsEnd = end === Math.max(start, end);
-    const caretDomRect = focusIsEnd ? rects[rects.length - 1] : rects[0];
-    const caretRect = caretDomRect
-        ? {
-              // Position the caret at the correct edge of the rect.
-              top: caretDomRect.top - containerRect.top + scrollTop,
-              left: focusIsEnd
-                  ? caretDomRect.right - containerRect.left
-                  : caretDomRect.left - containerRect.left,
-              width: 0,
-              height: caretDomRect.height,
-          }
-        : null;
-
-    return { caretRect, selectionRects: rects.map(translate) };
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
