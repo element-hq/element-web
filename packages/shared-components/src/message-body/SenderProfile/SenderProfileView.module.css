@@ -9,10 +9,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    background: none !important;
+    padding: 0 !important;
+    line-height: inherit;
+    letter-spacing: inherit;
+    font: inherit;
+    border: none !important;
+    text-align: start;
+    margin: 0 !important;
 
     .senderProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
-        letter-spacing: var(--cpd-letter-spacing-body-md);
+        letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
         line-height: 1;
     }
 
