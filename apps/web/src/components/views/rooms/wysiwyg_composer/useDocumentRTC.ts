@@ -180,6 +180,7 @@ export function useDocumentRTC(
             livekitRoom.on(
                 RoomEvent.DataReceived,
                 (payload: Uint8Array, _participant: unknown, _kind: unknown, topic?: string) => {
+                    logger.info(`[DocumentRTC] DataReceived topic=${topic} size=${payload.length}b`);
                     if (topic === LIVEKIT_DATA_TOPIC) {
                         onDeltaRef.current?.(payload);
                     } else if (topic === CURSOR_DATA_TOPIC) {

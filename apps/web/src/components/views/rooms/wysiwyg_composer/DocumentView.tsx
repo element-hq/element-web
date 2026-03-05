@@ -64,6 +64,7 @@ const CURSOR_THROTTLE_MS = 50;
 // ------------------------------------------------------------------
 interface CollaborativeComposerModel {
     save_incremental(): Uint8Array;
+    save_after(heads: string[]): Uint8Array;
     save_document(): Uint8Array;
     load_document(data: Uint8Array): void;
     receive_changes(data: Uint8Array): unknown;
@@ -225,6 +226,7 @@ function useDocumentSync(
 
     /** Apply raw Automerge delta bytes to the model and update the DOM. */
     const applyDeltaBytes = useCallback((deltaBytes: Uint8Array): void => {
+        logger.info(`[DocumentView] applyDeltaBytes called: ${deltaBytes.length}b, model collab=${isCollaborative(composerModelRef.current)}, editor=${Boolean(editorRef.current)}`);
         const model = composerModelRef.current;
         if (!isCollaborative(model)) {
             logger.warn("[DocumentView] Model not collaborative yet, dropping delta");
@@ -232,6 +234,7 @@ function useDocumentSync(
         }
         try {
             model.receive_changes(deltaBytes);
+            logger.info(`[DocumentView] receive_changes ok, new heads=${JSON.stringify(model.get_heads())}`);
             // Drain the incremental save cursor so that received changes are not
             // re-included in the next save_incremental() call from this client.
             model.save_incremental();
@@ -250,10 +253,16 @@ function useDocumentSync(
                 // committedTextRef in sync so reconcileNative() produces
                 // correct diffs on the next input event.
                 const projections = model.get_block_projections();
+                const innerBefore = editorRef.current.innerHTML;
+                logger.info(`[DocumentView] renderProjections: ${projections.length} block(s), restoring sel ${selStart}-${selEnd}, innerHTML before=${innerBefore.length}b`);
                 committedTextRef.current = renderProjections(projections, editorRef.current);
+                const innerAfter = editorRef.current.innerHTML;
+                logger.info(`[DocumentView] DOM updated, innerHTML after=${innerAfter.length}b, changed=${innerBefore !== innerAfter}`);
 
                 // Restore the local cursor position.
                 selectContent(editorRef.current, selStart, selEnd);
+            } else {
+                logger.warn("[DocumentView] editorRef.current is null — skipping DOM update");
             }
         } catch (e) {
             logger.warn("[DocumentView] Failed to apply remote delta", e);
@@ -264,6 +273,7 @@ function useDocumentSync(
     // Wire the LiveKit onDeltaRef callback when RTC is provided.
     useEffect(() => {
         if (!rtc) return;
+        logger.info("[DocumentView] Wiring rtc.onDeltaRef");
         rtc.onDeltaRef.current = applyDeltaBytes;
         return () => { rtc.onDeltaRef.current = null; };
     }, [rtc, applyDeltaBytes]);
@@ -273,6 +283,7 @@ function useDocumentSync(
     // the durable persistence layer and must always be applied so that users
     // who join later (or reconnect after an outage) see the correct document state.
     useEffect(() => {
+        logger.info("[DocumentView] Registering Matrix timeline listener");
         const applyDeltaEvent = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
@@ -280,6 +291,7 @@ function useDocumentSync(
             if (event.getSender() === client.getUserId()) return;
             const data = event.getContent<{ data?: string }>().data;
             if (!data) return;
+            logger.info(`[DocumentView] Matrix delta event from ${event.getSender()}, applying ${data.length}b (base64)`);
             applyDeltaBytes(base64Decode(data));
         };
 
