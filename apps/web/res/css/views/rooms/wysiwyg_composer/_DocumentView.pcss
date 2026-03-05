@@ -26,6 +26,31 @@ Please see LICENSE files in the repository root for full details.
     flex-shrink: 0;
 }
 
+/**
+ * Save-state indicator shown to the right of the formatting toolbar.
+ * Three states: editing (user is typing), saving… (debounce fired, awaiting
+ * server ack), saved (server confirmed).
+ */
+.mx_DocumentView_saveStatus {
+    margin-inline-start: auto;
+    padding-inline: var(--cpd-space-3x);
+    font-size: var(--cpd-font-size-body-sm);
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.mx_DocumentView_saveStatus--editing {
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_DocumentView_saveStatus--saving {
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_DocumentView_saveStatus--saved {
+    color: var(--cpd-color-green-900, var(--cpd-color-text-success));
+}
+
 .mx_DocumentView_content {
     flex: 1;
     overflow-y: auto;

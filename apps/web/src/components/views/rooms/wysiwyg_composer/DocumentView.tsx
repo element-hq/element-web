@@ -29,16 +29,18 @@ const DOC_DELTA_EVENT_TYPE = "org.element.doc.delta";
  */
 const DOC_STATE_EVENT_TYPE = "org.element.doc.automerge";
 
-/** Debounce delay (ms) before sending an incremental delta after a keystroke. */
+/**
+ * Debounce delay (ms) before sending a delta. Both the MatrixRTC real-time
+ * channel and the Matrix timeline persistence channel are triggered by the
+ * same debounce so the document is always persisted even if the user exits
+ * quickly.
+ */
 const DELTA_DEBOUNCE_MS = 500;
 
-/**
- * Debounce when sending over LiveKit (much lower latency, no rate limits).
- * Kept small to batch rapid keystrokes without perceptible delay.
- */
-const DELTA_DEBOUNCE_RTC_MS = 50;
+/** How long (ms) to show the "Saved" indicator before resetting to idle. */
+const SAVED_CLEAR_DELAY_MS = 2000;
 
-/** Save a full snapshot to room state every N deltas (not every send). */
+/** Save a full snapshot to room state every N Matrix timeline deltas. */
 const SNAPSHOT_EVERY_N_DELTAS = 20;
 
 // ------------------------------------------------------------------
@@ -154,13 +156,16 @@ function toHex(str: string): string {
 // ------------------------------------------------------------------
 // Hook: useDocumentSync
 // ------------------------------------------------------------------
+
+/** Status shown in the document toolbar reflecting the current save state. */
+type SaveStatus = "idle" | "editing" | "saving" | "saved";
+
 function useDocumentSync(
     room: Room,
     client: MatrixClient,
     composerModel: unknown,
     editorRef: React.RefObject<HTMLDivElement | null>,
     onContentChanged: () => void,
-    /** If provided, send deltas via LiveKit instead of Matrix events. */
     rtc?: {
         publishDelta: (bytes: Uint8Array) => void;
         onDeltaRef: React.MutableRefObject<((bytes: Uint8Array) => void) | null>;
@@ -170,9 +175,12 @@ function useDocumentSync(
     isLoaded: boolean;
     scheduleDeltaSend: () => void;
     suppressMutations: React.MutableRefObject<boolean>;
+    saveStatus: SaveStatus;
 } {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const savedClearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const suppressMutations = useRef(false);
 
     // Set actor ID as hex-encoded userId:deviceId for correct CRDT attribution.
@@ -292,16 +300,11 @@ function useDocumentSync(
         return () => { rtc.onDeltaRef.current = null; };
     }, [rtc, applyDeltaBytes]);
 
-    // Matrix event fallback: only used when LiveKit is NOT connected.
+    // Always listen for Matrix delta events from remote peers.
+    // This runs regardless of whether LiveKit is connected: Matrix events are
+    // the durable persistence layer and must always be applied so that users
+    // who join later (or reconnect after an outage) see the correct document state.
     useEffect(() => {
-        // If LiveKit is connected, deltas come through the data channel — skip Matrix listener.
-        if (rtc?.isConnected) {
-            logger.info("[DocumentView] LiveKit connected — skipping Matrix delta listener");
-            return;
-        }
-
-        logger.info("[DocumentView] Registering Matrix delta listener (no LiveKit)");
-
         const applyDeltaEvent = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
@@ -323,48 +326,63 @@ function useDocumentSync(
             client.off(MatrixEventEvent.Decrypted, applyDeltaEvent);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [room, client, rtc?.isConnected, applyDeltaBytes]);
+    }, [room, client, applyDeltaBytes]);
 
-    // Debounced delta send triggered after each keystroke.
-    // When LiveKit is connected: sends via data channel (50ms debounce, no rate limits).
-    // When falling back: sends as Matrix timeline event (500ms debounce).
-    // Saves a full snapshot to room state every SNAPSHOT_EVERY_N_DELTAS sends.
     const deltaSendCount = useRef(0);
     const rtcRef = useRef(rtc);
     useEffect(() => { rtcRef.current = rtc; });
 
+    /**
+     * Called after every local edit. Immediately surfaces the "Editing"
+     * indicator and schedules a 500 ms debounced send to BOTH channels:
+     *
+     *   1. MatrixRTC / LiveKit (if connected) — real-time collaboration.
+     *   2. Matrix room timeline            — durable persistence.
+     *
+     * Sending to the timeline on every debounce (not just on unmount) ensures
+     * the document is never lost even if the user exits quickly.
+     */
     const scheduleDeltaSend = useCallback(() => {
         if (!isCollaborative(composerModel)) return;
 
+        // Immediately surface the editing indicator.
+        setSaveStatus("editing");
+        if (savedClearTimer.current !== null) {
+            clearTimeout(savedClearTimer.current);
+            savedClearTimer.current = null;
+        }
+
         if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
-
-        const useRTC = rtcRef.current?.isConnected ?? false;
-        const debounceMs = useRTC ? DELTA_DEBOUNCE_RTC_MS : DELTA_DEBOUNCE_MS;
-
         debounceTimer.current = setTimeout(async () => {
             debounceTimer.current = null;
             if (!isCollaborative(composerModel)) return;
+            setSaveStatus("saving");
             try {
                 const delta = composerModel.save_incremental();
-                if (delta.length === 0) return;
+                if (delta.length === 0) {
+                    setSaveStatus("saved");
+                    savedClearTimer.current = setTimeout(() => setSaveStatus("idle"), SAVED_CLEAR_DELAY_MS);
+                    return;
+                }
 
                 const heads = composerModel.get_heads();
 
+                // Real-time channel: deliver immediately to connected peers.
                 if (rtcRef.current?.isConnected) {
-                    // Fast path: send over LiveKit data channel.
                     rtcRef.current.publishDelta(delta);
-                } else {
-                    // Fallback: send as Matrix timeline event.
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    await client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
-                        data: base64Encode(delta),
-                        heads,
-                    });
                 }
+
+                // Persistence channel: always write to the Matrix timeline so
+                // the document survives session boundaries and reconnects.
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
+                    data: base64Encode(delta),
+                    heads,
+                });
 
                 deltaSendCount.current++;
 
-                // Persist a full snapshot periodically regardless of transport.
+                // Periodically save a full snapshot to speed up future loads.
                 if (deltaSendCount.current % SNAPSHOT_EVERY_N_DELTAS === 0) {
                     const snapshot = composerModel.save_document();
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -374,10 +392,14 @@ function useDocumentSync(
                     });
                     logger.info("[DocumentView] Saved snapshot to room state");
                 }
+
+                setSaveStatus("saved");
+                savedClearTimer.current = setTimeout(() => setSaveStatus("idle"), SAVED_CLEAR_DELAY_MS);
             } catch (e) {
                 logger.warn("[DocumentView] Failed to send delta", e);
+                setSaveStatus("idle");
             }
-        }, debounceMs);
+        }, DELTA_DEBOUNCE_MS);
     }, [client, composerModel, room.roomId]);
 
     // Flush pending delta and save a final snapshot when the document view
@@ -387,8 +409,9 @@ function useDocumentSync(
 
     useEffect(() => {
         return () => {
-            // Cancel any pending debounce timer.
+            // Cancel any pending timers.
             if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
+            if (savedClearTimer.current !== null) clearTimeout(savedClearTimer.current);
 
             const model = composerModelRefForCleanup.current;
             if (!isCollaborative(model)) return;
@@ -418,7 +441,7 @@ function useDocumentSync(
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [client, room.roomId]);
 
-    return { isLoaded, scheduleDeltaSend, suppressMutations };
+    return { isLoaded, scheduleDeltaSend, suppressMutations, saveStatus };
 }
 
 // ------------------------------------------------------------------
@@ -458,7 +481,7 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         setHasContent(Boolean(ref.current?.textContent?.trim()));
     });
 
-    const { isLoaded, scheduleDeltaSend, suppressMutations } = useDocumentSync(
+    const { isLoaded, scheduleDeltaSend, suppressMutations, saveStatus } = useDocumentSync(
         room,
         client,
         composerModel,
@@ -567,6 +590,19 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
             <div className="mx_DocumentView" data-testid="DocumentView">
                 <div className="mx_DocumentView_toolbar">
                     {isLoaded && <FormattingButtons composer={wysiwyg} actionStates={actionStates} />}
+                    {isLoaded && saveStatus !== "idle" && (
+                        <span
+                            className={`mx_DocumentView_saveStatus mx_DocumentView_saveStatus--${saveStatus}`}
+                            aria-live="polite"
+                            aria-atomic="true"
+                        >
+                            {saveStatus === "editing"
+                                ? "Editing"
+                                : saveStatus === "saving"
+                                  ? "Saving\u2026"
+                                  : "Saved"}
+                        </span>
+                    )}
                 </div>
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <div className="mx_DocumentView_content" onInput={handleInput} onClick={handleContentClick}>
