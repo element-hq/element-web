@@ -480,11 +480,6 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     // LiveKit real-time transport (falls back gracefully if unavailable).
     const rtc = useDocumentRTC(room, client);
 
-    // Place the cursor at the end and focus the editor once the WASM model is
-    // ready.  Without this the editor is enabled but has no selection, so no
-    // cursor appears even after the element receives focus.
-    useSetCursorPosition(!isWysiwygReady, ref);
-
     // Track whether the editor has content so we can hide the placeholder.
     const [hasContent, setHasContent] = useState(false);
 
@@ -502,6 +497,13 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
         notifyContentChangedRef.current,
         rtc,
     );
+
+    // Place the cursor at the end and focus the editor only after BOTH the WASM
+    // model is ready AND the document content has been written to the DOM.
+    // Waiting for isLoaded prevents the cursor being placed into the empty editor
+    // before innerHTML is populated, which would leave it one position short on
+    // the first keypress.
+    useSetCursorPosition(!isWysiwygReady || !isLoaded, ref);
 
     const handleInput = useCallback(() => {
         notifyContentChangedRef.current();
