@@ -36,9 +36,8 @@ describe("EncryptionEventView", () => {
             state,
             encryptedStateEvents,
             userName,
-            className,
         });
-        render(<EncryptionEventView vm={vm} />);
+        render(<EncryptionEventView vm={vm} className={className} />);
     };
 
     it("renders Default story", () => {

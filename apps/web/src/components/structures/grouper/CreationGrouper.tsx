@@ -29,7 +29,7 @@ import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparat
  */
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
     const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
-    return <DateSeparatorView vm={vm} />;
+    return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 
 export class CreationGrouper extends BaseGrouper {

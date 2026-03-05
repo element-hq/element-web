@@ -12,18 +12,6 @@ exports[`MessageTimestampView > renders the message timestamp in default state 1
 </div>
 `;
 
-exports[`MessageTimestampView > renders the message timestamp with extra class names 1`] = `
-<div>
-  <span
-    aria-live="off"
-    class="extra_class_1 extra_class_2 content"
-    tabindex="0"
-  >
-    04:58
-  </span>
-</div>
-`;
-
 exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
 <div>
   <a
