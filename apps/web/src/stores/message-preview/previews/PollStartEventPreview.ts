@@ -10,13 +10,13 @@ import { type MatrixEvent, type PollStartEventContent } from "matrix-js-sdk/src/
 import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/InvalidEventError";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
-import { type IPreview } from "./IPreview";
+import { type Preview } from "./Preview";
 import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-export class PollStartEventPreview implements IPreview {
+export class PollStartEventPreview implements Preview {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 

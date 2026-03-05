@@ -68,7 +68,6 @@ describe("ReactionsRowView", () => {
                 showAddReactionButton: true,
                 addReactionButtonLabel: "Add reaction",
                 addReactionButtonVisible: true,
-                children: <span>👍</span>,
             },
             {
                 onShowAllClick,
@@ -77,7 +76,11 @@ describe("ReactionsRowView", () => {
             },
         ) as ReactionsRowViewModel;
 
-        render(<ReactionsRowView vm={vm} />);
+        render(
+            <ReactionsRowView vm={vm}>
+                <span>👍</span>
+            </ReactionsRowView>,
+        );
 
         await user.click(screen.getByRole("button", { name: "Show all" }));
         await user.click(screen.getByRole("button", { name: "Add reaction" }));
@@ -86,5 +89,17 @@ describe("ReactionsRowView", () => {
         expect(onShowAllClick).toHaveBeenCalledTimes(1);
         expect(onAddReactionClick).toHaveBeenCalledTimes(1);
         expect(onAddReactionContextMenu).toHaveBeenCalledTimes(1);
+    });
+
+    it("applies custom className to the toolbar container", () => {
+        const vm = new MockViewModel<ReactionsRowViewSnapshot>({
+            ariaLabel: "Reactions",
+            isVisible: true,
+            addReactionButtonLabel: "Add reaction",
+        }) as ReactionsRowViewModel;
+
+        render(<ReactionsRowView vm={vm} className="custom-reactions-row another-class" />);
+
+        expect(screen.getByRole("toolbar", { name: "Reactions" })).toHaveClass("custom-reactions-row", "another-class");
     });
 });

@@ -11,7 +11,7 @@ import { type IContent, M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgTyp
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../stores/message-preview";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter.ts";

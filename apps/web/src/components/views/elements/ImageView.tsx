@@ -657,5 +657,5 @@ function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Ele
         vm.setHref(props.href);
         vm.setHandlers({ onClick: props.onClick });
     }, [vm, props]);
-    return <MessageTimestampView vm={vm} />;
+    return <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />;
 }
