@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import type { linkifyjs } from "@element-hq/web-shared-components";
-import { options } from "../../src/linkify-matrix";
+import { roomAliasEventListeners, userIdEventListeners } from "../../src/Linkify";
 import dispatcher from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
 
@@ -15,11 +15,7 @@ describe("linkify-matrix", () => {
         it("should intercept clicks with a ViewRoom dispatch", () => {
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
-            const handlers = (options.events as (href: string, type: string) => linkifyjs.EventListeners)(
-                "#room:server.com",
-                "roomalias",
-            );
-
+            const handlers = roomAliasEventListeners("#room:server.com");
             const event = new MouseEvent("mousedown");
             event.preventDefault = jest.fn();
             handlers!.click(event);
@@ -37,10 +33,7 @@ describe("linkify-matrix", () => {
         it("should intercept clicks with a ViewUser dispatch", () => {
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
-            const handlers = (options.events as (href: string, type: string) => linkifyjs.EventListeners)(
-                "@localpart:server.com",
-                "userid",
-            );
+            const handlers = userIdEventListeners("@localpart:server.com");
 
             const event = new MouseEvent("mousedown");
             event.preventDefault = jest.fn();

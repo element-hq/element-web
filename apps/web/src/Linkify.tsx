@@ -260,7 +260,7 @@ function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.
     return {};
 }
 
-function userIdEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+export function userIdEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
     return {
         click: function (e: MouseEvent) {
             e.preventDefault();
@@ -271,7 +271,7 @@ function userIdEventListeners(href: string, onClickAction?: () => void): linkify
     };
 }
 
-function roomAliasEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+export function roomAliasEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
     return {
         click: function (e: MouseEvent) {
             e.preventDefault();
@@ -282,7 +282,7 @@ function roomAliasEventListeners(href: string, onClickAction?: () => void): link
     };
 }
 
-function UrlTargetTransformFunction(href: string | string): string {
+function urlTargetTransformFunction(href: string | string): string {
     try {
         const transformed = tryTransformPermalinkToLocalHref(href);
         if (
@@ -328,7 +328,7 @@ const DefaultLinkifyOptions = {
     roomAliasListener: roomAliasEventListeners,
     urlListener: urlEventListeners,
     hrefTransformer: formatHref,
-    urlTargetTransformer: UrlTargetTransformFunction,
+    urlTargetTransformer: urlTargetTransformFunction,
 };
 
 /**
