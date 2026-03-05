@@ -12,6 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "./RoomListItemView";
 import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItemView";
 import { useMockedViewModel } from "../../viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 import { renderAvatar } from "../story-mocks";
 
@@ -26,7 +27,7 @@ type RoomListItemProps = RoomListItemSnapshot &
     };
 
 // Wrapper component that creates a mocked ViewModel
-const RoomListItemWrapper = ({
+const RoomListItemWrapperImpl = ({
     onOpenRoom,
     onMarkAsRead,
     onMarkAsUnread,
@@ -67,6 +68,7 @@ const RoomListItemWrapper = ({
         />
     );
 };
+const RoomListItemWrapper = withViewDocs(RoomListItemWrapperImpl, RoomListItemView);
 
 const meta = {
     title: "Room List/RoomListItemView",
@@ -85,7 +87,7 @@ const meta = {
         ...defaultSnapshot,
         isSelected: false,
         isFocused: false,
-        roomIndex: 0,
+        roomIndex: 1,
         roomCount: 10,
         onOpenRoom: fn(),
         onMarkAsRead: fn(),
@@ -223,10 +225,23 @@ export const WithLargeFont: Story = {
     args: {
         isSelected: true,
     },
+    // Render the story in an iframe to avoid affecting other story
+    parameters: {
+        docs: {
+            story: {
+                inline: false,
+                iframeHeight: 170,
+            },
+        },
+    },
     decorators: [
         (Story) => {
             useEffect(() => {
+                const originalFontSize = getComputedStyle(document.documentElement).fontSize;
                 document.documentElement.style.setProperty("font-size", "36px");
+                return () => {
+                    document.documentElement.style.setProperty("font-size", originalFontSize);
+                };
             }, []);
             return <Story />;
         },
@@ -244,4 +259,18 @@ export const WithZoom: Story = {
             </div>
         ),
     ],
+};
+
+export const FirstItem: Story = {
+    args: {
+        roomIndex: 0,
+        isSelected: true,
+    },
+};
+
+export const LastItem: Story = {
+    args: {
+        roomIndex: 9,
+        isSelected: true,
+    },
 };

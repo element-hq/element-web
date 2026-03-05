@@ -8,7 +8,7 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import { type Room, type RoomListItemSnapshot, RoomNotifState } from "./RoomListItemView";
+import { type Room, type RoomItemViewModel, type RoomListItemSnapshot, RoomNotifState } from "./RoomListItemView";
 
 /**
  * Mock avatar component for stories
@@ -39,6 +39,7 @@ export const mockAvatar = (name: string): React.ReactElement => (
  */
 export const renderAvatar = (room: Room): React.ReactElement => {
     // Cast to any to access properties - in real usage, the room object from the SDK will have these
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return mockAvatar((room as any)?.name || "Room");
 };
 
@@ -102,8 +103,8 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
 /**
  * Create a mock getRoomItemViewModel function for stories
  */
-export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => any) => {
-    const viewModels = new Map();
+export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomItemViewModel) => {
+    const viewModels = new Map<string, RoomItemViewModel>();
     roomIds.forEach((roomId, index) => {
         const name = roomNames[index % roomNames.length];
         const snapshot = createMockRoomSnapshot(roomId, name, index);
@@ -125,7 +126,7 @@ export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string)
         viewModels.set(roomId, mockViewModel);
     });
 
-    return (roomId: string) => viewModels.get(roomId);
+    return (roomId: string) => viewModels.get(roomId)!;
 };
 
 /**

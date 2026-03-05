@@ -65,14 +65,14 @@ export interface DecryptionFailureBodyViewSnapshot {
      * The local device verification state.
      */
     isLocalDeviceVerified?: boolean;
-    /**
-     * Extra CSS classes to apply to the component
-     */
-    extraClassNames?: string[];
 }
 
 /**
  * The view model for the component.
+ *
+ * Snapshot data is intentionally content-focused (`decryptionFailureReason`
+ * plus optional `isLocalDeviceVerified`). Container styling is supplied
+ * via component props.
  */
 export type DecryptionFailureBodyViewModel = ViewModel<DecryptionFailureBodyViewSnapshot>;
 
@@ -82,9 +82,13 @@ interface DecryptionFailureBodyViewProps {
      */
     vm: DecryptionFailureBodyViewModel;
     /**
+     * Optional CSS class names to apply to the component container.
+     */
+    className?: string;
+    /**
      * React ref to attach to any React components returned
      */
-    ref?: React.RefObject<any>;
+    ref?: React.RefObject<HTMLDivElement>;
 }
 
 /**
@@ -156,17 +160,27 @@ function errorClassName(decryptionFailureReason: DecryptionFailureReason): strin
 }
 
 /**
- * A placeholder element for messages that could not be decrypted
+ * Renders a message-body placeholder for events that could not be decrypted.
+ *
+ * Message copy and warning styling are derived from snapshot values:
+ * - `decryptionFailureReason` selects the base text/variant.
+ * - `isLocalDeviceVerified` influences historical-backup messaging.
+ *
+ * Use `className` for host-level container styling, following standard React patterns.
  *
  * @example
  * ```tsx
- * <DecryptionFailureBodyView vm={DecryptionFailureBodyViewModel} />
+ * <DecryptionFailureBodyView vm={decryptionFailureBodyVm} className="mx_DecryptionFailureBody" />
  * ```
  */
-export function DecryptionFailureBodyView({ vm, ref }: Readonly<DecryptionFailureBodyViewProps>): JSX.Element {
+export function DecryptionFailureBodyView({
+    vm,
+    ref,
+    className,
+}: Readonly<DecryptionFailureBodyViewProps>): JSX.Element {
     const i18nApi = useI18n();
-    const { decryptionFailureReason, isLocalDeviceVerified, extraClassNames } = useViewModel(vm);
-    const classes = classNames(styles.content, errorClassName(decryptionFailureReason), extraClassNames);
+    const { decryptionFailureReason, isLocalDeviceVerified } = useViewModel(vm);
+    const classes = classNames(styles.content, errorClassName(decryptionFailureReason), className);
 
     return (
         <div className={classes} ref={ref}>

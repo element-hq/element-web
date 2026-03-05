@@ -47,7 +47,7 @@
         "build:storybook": "nx run @element-hq/web-shared-components:storybook",
         "build:doc": "nx run @element-hq/web-shared-components:typedoc",
         "lint": "pnpm lint:types && pnpm lint:js",
-        "lint:js": "eslint --max-warnings 0 src && prettier --check .",
+        "lint:js": "eslint --max-warnings 0 src",
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "dependencies": {
@@ -65,6 +65,7 @@
     "devDependencies": {
         "@element-hq/element-web-playwright-common-local": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
+        "@fontsource/inter": "catalog:",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@playwright/test": "catalog:",
         "@storybook/addon-a11y": "^10.0.7",
@@ -92,7 +93,7 @@
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-deprecate": "^0.8.7",
+        "eslint-plugin-deprecate": "^0.9.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsx-a11y": "^6.10.2",
         "eslint-plugin-matrix-org": "^3.0.0",
@@ -119,7 +120,7 @@
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
+    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5"
     }

@@ -1,5 +1,7 @@
 ARG PLAYWRIGHT_VERSION
 FROM mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble
+# Expose the argument to this build stage
+ARG PLAYWRIGHT_VERSION
 
 WORKDIR /work
 

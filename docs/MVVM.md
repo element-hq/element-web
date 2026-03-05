@@ -47,7 +47,7 @@ interface FooViewActions {
 
 // ViewModel is an object (usually a class) that implements both the interfaces listed above.
 // https://github.com/element-hq/element-web/blob/develop/packages/shared-components/src/ViewModel.ts
-export type FooViewModel = ViewModel<FooViewSnapshot> & FooViewActions;
+export type FooViewModel = ViewModel<FooViewSnapshot, FooViewActions>;
 
 interface FooViewProps {
     // Ideally the view only depends on the view model i.e you don't expect any other props here.
@@ -125,6 +125,20 @@ export class FooViewModel extends BaseViewModel<FooViewSnapshot, Props> implemen
         console.log("Current props:", this.props);
     }
 }
+```
+
+#### Binding of View Model Actions:
+
+All view model actions must be defined as arrow functions to ensure they are bound to the class instance.
+
+Using standard class methods can result in `this` being undefined when the function is passed as a callback (e.g. to a React event handler), which may cause runtime errors.
+
+Correct pattern:
+
+```ts
+public doSomething = (): void => {
+    ...
+};
 ```
 
 ### `useViewModel` hook

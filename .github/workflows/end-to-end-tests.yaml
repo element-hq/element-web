@@ -68,18 +68,20 @@ jobs:
               run: scripts/layered.sh
 
             - name: Copy config
+              working-directory: apps/web
               run: cp element.io/develop/config.json config.json
 
             - name: Build
               env:
                   CI_PACKAGE: true
+              working-directory: apps/web
               run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: webapp
-                  path: webapp
+                  path: apps/web/webapp
                   retention-days: 1
 
             - name: Calculate runner variables
@@ -130,10 +132,10 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   name: webapp
-                  path: webapp
+                  path: apps/web/webapp
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -167,6 +169,7 @@ jobs:
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
+              working-directory: apps/web
               run: |
                   pnpm playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
@@ -175,10 +178,10 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
-                  path: blob-report
+                  path: apps/web/blob-report
                   retention-days: 1
 
     downstream-modules:
@@ -217,7 +220,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   pattern: all-blob-reports-*
                   path: all-blob-reports
@@ -225,7 +228,7 @@ jobs:
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: pnpm playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
+              run: pnpm playwright merge-reports --reporter=html,./apps/web/playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
@@ -233,7 +236,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: html-report
                   path: playwright-report
