@@ -39,13 +39,13 @@
     code:not(pre *) {
         background-color: var(--cpd-color-bg-subtle-primary);
         border: 1px solid var(--cpd-color-gray-400);
-        border-radius: 4px;
+        border-radius: var(--cpd-space-1x);
         /* The horizontal padding is added by github-markdown-css .markdown-body */
-        padding: 2px 0;
+        padding: var(--cpd-space-0-5x) 0;
         /* Avoid inline code blocks to be sticked when on multiple lines */
         line-height: 1.375rem;
         /* Avoid the border to be glued to the other words */
-        margin-right: 2px;
+        margin-right: var(--cpd-space-0-5x);
     }
 
     code {
@@ -78,8 +78,8 @@
 .EventTile_searchHighlight {
     background-color: var(--cpd-color-text-action-accent);
     color: var(--cpd-color-text-on-solid-primary);
-    border-radius: 5px;
-    padding-inline: 2px;
+    border-radius: 5px; /* no compund for 5px */
+    padding-inline: var(--cpd-space-0-5x);
     cursor: pointer;
 
     a {
