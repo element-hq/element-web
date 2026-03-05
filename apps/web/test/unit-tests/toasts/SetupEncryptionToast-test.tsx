@@ -120,7 +120,9 @@ describe("SetupEncryptionToast", () => {
 
             const crypto = client.getCrypto()!;
 
-            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async (func = async (): Promise<void> => {}) => func());
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
+                async (func = async (): Promise<void> => {}) => func(),
+            );
 
             // Given we throw when trying to load the backup decrption key
             mocked(crypto.loadSessionBackupPrivateKeyFromSecretStorage).mockRejectedValue(
@@ -216,7 +218,9 @@ describe("SetupEncryptionToast", () => {
         });
 
         it("should go to change recovery key when recovering fails inside loadSessionBackup...", async () => {
-            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async (func = async (): Promise<void> => {}) => func());
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(
+                async (func = async (): Promise<void> => {}) => func(),
+            );
 
             jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
                 true,
