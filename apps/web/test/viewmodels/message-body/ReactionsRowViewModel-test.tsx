@@ -29,7 +29,6 @@ describe("ReactionsRowViewModel", () => {
         expect(snapshot.showAllButtonVisible).toBe(true);
         expect(snapshot.showAddReactionButton).toBe(true);
         expect(snapshot.addReactionButtonActive).toBe(false);
-        expect(snapshot.className).toContain("mx_ReactionsRow");
     });
 
     it("hides show-all after onShowAllClick", () => {

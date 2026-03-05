@@ -266,7 +266,7 @@ export default class HTMLExporter extends Exporter {
         try {
             const dateSeparator = (
                 <li key={ts}>
-                    <DateSeparatorView vm={dateSeparatorViewModel} />
+                    <DateSeparatorView vm={dateSeparatorViewModel} className="mx_TimelineSeparator" />
                 </li>
             );
             return this.renderToStaticMarkupWithProviders(dateSeparator);

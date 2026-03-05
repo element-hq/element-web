@@ -22,10 +22,6 @@ export interface DecryptionFailureBodyViewModelProps {
      * The local device verification state.
      */
     verificationState?: boolean;
-    /**
-     * Extra CSS classes to apply to the component
-     */
-    extraClassNames?: string[];
 }
 
 /**
@@ -62,30 +58,21 @@ export class DecryptionFailureBodyViewModel
     /**
      * @param decryptionFailureCode - The decryption failure code for the event.
      * @param verificationState - The local device verification state.
-     * @param extraClassNames - Extra CSS classes to apply to the component.
      */
     private static readonly computeSnapshot = (
         decryptionFailureCode: DecryptionFailureCode | null,
         verificationState?: boolean,
-        extraClassNames?: string[],
     ): DecryptionFailureBodyViewSnapshotInterface => {
-        // Keep mx_DecryptionFailureBody and mx_EventTile_content to support the compatibility with existing timeline and the all the layout
-        const defaultClassNames = ["mx_DecryptionFailureBody", "mx_EventTile_content"];
         return {
             decryptionFailureReason: DecryptionFailureBodyViewModel.getDecryptionReasonFromCode(decryptionFailureCode),
             isLocalDeviceVerified: verificationState,
-            extraClassNames: extraClassNames ? defaultClassNames.concat(extraClassNames) : defaultClassNames,
         };
     };
 
     public constructor(props: DecryptionFailureBodyViewModelProps) {
         super(
             props,
-            DecryptionFailureBodyViewModel.computeSnapshot(
-                props.decryptionFailureCode,
-                props.verificationState,
-                props.extraClassNames,
-            ),
+            DecryptionFailureBodyViewModel.computeSnapshot(props.decryptionFailureCode, props.verificationState),
         );
     }
 

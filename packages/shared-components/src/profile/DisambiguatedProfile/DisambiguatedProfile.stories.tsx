@@ -19,9 +19,13 @@ import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DisambiguatedProfileProps = DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions;
 
-const DisambiguatedProfileViewWrapperImpl = ({ onClick, ...rest }: DisambiguatedProfileProps): JSX.Element => {
+const DisambiguatedProfileViewWrapperImpl = ({
+    onClick,
+    className,
+    ...rest
+}: DisambiguatedProfileProps & { className?: string }): JSX.Element => {
     const vm = useMockedViewModel(rest, { onClick });
-    return <DisambiguatedProfileView vm={vm} />;
+    return <DisambiguatedProfileView vm={vm} className={className} />;
 };
 const DisambiguatedProfileViewWrapper = withViewDocs(DisambiguatedProfileViewWrapperImpl, DisambiguatedProfileView);
 

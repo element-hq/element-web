@@ -91,14 +91,12 @@ export class MessageTimestampViewModel
             receivedAt = formatFullDate(receivedDate, props.showTwelveHour);
         }
 
-        // Keep mx_MessageTimestamp for compatibility with the existing timeline and layout.
         return {
             ts: timestamp,
             tsSentAt: sentAt,
             tsReceivedAt: receivedAt,
             inhibitTooltip: props.inhibitTooltip,
             href: props.href,
-            className: "mx_MessageTimestamp",
         };
     };
 
