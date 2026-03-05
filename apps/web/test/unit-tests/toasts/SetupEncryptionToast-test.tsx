@@ -11,7 +11,8 @@ import { act, render, screen } from "jest-matrix-react";
 import { mocked, type Mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/src/crypto-api";
+import { type SecretStorageKeyDescriptionAesV1 } from "matrix-js-sdk/src/secret-storage";
 
 import * as SecurityManager from "../../../src/SecurityManager";
 import ToastContainer from "../../../src/components/structures/ToastContainer";
@@ -114,6 +115,30 @@ describe("SetupEncryptionToast", () => {
             expect(client.getCrypto()!.loadSessionBackupPrivateKeyFromSecretStorage).toHaveBeenCalled();
         });
 
+        it("should reset key backup if decryption key does not match backup", async () => {
+            showToast("key_storage_out_of_sync");
+
+            const crypto = client.getCrypto()!;
+
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async (func = async (): Promise<void> => {}) => func());
+
+            // Given we throw when trying to load the backup decrption key
+            mocked(crypto.loadSessionBackupPrivateKeyFromSecretStorage).mockRejectedValue(
+                new DecryptionKeyDoesNotMatchError("it key no match"),
+            );
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+            client.isKeyBackupKeyStored.mockResolvedValue({});
+
+            // When we enter our recovery key
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            // Then we should reset the key backup because we caught the
+            // DecryptionKeyDoesNotMatchError.
+            expect(client.getCrypto()!.resetKeyBackup).toHaveBeenCalled();
+        });
+
         it("should open settings to the reset flow when 'forgot recovery key' clicked and identity reset needed", async () => {
             act(() => showToast("key_storage_out_of_sync"));
 
@@ -190,6 +215,38 @@ describe("SetupEncryptionToast", () => {
             });
         });
 
+        it("should go to change recovery key when recovering fails inside loadSessionBackup...", async () => {
+            jest.spyOn(SecurityManager, "accessSecretStorage").mockImplementation(async (func = async (): Promise<void> => {}) => func());
+
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(
+                true,
+            );
+            jest.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+            mocked(client.isKeyBackupKeyStored).mockResolvedValue(fakeKeyBackupKey());
+
+            // Given when we try to load from backup we get an unexpected error
+            mocked(client.getCrypto()!.loadSessionBackupPrivateKeyFromSecretStorage).mockRejectedValue(
+                new Error("Unexpected error"),
+            );
+
+            act(() => showToast("key_storage_out_of_sync"));
+
+            // When we start to entry recovery key
+            const user = userEvent.setup();
+            await user.click(await screen.findByText("Enter recovery key"));
+
+            // Then we handle the error and jump to the Encryption Settings.
+            //
+            // Note: It seems reasonable to ask the user to reset their identity
+            // in this case, but we're not actually sure what happened, so it
+            // may not be the right response.
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: "view_user_settings",
+                initialTabId: "USER_ENCRYPTION_TAB",
+                props: { initialEncryptionState: "reset_identity_sync_failed" },
+            });
+        });
+
         it("should dismiss the toast when the close button is clicked", async () => {
             jest.spyOn(DeviceListener.sharedInstance(), "dismissEncryptionSetup");
 
@@ -200,6 +257,26 @@ describe("SetupEncryptionToast", () => {
 
             expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
         });
+
+        /**
+         * Just enough of a key backup key to persuade SetupEncryptionToast that we
+         * don't need to reset backup.
+         */
+        function fakeKeyBackupKey(): Record<string, SecretStorageKeyDescriptionAesV1> {
+            return {
+                x: {
+                    iv: "x",
+                    mac: "y",
+                    name: "n",
+                    algorithm: "a",
+                    passphrase: {
+                        algorithm: "m.pbkdf2",
+                        iterations: 1,
+                        salt: "s",
+                    },
+                },
+            };
+        }
     });
 
     describe("Turn on key storage", () => {
