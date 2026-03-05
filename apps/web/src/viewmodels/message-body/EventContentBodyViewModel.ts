@@ -36,22 +36,27 @@ import SettingsStore from "../../settings/SettingsStore";
 export interface ReplacerOptions {
     /**
      * Whether to render room/user mentions as pills.
+     * @default false
      */
     renderMentionPills?: boolean;
     /**
      * Whether to render push rule keywords as pills.
+     * @default false
      */
     renderKeywordPills?: boolean;
     /**
      * Whether to render spoilers as hidden content revealed on click.
+     * @default false
      */
     renderSpoilers?: boolean;
     /**
      * Whether to render code blocks as syntax highlighted code with a copy to clipboard button.
+     * @default false
      */
     renderCodeBlocks?: boolean;
     /**
      * Whether to render tooltips for ambiguous links, only effective on platforms which specify `needsUrlTooltips` true.
+     * @default false
      */
     renderTooltipsForAmbiguousLinks?: boolean;
 }
@@ -70,6 +75,7 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
     mxEvent?: MatrixEvent;
     /**
      * Whether to strip reply fallbacks from the content before rendering.
+     * @default false
      */
     stripReply?: boolean;
     /**
@@ -83,6 +89,7 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
     /**
      * Whether to include the `dir="auto"` attribute on the rendered element.
      * Always true for "div" elements.
+     * @default true
      */
     includeDir?: boolean;
     /**
@@ -91,14 +98,17 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
     as: "span" | "div";
     /**
      * Whether big emoji should be enabled.
+     * @default false
      */
     enableBigEmoji?: boolean;
     /**
      * Whether media is visible in the event.
+     * @default true
      */
     mediaIsVisible?: boolean;
     /**
      * Whether to show pill avatars.
+     * @default true
      */
     shouldShowPillAvatar?: boolean;
 }
