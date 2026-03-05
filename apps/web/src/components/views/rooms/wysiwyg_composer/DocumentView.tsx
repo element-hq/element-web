@@ -652,9 +652,25 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
             return info;
         };
 
+        // Expose a test helper to manually inject a base64-encoded Automerge
+        // delta from the browser console.  Useful for confirming that
+        // applyDeltaBytes works in isolation (to rule out delivery issues).
+        // Usage: window.__docApplyDelta("<base64 delta from __docDebug output>")
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).__docApplyDelta = (base64: string): void => {
+            logger.info("[DocumentView] __docApplyDelta: manual injection", base64.length, "b base64");
+            if (rtc.onDeltaRef.current) {
+                rtc.onDeltaRef.current(base64Decode(base64));
+            } else {
+                logger.warn("[DocumentView] __docApplyDelta: onDeltaRef.current is null — check wiring");
+            }
+        };
+
         return () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             delete (window as any).__docDebug;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            delete (window as any).__docApplyDelta;
         };
     }, [composerModel, room, client, ref, rtc]);
 
