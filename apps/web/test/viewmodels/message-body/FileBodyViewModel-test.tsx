@@ -61,9 +61,7 @@ describe("FileBodyViewModel", () => {
             fileName,
         }) as unknown as MediaEventHelper;
 
-    const createVm = (
-        overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
-    ): FileBodyViewModel =>
+    const createVm = (overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {}): FileBodyViewModel =>
         new FileBodyViewModel({
             mxEvent: mkMediaEvent({}),
             mediaEventHelper: mkMediaEventHelper({ encrypted: false }),

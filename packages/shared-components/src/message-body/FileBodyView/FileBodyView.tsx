@@ -42,11 +42,6 @@ export enum FileBodyViewInfoIcon {
     VIDEO = "VIDEO",
 }
 
-/**
- * @deprecated Use `FileBodyViewInfoIcon`.
- */
-export const FileBodyViewinfoIcon = FileBodyViewInfoIcon;
-
 export interface FileBodyViewSnapshot {
     /**
      * Primary rendering branch for the component.
