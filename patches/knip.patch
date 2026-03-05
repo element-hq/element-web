@@ -1,0 +1,93 @@
+diff --git a/dist/binaries/bash-parser.js b/dist/binaries/bash-parser.js
+index 7e8c465e4fcf156988edd35ac725f8159edc5a87..ab28395084c77ed8922a3fa882daaff89f1e65fd 100644
+--- a/dist/binaries/bash-parser.js
++++ b/dist/binaries/bash-parser.js
+@@ -49,6 +49,16 @@ export const getDependenciesFromScript = (script, options) => {
+                 if (definedFunctions.has(binary))
+                     return [];
+                 const args = node.suffix?.map(arg => arg.text) ?? [];
++                if (binary === "find" && args.includes("-exec")) {
++                    const i = args.indexOf("-exec");
++                    const [execCmd, ...execArgs] = node.suffix.slice(i + 1, -1);
++                    return getDependenciesFromNodes([{
++                        type: "Command",
++                        name: execCmd,
++                        suffix: execArgs,
++                    }]);
++                    return (commandExpansions.flatMap(expansion => getDependenciesFromNodes(expansion.commandAST.commands)) ?? []);
++                }
+                 if (['!', 'test'].includes(binary))
+                     return fromArgs(args);
+                 const fromNodeOptions = node.prefix
+diff --git a/dist/plugins/babel/index.js b/dist/plugins/babel/index.js
+index 4772fcda2ab92dfc80b248e91dc5c3894920d075..3b34f9c3439b6576f07959abf42f37c0418c2fc5 100644
+--- a/dist/plugins/babel/index.js
++++ b/dist/plugins/babel/index.js
+@@ -9,15 +9,23 @@ const config = ['babel.config.{json,js,cjs,mjs,cts,ts}', '.babelrc.{json,js,cjs,
+ const getName = (value) => [Array.isArray(value) ? value[0] : value].filter(name => typeof name === 'string');
+ export const getDependenciesFromConfig = (config) => {
+     const presets = config.presets?.flatMap(getName).map(name => resolveName(name, 'preset')) ?? [];
++    const presetIncludes = config.presets?.filter(preset => Array.isArray(preset) && typeof preset[1] === "object").flatMap(preset => preset[1]?.include ?? []).map(name => resolveName(name, 'plugin')) ?? [];
+     const plugins = config.plugins?.flatMap(getName).map(name => resolveName(name, 'plugin')) ?? [];
+     const nested = config.env ? Object.values(config.env).flatMap(getDependenciesFromConfig) : [];
+     const overrides = config.overrides ? [config.overrides].flat().flatMap(getDependenciesFromConfig) : [];
+-    return compact([
++    const deps = [
+         ...presets.map(id => toDeferResolve(id)),
++        ...presetIncludes.map(id => toDeferResolve(id)),
+         ...plugins.map(id => toDeferResolve(id)),
+         ...nested,
+         ...overrides,
+-    ]);
++    ];
++
++    if (deps.find(dep => dep.specifier === "@babel/plugin-transform-runtime")) {
++        deps.push(toDeferResolve("@babel/runtime"));
++    }
++
++    return compact(deps);
+ };
+ const resolveConfig = async (config) => {
+     if (typeof config === 'function')
+diff --git a/dist/plugins/nx/index.js b/dist/plugins/nx/index.js
+index 43bd253a3bcae4e9f8cb05be0db09b0b14598000..415479489f30cfcc9d57557a7fab02babdf12030 100644
+--- a/dist/plugins/nx/index.js
++++ b/dist/plugins/nx/index.js
+@@ -34,18 +34,18 @@ const resolveConfig = async (localConfig, options) => {
+         .map(target => target?.executor)
+         .filter(executor => executor && !executor.startsWith('.'))
+         .map(executor => executor?.split(':')[0]);
+-    const scripts = targets
++    const inputs = targets
+         .filter(target => target.executor === 'nx:run-commands' || target.command)
+         .flatMap(target => {
++        let commands = [];
+         if (target.command)
+-            return [target.command];
++            commands = [target.command];
+         if (target.options?.command)
+-            return [target.options.command];
++            commands = [target.options.command];
+         if (target.options?.commands)
+-            return target.options.commands.map(commandConfig => typeof commandConfig === 'string' ? commandConfig : commandConfig.command);
+-        return [];
++            commands = target.options.commands.map(commandConfig => typeof commandConfig === 'string' ? commandConfig : commandConfig.command);
++        return options.getInputsFromScripts(commands, { cwd: target.options?.cwd });
+     });
+-    const inputs = options.getInputsFromScripts(scripts);
+     const configInputs = targets.flatMap(target => {
+         const opts = target.options;
+         if (!opts)
+diff --git a/dist/typescript/pragmas/custom.js b/dist/typescript/pragmas/custom.js
+index f913d03560252b9161c11f0371f1a68198ed78bd..7ac5cc43b1fff9eec9b7b59d48c5871fb8403eb4 100644
+--- a/dist/typescript/pragmas/custom.js
++++ b/dist/typescript/pragmas/custom.js
+@@ -2,7 +2,7 @@ import { IMPORT_FLAGS } from '../../constants.js';
+ import { getEnvSpecifier } from '../../plugins/vitest/helpers.js';
+ import { isAbsolute, isInternal } from '../../util/path.js';
+ import { getLeadingComments, stripQuotes } from '../ast-helpers.js';
+-const VITEST_ENV = /@(vitest|jest)-environment\s+(\S+)/g;
++const VITEST_ENV = /@(vitest)-environment\s+(\S+)/g;
+ export const collectCustomImports = (sourceFile) => {
+     const comments = getLeadingComments(sourceFile);
+     if (!comments.length)
