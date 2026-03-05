@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type EventListeners } from "linkifyjs";
+import { linkifyjs, LinkifyMatrixOpaqueIdType } from "@element-hq/web-shared-components";
 
-import { linkify, Type, options } from "../../src/linkify-matrix";
+import { options } from "../../src/linkify-matrix";
 import dispatcher from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
 
@@ -27,13 +27,13 @@ describe("linkify-matrix", () => {
         const type = linkTypesByInitialCharacter[char];
         it("should not parse " + char + "foo without domain", () => {
             const test = char + "foo";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([]);
         });
         describe("ip v4 tests", () => {
             it("should properly parse IPs v4 as the domain name", () => {
                 const test = char + "potato:1.2.3.4";
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: char + "potato:1.2.3.4",
@@ -47,7 +47,7 @@ describe("linkify-matrix", () => {
             });
             it("should properly parse IPs v4 with port as the domain name with attached", () => {
                 const test = char + "potato:1.2.3.4:1337";
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: char + "potato:1.2.3.4:1337",
@@ -61,7 +61,7 @@ describe("linkify-matrix", () => {
             });
             it("should properly parse IPs v4 as the domain name while ignoring missing port", () => {
                 const test = char + "potato:1.2.3.4:";
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: char + "potato:1.2.3.4",
@@ -78,7 +78,7 @@ describe("linkify-matrix", () => {
         describe.skip("ip v6 tests", () => {
             it("should properly parse IPs v6 as the domain name", () => {
                 const test = char + "username:[1234:5678::abcd]";
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: char + "username:[1234:5678::abcd]",
@@ -93,7 +93,7 @@ describe("linkify-matrix", () => {
 
             it("should properly parse IPs v6 with port as the domain name", () => {
                 const test = char + "username:[1234:5678::abcd]:1337";
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: char + "username:[1234:5678::abcd]:1337",
@@ -108,7 +108,7 @@ describe("linkify-matrix", () => {
             // eslint-disable-next-line max-len
             it("should properly parse IPs v6 while ignoring dangling comma when without port name as the domain name", () => {
                 const test = char + "username:[1234:5678::abcd]:";
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: char + "username:[1234:5678::abcd]:",
@@ -123,7 +123,7 @@ describe("linkify-matrix", () => {
         });
         it("properly parses " + char + "_foonetic_xkcd:matrix.org", () => {
             const test = "" + char + "_foonetic_xkcd:matrix.org";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "_foonetic_xkcd:matrix.org",
@@ -137,7 +137,7 @@ describe("linkify-matrix", () => {
         });
         it("properly parses " + char + "localhost:foo.com", () => {
             const test = char + "localhost:foo.com";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "localhost:foo.com",
@@ -151,7 +151,7 @@ describe("linkify-matrix", () => {
         });
         it("properly parses " + char + "foo:localhost", () => {
             const test = char + "foo:localhost";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:localhost",
@@ -165,7 +165,7 @@ describe("linkify-matrix", () => {
         });
         it("accept " + char + "foo:bar.com", () => {
             const test = "" + char + "foo:bar.com";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:bar.com",
@@ -179,7 +179,7 @@ describe("linkify-matrix", () => {
         });
         it("accept " + char + "foo:com (mostly for (TLD|DOMAIN)+ mixing)", () => {
             const test = "" + char + "foo:com";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:com",
@@ -193,7 +193,7 @@ describe("linkify-matrix", () => {
         });
         it("accept repeated TLDs (e.g .org.uk)", () => {
             const test = "" + char + "foo:bar.org.uk";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:bar.org.uk",
@@ -207,7 +207,7 @@ describe("linkify-matrix", () => {
         });
         it("accept hyphens in name " + char + "foo-bar:server.com", () => {
             const test = "" + char + "foo-bar:server.com";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo-bar:server.com",
@@ -221,7 +221,7 @@ describe("linkify-matrix", () => {
         });
         it("ignores trailing `:`", () => {
             const test = "" + char + "foo:bar.com:";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     type,
@@ -235,7 +235,7 @@ describe("linkify-matrix", () => {
         });
         it("accept :NUM (port specifier)", () => {
             const test = "" + char + "foo:bar.com:2225";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:bar.com:2225",
@@ -249,7 +249,7 @@ describe("linkify-matrix", () => {
         });
         it("ignores duplicate :NUM (double port specifier)", () => {
             const test = "" + char + "foo:bar.com:2225:1234";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:bar.com:2225",
@@ -263,7 +263,7 @@ describe("linkify-matrix", () => {
         });
         it("ignores all the trailing :", () => {
             const test = "" + char + "foo:bar.com::::";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:bar.com",
@@ -277,7 +277,7 @@ describe("linkify-matrix", () => {
         });
         it("properly parses room alias with dots in name", () => {
             const test = "" + char + "foo.asdf:bar.com::::";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo.asdf:bar.com",
@@ -291,7 +291,7 @@ describe("linkify-matrix", () => {
         });
         it("does not parse room alias with too many separators", () => {
             const test = "" + char + "foo:::bar.com";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: "http://bar.com",
@@ -305,7 +305,7 @@ describe("linkify-matrix", () => {
         });
         it("properly parses room alias with hyphen in domain part", () => {
             const test = "" + char + "foo:bar.com-baz.com";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: char + "foo:bar.com-baz.com",
@@ -325,7 +325,7 @@ describe("linkify-matrix", () => {
         it("should intercept clicks with a ViewRoom dispatch", () => {
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
-            const handlers = (options.events as (href: string, type: string) => EventListeners)(
+            const handlers = (options.events as (href: string, type: string) => linkifyjs.EventListeners)(
                 "#room:server.com",
                 "roomalias",
             );
@@ -348,7 +348,7 @@ describe("linkify-matrix", () => {
 
         it("allows dots in localparts", () => {
             const test = "@test.:matrix.org";
-            const found = linkify.find(test);
+            const found = linkifyjs.find(test);
             expect(found).toEqual([
                 {
                     href: test,
@@ -365,7 +365,7 @@ describe("linkify-matrix", () => {
         it("should intercept clicks with a ViewUser dispatch", () => {
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
-            const handlers = (options.events as (href: string, type: string) => EventListeners)(
+            const handlers = (options.events as (href: string, type: string) => linkifyjs.EventListeners)(
                 "@localpart:server.com",
                 "userid",
             );
@@ -398,11 +398,11 @@ describe("linkify-matrix", () => {
         for (const matrixUri of acceptedMatrixUris) {
             it("accepts " + matrixUri, () => {
                 const test = matrixUri;
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: matrixUri,
-                        type: Type.URL,
+                        type: LinkifyMatrixOpaqueIdType.URL,
                         value: matrixUri,
                         end: matrixUri.length,
                         start: 0,
@@ -418,11 +418,11 @@ describe("linkify-matrix", () => {
         for (const domain of acceptedDomains) {
             it("accepts " + domain, () => {
                 const test = domain;
-                const found = linkify.find(test);
+                const found = linkifyjs.find(test);
                 expect(found).toEqual([
                     {
                         href: `http://${domain}`,
-                        type: Type.URL,
+                        type: LinkifyMatrixOpaqueIdType.URL,
                         value: domain,
                         end: domain.length,
                         start: 0,
