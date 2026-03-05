@@ -24,6 +24,7 @@
     align-items: center;
     flex-grow: 1;
     cursor: pointer;
+    gap: var(--cpd-space-3x);
 
     & [data-type="info-icon"] {
         display: inline-flex;
@@ -43,7 +44,6 @@
     & [data-type="info-label"] {
         font: var(--cpd-font-body-md-regular);
         color: var(--cpd-color-text-primary);
-        padding: var(--cpd-space-2x);
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
