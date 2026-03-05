@@ -9,7 +9,6 @@ import React from "react";
 import { Markdown } from "@storybook/addon-docs/blocks";
 
 import type { Meta } from "@storybook/react-vite";
-import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
 
 const meta = {
     title: "utils/humanize",
@@ -17,8 +16,8 @@ const meta = {
         docs: {
             page: () => (
                 <>
-                    <h1>humanize</h1>
-                    <Markdown>{humanizeTimeDoc}</Markdown>
+                    <h1>linkifyjs</h1>
+                    <Markdown>**Here is some md**</Markdown>
                 </>
             ),
         },

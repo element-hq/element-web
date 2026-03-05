@@ -9,12 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactElement } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
 import { merge } from "lodash";
-import _Linkify from "linkify-react";
+import {
+    PERMITTED_URL_SCHEMES,
+    LinkifyComponent,
+    linkifyString as _linkifyString,
+    linkifyHtml as _linkifyHtml,
+} from "@element-hq/web-shared-components";
 
-import { _linkifyString, _linkifyHtml, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
+import { ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
-import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -194,11 +198,11 @@ export const sanitizeHtmlParams: IOptions = {
 };
 
 /* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
+export function Linkify({ as, options, children }: React.ComponentProps<typeof LinkifyComponent>): ReactElement {
     return (
-        <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
+        <LinkifyComponent as={as} options={merge({}, linkifyMatrixOptions, options)}>
             {children}
-        </_Linkify>
+        </LinkifyComponent>
     );
 }
 
@@ -226,9 +230,9 @@ export function linkifyHtml(str: string, options = linkifyMatrixOptions): string
 /**
  * Linkify the given string and sanitize the HTML afterwards.
  *
- * @param {string} dirtyHtml The HTML string to sanitize and linkify
- * @param {object} [options] Options for linkifyString. Default: linkifyMatrixOptions
- * @returns {string}
+ * @param dirtyString The string to linkify, and then sanitize.
+ * @param [options] Options for linkifyString. Default: linkifyMatrixOptions
+ * @returns HTML string
  */
 export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrixOptions): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
