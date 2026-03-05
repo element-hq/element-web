@@ -90,7 +90,7 @@ import { CallView } from "../views/voip/CallView";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
-import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
@@ -141,6 +141,7 @@ import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/event-tiles/EncryptionEventViewModel.ts";
+import { ModuleApi } from "../../modules/Api.ts";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -952,7 +953,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // Otherwise (in case the user set hideWidgetDrawer by clicking the button) follow the parameter.
         const isManuallyShown = hideWidgetDrawer ? hideWidgetDrawer === "false" : true;
 
-        const widgets = this.context.widgetLayoutStore.getContainerWidgets(room, Container.Top);
+        const widgets = this.context.widgetLayoutStore.getContainerWidgets(room, "top");
         return isManuallyShown && widgets.length > 0;
     }
 
@@ -2726,6 +2727,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 this.state.mainSplitContentType === MainSplitContentType.Call ? "video_room" : "maximised_widget";
         }
 
+        const extraButtons = ModuleApi.instance.extras.roomHeaderButtonsCallback?.(this.state.room.roomId);
+
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
                 <div
@@ -2753,7 +2756,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 {!this.props.hideHeader && (
                                     <RoomHeader
                                         room={this.state.room}
-                                        additionalButtons={this.state.viewRoomOpts.buttons}
+                                        legacyAdditionalButtons={this.state.viewRoomOpts.buttons}
+                                        extraButtons={extraButtons}
                                     />
                                 )}
                                 {mainSplitBody}

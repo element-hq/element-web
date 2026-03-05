@@ -16,7 +16,7 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { Action } from "../../../dispatcher/actions";
 import { useCallForWidget } from "../../../hooks/useCall";
 import WidgetStore from "../../../stores/WidgetStore";
-import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import Toolbar from "../../../accessibility/Toolbar";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
@@ -66,7 +66,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                     metricsTrigger: "WebFloatingCallWindow",
                 });
             } else if (viewingRoom) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Center);
+                WidgetLayoutStore.instance.moveToContainer(room, widget, "center");
             } else {
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,

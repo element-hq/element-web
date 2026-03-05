@@ -10,6 +10,7 @@ import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/m
 import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, defaultNumber, sum } from "@element-hq/web-shared-components";
+import { Container } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { type IApp } from "../WidgetStore";
@@ -19,13 +20,7 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
-import {
-    Container,
-    type IStoredLayout,
-    type ILayoutStateEvent,
-    WIDGET_LAYOUT_EVENT_TYPE,
-    type IWidgetLayouts,
-} from "./types";
+import { type IStoredLayout, type ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, type IWidgetLayouts } from "./types";
 
 export type { IStoredLayout, ILayoutStateEvent };
 export { Container, WIDGET_LAYOUT_EVENT_TYPE };
@@ -173,8 +168,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             const stateContainer = roomLayout?.widgets?.[widget.id]?.container;
             const manualContainer = userLayout?.widgets?.[widget.id]?.container;
             const isLegacyPinned = !!legacyPinned?.[widget.id];
-            const defaultContainer = WidgetType.JITSI.matches(widget.type) ? Container.Top : Container.Right;
-            if (manualContainer ? manualContainer === Container.Center : stateContainer === Container.Center) {
+            const defaultContainer = WidgetType.JITSI.matches(widget.type) ? "top" : "right";
+            if (manualContainer ? manualContainer === "center" : stateContainer === "center") {
                 if (centerWidgets.length) {
                     console.error("Tried to push a second widget into the center container");
                 } else {
@@ -188,9 +183,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 targetContainer = manualContainer ?? stateContainer!;
             } else if (isLegacyPinned && !stateContainer) {
                 // Special legacy case
-                targetContainer = Container.Top;
+                targetContainer = "top";
             }
-            (targetContainer === Container.Top ? topWidgets : rightWidgets).push(widget);
+            (targetContainer === "top" ? topWidgets : rightWidgets).push(widget);
         }
 
         // Trim to MAX_PINNED
@@ -291,19 +286,19 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const newRoomContainers = new Map();
         this.byRoom.set(room.roomId, newRoomContainers);
         if (topWidgets.length) {
-            newRoomContainers.set(Container.Top, {
+            newRoomContainers.set("top", {
                 ordered: topWidgets,
                 distributions: widths,
                 height: maxHeight,
             });
         }
         if (rightWidgets.length) {
-            newRoomContainers.set(Container.Right, {
+            newRoomContainers.set("right", {
                 ordered: rightWidgets,
             });
         }
         if (centerWidgets.length) {
-            newRoomContainers.set(Container.Center, {
+            newRoomContainers.set("center", {
                 ordered: centerWidgets,
             });
         }
@@ -325,11 +320,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
     public canAddToContainer(room: Room, container: Container): boolean {
         switch (container) {
-            case Container.Top:
+            case "top":
                 return this.getContainerWidgets(room, container).length < MAX_PINNED;
-            case Container.Right:
+            case "right":
                 return this.getContainerWidgets(room, container).length < MAX_PINNED;
-            case Container.Center:
+            case "center":
                 return this.getContainerWidgets(room, container).length < 1;
         }
     }
@@ -349,7 +344,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     }
 
     public setResizerDistributions(room: Room, container: Container, distributions: string[]): void {
-        if (container !== Container.Top) return; // ignore - not relevant
+        if (container !== "top") return; // ignore - not relevant
 
         const numbers = distributions.map((d) => Number(Number(d.substring(0, d.length - 1)).toFixed(1)));
         const widgets = this.getContainerWidgets(room, container);
@@ -419,23 +414,23 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         // Prepare other containers (potentially move widgets to obey the following rules)
         const newLayout: Record<string, IStoredLayout> = {};
         switch (toContainer) {
-            case Container.Right:
+            case "right":
                 // new "right" widget
                 break;
-            case Container.Center:
+            case "center":
                 // new "center" widget => all other widgets go into "right"
-                for (const w of this.getContainerWidgets(room, Container.Top)) {
-                    newLayout[w.id] = { container: Container.Right };
+                for (const w of this.getContainerWidgets(room, "top")) {
+                    newLayout[w.id] = { container: "right" };
                 }
-                for (const w of this.getContainerWidgets(room, Container.Center)) {
-                    newLayout[w.id] = { container: Container.Right };
+                for (const w of this.getContainerWidgets(room, "center")) {
+                    newLayout[w.id] = { container: "right" };
                 }
                 break;
-            case Container.Top:
+            case "top":
                 // new "top" widget => the center widget moves into "right"
                 if (this.hasMaximisedWidget(room)) {
-                    const centerWidget = this.getContainerWidgets(room, Container.Center)[0];
-                    newLayout[centerWidget.id] = { container: Container.Right };
+                    const centerWidget = this.getContainerWidgets(room, "center")[0];
+                    newLayout[centerWidget.id] = { container: "right" };
                 }
                 break;
         }
@@ -447,11 +442,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     }
 
     public hasMaximisedWidget(room: Room): boolean {
-        return this.getContainerWidgets(room, Container.Center).length > 0;
+        return this.getContainerWidgets(room, "center").length > 0;
     }
 
     public hasPinnedWidgets(room: Room): boolean {
-        return this.getContainerWidgets(room, Container.Top).length > 0;
+        return this.getContainerWidgets(room, "top").length > 0;
     }
 
     public canCopyLayoutToRoom(room: Room): boolean {
@@ -464,7 +459,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const evContent: ILayoutStateEvent = { widgets: {} };
         for (const [widget, container] of allWidgets) {
             evContent.widgets[widget.id] = { container };
-            if (container === Container.Top) {
+            if (container === "top") {
                 const containerWidgets = this.getContainerWidgets(room, container);
                 const idx = containerWidgets.findIndex((w) => w.id === widget.id);
                 const widths = this.byRoom.get(room.roomId)?.get(container)?.distributions;

@@ -6,7 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useState } from "react";
-import { type SpacePanelItemProps, type ExtrasApi } from "@element-hq/element-web-module-api";
+import {
+    type SpacePanelItemProps,
+    type ExtrasApi,
+    type RoomHeaderButtonsCallback,
+} from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
@@ -26,6 +30,7 @@ interface EmittedEvents {
 export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> implements ExtrasApi {
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
+    public roomHeaderButtonsCallback?: RoomHeaderButtonsCallback;
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -34,6 +39,10 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
 
     public getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void {
         this.visibleRoomBySpaceKey.set(spaceKey, cb);
+    }
+
+    public setRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
+        this.roomHeaderButtonsCallback = cb;
     }
 }
 
