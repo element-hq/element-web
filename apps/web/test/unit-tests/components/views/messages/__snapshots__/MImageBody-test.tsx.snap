@@ -300,15 +300,16 @@ exports[`<MImageBody/> should open ImageView using thumbnail for encrypted svg 1
 exports[`<MImageBody/> should render MFileBody for svg with no thumbnail 1`] = `
 <DocumentFragment>
   <span
-    class="mx_MFileBody"
+    class="_content_1qjfu_8 mx_MFileBody"
   >
     <div
-      class="mx_AccessibleButton mx_MediaBody mx_MFileBody_info"
+      class="mx_MediaBody _mediaBody_1xzob_8"
+      data-type="info"
       role="button"
       tabindex="0"
     >
       <span
-        class="mx_MFileBody_info_icon"
+        data-type="info-icon"
       >
         <svg
           fill="currentColor"
@@ -323,14 +324,9 @@ exports[`<MImageBody/> should render MFileBody for svg with no thumbnail 1`] = `
         </svg>
       </span>
       <span
-        aria-labelledby="_r_0_"
-        tabindex="0"
+        data-type="info-label"
       >
-        <span
-          class="mx_MFileBody_info_filename"
-        >
-          Attachment
-        </span>
+        Attachment
       </span>
     </div>
   </span>

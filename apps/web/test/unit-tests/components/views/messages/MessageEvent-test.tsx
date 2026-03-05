@@ -33,9 +33,10 @@ jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
     default: () => <div data-testid="video-body" />,
 }));
 
-jest.mock("../../../../../src/components/views/messages/MFileBody", () => ({
+jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
-    default: () => <div data-testid="file-body" />,
+    FileBodyViewFactory: () => <div data-testid="file-body" />,
+    renderMBody: () => <div data-testid="file-body" />,
 }));
 
 jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => ({

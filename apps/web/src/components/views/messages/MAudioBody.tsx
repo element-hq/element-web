@@ -15,12 +15,12 @@ import { AudioPlayerView, useCreateAutoDisposedViewModel } from "@element-hq/web
 import { type Playback } from "../../../audio/Playback";
 import InlineSpinner from "../elements/InlineSpinner";
 import { _t } from "../../../languageHandler";
-import MFileBody from "./MFileBody";
 import { type IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
+import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
 
 interface IState {
     error?: boolean;
@@ -111,7 +111,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         return (
             <span className="mx_MAudioBody">
                 <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
-                {this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />}
+                {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyViewFactory)}
             </span>
         );
     }
