@@ -245,9 +245,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
 
             // Assert that replied audio file is rendered as file button inside ReplyChain
-            const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody_info[role='button']");
+            const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody [role='button']");
             // Assert that the file button has file name
-            await expect(button.locator(".mx_MFileBody_info_filename")).toBeVisible();
+            await expect(button.locator(".mx_MFileBody [data-type='info-label']")).toBeVisible();
 
             await takeSnapshots(page, app, "Selected EventTile of audio player with a reply");
         },
@@ -308,8 +308,8 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that the file button contains the name of the file sent at first
             await expect(
                 replyChain
-                    .locator(".mx_MFileBody_info[role='button']")
-                    .locator(".mx_MFileBody_info_filename", { hasText: "upload-first.ogg" }),
+                    .locator(".mx_MFileBody [role='button']")
+                    .locator(".mx_MFileBody [data-type='info-label']", { hasText: "upload-first.ogg" }),
             ).toBeVisible();
 
             // Take snapshots
@@ -357,9 +357,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         const composer = thread.locator(".mx_MessageComposer--compact");
         // Assert that the reply preview contains audio ReplyTile the file info button
-        await expect(
-            composer.locator(".mx_ReplyPreview .mx_ReplyTile .mx_MFileBody_info[role='button']"),
-        ).toBeVisible();
+        await expect(composer.locator(".mx_ReplyPreview .mx_ReplyTile .mx_MFileBody [role='button']")).toBeVisible();
 
         // Select :smile: emoji and send it
         await composer.getByTestId("basicmessagecomposer").fill(":smile:");
@@ -367,6 +365,6 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await composer.getByTestId("basicmessagecomposer").press("Enter");
 
         // Assert that the file name is rendered on the file button
-        await expect(threadTile.locator(".mx_ReplyTile .mx_MFileBody_info[role='button']")).toBeVisible();
+        await expect(threadTile.locator(".mx_ReplyTile .mx_MFileBody [role='button']")).toBeVisible();
     });
 });

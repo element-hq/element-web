@@ -103,9 +103,7 @@ test.describe("FilePanel", () => {
 
             // Detect the JSON file
             // Assert that the tile is rendered as a button
-            const file = filePanelMessageList.locator(
-                ".mx_EventTile_mediaLine .mx_MFileBody [role='button'] .mx_MFileBody [data-type='info-label']",
-            );
+            const file = filePanelMessageList.locator(".mx_EventTile_mediaLine .mx_MFileBody [role='button']");
             // Assert that the file name is rendered inside the button with ellipsis
             await expect(file.getByText(/matrix.*?\.json/)).toBeVisible();
 
@@ -194,7 +192,7 @@ test.describe("FilePanel", () => {
                 ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_MImageBody",
             );
 
-            const link = imageBody.locator(".mx_MFileBody_download a");
+            const link = imageBody.locator(".mx_MFileBody a");
 
             const downloadPromise = page.waitForEvent("download");
 
