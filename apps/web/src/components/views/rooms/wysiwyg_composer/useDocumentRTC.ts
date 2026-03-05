@@ -26,12 +26,29 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { Room as LivekitRoom, RoomEvent, ConnectionState } from "livekit-client";
 
 const LIVEKIT_DATA_TOPIC = "org.element.doc.delta";
+const CURSOR_DATA_TOPIC = "org.element.doc.cursor";
+
+/** Wire format for a remote cursor/selection position. */
+export interface CursorPayload {
+    /** Character offset of the selection anchor. */
+    a: number;
+    /** Character offset of the selection focus (equals anchor for a plain caret). */
+    f: number;
+    /** Hex-encoded actor ID (userId:deviceId) of the sender. */
+    id: string;
+}
 
 export interface UseDocumentRTCResult {
     /** Send an Automerge incremental delta to all connected peers. */
     publishDelta: (bytes: Uint8Array) => void;
-    /** Set this to receive deltas from peers. Updated value is used without re-registering listeners. */
+    /** Send this client's cursor/selection position to all peers. */
+    publishCursor: (anchor: number, focus: number, actorId: string) => void;
+    /** Set this to receive deltas from peers. */
     onDeltaRef: React.MutableRefObject<((bytes: Uint8Array) => void) | null>;
+    /** Set this to receive cursor updates from peers. */
+    onCursorRef: React.MutableRefObject<((cursor: CursorPayload) => void) | null>;
+    /** Set this to be notified when a peer leaves (receives their actor identity string). */
+    onPeerLeaveRef: React.MutableRefObject<((identity: string) => void) | null>;
     /** True when connected to the LiveKit room. */
     isConnected: boolean;
 }
@@ -77,6 +94,8 @@ export function useDocumentRTC(
     const [isConnected, setIsConnected] = useState(false);
     const livekitRoomRef = useRef<LivekitRoom | null>(null);
     const onDeltaRef = useRef<((bytes: Uint8Array) => void) | null>(null);
+    const onCursorRef = useRef<((cursor: CursorPayload) => void) | null>(null);
+    const onPeerLeaveRef = useRef<((identity: string) => void) | null>(null);
 
     useEffect(() => {
         let cancelled = false;
@@ -157,14 +176,28 @@ export function useDocumentRTC(
                 }
             });
 
-            // 4. Receive Automerge deltas from peers.
+            // 4. Receive data from peers — route by topic.
             livekitRoom.on(
                 RoomEvent.DataReceived,
                 (payload: Uint8Array, _participant: unknown, _kind: unknown, topic?: string) => {
-                    if (topic !== LIVEKIT_DATA_TOPIC) return;
-                    onDeltaRef.current?.(payload);
+                    if (topic === LIVEKIT_DATA_TOPIC) {
+                        onDeltaRef.current?.(payload);
+                    } else if (topic === CURSOR_DATA_TOPIC) {
+                        try {
+                            const cursor = JSON.parse(new TextDecoder().decode(payload)) as CursorPayload;
+                            onCursorRef.current?.(cursor);
+                        } catch (e) {
+                            logger.warn("[DocumentRTC] Failed to parse cursor payload", e);
+                        }
+                    }
                 },
             );
+
+            // 5. Notify when a peer leaves so their cursor can be cleared.
+            livekitRoom.on(RoomEvent.ParticipantDisconnected, (participant: unknown) => {
+                const identity = (participant as { identity?: string })?.identity;
+                if (identity) onPeerLeaveRef.current?.(identity);
+            });
 
             try {
                 await livekitRoom.connect(livekitCreds.url, livekitCreds.jwt, {
@@ -200,5 +233,16 @@ export function useDocumentRTC(
             .catch((e: unknown) => logger.warn("[DocumentRTC] Failed to publish delta", e));
     }, []);
 
-    return { publishDelta, onDeltaRef, isConnected };
+    const publishCursor = useCallback((anchor: number, focus: number, actorId: string): void => {
+        const room = livekitRoomRef.current;
+        if (!room || room.state !== ConnectionState.Connected) return;
+        const payload = new TextEncoder().encode(
+            JSON.stringify({ a: anchor, f: focus, id: actorId } satisfies CursorPayload),
+        );
+        room.localParticipant
+            .publishData(payload, { reliable: false, topic: CURSOR_DATA_TOPIC })
+            .catch((e: unknown) => logger.warn("[DocumentRTC] Failed to publish cursor", e));
+    }, []);
+
+    return { publishDelta, publishCursor, onDeltaRef, onCursorRef, onPeerLeaveRef, isConnected };
 }

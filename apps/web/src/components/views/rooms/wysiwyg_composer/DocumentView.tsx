@@ -8,13 +8,19 @@ Please see LICENSE files in the repository root for full details.
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type Room, type MatrixClient, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { useWysiwyg, type UseWysiwyg } from "@vector-im/matrix-wysiwyg";
+import {
+    useWysiwyg,
+    renderProjections,
+    selectContent,
+    type BlockProjection,
+} from "@vector-im/matrix-wysiwyg";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { FormattingButtons } from "./components/FormattingButtons.tsx";
 import { Editor } from "./components/Editor.tsx";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext.ts";
-import { useDocumentRTC } from "./useDocumentRTC.ts";
+import { useDocumentRTC, type CursorPayload } from "./useDocumentRTC.ts";
+import { RemoteCursorOverlay, colorForActor, type RemoteCursor } from "./RemoteCursorOverlay.tsx";
 
 /**
  * Matrix event type for incremental Automerge deltas sent as timeline events.
@@ -45,6 +51,9 @@ const SAVED_CLEAR_DELAY_MS = 2000;
 /** Save a full snapshot to room state every N Matrix timeline deltas. */
 const SNAPSHOT_EVERY_N_DELTAS = 20;
 
+/** Throttle interval for broadcasting cursor position changes. */
+const CURSOR_THROTTLE_MS = 50;
+
 // ------------------------------------------------------------------
 // Collaboration type augmentation
 //
@@ -61,16 +70,10 @@ interface CollaborativeComposerModel {
     get_heads(): string[];
     set_actor_id(actor: string): void;
     get_content_as_html(): string;
+    get_block_projections(): BlockProjection[];
+    selection_start(): number;
+    selection_end(): number;
 }
-
-/**
- * UseWysiwyg extended with the composerModel field exposed in langleyd/automerge.
- * The npm-published 2.40.0 package does not include this field; we use an
- * intersection type + runtime cast so code is forward-compatible.
- */
-type UseWysiwygExtended = UseWysiwyg & {
-    composerModel?: unknown;
-};
 
 function isCollaborative(model: unknown): model is CollaborativeComposerModel {
     return typeof (model as CollaborativeComposerModel | null)?.save_incremental === "function";
@@ -91,58 +94,6 @@ function base64Decode(b64: string): Uint8Array {
         bytes[i] = binary.charCodeAt(i);
     }
     return bytes;
-}
-
-/**
- * Save the caret position as a character offset from the start of the
- * editor's text content. Returns -1 if there is no selection.
- */
-function saveCaretOffset(editor: HTMLElement): number {
-    const sel = document.getSelection();
-    if (!sel || sel.rangeCount === 0) return -1;
-    const range = sel.getRangeAt(0).cloneRange();
-    range.selectNodeContents(editor);
-    range.setEnd(sel.getRangeAt(0).endContainer, sel.getRangeAt(0).endOffset);
-    return range.toString().length;
-}
-
-/**
- * Restore a caret position (character offset) inside the editor after an
- * innerHTML replacement. Walks text nodes to find the right position.
- */
-function restoreCaretOffset(editor: HTMLElement, offset: number): void {
-    if (offset < 0) return;
-    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
-    let remaining = offset;
-    let node: Text | null = null;
-    let nodeOffset = 0;
-    while (walker.nextNode()) {
-        const text = walker.currentNode as Text;
-        if (text.length >= remaining) {
-            node = text;
-            nodeOffset = remaining;
-            break;
-        }
-        remaining -= text.length;
-    }
-    if (!node && editor.lastChild) {
-        // offset past end — place at end
-        const range = document.createRange();
-        range.selectNodeContents(editor);
-        range.collapse(false);
-        const sel = document.getSelection();
-        sel?.removeAllRanges();
-        sel?.addRange(range);
-        return;
-    }
-    if (node) {
-        const range = document.createRange();
-        range.setStart(node, nodeOffset);
-        range.collapse(true);
-        const sel = document.getSelection();
-        sel?.removeAllRanges();
-        sel?.addRange(range);
-    }
 }
 
 /**
@@ -167,7 +118,7 @@ function useDocumentSync(
     client: MatrixClient,
     composerModel: unknown,
     editorRef: React.RefObject<HTMLDivElement | null>,
-    onContentChanged: () => void,
+    committedTextRef: React.MutableRefObject<string>,
     rtc?: {
         publishDelta: (bytes: Uint8Array) => void;
         onDeltaRef: React.MutableRefObject<((bytes: Uint8Array) => void) | null>;
@@ -176,14 +127,12 @@ function useDocumentSync(
 ): {
     isLoaded: boolean;
     scheduleDeltaSend: () => void;
-    suppressMutations: React.MutableRefObject<boolean>;
     saveStatus: SaveStatus;
 } {
     const [isLoaded, setIsLoaded] = useState(false);
     const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const savedClearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const suppressMutations = useRef(false);
     // Tracks the Automerge heads at the time of the last RTC publish so that
     // save_after() gives exactly the delta since the previous keystroke send.
     const lastRtcHeadsRef = useRef<string[]>([]);
@@ -256,16 +205,15 @@ function useDocumentSync(
         // captures only the changes made after this load point.
         lastRtcHeadsRef.current = composerModel.get_heads();
 
-        // 3. Update the editor DOM to reflect the loaded + replayed state.
+        // 3. Update the editor DOM to reflect the loaded + replayed state
+        //    using projection-based rendering for correct UTF-16 offset mapping.
         if (editorRef.current) {
-            suppressMutations.current = true;
-            editorRef.current.innerHTML = composerModel.get_content_as_html();
-            requestAnimationFrame(() => { suppressMutations.current = false; });
-            onContentChanged();
+            const projections = composerModel.get_block_projections();
+            committedTextRef.current = renderProjections(projections, editorRef.current);
         }
 
         setIsLoaded(true);
-    }, [room, composerModel, editorRef, onContentChanged]);
+    }, [room, composerModel, editorRef, committedTextRef]);
 
     // Apply incoming delta events from the room timeline and update the DOM.
     // Use a ref for composerModel so the listener closure always has the latest
@@ -291,18 +239,27 @@ function useDocumentSync(
             // keystroke doesn't re-transmit the just-received remote changes.
             lastRtcHeadsRef.current = model.get_heads();
             if (editorRef.current) {
-                suppressMutations.current = true;
-                const caretOffset = saveCaretOffset(editorRef.current);
-                editorRef.current.innerHTML = model.get_content_as_html();
-                restoreCaretOffset(editorRef.current, caretOffset);
-                requestAnimationFrame(() => { suppressMutations.current = false; });
-                onContentChanged();
+                // Save the model's current selection so we can restore it after
+                // re-rendering.  The model selection is kept in sync by
+                // useListeners' selectionchange handler.
+                const selStart = model.selection_start();
+                const selEnd = model.selection_end();
+
+                // Re-render from the model's block projections (same pipeline
+                // as useListeners uses for local edits) and keep
+                // committedTextRef in sync so reconcileNative() produces
+                // correct diffs on the next input event.
+                const projections = model.get_block_projections();
+                committedTextRef.current = renderProjections(projections, editorRef.current);
+
+                // Restore the local cursor position.
+                selectContent(editorRef.current, selStart, selEnd);
             }
         } catch (e) {
             logger.warn("[DocumentView] Failed to apply remote delta", e);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editorRef, onContentChanged]);
+    }, [editorRef, committedTextRef]);
 
     // Wire the LiveKit onDeltaRef callback when RTC is provided.
     useEffect(() => {
@@ -479,7 +436,7 @@ function useDocumentSync(
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [client, room.roomId]);
 
-    return { isLoaded, scheduleDeltaSend, suppressMutations, saveStatus };
+    return { isLoaded, scheduleDeltaSend, saveStatus };
 }
 
 // ------------------------------------------------------------------
@@ -496,11 +453,12 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     // ComposerContext is required by the Editor's useSelection hook.
     const composerContext = useMemo(() => getDefaultContextValue(), []);
 
-    // Cast to the extended type to access composerModel when available (requires
-    // @vector-im/matrix-wysiwyg >= langleyd/automerge build).
-    const wysiwygResult = useWysiwyg({ isAutoFocusEnabled: true }) as UseWysiwygExtended;
-    const { ref, isWysiwygReady, wysiwyg, actionStates } = wysiwygResult;
-    const composerModel = wysiwygResult.composerModel;
+    // useWysiwyg sets up the full input pipeline: useListeners handles input
+    // events, feeds them into the Rust model, re-renders via renderProjections,
+    // and updates `content` after each model change.  `committedTextRef` tracks
+    // the last plain text committed to the editor so reconcileNative() works.
+    const { ref, isWysiwygReady, wysiwyg, actionStates, content, composerModel, committedTextRef } =
+        useWysiwyg({ isAutoFocusEnabled: true });
 
     // LiveKit real-time transport (falls back gracefully if unavailable).
     const rtc = useDocumentRTC(room, client);
@@ -508,59 +466,120 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     // Track whether the editor has content so we can hide the placeholder.
     const [hasContent, setHasContent] = useState(false);
 
-    // Stable callback ref so useDocumentSync doesn't re-register its listener
-    // every time the component re-renders.
-    const notifyContentChangedRef = useRef(() => {
-        setHasContent(Boolean(ref.current?.textContent?.trim()));
-    });
+    // Remote cursor state: map of actorId → cursor position + colour.
+    const [remoteCursors, setRemoteCursors] = useState<Map<string, RemoteCursor>>(() => new Map());
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-    const { isLoaded, scheduleDeltaSend, suppressMutations, saveStatus } = useDocumentSync(
+    const { isLoaded, scheduleDeltaSend, saveStatus } = useDocumentSync(
         room,
         client,
         composerModel,
         ref,
-        notifyContentChangedRef.current,
+        committedTextRef,
         rtc,
     );
+
+    // Trigger Automerge sync whenever useListeners updates `content` (i.e.
+    // after every local edit that goes through the model).  This replaces the
+    // old manual onInput + MutationObserver approach: the Rust model is now
+    // the single source of truth and useListeners keeps it in sync with the DOM.
+    const prevContentRef = useRef(content);
+    useEffect(() => {
+        if (content !== prevContentRef.current) {
+            prevContentRef.current = content;
+            setHasContent(Boolean(ref.current?.textContent?.trim()));
+            if (isLoaded) {
+                scheduleDeltaSend();
+            }
+        }
+    }, [content, isLoaded, scheduleDeltaSend, ref]);
 
     // Place the cursor at position 0 (document start, like Google Docs) once the
     // WASM model is ready AND the document content has been written to the DOM.
     useEffect(() => {
         if (!isWysiwygReady || !isLoaded || !ref.current) return;
-        const range = document.createRange();
-        range.selectNodeContents(ref.current);
-        range.collapse(true); // collapse to start
-        const sel = document.getSelection();
-        sel?.removeAllRanges();
-        sel?.addRange(range);
+        selectContent(ref.current, 0, 0);
         ref.current.focus();
     }, [isWysiwygReady, isLoaded, ref]);
-
-    const handleInput = useCallback(() => {
-        notifyContentChangedRef.current();
-        scheduleDeltaSend();
-    }, [scheduleDeltaSend]);
-
-    // MutationObserver to catch formatting/structural changes that don't
-    // fire onInput (e.g. bold, italic applied via the toolbar).
-    const scheduleDeltaSendRef = useRef(scheduleDeltaSend);
-    useEffect(() => { scheduleDeltaSendRef.current = scheduleDeltaSend; }, [scheduleDeltaSend]);
-
-    useEffect(() => {
-        if (!ref.current) return;
-        const observer = new MutationObserver(() => {
-            if (suppressMutations.current) return;
-            scheduleDeltaSendRef.current();
-            notifyContentChangedRef.current();
-        });
-        observer.observe(ref.current, { childList: true, subtree: true, characterData: true, attributes: true });
-        return () => observer.disconnect();
-    }, [ref, isWysiwygReady, suppressMutations]); // re-attach after editor becomes enabled
 
     // Forward clicks anywhere in the content area to the contentEditable.
     const handleContentClick = useCallback(() => {
         ref.current?.focus();
     }, [ref]);
+
+    // ── Remote cursor sharing ─────────────────────────────────────────────
+
+    // Wire RTC cursor and peer-leave callbacks.
+    useEffect(() => {
+        rtc.onCursorRef.current = (cursor: CursorPayload): void => {
+            setRemoteCursors((prev) => {
+                const next = new Map(prev);
+                next.set(cursor.id, {
+                    anchor: cursor.a,
+                    focus: cursor.f,
+                    color: colorForActor(cursor.id),
+                });
+                return next;
+            });
+        };
+        rtc.onPeerLeaveRef.current = (identity: string): void => {
+            setRemoteCursors((prev) => {
+                if (!prev.has(identity)) return prev;
+                const next = new Map(prev);
+                next.delete(identity);
+                return next;
+            });
+        };
+        return () => {
+            rtc.onCursorRef.current = null;
+            rtc.onPeerLeaveRef.current = null;
+        };
+    }, [rtc]);
+
+    // Broadcast the local cursor position on every selectionchange, throttled.
+    // Now that useListeners keeps the model selection in sync via
+    // composerModel.select(), we can read selection_start/end directly.
+    const actorId = useMemo(
+        () => toHex(`${client.getUserId()}:${client.getDeviceId()}`),
+        [client],
+    );
+
+    useEffect(() => {
+        if (!isLoaded || !isCollaborative(composerModel)) return;
+
+        let lastSentAt = 0;
+        let pending: ReturnType<typeof setTimeout> | null = null;
+
+        const send = (): void => {
+            if (!isCollaborative(composerModel)) return;
+            const anchor = composerModel.selection_start();
+            const focus = composerModel.selection_end();
+            rtc.publishCursor(anchor, focus, actorId);
+            lastSentAt = Date.now();
+        };
+
+        const onSelectionChange = (): void => {
+            // Only broadcast when the editor is focused.
+            const active = document.activeElement;
+            if (!ref.current || !ref.current.contains(active)) return;
+
+            const elapsed = Date.now() - lastSentAt;
+            if (elapsed >= CURSOR_THROTTLE_MS) {
+                send();
+            } else if (!pending) {
+                pending = setTimeout(() => {
+                    pending = null;
+                    send();
+                }, CURSOR_THROTTLE_MS - elapsed);
+            }
+        };
+
+        document.addEventListener("selectionchange", onSelectionChange);
+        return () => {
+            document.removeEventListener("selectionchange", onSelectionChange);
+            if (pending) clearTimeout(pending);
+        };
+    }, [isLoaded, composerModel, rtc, actorId, ref]);
 
     // Expose a lightweight diagnostic on `window.__docDebug()` so we can
     // compare CRDT state across clients from the browser console without
@@ -651,11 +670,20 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
                     )}
                 </div>
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-                <div className="mx_DocumentView_content" onInput={handleInput} onClick={handleContentClick}>
+                <div
+                    className="mx_DocumentView_content"
+                    ref={scrollContainerRef}
+                    onClick={handleContentClick}
+                >
                     <Editor
                         ref={ref}
                         disabled={!isWysiwygReady}
-                        placeholder={hasContent ? undefined : "Start typing your document…"}
+                        placeholder={hasContent ? undefined : "Start typing your document\u2026"}
+                    />
+                    <RemoteCursorOverlay
+                        editorRef={ref}
+                        scrollContainerRef={scrollContainerRef}
+                        cursors={remoteCursors}
                     />
                 </div>
             </div>

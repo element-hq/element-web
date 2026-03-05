@@ -60,6 +60,8 @@ Please see LICENSE files in the repository root for full details.
     padding: var(--cpd-space-8x) var(--cpd-space-12x);
     /* Forward clicks anywhere in this area to the editor */
     cursor: text;
+    /* Positioning context for the remote cursor overlay. */
+    position: relative;
 
     /*
      * The composer's editor stack is designed for a small multi-line input.
@@ -85,5 +87,48 @@ Please see LICENSE files in the repository root for full details.
             /* Remove the narrow composer outline */
             border: none;
         }
+    }
+}
+
+/* ─── Remote cursor overlay ─────────────────────────────────────────────── */
+
+.mx_RemoteCursorOverlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/**
+ * Thin coloured line drawn at the remote peer's caret position.
+ * The colour is set via inline `borderColor` style.
+ */
+.mx_RemoteCursorOverlay_caret {
+    position: absolute;
+    width: 0;
+    border-left: 2px solid;
+    /* Inherit borderColor from inline style */
+    box-sizing: border-box;
+    animation: mx_RemoteCursorOverlay_pulse 1.2s ease-in-out infinite;
+}
+
+/**
+ * Semi-transparent rectangle covering a portion of a remote peer's selection.
+ * The colour is set via inline `backgroundColor` style.
+ */
+.mx_RemoteCursorOverlay_selection {
+    position: absolute;
+    opacity: 0.25;
+    border-radius: 2px;
+}
+
+@keyframes mx_RemoteCursorOverlay_pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
     }
 }
