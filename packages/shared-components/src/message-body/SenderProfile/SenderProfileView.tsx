@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type KeyboardEventHandler, type MouseEventHandler, type JSX } from "react";
+import React, { type MouseEventHandler, type JSX } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -46,7 +46,7 @@ export interface SenderProfileViewActions {
     /**
      * Optional click action for sender profile.
      */
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
 }
 
 export type SenderProfileViewModel = ViewModel<SenderProfileViewSnapshot> & SenderProfileViewActions;
@@ -59,27 +59,16 @@ export function SenderProfileView({ vm }: Readonly<SenderProfileViewProps>): JSX
     const { isVisible, displayName, displayIdentifier, title, colorClass, className, emphasizeDisplayName } =
         useViewModel(vm);
 
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
-              }
-          }
-        : undefined;
-
     if (!isVisible) {
         return <></>;
     }
 
     return (
-        <div
+        <button
             className={classNames(className, styles.senderProfile)}
+            type={vm.onClick ? "button" : undefined}
             title={title}
             onClick={vm.onClick}
-            onKeyDown={handleKeyDown}
-            role={vm.onClick ? "button" : undefined}
-            tabIndex={vm.onClick ? 0 : undefined}
         >
             <span
                 className={classNames(colorClass, {
@@ -92,6 +81,6 @@ export function SenderProfileView({ vm }: Readonly<SenderProfileViewProps>): JSX
             {displayIdentifier && (
                 <span className={classNames(className, styles.senderProfile_mxid)}>{displayIdentifier}</span>
             )}
-        </div>
+        </button>
     );
 }

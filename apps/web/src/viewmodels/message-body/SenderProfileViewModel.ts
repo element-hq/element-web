@@ -12,6 +12,7 @@ import {
     type SenderProfileViewModel as SenderProfileViewModelInterface,
     type SenderProfileViewSnapshot,
 } from "@element-hq/web-shared-components";
+import { type MouseEvent } from "react";
 
 import { _t } from "../../languageHandler";
 import UserIdentifier from "../../customisations/UserIdentifier";
@@ -85,9 +86,9 @@ export class SenderProfileViewModel
         this.snapshot.set(SenderProfileViewModel.computeSnapshot(this.props));
     }
 
-    public onClick: SenderProfileViewActions["onClick"] = (evt): void => {
-        this.props.onClick?.(evt);
-    };
+    public get onClick(): ((event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void) | undefined {
+        return this.props.onClick;
+    }
 
     public setWithTooltip(withTooltip?: boolean): void {
         this.props.withTooltip = withTooltip;
