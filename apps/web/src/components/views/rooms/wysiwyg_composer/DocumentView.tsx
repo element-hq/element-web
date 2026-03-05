@@ -184,6 +184,9 @@ function useDocumentSync(
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const savedClearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const suppressMutations = useRef(false);
+    // Tracks the Automerge heads at the time of the last RTC publish so that
+    // save_after() gives exactly the delta since the previous keystroke send.
+    const lastRtcHeadsRef = useRef<string[]>([]);
 
     // Set actor ID as hex-encoded userId:deviceId for correct CRDT attribution.
     // set_actor_id() requires a hex string (decoded to raw bytes internally).
@@ -249,6 +252,9 @@ function useDocumentSync(
         // call, the first save_incremental() after load would return the entire document
         // history and hit the Matrix 65KB event size limit.
         composerModel.save_incremental();
+        // Seed the RTC heads cursor so the first save_after() on a keystroke
+        // captures only the changes made after this load point.
+        lastRtcHeadsRef.current = composerModel.get_heads();
 
         // 3. Update the editor DOM to reflect the loaded + replayed state.
         if (editorRef.current) {
@@ -281,6 +287,9 @@ function useDocumentSync(
             // Drain the incremental save cursor so that received changes are not
             // re-included in the next save_incremental() call from this client.
             model.save_incremental();
+            // Advance the RTC cursor too so the next save_after() on a local
+            // keystroke doesn't re-transmit the just-received remote changes.
+            lastRtcHeadsRef.current = model.get_heads();
             if (editorRef.current) {
                 suppressMutations.current = true;
                 const caretOffset = saveCaretOffset(editorRef.current);
@@ -335,19 +344,41 @@ function useDocumentSync(
     useEffect(() => { rtcRef.current = rtc; });
 
     /**
-     * Called after every local edit. Immediately surfaces the "Editing"
-     * indicator and schedules a 500 ms debounced send to BOTH channels:
+     * Called after every local edit.
      *
-     *   1. MatrixRTC / LiveKit (if connected) — real-time collaboration.
-     *   2. Matrix room timeline            — durable persistence.
+     * Two independent channels run at different cadences:
      *
-     * Sending to the timeline on every debounce (not just on unmount) ensures
-     * the document is never lost even if the user exits quickly.
+     *   1. MatrixRTC / LiveKit (if connected) — fires on EVERY call (every
+     *      keystroke). Uses save_after(lastRtcHeads) so each publish contains
+     *      only the changes since the previous RTC send, giving sub-50 ms
+     *      delivery to connected peers.
+     *
+     *   2. Matrix room timeline — fires after a 500 ms debounce. Uses
+     *      save_incremental() which has its own independent cursor, so it
+     *      always captures and persists the full batch of changes made during
+     *      the quiet period.
+     *
+     * The two cursors (lastRtcHeadsRef for RTC, internal automerge cursor for
+     * Matrix) are entirely independent so neither path affects the other.
      */
     const scheduleDeltaSend = useCallback(() => {
         if (!isCollaborative(composerModel)) return;
 
-        // Immediately surface the editing indicator.
+        // ── Channel 1: RTC — immediate, every keystroke ───────────────────
+        const rtc = rtcRef.current;
+        if (rtc?.isConnected) {
+            try {
+                const rtcDelta = composerModel.save_after(lastRtcHeadsRef.current);
+                if (rtcDelta.length > 0) {
+                    rtc.publishDelta(rtcDelta);
+                    lastRtcHeadsRef.current = composerModel.get_heads();
+                }
+            } catch (e) {
+                logger.warn("[DocumentView] Failed to publish RTC delta", e);
+            }
+        }
+
+        // ── Channel 2: Matrix — debounced, persistent ─────────────────────
         setSaveStatus("editing");
         if (savedClearTimer.current !== null) {
             clearTimeout(savedClearTimer.current);
@@ -377,11 +408,6 @@ function useDocumentSync(
                 }
 
                 const heads = composerModel.get_heads();
-
-                // Real-time channel: deliver immediately to connected peers.
-                if (rtcRef.current?.isConnected) {
-                    rtcRef.current.publishDelta(delta);
-                }
 
                 // Persistence channel: always write to the Matrix timeline so
                 // the document survives session boundaries and reconnects.
