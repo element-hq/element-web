@@ -79,7 +79,7 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
     /**
      * Whether to render links as clickable anchors.
      */
-    linkify: boolean;
+    linkify?: boolean;
     /**
      * Whether to include the `dir="auto"` attribute on the rendered element.
      * Always true for "div" elements.
