@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -11,9 +11,9 @@ import {
     type WidgetPipViewModel as WidgetPipViewModelInterface,
 } from "@element-hq/web-shared-components";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { type FC } from "react";
 import React from "react";
 
+import type { RefObject, FC } from "react";
 import { Action } from "../../dispatcher/actions";
 import WidgetStore, { type IApp } from "../../stores/WidgetStore";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
@@ -24,31 +24,54 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import PersistentApp from "../../components/views/elements/PersistentApp";
 
 export interface Props {
+    /**
+     * The widgetId this widget PiP view is showing.
+     */
     widgetId: string;
+    /**
+     * The room this widget PiP view model is associated with.
+     */
     room: Room;
+    /**
+     * A callback which is called when a mouse event (most likely mouse down) occurs at start of moving the pip around
+     */
+    onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    /**
+     * This callback ref will be used by the ViewModel once the view is moving.
+     * Widgets might be implemented with a top layer dom tree path containing the widget IFrame.
+     * This allows moving the Iframe around (Pip/in room) without remounting it.
+     * This callback allows any `PersistentApp` view / component to know when to update the IFrame position of the widget.
+     */
+    movePersistedElement: RefObject<(() => void) | null>;
 }
 
 export class WidgetPipViewModel
     extends BaseViewModel<WidgetPipViewSnapshot, Props>
     implements WidgetPipViewModelInterface
 {
-    private readonly widgetId: string;
-    private readonly room: Room;
+    /** The widget this view model uses for the PipView */
     private readonly widget: IApp;
-
+    /**
+     * The call associated with the widget (if the widget is a call widget)
+     * For non-call widgets, this will be `null`.
+     */
     private call: Call | null;
+    /** If the user is currently viewing the room associated with the PipView (`this.props.room`) */
     private viewingRoom?: boolean;
 
     public constructor(props: Props) {
         super(props, { widgetId: props.widgetId, roomName: props.room.name, roomId: props.room.roomId });
-        this.widgetId = props.widgetId;
-        this.room = props.room;
-        this.widget = WidgetStore.instance.getApps(this.room.roomId).find((app) => app.id === this.widgetId)!;
+        this.widget = WidgetStore.instance
+            .getApps(this.props.room.roomId)
+            .find((app) => app.id === this.props.widgetId)!;
         this.call = CallStore.instance.getCall(props.room.roomId) ?? null;
+        this.onStartMoving = props.onStartMoving;
 
-        this.disposables.trackListener(this.room, RoomEvent.Name, this.onRoomName);
+        this.disposables.trackListener(this.props.room, RoomEvent.Name, this.onRoomName);
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
     }
+
+    public onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
 
     public setViewingRoom(viewing: boolean): void {
         this.viewingRoom = viewing;
@@ -61,16 +84,16 @@ export class WidgetPipViewModel
         if (this.call !== null) {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: this.room.roomId,
+                room_id: this.props.room.roomId,
                 view_call: true,
                 metricsTrigger: "WebFloatingCallWindow",
             });
         } else if (this.viewingRoom) {
-            WidgetLayoutStore.instance.moveToContainer(this.room, this.widget, Container.Center);
+            WidgetLayoutStore.instance.moveToContainer(this.props.room, this.widget, Container.Center);
         } else {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: this.room.roomId,
+                room_id: this.props.room.roomId,
                 metricsTrigger: "WebFloatingCallWindow",
             });
         }
@@ -81,24 +104,26 @@ export class WidgetPipViewModel
      * @param props a copy of the PersistentApp component's props
      * @returns
      */
-    public persistentAppComponent: FC<React.ComponentProps<typeof PersistentApp>> = (props) => {
+    public persistentAppComponent: FC<
+        Pick<React.ComponentProps<typeof PersistentApp>, "persistentWidgetId" | "persistentRoomId">
+    > = (props) => {
         return (
             <PersistentApp
                 persistentWidgetId={props.persistentWidgetId}
                 persistentRoomId={props.persistentRoomId}
-                movePersistedElement={props.movePersistedElement}
+                movePersistedElement={this.props.movePersistedElement}
             />
         );
     };
 
     private readonly onRoomName = (): void => {
-        this.snapshot.merge({ roomName: this.room.name });
+        this.snapshot.merge({ roomName: this.props.room.name });
     };
 
     private readonly onCallChange = (...args: unknown[]): void => {
         const [call, forRoomId] = args as [Call | null, string];
-        if (forRoomId === this.room.roomId) {
-            this.call = call?.widget.id === this.widgetId ? call : null;
+        if (forRoomId === this.props.room.roomId) {
+            this.call = call?.widget.id === this.props.widgetId ? call : null;
         }
     };
 }

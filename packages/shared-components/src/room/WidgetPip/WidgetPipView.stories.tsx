@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
- * Please see LICENSE files in the repository root for full details.
- */
+Copyright (c) 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
 import { type Meta, type StoryFn } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import { useMockedViewModel } from "../../viewmodel";
 import { WidgetPipView, type WidgetPipViewActions, type WidgetPipViewSnapshot } from "./WidgetPipView";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type WidgetPipViewProps = WidgetPipViewSnapshot & WidgetPipViewActions;
 
@@ -19,26 +21,23 @@ const RoomAvatarMock: React.FC = () => (
 );
 const PersistentAppMock: React.FC = () => <div style={{ backgroundColor: "grey", flexGrow: 1 }} />;
 
-const WidgetPipViewWrapper = ({
+const WidgetPipViewWrapperImpl = ({
     onBackClick,
     persistentAppComponent,
     setViewingRoom,
+    onStartMoving,
     ...rest
 }: WidgetPipViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         onBackClick,
         persistentAppComponent,
         setViewingRoom,
+        onStartMoving,
     });
-    return (
-        <WidgetPipView
-            vm={vm}
-            RoomAvatar={RoomAvatarMock}
-            movePersistedElement={React.createRef()}
-            onStartMoving={() => {}}
-        />
-    );
+    return <WidgetPipView vm={vm} RoomAvatar={RoomAvatarMock} />;
 };
+
+const WidgetPipViewWrapper = withViewDocs(WidgetPipViewWrapperImpl, WidgetPipView);
 
 export default {
     title: "room/WidgetPipView",
@@ -52,6 +51,7 @@ export default {
         onBackClick: fn(),
         persistentAppComponent: PersistentAppMock,
         setViewingRoom: fn(),
+        onStartMoving: fn(),
     },
     parameters: {
         design: {

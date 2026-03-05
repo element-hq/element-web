@@ -9,11 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type RefObject, type ReactNode, useRef, useEffect } from "react";
 import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    useCreateAutoDisposedViewModel,
-    WidgetPipView,
-    type WidgetPipViewProps,
-} from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, WidgetPipView } from "@element-hq/web-shared-components";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -291,8 +287,7 @@ export const PipContainer: React.FC = () => {
     return <PipContainerInner movePersistedElement={movePersistedElement} />;
 };
 
-type Props = { viewingRoom: boolean } & WidgetPipViewModelProps &
-    Pick<WidgetPipViewProps, "onStartMoving" | "movePersistedElement" | "onStartMoving">;
+type Props = { viewingRoom: boolean } & WidgetPipViewModelProps;
 
 /**
  * A wrapper for the WidgetPipView component.
@@ -314,8 +309,6 @@ const WidgetPipWrappedView: React.FC<Props> = (props: Props) => {
         <WidgetPipView
             vm={vm}
             // props only used in the view and not the vm get passed directly.
-            movePersistedElement={props.movePersistedElement}
-            onStartMoving={props.onStartMoving}
             RoomAvatar={({ size }) => <RoomAvatar size={size} room={props.room} />}
         />
     );

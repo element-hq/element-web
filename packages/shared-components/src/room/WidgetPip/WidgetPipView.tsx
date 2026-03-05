@@ -1,12 +1,11 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright (c) 2026 Element Creations Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject, type FC } from "react";
+import React, { type FC } from "react";
 import { ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { IconButton } from "@vector-im/compound-web";
 
@@ -15,18 +14,46 @@ import { useViewModel, type ViewModel } from "../../viewmodel";
 import { useI18n } from "../..";
 
 export interface WidgetPipViewActions {
+    /**
+     * Call this once the back button is clicked in the pip view.
+     * The view model will handle navigating back to the associated room.
+     * @param ev The mouse event that triggered the back click.
+     */
     onBackClick: (ev: React.MouseEvent<Element, MouseEvent>) => void;
+    /**
+     * The viewModel needs to know the if the room is currently being viewed.
+     * @param viewing if we are currently viewing the room.
+     */
     setViewingRoom: (viewing: boolean) => void;
+    /**
+     * The view model exposes the `<PersistentApp />` component via this action.
+     * `PersistentApp` is not available in shared components.
+     * It can be any React component that renders a widget.
+     * It will be mounted inside the PipView.
+     */
     persistentAppComponent: React.FC<{
         persistentWidgetId: string;
         persistentRoomId: string;
-        movePersistedElement: RefObject<(() => void) | null>;
     }>;
+    /**
+     * Action that needs to be called when the pip view starts to get dragged.
+     * @param ev The mouse event that triggered the drag start.
+     */
+    onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
 }
 
 export interface WidgetPipViewSnapshot {
+    /**
+     * The widget Id this view is rendering.
+     */
     widgetId: string;
+    /**
+     * The room name the Pip View should use in the header.
+     */
     roomName: string;
+    /**
+     * The room Id this Pip views widget is associated with.
+     */
     roomId: string;
 }
 
@@ -36,22 +63,41 @@ export interface WidgetPipViewSnapshot {
 export type WidgetPipViewModel = ViewModel<WidgetPipViewSnapshot> & WidgetPipViewActions;
 
 export interface WidgetPipViewProps {
+    /**
+     * The WidgetPipViewModel to expose the WidgetPipViewSnapshot and:
+     *  - handling the back button callback.
+     *  - exposing the persistentApp react component to the view.
+     */
     vm: WidgetPipViewModel;
+    /**
+     * The avatar is passed as a React component.
+     * This allows to use any avatar implementation in this view (Like RoomAvatar)
+     */
+    // In the future the avatar compoentn can also become a shared component. Then it would be accessible
+    // in the shared component package and we could remove this prop.
     RoomAvatar: React.FC<{ size: string }>;
-    onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
-    movePersistedElement: RefObject<(() => void) | null>;
 }
 
 /**
  * A picture-in-picture view for a widget. Additional controls are shown if the
  * widget is a call of some sort.
  */
-export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar, onStartMoving, movePersistedElement }) => {
+export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar }) => {
     const snapshot = useViewModel(vm);
     const { translate: _t } = useI18n();
     return (
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        <div data-testid="widget-pip-container" className={styles.container} onMouseDown={onStartMoving}>
+        // The interaction we use the onMouseDown handler is only useful for dragging the widget around.
+        // Which is not doable via the keyboard. The output of this interaction can only be altered
+        // if the user interacts with a mouse. Hence there is no use in providing an alternative.
+        // In the future we might consider introducing alternative shortcuts for moving the PiP around
+        // with the keyboard.
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+        <div
+            role="complementary"
+            data-testid="widget-pip-container"
+            className={styles.container}
+            onMouseDown={vm.onStartMoving}
+        >
             <div className={styles.header}>
                 <IconButton
                     size="28px"
@@ -66,13 +112,7 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar, onStartM
                 {snapshot.roomName}
             </div>
             <div className={styles.roundedCornerContainer}>
-                <vm.persistentAppComponent
-                    persistentWidgetId={snapshot.widgetId}
-                    persistentRoomId={snapshot.roomId}
-                    movePersistedElement={movePersistedElement}
-                >
-                    {}
-                </vm.persistentAppComponent>
+                <vm.persistentAppComponent persistentWidgetId={snapshot.widgetId} persistentRoomId={snapshot.roomId} />
             </div>
         </div>
     );
