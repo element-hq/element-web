@@ -103,7 +103,7 @@ async function expectTimelineSticker(page: Page, serverName: string, roomId: str
 }
 
 async function expectFileTile(page: Page, roomId: string, contentUri: string) {
-    await expect(page.locator(".mx_MFileBody_info_filename")).toContainText(STICKER_NAME);
+    await expect(page.locator(".mx_MFileBody [data-type='info-label']")).toContainText(STICKER_NAME);
 }
 
 async function setWidgetAccountData(
