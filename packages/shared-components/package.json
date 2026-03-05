@@ -60,7 +60,11 @@
         "matrix-web-i18n": "catalog:",
         "react-merge-refs": "^3.0.2",
         "react-virtuoso": "^4.14.0",
-        "temporal-polyfill": "^0.3.0"
+        "temporal-polyfill": "^0.3.0",
+        "linkify-html": "4.3.2",
+        "linkify-react": "4.3.2",
+        "linkify-string": "4.3.2",
+        "linkifyjs": "4.3.2"
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common-local": "workspace:*",

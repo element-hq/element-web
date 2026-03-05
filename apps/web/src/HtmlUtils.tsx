@@ -17,11 +17,12 @@ import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
+import { linkifyHtml } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { linkifyHtml, sanitizeHtmlParams, transformTags } from "./Linkify";
+import { sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";

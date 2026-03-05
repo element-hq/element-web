@@ -12,6 +12,7 @@ import { type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
+import { linkifyjs } from "@element-hq/web-shared-components";
 
 import type EditorModel from "../../../editor/model";
 import HistoryManager from "../../../editor/history";
@@ -40,7 +41,6 @@ import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";
-import { linkify } from "../../../linkify-matrix";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
@@ -357,7 +357,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const range = getRangeForSelection(this.editorRef.current, model, document.getSelection()!);
 
         // If the user is pasting a link, and has a range selected which is not a link, wrap the range with the link
-        if (plainText && range.length > 0 && linkify.test(plainText) && !linkify.test(range.text)) {
+        if (plainText && range.length > 0 && linkifyjs.test(plainText) && !linkifyjs.test(range.text)) {
             formatRangeAsLink(range, plainText);
         } else {
             replaceRangeAndMoveCaret(range, parts);
