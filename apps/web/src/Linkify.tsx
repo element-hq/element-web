@@ -8,17 +8,30 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
-import { merge } from "lodash";
 import {
     PERMITTED_URL_SCHEMES,
-    LinkifyComponent,
+    type LinkedTextProps,
     linkifyString as _linkifyString,
     linkifyHtml as _linkifyHtml,
+    LinkedText,
+    LinkifyMatrixOpaqueIdType,
+    generateLinkedTextOptions,
+    type linkifyjs,
 } from "@element-hq/web-shared-components";
+import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
 
-import { ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
-import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
+import { ELEMENT_URL_PATTERN } from "./linkify-matrix";
 import { mediaFromMxc } from "./customisations/Media";
+import {
+    parsePermalink,
+    tryTransformEntityToPermalink,
+    tryTransformPermalinkToLocalHref,
+} from "./utils/permalinks/Permalinks";
+import dis from "./dispatcher/dispatcher";
+import { Action } from "./dispatcher/actions";
+import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -197,36 +210,173 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
-/* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children }: React.ComponentProps<typeof LinkifyComponent>): ReactElement {
+function onUserClick(event: MouseEvent, userId: string): void {
+    event.preventDefault();
+    dis.dispatch<ViewUserPayload>({
+        action: Action.ViewUser,
+        member: new User(userId),
+    });
+}
+
+function onAliasClick(event: MouseEvent, roomAlias: string): void {
+    event.preventDefault();
+    dis.dispatch<ViewRoomPayload>({
+        action: Action.ViewRoom,
+        room_alias: roomAlias,
+        metricsTrigger: "Timeline",
+        metricsViaKeyboard: false,
+    });
+}
+
+function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+    // intercept local permalinks to users and show them like userids (in userinfo of current room)
+    try {
+        const permalink = parsePermalink(href);
+        if (permalink?.userId) {
+            return {
+                click: function (e: MouseEvent) {
+                    onClickAction?.();
+                    onUserClick(e, permalink.userId!);
+                },
+            };
+        } else {
+            // for events, rooms etc. (anything other than users)
+            const localHref = tryTransformPermalinkToLocalHref(href);
+            if (localHref !== href) {
+                // it could be converted to a localHref -> therefore handle locally
+                return {
+                    click: function (e: MouseEvent) {
+                        e.preventDefault();
+                        onClickAction?.();
+                        window.location.hash = localHref;
+                    },
+                };
+            }
+        }
+    } catch {
+        // OK fine, it's not actually a permalink
+    }
+    return {};
+}
+
+function userIdEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+    return {
+        click: function (e: MouseEvent) {
+            e.preventDefault();
+            onClickAction?.();
+            const userId = parsePermalink(href)?.userId ?? href;
+            if (userId) onUserClick(e, userId);
+        },
+    };
+}
+
+function roomAliasEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+    return {
+        click: function (e: MouseEvent) {
+            e.preventDefault();
+            onClickAction?.();
+            const alias = parsePermalink(href)?.roomIdOrAlias ?? href;
+            if (alias) onAliasClick(e, alias);
+        },
+    };
+}
+
+function UrlTargetTransformFunction(href: string | string): string {
+    try {
+        const transformed = tryTransformPermalinkToLocalHref(href);
+        if (
+            transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
+            decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https links to Element domains
+        ) {
+            return "";
+        } else {
+            return "_blank";
+        }
+    } catch {
+        // malformed URI
+    }
+    return "";
+}
+
+export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): string {
+    console.log("formatHref", href, type);
+    switch (type) {
+        case LinkifyMatrixOpaqueIdType.URL:
+            if (href.startsWith("mxc://") && MatrixClientPeg.get()) {
+                return getHttpUriForMxc(
+                    MatrixClientPeg.get()!.baseUrl,
+                    href,
+                    undefined,
+                    undefined,
+                    undefined,
+                    false,
+                    true,
+                );
+            }
+        // fallthrough
+        case LinkifyMatrixOpaqueIdType.RoomAlias:
+        case LinkifyMatrixOpaqueIdType.UserId:
+        default: {
+            console.log("formatHref", { href, type });
+            return tryTransformEntityToPermalink(MatrixClientPeg.safeGet(), href) ?? "";
+        }
+    }
+}
+const DefaultLinkifyOptions = {
+    userIdListener: userIdEventListeners,
+    roomAliasListener: roomAliasEventListeners,
+    urlListener: urlEventListeners,
+    hrefTransformer: formatHref,
+    urlTargetTransformer: UrlTargetTransformFunction,
+};
+
+/**
+ * Wrapper around LinkedText providing Element Web specific hooks.
+ */
+export function ElementLinkedText({
+    children,
+    onLinkClick,
+    ...props
+}: LinkedTextProps & { onLinkClick?: () => void }): ReactElement {
+    // If the component requires an additional action on click, inject ith ere.
+    const options = onLinkClick
+        ? {
+              ...DefaultLinkifyOptions,
+              userIdListener: (href: string) => userIdEventListeners(href, onLinkClick),
+              roomAliasListener: (href: string) => roomAliasEventListeners(href, onLinkClick),
+              urlListener: (href: string) => urlEventListeners(href, onLinkClick),
+          }
+        : DefaultLinkifyOptions;
+    console.log("ElementLinkedText", children);
     return (
-        <LinkifyComponent as={as} options={merge({}, linkifyMatrixOptions, options)}>
+        <LinkedText {...options} {...props}>
             {children}
-        </LinkifyComponent>
+        </LinkedText>
     );
 }
 
 /**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
- * @param {string} str string to linkify
- * @param {object} [options] Options for linkifyString. Default: linkifyMatrixOptions
- * @returns {string} Linkified string
+ * @param str string to linkify
+ * @param [options] Options for linkifyString.
+ * @returns Linkified string
  */
-export function linkifyString(str: string, options = linkifyMatrixOptions): string {
-    return _linkifyString(str, options);
+export function linkifyString(value: string, options = generateLinkedTextOptions(DefaultLinkifyOptions)): string {
+    return _linkifyString(value, options);
 }
 
 /**
  * Linkifies the given HTML-formatted string. This is a wrapper around 'linkifyjs/html'.
  *
- * @param {string} str HTML string to linkify
- * @param {object} [options] Options for linkifyHtml. Default: linkifyMatrixOptions
- * @returns {string} Linkified string
+ * @param str HTML string to linkify
+ * @param [options] Options for linkifyHtml.
+ * @returns Linkified string
  */
-export function linkifyHtml(str: string, options = linkifyMatrixOptions): string {
-    return _linkifyHtml(str, options);
+export function linkifyHtml(value: string, options = generateLinkedTextOptions(DefaultLinkifyOptions)): string {
+    return _linkifyHtml(value, options);
 }
+
 /**
  * Linkify the given string and sanitize the HTML afterwards.
  *
@@ -234,6 +384,9 @@ export function linkifyHtml(str: string, options = linkifyMatrixOptions): string
  * @param [options] Options for linkifyString. Default: linkifyMatrixOptions
  * @returns HTML string
  */
-export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrixOptions): string {
+export function linkifyAndSanitizeHtml(
+    dirtyHtml: string,
+    options = generateLinkedTextOptions(DefaultLinkifyOptions),
+): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }

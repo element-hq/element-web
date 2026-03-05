@@ -6,28 +6,16 @@
  */
 
 import { Link, Text } from "@vector-im/compound-web";
-import React, { type ComponentProps } from "react";
+import React, { useMemo, type ComponentProps } from "react";
 import classNames from "classnames";
+import Linkify from "linkify-react";
 
 import type { Opts } from "linkifyjs";
 import styles from "./LinkedText.module.css";
-import { LinkifyComponent, LinkifyMatrixOpaqueIdType } from "../linkify";
+import { generateLinkedTextOptions, type LinkedTextOptions } from "../linkify";
 
-type Props = ComponentProps<typeof Text>;
+export type LinkedTextProps = ComponentProps<typeof Text> & LinkedTextOptions;
 
-const options: Opts = {
-    render: Link,
-    target: "_blank",
-    rel: "noreferrer noopener",
-    defaultProtocol: "https",
-    // By default, ignore Matrix ID types.
-    // Other applications may implement their own version of LinkifyComponent.
-    // In the future, shared-components may fully implement this logic.
-    validate: (_value, type: string) =>
-        ![LinkifyMatrixOpaqueIdType.RoomAlias, LinkifyMatrixOpaqueIdType.UserId].includes(
-            type as LinkifyMatrixOpaqueIdType,
-        ),
-};
 /**
  * A component that renders URLs as clickable links inside some plain text.
  *
@@ -38,15 +26,35 @@ const options: Opts = {
  * </LinkedText>
  * ```
  */
-export function LinkedText({ children, className, ...textProps }: Props): React.ReactNode {
+export function LinkedText({
+    children,
+    className,
+    userIdListener,
+    roomAliasListener,
+    urlListener,
+    urlTargetTransformer,
+    hrefTransformer,
+    canClick,
+    ...textProps
+}: LinkedTextProps): React.ReactNode {
+    const options = useMemo<Opts>(
+        () => ({
+            render: Link,
+            ...generateLinkedTextOptions({
+                canClick,
+                urlListener,
+                hrefTransformer,
+                urlTargetTransformer,
+                userIdListener,
+                roomAliasListener,
+            }),
+        }),
+        [canClick, urlListener, hrefTransformer, urlTargetTransformer, userIdListener, roomAliasListener],
+    );
+
     return (
-        <LinkifyComponent
-            className={classNames(styles.container, className)}
-            as={Text}
-            options={options}
-            {...textProps}
-        >
+        <Linkify className={classNames(styles.container, className)} as={Text} options={options} {...textProps}>
             {children}
-        </LinkifyComponent>
+        </Linkify>
     );
 }

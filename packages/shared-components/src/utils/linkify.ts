@@ -175,9 +175,108 @@ linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.UserId, ({ scanner, parser })
     });
 });
 
-// Export our instances of linkify to ensure there is a singular instance of it.
+export interface LinkedTextOptions {
+    urlListener?: (href: string) => linkifyjs.EventListeners;
+    roomAliasListener?: (href: string) => linkifyjs.EventListeners;
+    userIdListener?: (href: string) => linkifyjs.EventListeners;
+    urlTargetTransformer?: (href: string) => string;
+    hrefTransformer?: (href: string, target: LinkifyMatrixOpaqueIdType) => string;
+    /**
+     * Disable this to force the
+     */
+    canClick?: boolean;
+}
+
+/**
+ * Generates a linkifyjs options object that is reasonably paired down
+ * to just the essentials required for an Element client.
+ *
+ * @param param0
+ * @returns
+ */
+export function generateLinkedTextOptions({
+    urlListener,
+    roomAliasListener,
+    userIdListener,
+    urlTargetTransformer,
+    hrefTransformer,
+    canClick,
+}: LinkedTextOptions): linkifyjs.Opts {
+    const events = (href: string, type: string): linkifyjs.EventListeners => {
+        // Attach click handlers to links based on their type
+        switch (type as LinkifyMatrixOpaqueIdType) {
+            case LinkifyMatrixOpaqueIdType.URL: {
+                if (urlListener) {
+                    return urlListener(href);
+                }
+                break;
+            }
+            case LinkifyMatrixOpaqueIdType.UserId:
+                if (userIdListener) {
+                    return userIdListener(href);
+                }
+                break;
+            case LinkifyMatrixOpaqueIdType.RoomAlias:
+                if (roomAliasListener) {
+                    return roomAliasListener(href);
+                }
+                break;
+        }
+
+        return {};
+    };
+
+    const attributes = (href: string, type: string): Record<string, unknown> => {
+        // Sometimes components want to render links to prettify but not make them clicky.
+        if (canClick === false) {
+            return {
+                "href": undefined,
+                "data-linkfied": "true",
+            };
+        }
+
+        const attrs: Record<string, unknown> = {
+            "data-linkfied": "true",
+        };
+
+        const options = events(href, type);
+        // linkify-react doesn't respect `events` and needs it mapping to React attributes
+        // so we need to manually add the click handler to the attributes
+        // https://linkify.js.org/docs/linkify-react.html#events
+        if (options?.click) {
+            attrs.onClick = options.click;
+        }
+
+        return attrs;
+    };
+
+    return {
+        rel: "noreferrer noopener",
+        ignoreTags: ["a", "pre", "code"],
+        defaultProtocol: "https",
+        events,
+        attributes,
+        target(href, type) {
+            if (type === LinkifyMatrixOpaqueIdType.URL && urlTargetTransformer) {
+                return urlTargetTransformer(href);
+            }
+            return "_blank";
+        },
+        ...(hrefTransformer && canClick !== false
+            ? {
+                  formatHref: (href, type) => hrefTransformer(href, type as LinkifyMatrixOpaqueIdType),
+              }
+            : undefined),
+        // By default, ignore Matrix ID types.
+        // Other applications may implement their own version of LinkifyComponent.
+        validate: (_value, type: string) =>
+            !!(type === LinkifyMatrixOpaqueIdType.UserId && userIdListener) ||
+            !!(type === LinkifyMatrixOpaqueIdType.RoomAlias && roomAliasListener) ||
+            type === LinkifyMatrixOpaqueIdType.URL,
+    } satisfies linkifyjs.Opts;
+}
+
 export { default as linkifyString } from "linkify-string";
 export { default as linkifyHtml } from "linkify-html";
-export { default as LinkifyComponent } from "linkify-react";
 
 export { linkifyjs };
