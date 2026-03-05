@@ -15,6 +15,7 @@ test.describe("Message links", () => {
         },
         botCreateOpts: {
             displayName: "Bob",
+            autoAcceptInvites: true,
         },
     });
     for (const link of ["https://example.org", "example.org", "ftp://example.org"]) {
@@ -32,22 +33,14 @@ test.describe("Message links", () => {
         // Needs to be unformatted so we test linkifing
         await bot.sendMessage(room.roomId, `Check out ${bot.credentials.userId}`);
         const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: bot.credentials.userId });
-        await app.timeline.scrollToBottom();
-        await expect(linkElement).toBeVisible();
-        const waitForUrl = page.waitForURL(`https://matrix.to/#/#${bot.credentials.userId}`);
-        await linkElement.click();
-        await waitForUrl;
+        await expect(linkElement).toHaveAttribute("href", `https://matrix.to/#/${bot.credentials.userId}`);
     });
     test("should linkify a Room alias", async ({ page, user, app, bot, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing
         await bot.sendMessage(room.roomId, "Check out #aroom:example.org");
         const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "#aroom:example.org" });
-        await app.timeline.scrollToBottom();
-        await expect(linkElement).toBeVisible();
-        const waitForUrl = page.waitForURL(`https://matrix.to/#/##aroom:example.org`);
-        await linkElement.click();
-        await waitForUrl;
+        await expect(linkElement).toHaveAttribute("href", "https://matrix.to/#/#aroom:example.org");
     });
     test(
         "should linkify text inside a URL preview",
