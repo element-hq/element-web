@@ -18,6 +18,7 @@ import {
     type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
 } from "./DisambiguatedProfileView";
+import styles from "./DisambiguatedProfile.module.css";
 import { MockViewModel } from "../../viewmodel/MockViewModel";
 
 const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample } = composeStories(stories);
@@ -198,26 +199,24 @@ describe("DisambiguatedProfileView", () => {
     it("should apply the display name class hook from snapshot props", () => {
         const vm = new DisambiguatedProfileViewModel({
             displayName: "Legacy User",
-            classNameDisplayName: "mx_DisambiguatedProfile_displayName",
+            emphasizeDisplayName: true,
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByText("Legacy User")).toHaveClass("mx_DisambiguatedProfile_displayName");
+        expect(screen.getByText("Legacy User")).toHaveClass(styles.disambiguatedProfile_displayName);
     });
 
     it("should apply the MXID class hook from snapshot props without leaking the root className", () => {
         const vm = new DisambiguatedProfileViewModel({
             displayName: "Legacy User",
             displayIdentifier: "@legacy:example.org",
-            className: "mx_DisambiguatedProfile",
-            classNameDisplayIdentifier: "mx_DisambiguatedProfile_mxid",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
 
         const mxidElement = screen.getByText("@legacy:example.org");
-        expect(mxidElement).toHaveClass("mx_DisambiguatedProfile_mxid");
-        expect(mxidElement).not.toHaveClass("mx_DisambiguatedProfile");
+        expect(mxidElement).toHaveClass(styles.disambiguatedProfile_mxid);
+        expect(mxidElement).not.toHaveClass(styles.disambiguatedProfile);
     });
 
     it("should apply custom className to the profile container", () => {
@@ -226,7 +225,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} className="custom-profile another-class" />);
-        const profileContainer = getProfileContainer("Classed User");
-        expect(profileContainer).toHaveClass("custom-profile", "another-class");
+        const profileContainer = screen.getByText("Classed User").parentElement;
+        expect(profileContainer).toHaveClass("custom-profile", "another-class", styles.disambiguatedProfile);
     });
 });

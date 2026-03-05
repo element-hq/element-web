@@ -39,7 +39,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
             title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
-              class="mx_DisambiguatedProfile_displayName"
+              class="mx_DisambiguatedProfile"
               dir="auto"
             >
               @userId:matrix.org
@@ -113,7 +113,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
             title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
-              class="mx_DisambiguatedProfile_displayName"
+              class="mx_DisambiguatedProfile"
               dir="auto"
             >
               @userId:matrix.org
@@ -187,7 +187,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
             title="@userId:matrix.org (@userId:matrix.org)"
           >
             <span
-              class="mx_DisambiguatedProfile_displayName"
+              class="mx_DisambiguatedProfile"
               dir="auto"
             >
               @userId:matrix.org

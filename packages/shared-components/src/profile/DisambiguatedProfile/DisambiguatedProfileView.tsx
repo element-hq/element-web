@@ -82,10 +82,10 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
 
-    const displayNameClasses = classNames(classNameDisplayName, colorClass, {
+    const displayNameClasses = classNames(className, colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
     });
-    const displayIdentifierClasses = classNames(classNameDisplayIdentifier, styles.disambiguatedProfile_mxid);
+    const displayIdentifierClasses = classNames(className, styles.disambiguatedProfile_mxid);
 
     const Component = vm.onClick ? "button" : "div";
 

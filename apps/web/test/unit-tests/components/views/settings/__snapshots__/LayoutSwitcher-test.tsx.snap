@@ -75,7 +75,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   type="button"
                 >
                   <span
-                    class="mx_DisambiguatedProfile_displayName mx_Username_color2 _disambiguatedProfile_displayName_1fpl7_23"
+                    class="mx_DisambiguatedProfile mx_Username_color2 _disambiguatedProfile_displayName_1fpl7_23"
                     dir="auto"
                   >
                     Alice
@@ -215,7 +215,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   type="button"
                 >
                   <span
-                    class="mx_DisambiguatedProfile_displayName mx_Username_color2 _disambiguatedProfile_displayName_1fpl7_23"
+                    class="mx_DisambiguatedProfile mx_Username_color2 _disambiguatedProfile_displayName_1fpl7_23"
                     dir="auto"
                   >
                     Alice
@@ -358,7 +358,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   type="button"
                 >
                   <span
-                    class="mx_DisambiguatedProfile_displayName mx_Username_color2 _disambiguatedProfile_displayName_1fpl7_23"
+                    class="mx_DisambiguatedProfile mx_Username_color2 _disambiguatedProfile_displayName_1fpl7_23"
                     dir="auto"
                   >
                     Alice
