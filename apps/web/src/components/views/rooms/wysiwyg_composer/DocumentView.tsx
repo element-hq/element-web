@@ -287,8 +287,11 @@ function useDocumentSync(
         const applyDeltaEvent = (event: import("matrix-js-sdk/src/matrix").MatrixEvent): void => {
             if (event.getRoomId() !== room.roomId) return;
             if (event.getType() !== DOC_DELTA_EVENT_TYPE) return;
-            // Skip our own events — local model already has our changes.
-            if (event.getSender() === client.getUserId()) return;
+            // Skip events sent by this exact device — we already have those
+            // changes in our local model.  We must NOT skip events from the same
+            // user on a different device (e.g. two tabs open).
+            const senderDeviceId = event.getContent<{ device_id?: string }>().device_id;
+            if (event.getSender() === client.getUserId() && senderDeviceId === client.getDeviceId()) return;
             const data = event.getContent<{ data?: string }>().data;
             if (!data) return;
             logger.info(`[DocumentView] Matrix delta event from ${event.getSender()}, applying ${data.length}b (base64)`);
@@ -384,6 +387,7 @@ function useDocumentSync(
                 await client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
                     data: base64Encode(delta),
                     heads,
+                    device_id: client.getDeviceId(),
                 });
 
                 deltaSendCount.current++;
@@ -432,6 +436,7 @@ function useDocumentSync(
                     client.sendEvent(room.roomId, DOC_DELTA_EVENT_TYPE as any, {
                         data: base64Encode(delta),
                         heads,
+                        device_id: client.getDeviceId(),
                     }).catch((e) => logger.warn("[DocumentView] Failed to send final delta on unmount", e));
                 }
                 // Always save snapshot on close so next load starts fresh.

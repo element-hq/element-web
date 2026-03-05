@@ -19,7 +19,7 @@ Please see LICENSE files in the repository root for full details.
  * `isConnected` stays false and the caller should fall back to Matrix events.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type Room as MatrixRoom, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { isLivekitTransportConfig } from "matrix-js-sdk/src/matrixrtc";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -245,5 +245,16 @@ export function useDocumentRTC(
             .catch((e: unknown) => logger.warn("[DocumentRTC] Failed to publish cursor", e));
     }, []);
 
-    return { publishDelta, publishCursor, onDeltaRef, onCursorRef, onPeerLeaveRef, isConnected };
+    // Wrap in useMemo so the returned object reference is stable across renders
+    // (only changes when isConnected changes).  Without this, DocumentView's
+    // wiring useEffect ([rtc, applyDeltaBytes]) fires on every render because
+    // the plain object literal `{}` produces a new reference each time.
+    const result = useMemo(
+        () => ({ publishDelta, publishCursor, onDeltaRef, onCursorRef, onPeerLeaveRef, isConnected }),
+        // publishDelta/publishCursor are useCallback stable; refs are always stable;
+        // only isConnected can change.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [isConnected],
+    );
+    return result;
 }
