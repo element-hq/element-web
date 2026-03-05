@@ -25,13 +25,3 @@ export const Default = Template.bind({});
 Default.args = {
     children: "I love working on https://matrix.org.",
 };
-
-export const WithUserId = Template.bind({});
-WithUserId.args = {
-    children: "I love chatting to @foo:bar.org.",
-};
-
-export const WithAlias = Template.bind({});
-WithAlias.args = {
-    children: "I love chatting to #foo:bar.",
-};
