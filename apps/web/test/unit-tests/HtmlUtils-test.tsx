@@ -100,7 +100,9 @@ describe("bodyToHtml", () => {
             },
         );
 
-        expect(html).toMatchInlineSnapshot(`"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener" data-linkified="true">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`);
+        expect(html).toMatchInlineSnapshot(
+            `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener" data-linkified="true">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
+        );
     });
 
     it("should hightlight parts of links in HTML message highlighting", () => {
