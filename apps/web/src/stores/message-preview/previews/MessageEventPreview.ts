@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 
-import { type IPreview } from "./IPreview";
+import { type Preview } from "./Preview";
 import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { getHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
 
-export class MessageEventPreview implements IPreview {
+export class MessageEventPreview implements Preview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();
 

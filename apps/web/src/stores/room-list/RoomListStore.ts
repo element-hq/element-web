@@ -35,7 +35,7 @@ import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getChangedOverrideRoomMutePushRules } from "../room-list-v3/utils";
-import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
+import { type TagID } from "../room-list-v3/skip-list/tag";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 export const LISTS_LOADING_EVENT = RoomListStoreEvent.ListsLoading; // unused; used by SlidingRoomListStore
@@ -595,19 +595,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
         if (removed) {
             promise.then(() => this.updateFn.trigger());
         }
-    }
-
-    /**
-     * Gets the tags for a room identified by the store. The returned set
-     * should never be empty, and will contain DefaultTagID.Untagged if
-     * the store is not aware of any tags.
-     * @param room The room to get the tags for.
-     * @returns The tags for the room.
-     */
-    public getTagsForRoom(room: Room): TagID[] {
-        const algorithmTags = this.algorithm.getTagsForRoom(room);
-        if (!algorithmTags) return [DefaultTagID.Untagged];
-        return algorithmTags;
     }
 
     public getCount(tagId: TagID): number {
