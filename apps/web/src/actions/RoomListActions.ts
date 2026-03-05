@@ -38,8 +38,8 @@ export default class RoomListActions {
     public static tagRoom(
         matrixClient: MatrixClient,
         room: Room,
-        oldTag: TagID | null,
-        newTag: TagID | null,
+        oldTag: TagID | null | undefined,
+        newTag: TagID | null | undefined,
         newIndex: number,
     ): AsyncActionPayload {
         return asyncAction(
