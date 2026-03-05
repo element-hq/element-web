@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: row;
     min-width: 0;
+    gap: var(--cpd-space-2x);
 
     & a {
         display: flex;
@@ -52,6 +53,8 @@
 }
 
 .content [data-type="download"] {
+    display: inline-flex;
+    align-items: center;
     color: var(--cpd-color-text-action-accent);
 
     & iframe {
@@ -59,14 +62,6 @@
         padding: 0;
         border: none;
         width: 100%;
-    }
-
-    & object {
-        margin-left: -1 * var(--cpd-space-4x);
-        padding-right: var(--cpd-space-1x);
-        margin-top: -1 * var(--cpd-space-1x);
-        vertical-align: middle;
-        pointer-events: none;
     }
 }
 

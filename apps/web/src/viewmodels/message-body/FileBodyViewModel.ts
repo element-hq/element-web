@@ -137,76 +137,79 @@ export class FileBodyViewModel
         //Whether or not to show the default placeholder for the file. Defaults to true.
         const showFileInfo = props.showFileInfo ?? true;
 
-        let showDownloadLink =
+        let showDownload =
             !showFileInfo ||
             (props.timelineRenderingType !== TimelineRenderingType.Room &&
                 props.timelineRenderingType !== TimelineRenderingType.Search &&
                 props.timelineRenderingType !== TimelineRenderingType.Pinned);
         if (showFileInfo) {
-            showDownloadLink = false;
+            showDownload = false;
         }
         if (props.timelineRenderingType === TimelineRenderingType.Thread) {
-            showDownloadLink = false;
+            showDownload = false;
         }
 
-        const fileInfoLabel = presentableTextForFile(content, _t("common|attachment"), true, true);
+        const fileInfoLabel = showFileInfo
+            ? presentableTextForFile(content, _t("common|attachment"), true, true)
+            : undefined;
         const fileInfoTooltip = showFileInfo
             ? presentableTextForFile(content, _t("common|attachment"), true)
             : undefined;
-        const downloadLabel = downloadLabelForFile(content, true);
+        const fileInfoIcon = showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined;
+        const downloadLabel = showDownload ? downloadLabelForFile(content, true) : undefined;
+        const downloadTitle = showDownload
+            ? presentableTextForFile(content, _t("common|attachment"), true, true)
+            : undefined;
 
         if (props.forExport) {
             return {
                 rendering: FileBodyViewRendering.EXPORT,
-                label: showFileInfo ? fileInfoLabel : undefined,
-                tooltip: fileInfoTooltip,
-                icon: showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined,
-                href: content.file?.url || content.url,
+                infoShow: showFileInfo,
+                infoLabel: fileInfoLabel,
+                infoTooltip: fileInfoTooltip,
+                infoIcon: fileInfoIcon,
+                infoHref: content.file?.url || content.url,
             };
         }
 
         if (isEncrypted) {
-            const rendering = showDownloadLink
-                ? decryptedBlob
-                    ? FileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME
-                    : FileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING
-                : FileBodyViewRendering.INFO;
+            const rendering = decryptedBlob
+                ? FileBodyViewRendering.ENCRYPTED_IFRAME
+                : FileBodyViewRendering.ENCRYPTED_PENDING;
 
             return {
                 rendering,
-                label: rendering === FileBodyViewRendering.INFO ? fileInfoLabel : downloadLabel,
-                tooltip: rendering === FileBodyViewRendering.INFO ? fileInfoTooltip : undefined,
-                icon:
-                    rendering === FileBodyViewRendering.INFO
-                        ? showFileInfo
-                            ? FileBodyViewModel.getInfoIcon(content)
-                            : undefined
-                        : FileBodyViewInfoIcon.DOWNLOAD,
+                infoShow: showFileInfo,
+                infoLabel: fileInfoLabel,
+                infoTooltip: fileInfoTooltip,
+                infoIcon: fileInfoIcon,
+                downloadShow: showDownload,
+                downloadLabel,
+                downloadTitle: downloadTitle,
             };
         }
 
         if (media.srcHttp) {
-            const rendering = showDownloadLink ? FileBodyViewRendering.DOWNLOAD_UNENCRYPTED : FileBodyViewRendering.INFO;
-
             return {
-                rendering,
-                label: rendering === FileBodyViewRendering.INFO ? fileInfoLabel : downloadLabel,
-                tooltip: rendering === FileBodyViewRendering.INFO ? fileInfoTooltip : undefined,
-                icon:
-                    rendering === FileBodyViewRendering.INFO
-                        ? showFileInfo
-                            ? FileBodyViewModel.getInfoIcon(content)
-                            : undefined
-                        : FileBodyViewInfoIcon.DOWNLOAD,
-                href: media.srcHttp,
+                rendering: FileBodyViewRendering.UNENCRYPTED,
+                infoShow: showFileInfo,
+                infoLabel: fileInfoLabel,
+                infoTooltip: fileInfoTooltip,
+                infoIcon: fileInfoIcon,
+                downloadShow: showDownload,
+                downloadLabel,
+                downloadTitle: downloadTitle,
+                downloadHref: media.srcHttp,
             };
         }
 
         return {
             rendering: FileBodyViewRendering.INVALID,
-            label: showFileInfo ? fileInfoLabel : undefined,
-            tooltip: fileInfoTooltip,
-            icon: showFileInfo ? FileBodyViewModel.getInfoIcon(content) : undefined,
+            infoShow: showFileInfo,
+            infoLabel: fileInfoLabel,
+            infoTooltip: fileInfoTooltip,
+            infoIcon: fileInfoIcon,
+            infoHref: content.file?.url || content.url,
         };
     }
 

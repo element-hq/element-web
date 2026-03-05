@@ -7,7 +7,7 @@
 
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { FileBodyViewInfoIcon } from "@element-hq/web-shared-components";
+import { FileBodyViewInfoIcon, FileBodyViewRendering } from "@element-hq/web-shared-components";
 
 import Modal from "../../../src/Modal";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
@@ -83,8 +83,10 @@ describe("FileBodyViewModel", () => {
         expect(vm.refIFrame).toBeDefined();
         expect(vm.refLink).toBeDefined();
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: "DOWNLOAD_UNENCRYPTED",
-            href: "https://server/file",
+            rendering: FileBodyViewRendering.UNENCRYPTED,
+            infoShow: false,
+            downloadShow: true,
+            downloadHref: "https://server/file",
         });
     });
 
@@ -99,9 +101,11 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: "INFO",
-            label: "alt",
-            icon: expectedIcon,
+            rendering: FileBodyViewRendering.UNENCRYPTED,
+            infoShow: true,
+            infoLabel: "alt",
+            infoIcon: expectedIcon,
+            downloadShow: false,
         });
     });
 
@@ -113,9 +117,10 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: "EXPORT",
-            label: "alt",
-            href: "https://server/export-file",
+            rendering: FileBodyViewRendering.EXPORT,
+            infoShow: true,
+            infoLabel: "alt",
+            infoHref: "https://server/export-file",
         });
     });
 
@@ -143,7 +148,7 @@ describe("FileBodyViewModel", () => {
 
         await vm.onDownloadClick();
 
-        expect(vm.getSnapshot().rendering).toBe("DOWNLOAD_ENCRYPTED_IFRAME");
+        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_IFRAME);
 
         vm.onDownloadIframeLoad();
 
@@ -203,7 +208,7 @@ describe("FileBodyViewModel", () => {
                 description: expect.stringMatching(/decrypt/i),
             }),
         );
-        expect(vm.getSnapshot().rendering).toBe("DOWNLOAD_ENCRYPTED_PENDING");
+        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_PENDING);
     });
 
     it("resets decrypted state when mxEvent changes", async () => {
@@ -213,14 +218,91 @@ describe("FileBodyViewModel", () => {
         });
 
         await vm.onDownloadClick();
-        expect(vm.getSnapshot().rendering).toBe("DOWNLOAD_ENCRYPTED_IFRAME");
+        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_IFRAME);
 
         vm.setProps({
             mxEvent: mkMediaEvent({ body: "new", file: { url: "mxc://server/file-b" } }),
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: "DOWNLOAD_ENCRYPTED_PENDING",
+            rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
         });
+    });
+
+    it("keeps decrypted state when non-event props change", async () => {
+        const vm = createVm({
+            mediaEventHelper: mkMediaEventHelper({ encrypted: true }),
+            mxEvent: mkMediaEvent({ file: { url: "mxc://server/file-a" } }),
+        });
+
+        await vm.onDownloadClick();
+        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_IFRAME);
+
+        vm.setProps({
+            timelineRenderingType: TimelineRenderingType.Thread,
+        });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
+            downloadShow: false,
+        });
+    });
+
+    it("uses filename-like downloadTitle in encrypted mode when showFileInfo is false", () => {
+        const vm = createVm({
+            showFileInfo: false,
+            mediaEventHelper: mkMediaEventHelper({ encrypted: true }),
+            mxEvent: mkMediaEvent({ body: "my-file.pdf", file: { url: "mxc://server/file" } }),
+        });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
+            downloadTitle: "my-file.pdf",
+        });
+    });
+
+    it("hides download in thread rendering even when showFileInfo is false", () => {
+        const vm = createVm({
+            showFileInfo: false,
+            timelineRenderingType: TimelineRenderingType.Thread,
+        });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            rendering: FileBodyViewRendering.UNENCRYPTED,
+            downloadShow: false,
+        });
+    });
+
+    it("returns INVALID snapshot when content URL is missing", () => {
+        const vm = createVm({
+            mxEvent: mkMediaEvent({ url: undefined }),
+            showFileInfo: true,
+        });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            rendering: FileBodyViewRendering.INVALID,
+            infoShow: true,
+            infoLabel: "alt",
+            infoIcon: FileBodyViewInfoIcon.ATTACHMENT,
+        });
+    });
+
+    it("does not download on info click when showFileInfo is false", async () => {
+        const vm = createVm({ showFileInfo: false });
+
+        await vm.onInfoClick();
+
+        expect(mockDownload).not.toHaveBeenCalled();
+    });
+
+    it("keeps unencrypted snapshot when download is clicked without mediaEventHelper", async () => {
+        const vm = createVm({
+            mediaEventHelper: undefined,
+            mxEvent: mkMediaEvent({ file: { url: "mxc://server/file" } }),
+        });
+
+        await vm.onDownloadClick();
+
+        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.UNENCRYPTED);
     });
 });

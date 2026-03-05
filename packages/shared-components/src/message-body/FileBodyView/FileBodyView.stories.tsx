@@ -6,6 +6,7 @@
  */
 
 import React, { type ReactNode } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -51,20 +52,28 @@ const meta = {
                 .map(([key]) => key),
             control: { type: "select" },
         },
-        icon: {
+        infoIcon: {
             options: Object.entries(FileBodyViewInfoIcon)
                 .filter(([key, value]) => key === value)
                 .map(([key]) => key),
             control: { type: "select" },
         },
+        infoShow: { control: "boolean" },
+        downloadShow: { control: "boolean" },
+        className: { control: "text" },
     },
     args: {
-        rendering: FileBodyViewRendering.INFO,
-        label: "spec.pdf",
-        tooltip: "spec.pdf (22 KB)",
-        icon: FileBodyViewInfoIcon.ATTACHMENT,
-        href: "https://example.org/spec.pdf",
-        className: "",
+        rendering: FileBodyViewRendering.UNENCRYPTED,
+        infoShow: true,
+        infoLabel: "spec.pdf",
+        infoTooltip: "spec.pdf (22 KB)",
+        infoIcon: FileBodyViewInfoIcon.ATTACHMENT,
+        infoHref: "https://example.org/spec.pdf",
+        downloadShow: true,
+        downloadLabel: "Download file",
+        downloadTitle: "Download title",
+        downloadHref: "https://example.org/download/spec.pdf",
+        className: undefined,
     },
 } satisfies Meta<typeof FileBodyViewWrapper>;
 
@@ -87,46 +96,61 @@ export const Invalid: Story = {
 
 export const LongFilenameInfo: Story = {
     args: {
-        label: "a very long filename to show ellipsis.pdf",
-        tooltip: "a very long filename to show ellipsis.pdf (12 kB)",
+        downloadShow: false,
+        infoLabel: "a very long filename to show ellipsis.pdf",
+        infoTooltip: "a very long filename to show ellipsis.pdf (12 kB)",
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await userEvent.hover(canvas.getByText("a very long filename to show ellipsis.pdf"));
+        await expect(
+            within(canvasElement.ownerDocument.body).findByText("a very long filename to show ellipsis.pdf (12 kB)"),
+        ).resolves.toBeInTheDocument();
     },
 };
 
 export const AudioInfo: Story = {
     args: {
-        icon: FileBodyViewInfoIcon.AUDIO,
-        label: "voice-message.ogg",
+        downloadShow: false,
+        infoIcon: FileBodyViewInfoIcon.AUDIO,
+        infoLabel: "voice-message.ogg",
     },
 };
 
 export const VideoInfo: Story = {
     args: {
-        icon: FileBodyViewInfoIcon.VIDEO,
-        label: "clip.mp4",
+        downloadShow: false,
+        infoIcon: FileBodyViewInfoIcon.VIDEO,
+        infoLabel: "clip.mp4",
     },
 };
 
 export const UnencryptedDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
+        rendering: FileBodyViewRendering.UNENCRYPTED,
+        infoShow: false,
     },
 };
 
 export const EncryptedIframeDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME,
+        rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
+        infoShow: false,
     },
 };
 
 export const EncryptedPendingDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
+        rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
+        infoShow: false,
     },
 };
 
 export const LongFilenameDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
-        label: "a very long filename to show ellipsis.pdf",
+        rendering: FileBodyViewRendering.UNENCRYPTED,
+        infoShow: false,
+        downloadShow: true,
+        downloadLabel: "a very long filename to show ellipsis.pdf",
     },
 };

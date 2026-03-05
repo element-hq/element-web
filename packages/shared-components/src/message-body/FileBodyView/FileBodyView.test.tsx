@@ -40,7 +40,8 @@ const {
 } = composeStories(stories);
 
 const defaultSnapshot: FileBodyViewSnapshot = {
-    rendering: FileBodyViewRendering.INFO,
+    rendering: FileBodyViewRendering.UNENCRYPTED,
+    infoShow: true,
 };
 
 class TestViewModel extends MockViewModel<FileBodyViewSnapshot> implements FileBodyViewActions {
@@ -87,8 +88,8 @@ describe("FileBodyView", () => {
     it("renders info row in info-only mode using label and tooltip", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            label: "spec.pdf",
-            tooltip: "spec.pdf (22 KB)",
+            infoLabel: "spec.pdf",
+            infoTooltip: "spec.pdf (22 KB)",
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -101,7 +102,8 @@ describe("FileBodyView", () => {
     it("uses href in export mode", () => {
         const vm = new TestViewModel({
             rendering: FileBodyViewRendering.EXPORT,
-            href: "https://example.org/export.pdf",
+            infoShow: true,
+            infoHref: "https://example.org/export.pdf",
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -112,8 +114,9 @@ describe("FileBodyView", () => {
 
     it("uses href in unencrypted download mode", () => {
         const vm = new TestViewModel({
-            rendering: FileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
-            href: "https://example.org/download.pdf",
+            rendering: FileBodyViewRendering.UNENCRYPTED,
+            downloadShow: true,
+            downloadHref: "https://example.org/download.pdf",
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -125,7 +128,7 @@ describe("FileBodyView", () => {
     });
 
     it("renders safely when href is missing in EXPORT mode", () => {
-        const vm = new TestViewModel({ rendering: FileBodyViewRendering.EXPORT });
+        const vm = new TestViewModel({ rendering: FileBodyViewRendering.EXPORT, infoShow: true });
 
         const { container } = renderWithI18n(<FileBodyView vm={vm} />);
 
@@ -134,8 +137,8 @@ describe("FileBodyView", () => {
         expect(container.querySelector("a")).toBeInTheDocument();
     });
 
-    it("renders safely when href is missing in DOWNLOAD_UNENCRYPTED mode", () => {
-        const vm = new TestViewModel({ rendering: FileBodyViewRendering.DOWNLOAD_UNENCRYPTED });
+    it("renders safely when href is missing in UNENCRYPTED mode", () => {
+        const vm = new TestViewModel({ rendering: FileBodyViewRendering.UNENCRYPTED, downloadShow: true });
 
         renderWithI18n(<FileBodyView vm={vm} />);
 
@@ -145,7 +148,7 @@ describe("FileBodyView", () => {
     it("uses label as fallback tooltip content", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            label: "spec.pdf",
+            infoLabel: "spec.pdf",
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -156,7 +159,8 @@ describe("FileBodyView", () => {
     it("renders download button in encrypted-pending mode", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            rendering: FileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
+            rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
+            downloadShow: true,
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -180,7 +184,8 @@ describe("FileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: FileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
+                rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
+                downloadShow: true,
             },
             { onDownloadClick },
         );
@@ -196,7 +201,8 @@ describe("FileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: FileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
+                rendering: FileBodyViewRendering.UNENCRYPTED,
+                downloadShow: true,
             },
             { onDownloadLinkClick },
         );
@@ -212,7 +218,8 @@ describe("FileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: FileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME,
+                rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
+                downloadShow: true,
             },
             { onDownloadIframeLoad },
         );
@@ -227,7 +234,8 @@ describe("FileBodyView", () => {
     it("wires refLink in encrypted-iframe-download mode", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            rendering: FileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME,
+            rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
+            downloadShow: true,
         });
         const refLink = React.createRef<HTMLAnchorElement>() as React.RefObject<HTMLAnchorElement>;
 
@@ -236,14 +244,29 @@ describe("FileBodyView", () => {
         expect(refLink.current).toBeInstanceOf(HTMLAnchorElement);
     });
 
+    it("wires refIFrame in encrypted-iframe-download mode", () => {
+        const vm = new TestViewModel({
+            ...defaultSnapshot,
+            rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
+            downloadShow: true,
+        });
+        const refIFrame = React.createRef<HTMLIFrameElement>() as React.RefObject<HTMLIFrameElement>;
+
+        renderWithI18n(<FileBodyView vm={vm} refIFrame={refIFrame} />);
+
+        expect(refIFrame.current).toBeInstanceOf(HTMLIFrameElement);
+    });
+
     it.each([
-        FileBodyViewRendering.DOWNLOAD_UNENCRYPTED,
-        FileBodyViewRendering.DOWNLOAD_ENCRYPTED_PENDING,
-        FileBodyViewRendering.DOWNLOAD_ENCRYPTED_IFRAME,
+        FileBodyViewRendering.UNENCRYPTED,
+        FileBodyViewRendering.ENCRYPTED_PENDING,
+        FileBodyViewRendering.ENCRYPTED_IFRAME,
     ])("hides info row in %s mode", (rendering) => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
             rendering,
+            infoShow: false,
+            downloadShow: true,
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -251,14 +274,14 @@ describe("FileBodyView", () => {
         expect(screen.queryByRole("button", { name: "Attachment" })).not.toBeInTheDocument();
     });
 
-    it("shows invalid message and info row in invalid mode", () => {
+    it("shows message in invalid mode", () => {
         const vm = new TestViewModel({
             rendering: FileBodyViewRendering.INVALID,
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
 
-        expect(screen.getByRole("button", { name: "Attachment" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Attachment" })).not.toBeInTheDocument();
         expect(screen.getByText("Invalid file")).toBeInTheDocument();
     });
 
