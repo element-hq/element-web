@@ -17,12 +17,18 @@ Please see LICENSE files in the repository root for full details.
     visibility: hidden;
     cursor: pointer;
     display: flex;
-    gap: var(--cpd-space-0-5x)
+    gap: var(--cpd-space-0-5x);
     line-height: $font-24px;
     border-radius: 8px;
     background: $background;
     border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
-    top: -32px;
+    top: calc(
+        -1 *
+            (
+                var(--MessageActionBar-size-button) + 2 *
+                    (var(--MessageActionBar-size-margin) + var(--cpd-border-width-1))
+            )
+    );
     right: 8px;
     user-select: none;
     /* Ensure the action bar appears above other things like the read marker */
