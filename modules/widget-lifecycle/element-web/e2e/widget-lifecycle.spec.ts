@@ -53,7 +53,7 @@ test.describe("Widget Lifecycle", () => {
             config: {
                 "io.element.element-web-modules.widget-lifecycle": {
                     widget_permissions: {
-                        [WIDGET_URL]: {
+                        [`${WIDGET_URL}*`]: {
                             preload_approved: true,
                             identity_approved: true,
                             capabilities_approved: ["org.matrix.msc2762.receive.state_event:m.room.topic"],
