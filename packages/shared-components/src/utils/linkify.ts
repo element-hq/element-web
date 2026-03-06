@@ -279,4 +279,4 @@ export function generateLinkedTextOptions({
 export { default as linkifyString } from "linkify-string";
 export { default as linkifyHtml } from "linkify-html";
 
-export { linkifyjs };
+export { default as linkifyjs } from "linkifyjs";

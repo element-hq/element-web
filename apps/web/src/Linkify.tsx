@@ -47,7 +47,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
             const transformed = tryTransformPermalinkToLocalHref(attribs.href); // only used to check if it is a link that can be handled locally
             if (
                 transformed !== attribs.href || // it could be converted so handle locally symbols e.g. @user:server.tdl, matrix: and matrix.to
-                attribs.href.match(ELEMENT_URL_PATTERN) // for https links to Element domains
+                ELEMENT_URL_PATTERN.test(attribs.href) // for https links to Element domains
             ) {
                 delete attribs.target;
             }
@@ -249,7 +249,7 @@ function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.
                     click: function (e: MouseEvent) {
                         e.preventDefault();
                         onClickAction?.();
-                        window.location.hash = localHref;
+                        globalThis.location.hash = localHref;
                     },
                 };
             }
@@ -282,12 +282,12 @@ export function roomAliasEventListeners(href: string, onClickAction?: () => void
     };
 }
 
-function urlTargetTransformFunction(href: string | string): string {
+function urlTargetTransformFunction(href: string): string {
     try {
         const transformed = tryTransformPermalinkToLocalHref(href);
         if (
             transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
-            decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https links to Element domains
+            ELEMENT_URL_PATTERN.test(decodeURIComponent(href)) // for https links to Element domains
         ) {
             return "";
         } else {

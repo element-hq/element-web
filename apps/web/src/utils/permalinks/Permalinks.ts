@@ -374,7 +374,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
     }
 
     try {
-        const m = decodeURIComponent(permalink).match(ELEMENT_URL_PATTERN);
+        const m = ELEMENT_URL_PATTERN.exec(decodeURIComponent(permalink));
         if (m) {
             return m[1];
         }
@@ -410,7 +410,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string | null {
 
         // If not a permalink, try the vector patterns.
         if (!permalinkParts) {
-            const m = permalink.match(ELEMENT_URL_PATTERN);
+            const m = ELEMENT_URL_PATTERN.exec(permalink);
             if (m) {
                 // A bit of a hack, but it gets the job done
                 const handler = new ElementPermalinkConstructor("http://localhost");
