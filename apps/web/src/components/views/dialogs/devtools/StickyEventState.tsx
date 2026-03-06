@@ -300,7 +300,6 @@ const StickyEventListPerType: React.FC<StickyEventListPerTypeProps> = ({
                             }
                             const matchesStickyKey = ev.getContent().msc4354_sticky_key?.includes(query);
                             return !!matchesStickyKey;
-
                         })
                         .sort((a, b) => {
                             return (a.unstableStickyExpiresAt ?? 0) - (b.unstableStickyExpiresAt ?? 0);
