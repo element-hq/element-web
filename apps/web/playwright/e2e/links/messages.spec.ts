@@ -38,7 +38,7 @@ test.describe("Message links", () => {
         const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "#aroom:example.org" });
         await expect(linkElement).toHaveAttribute("href", "https://matrix.to/#/#aroom:example.org");
     });
-    test("should linkify text inside a URL preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {
+    test("should linkify text inside a URL preview", async ({ page, user, app, room, axe }) => {
         axe.disableRules("color-contrast");
         await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
@@ -56,26 +56,4 @@ test.describe("Message links", () => {
             page.locator(".mx_EventTile_last").getByRole("link", { name: "https://example.org/another-link" }),
         ).toBeVisible();
     });
-    test(
-        "should linkify text inside a URL preview",
-        { tag: "@screenshot" },
-        async ({ page, user, bot, app, room, axe }) => {
-            axe.disableRules("color-contrast");
-            await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
-                const requestedPage = new URL(request.url()).searchParams.get("url");
-                expect(requestedPage).toEqual("https://example.org/");
-                return route.fulfill({
-                    json: {
-                        "og:title": "A simple site",
-                        "og:description": "And with a brief description containing https://example.org/another-link",
-                    },
-                });
-            });
-            await page.goto(`#/room/${room.roomId}`);
-            await bot.sendMessage(room.roomId, "Check out https://example.org/");
-            await expect(
-                page.locator(".mx_EventTile_last").getByRole("link", { name: "https://example.org/another-link" }),
-            ).toBeVisible();
-        },
-    );
 });
