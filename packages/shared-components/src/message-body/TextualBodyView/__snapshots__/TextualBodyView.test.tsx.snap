@@ -1,0 +1,70 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextualBodyView > renders markers and widgets 1`] = `
+<div>
+  <div
+    class="mx_MTextBody textBody mx_EventTile_content rootContent"
+    id="textual-body-view"
+  >
+    <div
+      class="mx_EventTile_annotated annotated"
+      dir="auto"
+    >
+      Message with URL preview widgets
+      <span
+        class="mx_EventTile_edited marker editedMarker"
+      >
+        <button
+          aria-label="Message edited"
+          class="editedMarkerButton"
+          type="button"
+        >
+          (edited)
+        </button>
+      </span>
+      <span
+        class="mx_EventTile_pendingModeration marker"
+      >
+        (
+        pending moderation because of policy checks
+        )
+      </span>
+    </div>
+    <div>
+      Mock URL preview widget
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TextualBodyView > renders the default textual body 1`] = `
+<div>
+  <div
+    class="mx_MTextBody textBody mx_EventTile_content rootContent"
+    id="textual-body-view"
+  >
+    Hello from TextualBodyView
+  </div>
+</div>
+`;
+
+exports[`TextualBodyView > renders the emote variant 1`] = `
+<div>
+  <div
+    class="mx_MEmoteBody emoteBody mx_EventTile_content rootContent"
+    dir="auto"
+    id="textual-body-view"
+  >
+    * 
+    <button
+      aria-label="Alice"
+      class="mx_MEmoteBody_sender emoteSenderButton"
+      type="button"
+    >
+      Alice
+    </button>
+     
+    waves enthusiastically
+  </div>
+</div>
+`;
