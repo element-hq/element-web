@@ -79,5 +79,3 @@ export default class WidgetLifecycleModule implements Module {
         return approvedCapabilities.size > 0 ? approvedCapabilities : undefined;
     }
 }
-
-export { WidgetLifecycleModule };
