@@ -35,7 +35,7 @@ trap clean_up EXIT
 
 # Wait for playwright-server to be ready
 echo "Waiting for playwright-server"
-pnpm --dir "$SCRIPT_DIR" wait-on "tcp:$WS_PORT"
+pnpm --dir "$SCRIPT_DIR" exec wait-on "tcp:$WS_PORT"
 
 # Run the test we were given, setting PW_TEST_CONNECT_WS_ENDPOINT accordingly
 echo "Running '$@'"
