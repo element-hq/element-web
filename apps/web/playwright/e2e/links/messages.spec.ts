@@ -10,58 +10,50 @@ test.describe("Message links", () => {
     test.use({
         displayName: "Alice",
         room: async ({ user, app, bot }, use) => {
-            const roomId = await app.client.createRoom({ name: "Test room", invite: [bot.credentials.userId] });
+            const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
-        },
-        botCreateOpts: {
-            displayName: "Bob",
-            autoAcceptInvites: true,
         },
     });
     for (const link of ["https://example.org", "example.org", "ftp://example.org"]) {
-        test(`should linkify a regular link '${link}'`, async ({ page, user, app, bot, room }) => {
+        test(`should linkify a regular link '${link}'`, async ({ page, user, app, room }) => {
             await page.goto(`#/room/${room.roomId}`);
             // Needs to be unformatted so we test linkifing
-            await bot.sendMessage(room.roomId, `Check out ${link}`);
+            await app.client.sendMessage(room.roomId, `Check out ${link}`);
             const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: link });
             await app.timeline.scrollToBottom();
             await expect(linkElement).toBeVisible();
         });
     }
-    test("should linkify a User ID", async ({ page, user, app, bot, room }) => {
+    test("should linkify a User ID", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing
-        await bot.sendMessage(room.roomId, `Check out ${bot.credentials.userId}`);
-        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: bot.credentials.userId });
-        await expect(linkElement).toHaveAttribute("href", `https://matrix.to/#/${bot.credentials.userId}`);
+        await app.client.sendMessage(room.roomId, `Check out @bob:example.org`);
+        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "@bob:example.org" });
+        await expect(linkElement).toHaveAttribute("href", `https://matrix.to/#/@bob:example.org`);
     });
-    test("should linkify a Room alias", async ({ page, user, app, bot, room }) => {
+    test("should linkify a Room alias", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing
-        await bot.sendMessage(room.roomId, "Check out #aroom:example.org");
+        await app.client.sendMessage(room.roomId, "Check out #aroom:example.org");
         const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "#aroom:example.org" });
         await expect(linkElement).toHaveAttribute("href", "https://matrix.to/#/#aroom:example.org");
     });
-    test(
-        "should linkify text inside a URL preview",
-        { tag: "@screenshot" },
-        async ({ page, user, bot, app, room, axe }) => {
-            axe.disableRules("color-contrast");
-            await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
-                const requestedPage = new URL(request.url()).searchParams.get("url");
-                expect(requestedPage).toEqual("https://example.org/");
-                return route.fulfill({
-                    json: {
-                        "og:title": "A simple site",
-                        "og:description": "And with a brief description containing https://example.org/another-link",
-                    },
-                });
+    test("should linkify text inside a URL preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {
+        axe.disableRules("color-contrast");
+        await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
+            const requestedPage = new URL(request.url()).searchParams.get("url");
+            expect(requestedPage).toEqual("https://example.org/");
+            return route.fulfill({
+                json: {
+                    "og:title": "A simple site",
+                    "og:description": "And with a brief description containing https://example.org/another-link",
+                },
             });
-            await page.goto(`#/room/${room.roomId}`);
-            await bot.sendMessage(room.roomId, "Check out https://example.org/");
-            await expect(
-                page.locator(".mx_EventTile_last").getByRole("link", { name: "https://example.org/another-link" }),
-            ).toBeVisible();
-        },
-    );
+        });
+        await page.goto(`#/room/${room.roomId}`);
+        await app.client.sendMessage(room.roomId, "Check out https://example.org/");
+        await expect(
+            page.locator(".mx_EventTile_last").getByRole("link", { name: "https://example.org/another-link" }),
+        ).toBeVisible();
+    });
 });

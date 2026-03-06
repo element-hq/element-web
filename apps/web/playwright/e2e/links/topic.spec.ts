@@ -10,26 +10,25 @@ test.describe("Topic links", () => {
     test.use({
         displayName: "Alice",
         room: async ({ user, app, bot }, use) => {
-            const roomId = await app.client.createRoom({ name: "Test room", invite: [bot.credentials.userId] });
+            const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
-        },
-        botCreateOpts: {
-            displayName: "Bob",
         },
     });
     for (const link of [
         "https://example.org",
         "example.org",
         "ftp://example.org",
-        "@alice:example.org",
         "#aroom:example.org",
+        "@alice:example.org",
     ]) {
-        test(`should linkify plaintext '${link}'`, async ({ page, user, app, bot, room }) => {
+        // Playwright treats '@' as a tag, so replace it to be safe
+        test(`should linkify plaintext '${link.replace("@", "_@")}'`, async ({ page, user, app, room }) => {
             await app.client.sendStateEvent(
                 room.roomId,
                 "m.room.topic",
                 {
                     "m.topic": {
+                        // Deliberately no HTML version.
                         "m.text": [
                             {
                                 body: `An interesting room topic containing ${link}`,
