@@ -18,7 +18,7 @@ import { RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
 import { AlphabeticAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/AlphabeticAlgorithm";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
-import { RecentAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { RecentAlgorithm } from "../../../../../../src/utils/room/sorting/RecentAlgorithm";
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../../../../test-utils/pushRules";
 
 describe("ImportanceAlgorithm", () => {

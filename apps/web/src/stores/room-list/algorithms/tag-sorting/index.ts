@@ -10,12 +10,12 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { SortAlgorithm } from "../models";
 import { ManualAlgorithm } from "./ManualAlgorithm";
-import { type IAlgorithm } from "./IAlgorithm";
+import { type Algorithm } from "../../../../utils/room/sorting/Algorithm";
 import { type TagID } from "../../../room-list-v3/skip-list/tag";
-import { RecentAlgorithm } from "./RecentAlgorithm";
+import { RecentAlgorithm } from "../../../../utils/room/sorting/RecentAlgorithm";
 import { AlphabeticAlgorithm } from "./AlphabeticAlgorithm";
 
-const ALGORITHM_INSTANCES: { [algorithm in SortAlgorithm]: IAlgorithm } = {
+const ALGORITHM_INSTANCES: { [algorithm in SortAlgorithm]: Algorithm } = {
     [SortAlgorithm.Recent]: new RecentAlgorithm(),
     [SortAlgorithm.Alphabetic]: new AlphabeticAlgorithm(),
     [SortAlgorithm.Manual]: new ManualAlgorithm(),
@@ -24,9 +24,9 @@ const ALGORITHM_INSTANCES: { [algorithm in SortAlgorithm]: IAlgorithm } = {
 /**
  * Gets an instance of the defined algorithm
  * @param {SortAlgorithm} algorithm The algorithm to get an instance of.
- * @returns {IAlgorithm} The algorithm instance.
+ * @returns {Algorithm} The algorithm instance.
  */
-export function getSortingAlgorithmInstance(algorithm: SortAlgorithm): IAlgorithm {
+export function getSortingAlgorithmInstance(algorithm: SortAlgorithm): Algorithm {
     if (!ALGORITHM_INSTANCES[algorithm]) {
         throw new Error(`${algorithm} is not a known algorithm`);
     }

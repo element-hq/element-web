@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { type TagID } from "../../../room-list-v3/skip-list/tag";
+import { type TagID } from "../../../stores/room-list-v3/skip-list/tag";
 
 /**
  * Represents a tag sorting algorithm.
  */
-export interface IAlgorithm {
+export interface Algorithm {
     /**
      * Sorts the given rooms according to the sorting rules of the algorithm.
      * @param {Room[]} rooms The rooms to sort.

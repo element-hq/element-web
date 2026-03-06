@@ -9,10 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { mkMessage, mkRoom, stubClient } from "../../../../test-utils";
+import { mkMembership, mkMessage, mkRoom, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import "../../../../../src/stores/room-list/RoomListStore";
-import { RecentAlgorithm } from "../../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { RecentAlgorithm } from "../../../../../src/utils/room/sorting/RecentAlgorithm";
 import { makeThreadEvent, mkThread } from "../../../../test-utils/threads";
 import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 
@@ -68,6 +67,31 @@ describe("RecentAlgorithm", () => {
             const room = mkRoom(cli, "!new:example.org");
             room.getMyMembership.mockReturnValue(KnownMembership.Invite);
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
+        });
+
+        describe("shouldCauseReorder", () => {
+            const userId = "@john:matrix.org";
+
+            it.each([KnownMembership.Join, KnownMembership.Invite, KnownMembership.Leave, KnownMembership.Ban])(
+                "counts a membership change from the current user (join → %s)",
+                (membership) => {
+                    const room = new Room("room123", cli, userId);
+                    room.getMyMembership = () => KnownMembership.Join;
+
+                    const membershipEvent = mkMembership({
+                        room: room.roomId,
+                        user: userId,
+                        mship: membership,
+                        prevMship: KnownMembership.Join,
+                        ts: 99,
+                        event: true,
+                        skey: userId,
+                    });
+
+                    room.addLiveEvents([membershipEvent], { addToState: true });
+                    expect(algorithm.getLastTs(room, userId)).toBe(99);
+                },
+            );
         });
     });
 
