@@ -39,7 +39,6 @@ test.describe("Message links", () => {
         await expect(linkElement).toHaveAttribute("href", "https://matrix.to/#/#aroom:example.org");
     });
     test("should linkify text inside a URL preview", async ({ page, user, app, room, axe }) => {
-        axe.disableRules("color-contrast");
         await page.route(/.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/, (route, request) => {
             const requestedPage = new URL(request.url()).searchParams.get("url");
             expect(requestedPage).toEqual("https://example.org/");
