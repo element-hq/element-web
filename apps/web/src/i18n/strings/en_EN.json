@@ -809,6 +809,8 @@
         "edit_setting": "Edit setting",
         "edit_values": "Edit values",
         "empty_string": "<empty string>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration must be a number",
+        "error_sticky_duration_out_of_range": "stickyDuration must be between 0 and 36000 milliseconds (1h)",
         "event_content": "Event Content",
         "event_id": "Event ID: %(eventId)s",
         "event_sent": "Event sent!",

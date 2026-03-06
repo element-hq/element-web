@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import { logger } from "nx/src/utils/logger";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
-import { _t, _td } from "../../../../languageHandler.tsx";
+import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
 import {
     EventEditor,
     eventTypeField,
@@ -346,10 +346,10 @@ export const StickyEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) =
         // between 0 and 3,600,000 (inclusive) — 1 hour max.
         const parsed = Number.parseInt(String(stickyDuration), 10);
         if (Number.isNaN(parsed)) {
-            throw new Error("stickyDuration must be a number");
+            throw new UserFriendlyError("devtools|error_sticky_duration_must_be_a_number");
         }
         if (parsed < 0 || parsed > 3600000) {
-            throw new Error(`stickyDuration must be between 0 and 36000 milliseconds (1h)`);
+            throw new UserFriendlyError("devtools|error_sticky_duration_out_of_range");
         }
 
         await cli._unstable_sendStickyEvent(context.room.roomId, parsed, null, eventType as any, content);
