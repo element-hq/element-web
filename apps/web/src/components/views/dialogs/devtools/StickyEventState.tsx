@@ -8,9 +8,9 @@
 import React, { type ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { Pill } from "@element-hq/web-shared-components";
 import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk/src/matrix";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { v4 as uuidv4 } from "uuid";
-import { logger } from "nx/src/utils/logger";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
 import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
@@ -24,6 +24,7 @@ import {
 } from "./Event.tsx";
 import Field from "../../elements/Field.tsx";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext.tsx";
+import InlineSpinner from "../../elements/InlineSpinner.tsx";
 import { Key } from "../../../../Keyboard.ts";
 
 /**
@@ -39,6 +40,20 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
 
     const [events, setEvents] = useState<MatrixEvent[]>(() => [...context.room._unstable_getStickyEvents()]);
 
+    const cli = useContext(MatrixClientContext);
+    // Check if the server supports sticky events and show a message if it doesn't.
+    // undefined means we are still checking, true/false means we have the result.
+    const [stickyEventsSupported, setStickyEventsSupported] = useState<boolean | undefined>(undefined);
+    useEffect(() => {
+        cli.doesServerSupportUnstableFeature("org.matrix.msc4354")
+            .then((result) => {
+                setStickyEventsSupported(result);
+            })
+            .catch((ex) => {
+                logger.warn("Failed to check if sticky events are supported", ex);
+            });
+    }, [cli]);
+
     // Listen for updates to the sticky events and refresh the list when they change
     useEffect(() => {
         const refresh = (): void => setEvents([...context.room._unstable_getStickyEvents()]);
@@ -48,6 +63,27 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
             context.room.off(RoomStickyEventsEvent.Update, refresh);
         };
     }, [context.room]);
+
+    if (stickyEventsSupported === false) {
+        return (
+            <p>
+                <Alert
+                    type="critical"
+                    title={_t("devtools|sticky_events_not_supported")}
+                    actions={<button onClick={onBack}>{_t("action|back")}</button>}
+                />
+            </p>
+        );
+    } else if (stickyEventsSupported === undefined) {
+        return (
+            <BaseTool onBack={onBack} onAction={async () => {}} actionLabel={_td("devtools|send_custom_sticky_event")}>
+                <p>
+                    <InlineSpinner />
+                    {_t("devtools|checking_sticky_events_support")}
+                </p>
+            </BaseTool>
+        );
+    }
 
     // If an event is selected, show the single event view, which allows viewing the content of the event
     // and sending a new one with the same sticky key.
@@ -260,18 +296,11 @@ const StickyEventListPerType: React.FC<StickyEventListPerTypeProps> = ({
                             if (!query) return true;
                             // Filter by sender or sticky key
                             if (ev.getSender()!.includes(query)) {
-                                logger.log(`Filtering by sender ${ev.getSender()} matched query ${query}`);
                                 return true;
                             }
-                            if (ev.getContent().msc4354_sticky_key?.includes(query)) {
-                                logger.log(
-                                    `Filtering by sticky key ${ev.getContent().msc4354_sticky_key} matched query ${query}`,
-                                );
-                                return true;
-                            }
+                            const matchesStickyKey = ev.getContent().msc4354_sticky_key?.includes(query);
+                            return !!matchesStickyKey;
 
-                            logger.log(`Filtering did not match query ${query}`);
-                            return false;
                         })
                         .sort((a, b) => {
                             return (a.unstableStickyExpiresAt ?? 0) - (b.unstableStickyExpiresAt ?? 0);

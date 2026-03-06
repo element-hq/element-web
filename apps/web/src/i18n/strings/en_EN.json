@@ -751,6 +751,7 @@
         "category_other": "Other",
         "category_room": "Room",
         "caution_colon": "Caution:",
+        "checking_sticky_events_support": "Checking for support for sticky events...",
         "client_versions": "Client Versions",
         "crypto": {
             "4s_public_key_in_account_data": "in account data",
@@ -882,6 +883,7 @@
         },
         "state_key": "State Key",
         "sticky_duration": "Sticky Duration (ms)",
+        "sticky_events_not_supported": "Your homeserver does not support sticky events yet.",
         "sticky_key": "Sticky Key",
         "thread_root_id": "Thread Root ID: %(threadRootId)s",
         "threads_timeline": "Threads timeline",
