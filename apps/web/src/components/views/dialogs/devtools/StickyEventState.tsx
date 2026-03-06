@@ -28,9 +28,8 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext.tsx";
 /**
  * Devtool to explore sticky events in the current room.
  * It allows you to see all sticky events, filter them by type, and view their content.
- * @param onBack
- * @param setTool
- * @constructor
+ * @param onBack - handle back navigation in devtools
+ * @param setTool - callback to switch to a different devtool (StickyEventEditor) when the user wants to send a new sticky event
  */
 export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool }) => {
     const context = useContext(DevtoolsContext);
@@ -96,7 +95,6 @@ interface StateEventButtonProps {
     userId: string;
     stickyKey?: string;
     expiresAt: number;
-
     onClick(this: void): void;
 }
 
