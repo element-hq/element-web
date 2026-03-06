@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IContent, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixClient, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import {
@@ -26,7 +26,6 @@ import {
     codeBlockRenderer,
     spoilerRenderer,
 } from "../../renderer";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { filterBoolean } from "../../utils/arrays";
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -112,6 +111,10 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
      * @default true
      */
     shouldShowPillAvatar?: boolean;
+    /**
+     * Matrix client used to resolve room context for renderers.
+     */
+    client: MatrixClient | null;
 }
 
 /**
@@ -133,9 +136,8 @@ const getPushDetailsKeywordPatternRegexp = (mxEvent: MatrixEvent): RegExp | unde
  * Creates a replacer function based on the provided options and context.
  */
 const createReplacer = (props: EventContentBodyViewModelProps): Replacer => {
-    const { content, mxEvent, shouldShowPillAvatar, ...options } = props;
-    const cli = MatrixClientPeg.get();
-    const room = cli?.getRoom(mxEvent?.getRoomId()) ?? undefined;
+    const { content, mxEvent, shouldShowPillAvatar, client, ...options } = props;
+    const room = client?.getRoom(mxEvent?.getRoomId()) ?? undefined;
     const isHtml = content.format === "org.matrix.custom.html";
     const keywordRegexpPattern = mxEvent ? getPushDetailsKeywordPatternRegexp(mxEvent) : undefined;
 

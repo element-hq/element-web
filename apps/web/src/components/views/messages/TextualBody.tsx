@@ -52,8 +52,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         widgetHidden: false,
     };
 
-    public constructor(props: IBodyProps) {
-        super(props);
+    public constructor(props: IBodyProps, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
         const mxEvent = props.mxEvent;
         const content = mxEvent.getContent();
         const isEmote = content.msgtype === MsgType.Emote;
@@ -75,6 +75,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             renderMentionPills: true,
             renderCodeBlocks: true,
             renderSpoilers: true,
+            client: context.room?.client ?? null,
         });
     }
 

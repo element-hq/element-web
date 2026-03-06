@@ -58,6 +58,7 @@ describe("EventContentBodyViewModel", () => {
     };
 
     const defaultProps = (overrides: Partial<EventContentBodyViewModelProps> = {}): EventContentBodyViewModelProps => ({
+        client: null,
         content: defaultContent,
         linkify: false,
         as: "span",
@@ -131,6 +132,33 @@ describe("EventContentBodyViewModel", () => {
             expect.objectContaining({ shouldShowPillAvatar: false }),
         );
         getValueSpy.mockRestore();
+    });
+
+    it("uses the injected client to resolve the room for renderer context", () => {
+        const replacer = jest.fn();
+        const createReplacerFromOptions = jest.fn().mockReturnValue(replacer);
+        mockedCombineRenderers.mockReturnValue(createReplacerFromOptions);
+        mockedBodyToNode.mockReturnValue({
+            strippedBody: "Hello world",
+            formattedBody: undefined,
+            emojiBodyElements: undefined,
+            className: "mx_EventTile_body",
+        });
+        const client = stubClient();
+        const mxEvent = mkEvent({
+            type: "m.room.message",
+            room: "!room:example.org",
+            user: "@user:example.org",
+            content: defaultContent,
+            event: true,
+        });
+        const room = mkStubRoom("!room:example.org", "Room", client) as Room;
+        const getRoomSpy = jest.spyOn(client, "getRoom").mockReturnValue(room);
+
+        new EventContentBodyViewModel(defaultProps({ mxEvent, client }));
+
+        expect(getRoomSpy).toHaveBeenCalledWith("!room:example.org");
+        expect(createReplacerFromOptions).toHaveBeenCalledWith(expect.objectContaining({ room }));
     });
 
     it("forces disableBigEmoji for emote events", () => {

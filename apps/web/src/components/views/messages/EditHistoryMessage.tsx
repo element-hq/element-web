@@ -71,6 +71,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             renderCodeBlocks: true,
             renderSpoilers: true,
             linkify: true,
+            client: cli,
         });
     }
 
