@@ -94,8 +94,9 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
     includeDir?: boolean;
     /**
      * Whether to render the content in a div or span.
+     * @default "span"
      */
-    as: "span" | "div";
+    as?: "span" | "div";
     /**
      * Whether big emoji should be enabled.
      * @default false
@@ -188,7 +189,7 @@ export class EventContentBodyViewModel
     };
 
     private static readonly computeDir = (props: EventContentBodyViewModelProps): "auto" | undefined => {
-        const { as, includeDir = true } = props;
+        const { as = "span", includeDir = true } = props;
         return as === "div" || includeDir ? "auto" : undefined;
     };
 

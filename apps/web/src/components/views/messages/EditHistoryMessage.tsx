@@ -61,7 +61,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
 
         const mxEventContent = getReplacedContent(event);
         this.EventContentBodyViewModel = new EventContentBodyViewModel({
-            as: "span",
             mxEvent: event,
             content: mxEventContent,
             highlights: [],
