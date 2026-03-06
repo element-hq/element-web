@@ -17,7 +17,7 @@ import {
     LinkedText,
     LinkifyMatrixOpaqueIdType,
     generateLinkedTextOptions,
-    type linkifyjs,
+    type LinkEventListener,
 } from "@element-hq/web-shared-components";
 import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
 
@@ -229,7 +229,7 @@ function onAliasClick(event: MouseEvent, roomAlias: string): void {
     });
 }
 
-function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+function urlEventListeners(href: string, onClickAction?: () => void): LinkEventListener {
     // intercept local permalinks to users and show them like userids (in userinfo of current room)
     try {
         const permalink = parsePermalink(href);
@@ -260,7 +260,7 @@ function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.
     return {};
 }
 
-export function userIdEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+export function userIdEventListeners(href: string, onClickAction?: () => void): LinkEventListener {
     return {
         click: function (e: MouseEvent) {
             e.preventDefault();
@@ -271,7 +271,7 @@ export function userIdEventListeners(href: string, onClickAction?: () => void): 
     };
 }
 
-export function roomAliasEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+export function roomAliasEventListeners(href: string, onClickAction?: () => void): LinkEventListener {
     return {
         click: function (e: MouseEvent) {
             e.preventDefault();

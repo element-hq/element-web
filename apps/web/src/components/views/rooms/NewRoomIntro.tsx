@@ -73,7 +73,7 @@ const NewRoomIntro: React.FC = () => {
         if (dmPartner) {
             return undefined;
         }
-        return topicToHtml(topic?.text, topic?.html);
+        return <ElementLinkedText>${topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>;
     }, [topic, dmPartner]);
 
     if (!room || !roomId) {
@@ -153,15 +153,11 @@ const NewRoomIntro: React.FC = () => {
                             {sub}
                         </AccessibleButton>
                     ),
-                    topic: () => <ElementLinkedText>{topicHtml}</ElementLinkedText>,
+                    topic: topicHtml,
                 },
             );
         } else if (topic) {
-            topicText = _t(
-                "room|intro|display_topic",
-                {},
-                { topic: () => <ElementLinkedText>{topicHtml}</ElementLinkedText> },
-            );
+            topicText = _t("room|intro|display_topic", {}, { topic: topicHtml });
         } else if (canAddTopic) {
             topicText = _t(
                 "room|intro|no_topic",

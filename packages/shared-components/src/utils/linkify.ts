@@ -175,14 +175,32 @@ linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.UserId, ({ scanner, parser })
     });
 });
 
+export type LinkEventListener = linkifyjs.EventListeners;
+
 export interface LinkedTextOptions {
-    urlListener?: (href: string) => linkifyjs.EventListeners;
-    roomAliasListener?: (href: string) => linkifyjs.EventListeners;
-    userIdListener?: (href: string) => linkifyjs.EventListeners;
+    /**
+     * Event handlers for URL links.
+     */
+    urlListener?: (href: string) => LinkEventListener;
+    /**
+     * Event handlers for room alias links.
+     */
+    roomAliasListener?: (href: string) => LinkEventListener;
+    /**
+     * Event handlers for user ID links.
+     */
+    userIdListener?: (href: string) => LinkEventListener;
+    /**
+     * Function that can be used to transform the `target` attribute on links, depending on the `href`.
+     */
     urlTargetTransformer?: (href: string) => string;
+    /**
+     * Function that can be used to transform the `href` attribute on links, depending on the current href and target type.
+     */
     hrefTransformer?: (href: string, target: LinkifyMatrixOpaqueIdType) => string;
     /**
-     * Disable this to force the
+     * If `false`, links are not clickable and only highlighted.
+     * Defaults to `true`.
      */
     canClick?: boolean;
 }
@@ -191,8 +209,9 @@ export interface LinkedTextOptions {
  * Generates a linkifyjs options object that is reasonably paired down
  * to just the essentials required for an Element client.
  *
- * @param param0
- * @returns
+ * @return A `linkifyjs` `Opts` object. Used by `linkifyString` and `linkifyHtml`
+ * @see `linkifyHtml`
+ * @see `linkifyString`
  */
 export function generateLinkedTextOptions({
     urlListener,
@@ -202,7 +221,7 @@ export function generateLinkedTextOptions({
     hrefTransformer,
     canClick,
 }: LinkedTextOptions): linkifyjs.Opts {
-    const events = (href: string, type: string): linkifyjs.EventListeners => {
+    const events = (href: string, type: string): LinkEventListener => {
         // Attach click handlers to links based on their type
         switch (type as LinkifyMatrixOpaqueIdType) {
             case LinkifyMatrixOpaqueIdType.URL: {
@@ -276,7 +295,25 @@ export function generateLinkedTextOptions({
     } satisfies linkifyjs.Opts;
 }
 
+/**
+ * Finds all links in a given string.
+ *
+ * @param str A string that may contain one or more strings.
+ * @returns A set of all links in the string.
+ */
+export function findLinksInString(str: string): ReturnType<typeof linkifyjs.find> {
+    return linkifyjs.find(str);
+}
+
+/**
+ * Is the given string a valid linkable. This does not trim the string.
+ *
+ * @param str A string value to be tested if the entire value is linkable.
+ * @returns Whether or not the `str` value is a link.
+ */
+export function isLinkable(str: string): boolean {
+    return linkifyjs.test(str);
+}
+
 export { default as linkifyString } from "linkify-string";
 export { default as linkifyHtml } from "linkify-html";
-
-export { default as linkifyjs } from "linkifyjs";
