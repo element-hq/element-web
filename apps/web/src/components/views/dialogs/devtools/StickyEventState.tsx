@@ -24,6 +24,7 @@ import {
 } from "./Event.tsx";
 import Field from "../../elements/Field.tsx";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext.tsx";
+import { Key } from "../../../../Keyboard.ts";
 
 /**
  * Devtool to explore sticky events in the current room.
@@ -160,9 +161,9 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
             }}
             onKeyDown={(e) => {
                 // show focus when using keyboard keys (Tab/Enter/Space)
-                if (e.key === "Tab" || e.key === "Enter" || e.key === " ") setShowFocus(true);
+                if (e.key === Key.TAB || e.key === Key.ENTER || e.key === Key.SPACE) setShowFocus(true);
                 // Activate on Enter or Space for keyboard users
-                if (e.key === "Enter" || e.key === " ") {
+                if (e.key === Key.ENTER || e.key === Key.SPACE) {
                     e.preventDefault();
                     onClick();
                 }
