@@ -9,14 +9,16 @@
         "prepare": "vite build",
         "lint:types": "tsc --noEmit",
         "lint:codestyle": "echo 'handled by lint:eslint'",
-        "test": "vitest"
+        "test": "vitest run --coverage"
     },
     "devDependencies": {
         "@element-hq/element-web-module-api": "^1.0.0",
         "@types/node": "^22.10.7",
+        "@vitest/coverage-v8": "^4.0.0",
         "typescript": "^5.7.3",
         "vite": "^7.1.11",
-        "vitest": "^4.0.0"
+        "vitest": "^4.0.0",
+        "vitest-sonar-reporter": "^2.0.0"
     },
     "dependencies": {
         "zod": "^4.0.0"
