@@ -43,6 +43,7 @@ export * from "./utils/Box";
 export * from "./utils/Flex";
 export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
+export * from "./resize";
 
 // Utils
 export * from "./utils/i18n";
