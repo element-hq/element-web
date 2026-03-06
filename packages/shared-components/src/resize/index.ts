@@ -5,9 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import type { SeparatorViewSnapshot } from "./separator/SeparatorView";
-import type { LeftResizablePanelViewSnapshot } from "./panel/LeftResizablePanelView";
-
 /**
  * This is the id given to the resizable container that holds
  * the left panel contents.
@@ -18,7 +15,16 @@ export * from "./group/GroupView";
 export * from "./separator/SeparatorView";
 export * from "./panel/LeftResizablePanelView";
 
-export type ResizerSnapshot = SeparatorViewSnapshot & LeftResizablePanelViewSnapshot;
+export interface ResizerSnapshot {
+    /**
+     * Whether the left panel is collapsed or not.
+     */
+    isCollapsed: boolean;
+    /**
+     * This is the initial size of the panel if available; should be interpreted as percentage.
+     */
+    initialSize?: number;
+}
 
 /**
  * Export relevant parts of the underlying library.

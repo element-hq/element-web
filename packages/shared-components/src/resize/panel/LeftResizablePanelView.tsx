@@ -15,7 +15,7 @@ import {
 } from "react-resizable-panels";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
-import { LEFT_PANEL_ID } from "..";
+import { LEFT_PANEL_ID, type ResizerSnapshot } from "..";
 
 export interface LeftResizablePanelViewActions {
     /**
@@ -31,15 +31,8 @@ export interface LeftResizablePanelViewActions {
     setPanelHandle: (handle: PanelImperativeHandle) => void;
 }
 
-export interface LeftResizablePanelViewSnapshot {
-    /**
-     * This is the initial size of the panel if available; should be interpreted as percentage.
-     */
-    initialSize?: number;
-}
-
 type Props = {
-    vm: ViewModel<LeftResizablePanelViewSnapshot, LeftResizablePanelViewActions>;
+    vm: ViewModel<ResizerSnapshot, LeftResizablePanelViewActions>;
     className?: string;
 } & Pick<PanelProps, "minSize" | "maxSize" | "defaultSize">;
 
@@ -49,7 +42,7 @@ export function LeftResizablePanelView({
     children,
     ...props
 }: PropsWithChildren<Props>): React.ReactNode {
-    const { initialSize } = useViewModel(vm);
+    const { initialSize, isCollapsed } = useViewModel(vm);
     const [panelRef, setPanelRef] = usePanelCallbackRef();
 
     useEffect(() => {
@@ -60,6 +53,7 @@ export function LeftResizablePanelView({
 
     return (
         <Panel
+            inert={isCollapsed}
             id={LEFT_PANEL_ID}
             className={className}
             collapsible

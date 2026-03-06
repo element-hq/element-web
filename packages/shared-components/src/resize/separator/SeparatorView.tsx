@@ -13,13 +13,7 @@ import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./SeparatorView.module.css";
-
-export interface SeparatorViewSnapshot {
-    /**
-     * Whether the left panel is collapsed or not.
-     */
-    isCollapsed: boolean;
-}
+import { type ResizerSnapshot } from "..";
 
 export interface SeparatorViewActions {
     /**
@@ -29,7 +23,7 @@ export interface SeparatorViewActions {
 }
 
 interface Props {
-    vm: ViewModel<SeparatorViewSnapshot, SeparatorViewActions>;
+    vm: ViewModel<ResizerSnapshot, SeparatorViewActions>;
 }
 
 export function SeparatorView({ vm }: Props): React.ReactNode {
