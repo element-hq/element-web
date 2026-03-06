@@ -7,7 +7,7 @@
 
 import React, { type JSX, type MouseEvent } from "react";
 import classNames from "classnames";
-import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
+import { Button, Tooltip } from "@vector-im/compound-web";
 import {
     AttachmentIcon,
     DownloadIcon,
@@ -186,18 +186,11 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
     }
 
     const info = infoShow ? (
-        <MediaBody data-type="info">
-            <Button
-                as="button"
-                size="sm"
-                kind="secondary"
-                aria-label={resolvedInfoLabel}
-                // tooltip={resolvedInfoTooltip}
-                Icon={resolvedInfoIcon}
-                onClick={vm.onInfoClick}
-            >
+        <MediaBody data-type="info" onClick={vm.onInfoClick} role="button" tabIndex={0}>
+            <span data-type="info-icon">{React.createElement(resolvedInfoIcon)}</span>
+            <Tooltip description={resolvedInfoTooltip} placement="right">
                 <span data-type="info-label">{resolvedInfoLabel}</span>
-            </Button>
+            </Tooltip>
         </MediaBody>
     ) : null;
 
