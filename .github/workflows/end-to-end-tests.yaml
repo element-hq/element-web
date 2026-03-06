@@ -223,18 +223,16 @@ jobs:
               uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   pattern: all-blob-reports-*
-                  path: all-blob-reports
+                  path: apps/web/all-blob-reports
                   merge-multiple: true
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: pnpm playwright merge-reports --reporter=html,./apps/web/playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
+              working-directory: apps/web
+              run: pnpm playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
-
-            - run: ls -lah
-            - run: ls -lah apps/web
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
@@ -242,7 +240,7 @@ jobs:
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: html-report
-                  path: playwright-report
+                  path: apps/web/playwright-report
                   retention-days: 14
 
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
