@@ -69,7 +69,7 @@ const NewRoomIntro: React.FC = () => {
         return undefined;
     }, [isLocalRoom, room, roomId]);
 
-    const topicHtml = useMemo(() => {
+    const renderedTopic = useMemo(() => {
         if (dmPartner) {
             return undefined;
         }
@@ -153,11 +153,11 @@ const NewRoomIntro: React.FC = () => {
                             {sub}
                         </AccessibleButton>
                     ),
-                    topic: topicHtml,
+                    topic: renderedTopic,
                 },
             );
         } else if (topic) {
-            topicText = _t("room|intro|display_topic", {}, { topic: topicHtml });
+            topicText = _t("room|intro|display_topic", {}, { topic: renderedTopic });
         } else if (canAddTopic) {
             topicText = _t(
                 "room|intro|no_topic",
