@@ -1,0 +1,75 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React, { useEffect, type PropsWithChildren } from "react";
+import {
+    Panel,
+    type PanelProps,
+    usePanelCallbackRef,
+    type PanelImperativeHandle,
+    type PanelSize,
+} from "react-resizable-panels";
+
+import { type ViewModel, useViewModel } from "../../viewmodel";
+import { LEFT_PANEL_ID } from "..";
+
+export interface LeftResizablePanelViewActions {
+    /**
+     * Indicates to the view-model that the left panel was resized.
+     * @param newSize The new size of the left panel.
+     */
+    onLeftPanelResize: (panelSize: PanelSize) => void;
+
+    /**
+     * Pass the vm the object containing the API to interact with this panel.
+     * @param handle Object that can be used to access the imperative methods of the panel.
+     */
+    setPanelHandle: (handle: PanelImperativeHandle) => void;
+}
+
+export interface LeftResizablePanelViewSnapshot {
+    /**
+     * This is the initial size of the panel if available; should be interpreted as percentage.
+     */
+    initialSize?: number;
+}
+
+type Props = {
+    vm: ViewModel<LeftResizablePanelViewSnapshot, LeftResizablePanelViewActions>;
+    className?: string;
+} & Pick<PanelProps, "minSize" | "maxSize" | "defaultSize">;
+
+export function LeftResizablePanelView({
+    vm,
+    className,
+    children,
+    ...props
+}: PropsWithChildren<Props>): React.ReactNode {
+    const { initialSize } = useViewModel(vm);
+    const [panelRef, setPanelRef] = usePanelCallbackRef();
+
+    useEffect(() => {
+        if (panelRef) vm.setPanelHandle(panelRef);
+    }, [vm, panelRef]);
+
+    const defaultSize = initialSize !== undefined ? `${initialSize}%` : props.defaultSize;
+
+    return (
+        <Panel
+            id={LEFT_PANEL_ID}
+            className={className}
+            collapsible
+            minSize={props.minSize}
+            maxSize={props.maxSize}
+            defaultSize={defaultSize}
+            onResize={vm.onLeftPanelResize}
+            panelRef={setPanelRef}
+        >
+            {children}
+        </Panel>
+    );
+}
