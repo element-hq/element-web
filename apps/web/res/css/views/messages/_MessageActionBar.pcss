@@ -35,13 +35,11 @@ Please see LICENSE files in the repository root for full details.
     &::before {
         content: "";
         position: absolute;
-        /* tooltip safe mousing area + tooltip overhang + */
-        /* action bar + action bar offset from event */
-        width: calc(10px + 48px + 100% + 8px);
-        /* safe area + action bar */
+        /* tooltip safe mousing area */
+        width: calc(100% + 20px);
         height: calc(20px + 100%);
-        top: -12px;
-        left: -58px;
+        top: -11.5px;
+        left: -11.5px;
         z-index: -1;
         cursor: initial;
 
@@ -68,6 +66,12 @@ Please see LICENSE files in the repository root for full details.
             top: 0;
             left: 0;
         }
+    }
+
+    /* Mutates the safe area to add a tooltip overhang if tooltip is present */
+    &:has(> *[aria-describedby])::before {
+        width: calc(100% + 66.5px);
+        left: -58px;
     }
 
     > * {
