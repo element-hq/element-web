@@ -143,7 +143,10 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
                 const separatorTs = e.getTs();
                 nodes.push(
                     <li key={`${separatorRoomId}-${separatorTs}~`}>
-                        <DateSeparatorView vm={this.getDateSeparatorVm(separatorRoomId, separatorTs)} />
+                        <DateSeparatorView
+                            vm={this.getDateSeparatorVm(separatorRoomId, separatorTs)}
+                            className="mx_TimelineSeparator"
+                        />
                     </li>,
                 );
             }

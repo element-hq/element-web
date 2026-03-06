@@ -3,9 +3,10 @@
 exports[`EncryptionEventView > renders Default story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -33,9 +34,10 @@ exports[`EncryptionEventView > renders Default story 1`] = `
 exports[`EncryptionEventView > renders DisableAttempt story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -63,9 +65,10 @@ exports[`EncryptionEventView > renders DisableAttempt story 1`] = `
 exports[`EncryptionEventView > renders EnabledDirectMessage story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -93,9 +96,10 @@ exports[`EncryptionEventView > renders EnabledDirectMessage story 1`] = `
 exports[`EncryptionEventView > renders EnabledLocalRoom story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -123,9 +127,10 @@ exports[`EncryptionEventView > renders EnabledLocalRoom story 1`] = `
 exports[`EncryptionEventView > renders ParametersChanged story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -153,9 +158,10 @@ exports[`EncryptionEventView > renders ParametersChanged story 1`] = `
 exports[`EncryptionEventView > renders StateEncryptionEnabled story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -183,10 +189,10 @@ exports[`EncryptionEventView > renders StateEncryptionEnabled story 1`] = `
 exports[`EncryptionEventView > renders Unsupported story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
-      class="error"
+      data-state="unsupported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -214,9 +220,10 @@ exports[`EncryptionEventView > renders Unsupported story 1`] = `
 exports[`EncryptionEventView > renders WithTimestamp story 1`] = `
 <div>
   <div
-    class="container"
+    class="container content"
   >
     <svg
+      data-state="supported"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"

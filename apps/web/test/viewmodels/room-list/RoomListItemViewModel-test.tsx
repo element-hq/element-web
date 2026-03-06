@@ -19,7 +19,7 @@ import { createTestClient, flushPromises } from "../../test-utils";
 import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
-import { type MessagePreview, MessagePreviewStore } from "../../../src/stores/room-list/MessagePreviewStore";
+import { type MessagePreview, MessagePreviewStore } from "../../../src/stores/message-preview";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";

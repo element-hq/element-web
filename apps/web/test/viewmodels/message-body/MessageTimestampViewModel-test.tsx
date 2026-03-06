@@ -42,14 +42,13 @@ describe("MessageTimestampViewModel", () => {
         });
     });
 
-    it("should return the snapshot with extra class names", () => {
+    it("should return the snapshot without presentation class names", () => {
         const vm = new MessageTimestampViewModel({
             ts: nowDate.getTime(),
         });
         expect(vm.getSnapshot()).toMatchObject({
             ts: "08:09",
             tsSentAt: "Fri, Dec 17, 2021, 08:09:00",
-            className: "mx_MessageTimestamp",
         });
     });
 

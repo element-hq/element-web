@@ -20,10 +20,11 @@ const DateSeparatorViewWrapperImpl = ({
     onLastMonthPicked,
     onBeginningPicked,
     onDatePicked,
+    className,
     ...rest
-}: DateSeparatorProps): JSX.Element => {
+}: DateSeparatorProps & { className?: string }): JSX.Element => {
     const vm = useMockedViewModel(rest, { onLastWeekPicked, onLastMonthPicked, onBeginningPicked, onDatePicked });
-    return <DateSeparatorView vm={vm} />;
+    return <DateSeparatorView vm={vm} className={className} />;
 };
 const DateSeparatorViewWrapper = withViewDocs(DateSeparatorViewWrapperImpl, DateSeparatorView);
 
