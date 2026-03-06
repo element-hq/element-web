@@ -175,7 +175,6 @@ test.describe("FilePanel", () => {
             const tile = page.locator(".mx_FilePanel .mx_EventTile");
             // Assert that the file size is displayed in kibibytes, not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
-            await expect(tile.locator(".mx_MFileBody [data-type='info-label']", { hasText: size })).toBeVisible();
             await expect(tile.locator(".mx_MFileBody [data-type='info']", { hasText: size })).toBeVisible();
         });
     });

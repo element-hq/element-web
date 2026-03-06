@@ -186,12 +186,20 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
     }
 
     const info = infoShow ? (
-        <MediaBody data-type="info" onClick={vm.onInfoClick} role="button" tabIndex={0}>
-            <span data-type="info-icon">{React.createElement(resolvedInfoIcon)}</span>
-            <Tooltip description={resolvedInfoTooltip} placement="right">
-                <span data-type="info-label">{resolvedInfoLabel}</span>
-            </Tooltip>
-        </MediaBody>
+        <Tooltip description={resolvedInfoTooltip} placement="right">
+            <MediaBody data-type="info">
+                <Button
+                    as="button"
+                    size="sm"
+                    kind="secondary"
+                    aria-label={resolvedInfoLabel}
+                    Icon={resolvedInfoIcon}
+                    onClick={vm.onInfoClick}
+                >
+                    <span>{resolvedInfoLabel}</span>
+                </Button>
+            </MediaBody>
+        </Tooltip>
     ) : null;
 
     const classes = classNames(styles.content, className);

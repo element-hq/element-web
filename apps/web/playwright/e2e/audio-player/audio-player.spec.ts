@@ -247,7 +247,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that replied audio file is rendered as file button inside ReplyChain
             const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody [role='button']");
             // Assert that the file button has file name
-            await expect(button.locator("[data-type='info-label']")).toBeVisible();
+            await expect(button.locator("span")).toBeVisible();
 
             await takeSnapshots(page, app, "Selected EventTile of audio player with a reply");
         },
@@ -307,9 +307,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Assert that the file button contains the name of the file sent at first
             await expect(
-                replyChain
-                    .locator(".mx_MFileBody [role='button']")
-                    .locator("[data-type='info-label']", { hasText: "upload-first.ogg" }),
+                replyChain.locator(".mx_MFileBody [role='button']").locator("span", { hasText: "upload-first.ogg" }),
             ).toBeVisible();
 
             // Take snapshots

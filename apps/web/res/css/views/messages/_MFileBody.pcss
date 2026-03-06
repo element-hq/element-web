@@ -20,17 +20,13 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_MFileBody [data-type="info"] {
-    & [data-type="info-icon"] {
-        background-color: $system;
-        border-radius: 20px;
-        padding: var(--cpd-space-2x);
-
-        svg {
-            color: $secondary-content;
-        }
+    svg {
+        color: $secondary-content !important;
+        background-color: $system !important;
+        border-radius: 20px !important;
     }
 
-    & [data-type="info-label"] {
+    span {
         width: calc(100% - 32px - 12px); /* 32px icon, 12px margin on the icon */
     }
 }

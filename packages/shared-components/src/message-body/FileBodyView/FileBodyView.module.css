@@ -23,32 +23,33 @@
     display: inline-flex;
     align-items: center;
     flex-grow: 1;
-    cursor: pointer;
-    gap: var(--cpd-space-3x);
 
-    & [data-type="info-icon"] {
-        display: inline-flex;
-        align-items: center;
+    button {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none;
+        width: 100%;
+        min-block-size: unset;
+        color: inherit;
         background-color: inherit;
-        width: 16px;
-        height: 16px;
-        padding: var(--cpd-space-2x);
+        gap: var(--cpd-space-3x);
 
         svg {
-            width: inherit;
-            height: inherit;
-            display: block;
+            width: 16px;
+            height: 16px;
+            padding: var(--cpd-space-2x);
         }
-    }
 
-    & [data-type="info-label"] {
-        font: var(--cpd-font-body-md-regular);
-        color: var(--cpd-color-text-primary);
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        flex-grow: 1;
+        span {
+            flex-grow: 1;
+            text-align: start;
+            font: var(--cpd-font-body-md-regular);
+            color: var(--cpd-color-text-primary);
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 }
 
