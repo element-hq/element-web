@@ -19,13 +19,14 @@ import {
     mkStubRoom,
     mockClientPushProcessor,
 } from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../../src/languageHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import TextualBody from "../../../../../src/components/views/messages/TextualBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
+import RoomContext from "../../../../../src/contexts/RoomContext";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { getRoomContext } from "../../../../test-utils/room";
 
 const room1Id = "!room1:example.com";
 const room2Id = "!room2:example.com";
@@ -57,7 +58,6 @@ const mkFormattedMessage = (body: string, formattedBody: string): MatrixEvent =>
 
 describe("<TextualBody />", () => {
     afterEach(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockRestore();
         jest.spyOn(global.Math, "random").mockRestore();
     });
 
@@ -114,12 +114,17 @@ describe("<TextualBody />", () => {
         jest.spyOn(global.Math, "random").mockReturnValue(0.123456);
     });
 
-    const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) =>
-        (renderingFn ?? render)(
+    const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) => {
+        const mergedProps = { ...defaultProps, ...props };
+        const room = matrixClient.getRoom(mergedProps.mxEvent.getRoomId()) ?? defaultRoom;
+        return (renderingFn ?? render)(
             <MatrixClientContext.Provider value={matrixClient}>
-                <TextualBody {...defaultProps} {...props} />
+                <RoomContext.Provider value={getRoomContext(room, {})}>
+                    <TextualBody {...mergedProps} />
+                </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );
+    };
 
     it("renders m.emote correctly", () => {
         DMRoomMap.makeShared(defaultMatrixClient);
