@@ -73,7 +73,7 @@ const NewRoomIntro: React.FC = () => {
         if (dmPartner) {
             return undefined;
         }
-        return <ElementLinkedText>${topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>;
+        return <ElementLinkedText>{topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>;
     }, [topic, dmPartner]);
 
     if (!room || !roomId) {
