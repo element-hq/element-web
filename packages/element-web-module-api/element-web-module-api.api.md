@@ -5,6 +5,7 @@
 ```ts
 
 import { ComponentType } from 'react';
+import { IWidget } from 'matrix-widget-api';
 import { JSX } from 'react';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { Root } from 'react-dom/client';
@@ -56,6 +57,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly rootNode: HTMLElement;
     readonly stores: StoresApi;
     // @alpha
+    readonly widget: WidgetApi;
+    // @alpha
     readonly widgetLifecycle: WidgetLifecycleApi;
 }
 
@@ -106,6 +109,9 @@ export interface ConfigApi {
     // (undocumented)
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
 }
+
+// @alpha
+export type Container = "top" | "right" | "center";
 
 // @alpha
 export interface CustomComponentsApi {
@@ -174,6 +180,7 @@ export interface DirectoryCustomisations {
 // @alpha
 export interface ExtrasApi {
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+    setRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
@@ -358,6 +365,9 @@ export interface Room {
     name: Watchable<string>;
 }
 
+// @alpha
+export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
+
 // @alpha @deprecated (undocumented)
 export interface RoomListCustomisations<Room> {
     isRoomVisible?(room: Room): boolean;
@@ -437,6 +447,14 @@ export class Watchable<T> {
 }
 
 // @alpha
+export interface WidgetApi {
+    getAppAvatarUrl(app: IWidget, width?: number, height?: number, resizeMethod?: string): string | null;
+    getWidgetsInRoom(roomId: string): IWidget[];
+    isAppInContainer(app: IWidget, container: Container, roomId: string): boolean;
+    moveAppToContainer(app: IWidget, container: Container, roomId: string): void;
+}
+
+// @alpha
 export type WidgetDescriptor = {
     id: string;
     templateUrl: string;
@@ -476,4 +494,3 @@ export interface WidgetVariablesCustomisations {
 // (No @packageDocumentation comment for this package)
 
 ```
-

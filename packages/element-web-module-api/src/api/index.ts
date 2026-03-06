@@ -1,5 +1,6 @@
 /*
 Copyright 2025 New Vector Ltd.
+Copyright 2026 Element Creations Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -20,6 +21,7 @@ import { type BuiltinsApi } from "./builtins.ts";
 import { type StoresApi } from "./stores.ts";
 import { type ClientApi } from "./client.ts";
 import { type WidgetLifecycleApi } from "./widget-lifecycle.ts";
+import { type WidgetApi } from "./widget.ts";
 
 /**
  * Module interface for modules to implement.
@@ -142,6 +144,13 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly widgetLifecycle: WidgetLifecycleApi;
+
+    /**
+     * API for modules to interact with widgets in Element Web, including getting what widgets
+     * are active in a given room.
+     * @alpha Subject to change.
+     */
+    readonly widget: WidgetApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

@@ -61,5 +61,8 @@
         "matrix-web-i18n": {
             "optional": true
         }
+    },
+    "dependencies": {
+        "matrix-widget-api": "^1.17.0"
     }
 }

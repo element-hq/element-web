@@ -23,5 +23,6 @@ export type * from "./api/builtins";
 export type * from "./api/stores";
 export type * from "./api/client";
 export type * from "./api/widget-lifecycle";
+export type * from "./api/widget";
 export * from "./api/watchable";
 export type * from "./utils";
