@@ -24,6 +24,7 @@ import {
 } from "../../../src/renderer";
 import PlatformPeg from "../../../src/PlatformPeg";
 import type BasePlatform from "../../../src/BasePlatform";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 jest.mock("../../../src/HtmlUtils", () => ({
     ...jest.requireActual("../../../src/HtmlUtils"),
@@ -99,6 +100,35 @@ describe("EventContentBodyViewModel", () => {
         expect(snapshot.body).toBe("Hello world");
         expect(snapshot.replacer).toBe(replacer);
         expect(snapshot.className).toContain("mx_EventTile_body");
+    });
+
+    it("initializes setting-backed options from SettingsStore when omitted", () => {
+        const replacer = jest.fn();
+        const createReplacerFromOptions = jest.fn().mockReturnValue(replacer);
+        mockedCombineRenderers.mockReturnValue(createReplacerFromOptions);
+        mockedBodyToNode.mockReturnValue({
+            strippedBody: "Hello world",
+            formattedBody: undefined,
+            emojiBodyElements: undefined,
+            className: "mx_EventTile_body",
+        });
+        const getValueSpy = jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+            if (settingName === "TextualBody.enableBigEmoji") return false;
+            if (settingName === "Pill.shouldShowPillAvatar") return false;
+            return true;
+        });
+
+        new EventContentBodyViewModel(defaultProps());
+
+        expect(getValueSpy).toHaveBeenCalledWith("TextualBody.enableBigEmoji");
+        expect(getValueSpy).toHaveBeenCalledWith("Pill.shouldShowPillAvatar");
+        expect(mockedBodyToNode).toHaveBeenCalledWith(
+            defaultContent,
+            undefined,
+            expect.objectContaining({ disableBigEmoji: true }),
+        );
+        expect(createReplacerFromOptions).toHaveBeenCalledWith(expect.objectContaining({ shouldShowPillAvatar: false }));
+        getValueSpy.mockRestore();
     });
 
     it("forces disableBigEmoji for emote events", () => {

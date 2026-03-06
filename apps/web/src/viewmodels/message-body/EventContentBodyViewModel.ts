@@ -84,6 +84,7 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
     highlights?: string[];
     /**
      * Whether to render links as clickable anchors.
+     * @default true
      */
     linkify?: boolean;
     /**
@@ -210,7 +211,13 @@ export class EventContentBodyViewModel
     };
 
     public constructor(props: EventContentBodyViewModelProps) {
-        super(props, EventContentBodyViewModel.computeSnapshot(props));
+        const propsWithSettingDefaults: EventContentBodyViewModelProps = {
+            ...props,
+            enableBigEmoji: props.enableBigEmoji ?? SettingsStore.getValue("TextualBody.enableBigEmoji"),
+            shouldShowPillAvatar: props.shouldShowPillAvatar ?? SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+        };
+
+        super(propsWithSettingDefaults, EventContentBodyViewModel.computeSnapshot(propsWithSettingDefaults));
 
         const enableBigEmojiWatcherRef = SettingsStore.watchSetting(
             "TextualBody.enableBigEmoji",
