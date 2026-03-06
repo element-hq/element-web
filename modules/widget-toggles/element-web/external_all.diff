@@ -1,0 +1,28 @@
+diff --git a/modules/widget-toggles/element-web/vite.config.ts b/modules/widget-toggles/element-web/vite.config.ts
+index b65e3ec..9d1ba49 100644
+--- a/modules/widget-toggles/element-web/vite.config.ts
++++ b/modules/widget-toggles/element-web/vite.config.ts
+@@ -28,7 +28,14 @@ export default defineConfig({
+         target: "esnext",
+         sourcemap: true,
+         rollupOptions: {
+-            external: ["react"],
++            // make sure to externalize deps that shouldn't be bundled
++            // into your library
++            external: [
++                "react",
++                "react-dom",
++                "@vector-im/compound-design-tokens",
++                "@vector-im/compound-web"
++            ],
+         },
+     },
+     plugins: [
+@@ -41,6 +48,7 @@ export default defineConfig({
+         externalGlobals({
+             // Reuse React from the host app
+             react: "window.React",
++            "@vector-im/compound-web": "window.CompoundWeb",
+         }),
+     ],
+     define: {
