@@ -108,7 +108,6 @@ interface StateEventButtonProps {
 const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyKey, expiresAt, onClick }) => {
     const [timeRemaining, setTimeRemaining] = useState<string>("");
     const [isExpired, setIsExpired] = useState<boolean>(false);
-    const [hover, setHover] = useState<boolean>(false);
     const [focused, setFocused] = useState<boolean>(false);
     // showFocus indicates the focus outline should be shown - we set it on keyboard interaction
     const [showFocus, setShowFocus] = useState<boolean>(false);
@@ -150,36 +149,9 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
         return () => clearInterval(interval);
     }, [expiresAt]);
 
-    // Small reusable cell styles used to keep layout tidy in this devtool
-    // Give more space to the userId column to avoid truncation in typical cases
-    const userCellStyle: React.CSSProperties = {
-        maxWidth: "36ch",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        padding: "8px 12px",
-    };
-    const keyCellStyle: React.CSSProperties = {
-        maxWidth: "48ch",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        padding: "8px 12px",
-    };
-    const expiresCellStyle: React.CSSProperties = { textAlign: "right", whiteSpace: "nowrap", padding: "8px 12px" };
-
-    const rowStyle: React.CSSProperties = {
-        cursor: "pointer",
-        background: hover ? "rgba(0,0,0,0.03)" : "transparent",
-        borderBottom: "1px solid rgba(0,0,0,0.06)",
-    };
-    const focusStyle: React.CSSProperties = { outline: "2px solid rgba(0,120,212,0.25)", outlineOffset: "2px" };
-
     return (
         <tr
             onClick={onClick}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
             onMouseDown={() => setShowFocus(false)}
             onFocus={() => setFocused(true)}
             onBlur={() => {
@@ -197,11 +169,11 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
             }}
             tabIndex={0}
             role="button"
-            style={{ ...rowStyle, ...(focused && showFocus ? focusStyle : {}) }}
+            className={focused && showFocus ? "focused" : ""}
         >
-            <td style={userCellStyle}>{userId}</td>
-            <td style={keyCellStyle}>{stickyKey ?? <i>unkeyed</i>}</td>
-            <td style={expiresCellStyle}>{isExpired ? _t("devtools|expired") : timeRemaining}</td>
+            <td style={{ maxWidth: "36ch" }}>{userId}</td>
+            <td style={{ maxWidth: "48ch" }}>{stickyKey ?? <i>unkeyed</i>}</td>
+            <td style={{ textAlign: "right" }}>{isExpired ? _t("devtools|expired") : timeRemaining}</td>
         </tr>
     );
 };
@@ -229,7 +201,12 @@ const StickyEventListPerType: React.FC<StickyEventListPerTypeProps> = ({
     const [showEmptyState, setShowEmptyState] = useState(true);
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_td("devtools|send_custom_sticky_event")} onAction={onAction}>
+        <BaseTool
+            className="mx_DevTools_sticky_explorer"
+            onBack={onBack}
+            actionLabel={_td("devtools|send_custom_sticky_event")}
+            onAction={onAction}
+        >
             <p>
                 <Pill label={eventType} />
             </p>
@@ -259,16 +236,12 @@ const StickyEventListPerType: React.FC<StickyEventListPerTypeProps> = ({
                 />
             </Form.Root>
 
-            <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed", marginTop: 8 }}>
+            <table className="mx_DevTools_event_table">
                 <thead>
                     <tr>
-                        <th style={{ textAlign: "left", padding: "8px 12px", width: "35%" }}>{_t("devtools|users")}</th>
-                        <th style={{ textAlign: "left", padding: "8px 12px", width: "50%" }}>
-                            {_t("devtools|sticky_key")}
-                        </th>
-                        <th style={{ textAlign: "right", padding: "8px 12px", width: "15%" }}>
-                            {_t("devtools|expires_in")}
-                        </th>
+                        <th style={{ width: "35%" }}>{_t("devtools|users")}</th>
+                        <th style={{ width: "50%" }}>{_t("devtools|sticky_key")}</th>
+                        <th style={{ width: "15%" }}>{_t("devtools|expires_in")}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -341,7 +314,7 @@ export const StickyEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) =
 
     const onSend = async ([eventType, stickyDuration]: string[], content: IContent): Promise<void> => {
         // Parse and validate stickyDuration. It must be an integer number of milliseconds
-        // between 0 and 3,600,000 (inclusive) — 1 hour max.
+        // between 0 and 3,600,000 (inclusive) — 1-hour max.
         const parsed = Number.parseInt(String(stickyDuration), 10);
         if (Number.isNaN(parsed)) {
             throw new UserFriendlyError("devtools|error_sticky_duration_must_be_a_number");

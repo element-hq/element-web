@@ -187,3 +187,40 @@ Please see LICENSE files in the repository root for full details.
     /* used on focus */
     color: $links !important;
 }
+
+.mx_DevTools_sticky_explorer {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin-top: 8px;
+
+        th {
+            text-align: left;
+            padding: 8px 12px;
+        }
+
+        tr {
+            cursor: pointer;
+            border-bottom: 1px solid $separator;
+            background: transparent;
+        }
+
+        tr:hover {
+            color: $secondary-content;
+            background: $system;
+        }
+
+        tr.focused {
+            outline: 2px solid $focus-bg-color;
+            outline-offset: 2px;
+        }
+
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 8px 12px;
+        }
+    }
+}
