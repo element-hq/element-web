@@ -5,26 +5,27 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
- .separator {
+.separator {
     display: flex;
     align-items: center;
     border-right: 1px solid var(--cpd-color-bg-subtle-primary);
     /* Hide the separator by default */
     width: 0px;
     opacity: 0;
- }
+}
 
- .separator:focus {
+.separator:focus {
     /* If the separator is focused, set opacity so that the focus ring is visible */
-    opacity: 100%;;
- }
+    opacity: 100%;
+}
 
- .separator:hover, .separator:focus-visible {
+.separator:hover,
+.separator:focus-visible {
     background: var(--cpd-color-bg-action-tertiary-hovered);
- }
+}
 
- .collapsed {
+.collapsed {
     /* Show the separator when the left panel is collapsed */
     opacity: 100%;
     width: 12px;
- }
+}
