@@ -242,6 +242,7 @@ jobs:
                   name: html-report
                   path: apps/web/playwright-report
                   retention-days: 14
+                  if-no-files-found: error
 
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
