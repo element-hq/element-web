@@ -5,19 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-/// <reference types="@vitest/browser-playwright" />
-
 import { defineConfig } from "vitest/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
-import { playwright } from "@vitest/browser-playwright";
+import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { InlineConfig } from "vite";
 import { Reporter } from "vitest/reporters";
 import { env } from "process";
-import { BrowserContextOptions } from "playwright-core";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -61,7 +58,7 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
     }
 }
 
-const commonContextOptions: Omit<BrowserContextOptions, "ignoreHTTPSErrors" | "serviceWorkers"> = {
+const commonContextOptions: PlaywrightProviderOptions["contextOptions"] = {
     reducedMotion: "reduce",
     // Force consistent font rendering
     colorScheme: "light",
