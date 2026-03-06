@@ -46,6 +46,7 @@
             font: var(--cpd-font-body-md-regular);
             color: var(--cpd-color-text-primary);
             min-width: 0;
+            width: calc(100% - 16px - 2 * var(--cpd-space-2x) - var(--cpd-space-3x));
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
