@@ -78,7 +78,7 @@ jobs:
               run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -132,7 +132,7 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -160,11 +160,13 @@ jobs:
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
+              working-directory: apps/web
               run: pnpm playwright install --with-deps --no-shell
 
             - name: Install system dependencies for WebKit
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
+              working-directory: apps/web
               run: pnpm playwright install-deps webkit
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
@@ -178,7 +180,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
                   path: apps/web/blob-report
@@ -220,15 +222,16 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
               with:
                   pattern: all-blob-reports-*
-                  path: all-blob-reports
+                  path: apps/web/all-blob-reports
                   merge-multiple: true
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: pnpm playwright merge-reports --reporter=html,./apps/web/playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
+              working-directory: apps/web
+              run: pnpm playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
@@ -236,11 +239,12 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: html-report
-                  path: playwright-report
+                  path: apps/web/playwright-report
                   retention-days: 14
+                  if-no-files-found: error
 
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1

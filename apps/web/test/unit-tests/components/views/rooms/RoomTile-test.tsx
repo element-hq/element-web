@@ -33,7 +33,7 @@ import {
 } from "../../../../test-utils";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import RoomTile from "../../../../../src/components/views/rooms/RoomTile";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import PlatformPeg from "../../../../../src/PlatformPeg";
 import type BasePlatform from "../../../../../src/BasePlatform";
@@ -42,7 +42,7 @@ import { TestSdkContext } from "../../../TestSdkContext";
 import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
-import { MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../../../src/stores/message-preview";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { ConnectionState } from "../../../../../src/models/Call";

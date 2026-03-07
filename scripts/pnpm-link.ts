@@ -13,7 +13,7 @@ Please see LICENSE files in the repository root for full details.
 // replacing them with a symlink/directory junction.
 // This tool is a helpful substitute to `pnpm link` as that modifies the package.json & pnpm-lock.yaml files.
 
-import fs from "node:fs/promises";
+import * as fs from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -48,8 +48,10 @@ try {
             console.log(`Linking ${dependency} to ${path}`);
             await fs.symlink(path, dependencyPath);
 
+            const pkgJson = await fs.readFile(join(path, "package.json"), "utf-8");
+            const pkgManager = JSON.parse(pkgJson)["packageManager"]?.split("@").at(0) ?? "yarn";
             // pnpm install may have wiped out the `node_modules` dir so we have to restore it
-            execSync("pnpm i --ignore-scripts --frozen-lockfile", {
+            execSync(`${pkgManager} install --ignore-scripts --frozen-lockfile`, {
                 cwd: dependencyPath,
             });
         } catch (e) {

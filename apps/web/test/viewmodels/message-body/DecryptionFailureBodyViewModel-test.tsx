@@ -22,19 +22,6 @@ describe("DecryptionFailureBodyViewModel", () => {
         });
     });
 
-    it("should return the snapshot with extra class names", () => {
-        const vm = new DecryptionFailureBodyViewModel({
-            decryptionFailureCode: null,
-            verificationState: true,
-            extraClassNames: ["custom-class"],
-        });
-        expect(vm.getSnapshot()).toMatchObject({
-            decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
-            isLocalDeviceVerified: true,
-            extraClassNames: ["mx_DecryptionFailureBody", "mx_EventTile_content", "custom-class"],
-        });
-    });
-
     it.each([
         {
             code: DecryptionFailureCode.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED,

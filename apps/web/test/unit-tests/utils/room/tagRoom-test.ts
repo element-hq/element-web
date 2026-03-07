@@ -10,10 +10,10 @@ import { Room } from "matrix-js-sdk/src/matrix";
 
 import RoomListActions from "../../../../src/actions/RoomListActions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { DefaultTagID, type TagID } from "../../../../src/stores/room-list/models";
-import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
+import { DefaultTagID, type TagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { tagRoom } from "../../../../src/utils/room/tagRoom";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
+import * as getTagsForRoomUtils from "../../../../src/utils/room/getTagsForRoom";
 
 describe("tagRoom()", () => {
     const userId = "@alice:server.org";
@@ -25,7 +25,7 @@ describe("tagRoom()", () => {
         });
         const room = new Room(roomId, client, userId);
 
-        jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValue(tags);
+        jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue(tags);
 
         return room;
     };

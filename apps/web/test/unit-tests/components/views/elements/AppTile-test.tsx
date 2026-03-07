@@ -37,6 +37,7 @@ import { ElementWidgetCapabilities } from "../../../../../src/stores/widgets/Ele
 import { ElementWidget, type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
+import { ModuleApi } from "../../../../../src/modules/Api";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
@@ -424,6 +425,30 @@ describe("AppTile", () => {
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
 
             expect(renderResult.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument();
+        });
+
+        it("should auto-approve preload via new widget lifecycle API", async () => {
+            // Legacy module API denies preload
+            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
+                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
+                    (opts as ApprovalOpts).approved = false;
+                }
+            });
+
+            // New API approves preload
+            jest.spyOn(ModuleApi.instance.widgetLifecycle, "preapprovePreload").mockResolvedValue(true);
+
+            // userId and creatorUserId are different so legacy path would show "Continue"
+            const renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />
+                </MatrixClientContext.Provider>,
+            );
+
+            // The new API runs async in componentDidMount, so wait for it to take effect
+            await waitFor(() => {
+                expect(renderResult.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument();
+            });
         });
 
         describe("for a maximised (centered) widget", () => {

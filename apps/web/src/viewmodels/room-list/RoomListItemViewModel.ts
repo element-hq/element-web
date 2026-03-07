@@ -18,9 +18,9 @@ import type { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
-import { MessagePreviewStore } from "../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../stores/message-preview";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { DefaultTagID } from "../../stores/room-list/models";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
@@ -37,7 +37,6 @@ import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 
-
 interface RoomItemProps {
     room: Room;
     client: MatrixClient;
@@ -53,6 +52,9 @@ export class RoomListItemViewModel
     implements RoomListItemActions
 {
     private notifState: RoomNotificationState;
+    /**
+     * Track the current call for this room to manager listeners
+     */
 
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
@@ -80,6 +82,7 @@ export class RoomListItemViewModel
 
         // Subscribe to call state changes
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, this.onCallStateChanged);
+        // If there is an active call for this room, listen to participant changes
 
         // Subscribe to room-specific events
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
@@ -87,6 +90,10 @@ export class RoomListItemViewModel
 
         // Load message preview asynchronously (sync data is already complete)
         void this.loadAndSetMessagePreview();
+    }
+
+    public dispose(): void {
+        super.dispose();
     }
 
     private onNotificationChanged = (): void => {
@@ -102,6 +109,8 @@ export class RoomListItemViewModel
     };
 
     private onCallStateChanged = (): void => {
+        this.listenToCallParticipants();
+
         this.updateItem();
     };
 
@@ -208,14 +217,15 @@ export class RoomListItemViewModel
         // Video room and call state tracking
         const call = CallStore.instance.getCall(room.roomId);
 
-        const callParticipants: CallParticipantListItem[] = [...call?.participants?.keys() ?? []].map(roomMember => {
-            return {
-                id: roomMember.userId,
-                name: roomMember.name,
-                avatarUrl: roomMember.getAvatarUrl(client.baseUrl, 24, 24, "scale", true, false),
-            }
-        });
-
+        const callParticipants: CallParticipantListItem[] = [...(call?.participants?.keys() ?? [])].map(
+            (roomMember) => {
+                return {
+                    id: roomMember.userId,
+                    name: roomMember.name,
+                    avatarUrl: roomMember.getAvatarUrl(client.baseUrl, 24, 24, "scale", true, false),
+                };
+            },
+        );
 
         return {
             id: room.roomId,
@@ -244,8 +254,8 @@ export class RoomListItemViewModel
             canMarkAsUnread,
             roomNotifState,
             callParticipants: {
-                participants: callParticipants
-            }
+                participants: callParticipants,
+            },
         };
     }
 

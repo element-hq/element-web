@@ -21,14 +21,14 @@ import {
 } from "../../../../../src/components/views/context_menus/RoomGeneralContextMenu";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
-import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { mkMessage, stubClient } from "../../../../test-utils/test-utils";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { clearAllModals } from "../../../../test-utils";
+import * as getTagsForRoomUtils from "../../../../../src/utils/room/getTagsForRoom";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -74,7 +74,7 @@ describe("RoomGeneralContextMenu", () => {
         } as unknown as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
 
-        jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValueOnce([
+        jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValueOnce([
             DefaultTagID.DM,
             DefaultTagID.Favourite,
         ]);
@@ -87,7 +87,7 @@ describe("RoomGeneralContextMenu", () => {
     });
 
     it("renders an empty context menu for archived rooms", async () => {
-        jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValueOnce([DefaultTagID.Archived]);
+        jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValueOnce([DefaultTagID.Archived]);
 
         const { container } = getComponent({});
         expect(container).toMatchSnapshot();

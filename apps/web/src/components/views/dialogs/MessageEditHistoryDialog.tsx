@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type MatrixEvent, EventType, RelationType, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { DateSeparatorView } from "@element-hq/web-shared-components";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -18,7 +19,7 @@ import BaseDialog from "./BaseDialog";
 import ScrollPanel from "../../structures/ScrollPanel";
 import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
-import DateSeparator from "../messages/DateSeparator";
+import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -35,6 +36,8 @@ interface IState {
 }
 
 export default class MessageEditHistoryDialog extends React.PureComponent<IProps, IState> {
+    private dateSeparatorVms = new Map<string, DateSeparatorViewModel>();
+
     public constructor(props: IProps) {
         super(props);
         this.state = {
@@ -45,6 +48,16 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
             isLoading: true,
             isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
         };
+    }
+
+    private getDateSeparatorVm(roomId: string, ts: number): DateSeparatorViewModel {
+        const key = `${roomId}-${ts}`;
+        let vm = this.dateSeparatorVms.get(key);
+        if (!vm) {
+            vm = new DateSeparatorViewModel({ roomId, ts });
+            this.dateSeparatorVms.set(key, vm);
+        }
+        return vm;
     }
 
     private loadMoreEdits = async (backwards?: boolean): Promise<boolean> => {
@@ -108,6 +121,13 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         this.loadMoreEdits();
     }
 
+    public componentWillUnmount(): void {
+        for (const vm of this.dateSeparatorVms.values()) {
+            vm.dispose();
+        }
+        this.dateSeparatorVms.clear();
+    }
+
     private renderEdits(): JSX.Element[] {
         const nodes: JSX.Element[] = [];
         let lastEvent: MatrixEvent;
@@ -119,9 +139,14 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const baseEventId = this.props.mxEvent.getId();
         allEvents.forEach((e, i) => {
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate() || undefined, e.getDate() || undefined)) {
+                const separatorRoomId = e.getRoomId()!;
+                const separatorTs = e.getTs();
                 nodes.push(
-                    <li key={e.getTs() + "~"}>
-                        <DateSeparator roomId={e.getRoomId()!} ts={e.getTs()} />
+                    <li key={`${separatorRoomId}-${separatorTs}~`}>
+                        <DateSeparatorView
+                            vm={this.getDateSeparatorVm(separatorRoomId, separatorTs)}
+                            className="mx_TimelineSeparator"
+                        />
                     </li>,
                 );
             }

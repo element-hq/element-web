@@ -39,6 +39,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
 import { mkEvent, stubClient } from "../../../test-utils";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
+import { ModuleApi } from "../../../../src/modules/Api";
 import dis from "../../../../src/dispatcher/dispatcher";
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -169,6 +170,76 @@ describe("ElementWidgetDriver", () => {
     it("approves identity via module api", async () => {
         const driver = mkDefaultDriver();
 
+        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
+            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
+                (opts as ApprovalOpts).approved = true;
+            }
+        });
+
+        const listener = jest.fn();
+        const observer = new SimpleObservable<IOpenIDUpdate>();
+        observer.onUpdate(listener);
+        await driver.askOpenID(observer);
+
+        const openIdUpdate: IOpenIDUpdate = {
+            state: OpenIDRequestState.Allowed,
+            token: await client.getOpenIdToken(),
+        };
+        expect(listener).toHaveBeenCalledWith(openIdUpdate);
+    });
+
+    it("approves capabilities via new widget lifecycle API", async () => {
+        const driver = mkDefaultDriver();
+
+        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
+
+        jest.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveCapabilities").mockResolvedValue(
+            requestedCapabilities,
+        );
+
+        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
+        expect(approvedCapabilities).toEqual(requestedCapabilities);
+    });
+
+    it("falls back to legacy module API when new API returns undefined for capabilities", async () => {
+        const driver = mkDefaultDriver();
+
+        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
+
+        jest.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveCapabilities").mockResolvedValue(undefined);
+        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation(
+            (lifecycleEvent, opts, widgetInfo, requested) => {
+                if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
+                    (opts as CapabilitiesOpts).approvedCapabilities = requested;
+                }
+            },
+        );
+
+        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
+        expect(approvedCapabilities).toEqual(requestedCapabilities);
+    });
+
+    it("approves identity via new widget lifecycle API", async () => {
+        const driver = mkDefaultDriver();
+
+        jest.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveIdentity").mockResolvedValue(true);
+
+        const listener = jest.fn();
+        const observer = new SimpleObservable<IOpenIDUpdate>();
+        observer.onUpdate(listener);
+        await driver.askOpenID(observer);
+
+        const openIdUpdate: IOpenIDUpdate = {
+            state: OpenIDRequestState.Allowed,
+            token: await client.getOpenIdToken(),
+        };
+        expect(listener).toHaveBeenCalledWith(openIdUpdate);
+    });
+
+    it("falls back to legacy module API when new API returns false for identity", async () => {
+        const driver = mkDefaultDriver();
+
+        jest.spyOn(ModuleApi.instance.widgetLifecycle, "preapproveIdentity").mockResolvedValue(false);
         jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
             if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
                 (opts as ApprovalOpts).approved = true;

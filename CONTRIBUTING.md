@@ -46,6 +46,9 @@ As for your PR description, it should include these things:
 - Add comments to the diff for the reviewer that might help them to understand
   why the change is necessary or how they might better understand and review it.
 
+Please **_do not use force push_** in your PRs. Doing so means we can't see what
+has changed. We use squash merge to get a "clean" git history.
+
 ### Changelogs
 
 There's no need to manually add Changelog entries: we use information in the

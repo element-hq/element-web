@@ -5,26 +5,23 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { composeStories } from "@storybook/react-vite";
 import { render } from "@test-utils";
 import React from "react";
 import { describe, it, expect } from "vitest";
 
 import { DecryptionFailureBodyView, DecryptionFailureReason } from "./DecryptionFailureBodyView";
 import { MockViewModel } from "../../viewmodel";
-import * as stories from "./DecryptionFailureBodyView.stories";
-
-const { HasExtraClassNames } = composeStories(stories);
 
 describe("DecryptionFailureBodyView", () => {
     function customRender(
         decryptionFailureReason: DecryptionFailureReason,
         isLocalDeviceVerified: boolean = false,
-        extraClassNames: string[] | undefined = undefined,
+        className: string | undefined = undefined,
     ): ReturnType<typeof render> {
         return render(
             <DecryptionFailureBodyView
-                vm={new MockViewModel({ decryptionFailureReason, isLocalDeviceVerified, extraClassNames })}
+                vm={new MockViewModel({ decryptionFailureReason, isLocalDeviceVerified })}
+                className={className}
             />,
         );
     }
@@ -38,12 +35,14 @@ describe("DecryptionFailureBodyView", () => {
         );
     }
 
-    it("Should display with extra class names", () => {
-        // When
-        const { container } = render(<HasExtraClassNames />);
+    it("applies custom className to the root element", () => {
+        const { container } = customRender(
+            DecryptionFailureReason.UNABLE_TO_DECRYPT,
+            false,
+            "extra_class_1 extra_class_2",
+        );
 
-        // Then
-        expect(container).toMatchSnapshot();
+        expect(container.firstChild).toHaveClass("extra_class_1", "extra_class_2");
     });
 
     it.each([true, false])(`Should display "Unable to decrypt message and device verification is %s"`, (verified) => {

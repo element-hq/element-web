@@ -15,6 +15,7 @@ import { ErrorSolidIcon, InfoIcon } from "@vector-im/compound-design-tokens/asse
 import { _t } from "../../../languageHandler";
 
 export enum InfoTooltipKind {
+    /** @knipignore */
     Info = "info",
     Warning = "warning",
 }

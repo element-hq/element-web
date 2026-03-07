@@ -76,7 +76,6 @@
         "@storybook/react-vite": "^10.0.7",
         "@stylistic/eslint-plugin": "^5.7.0",
         "@testing-library/dom": "^10.4.1",
-        "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",
         "@testing-library/user-event": "^14.6.1",
         "@types/counterpart": "^0.18.4",
@@ -86,14 +85,12 @@
         "@typescript-eslint/eslint-plugin": "^8.53.1",
         "@typescript-eslint/parser": "^8.53.1",
         "@vector-im/compound-web": "catalog:",
-        "@vitejs/plugin-react": "^5.1.2",
         "@vitest/browser-playwright": "^4.0.17",
         "@vitest/coverage-v8": "^4.0.17",
-        "@vitest/ui": "^4.0.17",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-deprecate": "^0.8.7",
+        "eslint-plugin-deprecate": "^0.9.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsx-a11y": "^6.10.2",
         "eslint-plugin-matrix-org": "^3.0.0",
@@ -102,7 +99,6 @@
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-storybook": "^10.0.7",
         "eslint-plugin-unicorn": "^56.0.0",
-        "expect": "^30.2.0",
         "prettier": "^3.6.2",
         "storybook": "^10.0.7",
         "storybook-addon-vis": "^3.1.2",
@@ -114,13 +110,12 @@
         "vite-plugin-dts": "^4.5.4",
         "vite-plugin-node-polyfills": "^0.25.0",
         "vitest": "^4.0.18",
-        "vitest-browser-react": "^2.0.2",
         "vitest-sonar-reporter": "^3.0.0"
     },
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
+    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5"
     }

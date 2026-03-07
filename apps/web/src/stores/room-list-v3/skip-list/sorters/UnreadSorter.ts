@@ -9,10 +9,10 @@ import { KnownMembership, RoomType, type Room } from "matrix-js-sdk/src/matrix";
 
 import { type Sorter, SortingAlgorithm } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
-import { DefaultTagID } from "../../../room-list/models";
 import { CallStore } from "../../../CallStore";
 import { getMarkedUnreadState } from "../../../../utils/notifications";
 import { BaseRecencySorter } from "./BaseRecencySorter";
+import { DefaultTagID } from "../tag";
 
 /**
  * Similar to RecencySorter but with the following special order:

@@ -5,7 +5,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useRef, useState } from "react";
-import { EventType, type HistoryVisibility, type JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    type HistoryVisibility,
+    type JoinRule,
+    type Room,
+    RoomEvent,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -17,9 +24,8 @@ import { useAccountData } from "../../../hooks/useAccountData";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
-import { DefaultTagID } from "../../../stores/room-list/models";
+import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -34,6 +40,7 @@ import { Key } from "../../../Keyboard";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
+import { getTagsForRoom } from "../../../utils/room/getTagsForRoom";
 
 export interface RoomSummaryCardState {
     isDirectMessage: boolean;
@@ -171,9 +178,7 @@ export function useRoomSummaryCardViewModel(
     // value to check if the user can invite to the room
     const canInviteToState = useEventEmitterState(room, RoomStateEvent.Update, () => canInviteTo(room));
 
-    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
-        RoomListStore.instance.getTagsForRoom(room),
-    );
+    const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => getTagsForRoom(room));
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
 
     const isDirectMessage = useIsDirectMessage(room);

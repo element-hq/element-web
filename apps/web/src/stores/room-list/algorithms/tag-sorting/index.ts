@@ -11,7 +11,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { SortAlgorithm } from "../models";
 import { ManualAlgorithm } from "./ManualAlgorithm";
 import { type IAlgorithm } from "./IAlgorithm";
-import { type TagID } from "../../models";
+import { type TagID } from "../../../room-list-v3/skip-list/tag";
 import { RecentAlgorithm } from "./RecentAlgorithm";
 import { AlphabeticAlgorithm } from "./AlphabeticAlgorithm";
 

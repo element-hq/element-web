@@ -11,8 +11,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { useRoomSummaryCardViewModel } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
-import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import Modal from "../../../../../src/Modal";
@@ -23,6 +22,7 @@ import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/Re
 import { inviteToRoom } from "../../../../../src/utils/room/inviteToRoom";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import * as hooks from "../../../../../src/hooks/useAccountData";
+import * as getTagsForRoomUtils from "../../../../../src/utils/room/getTagsForRoom";
 
 jest.mock("../../../../../src/utils/room/inviteToRoom", () => ({
     inviteToRoom: jest.fn(),
@@ -43,7 +43,7 @@ describe("useRoomSummaryCardViewModel", () => {
             getUserIdForRoomId: jest.fn(),
         } as unknown as DMRoomMap);
 
-        jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValue([]);
+        jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([]);
     });
 
     afterEach(() => {
@@ -195,14 +195,14 @@ describe("useRoomSummaryCardViewModel", () => {
 
     describe("favorite room state", () => {
         it("should identify favorite rooms", () => {
-            jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValue([DefaultTagID.Favourite]);
+            jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([DefaultTagID.Favourite]);
             const { result } = render();
 
             expect(result.current.isFavorite).toBe(true);
         });
 
         it("should identify non-favorite rooms", () => {
-            jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValue([]);
+            jest.spyOn(getTagsForRoomUtils, "getTagsForRoom").mockReturnValue([]);
             const { result } = render();
 
             expect(result.current.isFavorite).toBe(false);
