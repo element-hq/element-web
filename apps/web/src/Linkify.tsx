@@ -19,6 +19,16 @@ import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 
+function sanitizeMxcImageSrc(src?: string): string | undefined {
+    if (!src) return undefined;
+    if (src.startsWith("mxc://")) return src;
+
+    const match = MEDIA_API_MXC_REGEX.exec(src);
+    if (!match) return undefined;
+
+    return `mxc://${match[1]}/${match[2]}`;
+}
+
 export const transformTags: NonNullable<IOptions["transformTags"]> = {
     // custom to matrix
     // add blank targets to all hyperlinks except vector URLs
@@ -42,22 +52,11 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         return { tagName, attribs };
     },
     "img": function (tagName: string, attribs: sanitizeHtml.Attributes) {
-        let src = attribs.src;
+        const src = sanitizeMxcImageSrc(attribs.src);
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
         if (!src) {
-            return { tagName, attribs: {} };
-        }
-
-        if (!src.startsWith("mxc://")) {
-            const match = MEDIA_API_MXC_REGEX.exec(src);
-            if (match) {
-                src = `mxc://${match[1]}/${match[2]}`;
-            }
-        }
-
-        if (!src.startsWith("mxc://")) {
             return { tagName, attribs: {} };
         }
 
@@ -74,7 +73,12 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         if (requestedHeight) {
             attribs.style += "height: 100%;";
         }
-        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
+
+        const media = mediaFromMxc(src);
+        attribs.src =
+            attribs["data-mx-emoticon"] !== undefined
+                ? (media.srcHttp ?? media.getThumbnailOfSourceHttp(width, height)!)
+                : media.getThumbnailOfSourceHttp(width, height)!;
         return { tagName, attribs };
     },
     "code": function (tagName: string, attribs: sanitizeHtml.Attributes) {
@@ -179,7 +183,7 @@ export const sanitizeHtmlParams: IOptions = {
         div: ["data-mx-maths"],
         a: ["href", "name", "target", "rel"], // remote target: custom to matrix
         // img tags also accept width/height, we just map those to max-width & max-height during transformation
-        img: ["src", "alt", "title", "style"],
+        img: ["src", "alt", "title", "style", "data-mx-emoticon"],
         ol: ["start"],
         code: ["class"], // We don't actually allow all classes, we filter them in transformTags
     },

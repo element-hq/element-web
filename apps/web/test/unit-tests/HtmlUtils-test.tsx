@@ -48,6 +48,10 @@ describe("topicToHtml", () => {
 });
 
 describe("bodyToHtml", () => {
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it("should apply highlights to HTML messages", () => {
         const html = bodyToHtml(
             {
@@ -122,6 +126,56 @@ describe("bodyToHtml", () => {
         expect(html).toMatchInlineSnapshot(
             `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
         );
+    });
+
+    it("renders inline custom emoticons from their source media URL", () => {
+        const mxcUrlToHttp = jest.fn().mockImplementation((mxc, width, height) => {
+            if (width === undefined && height === undefined) {
+                return `https://cdn.example/download/${encodeURIComponent(mxc)}`;
+            }
+
+            return `https://cdn.example/thumbnail/${encodeURIComponent(mxc)}/${width}x${height}`;
+        });
+        getMockClientWithEventEmitter({ mxcUrlToHttp });
+
+        const html = bodyToHtml(
+            {
+                body: ":party_parrot:",
+                msgtype: "m.text",
+                formatted_body:
+                    '<img data-mx-emoticon src="mxc://example.org/party-parrot" alt="party_parrot" title="party_parrot" height="32" />',
+                format: "org.matrix.custom.html",
+            },
+            [],
+        );
+
+        expect(html).toContain('src="https://cdn.example/download/mxc%3A%2F%2Fexample.org%2Fparty-parrot"');
+        expect(html).toContain("data-mx-emoticon");
+        expect(html).not.toContain("thumbnail");
+    });
+
+    it("continues to thumbnail generic inline MXC images", () => {
+        const mxcUrlToHttp = jest.fn().mockImplementation((mxc, width, height) => {
+            if (width === undefined && height === undefined) {
+                return `https://cdn.example/download/${encodeURIComponent(mxc)}`;
+            }
+
+            return `https://cdn.example/thumbnail/${encodeURIComponent(mxc)}/${width}x${height}`;
+        });
+        getMockClientWithEventEmitter({ mxcUrlToHttp });
+
+        const html = bodyToHtml(
+            {
+                body: "inline image",
+                msgtype: "m.text",
+                formatted_body: '<img src="mxc://example.org/static-image" alt="static-image" height="32" />',
+                format: "org.matrix.custom.html",
+            },
+            [],
+        );
+
+        expect(html).toContain('src="https://cdn.example/thumbnail/mxc%3A%2F%2Fexample.org%2Fstatic-image/800x32"');
+        expect(html).not.toContain("data-mx-emoticon");
     });
 
     it("does not mistake characters in text presentation mode for emoji", () => {
