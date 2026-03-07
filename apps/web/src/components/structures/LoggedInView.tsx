@@ -805,7 +805,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     >
                         {leftPanel}
                     </LeftResizablePanelView>
-                    <SeparatorView vm={this.resizerViewModel} />
+                    <SeparatorView className="mx_Separator" vm={this.resizerViewModel} />
                     <Panel className="mx_LeftPanel_panel">{roomView}</Panel>
                 </GroupView>
             ) : (
