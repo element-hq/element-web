@@ -7,10 +7,13 @@
 
 import { waitFor } from "jest-matrix-react";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
+import whatInput from "what-input";
 
 import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+
+jest.mock("what-input");
 
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
@@ -24,6 +27,7 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: true,
                 initialSize: 0,
+                isFocusedViaKeyboard: false,
             });
         });
 
@@ -33,6 +37,7 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: 34,
+                isFocusedViaKeyboard: false,
             });
         });
 
@@ -41,6 +46,7 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: undefined,
+                isFocusedViaKeyboard: false,
             });
         });
     });
@@ -62,9 +68,8 @@ describe("LeftPanelResizerViewModel", () => {
         expect(() => vm.onSeparatorClick()).not.toThrow();
     });
 
-    it("should noop on onSeparatorClick() when settings store does not contain last known size", () => {
+    it("should expand panel on onSeparatorClick()", () => {
         const vm = new ResizerViewModel();
-
         const mockHandle = {
             resize: jest.fn(),
             isCollapsed: jest.fn().mockReturnValue(true),
@@ -72,23 +77,16 @@ describe("LeftPanelResizerViewModel", () => {
         vm.setPanelHandle(mockHandle);
 
         vm.onSeparatorClick();
-        expect(mockHandle.resize).not.toHaveBeenCalled();
+
+        expect(mockHandle.resize).toHaveBeenCalledWith("100%");
     });
 
-    it("should expand panel to last known width on onSeparatorClick()", () => {
+    it("should set isFocusedViaKeyboard state correctly", () => {
+        whatInput.ask = jest.fn().mockReturnValue("keyboard");
         const vm = new ResizerViewModel();
-        const mockHandle = {
-            resize: jest.fn(),
-            isCollapsed: jest.fn().mockReturnValue(true),
-        } as unknown as PanelImperativeHandle;
-
-        vm.setPanelHandle(mockHandle);
-
-        // Let's say that the panel first is resized to 20%
-        vm.onLeftPanelResized(20);
-
-        // Now the panel should be restored to 20%
-        vm.onSeparatorClick();
-        expect(mockHandle.resize).toHaveBeenCalledWith("20%");
+        vm.onFocus();
+        expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(true);
+        vm.onBlur();
+        expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(false);
     });
 });
