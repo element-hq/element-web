@@ -8,15 +8,11 @@
 .separator {
     display: flex;
     align-items: center;
-    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
     /* Hide the separator by default */
     width: 0px;
     opacity: 0;
-}
-
-.separator:focus {
-    /* If the separator is focused, set opacity so that the focus ring is visible */
-    opacity: 100%;
+    /* Necessary to avoid weird focus outlines (doubled on one side, absent on one side etc...) */
+    outline-offset: -2px;
 }
 
 .separator:hover,
@@ -24,8 +20,9 @@
     background: var(--cpd-color-bg-action-tertiary-hovered);
 }
 
-.collapsed {
+.visible {
     /* Show the separator when the left panel is collapsed */
     opacity: 100%;
     width: 12px;
+    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
 }

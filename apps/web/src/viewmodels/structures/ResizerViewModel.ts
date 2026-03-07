@@ -15,7 +15,7 @@ import {
     type ResizerSnapshot,
 } from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
-import { logger } from "matrix-js-sdk/src/logger";
+import whatInput from "what-input";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
@@ -25,11 +25,13 @@ function getInitialState(): ResizerSnapshot {
         return {
             isCollapsed: true,
             initialSize: 0,
+            isFocusedViaKeyboard: false,
         };
     }
     return {
         isCollapsed: false,
         initialSize: SettingsStore.getValue("RoomList.panelSize") ?? undefined,
+        isFocusedViaKeyboard: false,
     };
 }
 
@@ -72,5 +74,27 @@ export class ResizerViewModel
         if (this.panelHandle?.isCollapsed()) {
             this.panelHandle.resize(`100%`);
         }
+    };
+
+    public onFocus = (): void => {
+        /**
+         * The intention here is to make the separator visible when it is focused by keyboard
+         * navigation i.e tabbing through the app.
+         *
+         * There's a good reason to take this approach instead of just relying on the focus-visible
+         * selector:
+         * When exactly an element gets focus-visible is determined by browser heuristics and usually
+         * interacting with the mouse will not give an element focus-visible.
+         * However with this separator on chrome, mouse interaction occasionally gives it focus-visible.
+         * The leads to flakey separator behaviour.
+         */
+        const currentNavigation = whatInput.ask();
+        if (currentNavigation === "keyboard") {
+            this.snapshot.merge({ isFocusedViaKeyboard: true });
+        }
+    };
+
+    public onBlur = (): void => {
+        if (this.getSnapshot().isFocusedViaKeyboard) this.snapshot.merge({ isFocusedViaKeyboard: false });
     };
 }

@@ -20,21 +20,38 @@ export interface SeparatorViewActions {
      * onClick handler for the separator.
      */
     onSeparatorClick: () => void;
+
+    /**
+     * onFocus handler for the separator.
+     */
+    onFocus: () => void;
+
+    /**
+     * onBlur handler for the separator.
+     */
+    onBlur: () => void;
 }
 
 interface Props {
     vm: ViewModel<ResizerSnapshot, SeparatorViewActions>;
+    className?: string;
 }
 
-export function SeparatorView({ vm }: Props): React.ReactNode {
-    const { isCollapsed } = useViewModel(vm);
+export function SeparatorView({ vm, className }: Props): React.ReactNode {
+    const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
 
-    const classes = classNames(styles.separator, {
-        [styles.collapsed]: isCollapsed,
+    const classes = classNames(styles.separator, className, {
+        [styles.visible]: isCollapsed || isFocusedViaKeyboard,
     });
 
     return (
-        <Separator className={classes} onClick={vm.onSeparatorClick} aria-label="Click or drag to expand">
+        <Separator
+            className={classes}
+            onClick={vm.onSeparatorClick}
+            onFocus={vm.onFocus}
+            onBlur={vm.onBlur}
+            aria-label="Click or drag to expand"
+        >
             <Tooltip description="Click or drag to expand" placement="right">
                 <DragIcon
                     width="20px"
