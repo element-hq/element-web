@@ -70,15 +70,7 @@ export class ResizerViewModel
 
     public onSeparatorClick = (): void => {
         if (this.panelHandle?.isCollapsed()) {
-            const restoreWidth = SettingsStore.getValue("RoomList.panelSize");
-            if (!restoreWidth) {
-                // This is unlikely to ever happen since onLeftPanelResized will be called
-                // on initial render of the separator.
-                logger.error("ResizerViewModel.onSeparatorClick: Returning because restoreWidth is zero.");
-                return;
-            }
-            // There's an expand method but it doesn't remember the last known width correctly.
-            this.panelHandle.resize(`${restoreWidth}%`);
+            this.panelHandle.resize(`100%`);
         }
     };
 }
