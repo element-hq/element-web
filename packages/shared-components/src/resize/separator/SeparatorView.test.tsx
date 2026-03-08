@@ -8,12 +8,36 @@
 import React from "react";
 import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import * as stories from "./SeparatorView.stories";
 import { userEvent } from "vitest/browser";
+import { BaseViewModel } from "../../viewmodel";
+import { Group, Panel, ResizerSnapshot, SeparatorView, SeparatorViewActions } from "..";
 
 const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);
+
+class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements SeparatorViewActions {
+    public constructor(snapshot: ResizerSnapshot) {
+        super(undefined, snapshot);
+    }
+    public onBlur: () => void = vi.fn();
+    public onFocus: () => void = vi.fn();
+    public onSeparatorClick: () => void = vi.fn();
+}
+
+function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>) {
+    const snapshot = { isCollapsed: true, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
+    const vm = new MockViewModel(snapshot);
+    render(
+        <Group>
+            <Panel>Left</Panel>
+            <SeparatorView vm={vm} />
+            <Panel>Test</Panel>
+        </Group>,
+    );
+    return vm;
+}
 
 describe("<SeparatorView />", () => {
     it("renders Default story", () => {
@@ -32,18 +56,18 @@ describe("<SeparatorView />", () => {
     });
 
     it("should call onSeparatorClick() when clicked", async () => {
-        render(<Default />);
+        const vm = renderPanel();
         const separator = screen.getByRole("separator");
         await userEvent.click(separator);
-        expect(Default.args.onSeparatorClick).toHaveBeenCalledOnce();
+        expect(vm.onSeparatorClick).toHaveBeenCalledOnce();
     });
 
     it("should call onFocus and onBlur when receiving/loosing focus", async () => {
-        render(<Default />);
+        const vm = renderPanel();
         const separator = screen.getByRole("separator");
         separator.focus();
-        expect(Default.args.onFocus).toHaveBeenCalled();
+        expect(vm.onFocus).toHaveBeenCalled();
         separator.blur();
-        expect(Default.args.onBlur).toHaveBeenCalled();
+        expect(vm.onBlur).toHaveBeenCalled();
     });
 });
