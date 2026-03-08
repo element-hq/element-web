@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<LeftResizablePanelView /> > renders Default story 1`] = `
+<div>
+  <div
+    style="height: 600px;"
+  >
+    <div
+      data-group="true"
+      data-testid="_r_0_"
+      id="_r_0_"
+      style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
+    >
+      <div
+        data-panel="true"
+        data-testid="left-panel"
+        id="left-panel"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 0 1 0px; overflow: hidden;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            LEFT CONTENT
+          </div>
+        </div>
+      </div>
+      <div
+        aria-controls="left-panel"
+        aria-orientation="vertical"
+        aria-valuemax="96.618"
+        aria-valuemin="0"
+        aria-valuenow="0"
+        data-separator="inactive"
+        data-testid="_r_2_"
+        id="_r_2_"
+        role="separator"
+        style="flex: 0 0 auto; touch-action: none;"
+        tabindex="0"
+      />
+      <div
+        data-panel="true"
+        data-testid="_r_3_"
+        id="_r_3_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 100 1 0px; overflow: hidden;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            MAIN CONTENT
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

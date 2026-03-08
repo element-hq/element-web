@@ -20,7 +20,7 @@ import { LEFT_PANEL_ID, type ResizerSnapshot } from "..";
 export interface LeftResizablePanelViewActions {
     /**
      * Indicates to the view-model that the left panel was resized.
-     * @param newSize The new size of the left panel.
+     * @param panelSize The new panel size.
      */
     onLeftPanelResize: (panelSize: PanelSize) => void;
 
@@ -36,6 +36,10 @@ type Props = {
     className?: string;
 } & Pick<PanelProps, "minSize" | "maxSize" | "defaultSize">;
 
+/**
+ * This is a custom panel component for the left-panel. It is used along with SeparatorView, Group and Panel to render
+ * collapsible room list.
+ */
 export function LeftResizablePanelView({
     vm,
     className,
