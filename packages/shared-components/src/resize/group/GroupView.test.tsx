@@ -9,11 +9,11 @@ import React from "react";
 import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 
 import * as stories from "./GroupView.stories";
-import userEvent from "@testing-library/user-event";
 import { BaseViewModel } from "../../viewmodel";
-import { GroupView, GroupViewActions, Panel, Separator } from "..";
+import { GroupView, type GroupViewActions, Panel, Separator } from "..";
 
 const { Default } = composeStories(stories);
 
@@ -25,7 +25,7 @@ class MockViewModel extends BaseViewModel<unknown, unknown> implements GroupView
     public onLeftPanelResized: (newSize: number) => void = vi.fn();
 }
 
-function renderPanel() {
+function renderPanel(): MockViewModel {
     const vm = new MockViewModel();
     render(
         <GroupView vm={vm}>

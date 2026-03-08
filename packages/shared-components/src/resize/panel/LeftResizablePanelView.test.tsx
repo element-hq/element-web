@@ -9,19 +9,19 @@ import React from "react";
 import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 
 import * as stories from "./LeftResizablePanelView.stories";
-import userEvent from "@testing-library/user-event";
 import { BaseViewModel } from "../../viewmodel";
 import {
     Group,
     LEFT_PANEL_ID,
     LeftResizablePanelView,
-    LeftResizablePanelViewActions,
+    type LeftResizablePanelViewActions,
     Panel,
-    PanelImperativeHandle,
-    PanelSize,
-    ResizerSnapshot,
+    type PanelImperativeHandle,
+    type PanelSize,
+    type ResizerSnapshot,
     Separator,
 } from "..";
 
@@ -36,7 +36,7 @@ class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements L
     public setPanelHandle: (handle: PanelImperativeHandle) => void = vi.fn();
 }
 
-function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>) {
+function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>): MockViewModel {
     const snapshot = { isCollapsed: false, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
     const vm = new MockViewModel(snapshot);
     render(

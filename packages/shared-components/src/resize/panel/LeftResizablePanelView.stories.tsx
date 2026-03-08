@@ -12,9 +12,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     Group,
     LeftResizablePanelView,
-    LeftResizablePanelViewActions,
     Panel,
     Separator,
+    type LeftResizablePanelViewActions,
     type ResizerSnapshot,
 } from "..";
 import { useMockedViewModel } from "../../viewmodel";

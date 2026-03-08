@@ -9,11 +9,11 @@ import React from "react";
 import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect, vi } from "vitest";
+import { userEvent } from "vitest/browser";
 
 import * as stories from "./SeparatorView.stories";
-import { userEvent } from "vitest/browser";
 import { BaseViewModel } from "../../viewmodel";
-import { Group, Panel, ResizerSnapshot, SeparatorView, SeparatorViewActions } from "..";
+import { Group, Panel, type ResizerSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 
 const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);
 
@@ -26,7 +26,7 @@ class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements S
     public onSeparatorClick: () => void = vi.fn();
 }
 
-function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>) {
+function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>): MockViewModel {
     const snapshot = { isCollapsed: true, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
     const vm = new MockViewModel(snapshot);
     render(
