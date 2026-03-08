@@ -15,7 +15,7 @@
     outline-offset: -2px;
 }
 
-.separator:hover,
+.separator[data-separator="hover"],
 .separator:focus-visible {
     background: var(--cpd-color-bg-action-tertiary-hovered);
 }
