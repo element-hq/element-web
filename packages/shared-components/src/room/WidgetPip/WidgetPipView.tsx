@@ -21,11 +21,6 @@ export interface WidgetPipViewActions {
      */
     onBackClick: (ev: React.MouseEvent<Element, MouseEvent>) => void;
     /**
-     * The view model needs to know if the room is currently being viewed.
-     * @param viewing Whether we are currently viewing the room.
-     */
-    setViewingRoom: (viewing: boolean) => void;
-    /**
      * The view model exposes the `<PersistentApp />` component via this action.
      * `PersistentApp` is not available in shared components.
      * It can be any React component that renders a widget.

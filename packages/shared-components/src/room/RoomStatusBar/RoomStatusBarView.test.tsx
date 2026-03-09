@@ -16,7 +16,7 @@ import * as stories from "./RoomStatusBarView.stories.tsx";
 const { WithConnectionLost, WithConsentLink, WithResourceLimit, WithUnsentMessages, WithLocalRoomRetry } =
     composeStories(stories);
 
-describe("RoomStatusBarView", () => {
+describe("RoomStatu sBarView", () => {
     it("renders connection lost", () => {
         const { container } = render(<WithConnectionLost />);
         expect(container).toMatchSnapshot();

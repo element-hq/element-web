@@ -24,14 +24,12 @@ const PersistentAppMock: React.FC = () => <div style={{ backgroundColor: "grey",
 const WidgetPipViewWrapperImpl = ({
     onBackClick,
     persistentAppComponent,
-    setViewingRoom,
     onStartMoving,
     ...rest
 }: WidgetPipViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         onBackClick,
         persistentAppComponent,
-        setViewingRoom,
         onStartMoving,
     });
     return <WidgetPipView vm={vm} RoomAvatar={RoomAvatarMock} />;
@@ -50,7 +48,6 @@ export default {
         roomName: "Room Name",
         onBackClick: fn(),
         persistentAppComponent: PersistentAppMock,
-        setViewingRoom: fn(),
         onStartMoving: fn(),
     },
     parameters: {
