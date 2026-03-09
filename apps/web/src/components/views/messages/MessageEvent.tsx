@@ -361,12 +361,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
 
         if (isTextualMessage) {
             const { ref, ...textualBodyProps } = bodyProps;
-            return (
-                <TextualBodyWrapper
-                    {...textualBodyProps}
-                    onEventTileOpsChange={this.setTextualBodyEventTileOps}
-                />
-            );
+            return <TextualBodyWrapper {...textualBodyProps} onEventTileOpsChange={this.setTextualBodyEventTileOps} />;
         }
 
         return BodyType ? <BodyType {...bodyProps} /> : null;
