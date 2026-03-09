@@ -5,23 +5,31 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "download": "action|download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "go": "Go",
+        "hide": "action|hide",
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
         "new_video_room": "New video room",
         "open_menu": "Open menu",
         "pause": "Pause",
+        "pin": "action|pin",
         "play": "Play",
+        "react": "action|react",
         "remove": "Remove",
+        "reply": "action|reply",
+        "reply_in_thread": "action|reply_in_thread",
         "retry": "Retry",
         "search": "Search",
-        "start_chat": "Start chat"
+        "start_chat": "Start chat",
+        "unpin": "action|unpin"
     },
     "common": {
         "encryption_enabled": "Encryption enabled",
+        "options": "common|options",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
@@ -135,6 +143,9 @@
     "terms": {
         "tac_button": "Review terms and conditions"
     },
+    "threads": {
+        "error_start_thread_existing_relation": "threads|error_start_thread_existing_relation"
+    },
     "time": {
         "about_day_ago": "about a day ago",
         "about_hour_ago": "about an hour ago",
@@ -161,6 +172,8 @@
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
+        "download_action_decrypting": "timeline|download_action_decrypting",
+        "download_action_downloading": "timeline|download_action_downloading",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
@@ -175,6 +188,11 @@
             "parameters_changed": "Some encryption parameters have been changed.",
             "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
+        },
+        "mab": {
+            "collapse_reply_chain": "timeline|mab|collapse_reply_chain",
+            "expand_reply_chain": "timeline|mab|expand_reply_chain",
+            "label": "timeline|mab|label"
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s"
