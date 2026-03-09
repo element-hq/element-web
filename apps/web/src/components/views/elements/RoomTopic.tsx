@@ -10,6 +10,7 @@ import React, { type JSX, useCallback, useContext, useState } from "react";
 import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import { useTopic } from "../../../hooks/room/useTopic";
 import { _t } from "../../../languageHandler";
@@ -22,7 +23,6 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
 import { topicToHtml } from "../../../HtmlUtils";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
-import { ElementLinkedText } from "../../../Linkify";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
     room: Room;
@@ -75,7 +75,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                 title: room.name,
                 description: (
                     <div>
-                        <ElementLinkedText onLinkClick={() => modal.close()}>{body}</ElementLinkedText>
+                        <LinkedText onLinkClick={() => modal.close()}>{body}</LinkedText>
                         {canSetTopic && (
                             <AccessibleButton
                                 kind="primary_outline"
@@ -111,7 +111,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                 onFocus={onHover}
                 aria-label={_t("room|read_topic")}
             >
-                <ElementLinkedText>{body}</ElementLinkedText>
+                <LinkedText>{body}</LinkedText>
             </div>
         </Tooltip>
     );

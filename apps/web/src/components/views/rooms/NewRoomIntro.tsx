@@ -10,7 +10,7 @@ import React, { type JSX, useContext, useMemo } from "react";
 import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { ErrorSolidIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { EventTileBubble } from "@element-hq/web-shared-components";
+import { EventTileBubble, LinkedText } from "@element-hq/web-shared-components";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -33,7 +33,6 @@ import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/s
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useTopic } from "../../../hooks/room/useTopic";
 import { topicToHtml } from "../../../HtmlUtils";
-import { ElementLinkedText } from "../../../Linkify.tsx";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -70,7 +69,7 @@ const NewRoomIntro: React.FC = () => {
         if (dmPartner) {
             return undefined;
         }
-        return <ElementLinkedText as="span">{topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>;
+        return <LinkedText as="span">{topicToHtml(topic?.text, topic?.html)}</LinkedText>;
     }, [topic, dmPartner]);
 
     if (!room || !roomId) {

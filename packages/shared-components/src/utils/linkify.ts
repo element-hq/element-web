@@ -173,10 +173,9 @@ export interface LinkedTextOptions {
      */
     hrefTransformer?: (href: string, target: LinkifyMatrixOpaqueIdType) => string;
     /**
-     * If `false`, links are not clickable and only highlighted.
-     * Defaults to `true`.
+     * Function called before all listeners when a link is clicked.
      */
-    canClick?: boolean;
+    onLinkClick?: (ev: MouseEvent) => void;
 }
 
 /**
@@ -193,10 +192,9 @@ export function generateLinkedTextOptions({
     userIdListener,
     urlTargetTransformer,
     hrefTransformer,
-    canClick,
+    onLinkClick,
 }: LinkedTextOptions): linkifyjs.Opts {
     const events = (href: string, type: string): LinkEventListener => {
-        // Attach click handlers to links based on their type
         switch (type as LinkifyMatrixOpaqueIdType) {
             case LinkifyMatrixOpaqueIdType.URL: {
                 if (urlListener) {
@@ -223,18 +221,18 @@ export function generateLinkedTextOptions({
         const attrs: Record<string, unknown> = {
             [`data-${LINKIFIED_DATA_ATTRIBUTE}`]: "true",
         };
-
-        // Sometimes components want to render links to prettify but not make them clicky.
-        if (canClick === false) {
-            attrs.href = undefined;
-        } else {
-            const options = events(href, type);
-            // linkify-react doesn't respect `events` and needs it mapping to React attributes
-            // so we need to manually add the click handler to the attributes
-            // https://linkify.js.org/docs/linkify-react.html#events
-            if (options?.click) {
-                attrs.onClick = options.click;
-            }
+        // linkify-react doesn't respect `events` and needs it mapping to React attributes
+        // so we need to manually add the click handler to the attributes
+        // https://linkify.js.org/docs/linkify-react.html#events
+        const options = events(href, type);
+        if (options?.click) {
+            attrs.onClick = options.click;
+        }
+        if (onLinkClick) {
+            attrs.onClick = (ev: MouseEvent) => {
+                onLinkClick(ev);
+                options?.click?.(ev);
+            };
         }
 
         return attrs;
@@ -252,7 +250,7 @@ export function generateLinkedTextOptions({
             }
             return "_blank";
         },
-        ...(hrefTransformer && canClick !== false
+        ...(hrefTransformer
             ? {
                   formatHref: (href, type) => hrefTransformer(href, type as LinkifyMatrixOpaqueIdType),
               }

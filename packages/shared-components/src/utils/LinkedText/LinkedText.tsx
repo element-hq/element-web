@@ -6,54 +6,40 @@
  */
 
 import { Link, Text } from "@vector-im/compound-web";
-import React, { useMemo, type ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 import classNames from "classnames";
 import Linkify from "linkify-react";
 
-import type { Opts } from "linkifyjs";
 import styles from "./LinkedText.module.css";
-import { generateLinkedTextOptions, type LinkedTextOptions } from "../linkify";
+import { generateLinkedTextOptions } from "../linkify";
+import { useLinkedTextContext } from "./LinkedTextContext";
 
-export type LinkedTextProps = ComponentProps<typeof Text> & LinkedTextOptions;
-
+export type LinkedTextProps = ComponentProps<typeof Text> & { onLinkClick: (ev: MouseEvent) => void };
 /**
  * A component that renders URLs as clickable links inside some plain text.
  *
+ * Requires a `<LinkedTextContext.Provider>`
+ *
  * @example
  * ```tsx
- * <LinkedText>
- *     I love working on https://matrix.org
- * </LinkedText>
+ * <LinkedTextContext.Provider value={...}>
+ *     <LinkedText>
+ *         I love working on https://matrix.org
+ *     </LinkedText>
+ * </LinkedTextContext.Provider>
  * ```
  */
-export function LinkedText({
-    children,
-    className,
-    userIdListener,
-    roomAliasListener,
-    urlListener,
-    urlTargetTransformer,
-    hrefTransformer,
-    canClick,
-    ...textProps
-}: LinkedTextProps): React.ReactNode {
-    const options = useMemo<Opts>(
-        () => ({
-            render: Link,
-            ...generateLinkedTextOptions({
-                canClick,
-                urlListener,
-                hrefTransformer,
-                urlTargetTransformer,
-                userIdListener,
-                roomAliasListener,
-            }),
-        }),
-        [canClick, urlListener, hrefTransformer, urlTargetTransformer, userIdListener, roomAliasListener],
-    );
-
+export function LinkedText({ children, className, onLinkClick, ...textProps }: LinkedTextProps): React.ReactNode {
+    const options = useLinkedTextContext();
+    const linkifyOptions = generateLinkedTextOptions({ ...options, onLinkClick });
+    // todo: onLinkClick
     return (
-        <Linkify className={classNames(styles.container, className)} as={Text} options={options} {...textProps}>
+        <Linkify
+            className={classNames(styles.container, className)}
+            as={Text}
+            options={{ ...linkifyOptions, render: Link }}
+            {...textProps}
+        >
             {children}
         </Linkify>
     );

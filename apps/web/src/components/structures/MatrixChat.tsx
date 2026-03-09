@@ -28,7 +28,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";
 import sanitizeHtml from "sanitize-html";
-import { I18nContext } from "@element-hq/web-shared-components";
+import { I18nContext, LinkedTextContext, LinkedText } from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import PosthogTrackers from "../../PosthogTrackers";
@@ -139,7 +139,7 @@ import { setTheme } from "../../theme";
 import { type OpenForwardDialogPayload } from "../../dispatcher/payloads/OpenForwardDialogPayload";
 import { ShareFormat, type SharePayload } from "../../dispatcher/payloads/SharePayload";
 import Markdown from "../../Markdown";
-import { ElementLinkedText, sanitizeHtmlParams } from "../../Linkify";
+import { LinkedTextConfiguration, sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
 
@@ -1458,7 +1458,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     key,
                     title: userNotice.title,
                     props: {
-                        description: <ElementLinkedText>{userNotice.description}</ElementLinkedText>,
+                        description: <LinkedText>{userNotice.description}</LinkedText>,
                         primaryLabel: _t("action|ok"),
                         onPrimaryClick: () => {
                             ToastStore.sharedInstance().dismissToast(key);
@@ -2291,7 +2291,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             <ErrorBoundary>
                 <I18nContext.Provider value={ModuleApi.instance.i18n}>
                     <SDKContext.Provider value={this.stores}>
-                        <TooltipProvider>{view}</TooltipProvider>
+                        <LinkedTextContext.Provider value={LinkedTextConfiguration}>
+                            <TooltipProvider>{view}</TooltipProvider>
+                        </LinkedTextContext.Provider>
                     </SDKContext.Provider>
                 </I18nContext.Provider>
             </ErrorBoundary>

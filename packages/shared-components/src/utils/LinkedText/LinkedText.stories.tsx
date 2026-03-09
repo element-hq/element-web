@@ -5,11 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { type ComponentProps } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { LinkedText } from "./LinkedText";
+import { LinkedTextContext } from "./LinkedTextContext";
 
 export default {
     title: "Utils/LinkedText",
@@ -21,20 +22,19 @@ export default {
         canClick: { control: "boolean" },
     },
     tags: ["autodocs"],
-} satisfies Meta<typeof LinkedText>;
+} satisfies Meta<ComponentProps<typeof LinkedText> & ComponentProps<typeof LinkedTextContext>["value"]>;
 
-const Template: StoryFn<typeof LinkedText> = ({ children, ...args }) => <LinkedText {...args}>{children}</LinkedText>;
+const Template: StoryFn<ComponentProps<typeof LinkedText> & ComponentProps<typeof LinkedTextContext>["value"]> = ({
+    children,
+    ...args
+}) => (
+    <LinkedTextContext.Provider value={args}>
+        <LinkedText>{children}</LinkedText>
+    </LinkedTextContext.Provider>
+);
 
 export const Default = Template.bind({});
 Default.args = {};
-
-export const Unclickable = Template.bind({});
-Unclickable.tags = ["skip-test"];
-
-Unclickable.args = {
-    children: "I love working on https://matrix.org.",
-    canClick: false,
-};
 
 export const WithUserId = Template.bind({});
 

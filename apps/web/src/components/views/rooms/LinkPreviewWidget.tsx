@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ComponentProps, createRef, type ReactNode } from "react";
 import { decode } from "html-entities";
 import { type MatrixEvent, type IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
@@ -16,7 +17,6 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import ImageView from "../elements/ImageView";
 import LinkWithTooltip from "../elements/LinkWithTooltip";
 import PlatformPeg from "../../../PlatformPeg";
-import { ElementLinkedText } from "../../../Linkify";
 
 interface IProps {
     link: string;
@@ -128,7 +128,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
                             )}
                         </div>
                         <div className="mx_LinkPreviewWidget_description">
-                            <ElementLinkedText>{description}</ElementLinkedText>
+                            <LinkedText>{description}</LinkedText>
                         </div>
                     </div>
                 </div>

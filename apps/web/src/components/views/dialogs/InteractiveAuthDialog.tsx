@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type AuthType } from "matrix-js-sdk/src/interactive-auth";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -21,7 +22,6 @@ import InteractiveAuth, {
 } from "../../structures/InteractiveAuth";
 import { type ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
-import { ElementLinkedText } from "../../../Linkify";
 
 type DialogAesthetics = Partial<{
     [x in AuthType]: {
@@ -163,9 +163,9 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         if (this.state.authError) {
             content = (
                 <div id="mx_Dialog_content">
-                    <ElementLinkedText role="alert">
+                    <LinkedText role="alert">
                         {this.state.authError.message || this.state.authError.toString()}
-                    </ElementLinkedText>
+                    </LinkedText>
                     <br />
                     <AccessibleButton onClick={this.onDismissClick} className="mx_GeneralButton" autoFocus={true}>
                         {_t("action|dismiss")}

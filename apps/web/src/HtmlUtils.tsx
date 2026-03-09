@@ -17,10 +17,10 @@ import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
+import { PERMITTED_URL_SCHEMES, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
-import { PERMITTED_URL_SCHEMES } from "@element-hq/web-shared-components";
 import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
@@ -325,7 +325,8 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
         sanitizeParams = { ...sanitizeParams };
         if (typeof sanitizeParams.allowedAttributes === "object") {
             const attribs = { ...sanitizeParams.allowedAttributes };
-            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], "data-linkified"];
+            // We allow data-linkified because TextualBody uses it to passthrough links.
+            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], `data-${LINKIFIED_DATA_ATTRIBUTE}`];
             sanitizeParams.allowedAttributes = attribs;
         } // else: No attibutes are are allowed for "a"
     }
