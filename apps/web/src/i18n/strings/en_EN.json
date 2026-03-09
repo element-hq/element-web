@@ -1502,6 +1502,7 @@
         "beta_feedback_leave_button": "To leave the beta, visit your settings.",
         "beta_feedback_title": "%(featureName)s Beta feedback",
         "beta_section": "Upcoming features",
+        "beta_removal_warning": "This feature is due to be removed from the beta system.",
         "beta_leave_warning": {
             "title": "Leaving beta",
             "description": "Once this beta is disabled, it cannot be re-enabled. This action is irreversible.",

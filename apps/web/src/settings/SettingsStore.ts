@@ -333,7 +333,7 @@ export default class SettingsStore {
             return undefined;
         }
 
-        if (betaInfo.labsOnly) {
+        if (betaInfo.removed) {
             // If the beta has been moved back to labs, only show it if it's enabled.
             const configValue = SettingsStore.getValue(settingName);
             if (!configValue) {

@@ -169,10 +169,11 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     betaInfo?: {
         title: TranslationKey;
         /**
-         * Set this when the beta should ONLY be visible to users already in the beta.
-         * Otherwise, the feature is only exposed as a labs setting.
+         * Set this when the feature has been removed from beta. Users who
+         * have not opted into the beta will not see it, but users who
+         * have it enabled will be able to turn it off.
          */
-        labsOnly?: boolean;
+        removed?: boolean;
         caption: () => ReactNode;
         faq?: (enabled: boolean) => ReactNode;
         image?: string; // require(...)
@@ -399,7 +400,7 @@ export const SETTINGS: Settings = {
         betaInfo: {
             title: _td("labs|video_rooms"),
             // Video rooms have been moved back to labs.
-            labsOnly: true,
+            removed: true,
             caption: () => (
                 <>
                     <p>
@@ -422,8 +423,6 @@ export const SETTINGS: Settings = {
                     <p>{_t("labs|video_rooms_faq2_answer")}</p>
                 </>
             ),
-            feedbackLabel: "video-room-feedback",
-            feedbackSubheading: _td("labs|video_rooms_feedbackSubheading"),
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             image: require("../../res/img/betas/video_rooms.png"),
             requiresRefresh: true,

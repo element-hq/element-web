@@ -24,8 +24,6 @@ import InlineSpinner from "../elements/InlineSpinner";
 import { shouldShowFeedback } from "../../../utils/Feedback";
 import { type FeatureSettingKey } from "../../../settings/Settings.tsx";
 
-// XXX: Keep this around for re-use in future Betas
-
 interface IProps {
     title?: string;
     featureId: FeatureSettingKey;
@@ -71,7 +69,7 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
         void (async () => {
             // Warn if we're about to disable the setting, the beta has gone back to labs
             // and the user has no access to labs.
-            if (value && info.labsOnly && !SdkConfig.get("show_labs_settings")) {
+            if (value && info.removed && !SdkConfig.get("show_labs_settings")) {
                 const { finished } = Modal.createDialog(QuestionDialog, {
                     title: _t("labs|beta_leave_warning|title"),
                     description: <Text>{_t("labs|beta_leave_warning|description")}</Text>,
@@ -98,10 +96,20 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
 
     if (!info) return null; // Beta is invalid/disabled
 
-    const { title, caption, faq, image, feedbackLabel, feedbackSubheading, extraSettings, requiresRefresh } = info;
+    const {
+        title,
+        removed: labsOnly,
+        caption,
+        faq,
+        image,
+        feedbackLabel,
+        feedbackSubheading,
+        extraSettings,
+        requiresRefresh,
+    } = info;
 
     let feedbackButton;
-    if (value && feedbackLabel && feedbackSubheading && info.labsOnly && shouldShowFeedback()) {
+    if (value && feedbackLabel && feedbackSubheading && shouldShowFeedback()) {
         feedbackButton = (
             <AccessibleButton
                 onClick={() => {
@@ -149,6 +157,11 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
                         </AccessibleButton>
                     </div>
                     {refreshWarning && <div className="mx_BetaCard_refreshWarning">{refreshWarning}</div>}
+                    {labsOnly && (
+                        <Text style={{ color: "var(--cpd-color-text-critical-primary)" }} size="sm">
+                            {_t("labs|beta_removal_warning")}
+                        </Text>
+                    )}
                     {faq && <div className="mx_BetaCard_faq">{faq(value)}</div>}
                 </div>
                 <div className="mx_BetaCard_columns_image_wrapper">
