@@ -17,6 +17,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
@@ -48,18 +49,17 @@ jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({
     default: () => <div data-testid="sticker-body" />,
 }));
 
-jest.mock("../../../../../src/components/views/messages/TextualBody.tsx", () => ({
-    __esModule: true,
-    default: () => <div data-testid="textual-body" />,
-}));
-
 describe("MessageEvent", () => {
     let room: Room;
     let client: MatrixClient;
     let event: MatrixEvent;
 
     const renderMessageEvent = (): RenderResult => {
-        return render(<MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />);
+        return render(
+            <MatrixClientContext.Provider value={client}>
+                <MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
+            </MatrixClientContext.Provider>,
+        );
     };
 
     beforeEach(() => {
@@ -106,7 +106,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("image-body");
-            result.getByTestId("textual-body");
+            result.getByText("caption for a test image");
         });
 
         it("should render a TextualBody and a FileBody for mismatched extension", () => {
@@ -114,7 +114,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("file-body");
-            result.getByTestId("textual-body");
+            result.getByText("caption for a test image");
         });
 
         it("should render a TextualBody and an VideoBody", () => {
@@ -122,7 +122,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("video-body");
-            result.getByTestId("textual-body");
+            result.getByText("caption for a test image");
         });
 
         it("should render a TextualBody and a FileBody for non-video mimetype", () => {
@@ -130,7 +130,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("file-body");
-            result.getByTestId("textual-body");
+            result.getByText("caption for a test image");
         });
     });
 });

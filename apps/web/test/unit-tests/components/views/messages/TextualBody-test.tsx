@@ -21,7 +21,7 @@ import {
 } from "../../../../test-utils";
 import * as languageHandler from "../../../../../src/languageHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import TextualBody from "../../../../../src/components/views/messages/TextualBody";
+import { TextualBodyWrapper as TextualBody } from "../../../../../src/components/views/messages/MessageEvent";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../src/contexts/RoomContext";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";

@@ -130,7 +130,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
 exports[`<TextualBody /> renders formatted m.text correctly pills appear for event permalinks without a custom label 1`] = `
 <DocumentFragment>
   <div
-    class="mx_MTextBody mx_EventTile_content"
+    class="mx_MTextBody _textBody_1l9h2_8 mx_EventTile_content _rootContent_1l9h2_14"
   >
     <div
       class="mx_EventTile_body markdown-body translate"
@@ -177,7 +177,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
 exports[`<TextualBody /> renders formatted m.text correctly pills appear for room links with vias 1`] = `
 <DocumentFragment>
   <div
-    class="mx_MTextBody mx_EventTile_content"
+    class="mx_MTextBody _textBody_1l9h2_8 mx_EventTile_content _rootContent_1l9h2_14"
   >
     <div
       class="mx_EventTile_body markdown-body translate"
@@ -225,7 +225,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
 exports[`<TextualBody /> renders formatted m.text correctly pills do not appear for event permalinks with a custom label 1`] = `
 <DocumentFragment>
   <div
-    class="mx_MTextBody mx_EventTile_content"
+    class="mx_MTextBody _textBody_1l9h2_8 mx_EventTile_content _rootContent_1l9h2_14"
   >
     <div
       class="mx_EventTile_body markdown-body translate"
