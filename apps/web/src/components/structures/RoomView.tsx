@@ -2727,7 +2727,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 this.state.mainSplitContentType === MainSplitContentType.Call ? "video_room" : "maximised_widget";
         }
 
-        const extraButtons = ModuleApi.instance.extras.roomHeaderButtonsCallback?.(this.state.room.roomId);
+        const extraButtons: JSX.Element[] = [];
+        for (const cb of ModuleApi.instance.extras.roomHeaderButtonsCallbacks) {
+            const b = cb(this.state.room.roomId);
+            if (b) extraButtons.push(b);
+        }
 
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
@@ -2757,7 +2761,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                     <RoomHeader
                                         room={this.state.room}
                                         legacyAdditionalButtons={this.state.viewRoomOpts.buttons}
-                                        extraButtons={extraButtons}
+                                        extraButtons={<>{extraButtons}</>}
                                     />
                                 )}
                                 {mainSplitBody}

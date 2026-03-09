@@ -1,5 +1,5 @@
 /*
-Copyright 2025 New Vector Ltd.
+Copyright 2025-2026 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -30,7 +30,7 @@ interface EmittedEvents {
 export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> implements ExtrasApi {
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
-    public roomHeaderButtonsCallback?: RoomHeaderButtonsCallback;
+    public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -41,8 +41,8 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
         this.visibleRoomBySpaceKey.set(spaceKey, cb);
     }
 
-    public setRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
-        this.roomHeaderButtonsCallback = cb;
+    public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
+        this.roomHeaderButtonsCallbacks.push(cb);
     }
 }
 
