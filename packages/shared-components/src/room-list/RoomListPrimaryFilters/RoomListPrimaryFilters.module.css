@@ -6,20 +6,38 @@
  */
 
 .roomListPrimaryFilters {
-    padding: 0 var(--cpd-space-4x) var(--cpd-space-5x) var(--cpd-space-3x);
-}
-
-/* Hide filters that are wrapping when collapsed */
-.roomListPrimaryFilters :global(.wrapping) {
-    display: none;
+    padding: 0 var(--cpd-space-4x) 0 var(--cpd-space-3x);
+    margin-bottom: var(--cpd-space-5x);
+    overflow: hidden;
+    transition: height 0.1s ease;
 }
 
 .list {
-    /**
-     * The InteractionObserver needs the height to be set to work properly.
-     */
-    height: 100%;
     flex: 1;
+    overflow: hidden;
+}
+
+.list > [role="option"] {
+    transform-origin: left bottom;
+    transition:
+        transform 0.1s ease,
+        opacity 0.1s ease;
+    transition-delay: 0ms;
+}
+
+.list > [role="option"]:not([data-away="true"]) {
+    transition-delay: var(--away-delay, 0ms);
+}
+
+.list > [role="option"][data-away="true"] {
+    transition-delay: 0.1s;
+    transform: scale(0.75);
+    opacity: 0;
+}
+
+.away {
+    background-color: red !important;
+    transform: scale(0.75);
 }
 
 /* IconButton styles for chevron */
@@ -29,4 +47,16 @@
 
 .iconButton[aria-expanded="true"] svg {
     transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .roomListPrimaryFilters,
+    .list > [role="option"],
+    .iconButton svg {
+        transition: none;
+    }
+
+    .list > [role="option"] {
+        transition-delay: 0ms;
+    }
 }

@@ -72,10 +72,12 @@ export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstruct
     wrap = "nowrap",
     className,
     children,
+    style: styleProp,
     ...props
 }: React.PropsWithChildren<FlexProps<T>>): JSX.Element {
     const style = useMemo(
         () => ({
+            ...styleProp, // Don't throw away previously established styles
             "--mx-flex-display": display,
             "--mx-flex-direction": direction,
             "--mx-flex-align": align,
@@ -83,7 +85,7 @@ export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstruct
             "--mx-flex-gap": gap,
             "--mx-flex-wrap": wrap,
         }),
-        [align, direction, display, gap, justify, wrap],
+        [align, direction, display, gap, justify, styleProp, wrap],
     );
 
     return React.createElement(as, { ...props, className: classNames(styles.flex, className), style }, children);
