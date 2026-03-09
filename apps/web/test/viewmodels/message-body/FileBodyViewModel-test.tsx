@@ -69,8 +69,8 @@ describe("FileBodyViewModel", () => {
             showFileInfo: false,
             forExport: false,
             timelineRenderingType: TimelineRenderingType.File,
-            refIFrame: (createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>),
-            refLink: (createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>),
+            refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
+            refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
             ...overrides,
         });
 
