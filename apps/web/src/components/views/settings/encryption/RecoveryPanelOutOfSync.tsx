@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { Button } from "@vector-im/compound-web";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import { logger } from "matrix-js-sdk/src/logger";
+import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/src/crypto-api";
 
 import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";
@@ -92,7 +93,18 @@ export function RecoveryPanelOutOfSync({
                                     if (needsBackupReset) {
                                         await resetKeyBackupAndWait(crypto);
                                     } else if (await matrixClient.isKeyBackupKeyStored()) {
-                                        await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
+                                        try {
+                                            await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
+                                        } catch (error: any) {
+                                            if (error instanceof DecryptionKeyDoesNotMatchError) {
+                                                logger.error(
+                                                    "RecoveryPanelOutOfSync: decryption key does not match the public backup. Replacing.",
+                                                );
+                                                await resetKeyBackupAndWait(crypto);
+                                            } else {
+                                                throw error;
+                                            }
+                                        }
                                     }
                                 });
                             });

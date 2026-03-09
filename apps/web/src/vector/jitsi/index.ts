@@ -33,6 +33,9 @@ import { SnakedObject } from "../../utils/SnakedObject";
 import { ElementWidgetCapabilities } from "../../stores/widgets/ElementWidgetCapabilities";
 import { getVectorConfig } from "../getconfig";
 
+// We have to trick webpack into loading our CSS for us.
+import "./index.pcss";
+
 interface Config extends _Config {
     // Jitsi's types are missing these fields
     prejoinConfig?: {
@@ -60,10 +63,6 @@ interface ExternalAPIOptions extends _ExternalAPIOptions {
     // Jitsi's types are missing these fields
     lang?: string;
 }
-
-// We have to trick webpack into loading our CSS for us.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require("./index.pcss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = "openidtoken-jwt";
 
