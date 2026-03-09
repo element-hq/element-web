@@ -23,7 +23,7 @@ could corrupt a user's session or account, it should not be in beta.
 A beta feature SHOULD have analytics so that the team can understand how many users
 are using it.
 
-A beta feature MAY be backed out into labs if the team deem it necessary.
+A beta feature MAY be backed out to labs (or in special circumstances removed entirely) if the team deem it necessary.
 
 ## Current Betas
 
