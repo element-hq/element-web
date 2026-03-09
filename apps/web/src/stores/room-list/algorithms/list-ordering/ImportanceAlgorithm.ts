@@ -93,7 +93,6 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     public setRooms(rooms: Room[]): void {
-        // Every other sorting type affects the categories, not the whole tag.
         const categorized = this.categorizeRooms(rooms);
         for (const category of Object.keys(categorized)) {
             const notificationColor = category as unknown as NotificationLevel;
