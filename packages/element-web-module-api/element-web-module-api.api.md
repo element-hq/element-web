@@ -5,6 +5,7 @@
 ```ts
 
 import { ComponentType } from 'react';
+import { IWidget } from 'matrix-widget-api';
 import { JSX } from 'react';
 import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
@@ -59,6 +60,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly rootNode: HTMLElement;
     readonly stores: StoresApi;
     // @alpha
+    readonly widget: WidgetApi;
+    // @alpha
     readonly widgetLifecycle: WidgetLifecycleApi;
 }
 
@@ -109,6 +112,9 @@ export interface ConfigApi {
     // (undocumented)
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
 }
+
+// @alpha
+export type Container = "top" | "right" | "center";
 
 // @alpha
 export interface CustomComponentsApi {
@@ -205,6 +211,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
+    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
@@ -390,6 +397,9 @@ export interface Room {
     name: Watchable<string>;
 }
 
+// @alpha
+export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
+
 // @alpha @deprecated (undocumented)
 export interface RoomListCustomisations<Room> {
     isRoomVisible?(room: Room): boolean;
@@ -477,6 +487,14 @@ export class Watchable<T> {
     set value(value: T);
     // (undocumented)
     watch(listener: (value: T) => void): void;
+}
+
+// @alpha
+export interface WidgetApi {
+    getAppAvatarUrl(app: IWidget, width?: number, height?: number, resizeMethod?: string): string | null;
+    getWidgetsInRoom(roomId: string): IWidget[];
+    isAppInContainer(app: IWidget, container: Container, roomId: string): boolean;
+    moveAppToContainer(app: IWidget, container: Container, roomId: string): void;
 }
 
 // @alpha
