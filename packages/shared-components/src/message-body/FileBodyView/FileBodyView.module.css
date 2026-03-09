@@ -46,6 +46,7 @@
             min-width: 0;
             text-align: start;
             font: var(--cpd-font-body-md-regular);
+            letter-spacing: var(--cpd-font-letter-spacing-body-md);
             color: var(--cpd-color-text-primary);
             overflow: hidden;
             text-overflow: ellipsis;

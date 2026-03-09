@@ -151,6 +151,6 @@ export const LongFilenameDownload: Story = {
         rendering: FileBodyViewRendering.UNENCRYPTED,
         infoShow: false,
         downloadShow: true,
-        downloadLabel: "a very long filename to show ellipsis.pdf",
+        downloadLabel: "a very long filename that show no ellipsis.pdf",
     },
 };
