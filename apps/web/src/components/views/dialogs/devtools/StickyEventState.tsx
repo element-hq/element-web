@@ -11,6 +11,7 @@ import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { v4 as uuidv4 } from "uuid";
 import { logger } from "matrix-js-sdk/src/logger";
+import classnames from "classnames";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
 import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
@@ -206,11 +207,13 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
             }}
             tabIndex={0}
             role="button"
-            className={focused && showFocus ? "focused" : ""}
+            className={classnames({
+                focused: focused && showFocus,
+            })}
         >
-            <td style={{ maxWidth: "36ch" }}>{userId}</td>
-            <td style={{ maxWidth: "48ch" }}>{stickyKey ?? <i>unkeyed</i>}</td>
-            <td style={{ textAlign: "right" }}>{isExpired ? _t("devtools|expired") : timeRemaining}</td>
+            <td>{userId}</td>
+            <td>{stickyKey ?? <i>unkeyed</i>}</td>
+            <td className="expired_column">{isExpired ? _t("devtools|expired") : timeRemaining}</td>
         </tr>
     );
 };
@@ -276,9 +279,9 @@ const StickyEventListPerType: React.FC<StickyEventListPerTypeProps> = ({
             <table className="mx_DevTools_event_table">
                 <thead>
                     <tr>
-                        <th style={{ width: "35%" }}>{_t("devtools|users")}</th>
-                        <th style={{ width: "50%" }}>{_t("devtools|sticky_key")}</th>
-                        <th style={{ width: "15%" }}>{_t("devtools|expires_in")}</th>
+                        <th id="user_header">{_t("devtools|users")}</th>
+                        <th id="sticky_key_header">{_t("devtools|sticky_key")}</th>
+                        <th id="expires_in_header">{_t("devtools|expires_in")}</th>
                     </tr>
                 </thead>
                 <tbody>

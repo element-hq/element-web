@@ -200,6 +200,16 @@ Please see LICENSE files in the repository root for full details.
             padding: 8px 12px;
         }
 
+        th#user_header {
+            width: 35%;
+        }
+        th#sticky_key_header {
+            width: 50%;
+        }
+        th#expires_in_header {
+            width: 15%;
+        }
+
         tr {
             cursor: pointer;
             border-bottom: 1px solid $separator;
@@ -221,6 +231,10 @@ Please see LICENSE files in the repository root for full details.
             overflow: hidden;
             text-overflow: ellipsis;
             padding: 8px 12px;
+        }
+
+        td.expired_column {
+            text-align: right;
         }
     }
 }
