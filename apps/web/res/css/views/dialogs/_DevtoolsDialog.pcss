@@ -193,11 +193,11 @@ Please see LICENSE files in the repository root for full details.
         width: 100%;
         border-collapse: collapse;
         table-layout: fixed;
-        margin-top: 8px;
+        margin-top: var(--cpd-space-3x);
 
         th {
             text-align: left;
-            padding: 8px 12px;
+            padding: var(--cpd-space-2x) var(--cpd-space-3x);
         }
 
         th#user_header {
@@ -212,25 +212,25 @@ Please see LICENSE files in the repository root for full details.
 
         tr {
             cursor: pointer;
-            border-bottom: 1px solid $separator;
+            border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-primary);
             background: transparent;
         }
 
         tr:hover {
-            color: $secondary-content;
-            background: $system;
+            color: var(--cpd-color-text-secondary);
+            background: var(--cpd-color-bg-action-secondary-hovered);
         }
 
         tr.focused {
-            outline: 2px solid $focus-bg-color;
-            outline-offset: 2px;
+            outline: var(--cpd-border-width-2) solid var(--cpd-color-border-focused);
+            outline-offset:var(--cpd-border-width-2);
         }
 
         td {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 8px 12px;
+            padding: var(--cpd-space-2x) var(--cpd-space-3x);
         }
 
         td.expired_column {
