@@ -128,6 +128,7 @@ describe("EventContentBodyViewModel", () => {
             undefined,
             expect.objectContaining({ disableBigEmoji: true }),
         );
+        expect(mockedCombineRenderers).toHaveBeenCalledWith();
         expect(createReplacerFromOptions).toHaveBeenCalledWith(
             expect.objectContaining({ shouldShowPillAvatar: false }),
         );

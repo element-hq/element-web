@@ -216,6 +216,11 @@ export class EventContentBodyViewModel
     public constructor(props: EventContentBodyViewModelProps) {
         const propsWithSettingDefaults: EventContentBodyViewModelProps = {
             ...props,
+            renderMentionPills: props.renderMentionPills ?? false,
+            renderKeywordPills: props.renderKeywordPills ?? false,
+            renderSpoilers: props.renderSpoilers ?? false,
+            renderCodeBlocks: props.renderCodeBlocks ?? false,
+            renderTooltipsForAmbiguousLinks: props.renderTooltipsForAmbiguousLinks ?? false,
             enableBigEmoji: props.enableBigEmoji ?? SettingsStore.getValue("TextualBody.enableBigEmoji"),
             shouldShowPillAvatar: props.shouldShowPillAvatar ?? SettingsStore.getValue("Pill.shouldShowPillAvatar"),
         };
