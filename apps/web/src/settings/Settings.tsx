@@ -161,9 +161,18 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // not use this for new settings.
     invertedSettingName?: string;
 
-    // XXX: Keep this around for re-use in future Betas
+    /**
+     * If set, the setting is considered a beta.
+     * Please read the betas.md documentation before marking a setting a beta.
+     * @see `docs/betas.md`
+     */
     betaInfo?: {
         title: TranslationKey;
+        /**
+         * Set this when the beta should ONLY be visible to users already in the beta.
+         * Otherwise, the feature is only exposed as a labs setting.
+         */
+        labsOnly?: boolean;
         caption: () => ReactNode;
         faq?: (enabled: boolean) => ReactNode;
         image?: string; // require(...)
@@ -389,6 +398,8 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("labs|video_rooms"),
+            // Video rooms have been moved back to labs.
+            labsOnly: true,
             caption: () => (
                 <>
                     <p>
