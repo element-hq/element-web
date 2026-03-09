@@ -7,6 +7,7 @@
 
 import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
+import { Button } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./DisambiguatedProfile.module.css";
@@ -47,7 +48,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
 /**
@@ -82,25 +83,43 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
 
-    const displayNameClasses = classNames(className, colorClass, {
+    const displayNameClasses = classNames(colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
+        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
-    const displayIdentifierClasses = classNames(className, styles.disambiguatedProfile_mxid);
 
-    const Component = vm.onClick ? "button" : "div";
+    if (vm.onClick) {
+        return (
+            <Button
+                as="a"
+                className={classNames(className, styles.disambiguatedProfile)}
+                title={title}
+                onClick={vm.onClick}
+            >
+                <span className={displayNameClasses} dir="auto">
+                    {displayName}
+                </span>
+                {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+                {displayIdentifier && (
+                    <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                        {displayIdentifier}
+                    </span>
+                )}
+            </Button>
+        );
+    }
 
     return (
-        <Component
-            // Only valid for <button>
-            type={vm.onClick ? "button" : undefined}
-            className={classNames(className, styles.disambiguatedProfile)}
-            title={title}
-            onClick={vm.onClick}
-        >
+        <div className={classNames(className, styles.disambiguatedProfile)} title={title}>
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
-            {displayIdentifier && <span className={displayIdentifierClasses}>{displayIdentifier}</span>}
-        </Component>
+            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+            {displayIdentifier && (
+                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                    {displayIdentifier}
+                </span>
+            )}
+        </div>
     );
 }

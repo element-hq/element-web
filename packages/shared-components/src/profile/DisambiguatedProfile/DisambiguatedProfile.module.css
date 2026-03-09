@@ -6,26 +6,26 @@
  */
 
 .disambiguatedProfile {
-    overflow: hidden;
-    background: none !important;
+    display: inline-block !important;
+    border: 0 !important;
     padding: 0 !important;
-    line-height: inherit;
-    letter-spacing: inherit;
+    margin: 0;
     font: inherit;
-    border: none !important;
-    vertical-align: baseline;
+    line-height: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    background-color: inherit !important;
+    border-radius: unset !important;
+    min-block-size: unset !important;
+    color: var(--cpd-color-text-primary) !important;
+
+    overflow: hidden;
     text-overflow: ellipsis;
-    text-align: start;
-    margin: 0 !important;
     white-space: nowrap;
-    cursor: pointer;
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
-        letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
-        margin-inline-end: 0;
-        /* keeps the height in check, important for the bubble apperance */
-        line-height: 1;
+        letter-spacing: var(--cpd-letter-spacing-body-md);
     }
 
     .disambiguatedProfile_mxid {

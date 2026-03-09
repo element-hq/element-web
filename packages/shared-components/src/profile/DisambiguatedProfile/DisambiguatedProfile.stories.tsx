@@ -97,3 +97,14 @@ export const FullExample: Story = {
         emphasizeDisplayName: true,
     },
 };
+
+export const FullExampleWithoutClick: Story = {
+    args: {
+        displayName: "Eve",
+        displayIdentifier: "@eve:matrix.org",
+        colorClass: "mx_Username_color5",
+        title: "Eve (@eve:matrix.org)",
+        emphasizeDisplayName: true,
+        onClick: undefined,
+    },
+};
