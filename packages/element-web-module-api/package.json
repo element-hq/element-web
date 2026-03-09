@@ -39,6 +39,7 @@
         "@types/semver": "^7.5.8",
         "@vitest/coverage-v8": "^4.0.0",
         "matrix-web-i18n": "^3.3.0",
+        "matrix-widget-api": "^1.17.0",
         "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
         "typescript": "^5.7.3",
@@ -62,7 +63,5 @@
             "optional": true
         }
     },
-    "dependencies": {
-        "matrix-widget-api": "^1.17.0"
-    }
+    "dependencies": {}
 }
