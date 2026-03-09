@@ -91,13 +91,8 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar }) => {
         // if the user interacts with a mouse. Hence there is no use in providing an accessible alternative.
         // In the future we might consider introducing alternative shortcuts for moving the PiP around
         // with the keyboard.
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-        <div
-            role="complementary"
-            data-testid="widget-pip-container"
-            className={styles.container}
-            onMouseDown={vm.onStartMoving}
-        >
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+        <div data-testid="widget-pip-container" className={styles.container} onMouseDown={vm.onStartMoving}>
             <div className={styles.header}>
                 <IconButton
                     size="28px"
