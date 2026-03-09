@@ -97,7 +97,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
         fireEvent.click(toggleButton);
     };
     const getGuestAccessToggle = ({ getByLabelText }: RenderResult) => getByLabelText("Enable guest access");
-    const getHistoryVisibilityToggle = ({ getByLabelText }: RenderResult) => getByLabelText("Preview Space");
+    const getHistoryVisibilityToggle = ({ getByLabelText }: RenderResult) => getByLabelText("Preview space");
     const getErrorMessage = ({ getByTestId }: RenderResult) => getByTestId("space-settings-error")?.textContent;
 
     beforeEach(() => {

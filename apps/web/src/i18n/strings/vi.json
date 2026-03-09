@@ -1603,8 +1603,6 @@
         "joining_space": "Đang tham gia space…",
         "jump_read_marker": "Chuyển đến tin nhắn chưa đọc đầu tiên.",
         "jump_to_bottom_button": "Di chuyển đến các tin nhắn gần đây nhất",
-        "jump_to_date": "Nhảy đến ngày",
-        "jump_to_date_beginning": "Bắt đầu phòng",
         "kick_reason": "Lý do: %(reason)s",
         "kicked_by": "Bạn đã bị loại bởi %(memberName)s",
         "kicked_from_room_by": "Bạn đã bị loại khỏi %(roomName)s bởi %(memberName)s",
