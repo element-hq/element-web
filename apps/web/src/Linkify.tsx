@@ -10,10 +10,13 @@ import React, { type ReactElement } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
 import { merge } from "lodash";
 import _Linkify from "linkify-react";
+import { getHttpUriForMxc } from "matrix-js-sdk/src/matrix";
 
 import { _linkifyString, _linkifyHtml, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
+import SettingsStore from "./settings/SettingsStore";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
@@ -27,6 +30,24 @@ function sanitizeMxcImageSrc(src?: string): string | undefined {
     if (!match) return undefined;
 
     return `mxc://${match[1]}/${match[2]}`;
+}
+
+function getAnimatedThumbnailHttp(src: string, width: number, height: number, animated: boolean): string | null {
+    const client = MatrixClientPeg.safeGet();
+
+    return (
+        getHttpUriForMxc(
+            client.baseUrl,
+            src,
+            Math.floor(width * window.devicePixelRatio),
+            Math.floor(height * window.devicePixelRatio),
+            "scale",
+            false,
+            true,
+            undefined,
+            animated,
+        ) || null
+    );
 }
 
 export const transformTags: NonNullable<IOptions["transformTags"]> = {
@@ -77,7 +98,8 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         const media = mediaFromMxc(src);
         attribs.src =
             attribs["data-mx-emoticon"] !== undefined
-                ? (media.srcHttp ?? media.getThumbnailOfSourceHttp(width, height)!)
+                ? (getAnimatedThumbnailHttp(src, width, height, SettingsStore.getValue("autoplayGifs")) ??
+                  media.getThumbnailOfSourceHttp(width, height)!)
                 : media.getThumbnailOfSourceHttp(width, height)!;
         return { tagName, attribs };
     },

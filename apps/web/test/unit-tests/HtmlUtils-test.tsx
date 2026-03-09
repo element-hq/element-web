@@ -50,6 +50,7 @@ describe("topicToHtml", () => {
 describe("bodyToHtml", () => {
     afterEach(() => {
         jest.restoreAllMocks();
+        SettingsStore.reset();
     });
 
     it("should apply highlights to HTML messages", () => {
@@ -128,15 +129,14 @@ describe("bodyToHtml", () => {
         );
     });
 
-    it("renders inline custom emoticons from their source media URL", () => {
-        const mxcUrlToHttp = jest.fn().mockImplementation((mxc, width, height) => {
-            if (width === undefined && height === undefined) {
-                return `https://cdn.example/download/${encodeURIComponent(mxc)}`;
-            }
-
-            return `https://cdn.example/thumbnail/${encodeURIComponent(mxc)}/${width}x${height}`;
+    it("renders inline custom emoticons from animated thumbnails when GIF autoplay is enabled", () => {
+        getMockClientWithEventEmitter({ baseUrl: "https://matrix.example" });
+        const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+        const getValue = jest.spyOn(SettingsStore, "getValue");
+        getValue.mockImplementation((settingName, ...args) => {
+            if (settingName === "autoplayGifs") return true;
+            return originalGetValue(settingName, ...args);
         });
-        getMockClientWithEventEmitter({ mxcUrlToHttp });
 
         const html = bodyToHtml(
             {
@@ -149,20 +149,49 @@ describe("bodyToHtml", () => {
             [],
         );
 
-        expect(html).toContain('src="https://cdn.example/download/mxc%3A%2F%2Fexample.org%2Fparty-parrot"');
+        expect(html).toContain(
+            'src="https://matrix.example/_matrix/media/v3/thumbnail/example.org/party-parrot?width=800&amp;height=32&amp;method=scale&amp;animated=true&amp;allow_redirect=true"',
+        );
         expect(html).toContain("data-mx-emoticon");
-        expect(html).not.toContain("thumbnail");
+    });
+
+    it("renders inline custom emoticons from static thumbnails when GIF autoplay is disabled", () => {
+        getMockClientWithEventEmitter({ baseUrl: "https://matrix.example" });
+        const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+        const getValue = jest.spyOn(SettingsStore, "getValue");
+        getValue.mockImplementation((settingName, ...args) => {
+            if (settingName === "autoplayGifs") return false;
+            return originalGetValue(settingName, ...args);
+        });
+
+        const html = bodyToHtml(
+            {
+                body: ":party_parrot:",
+                msgtype: "m.text",
+                formatted_body:
+                    '<img data-mx-emoticon src="mxc://example.org/party-parrot" alt="party_parrot" title="party_parrot" height="32" />',
+                format: "org.matrix.custom.html",
+            },
+            [],
+        );
+
+        expect(html).toContain(
+            'src="https://matrix.example/_matrix/media/v3/thumbnail/example.org/party-parrot?width=800&amp;height=32&amp;method=scale&amp;animated=false&amp;allow_redirect=true"',
+        );
+        expect(html).toContain("data-mx-emoticon");
     });
 
     it("continues to thumbnail generic inline MXC images", () => {
-        const mxcUrlToHttp = jest.fn().mockImplementation((mxc, width, height) => {
-            if (width === undefined && height === undefined) {
-                return `https://cdn.example/download/${encodeURIComponent(mxc)}`;
-            }
+        getMockClientWithEventEmitter({
+            baseUrl: "https://matrix.example",
+            mxcUrlToHttp: jest.fn().mockImplementation((mxc, width, height) => {
+                if (width === undefined && height === undefined) {
+                    return `https://cdn.example/download/${encodeURIComponent(mxc)}`;
+                }
 
-            return `https://cdn.example/thumbnail/${encodeURIComponent(mxc)}/${width}x${height}`;
+                return `https://cdn.example/thumbnail/${encodeURIComponent(mxc)}/${width}x${height}`;
+            }),
         });
-        getMockClientWithEventEmitter({ mxcUrlToHttp });
 
         const html = bodyToHtml(
             {
