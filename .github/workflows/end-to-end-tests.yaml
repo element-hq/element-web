@@ -242,8 +242,9 @@ jobs:
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: html-report
-                  path: playwright-report
+                  path: apps/web/playwright-report
                   retention-days: 14
+                  if-no-files-found: error
 
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
