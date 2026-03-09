@@ -12,7 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { type TagID } from "../../../room-list-v3/skip-list/tag";
 import { RoomUpdateCause } from "../../models";
-import { SortAlgorithm } from "../models";
+import { type SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { NotificationLevel } from "../../../notifications/NotificationLevel";
@@ -93,32 +93,23 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     public setRooms(rooms: Room[]): void {
-        if (this.sortingAlgorithm === SortAlgorithm.Manual) {
-            this.cachedOrderedRooms = sortRoomsWithAlgorithm(rooms, this.tagId, this.sortingAlgorithm);
-        } else {
-            // Every other sorting type affects the categories, not the whole tag.
-            const categorized = this.categorizeRooms(rooms);
-            for (const category of Object.keys(categorized)) {
-                const notificationColor = category as unknown as NotificationLevel;
-                const roomsToOrder = categorized[notificationColor];
-                categorized[notificationColor] = sortRoomsWithAlgorithm(
-                    roomsToOrder,
-                    this.tagId,
-                    this.sortingAlgorithm,
-                );
-            }
-
-            const newlyOrganized: Room[] = [];
-            const newIndices: CategoryIndex = {};
-
-            for (const category of CATEGORY_ORDER) {
-                newIndices[category] = newlyOrganized.length;
-                newlyOrganized.push(...categorized[category]);
-            }
-
-            this.indices = newIndices;
-            this.cachedOrderedRooms = newlyOrganized;
+        const categorized = this.categorizeRooms(rooms);
+        for (const category of Object.keys(categorized)) {
+            const notificationColor = category as unknown as NotificationLevel;
+            const roomsToOrder = categorized[notificationColor];
+            categorized[notificationColor] = sortRoomsWithAlgorithm(roomsToOrder, this.tagId, this.sortingAlgorithm);
         }
+
+        const newlyOrganized: Room[] = [];
+        const newIndices: CategoryIndex = {};
+
+        for (const category of CATEGORY_ORDER) {
+            newIndices[category] = newlyOrganized.length;
+            newlyOrganized.push(...categorized[category]);
+        }
+
+        this.indices = newIndices;
+        this.cachedOrderedRooms = newlyOrganized;
     }
 
     private getCategoryIndex(category: NotificationLevel): number {
@@ -170,10 +161,6 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         // don't react to mute changes when we are not sorting by mute
         if (cause === RoomUpdateCause.PossibleMuteChange && !this.isMutedToBottom) {
             return false;
-        }
-
-        if (this.sortingAlgorithm === SortAlgorithm.Manual) {
-            return false; // Nothing to do here.
         }
 
         const category = this.getRoomCategory(room);
