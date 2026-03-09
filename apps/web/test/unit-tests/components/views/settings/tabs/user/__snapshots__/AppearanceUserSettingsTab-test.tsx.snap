@@ -245,7 +245,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           id="1"
                         >
                           <div
-                            class="mx_MTextBody _textBody_1l9h2_8 mx_EventTile_content _rootContent_1l9h2_14"
+                            class="mx_MTextBody _textBody_10wrb_8 mx_EventTile_content _rootContent_10wrb_14"
                           >
                             <div
                               class="mx_EventTile_body translate"
@@ -386,7 +386,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           id="2"
                         >
                           <div
-                            class="mx_MTextBody _textBody_1l9h2_8 mx_EventTile_content _rootContent_1l9h2_14"
+                            class="mx_MTextBody _textBody_10wrb_8 mx_EventTile_content _rootContent_10wrb_14"
                           >
                             <div
                               class="mx_EventTile_body translate"
@@ -530,7 +530,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           id="3"
                         >
                           <div
-                            class="mx_MTextBody _textBody_1l9h2_8 mx_EventTile_content _rootContent_1l9h2_14"
+                            class="mx_MTextBody _textBody_10wrb_8 mx_EventTile_content _rootContent_10wrb_14"
                           >
                             <div
                               class="mx_EventTile_body translate"
