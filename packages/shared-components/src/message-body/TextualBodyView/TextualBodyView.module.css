@@ -41,6 +41,7 @@
     background: none;
     color: inherit;
     font: inherit;
+    letter-spacing: inherit;
     padding: 0;
 }
 
@@ -49,6 +50,7 @@
     background: none;
     color: inherit;
     font: inherit;
+    letter-spacing: inherit;
     padding: 0;
     cursor: pointer;
 }
