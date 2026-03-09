@@ -73,8 +73,8 @@ export interface WidgetPipViewProps {
      * The avatar is passed as a React component.
      * This allows any avatar implementation to be used in this view (like RoomAvatar).
      */
-    // In the future the avatar component can also become a shared component. Then it would be accessible
-    // in the shared component package and we could remove this prop.
+    // In the future the avatar component can/should also become a shared component.
+    // It would then be accessible in the shared component package and we could remove this prop.
     RoomAvatar: React.FC<{ size: string }>;
 }
 
@@ -86,9 +86,9 @@ export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar }) => {
     const snapshot = useViewModel(vm);
     const { translate: _t } = useI18n();
     return (
-        // The interaction where we use the onMouseDown handler is only useful for dragging the widget around,
+        // The interaction where we use the `onMouseDown` handler is only useful for dragging the widget around,
         // which is not possible via the keyboard. The outcome of this interaction can only be changed
-        // if the user interacts with a mouse. Hence there is no use in providing an alternative.
+        // if the user interacts with a mouse. Hence there is no use in providing an accessible alternative.
         // In the future we might consider introducing alternative shortcuts for moving the PiP around
         // with the keyboard.
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions

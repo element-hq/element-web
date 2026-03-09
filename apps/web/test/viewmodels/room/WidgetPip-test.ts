@@ -9,7 +9,7 @@ import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matri
 import { type MockedObject } from "jest-mock";
 
 import { mkRoom, stubClient } from "../../test-utils";
-import { WidgetPipViewModel } from "../../../src/viewmodels/room/WidgetPip";
+import { WidgetPipViewModel } from "../../../src/viewmodels/room/WidgetPipViewModel";
 import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";

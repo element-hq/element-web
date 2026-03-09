@@ -61,13 +61,11 @@ export class WidgetPipViewModel
 
     public constructor(props: Props) {
         super(props, { widgetId: props.widgetId, roomName: props.room.name, roomId: props.room.roomId });
-        this.widget = WidgetStore.instance
-            .getApps(this.props.room.roomId)
-            .find((app) => app.id === this.props.widgetId)!;
+        this.widget = WidgetStore.instance.getApps(props.room.roomId).find((app) => app.id === this.props.widgetId)!;
         this.call = CallStore.instance.getCall(props.room.roomId) ?? null;
         this.onStartMoving = props.onStartMoving;
 
-        this.disposables.trackListener(this.props.room, RoomEvent.Name, this.onRoomName);
+        this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomName);
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
     }
 
