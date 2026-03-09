@@ -319,18 +319,31 @@ export default class SettingsStore {
     }
 
     public static getBetaInfo(settingName: SettingKey): ISetting["betaInfo"] {
-        // consider a beta disabled if the config is explicitly set to false, in which case treat as normal Labs flag
-        if (
-            SettingsStore.isFeature(settingName) &&
-            SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
-        ) {
-            const betaInfo = SETTINGS[settingName]!.betaInfo;
-            if (betaInfo) {
-                betaInfo.requiresRefresh =
-                    betaInfo.requiresRefresh ?? SETTINGS[settingName]!.controller instanceof ReloadOnChangeController;
-            }
-            return betaInfo;
+        if (!SettingsStore.isFeature(settingName)) {
+            return undefined;
         }
+        const { betaInfo } = SETTINGS[settingName];
+        if (!betaInfo) {
+            return undefined;
+        }
+
+        const configValue = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true);
+        if (configValue === false) {
+            // consider a beta disabled if the config is explicitly set to false, in which case treat as normal Labs flag
+            return undefined;
+        }
+
+        if (betaInfo.labsOnly) {
+            // If the beta has been moved back to labs, only show it if it's enabled.
+            const configValue = SettingsStore.getValue(settingName);
+            if (!configValue) {
+                return undefined;
+            }
+        }
+        if (!betaInfo.requiresRefresh) {
+            betaInfo.requiresRefresh = SETTINGS[settingName]!.controller instanceof ReloadOnChangeController;
+        }
+        return betaInfo;
     }
 
     public static getLabGroup(settingName: SettingKey): LabGroup | undefined {
