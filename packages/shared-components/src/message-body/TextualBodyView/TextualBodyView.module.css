@@ -27,6 +27,7 @@
 .marker {
     user-select: none;
     font-size: var(--cpd-font-size-body-sm);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
     line-height: var(--cpd-font-line-height-body-sm);
     color: var(--cpd-color-text-secondary);
     margin-inline-start: var(--cpd-space-2x);
