@@ -300,7 +300,7 @@ exports[`<MImageBody/> should open ImageView using thumbnail for encrypted svg 1
 exports[`<MImageBody/> should render MFileBody for svg with no thumbnail 1`] = `
 <DocumentFragment>
   <span
-    class="_content_bhrse_8 mx_MFileBody"
+    class="_content_1aoc6_8 mx_MFileBody"
   >
     <div
       class="mx_MediaBody _mediaBody_1xzob_8"
