@@ -391,7 +391,6 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
                 safeBody = phtml.body.innerHTML;
             }
         } else if (opts.linkify) {
-            console.log(sanitizeParams);
             // If we are linkifying plain text, pass the result through sanitizeHtml so that the highlighter configured in sanitizeParams.textFilter gets applied.
             safeBody = sanitizeHtml(linkifyHtml(escapeHtml(plainBody)), sanitizeParams);
         } else if (highlighter) {
