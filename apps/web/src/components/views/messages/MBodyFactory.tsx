@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useEffect } from "react";
+import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import { FileBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
@@ -32,6 +32,8 @@ function FileBodyViewWrapped({
     showFileInfo,
 }: IBodyProps & FileBodyViewProps): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
+    const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
+    const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -41,6 +43,8 @@ function FileBodyViewWrapped({
                 forExport,
                 showFileInfo,
                 timelineRenderingType,
+                refIFrame,
+                refLink,
             }),
     );
 
@@ -54,7 +58,7 @@ function FileBodyViewWrapped({
         });
     }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
 
-    return <FileBodyView vm={vm} refIFrame={vm.refIFrame} refLink={vm.refLink} className="mx_MFileBody" />;
+    return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
 
 // Exported for explicit fallback usage where callers want file-body rendering.

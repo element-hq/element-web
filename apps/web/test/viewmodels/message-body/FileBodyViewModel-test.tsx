@@ -7,6 +7,7 @@
 
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { createRef, type RefObject } from "react";
 import { FileBodyViewInfoIcon, FileBodyViewRendering } from "@element-hq/web-shared-components";
 
 import Modal from "../../../src/Modal";
@@ -68,6 +69,8 @@ describe("FileBodyViewModel", () => {
             showFileInfo: false,
             forExport: false,
             timelineRenderingType: TimelineRenderingType.File,
+            refIFrame: (createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>),
+            refLink: (createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>),
             ...overrides,
         });
 
@@ -77,9 +80,6 @@ describe("FileBodyViewModel", () => {
 
     it("shows unencrypted download snapshot in file rendering type", () => {
         const vm = createVm();
-
-        expect(vm.refIFrame).toBeDefined();
-        expect(vm.refLink).toBeDefined();
         expect(vm.getSnapshot()).toMatchObject({
             rendering: FileBodyViewRendering.UNENCRYPTED,
             infoShow: false,

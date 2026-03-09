@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { createRef, type MouseEvent, type RefObject } from "react";
+import { type MouseEvent, type RefObject } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
@@ -32,18 +32,21 @@ export interface FileBodyViewModelProps {
     forExport?: boolean;
     showFileInfo?: boolean;
     timelineRenderingType: TimelineRenderingType;
+    refIFrame: RefObject<HTMLIFrameElement>;
+    refLink: RefObject<HTMLAnchorElement>;
 }
 
-// cached copy of the download.svg asset for the sandboxed iframe later on
-export let DOWNLOAD_ICON_URL: string;
+// Cached copy of the download.svg asset for the sandboxed iframe.
+const downloadIconCache = { url: "" };
 
-async function cacheDownloadIcon(): Promise<void> {
-    if (DOWNLOAD_ICON_URL) return;
+async function cacheDownloadIcon(): Promise<string> {
+    if (downloadIconCache.url) return downloadIconCache.url;
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const svg = await fetch(require("@vector-im/compound-design-tokens/icons/download.svg").default).then((r) =>
         r.text(),
     );
-    DOWNLOAD_ICON_URL = "data:image/svg+xml;base64," + window.btoa(svg);
+    downloadIconCache.url = "data:image/svg+xml;base64," + window.btoa(svg);
+    return downloadIconCache.url;
 }
 
 // Cache the asset immediately
@@ -107,16 +110,16 @@ export class FileBodyViewModel
     extends BaseViewModel<FileBodyViewSnapshot, FileBodyViewModelProps>
     implements FileBodyViewModelInterface
 {
-    public readonly refIFrame: RefObject<HTMLIFrameElement>;
-    public readonly refLink: RefObject<HTMLAnchorElement>;
+    private readonly refIFrame: RefObject<HTMLIFrameElement>;
+    private readonly refLink: RefObject<HTMLAnchorElement>;
     private decryptedBlob?: Blob;
     private userDidClick = false;
     private readonly fileDownloader: FileDownloader;
 
     public constructor(props: FileBodyViewModelProps) {
         super(props, FileBodyViewModel.computeSnapshot(props));
-        this.refIFrame = createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>;
-        this.refLink = createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>;
+        this.refIFrame = props.refIFrame;
+        this.refLink = props.refLink;
         this.fileDownloader = new FileDownloader(() => this.refIFrame.current);
     }
 
@@ -233,7 +236,7 @@ export class FileBodyViewModel
             name: fileName,
             autoDownload: this.userDidClick,
             opts: {
-                imgSrc: DOWNLOAD_ICON_URL,
+                imgSrc: downloadIconCache.url,
                 imgStyle: null,
                 style: computedStyle(this.refLink.current),
                 textContent: text,
