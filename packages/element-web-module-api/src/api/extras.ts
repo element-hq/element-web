@@ -78,9 +78,9 @@ export interface ExtrasApi {
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
 
     /**
-     * Sets the callback to get extra buttons in the room header (which can vary depending on the room being displayed).
+     * Adds a callback to get extra buttons in the room header (which can vary depending on the room being displayed).
      *
      * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
      */
-    setRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
 }
