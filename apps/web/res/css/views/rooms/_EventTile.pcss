@@ -86,11 +86,11 @@ $left-gutter: 64px;
     }
 
     .mx_DisambiguatedProfile {
-        color: $primary-content !important;
-        font: var(--cpd-font-body-md-regular) !important;
-        display: inline-block !important;
-        padding-bottom: 0px !important;
-        padding-top: 0px !important;
+        color: $primary-content;
+        font: var(--cpd-font-body-md-regular);
+        display: inline-block;
+        padding-bottom: 0px;
+        padding-top: 0px;
     }
 
     .mx_ReactionsRow {
@@ -289,39 +289,39 @@ $left-gutter: 64px;
         }
 
         .mx_DisambiguatedProfile {
-            order: 2 !important;
-            width: var(--name-width) !important;
-            margin-inline-end: 0 !important; /* override mx_EventTile > * */
+            order: 2;
+            width: var(--name-width);
+            margin-inline-end: 0; /* override mx_EventTile > * */
 
             > .mx_DisambiguatedProfile_displayName {
-                width: 100% !important;
-                text-align: end !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
+                width: 100%;
+                text-align: end;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             > .mx_DisambiguatedProfile_mxid {
-                visibility: collapse !important;
-                margin-left: 0 !important; /* Override the inherited margin. */
-                padding: 0 5px !important;
+                visibility: collapse;
+                margin-left: 0; /* Override the inherited margin. */
+                padding: 0 5px;
             }
 
             &:hover {
-                overflow: visible !important;
-                z-index: 10 !important;
+                overflow: visible;
+                z-index: 10;
 
                 > .mx_DisambiguatedProfile_displayName {
-                    overflow: visible !important;
-                    display: inline !important;
-                    background-color: $event-selected-color !important;
-                    border-radius: 8px 0 0 8px !important;
-                    padding-right: $spacing-8 !important;
+                    overflow: visible;
+                    display: inline;
+                    background-color: $event-selected-color;
+                    border-radius: 8px 0 0 8px;
+                    padding-right: $spacing-8;
                 }
 
                 > .mx_DisambiguatedProfile_mxid {
-                    visibility: visible !important;
-                    opacity: 1 !important;
-                    background-color: $event-selected-color !important;
+                    visibility: visible;
+                    opacity: 1;
+                    background-color: $event-selected-color;
                 }
             }
         }
@@ -486,11 +486,9 @@ $left-gutter: 64px;
         }
 
         > .mx_DisambiguatedProfile {
-            margin-bottom: var(--cpd-space-1x) !important;
-            margin-left: $left-gutter !important;
-            position: relative;
-            top: -1px;
-            max-width: calc(100% - $left-gutter) !important;
+            line-height: $font-20px;
+            margin-left: $left-gutter;
+            max-width: calc(100% - $left-gutter);
         }
 
         > .mx_EventTile_avatar {
@@ -1016,24 +1014,24 @@ $left-gutter: 64px;
     }
 
     .mx_DisambiguatedProfile {
-        display: inline-flex !important;
-        align-items: center !important;
-        flex: 1 !important;
+        display: inline-flex;
+        align-items: center;
+        flex: 1;
 
         .mx_DisambiguatedProfile_displayName,
         .mx_DisambiguatedProfile_mxid {
-            display: block !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .mx_DisambiguatedProfile_displayName {
-            flex: none !important;
-            max-width: 100% !important;
+            flex: none;
+            max-width: 100%;
         }
 
         .mx_DisambiguatedProfile_mxid {
-            flex: 1 !important;
+            flex: 1;
         }
     }
 
@@ -1217,8 +1215,8 @@ $left-gutter: 64px;
                     align-items: center;
 
                     .mx_DisambiguatedProfile {
-                        margin-left: 8px !important;
-                        flex: 1 !important;
+                        margin-left: 8px;
+                        flex: 1;
                     }
                 }
             }
