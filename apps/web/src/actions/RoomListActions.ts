@@ -23,14 +23,14 @@ export default class RoomListActions {
      * Creates an action thunk that will do an asynchronous request to
      * tag room.
      *
-     * @param {MatrixClient} matrixClient the matrix client to set the
+     * @param matrixClient the matrix client to set the
      *                                    account data on.
-     * @param {Room} room the room to tag.
-     * @param {string} oldTag the tag to remove (unless oldTag ==== newTag)
-     * @param {string} newTag the tag with which to tag the room.
-     * @param {?number} oldIndex the previous position of the room in the
+     * @param room the room to tag.
+     * @param oldTag the tag to remove (unless oldTag ==== newTag)
+     * @param newTag the tag with which to tag the room.
+     * @param oldIndex the previous position of the room in the
      *                           list of rooms.
-     * @returns {AsyncActionPayload} an async action payload
+     * @returns an async action payload
      * @see asyncAction
      */
     public static tagRoom(
