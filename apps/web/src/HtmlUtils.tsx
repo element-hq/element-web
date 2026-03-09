@@ -20,7 +20,7 @@ import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
-import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
+import { PERMITTED_URL_SCHEMES } from "@element-hq/web-shared-components";
 import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 

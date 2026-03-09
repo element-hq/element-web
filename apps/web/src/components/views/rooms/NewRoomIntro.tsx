@@ -59,21 +59,18 @@ const NewRoomIntro: React.FC = () => {
     const topic = useTopic(room);
     const isLocalRoom = room instanceof LocalRoom;
 
-    const dmPartner = useMemo(() => {
-        if (isLocalRoom) {
-            return room?.targets[0]?.userId;
-        }
-        if (roomId) {
-            return DMRoomMap.shared().getUserIdForRoomId(roomId);
-        }
-        return undefined;
-    }, [isLocalRoom, room, roomId]);
+    let dmPartner: string | undefined;
+    if (isLocalRoom) {
+        dmPartner = room?.targets[0]?.userId;
+    } else if (roomId) {
+        dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
+    }
 
     const renderedTopic = useMemo(() => {
         if (dmPartner) {
             return undefined;
         }
-        return <ElementLinkedText>{topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>;
+        return <ElementLinkedText as="span">{topicToHtml(topic?.text, topic?.html)}</ElementLinkedText>;
     }, [topic, dmPartner]);
 
     if (!room || !roomId) {

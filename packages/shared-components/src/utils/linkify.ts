@@ -42,35 +42,9 @@ export const LinkifyOptionalSlashProtocols = [
 ];
 
 /**
- * URL schemes that are safe to be resolved within the context of a Matrix client.
+ * URL schemes that are safe to be resolved by the app consuming the library.
  */
-export const PERMITTED_URL_SCHEMES = [
-    "bitcoin",
-    "ftp",
-    "geo",
-    "http",
-    "https",
-    "im",
-    "irc",
-    "ircs",
-    "magnet",
-    "mailto",
-    "matrix",
-    "mms",
-    "news",
-    "nntp",
-    "openpgp4fpr",
-    "sip",
-    "sftp",
-    "sms",
-    "smsto",
-    "ssh",
-    "tel",
-    "urn",
-    "webcal",
-    "wtai",
-    "xmpp",
-];
+export const PERMITTED_URL_SCHEMES = [...LinkifySupportedProtocols, ...LinkifyOptionalSlashProtocols];
 
 // Linkify supports some common protocols but not others, register all permitted url schemes if unsupported
 // https://github.com/nfrasser/linkifyjs/blob/main/packages/linkifyjs/src/scanner.mjs#L171-L177
@@ -81,7 +55,7 @@ PERMITTED_URL_SCHEMES.forEach((scheme) => {
     }
 });
 
-// MXC urls can be resolved, but are not permitted in other parts of the app.
+// 'mxc' is specialcased. They can be linked to
 linkifyjs.registerCustomProtocol("mxc", false);
 
 export enum LinkifyMatrixOpaqueIdType {
@@ -303,10 +277,13 @@ export function findLinksInString(str: string): ReturnType<typeof linkifyjs.find
 }
 
 /**
- * Is the given string a valid linkable. This does not trim the string.
+ * Is the given string considered linkable, as in it looks
+ * like a URL and uses a permitted protocol.
+ * This does not trim the string.
  *
  * @param str A string value to be tested if the entire value is linkable.
  * @returns Whether or not the `str` value is a link.
+ * @see `PERMITTED_URL_SCHEMES` for permitted links.
  */
 export function isLinkable(str: string): boolean {
     return linkifyjs.test(str);

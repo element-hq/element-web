@@ -90,7 +90,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = vm.expanded ? <ElementLinkedText>{body}</ElementLinkedText> : body;
+    const content = vm.expanded ? <ElementLinkedText as="span">{body}</ElementLinkedText> : body;
 
     return (
         <Flex

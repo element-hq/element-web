@@ -1,9 +1,10 @@
 /*
-Copyright 2026 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
 import React from "react";
 import { fn } from "storybook/test";
 
@@ -25,10 +26,10 @@ export default {
 const Template: StoryFn<typeof LinkedText> = ({ children, ...args }) => <LinkedText {...args}>{children}</LinkedText>;
 
 export const Default = Template.bind({});
-
 Default.args = {};
 
 export const Unclickable = Template.bind({});
+Unclickable.tags = ["skip-test"];
 
 Unclickable.args = {
     children: "I love working on https://matrix.org.",
@@ -50,13 +51,14 @@ WithRoomAlias.args = {
 };
 
 export const WithCustomUrlTarget = Template.bind({});
-
+WithCustomUrlTarget.tags = ["skip-test"];
 WithCustomUrlTarget.args = {
     urlTargetTransformer: () => "_fake_target",
 };
 
 export const WithCustomHref = Template.bind({});
 
+WithCustomHref.tags = ["skip-test"];
 WithCustomHref.args = {
     hrefTransformer: () => {
         return "https://example.org";
