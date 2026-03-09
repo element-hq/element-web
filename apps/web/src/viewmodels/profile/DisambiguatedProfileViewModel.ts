@@ -7,9 +7,9 @@
 import {
     BaseViewModel,
     type DisambiguatedProfileViewSnapshot,
+    type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { type MouseEvent } from "react";
 
 import { _t } from "../../languageHandler";
 import { getUserNameColorClass } from "../../utils/FormattingUtils";
@@ -135,7 +135,7 @@ export class DisambiguatedProfileViewModel
         this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
-    public get onClick(): ((event: MouseEvent<HTMLButtonElement | HTMLDivElement>) => void) | undefined {
+    public get onClick(): DisambiguatedProfileViewModelProps["onClick"] {
         return this.props.onClick;
     }
 }
