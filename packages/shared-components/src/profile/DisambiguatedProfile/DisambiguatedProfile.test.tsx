@@ -8,7 +8,7 @@
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { createEvent, fireEvent } from "@testing-library/dom";
+import { fireEvent } from "@testing-library/dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@test-utils";
 
@@ -134,8 +134,9 @@ describe("DisambiguatedProfileView", () => {
         expect(profileContainer).toHaveAttribute("tabIndex", "0");
     });
 
-    it("should call onClick on keyboard activation keys", () => {
+    it("should not call onClick on Enter when focused", async () => {
         const onClick = vi.fn();
+        const user = userEvent.setup();
         const vm = new DisambiguatedProfileViewModel(
             {
                 displayName: "Keyboard User",
@@ -145,16 +146,28 @@ describe("DisambiguatedProfileView", () => {
 
         render(<DisambiguatedProfileView vm={vm} />);
         const profileContainer = getProfileLink("Keyboard User");
+        profileContainer.focus();
 
-        const enterEvent = createEvent.keyDown(profileContainer, { key: "Enter" });
-        fireEvent(profileContainer, enterEvent);
+        await user.keyboard("{Enter}");
+        expect(onClick).not.toHaveBeenCalled();
+    });
 
-        const spaceEvent = createEvent.keyDown(profileContainer, { key: " " });
-        fireEvent(profileContainer, spaceEvent);
+    it("should not call onClick on Space when focused", async () => {
+        const onClick = vi.fn();
+        const user = userEvent.setup();
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Keyboard User",
+            },
+            { onClick },
+        );
 
-        expect(enterEvent.defaultPrevented).toBe(true);
-        expect(spaceEvent.defaultPrevented).toBe(true);
-        expect(onClick).toHaveBeenCalledTimes(2);
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileLink("Keyboard User");
+        profileContainer.focus();
+
+        await user.keyboard(" ");
+        expect(onClick).not.toHaveBeenCalled();
     });
 
     it("should not call onClick for non-activation keys", () => {
