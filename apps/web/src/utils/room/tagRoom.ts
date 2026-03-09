@@ -25,7 +25,7 @@ export function tagRoom(room: Room, tagId: TagID): void {
         const isApplied = getTagsForRoom(room).includes(tagId);
         const removeTag = isApplied ? tagId : inverseTag;
         const addTag = isApplied ? null : tagId;
-        dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag, 0));
+        dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag));
     } else {
         logger.warn(`Unexpected tag ${tagId} applied to ${room.roomId}`);
     }

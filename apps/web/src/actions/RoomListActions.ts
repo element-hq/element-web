@@ -30,8 +30,6 @@ export default class RoomListActions {
      * @param {string} newTag the tag with which to tag the room.
      * @param {?number} oldIndex the previous position of the room in the
      *                           list of rooms.
-     * @param {?number} newIndex the new position of the room in the list
-     *                           of rooms.
      * @returns {AsyncActionPayload} an async action payload
      * @see asyncAction
      */
@@ -40,7 +38,6 @@ export default class RoomListActions {
         room: Room,
         oldTag: TagID | null | undefined,
         newTag: TagID | null | undefined,
-        newIndex: number,
     ): AsyncActionPayload {
         return asyncAction(
             "RoomListActions.tagRoom",

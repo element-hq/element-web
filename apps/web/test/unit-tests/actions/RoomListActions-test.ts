@@ -41,9 +41,8 @@ describe("RoomListActions", () => {
         async function invokeTagRoom(
             oldTag: Parameters<typeof RoomListActions.tagRoom>[2],
             newTag: Parameters<typeof RoomListActions.tagRoom>[3],
-            newIndex = 0,
         ): Promise<void> {
-            const payload = RoomListActions.tagRoom(client, room, oldTag, newTag, newIndex);
+            const payload = RoomListActions.tagRoom(client, room, oldTag, newTag);
 
             // Execute the async function embedded in the payload.
             payload.fn(dispatch);
@@ -53,7 +52,7 @@ describe("RoomListActions", () => {
         }
 
         it("dispatches a pending action immediately with the optimistic update data", () => {
-            const payload = RoomListActions.tagRoom(client, room, DefaultTagID.Favourite, DefaultTagID.LowPriority, 0);
+            const payload = RoomListActions.tagRoom(client, room, DefaultTagID.Favourite, DefaultTagID.LowPriority);
 
             payload.fn(dispatch);
 
