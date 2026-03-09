@@ -71,6 +71,10 @@ export class WidgetPipViewModel
 
     public onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
 
+    /**
+     * The view model needs to know if the room is currently being viewed.
+     * @param viewing Whether we are currently viewing the room.
+     */
     public setViewingRoom(viewing: boolean): void {
         this.viewingRoom = viewing;
     }
