@@ -33,14 +33,14 @@ export interface Props {
      */
     room: Room;
     /**
-     * A callback which is called when a mouse event (most likely mouse down) occurs at start of moving the pip around
+     * A callback which is called when a mouse event (most likely mouse down) occurs at the start of moving the PiP around.
      */
     onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
     /**
      * This callback ref will be used by the ViewModel once the view is moving.
-     * Widgets might be implemented with a top layer dom tree path containing the widget IFrame.
-     * This allows moving the Iframe around (Pip/in room) without remounting it.
-     * This callback allows any `PersistentApp` view / component to know when to update the IFrame position of the widget.
+     * Widgets might be implemented with a top-layer DOM tree path containing the widget iframe.
+     * This allows moving the iframe around (PiP/in-room) without remounting it.
+     * This callback allows any `PersistentApp` view/component to know when to update the iframe position of the widget.
      */
     movePersistedElement: RefObject<(() => void) | null>;
 }
@@ -56,7 +56,7 @@ export class WidgetPipViewModel
      * For non-call widgets, this will be `null`.
      */
     private call: Call | null;
-    /** If the user is currently viewing the room associated with the PipView (`this.props.room`) */
+    /** If the user is currently viewing the room associated with the PiP view (`this.props.room`) */
     private viewingRoom?: boolean;
 
     public constructor(props: Props) {
@@ -101,7 +101,7 @@ export class WidgetPipViewModel
 
     /**
      * The component to render as the persistent app by the WidgetPipView.
-     * @param props a copy of the PersistentApp component's props
+     * @param props A copy of the `PersistentApp` component's props.
      * @returns
      */
     public persistentAppComponent: FC<

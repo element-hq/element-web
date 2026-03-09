@@ -48,7 +48,7 @@ interface IState {
     // they belong to
     secondaryCall: MatrixCall;
 
-    // widget candidate to be displayed in the pip view.
+    // Widget candidate to be displayed in the PiP view.
     persistentWidgetId: string | null;
     persistentRoomId: string | null;
     showWidgetInPip: boolean;
@@ -292,7 +292,7 @@ type Props = { viewingRoom: boolean } & WidgetPipViewModelProps;
 /**
  * A wrapper for the WidgetPipView component.
  *
- * This exposes the new shared WidgetPipView with the same api it was previously done and how
+ * This exposes the new shared WidgetPipView with the same API as before and how
  * it is used in the PipContainerInner component.
  * @param props The same props the legacy WidgetPip was using.
  * @returns
@@ -301,14 +301,14 @@ const WidgetPipWrappedView: React.FC<Props> = (props: Props) => {
     const vm = useCreateAutoDisposedViewModel(() => new WidgetPipViewModel(props));
 
     useEffect(() => {
-        // Use an effect to update viewingRoom. It is not required in the view but just the vm.
+        // Use an effect to update viewingRoom. It is not required in the view but only in the view model.
         vm.setViewingRoom(props.viewingRoom);
     }, [vm, props.viewingRoom]);
 
     return (
         <WidgetPipView
             vm={vm}
-            // props only used in the view and not the vm get passed directly.
+            // Props only used in the view and not the view model get passed directly.
             RoomAvatar={({ size }) => <RoomAvatar size={size} room={props.room} />}
         />
     );

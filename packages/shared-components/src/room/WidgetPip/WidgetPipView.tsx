@@ -21,8 +21,8 @@ export interface WidgetPipViewActions {
      */
     onBackClick: (ev: React.MouseEvent<Element, MouseEvent>) => void;
     /**
-     * The viewModel needs to know the if the room is currently being viewed.
-     * @param viewing if we are currently viewing the room.
+     * The view model needs to know if the room is currently being viewed.
+     * @param viewing Whether we are currently viewing the room.
      */
     setViewingRoom: (viewing: boolean) => void;
     /**
@@ -44,7 +44,7 @@ export interface WidgetPipViewActions {
 
 export interface WidgetPipViewSnapshot {
     /**
-     * The widget Id this view is rendering.
+     * The widget ID this view is rendering.
      */
     widgetId: string;
     /**
@@ -52,42 +52,42 @@ export interface WidgetPipViewSnapshot {
      */
     roomName: string;
     /**
-     * The room Id this Pip views widget is associated with.
+     * The room ID this PiP view’s widget is associated with.
      */
     roomId: string;
 }
 
 /**
- * The view model for RoomStatusBarView.
+ * The view model for the widget PiP view.
  */
 export type WidgetPipViewModel = ViewModel<WidgetPipViewSnapshot> & WidgetPipViewActions;
 
 export interface WidgetPipViewProps {
     /**
-     * The WidgetPipViewModel to expose the WidgetPipViewSnapshot and:
+     * The WidgetPipViewModel to expose the WidgetPipViewSnapshot and to:
      *  - handling the back button callback.
      *  - exposing the persistentApp react component to the view.
      */
     vm: WidgetPipViewModel;
     /**
      * The avatar is passed as a React component.
-     * This allows to use any avatar implementation in this view (Like RoomAvatar)
+     * This allows any avatar implementation to be used in this view (like RoomAvatar).
      */
-    // In the future the avatar compoentn can also become a shared component. Then it would be accessible
+    // In the future the avatar component can also become a shared component. Then it would be accessible
     // in the shared component package and we could remove this prop.
     RoomAvatar: React.FC<{ size: string }>;
 }
 
 /**
  * A picture-in-picture view for a widget. Additional controls are shown if the
- * widget is a call of some sort.
+ * widget represents a call.
  */
 export const WidgetPipView: FC<WidgetPipViewProps> = ({ vm, RoomAvatar }) => {
     const snapshot = useViewModel(vm);
     const { translate: _t } = useI18n();
     return (
-        // The interaction we use the onMouseDown handler is only useful for dragging the widget around.
-        // Which is not doable via the keyboard. The output of this interaction can only be altered
+        // The interaction where we use the onMouseDown handler is only useful for dragging the widget around,
+        // which is not possible via the keyboard. The outcome of this interaction can only be changed
         // if the user interacts with a mouse. Hence there is no use in providing an alternative.
         // In the future we might consider introducing alternative shortcuts for moving the PiP around
         // with the keyboard.

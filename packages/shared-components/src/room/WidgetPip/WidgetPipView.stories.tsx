@@ -70,7 +70,7 @@ export const WithGreyWidget = Template.bind({});
 WithGreyWidget.args = {};
 
 /**
- * Rendered when using a transparent bg widget like element call
+ * Rendered when using a transparent background widget like Element Call.
  */
 export const WithElementCallWidgetMock = Template.bind({});
 const CallPill: React.FC = () => (
