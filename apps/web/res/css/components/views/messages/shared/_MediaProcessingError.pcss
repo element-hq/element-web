@@ -6,7 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_MediaProcessingError_Icon {
-    margin-right: $spacing-4;
-    vertical-align: text-top;
+@keyframes mx_MediaProcessingError_spinIconOnHover {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@media (hover) and (prefers-reduced-motion: no-preference) {
+    .mx_MediaProcessingError_spinIconOnHover:hover > svg {
+        transform-origin: center;
+        animation: mx_MediaProcessingError_spinIconOnHover 450ms ease;
+    }
 }

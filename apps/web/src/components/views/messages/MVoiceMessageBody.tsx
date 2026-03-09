@@ -36,7 +36,12 @@ export default class MVoiceMessageBody extends MAudioBody {
     public render(): React.ReactNode {
         if (this.state.error) {
             return (
-                <MediaProcessingError className="mx_MVoiceMessageBody">
+                <MediaProcessingError
+                    className="mx_MVoiceMessageBody"
+                    // Compound Alert doesn't accept custom icons yet.
+                    // Replace its icon with MicOnIcon if that becomes possible.
+                    title="Couldn't play voice message"
+                >
                     {_t("timeline|m.audio|error_processing_voice_message")}
                 </MediaProcessingError>
             );

@@ -82,7 +82,12 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
     public render(): React.ReactNode {
         if (this.state.error) {
             return (
-                <MediaProcessingError className="mx_MAudioBody">
+                <MediaProcessingError
+                    className="mx_MAudioBody"
+                    // Compound Alert doesn't accept custom icons yet.
+                    // Replace its icon with AudioIcon if that becomes possible.
+                    title="Couldn't play audio"
+                >
                     {_t("timeline|m.audio|error_processing_audio")}
                 </MediaProcessingError>
             );

@@ -267,7 +267,12 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
 
         if (this.state.error !== null) {
             return (
-                <MediaProcessingError className="mx_MVideoBody">
+                <MediaProcessingError
+                    className="mx_MVideoBody"
+                    // Compound Alert doesn't accept custom icons yet.
+                    // Replace its icon with VideoCallIcon if that becomes possible.
+                    title="Couldn't show video"
+                >
                     {_t("timeline|m.video|error_decrypting")}
                 </MediaProcessingError>
             );

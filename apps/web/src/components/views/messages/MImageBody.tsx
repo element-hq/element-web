@@ -15,7 +15,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
-import { ImageErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MFileBody from "./MFileBody";
 import Modal from "../../../Modal";
@@ -83,7 +83,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
     private placeholder = createRef<HTMLDivElement>();
     private timeout?: number;
     private sizeWatcher?: string;
-
     public state: IState = {
         contentUrl: null,
         thumbUrl: null,
@@ -199,6 +198,21 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             loadedImageDimensions = { naturalWidth, naturalHeight };
         }
         this.setState({ imgLoaded: true, loadedImageDimensions });
+    };
+
+    private onRetry = (): void => {
+        this.setState(
+            {
+                contentUrl: null,
+                thumbUrl: null,
+                isAnimated: undefined,
+                error: undefined,
+                imgError: false,
+                imgLoaded: false,
+                loadedImageDimensions: undefined,
+            },
+            () => void this.downloadImage(),
+        );
     };
 
     private getContentUrl(): string | null {
@@ -361,7 +375,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-
         if (this.props.mediaVisible) {
             // noinspection JSIgnoredPromiseFromCall
             this.downloadImage();
@@ -674,9 +687,19 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             } else if (this.state.error instanceof DownloadError) {
                 errorText = _t("timeline|m.image|error_downloading");
             }
-
             return (
-                <MediaProcessingError className="mx_MImageBody" Icon={ImageErrorIcon}>
+                <MediaProcessingError
+                    className="mx_MImageBody"
+                    // Compound Alert doesn't accept custom icons yet.
+                    // Provide with ImageErrorIcon if that becomes possible.
+                    title="Couldn't show image"
+                    action={{
+                        label: "Retry",
+                        Icon: RestartIcon,
+                        onClick: this.onRetry,
+                        className: "mx_MediaProcessingError_spinIconOnHover",
+                    }}
+                >
                     {errorText}
                 </MediaProcessingError>
             );
