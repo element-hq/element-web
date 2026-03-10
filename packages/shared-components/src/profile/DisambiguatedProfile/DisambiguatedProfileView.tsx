@@ -93,7 +93,12 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
                 title={title}
                 onClick={vm.onClick}
             >
-                <span className={displayNameClasses} data-part="display-name" dir="auto">
+                <span
+                    className={displayNameClasses}
+                    data-part="display-name"
+                    data-emphasized={emphasizeDisplayName ? "true" : undefined}
+                    dir="auto"
+                >
                     {displayName}
                 </span>
                 {/* data-part hooks are used by app CSS selectors such as .mx_MemberTileView .mx_DisambiguatedProfile > [data-part="mxid"] */}
@@ -108,7 +113,12 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
 
     return (
         <div className={classNames(className, styles.disambiguatedProfile)} title={title}>
-            <span className={displayNameClasses} data-part="display-name" dir="auto">
+            <span
+                className={displayNameClasses}
+                data-part="display-name"
+                data-emphasized={emphasizeDisplayName ? "true" : undefined}
+                dir="auto"
+            >
                 {displayName}
             </span>
             {/* data-part hooks are used by app CSS selectors such as .mx_MemberTileView .mx_DisambiguatedProfile > [data-part="mxid"] */}

@@ -13,7 +13,7 @@ Please see LICENSE files in the repository root for full details.
     white-space: nowrap;
     cursor: pointer;
 
-    > [data-part="display-name"] {
+    > [data-part="display-name"][data-emphasized="true"] {
         font: var(--cpd-font-body-md-semibold);
         margin-inline-end: 0;
         /* keeps the height in check, important for the bubble apperance */
@@ -31,8 +31,6 @@ Please see LICENSE files in the repository root for full details.
 .mx_MemberTileView .mx_DisambiguatedProfile {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    min-width: 0;
 
     > [data-part="mxid"] {
         margin-inline-start: 0;
