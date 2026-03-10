@@ -141,15 +141,15 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             <p
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
             >
-              <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_3pbrs_1"
+              <span
+                class="_container_qfblg_8"
               >
                 <span
                   dir="auto"
                 >
                   This is the room's topic.
                 </span>
-              </p>
+              </span>
             </p>
             <button
               class="_icon-button_1215g_8 mx_RoomSummaryCard_topic_chevron"
@@ -1577,15 +1577,15 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             <p
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
             >
-              <p
-                class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 _container_3pbrs_1"
+              <span
+                class="_container_qfblg_8"
               >
                 <span
                   dir="auto"
                 >
                   This is the room's topic.
                 </span>
-              </p>
+              </span>
             </p>
             <button
               class="_icon-button_1215g_8 mx_RoomSummaryCard_topic_chevron"

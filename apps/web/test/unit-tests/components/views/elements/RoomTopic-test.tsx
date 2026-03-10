@@ -16,6 +16,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import RoomTopic from "../../../../../src/components/views/elements/RoomTopic";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
@@ -52,7 +53,9 @@ describe("<RoomTopic/>", () => {
      */
     const renderRoom = (topic: string) => {
         const room = createRoom(topic);
-        render(<RoomTopic room={room} />);
+        render(<RoomTopic room={room} />, {
+            wrapper: ({ children }) => <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>,
+        });
     };
 
     /**

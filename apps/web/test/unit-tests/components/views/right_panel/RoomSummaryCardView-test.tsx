@@ -22,6 +22,7 @@ import {
     useRoomSummaryCardViewModel,
 } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
@@ -44,7 +45,9 @@ describe("<RoomSummaryCard />", () => {
 
         return render(<RoomSummaryCardView {...defaultProps} {...props} />, {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
+                <MatrixClientContext.Provider value={mockClient}>
+                    <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>
+                </MatrixClientContext.Provider>
             ),
         });
     };
