@@ -35,6 +35,7 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
               >
                 <span
                   class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                  data-emphasized="true"
                   data-part="display-name"
                   dir="auto"
                 >
