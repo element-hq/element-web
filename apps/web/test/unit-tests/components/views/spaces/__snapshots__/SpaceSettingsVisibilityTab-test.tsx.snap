@@ -24,7 +24,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
         <h2
           class="mx_Heading_h3"
         >
-          Visibility
+          Security & Privacy
         </h2>
         <div
           class="mx_SettingsSection_subSections"
@@ -67,7 +67,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                 <div
                   class="mx_StyledRadioButton_content"
                 >
-                  Private (invite only)
+                  Invite only
                 </div>
                 <div
                   class="mx_StyledRadioButton_spacer"
@@ -96,7 +96,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                 <div
                   class="mx_StyledRadioButton_content"
                 >
-                  Public
+                  Anyone
                 </div>
                 <div
                   class="mx_StyledRadioButton_spacer"
@@ -105,7 +105,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
               <span
                 id="joinRule-public-description"
               >
-                Anyone can find and join.
+                Anyone can join.
               </span>
               <form
                 class="_root_19upo_16"
@@ -149,7 +149,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                       class="_label_19upo_59"
                       for="_r_3j_"
                     >
-                      Preview Space
+                      Preview space
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
@@ -396,7 +396,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
         <h2
           class="mx_Heading_h3"
         >
-          Visibility
+          Security & Privacy
         </h2>
         <div
           class="mx_SettingsSection_subSections"
@@ -440,7 +440,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                 <div
                   class="mx_StyledRadioButton_content"
                 >
-                  Private (invite only)
+                  Invite only
                 </div>
                 <div
                   class="mx_StyledRadioButton_spacer"
@@ -468,7 +468,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                 <div
                   class="mx_StyledRadioButton_content"
                 >
-                  Public
+                  Anyone
                 </div>
                 <div
                   class="mx_StyledRadioButton_spacer"
@@ -477,7 +477,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
               <span
                 id="joinRule-public-description"
               >
-                Anyone can find and join.
+                Anyone can join.
               </span>
               <form
                 class="_root_19upo_16"
@@ -510,7 +510,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                       class="_label_19upo_59"
                       for="_r_0_"
                     >
-                      Preview Space
+                      Preview space
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
