@@ -35,15 +35,15 @@ import { Key } from "../../../../Keyboard.ts";
  */
 export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool }) => {
     const context = useContext(DevtoolsContext);
-    const [eventType, setEventType] = useState<string | null>(null);
-    const [event, setEvent] = useState<MatrixEvent | null>(null);
+    const [eventType, setEventType] = useState<string>();
+    const [event, setEvent] = useState<MatrixEvent>();
 
     const [events, setEvents] = useState<MatrixEvent[]>(() => [...context.room._unstable_getStickyEvents()]);
 
     const cli = useContext(MatrixClientContext);
     // Check if the server supports sticky events and show a message if it doesn't.
     // undefined means we are still checking, true/false means we have the result.
-    const [stickyEventsSupported, setStickyEventsSupported] = useState<boolean | undefined>(undefined);
+    const [stickyEventsSupported, setStickyEventsSupported] = useState<boolean>();
     useEffect(() => {
         cli.doesServerSupportUnstableFeature("org.matrix.msc4354")
             .then((result) => {
@@ -101,7 +101,7 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
                 eventType={eventType}
                 setTool={setTool}
                 events={events.filter((ev) => ev.getType() === eventType)}
-                onBack={() => setEventType(null)}
+                onBack={() => setEventType(undefined)}
                 setEvent={setEvent}
             />
         );
@@ -208,7 +208,7 @@ interface StickyEventListPerTypeProps {
     eventType: string;
     events: MatrixEvent[];
     onBack: () => void;
-    setEvent: (event: MatrixEvent | null) => void;
+    setEvent: (event: MatrixEvent | undefined) => void;
     setTool: IDevtoolsProps["setTool"];
 }
 
@@ -308,9 +308,9 @@ const StickyEventListPerType: React.FC<StickyEventListPerTypeProps> = ({
     );
 };
 
-function renderSingleEvent(setEvent: (value: MatrixEvent | null) => void, event: MatrixEvent): React.JSX.Element {
+function renderSingleEvent(setEvent: (value: MatrixEvent | undefined) => void, event: MatrixEvent): React.JSX.Element {
     const _onBack = (): void => {
-        setEvent(null);
+        setEvent(undefined);
     };
 
     // If the event is encrypted, getEffectiveEvent will return the event
