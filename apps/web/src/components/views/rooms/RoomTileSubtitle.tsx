@@ -10,7 +10,7 @@ import React from "react";
 import classNames from "classnames";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { type MessagePreview } from "../../../stores/room-list/MessagePreviewStore";
+import { type MessagePreview } from "../../../stores/message-preview";
 import { type Call } from "../../../models/Call";
 import { RoomTileCallSummary } from "./RoomTileCallSummary";
 

@@ -66,7 +66,7 @@ const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
  */
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
-    return <DateSeparatorView vm={vm} />;
+    return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 
 /**

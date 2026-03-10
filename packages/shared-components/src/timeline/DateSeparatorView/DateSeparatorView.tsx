@@ -29,10 +29,6 @@ export interface DateSeparatorViewSnapshot {
      * Reference date as input format used to prefill the jump-to-date picker value.
      */
     jumpFromDate?: string;
-    /**
-     * Extra CSS classes to apply to the component.
-     */
-    className?: string;
 }
 
 export interface DateSeparatorViewActions {
@@ -56,6 +52,10 @@ interface DateSeparatorViewProps {
      * The view model for the component.
      */
     vm: DateSeparatorViewModel;
+    /**
+     * Extra CSS classes to apply to the component.
+     */
+    className?: string;
 }
 
 /**
@@ -68,8 +68,8 @@ interface DateSeparatorViewProps {
  * <DateSeparatorView vm={vm} />
  * ```
  */
-export function DateSeparatorView({ vm }: Readonly<DateSeparatorViewProps>): JSX.Element {
-    const { label, className, jumpToEnabled } = useViewModel(vm);
+export function DateSeparatorView({ vm, className }: Readonly<DateSeparatorViewProps>): JSX.Element {
+    const { label, jumpToEnabled } = useViewModel(vm);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isTriggerHovered, setIsTriggerHovered] = useState(false);
     const [isTriggerFocused, setIsTriggerFocused] = useState(false);

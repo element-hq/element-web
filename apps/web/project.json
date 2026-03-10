@@ -34,9 +34,9 @@
             "executor": "nx:run-commands",
             "options": {
                 "commands": [
-                    "tsc --noEmit --project ./tsconfig.module_system.json",
-                    "tsc --noEmit",
-                    "tsc --noEmit -p playwright"
+                    "pnpm tsc --noEmit --project ./tsconfig.module_system.json",
+                    "pnpm tsc --noEmit",
+                    "pnpm tsc --noEmit -p playwright"
                 ],
                 "parallel": false,
                 "cwd": "apps/web"

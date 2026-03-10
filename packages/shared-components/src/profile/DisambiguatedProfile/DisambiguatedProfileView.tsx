@@ -25,10 +25,6 @@ export interface DisambiguatedProfileViewSnapshot {
      */
     colorClass?: string;
     /**
-     * The CSS class name.
-     */
-    className?: string;
-    /**
      * The formatted user identifier to display when disambiguation is needed.
      * Undefined if disambiguation is not required.
      */
@@ -67,6 +63,10 @@ interface DisambiguatedProfileViewProps {
      * The view model for the disambiguated profile.
      */
     vm: DisambiguatedProfileViewModel;
+    /**
+     * Optional CSS class name applied to the profile container.
+     */
+    className?: string;
 }
 
 /**
@@ -79,8 +79,8 @@ interface DisambiguatedProfileViewProps {
  * <DisambiguatedProfileView vm={disambiguatedProfileViewModel} />
  * ```
  */
-export function DisambiguatedProfileView({ vm }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
-    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, className } = useViewModel(vm);
+export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
+    const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
 
     const displayNameClasses = classNames(colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,

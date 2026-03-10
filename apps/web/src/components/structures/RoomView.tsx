@@ -417,7 +417,8 @@ function RoomStatusBarWrappedView(props: ConstructorParameters<typeof RoomStatus
 function EncryptionEventWrappedView({ mxEvent }: { mxEvent: MatrixEvent }): ReactElement | null {
     const cli = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(() => new EncryptionEventViewModel({ mxEvent, cli }));
-    return <EncryptionEventView vm={vm} />;
+
+    return <EncryptionEventView vm={vm} className="mx_EventTileBubble mx_cryptoEvent" />;
 }
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {

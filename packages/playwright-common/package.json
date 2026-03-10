@@ -16,7 +16,6 @@
         "playwright-screenshots-experimental": "playwright-screenshots.sh"
     },
     "devDependencies": {
-        "@playwright/test": "catalog:",
         "wait-on": "^9.0.4"
     }
 }
