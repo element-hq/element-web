@@ -11,7 +11,6 @@ import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { v4 as uuidv4 } from "uuid";
 import { logger } from "matrix-js-sdk/src/logger";
-import classnames from "classnames";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
 import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
@@ -146,9 +145,6 @@ interface StateEventButtonProps {
 const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyKey, expiresAt, onClick }) => {
     const [timeRemaining, setTimeRemaining] = useState<string>("");
     const [isExpired, setIsExpired] = useState<boolean>(false);
-    const [focused, setFocused] = useState<boolean>(false);
-    // showFocus indicates the focus outline should be shown - we set it on keyboard interaction
-    const [showFocus, setShowFocus] = useState<boolean>(false);
 
     useEffect(() => {
         const updateCountdown = (): void => {
@@ -190,26 +186,14 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
     return (
         <tr
             onClick={onClick}
-            onMouseDown={() => setShowFocus(false)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => {
-                setFocused(false);
-                setShowFocus(false);
-            }}
             onKeyDown={(e) => {
-                // show focus when using keyboard keys (Tab/Enter/Space)
-                if (e.key === Key.TAB || e.key === Key.ENTER || e.key === Key.SPACE) setShowFocus(true);
                 // Activate on Enter or Space for keyboard users
                 if (e.key === Key.ENTER || e.key === Key.SPACE) {
-                    e.preventDefault();
                     onClick();
                 }
             }}
             tabIndex={0}
             role="button"
-            className={classnames({
-                focused: focused && showFocus,
-            })}
         >
             <td>{userId}</td>
             <td>{stickyKey ?? <i>unkeyed</i>}</td>
