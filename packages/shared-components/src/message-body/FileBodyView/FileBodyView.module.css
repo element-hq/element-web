@@ -7,7 +7,7 @@
 
 .content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     min-width: 0;
     gap: var(--cpd-space-2x);
 
@@ -24,7 +24,7 @@
     align-items: center;
     flex-grow: 1;
 
-    button {
+    & button {
         display: flex;
         margin: 0 !important;
         padding: 0 !important;
@@ -35,13 +35,13 @@
         background-color: inherit;
         gap: var(--cpd-space-3x);
 
-        svg {
+        & svg {
             width: 16px;
             height: 16px;
             padding: var(--cpd-space-2x);
         }
 
-        span {
+        & span {
             flex: 1;
             min-width: 0;
             text-align: start;
@@ -56,7 +56,6 @@
 }
 
 .content [data-type="download"] {
-    display: inline-flex;
     align-items: center;
     color: var(--cpd-color-text-action-accent);
 
@@ -69,6 +68,5 @@
 }
 
 .invalid {
-    display: block;
     color: var(--cpd-color-text-critical-primary);
 }

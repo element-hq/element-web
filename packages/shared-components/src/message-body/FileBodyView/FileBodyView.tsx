@@ -151,7 +151,10 @@ interface FileBodyViewProps {
  * - export link (`EXPORT`)
  * - download-only display: set `infoShow: false`, `downloadShow: true`
  *
- * Labels and titles are resolved from snapshot values with i18n fallbacks.
+ * Note on using the encrypted iframe, `ENCRYPTED_IFRAME`:
+ * To make this rendering branch work it is excpected a `usercontent/` target is available
+ * relative to the root of the application as is described in detail here,
+ * https://github.com/element-hq/element-web/blob/develop/docs/usercontent.md
  *
  * @example
  * ```tsx
@@ -293,7 +296,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
             return (
                 <>
                     <span className={classes}>{info}</span>
-                    <span className={styles.invalid}>{_t("timeline|m.file|error_invalid")}</span>
+                    <span className={classNames(classes, styles.invalid)}>{_t("timeline|m.file|error_invalid")}</span>
                 </>
             );
     }
