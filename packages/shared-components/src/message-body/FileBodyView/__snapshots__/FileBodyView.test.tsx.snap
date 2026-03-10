@@ -263,7 +263,7 @@ exports[`FileBodyView > matches snapshot for invalid story 1`] = `
     </div>
   </span>
   <span
-    class="invalid"
+    class="content invalid"
   >
     Invalid file
   </span>

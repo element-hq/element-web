@@ -3,10 +3,10 @@
 exports[`MBodyFactory renderMBody fallback shows m.audio generic placeholder when showFileInfo is true 1`] = `
 <div>
   <span
-    class="_content_1aoc6_8 mx_MFileBody"
+    class="_content_f1s5h_8 mx_MFileBody"
   >
     <div
-      class="mx_MediaBody _mediaBody_1xzob_8"
+      class="mx_MediaBody _mediaBody_rgndh_8"
       data-type="info"
     >
       <button
@@ -44,10 +44,10 @@ exports[`MBodyFactory renderMBody fallback shows m.audio generic placeholder whe
 exports[`MBodyFactory renderMBody fallback shows m.file generic placeholder when showFileInfo is true 1`] = `
 <div>
   <span
-    class="_content_1aoc6_8 mx_MFileBody"
+    class="_content_f1s5h_8 mx_MFileBody"
   >
     <div
-      class="mx_MediaBody _mediaBody_1xzob_8"
+      class="mx_MediaBody _mediaBody_rgndh_8"
       data-type="info"
     >
       <button
@@ -82,10 +82,10 @@ exports[`MBodyFactory renderMBody fallback shows m.file generic placeholder when
 exports[`MBodyFactory renderMBody fallback shows m.video generic placeholder when showFileInfo is true 1`] = `
 <div>
   <span
-    class="_content_1aoc6_8 mx_MFileBody"
+    class="_content_f1s5h_8 mx_MFileBody"
   >
     <div
-      class="mx_MediaBody _mediaBody_1xzob_8"
+      class="mx_MediaBody _mediaBody_rgndh_8"
       data-type="info"
     >
       <button
@@ -120,7 +120,7 @@ exports[`MBodyFactory renderMBody fallback shows m.video generic placeholder whe
 exports[`MBodyFactory renderMBody renders download button for m.file in file rendering type 1`] = `
 <div>
   <span
-    class="_content_1aoc6_8 mx_MFileBody"
+    class="_content_f1s5h_8 mx_MFileBody"
   >
     <div
       data-type="download"
