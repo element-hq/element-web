@@ -61,7 +61,6 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 DefaultTagID.Favourite, // add
-                0,
             );
         });
 
@@ -76,7 +75,6 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 DefaultTagID.LowPriority, // add
-                0,
             );
         });
     });
@@ -93,7 +91,6 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 null, // add
-                0,
             );
         });
 
@@ -108,7 +105,6 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.Favourite, // remove
                 DefaultTagID.LowPriority, // add
-                0,
             );
         });
     });
@@ -124,7 +120,6 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 DefaultTagID.Favourite, // add
-                0,
             );
         });
 
@@ -139,7 +134,6 @@ describe("tagRoom()", () => {
                 room,
                 DefaultTagID.LowPriority, // remove
                 null, // add
-                0,
             );
         });
     });

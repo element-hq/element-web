@@ -1986,9 +1986,6 @@
         "joining_space": "Går med i utrymme …",
         "jump_read_marker": "Hoppa till första olästa meddelandet.",
         "jump_to_bottom_button": "Skrolla till de senaste meddelandena",
-        "jump_to_date": "Hoppa till datum",
-        "jump_to_date_beginning": "Början av rummet",
-        "jump_to_date_prompt": "Välj ett datum att hoppa till",
         "kick_reason": "Anledning: %(reason)s",
         "kicked_by": "Du togs bort av %(memberName)s",
         "kicked_from_room_by": "Du togs bort från %(roomName)s av %(memberName)s",
@@ -3366,7 +3363,7 @@
             "unknown": "%(senderDisplayName)s ändrade gäståtkomst till %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s gjorde framtida rumshistorik synligt för alla rumsmedlemmar från att de bjöds in.",
+            "invited": "%(senderName)s gjorde den framtida rumshistoriken synlig för alla rumsmedlemmar från det att de bjuds in.",
             "joined": "%(senderName)s gjorde framtida rumshistorik synligt för alla rumsmedlemmar fr.o.m. att de gick med som medlem.",
             "shared": "%(senderName)s gjorde framtida rumshistorik synligt för alla rumsmedlemmar.",
             "unknown": "%(senderName)s satte framtida rumshistorik till okänd synlighet (%(visibility)s).",

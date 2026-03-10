@@ -59,9 +59,18 @@
         "a11y": {
             "default": "Åpne rom %(roomName)s",
             "invitation": "Invitasjon til det åpne rommet %(roomName)s.",
+            "mention": {
+                "one": "Åpent rom %(roomName)s med 1 ulest omtale.",
+                "other": "Åpne rom %(roomName)s med %(count)s uleste omtaler."
+            },
+            "unread": {
+                "one": "Åpent rom %(roomName)s med 1 ulest melding.",
+                "other": "Åpne rom %(roomName)s med %(count)s uleste meldinger."
+            },
             "unsent_message": "Åpent rom %(roomName)s med en usendt melding."
         },
         "appearance": "Utseende",
+        "collapse_filters": "Skjul filterlisten",
         "empty": {
             "no_chats": "Ingen chat ennå",
             "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
@@ -72,11 +81,14 @@
             "no_lowpriority": "Du har ingen rom med lav prioritet",
             "no_mentions": "Du har ingen uleste omtaler",
             "no_people": "Du har ikke direkte chatter med noen ennå",
+            "no_people_description": "Du kan fjerne filtrene for å se de andre chatene dine",
             "no_rooms": "Du er ikke med i noen rom ennå",
+            "no_rooms_description": "Du kan fjerne filtrene for å se de andre chatene dine",
             "no_unread": "Gratulerer! Du har ingen uleste meldinger",
             "show_activity": "Se alle aktiviteter",
             "show_chats": "Vis alle chatter"
         },
+        "expand_filters": "Utvid filterlisten",
         "filters": {
             "favourite": "Favoritter",
             "invites": "Invitasjoner",
@@ -91,9 +103,16 @@
             "copy_link": "Kopier romlenke",
             "favourited": "Favorittmerket",
             "leave_room": "Forlat rommet",
-            "low_priority": "Lav prioritet"
+            "low_priority": "Lav prioritet",
+            "mark_read": "Marker som lest",
+            "mark_unread": "Marker som ulest"
         },
+        "notification_options": "Varselsinnstillinger",
         "open_space_menu": "Åpne Område-meny",
+        "primary_filters": "Filtre for romliste",
+        "room": {
+            "more_options": "Flere alternativer"
+        },
         "room_options": "Rominnstillinger",
         "show_message_previews": "Aktiver forhåndsvisning av meldinger",
         "sort": "Sorter",
