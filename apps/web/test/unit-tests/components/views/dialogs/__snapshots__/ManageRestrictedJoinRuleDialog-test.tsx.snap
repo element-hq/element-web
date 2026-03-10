@@ -21,16 +21,16 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Select spaces
+        Manage spaces
       </h1>
     </div>
     <p>
       <span>
-        Decide which spaces can access this room. If a space is selected, its members can find and join 
+        Spaces where members can join 
         <strong>
           !roomId:server
         </strong>
-        .
+         without an invitation.
       </span>
     </p>
     <div
@@ -70,7 +70,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
         class="mx_ManageRestrictedJoinRuleDialog_section"
       >
         <h3>
-          Other spaces you know
+          Your spaces that do not contain this room
         </h3>
         <div
           class="mx_ManageRestrictedJoinRuleDialog_entry"
@@ -165,7 +165,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
             d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
           />
         </svg>
-        You're removing all spaces. Access will default to invite only
+        You're removing all authorised spaces. Access will default to invite only
       </div>
       <div
         class="mx_ManageRestrictedJoinRuleDialog_footer_buttons"
@@ -234,16 +234,16 @@ exports[`<ManageRestrictedJoinRuleDialog /> should render empty state 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Select spaces
+        Manage spaces
       </h1>
     </div>
     <p>
       <span>
-        Decide which spaces can access this room. If a space is selected, its members can find and join 
+        Spaces where members can join 
         <strong>
           !roomId:server
         </strong>
-        .
+         without an invitation.
       </span>
     </p>
     <div
@@ -302,7 +302,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should render empty state 1`] = `
             d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16v-4a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 11a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 12v4q0 .424.287.712.288.288.713.288m0-8q.424 0 .713-.287A.97.97 0 0 0 13 8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8q0 .424.287.713Q11.576 9 12 9m0 13a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
           />
         </svg>
-        You're removing all spaces. Access will default to invite only
+        You're removing all authorised spaces. Access will default to invite only
       </div>
       <div
         class="mx_ManageRestrictedJoinRuleDialog_footer_buttons"

@@ -384,7 +384,7 @@ test.describe("Spaces", () => {
         });
         await app.viewSpaceByName("My space");
         await page.getByLabel("Settings", { exact: true }).click();
-        await app.settings.switchTab("Visibility");
+        await app.settings.switchTab("Security & Privacy");
 
         axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
         await expect(axe).toHaveNoViolations();

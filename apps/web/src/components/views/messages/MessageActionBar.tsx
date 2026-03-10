@@ -130,7 +130,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
                 ref={buttonRefCallback}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
-                placement="left"
+                placement="top"
             >
                 <OverflowHorizontalIcon />
             </ContextMenuTooltipButton>
@@ -188,7 +188,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
                 ref={buttonRefCallback}
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
-                placement="left"
+                placement="top"
             >
                 <ReactionAddIcon />
             </ContextMenuTooltipButton>
@@ -241,7 +241,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
             title={title}
             onClick={onClick}
             onContextMenu={onClick}
-            placement="left"
+            placement="top"
         >
             <ThreadsIcon />
         </RovingAccessibleButton>
@@ -420,7 +420,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     onClick={this.onEditClick}
                     onContextMenu={this.onEditClick}
                     key="edit"
-                    placement="left"
+                    placement="top"
                 >
                     <EditIcon />
                 </RovingAccessibleButton>,
@@ -439,7 +439,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     onClick={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     onContextMenu={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     key="pin"
-                    placement="left"
+                    placement="top"
                 >
                     {isPinned ? <UnpinIcon /> : <PinIcon />}
                 </RovingAccessibleButton>,
@@ -453,7 +453,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 onClick={this.onCancelClick}
                 onContextMenu={this.onCancelClick}
                 key="cancel"
-                placement="left"
+                placement="top"
             >
                 <DeleteIcon />
             </RovingAccessibleButton>
@@ -479,7 +479,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     onClick={this.onResendClick}
                     onContextMenu={this.onResendClick}
                     key="resend"
-                    placement="left"
+                    placement="top"
                 >
                     <RestartIcon />
                 </RovingAccessibleButton>,
@@ -506,7 +506,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             onClick={this.onReplyClick}
                             onContextMenu={this.onReplyClick}
                             key="reply"
-                            placement="left"
+                            placement="top"
                         >
                             <ReplyIcon />
                         </RovingAccessibleButton>,
@@ -570,7 +570,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         caption={_t(ALTERNATE_KEY_NAME[Key.SHIFT]) + " + " + _t("action|click")}
                         onClick={this.props.toggleThreadExpanded}
                         key="expand"
-                        placement="left"
+                        placement="top"
                     >
                         {this.props.isQuoteExpanded ? <CollapseIcon /> : <ExpandIcon />}
                     </RovingAccessibleButton>,
