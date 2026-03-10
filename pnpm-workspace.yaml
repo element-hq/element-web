@@ -15,6 +15,7 @@ catalog:
     # playwright
     "@element-hq/element-web-playwright-common": 2.2.7
     "@playwright/test": 1.58.2
+    "playwright-core": 1.58.2
     # Module API
     "@element-hq/element-web-module-api": 1.10.0
     # Compound

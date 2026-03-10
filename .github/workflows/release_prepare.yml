@@ -27,7 +27,7 @@ jobs:
                     - matrix-org/matrix-js-sdk
                     - element-hq/element-web
                     - element-hq/element-desktop
-        uses: matrix-org/matrix-js-sdk/.github/workflows/release-checks.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-checks.yml@develop # zizmor: ignore[unpinned-uses]
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
@@ -50,6 +50,7 @@ jobs:
                   fetch-depth: 0
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  persist-credentials: true
             - name: Checkout Element Web
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               if: inputs.element-web
@@ -60,6 +61,7 @@ jobs:
                   fetch-depth: 0
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  persist-credentials: true
             - name: Checkout Matrix JS SDK
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               if: inputs.matrix-js-sdk
@@ -70,6 +72,7 @@ jobs:
                   fetch-depth: 0
                   fetch-tags: true
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  persist-credentials: true
 
             - name: Prepare Git
               run: |

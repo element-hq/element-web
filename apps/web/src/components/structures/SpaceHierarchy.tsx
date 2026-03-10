@@ -41,6 +41,7 @@ import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/types";
 import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -73,7 +74,6 @@ import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import RoomContext from "../../contexts/RoomContext.ts";
-import { ElementLinkedText } from "../../Linkify.tsx";
 
 interface IProps {
     space: Room;
@@ -234,11 +234,12 @@ const Tile: React.FC<ITileProps> = ({
 
     let topicSection: ReactNode | undefined;
     if (topic) {
+        // prevent clicks on links from bubbling up to the room tile
         topicSection = (
-            <ElementLinkedText canClick={false}>
+            <LinkedText onLinkClick={(ev) => ev.stopPropagation()}>
                 {" · "}
                 {topic}
-            </ElementLinkedText>
+            </LinkedText>
         );
     }
 

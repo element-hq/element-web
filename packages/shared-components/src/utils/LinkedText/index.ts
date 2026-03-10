@@ -6,3 +6,4 @@
  */
 
 export { LinkedText, type LinkedTextProps } from "./LinkedText";
+export { LinkedTextContext, useLinkedTextContext } from "./LinkedTextContext";

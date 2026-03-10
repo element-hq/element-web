@@ -12,9 +12,11 @@ import {
     UrlPreviewGroupView,
     type UrlPreviewViewSnapshotPreview,
     useCreateAutoDisposedViewModel,
+    EventContentBodyView,
+    LINKIFIED_DATA_ATTRIBUTE,
 } from "@element-hq/web-shared-components";
 
-import EventContentBody from "./EventContentBody.tsx";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
@@ -37,11 +39,81 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 import ImageView from "../elements/ImageView.tsx";
 
-class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewModel: UrlPreviewViewModel }> {
+type Props = IBodyProps & { urlPreviewViewModel: UrlPreviewViewModel };
+
+class InnerTextualBody extends React.Component<Props> {
     private readonly contentRef = createRef<HTMLDivElement>();
 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
+
+    private EventContentBodyViewModel: EventContentBodyViewModel;
+
+    public state = {
+        links: [],
+    };
+
+    public constructor(props: Props, context: React.ContextType<typeof RoomContext>) {
+        super(props, context);
+        const mxEvent = props.mxEvent;
+        const content = mxEvent.getContent();
+        const isEmote = content.msgtype === MsgType.Emote;
+        const willHaveWrapper =
+            !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
+        // only strip reply if this is the original replying event, edits thereafter do not have the fallback
+        const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
+        this.EventContentBodyViewModel = new EventContentBodyViewModel({
+            as: willHaveWrapper ? "span" : "div",
+            includeDir: false,
+            mxEvent,
+            content,
+            stripReply,
+            linkify: true,
+            highlights: props.highlights,
+            renderTooltipsForAmbiguousLinks: true,
+            renderKeywordPills: true,
+            renderMentionPills: true,
+            renderCodeBlocks: true,
+            renderSpoilers: true,
+            client: context.room?.client ?? null,
+        });
+    }
+
+    public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
+        // Update the ViewModel when relevant props change
+        const mxEventChanged = prevProps.mxEvent !== this.props.mxEvent;
+        const highlightsChanged = prevProps.highlights !== this.props.highlights;
+        const wrapperChanged =
+            prevProps.replacingEventId !== this.props.replacingEventId ||
+            prevProps.isSeeingThroughMessageHiddenForModeration !==
+                this.props.isSeeingThroughMessageHiddenForModeration;
+
+        if (mxEventChanged || highlightsChanged || wrapperChanged) {
+            const mxEvent = this.props.mxEvent;
+            const content = mxEvent.getContent();
+            const isEmote = content.msgtype === MsgType.Emote;
+            const willHaveWrapper =
+                !!this.props.replacingEventId || !!this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
+            // only strip reply if this is the original replying event, edits thereafter do not have the fallback
+            const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
+            this.EventContentBodyViewModel.setEventContent(mxEvent, content);
+            this.EventContentBodyViewModel.setStripReply(stripReply);
+
+            if (mxEventChanged || wrapperChanged) {
+                this.EventContentBodyViewModel.setAs(willHaveWrapper ? "span" : "div");
+            }
+
+            if (highlightsChanged) {
+                this.EventContentBodyViewModel.setHighlights(this.props.highlights);
+            }
+        }
+    }
+
+    public componentWillUnmount(): void {
+        this.EventContentBodyViewModel.dispose();
+    }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>): boolean {
         // exploit that events are immutable :)
@@ -72,7 +144,7 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
     private onBodyLinkClick = (e: MouseEvent): void => {
         let target: HTMLLinkElement | null = e.target as HTMLLinkElement;
         // links processed by linkifyjs have their own handler so don't handle those here
-        if (target.hasAttribute("data-linkified")) return;
+        if (target.dataset[LINKIFIED_DATA_ATTRIBUTE]) return;
         if (target.nodeName !== "A") {
             // Jump to parent as the `<a>` may contain children, e.g. an anchor wrapping an inline code section
             target = target.closest<HTMLLinkElement>("a");
@@ -192,12 +264,6 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
         }
     }
 
-    public componentDidUpdate(): void {
-        if (this.contentRef.current && !this.props.editState) {
-            void this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
-        }
-    }
-
     public render(): React.ReactNode {
         if (this.props.editState) {
             const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
@@ -207,6 +273,7 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
                 <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />
             );
         }
+
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
         const isNotice = content.msgtype === MsgType.Notice;
@@ -217,23 +284,12 @@ class InnerTextualBody extends React.Component<IBodyProps & { urlPreviewViewMode
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
-        // only strip reply if this is the original replying event, edits thereafter do not have the fallback
-        const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
         let body = (
-            <EventContentBody
+            <EventContentBodyView
+                vm={this.EventContentBodyViewModel}
                 as={willHaveWrapper ? "span" : "div"}
-                includeDir={false}
-                mxEvent={mxEvent}
-                content={content}
-                stripReply={stripReply}
-                linkify
-                highlights={this.props.highlights}
                 ref={this.contentRef}
-                renderTooltipsForAmbiguousLinks
-                renderKeywordPills
-                renderMentionPills
-                renderCodeBlocks
-                renderSpoilers
             />
         );
 

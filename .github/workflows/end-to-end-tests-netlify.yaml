@@ -2,7 +2,9 @@
 # taking the artifact and uploading it to Netlify for easier viewing
 name: Upload End to End Test report to Netlify
 on:
-    workflow_run:
+    # Privilege escalation necessary to publish to Netlify
+    # 🚨 We must not execute any checked out code here.
+    workflow_run: # zizmor: ignore[dangerous-triggers]
         workflows: ["End to End Tests"]
         types:
             - completed

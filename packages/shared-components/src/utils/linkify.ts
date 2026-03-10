@@ -42,35 +42,9 @@ export const LinkifyOptionalSlashProtocols = [
 ];
 
 /**
- * URL schemes that are safe to be resolved within the context of a Matrix client.
+ * URL schemes that are safe to be resolved by the app consuming the library.
  */
-export const PERMITTED_URL_SCHEMES = [
-    "bitcoin",
-    "ftp",
-    "geo",
-    "http",
-    "https",
-    "im",
-    "irc",
-    "ircs",
-    "magnet",
-    "mailto",
-    "matrix",
-    "mms",
-    "news",
-    "nntp",
-    "openpgp4fpr",
-    "sip",
-    "sftp",
-    "sms",
-    "smsto",
-    "ssh",
-    "tel",
-    "urn",
-    "webcal",
-    "wtai",
-    "xmpp",
-];
+export const PERMITTED_URL_SCHEMES = [...LinkifySupportedProtocols, ...LinkifyOptionalSlashProtocols];
 
 // Linkify supports some common protocols but not others, register all permitted url schemes if unsupported
 // https://github.com/nfrasser/linkifyjs/blob/main/packages/linkifyjs/src/scanner.mjs#L171-L177
@@ -81,7 +55,7 @@ PERMITTED_URL_SCHEMES.forEach((scheme) => {
     }
 });
 
-// MXC urls can be resolved, but are not permitted in other parts of the app.
+// 'mxc' is specialcased. They can be linked to
 linkifyjs.registerCustomProtocol("mxc", false);
 
 export enum LinkifyMatrixOpaqueIdType {
@@ -175,24 +149,42 @@ linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.UserId, ({ scanner, parser })
     });
 });
 
+export type LinkEventListener = linkifyjs.EventListeners;
+
 export interface LinkedTextOptions {
-    urlListener?: (href: string) => linkifyjs.EventListeners;
-    roomAliasListener?: (href: string) => linkifyjs.EventListeners;
-    userIdListener?: (href: string) => linkifyjs.EventListeners;
+    /**
+     * Event handlers for URL links.
+     */
+    urlListener?: (href: string) => LinkEventListener;
+    /**
+     * Event handlers for room alias links.
+     */
+    roomAliasListener?: (href: string) => LinkEventListener;
+    /**
+     * Event handlers for user ID links.
+     */
+    userIdListener?: (href: string) => LinkEventListener;
+    /**
+     * Function that can be used to transform the `target` attribute on links, depending on the `href`.
+     */
     urlTargetTransformer?: (href: string) => string;
+    /**
+     * Function that can be used to transform the `href` attribute on links, depending on the current href and target type.
+     */
     hrefTransformer?: (href: string, target: LinkifyMatrixOpaqueIdType) => string;
     /**
-     * Disable this to force the
+     * Function called before all listeners when a link is clicked.
      */
-    canClick?: boolean;
+    onLinkClick?: (ev: MouseEvent) => void;
 }
 
 /**
  * Generates a linkifyjs options object that is reasonably paired down
  * to just the essentials required for an Element client.
  *
- * @param param0
- * @returns
+ * @return A `linkifyjs` `Opts` object. Used by `linkifyString` and `linkifyHtml`
+ * @see `linkifyHtml`
+ * @see `linkifyString`
  */
 export function generateLinkedTextOptions({
     urlListener,
@@ -200,10 +192,9 @@ export function generateLinkedTextOptions({
     userIdListener,
     urlTargetTransformer,
     hrefTransformer,
-    canClick,
+    onLinkClick,
 }: LinkedTextOptions): linkifyjs.Opts {
-    const events = (href: string, type: string): linkifyjs.EventListeners => {
-        // Attach click handlers to links based on their type
+    const events = (href: string, type: string): LinkEventListener => {
         switch (type as LinkifyMatrixOpaqueIdType) {
             case LinkifyMatrixOpaqueIdType.URL: {
                 if (urlListener) {
@@ -227,24 +218,21 @@ export function generateLinkedTextOptions({
     };
 
     const attributes = (href: string, type: string): Record<string, unknown> => {
-        // Sometimes components want to render links to prettify but not make them clicky.
-        if (canClick === false) {
-            return {
-                "href": undefined,
-                "data-linkified": "true",
-            };
-        }
-
         const attrs: Record<string, unknown> = {
-            "data-linkified": "true",
+            [`data-${LINKIFIED_DATA_ATTRIBUTE}`]: "true",
         };
-
-        const options = events(href, type);
         // linkify-react doesn't respect `events` and needs it mapping to React attributes
         // so we need to manually add the click handler to the attributes
         // https://linkify.js.org/docs/linkify-react.html#events
+        const options = events(href, type);
         if (options?.click) {
             attrs.onClick = options.click;
+        }
+        if (onLinkClick) {
+            attrs.onClick = (ev: MouseEvent) => {
+                onLinkClick(ev);
+                options?.click?.(ev);
+            };
         }
 
         return attrs;
@@ -262,7 +250,7 @@ export function generateLinkedTextOptions({
             }
             return "_blank";
         },
-        ...(hrefTransformer && canClick !== false
+        ...(hrefTransformer
             ? {
                   formatHref: (href, type) => hrefTransformer(href, type as LinkifyMatrixOpaqueIdType),
               }
@@ -276,7 +264,34 @@ export function generateLinkedTextOptions({
     } satisfies linkifyjs.Opts;
 }
 
+/**
+ * Finds all links in a given string.
+ *
+ * @param str A string that may contain one or more strings.
+ * @returns A set of all links in the string.
+ */
+export function findLinksInString(str: string): ReturnType<typeof linkifyjs.find> {
+    return linkifyjs.find(str);
+}
+
+/**
+ * Is the provided value something that would be converted to a clickable
+ * link.
+ *
+ * E.g. 'https://matrix.org', `matrix.org` or 'example@matrix.org'
+ *
+ * @param str A string value to be tested if the entire value is linkable.
+ * @returns Whether or not the `str` value is a link.
+ * @see `PERMITTED_URL_SCHEMES` for permitted links.
+ */
+export function isLinkable(str: string): boolean {
+    return linkifyjs.test(str);
+}
+
+/**
+ * `data-linkified` is applied to all links generated by the linkifaction functions and `<LinkedText>`.
+ */
+export const LINKIFIED_DATA_ATTRIBUTE = "linkified";
+
 export { default as linkifyString } from "linkify-string";
 export { default as linkifyHtml } from "linkify-html";
-
-export { linkifyjs };

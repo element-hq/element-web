@@ -39,7 +39,7 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
-import { Box, Flex, HistoryVisibilityBadge } from "@element-hq/web-shared-components";
+import { Box, Flex, HistoryVisibilityBadge, LinkedText } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
@@ -50,7 +50,6 @@ import { topicToHtml } from "../../../HtmlUtils.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 import { useRoomName } from "../../../hooks/useRoomName.ts";
-import { ElementLinkedText } from "../../../Linkify.tsx";
 
 interface IProps {
     room: Room;
@@ -90,7 +89,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = vm.expanded ? <ElementLinkedText>{body}</ElementLinkedText> : body;
+    const content = vm.expanded ? <LinkedText as="span">{body}</LinkedText> : body;
 
     return (
         <Flex

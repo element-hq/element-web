@@ -7,17 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
 import {
     PERMITTED_URL_SCHEMES,
-    type LinkedTextProps,
     linkifyString as _linkifyString,
     linkifyHtml as _linkifyHtml,
-    LinkedText,
     LinkifyMatrixOpaqueIdType,
     generateLinkedTextOptions,
-    type linkifyjs,
+    type LinkEventListener,
 } from "@element-hq/web-shared-components";
 import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
 
@@ -47,7 +44,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
             const transformed = tryTransformPermalinkToLocalHref(attribs.href); // only used to check if it is a link that can be handled locally
             if (
                 transformed !== attribs.href || // it could be converted so handle locally symbols e.g. @user:server.tdl, matrix: and matrix.to
-                attribs.href.match(ELEMENT_URL_PATTERN) // for https links to Element domains
+                ELEMENT_URL_PATTERN.test(attribs.href) // for https links to Element domains
             ) {
                 delete attribs.target;
             }
@@ -229,14 +226,13 @@ function onAliasClick(event: MouseEvent, roomAlias: string): void {
     });
 }
 
-function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+function urlEventListeners(href: string): LinkEventListener {
     // intercept local permalinks to users and show them like userids (in userinfo of current room)
     try {
         const permalink = parsePermalink(href);
         if (permalink?.userId) {
             return {
                 click: function (e: MouseEvent) {
-                    onClickAction?.();
                     onUserClick(e, permalink.userId!);
                 },
             };
@@ -248,8 +244,7 @@ function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.
                 return {
                     click: function (e: MouseEvent) {
                         e.preventDefault();
-                        onClickAction?.();
-                        window.location.hash = localHref;
+                        globalThis.location.hash = localHref;
                     },
                 };
             }
@@ -260,34 +255,32 @@ function urlEventListeners(href: string, onClickAction?: () => void): linkifyjs.
     return {};
 }
 
-export function userIdEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+export function userIdEventListeners(href: string): LinkEventListener {
     return {
         click: function (e: MouseEvent) {
             e.preventDefault();
-            onClickAction?.();
             const userId = parsePermalink(href)?.userId ?? href;
             if (userId) onUserClick(e, userId);
         },
     };
 }
 
-export function roomAliasEventListeners(href: string, onClickAction?: () => void): linkifyjs.EventListeners {
+export function roomAliasEventListeners(href: string): LinkEventListener {
     return {
         click: function (e: MouseEvent) {
             e.preventDefault();
-            onClickAction?.();
             const alias = parsePermalink(href)?.roomIdOrAlias ?? href;
             if (alias) onAliasClick(e, alias);
         },
     };
 }
 
-function urlTargetTransformFunction(href: string | string): string {
+function urlTargetTransformFunction(href: string): string {
     try {
         const transformed = tryTransformPermalinkToLocalHref(href);
         if (
             transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
-            decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https links to Element domains
+            ELEMENT_URL_PATTERN.test(decodeURIComponent(href)) // for https links to Element domains
         ) {
             return "";
         } else {
@@ -321,7 +314,8 @@ export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): strin
         }
     }
 }
-const DefaultLinkifyOptions = {
+
+export const LinkedTextConfiguration = {
     userIdListener: userIdEventListeners,
     roomAliasListener: roomAliasEventListeners,
     urlListener: urlEventListeners,
@@ -330,38 +324,13 @@ const DefaultLinkifyOptions = {
 };
 
 /**
- * Wrapper around LinkedText providing Element Web specific hooks.
- */
-export function ElementLinkedText({
-    children,
-    onLinkClick,
-    ...props
-}: LinkedTextProps & { onLinkClick?: () => void }): ReactElement {
-    // If the component requires an additional action on click, inject ith ere.
-    const options = onLinkClick
-        ? {
-              ...DefaultLinkifyOptions,
-              userIdListener: (href: string) => userIdEventListeners(href, onLinkClick),
-              roomAliasListener: (href: string) => roomAliasEventListeners(href, onLinkClick),
-              urlListener: (href: string) => urlEventListeners(href, onLinkClick),
-          }
-        : DefaultLinkifyOptions;
-    console.log("ElementLinkedText", children);
-    return (
-        <LinkedText {...options} {...props}>
-            {children}
-        </LinkedText>
-    );
-}
-
-/**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
  * @param str string to linkify
  * @param [options] Options for linkifyString.
  * @returns Linkified string
  */
-export function linkifyString(value: string, options = generateLinkedTextOptions(DefaultLinkifyOptions)): string {
+export function linkifyString(value: string, options = generateLinkedTextOptions(LinkedTextConfiguration)): string {
     return _linkifyString(value, options);
 }
 
@@ -372,7 +341,7 @@ export function linkifyString(value: string, options = generateLinkedTextOptions
  * @param [options] Options for linkifyHtml.
  * @returns Linkified string
  */
-export function linkifyHtml(value: string, options = generateLinkedTextOptions(DefaultLinkifyOptions)): string {
+export function linkifyHtml(value: string, options = generateLinkedTextOptions(LinkedTextConfiguration)): string {
     return _linkifyHtml(value, options);
 }
 
@@ -385,7 +354,7 @@ export function linkifyHtml(value: string, options = generateLinkedTextOptions(D
  */
 export function linkifyAndSanitizeHtml(
     dirtyHtml: string,
-    options = generateLinkedTextOptions(DefaultLinkifyOptions),
+    options = generateLinkedTextOptions(LinkedTextConfiguration),
 ): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }

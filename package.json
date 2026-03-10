@@ -16,8 +16,9 @@
         "lint": "pnpm -r lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
         "lint:prettier": "prettier --check .",
         "lint:prettier-fix": "prettier --log-level=warn --write .",
-        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
+        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
         "lint:knip": "knip",
+        "install:git-hooks": "husky",
         "postinstall": "node scripts/pnpm-link.ts"
     },
     "resolutions": {
@@ -35,7 +36,6 @@
         "qs": "6.15.0",
         "serialize-javascript": "7.0.3"
     },
-    "dependencies": {},
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
@@ -71,7 +71,8 @@
             "await-lock": "patches/await-lock.patch",
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
             "jsdom": "patches/jsdom.patch",
-            "rollup": "patches/rollup.patch"
+            "rollup": "patches/rollup.patch",
+            "knip": "patches/knip.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {

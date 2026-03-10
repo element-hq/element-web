@@ -7,6 +7,7 @@
         "dismiss": "Zavřít",
         "edit": "Upravit",
         "explore_rooms": "Procházet místnosti",
+        "go": "Přejít",
         "invite": "Pozvat",
         "new_conversation": "Nová konverzace",
         "new_room": "Nová místnost",
@@ -42,6 +43,9 @@
             "shared": "Noví členové vidí historii",
             "world_readable": "Každý může vidět historii"
         },
+        "jump_to_date": "Přejít na datum",
+        "jump_to_date_beginning": "Začátek místnosti",
+        "jump_to_date_prompt": "Vyberte datum, na které chcete přejít",
         "status_bar": {
             "delete_all": "Smazat vše",
             "exceeded_resource_limit_description": "Chcete-li službu nadále používat, obraťte se na správce služby.",
@@ -121,7 +125,7 @@
         "show_message_previews": "Zobrazit náhledy zpráv",
         "sort": "Řadit",
         "sort_type": {
-            "activity": "Aktivita",
+            "activity": "Poslední aktivita",
             "atoz": "A-Z",
             "unread_first": "Nepřečtené jako první"
         },
