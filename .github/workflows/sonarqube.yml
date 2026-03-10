@@ -12,7 +12,7 @@ jobs:
     sonarqube:
         name: 🩻 SonarQube
         if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group'
-        uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop # zizmor: ignore[unpinned-uses]
         permissions:
             actions: read
             statuses: write
