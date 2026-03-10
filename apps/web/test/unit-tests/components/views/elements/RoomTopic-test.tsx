@@ -10,13 +10,13 @@ import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import { mkEvent, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import RoomTopic from "../../../../../src/components/views/elements/RoomTopic";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
