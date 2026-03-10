@@ -130,9 +130,8 @@ export function ActionBarView({
                     key="edit"
                     hideChevron={true}
                     className={styles.menu_item}
-                >
-                    <EditIcon />
-                </MenuItem>
+                    Icon={EditIcon}
+                />
             </Tooltip>,
         );
     }
@@ -149,9 +148,8 @@ export function ActionBarView({
                     key="pin"
                     hideChevron={true}
                     className={styles.menu_item}
-                >
-                    {isPinned ? <UnpinIcon /> : <PinIcon />}
-                </MenuItem>
+                    Icon={isPinned ? UnpinIcon : PinIcon}
+                />
             </Tooltip>,
         );
     }
@@ -166,9 +164,8 @@ export function ActionBarView({
                 key="cancel"
                 hideChevron={true}
                 className={styles.menu_item}
-            >
-                <DeleteIcon />
-            </MenuItem>
+                Icon={DeleteIcon}
+            />
         </Tooltip>
     );
 
@@ -185,9 +182,8 @@ export function ActionBarView({
                 key="reply_thread"
                 hideChevron={true}
                 className={styles.menu_item}
-            >
-                <ThreadsIcon />
-            </MenuItem>
+                Icon={ThreadsIcon}
+            />
         </Tooltip>
     );
 
@@ -204,9 +200,8 @@ export function ActionBarView({
                     key="resend"
                     hideChevron={true}
                     className={styles.menu_item}
-                >
-                    <RestartIcon />
-                </MenuItem>
+                    Icon={RestartIcon}
+                />
             </Tooltip>,
         );
         menuItems.push(cancelSendingButton);
@@ -228,9 +223,8 @@ export function ActionBarView({
                             key="reply"
                             hideChevron={true}
                             className={styles.menu_item}
-                        >
-                            <ReplyIcon />
-                        </MenuItem>
+                            Icon={ReplyIcon}
+                        />
                     </Tooltip>,
                 );
             }
@@ -248,9 +242,8 @@ export function ActionBarView({
                             key="react"
                             hideChevron={true}
                             className={styles.menu_item}
-                        >
-                            <ReactionAddIcon />
-                        </MenuItem>
+                            Icon={ReactionAddIcon}
+                        />
                     </Tooltip>,
                 );
             }
@@ -272,10 +265,8 @@ export function ActionBarView({
                             key="download"
                             hideChevron={true}
                             className={styles.menu_item}
-                        >
-                            <DownloadIcon />
-                            {isDownloadLoading ?? <InlineSpinner size={18} />}
-                        </MenuItem>
+                            Icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
+                        />
                     </Tooltip>,
                 );
             }
@@ -292,9 +283,8 @@ export function ActionBarView({
                             key="hide"
                             hideChevron={true}
                             className={styles.menu_item}
-                        >
-                            <VisibilityOffIcon />
-                        </MenuItem>
+                            Icon={VisibilityOffIcon}
+                        />
                     </Tooltip>,
                 );
             }
@@ -323,9 +313,8 @@ export function ActionBarView({
                         key="expand"
                         hideChevron={true}
                         className={styles.menu_item}
-                    >
-                        {isQuoteExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                    </MenuItem>
+                        Icon={isQuoteExpanded ? CollapseIcon : ExpandIcon}
+                    />
                 </Tooltip>,
             );
         }
@@ -340,9 +329,8 @@ export function ActionBarView({
                     key="options"
                     hideChevron={true}
                     className={styles.menu_item}
-                >
-                    <OverflowHorizontalIcon />
-                </MenuItem>
+                    Icon={OverflowHorizontalIcon}
+                />
             </Tooltip>,
         );
     }
