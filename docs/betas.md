@@ -15,15 +15,13 @@ A beta feature MUST first become a labs feature before it can become a beta (see
 
 A beta feature MUST have an expected timeline to be upgraded to a stable feature. This timeline
 should not exceed 3 months. If a feature persists in beta for longer and hasn't been explicitly
-extended, it is at risk of being downgraded to labs.
+extended, the feature MAY be backed out to labs.
 
 A beta feature MUST have a rollback path for users to opt-out. If a feature is irreversible or
 could corrupt a user's session or account, it should not be in beta.
 
 A beta feature SHOULD have analytics so that the team can understand how many users
 are using it.
-
-A beta feature MAY be backed out to labs (or in special circumstances removed entirely) if the team deem it necessary.
 
 ## Current Betas
 
