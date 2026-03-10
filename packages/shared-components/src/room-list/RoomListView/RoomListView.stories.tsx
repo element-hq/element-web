@@ -11,7 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "../RoomListItemView";
 import type { FilterId } from "../RoomListPrimaryFilters";
-import { RoomListView, type RoomListSnapshot, type RoomListViewActions } from "./RoomListView";
+import { RoomListView } from "./RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
@@ -24,6 +24,7 @@ import {
     mockLargeListSections,
     mockLargeListRoomIds,
 } from "../story-mocks";
+import { type RoomListSnapshot, type RoomListViewActions } from "./types";
 
 type RoomListViewProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 

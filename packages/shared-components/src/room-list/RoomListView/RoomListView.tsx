@@ -7,69 +7,13 @@
 
 import React, { type JSX, type ReactNode } from "react";
 
-import { useViewModel, type ViewModel } from "../../viewmodel";
-import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters";
+import { useViewModel } from "../../viewmodel";
+import { RoomListPrimaryFilters } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
-import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomItemViewModel } from "../RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "../RoomListSectionHeaderView";
-
-export type RoomListSection = {
-    /** Unique identifier for the section */
-    id: string;
-    /** Array of room IDs that belong to this section */
-    roomIds: string[];
-};
-
-/**
- * Snapshot for the room list view
- */
-export type RoomListSnapshot = {
-    /** Whether the rooms are currently loading */
-    isLoadingRooms: boolean;
-    /** Whether the room list is empty */
-    isRoomListEmpty: boolean;
-    /** Array of filter IDs */
-    filterIds: FilterId[];
-    /** Currently active filter ID (if any) */
-    activeFilterId?: FilterId;
-    /** Room list state */
-    roomListState: RoomListViewState;
-    /** Array of sections in the room list */
-    sections: RoomListSection[];
-    /** Optional description for the empty state */
-    emptyStateDescription?: string;
-    /** Optional action element for the empty state */
-    emptyStateAction?: ReactNode;
-    /** Whether the user can create rooms */
-    canCreateRoom?: boolean;
-    /** Whether the room list is displayed as a flat list */
-    isFlatList: boolean;
-};
-
-/**
- * Actions interface for room list operations
- */
-export interface RoomListViewActions {
-    /** Called when a filter is toggled */
-    onToggleFilter: (filterId: FilterId) => void;
-    /** Called to create a new chat room */
-    createChatRoom: () => void;
-    /** Called to create a new room */
-    createRoom: () => void;
-    /** Get view model for a specific room (virtualization API) */
-    getRoomItemViewModel: (roomId: string) => RoomItemViewModel;
-    /** Called when the visible range changes (virtualization API) */
-    updateVisibleRooms: (startIndex: number, endIndex: number) => void;
-    /** Get view model for a specific section header (virtualization API) */
-    getSectionViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
-}
-
-/**
- * The view model type for the room list view
- */
-export type RoomListViewModel = ViewModel<RoomListSnapshot, RoomListViewActions>;
+import { VirtualizedRoomListView } from "../VirtualizedRoomListView";
+import { type Room } from "../RoomListItemView";
+import type { RoomListViewModel } from "./types";
 
 /**
  * Props for RoomListView component

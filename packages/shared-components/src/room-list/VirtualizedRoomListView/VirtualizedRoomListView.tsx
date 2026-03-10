@@ -17,27 +17,10 @@ import {
     getContainerAccessibleProps,
     type VirtualizedListContext,
 } from "../../utils/VirtualizedList";
-import type { RoomListSnapshot, RoomListViewModel } from "../RoomListView";
+import type { RoomListSnapshot, RoomListViewModel, FilterKey } from "../RoomListView/types";
 import { GroupedVirtualizedList } from "../../utils/VirtualizedList";
 import { RoomListSectionHeaderView } from "../RoomListSectionHeaderView";
 import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWrapper";
-
-/**
- * Filter key type - opaque string type for filter identifiers
- */
-export type FilterKey = string;
-
-/**
- * State for the room list data (nested within RoomListSnapshot)
- */
-export interface RoomListViewState {
-    /** Optional active room index for keyboard navigation */
-    activeRoomIndex?: number;
-    /** Space ID for context tracking */
-    spaceId?: string;
-    /** Active filter keys for context tracking */
-    filterKeys?: FilterKey[];
-}
 
 /**
  * Props for the VirtualizedRoomListView component

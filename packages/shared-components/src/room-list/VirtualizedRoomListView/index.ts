@@ -6,4 +6,4 @@
  */
 
 export { VirtualizedRoomListView } from "./VirtualizedRoomListView";
-export type { VirtualizedRoomListViewProps, RoomListViewState, FilterKey } from "./VirtualizedRoomListView";
+export type { VirtualizedRoomListViewProps } from "./VirtualizedRoomListView";

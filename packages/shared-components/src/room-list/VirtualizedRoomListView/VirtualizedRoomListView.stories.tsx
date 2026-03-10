@@ -10,8 +10,8 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "../RoomListItemView";
-import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
-import type { RoomListSnapshot, RoomListViewActions } from "../RoomListView";
+import { VirtualizedRoomListView } from "./VirtualizedRoomListView";
+import type { RoomListSnapshot, RoomListViewActions, RoomListViewState } from "../RoomListView/types";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import type { FilterId } from "../RoomListPrimaryFilters";
