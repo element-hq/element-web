@@ -10,7 +10,6 @@ import { Pill } from "@element-hq/web-shared-components";
 import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk/src/matrix";
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { v4 as uuidv4 } from "uuid";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
 import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
@@ -26,6 +25,7 @@ import Field from "../../elements/Field.tsx";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext.tsx";
 import InlineSpinner from "../../elements/InlineSpinner.tsx";
 import { Key } from "../../../../Keyboard.ts";
+import { useAsyncMemo } from "../../../../hooks/useAsyncMemo.ts";
 
 /**
  * Devtool to explore sticky events in the current room.
@@ -43,15 +43,8 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
     const cli = useContext(MatrixClientContext);
     // Check if the server supports sticky events and show a message if it doesn't.
     // undefined means we are still checking, true/false means we have the result.
-    const [stickyEventsSupported, setStickyEventsSupported] = useState<boolean>();
-    useEffect(() => {
-        cli.doesServerSupportUnstableFeature("org.matrix.msc4354")
-            .then((result) => {
-                setStickyEventsSupported(result);
-            })
-            .catch((ex) => {
-                logger.warn("Failed to check if sticky events are supported", ex);
-            });
+    const stickyEventsSupported = useAsyncMemo(() => {
+        return cli.doesServerSupportUnstableFeature("org.matrix.msc4354");
     }, [cli]);
 
     // Listen for updates to the sticky events and refresh the list when they change
