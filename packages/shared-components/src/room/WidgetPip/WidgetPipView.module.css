@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .container {
-    width: 304px; /* from $width */
-    height: 278px; /* from $height */
+    width: 304px; /* hardcoded to match figma -> might become a resizable pip in the future */
+    height: 278px; /* hardcoded to match figma -> might become a resizable pip in the future */
 
     display: flex;
     flex-direction: column;
