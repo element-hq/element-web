@@ -82,10 +82,10 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
 
     // If an event type is selected, show the list of events of that type,
     // with a filter and the option to show/hide "empty" events (empty sticky event is a way to clear state).
-    if (eventType) {
+    if (eventType !== undefined /* event type can be empty string */) {
         return (
             <StickyEventListPerType
-                eventType={eventType}
+                eventType={eventType.length > 0 ? eventType : _t("devtools|empty_string")}
                 setTool={setTool}
                 events={events.filter((ev) => ev.getType() === eventType)}
                 onBack={() => setEventType(undefined)}
@@ -109,7 +109,7 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
             <p>
                 {uniqueEventTypes.map((eventType) => (
                     <button key={eventType} className="mx_DevTools_button" onClick={() => setEventType(eventType)}>
-                        {eventType}
+                        {eventType.length > 0 ? eventType : _t("devtools|empty_string")}
                     </button>
                 ))}
             </p>
