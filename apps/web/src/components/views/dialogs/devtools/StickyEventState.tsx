@@ -69,9 +69,11 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
             <p>
                 <Alert
                     type="critical"
-                    title={_t("devtools|sticky_events_not_supported")}
+                    title={_t("common|error")}
                     actions={<button onClick={onBack}>{_t("action|back")}</button>}
-                />
+                >
+                    {_t("devtools|sticky_events_not_supported")}
+                </Alert>
             </p>
         );
     } else if (stickyEventsSupported === undefined) {
