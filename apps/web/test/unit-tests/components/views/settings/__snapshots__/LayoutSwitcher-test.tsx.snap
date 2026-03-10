@@ -71,14 +71,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <a
-                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_gd6tj_8"
+                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_1v0z5_8"
                   data-kind="primary"
                   data-size="lg"
                   role="link"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_gd6tj_26 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -214,14 +214,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <a
-                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_gd6tj_8"
+                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_1v0z5_8"
                   data-kind="primary"
                   data-size="lg"
                   role="link"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_gd6tj_26 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -360,14 +360,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_MessageTimestamp"
                 />
                 <a
-                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_gd6tj_8"
+                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_1v0z5_8"
                   data-kind="primary"
                   data-size="lg"
                   role="link"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_gd6tj_26 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
