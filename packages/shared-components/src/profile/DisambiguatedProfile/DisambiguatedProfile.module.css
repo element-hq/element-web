@@ -18,8 +18,8 @@
     border-radius: unset !important;
     min-block-size: unset !important;
     color: var(--cpd-color-text-primary) !important;
-    justify-content: flex-start;
-    gap: 0;
+    justify-content: flex-start !important;
+    gap: 0 !important;
     min-inline-size: 0;
 
     overflow: hidden;
