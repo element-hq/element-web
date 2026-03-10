@@ -35,6 +35,7 @@ export * from "./rich-list/RichItem";
 export * from "./rich-list/RichList";
 export * from "./room-list/RoomListHeaderView";
 export * from "./room-list/RoomListSearchView";
+export * from "./room-list/RoomListSectionHeaderView";
 export * from "./room-list/RoomListView";
 export * from "./room-list/RoomListItemView";
 export * from "./room-list/RoomListPrimaryFilters";
