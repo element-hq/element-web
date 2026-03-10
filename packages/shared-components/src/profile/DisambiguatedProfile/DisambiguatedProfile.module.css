@@ -6,7 +6,7 @@
  */
 
 .disambiguatedProfile {
-    display: inline-block !important;
+    display: inline-flex;
     border: 0 !important;
     padding: 0 !important;
     margin: 0;
@@ -18,6 +18,9 @@
     border-radius: unset !important;
     min-block-size: unset !important;
     color: var(--cpd-color-text-primary) !important;
+    justify-content: flex-start;
+    gap: 0;
+    min-inline-size: 0;
 
     overflow: hidden;
     text-overflow: ellipsis;
