@@ -26,6 +26,7 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext.tsx";
 import InlineSpinner from "../../elements/InlineSpinner.tsx";
 import { Key } from "../../../../Keyboard.ts";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo.ts";
+import { useTypedEventEmitterState } from "../../../../hooks/useEventEmitter.ts";
 
 /**
  * Devtool to explore sticky events in the current room.
@@ -38,8 +39,6 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
     const [eventType, setEventType] = useState<string>();
     const [event, setEvent] = useState<MatrixEvent>();
 
-    const [events, setEvents] = useState<MatrixEvent[]>(() => [...context.room._unstable_getStickyEvents()]);
-
     const cli = useContext(MatrixClientContext);
     // Check if the server supports sticky events and show a message if it doesn't.
     // undefined means we are still checking, true/false means we have the result.
@@ -48,14 +47,9 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
     }, [cli]);
 
     // Listen for updates to the sticky events and refresh the list when they change
-    useEffect(() => {
-        const refresh = (): void => setEvents([...context.room._unstable_getStickyEvents()]);
-        context.room.on(RoomStickyEventsEvent.Update, refresh);
-
-        return () => {
-            context.room.off(RoomStickyEventsEvent.Update, refresh);
-        };
-    }, [context.room]);
+    const events = useTypedEventEmitterState(context.room, RoomStickyEventsEvent.Update, () => {
+        return [...context.room._unstable_getStickyEvents()];
+    });
 
     if (stickyEventsSupported === false) {
         return (
