@@ -26,7 +26,7 @@ class WidgetToggleModule implements Module {
             throw new Error(`Errors in module configuration for widget toggles module`);
         }
 
-        this.api.extras.setRoomHeaderButtonCallback((roomId: string) => {
+        this.api.extras.addRoomHeaderButtonCallback((roomId: string) => {
             const widgets = this.api.widget.getWidgetsInRoom(roomId);
             const toggleElements: JSX.Element[] = [];
 
