@@ -7,6 +7,7 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
   >
     <span
       class="disambiguatedProfile_displayName"
+      data-emphasized="true"
       data-part="display-name"
       dir="auto"
     >
@@ -24,6 +25,7 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
   >
     <span
       class="mx_Username_color5 disambiguatedProfile_displayName"
+      data-emphasized="true"
       data-part="display-name"
       dir="auto"
     >
@@ -46,6 +48,7 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
   >
     <span
       class="mx_Username_color1 disambiguatedProfile_displayName"
+      data-emphasized="true"
       data-part="display-name"
       dir="auto"
     >
@@ -68,6 +71,7 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
   >
     <span
       class="mx_Username_color3 disambiguatedProfile_displayName"
+      data-emphasized="true"
       data-part="display-name"
       dir="auto"
     >
@@ -84,6 +88,7 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
   >
     <span
       class="disambiguatedProfile_displayName"
+      data-emphasized="true"
       data-part="display-name"
       dir="auto"
     >
@@ -101,6 +106,7 @@ exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
   >
     <span
       class="disambiguatedProfile_displayName"
+      data-emphasized="true"
       data-part="display-name"
       dir="auto"
     >

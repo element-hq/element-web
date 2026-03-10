@@ -79,6 +79,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 >
                   <span
                     class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                    data-emphasized="true"
                     data-part="display-name"
                     dir="auto"
                   >
@@ -223,6 +224,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 >
                   <span
                     class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                    data-emphasized="true"
                     data-part="display-name"
                     dir="auto"
                   >
@@ -370,6 +372,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 >
                   <span
                     class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                    data-emphasized="true"
                     data-part="display-name"
                     dir="auto"
                   >
