@@ -15,12 +15,15 @@ import type { RoomListSnapshot, RoomListViewActions } from "../RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import type { FilterId } from "../RoomListPrimaryFilters";
-import { renderAvatar, createGetRoomItemViewModel, mockRoomIds } from "../story-mocks";
+import {
+    renderAvatar,
+    createGetRoomItemViewModel,
+    mock10RoomsIds,
+    createGetSectionViewModel,
+    mock10RoomsSections,
+} from "../story-mocks";
 
 type RoomListStoryProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
-
-// Use first 10 room IDs for this story
-const storyRoomIds = mockRoomIds.slice(0, 10);
 
 // Wrapper component that creates a mocked ViewModel
 const RoomListWrapperImpl = ({
@@ -28,6 +31,7 @@ const RoomListWrapperImpl = ({
     createChatRoom,
     createRoom,
     getRoomItemViewModel,
+    getSectionViewModel,
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
     ...rest
@@ -37,6 +41,7 @@ const RoomListWrapperImpl = ({
         createChatRoom,
         createRoom,
         getRoomItemViewModel,
+        getSectionViewModel,
         updateVisibleRooms,
     });
 
@@ -65,15 +70,17 @@ const meta = {
         isRoomListEmpty: false,
         filterIds: mockFilterIds,
         activeFilterId: undefined,
-        roomIds: storyRoomIds,
+        sections: mock10RoomsSections,
         roomListState: defaultRoomListState,
         canCreateRoom: true,
         onToggleFilter: fn(),
         createChatRoom: fn(),
         createRoom: fn(),
-        getRoomItemViewModel: createGetRoomItemViewModel(storyRoomIds),
+        getRoomItemViewModel: createGetRoomItemViewModel(mock10RoomsIds),
+        getSectionViewModel: createGetSectionViewModel(mock10RoomsSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
         renderAvatar,
+        isFlatList: true,
     },
     parameters: {
         design: {
@@ -94,3 +101,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Sections: Story = {
+    args: {
+        isFlatList: false,
+    },
+};
