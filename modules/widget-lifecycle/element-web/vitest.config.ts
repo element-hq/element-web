@@ -20,7 +20,7 @@ export default defineConfig({
         coverage: {
             provider: "v8",
             include: ["src/**/*.ts"],
-            reporter: ["lcov", "text"],
+            reporter: [["lcov", { projectRoot: "../../../" }], "text"],
         },
     },
 });
