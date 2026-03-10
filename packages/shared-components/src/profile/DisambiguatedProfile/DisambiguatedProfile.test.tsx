@@ -229,7 +229,8 @@ describe("DisambiguatedProfileView", () => {
 
         render(<DisambiguatedProfileView vm={vm} />);
         const displayNameElement = screen.getByText("Emphasized User");
-        expect(displayNameElement).toHaveClass("mx_DisambiguatedProfile_displayName");
+        expect(displayNameElement).toHaveClass("disambiguatedProfile_displayName");
+        expect(displayNameElement).toHaveAttribute("data-part", "display-name");
     });
 
     it("should apply custom className to the profile container", () => {

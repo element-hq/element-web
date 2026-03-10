@@ -221,7 +221,8 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                            data-part="display-name"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -364,7 +365,8 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                            data-part="display-name"
                             dir="auto"
                           >
                             @userId:matrix.org
@@ -510,7 +512,8 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           tabindex="0"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                            data-part="display-name"
                             dir="auto"
                           >
                             @userId:matrix.org

@@ -32,7 +32,7 @@ export class Timeline {
         const locators = await this.page.locator(".mx_RoomView_MessageList .mx_EventTile").all();
         let latestSender: string;
         for (const locator of locators) {
-            const displayName = locator.locator(".mx_DisambiguatedProfile_displayName");
+            const displayName = locator.locator(".mx_DisambiguatedProfile [data-part='display-name']");
             if (await displayName.count()) {
                 latestSender = await displayName.innerText();
             }

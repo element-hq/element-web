@@ -6,7 +6,8 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
     class="disambiguatedProfile"
   >
     <span
-      class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="disambiguatedProfile_displayName"
+      data-part="display-name"
       dir="auto"
     >
       Alice
@@ -22,13 +23,15 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
     title="Eve (@eve:matrix.org)"
   >
     <span
-      class="mx_Username_color5 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color5 disambiguatedProfile_displayName"
+      data-part="display-name"
       dir="auto"
     >
       Eve
     </span>
     <span
-      class="mx_DisambiguatedProfile_mxid disambiguatedProfile_mxid"
+      class="disambiguatedProfile_mxid"
+      data-part="mxid"
     >
       @eve:matrix.org
     </span>
@@ -42,13 +45,15 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
     class="disambiguatedProfile"
   >
     <span
-      class="mx_Username_color1 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color1 disambiguatedProfile_displayName"
+      data-part="display-name"
       dir="auto"
     >
       Alice
     </span>
     <span
-      class="mx_DisambiguatedProfile_mxid disambiguatedProfile_mxid"
+      class="disambiguatedProfile_mxid"
+      data-part="mxid"
     >
       @alice:example.org
     </span>
@@ -62,7 +67,8 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
     class="disambiguatedProfile"
   >
     <span
-      class="mx_Username_color3 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color3 disambiguatedProfile_displayName"
+      data-part="display-name"
       dir="auto"
     >
       Bob
@@ -77,7 +83,8 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
     class="disambiguatedProfile"
   >
     <span
-      class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="disambiguatedProfile_displayName"
+      data-part="display-name"
       dir="auto"
     >
       Charlie
@@ -93,7 +100,8 @@ exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
     title="Diana (@diana:example.org)"
   >
     <span
-      class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="disambiguatedProfile_displayName"
+      data-part="display-name"
       dir="auto"
     >
       Diana

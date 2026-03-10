@@ -83,10 +83,7 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
 
-    const displayNameClasses = classNames(colorClass, {
-        [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
-        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
-    });
+    const displayNameClasses = classNames(colorClass, emphasizeDisplayName && styles.disambiguatedProfile_displayName);
 
     if (vm.onClick) {
         return (
@@ -96,12 +93,12 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
                 title={title}
                 onClick={vm.onClick}
             >
-                <span className={displayNameClasses} dir="auto">
+                <span className={displayNameClasses} data-part="display-name" dir="auto">
                     {displayName}
                 </span>
-                {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+                {/* data-part hooks are used by app CSS selectors such as .mx_MemberTileView .mx_DisambiguatedProfile > [data-part="mxid"] */}
                 {displayIdentifier && (
-                    <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                    <span className={styles.disambiguatedProfile_mxid} data-part="mxid">
                         {displayIdentifier}
                     </span>
                 )}
@@ -111,12 +108,12 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
 
     return (
         <div className={classNames(className, styles.disambiguatedProfile)} title={title}>
-            <span className={displayNameClasses} dir="auto">
+            <span className={displayNameClasses} data-part="display-name" dir="auto">
                 {displayName}
             </span>
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+            {/* data-part hooks are used by app CSS selectors such as .mx_MemberTileView .mx_DisambiguatedProfile > [data-part="mxid"] */}
             {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                <span className={styles.disambiguatedProfile_mxid} data-part="mxid">
                     {displayIdentifier}
                 </span>
             )}
