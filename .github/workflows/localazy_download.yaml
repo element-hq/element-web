@@ -7,7 +7,7 @@ permissions:
     pull-requests: write # needed to auto-approve PRs
 jobs:
     download:
-        uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_download.yaml@main
+        uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_download.yaml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         with:
             packageManager: pnpm
         secrets:

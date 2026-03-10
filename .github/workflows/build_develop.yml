@@ -29,6 +29,8 @@ jobs:
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
 
             - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
             - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
@@ -134,4 +136,6 @@ jobs:
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
             - run: |
-                  echo "Deployed to ${{ steps.cfp.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+                  echo "Deployed to ${STEPS_CFP_OUTPUTS_URL}" >> $GITHUB_STEP_SUMMARY
+              env:
+                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.url }}
