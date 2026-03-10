@@ -30,45 +30,51 @@ import styles from "./ActionBarView.module.css";
 
 export interface ActionBarViewSnapshot {
     /**
+     * The edge along which the menu and trigger will be aligned.
+     * @default center
+     */
+    align?: "start" | "center" | "end";
+    /**
      * The side of the trigger on which to place the menu. Note that the menu may
      * still end up on a different side than the one you request if there isn't
      * enough space.
      * @default bottom
      */
     side?: "top" | "right" | "bottom" | "left";
-    /**
-     * The edge along which the menu and trigger will be aligned.
-     * @default center
-     */
-    align?: "start" | "center" | "end";
+
+    canCancel: boolean;
     canEdit: boolean;
     canPinOrUnpin: boolean;
-    isPinned: boolean;
-    allowCancel: boolean;
-    isFailed: boolean;
-    isContentActionable: boolean;
-    canSendMessages: boolean;
     canReact: boolean;
-    hasThreadRelation: boolean;
-    isDownloadEncrypted: boolean;
-    isDownloadLoading: boolean;
+    canSendMessages: boolean;
+
+    showDownloadAction: boolean;
+    showExpandCollapseAction: boolean;
+    showHideAction: boolean;
     showReplyInThreadAction: boolean;
     showThreadForDeletedMessage: boolean;
-    showDownloadAction: boolean;
-    showHideAction: boolean;
-    showExpandCollapseAction: boolean;
+
+    hasThreadRelation: boolean;
+
+    isContentActionable: boolean;
+    isDownloadEncrypted: boolean;
+    isDownloadLoading: boolean;
+    isFailed: boolean;
+    isPinned: boolean;
     isQuoteExpanded: boolean;
 }
 
 export interface ActionBarViewActions {
-    onEditClick?: () => void;
-    onPinClick?: () => void;
-    onResendClick?: () => void;
     onCancelClick?: () => void;
     onDownloadClick?: () => void;
+    onEditClick?: () => void;
     onHideClick?: () => void;
+    onOptionsClick?: () => void;
+    onPinClick?: () => void;
+    onReactClick?: () => void;
     onReplyClick?: () => void;
     onReplyInThreadClick?: () => void;
+    onResendClick?: () => void;
     onToggleThreadExpanded?: () => void;
 }
 
@@ -101,7 +107,7 @@ export function ActionBarView({
         canEdit,
         canPinOrUnpin,
         isPinned,
-        allowCancel,
+        canCancel,
         isFailed,
         isContentActionable,
         canSendMessages,
@@ -187,7 +193,7 @@ export function ActionBarView({
         </Tooltip>
     );
 
-    if (allowCancel && isFailed) {
+    if (canCancel && isFailed) {
         menuItems.splice(
             0,
             0,
@@ -238,7 +244,7 @@ export function ActionBarView({
                             as="div"
                             label={null}
                             aria-label={_t("action|react")}
-                            onSelect={null}
+                            onSelect={() => vm.onReactClick?.()}
                             key="react"
                             hideChevron={true}
                             className={styles.menu_item}
@@ -292,7 +298,7 @@ export function ActionBarView({
             menuItems.unshift(threadTooltipButton);
         }
 
-        if (allowCancel) {
+        if (canCancel) {
             menuItems.push(cancelSendingButton);
         }
 
@@ -325,7 +331,7 @@ export function ActionBarView({
                     as="div"
                     label={null}
                     aria-label={_t("common|options")}
-                    onSelect={null}
+                    onSelect={() => vm.onOptionsClick?.()}
                     key="options"
                     hideChevron={true}
                     className={styles.menu_item}
