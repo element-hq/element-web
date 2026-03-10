@@ -88,7 +88,8 @@ export const TextualEventFactory: Factory = (ref, props) => {
 function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const cli = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(() => new EncryptionEventViewModel({ mxEvent, cli }));
-    return <EncryptionEventView vm={vm} ref={ref} />;
+
+    return <EncryptionEventView vm={vm} ref={ref} className="mx_EventTileBubble mx_cryptoEvent" />;
 }
 const EncryptionEventFactory: Factory = (ref, props) => {
     return <EncryptionEventWrappedView ref={ref} {...props} />;

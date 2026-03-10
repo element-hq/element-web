@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { type TagID } from "../../models";
+import { type TagID } from "../../../room-list-v3/skip-list/tag";
 
 /**
  * Represents a tag sorting algorithm.

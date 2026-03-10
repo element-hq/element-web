@@ -13,7 +13,8 @@ import { RoomNotificationStateStore } from "../../../../../../src/stores/notific
 import { ImportanceAlgorithm } from "../../../../../../src/stores/room-list/algorithms/list-ordering/ImportanceAlgorithm";
 import { SortAlgorithm } from "../../../../../../src/stores/room-list/algorithms/models";
 import * as RoomNotifs from "../../../../../../src/RoomNotifs";
-import { DefaultTagID, RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../../src/stores/room-list-v3/skip-list/tag";
+import { RoomUpdateCause } from "../../../../../../src/stores/room-list/models";
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
 import { AlphabeticAlgorithm } from "../../../../../../src/stores/room-list/algorithms/tag-sorting/AlphabeticAlgorithm";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
@@ -86,72 +87,6 @@ describe("ImportanceAlgorithm", () => {
         algorithm.setRooms(rooms || [roomA, roomB, roomC]);
         return algorithm;
     };
-
-    describe("When sortAlgorithm is manual", () => {
-        const sortAlgorithm = SortAlgorithm.Manual;
-        it("orders rooms by tag order without categorizing", () => {
-            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState");
-            const algorithm = setupAlgorithm(sortAlgorithm);
-
-            // didn't check notif state
-            expect(RoomNotificationStateStore.instance.getRoomState).not.toHaveBeenCalled();
-            // sorted according to room tag order
-            expect(algorithm.orderedRooms).toEqual([roomC, roomA, roomB]);
-        });
-
-        describe("handleRoomUpdate", () => {
-            // XXX: This doesn't work because manual ordered rooms dont get categoryindices
-            // possibly related https://github.com/vector-im/element-web/issues/25099
-            it.skip("removes a room", () => {
-                const algorithm = setupAlgorithm(sortAlgorithm);
-
-                const shouldTriggerUpdate = algorithm.handleRoomUpdate(roomA, RoomUpdateCause.RoomRemoved);
-
-                expect(shouldTriggerUpdate).toBe(true);
-                expect(algorithm.orderedRooms).toEqual([roomC, roomB]);
-            });
-
-            // XXX: This doesn't work because manual ordered rooms dont get categoryindices
-            it.skip("adds a new room", () => {
-                const algorithm = setupAlgorithm(sortAlgorithm);
-
-                const shouldTriggerUpdate = algorithm.handleRoomUpdate(roomD, RoomUpdateCause.NewRoom);
-
-                expect(shouldTriggerUpdate).toBe(true);
-                expect(algorithm.orderedRooms).toEqual([roomC, roomB, roomD, roomE]);
-            });
-
-            it("does nothing and returns false for a timeline update", () => {
-                const algorithm = setupAlgorithm(sortAlgorithm);
-
-                const beforeRooms = algorithm.orderedRooms;
-                const shouldTriggerUpdate = algorithm.handleRoomUpdate(roomA, RoomUpdateCause.Timeline);
-
-                expect(shouldTriggerUpdate).toBe(false);
-                // strict equal
-                expect(algorithm.orderedRooms).toBe(beforeRooms);
-            });
-
-            it("does nothing and returns false for a read receipt update", () => {
-                const algorithm = setupAlgorithm(sortAlgorithm);
-
-                const beforeRooms = algorithm.orderedRooms;
-                const shouldTriggerUpdate = algorithm.handleRoomUpdate(roomA, RoomUpdateCause.ReadReceipt);
-
-                expect(shouldTriggerUpdate).toBe(false);
-                // strict equal
-                expect(algorithm.orderedRooms).toBe(beforeRooms);
-            });
-
-            it("throws for an unhandle update cause", () => {
-                const algorithm = setupAlgorithm(sortAlgorithm);
-
-                expect(() =>
-                    algorithm.handleRoomUpdate(roomA, "something unexpected" as unknown as RoomUpdateCause),
-                ).toThrow("Unsupported update cause: something unexpected");
-            });
-        });
-    });
 
     describe("When sortAlgorithm is alphabetical", () => {
         const sortAlgorithm = SortAlgorithm.Alphabetic;

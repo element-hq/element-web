@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MouseEvent, type MouseEventHandler, type ReactNode } from "react";
+import { type MouseEvent, type MouseEventHandler } from "react";
 import {
     BaseViewModel,
     type ReactionsRowViewSnapshot,
@@ -41,10 +41,6 @@ export interface ReactionsRowViewModelProps {
      * Optional callback invoked on add-reaction button context-menu.
      */
     onAddReactionContextMenu?: MouseEventHandler<HTMLButtonElement>;
-    /**
-     * Reaction row children (typically reaction buttons).
-     */
-    children?: ReactNode;
 }
 
 interface InternalProps extends ReactionsRowViewModelProps {
@@ -59,18 +55,16 @@ export class ReactionsRowViewModel
         props: InternalProps,
     ): Pick<
         ReactionsRowViewSnapshot,
-        "isVisible" | "showAllButtonVisible" | "showAddReactionButton" | "addReactionButtonActive" | "children"
+        "isVisible" | "showAllButtonVisible" | "showAddReactionButton" | "addReactionButtonActive"
     > => ({
         isVisible: props.isActionable && props.reactionGroupCount > 0,
         showAllButtonVisible: props.reactionGroupCount > MAX_ITEMS_WHEN_LIMITED + 1 && !props.showAll,
         showAddReactionButton: props.canReact,
         addReactionButtonActive: !!props.addReactionButtonActive,
-        children: props.children,
     });
 
     private static readonly computeSnapshot = (props: InternalProps): ReactionsRowViewSnapshot => ({
         ariaLabel: _t("common|reactions"),
-        className: "mx_ReactionsRow",
         showAllButtonLabel: _t("action|show_all"),
         addReactionButtonLabel: _t("timeline|reactions|add_reaction_prompt"),
         addReactionButtonVisible: false,
@@ -134,15 +128,6 @@ export class ReactionsRowViewModel
         };
 
         this.snapshot.merge({ addReactionButtonActive });
-    }
-
-    public setChildren(children?: ReactNode): void {
-        this.props = {
-            ...this.props,
-            children,
-        };
-
-        this.snapshot.merge({ children });
     }
 
     public setAddReactionHandlers({

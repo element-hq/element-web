@@ -15,6 +15,8 @@ jobs:
             VERSION: ${{ github.ref_name }}
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
 
             - name: Download package
               working-directory: apps/web
@@ -75,7 +77,7 @@ jobs:
 
             - name: Publish to packages.element.io
               if: github.event.release.prerelease == false
-              uses: element-hq/packages.element.io@master
+              uses: element-hq/packages.element.io@master # zizmor: ignore[unpinned-uses]
               with:
                   file: apps/web/element-web.deb
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

@@ -21,7 +21,7 @@ import {
 } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 import { SortAlgorithm, ListAlgorithm } from "../../../../../src/stores/room-list/algorithms/models";
 import "../../../../../src/stores/room-list/RoomListStore"; // must be imported before Algorithm to avoid cycles
 import { Algorithm } from "../../../../../src/stores/room-list/algorithms/Algorithm";

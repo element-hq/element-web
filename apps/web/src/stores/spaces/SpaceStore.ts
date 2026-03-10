@@ -29,7 +29,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
-import { DefaultTagID } from "../room-list/models";
+import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 import { EnhancedMap, mapDiff } from "../../utils/maps";
 import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";

@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { EventEmitter } from "events";
 import { type ITagMap, type ListAlgorithm, type SortAlgorithm } from "./algorithms/models";
-import { type RoomUpdateCause, type TagID } from "./models";
+import { type RoomUpdateCause } from "./models";
+import { type TagID } from "../room-list-v3/skip-list/tag";
 import { type IFilterCondition } from "./filters/IFilterCondition";
 
 export enum RoomListStoreEvent {
@@ -90,15 +91,6 @@ export interface RoomListStore extends EventEmitter {
      * @param {IFilterCondition} filter The filter condition to remove.
      */
     removeFilter(filter: IFilterCondition): void;
-
-    /**
-     * Gets the tags for a room identified by the store. The returned set
-     * should never be empty, and will contain DefaultTagID.Untagged if
-     * the store is not aware of any tags.
-     * @param room The room to get the tags for.
-     * @returns The tags for the room.
-     */
-    getTagsForRoom(room: Room): TagID[];
 
     /**
      * Manually update a room with a given cause. This should only be used if the

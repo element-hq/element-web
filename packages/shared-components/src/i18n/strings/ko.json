@@ -7,6 +7,7 @@
         "dismiss": "버리기",
         "edit": "편집",
         "explore_rooms": "방 검색",
+        "go": "이동",
         "invite": "초대",
         "new_conversation": "새로운 대화",
         "new_room": "새로운 방",
@@ -42,6 +43,9 @@
             "shared": "신규 회원은 기록을 볼 수 있습니다.",
             "world_readable": "누구나 히스토리를 볼 수 있습니다"
         },
+        "jump_to_date": "날짜로 이동",
+        "jump_to_date_beginning": "방의 시작 지점입니다.",
+        "jump_to_date_prompt": "이동할 날짜를 선택하세요.",
         "status_bar": {
             "delete_all": "전체 삭제",
             "exceeded_resource_limit_description": "서비스를 계속 이용하시려면 서비스 관리자에게 문의하십시오.",
@@ -117,7 +121,7 @@
         "show_message_previews": "메시지 미리보기 표시",
         "sort": "정렬",
         "sort_type": {
-            "activity": "활동내역",
+            "activity": "최근 활동",
             "atoz": "A-Z",
             "unread_first": "안읽은 글 우선"
         },
@@ -169,7 +173,9 @@
             "parameters_changed": "일부 암호화 설정이 변경되었습니다.",
             "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
             "unsupported": "이 방에서 사용 중인 암호화 방식은 지원되지 않습니다."
-        }
+        },
+        "message_timestamp_received_at": "수신 시간: %(dateTime)s",
+        "message_timestamp_sent_at": "발송 시간: %(dateTime)s"
     },
     "widget": {
         "context_menu": {

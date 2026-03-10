@@ -10,7 +10,7 @@ import { type MatrixClient, type Room, EventType, type EmptyObject } from "matri
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, type TagID } from "./models";
+import { OrderedDefaultTagIDs, RoomUpdateCause } from "./models";
 import {
     type IListOrderingMap,
     type ITagMap,
@@ -28,13 +28,14 @@ import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
-import { VisibilityProvider } from "./filters/VisibilityProvider";
+import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { SpaceWatcher } from "./SpaceWatcher";
 import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
+import { getChangedOverrideRoomMutePushRules } from "../room-list-v3/utils";
+import { type TagID } from "../room-list-v3/skip-list/tag";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 export const LISTS_LOADING_EVENT = RoomListStoreEvent.ListsLoading; // unused; used by SlidingRoomListStore
@@ -346,7 +347,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
-        if (!VisibilityProvider.instance.isRoomVisible(room)) {
+        if (!isRoomVisible(room)) {
             return; // don't do anything on rooms that aren't visible
         }
 
@@ -514,7 +515,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
         if (!this.matrixClient) return [];
 
         let rooms = this.matrixClient.getVisibleRooms(this.msc3946ProcessDynamicPredecessor);
-        rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
+        rooms = rooms.filter((r) => isRoomVisible(r));
 
         if (this.prefilterConditions.length > 0) {
             rooms = rooms.filter((r) => {
@@ -594,19 +595,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
         if (removed) {
             promise.then(() => this.updateFn.trigger());
         }
-    }
-
-    /**
-     * Gets the tags for a room identified by the store. The returned set
-     * should never be empty, and will contain DefaultTagID.Untagged if
-     * the store is not aware of any tags.
-     * @param room The room to get the tags for.
-     * @returns The tags for the room.
-     */
-    public getTagsForRoom(room: Room): TagID[] {
-        const algorithmTags = this.algorithm.getTagsForRoom(room);
-        if (!algorithmTags) return [DefaultTagID.Untagged];
-        return algorithmTags;
     }
 
     public getCount(tagId: TagID): number {

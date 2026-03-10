@@ -5,6 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.error {
+.content svg[data-state="supported"] {
+    color: inherit;
+}
+
+.content svg[data-state="unsupported"] {
     color: var(--cpd-color-icon-critical-primary);
 }

@@ -68,7 +68,6 @@ export class DateSeparatorViewModel
 
         super(props, {
             label: DateSeparatorViewModel.computeLabel(props, relativeDatesEnabled),
-            className: "mx_TimelineSeparator",
         });
 
         this.relativeDatesEnabled = relativeDatesEnabled;
@@ -101,7 +100,6 @@ export class DateSeparatorViewModel
         const label = DateSeparatorViewModel.computeLabel(this.props, this.relativeDatesEnabled);
         return {
             label,
-            className: "mx_TimelineSeparator",
             jumpToEnabled: this.jumpToDateEnabled && !this.props.forExport,
             jumpFromDate: formatDateForInput(new Date(this.props.ts)),
         };

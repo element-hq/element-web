@@ -75,7 +75,7 @@ const MKeyVerificationRequest: React.FC<Props> = ({ mxEvent, timestamp }) => {
     return (
         <EventTileBubble
             icon={<LockSolidIcon />}
-            className="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
+            className="mx_EventTileBubble mx_cryptoEvent"
             title={title}
             subtitle={subtitle}
         >

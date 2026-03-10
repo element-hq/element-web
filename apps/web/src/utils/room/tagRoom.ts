@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import RoomListStore from "../../stores/room-list/RoomListStore";
-import { DefaultTagID, type TagID } from "../../stores/room-list/models";
+import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
+import { getTagsForRoom } from "./getTagsForRoom";
 
 /**
  * Toggle tag for a given room
@@ -22,10 +22,10 @@ import dis from "../../dispatcher/dispatcher";
 export function tagRoom(room: Room, tagId: TagID): void {
     if (tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority) {
         const inverseTag = tagId === DefaultTagID.Favourite ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
-        const isApplied = RoomListStore.instance.getTagsForRoom(room).includes(tagId);
+        const isApplied = getTagsForRoom(room).includes(tagId);
         const removeTag = isApplied ? tagId : inverseTag;
         const addTag = isApplied ? null : tagId;
-        dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag, 0));
+        dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag));
     } else {
         logger.warn(`Unexpected tag ${tagId} applied to ${room.roomId}`);
     }
