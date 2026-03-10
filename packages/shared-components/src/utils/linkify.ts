@@ -275,9 +275,10 @@ export function findLinksInString(str: string): ReturnType<typeof linkifyjs.find
 }
 
 /**
- * Is the given string considered linkable, as in it looks
- * like a URL and uses a permitted protocol.
- * This does not trim the string.
+ * Is the provided value something that would be converted to a clickable
+ * link.
+ *
+ * E.g. 'https://matrix.org', `matrix.org` or 'example@matrix.org'
  *
  * @param str A string value to be tested if the entire value is linkable.
  * @returns Whether or not the `str` value is a link.

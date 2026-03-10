@@ -74,7 +74,6 @@ import SettingsStore from "../../settings/SettingsStore";
 import { filterBoolean } from "../../utils/arrays.ts";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import RoomContext from "../../contexts/RoomContext.ts";
-import { LinkedTextConfiguration } from "../../Linkify.tsx";
 
 interface IProps {
     space: Room;
@@ -234,9 +233,14 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     let topicSection: ReactNode | undefined;
-    if (topic) {{
+    if (topic) {
         // prevent clicks on links from bubbling up to the room tile
-        topicSection = <LinkedText onLinkClick={(ev) => ev.stopPropagation()}>{" · "}{topic}</LinkedText>;
+        topicSection = (
+            <LinkedText onLinkClick={(ev) => ev.stopPropagation()}>
+                {" · "}
+                {topic}
+            </LinkedText>
+        );
     }
 
     let joinedSection: ReactElement | undefined;

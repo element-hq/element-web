@@ -14,7 +14,14 @@ import styles from "./LinkedText.module.css";
 import { generateLinkedTextOptions } from "../linkify";
 import { useLinkedTextContext } from "./LinkedTextContext";
 
-export type LinkedTextProps = ComponentProps<typeof Text> & { onLinkClick: (ev: MouseEvent) => void };
+export type LinkedTextProps = ComponentProps<typeof Text> & {
+    /**
+     * Handler for when a link within the component is clicked. This will run
+     * *before* any LinkedTextContext handlers are run.
+     * @param ev The event raised by the click.
+     */
+    onLinkClick?: (ev: MouseEvent) => void;
+};
 /**
  * A component that renders URLs as clickable links inside some plain text.
  *
@@ -32,7 +39,6 @@ export type LinkedTextProps = ComponentProps<typeof Text> & { onLinkClick: (ev: 
 export function LinkedText({ children, className, onLinkClick, ...textProps }: LinkedTextProps): React.ReactNode {
     const options = useLinkedTextContext();
     const linkifyOptions = generateLinkedTextOptions({ ...options, onLinkClick });
-    // todo: onLinkClick
     return (
         <Linkify
             className={classNames(styles.container, className)}

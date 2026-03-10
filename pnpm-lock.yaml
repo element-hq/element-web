@@ -267,6 +267,18 @@ importers:
       katex:
         specifier: ^0.16.0
         version: 0.16.33
+      linkify-html:
+        specifier: 4.3.2
+        version: 4.3.2(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.2)
+      linkify-react:
+        specifier: 4.3.2
+        version: 4.3.2(linkifyjs@4.3.2)(react@19.2.4)
+      linkify-string:
+        specifier: 4.3.2
+        version: 4.3.2(linkifyjs@4.3.2)
+      linkifyjs:
+        specifier: 4.3.2
+        version: 4.3.2
       lodash:
         specifier: npm:lodash-es@^4.17.21
         version: lodash-es@4.17.23
@@ -766,18 +778,6 @@ importers:
       html-react-parser:
         specifier: ^5.2.2
         version: 5.2.17(@types/react@19.2.10)(react@19.2.4)
-      linkify-html:
-        specifier: 4.3.2
-        version: 4.3.2(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.2)
-      linkify-react:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)(react@19.2.4)
-      linkify-string:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)
-      linkifyjs:
-        specifier: 4.3.2
-        version: 4.3.2
       lodash:
         specifier: npm:lodash-es@^4.17.21
         version: lodash-es@4.17.23

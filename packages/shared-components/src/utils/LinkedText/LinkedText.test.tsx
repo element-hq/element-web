@@ -14,8 +14,7 @@ import * as stories from "./LinkedText.stories.tsx";
 import { LinkedText } from "./LinkedText.tsx";
 import { LinkifyOptionalSlashProtocols, PERMITTED_URL_SCHEMES } from "../linkify";
 
-const { Default, Unclickable, WithUserId, WithRoomAlias, WithCustomHref, WithCustomUrlTarget } =
-    composeStories(stories);
+const { Default, WithUserId, WithRoomAlias, WithCustomHref, WithCustomUrlTarget } = composeStories(stories);
 
 describe("LinkedText", () => {
     it.each(

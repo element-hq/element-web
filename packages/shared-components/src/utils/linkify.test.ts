@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect } from "vitest";
 
-import { findLinksInString, isLinkable, LinkifyMatrixOpaqueIdType } from "./linkify";
+import { findLinksInString, isLinkable, linkifyHtml, LinkifyMatrixOpaqueIdType } from "./linkify";
 
 describe("linkify-matrix", () => {
     const linkTypesByInitialCharacter: Record<string, string> = {
@@ -398,5 +398,14 @@ describe("linkify-matrix", () => {
                 ]);
             });
         }
+    });
+    describe("linkifyHtml", () => {
+        it("removes any existing data-linkified", () => {
+            expect(
+                linkifyHtml("<span data-linkfied><a data-linkfied href='evil://com'>evil.com</a></span>"),
+            ).toMatchInlineSnapshot(
+                `"<span data-linkfied=""><a data-linkfied="" href="evil://com">evil.com</a></span>"`,
+            );
+        });
     });
 });
