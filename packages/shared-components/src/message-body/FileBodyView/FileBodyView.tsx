@@ -152,7 +152,7 @@ interface FileBodyViewProps {
  * - download-only display: set `infoShow: false`, `downloadShow: true`
  *
  * Note on using the encrypted iframe, `ENCRYPTED_IFRAME`:
- * To make this rendering branch work, it is excpected that a `usercontent/` target
+ * To make this rendering branch work, it is expected that a `usercontent/` target
  * is available relative to the root of the application as is described in detail here,
  * https://github.com/element-hq/element-web/blob/develop/docs/usercontent.md
  *
