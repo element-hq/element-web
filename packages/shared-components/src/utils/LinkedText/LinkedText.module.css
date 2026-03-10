@@ -8,7 +8,6 @@
 .container {
     a {
         color: var(--cpd-color-text-link-external);
-        text-decoration-line: none;
     }
     margin: 0;
 }
