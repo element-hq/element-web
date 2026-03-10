@@ -5,31 +5,31 @@
     "action": {
         "delete": "Delete",
         "dismiss": "Dismiss",
-        "download": "action|download",
+        "download": "Download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "go": "Go",
-        "hide": "action|hide",
+        "hide": "Hide",
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
         "new_video_room": "New video room",
         "open_menu": "Open menu",
         "pause": "Pause",
-        "pin": "action|pin",
+        "pin": "Pin",
         "play": "Play",
-        "react": "action|react",
+        "react": "React",
         "remove": "Remove",
-        "reply": "action|reply",
-        "reply_in_thread": "action|reply_in_thread",
+        "reply": "Reply",
+        "reply_in_thread": "Reply in thread",
         "retry": "Retry",
         "search": "Search",
         "start_chat": "Start chat",
-        "unpin": "action|unpin"
+        "unpin": "Unpin"
     },
     "common": {
         "encryption_enabled": "Encryption enabled",
-        "options": "common|options",
+        "options": "Options",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
@@ -144,7 +144,7 @@
         "tac_button": "Review terms and conditions"
     },
     "threads": {
-        "error_start_thread_existing_relation": "threads|error_start_thread_existing_relation"
+        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation"
     },
     "time": {
         "about_day_ago": "about a day ago",
@@ -172,8 +172,8 @@
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
-        "download_action_decrypting": "timeline|download_action_decrypting",
-        "download_action_downloading": "timeline|download_action_downloading",
+        "download_action_decrypting": "Decrypting",
+        "download_action_downloading": "Downloading",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
@@ -190,9 +190,9 @@
             "unsupported": "The encryption used by this room isn't supported."
         },
         "mab": {
-            "collapse_reply_chain": "timeline|mab|collapse_reply_chain",
-            "expand_reply_chain": "timeline|mab|expand_reply_chain",
-            "label": "timeline|mab|label"
+            "collapse_reply_chain": "Collapse quotes",
+            "expand_reply_chain": "Expand quotes",
+            "label": "Message Actions"
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s"

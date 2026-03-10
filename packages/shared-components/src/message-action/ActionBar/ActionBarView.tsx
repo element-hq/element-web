@@ -22,7 +22,7 @@ import {
     OverflowHorizontalIcon,
     ReactionAddIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { Menu, MenuItem, InlineSpinner } from "@vector-im/compound-web";
+import { Menu, MenuItem, InlineSpinner, Tooltip } from "@vector-im/compound-web";
 
 import { useI18n } from "../../utils/i18nContext";
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -121,86 +121,93 @@ export function ActionBarView({
 
     if (canEdit) {
         menuItems.push(
-            <MenuItem
-                as="div"
-                label={null}
-                title={_t("action|edit")}
-                onSelect={() => vm.onEditClick?.()}
-                key="edit"
-                // placement="left"
-                hideChevron={true}
-                className={styles.menu_item}
-            >
-                <EditIcon />
-            </MenuItem>,
+            <Tooltip description={_t("action|edit")} placement="top">
+                <MenuItem
+                    as="div"
+                    label={null}
+                    aria-label={_t("action|edit")}
+                    onSelect={() => vm.onEditClick?.()}
+                    key="edit"
+                    hideChevron={true}
+                    className={styles.menu_item}
+                >
+                    <EditIcon />
+                </MenuItem>
+            </Tooltip>,
         );
     }
 
     if (canPinOrUnpin) {
+        const description = isPinned ? _t("action|unpin") : _t("action|pin");
         menuItems.push(
-            <MenuItem
-                as="div"
-                label={null}
-                title={isPinned ? _t("action|unpin") : _t("action|pin")}
-                onSelect={() => vm.onPinClick?.()}
-                key="pin"
-                // placement="left"
-                hideChevron={true}
-                className={styles.menu_item}
-            >
-                {isPinned ? <UnpinIcon /> : <PinIcon />}
-            </MenuItem>,
+            <Tooltip description={description} placement="top">
+                <MenuItem
+                    as="div"
+                    label={null}
+                    aria-label={description}
+                    onSelect={() => vm.onPinClick?.()}
+                    key="pin"
+                    hideChevron={true}
+                    className={styles.menu_item}
+                >
+                    {isPinned ? <UnpinIcon /> : <PinIcon />}
+                </MenuItem>
+            </Tooltip>,
         );
     }
 
     const cancelSendingButton = (
-        <MenuItem
-            as="div"
-            label={null}
-            title={_t("action|delete")}
-            onSelect={() => vm.onCancelClick?.()}
-            key="cancel"
-            // placement="left"
-            hideChevron={true}
-            className={styles.menu_item}
-        >
-            <DeleteIcon />
-        </MenuItem>
+        <Tooltip description={_t("action|delete")} placement="top">
+            <MenuItem
+                as="div"
+                label={null}
+                aria-label={_t("action|delete")}
+                onSelect={() => vm.onCancelClick?.()}
+                key="cancel"
+                hideChevron={true}
+                className={styles.menu_item}
+            >
+                <DeleteIcon />
+            </MenuItem>
+        </Tooltip>
     );
 
+    const threadTooltipDescription = hasThreadRelation
+        ? _t("action|reply_in_thread")
+        : _t("threads|error_start_thread_existing_relation");
     const threadTooltipButton = (
-        <MenuItem
-            as="div"
-            label={null}
-            title={
-                hasThreadRelation ? _t("action|reply_in_thread") : _t("threads|error_start_thread_existing_relation")
-            }
-            onSelect={hasThreadRelation && vm.onReplyInThreadClick ? vm.onReplyInThreadClick : null}
-            key="reply_thread"
-            // placement="left"
-            hideChevron={true}
-            className={styles.menu_item}
-        >
-            <ThreadsIcon />
-        </MenuItem>
+        <Tooltip description={threadTooltipDescription} placement="top">
+            <MenuItem
+                as="div"
+                label={null}
+                aria-label={threadTooltipDescription}
+                onSelect={hasThreadRelation && vm.onReplyInThreadClick ? vm.onReplyInThreadClick : null}
+                key="reply_thread"
+                hideChevron={true}
+                className={styles.menu_item}
+            >
+                <ThreadsIcon />
+            </MenuItem>
+        </Tooltip>
     );
 
     if (allowCancel && isFailed) {
         menuItems.splice(
             0,
             0,
-            <MenuItem
-                as="div"
-                label={null}
-                title={_t("action|retry")}
-                onSelect={() => vm.onResendClick?.()}
-                key="resend"
-                // placement="left"
-                hideChevron={true}
-                className={styles.menu_item}
-            >
-                <RestartIcon />
-            </MenuItem>,
+            <Tooltip description={_t("action|retry")} placement="top">
+                <MenuItem
+                    as="div"
+                    label={null}
+                    aria-label={_t("action|retry")}
+                    onSelect={() => vm.onResendClick?.()}
+                    key="resend"
+                    hideChevron={true}
+                    className={styles.menu_item}
+                >
+                    <RestartIcon />
+                </MenuItem>
+            </Tooltip>,
         );
         menuItems.push(cancelSendingButton);
     } else {
@@ -212,18 +219,19 @@ export function ActionBarView({
                 menuItems.splice(
                     0,
                     0,
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        title={_t("action|reply")}
-                        onSelect={() => vm.onReplyClick?.()}
-                        key="reply"
-                        // placement="left"
-                        hideChevron={true}
-                        className={styles.menu_item}
-                    >
-                        <ReplyIcon />
-                    </MenuItem>,
+                    <Tooltip description={_t("action|reply")} placement="top">
+                        <MenuItem
+                            as="div"
+                            label={null}
+                            aria-label={_t("action|reply")}
+                            onSelect={() => vm.onReplyClick?.()}
+                            key="reply"
+                            hideChevron={true}
+                            className={styles.menu_item}
+                        >
+                            <ReplyIcon />
+                        </MenuItem>
+                    </Tooltip>,
                 );
             }
 
@@ -231,18 +239,19 @@ export function ActionBarView({
                 menuItems.splice(
                     0,
                     0,
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        title={_t("action|react")}
-                        onSelect={null}
-                        key="react"
-                        // placement="left"
-                        hideChevron={true}
-                        className={styles.menu_item}
-                    >
-                        <ReactionAddIcon />
-                    </MenuItem>,
+                    <Tooltip description={_t("action|react")} placement="top">
+                        <MenuItem
+                            as="div"
+                            label={null}
+                            aria-label={_t("action|react")}
+                            onSelect={null}
+                            key="react"
+                            hideChevron={true}
+                            className={styles.menu_item}
+                        >
+                            <ReactionAddIcon />
+                        </MenuItem>
+                    </Tooltip>,
                 );
             }
             if (showDownloadAction) {
@@ -254,37 +263,39 @@ export function ActionBarView({
                 menuItems.splice(
                     0,
                     0,
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        title={downloadTitle}
-                        onSelect={() => vm.onHideClick?.()}
-                        key="download"
-                        // placement="left"
-                        hideChevron={true}
-                        className={styles.menu_item}
-                    >
-                        <DownloadIcon />
-                        {isDownloadLoading ?? <InlineSpinner size={18} />}
-                    </MenuItem>,
+                    <Tooltip description={downloadTitle} placement="top">
+                        <MenuItem
+                            as="div"
+                            label={null}
+                            aria-label={downloadTitle}
+                            onSelect={() => vm.onHideClick?.()}
+                            key="download"
+                            hideChevron={true}
+                            className={styles.menu_item}
+                        >
+                            <DownloadIcon />
+                            {isDownloadLoading ?? <InlineSpinner size={18} />}
+                        </MenuItem>
+                    </Tooltip>,
                 );
             }
             if (showHideAction) {
                 menuItems.splice(
                     0,
                     0,
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        title={_t("action|hide")}
-                        onSelect={() => vm.onHideClick?.()}
-                        key="hide"
-                        // placement="left"
-                        hideChevron={true}
-                        className={styles.menu_item}
-                    >
-                        <VisibilityOffIcon />
-                    </MenuItem>,
+                    <Tooltip description={_t("action|hide")} placement="top">
+                        <MenuItem
+                            as="div"
+                            label={null}
+                            aria-label={_t("action|hide")}
+                            onSelect={() => vm.onHideClick?.()}
+                            key="hide"
+                            hideChevron={true}
+                            className={styles.menu_item}
+                        >
+                            <VisibilityOffIcon />
+                        </MenuItem>
+                    </Tooltip>,
                 );
             }
         } else if (showThreadForDeletedMessage) {
@@ -296,41 +307,43 @@ export function ActionBarView({
         }
 
         if (showExpandCollapseAction) {
+            const description = isQuoteExpanded
+                ? _t("timeline|mab|collapse_reply_chain")
+                : _t("timeline|mab|expand_reply_chain");
+
             menuItems.push(
-                <MenuItem
-                    as="div"
-                    //caption={_t(ALTERNATE_KEY_NAME[Key.SHIFT]) + " + " + _t("action|click")}
-                    //label={_t("keyboard|shift") + " + " + _t("action|click")}
-                    label={null}
-                    title={
-                        isQuoteExpanded
-                            ? _t("timeline|mab|collapse_reply_chain")
-                            : _t("timeline|mab|expand_reply_chain")
-                    }
-                    onSelect={() => vm.onToggleThreadExpanded?.()}
-                    key="expand"
-                    // placement="left"
-                    hideChevron={true}
-                    className={styles.menu_item}
-                >
-                    {isQuoteExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                </MenuItem>,
+                <Tooltip description={description} placement="top">
+                    <MenuItem
+                        as="div"
+                        //caption={_t(ALTERNATE_KEY_NAME[Key.SHIFT]) + " + " + _t("action|click")}
+                        //label={_t("keyboard|shift") + " + " + _t("action|click")}
+                        aria-label={description}
+                        label={null}
+                        onSelect={() => vm.onToggleThreadExpanded?.()}
+                        key="expand"
+                        hideChevron={true}
+                        className={styles.menu_item}
+                    >
+                        {isQuoteExpanded ? <CollapseIcon /> : <ExpandIcon />}
+                    </MenuItem>
+                </Tooltip>,
             );
         }
 
         menuItems.push(
-            <MenuItem
-                as="div"
-                label={null}
-                title={_t("common|options")}
-                onSelect={null}
-                key="options"
-                // placement="left"
-                hideChevron={true}
-                className={styles.menu_item}
-            >
-                <OverflowHorizontalIcon />
-            </MenuItem>,
+            <Tooltip description={_t("common|options")} placement="top">
+                <MenuItem
+                    as="div"
+                    label={null}
+                    aria-label={_t("common|options")}
+                    onSelect={null}
+                    key="options"
+                    hideChevron={true}
+                    className={styles.menu_item}
+                >
+                    <OverflowHorizontalIcon />
+                </MenuItem>
+            </Tooltip>,
         );
     }
 

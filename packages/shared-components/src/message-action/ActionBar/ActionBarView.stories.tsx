@@ -51,8 +51,8 @@ const ActionBarViewWrapper = ({ ...snapshotAndActions }: WrapperProps): JSX.Elem
             trigger={
                 <div
                     style={{
-                        marginTop: "50px",
-                        marginBottom: "50px",
+                        marginTop: "100px",
+                        marginBottom: "100px",
                         marginLeft: "30%",
                         marginRight: "30%",
                         display: "flex",
