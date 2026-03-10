@@ -1,3 +1,31 @@
+Changes in [1.12.12](https://github.com/element-hq/element-web/releases/tag/v1.12.12) (2026-03-10)
+==================================================================================================
+## ✨ Features
+
+* Add stable support for MSC4380 invite blocking ([#31966](https://github.com/element-hq/element-web/pull/31966)). Contributed by @richvdh.
+* Hide the names of banned users behind a spoiler tag ([#32424](https://github.com/element-hq/element-web/pull/32424)). Contributed by @andybalaam.
+* Room list: remove bold effect on selected room ([#32593](https://github.com/element-hq/element-web/pull/32593)). Contributed by @florianduros.
+* Use Compound buttons in auth screens ([#32562](https://github.com/element-hq/element-web/pull/32562)). Contributed by @t3chguy.
+* Track room list sorting algorithm changes ([#32556](https://github.com/element-hq/element-web/pull/32556)). Contributed by @MidhunSureshR.
+* Update `sso_redirect_options` to work for Native OIDC ([#32537](https://github.com/element-hq/element-web/pull/32537)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Room list: avoid excessive re-renders on room list store update or filter change ([#32663](https://github.com/element-hq/element-web/pull/32663)). Contributed by @florianduros.
+* Room list: listen to call event to check number of participants ([#32677](https://github.com/element-hq/element-web/pull/32677)). Contributed by @florianduros.
+* Fix invite-specific join errors not being shown ([#32621](https://github.com/element-hq/element-web/pull/32621)). Contributed by @Half-Shot.
+* Prevent logging lots of "Browser unsupported" lines ([#32647](https://github.com/element-hq/element-web/pull/32647)). Contributed by @Half-Shot.
+* Update critical gradient for room status bar ([#32575](https://github.com/element-hq/element-web/pull/32575)). Contributed by @Half-Shot.
+* Room list: avoid header overflowing when too long ([#32645](https://github.com/element-hq/element-web/pull/32645)). Contributed by @florianduros.
+* Room list: center focus outline of room list item ([#32637](https://github.com/element-hq/element-web/pull/32637)). Contributed by @florianduros.
+* Fix misaligned cross in complete security dialog ([#32614](https://github.com/element-hq/element-web/pull/32614)). Contributed by @dbkr.
+* Room list: fix keyboard navigation ([#32585](https://github.com/element-hq/element-web/pull/32585)). Contributed by @florianduros.
+* Don't show empty privacy section ([#32582](https://github.com/element-hq/element-web/pull/32582)). Contributed by @dbkr.
+* Disable room list image dragging ([#32590](https://github.com/element-hq/element-web/pull/32590)). Contributed by @florianduros.
+* Update UserMenu theme toggle to use IconButton ([#32591](https://github.com/element-hq/element-web/pull/32591)). Contributed by @t3chguy.
+* Room list: make room list item scales with large font size ([#32523](https://github.com/element-hq/element-web/pull/32523)). Contributed by @florianduros.
+
+
 Changes in [1.12.11](https://github.com/element-hq/element-web/releases/tag/v1.12.11) (2026-02-24)
 ==================================================================================================
 ## 🦖 Deprecations
