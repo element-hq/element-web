@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
+    type ActionBarMenuRenderer,
     BaseViewModel,
     type ActionBarViewActions,
     type ActionBarViewSnapshot,
@@ -51,10 +52,10 @@ export interface ActionBarViewModelProps {
     isSearch?: boolean;
     isCard?: boolean;
     isQuoteExpanded?: boolean;
+    reactionsMenu?: ActionBarMenuRenderer;
+    optionsMenu?: ActionBarMenuRenderer;
     getRelationsForEvent?: GetRelationsForEvent;
-    onReactClick?: ActionBarViewActions["onReactClick"];
-    onOptionsClick?: ActionBarViewActions["onOptionsClick"];
-    onToggleThreadExpanded?: ActionBarViewActions["onToggleThreadExpanded"];
+    onToggleThreadExpanded?: () => void;
 }
 
 export class ActionBarViewModel
@@ -271,6 +272,14 @@ export class ActionBarViewModel
         super.dispose();
     }
 
+    public get reactionsMenu(): ActionBarMenuRenderer | undefined {
+        return this.props.reactionsMenu;
+    }
+
+    public get optionsMenu(): ActionBarMenuRenderer | undefined {
+        return this.props.optionsMenu;
+    }
+
     public onReplyClick = (): void => {
         defaultDispatcher.dispatch({
             action: "reply_to_event",
@@ -303,14 +312,6 @@ export class ActionBarViewModel
         const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
-    };
-
-    public onReactClick = (): void => {
-        this.props.onReactClick?.();
-    };
-
-    public onOptionsClick = (): void => {
-        this.props.onOptionsClick?.();
     };
 
     public onDownloadClick = async (): Promise<void> => {

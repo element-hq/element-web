@@ -6,6 +6,7 @@
  */
 
 export type {
+    ActionBarMenuRenderer,
     ActionBarViewActions,
     ActionBarViewModel,
     ActionBarViewSnapshot,

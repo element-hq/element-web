@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useCallback, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     CollapseIcon,
@@ -68,9 +68,7 @@ export interface ActionBarViewActions {
     onDownloadClick?: () => void;
     onEditClick?: () => void;
     onHideClick?: () => void;
-    onOptionsClick?: () => void;
     onPinClick?: () => void;
-    onReactClick?: () => void;
     onReplyClick?: () => void;
     onReplyInThreadClick?: () => void;
     onResendClick?: () => void;
@@ -78,6 +76,11 @@ export interface ActionBarViewActions {
 }
 
 export type ActionBarViewModel = ViewModel<ActionBarViewSnapshot, ActionBarViewActions>;
+export type ActionBarMenuRenderer = (props: {
+    open: boolean;
+    onClose: () => void;
+    anchorRect: DOMRect | null;
+}) => React.ReactNode;
 
 interface ActionBarViewProps {
     /** The view model for the component. */
@@ -88,6 +91,10 @@ interface ActionBarViewProps {
     open: boolean;
     /** The element used as the view trigger. */
     trigger: React.ReactNode;
+    /** Optional reactions menu rendered outside the menu tree. */
+    reactionsMenu?: ActionBarMenuRenderer;
+    /** Optional options menu rendered outside the menu tree. */
+    optionsMenu?: ActionBarMenuRenderer;
     /** Called when the view requests an open state change. */
     onOpenChange?: (open: boolean) => void;
 }
@@ -97,9 +104,15 @@ export function ActionBarView({
     className,
     open,
     trigger,
+    reactionsMenu,
+    optionsMenu,
     onOpenChange,
 }: Readonly<ActionBarViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
+    const reactTriggerRef = useRef<HTMLDivElement>(null);
+    const optionsTriggerRef = useRef<HTMLDivElement>(null);
+    const [reactionsMenuOpen, setReactionsMenuOpen] = useState(false);
+    const [optionsMenuOpen, setOptionsMenuOpen] = useState(false);
     const {
         side,
         align,
@@ -121,6 +134,18 @@ export function ActionBarView({
         showExpandCollapseAction,
         isQuoteExpanded,
     } = useViewModel(vm);
+    const closeReactionsMenu = useCallback((): void => {
+        setReactionsMenuOpen(false);
+    }, []);
+    const openReactionsMenu = useCallback((): void => {
+        setReactionsMenuOpen(true);
+    }, []);
+    const closeOptionsMenu = useCallback((): void => {
+        setOptionsMenuOpen(false);
+    }, []);
+    const openOptionsMenu = useCallback((): void => {
+        setOptionsMenuOpen(true);
+    }, []);
 
     const menuItems: JSX.Element[] = [];
 
@@ -238,18 +263,24 @@ export function ActionBarView({
                 menuItems.splice(
                     0,
                     0,
-                    <Tooltip description={_t("action|react")} placement="top">
-                        <MenuItem
-                            as="div"
-                            label={null}
-                            aria-label={_t("action|react")}
-                            onSelect={() => vm.onReactClick?.()}
-                            key="react"
-                            hideChevron={true}
-                            className={styles.menu_item}
-                            Icon={ReactionAddIcon}
-                        />
-                    </Tooltip>,
+                    <div ref={reactTriggerRef} key="react">
+                        <Tooltip description={_t("action|react")} placement="top">
+                            <MenuItem
+                                as="div"
+                                label={null}
+                                aria-label={_t("action|react")}
+                                onSelect={openReactionsMenu}
+                                hideChevron={true}
+                                className={styles.menu_item}
+                                Icon={ReactionAddIcon}
+                            />
+                        </Tooltip>
+                        {reactionsMenu?.({
+                            open: reactionsMenuOpen,
+                            onClose: closeReactionsMenu,
+                            anchorRect: reactTriggerRef.current?.getBoundingClientRect() ?? null,
+                        })}
+                    </div>,
                 );
             }
             if (showDownloadAction) {
@@ -325,36 +356,44 @@ export function ActionBarView({
         }
 
         menuItems.push(
-            <Tooltip description={_t("common|options")} placement="top">
-                <MenuItem
-                    as="div"
-                    label={null}
-                    aria-label={_t("common|options")}
-                    onSelect={() => vm.onOptionsClick?.()}
-                    key="options"
-                    hideChevron={true}
-                    className={styles.menu_item}
-                    Icon={OverflowHorizontalIcon}
-                />
-            </Tooltip>,
+            <div ref={optionsTriggerRef} key="options">
+                <Tooltip description={_t("common|options")} placement="top">
+                    <MenuItem
+                        as="div"
+                        label={null}
+                        aria-label={_t("common|options")}
+                        onSelect={openOptionsMenu}
+                        hideChevron={true}
+                        className={styles.menu_item}
+                        Icon={OverflowHorizontalIcon}
+                    />
+                </Tooltip>
+                {optionsMenu?.({
+                    open: optionsMenuOpen,
+                    onClose: closeOptionsMenu,
+                    anchorRect: optionsTriggerRef.current?.getBoundingClientRect() ?? null,
+                })}
+            </div>,
         );
     }
 
     return (
-        <Menu
-            side={side}
-            align={align}
-            open={open}
-            onOpenChange={(newOpen) => {
-                onOpenChange?.(newOpen);
-            }}
-            trigger={trigger}
-            title={_t("timeline|mab|label")}
-            showTitle={false}
-            aria-live="off"
-            className={classNames(className, styles.menu)}
-        >
-            {menuItems}
-        </Menu>
+        <React.Fragment>
+            <Menu
+                side={side}
+                align={align}
+                open={open}
+                onOpenChange={(newOpen) => {
+                    onOpenChange?.(newOpen);
+                }}
+                trigger={trigger}
+                title={_t("timeline|mab|label")}
+                showTitle={false}
+                aria-live="off"
+                className={classNames(className, styles.menu)}
+            >
+                {menuItems}
+            </Menu>
+        </React.Fragment>
     );
 }
