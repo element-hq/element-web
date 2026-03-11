@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ComponentProps } from "react";
 import { screen, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixWidgetType } from "matrix-widget-api";
 import {
     type ApprovalOpts,
@@ -24,8 +24,10 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import WidgetUtils from "../../../../../src/utils/WidgetUtils";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import * as ScopedRoomContext from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
+import { mkStubRoom } from "../../../../test-utils/test-utils.ts";
+import { type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("<WidgetContextMenu />", () => {
     const widgetId = "w1";
@@ -46,20 +48,26 @@ describe("<WidgetContextMenu />", () => {
 
     let mockClient: MatrixClient;
 
+    let room: Room;
+
     let onFinished: () => void;
+
+    let roomContext: RoomContextType;
 
     beforeEach(() => {
         onFinished = jest.fn();
         jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
-        // WidgetContextMenu reads room data from useScopedRoomContext, so provide a minimal room shape.
-        jest.spyOn(ScopedRoomContext, "useScopedRoomContext").mockReturnValue({
-            room: { roomId },
-            roomId,
-        } as never);
 
         mockClient = {
             getUserId: jest.fn().mockReturnValue(userId),
         } as unknown as MatrixClient;
+
+        room = mkStubRoom(roomId, "Test Room", mockClient);
+
+        roomContext = {
+            room,
+            roomId,
+        } as unknown as RoomContextType;
     });
 
     afterEach(() => {
@@ -69,7 +77,9 @@ describe("<WidgetContextMenu />", () => {
     function getComponent(props: Partial<ComponentProps<typeof WidgetContextMenu>> = {}): JSX.Element {
         return (
             <MatrixClientContext.Provider value={mockClient}>
-                <WidgetContextMenu app={app} onFinished={onFinished} {...props} />
+                <ScopedRoomContextProvider {...roomContext}>
+                    <WidgetContextMenu app={app} onFinished={onFinished} {...props} />
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
     }
@@ -121,5 +131,44 @@ describe("<WidgetContextMenu />", () => {
 
         expect(screen.getByLabelText("Move right")).toBeInTheDocument();
         expect(screen.queryByLabelText("Move left")).not.toBeInTheDocument();
+    });
+
+    it("moves widget left when move left button is clicked", async () => {
+        // Place our widget second so move left is visible.
+        jest.spyOn(WidgetLayoutStore.instance, "getContainerWidgets").mockReturnValue([
+            { id: "someOtherWidget", type: "m.custom", creatorUserId: userId, url: "" },
+            { id: widgetId, type: "m.custom", creatorUserId: userId, url: "" },
+        ]);
+
+        // Mock moveWithinContainer to verify it's called with the correct arguments.
+        const moveWithinContainerSpy = jest
+            .spyOn(WidgetLayoutStore.instance, "moveWithinContainer")
+            .mockImplementation();
+
+        render(getComponent({ showUnpin: true }));
+
+        await userEvent.click(screen.getByLabelText("Move left"));
+
+        expect(moveWithinContainerSpy).toHaveBeenCalledWith(room, "top", app, -1);
+        expect(onFinished).toHaveBeenCalled();
+    });
+
+    it("moves widget right when move right button is clicked", async () => {
+        // Place our widget first so move right is visible.
+        jest.spyOn(WidgetLayoutStore.instance, "getContainerWidgets").mockReturnValue([
+            { id: widgetId, type: "m.custom", creatorUserId: userId, url: "" },
+            { id: "someOtherWidget", type: "m.custom", creatorUserId: userId, url: "" },
+        ]);
+
+        // Mock moveWithinContainer to verify it's called with the correct arguments.
+        const moveWithinContainerSpy = jest
+            .spyOn(WidgetLayoutStore.instance, "moveWithinContainer")
+            .mockImplementation();
+
+        render(getComponent({ showUnpin: true }));
+        await userEvent.click(screen.getByLabelText("Move right"));
+
+        expect(moveWithinContainerSpy).toHaveBeenCalledWith(room, "top", app, 1);
+        expect(onFinished).toHaveBeenCalled();
     });
 });
