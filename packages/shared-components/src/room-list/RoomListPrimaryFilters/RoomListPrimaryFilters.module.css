@@ -7,7 +7,6 @@
 
 .roomListPrimaryFilters {
     padding: 0 var(--cpd-space-4x) 0 var(--cpd-space-3x);
-    margin-bottom: var(--cpd-space-5x);
     overflow: hidden;
     transition: height 0.1s ease;
 }

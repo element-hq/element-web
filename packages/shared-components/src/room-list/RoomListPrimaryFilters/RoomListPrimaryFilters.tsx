@@ -70,7 +70,9 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
     const visibleFilterIds = useVisibleFilters(filterIds, activeFilterId, wrappingIndex);
 
     useEffect(() => {
-        const observer = new ResizeObserver(() => setExpandedHeight(`${ref.current!.scrollHeight}px`));
+        const observer = new ResizeObserver(() =>
+            setExpandedHeight(`calc(${ref.current!.scrollHeight}px + var(--cpd-space-5x))`),
+        );
         observer.observe(ref.current!);
         return () => observer.disconnect();
     }, [ref]);
@@ -129,6 +131,7 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
                         <ChatFilter
                             key={`${filterId}-${index}`}
                             aria-hidden={isAway ? "true" : undefined}
+                            inert={isAway ? true : undefined}
                             data-away={isAway ? "true" : undefined}
                             role="option"
                             selected={filterId === activeFilterId}
@@ -138,7 +141,7 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
                                 index === 0 || index === visibleFilterIds.length - 1
                                     ? (node) => {
                                           if (node && index === 0) {
-                                              setCollapsedHeight(`${Math.ceil(node.getBoundingClientRect().height)}px`);
+                                              setCollapsedHeight(`${Math.max(Math.ceil(node.getBoundingClientRect().height), 50)}px`);
                                           }
                                       }
                                     : undefined
