@@ -10,7 +10,10 @@ import { useEffect, useRef, useState } from "react";
 
 type Handler = () => void;
 
-// Hook to simplify timeouts in functional components
+/**
+ * Hook to simplify timeouts in functional components
+ * @knipignore
+ */
 export const useTimeout = (handler: Handler, timeoutMs: number): void => {
     // Create a ref that stores handler
     const savedHandler = useRef<Handler>(undefined);
