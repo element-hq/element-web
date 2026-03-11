@@ -78,9 +78,7 @@ export function SenderProfileView({ vm }: Readonly<SenderProfileViewProps>): JSX
             >
                 {displayName}
             </span>
-            {displayIdentifier && (
-                <span data-part="mxid">{displayIdentifier}</span>
-            )}
+            {displayIdentifier && <span data-part="mxid">{displayIdentifier}</span>}
         </button>
     );
 }

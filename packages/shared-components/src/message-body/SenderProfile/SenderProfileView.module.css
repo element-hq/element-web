@@ -6,17 +6,24 @@
  */
 
 .senderProfile {
+    display: inline-flex;
+    border: 0 !important;
+    padding: 0 !important;
+    font: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    background-color: inherit !important;
+    border-radius: unset !important;
+    min-block-size: unset !important;
+    color: var(--cpd-color-text-primary) !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    min-inline-size: 0;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    background: none !important;
-    padding: 0 !important;
-    line-height: inherit;
-    letter-spacing: inherit;
-    font: inherit;
-    border: none !important;
     margin: 0 !important;
 
     [data-part="display-name"][data-emphasized="true"] {
