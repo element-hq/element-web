@@ -48,6 +48,11 @@ describe("topicToHtml", () => {
 });
 
 describe("bodyToHtml", () => {
+    afterEach(() => {
+        jest.restoreAllMocks();
+        SettingsStore.reset();
+    });
+
     it("should apply highlights to HTML messages", () => {
         const html = bodyToHtml(
             {
@@ -122,6 +127,84 @@ describe("bodyToHtml", () => {
         expect(html).toMatchInlineSnapshot(
             `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
         );
+    });
+
+    it("renders inline custom emoticons from animated thumbnails when GIF autoplay is enabled", () => {
+        getMockClientWithEventEmitter({ baseUrl: "https://matrix.example" });
+        const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+        const getValue = jest.spyOn(SettingsStore, "getValue");
+        getValue.mockImplementation((settingName, ...args) => {
+            if (settingName === "autoplayGifs") return true;
+            return originalGetValue(settingName, ...args);
+        });
+
+        const html = bodyToHtml(
+            {
+                body: ":party_parrot:",
+                msgtype: "m.text",
+                formatted_body:
+                    '<img data-mx-emoticon src="mxc://example.org/party-parrot" alt="party_parrot" title="party_parrot" height="32" />',
+                format: "org.matrix.custom.html",
+            },
+            [],
+        );
+
+        expect(html).toContain(
+            'src="https://matrix.example/_matrix/media/v3/thumbnail/example.org/party-parrot?width=800&amp;height=32&amp;method=scale&amp;animated=true&amp;allow_redirect=true"',
+        );
+        expect(html).toContain("data-mx-emoticon");
+    });
+
+    it("renders inline custom emoticons from static thumbnails when GIF autoplay is disabled", () => {
+        getMockClientWithEventEmitter({ baseUrl: "https://matrix.example" });
+        const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
+        const getValue = jest.spyOn(SettingsStore, "getValue");
+        getValue.mockImplementation((settingName, ...args) => {
+            if (settingName === "autoplayGifs") return false;
+            return originalGetValue(settingName, ...args);
+        });
+
+        const html = bodyToHtml(
+            {
+                body: ":party_parrot:",
+                msgtype: "m.text",
+                formatted_body:
+                    '<img data-mx-emoticon src="mxc://example.org/party-parrot" alt="party_parrot" title="party_parrot" height="32" />',
+                format: "org.matrix.custom.html",
+            },
+            [],
+        );
+
+        expect(html).toContain(
+            'src="https://matrix.example/_matrix/media/v3/thumbnail/example.org/party-parrot?width=800&amp;height=32&amp;method=scale&amp;animated=false&amp;allow_redirect=true"',
+        );
+        expect(html).toContain("data-mx-emoticon");
+    });
+
+    it("continues to thumbnail generic inline MXC images", () => {
+        getMockClientWithEventEmitter({
+            baseUrl: "https://matrix.example",
+            mxcUrlToHttp: jest.fn().mockImplementation((mxc, width, height) => {
+                if (width === undefined && height === undefined) {
+                    return `https://cdn.example/download/${encodeURIComponent(mxc)}`;
+                }
+
+                return `https://cdn.example/thumbnail/${encodeURIComponent(mxc)}/${width}x${height}`;
+            }),
+        });
+
+        const html = bodyToHtml(
+            {
+                body: "inline image",
+                msgtype: "m.text",
+                formatted_body: '<img src="mxc://example.org/static-image" alt="static-image" height="32" />',
+                format: "org.matrix.custom.html",
+            },
+            [],
+        );
+
+        expect(html).toContain('src="https://cdn.example/thumbnail/mxc%3A%2F%2Fexample.org%2Fstatic-image/800x32"');
+        expect(html).not.toContain("data-mx-emoticon");
     });
 
     it("does not mistake characters in text presentation mode for emoji", () => {
