@@ -24,6 +24,8 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import WidgetUtils from "../../../../../src/utils/WidgetUtils";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import * as ScopedRoomContext from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 
 describe("<WidgetContextMenu />", () => {
     const widgetId = "w1";
@@ -49,6 +51,11 @@ describe("<WidgetContextMenu />", () => {
     beforeEach(() => {
         onFinished = jest.fn();
         jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
+        // WidgetContextMenu reads room data from useScopedRoomContext, so provide a minimal room shape.
+        jest.spyOn(ScopedRoomContext, "useScopedRoomContext").mockReturnValue({
+            room: { roomId },
+            roomId,
+        } as never);
 
         mockClient = {
             getUserId: jest.fn().mockReturnValue(userId),
@@ -88,5 +95,31 @@ describe("<WidgetContextMenu />", () => {
         await userEvent.click(screen.getByLabelText("Revoke permissions"));
         expect(onFinished).toHaveBeenCalled();
         expect(SettingsStore.getValue("allowedWidgets", roomId)[eventId]).toBe(false);
+    });
+
+    it("shows the move left button when the widget can be moved left", () => {
+        // Place our widget second so it can move left but not right.
+        jest.spyOn(WidgetLayoutStore.instance, "getContainerWidgets").mockReturnValue([
+            { id: "someOtherWidget", type: "m.custom", creatorUserId: userId, url: "" },
+            { id: widgetId, type: "m.custom", creatorUserId: userId, url: "" },
+        ]);
+
+        render(getComponent({ showUnpin: true }));
+
+        expect(screen.getByLabelText("Move left")).toBeInTheDocument();
+        expect(screen.queryByLabelText("Move right")).not.toBeInTheDocument();
+    });
+
+    it("shows the move right button when the widget can be moved right", () => {
+        // Place our widget first so it can move right but not left.
+        jest.spyOn(WidgetLayoutStore.instance, "getContainerWidgets").mockReturnValue([
+            { id: widgetId, type: "m.custom", creatorUserId: userId, url: "" },
+            { id: "someOtherWidget", type: "m.custom", creatorUserId: userId, url: "" },
+        ]);
+
+        render(getComponent({ showUnpin: true }));
+
+        expect(screen.getByLabelText("Move right")).toBeInTheDocument();
+        expect(screen.queryByLabelText("Move left")).not.toBeInTheDocument();
     });
 });
