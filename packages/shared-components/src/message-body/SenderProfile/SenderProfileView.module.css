@@ -17,7 +17,6 @@
     letter-spacing: inherit;
     font: inherit;
     border: none !important;
-    text-align: start;
     margin: 0 !important;
 
     [data-part="display-name"][data-emphasized="true"] {
