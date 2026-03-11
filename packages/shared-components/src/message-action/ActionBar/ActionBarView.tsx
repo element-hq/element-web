@@ -47,14 +47,13 @@ export interface ActionBarViewSnapshot {
     canPinOrUnpin: boolean;
     canReact: boolean;
     canSendMessages: boolean;
+    canStartThread: boolean;
 
     showDownloadAction: boolean;
     showExpandCollapseAction: boolean;
     showHideAction: boolean;
     showReplyInThreadAction: boolean;
     showThreadForDeletedMessage: boolean;
-
-    hasThreadRelation: boolean;
 
     isContentActionable: boolean;
     isDownloadEncrypted: boolean;
@@ -112,7 +111,7 @@ export function ActionBarView({
         isContentActionable,
         canSendMessages,
         canReact,
-        hasThreadRelation,
+        canStartThread,
         isDownloadEncrypted,
         isDownloadLoading,
         showReplyInThreadAction,
@@ -175,7 +174,7 @@ export function ActionBarView({
         </Tooltip>
     );
 
-    const threadTooltipDescription = hasThreadRelation
+    const threadTooltipDescription = canStartThread
         ? _t("action|reply_in_thread")
         : _t("threads|error_start_thread_existing_relation");
     const threadTooltipButton = (
@@ -184,7 +183,7 @@ export function ActionBarView({
                 as="div"
                 label={null}
                 aria-label={threadTooltipDescription}
-                onSelect={hasThreadRelation && vm.onReplyInThreadClick ? vm.onReplyInThreadClick : null}
+                onSelect={canStartThread && vm.onReplyInThreadClick ? vm.onReplyInThreadClick : null}
                 key="reply_thread"
                 hideChevron={true}
                 className={styles.menu_item}
