@@ -35,7 +35,9 @@ const getEventTilesWithBodies = (page: Page): Locator => {
 };
 
 const expectDisplayName = async (e: Locator, displayName: string): Promise<void> => {
-    await expect(e.locator(".mx_DisambiguatedProfile_displayName")).toHaveText(displayName);
+    await expect(e.locator(".mx_DisambiguatedProfile [data-part='display-name'], .mx_DisambiguatedProfile_displayName")).toHaveText(
+        displayName,
+    );
 };
 
 const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise<void> => {

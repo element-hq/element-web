@@ -9,6 +9,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
     background: none !important;
     padding: 0 !important;
     line-height: inherit;
@@ -18,13 +20,13 @@
     text-align: start;
     margin: 0 !important;
 
-    .senderProfile_displayName {
+    [data-part="display-name"][data-emphasized="true"] {
         font: var(--cpd-font-body-md-semibold);
         letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
         line-height: 1;
     }
 
-    .senderProfile_mxid {
+    [data-part="mxid"] {
         color: var(--cpd-color-text-secondary);
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;

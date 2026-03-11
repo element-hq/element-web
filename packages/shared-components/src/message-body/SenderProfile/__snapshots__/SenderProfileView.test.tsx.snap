@@ -4,39 +4,39 @@ exports[`SenderProfileView > does not render when hidden 1`] = `<div />`;
 
 exports[`SenderProfileView > renders default sender profile 1`] = `
 <div>
-  <div
+  <button
     class="mx_DisambiguatedProfile senderProfile"
-    role="button"
-    tabindex="0"
+    type="button"
   >
     <span
-      class="senderProfile_displayName"
+      data-emphasized="true"
+      data-part="display-name"
       dir="auto"
     >
       Alice
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`SenderProfileView > renders disambiguated identifier 1`] = `
 <div>
-  <div
+  <button
     class="mx_DisambiguatedProfile senderProfile"
-    role="button"
-    tabindex="0"
+    type="button"
   >
     <span
-      class="senderProfile_displayName"
+      data-emphasized="true"
+      data-part="display-name"
       dir="auto"
     >
       Alice
     </span>
     <span
-      class="mx_DisambiguatedProfile senderProfile_mxid"
+      data-part="mxid"
     >
       @alice:example.org
     </span>
-  </div>
+  </button>
 </div>
 `;

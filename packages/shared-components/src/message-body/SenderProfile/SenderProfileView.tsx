@@ -71,15 +71,15 @@ export function SenderProfileView({ vm }: Readonly<SenderProfileViewProps>): JSX
             onClick={vm.onClick}
         >
             <span
-                className={classNames(colorClass, {
-                    [styles.senderProfile_displayName]: emphasizeDisplayName,
-                })}
+                className={colorClass}
+                data-part="display-name"
+                data-emphasized={emphasizeDisplayName ? "true" : undefined}
                 dir="auto"
             >
                 {displayName}
             </span>
             {displayIdentifier && (
-                <span className={classNames(className, styles.senderProfile_mxid)}>{displayIdentifier}</span>
+                <span data-part="mxid">{displayIdentifier}</span>
             )}
         </button>
     );
