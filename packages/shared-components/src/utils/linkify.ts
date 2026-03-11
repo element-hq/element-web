@@ -6,6 +6,8 @@
  */
 
 import * as linkifyjs from "linkifyjs";
+import { default as linkifyString } from "linkify-string"; // Only exported by this file, but imported for jsdoc.
+import { default as linkifyHtml } from "linkify-html"; // Only exported by this file, but imported for jsdoc.
 
 /**
  * This file describes common linkify configuration settings such as supported protocols.
@@ -46,18 +48,6 @@ export const LinkifyOptionalSlashProtocols = [
  */
 export const PERMITTED_URL_SCHEMES = [...LinkifySupportedProtocols, ...LinkifyOptionalSlashProtocols];
 
-// Linkify supports some common protocols but not others, register all permitted url schemes if unsupported
-// https://github.com/nfrasser/linkifyjs/blob/main/packages/linkifyjs/src/scanner.mjs#L171-L177
-// This also handles registering the `matrix:` protocol scheme
-PERMITTED_URL_SCHEMES.forEach((scheme) => {
-    if (!LinkifySupportedProtocols.includes(scheme)) {
-        linkifyjs.registerCustomProtocol(scheme, LinkifyOptionalSlashProtocols.includes(scheme));
-    }
-});
-
-// 'mxc' is specialcased. They can be linked to
-linkifyjs.registerCustomProtocol("mxc", false);
-
 export enum LinkifyMatrixOpaqueIdType {
     URL = "url",
     UserId = "userid",
@@ -65,9 +55,11 @@ export enum LinkifyMatrixOpaqueIdType {
 }
 
 /**
- * Finds instances of room aliases and user IDs.
+ * Plugin function for linkifyjs to find Matrix Room or User IDs.
+ *
+ * Should be used exclusively by a `registerPlugin` function call.
  */
-function matrixOpaqueIdLinkifyParser({
+function parseOpaqueIdsToMatrixIds({
     scanner,
     parser,
     token,
@@ -107,47 +99,26 @@ function matrixOpaqueIdLinkifyParser({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ) as any as linkifyjs.State<linkifyjs.MultiToken>; // linkify doesn't appear to type this correctly
 
-    const INITIAL_STATE = parser.start.tt(token);
+    const initialState = parser.start.tt(token);
 
     // Localpart
-    const LOCALPART_STATE = new linkifyjs.State<linkifyjs.MultiToken>();
-    INITIAL_STATE.ta(domain, LOCALPART_STATE);
-    INITIAL_STATE.ta(additionalLocalpartTokens, LOCALPART_STATE);
-    LOCALPART_STATE.ta(domain, LOCALPART_STATE);
-    LOCALPART_STATE.ta(additionalLocalpartTokens, LOCALPART_STATE);
+    const localpartState = new linkifyjs.State<linkifyjs.MultiToken>();
+    initialState.ta(domain, localpartState);
+    initialState.ta(additionalLocalpartTokens, localpartState);
+    localpartState.ta(domain, localpartState);
+    localpartState.ta(additionalLocalpartTokens, localpartState);
 
     // Domainpart
-    const DOMAINPART_STATE_DOT = LOCALPART_STATE.tt(COLON);
-    DOMAINPART_STATE_DOT.ta(domain, matrixTokenState);
-    DOMAINPART_STATE_DOT.ta(additionalDomainpartTokens, matrixTokenState);
+    const domainStateDot = localpartState.tt(COLON);
+    domainStateDot.ta(domain, matrixTokenState);
+    domainStateDot.ta(additionalDomainpartTokens, matrixTokenState);
     matrixTokenState.ta(domain, matrixTokenState);
     matrixTokenState.ta(additionalDomainpartTokens, matrixTokenState);
-    matrixTokenState.tt(DOT, DOMAINPART_STATE_DOT);
+    matrixTokenState.tt(DOT, domainStateDot);
 
     // Port suffixes
     matrixTokenState.tt(COLON).tt(NUM, matrixTokenWithPortState);
 }
-
-// Register plugins
-linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.RoomAlias, ({ scanner, parser }) => {
-    const token = scanner.tokens.POUND as "#";
-    matrixOpaqueIdLinkifyParser({
-        scanner,
-        parser,
-        token,
-        name: LinkifyMatrixOpaqueIdType.RoomAlias,
-    });
-});
-
-linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.UserId, ({ scanner, parser }) => {
-    const token = scanner.tokens.AT as "@";
-    matrixOpaqueIdLinkifyParser({
-        scanner,
-        parser,
-        token,
-        name: LinkifyMatrixOpaqueIdType.UserId,
-    });
-});
 
 export type LinkEventListener = linkifyjs.EventListeners;
 
@@ -182,9 +153,9 @@ export interface LinkedTextOptions {
  * Generates a linkifyjs options object that is reasonably paired down
  * to just the essentials required for an Element client.
  *
- * @return A `linkifyjs` `Opts` object. Used by `linkifyString` and `linkifyHtml`
- * @see `linkifyHtml`
- * @see `linkifyString`
+ * @return A `linkifyjs` `Opts` object. Used by `linkifyString` and `linkifyHtml
+ * @see {@link linkifyHtml}
+ * @see {@link linkifyString}
  */
 export function generateLinkedTextOptions({
     urlListener,
@@ -283,6 +254,7 @@ export function findLinksInString(str: string): ReturnType<typeof linkifyjs.find
  * @param str A string value to be tested if the entire value is linkable.
  * @returns Whether or not the `str` value is a link.
  * @see `PERMITTED_URL_SCHEMES` for permitted links.
+ * @see {@link linkifyjs.test}
  */
 export function isLinkable(str: string): boolean {
     return linkifyjs.test(str);
@@ -293,5 +265,48 @@ export function isLinkable(str: string): boolean {
  */
 export const LINKIFIED_DATA_ATTRIBUTE = "linkified";
 
-export { default as linkifyString } from "linkify-string";
-export { default as linkifyHtml } from "linkify-html";
+export { linkifyString, linkifyHtml };
+
+// Linkifyjs MUST be configured globally as it has no ability to be instanced seperately
+// so we ensure it's always configured the same way.
+let linkifyJSConfigured = false;
+function configureLinkifyJS(): void {
+    if (linkifyJSConfigured) {
+        return;
+    }
+    // Register plugins
+    linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.RoomAlias, ({ scanner, parser }) => {
+        const token = scanner.tokens.POUND as "#";
+        parseOpaqueIdsToMatrixIds({
+            scanner,
+            parser,
+            token,
+            name: LinkifyMatrixOpaqueIdType.RoomAlias,
+        });
+    });
+
+    linkifyjs.registerPlugin(LinkifyMatrixOpaqueIdType.UserId, ({ scanner, parser }) => {
+        const token = scanner.tokens.AT as "@";
+        parseOpaqueIdsToMatrixIds({
+            scanner,
+            parser,
+            token,
+            name: LinkifyMatrixOpaqueIdType.UserId,
+        });
+    });
+
+    // 'mxc' is specialcased. They can be linked to
+    linkifyjs.registerCustomProtocol("mxc", false);
+
+    // Linkify supports some common protocols but not others, register all permitted url schemes if unsupported
+    // https://github.com/nfrasser/linkifyjs/blob/main/packages/linkifyjs/src/scanner.mjs#L171-L177
+    // This also handles registering the `matrix:` protocol scheme
+    PERMITTED_URL_SCHEMES.forEach((scheme) => {
+        if (!LinkifySupportedProtocols.includes(scheme)) {
+            linkifyjs.registerCustomProtocol(scheme, LinkifyOptionalSlashProtocols.includes(scheme));
+        }
+    });
+    linkifyJSConfigured = true;
+}
+
+configureLinkifyJS();
