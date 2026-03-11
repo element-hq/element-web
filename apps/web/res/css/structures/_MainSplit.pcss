@@ -11,6 +11,42 @@ Please see LICENSE files in the repository root for full details.
     min-width: 0;
     min-height: 0;
     height: 100%;
+    --mx-target-content-width: var(--mx-min-timeline-width);
+
+    > .mx_MainSplit_timeline > * {
+        min-width: var(--mx-target-content-width);
+    }
+
+    > .mx_MainSplit_timeline:has(+ div > .mx_RightPanel) {
+        --mx-target-content-width: clamp(
+            100%,
+            calc(100% + (var(--mx-preferred-timeline-width) - 100%) * 9999),
+            var(--mx-main-split-width)
+        );
+        --mx-overlap-width: max(
+            0px,
+            calc(
+                max(
+                    var(--mx-min-timeline-width),
+                    min(var(--mx-preferred-timeline-width), var(--mx-main-split-width))
+                ) - 100%
+            )
+        );
+
+        position: relative;
+        overflow-x: clip;
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            /* A bit of a hack, but very reliable. Expand the painted background to full width once overlap is non-zero. */
+            background-image: linear-gradient($overlay-background, $overlay-background);
+            background-repeat: no-repeat;
+            background-size: calc(var(--mx-overlap-width) * 100000) 100%;
+            pointer-events: none;
+        }
+    }
 }
 
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {

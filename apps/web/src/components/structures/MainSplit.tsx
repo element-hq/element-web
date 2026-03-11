@@ -7,13 +7,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { createRef, type JSX, type ReactNode } from "react";
 import { type NumberSize, Resizable } from "re-resizable";
 import { type Direction } from "re-resizable/lib/resizer";
 import { type WebPanelResize } from "@matrix-org/analytics-events/types/typescript/WebPanelResize";
 
 import { PosthogAnalytics } from "../../PosthogAnalytics.ts";
 import { SDKContext } from "../../contexts/SDKContext.ts";
+
+const MIN_TIMELINE_WIDTH = 360;
+const PREFERRED_TIMELINE_WIDTH = 500;
 
 interface IProps {
     collapsedRhs?: boolean;
@@ -42,8 +45,24 @@ export default class MainSplit extends React.Component<IProps> {
         defaultSize: 320,
     };
 
+    private readonly mainSplitRef = createRef<HTMLDivElement>();
+    private readonly resizeObserver: ResizeObserver;
+
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
+
+        this.resizeObserver = new ResizeObserver(this.onMainSplitResize);
+    }
+
+    public componentDidMount(): void {
+        if (!this.mainSplitRef.current) return;
+
+        this.resizeObserver.observe(this.mainSplitRef.current);
+        this.setMainSplitWidth(this.mainSplitRef.current.getBoundingClientRect().width);
+    }
+
+    public componentWillUnmount(): void {
+        this.resizeObserver.disconnect();
     }
 
     private onResizeStart = (): void => {
@@ -93,6 +112,18 @@ export default class MainSplit extends React.Component<IProps> {
         };
     }
 
+    private onMainSplitResize = (entries: ResizeObserverEntry[]): void => {
+        if (!entries[0]) return;
+
+        this.setMainSplitWidth(entries[0].contentRect.width);
+    };
+
+    private setMainSplitWidth(width: number): void {
+        this.mainSplitRef.current?.style.setProperty("--mx-main-split-width", `${Math.round(width)}px`);
+        this.mainSplitRef.current?.style.setProperty("--mx-min-timeline-width", `${MIN_TIMELINE_WIDTH}px`);
+        this.mainSplitRef.current?.style.setProperty("--mx-preferred-timeline-width", `${PREFERRED_TIMELINE_WIDTH}px`);
+    }
+
     public render(): React.ReactNode {
         const bodyView = React.Children.only(this.props.children);
         const panelView = this.props.panel;
@@ -129,7 +160,7 @@ export default class MainSplit extends React.Component<IProps> {
         }
 
         return (
-            <div className="mx_MainSplit">
+            <div className="mx_MainSplit" ref={this.mainSplitRef}>
                 {bodyView}
                 {children}
             </div>
