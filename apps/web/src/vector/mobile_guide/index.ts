@@ -55,6 +55,11 @@ async function initPage(): Promise<void> {
 
     const appVariant = (config?.["mobile_guide_app_variant"] as MobileAppVariant) ?? MobileAppVariant.X;
     const metadata = mobileApps[appVariant] ?? mobileApps[MobileAppVariant.X]; // Additional fallback in case mobile_guide_app_variant has an unexpected value.
+    metadata.name = config?.["brand"] ?? metadata.name;
+    metadata.appleAppId = config?.["mobile_builds"]?.["ios_appid"] ?? metadata.appleAppId;
+    metadata.appStoreUrl = config?.["mobile_builds"]?.["ios"] ?? metadata.appStoreUrl;
+    metadata.playStoreUrl = config?.["mobile_builds"]?.["android"] ?? metadata.playStoreUrl;
+    metadata.fDroidUrl = config?.["mobile_builds"]?.["fdroid"] ?? metadata.fDroidUrl;
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);
     if (defaultHsUrl && (wkConfig || serverName)) {

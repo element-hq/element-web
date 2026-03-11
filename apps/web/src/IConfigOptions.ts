@@ -82,6 +82,7 @@ export interface IConfigOptions {
     };
     mobile_builds: {
         ios: string | null; // download url
+        ios_appid: string | null; // App Store App id
         android: string | null; // download url
         fdroid: string | null; // download url
     };

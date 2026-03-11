@@ -181,12 +181,13 @@ Starting with `desktop_builds`, the following sub-properties are available:
 
 When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
 
-For `mobile_builds`, the following subproperties are available:
+For `mobile_builds`, these override any given defaults from `mobile_guide_app_variant`. The following subproperties are available:
 
 1. `ios`: The URL for where to download the iOS app, such as an App Store link. When explicitly `null`, the app will assume the
    iOS app cannot be downloaded. When not provided, the default Element app will be assumed available.
-2. `android`: The same as `ios`, except for Android instead.
-3. `fdroid`: The same as `android`, except for FDroid instead.
+2. `ios_appid`: The id of the iOS app on the App Store. Usually the last part of the App Store link, format is usually `id` and then a number.
+3. `android`: The same as `ios`, except for Android instead.
+4. `fdroid`: The same as `android`, except for FDroid instead.
 
 Together, these two options might look like the following in your config:
 
@@ -198,7 +199,8 @@ Together, these two options might look like the following in your config:
         "url": "https://example.org/not_element/download"
     },
     "mobile_builds": {
-        "ios": null,
+        "ios": "https://apps.apple.com/app/not_element/id1234567890",
+        "ios_appid": "id1234567890",
         "android": "https://example.org/not_element/android",
         "fdroid": "https://example.org/not_element/fdroid"
     }
