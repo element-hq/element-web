@@ -17,7 +17,7 @@ const meta = {
     component: LinkedText,
     decorators: [
         (Story) => (
-            <LinkedTextContext.Provider value={args}>
+            <LinkedTextContext.Provider value={{}}>
                 <Story />
             </LinkedTextContext.Provider>
         ),
