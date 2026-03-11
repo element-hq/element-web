@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./LinkPreview.stories.tsx";
 
-const { Default, WithCompactLayout, WithTooltip, Title, TitleAndDescription } = composeStories(stories);
+const { Default, WithTooltip, Title, TitleAndDescription } = composeStories(stories);
 
 describe("LinkPreview", () => {
     it("renders a preview", () => {
@@ -35,9 +35,5 @@ describe("LinkPreview", () => {
         expect(screen.getByText("A simple title")).toHaveFocus();
         // Tooltip has the URL
         expect(await screen.findByText("https://matrix.org/")).toBeVisible();
-    });
-    it("renders a preview with a compact layout", () => {
-        const { container } = render(<WithCompactLayout />);
-        expect(container).toMatchSnapshot();
     });
 });

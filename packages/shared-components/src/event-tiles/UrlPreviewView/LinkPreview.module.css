@@ -23,11 +23,6 @@
     border-radius: 2px;
     color: var(--cpd-color-gray-900);
 
-    &.compactLayout & {
-        margin-top: var(--cpd-space-3x);
-        margin-bottom: var(--cpd-space-3x);
-    }
-
     .wrapImageCaption {
         display: inline-flex;
         flex-direction: row;

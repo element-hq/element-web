@@ -67,9 +67,7 @@ exports[`UrlPreviewViewModel should deduplicate multiple versions of the same UR
   "overPreviewLimit": false,
   "previews": [
     {
-      "description": <Linkify>
-        This is a description
-      </Linkify>,
+      "description": "This is a description",
       "image": undefined,
       "link": "https://example.org",
       "showTooltipOnLink": undefined,
@@ -98,9 +96,7 @@ exports[`UrlPreviewViewModel should handle being hidden and shown by the user 2`
   "overPreviewLimit": false,
   "previews": [
     {
-      "description": <Linkify>
-        This is a description
-      </Linkify>,
+      "description": "This is a description",
       "image": undefined,
       "link": "https://example.org",
       "showTooltipOnLink": undefined,
@@ -183,9 +179,7 @@ exports[`UrlPreviewViewModel should preview a single valid URL 1`] = `
   "overPreviewLimit": false,
   "previews": [
     {
-      "description": <Linkify>
-        This is a description
-      </Linkify>,
+      "description": "This is a description",
       "image": undefined,
       "link": "https://example.org",
       "showTooltipOnLink": undefined,

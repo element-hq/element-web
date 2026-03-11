@@ -38,6 +38,7 @@ import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreview
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 import ImageView from "../elements/ImageView.tsx";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 
 type Props = IBodyProps & { urlPreviewViewModel: UrlPreviewViewModel };
 
@@ -370,6 +371,7 @@ class InnerTextualBody extends React.Component<Props> {
 
 export default function TextualBody(props: IBodyProps): React.ReactElement {
     const [mediaVisible] = useMediaVisible(props.mxEvent);
+    const client = useMatrixClientContext();
 
     const onUrlPreviewImageClicked = useCallback((preview: UrlPreviewViewSnapshotPreview): void => {
         if (!preview.image?.imageFull) {
@@ -390,7 +392,7 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new UrlPreviewViewModel({
-                client: MatrixClientPeg.safeGet(),
+                client,
                 mxEvent: props.mxEvent,
                 mediaVisible: mediaVisible,
                 onImageClicked: onUrlPreviewImageClicked,

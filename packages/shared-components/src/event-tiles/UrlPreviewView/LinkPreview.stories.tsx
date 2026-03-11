@@ -11,6 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import imageFile from "../../../static/element.png";
 import { LinkPreview } from "./LinkPreview";
+import { LinkedTextContext } from "../../utils/LinkedText";
 
 export default {
     title: "Event/UrlPreviewView",
@@ -21,7 +22,11 @@ export default {
     },
 } satisfies Meta<typeof LinkPreview>;
 
-const Template: StoryFn<typeof LinkPreview> = (args) => <LinkPreview {...args} />;
+const Template: StoryFn<typeof LinkPreview> = (args) => (
+    <LinkedTextContext.Provider value={{}}>
+        <LinkPreview {...args} />
+    </LinkedTextContext.Provider>
+);
 
 export const Default = Template.bind({});
 Default.args = {
@@ -44,7 +49,7 @@ Title.args = {
 export const TitleAndDescription = Template.bind({});
 TitleAndDescription.args = {
     title: "A simple title",
-    description: "A simple description",
+    description: "A simple description with a link to https://matrix.org",
     link: "https://matrix.org",
 };
 
@@ -54,19 +59,6 @@ WithTooltip.args = {
     description: "A simple description",
     showTooltipOnLink: true,
     link: "https://matrix.org",
-};
-
-export const WithCompactLayout = Template.bind({});
-WithCompactLayout.args = {
-    compactLayout: true,
-    title: "A simple title",
-    description: "A simple description",
-    link: "https://matrix.org",
-    siteName: "Site name",
-    image: {
-        imageThumb: imageFile,
-        imageFull: imageFile,
-    },
 };
 
 export const WithVeryLongText = Template.bind({});

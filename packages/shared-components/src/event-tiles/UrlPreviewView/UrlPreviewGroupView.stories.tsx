@@ -16,6 +16,7 @@ import {
     type UrlPreviewGroupViewSnapshot,
 } from "./UrlPreviewGroupView";
 import { useMockedViewModel } from "../../viewmodel";
+import { LinkedTextContext } from "../../utils/LinkedText";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
@@ -30,7 +31,11 @@ const UrlPreviewGroupViewWrapper = ({
         onImageClick,
         onTogglePreviewLimit,
     });
-    return <UrlPreviewGroupView vm={vm} />;
+    return (
+        <LinkedTextContext.Provider value={{}}>
+            <UrlPreviewGroupView vm={vm} />
+        </LinkedTextContext.Provider>
+    );
 };
 
 export default {
@@ -113,4 +118,10 @@ MultiplePreviewsVisible.args = {
     overPreviewLimit: true,
     previewsLimited: false,
     totalPreviewCount: 10,
+};
+
+export const WithCompactView = Template.bind({});
+WithCompactView.args = {
+    ...MultiplePreviewsVisible.args,
+    compactLayout: true,
 };

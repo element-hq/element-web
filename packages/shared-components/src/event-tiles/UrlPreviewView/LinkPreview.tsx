@@ -12,22 +12,19 @@ import classNames from "classnames";
 import { useI18n } from "../../utils/i18nContext";
 import styles from "./LinkPreview.module.css";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
+import { LinkedText } from "../../utils/LinkedText";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export interface LinkPreviewAdditionalProps {
-    compactLayout?: boolean;
-}
-
-export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewActions & LinkPreviewAdditionalProps;
+export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewActions;
 
 /**
  * LinkPreview renders a single preview component for a single link on an event. It is usually rendered as part of
  * a `UrlPreviewGroupView`.
  */
-export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPreviewProps): JSX.Element {
+export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
 
     const tooltipCaption = useMemo(() => {
@@ -70,7 +67,7 @@ export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPre
         </a>
     );
     return (
-        <div className={classNames(styles.container, compactLayout && "compactLayout")}>
+        <div className={classNames(styles.container)}>
             <div className={styles.wrapImageCaption}>
                 {img}
                 <div className={styles.caption}>
@@ -82,7 +79,9 @@ export function LinkPreview({ onImageClick, compactLayout, ...preview }: LinkPre
                             </Text>
                         )}
                     </Text>
-                    {preview.description && <Text className={styles.description}>{preview.description}</Text>}
+                    {preview.description && (
+                        <LinkedText className={styles.description}>{preview.description}</LinkedText>
+                    )}
                 </div>
             </div>
         </div>

@@ -283,9 +283,9 @@ export class UrlPreviewViewModel
     private readonly previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
 
     /**
-     * Callback for when the image element is clicked on.
+     * Called when the user clicks on the preview thumbnail.
      */
-    private readonly onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
+    public readonly onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;
 
     public constructor(props: UrlPreviewViewModelProps) {
         const storageKey = `hide_preview_${props.mxEvent.getId()}`;
@@ -302,7 +302,7 @@ export class UrlPreviewViewModel
         this.storageKey = storageKey;
         this.client = props.client;
         this.eventSendTime = props.mxEvent.getTs();
-        this.onImageClicked = props.onImageClicked;
+        this.onImageClick = props.onImageClicked;
         this.useCompactLayoutSettingWatcher = SettingsStore.watchSetting(
             "useCompactLayout",
             null,
@@ -403,14 +403,6 @@ export class UrlPreviewViewModel
     public readonly onTogglePreviewLimit = (): void => {
         this.limitPreviews = !this.limitPreviews;
         void this.computeSnapshot();
-    };
-
-    /**
-     * Called when the user clicks on the preview thumbnail.
-     */
-    public readonly onImageClick = (preview: UrlPreviewViewSnapshotPreview): void => {
-        // Render a lightbox.
-        this.onImageClicked(preview);
     };
 
     /**

@@ -39,56 +39,7 @@ exports[`LinkPreview > renders a preview 1`] = `
           </span>
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
-        >
-          A simple description
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`LinkPreview > renders a preview with a compact layout 1`] = `
-<div>
-  <div
-    class="container compactLayout"
-  >
-    <div
-      class="wrapImageCaption"
-    >
-      <button
-        aria-label="View image"
-        class="image"
-      >
-        <img
-          alt=""
-          class="thumbnail"
-          src="/static/element.png"
-        />
-      </button>
-      <div
-        class="caption"
-      >
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-        >
-          <a
-            class="link"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
-          <span
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
-          >
-             - Site name
-          </span>
-        </p>
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
         >
           A simple description
         </p>
@@ -151,9 +102,17 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
           </a>
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
         >
-          A simple description
+          A simple description with a link to 
+          <a
+            data-linkified="true"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            https://matrix.org
+          </a>
         </p>
       </div>
     </div>

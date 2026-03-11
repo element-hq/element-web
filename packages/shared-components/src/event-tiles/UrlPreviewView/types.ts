@@ -5,8 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { ReactNode } from "react";
-
 export interface UrlPreviewViewSnapshotPreview {
     /**
      * The URL for the preview.
@@ -27,7 +25,7 @@ export interface UrlPreviewViewSnapshotPreview {
     /**
      * Description of the site. May contain links.
      */
-    description?: ReactNode;
+    description?: string;
     /**
      * Preview image to display.
      */
