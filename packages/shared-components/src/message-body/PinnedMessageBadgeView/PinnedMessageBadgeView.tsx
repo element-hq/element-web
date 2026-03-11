@@ -17,11 +17,7 @@ export type PinnedMessageBadgeProps = HTMLAttributes<HTMLDivElement>;
 /**
  * A badge indicating that a message is pinned.
  */
-export function PinnedMessageBadge({
-    className,
-    children,
-    ...props
-}: Readonly<PinnedMessageBadgeProps>): JSX.Element {
+export function PinnedMessageBadge({ className, children, ...props }: Readonly<PinnedMessageBadgeProps>): JSX.Element {
     return (
         <div {...props} className={classNames("mx_PinnedMessageBadge", styles.pinnedMessageBadge, className)}>
             <PinIcon width="16px" height="16px" />

@@ -6,7 +6,6 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-
 import { PinnedMessageBadge } from "./PinnedMessageBadgeView";
 
 const meta = {
@@ -24,6 +23,6 @@ export const Default: Story = {};
 export const WithAriaDescription: Story = {
     args: {
         "aria-describedby": "event-tile-description",
-        tabIndex: 0,
+        "tabIndex": 0,
     },
 };
