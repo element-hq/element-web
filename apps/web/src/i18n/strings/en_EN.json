@@ -988,8 +988,8 @@
             "title": "Recovery Method Removed",
             "warning": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
-        "set_up_recovery": "Set up recovery",
-        "set_up_recovery_toast_description": "Generate a recovery key that can be used to restore your encrypted message history in case you lose access to your devices.",
+        "set_up_recovery": "Back up your chats",
+        "set_up_recovery_toast_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "set_up_toast_title": "Set up Secure Backup",
         "setup_secure_backup": {
             "explainer": "Back up your keys before signing out to avoid losing them."
@@ -2581,14 +2581,15 @@
                 "change_recovery_key": "Change recovery key",
                 "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then click Continue to confirm the change.",
                 "change_recovery_key_title": "Change recovery key?",
-                "description": "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.",
+                "description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
                 "forgot_recovery_key": "Forgot recovery key?",
                 "key_storage_warning": "Your key storage is out of sync. Click one of the buttons below to fix the problem.",
                 "save_key_description": "Do not share this with anyone!",
                 "save_key_title": "Recovery key",
-                "set_up_recovery": "Set up recovery",
+                "set_up_recovery": "Get recovery key",
+                "get_recovery_key": "Get recovery key",
                 "set_up_recovery_confirm_button": "Finish set up",
                 "set_up_recovery_confirm_description": "Enter the recovery key shown on the previous screen to finish setting up recovery.",
                 "set_up_recovery_confirm_title": "Enter your recovery key to confirm",
@@ -2596,7 +2597,7 @@
                 "set_up_recovery_save_key_description": "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.",
                 "set_up_recovery_save_key_title": "Save your recovery key somewhere safe",
                 "set_up_recovery_secondary_description": "After clicking continue, we’ll generate a recovery key for you.",
-                "title": "Recovery"
+                "title": "Backup"
             },
             "title": "Encryption"
         },
