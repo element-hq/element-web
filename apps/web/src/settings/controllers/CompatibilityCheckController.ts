@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import { type SettingLevel } from "../SettingLevel";
+import PlatformPeg from "../../PlatformPeg";
 
 /**
  * Enforces that a boolean setting cannot be changed if a function returns false.
@@ -17,8 +18,9 @@ export default class CompatibilityCheckController extends SettingController {
      * @param forcedValue The forced value if the setting is incompatible.
      */
     public constructor(
-        private compatibleCheck: () => boolean | string,
-        private forcedValue = false,
+        private readonly compatibleCheck: () => boolean | string,
+        private readonly forcedValue = false,
+        private readonly reloadOnChange = false,
     ) {
         super();
     }
@@ -33,6 +35,12 @@ export default class CompatibilityCheckController extends SettingController {
             return this.forcedValue;
         }
         return null; // no override
+    }
+
+    public onChange(): void {
+        if (this.reloadOnChange) {
+            PlatformPeg.get()?.reload();
+        }
     }
 
     public get settingDisabled(): boolean | string {

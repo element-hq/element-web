@@ -1315,8 +1315,10 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|automatic_debug_logs"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
-        controller: new CompatibilityCheckController(() =>
-            SdkConfig.get("sentry") ? false : _t("labs|automatic_debug_logs_disabled"),
+        controller: new CompatibilityCheckController(
+            () => (SdkConfig.get("sentry") ? false : _t("labs|automatic_debug_logs_disabled")),
+            false,
+            true,
         ),
     },
     "automaticDecryptionErrorReporting": {
