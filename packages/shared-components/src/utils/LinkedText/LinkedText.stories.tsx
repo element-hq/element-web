@@ -16,8 +16,15 @@ const meta = {
     title: "Utils/LinkedText",
     component: LinkedText,
     decorators: [
-        (Story) => (
-            <LinkedTextContext.Provider value={{}}>
+        (Story, { args }) => (
+            <LinkedTextContext.Provider
+                value={{
+                    userIdListener: args.userIdListener,
+                    roomAliasListener: args.roomAliasListener,
+                    urlTargetTransformer: args.urlTargetTransformer,
+                    hrefTransformer: args.hrefTransformer,
+                }}
+            >
                 <Story />
             </LinkedTextContext.Provider>
         ),
