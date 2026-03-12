@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 
-export const enum FilterKey {
+export const enum FilterEnum {
     FavouriteFilter,
     UnreadFilter,
     PeopleFilter,
@@ -14,7 +14,10 @@ export const enum FilterKey {
     LowPriorityFilter,
     MentionsFilter,
     InvitesFilter,
+    ExcludeTagsFilter,
 }
+
+export type FilterKey = FilterEnum | string;
 
 export interface Filter {
     /**
